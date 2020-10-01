@@ -1,0 +1,7 @@
+{
+  "name": "propco-v4",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
