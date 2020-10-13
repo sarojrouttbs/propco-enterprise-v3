@@ -1,8 +1,8 @@
 {
   "name": "propco-enterprise-v3",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "Raman Jangid",
+  "homepage": "https://www.propco.co.uk/",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
