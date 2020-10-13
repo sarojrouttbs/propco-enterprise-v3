@@ -1,6 +1,6 @@
 {
   "appId": "io.ionic.starter",
-  "appName": "propco-v4",
+  "appName": "propco-enterprise-v3",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
