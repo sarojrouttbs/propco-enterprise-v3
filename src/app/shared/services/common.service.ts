@@ -241,7 +241,7 @@ export class CommonService {
     //   spinner: 'crescent'
     // });
     // await this.loader.present();
-    var elem = document.getElementById('progressbar');
+    var elem = document.getElementById('loading');
     elem.style.display = '';
   }
 
@@ -249,7 +249,7 @@ export class CommonService {
     // if (this.loader) {
     //   this.loader.dismiss();
     // }
-    var elem = document.getElementById('progressbar');
+    var elem = document.getElementById('loading');
     elem.style.display = 'none';
   }
 
