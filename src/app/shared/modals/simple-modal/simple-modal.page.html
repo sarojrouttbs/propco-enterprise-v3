@@ -14,8 +14,4 @@
   <div class="ion-text-end ion-padding" *ngIf="button">
     <ion-button fill="outline" color="success" class="" (click)="dismiss()">{{ button }}</ion-button>
   </div>
-  <div class="ion-text-end ion-padding" *ngIf="sessionTimer">
-    <ion-button color="danger" style="margin-right:0" (click)="logout();">Sign Out</ion-button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <ion-button color="success" (click)="refreshSession();"> Stay Logged In ({{counter}}s)</ion-button>
-  </div>
 </ion-footer>

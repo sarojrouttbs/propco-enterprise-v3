@@ -1,3 +1,4 @@
+import { AuthGuard } from './../shared/authguard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -7,6 +8,7 @@ const routes: Routes = [
   {
     path: '',
     component: FaultsPage,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'dashboard',
