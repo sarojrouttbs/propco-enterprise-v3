@@ -5,17 +5,14 @@
 </ion-header>
 
 <ion-content>
+  <ion-button class="negotiate" (click)="addFault()">Add Fault</ion-button>
+
   <ion-grid id="final-view">
     <ion-row>
       <ion-col size="100">
         <div class="overlay-container" style="position: relative">
-          <table
-            datatable
-            [dtOptions]="dtOptions[0]"
-            [dtTrigger]="dtTrigger"
-            class="row-border hover"
-            style="width: 100%; position: relative"
-          >
+          <table datatable [dtOptions]="dtOptions[0]" [dtTrigger]="dtTrigger" class="row-border hover"
+            style="width: 100%; position: relative">
             <thead>
               <tr>
                 <th>Issue Id</th>
@@ -44,10 +41,8 @@
                 <td>ggg</td>
                 <td>swwew</td>
                 <td class="resp-action-icon">
-                  <i
-                    (click)="showMenu($event,'divOverlay', fault, 'table-row')"
-                    class="propcoicon propcoicon-actions-on"
-                  ></i>
+                  <i (click)="showMenu($event,'divOverlay', fault, 'table-row')"
+                    class="propcoicon propcoicon-actions-on"></i>
                 </td>
               </tr>
             </tbody>
@@ -56,10 +51,7 @@
             <ion-button class="negotiate" (click)="notesModal()">
               Negotiate
             </ion-button>
-            <i
-              (click)="hideMenu($event,'divOverlay')"
-              class="propcoicon propcoicon-actions-on"
-            ></i>
+            <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
           </div>
         </div>
       </ion-col>
@@ -68,10 +60,8 @@
     <ion-row>
       <ion-col size="100">
         <div class="overlay-container" style="position: relative">
-          <table datatable [dtOptions]="dtOptions[1]" [dtTrigger]="dtTrigger"
-            class="row-border hover"
-            style="width: 100%; position: relative"
-          >
+          <table datatable [dtOptions]="dtOptions[1]" [dtTrigger]="dtTrigger" class="row-border hover"
+            style="width: 100%; position: relative">
             <thead>
               <tr>
                 <th>Issue Id</th>
@@ -114,20 +104,15 @@
                       </ion-fab-button>
                     </ion-fab-list>
                   </ion-fab> -->
-                  <i
-                    (click)="showMenu($event,'divOverlay', fault, 'table-row')"
-                    class="propcoicon propcoicon-actions-on"
-                  ></i>
+                  <i (click)="showMenu($event,'divOverlay', fault, 'table-row')"
+                    class="propcoicon propcoicon-actions-on"></i>
                 </td>
               </tr>
             </tbody>
           </table>
           <div id="divOverlay">
             <!-- <ion-button ng-click="viewApplicant()">view</ion-button> -->
-            <i
-              (click)="hideMenu($event,'divOverlay')"
-              class="propcoicon propcoicon-actions-on"
-            ></i>
+            <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
           </div>
         </div>
       </ion-col>

@@ -42,6 +42,13 @@ table.dataTable {
     td {
       padding: 6px 10px;
     }
+
+    tr td:first-child{
+      border-left: 1px solid var(--ion-color-step-1750);
+    }
+    tr td:last-child{
+      border-right: 1px solid var(--ion-color-step-1750);
+    }
   }
 
   
