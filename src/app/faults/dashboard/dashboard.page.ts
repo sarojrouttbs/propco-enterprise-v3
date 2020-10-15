@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { faultList, faultNotes } from './list.json';
 import { DataTableDirective } from 'angular-datatables';
@@ -15,7 +16,8 @@ export class DashboardPage implements OnInit {
   @ViewChildren(DataTableDirective) dtElements: QueryList<any>;
 
   dtOptions: DataTables.Settings[] = [];
-
+  dtTrigger: Subject<any> = new Subject();
+  notesDtTrigger: Subject<any> = new Subject();
   faultList: any[] = faultList;
   faultNotes: any[] = faultNotes;
 
@@ -31,6 +33,9 @@ export class DashboardPage implements OnInit {
       paging: true,
       searching: false
     };
+  }
+
+  public addFault(){
   }
 
   async notesModal() {
@@ -51,7 +56,7 @@ export class DashboardPage implements OnInit {
     await modal.present();
   }
 
-  showMenu(event, id, data, className, isCard) {
+  showMenu(event, id, data, className, isCard?) {
     const baseContainer = $(event.target).parents('.' + className);
     const divOverlay = $('#' + id);
     const baseContainerWidth = baseContainer.outerWidth(true);
