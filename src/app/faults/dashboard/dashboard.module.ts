@@ -8,12 +8,17 @@ import { DashboardPageRoutingModule } from './dashboard-routing.module';
 
 import { DashboardPage } from './dashboard.page';
 
+import { NotesModalPageModule } from '../../shared/modals/notes-modal/notes-modal.module';
+import { DataTablesModule } from 'angular-datatables';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DashboardPageRoutingModule
+    DashboardPageRoutingModule,
+    NotesModalPageModule,
+    DataTablesModule
   ],
   declarations: [DashboardPage]
 })
