@@ -1,4 +1,5 @@
 import { SimpleModalPageModule } from './shared/modals/simple-modal/simple-modal.module';
+import { NotesModalPageModule } from './shared/modals/notes-modal/notes-modal.module';
 import { CommonService } from './shared/services/common.service';
 import { AppHttpInterceptor } from './app.http.Interceptor';
 import { NgModule } from '@angular/core';
@@ -28,7 +29,8 @@ import { DataTablesModule } from 'angular-datatables';
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     DataTablesModule,
-    SimpleModalPageModule
+    SimpleModalPageModule,
+    NotesModalPageModule
   ],
   providers: [
     StatusBar,

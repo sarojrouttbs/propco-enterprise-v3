@@ -1,0 +1,515 @@
+@font-face {
+  font-family: "Lato Light";
+  font-style: normal;
+  font-weight: 300;
+  src: local("Lato Light"), local("Lato-Light"),
+    url("../../assets/fonts/lato-light.woff2") format("woff2"),
+    url("../../assets/fonts/lato-light.woff") format("woff");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+/* latin */
+@font-face {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Lato Regular"), local("Lato-Regular"),
+    url("../../assets/fonts/lato-regular.woff2") format("woff2"),
+    url("../../assets/fonts/lato-regular.woff") format("woff");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "PropCoIcons";
+  src: url("../../assets/fonts/propco-font.woff") format("woff"),
+    url("../../assets/fonts/propco-font.svg#PropCoIconsRegular") format("svg");
+}
+
+.propcoicon {
+  display: table-cell;
+  font-family: "PropCoIcons";
+  font-style: normal;
+  line-height: 1;
+  background-color: gray;
+  font-size: 28px;
+  width: 36px;
+  height: 36px;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 4px;
+}
+
+.material-icons {
+  //color: $text-color-primary !important;
+}
+
+.propcoicon-small {
+  font-size: 14px;
+}
+
+.propcoicon-medium {
+  font-size: 16px;
+}
+
+.propcoicon:hover {
+  //color: $text-color-sixth;
+}
+
+.propcoicon-paint-roller:before {
+  content: "";
+}
+.propcoicon-tools:before {
+  content: "";
+}
+
+.propcoicon-property-management:before {
+  content: "";
+}
+
+.propcoicon-chain-management:before {
+  content: "";
+}
+
+.propcoicon-property-saved:before {
+  content: "";
+}
+.propcoicon-market-apprasial:before {
+  content: "";
+}
+
+.propcoicon-property-search:before {
+  content: "";
+}
+
+.propcoicon-my-properties:before {
+  content: "";
+}
+
+.propcoicon-property-comparison:before {
+  content: "";
+}
+
+.propcoicon-location:before {
+  content: "";
+}
+
+.propcoicon-cash-register:before {
+  content: "";
+}
+
+.propcoicon-keys:before {
+  content: "";
+}
+
+.propcoicon-checklist:before {
+  content: "";
+}
+
+.propcoicon-13:before {
+  content: "";
+}
+
+.propcoicon-front-office:before {
+  content: "";
+}
+
+.propcoicon-brochure:before {
+  content: "";
+}
+
+.propcoicon-Web-browser:before {
+  content: "";
+}
+
+.propcoicon-property-information:before {
+  content: "";
+}
+
+.propcoicon-link:before {
+  content: "";
+}
+
+.propcoicon-property-description:before {
+  content: "";
+}
+
+.propcoicon-restrictions:before {
+  content: "";
+}
+
+.propcoicon-property-features:before {
+  content: "";
+}
+
+.propcoicon-property-viewings:before {
+  content: "";
+}
+
+.propcoicon-tasks:before {
+  content: "";
+}
+
+.propcoicon-property-notes:before {
+  content: "";
+}
+
+.propcoicon-property-tasks:before {
+  content: "";
+}
+
+.propcoicon-pictures:before {
+  content: "";
+}
+.propcoicon-print:before {
+  content: "";
+}
+
+.propcoicon-viewings:before {
+  content: "";
+}
+
+.propcoicon-propco-home:before {
+  content: "";
+}
+
+.propcoicon-save:before {
+  content: "";
+}
+
+.propcoicon-diary:before {
+  content: "";
+}
+
+.propcoicon-referencing:before {
+  content: "„";
+}
+
+.propcoicon-calculator:before {
+  content: "";
+}
+
+.propcoicon-mail-merge:before {
+  content: "";
+}
+
+.propcoicon-email:before {
+  content: "";
+}
+
+.propcoicon-message-centre:before {
+  content: "";
+}
+
+.propcoicon-workflow:before {
+  content: "";
+}
+
+.propcoicon-document-manager:before {
+  content: "";
+}
+
+.propcoicon-task-manager:before {
+  content: "";
+}
+
+.propcoicon-38:before {
+  content: "";
+}
+
+.propcoicon-balance-sheet:before {
+  content: "";
+}
+
+.propcoicon-fee-run:before {
+  content: "";
+}
+
+.propcoicon-prepare-statements:before {
+  content: "";
+}
+
+.propcoicon-bank-reconciliation:before {
+  content: "";
+}
+
+.propcoicon-misc-cr-db:before {
+  content: "";
+}
+
+.propcoicon-overdue-tenant:before {
+  content: "";
+}
+
+.propcoicon-account-transfer:before {
+  content: "";
+}
+
+.propcoicon-reports:before {
+  content: "";
+}
+
+.propcoicon-fast-start:before {
+  content: "";
+}
+
+.propcoicon-property:before {
+  content: "";
+}
+
+.propcoicon-landlord:before {
+  content: "1";
+}
+.propcoicon-vendor:before {
+  content: "4";
+}
+
+.propcoicon-tenant:before {
+  content: "6";
+}
+.propcoicon-purchaser:before {
+  content: "5";
+}
+.propcoicon-applicant-let:before {
+  content: "2";
+}
+
+.propcoicon-applicant-sale:before {
+  content: "3";
+}
+.propcoicon-contractor:before {
+  content: "";
+}
+
+.propcoicon-agent:before {
+  content: "";
+}
+
+.propcoicon-solicitor:before {
+  content: "";
+}
+
+.propcoicon-applicant-card:before {
+  content: "";
+}
+
+.propcoicon-applicant-management:before {
+  content: "";
+}
+
+.propcoicon-available-property-list:before {
+  content: "";
+}
+
+.propcoicon-sales-brochure:before {
+  content: "";
+}
+
+.propcoicon-beds:before {
+  content: "";
+}
+
+.propcoicon-bathrooms:before {
+  content: "";
+}
+
+.propcoicon-lounge:before {
+  content: "";
+}
+
+.propcoicon-garage:before {
+  content: "";
+}
+
+.propcoicon-close:before {
+  content: "";
+}
+
+.propcoicon-minimise:before {
+  content: "";
+}
+
+.propcoicon-expand:before {
+  content: "";
+}
+
+.propcoicon-reply:before {
+  content: "";
+}
+
+.propcoicon-reply-all:before {
+  content: "";
+}
+
+.propcoicon-forward:before {
+  content: "";
+}
+
+.propcoicon-cancel:before {
+  content: "";
+}
+
+.propcoicon-attachment:before {
+  content: "";
+}
+
+.propcoicon-refresh:before {
+  content: "";
+}
+
+.propcoicon-grid-view:before {
+  content: "";
+}
+
+.propcoicon-list-view:before {
+  content: "";
+}
+
+.propcoicon-pdf:before {
+  content: "";
+}
+
+.propcoicon-settings:before {
+  content: "ˇ";
+}
+
+.propcoicon-four-arrow:before {
+  content: "˝";
+}
+
+.propcoicon-notification:before {
+  content: "˛";
+}
+
+.propcoicon-search:before {
+  content: "˙";
+}
+
+.propcoicon-send-mail:before {
+  content: "˚";
+}
+
+.propcoicon-t-icon:before {
+  content: "¸";
+}
+
+.propcoicon-folder:before {
+  content: "";
+}
+
+.propcoicon-dashboard:before {
+  content: "";
+}
+
+.propcoicon-actions-on:before {
+  content: "";
+}
+
+.propcoicon-empty-square:before {
+  content: "";
+}
+
+.propcoicon-dropdown:before {
+  content: "";
+}
+
+.propcoicon-filled-square:before {
+  content: "⬛";
+}
+
+.propcoicon-dropdown-right:before {
+  content: "ᐳ";
+}
+
+.propcoicon-arrow-down:before {
+  content: "▼";
+}
+
+.propcoicon-bookmark:before {
+  content: "Ù";
+}
+
+.propcoicon-copy-user:before {
+  content: "Ò";
+}
+
+.propcoicon-add-user:before {
+  content: "Û";
+}
+
+.propcoicon-user-management:before {
+  content: "Ô";
+}
+
+.propcoicon-user-templates:before {
+  content: "Ú";
+}
+
+.propcoicon-disable-user:before {
+  content: "";
+}
+
+.propcoicon-edit-user:before {
+  content: "Ó";
+}
+
+.propcoicon-circled-tick:before {
+  content: "";
+}
+.propcoicon-reset:before {
+  content: "Ì";
+}
+.propcoicon-circumflex:before {
+  content: "ˆ";
+}
+.propcoicon-mobile:before {
+  content: "¯";
+}
+.propcoicon-calendar:before {
+  content: "";
+}
+.propcoicon-email-open:before {
+  content: "";
+}
+
+.propcoicon-log-history:before {
+  content: "˘";
+}
+
+.propcoicon-property-matching:before {
+  content: "Í";
+}
+
+.propcoicon-applicant-matching:before {
+  content: "Î";
+}
+
+.propcoicon-guarantor:before {
+  content: "7";
+}
+
+.propcoicon-applications:before {
+  content: "e";
+}
+
+.propcoicon-offers:before {
+  content: "d";
+}
+
+.propcoicon.propcoicon-property-description {
+  //background-color: $bg-color-twentytwo;
+  //color: $text-color-secondary;
+}
+
+.propcoicon.propcoicon-cancel {
+  //color: $text-color-fourth;
+}
+
+.propcoicon.propcoicon-cancel:hover {
+  //color: $text-color-sixth;
+}
+.propcoicon.propcoicon-add:before {
+  content: "";
+}

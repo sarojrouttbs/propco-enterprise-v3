@@ -11,22 +11,23 @@ const { Network } = Plugins;
 import { ToastController } from '@ionic/angular';
 import { ToastrService } from 'ngx-toastr';
 
-interface lookupdata {
+interface Lookupdata {
   obj: Object;
 }
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class CommonService {
   private loader;
   entityType;
 
   constructor(
-    private _alertCtrl: AlertController,
-    private _loadingCtrl: LoadingController,
-    private _httpClient: HttpClient,
-    private _router: Router,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
+    private httpClient: HttpClient,
+    private router: Router,
     public toastController: ToastController,
     private toastr: ToastrService,
   ) {
@@ -44,7 +45,7 @@ export class CommonService {
   // }
 
   async isInternetConnected(): Promise<boolean> {
-    let status = await Network.getStatus();
+    const status = await Network.getStatus();
     return status.connected;
     //  NetworkStatus: {
     //   connected : boolean;
@@ -54,11 +55,12 @@ export class CommonService {
 
 
   getCookie(cname) {
-    let name = cname + '=';
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-      let c = ca[i];
+    const name = cname + '=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+
+    for (const element of ca) {
+      let c = element;
       while (c.charAt(0) == ' ') {
         c = c.substring(1);
       }
@@ -70,28 +72,32 @@ export class CommonService {
   }
 
   getCSRFToken(): Observable<any> {
-    return this._httpClient.get(environment.API_BASE_URL);
+    return this.httpClient.get(environment.API_BASE_URL);
   }
 
   authenticateSsoToken(encodedString: string): Observable<any> {
-    let requestObj = { 'env': 'saas-cw-uat' };
-    return this._httpClient.post(environment.API_BASE_URL + 'authentication/sso/token', requestObj, {
+    const requestObj = { env: 'saas-cw-uat' };
+    return this.httpClient.post(environment.API_BASE_URL + 'authentication/sso/token', requestObj, {
       headers: {
-        'Authorization': 'Basic ' + encodedString
+        Authorization: 'Basic ' + encodedString
       }
     });
   }
+  
+  getLookup(): Observable<Lookupdata> {
+    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'applicants/lookup', { responseType: 'json' });
+  }
 
-  getLookup(): Observable<lookupdata> {
-    return this._httpClient.get<lookupdata>(environment.API_BASE_URL + 'agent/lookup', { responseType: 'json' });
+  getMetaConfig(): Observable<Lookupdata> {
+    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'meta-config', { responseType: 'json' });
   }
 
   getPostcodeAddressList(postcode: string): Observable<any> {
-    return this._httpClient.get(environment.API_BASE_URL + postcode + '/fetch');
+    return this.httpClient.get(environment.API_BASE_URL + postcode + '/fetch');
   }
 
   getPostcodeAddressDetails(addressId: string): Observable<any> {
-    return this._httpClient.get(environment.API_BASE_URL + addressId + '/retrieve');
+    return this.httpClient.get(environment.API_BASE_URL + addressId + '/retrieve');
   }
 
 
@@ -99,7 +105,7 @@ export class CommonService {
     let propertyStatus;
     listOfArray = listOfArray && listOfArray.length ? listOfArray : [];
     listOfArray.find((obj) => {
-      if (obj.index == id) {
+      if (obj.index === id) {
         propertyStatus = obj.value;
       }
     })
@@ -140,7 +146,7 @@ export class CommonService {
       this.toastr.success(message, title ? title : 'Success', {
         //   disableTimeOut: true,
         closeButton: true,
-        // tapToDismiss: false 
+        // tapToDismiss: false
         timeOut: 4000
       });
     }
@@ -149,7 +155,7 @@ export class CommonService {
         timeOut: 4000,
         // disableTimeOut: true,
         closeButton: true,
-        // tapToDismiss: false 
+        // tapToDismiss: false
       });
     }
     else if (type === 'info') {
@@ -157,7 +163,7 @@ export class CommonService {
         timeOut: 4000,
         // disableTimeOut: true,
         closeButton: true,
-        // tapToDismiss: false 
+        // tapToDismiss: false
       });
     }
     else if (type === 'warning') {
@@ -173,7 +179,7 @@ export class CommonService {
   async showAlert(title: string, displayText: string, subtitle?: string) {
     return new Promise((resolve, reject) => {
       let alertPopup: any;
-      this._alertCtrl.create({
+      this.alertCtrl.create({
         header: title,
         subHeader: subtitle ? subtitle : undefined,
         message: displayText,
@@ -198,7 +204,7 @@ export class CommonService {
   async showConfirm(title: string, displayText: string, subtitle?: string) {
     return new Promise((resolve, reject) => {
       let alertPopup: any;
-      this._alertCtrl.create({
+      this.alertCtrl.create({
         header: title,
         subHeader: subtitle ? subtitle : undefined,
         message: displayText,
@@ -234,9 +240,9 @@ export class CommonService {
     });
   }
 
-  async presentToast(message, color?) {
+  async presentToast(message: any, color?) {
     const toast = await this.toastController.create({
-      message: message,
+      message,
       duration: 2000,
       position: 'top',
       color: color ? color : 'primary',
@@ -245,12 +251,12 @@ export class CommonService {
   }
 
   showLoader(duration?: number) {
-    // this.loader = await this._loadingCtrl.create({
+    // this.loader = await this.loadingCtrl.create({
     //   message: 'Loading...',
     //   spinner: 'crescent'
     // });
     // await this.loader.present();
-    var elem = document.getElementById('loading');
+    const elem = document.getElementById('loading');
     elem.style.display = '';
   }
 
@@ -258,16 +264,16 @@ export class CommonService {
     // if (this.loader) {
     //   this.loader.dismiss();
     // }
-    var elem = document.getElementById('loading');
+    const elem = document.getElementById('loading');
     elem.style.display = 'none';
   }
 
   getResizedImageUrl(url, size?) {
     let srcUrl = '';
     if (url) {
-      let splitUrl = url.split('images/');
-      let mediaHost = (splitUrl.length > 0) ? splitUrl[0] : '';
-      let fileName = (splitUrl.length > 0) ? splitUrl[1] : '';
+      const splitUrl = url.split('images/');
+      const mediaHost = (splitUrl.length > 0) ? splitUrl[0] : '';
+      const fileName = (splitUrl.length > 0) ? splitUrl[1] : '';
       size = size ? size : 400;
       srcUrl = mediaHost + 'images/resize.php/' + fileName + '?resize(' + size + ')';
     }
@@ -301,17 +307,17 @@ export class CommonService {
   }
 
   downloadDocument(response) {
-    var blob = new Blob([response], { type: 'application/pdf' });
-    var downloadURL = window.URL.createObjectURL(blob);
-    var link = document.createElement('a');
+    const blob = new Blob([response], { type: 'application/pdf' });
+    const downloadURL = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
     link.href = downloadURL;
-    link.download = "file.pdf";
+    link.download = 'file.pdf';
     link.click();
   }
 
   getFileNameFromContent(content) {
     let fileName = '';
-    let startIndex = content.indexOf('filename') + 10;
+    const startIndex = content.indexOf('filename') + 10;
     fileName = content.substring(startIndex, content.length - 1);
     return fileName;
   }
@@ -321,10 +327,10 @@ export class CommonService {
     /* let queryParams = {'token': accessToken}; */
     /* this.resetLocalStorage(); */
     this.showLoader();
-    this._httpClient.get(environment.API_BASE_URL + 'authentication/user/logout', {}).toPromise().finally(() => {
+    this.httpClient.get(environment.API_BASE_URL + 'authentication/user/logout', {}).toPromise().finally(() => {
       this.hideLoader();
       this.resetLocalStorage();
-      this._router.navigate(['/login'], { replaceUrl: true });
+      this.router.navigate(['/login'], { replaceUrl: true });
     });
   }
 
@@ -338,15 +344,15 @@ export class CommonService {
   }
 
   getFormatedDate(date, format?): string {
-    if (typeof date !== "undefined" && isNaN(date)) {
+    if (typeof date !== 'undefined' && isNaN(date)) {
       return new DatePipe('en-UK').transform(new Date(date), format || 'yyyy-MM-dd');
     }
   }
 
   replaceEmptyStringWithNull(requestObj): any {
     Object.keys(requestObj).forEach(key => {
-      if (requestObj[key] == '') {
-        requestObj[key] = null
+      if (requestObj[key] === '') {
+        requestObj[key] = null;
       }
     });
     return requestObj;
@@ -357,14 +363,16 @@ export class CommonService {
   }
 
   getDirtyValues(form: any): any {
-    let dirtyValues = {};
+    const dirtyValues = {};
     Object.keys(form.controls).forEach(key => {
-      let currentControl = form.controls[key];
+      const currentControl = form.controls[key];
       if (currentControl.dirty) {
-        if (currentControl.controls)
+        if (currentControl.controls){
           dirtyValues[key] = this.getDirtyValues(currentControl);
-        else
+        }
+        else{
           dirtyValues[key] = currentControl.value;
+        }
       }
     });
     return dirtyValues;

@@ -5,5 +5,132 @@
 </ion-header>
 
 <ion-content>
+  <ion-grid id="final-view">
+    <ion-row>
+      <ion-col size="100">
+        <div class="overlay-container" style="position: relative">
+          <table
+            datatable
+            [dtOptions]="dtOptions[0]"
+            [dtTrigger]="dtTrigger"
+            class="row-border hover"
+            style="width: 100%; position: relative"
+          >
+            <thead>
+              <tr>
+                <th>Issue Id</th>
+                <th>Reported On</th>
+                <th>Fault Category</th>
+                <th>Property Ref</th>
+                <th>Address</th>
+                <th>Office</th>
+                <th>Job Title</th>
+                <th>Reported By</th>
+                <th>Fault Status</th>
+                <th>Urgency Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let fault of faultList" class="table-row">
+                <td>{{fault.reference || '-'}}</td>
+                <td>{{fault.createdAt || '-'}}</td>
+                <td>sss</td>
+                <td>{{fault.propertyReference || '-'}}</td>
+                <td>{{fault.propertyAddress.addressLine1}}</td>
+                <td>fff</td>
+                <td>{{fault.title || '-'}}</td>
+                <td>{{fault.reportedBy || '-'}}</td>
+                <td>ggg</td>
+                <td>swwew</td>
+                <td class="resp-action-icon">
+                  <i
+                    (click)="showMenu($event,'divOverlay', fault, 'table-row')"
+                    class="propcoicon propcoicon-actions-on"
+                  ></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div id="divOverlay">
+            <ion-button class="negotiate" (click)="notesModal()">
+              Negotiate
+            </ion-button>
+            <i
+              (click)="hideMenu($event,'divOverlay')"
+              class="propcoicon propcoicon-actions-on"
+            ></i>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
 
+    <ion-row>
+      <ion-col size="100">
+        <div class="overlay-container" style="position: relative">
+          <table datatable [dtOptions]="dtOptions[1]" [dtTrigger]="dtTrigger"
+            class="row-border hover"
+            style="width: 100%; position: relative"
+          >
+            <thead>
+              <tr>
+                <th>Issue Id</th>
+                <th>Reported On</th>
+                <th>Fault Category</th>
+                <th>Property Ref</th>
+                <th>Address</th>
+                <th>Office</th>
+                <th>Job Title</th>
+                <th>Reported By</th>
+                <th>Fault Status</th>
+                <th>Urgency Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let fault of faultNotes" class="table-row">
+                <td>{{fault.reference || '-'}}</td>
+                <td>{{fault.createdAt || '-'}}</td>
+                <td>sss</td>
+                <td>{{fault.propertyReference || '-'}}</td>
+                <td>{{fault.propertyAddress.addressLine1}}</td>
+                <td>fff</td>
+                <td>{{fault.title || '-'}}</td>
+                <td>{{fault.reportedBy || '-'}}</td>
+                <td>ggg</td>
+                <td>swwew</td>
+                <td class="resp-action-icon">
+                  <!-- <ion-fab vertical="center" horizontal="end" slot="fixed">
+                    <ion-fab-button>Share</ion-fab-button>
+                    <ion-fab-list side="start">
+                      <ion-fab-button>
+                        <ion-icon name="logo-vimeo"></ion-icon>
+                      </ion-fab-button>
+                      <ion-fab-button>
+                        <ion-icon name="logo-chrome"></ion-icon>
+                      </ion-fab-button>
+                      <ion-fab-button>
+                        <ion-icon name="logo-react"></ion-icon>
+                      </ion-fab-button>
+                    </ion-fab-list>
+                  </ion-fab> -->
+                  <i
+                    (click)="showMenu($event,'divOverlay', fault, 'table-row')"
+                    class="propcoicon propcoicon-actions-on"
+                  ></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div id="divOverlay">
+            <!-- <ion-button ng-click="viewApplicant()">view</ion-button> -->
+            <i
+              (click)="hideMenu($event,'divOverlay')"
+              class="propcoicon propcoicon-actions-on"
+            ></i>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
