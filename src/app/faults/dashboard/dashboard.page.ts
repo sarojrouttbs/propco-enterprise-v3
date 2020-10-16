@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { faultList, faultNotes } from './list.json';
@@ -21,11 +22,15 @@ export class DashboardPage implements OnInit {
   faultList: any[] = faultList;
   faultNotes: any[] = faultNotes;
 
-  constructor(private modalController: ModalController) { }
+  constructor(private modalController: ModalController, private router: Router) { }
 
   ngOnInit(): void {
     this.dtOptions[0] = this.buildDtOptions();
     this.dtOptions[1] = this.buildDtOptions();
+    setTimeout(()=>{
+      this.dtTrigger.next();
+      this.notesDtTrigger.next();
+    }, 1000)
   }
 
   private buildDtOptions(): DataTables.Settings {
@@ -36,6 +41,7 @@ export class DashboardPage implements OnInit {
   }
 
   public addFault(){
+    this.router.navigate(['faults/add']);
   }
 
   async notesModal() {
