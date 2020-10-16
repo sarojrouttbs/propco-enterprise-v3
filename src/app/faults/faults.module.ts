@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { FaultsPageRoutingModule } from './faults-routing.module';
 
 import { FaultsPage } from './faults.page';
+import { ComponentsModule } from '../shared/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    FaultsPageRoutingModule
+    FaultsPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [FaultsPage]
 })

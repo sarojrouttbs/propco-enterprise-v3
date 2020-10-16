@@ -17,8 +17,8 @@ export class DashboardPage implements OnInit {
   @ViewChildren(DataTableDirective) dtElements: QueryList<any>;
 
   dtOptions: DataTables.Settings[] = [];
-  dtTrigger: Subject<any> = new Subject();
-  notesDtTrigger: Subject<any> = new Subject();
+  //dtTrigger: Subject<any> = new Subject();
+  //notesDtTrigger: Subject<any> = new Subject();
   faultList: any[] = faultList;
   faultNotes: any[] = faultNotes;
 
