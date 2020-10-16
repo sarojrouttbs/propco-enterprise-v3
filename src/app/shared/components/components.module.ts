@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ValidationMessageComponent } from './validation-message/validation-message.component';
+import { PropertyDetailsComponent } from './property-details/property-details.component';
 
 @NgModule({
     imports: [
@@ -10,8 +11,8 @@ import { ValidationMessageComponent } from './validation-message/validation-mess
         ReactiveFormsModule,
         IonicModule,
     ],
-    declarations: [ValidationMessageComponent],
-    exports: [ValidationMessageComponent]
+    declarations: [ValidationMessageComponent, PropertyDetailsComponent],
+    exports: [ValidationMessageComponent, PropertyDetailsComponent]
 })
 
 export class ComponentsModule {

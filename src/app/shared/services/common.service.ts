@@ -85,7 +85,7 @@ export class CommonService {
   }
   
   getLookup(): Observable<Lookupdata> {
-    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'applicants/lookup', { responseType: 'json' });
+    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup', { responseType: 'json' });
   }
 
   getMetaConfig(): Observable<Lookupdata> {

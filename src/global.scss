@@ -29,7 +29,7 @@
 
 body {
   font-size: 16px;
-  //background-color: var(--ion-color-primary-contrast);
+  //background-color: var(--ion-color-step-2000);
 
   .fs-14 {
     font-size: 14px !important;
@@ -72,7 +72,7 @@ body {
   }
 
   .text-white {
-    color: var(--ion-color-primary-contrast);
+    color: var(--ion-color-step-2000);
   }
 
   .no-padd-left {
@@ -213,7 +213,7 @@ body {
     background-repeat: no-repeat;
     background-size: 0;
     box-shadow: 0 0 12px var(--ion-color-medium);
-    background-color: var(--ion-color-primary-contrast);
+    background-color: var(--ion-color-step-2000);
   }
   .toast-close-button {
     position: relative;
@@ -223,7 +223,7 @@ body {
     font-size: 20px;
     font-weight: bold;
     color: var(--ion-color-dark);
-    text-shadow: 0 1px 0 var(--ion-color-primary-contrast);
+    text-shadow: 0 1px 0 var(--ion-color-step-2000);
     opacity: 0.8;
   }
   .toast-error::before {
@@ -236,7 +236,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--ion-color-primary-contrast);
+    color: var(--ion-color-step-2000);
     font-size: 30px;
   }
 
@@ -250,7 +250,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--ion-color-primary-contrast);
+    color: var(--ion-color-step-2000);
     font-size: 30px;
   }
 
@@ -264,7 +264,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--ion-color-primary-contrast);
+    color: var(--ion-color-step-2000);
     font-size: 30px;
   }
 
@@ -278,7 +278,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--ion-color-primary-contrast);
+    color: var(--ion-color-step-2000);
     font-size: 30px;
   }
 
@@ -293,11 +293,11 @@ body {
   }
 
   #wp-cl-worldpay-iframe-container {
-    background-color: var(--ion-color-primary-contrast);
+    background-color: var(--ion-color-step-2000);
   }
 
   .spinner-bg {
-    background-color: rgba(var(--ion-color-primary-contrast-rgb), 0.49);
+    background-color: rgba(var(--ion-color-step-2000-rgb), 0.49);
     height: 100%;
     left: 0;
     position: fixed;

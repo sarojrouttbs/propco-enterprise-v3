@@ -7,13 +7,17 @@ import { IonicModule } from '@ionic/angular';
 import { DetailsPageRoutingModule } from './details-routing.module';
 
 import { DetailsPage } from './details.page';
+import { ComponentsModule } from '../../shared/components/components.module';
+import {MaterialModule} from '../../material.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DetailsPageRoutingModule
+    DetailsPageRoutingModule,
+    ComponentsModule,
+    MaterialModule
   ],
   declarations: [DetailsPage]
 })
