@@ -1,3 +1,6 @@
+import { PROPCO, REPORTED_BY_TYPES } from './../../shared/constants';
+import { CommonService } from './../../shared/services/common.service';
+import { FaultsService } from './../faults.service';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
@@ -6,6 +9,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { NotesModalPage } from '../../shared/modals/notes-modal/notes-modal.page';
 import { ModalController } from '@ionic/angular';
 import { async } from 'q';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -19,18 +23,62 @@ export class DashboardPage implements OnInit {
   dtOptions: DataTables.Settings[] = [];
   dtTrigger: Subject<any> = new Subject();
   notesDtTrigger: Subject<any> = new Subject();
-  faultList: any[] = faultList;
-  faultNotes: any[] = faultNotes;
+  faultList: any[];
+  faultNotes: any[];
+  selectedData: any;
+  lookupdata: any; faultCategories: any[]; officeCodes: any[]; faultStatuses: any[]; faultUrgencyStatuses;
+  reportedByTypes = REPORTED_BY_TYPES;
 
-  constructor(private modalController: ModalController, private router: Router) { }
+  constructor(
+    private commonService: CommonService,
+    private modalController: ModalController,
+    private router: Router,
+    private faultsService: FaultsService) {
+    this.getLookupData();
+  }
 
   ngOnInit(): void {
+    this.getFaultList();
     this.dtOptions[0] = this.buildDtOptions();
     this.dtOptions[1] = this.buildDtOptions();
-    setTimeout(()=>{
-      this.dtTrigger.next();
-      this.notesDtTrigger.next();
-    }, 1000)
+
+    this.dtOptions[0].rowCallback = (row: Node, data: any[] | Object, index: number) => {
+      $('td', row).unbind('click');
+      $('td', row).bind('click', () => {
+        this.onClickRow(data, index);
+      });
+      return row;
+    }
+  }
+
+  private getLookupData() {
+    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
+    if (this.lookupdata) {
+      this.setLookupData(this.lookupdata);
+    } else {
+      this.commonService.getLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
+        this.lookupdata = data;
+        this.setLookupData(data);
+      });
+    }
+  }
+
+  private setLookupData(data) {
+    this.faultCategories = data.faultCategories;
+    this.officeCodes = data.officeCodes;
+    this.faultStatuses = data.faultStatuses;
+    this.faultUrgencyStatuses = data.faultUrgencyStatuses;
+  }
+
+  getLookupValue(index, lookup, type?) {
+    index = (type == 'category' && index) ? Number(index) : index;
+    return this.commonService.getLookupValue(index, lookup);
+  }
+
+  onClickRow(data, index) {
+    this.selectedData = this.faultList[index];
+    this.getFaultNotes(this.faultList[index].faultId);
   }
 
   private buildDtOptions(): DataTables.Settings {
@@ -40,7 +88,21 @@ export class DashboardPage implements OnInit {
     };
   }
 
-  public addFault(){
+  getFaultList() {
+    this.faultsService.getAllFaults().subscribe(res => {
+      this.faultList = res && res.data ? res.data : [];
+      this.dtTrigger.next();
+    });
+  }
+
+  private getFaultNotes(faultId) {
+    this.faultsService.getFaultNotes(faultId).subscribe(res => {
+      this.faultNotes = res ? res : [];
+      this.notesDtTrigger.next();
+    });
+  }
+
+  public addFault() {
     this.router.navigate(['faults/add']);
   }
 

@@ -1,3 +1,4 @@
+import { PROPCO } from './../../constants';
 import { Component, OnInit, Input } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 
@@ -12,12 +13,12 @@ export class PropertyDetailsComponent implements OnInit {
   advertisementRentFrequencies: any;
 
   constructor(public commonService: CommonService) {
-    this.lookupdata = this.commonService.getItem('lookupdata', true);
+    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
     if (this.lookupdata) {
       this.setLookupData();
     } else {
       this.commonService.getLookup().subscribe(data => {
-        this.commonService.setItem('lookupdata', data);
+        this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
         this.setLookupData();
       });
     }
@@ -26,7 +27,7 @@ export class PropertyDetailsComponent implements OnInit {
 
   ngOnInit() { }
   private setLookupData() {
-    this.lookupdata = this.commonService.getItem('lookupdata', true);
+    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
     this.advertisementRentFrequencies = this.lookupdata.advertisementRentFrequencies;
   }
 
