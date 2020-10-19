@@ -1,135 +1,145 @@
 <ng-template #faultDetails>
-  <ion-grid>
-    <ion-row>
-      <ion-col size-xs="100" size-sm="50">
-        <ion-item>
-          <ion-label position="floating">Fault description</ion-label>
-          <ion-input></ion-input>
-        </ion-item>
-        <!-- <app-validation-message [control]=""></app-validation-message> -->
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <form class="propco-form">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating">Fault description</ion-label>
+            <ion-input></ion-input>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ng-template>
 
 <ng-template #reportedBy>
-  <ion-grid>
-    <ion-row>
-      <ion-col size-xs="100" size-sm="50">
-        <ion-item>
-          <ion-label position="floating">Who reported the fault?</ion-label>
-          <ion-select interface="popover">
-            <ion-select-option [value]="item.index" *ngFor="let item of catList"
-              >{{ item.value }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <!-- <app-validation-message [control]=""></app-validation-message> -->
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50">
-        <ion-item>
-          <ion-label position="floating">Select agreement</ion-label>
-          <ion-select interface="popover">
-            <ion-select-option [value]="item.index" *ngFor="let item of catList"
-              >{{ item.value }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <!-- <app-validation-message [control]=""></app-validation-message> -->
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50">
-        <ion-item>
-          <ion-label position="floating">Select tenant</ion-label>
-          <ion-select interface="popover">
-            <ion-select-option [value]="item.index" *ngFor="let item of catList"
-              >{{ item.value }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <!-- <app-validation-message [control]=""></app-validation-message> -->
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50">
-        <ion-item>
-          <ion-label position="floating">Title</ion-label>
-          <ion-input></ion-input>
-        </ion-item>
-        <!-- <app-validation-message [control]=""></app-validation-message> -->
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50">
-        <ion-item>
-          <ion-label position="floating">Forename</ion-label>
-          <ion-input></ion-input>
-        </ion-item>
-        <!-- <app-validation-message [control]=""></app-validation-message> -->
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50">
-        <ion-item>
-          <ion-label position="floating">Surname</ion-label>
-          <ion-input></ion-input>
-        </ion-item>
-        <!-- <app-validation-message [control]=""></app-validation-message> -->
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50">
-        <ion-item>
-          <ion-label position="floating">E-mail</ion-label>
-          <ion-input></ion-input>
-        </ion-item>
-        <!-- <app-validation-message [control]=""></app-validation-message> -->
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50">
-        <ion-item>
-          <ion-label position="floating">Mobile</ion-label>
-          <ion-input></ion-input>
-        </ion-item>
-        <!-- <app-validation-message [control]=""></app-validation-message> -->
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50">
-        <ion-item>
-          <ion-label position="floating">Telephone</ion-label>
-          <ion-input></ion-input>
-        </ion-item>
-        <!-- <app-validation-message [control]=""></app-validation-message> -->
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <form class="propco-form">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating">Who reported the fault?</ion-label>
+            <ion-select interface="popover">
+              <ion-select-option [value]="item.index" *ngFor="let item of catList"
+                >{{ item.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating">Select agreement</ion-label>
+            <ion-select interface="popover">
+              <ion-select-option [value]="item.index" *ngFor="let item of catList"
+                >{{ item.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating">Select tenant</ion-label>
+            <ion-select interface="popover">
+              <ion-select-option [value]="item.index" *ngFor="let item of catList"
+                >{{ item.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating">Title</ion-label>
+            <ion-input></ion-input>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating">Forename</ion-label>
+            <ion-input></ion-input>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating">Surname</ion-label>
+            <ion-input></ion-input>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating">E-mail</ion-label>
+            <ion-input></ion-input>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating">Mobile</ion-label>
+            <ion-input></ion-input>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating">Telephone</ion-label>
+            <ion-input></ion-input>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ng-template>
 
 <ng-template #accessInformation>
-  <ion-grid>
-    <ion-row>
-      <ion-col size-xs="100" size-sm="50">
-        <ion-item>
-          <ion-label position="floating">Access information</ion-label>
-          <ion-select interface="popover">
-            <ion-select-option [value]="item.index" *ngFor="let item of catList"
-              >{{ item.value }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <!-- <app-validation-message [control]=""></app-validation-message> -->
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50">
-        <ion-item>
-          <ion-label position="floating">Is there a vulnerable occupier at this property?</ion-label>
-          <ion-toggle color="primary"></ion-toggle>
-        </ion-item>
-        <!-- <app-validation-message [control]=""></app-validation-message> -->
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50">
-        <ion-item>
-          <ion-label position="floating">Useful instructions</ion-label>
-          <ion-input></ion-input>
-        </ion-item>
-        <!-- <app-validation-message [control]=""></app-validation-message> -->
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <form class="propco-form">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating">Access information</ion-label>
+            <ion-select interface="popover">
+              <ion-select-option [value]="item.index" *ngFor="let item of catList"
+                >{{ item.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating"
+              >Is there a vulnerable occupier at this property?</ion-label
+            >
+            <ion-toggle color="primary"></ion-toggle>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating">Useful instructions</ion-label>
+            <ion-input></ion-input>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ng-template>
 
 <ng-template #media>
-  <ion-grid>
-    <ion-row> </ion-row>
-  </ion-grid>
+  <form class="propco-form">
+    <ion-grid>
+      <ion-row> </ion-row>
+    </ion-grid>
+  </form>
 </ng-template>
 
 <ng-template #SubmitCancel>
@@ -154,16 +164,26 @@
   </ion-grid>
 </ng-template>
 
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Details</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content id="fault-details">
   <ion-grid *ngIf="pageNo===1">
     <ion-row>
-      <ion-col size="25" *ngFor="let item of catList">
+      <ion-col>
+        <h2 class="heading">Log a fault</h2>
+        <h2>
+          What do you want to report in
+          <b>
+            {{ propertyData?.address?.addressLine1 ?
+            propertyData?.address?.addressLine1 + ',' : ''}} {{
+            propertyData?.address?.addressLine2 ?
+            propertyData?.address?.addressLine2 + ',' : ''}} {{
+            propertyData?.address?.locality ? propertyData?.address?.locality +
+            ',' : ''}} {{ propertyData?.address?.postcode }} ?
+          </b>
+        </h2>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="20" *ngFor="let item of catList">
         <div class="block" (click)="goToPriorityPage(2)">
           <img [src]="item.imgPath" />
           <h4>{{item.value}}</h4>
@@ -173,26 +193,44 @@
   </ion-grid>
 
   <ion-grid *ngIf="pageNo===2">
-    <p>Select the priority</p>
-    <ion-button>Non urgent</ion-button>
-    <ion-button>Urgent</ion-button>
-    <ion-button>Emergency</ion-button>
-    <div class="panel-block-normal">
-      <ion-row>
-        <ion-col size="100">
+    <ion-row>
+      <ion-col>
+        <h2 class="heading">Log a fault</h2>
+        <h2>
+          Describe the issue with <b>Alarms and Smoke Detectors</b> in
+          <b>
+            {{ propertyData?.address?.addressLine1 ?
+            propertyData?.address?.addressLine1 + ',' : ''}} {{
+            propertyData?.address?.addressLine2 ?
+            propertyData?.address?.addressLine2 + ',' : ''}} {{
+            propertyData?.address?.locality ? propertyData?.address?.locality +
+            ',' : ''}} {{ propertyData?.address?.postcode }} ?
+          </b>
+        </h2>
+        <div class="priority-heading">Select the priority</div>
+        <ion-button>Non urgent</ion-button>
+        <ion-button>Urgent</ion-button>
+        <ion-button>Emergency</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <div class="panel-block-normal propco-form" *ngIf="pageNo===2">
+    <ion-grid>
+      <ion-row class="main-row">
+        <ion-col size="100" class="col1">
           <ion-item>
             <ion-label position="floating">Title</ion-label>
             <ion-input type="text"> </ion-input>
           </ion-item>
         </ion-col>
-        <ion-col size="100">
+        <ion-col size="100" class="col2">
           <ion-button>Cancel</ion-button>
           <ion-button (click)="goToPriorityPage(1)">Back</ion-button>
           <ion-button (click)="goToPriorityPage(3)">Next</ion-button>
         </ion-col>
       </ion-row>
-    </div>
-  </ion-grid>
+    </ion-grid>
+  </div>
 
   <ng-container *ngIf="pageNo===3">
     <ion-card class="ion-no-margin" id="property-details-card">
