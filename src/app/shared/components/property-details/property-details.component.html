@@ -1,28 +1,28 @@
 <ion-card-content id="property-details">
-  <ion-grid class="ion-no-padding">
+  <ion-grid class="">
     <ion-row class="main-row">
-      <ion-col class="ion-no-padding" size="20">
+      <ion-col class="" size="15">
         <img src="assets/images/fault-categories/alarms-and-smoke-detectors.svg"/>
       </ion-col>
-      <ion-col class="ion-no-padding" size="80">
-        <ion-grid style="height:100%;" class="ion-no-padding">
+      <ion-col class="" size="85">
+        <ion-grid style="height:100%;" class="no-padding-top">
           <ion-row class="property-details-row">
-            <ion-col class="ion-no-padding col1" size="70">
+            <ion-col class="no-padding-top col1" size="70">
               <h1 class="heading" *ngIf="propertyDetails?.publishedAddress">
                 {{propertyDetails.publishedAddress}}
               </h1>
               <h1 class="heading" *ngIf="!propertyDetails?.publishedAddress">
                   {{ propertyDetails?.address?.addressLine1 ? propertyDetails?.address?.addressLine1 + ',' : ''}}
                   {{ propertyDetails?.address?.addressLine2 ? propertyDetails?.address?.addressLine2 + ',' : ''}}
-                  {{ propertyDetails?.address?.addressLine5 ? propertyDetails?.address?.addressLine5 + ',' : ''}}
+                  {{ propertyDetails?.address?.locality ? propertyDetails?.address?.locality + ',' : ''}}
                   {{ propertyDetails?.address?.postcode }}
               </h1>
             </ion-col>
-            <ion-col class="ion-no-padding col2" size="30">
+            <ion-col class="no-padding-top col2 ion-text-end" size="30">
               <h1>Urgent</h1>
             </ion-col>
           </ion-row>
-          <ion-row>
+          <ion-row class="fault-data-row">
             <ion-col size="25">
               <span class="text">office</span>
               <br />
@@ -53,10 +53,20 @@
               <br />
               rr1234
             </ion-col>
-
           </ion-row>
           <ion-row>
-            
+            <ion-col size="25">
+              Electric Meter
+            </ion-col>
+            <ion-col size="25">
+              Water Meter
+            </ion-col>
+            <ion-col size="25">
+              Gas Meter
+            </ion-col>
+            <ion-col size="25">
+              Stop Tap
+            </ion-col>
           </ion-row>
         </ion-grid>
       </ion-col>

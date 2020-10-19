@@ -6,7 +6,7 @@
 
 .mat-stepper-horizontal {
   .mat-horizontal-stepper-header-container {
-    margin: 0 65px;
+    margin: 0 20px;
     .mat-stepper-horizontal-line {
       border-top-width: 2px;
       top: 30px;
@@ -142,7 +142,7 @@
       background: var(--ion-color-step-2000);
       border-radius: 5px;
       position: relative;
-      margin-bottom: 25px;
+      margin: 0 20px 25px;
     }
 
     .stepper-next, .stepper-back {
@@ -167,6 +167,10 @@
       width: 55px;
       height: 55px;
     }
+
+    ion-item{
+      --background: transparent;
+    }
   }
 
   .mat-stepper-vertical {
@@ -183,6 +187,10 @@
       .mat-vertical-stepper-header {
 
       }
+    }
+
+    ion-item{
+      --background: transparent;
     }
   }
 }

@@ -11,6 +11,7 @@ export class DetailsPage implements OnInit {
   catList: any[] = catList;
   propertyData = propertyData;
   pageNo = 1;
+  faultDetails: any = {};
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -28,9 +29,8 @@ export class DetailsPage implements OnInit {
     'assets/images/fault-categories/water-and-leaks.svg'
   ];
 
-
-
-  constructor() { }
+  constructor() { 
+  }
 
   ngOnInit() {
     this.catList.map((cat, index) => {
