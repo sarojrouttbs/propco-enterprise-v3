@@ -35,15 +35,15 @@
             <tbody>
               <tr *ngFor="let fault of faultList" class="table-row">
                 <td>{{fault.reference || '-'}}</td>
-                <td>{{fault.createdAt || '-'}}</td>
-                <td>sss</td>
+                <td>{{fault.createdAt | date: 'dd/MM/yyyy HH:mm:ss' || '-'}}</td>
+                <td>{{(fault.sourceType === 'FIXFLO') ? (fault.fixfloCategory || '-') : (getLookupValue(fault.category, faultCategories, 'category') || '-')}}</td>
                 <td>{{fault.propertyReference || '-'}}</td>
                 <td>{{fault.propertyAddress.addressLine1}}</td>
-                <td>fff</td>
+                <td>{{getLookupValue(fault.propertyOfficeCode, officeCodes) || '-'}}</td>
                 <td>{{fault.title || '-'}}</td>
-                <td>{{fault.reportedBy || '-'}}</td>
-                <td>ggg</td>
-                <td>swwew</td>
+                <td>{{getLookupValue(fault.reportedBy, reportedByTypes) || '-'}}</td>
+                <td>{{getLookupValue(fault.status, faultStatuses) || '-'}}</td>
+                <td>{{getLookupValue(fault.urgencyStatus, faultUrgencyStatuses) || '-'}}</td>
                 <td class="resp-action-icon">
                   <i (click)="showMenu($event,'divOverlay', fault, 'table-row')"
                     class="propcoicon propcoicon-actions-on"></i>
@@ -64,26 +64,22 @@
     <ion-row>
       <ion-col size="100">
         <div class="overlay-container" style="position: relative">
-          <table datatable [dtOptions]="dtOptions[1]" [dtTrigger]="dtTrigger" class="row-border hover"
+          <table datatable [dtOptions]="dtOptions[1]" [dtTrigger]="notesDtTrigger" class="row-border hover"
             style="width: 100%; position: relative">
             <thead>
               <tr>
-                <th>Issue Id</th>
-                <th>Reported On</th>
-                <th>Fault Category</th>
-                <th>Property Ref</th>
-                <th>Address</th>
-                <th>Office</th>
-                <th>Job Title</th>
-                <th>Reported By</th>
-                <th>Fault Status</th>
-                <th>Urgency Status</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Type</th>
+                <th>Complaint</th>
+                <th>Category</th>
+                <th>User</th>
+                <th>Notes</th>                
                 <th></th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let fault of faultNotes" class="table-row">
-                <td>{{fault.reference || '-'}}</td>
                 <td>{{fault.createdAt || '-'}}</td>
                 <td>sss</td>
                 <td>{{fault.propertyReference || '-'}}</td>
@@ -91,8 +87,6 @@
                 <td>fff</td>
                 <td>{{fault.title || '-'}}</td>
                 <td>{{fault.reportedBy || '-'}}</td>
-                <td>ggg</td>
-                <td>swwew</td>
                 <td class="resp-action-icon">
                   <!-- <ion-fab vertical="center" horizontal="end" slot="fixed">
                     <ion-fab-button>Share</ion-fab-button>

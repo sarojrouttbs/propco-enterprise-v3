@@ -101,7 +101,7 @@ export class CommonService {
   }
 
 
-  getLookupValue(listOfArray, id): string {
+  getLookupValue(id, listOfArray): string {
     let propertyStatus;
     listOfArray = listOfArray && listOfArray.length ? listOfArray : [];
     listOfArray.find((obj) => {

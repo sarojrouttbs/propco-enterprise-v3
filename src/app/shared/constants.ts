@@ -35,34 +35,27 @@ export const ERROR_CODE = {
   PARAMETER_MISSING_INVALID: 'PARAMETER_MISSING_INVALID'
 };
 
-export const INSPECTION_TYPES = {
-  EPC: 4,
-  GAS: 9
-}
-
 export const HEAD_CATEGORY = {
   ADMIN: 'Admin',
   TENANT: 'Tenant',
   CONTRACTOR: 'Contractor'
 }
 
-export const INVENTORIES = {
-  INVENTORY: 349,
-  CHECK_IN_REPORT: 350,
-  CHECK_OUT_REPORT: 351,
-}
-
-export const TENANT_STATUS = {
-  CONFIRMED_TENANCY: 4
-}
-
-export const MAINTENANCE_TYPE = {
-  INVOICE: 'invoice',
-  WORKS_ORDER: 'worksorder',
-  QUOTE: 'quote'
-}
-
-export const MAINTENANCE_STATUS = {
-  OUTSTANDING_FEES: 2,
-  PAID: 1
-}
+export const REPORTED_BY_TYPES = [
+  {
+      "index": "LANDLORD",
+      "value": "Landlord"
+  },
+  {
+      "index": "TENANT",
+      "value": "Tenant"
+  },
+  {
+      "index": "GUARANTOR",
+      "value": "Guarantor"
+  },
+  {
+      "index": "THIRD_PARTY",
+      "value": "Third Party"
+  }
+]
