@@ -1,8 +1,8 @@
 <ng-template #faultDetails>
-  <form class="propco-form">
+  <form>
     <ion-grid>
       <ion-row>
-        <ion-col size-xs="100" size-sm="50">
+        <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Fault description</ion-label>
             <ion-input></ion-input>
@@ -14,11 +14,71 @@
   </form>
 </ng-template>
 
-<ng-template #reportedBy>
-  <form class="propco-form">
+<ng-template #additionalInfo>
+  <form>
     <ion-grid>
       <ion-row>
-        <ion-col size-xs="100" size-sm="50">
+        <ion-col size="50">
+          <ion-grid class="additional-info-container">
+            <ion-row>
+              <ion-col size="30">
+                <ion-item>
+                  <ion-label position="floating">Type</ion-label>
+                  <ion-select interface="popover">
+                    <ion-select-option [value]="item.index" *ngFor="let item of catList"
+                      >{{ item.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col size="60">
+                <ion-item>
+                  <ion-label position="floating">Additional Info</ion-label>
+                  <ion-input></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="10">
+                <ion-button>Add</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+
+  <form>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="15">
+          <ion-item>
+            <ion-label position="floating">Type</ion-label>
+            <ion-select interface="popover">
+              <ion-select-option [value]="item.index" *ngFor="let item of catList"
+                >{{ item.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size="30">
+          <ion-item>
+            <ion-label position="floating">Additional Info</ion-label>
+            <ion-input></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="5">
+          <ion-button>Add</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ng-template>
+
+<ng-template #reportedBy>
+  <form>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="33">
           <ion-item>
             <ion-label position="floating">Who reported the fault?</ion-label>
             <ion-select interface="popover">
@@ -29,7 +89,7 @@
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size-xs="100" size-sm="50">
+        <ion-col size="67">
           <ion-item>
             <ion-label position="floating">Select agreement</ion-label>
             <ion-select interface="popover">
@@ -40,7 +100,7 @@
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size-xs="100" size-sm="50">
+        <ion-col size="33">
           <ion-item>
             <ion-label position="floating">Select tenant</ion-label>
             <ion-select interface="popover">
@@ -51,42 +111,42 @@
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size-xs="100" size-sm="50">
+        <ion-col size="33">
           <ion-item>
             <ion-label position="floating">Title</ion-label>
             <ion-input></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size-xs="100" size-sm="50">
+        <ion-col size="33">
           <ion-item>
             <ion-label position="floating">Forename</ion-label>
             <ion-input></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size-xs="100" size-sm="50">
+        <ion-col size="33">
           <ion-item>
             <ion-label position="floating">Surname</ion-label>
             <ion-input></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size-xs="100" size-sm="50">
+        <ion-col size="33">
           <ion-item>
             <ion-label position="floating">E-mail</ion-label>
             <ion-input></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size-xs="100" size-sm="50">
+        <ion-col size="33">
           <ion-item>
             <ion-label position="floating">Mobile</ion-label>
             <ion-input></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size-xs="100" size-sm="50">
+        <ion-col size="33">
           <ion-item>
             <ion-label position="floating">Telephone</ion-label>
             <ion-input></ion-input>
@@ -99,10 +159,10 @@
 </ng-template>
 
 <ng-template #accessInformation>
-  <form class="propco-form">
+  <form>
     <ion-grid>
       <ion-row>
-        <ion-col size-xs="100" size-sm="50">
+        <ion-col size="33">
           <ion-item>
             <ion-label position="floating">Access information</ion-label>
             <ion-select interface="popover">
@@ -113,16 +173,14 @@
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size-xs="100" size-sm="50">
-          <ion-item>
-            <ion-label position="floating"
-              >Is there a vulnerable occupier at this property?</ion-label
-            >
-            <ion-toggle color="primary"></ion-toggle>
+        <ion-col size="65">
+          <ion-item lines="none" style="margin-top: 6px;">
+            <ion-label>Is there a vulnerable occupier at this property?</ion-label>
+            <ion-toggle slot="start"></ion-toggle>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size-xs="100" size-sm="50">
+        <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Useful instructions</ion-label>
             <ion-input></ion-input>
@@ -135,7 +193,7 @@
 </ng-template>
 
 <ng-template #media>
-  <form class="propco-form">
+  <form>
     <ion-grid>
       <ion-row> </ion-row>
     </ion-grid>
@@ -208,9 +266,12 @@
           </b>
         </h2>
         <div class="priority-heading">Select the priority</div>
-        <ion-button>Non urgent</ion-button>
+        <ion-button (click)="faultDetails.urgencyStatus = 1" [class]="faultDetails?.urgencyStatus===1 ? 'urgency-selected non-urgent-btn' : 'non-urgent-btn'">Non urgent</ion-button>
+        <ion-button (click)="faultDetails.urgencyStatus = 2" [class]="faultDetails?.urgencyStatus===2 ? 'urgency-selected urgent-btn' : 'urgent-btn'">Urgent</ion-button>
+        <ion-button (click)="faultDetails.urgencyStatus = 3" [class]="faultDetails?.urgencyStatus===3 ? 'urgency-selected emergency-btn' : 'emergency-btn'">Emergency</ion-button>
+        <!-- <ion-button>Non urgent</ion-button>
         <ion-button>Urgent</ion-button>
-        <ion-button>Emergency</ion-button>
+        <ion-button>Emergency</ion-button> -->
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -245,7 +306,9 @@
     >
       <mat-step>
         <ng-container *ngTemplateOutlet="faultDetails"></ng-container>
+        <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
         <ng-template matStepLabel>Fault details</ng-template>
+        
         <!-- <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
               src="assets/images/right-arrow-active.svg" /></button>
           <div class="blank-div">&nbsp;</div> -->

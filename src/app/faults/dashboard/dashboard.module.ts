@@ -9,6 +9,7 @@ import { DashboardPageRoutingModule } from './dashboard-routing.module';
 import { DashboardPage } from './dashboard.page';
 
 import { NotesModalPageModule } from '../../shared/modals/notes-modal/notes-modal.module';
+import { EscalateModalPageModule } from '../../shared/modals/escalate-modal/escalate-modal.module';
 import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
@@ -18,6 +19,7 @@ import { DataTablesModule } from 'angular-datatables';
     IonicModule,
     DashboardPageRoutingModule,
     NotesModalPageModule,
+    EscalateModalPageModule,
     DataTablesModule
   ],
   declarations: [DashboardPage]

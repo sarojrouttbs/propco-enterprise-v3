@@ -10,7 +10,7 @@ export class DetailsPage implements OnInit {
 
   catList: any[] = catList;
   propertyData = propertyData;
-  pageNo = 1;
+  pageNo = 3;
   faultDetails: any = {};
 
   categoryIconList = [
@@ -33,6 +33,7 @@ export class DetailsPage implements OnInit {
   }
 
   ngOnInit() {
+    this.faultDetails.urgencyStatus = 1;
     this.catList.map((cat, index) => {
       cat.imgPath = this.categoryIconList[index];
     });
@@ -41,7 +42,4 @@ export class DetailsPage implements OnInit {
   goToPriorityPage(pageNo){
     this.pageNo = pageNo;
   }
-
-
-
 }

@@ -125,4 +125,11 @@
       --background: transparent;
     }
   }
+
+  .additional-info-container{
+    @include border-radius(5px);
+    background-color: var(--ion-color-step-1650);
+    margin: 20px 0;
+    padding: 20px;
+  }
 }

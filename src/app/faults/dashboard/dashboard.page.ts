@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { Component, OnInit, ViewChildren, QueryList, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { NotesModalPage } from '../../shared/modals/notes-modal/notes-modal.page';
+import { EscalateModalPage } from '../../shared/modals/escalate-modal/escalate-modal.page';
 import { ModalController } from '@ionic/angular';
 import { async } from 'q';
 
@@ -40,13 +41,14 @@ export class DashboardPage implements OnInit {
   ngOnInit(): void {
     // this.getFaultList();
     this.dtOptions[1] = this.buildDtOptions();
-    let that = this;
+    const that = this;
     this.dtOptions[0] = {
       paging: true,
       pagingType: 'full_numbers',
       serverSide: true,
       processing: true,
       searching: false,
+      ordering: false,
       pageLength: 10,
       ajax: (tableParams: any, callback) => {
         let params = new HttpParams()
@@ -109,7 +111,8 @@ export class DashboardPage implements OnInit {
   private buildDtOptions(): DataTables.Settings {
     return {
       paging: true,
-      searching: false
+      searching: false,
+      ordering: false
     };
   }
 
@@ -132,15 +135,31 @@ export class DashboardPage implements OnInit {
   }
 
   async notesModal() {
-    const headingText = 'aaa';
-    const offerStatus = 'reserved';
+    const headingText = 'Add Note';
+    const dataText = 'Test';
     const modal = await this.modalController.create({
       component: NotesModalPage,
-      cssClass: 'notes-container',
+      cssClass: 'modal-container',
       componentProps: {
-        data: offerStatus,
-        heading: headingText,
-        offerStatus,
+        data: dataText,
+        heading: headingText
+      }
+    });
+
+    const data = modal.onDidDismiss().then(res => {
+    });
+    await modal.present();
+  }
+
+  async escalateModal() {
+    const headingText = 'Escalate';
+    const dataText = 'Test';
+    const modal = await this.modalController.create({
+      component: EscalateModalPage,
+      cssClass: 'modal-container',
+      componentProps: {
+        data: dataText,
+        heading: headingText
       }
     });
 
