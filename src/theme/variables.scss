@@ -92,6 +92,7 @@
   --ion-color-step-700: #5a5a5a;
   --ion-color-step-750: #606060;
   --ion-color-step-800: #666666;
+  --ion-color-step-800-rgb: 102, 102, 102;
   --ion-color-step-850: #6d6d6d;
   --ion-color-step-900: #737373;
   --ion-color-step-950: #7a7a7a;
@@ -146,7 +147,7 @@
    * -------------------------------------------
    */
 
-body[color-theme="dark"] {
+/* body[color-theme="dark"] {
   --ion-color-primary: #33cc00;
   --ion-color-primary-rgb: 51, 204, 0;
   --ion-color-primary-contrast: #000000;
@@ -246,7 +247,7 @@ body[color-theme="dark"] {
 
   --ion-background-color: var(--ion-color-step-2000);
   --ion-text-color: var(--ion-color-step-200);
-}
+} */
 
 /*
    * iOS Dark Theme

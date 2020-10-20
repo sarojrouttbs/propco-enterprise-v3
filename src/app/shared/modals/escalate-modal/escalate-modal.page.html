@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{heading}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="notesForm">
+    <ion-grid class="">
+      <ion-row class="">
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Escalated By</ion-label>
+            <ion-select interface="popover">
+              <ion-select-option [value]="item.index" *ngFor="let item of catList"
+                >{{ item.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100">
+            <ion-item>
+              <ion-label position="floating">Escalation Reason</ion-label>
+              <ion-input></ion-input>
+            </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-end">
+        <ion-button
+          (click)="toggleEscalate()"
+          >Submit</ion-button
+        >
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

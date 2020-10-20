@@ -26,10 +26,12 @@ ion-split-pane {
 }
 
 ion-button {
-  text-transform: capitalize;
-  font-weight: 400;
   --box-shadow: none !important;
   --border-radius: 4px;
+  --background: var(--ion-color-step-900);
+  --color: var(--ion-color-step-2000);
+  text-transform: capitalize;
+  font-weight: 400;
 }
 
 ion-button.button-disabled {
@@ -37,7 +39,7 @@ ion-button.button-disabled {
   border-radius: 5px;
 }
 
-.propco-form {
+/* .propco-form {
   ion-item {
     --padding-start: 0px;
   }
@@ -45,9 +47,11 @@ ion-button.button-disabled {
   ion-label {
     color: rgba(var(--ion-color-dark-rgb), 0.6) !important;
   }
-}
+} */
 
 ion-item {
+  --padding-start: 0px;
+
   &.item-has-value {
     ion-select {
       &.ng-untouched.ng-pristine {
@@ -82,6 +86,10 @@ ion-item {
     }
   }
 
+  ion-label {
+    color: rgba(var(--ion-color-dark-rgb), 0.6) !important;
+  }
+
   &.item-datetime,
   &.item-input {
     &.ion-pristine {
@@ -96,7 +104,7 @@ ion-item {
   }
 }
 
-.date-filter{
+.date-filter {
   ion-item {
     ion-datetime {
       padding-bottom: 8px;
@@ -107,10 +115,64 @@ ion-item {
   }
 }
 
-.notes-container .modal-wrapper {
-  --background: #222;
+.modal-container {
+  .modal-wrapper {
+    --color: var(--ion-color-step-2000);
+    width: 500px;
+    border-radius: 10px;
+    height: auto;
+    min-height: 400px;
 
-  ion-content{
-    --background: #222;
+    ion-item {
+      --background: transparent;
+    }
+
+    ion-header {
+      background: var(--ion-color-step-900);
+      ion-toolbar {
+        --min-height: 40px;
+        --background: var(--ion-color-step-900);
+
+        ion-title {
+          --color: var(--ion-color-step-2000);
+          font-size: 16px;
+        }
+
+        ion-icon {
+          font-size: 25px;
+          color: var(--ion-color-step-2000);
+          cursor: pointer;
+        }
+      }
+    }
+
+    ion-content {
+      --background: var(--ion-color-step-1800);
+      --color: var(--ion-color-step-2000);
+      --padding-top: 0px;
+      --padding-bottom: 0px;
+      --padding-start: 10px;
+      --padding-end: 10px;
+    }
+
+    ion-footer {
+      background: var(--ion-color-step-1800);
+    }
+
+    .footer-md::before {
+      height: 0;
+    }
   }
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_processing,
+.dataTables_wrapper .dataTables_paginate {
+  color: var(--ion-color-step-200);
+}
+
+.dataTables_wrapper .dataTables_length {
+  margin-bottom: 10px;
 }

@@ -2,21 +2,20 @@ import { Component, OnInit, Input, Inject } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { CommonService } from '../../services/common.service';
-import { INoteItem } from './notes-modal.model'
 import { PROPCO } from '../../constants';
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-notes-modal',
-  templateUrl: './notes-modal.page.html',
-  styleUrls: ['./notes-modal.page.scss'],
+  selector: 'app-escalate-modal',
+  templateUrl: './escalate-modal.page.html',
+  styleUrls: ['./escalate-modal.page.scss'],
 })
-export class NotesModalPage implements OnInit {
+export class EscalateModalPage implements OnInit {
 
   notesArray: any[];
   heading: string;
   notesForm: FormGroup;
-  noteObj: INoteItem;
+  noteObj: any;
   userDetails: any;
   date: any;
   clauseObj: any;
@@ -61,13 +60,15 @@ export class NotesModalPage implements OnInit {
     this.noteObj.negotiatedBy = 'APPLICANT';
     this.notesForm.reset();
     if (this.clauseObj.offerClauseId) {
-      //this.saveNotesAgainstClause(this.clauseObj.offerClauseId, [this.noteObj]);
     } else if (this.clauseObj.offerRestrictionId) {
-      //this.saveNotesAgainstRestriction(this.clauseObj.offerRestrictionId, [this.noteObj]);
     } else {
       this.noteObj.createdAt = this.datepipe.transform(new Date(), 'yyyy/MM/dd hh:mm');
       this.notesArray.push(this.noteObj);
     }
+  }
+
+  toggleEscalate(){
+    
   }
 
   dismiss() {
@@ -75,4 +76,5 @@ export class NotesModalPage implements OnInit {
       dismissed: true
     });
   }
+
 }

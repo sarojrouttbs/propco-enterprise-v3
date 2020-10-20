@@ -1,0 +1,37 @@
+.escalate-container{
+    .modal-wrapper {
+      --color: var(--ion-color-step-2000);
+      width: 500px;
+      border-radius: 10px;
+      height: auto;
+    
+      ion-item{
+        --background: transparent;
+      }
+    
+      ion-header{
+        background: var(--ion-color-step-900);
+        ion-toolbar{
+          --min-height: 40px;
+          --background: var(--ion-color-step-900);
+    
+          ion-title{
+            --color: var(--ion-color-step-2000);
+          }
+        }
+      }
+    
+      ion-content{
+        --background: var(--ion-color-step-1800);
+        --color: var(--ion-color-step-2000);
+      }
+    
+      ion-footer{
+        background: var(--ion-color-step-1800);
+      }
+    
+      .footer-md::before{
+        height: 0;
+      }
+    }
+  }
