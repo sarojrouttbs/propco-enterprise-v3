@@ -20,7 +20,7 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}`);
   }
 
-  getPpropertyTenancies(propertyId: string): Observable<any> {
+  getPropertyTenancies(propertyId: string): Observable<any> {
     let params = new HttpParams();
     params.set('status', '1');
     params.set('status', '2');
@@ -29,7 +29,7 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenancies`, { params: params });
   }
 
-  getPpropertyAgreementDetails(propertyId: string, agreementId: string): Observable<any> {
+  getPropertyAgreementDetails(propertyId: string, agreementId: string): Observable<any> {
     let params = new HttpParams();
     params.set('agreementId', agreementId);
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenants`, { params: params });

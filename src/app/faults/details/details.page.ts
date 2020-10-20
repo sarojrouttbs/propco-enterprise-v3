@@ -141,7 +141,7 @@ export class DetailsPage implements OnInit {
   }
 
   getPpropertyTenancies(): void {
-    this.faultService.getPpropertyTenancies(this.propertyId).subscribe(
+    this.faultService.getPropertyTenancies(this.propertyId).subscribe(
       res => {
         if (res && res.data) {
           this.propertyTenancyDetails = res.data;
@@ -180,7 +180,7 @@ export class DetailsPage implements OnInit {
   }
 
   getAgreementDetails(agreementId): void {
-    this.faultService.getPpropertyAgreementDetails(this.propertyId, agreementId).subscribe(
+    this.faultService.getPropertyAgreementDetails(this.propertyId, agreementId).subscribe(
       res => {
         if (res && res.data) {
         }
