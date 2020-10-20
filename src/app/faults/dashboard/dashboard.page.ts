@@ -1,10 +1,10 @@
+import { HttpParams } from '@angular/common/http';
 import { PROPCO, REPORTED_BY_TYPES } from './../../shared/constants';
 import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
-import { faultList, faultNotes } from './list.json';
+import { Component, OnInit, ViewChildren, QueryList, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { NotesModalPage } from '../../shared/modals/notes-modal/notes-modal.page';
 import { ModalController } from '@ionic/angular';
@@ -18,7 +18,7 @@ import { async } from 'q';
 })
 export class DashboardPage implements OnInit {
 
-  @ViewChildren(DataTableDirective) dtElements: QueryList<any>;
+  @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
 
   dtOptions: DataTables.Settings[] = [];
   dtTrigger: Subject<any> = new Subject();
@@ -38,17 +38,41 @@ export class DashboardPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getFaultList();
-    this.dtOptions[0] = this.buildDtOptions();
+    // this.getFaultList();
     this.dtOptions[1] = this.buildDtOptions();
+    let that = this;
+    this.dtOptions[0] = {
+      paging: true,
+      pagingType: 'full_numbers',
+      serverSide: true,
+      processing: true,
+      searching: false,
+      pageLength: 10,
+      ajax: (tableParams: any, callback) => {
+        let params = new HttpParams()
+          .set('limit', tableParams.length)
+          .set('page', tableParams.start ? (Math.floor(tableParams.start/tableParams.length)+1)+'': '1');
+        that.faultsService.getAllFaults(params).subscribe(res => {
+          that.faultList = res && res.data ? res.data: [];
+          callback({
+            recordsTotal: res ? res.count : 0,
+            recordsFiltered: res ? res.count :0,
+            data: []
+          });
+        })
+      },
+      // rowCallback: (row: Node, data: any[] | Object, index: number) => {
+      //   $('td', row).unbind('click');
+      //   $('td', row).bind('click', () => {
+      //     this.onClickRow(data, index);
+      //   });
+      //   return row;
+      // }
+    };
 
-    this.dtOptions[0].rowCallback = (row: Node, data: any[] | Object, index: number) => {
-      $('td', row).unbind('click');
-      $('td', row).bind('click', () => {
-        this.onClickRow(data, index);
-      });
-      return row;
-    }
+    setTimeout(()=>{
+      this.notesDtTrigger.next();
+    }, 1000)
   }
 
   private getLookupData() {
@@ -76,9 +100,10 @@ export class DashboardPage implements OnInit {
     return this.commonService.getLookupValue(index, lookup);
   }
 
-  onClickRow(data, index) {
-    this.selectedData = this.faultList[index];
-    this.getFaultNotes(this.faultList[index].faultId);
+  onClickRow(data, index?) {
+    this.selectedData = data;
+    //this.selectedData = this.faultList[index];
+    this.getFaultNotes(this.selectedData.faultId);
   }
 
   private buildDtOptions(): DataTables.Settings {
@@ -88,9 +113,9 @@ export class DashboardPage implements OnInit {
     };
   }
 
-  getFaultList() {
-    this.faultsService.getAllFaults().subscribe(res => {
-      this.faultList = res && res.data ? res.data : [];
+  getFaultList(params?) {
+    this.faultsService.getAllFaults(params).subscribe(res => {
+      //this.faultList = res && res.data ? res.data : [];
       this.dtTrigger.next();
     });
   }
@@ -98,7 +123,7 @@ export class DashboardPage implements OnInit {
   private getFaultNotes(faultId) {
     this.faultsService.getFaultNotes(faultId).subscribe(res => {
       this.faultNotes = res ? res : [];
-      this.notesDtTrigger.next();
+      this.rerender();
     });
   }
 
@@ -180,6 +205,18 @@ export class DashboardPage implements OnInit {
     if (event) {
       event.stopPropagation();
     }
+  }
+
+  rerender(): void {
+    this.dtElements.last.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      this.notesDtTrigger.next();
+    })
+  }
+
+  ngOnDestroy() {
+    this.dtTrigger.unsubscribe();
+    this.notesDtTrigger.unsubscribe();
   }
 
 }

@@ -315,3 +315,11 @@ body {
     z-index: 100002;
   }
 }
+
+#faultListTable{
+  tr.odd{
+    td.dataTables_empty {
+      display: none;
+    }
+  }
+ }
