@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
@@ -29,6 +29,24 @@ export class DetailsPage implements OnInit {
   reportedByFOrm: FormGroup;
   accessInfoForm: FormGroup;
 
+  //MAT TABS//
+  caseDetail: FormGroup;
+  reported: FormGroup;
+  accessInfo: FormGroup;
+  manageMedia: FormGroup;
+  selected = new FormControl(0);
+  current = 0;
+  previous;
+  isCaseDetailValid;
+  isReportedValid;
+  isAccessInfoValid;
+  isManageMediaValid;
+  iscaseDetailSubmit;
+  isReportedSubmit;
+  isAccessInfoSubmit;
+  isManageMediaSubmit;
+  //MAT TABS//
+
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
     'assets/images/fault-categories/bathroom.svg',
@@ -57,6 +75,27 @@ export class DetailsPage implements OnInit {
     this.catList.map((cat, index) => {
       cat.imgPath = this.categoryIconList[index];
     });
+
+    //MAT FORMS//
+    this.caseDetail = this.fb.group({
+      case: ['', Validators.required],
+      fault: ['', Validators.required],
+      desc: ['', Validators.required],
+    });
+
+    this.reported = this.fb.group({
+      reporterName: ['', Validators.required],
+      tenant: ['', Validators.required],
+    });
+
+    this.accessInfo = this.fb.group({
+      // access: ['', Validators.required],
+    });
+    this.manageMedia = this.fb.group({
+      // manage: ['', Validators.required],
+    });
+
+    //MAT FORMS//
   }
 
   goToPriorityPage(pageNo) {
@@ -123,7 +162,7 @@ export class DetailsPage implements OnInit {
     });
   }
 
-  initUploadDocForm() : void{
+  initUploadDocForm(): void {
     this.uploadDocForm = this.fb.group({
       photos: this.fb.array([])
     });
@@ -258,5 +297,58 @@ export class DetailsPage implements OnInit {
       });
     }, 1000);
   }
+
+  //MAT METHODS//
+  caseDeatil(): void {
+    this.iscaseDetailSubmit = true;
+    this.isCaseDetailValid = this.caseDetail.valid;
+    if(this.caseDetail.invalid){
+      this.caseDetail.markAllAsTouched();
+    }
+  }
+
+  reportedBy(): void {
+    this.isReportedSubmit = true;
+    this.isReportedValid = this.reported.valid;
+  }
+
+  saveAccessInfo(): void {
+    this.isAccessInfoSubmit = true;
+    this.isAccessInfoValid = this.accessInfo.valid;
+  }
+
+  manageMediaDoc(): void {
+    this.isManageMediaSubmit = true;
+    this.isManageMediaValid = this.manageMedia.valid;
+  }
+
+  currentSelected(event): void {
+    this.previous = this.current;
+    this.current = event;
+
+    switch (this.previous) {
+      case 0: {
+        this.caseDeatil();
+        break;
+      }
+      case 1: {
+        this.reportedBy();
+        break;
+      }
+      case 2: {
+        this.saveAccessInfo();
+        break;
+      }
+      case 3: {
+        this.manageMediaDoc();
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  }
+
+  //MAT METHODS//
 
 }

@@ -1,5 +1,5 @@
 <ng-template #caseDetails>
-  <form>
+  <!-- <form>
     <ion-grid>
       <ion-row class="ion-justify-content-start">
         <ion-col size="auto">
@@ -24,18 +24,220 @@
               </ion-select-option>
             </ion-select>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
         <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Fault description</ion-label>
             <ion-input></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
       </ion-row>
     </ion-grid>
-  </form>
+  </form> -->
+
+  <mat-tab-group mat-stretch-tabs mat-align-tabs="start" [selectedIndex]="selected.value" (selectedIndexChange)="currentSelected($event)">
+  <mat-tab>
+    <ng-template mat-tab-label><span class="add" [class.green-border]='iscaseDetailSubmit && isCaseDetailValid'
+        [class.red-border]='iscaseDetailSubmit && !isCaseDetailValid'>Case Detail</span></ng-template>
+    <!-- <form [formGroup]='caseDetail'>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field appearance="legacy">
+            <mat-label>Urgency Status</mat-label>
+            <mat-select formControlName="case">
+              <mat-option value="option">Option</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="legacy">
+            <mat-label>Who reported the fault </mat-label>
+            <input matInput formControlName="fault">
+          </mat-form-field>
+        </div>
+      </div>
+    </form> -->
+
+    <form [formGroup]='caseDetail'>
+      <ion-grid>
+        <ion-row class="ion-justify-content-start">
+          <ion-col size="auto">
+            <h2>Bath & Toilet <ion-text color="success">›</ion-text><ion-text></ion-text></h2>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-item lines="none" class="edit-title">
+              <ion-input value="Fault jksahdfkh kjhfdskh jkha fdsjh jasdfh hahasfjkhjhjkfh jkhsfh" style="font-size:24px;padding-bottom:0"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="auto" class="ion-no-padding">
+            <ion-button>Edit</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="100">
+            <ion-item>
+              <ion-label position="floating">Urgency Status</ion-label>
+              <ion-select interface="popover" formControlName="case">
+                <ion-select-option [value]="item.index" *ngFor="let item of catList"
+                  >{{ item.value }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <!-- <app-validation-message [control]=""></app-validation-message> -->
+          </ion-col>
+          <ion-col size="100">
+            <ion-item>
+              <ion-label position="floating">Fault description</ion-label>
+              <ion-input formControlName="fault"></ion-input>
+            </ion-item>
+            <!-- <app-validation-message [control]=""></app-validation-message> -->
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <div>
+            <button mat-flat-button color="primary">Cancel</button>
+            <button mat-flat-button color="primary">Save for Later</button>
+            <button mat-flat-button [disabled]='selected.value===0'
+              (click)="selected.setValue(selected.value - 1 < 0 ? 0:selected.value - 1)" color="primary">Back</button>
+            <button mat-flat-button class="mr-2" [disabled]='selected.value===3' (click)="caseDeatil()"
+              (click)="selected.setValue(selected.value + 1 > 3 ? 3:selected.value + 1)" color="warn">Next</button>
+          </div>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label><span class="add" [class.green-border]='isReportedSubmit && isReportedValid'
+        [class.red-border]='isReportedSubmit && !isReportedValid'>Reported By</span></ng-template>
+    <br>
+    <form [formGroup]="reported">
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field appearance="legacy">
+            <mat-label>Who reported the fault ?</mat-label>
+            <mat-select formControlName="reporterName">
+              <mat-option value="option">Option</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-8">
+          <mat-form-field appearance="legacy">
+            <mat-label>Select Agreement</mat-label>
+            <mat-select>
+              <mat-option value="option">Option</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field appearance="legacy">
+            <mat-label>Select Tenant</mat-label>
+            <mat-select formControlName="tenant">
+              <mat-option value="option">Option</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="legacy">
+            <mat-label>Email Address</mat-label>
+            <input matInput>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field appearance="legacy">
+            <mat-label>Daytime Day</mat-label>
+            <input matInput>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="legacy">
+            <mat-label>Evening Tel</mat-label>
+            <input matInput>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="legacy">
+            <mat-label>Mobile</mat-label>
+            <input matInput>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row save">
+        <button mat-flat-button color="primary">Cancel</button>
+        <button mat-flat-button color="primary">Save for Later</button>
+        <button mat-flat-button [disabled]='selected.value===0'
+          (click)="selected.setValue(selected.value - 1 < 0 ? 0:selected.value - 1)" color="primary">Back</button>
+        <button mat-flat-button [disabled]='selected.value===3' (click)="reportedBy()"
+          (click)="selected.setValue(selected.value + 1 > 3 ? 3:selected.value + 1)" color="warn">Next</button>
+      </div>
+    </form>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label><span class="add" [class.green-border]='isAccessInfoSubmit && isAccessInfoValid'
+        [class.red-border]='isAccessInfoSubmit && !isAccessInfoValid'>Access Info</span></ng-template>
+    <br>
+    <form [formGroup]="accessInfo">
+      <div class="row">
+        <div class="col-md-3">
+          <mat-form-field appearance="legacy">
+            <mat-label>Select Tenant</mat-label>
+            <mat-select>
+              <mat-option value="option">Option</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-1">
+          <span><i class="fa fa-check-circle" aria-hidden="true"></i>
+          </span>
+        </div>
+        <div class="col-md-8">
+          <p>Is there a vulnerable occupier at this property ?</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field appearance="legacy">
+            <mat-label>Input</mat-label>
+            <input matInput>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row save mt-4 mr-1">
+        <button mat-flat-button color="primary">Cancel</button>
+        <button mat-flat-button color="primary">Save for Later</button>
+        <button mat-flat-button [disabled]='selected.value===0'
+          (click)="selected.setValue(selected.value - 1 < 0 ? 0:selected.value - 1)" color="primary">Back</button>
+        <button mat-flat-button [disabled]='selected.value===3' (click)="saveAccessInfo()"
+          (click)="selected.setValue(selected.value + 1 > 3 ? 3:selected.value + 1)" color="warn">Next</button>
+      </div>
+    </form>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label><span class="add" [class.green-border]='isManageMediaSubmit && isManageMediaValid'
+        [class.red-border]='isManageMediaSubmit && !isManageMediaValid'>Manage Media/document</span></ng-template>
+    <br>
+    <form [formGroup]="manageMedia">
+      <mat-form-field appearance="fill">
+        <mat-label>Input</mat-label>
+        <input matInput>
+      </mat-form-field><br>
+      <div class="row save mt-4 mr-1">
+        <button mat-flat-button color="primary">Cancel</button>
+        <button mat-flat-button color="primary">Save for Later</button>
+        <button mat-flat-button [disabled]='selected.value===0'
+          (click)="selected.setValue(selected.value - 1 < 0 ? 0:selected.value - 1)" color="primary">Back</button>
+        <button mat-flat-button [disabled]='selected.value===3' (click)="manageMediaDoc()"
+          (click)="selected.setValue(selected.value + 1 > 3 ? 3:selected.value + 1)" color="warn">Next</button>
+      </div>
+    </form>
+  </mat-tab>
+</mat-tab-group>
 </ng-template>
 
 <ng-template #additionalInfo>
