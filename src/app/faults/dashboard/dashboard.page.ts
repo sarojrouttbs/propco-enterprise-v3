@@ -200,7 +200,7 @@ export class DashboardPage implements OnInit {
     let origDivOverlayHeight;
     let origDivOverlayTop;
     let divOverlayTopBottomPadding = 0;
-    if (baseContainerHeight > 48) {
+    if (baseContainerHeight > 49) {
       divOverlayTopBottomPadding = (baseContainerHeight - 48) / 2;
     }
 
