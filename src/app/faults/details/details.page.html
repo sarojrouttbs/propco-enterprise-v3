@@ -1,5 +1,5 @@
 <ng-template #caseDetails>
-  <!-- <form>
+  <form>
     <ion-grid>
       <ion-row class="ion-justify-content-start">
         <ion-col size="auto">
@@ -24,220 +24,18 @@
               </ion-select-option>
             </ion-select>
           </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
         <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Fault description</ion-label>
             <ion-input></ion-input>
           </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
       </ion-row>
     </ion-grid>
-  </form> -->
-
-  <mat-tab-group mat-stretch-tabs mat-align-tabs="start" [selectedIndex]="selected.value" (selectedIndexChange)="currentSelected($event)">
-  <mat-tab>
-    <ng-template mat-tab-label><span class="add" [class.green-border]='iscaseDetailSubmit && isCaseDetailValid'
-        [class.red-border]='iscaseDetailSubmit && !isCaseDetailValid'>Case Detail</span></ng-template>
-    <!-- <form [formGroup]='caseDetail'>
-      <div class="row">
-        <div class="col-md-6">
-          <mat-form-field appearance="legacy">
-            <mat-label>Urgency Status</mat-label>
-            <mat-select formControlName="case">
-              <mat-option value="option">Option</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-md-6">
-          <mat-form-field appearance="legacy">
-            <mat-label>Who reported the fault </mat-label>
-            <input matInput formControlName="fault">
-          </mat-form-field>
-        </div>
-      </div>
-    </form> -->
-
-    <form [formGroup]='caseDetail'>
-      <ion-grid>
-        <ion-row class="ion-justify-content-start">
-          <ion-col size="auto">
-            <h2>Bath & Toilet <ion-text color="success">›</ion-text><ion-text></ion-text></h2>
-          </ion-col>
-          <ion-col size="auto">
-            <ion-item lines="none" class="edit-title">
-              <ion-input value="Fault jksahdfkh kjhfdskh jkha fdsjh jasdfh hahasfjkhjhjkfh jkhsfh" style="font-size:24px;padding-bottom:0"></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size="auto" class="ion-no-padding">
-            <ion-button>Edit</ion-button>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="100">
-            <ion-item>
-              <ion-label position="floating">Urgency Status</ion-label>
-              <ion-select interface="popover" formControlName="case">
-                <ion-select-option [value]="item.index" *ngFor="let item of catList"
-                  >{{ item.value }}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
-            <!-- <app-validation-message [control]=""></app-validation-message> -->
-          </ion-col>
-          <ion-col size="100">
-            <ion-item>
-              <ion-label position="floating">Fault description</ion-label>
-              <ion-input formControlName="fault"></ion-input>
-            </ion-item>
-            <!-- <app-validation-message [control]=""></app-validation-message> -->
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <div>
-            <button mat-flat-button color="primary">Cancel</button>
-            <button mat-flat-button color="primary">Save for Later</button>
-            <button mat-flat-button [disabled]='selected.value===0'
-              (click)="selected.setValue(selected.value - 1 < 0 ? 0:selected.value - 1)" color="primary">Back</button>
-            <button mat-flat-button class="mr-2" [disabled]='selected.value===3' (click)="caseDeatil()"
-              (click)="selected.setValue(selected.value + 1 > 3 ? 3:selected.value + 1)" color="warn">Next</button>
-          </div>
-        </ion-row>
-      </ion-grid>
-    </form>
-  </mat-tab>
-  <mat-tab>
-    <ng-template mat-tab-label><span class="add" [class.green-border]='isReportedSubmit && isReportedValid'
-        [class.red-border]='isReportedSubmit && !isReportedValid'>Reported By</span></ng-template>
-    <br>
-    <form [formGroup]="reported">
-      <div class="row">
-        <div class="col-md-4">
-          <mat-form-field appearance="legacy">
-            <mat-label>Who reported the fault ?</mat-label>
-            <mat-select formControlName="reporterName">
-              <mat-option value="option">Option</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-md-8">
-          <mat-form-field appearance="legacy">
-            <mat-label>Select Agreement</mat-label>
-            <mat-select>
-              <mat-option value="option">Option</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6">
-          <mat-form-field appearance="legacy">
-            <mat-label>Select Tenant</mat-label>
-            <mat-select formControlName="tenant">
-              <mat-option value="option">Option</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-md-6">
-          <mat-form-field appearance="legacy">
-            <mat-label>Email Address</mat-label>
-            <input matInput>
-          </mat-form-field>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-4">
-          <mat-form-field appearance="legacy">
-            <mat-label>Daytime Day</mat-label>
-            <input matInput>
-          </mat-form-field>
-        </div>
-        <div class="col-md-4">
-          <mat-form-field appearance="legacy">
-            <mat-label>Evening Tel</mat-label>
-            <input matInput>
-          </mat-form-field>
-        </div>
-        <div class="col-md-4">
-          <mat-form-field appearance="legacy">
-            <mat-label>Mobile</mat-label>
-            <input matInput>
-          </mat-form-field>
-        </div>
-      </div>
-
-      <div class="row save">
-        <button mat-flat-button color="primary">Cancel</button>
-        <button mat-flat-button color="primary">Save for Later</button>
-        <button mat-flat-button [disabled]='selected.value===0'
-          (click)="selected.setValue(selected.value - 1 < 0 ? 0:selected.value - 1)" color="primary">Back</button>
-        <button mat-flat-button [disabled]='selected.value===3' (click)="reportedBy()"
-          (click)="selected.setValue(selected.value + 1 > 3 ? 3:selected.value + 1)" color="warn">Next</button>
-      </div>
-    </form>
-  </mat-tab>
-  <mat-tab>
-    <ng-template mat-tab-label><span class="add" [class.green-border]='isAccessInfoSubmit && isAccessInfoValid'
-        [class.red-border]='isAccessInfoSubmit && !isAccessInfoValid'>Access Info</span></ng-template>
-    <br>
-    <form [formGroup]="accessInfo">
-      <div class="row">
-        <div class="col-md-3">
-          <mat-form-field appearance="legacy">
-            <mat-label>Select Tenant</mat-label>
-            <mat-select>
-              <mat-option value="option">Option</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-md-1">
-          <span><i class="fa fa-check-circle" aria-hidden="true"></i>
-          </span>
-        </div>
-        <div class="col-md-8">
-          <p>Is there a vulnerable occupier at this property ?</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <mat-form-field appearance="legacy">
-            <mat-label>Input</mat-label>
-            <input matInput>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row save mt-4 mr-1">
-        <button mat-flat-button color="primary">Cancel</button>
-        <button mat-flat-button color="primary">Save for Later</button>
-        <button mat-flat-button [disabled]='selected.value===0'
-          (click)="selected.setValue(selected.value - 1 < 0 ? 0:selected.value - 1)" color="primary">Back</button>
-        <button mat-flat-button [disabled]='selected.value===3' (click)="saveAccessInfo()"
-          (click)="selected.setValue(selected.value + 1 > 3 ? 3:selected.value + 1)" color="warn">Next</button>
-      </div>
-    </form>
-  </mat-tab>
-  <mat-tab>
-    <ng-template mat-tab-label><span class="add" [class.green-border]='isManageMediaSubmit && isManageMediaValid'
-        [class.red-border]='isManageMediaSubmit && !isManageMediaValid'>Manage Media/document</span></ng-template>
-    <br>
-    <form [formGroup]="manageMedia">
-      <mat-form-field appearance="fill">
-        <mat-label>Input</mat-label>
-        <input matInput>
-      </mat-form-field><br>
-      <div class="row save mt-4 mr-1">
-        <button mat-flat-button color="primary">Cancel</button>
-        <button mat-flat-button color="primary">Save for Later</button>
-        <button mat-flat-button [disabled]='selected.value===0'
-          (click)="selected.setValue(selected.value - 1 < 0 ? 0:selected.value - 1)" color="primary">Back</button>
-        <button mat-flat-button [disabled]='selected.value===3' (click)="manageMediaDoc()"
-          (click)="selected.setValue(selected.value + 1 > 3 ? 3:selected.value + 1)" color="warn">Next</button>
-      </div>
-    </form>
-  </mat-tab>
-</mat-tab-group>
+  </form>
 </ng-template>
 
 <ng-template #additionalInfo>
@@ -453,13 +251,13 @@
   <form>
     <ion-grid>
       <ion-row>
-        <form class="drop-zone" [formGroup]="uploadDocForm" file-drop (files)="submit($event)">
+        <!-- <form class="drop-zone" [formGroup]="uploadDocForm" file-drop (files)="submit($event)">
           <ion-icon class="icon" name="cloud-upload"></ion-icon>
           <input type="file" class="custom-file-input form-control" id="files" multiple (change)="submit($event.target.files)"
           accept="image/x-png,image/jpeg">
           <span class="drag-text">Drag files to upload here</span> <br>
           <label for="files" class="browse-btn">Browse Files</label>
-        </form>
+        </form> -->
         <!-- <form [formGroup]="uploadDocForm" >
           <ion-row size="col-20">
             <div class="images-preview mt-2" *ngIf="photos.length">
@@ -483,7 +281,7 @@
   </form>
 </ng-template>
 
-<ng-template #FinalView>
+<ng-template #finalView>
   <ion-grid id="final-view">
     <ion-row class="ion-justify-content-between">
       <ion-col size="100">
@@ -585,26 +383,60 @@
   </ion-grid>
 </ng-template>
 
-<ng-template #SubmitCancel>
-  <ion-grid class="action-buttons-block ion-text-center">
-    <ion-row>
-      <ion-col>
-        <ion-button color="danger" style="margin-left: 5px">Cancel</ion-button
-        >&nbsp;&nbsp;
-        <ion-button color="success"
-          >Submit
-          <ion-icon name="refresh" class="rotating submit-loader"></ion-icon>
-        </ion-button>
-        <ion-button color="success"
-          >Update
-          <ion-icon
-            name="refresh"
-            class="rotating submit-loader"
-          ></ion-icon> </ion-button
-        >&nbsp;&nbsp;
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+<ng-template #caseLogged>
+  <mat-tab-group  mat-stretch-tabs mat-align-tabs="start" #allTabs>
+    <mat-tab label="Case Details">
+      <ng-container *ngTemplateOutlet="caseDetails"></ng-container>
+      <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
+      <button mat-raised-button tabindex="-1" type="button" color="warn">Move to Tab 2</button>
+    </mat-tab>
+    <mat-tab label="Reported By">
+      <ng-container *ngTemplateOutlet="reportedBy"></ng-container>
+      <button mat-raised-button tabindex="-1" type="button" color="warn">Move to Tab 2</button>
+    </mat-tab>
+    <mat-tab label="Access Information">
+      <ng-container *ngTemplateOutlet="accessInformation"></ng-container>
+      <button mat-raised-button tabindex="-1" type="button" color="warn">Move to Tab 2</button>
+    </mat-tab>
+    <mat-tab label="Manage Media / Documents">
+      <ng-container *ngTemplateOutlet="media"></ng-container>
+      <button mat-raised-button tabindex="-1" type="button" color="warn">Move to Tab 2</button>
+    </mat-tab>
+    <mat-tab label="Review">
+      <ng-container *ngTemplateOutlet="finalView"></ng-container>
+      <button mat-raised-button tabindex="-1" type="button" color="warn">Move to Tab 2</button>
+    </mat-tab>
+  </mat-tab-group>
+</ng-template>
+
+<ng-template #caseQualification>
+  <ion-card class="ion-no-margin">
+    <h2 class="ion-text-center">This page is in pogress...</h2>
+  </ion-card>
+</ng-template>
+
+<ng-template #landlordInstructions>
+  <ion-card class="ion-no-margin">
+    <h2 class="ion-text-center">This page is in pogress...</h2>
+  </ion-card>
+</ng-template>
+
+<ng-template #arrangingContractor>
+  <ion-card class="ion-no-margin">
+    <h2 class="ion-text-center">This page is in pogress...</h2>
+  </ion-card>
+</ng-template>
+
+<ng-template #jobCompletion>
+  <ion-card class="ion-no-margin">
+    <h2 class="ion-text-center">This page is in pogress...</h2>
+  </ion-card>
+</ng-template>
+
+<ng-template #payment>
+  <ion-card class="ion-no-margin">
+    <h2 class="ion-text-center">This page is in pogress...</h2>
+  </ion-card>
 </ng-template>
 
 <ion-content id="fault-details">
@@ -654,12 +486,10 @@
         <ion-button (click)="faultDetails.urgencyStatus = 1" [class]="faultDetails?.urgencyStatus===1 ? 'urgency-selected non-urgent-btn' : 'non-urgent-btn'">Non urgent</ion-button>
         <ion-button (click)="faultDetails.urgencyStatus = 2" [class]="faultDetails?.urgencyStatus===2 ? 'urgency-selected urgent-btn' : 'urgent-btn'">Urgent</ion-button>
         <ion-button (click)="faultDetails.urgencyStatus = 3" [class]="faultDetails?.urgencyStatus===3 ? 'urgency-selected emergency-btn' : 'emergency-btn'">Emergency</ion-button>
-        <!-- <ion-button>Non urgent</ion-button>
-        <ion-button>Urgent</ion-button>
-        <ion-button>Emergency</ion-button> -->
       </ion-col>
     </ion-row>
   </ion-grid>
+  
   <div class="panel-block-normal propco-form" *ngIf="pageNo===2">
     <ion-grid>
       <ion-row class="main-row">
@@ -679,7 +509,7 @@
   </div>
 
   <ng-container *ngIf="pageNo===3">
-    <ion-grid>
+   <ion-grid>
       <ion-row>
         <ion-col size="50">
           <h2 class="heading">Log a fault</h2>
@@ -689,12 +519,11 @@
         </ion-col>
       
         <ion-col size="100">
-          <ion-card class="ion-no-margin" id="property-details-card">
-            <form [formGroup]="uploadDocForm">
-              <app-property-details (getUploadedFile)="getUploadedFile($event)" [files]="files" [parentForm]="uploadDocForm"
-                [propertyDetails]="propertyData"> </app-property-details>
-            </form>
-          </ion-card>
+          <!-- <ion-card class="ion-no-margin" id="property-details-card">
+            <app-property-details
+              [propertyDetails]="propertyDetails"
+            ></app-property-details>
+          </ion-card> -->
         </ion-col>
         <ion-col size="100">
           <mat-horizontal-stepper
@@ -702,49 +531,58 @@
             labelPosition="bottom"
           >
             <mat-step>
-              <ng-container *ngTemplateOutlet="caseDetails"></ng-container>
-              <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
-              <ng-template matStepLabel>Fault details</ng-template>
-              
-              <!-- <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
-                    src="assets/images/right-arrow-active.svg" /></button>
-                <div class="blank-div">&nbsp;</div> -->
+              <ng-container *ngTemplateOutlet="caseLogged"></ng-container>
+              <ng-template matStepLabel>Case Logged</ng-template>
+              <div class="ion-text-end margin-top-16">
+                <button mat-button matStepperPrevious class="stepper-back">Back</button>
+                <button mat-button matStepperNext class="stepper-next">Next</button>
+              </div>
+              <div class="blank-div">&nbsp;</div>
             </mat-step>
             <mat-step>
-              <ng-container *ngTemplateOutlet="reportedBy"></ng-container>
-              <ng-template matStepLabel>Reported By</ng-template>
-              <!-- <button mat-button matStepperPrevious mat-icon-button class="stepper-back"><img
-                    src="assets/images/left-arrow.svg" /></button>
-                <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
-                    src="assets/images/right-arrow-active.svg" /></button>
-                <div class="blank-div">&nbsp;</div> -->
+              <ng-container *ngTemplateOutlet="caseQualification"></ng-container>
+              <ng-template matStepLabel>Case Qualification</ng-template>
+              <div class="ion-text-end margin-top-16">
+                <button mat-button matStepperPrevious class="stepper-back">Back</button>
+                <button mat-button matStepperNext class="stepper-next">Next</button>
+              </div>
+              <div class="blank-div">&nbsp;</div>
             </mat-step>
             <mat-step>
-              <ng-container *ngTemplateOutlet="accessInformation"></ng-container>
-              <ng-template matStepLabel>Access Information</ng-template>
-              <!-- <button mat-button matStepperPrevious mat-icon-button class="stepper-back"><img
-                    src="assets/images/left-arrow.svg" /></button>
-                <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
-                    src="assets/images/right-arrow-active.svg" /></button>
-                <div class="blank-div">&nbsp;</div> -->
+              <ng-container *ngTemplateOutlet="landlordInstructions"></ng-container>
+              <ng-template matStepLabel>Landlord Instructions</ng-template>
+              <div class="ion-text-end margin-top-16">
+                <button mat-button matStepperPrevious class="stepper-back">Back</button>
+                <button mat-button matStepperNext class="stepper-next">Next</button>
+              </div>
+              <div class="blank-div">&nbsp;</div>
             </mat-step>
             <mat-step>
-              <ng-container *ngTemplateOutlet="media"></ng-container>
-              <ng-template matStepLabel>Media and Documents</ng-template>
-              <!-- <button mat-button matStepperPrevious mat-icon-button class="stepper-back"><img
-                    src="assets/images/left-arrow.svg" /></button>
-                <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
-                    src="assets/images/right-arrow-active.svg" /></button>
-                <div class="blank-div">&nbsp;</div> -->
+              <ng-container *ngTemplateOutlet="arrangingContractor"></ng-container>
+              <ng-template matStepLabel>Arranging Contractor</ng-template>
+              <div class="ion-text-end margin-top-16">
+                <button mat-button matStepperPrevious class="stepper-back">Back</button>
+                <button mat-button matStepperNext class="stepper-next">Next</button>
+              </div>
+              <div class="blank-div">&nbsp;</div>
             </mat-step>
             <mat-step>
-              <ng-container *ngTemplateOutlet="FinalView"></ng-container>
-              <ng-template matStepLabel>Review</ng-template>
-              <!-- <button mat-button matStepperPrevious mat-icon-button class="stepper-back"><img
-                    src="assets/images/left-arrow.svg" /></button>
-                <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
-                    src="assets/images/right-arrow-active.svg" /></button>
-                <div class="blank-div">&nbsp;</div> -->
+              <ng-container *ngTemplateOutlet="jobCompletion"></ng-container>
+              <ng-template matStepLabel>Job Completion</ng-template>
+              <div class="ion-text-end margin-top-16">
+                <button mat-button matStepperPrevious class="stepper-back">Back</button>
+                <button mat-button matStepperNext class="stepper-next">Next</button>
+              </div>
+              <div class="blank-div">&nbsp;</div>
+            </mat-step>
+            <mat-step>
+              <ng-container *ngTemplateOutlet="payment"></ng-container>
+              <ng-template matStepLabel>Payment</ng-template>
+              <div class="ion-text-end margin-top-16">
+                <button mat-button matStepperPrevious class="stepper-back">Back</button>
+                <button mat-button matStepperNext class="stepper-next">Next</button>
+              </div>
+              <div class="blank-div">&nbsp;</div>
             </mat-step>
           </mat-horizontal-stepper>
         </ion-col>
@@ -752,13 +590,4 @@
     </ion-grid>
   </ng-container>
 
-  <!-- <ion-grid *ngIf="pageNo===3">
-    <ion-row>
-      <ion-col>
-        <ion-card class="ion-no-margin" id="property-details-card">
-          <app-property-details [propertyDetails]="propertyData"></app-property-details>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid> -->
 </ion-content>

@@ -42,6 +42,7 @@
     min-width: 36px;
     width: 36px;
     max-width: 36px;
+    cursor: pointer;
   }
   
   #divOverlay,
@@ -77,6 +78,7 @@
       background-color: var(--ion-color-step-900);
       margin: 6px 0 6px 6px;
       color: var(--ion-color-step-2000);
+      cursor: pointer;
     }
   }
 }

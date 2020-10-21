@@ -14,7 +14,7 @@ export class DetailsPage implements OnInit {
 
   catList: any[] = catList;
   propertyData = propertyData;
-  pageNo = 1;
+  pageNo = 3;
   faultDetails: any = {};
   propertyId = '5eae3eee-f99b-11e8-bd34-0cc47a54d954';
   propertyDetails;
