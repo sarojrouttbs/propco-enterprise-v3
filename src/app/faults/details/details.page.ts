@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { forkJoin } from 'rxjs';
+import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
 import { catList, propertyData } from './cat.json';
 
 @Component({
   selector: 'fault-details',
   templateUrl: './details.page.html',
-  styleUrls: ['./details.page.scss'],
+  styleUrls: ['./details.page.scss', '../../shared/drag-drop.scss'],
 })
 export class DetailsPage implements OnInit {
 
@@ -20,6 +21,8 @@ export class DetailsPage implements OnInit {
   propertyTenancyDetails;
   propertyHMODetails;
   addtionalInfo;
+  public uploadDocForm: FormGroup;
+  files = [];
   describeFaultForm: FormGroup;
   faultDetailsForm: FormGroup;
   addAdditionalDetForm: FormGroup;
@@ -42,7 +45,7 @@ export class DetailsPage implements OnInit {
     'assets/images/fault-categories/water-and-leaks.svg'
   ];
 
-  constructor(private faultService: FaultsService, private fb: FormBuilder) {
+  constructor(private faultService: FaultsService, private fb: FormBuilder, private commonService: CommonService) {
   }
 
   ionViewDidEnter() {
@@ -50,6 +53,7 @@ export class DetailsPage implements OnInit {
   }
 
   ngOnInit() {
+    this.faultDetails.urgencyStatus = 1;
     this.catList.map((cat, index) => {
       cat.imgPath = this.categoryIconList[index];
     });
@@ -70,6 +74,7 @@ export class DetailsPage implements OnInit {
     this.initaddAdditionalDetForm();
     this.initReportedByForm();
     this.initAccessInfiForm();
+    this.initUploadDocForm();
   }
 
   initDescribeFaultForm(): void {
@@ -115,6 +120,12 @@ export class DetailsPage implements OnInit {
       email: [{ value: '', disabled: true }],
       mobile: [{ value: '', disabled: true }],
       homeTelephoneNo: [{ value: '', disabled: true }]
+    });
+  }
+
+  initUploadDocForm() : void{
+    this.uploadDocForm = this.fb.group({
+      photos: this.fb.array([])
     });
   }
 
@@ -191,5 +202,61 @@ export class DetailsPage implements OnInit {
     );
   }
 
+  getUploadedFile(files: FileList) {
+    this.submit(files);
+  }
+
+  removeFile(i) {
+    this.files.splice(i, 1);
+    this.photos.removeAt(i);
+  }
+
+  createItem(data): FormGroup {
+    return this.fb.group(data);
+  }
+
+  get photos(): FormArray {
+    return this.uploadDocForm.get('photos') as FormArray;
+  };
+
+  submit(files) {
+    if (this.files.length + files.length > 5) {
+      this.commonService.showMessage("You are only allowed to upload a maximum of 5 files", "Warning", "warning");
+      return;
+    }
+    if (files) {
+      for (let file of files) {
+        this.photos.push(this.createItem({
+          file: file
+        }));
+        let reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.files.push({
+            url: e.target.result,
+            name: file.name
+          })
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+  }
+
+
+  uploadFile() {
+    let apiObservableArray = [];
+    let uploadedDoc = this.uploadDocForm.controls.photos.value;
+    uploadedDoc.forEach(data => {
+      const formData = new FormData();
+      formData.append('file', data.file);
+      formData.append('folderName', '1');
+      formData.append('headCategory', 'Legal');
+      formData.append('subCategory', 'Addendum');
+      apiObservableArray.push(this.faultService.uploadDocument(formData));
+    });
+    setTimeout(() => {
+      forkJoin(apiObservableArray).subscribe(() => {
+      });
+    }, 1000);
+  }
 
 }

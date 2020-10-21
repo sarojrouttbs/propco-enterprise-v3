@@ -1,15 +1,20 @@
 import { PROPCO } from './../../constants';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { CommonService } from '../../services/common.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-property-details',
   templateUrl: './property-details.component.html',
-  styleUrls: ['./property-details.component.scss'],
+  styleUrls: ['./property-details.component.scss', '../../drag-drop.scss'],
 })
 export class PropertyDetailsComponent implements OnInit {
   @Input() propertyDetails;
+  @Input() parentForm: FormGroup;
+  @Input() files;
   lookupdata: any;
+  @Output()
+  getUploadedFile = new EventEmitter<any>();
   advertisementRentFrequencies: any;
 
   constructor(public commonService: CommonService) {
@@ -31,4 +36,7 @@ export class PropertyDetailsComponent implements OnInit {
     this.advertisementRentFrequencies = this.lookupdata.advertisementRentFrequencies;
   }
 
+  public submit(files: FileList) {
+    this.getUploadedFile.emit(files);
+  }
 }

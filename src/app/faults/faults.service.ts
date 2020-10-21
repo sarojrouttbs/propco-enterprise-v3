@@ -43,4 +43,9 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `faults/additional-info`);
   }
 
+  uploadDocument(formData: FormData): Observable<any> {
+    let faultId = "205e5506-ce3c-4bdf-820a-99d5e49e8066";
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/documents/upload`, formData);
+    }
+
 }
