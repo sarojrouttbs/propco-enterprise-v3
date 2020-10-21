@@ -27,7 +27,15 @@ export class DashboardPage implements OnInit {
   faultList: any[];
   faultNotes: any[];
   selectedData: any;
-  lookupdata: any; faultCategories: any[]; officeCodes: any[]; faultStatuses: any[]; faultUrgencyStatuses;
+  lookupdata: any; 
+  faultCategories: any[];
+  officeCodes: any[];
+  faultStatuses: any[];
+  faultUrgencyStatuses;
+  notesCategories: any[];
+  userLookupDetails: any[];
+  notesComplaints: any[];
+  notesTypes: any[];
   reportedByTypes = REPORTED_BY_TYPES;
 
   constructor(
@@ -95,6 +103,11 @@ export class DashboardPage implements OnInit {
     this.officeCodes = data.officeCodes;
     this.faultStatuses = data.faultStatuses;
     this.faultUrgencyStatuses = data.faultUrgencyStatuses;
+
+    this.notesCategories = data.notesCategories;
+    this.userLookupDetails = data.userLookupDetails;
+    this.notesComplaints = data.notesComplaint;
+    this.notesTypes = data.notesType;
   }
 
   getLookupValue(index, lookup, type?) {
@@ -125,7 +138,7 @@ export class DashboardPage implements OnInit {
 
   private getFaultNotes(faultId) {
     this.faultsService.getFaultNotes(faultId).subscribe(res => {
-      this.faultNotes = res ? res : [];
+      this.faultNotes = res && res.data ? res.data : [];
       this.rerender();
     });
   }
@@ -135,18 +148,21 @@ export class DashboardPage implements OnInit {
   }
 
   async notesModal() {
-    const headingText = 'Add Note';
-    const dataText = 'Test';
     const modal = await this.modalController.create({
       component: NotesModalPage,
       cssClass: 'modal-container',
       componentProps: {
-        data: dataText,
-        heading: headingText
-      }
+        notesType: 'fault',
+        notesTypeId: this.selectedData.faultId,
+        isAddNote : true
+      },
+      backdropDismiss: false
     });
 
     const data = modal.onDidDismiss().then(res => {
+      if(res.data && res.data.noteId){
+        this.getFaultNotes(this.selectedData.faultId);
+      }
     });
     await modal.present();
   }
@@ -169,6 +185,7 @@ export class DashboardPage implements OnInit {
   }
 
   showMenu(event, id, data, className, isCard?) {
+    this.selectedData = data;
     const baseContainer = $(event.target).parents('.' + className);
     const divOverlay = $('#' + id);
     const baseContainerWidth = baseContainer.outerWidth(true);

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{heading}}</ion-title>
+    <ion-title>{{isAddNote? 'Add Note': 'Edit Note'}}</ion-title>
     <ion-buttons slot="end">
       <ion-icon name="close" (click)="dismiss()"></ion-icon>
     </ion-buttons>
@@ -13,53 +13,52 @@
       <ion-row class="">
         <ion-col size="50">
           <ion-item>
-            <ion-label position="floating"
-              >Entered On
+            <ion-label position="floating">Entered On
               <ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-datetime
-              displayFormat="DD MMM YYYY"
-              interface="popover"
-            ></ion-datetime>
+            <ion-datetime formControlName="date" displayFormat="DD MMM YYYY" interface="popover" readonly="true"></ion-datetime>
           </ion-item>
         </ion-col>
         <ion-col size="50">
           <ion-item lines="none" style="margin-top: 6px;">
             <ion-label>Complaint</ion-label>
-            <ion-toggle slot="start"></ion-toggle>
+            <ion-toggle slot="start" formControlName="complaint"></ion-toggle>
           </ion-item>
+          <app-validation-message [control]="notesForm.controls.complaint"></app-validation-message>
         </ion-col>
-        <ion-col size="100">
-            <ion-item>
-              <ion-label position="floating">Entered By</ion-label>
-              <ion-input></ion-input>
-            </ion-item>
-        </ion-col>
+        <!-- <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Entered By</ion-label>
+            <ion-input formControlName="user"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="notesForm.controls.user"></app-validation-message>
+        </ion-col> -->
         <ion-col size="50">
           <ion-item>
             <ion-label position="floating">Category</ion-label>
-            <ion-select interface="popover">
-              <ion-select-option [value]="item.index" *ngFor="let item of catList"
-                >{{ item.value }}
+            <ion-select interface="popover" formControlName="category">
+              <ion-select-option [value]="category.index" *ngFor="let category of notesCategories">{{ category.value }}
               </ion-select-option>
             </ion-select>
           </ion-item>
+          <app-validation-message [control]="notesForm.controls.category"></app-validation-message>
         </ion-col>
         <ion-col size="50">
           <ion-item>
             <ion-label position="floating">Type</ion-label>
-            <ion-select interface="popover">
-              <ion-select-option [value]="item.index" *ngFor="let item of catList"
-                >{{ item.value }}
+            <ion-select interface="popover" formControlName="type">
+              <ion-select-option [value]="type.index" *ngFor="let type of notesTypes">{{ type.value }}
               </ion-select-option>
             </ion-select>
           </ion-item>
+          <app-validation-message [control]="notesForm.controls.type"></app-validation-message>
         </ion-col>
         <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Notes</ion-label>
-            <ion-input></ion-input>
+            <ion-input formControlName="notes"></ion-input>
           </ion-item>
+          <app-validation-message [control]="notesForm.controls.notes"></app-validation-message>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -69,10 +68,7 @@
   <ion-grid>
     <ion-row>
       <ion-col class="ion-text-end">
-        <ion-button
-          (click)="createNote()"
-          >Submit</ion-button
-        >
+        <ion-button (click)="createNote()">Submit</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
