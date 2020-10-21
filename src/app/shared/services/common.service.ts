@@ -183,6 +183,7 @@ export class CommonService {
         header: title,
         subHeader: subtitle ? subtitle : undefined,
         message: displayText,
+        cssClass: 'common-alert-box',
         buttons: [{
           text: 'OK',
           handler: () => {
@@ -208,6 +209,7 @@ export class CommonService {
         header: title,
         subHeader: subtitle ? subtitle : undefined,
         message: displayText,
+        cssClass: 'common-alert-box',
         buttons: [
           {
             text: 'Cancel',

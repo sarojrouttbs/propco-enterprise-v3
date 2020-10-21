@@ -168,6 +168,8 @@ export class DashboardPage implements OnInit {
   }
 
   async escalateModal() {
+    this.commonService.showAlert('Escalate', 'This functionality is under development.');
+    return;
     const headingText = 'Escalate';
     const dataText = 'Test';
     const modal = await this.modalController.create({
