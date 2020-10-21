@@ -74,36 +74,22 @@
                 <th>Category</th>
                 <th>User</th>
                 <th>Notes</th>                
-                <th></th>
+                <!-- <th></th> -->
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let notes of faultNotes" class="table-row">
-                <td>{{notes.createdAt || '-'}}</td>
-                <td>sss</td>
-                <td>{{notes.propertyReference || '-'}}</td>
-                <td>{{notes.propertyAddress}}</td>
-                <td>{{notes.title}}</td>
-                <td>{{notes.title || '-'}}</td>
-                <td>{{notes.reportedBy || '-'}}</td>
-                <td class="resp-action-icon">
-                  <!-- <ion-fab vertical="center" horizontal="end" slot="fixed">
-                    <ion-fab-button>Share</ion-fab-button>
-                    <ion-fab-list side="start">
-                      <ion-fab-button>
-                        <ion-icon name="logo-vimeo"></ion-icon>
-                      </ion-fab-button>
-                      <ion-fab-button>
-                        <ion-icon name="logo-chrome"></ion-icon>
-                      </ion-fab-button>
-                      <ion-fab-button>
-                        <ion-icon name="logo-react"></ion-icon>
-                      </ion-fab-button>
-                    </ion-fab-list>
-                  </ion-fab> -->
+                <td>{{notes.postedAt | date: 'dd/MM/yyyy' || '-'}}</td>
+                <td>{{notes.postedAt | date: 'HH:mm:ss' || '-'}}</td>
+                <td>{{getLookupValue(notes.type, notesTypes) || '-'}}</td>
+                <td>{{getLookupValue(notes.complaint, notesComplaints) || '-'}}</td>
+                <td>{{getLookupValue(notes.category, notesCategories) || '-'}}</td>
+                <td>{{getLookupValue(notes.user, userLookupDetails) || '-'}}</td>
+                <td>{{notes.notes|| '-'}}</td>
+                <!-- <td class="resp-action-icon">
                   <i (click)="showMenu($event,'divOverlay', notes, 'table-row')"
                     class="propcoicon propcoicon-actions-on"></i>
-                </td>
+                </td> -->
               </tr>
               <!-- <tr *ngIf="!faultNotes" class="table-row odd">
                 <td colspan="8" class="no-data-available">Please select the fault to view notes!</td>
