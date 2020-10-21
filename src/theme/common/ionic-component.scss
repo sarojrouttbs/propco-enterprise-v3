@@ -165,6 +165,16 @@ ion-item {
   }
 }
 
+ion-select-popover ion-list ion-item {
+  --border-width: 0;
+  --inner-border-width: 0;
+}
+
+ion-select-popover ion-list ion-item ion-radio {
+  --color: transparent;
+  --color-checked: transparent;
+}
+
 .dataTables_wrapper .dataTables_length,
 .dataTables_wrapper .dataTables_filter,
 .dataTables_wrapper .dataTables_info,
