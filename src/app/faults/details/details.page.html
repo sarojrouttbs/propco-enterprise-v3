@@ -1,4 +1,4 @@
-<ng-template #faultDetails>
+<ng-template #caseDetails>
   <form>
     <ion-grid>
       <ion-row class="ion-justify-content-start">
@@ -250,7 +250,33 @@
 <ng-template #media>
   <form>
     <ion-grid>
-      <ion-row> </ion-row>
+      <ion-row>
+        <form class="drop-zone" [formGroup]="uploadDocForm" file-drop (files)="submit($event)">
+          <ion-icon class="icon" name="cloud-upload"></ion-icon>
+          <input type="file" class="custom-file-input form-control" id="files" multiple (change)="submit($event.target.files)"
+          accept="image/x-png,image/jpeg">
+          <span class="drag-text">Drag files to upload here</span> <br>
+          <label for="files" class="browse-btn">Browse Files</label>
+        </form>
+        <!-- <form [formGroup]="uploadDocForm" >
+          <ion-row size="col-20">
+            <div class="images-preview mt-2" *ngIf="photos.length">
+              <div formArrayName="photos" *ngFor="let photo of photos.controls; let i = index;">
+                <div [formGroupName]="i">
+                  <img [src]="photo.controls.url.value" class="card-img-top" alt="Image Preview"  width="200px" height="200px">
+                  <button (click)="removeFile(i)">Delete</button>
+                </div>
+              </div>
+            </div>
+          </ion-row>
+        </form> -->
+        <div class="delete-icon-wrapper" *ngFor="let file of files; let i=index;">
+          <img [src]="file.url" width="250px" height="180px">
+          <span class="file-name">{{file.name}}</span>
+          <ion-icon (click)="removeFile(i)" class="delete-icon" name="close-circle"></ion-icon>
+        </div>
+      </ion-row>
+      <!-- <button (click)="uploadFile()">Upload</button> -->
     </ion-grid>
   </form>
 </ng-template>
@@ -462,9 +488,10 @@
       
         <ion-col size="100">
           <ion-card class="ion-no-margin" id="property-details-card">
-            <app-property-details
-              [propertyDetails]="propertyData"
-            ></app-property-details>
+            <form [formGroup]="uploadDocForm">
+              <app-property-details (getUploadedFile)="getUploadedFile($event)" [files]="files" [parentForm]="uploadDocForm"
+                [propertyDetails]="propertyData"> </app-property-details>
+            </form>
           </ion-card>
         </ion-col>
         <ion-col size="100">
@@ -473,7 +500,7 @@
             labelPosition="bottom"
           >
             <mat-step>
-              <ng-container *ngTemplateOutlet="faultDetails"></ng-container>
+              <ng-container *ngTemplateOutlet="caseDetails"></ng-container>
               <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
               <ng-template matStepLabel>Fault details</ng-template>
               
