@@ -1,7 +1,31 @@
 <ng-template #faultDetails>
   <form>
     <ion-grid>
+      <ion-row class="ion-justify-content-start">
+        <ion-col size="auto">
+          <h2>Bath & Toilet <ion-text color="success">›</ion-text><ion-text></ion-text></h2>
+        </ion-col>
+        <ion-col size="auto">
+          <ion-item lines="none" class="edit-title">
+            <ion-input value="Fault jksahdfkh kjhfdskh jkha fdsjh jasdfh hahasfjkhjhjkfh jkhsfh" style="font-size:24px;padding-bottom:0"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="auto" class="ion-no-padding">
+          <ion-button>Edit</ion-button>
+        </ion-col>
+      </ion-row>
       <ion-row>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Urgency Status</ion-label>
+            <ion-select interface="popover">
+              <ion-select-option [value]="item.index" *ngFor="let item of catList"
+                >{{ item.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
         <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Fault description</ion-label>
@@ -38,7 +62,7 @@
                 </ion-item>
               </ion-col>
               <ion-col size="10">
-                <ion-button>Add</ion-button>
+                <ion-button class="margin-top-16">Add</ion-button>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -50,24 +74,55 @@
   <form>
     <ion-grid>
       <ion-row>
-        <ion-col size="15">
-          <ion-item>
-            <ion-label position="floating">Type</ion-label>
-            <ion-select interface="popover">
-              <ion-select-option [value]="item.index" *ngFor="let item of catList"
-                >{{ item.value }}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
+        <ion-col size="50">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="30">
+                <ion-item>
+                  <ion-label position="floating">Type</ion-label>
+                  <ion-select interface="popover">
+                    <ion-select-option [value]="item.index" *ngFor="let item of catList"
+                      >{{ item.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col size="60">
+                <ion-item>
+                  <ion-label position="floating">Additional Info</ion-label>
+                  <ion-input></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="10">
+                <ion-icon name="close-circle" class="close-circle"></ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </ion-col>
-        <ion-col size="30">
-          <ion-item>
-            <ion-label position="floating">Additional Info</ion-label>
-            <ion-input></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col size="5">
-          <ion-button>Add</ion-button>
+        <ion-col size="50">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="30">
+                <ion-item>
+                  <ion-label position="floating">Type</ion-label>
+                  <ion-select interface="popover">
+                    <ion-select-option [value]="item.index" *ngFor="let item of catList"
+                      >{{ item.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col size="60">
+                <ion-item>
+                  <ion-label position="floating">Additional Info</ion-label>
+                  <ion-input></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="10">
+                <ion-icon name="close-circle" class="close-circle"></ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -78,7 +133,7 @@
   <form>
     <ion-grid>
       <ion-row>
-        <ion-col size="33">
+        <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Who reported the fault?</ion-label>
             <ion-select interface="popover">
@@ -89,7 +144,7 @@
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size="67">
+        <ion-col size="66.6">
           <ion-item>
             <ion-label position="floating">Select agreement</ion-label>
             <ion-select interface="popover">
@@ -100,7 +155,7 @@
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size="33">
+        <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Select tenant</ion-label>
             <ion-select interface="popover">
@@ -111,42 +166,42 @@
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size="33">
+        <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Title</ion-label>
             <ion-input></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size="33">
+        <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Forename</ion-label>
             <ion-input></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size="33">
+        <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Surname</ion-label>
             <ion-input></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size="33">
+        <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">E-mail</ion-label>
             <ion-input></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size="33">
+        <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Mobile</ion-label>
             <ion-input></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size="33">
+        <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Telephone</ion-label>
             <ion-input></ion-input>
@@ -162,7 +217,7 @@
   <form>
     <ion-grid>
       <ion-row>
-        <ion-col size="33">
+        <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Access information</ion-label>
             <ion-select interface="popover">
@@ -198,6 +253,108 @@
       <ion-row> </ion-row>
     </ion-grid>
   </form>
+</ng-template>
+
+<ng-template #FinalView>
+  <ion-grid id="final-view">
+    <ion-row class="ion-justify-content-between">
+      <ion-col size="100">
+        <div class="title">Please review case details and Start Progress when you’re ready</div>
+      </ion-col>
+      <ion-col size="100">
+        <div class="sub-heading">Fault Details</div>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Fault Category</ion-text><br />
+        <ion-text class="content">bvn</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Urgency Status</ion-text><br />
+        <ion-text class="content">f</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Title</ion-text><br />
+        <ion-text class="content">gfghrt</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Fault Description</ion-text><br />
+        <ion-text class="content">rtrt</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Type</ion-text><br />
+        <ion-text class="content">trt</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Additional Info</ion-text><br />
+        <ion-text class="content">ertret</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Type</ion-text><br />
+        <ion-text class="content"></ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Additional Info</ion-text><br />
+        <ion-text class="content"></ion-text>
+      </ion-col>
+      <ion-col size="100" class="border-bottom"></ion-col>
+      <ion-col size="100">
+        <div class="sub-heading">Reported By</div>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Who reported the fault?</ion-text><br />
+        <ion-text class="content"></ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Agreement</ion-text><br />
+        <ion-text class="content"></ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Tenant</ion-text><br />
+        <ion-text class="content"></ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Title</ion-text><br />
+        <ion-text class="content"></ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Forename</ion-text><br />
+        <ion-text class="content"></ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Surname</ion-text><br />
+        <ion-text class="content"></ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">E-mail</ion-text><br />
+        <ion-text class="content"></ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Mobile</ion-text><br />
+        <ion-text class="content"></ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Telephone</ion-text><br />
+        <ion-text class="content"></ion-text>
+      </ion-col>
+      <ion-col size="100" class="border-bottom"></ion-col>
+      <ion-col size="100">
+        <div class="sub-heading">Access Information</div>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Access Information</ion-text><br />
+        <ion-text class="content"></ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Is there a vulnerable occupier at this property?</ion-text><br />
+        <ion-text class="content"></ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Useful Instruction</ion-text><br />
+        <ion-text class="content"></ion-text>
+      </ion-col>
+      <ion-col size="100" class="border-bottom"></ion-col>
+    </ion-row>
+  </ion-grid>
 </ng-template>
 
 <ng-template #SubmitCancel>
@@ -294,53 +451,76 @@
   </div>
 
   <ng-container *ngIf="pageNo===3">
-    <ion-card class="ion-no-margin" id="property-details-card">
-      <app-property-details
-        [propertyDetails]="propertyData"
-      ></app-property-details>
-    </ion-card>
-    <mat-horizontal-stepper
-      #stepper
-      labelPosition="bottom"
-      labelPosition="bottom"
-    >
-      <mat-step>
-        <ng-container *ngTemplateOutlet="faultDetails"></ng-container>
-        <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
-        <ng-template matStepLabel>Fault details</ng-template>
-        
-        <!-- <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
-              src="assets/images/right-arrow-active.svg" /></button>
-          <div class="blank-div">&nbsp;</div> -->
-      </mat-step>
-      <mat-step>
-        <ng-container *ngTemplateOutlet="reportedBy"></ng-container>
-        <ng-template matStepLabel>Reported By</ng-template>
-        <!-- <button mat-button matStepperPrevious mat-icon-button class="stepper-back"><img
-              src="assets/images/left-arrow.svg" /></button>
-          <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
-              src="assets/images/right-arrow-active.svg" /></button>
-          <div class="blank-div">&nbsp;</div> -->
-      </mat-step>
-      <mat-step>
-        <ng-container *ngTemplateOutlet="accessInformation"></ng-container>
-        <ng-template matStepLabel>Access Information</ng-template>
-        <!-- <button mat-button matStepperPrevious mat-icon-button class="stepper-back"><img
-              src="assets/images/left-arrow.svg" /></button>
-          <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
-              src="assets/images/right-arrow-active.svg" /></button>
-          <div class="blank-div">&nbsp;</div> -->
-      </mat-step>
-      <mat-step>
-        <ng-container *ngTemplateOutlet="media"></ng-container>
-        <ng-template matStepLabel>Media and Documents</ng-template>
-        <!-- <button mat-button matStepperPrevious mat-icon-button class="stepper-back"><img
-              src="assets/images/left-arrow.svg" /></button>
-          <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
-              src="assets/images/right-arrow-active.svg" /></button>
-          <div class="blank-div">&nbsp;</div> -->
-      </mat-step>
-    </mat-horizontal-stepper>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="50">
+          <h2 class="heading">Log a fault</h2>
+        </ion-col>
+        <ion-col size="50">
+          <h2 class="heading-initial">Initial Issue &nbsp;<img src="assets/images/fault-categories/escalation.svg" /></h2>
+        </ion-col>
+      
+        <ion-col size="100">
+          <ion-card class="ion-no-margin" id="property-details-card">
+            <app-property-details
+              [propertyDetails]="propertyData"
+            ></app-property-details>
+          </ion-card>
+        </ion-col>
+        <ion-col size="100">
+          <mat-horizontal-stepper
+            #stepper
+            labelPosition="bottom"
+          >
+            <mat-step>
+              <ng-container *ngTemplateOutlet="faultDetails"></ng-container>
+              <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
+              <ng-template matStepLabel>Fault details</ng-template>
+              
+              <!-- <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
+                    src="assets/images/right-arrow-active.svg" /></button>
+                <div class="blank-div">&nbsp;</div> -->
+            </mat-step>
+            <mat-step>
+              <ng-container *ngTemplateOutlet="reportedBy"></ng-container>
+              <ng-template matStepLabel>Reported By</ng-template>
+              <!-- <button mat-button matStepperPrevious mat-icon-button class="stepper-back"><img
+                    src="assets/images/left-arrow.svg" /></button>
+                <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
+                    src="assets/images/right-arrow-active.svg" /></button>
+                <div class="blank-div">&nbsp;</div> -->
+            </mat-step>
+            <mat-step>
+              <ng-container *ngTemplateOutlet="accessInformation"></ng-container>
+              <ng-template matStepLabel>Access Information</ng-template>
+              <!-- <button mat-button matStepperPrevious mat-icon-button class="stepper-back"><img
+                    src="assets/images/left-arrow.svg" /></button>
+                <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
+                    src="assets/images/right-arrow-active.svg" /></button>
+                <div class="blank-div">&nbsp;</div> -->
+            </mat-step>
+            <mat-step>
+              <ng-container *ngTemplateOutlet="media"></ng-container>
+              <ng-template matStepLabel>Media and Documents</ng-template>
+              <!-- <button mat-button matStepperPrevious mat-icon-button class="stepper-back"><img
+                    src="assets/images/left-arrow.svg" /></button>
+                <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
+                    src="assets/images/right-arrow-active.svg" /></button>
+                <div class="blank-div">&nbsp;</div> -->
+            </mat-step>
+            <mat-step>
+              <ng-container *ngTemplateOutlet="FinalView"></ng-container>
+              <ng-template matStepLabel>Review</ng-template>
+              <!-- <button mat-button matStepperPrevious mat-icon-button class="stepper-back"><img
+                    src="assets/images/left-arrow.svg" /></button>
+                <button mat-button matStepperNext mat-icon-button class="stepper-next"><img
+                    src="assets/images/right-arrow-active.svg" /></button>
+                <div class="blank-div">&nbsp;</div> -->
+            </mat-step>
+          </mat-horizontal-stepper>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ng-container>
 
   <!-- <ion-grid *ngIf="pageNo===3">

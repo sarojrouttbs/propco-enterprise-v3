@@ -22,6 +22,14 @@
     //margin-left:5px;
   }
 
+  h2.heading-initial{
+    text-align: right;
+    img{
+      vertical-align: bottom;
+      width:24px;
+    }
+  }
+
   .block {
     background-color: var(--ion-color-step-1900);
     text-align: center;
@@ -131,5 +139,56 @@
     background-color: var(--ion-color-step-1650);
     margin: 20px 0;
     padding: 20px;
+  }
+
+  .close-circle{
+    font-size: 40px;
+    color: var(--ion-color-danger);
+    margin-top: 12px;
+    cursor: pointer;
+  }
+
+  .edit-title{
+    ion-input{
+      --padding-bottom: 0px;
+    }
+  }
+
+  #final-view {
+
+    width: 60%;
+    margin: 0 auto;
+
+    .title {
+      text-align: center;
+      margin-bottom: 15px;
+      margin-top: 40px;
+      font-weight: 700;
+      @include set-text-style(24px, 30px, 'Lato');
+    }
+
+    .sub-heading {
+      margin-top: 15px;
+      margin-bottom: 5px;
+      @include set-text-style(20px, 26px, 'Lato');
+    }
+
+    .header-content {
+      .header {
+        color: gray;
+        @include set-text-style(14px, 19px, 'Lato');
+      }
+  
+      .content {
+        @include set-text-style(16px, 20px, 'Lato');
+      }
+    }
+
+    .border-bottom {
+      border-bottom: 1px solid var(--ion-color-step-2000);
+      padding-left: 0;
+      outline-offset: -6px;
+      outline: 1px solid var(--ion-color-step-250);
+    }
   }
 }
