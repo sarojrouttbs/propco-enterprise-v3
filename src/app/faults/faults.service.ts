@@ -53,7 +53,7 @@ export class FaultsService {
   }
 
   deEscalateFault(faultId, requestObj): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/escalation`, requestObj);
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/de-escalation`, requestObj);
   }
 
   getLandlordsOfProperty(propertyId): Observable<any> {
