@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Search Property</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form class="example-form" [formGroup]='propertySearchForm'>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Search Property" [matAutocomplete]="auto" formControlName='text'>
+    </mat-form-field>
+  
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
+        <mat-option *ngFor="let user of (filteredProperty | async)?.data" [value]="user">
+          <span>{{ user.address }}</span>]
+        </mat-option>
+    </mat-autocomplete>
+  </form>
+</ion-content>

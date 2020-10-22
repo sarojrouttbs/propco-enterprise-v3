@@ -1,0 +1,33 @@
+export interface IPropertyResponse {
+    entityType: string;
+    propcoId: string;
+    legacyReference?: any;
+    address: string;
+    status: string;
+    email?: any;
+    fullName?: any;
+    dateOfBirth?: any;
+    postcode: string;
+    entitySuggestion?: any;
+    officeCode: string[];
+    managementType: string;
+    managementTypeLetCategory: string;
+    keyCode: string;
+    propertyManager: string;
+    propertyRent?: any;
+    propertyNegotiator: string;
+    propertyLandlord: string[];
+    propertyTenant?: any;
+    propertyBathrooms?: any;
+    propertyReceptions?: any;
+    propertyParkings?: any;
+    propertyAdvertisedRent?: any;
+    propertyAdvertisedRentFrequencyType?: any;
+    propertyAgreementDate?: any;
+    propertyImage?: any;
+    entityId: string;
+    reference: string;
+    houseType?: any;
+    numberOfBedroom?: any;
+    furnishingType?: any;
+}

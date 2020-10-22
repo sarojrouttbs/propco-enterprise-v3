@@ -1,3 +1,5 @@
+import { ModalController } from '@ionic/angular';
+import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
 import { REPORTED_BY_TYPES, PROPCO } from './../../shared/constants';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
@@ -18,7 +20,8 @@ export class DetailsPage implements OnInit {
   tenancyDataList: any[] = tenancyData;
   propertyData = propertyData;
   pageNo = 1;
-  propertyId = 'ac1137a8-71c8-16d3-8171-c827cdf47675';
+  // propertyId = 'ac1137a8-71c8-16d3-8171-c827cdf47675';
+  propertyId = null;
   propertyDetails = [];
   propertyTenancyDetails;
   propertyHMODetails;
@@ -76,7 +79,7 @@ export class DetailsPage implements OnInit {
     private fb: FormBuilder,
     private commonService: CommonService,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router, private modalController: ModalController) {
   }
 
   ionViewDidEnter() {
@@ -95,13 +98,17 @@ export class DetailsPage implements OnInit {
   }
 
   initiateFault() {
-    this.getLookupData();
-    this.faultId = this.route.snapshot.paramMap.get('faultId');
-    if (this.faultId) {
-      /*update process*/
+    if (!this.propertyId && !this.route.snapshot.paramMap.get('propertyId')) {
+      this.searchProperty();
+    } else {
+      this.getLookupData();
+      this.faultId = this.route.snapshot.paramMap.get('faultId');
+      if (this.faultId) {
+        /*update process*/
+      }
+      this.initiateForms();
+      this.initialApiCall();
     }
-    this.initiateForms();
-    this.initialApiCall();
   }
 
 
@@ -513,6 +520,25 @@ export class DetailsPage implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  async searchProperty() {
+    const modal = await this.modalController.create({
+      component: SearchPropertyPage,
+      cssClass: 'modal-container',
+      backdropDismiss: false
+    });
+
+    const data = modal.onDidDismiss().then(res => {
+      console.log(res)
+      if (res.data.propertyId) {
+        this.propertyId = res.data.propertyId;
+        this.initiateFault();
+      } else {
+        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+      }
+    });
+    await modal.present();
   }
 
 }

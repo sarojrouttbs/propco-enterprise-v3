@@ -1,3 +1,4 @@
+import { SearchPropertyPageModule } from './../../shared/modals/search-property/search-property.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -36,6 +37,7 @@ import { MatCardModule} from '@angular/material/card';
     MatFormFieldModule,
     MatTabsModule,
     MatCardModule,
+    SearchPropertyPageModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective]
 })

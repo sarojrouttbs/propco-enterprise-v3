@@ -64,4 +64,14 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/create`, requestObj);
   }
 
+  searchPropertyByText(text: string): Observable<any> {
+    let params = new HttpParams()
+    .set('limit', '10')
+    .set('page', '1')
+    .set('prop.mantypeLetCat', '3346')
+    .set('text', text)
+    .set('types', 'PROPERTY')
+    return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params: params });
+    }
+
 }
