@@ -68,6 +68,8 @@ export class DashboardPage implements OnInit {
             recordsFiltered: res ? res.count : 0,
             data: []
           });
+          this.faultNotes = [];
+          this.rerenderNotes();
         })
       }
     };
