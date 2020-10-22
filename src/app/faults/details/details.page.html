@@ -144,6 +144,17 @@
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
+        <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'THIRD_PARTY'" >
+          <ion-item>
+            <ion-label position="floating">Select Third Party</ion-label>
+            <ion-select interface="popover" formControlName="reportedById">
+              <ion-select-option [value]="item.index" *ngFor="let item of faultReportedByThirdParty"
+                >{{item.value}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <!-- <app-validation-message [control]=""></app-validation-message> -->
+        </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Title</ion-label>
@@ -390,6 +401,7 @@
     <mat-tab label="Review">
       <ng-container *ngTemplateOutlet="finalView"></ng-container>
       <button mat-raised-button (click)="caseTabs.selectedIndex = 3" type="button" color="primary">Back</button>
+      <button mat-raised-button (click)="createAFault()" type="button" color="primary">Submit</button>
     </mat-tab>
   </mat-tab-group>
 </ng-template>
