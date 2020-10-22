@@ -1,3 +1,4 @@
+import { ComponentsModule } from './../../components/components.module';
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,7 +16,8 @@ import { EscalateModalPage } from './escalate-modal.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    EscalateModalPageRoutingModule
+    EscalateModalPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [EscalateModalPage],
   exports: [EscalateModalPage]

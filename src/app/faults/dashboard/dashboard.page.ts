@@ -27,7 +27,7 @@ export class DashboardPage implements OnInit {
   faultList: any[];
   faultNotes: any[];
   selectedData: any;
-  lookupdata: any; 
+  private lookupdata: any;
   faultCategories: any[];
   officeCodes: any[];
   faultStatuses: any[];
@@ -47,7 +47,6 @@ export class DashboardPage implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.getFaultList();
     this.dtOptions[1] = this.buildDtOptions();
     const that = this;
     this.dtOptions[0] = {
@@ -59,28 +58,21 @@ export class DashboardPage implements OnInit {
       ordering: false,
       pageLength: 10,
       ajax: (tableParams: any, callback) => {
-        let params = new HttpParams()
+          let params = new HttpParams()
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start/tableParams.length)+1)+'': '1');
-        that.faultsService.getAllFaults(params).subscribe(res => {
-          that.faultList = res && res.data ? res.data: [];
+          that.faultsService.getAllFaults(params).subscribe(res => {
+          that.faultList = res && res.data ? res.data : [];
           callback({
             recordsTotal: res ? res.count : 0,
-            recordsFiltered: res ? res.count :0,
+            recordsFiltered: res ? res.count : 0,
             data: []
           });
         })
-      },
-      // rowCallback: (row: Node, data: any[] | Object, index: number) => {
-      //   $('td', row).unbind('click');
-      //   $('td', row).bind('click', () => {
-      //     this.onClickRow(data, index);
-      //   });
-      //   return row;
-      // }
+      }
     };
 
-    setTimeout(()=>{
+    setTimeout(() => {
       this.notesDtTrigger.next();
     }, 1000)
   }
@@ -117,7 +109,6 @@ export class DashboardPage implements OnInit {
 
   onClickRow(data, index?) {
     this.selectedData = data;
-    //this.selectedData = this.faultList[index];
     this.getFaultNotes(this.selectedData.faultId);
   }
 
@@ -129,17 +120,10 @@ export class DashboardPage implements OnInit {
     };
   }
 
-  getFaultList(params?) {
-    this.faultsService.getAllFaults(params).subscribe(res => {
-      //this.faultList = res && res.data ? res.data : [];
-      this.dtTrigger.next();
-    });
-  }
-
   private getFaultNotes(faultId) {
     this.faultsService.getFaultNotes(faultId).subscribe(res => {
       this.faultNotes = res && res.data ? res.data : [];
-      this.rerender();
+      this.rerenderNotes();
     });
   }
 
@@ -154,36 +138,49 @@ export class DashboardPage implements OnInit {
       componentProps: {
         notesType: 'fault',
         notesTypeId: this.selectedData.faultId,
-        isAddNote : true
+        isAddNote: true
       },
       backdropDismiss: false
     });
 
     const data = modal.onDidDismiss().then(res => {
-      if(res.data && res.data.noteId){
+      if (res.data && res.data.noteId) {
         this.getFaultNotes(this.selectedData.faultId);
       }
     });
     await modal.present();
   }
 
-  async escalateModal() {
-    this.commonService.showAlert('Escalate', 'This functionality is under development.');
-    return;
-    const headingText = 'Escalate';
-    const dataText = 'Test';
+  async escalateFault() {
+    const headingText = 'Escalate Fault';
     const modal = await this.modalController.create({
       component: EscalateModalPage,
       cssClass: 'modal-container',
       componentProps: {
-        data: dataText,
-        heading: headingText
+        heading: headingText,
+        faultId: this.selectedData.faultId
       }
     });
 
-    const data = modal.onDidDismiss().then(res => {
+    modal.onDidDismiss().then(res => {
+      if (res.data == 'success') {
+        this.commonService.showAlert('Escalate Fault', 'Fault has been escalated to the Property Manager');
+        this.rerenderFaults();
+      }
     });
     await modal.present();
+  }
+
+  async deEscalateFault() {
+    this.commonService.showConfirm('De-Escalate Fault', 'Are you sure, you want to de-escalate the fault?').then(res => {
+      if (res) {
+        this.faultsService.deEscalateFault(this.selectedData.faultId, {}).subscribe(res => {
+          this.rerenderFaults();
+        }, error => {
+          // this.commonService.showMessage();
+        });
+      }
+    })
   }
 
   showMenu(event, id, data, className, isCard?) {
@@ -245,11 +242,17 @@ export class DashboardPage implements OnInit {
     }
   }
 
-  rerender(): void {
+  rerenderNotes(): void {
     this.dtElements.last.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.destroy();
       this.notesDtTrigger.next();
     })
+  }
+
+  rerenderFaults(): void {
+    this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.ajax.reload((res)=>{}, false);
+    });
   }
 
   ngOnDestroy() {
