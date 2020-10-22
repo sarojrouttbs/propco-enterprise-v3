@@ -28,6 +28,16 @@
     url("../../assets/fonts/propco-font.svg#PropCoIconsRegular") format("svg");
 }
 
+@font-face {
+  font-family: "Ionicons";
+  src: url("../../assets/ionicons-fonts/ionicons.eot");
+  src: url("../../assets/ionicons-fonts/ionicons.ttf") format("truetype"),
+    url("../../assets/ionicons-fonts/ionicons.woff") format("woff"),
+    url("../../assets/ionicons-fonts/ionicons.svg") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .propcoicon {
   display: table-cell;
   font-family: "PropCoIcons";

@@ -163,7 +163,7 @@ body {
     padding-bottom: 5px;
     padding-left: 70px;
     padding-top: 10px;
-    color: var(--ion-color-primary);
+    color: var(--ion-color-step-550);
   }
 
   .toast-message {
@@ -172,7 +172,7 @@ body {
     padding-right: 15px;
     padding-bottom: 10px;
     font-size: 14px;
-    color: var(--ion-color-tertiary);
+    color: var(--ion-color-step-950);
     font-weight: 500;
   }
   // .toast-error {
@@ -274,7 +274,7 @@ body {
     position: absolute;
     height: 100%;
     width: 55px;
-    background: var(--ion-color-dark-light);
+    background: var(--ion-color-tertiary);
     display: flex;
     align-items: center;
     justify-content: center;
