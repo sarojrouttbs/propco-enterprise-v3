@@ -1,7 +1,7 @@
 import { REPORTED_BY_TYPES, PROPCO } from './../../shared/constants';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
@@ -18,7 +18,7 @@ export class DetailsPage implements OnInit {
   tenancyDataList: any[] = tenancyData;
   propertyData = propertyData;
   pageNo = 1;
-  propertyId = '5eae3979-f99b-11e8-bd34-0cc47a54d954';
+  propertyId = 'ac1137a8-71c8-16d3-8171-c827cdf47675';
   propertyDetails = [];
   propertyTenancyDetails;
   propertyHMODetails;
@@ -53,6 +53,7 @@ export class DetailsPage implements OnInit {
   agreementStatuses: any[];
   landlordsOfproperty = [];
   landlordPropertytmpData = landlordsOfProperty;
+  faultReportedByThirdParty: any[];
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -74,7 +75,8 @@ export class DetailsPage implements OnInit {
     private faultService: FaultsService,
     private fb: FormBuilder,
     private commonService: CommonService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private router: Router) {
   }
 
   ionViewDidEnter() {
@@ -118,6 +120,7 @@ export class DetailsPage implements OnInit {
 
   private setLookupData(data) {
     this.agreementStatuses = data.agreementStatuses;
+    this.faultReportedByThirdParty = data.faultReportedByThirdParty;
   }
 
   initiateForms() {
@@ -313,7 +316,7 @@ export class DetailsPage implements OnInit {
   }
 
 
-  uploadFile() {
+  uploadFile(faultId) {
     let apiObservableArray = [];
     let uploadedDoc = this.uploadDocForm.controls.photos.value;
     uploadedDoc.forEach(data => {
@@ -322,7 +325,7 @@ export class DetailsPage implements OnInit {
       formData.append('folderName', '1');
       formData.append('headCategory', 'Legal');
       formData.append('subCategory', 'Addendum');
-      apiObservableArray.push(this.faultService.uploadDocument(formData));
+      apiObservableArray.push(this.faultService.uploadDocument(formData, faultId));
     });
     setTimeout(() => {
       forkJoin(apiObservableArray).subscribe(() => {
@@ -478,8 +481,38 @@ export class DetailsPage implements OnInit {
     });
   }
 
-  createAFault(){
+  createAFault() {
+    this.commonService.showLoader();
+    let faultDetails = {
+      urgencyStatus: this.describeFaultForm.get('urgencyStatus').value,
+      reportedBy: this.reportedByForm.get('reportedBy').value,
+      category: this.describeFaultForm.get('category').value,
+      title: this.describeFaultForm.get('title').value,
+      notes: this.faultDetailsForm.get('notes').value,
+      agreementId: this.reportedByForm.get('agreementId').value,
+      reportedById: this.reportedByForm.get('reportedById').value,
+      isTenantPresenceRequired: this.accessInfoForm.get('isTenantPresenceRequired').value,
+      areOccupiersVulnerable: this.accessInfoForm.get('areOccupiersVulnerable').value,
+      tenantNotes: this.accessInfoForm.get('tenantNotes').value,
+      propertyId: this.propertyId,
+      sourceType: "FAULT",
+      additionalInfo: this.faultDetailsForm.get('additionalInfo').value,
+      isDraft: false
+    }
 
+    this.faultService.createFault(faultDetails).subscribe(
+      res => {
+        this.commonService.hideLoader();
+        this.commonService.showMessage('Fault Created Successfully', 'Fault', 'success');
+        this.uploadFile(res.faultId);
+        this.router.navigate(['faults/dashboard'], { replaceUrl: true })
+      },
+      error => {
+        this.commonService.hideLoader();
+        this.commonService.showMessage('Something went wrong', 'Fault', 'Error');
+        console.log(error);
+      }
+    );
   }
 
 }
