@@ -67,43 +67,29 @@
             style="width: 100%; position: relative" #faultNotesTable>
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Type</th>
-                <th>Complaint</th>
-                <th>Category</th>
-                <th>User</th>
-                <th>Notes</th>                
-                <th></th>
+                <th style="width:13%">Date</th>
+                <th style="width:13%">Time</th>
+                <th style="width:13%">Type</th>
+                <th style="width:13%">Complaint</th>
+                <th style="width:13%">Category</th>
+                <th style="width:13%">User</th>
+                <th style="width:22%">Notes</th>                
+                <!-- <th style="width:5%"></th> -->
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let notes of faultNotes" class="table-row">
-                <td>{{notes.createdAt || '-'}}</td>
-                <td>sss</td>
-                <td>{{notes.propertyReference || '-'}}</td>
-                <td>{{notes.propertyAddress}}</td>
-                <td>{{notes.title}}</td>
-                <td>{{notes.title || '-'}}</td>
-                <td>{{notes.reportedBy || '-'}}</td>
-                <td class="resp-action-icon">
-                  <!-- <ion-fab vertical="center" horizontal="end" slot="fixed">
-                    <ion-fab-button>Share</ion-fab-button>
-                    <ion-fab-list side="start">
-                      <ion-fab-button>
-                        <ion-icon name="logo-vimeo"></ion-icon>
-                      </ion-fab-button>
-                      <ion-fab-button>
-                        <ion-icon name="logo-chrome"></ion-icon>
-                      </ion-fab-button>
-                      <ion-fab-button>
-                        <ion-icon name="logo-react"></ion-icon>
-                      </ion-fab-button>
-                    </ion-fab-list>
-                  </ion-fab> -->
+                <td>{{notes.postedAt | date: 'dd/MM/yyyy' || '-'}}</td>
+                <td>{{notes.postedAt | date: 'HH:mm:ss' || '-'}}</td>
+                <td>{{getLookupValue(notes.type, notesTypes) || '-'}}</td>
+                <td>{{getLookupValue(notes.complaint, notesComplaints) || '-'}}</td>
+                <td>{{getLookupValue(notes.category, notesCategories) || '-'}}</td>
+                <td>{{getLookupValue(notes.user, userLookupDetails) || '-'}}</td>
+                <td>{{notes.notes|| '-'}}</td>
+                <!-- <td class="resp-action-icon">
                   <i (click)="showMenu($event,'divOverlay', notes, 'table-row')"
                     class="propcoicon propcoicon-actions-on"></i>
-                </td>
+                </td> -->
               </tr>
               <!-- <tr *ngIf="!faultNotes" class="table-row odd">
                 <td colspan="8" class="no-data-available">Please select the fault to view notes!</td>

@@ -28,6 +28,10 @@
       td {
         padding: 6px 10px;
       }
+
+      tr{
+        height: 49px;
+      }
   
       tr td:first-child {
         border-left: 1px solid var(--ion-color-step-1750);
@@ -42,6 +46,7 @@
     min-width: 36px;
     width: 36px;
     max-width: 36px;
+    cursor: pointer;
   }
   
   #divOverlay,
@@ -77,6 +82,7 @@
       background-color: var(--ion-color-step-900);
       margin: 6px 0 6px 6px;
       color: var(--ion-color-step-2000);
+      cursor: pointer;
     }
   }
 }

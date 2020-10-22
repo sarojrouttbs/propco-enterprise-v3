@@ -1,3 +1,5 @@
+import { NotesService } from './notes.service';
+import { ComponentsModule } from './../../components/components.module';
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -20,9 +22,10 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ComponentsModule
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, NotesService],
   declarations: [NotesModalPage],
   exports : [NotesModalPage]
 })

@@ -165,6 +165,25 @@ ion-item {
   }
 }
 
+ion-select-popover{
+  ion-list ion-item {
+    --border-width: 0;
+    --inner-border-width: 0;
+    --padding-start: 10px;
+    
+    ion-radio {
+      --color: transparent;
+      --color-checked: transparent;
+    }
+  }
+
+  ion-list ion-item.item-radio-checked{
+    --background: var(--ion-color-step-1650);
+  }
+}
+
+
+
 .dataTables_wrapper .dataTables_length,
 .dataTables_wrapper .dataTables_filter,
 .dataTables_wrapper .dataTables_info,

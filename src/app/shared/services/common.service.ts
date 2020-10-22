@@ -183,6 +183,7 @@ export class CommonService {
         header: title,
         subHeader: subtitle ? subtitle : undefined,
         message: displayText,
+        cssClass: 'common-alert-box',
         buttons: [{
           text: 'OK',
           handler: () => {
@@ -208,6 +209,7 @@ export class CommonService {
         header: title,
         subHeader: subtitle ? subtitle : undefined,
         message: displayText,
+        cssClass: 'common-alert-box',
         buttons: [
           {
             text: 'Cancel',
@@ -344,7 +346,7 @@ export class CommonService {
   }
 
   getFormatedDate(date, format?): string {
-    if (typeof date !== 'undefined' && isNaN(date)) {
+    if (typeof date !== 'undefined' && !isNaN(date)) {
       return new DatePipe('en-UK').transform(new Date(date), format || 'yyyy-MM-dd');
     }
   }
