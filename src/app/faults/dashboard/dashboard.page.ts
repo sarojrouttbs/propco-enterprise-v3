@@ -168,6 +168,7 @@ export class DashboardPage implements OnInit {
       if (res.data == 'success') {
         this.commonService.showAlert('Escalate Fault', 'Fault has been escalated to the Property Manager');
         this.rerenderFaults();
+        this.getFaultNotes(this.selectedData.faultId);
       }
     });
     await modal.present();
