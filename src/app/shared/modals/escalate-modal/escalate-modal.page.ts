@@ -1,3 +1,4 @@
+import { FaultsService } from './../../../faults/faults.service';
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
@@ -12,69 +13,47 @@ import { DatePipe } from '@angular/common';
 })
 export class EscalateModalPage implements OnInit {
 
-  notesArray: any[];
   heading: string;
-  notesForm: FormGroup;
-  noteObj: any;
+  escalateForm: FormGroup;
   userDetails: any;
-  date: any;
-  clauseObj: any;
-  offerStatus: any;
+  faultId:string;
 
   constructor(
     private navParams: NavParams,
     private modalController: ModalController,
     private formBuilder: FormBuilder,
     private commonService: CommonService,
-    public datepipe: DatePipe
+    private faultsService: FaultsService
   ) {
   }
 
   ngOnInit() {
     this.userDetails = this.commonService.getItem(PROPCO.LOGIN_DETAILS, true);
-    this.clauseObj = this.navParams.get('data');
     this.heading = this.navParams.get('heading');
-    this.offerStatus = this.navParams.get('offerStatus');
-    this.notesForm = this.formBuilder.group({
-      comment: ['']
+    this.faultId = this.navParams.get('faultId');
+    this.escalateForm = this.formBuilder.group({
+      escalationReason: ['', Validators.required]
     });
-    /* if (this.offerStatus == OFFER_STATUS.ACCEPTED || this.offerStatus == OFFER_STATUS.WITHDRAWN_BY_APPLICANT) {
-      this.notesForm.controls['comment'].disable();
-    }
-    else {
-      this.notesForm.controls['comment'].enable();
-    } */
-    this.getNotes();
+
   }
 
-  async getNotes() {
-    let notesArray;
-    notesArray = this.clauseObj.negotiations;
-    this.notesArray = notesArray ? notesArray : [];
-  }
-
-  createNote() {
-    this.noteObj = {};
-    this.noteObj.comment = this.notesForm.controls['comment'].value;
-    this.noteObj.negotiatedByName = this.userDetails.name;
-    this.noteObj.negotiatedBy = 'APPLICANT';
-    this.notesForm.reset();
-    if (this.clauseObj.offerClauseId) {
-    } else if (this.clauseObj.offerRestrictionId) {
+  escalateFault() {
+    if (this.escalateForm.valid) {
+      const requestObj = this.escalateForm.value;
+      this.faultsService.escalateFault(this.faultId, requestObj).subscribe(res => {
+        debugger;
+        this.modalController.dismiss('success');
+      }, err => {
+        this.commonService.showMessage(err.message, 'Add Note', 'error');
+      });
     } else {
-      this.noteObj.createdAt = this.datepipe.transform(new Date(), 'yyyy/MM/dd hh:mm');
-      this.notesArray.push(this.noteObj);
+      // this.commonService.showMessage('Please fill all the required fields.', 'Add Note', 'error');
+      this.escalateForm.markAllAsTouched();
     }
-  }
-
-  toggleEscalate(){
-    
   }
 
   dismiss() {
-    this.modalController.dismiss({
-      dismissed: true
-    });
+    this.modalController.dismiss();
   }
 
 }

@@ -22,10 +22,10 @@ export class FaultsService {
 
   getPropertyTenancies(propertyId: string): Observable<any> {
     let params = new HttpParams()
-    .append('status', '1')
-    .append('status', '2')
-    .append('status', '5')
-    .append('status', '6');
+      .append('status', '1')
+      .append('status', '2')
+      .append('status', '5')
+      .append('status', '6');
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenancies`, { params: params });
   }
 
@@ -46,6 +46,14 @@ export class FaultsService {
   uploadDocument(formData: FormData): Observable<any> {
     let faultId = "205e5506-ce3c-4bdf-820a-99d5e49e8066";
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/documents/upload`, formData);
-    }
+  }
+
+  escalateFault(faultId, requestObj): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/escalation`, requestObj);
+  }
+
+  deEscalateFault(faultId, requestObj): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + `faults/${faultId}/escalation`, requestObj);
+  }
 
 }
