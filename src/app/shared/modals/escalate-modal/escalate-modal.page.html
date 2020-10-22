@@ -8,9 +8,12 @@
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="notesForm">
+  <form [formGroup]="escalateForm">
     <ion-grid class="">
       <ion-row class="">
+        <ion-col size="100">
+          <h5>This fault will be escalated to the Property Manager and a notification will be sent. Are you sure?</h5>
+        </ion-col>
         <!-- <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Escalated By</ion-label>
@@ -22,10 +25,11 @@
           </ion-item>
         </ion-col> -->
         <ion-col size="100">
-            <ion-item>
-              <ion-label position="floating">Escalation Reason</ion-label>
-              <ion-input></ion-input>
-            </ion-item>
+          <ion-item>
+            <ion-label position="floating">Escalation Reason</ion-label>
+            <ion-input formControlName="escalationReason"></ion-input>        
+          </ion-item>
+          <app-validation-message [control]="escalateForm.controls.escalationReason"></app-validation-message>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -35,10 +39,8 @@
   <ion-grid>
     <ion-row>
       <ion-col class="ion-text-end">
-        <ion-button
-          (click)="toggleEscalate()"
-          >Submit</ion-button
-        >
+        <ion-button (click)="dismiss()">No</ion-button>
+        <ion-button (click)="escalateFault()">Yes</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
