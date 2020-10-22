@@ -56,4 +56,8 @@ export class FaultsService {
     return this.httpClient.delete(environment.API_BASE_URL + `faults/${faultId}/escalation`, requestObj);
   }
 
+    getLandlordsOfProperty(propertyId): Observable<any> {
+      return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/landlords`);
+    }
+
 }

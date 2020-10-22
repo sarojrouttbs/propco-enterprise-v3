@@ -1,182 +1,228 @@
 {
-  "tenancyData":[
-     {
-        "status":4,
-        "rent":1200,
-        "rentFrequency":1,
-        "frequencyType":3,
-        "deposit":1300,
-        "officeCode":"BEDS",
-        "tenancyStartDate":"2010-08-23",
-        "tenancyEndDate":"2011-07-22",
-        "originalStartDate":"2010-08-23",
-        "originalEndDate":"2011-08-22",
-        "contractType":30,
-        "checkInDate":"2010-08-26",
-        "nextClaimDate":"2011-07-23",
-        "checkOutDate":"2011-07-22",
-        "legacyReference":null,
-        "hasCheckedIn":true,
-        "propcoAgreementId":298468,
-        "agreementId":"1f370a4c-d5d7-42f4-b8b6-0e53c618b383",
-        "tenants":[
-           {
-              "depositStatus":null,
-              "tenantId":"2ca54cf1-fac7-400c-9abd-ff130b0b39fc",
-              "isLead":true
-           },
-           {
-              "depositStatus":null,
-              "tenantId":"38f9cb20-4cb8-46ea-bfe9-1e36b0e619e0",
-              "isLead":false
-           }
-        ],
-        "depositScheme":null
-     }
-  ],
-  "catList":[
-     {
-        "index":3556,
-        "value":"Alarms and Smoke Detectors"
-     },
-     {
-        "index":3557,
-        "value":"Bathroom"
-     },
-     {
-        "index":3558,
-        "value":"Electricity"
-     },
-     {
-        "index":3559,
-        "value":"Fire"
-     },
-     {
-        "index":3560,
-        "value":"Floors, walls and ceilings "
-     },
-     {
-        "index":3561,
-        "value":"Garden"
-     },
-     {
-        "index":3562,
-        "value":"Hot Water"
-     },
-     {
-        "index":3563,
-        "value":"Kitchen"
-     },
-     {
-        "index":3564,
-        "value":"Lighting"
-     },
-     {
-        "index":3565,
-        "value":"Others"
-     },
-     {
-        "index":3566,
-        "value":"Smell Oil or Gas?"
-     },
-     {
-        "index":3567,
-        "value":"Toilet"
-     },
-     {
-        "index":3568,
-        "value":"Water and Leaks"
-     }
-  ],
-  "propertyData":{
-     "reference":"000001995",
-     "legacyReference":null,
-     "managementType":2,
-     "managementTypeDescription":"Let Only",
-     "address":{
-        "addressLine1":"Ackwurth",
-        "addressLine2":"Collage Road",
-        "addressLine3":"BB18 6QB",
-        "county":"Crimingtonville",
-        "country":"UK",
-        "street":null,
-        "buildingName":null,
-        "buildingNumber":null,
-        "postcode":"FT34 9RY",
-        "latitude":null,
-        "longitude":null,
-        "locality":"Burslim",
-        "town":"Mickluton",
-        "pafReference":null
-     },
-     "status":4,
-     "numberOfBedroom":1,
-     "numberOfBathroom":null,
-     "houseType":null,
-     "parking":null,
-     "furnishingType":null,
-     "furnishingTypeDescription":null,
-     "tenancyRent":null,
-     "frequencyType":null,
-     "deposit":null,
-     "tenancyDeposit":9515.73,
-     "managementCommission":null,
-     "publishedAddress":null,
-     "smallDescription":null,
-     "fullDescription":null,
-     "restrictions":null,
-     "media":null,
-     "bullets":{
-        "bullet1":null,
-        "bullet2":null,
-        "bullet3":null,
-        "bullet4":null,
-        "bullet5":null,
-        "bullet6":null,
-        "bullet7":null,
-        "bullet8":null,
-        "bullet9":null,
-        "bullet10":null
-     },
-     "numberOfSmokeAlarms":null,
-     "numberOfFloors":null,
-     "numberOfCOAlarms":null,
-     "emergencyResponseService":{
-        "isERSEnabled":null,
-        "eriProduct":null,
-        "inceptionDate":null,
-        "renewalDate":null,
-        "cancelledDate":null
-     },
-     "createdAt":"2020-04-29 23:56:24",
-     "modifiedAt":"2020-09-30 06:03:49",
-     "propertyManager":"",
-     "propertyInspector":"",
-     "alarmCode":null,
-     "hasLetBefore":null,
-     "hasGas":null,
-     "hasPat":null,
-     "hasElectricalIndemnitySigned":null,
-     "hasOil":null,
-     "hasSolidFuel":null,
-     "stopTapLocation":null,
-     "epcAssetRating":null,
-     "numberOfReceptions":null,
-     "advertisedRentType":null,
-     "holdingDeposit":null,
-     "rentCategory":null,
-     "rentFrequency":null,
-     "depositScheme":null,
-     "expenditureLimit":null,
-     "landlordOccupancy":null,
-     "gasMeterLocation":"outside of property",
-     "waterMeterLocation":"ground floor communal area",
-     "electricMeterLocation":"in hallway",
-     "propcoId":1995,
-     "propertyId":"ac1137a8-71c8-16d3-8171-c827cdf47675",
-     "office":"NTY",
-     "advertisementRent":558.22,
-     "managementUserId":null,
-     "inspectionUserId":null
-  }
+   "landlordsOfProperty": {
+      "count": 1,
+      "pages": 1,
+      "data": [
+         {
+            "status": 5,
+            "address": {
+               "addressLine1": "18 Aurora Drive",
+               "addressLine2": "Beggarwood",
+               "addressLine3": "",
+               "county": "Hampshire",
+               "country": "",
+               "street": null,
+               "buildingName": null,
+               "buildingNumber": null,
+               "postcode": "RG22 4FH",
+               "latitude": null,
+               "longitude": null,
+               "locality": "",
+               "town": "Basingstoke",
+               "pafReference": "27650156.00"
+            },
+            "name": "Mr G Hamilton",
+            "addressee": "Mr Hamilton",
+            "homeTelephoneNo": "XXXXX",
+            "businessTelephoneNo": "XXXXX",
+            "alternativeEmail": null,
+            "dateOfBirth": null,
+            "email": "noone@nowhere.co.uk",
+            "mobile": "XXXXXXXXXX",
+            "createdAt": "2013-09-17 14:46:32",
+            "modifiedAt": "2020-07-12 22:47:07",
+            "reference": null,
+            "legacyReference": null,
+            "rentPercentage": 100,
+            "propertyLinkStatus": "Current",
+            "title": "Mr",
+            "forename": "G",
+            "middlename": "",
+            "surname": "Hamilton",
+            "fullName": "Mr G Hamilton",
+            "propcoId": "418000",
+            "landlordId": "748eaa10-525d-11e9-9cbf-0cc47a54d954"
+         }
+      ]
+   },
+   "tenancyData": [
+      {
+         "status": 4,
+         "rent": 1200,
+         "rentFrequency": 1,
+         "frequencyType": 3,
+         "deposit": 1300,
+         "officeCode": "BEDS",
+         "tenancyStartDate": "2010-08-23",
+         "tenancyEndDate": "2011-07-22",
+         "originalStartDate": "2010-08-23",
+         "originalEndDate": "2011-08-22",
+         "contractType": 30,
+         "checkInDate": "2010-08-26",
+         "nextClaimDate": "2011-07-23",
+         "checkOutDate": "2011-07-22",
+         "legacyReference": null,
+         "hasCheckedIn": true,
+         "propcoAgreementId": 298468,
+         "agreementId": "1f370a4c-d5d7-42f4-b8b6-0e53c618b383",
+         "tenants": [
+            {
+               "depositStatus": null,
+               "tenantId": "2ca54cf1-fac7-400c-9abd-ff130b0b39fc",
+               "isLead": true
+            },
+            {
+               "depositStatus": null,
+               "tenantId": "38f9cb20-4cb8-46ea-bfe9-1e36b0e619e0",
+               "isLead": false
+            }
+         ],
+         "depositScheme": null
+      }
+   ],
+   "catList": [
+      {
+         "index": 3556,
+         "value": "Alarms and Smoke Detectors"
+      },
+      {
+         "index": 3557,
+         "value": "Bathroom"
+      },
+      {
+         "index": 3558,
+         "value": "Electricity"
+      },
+      {
+         "index": 3559,
+         "value": "Fire"
+      },
+      {
+         "index": 3560,
+         "value": "Floors, walls and ceilings "
+      },
+      {
+         "index": 3561,
+         "value": "Garden"
+      },
+      {
+         "index": 3562,
+         "value": "Hot Water"
+      },
+      {
+         "index": 3563,
+         "value": "Kitchen"
+      },
+      {
+         "index": 3564,
+         "value": "Lighting"
+      },
+      {
+         "index": 3565,
+         "value": "Others"
+      },
+      {
+         "index": 3566,
+         "value": "Smell Oil or Gas?"
+      },
+      {
+         "index": 3567,
+         "value": "Toilet"
+      },
+      {
+         "index": 3568,
+         "value": "Water and Leaks"
+      }
+   ],
+   "propertyData": {
+      "reference": "000001995",
+      "legacyReference": null,
+      "managementType": 2,
+      "managementTypeDescription": "Let Only",
+      "address": {
+         "addressLine1": "Ackwurth",
+         "addressLine2": "Collage Road",
+         "addressLine3": "BB18 6QB",
+         "county": "Crimingtonville",
+         "country": "UK",
+         "street": null,
+         "buildingName": null,
+         "buildingNumber": null,
+         "postcode": "FT34 9RY",
+         "latitude": null,
+         "longitude": null,
+         "locality": "Burslim",
+         "town": "Mickluton",
+         "pafReference": null
+      },
+      "status": 4,
+      "numberOfBedroom": 1,
+      "numberOfBathroom": null,
+      "houseType": null,
+      "parking": null,
+      "furnishingType": null,
+      "furnishingTypeDescription": null,
+      "tenancyRent": null,
+      "frequencyType": null,
+      "deposit": null,
+      "tenancyDeposit": 9515.73,
+      "managementCommission": null,
+      "publishedAddress": null,
+      "smallDescription": null,
+      "fullDescription": null,
+      "restrictions": null,
+      "media": null,
+      "bullets": {
+         "bullet1": null,
+         "bullet2": null,
+         "bullet3": null,
+         "bullet4": null,
+         "bullet5": null,
+         "bullet6": null,
+         "bullet7": null,
+         "bullet8": null,
+         "bullet9": null,
+         "bullet10": null
+      },
+      "numberOfSmokeAlarms": null,
+      "numberOfFloors": null,
+      "numberOfCOAlarms": null,
+      "emergencyResponseService": {
+         "isERSEnabled": null,
+         "eriProduct": null,
+         "inceptionDate": null,
+         "renewalDate": null,
+         "cancelledDate": null
+      },
+      "createdAt": "2020-04-29 23:56:24",
+      "modifiedAt": "2020-09-30 06:03:49",
+      "propertyManager": "",
+      "propertyInspector": "",
+      "alarmCode": null,
+      "hasLetBefore": null,
+      "hasGas": null,
+      "hasPat": null,
+      "hasElectricalIndemnitySigned": null,
+      "hasOil": null,
+      "hasSolidFuel": null,
+      "stopTapLocation": null,
+      "epcAssetRating": null,
+      "numberOfReceptions": null,
+      "advertisedRentType": null,
+      "holdingDeposit": null,
+      "rentCategory": null,
+      "rentFrequency": null,
+      "depositScheme": null,
+      "expenditureLimit": null,
+      "landlordOccupancy": null,
+      "gasMeterLocation": "outside of property",
+      "waterMeterLocation": "ground floor communal area",
+      "electricMeterLocation": "in hallway",
+      "propcoId": 1995,
+      "propertyId": "ac1137a8-71c8-16d3-8171-c827cdf47675",
+      "office": "NTY",
+      "advertisementRent": 558.22,
+      "managementUserId": null,
+      "inspectionUserId": null
+   }
 }
