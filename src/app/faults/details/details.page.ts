@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
-import { tenancyData, catList, propertyData } from './cat.json';
+import { landlordsOfProperty, tenancyData, catList, propertyData } from './cat.json';
 
 @Component({
   selector: 'fault-details',
@@ -18,18 +18,18 @@ export class DetailsPage implements OnInit {
   tenancyDataList: any[] = tenancyData;
   propertyData = propertyData;
   pageNo = 1;
-  propertyId = '5eae3eee-f99b-11e8-bd34-0cc47a54d954';
+  propertyId = '5eae3979-f99b-11e8-bd34-0cc47a54d954';
   propertyDetails = [];
   propertyTenancyDetails;
   propertyHMODetails;
   addtionalInfo;
-  public uploadDocForm: FormGroup;
   files = [];
   describeFaultForm: FormGroup;
   faultDetailsForm: FormGroup;
   addAdditionalDetForm: FormGroup;
   reportedByForm: FormGroup;
   accessInfoForm: FormGroup;
+  uploadDocForm: FormGroup;
 
   //MAT TABS//
   caseDetail: FormGroup;
@@ -47,9 +47,12 @@ export class DetailsPage implements OnInit {
   categoryMap = new Map();
   faultId: string;
   accessInfoList = [{ title: 'Tenant Presense Required', value: true }, { title: 'Access with management keys', value: false }];
+  priorityList = [{ title: 'Non urgent', value: 1 }, { title: 'Urgent', value: 2 }, { title: 'Emergency', value: 3 }];
   reportedByTypes = REPORTED_BY_TYPES;
   lookupdata: any;
   agreementStatuses: any[];
+  landlordsOfproperty = [];
+  landlordPropertytmpData = landlordsOfProperty;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -158,9 +161,9 @@ export class DetailsPage implements OnInit {
 
   initReportedByForm(): void {
     this.reportedByForm = this.fb.group({
-      reportedBy: ['', Validators.required],
+      reportedBy: ['TENANT', Validators.required],
       agreementId: ['', Validators.required],
-      reportedById: '',
+      reportedById: ['', Validators.required],
       propertyId: '',
       isDraft: false,
       tenantId: ['', Validators.required],
@@ -169,7 +172,8 @@ export class DetailsPage implements OnInit {
       surname: [{ value: '', disabled: true }],
       email: [{ value: '', disabled: true }],
       mobile: [{ value: '', disabled: true }],
-      homeTelephoneNo: [{ value: '', disabled: true }]
+      homeTelephoneNo: [{ value: '', disabled: true }],
+      selectedEntity: ''
     });
   }
 
@@ -204,7 +208,7 @@ export class DetailsPage implements OnInit {
   getPpropertyTenancies(): void {
     this.faultService.getPropertyTenancies(this.propertyId).subscribe(
       res => {
-        this.propertyTenancyDetails = this.tenancyDataList;
+        this.propertyTenancyDetails = this.tenancyDataList.filter(x => x.hasCheckedIn);
         if (res && res.data) {
           this.propertyTenancyDetails = res.data;
         }
@@ -240,6 +244,22 @@ export class DetailsPage implements OnInit {
       }
     );
   }
+
+  getLandlordsOfProperty(propertyId): void {
+    this.faultService.getLandlordsOfProperty(propertyId).subscribe(
+      res => {
+        if (res && res.data) {
+          this.landlordsOfproperty = res.data;
+        } else {
+          this.landlordsOfproperty = this.landlordPropertytmpData.data;
+        }
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
 
   getAgreementDetails(agreementId): void {
     this.faultService.getPropertyAgreementDetails(this.propertyId, agreementId).subscribe(
@@ -334,6 +354,9 @@ export class DetailsPage implements OnInit {
 
   manageMediaDoc(): void {
     this.isManageMediaSubmit = true;
+    if (this.files.length === 0) {
+      this.uploadDocForm.markAllAsTouched();
+    }
   }
 
   currentSelected(event): void {
@@ -379,7 +402,11 @@ export class DetailsPage implements OnInit {
     return this.categoryMap.get(this.describeFaultForm.controls['category'].value);
   }
 
-  editTitle(title: string) {
+  getUrgencyName() {
+    return this.priorityList.find(x => x.value === this.describeFaultForm.controls['urgencyStatus'].value).title;
+  }
+
+  editTitle(title: any) {
     this.describeFaultForm.controls['title'].setValue(title);
   }
 
@@ -402,6 +429,12 @@ export class DetailsPage implements OnInit {
   }
 
   onSelectReprtedByType() {
+    if (this.reportedByForm.get('reportedBy').value === 'TENANT' || this.reportedByForm.get('reportedBy').value === 'GUARANTOR') {
+      this.reportedByForm.get('agreementId').setValidators(Validators.required);
+    } else {
+      this.reportedByForm.get('agreementId').clearValidators();
+      this.reportedByForm.get('agreementId').updateValueAndValidity();
+    }
     this.reportedByForm.patchValue({
       agreementId: null,
       title: '',
@@ -409,30 +442,16 @@ export class DetailsPage implements OnInit {
       surname: '',
       email: '',
       mobile: '',
-      homeTelephoneNo: ''
+      homeTelephoneNo: '',
+      selectedEntity: ''
     });
     this.getReportedByIdList();
   }
 
   getReportedByIdList() {
     let reportedBy = this.reportedByForm.get('reportedBy').value;
-    let agreementId = this.reportedByForm.get('agreementId').value;
-    if (reportedBy === 'GUARANTOR' && agreementId) {
-      let agreement = this.propertyTenancyDetails.find((tenancy) => {
-        return (tenancy.agreementId == agreementId);
-      });
-
-      if (agreement && agreement.tenants) {
-        // angular.forEach(agreement.tenants, function (tenant) {
-        //   getTenantsGuarantors(tenant.tenantId);
-        // });
-      }
-    }
-    else if (reportedBy === 'TENANT' && agreementId) {
-      // getTenantsOfProperty(this.propertyId, agreementId);
-    }
-    else if (reportedBy === 'LANDLORD') {
-      // getLandlordsOfProperty(this.propertyId);
+    if (reportedBy === 'LANDLORD') {
+      this.getLandlordsOfProperty(this.propertyId);
     }
   }
 
@@ -442,6 +461,25 @@ export class DetailsPage implements OnInit {
 
   getLookupValue(index, lookup) {
     return this.commonService.getLookupValue(index, lookup);
+  }
+
+  setEntityData(entity) {
+    let reportedBy = this.reportedByForm.get('reportedBy').value;
+    if (reportedBy == 'LANDLORD') {
+      this.reportedByForm.get('reportedById').setValue(entity.landlordId);
+    }
+    this.reportedByForm.patchValue({
+      title: entity.title,
+      forename: entity.forename,
+      surname: entity.surname,
+      email: entity.email,
+      mobile: entity.mobile,
+      homeTelephoneNo: entity.homeTelephoneNo
+    });
+  }
+
+  createAFault(){
+
   }
 
 }

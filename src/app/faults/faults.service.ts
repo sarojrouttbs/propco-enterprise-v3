@@ -48,4 +48,8 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/documents/upload`, formData);
     }
 
+    getLandlordsOfProperty(propertyId): Observable<any> {
+      return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/landlords`);
+    }
+
 }

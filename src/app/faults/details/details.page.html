@@ -114,7 +114,7 @@
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Who reported the fault?</ion-label>
-            <ion-select interface="popover" formControlName="reportedBy" (change)="onSelectReprtedByType()">
+            <ion-select interface="popover" formControlName="reportedBy" (ionChange)="onSelectReprtedByType()">
               <ion-select-option [value]="item.index" *ngFor="let item of reportedByTypes"
                 >{{ item.value }}
               </ion-select-option>
@@ -125,20 +125,20 @@
         <ion-col size="66.6">
           <ion-item>
             <ion-label position="floating">Select agreement</ion-label>
-            <ion-select interface="popover" (change)="onSelectAgreement()">
-              <ion-select-option [value]="item.agreementId" *ngFor="let item of propertyTenancyDetails"
+            <ion-select formControlName="agreementId" interface="popover" (ionChange)="onSelectAgreement()" [disabled]="reportedByForm.controls.reportedBy.value != 'TENANT' && reportedByForm.controls.reportedBy.value != 'GUARANTOR'">
+              <ion-select-option [value]="item.agreementId" *ngFor="let item of propertyTenancyDetails" 
                 > {{getLookupValue(item.status, agreementStatuses)}} {{item.tenancyStartDate | date:'dd/MM/yyyy'}} - {{item.tenancyEndDate| date:'dd/MM/yyyy'}}
               </ion-select-option>
             </ion-select>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size="33.3">
+        <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'LANDLORD'" >
           <ion-item>
-            <ion-label position="floating">Select tenant</ion-label>
-            <ion-select interface="popover">
-              <ion-select-option [value]="item.index" *ngFor="let item of catList"
-                >{{ item.value }}
+            <ion-label position="floating">Select Landlord</ion-label>
+            <ion-select interface="popover" formControlName="selectedEntity" (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
+              <ion-select-option [value]="item" *ngFor="let item of landlordsOfproperty"
+                >{{item.addressee || item.name}}
               </ion-select-option>
             </ion-select>
           </ion-item>
@@ -147,42 +147,42 @@
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Title</ion-label>
-            <ion-input></ion-input>
+            <ion-input formControlName="title"></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Forename</ion-label>
-            <ion-input></ion-input>
+            <ion-input formControlName="forename"></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Surname</ion-label>
-            <ion-input></ion-input>
+            <ion-input formControlName="surname"></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">E-mail</ion-label>
-            <ion-input></ion-input>
+            <ion-input formControlName="email"></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Mobile</ion-label>
-            <ion-input></ion-input>
+            <ion-input formControlName="mobile"></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Telephone</ion-label>
-            <ion-input></ion-input>
+            <ion-input formControlName="homeTelephoneNo"></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
@@ -229,13 +229,13 @@
   <form>
     <ion-grid>
       <ion-row>
-        <!-- <form class="drop-zone" [formGroup]="uploadDocForm" file-drop (files)="submit($event)">
+        <form class="drop-zone" [formGroup]="uploadDocForm" file-drop (files)="submit($event)">
           <ion-icon class="icon" name="cloud-upload"></ion-icon>
           <input type="file" class="custom-file-input form-control" id="files" multiple (change)="submit($event.target.files)"
           accept="image/x-png,image/jpeg">
           <span class="drag-text">Drag files to upload here</span> <br>
           <label for="files" class="browse-btn">Browse Files</label>
-        </form> -->
+        </form>
         <!-- <form [formGroup]="uploadDocForm" >
           <ion-row size="col-20">
             <div class="images-preview mt-2" *ngIf="photos.length">
@@ -270,43 +270,37 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Fault Category</ion-text><br />
-        <ion-text class="content">bvn</ion-text>
+        <ion-text class="content">{{getCategoryName() || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Urgency Status</ion-text><br />
-        <ion-text class="content">f</ion-text>
+        <ion-text class="content">{{getUrgencyName()  || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Title</ion-text><br />
-        <ion-text class="content">gfghrt</ion-text>
+        <ion-text class="content">{{describeFaultForm.controls.title.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Fault Description</ion-text><br />
-        <ion-text class="content">rtrt</ion-text>
+        <ion-text class="content">{{faultDetailsForm.controls.notes.value || 'N/A'}}</ion-text>
       </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Type</ion-text><br />
-        <ion-text class="content">trt</ion-text>
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Additional Info</ion-text><br />
-        <ion-text class="content">ertret</ion-text>
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Type</ion-text><br />
-        <ion-text class="content"></ion-text>
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Additional Info</ion-text><br />
-        <ion-text class="content"></ion-text>
-      </ion-col>
+      <ng-container *ngFor="let item of additionalInfoControls; let i = index;">
+        <ion-col size-xs="100" size-sm="50" class="header-content">
+          <ion-text class="header">Type</ion-text><br />
+          <ion-text class="content">{{item.value.label}}</ion-text>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="50" class="header-content">
+          <ion-text class="header">Additional Info</ion-text><br />
+          <ion-text class="content">{{item.value.value}}</ion-text>
+        </ion-col>
+      </ng-container>
       <ion-col size="100" class="border-bottom"></ion-col>
       <ion-col size="100">
         <div class="sub-heading">Reported By</div>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Who reported the fault?</ion-text><br />
-        <ion-text class="content"></ion-text>
+        <ion-text class="content">{{reportedByForm.controls.reportedBy.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Agreement</ion-text><br />
@@ -314,31 +308,31 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Tenant</ion-text><br />
-        <ion-text class="content"></ion-text>
+        <ion-text class="content">{{reportedByForm.controls.forename.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Title</ion-text><br />
-        <ion-text class="content"></ion-text>
+        <ion-text class="content">{{reportedByForm.controls.title.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Forename</ion-text><br />
-        <ion-text class="content"></ion-text>
+        <ion-text class="content">{{reportedByForm.controls.forename.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Surname</ion-text><br />
-        <ion-text class="content"></ion-text>
+        <ion-text class="content">{{reportedByForm.controls.surname.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">E-mail</ion-text><br />
-        <ion-text class="content"></ion-text>
+        <ion-text class="content">{{reportedByForm.controls.email.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Mobile</ion-text><br />
-        <ion-text class="content"></ion-text>
+        <ion-text class="content">{{reportedByForm.controls.mobile.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Telephone</ion-text><br />
-        <ion-text class="content"></ion-text>
+        <ion-text class="content">{{reportedByForm.controls.homeTelephoneNo.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size="100" class="border-bottom"></ion-col>
       <ion-col size="100">
@@ -346,15 +340,15 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Access Information</ion-text><br />
-        <ion-text class="content"></ion-text>
+        <ion-text class="content">{{accessInfoForm.controls.isTenantPresenceRequired.value?'YES':'NO' || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Is there a vulnerable occupier at this property?</ion-text><br />
-        <ion-text class="content"></ion-text>
+        <ion-text class="content">{{accessInfoForm.controls.areOccupiersVulnerable.value?'YES':'NO' || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Useful Instruction</ion-text><br />
-        <ion-text class="content"></ion-text>
+        <ion-text class="content">{{accessInfoForm.controls.tenantNotes.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size="100" class="border-bottom"></ion-col>
     </ion-row>
@@ -387,8 +381,8 @@
       <button mat-raised-button (click)="caseTabs.selectedIndex = 3" type="button" color="warn">Next</button>
     </mat-tab>
     <mat-tab>
-      <ng-template mat-tab-label><span class="add" [class.green-border]='isManageMediaSubmit && uploadDocForm.valid'
-        [class.red-border]='isManageMediaSubmit && !uploadDocForm.valid'>Manage media / Documents</span></ng-template>
+      <ng-template mat-tab-label><span class="add" [class.green-border]='isManageMediaSubmit && files.length !== 0'
+        [class.red-border]='isManageMediaSubmit && files.length === 0'>Manage media / Documents</span></ng-template>
       <ng-container *ngTemplateOutlet="media"></ng-container>
       <button mat-raised-button (click)="caseTabs.selectedIndex = 2" type="button" color="primary">Back</button>
       <button mat-raised-button (click)="caseTabs.selectedIndex = 4" type="button" color="warn">Next</button>
