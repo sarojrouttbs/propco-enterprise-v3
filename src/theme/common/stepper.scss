@@ -145,18 +145,24 @@
       margin: 0 20px 25px;
     }
 
-    .stepper-next, .stepper-back {
-      position: absolute;
-      top: calc(50% - 89px);
+    .stepper-next, .stepper-back, .stepper-submit, .stepper-cancle, .stepper-save {
+      color: var(--ion-color-step-2000);
+      margin: 5px;
     }
 
-    .stepper-next {
-      right: 20px;
+    .stepper-next, .stepper-back, .stepper-submit {
+      background-color: var(--ion-color-step-900);
     }
 
-    .stepper-back {
-      left: 20px;
+    .stepper-cancle {
+      background-color: var(--ion-color-danger);
+      margin-left: 20px;
     }
+
+    .stepper-save {
+      background-color: var(--ion-color-success);
+    }
+
 
     .mat-icon-button[disabled] {
       opacity: 0.5;
