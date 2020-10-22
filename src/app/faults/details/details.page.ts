@@ -1,9 +1,11 @@
+import { REPORTED_BY_TYPES, PROPCO } from './../../shared/constants';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
-import { catList, propertyData } from './cat.json';
+import { tenancyData, catList, propertyData } from './cat.json';
 
 @Component({
   selector: 'fault-details',
@@ -13,11 +15,11 @@ import { catList, propertyData } from './cat.json';
 export class DetailsPage implements OnInit {
 
   catList: any[] = catList;
+  tenancyDataList: any[] = tenancyData;
   propertyData = propertyData;
-  pageNo = 3;
-  faultDetails: any = {};
+  pageNo = 1;
   propertyId = '5eae3eee-f99b-11e8-bd34-0cc47a54d954';
-  propertyDetails;
+  propertyDetails = [];
   propertyTenancyDetails;
   propertyHMODetails;
   addtionalInfo;
@@ -26,7 +28,7 @@ export class DetailsPage implements OnInit {
   describeFaultForm: FormGroup;
   faultDetailsForm: FormGroup;
   addAdditionalDetForm: FormGroup;
-  reportedByFOrm: FormGroup;
+  reportedByForm: FormGroup;
   accessInfoForm: FormGroup;
 
   //MAT TABS//
@@ -37,15 +39,17 @@ export class DetailsPage implements OnInit {
   selected = new FormControl(0);
   current = 0;
   previous;
-  isCaseDetailValid;
-  isReportedValid;
-  isAccessInfoValid;
-  isManageMediaValid;
-  iscaseDetailSubmit;
+  isCaseDetailSubmit;
   isReportedSubmit;
   isAccessInfoSubmit;
   isManageMediaSubmit;
   //MAT TABS//
+  categoryMap = new Map();
+  faultId: string;
+  accessInfoList = [{ title: 'Tenant Presense Required', value: true }, { title: 'Access with management keys', value: false }];
+  reportedByTypes = REPORTED_BY_TYPES;
+  lookupdata: any;
+  agreementStatuses: any[];
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -63,7 +67,11 @@ export class DetailsPage implements OnInit {
     'assets/images/fault-categories/water-and-leaks.svg'
   ];
 
-  constructor(private faultService: FaultsService, private fb: FormBuilder, private commonService: CommonService) {
+  constructor(
+    private faultService: FaultsService,
+    private fb: FormBuilder,
+    private commonService: CommonService,
+    private route: ActivatedRoute) {
   }
 
   ionViewDidEnter() {
@@ -71,31 +79,10 @@ export class DetailsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.faultDetails.urgencyStatus = 1;
     this.catList.map((cat, index) => {
+      this.categoryMap.set(cat.index, cat.value);
       cat.imgPath = this.categoryIconList[index];
     });
-
-    //MAT FORMS//
-    this.caseDetail = this.fb.group({
-      case: ['', Validators.required],
-      fault: ['', Validators.required],
-      desc: ['', Validators.required],
-    });
-
-    this.reported = this.fb.group({
-      reporterName: ['', Validators.required],
-      tenant: ['', Validators.required],
-    });
-
-    this.accessInfo = this.fb.group({
-      // access: ['', Validators.required],
-    });
-    this.manageMedia = this.fb.group({
-      // manage: ['', Validators.required],
-    });
-
-    //MAT FORMS//
   }
 
   goToPriorityPage(pageNo) {
@@ -103,8 +90,31 @@ export class DetailsPage implements OnInit {
   }
 
   initiateFault() {
+    this.getLookupData();
+    this.faultId = this.route.snapshot.paramMap.get('faultId');
+    if (this.faultId) {
+      /*update process*/
+    }
     this.initiateForms();
     this.initialApiCall();
+  }
+
+
+  private getLookupData() {
+    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
+    if (this.lookupdata) {
+      this.setLookupData(this.lookupdata);
+    } else {
+      this.commonService.getLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
+        this.lookupdata = data;
+        this.setLookupData(data);
+      });
+    }
+  }
+
+  private setLookupData(data) {
+    this.agreementStatuses = data.agreementStatuses;
   }
 
   initiateForms() {
@@ -119,7 +129,8 @@ export class DetailsPage implements OnInit {
   initDescribeFaultForm(): void {
     this.describeFaultForm = this.fb.group({
       title: ['', Validators.required],
-      urgencyStatus: ['', Validators.required]
+      urgencyStatus: [1, Validators.required],
+      category: ['', Validators.required]
     });
   }
 
@@ -131,14 +142,14 @@ export class DetailsPage implements OnInit {
   }
 
   initaddAdditionalDetForm(): void {
-    this.describeFaultForm = this.fb.group({
+    this.addAdditionalDetForm = this.fb.group({
       label: ['', Validators.required],
       value: ['', Validators.required]
     });
   }
 
   initAccessInfiForm(): void {
-    this.describeFaultForm = this.fb.group({
+    this.accessInfoForm = this.fb.group({
       tenantNotes: '',
       areOccupiersVulnerable: '',
       isTenantPresenceRequired: ['', Validators.required]
@@ -146,7 +157,7 @@ export class DetailsPage implements OnInit {
   }
 
   initReportedByForm(): void {
-    this.describeFaultForm = this.fb.group({
+    this.reportedByForm = this.fb.group({
       reportedBy: ['', Validators.required],
       agreementId: ['', Validators.required],
       reportedById: '',
@@ -193,6 +204,7 @@ export class DetailsPage implements OnInit {
   getPpropertyTenancies(): void {
     this.faultService.getPropertyTenancies(this.propertyId).subscribe(
       res => {
+        this.propertyTenancyDetails = this.tenancyDataList;
         if (res && res.data) {
           this.propertyTenancyDetails = res.data;
         }
@@ -220,7 +232,7 @@ export class DetailsPage implements OnInit {
     this.faultService.getFaultAdditionalInfo().subscribe(
       res => {
         if (res) {
-          this.addtionalInfo = res.data;
+          this.addtionalInfo = res;
         }
       },
       error => {
@@ -300,26 +312,28 @@ export class DetailsPage implements OnInit {
 
   //MAT METHODS//
   caseDeatil(): void {
-    this.iscaseDetailSubmit = true;
-    this.isCaseDetailValid = this.caseDetail.valid;
-    if(this.caseDetail.invalid){
-      this.caseDetail.markAllAsTouched();
+    this.isCaseDetailSubmit = true;
+    if (this.faultDetailsForm.invalid) {
+      this.faultDetailsForm.markAllAsTouched();
     }
   }
 
   reportedBy(): void {
     this.isReportedSubmit = true;
-    this.isReportedValid = this.reported.valid;
+    if (this.reportedByForm.invalid) {
+      this.reportedByForm.markAllAsTouched();
+    }
   }
 
   saveAccessInfo(): void {
     this.isAccessInfoSubmit = true;
-    this.isAccessInfoValid = this.accessInfo.valid;
+    if (this.accessInfoForm.invalid) {
+      this.accessInfoForm.markAllAsTouched();
+    }
   }
 
   manageMediaDoc(): void {
     this.isManageMediaSubmit = true;
-    this.isManageMediaValid = this.manageMedia.valid;
   }
 
   currentSelected(event): void {
@@ -350,5 +364,84 @@ export class DetailsPage implements OnInit {
   }
 
   //MAT METHODS//
+
+  /*method to update category control*/
+  setCategory(catId: number): void {
+    this.describeFaultForm.get('category').setValue(catId);
+  }
+
+  /*method to update urgencyStatus control*/
+  setUrgencyStatus(urgencyStatus: number): void {
+    this.describeFaultForm.get('urgencyStatus').setValue(urgencyStatus);
+  }
+
+  getCategoryName() {
+    return this.categoryMap.get(this.describeFaultForm.controls['category'].value);
+  }
+
+  editTitle(title: string) {
+    this.describeFaultForm.controls['title'].setValue(title);
+  }
+
+  get additionalInfoControls() {
+    return this.faultDetailsForm.get('additionalInfo')['controls'];
+  }
+
+  createAdditionalInfo(detail) {
+    const infoArray = this.faultDetailsForm.get('additionalInfo') as FormArray;
+    infoArray.push(this.fb.group({
+      label: [detail.label, Validators.required],
+      value: [detail.value, Validators.required]
+    }));
+    this.addAdditionalDetForm.reset();
+  }
+
+  removeInfo(i: number) {
+    const infoArray = this.faultDetailsForm.get('additionalInfo') as FormArray;
+    infoArray.removeAt(i);
+  }
+
+  onSelectReprtedByType() {
+    this.reportedByForm.patchValue({
+      agreementId: null,
+      title: '',
+      forename: '',
+      surname: '',
+      email: '',
+      mobile: '',
+      homeTelephoneNo: ''
+    });
+    this.getReportedByIdList();
+  }
+
+  getReportedByIdList() {
+    let reportedBy = this.reportedByForm.get('reportedBy').value;
+    let agreementId = this.reportedByForm.get('agreementId').value;
+    if (reportedBy === 'GUARANTOR' && agreementId) {
+      let agreement = this.propertyTenancyDetails.find((tenancy) => {
+        return (tenancy.agreementId == agreementId);
+      });
+
+      if (agreement && agreement.tenants) {
+        // angular.forEach(agreement.tenants, function (tenant) {
+        //   getTenantsGuarantors(tenant.tenantId);
+        // });
+      }
+    }
+    else if (reportedBy === 'TENANT' && agreementId) {
+      // getTenantsOfProperty(this.propertyId, agreementId);
+    }
+    else if (reportedBy === 'LANDLORD') {
+      // getLandlordsOfProperty(this.propertyId);
+    }
+  }
+
+  onSelectAgreement() {
+    this.getReportedByIdList();
+  }
+
+  getLookupValue(index, lookup) {
+    return this.commonService.getLookupValue(index, lookup);
+  }
 
 }

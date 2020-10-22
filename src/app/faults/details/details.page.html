@@ -1,21 +1,21 @@
 <ng-template #caseDetails>
-  <form>
+  <form [formGroup]="faultDetailsForm">
     <ion-grid>
       <ion-row class="ion-justify-content-start">
         <ion-col size="auto">
-          <h2>Bath & Toilet <ion-text color="success">›</ion-text><ion-text></ion-text></h2>
+          <h2>{{categoryMap.get(describeFaultForm.controls['category'].value)}} <ion-text color="success">›</ion-text><ion-text></ion-text></h2>
         </ion-col>
         <ion-col size="auto">
           <ion-item lines="none" class="edit-title">
-            <ion-input value="Fault jksahdfkh kjhfdskh jkha fdsjh jasdfh hahasfjkhjhjkfh jkhsfh" style="font-size:24px;padding-bottom:0"></ion-input>
+            <ion-input #title [value] ="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="auto" class="ion-no-padding">
-          <ion-button>Edit</ion-button>
+          <ion-button (click)="editTitle(title.value)">Edit</ion-button>
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col size="100">
+        <ion-col size="100" *ngIf="faultId" >
           <ion-item>
             <ion-label position="floating">Urgency Status</ion-label>
             <ion-select interface="popover">
@@ -29,9 +29,9 @@
         <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Fault description</ion-label>
-            <ion-input></ion-input>
+            <ion-input formControlName="notes"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          <app-validation-message [control]="faultDetailsForm.controls.notes"></app-validation-message>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -39,7 +39,7 @@
 </ng-template>
 
 <ng-template #additionalInfo>
-  <form>
+  <form [formGroup]="addAdditionalDetForm">
     <ion-grid>
       <ion-row>
         <ion-col size="50">
@@ -48,9 +48,10 @@
               <ion-col size="30">
                 <ion-item>
                   <ion-label position="floating">Type</ion-label>
-                  <ion-select interface="popover">
-                    <ion-select-option [value]="item.index" *ngFor="let item of catList"
-                      >{{ item.value }}
+                 
+                  <ion-select interface="popover" formControlName="label">
+                    <ion-select-option [value]="item" *ngFor="let item of addtionalInfo"
+                      >{{ item }}
                     </ion-select-option>
                   </ion-select>
                 </ion-item>
@@ -58,11 +59,11 @@
               <ion-col size="60">
                 <ion-item>
                   <ion-label position="floating">Additional Info</ion-label>
-                  <ion-input></ion-input>
+                  <ion-input formControlName="value"></ion-input>
                 </ion-item>
               </ion-col>
               <ion-col size="10">
-                <ion-button class="margin-top-16">Add</ion-button>
+                <ion-button class="margin-top-16" [disabled]="!addAdditionalDetForm.valid" (click)="createAdditionalInfo(addAdditionalDetForm.value)">Add</ion-button>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -71,18 +72,19 @@
     </ion-grid>
   </form>
 
-  <form>
+  <form [formGroup]="faultDetailsForm">
     <ion-grid>
-      <ion-row>
-        <ion-col size="50">
+      <ion-row formArrayName="additionalInfo">
+        <ion-col size="50" *ngFor="let item of additionalInfoControls; let i = index;">
+          <ng-container [formGroupName]="i">
           <ion-grid>
             <ion-row>
               <ion-col size="30">
                 <ion-item>
                   <ion-label position="floating">Type</ion-label>
-                  <ion-select interface="popover">
-                    <ion-select-option [value]="item.index" *ngFor="let item of catList"
-                      >{{ item.value }}
+                  <ion-select interface="popover" formControlName="label">
+                    <ion-select-option [value]="item" *ngFor="let item of addtionalInfo"
+                      >{{ item }}
                     </ion-select-option>
                   </ion-select>
                 </ion-item>
@@ -90,39 +92,15 @@
               <ion-col size="60">
                 <ion-item>
                   <ion-label position="floating">Additional Info</ion-label>
-                  <ion-input></ion-input>
+                  <ion-input formControlName="value"></ion-input>
                 </ion-item>
               </ion-col>
               <ion-col size="10">
-                <ion-icon name="close-circle" class="close-circle"></ion-icon>
+                <ion-icon name="close-circle" class="close-circle" (click)="removeInfo(i)"></ion-icon>
               </ion-col>
             </ion-row>
           </ion-grid>
-        </ion-col>
-        <ion-col size="50">
-          <ion-grid>
-            <ion-row>
-              <ion-col size="30">
-                <ion-item>
-                  <ion-label position="floating">Type</ion-label>
-                  <ion-select interface="popover">
-                    <ion-select-option [value]="item.index" *ngFor="let item of catList"
-                      >{{ item.value }}
-                    </ion-select-option>
-                  </ion-select>
-                </ion-item>
-              </ion-col>
-              <ion-col size="60">
-                <ion-item>
-                  <ion-label position="floating">Additional Info</ion-label>
-                  <ion-input></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="10">
-                <ion-icon name="close-circle" class="close-circle"></ion-icon>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+        </ng-container>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -130,14 +108,14 @@
 </ng-template>
 
 <ng-template #reportedBy>
-  <form>
+  <form [formGroup]="reportedByForm">
     <ion-grid>
       <ion-row>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Who reported the fault?</ion-label>
-            <ion-select interface="popover">
-              <ion-select-option [value]="item.index" *ngFor="let item of catList"
+            <ion-select interface="popover" formControlName="reportedBy" (change)="onSelectReprtedByType()">
+              <ion-select-option [value]="item.index" *ngFor="let item of reportedByTypes"
                 >{{ item.value }}
               </ion-select-option>
             </ion-select>
@@ -147,9 +125,9 @@
         <ion-col size="66.6">
           <ion-item>
             <ion-label position="floating">Select agreement</ion-label>
-            <ion-select interface="popover">
-              <ion-select-option [value]="item.index" *ngFor="let item of catList"
-                >{{ item.value }}
+            <ion-select interface="popover" (change)="onSelectAgreement()">
+              <ion-select-option [value]="item.agreementId" *ngFor="let item of propertyTenancyDetails"
+                > {{getLookupValue(item.status, agreementStatuses)}} {{item.tenancyStartDate | date:'dd/MM/yyyy'}} - {{item.tenancyEndDate| date:'dd/MM/yyyy'}}
               </ion-select-option>
             </ion-select>
           </ion-item>
@@ -214,15 +192,15 @@
 </ng-template>
 
 <ng-template #accessInformation>
-  <form>
+  <form [formGroup]="accessInfoForm">
     <ion-grid>
       <ion-row>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Access information</ion-label>
-            <ion-select interface="popover">
-              <ion-select-option [value]="item.index" *ngFor="let item of catList"
-                >{{ item.value }}
+            <ion-select interface="popover" formControlName="isTenantPresenceRequired">
+              <ion-select-option [value]="item.value" *ngFor="let item of accessInfoList"
+                >{{ item.title }}
               </ion-select-option>
             </ion-select>
           </ion-item>
@@ -231,14 +209,14 @@
         <ion-col size="65">
           <ion-item lines="none" style="margin-top: 6px;">
             <ion-label>Is there a vulnerable occupier at this property?</ion-label>
-            <ion-toggle slot="start"></ion-toggle>
+            <ion-toggle slot="start" formControlName="areOccupiersVulnerable"></ion-toggle>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
         <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Useful instructions</ion-label>
-            <ion-input></ion-input>
+            <ion-input formControlName="tenantNotes"></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
@@ -384,27 +362,40 @@
 </ng-template>
 
 <ng-template #caseLogged>
-  <mat-tab-group  mat-stretch-tabs mat-align-tabs="start" #allTabs>
-    <mat-tab label="Case Details">
+  <mat-tab-group  mat-stretch-tabs mat-align-tabs="start" #caseTabs  (selectedIndexChange)="currentSelected($event)">
+    <mat-tab>
+      <ng-template mat-tab-label><span class="add" [class.green-border]='isCaseDetailSubmit && faultDetailsForm.valid'
+        [class.red-border]='isCaseDetailSubmit && !faultDetailsForm.valid'>Case Detail</span></ng-template>
       <ng-container *ngTemplateOutlet="caseDetails"></ng-container>
       <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
-      <button mat-raised-button tabindex="-1" type="button" color="warn">Move to Tab 2</button>
+      <button mat-raised-button (click)="caseTabs.selectedIndex = 1" type="button" color="warn">Next</button>
     </mat-tab>
-    <mat-tab label="Reported By">
+    <mat-tab>
+      <ng-template mat-tab-label><span class="add" [class.green-border]='isReportedSubmit && reportedByForm.valid'
+        [class.red-border]='isReportedSubmit && !reportedByForm.valid'>Reported By</span></ng-template>
+
       <ng-container *ngTemplateOutlet="reportedBy"></ng-container>
-      <button mat-raised-button tabindex="-1" type="button" color="warn">Move to Tab 2</button>
+      <button mat-raised-button (click)="caseTabs.selectedIndex = 0" type="button" color="primary">Back</button>
+      <button mat-raised-button (click)="caseTabs.selectedIndex = 2" type="button" color="warn">Next</button>
     </mat-tab>
-    <mat-tab label="Access Information">
+    <mat-tab>
+      <ng-template mat-tab-label><span class="add" [class.green-border]='isAccessInfoSubmit && accessInfoForm.valid'
+        [class.red-border]='isAccessInfoSubmit && !accessInfoForm.valid'>Access Information</span></ng-template>
+
       <ng-container *ngTemplateOutlet="accessInformation"></ng-container>
-      <button mat-raised-button tabindex="-1" type="button" color="warn">Move to Tab 2</button>
+      <button mat-raised-button (click)="caseTabs.selectedIndex = 1" type="button" color="primary">Back</button>
+      <button mat-raised-button (click)="caseTabs.selectedIndex = 3" type="button" color="warn">Next</button>
     </mat-tab>
-    <mat-tab label="Manage Media / Documents">
+    <mat-tab>
+      <ng-template mat-tab-label><span class="add" [class.green-border]='isManageMediaSubmit && uploadDocForm.valid'
+        [class.red-border]='isManageMediaSubmit && !uploadDocForm.valid'>Manage media / Documents</span></ng-template>
       <ng-container *ngTemplateOutlet="media"></ng-container>
-      <button mat-raised-button tabindex="-1" type="button" color="warn">Move to Tab 2</button>
+      <button mat-raised-button (click)="caseTabs.selectedIndex = 2" type="button" color="primary">Back</button>
+      <button mat-raised-button (click)="caseTabs.selectedIndex = 4" type="button" color="warn">Next</button>
     </mat-tab>
     <mat-tab label="Review">
       <ng-container *ngTemplateOutlet="finalView"></ng-container>
-      <button mat-raised-button tabindex="-1" type="button" color="warn">Move to Tab 2</button>
+      <button mat-raised-button (click)="caseTabs.selectedIndex = 3" type="button" color="primary">Back</button>
     </mat-tab>
   </mat-tab-group>
 </ng-template>
@@ -459,7 +450,7 @@
     </ion-row>
     <ion-row>
       <ion-col size="20" *ngFor="let item of catList">
-        <div class="block" (click)="goToPriorityPage(2)">
+        <div class="block" (click)="goToPriorityPage(2);setCategory(item.index)">
           <img [src]="item.imgPath" />
           <h4>{{item.value}}</h4>
         </div>
@@ -483,30 +474,31 @@
           </b>
         </h2>
         <div class="priority-heading">Select the priority</div>
-        <ion-button (click)="faultDetails.urgencyStatus = 1" [class]="faultDetails?.urgencyStatus===1 ? 'urgency-selected non-urgent-btn' : 'non-urgent-btn'">Non urgent</ion-button>
-        <ion-button (click)="faultDetails.urgencyStatus = 2" [class]="faultDetails?.urgencyStatus===2 ? 'urgency-selected urgent-btn' : 'urgent-btn'">Urgent</ion-button>
-        <ion-button (click)="faultDetails.urgencyStatus = 3" [class]="faultDetails?.urgencyStatus===3 ? 'urgency-selected emergency-btn' : 'emergency-btn'">Emergency</ion-button>
+        <ion-button (click)="setUrgencyStatus(1)" [class]="describeFaultForm.controls.urgencyStatus.value ===1 ? 'urgency-selected non-urgent-btn' : 'non-urgent-btn'">Non urgent</ion-button>
+        <ion-button (click)="setUrgencyStatus(2)" [class]="describeFaultForm.controls.urgencyStatus.value===2 ? 'urgency-selected urgent-btn' : 'urgent-btn'">Urgent</ion-button>
+        <ion-button (click)="setUrgencyStatus(3)" [class]="describeFaultForm.controls.urgencyStatus.value===3 ? 'urgency-selected emergency-btn' : 'emergency-btn'">Emergency</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
   
-  <div class="panel-block-normal propco-form" *ngIf="pageNo===2">
+  <form class="panel-block-normal propco-form" *ngIf="pageNo===2" [formGroup]="describeFaultForm">
     <ion-grid>
       <ion-row class="main-row">
         <ion-col size="100" class="col1">
           <ion-item>
             <ion-label position="floating">Title</ion-label>
-            <ion-input type="text"> </ion-input>
+            <ion-input type="text" formControlName="title"> </ion-input>
           </ion-item>
+          <app-validation-message [control]="describeFaultForm.controls.title"></app-validation-message>
         </ion-col>
         <ion-col size="100" class="col2">
           <ion-button>Cancel</ion-button>
           <ion-button (click)="goToPriorityPage(1)">Back</ion-button>
-          <ion-button (click)="goToPriorityPage(3)">Next</ion-button>
+          <ion-button (click)="goToPriorityPage(3)" [disabled]="!describeFaultForm.valid">Next</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
-  </div>
+  </form>
 
   <ng-container *ngIf="pageNo===3">
    <ion-grid>
@@ -519,11 +511,14 @@
         </ion-col>
       
         <ion-col size="100">
-          <!-- <ion-card class="ion-no-margin" id="property-details-card">
+          <ion-card class="ion-no-margin" id="property-details-card">
             <app-property-details
-              [propertyDetails]="propertyDetails"
-            ></app-property-details>
-          </ion-card> -->
+            [propertyDetails]="propertyDetails"
+            [files]="files"
+            [parentForm]="uploadDocForm"
+            (getUploadedFile)="getUploadedFile($event)"
+              ></app-property-details>
+          </ion-card>
         </ion-col>
         <ion-col size="100">
           <mat-horizontal-stepper
