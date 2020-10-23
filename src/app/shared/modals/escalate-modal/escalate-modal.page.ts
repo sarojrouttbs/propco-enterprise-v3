@@ -41,7 +41,6 @@ export class EscalateModalPage implements OnInit {
     if (this.escalateForm.valid) {
       const requestObj = this.escalateForm.value;
       this.faultsService.escalateFault(this.faultId, requestObj).subscribe(res => {
-        debugger;
         this.modalController.dismiss('success');
       }, err => {
         this.commonService.showMessage(err.message, 'Add Note', 'error');

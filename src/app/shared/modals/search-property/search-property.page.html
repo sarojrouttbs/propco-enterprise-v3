@@ -25,7 +25,7 @@
         <!-- <span class="text-color-lightblue">{{getLookupValue(result.officeCode, officeLookupDetails)}}&nbsp;</span> -->
         <span>{{result.address}}&nbsp;</span>
         <span class="text-color-gray-six">{{result.reference}}</span>&nbsp;
-        <span ng-if="result.entityType === 'PROPERTY'">{{result.propertyAdvertisedRent | currency : "£" : 0}}</span>&nbsp;
+        <span ng-if="result.entityType === 'PROPERTY'">{{result.propertyAdvertisedRent | currency : "£"}}</span>&nbsp;
         <span class="text-color-lightgreen">{{result.status}}</span>&nbsp;
       </mat-option>
     </mat-autocomplete>
