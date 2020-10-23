@@ -12,10 +12,14 @@ export class PropertyDetailsComponent implements OnInit {
   @Input() propertyDetails;
   @Input() parentForm: FormGroup;
   @Input() files;
+  @Input() hmoDetails;
   lookupdata: any;
   @Output()
   getUploadedFile = new EventEmitter<any>();
-  advertisementRentFrequencies: any;
+  advertisementRentFrequencies: any[];
+  officeCodes:any[];
+  hmoLicenceSchemes:any[];
+  faultUrgencyStatuses:any[];
 
   constructor(public commonService: CommonService) {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -30,12 +34,20 @@ export class PropertyDetailsComponent implements OnInit {
 
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
+
   private setLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
     this.advertisementRentFrequencies = this.lookupdata.advertisementRentFrequencies;
+    this.officeCodes = this.lookupdata.officeCodes;
+    this.hmoLicenceSchemes = this.lookupdata.hmoLicenceSchemes;
+    this.faultUrgencyStatuses = this.lookupdata.faultUrgencyStatuses;
   }
 
+  getLookupValue(index, lookup) {
+    return this.commonService.getLookupValue(index, lookup);
+  }
   public submit(files: FileList) {
     this.getUploadedFile.emit(files);
   }

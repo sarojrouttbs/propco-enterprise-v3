@@ -36,38 +36,45 @@
             </ion-col>
             <ion-col class="no-padding-top col2 ion-text-end" size="30">
               <h1>Urgent</h1>
+              {{getLookupValue(propertyDetails?.urgencyStatus, faultUrgencyStatuses)}}
             </ion-col>
           </ion-row>
           <ion-row class="fault-data-row">
             <ion-col size-xl="25" size="33.3">
               <span class="text">office</span>
               <br />
-              Allerton EG
+              {{getLookupValue(propertyDetails.office, officeCodes) || 'N/A'}}
             </ion-col>
             <ion-col size-xl="25" size="33.3">
               <span class="text">Management Service</span>
               <br />
-              CRL - Letting & Full Management
+              {{propertyDetails.managementTypeDescription || 'N/A'}}
             </ion-col>
             <ion-col size-xl="25" size="33.3">
               <span class="text">Property Manager</span>
               <br />
-              Danielle Hodge
+              {{propertyDetails.propertyManager || 'N/A'}}
             </ion-col>
             <ion-col size-xl="25" size="33.3">
               <span class="text">Occupancy Status</span>
               <br />
-              Tenanted
+              {{propertyDetails.isOwnerOccupied ? 'Landlord Occupied': propertyDetails.isPropertyCheckedIn ? 'Tenanted' : 'Vacant' }}
             </ion-col>
             <ion-col size-xl="25" size="33.3">
               <span class="text">Licence Details</span>
               <br />
-              Has HMO License? N/A
+              Has HMO License? {{ hmoDetails[0]?.isPropertyLicensed ? 'True' : 'N/A' }}
             </ion-col>
             <ion-col size-xl="25" size="33.3">
               <span class="text">Licence Scheme</span>
               <br />
-              rr1234
+              {{getLookupValue(hmoDetails[0]?.licenceSchemeLookup, hmoLicenceSchemes) || 'N/A'}}
+            </ion-col>
+            <ion-col size-xl="25" size="33.3">
+              <span class="text">Rent Arrears</span>
+              <br />
+              {{propertyDetails | json}}
+              {{propertyDetails?.tenantArrears || 0 | currency : "£" }}
             </ion-col>
           </ion-row>
           <ion-row class="fault-meter-row">

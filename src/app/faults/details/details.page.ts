@@ -20,9 +20,9 @@ export class DetailsPage implements OnInit {
   propertyData = propertyData;
   pageNo = 1;
   propertyId = null;
-  propertyDetails = [];
+  propertyDetails:any = {};
   propertyTenancyDetails: any[];
-  propertyHMODetails;
+  propertyHMODetails: any[] = [];
   addtionalInfo;
   files = [];
   describeFaultForm: FormGroup;
@@ -56,8 +56,8 @@ export class DetailsPage implements OnInit {
   faultReportedByThirdParty: any[];
   propertyTenants: any[] = [];
   allGuarantors: any[] = [];
-  tenantId: any = [];
-  tenantArrear: any;
+  tenantIds: any[] = [];
+  tenantArrears: any;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -95,7 +95,7 @@ export class DetailsPage implements OnInit {
     // });
   }
 
-  setCategoryMap(){
+  setCategoryMap() {
     this.faultCategories.map((cat, index) => {
       this.categoryMap.set(cat.index, cat.value);
       cat.imgPath = this.categoryIconList[index];
@@ -218,6 +218,8 @@ export class DetailsPage implements OnInit {
       res => {
         if (res && res.data) {
           this.propertyDetails = res.data;
+        } else {
+          this.propertyDetails = {};
         }
       },
       error => {
@@ -232,17 +234,18 @@ export class DetailsPage implements OnInit {
         if (res && res.data) {
           this.propertyTenancyDetails = res.data.filter(x => x.hasCheckedIn);
           if (this.propertyTenancyDetails) {
+            this.propertyDetails.isPropertyCheckedIn = true;
             for (let i = 0; i < this.propertyTenancyDetails.length; i++) {
               const tenants = this.propertyTenancyDetails[i].tenants;
               for (let j = 0; j < tenants.length; j++) {
                 let filterTenantsId = tenants.filter(data => data.tenantId);
-                this.tenantId = filterTenantsId.map(d => d.tenantId)
+                this.tenantIds = filterTenantsId.map(d => d.tenantId)
               }
             }
           }
         }
-        if(this.tenantId){
-          this.getTenantArrear(this.tenantId)
+        if (this.tenantIds) {
+          this.getTenantArrears(this.tenantIds)
         }
       },
       error => {
@@ -255,26 +258,27 @@ export class DetailsPage implements OnInit {
     return self.indexOf(value) === index;
   }
 
-  getTenantArrear(tenantId) {
+  private getTenantArrears(tenantId) {
     const uniqueSet = tenantId.filter(this.onlyUnique);
     let apiObservableArray = [];
     uniqueSet.forEach(id => {
       apiObservableArray.push(this.faultService.getTenantArrearsDetails(id));
     });
-    setTimeout(() => {
+    // setTimeout(() => {
       forkJoin(apiObservableArray).subscribe(res => {
         if (res) {
-          this.returnTenantArrear(res);
+          this.returnTenantArrears(res);
         }
       }, error => {
       });
-    }, 500);
+    // }, 200);
   }
 
-  returnTenantArrear(res){
+  private returnTenantArrears(res) {
     let arrearResponse = res.map(data => data.rentArrears);
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
-    this.tenantArrear = arrearResponse.reduce(reducer);
+    this.tenantArrears = arrearResponse.reduce(reducer);
+    this.propertyDetails.tenantArrears = this.tenantArrears;
   }
 
 
@@ -538,7 +542,7 @@ export class DetailsPage implements OnInit {
       this.allGuarantors = [];
       if (agreement && agreement.tenants) {
         agreement.tenants.forEach(tenant => {
-          this.getTenantsGuarantors(tenant.tenantId); 
+          this.getTenantsGuarantors(tenant.tenantId);
         });
       }
     }
