@@ -1,3 +1,4 @@
+import { MaterialModule } from './../../material.module';
 import { NgModule } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
@@ -11,6 +12,7 @@ import { PropertyDetailsComponent } from './property-details/property-details.co
         FormsModule,
         ReactiveFormsModule,
         IonicModule,
+        MaterialModule
     ],
     declarations: [ValidationMessageComponent, PropertyDetailsComponent],
     exports: [ValidationMessageComponent, PropertyDetailsComponent]
