@@ -525,7 +525,7 @@ export class DetailsPage implements OnInit {
   async searchProperty() {
     const modal = await this.modalController.create({
       component: SearchPropertyPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container entity-search',
       backdropDismiss: false
     });
 

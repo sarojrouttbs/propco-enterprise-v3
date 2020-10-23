@@ -165,6 +165,16 @@ ion-item {
   }
 }
 
+.entity-search {
+  .modal-wrapper {
+    min-height: 200px;
+  }
+}
+
+.mat-option{
+  font-size: 15px;
+}
+
 ion-select-popover{
   ion-list ion-item {
     --border-width: 0;

@@ -9,14 +9,34 @@
 
 <ion-content>
   <form class="example-form" [formGroup]='propertySearchForm'>
+    <br>
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="Search Property" [matAutocomplete]="auto" formControlName='text'>
+      <input matInput placeholder="Start typing to search" [matAutocomplete]="auto" formControlName='text'>
     </mat-form-field>
-  
+    <!-- <ion-searchbar placeholder="Start typing to search" [matAutocomplete]="auto" formControlName='text'></ion-searchbar> -->
+    <!-- <ion-searchbar type="search" debounce="300" (ionChange)="getSuggestion($event)" formControlName='text'></ion-searchbar>
+     <ion-list>
+         <ion-item *ngFor="let item of (filteredProperty | async)?.data">
+           {{ item.address }}
+          </ion-item>
+     </ion-list> -->
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
-        <mat-option *ngFor="let user of (filteredProperty | async)?.data" [value]="user">
-          <span>{{ user.address }}</span>]
-        </mat-option>
+      <mat-option *ngFor="let result of (filteredProperty | async)?.data" [value]="result">
+        <!-- <span class="text-color-lightblue">{{getLookupValue(result.officeCode, officeLookupDetails)}}&nbsp;</span> -->
+        <span>{{result.address}}&nbsp;</span>
+        <span class="text-color-gray-six">{{result.reference}}</span>&nbsp;
+        <span ng-if="result.entityType === 'PROPERTY'">{{result.propertyAdvertisedRent | currency : "£"}}</span>&nbsp;
+        <span class="text-color-lightgreen">{{result.status}}</span>&nbsp;
+      </mat-option>
     </mat-autocomplete>
   </form>
 </ion-content>
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-end">
+        <ion-button (click)="dismiss()">close</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
