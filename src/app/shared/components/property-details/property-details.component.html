@@ -1,7 +1,7 @@
 <ion-card-content id="property-details">
   <ion-grid class="">
     <ion-row class="main-row">
-      <ion-col class="" size="15">
+      <ion-col class="" size-xl="17" size="23">
         <form class="drop-zone" *ngIf="!files.length" [formGroup]="parentForm" file-drop (files)="submit($event)">
           <ion-icon class="icon" name="cloud-upload"></ion-icon>
           <input type="file" class="custom-file-input form-control" id="files" multiple (change)="submit($event.target.files)"
@@ -16,11 +16,11 @@
           <span class="drag-text">Drag files to upload here</span> <br>
           <label for="files" class="browse-btn">Browse Files</label>
         </form> -->
-        <div *ngIf="files.length">
-          <img [src]="files[0].url" width="250px" height="250px">
+        <div *ngIf="files.length" class="fault-image">
+          <img [src]="files[0].url">
         </div>
       </ion-col>
-      <ion-col class="" size="85">
+      <ion-col class="" size-xl="83" size="77">
         <ion-grid style="height:100%;" class="no-padding-top">
           <ion-row class="property-details-row">
             <ion-col class="no-padding-top col1" size="70">
@@ -39,32 +39,32 @@
             </ion-col>
           </ion-row>
           <ion-row class="fault-data-row">
-            <ion-col size="25">
+            <ion-col size-xl="25" size="33.3">
               <span class="text">office</span>
               <br />
               Allerton EG
             </ion-col>
-            <ion-col size="25">
+            <ion-col size-xl="25" size="33.3">
               <span class="text">Management Service</span>
               <br />
               CRL - Letting & Full Management
             </ion-col>
-            <ion-col size="25">
+            <ion-col size-xl="25" size="33.3">
               <span class="text">Property Manager</span>
               <br />
               Danielle Hodge
             </ion-col>
-            <ion-col size="25">
+            <ion-col size-xl="25" size="33.3">
               <span class="text">Occupancy Status</span>
               <br />
               Tenanted
             </ion-col>
-            <ion-col size="25">
+            <ion-col size-xl="25" size="33.3">
               <span class="text">Licence Details</span>
               <br />
               Has HMO License? N/A
             </ion-col>
-            <ion-col size="25">
+            <ion-col size-xl="25" size="33.3">
               <span class="text">Licence Scheme</span>
               <br />
               rr1234

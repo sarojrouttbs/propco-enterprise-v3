@@ -205,3 +205,49 @@ ion-select-popover{
 .dataTables_wrapper .dataTables_length {
   margin-bottom: 10px;
 }
+
+.mat-tab-group{
+  .mat-tab-header{
+    margin: 0 10px;
+
+    .mat-tab-label{
+      color: var(--ion-color-step-200);
+    }
+
+    .success-border {
+      border-bottom: 2px solid var(--ion-color-success) !important;
+    }
+    
+    .error-border {
+      border-bottom: 2px solid var(--ion-color-danger) !important;
+    }
+  }
+
+  .mat-tab-body {
+    .action-btn-group{
+      text-align: right;
+      margin: 25px 0 10px;
+
+      ion-button{
+        margin: 0 5px;
+      }
+      .cancel-button{
+        --background: var(--ion-color-danger) ;
+      }
+
+      .save-button{
+        --background: var(--ion-color-success) ;
+      }
+
+      .submit-button{
+        --background: var(--ion-color-success) ;
+      }
+    }
+  }
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar,
+.mat-tab-nav-bar.mat-primary .mat-ink-bar {
+  background-color: transparent;
+}
+

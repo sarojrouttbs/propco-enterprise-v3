@@ -65,31 +65,33 @@
   .non-urgent-btn,
   .urgent-btn,
   .emergency-btn {
-    width: 200px;
     --color: var(--ion-color-step-2000);
+    width: 200px;
     height: 40px;
-    opacity: 0.5;
     font-size: 16px;
     margin: 0;
   }
 
-  .non-urgent-btn.urgency-selected,
-  .urgent-btn.urgency-selected,
-  .emergency-btn.urgency-selected {
-    opacity: 1;
-  }
-
   .non-urgent-btn {
-    --background: var(--ion-color-primary);
+    --background: rgba(var(--ion-color-primary-rgb), 0.35);
+    &.urgency-selected{
+      --background: var(--ion-color-primary);
+    }
   }
 
   .urgent-btn {
-    --background: var(--ion-color-warning);
+    --background: rgba(var(--ion-color-warning-rgb), 0.35);
     margin: 10px;
+    &.urgency-selected{
+      --background: var(--ion-color-warning);
+    }
   }
 
   .emergency-btn {
-    --background: var(--ion-color-danger);
+    --background: rgba(var(--ion-color-danger-rgb), 0.35);
+    &.urgency-selected{
+      --background: var(--ion-color-danger);
+    }
   }
 
   .non-urgent {
@@ -125,6 +127,18 @@
         .col2{
           align-self: end;
           text-align: right;
+
+          ion-button{
+            margin: 0 5px;
+          }
+
+          ion-button:last-child{
+            margin-right: 0;
+          }
+
+          .cancel-button{
+            --background: var(--ion-color-danger);
+          }
         }
       }
     }
@@ -137,7 +151,7 @@
   .additional-info-container{
     @include border-radius(5px);
     background-color: var(--ion-color-step-1650);
-    margin: 20px 0;
+    margin: 20px 0 0;
     padding: 20px;
   }
 
@@ -154,7 +168,7 @@
     }
   }
 
-  #final-view {
+  .view-details {
 
     width: 60%;
     margin: 0 auto;
