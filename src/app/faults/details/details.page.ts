@@ -336,6 +336,7 @@ export class DetailsPage implements OnInit {
     });
     setTimeout(() => {
       forkJoin(apiObservableArray).subscribe(() => {
+        this.router.navigate(['faults/dashboard'], { replaceUrl: true })
       });
     }, 1000);
   }
@@ -512,7 +513,6 @@ export class DetailsPage implements OnInit {
         this.commonService.hideLoader();
         this.commonService.showMessage('Fault Created Successfully', 'Fault', 'success');
         this.uploadFile(res.faultId);
-        this.router.navigate(['faults/dashboard'], { replaceUrl: true })
       },
       error => {
         this.commonService.hideLoader();
