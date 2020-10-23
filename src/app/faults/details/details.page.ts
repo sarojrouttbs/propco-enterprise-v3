@@ -56,6 +56,8 @@ export class DetailsPage implements OnInit {
   faultReportedByThirdParty: any[];
   propertyTenants: any[] = [];
   allGuarantors: any[] = [];
+  tenantId: any = [];
+  tenantArrear: any;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -229,6 +231,18 @@ export class DetailsPage implements OnInit {
       res => {
         if (res && res.data) {
           this.propertyTenancyDetails = res.data.filter(x => x.hasCheckedIn);
+          if (this.propertyTenancyDetails) {
+            for (let i = 0; i < this.propertyTenancyDetails.length; i++) {
+              const tenants = this.propertyTenancyDetails[i].tenants;
+              for (let j = 0; j < tenants.length; j++) {
+                let filterTenantsId = tenants.filter(data => data.tenantId);
+                this.tenantId = filterTenantsId.map(d => d.tenantId)
+              }
+            }
+          }
+        }
+        if(this.tenantId){
+          this.getTenantArrear(this.tenantId)
         }
       },
       error => {
@@ -236,6 +250,33 @@ export class DetailsPage implements OnInit {
       }
     );
   }
+
+  private onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+
+  getTenantArrear(tenantId) {
+    const uniqueSet = tenantId.filter(this.onlyUnique);
+    let apiObservableArray = [];
+    uniqueSet.forEach(id => {
+      apiObservableArray.push(this.faultService.getTenantArrearsDetails(id));
+    });
+    setTimeout(() => {
+      forkJoin(apiObservableArray).subscribe(res => {
+        if (res) {
+          this.returnTenantArrear(res);
+        }
+      }, error => {
+      });
+    }, 500);
+  }
+
+  returnTenantArrear(res){
+    let arrearResponse = res.map(data => data.rentArrears);
+    const reducer = (accumulator, currentValue) => accumulator + currentValue;
+    this.tenantArrear = arrearResponse.reduce(reducer);
+  }
+
 
   getHMOLicenceDetails(): void {
     this.faultService.getHMOLicenceDetailsAgainstProperty(this.propertyId).subscribe(

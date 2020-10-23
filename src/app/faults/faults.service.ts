@@ -77,4 +77,7 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params: params });
     }
 
+  getTenantArrearsDetails(tenantId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}/arrears`);
+  }
 }
