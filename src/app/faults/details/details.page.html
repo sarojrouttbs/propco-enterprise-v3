@@ -420,9 +420,9 @@
         </ion-item>
         <h2 *ngIf="!faultId">{{describeFaultForm.controls['title'].value}} </h2>
       </ion-col>
-      <ion-col size="auto" class="ion-no-padding" *ngIf="faultId">
+      <!-- <ion-col size="auto" class="ion-no-padding" *ngIf="faultId">
         <ion-button (click)="editTitle(title.value)">Edit</ion-button>
-      </ion-col>
+      </ion-col> -->
     </ion-row>
   </ion-grid>
   <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #caseTabs  (selectedIndexChange)="currentSelected($event)">
