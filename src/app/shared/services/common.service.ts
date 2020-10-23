@@ -83,7 +83,7 @@ export class CommonService {
       }
     });
   }
-  
+
   getLookup(): Observable<Lookupdata> {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup', { responseType: 'json' });
   }
@@ -266,8 +266,10 @@ export class CommonService {
     // if (this.loader) {
     //   this.loader.dismiss();
     // }
-    const elem = document.getElementById('loading');
-    elem.style.display = 'none';
+    setTimeout(() => {
+      const elem = document.getElementById('loading');
+      elem.style.display = 'none';
+    }, 500);
   }
 
   getResizedImageUrl(url, size?) {
@@ -369,10 +371,10 @@ export class CommonService {
     Object.keys(form.controls).forEach(key => {
       const currentControl = form.controls[key];
       if (currentControl.dirty) {
-        if (currentControl.controls){
+        if (currentControl.controls) {
           dirtyValues[key] = this.getDirtyValues(currentControl);
         }
-        else{
+        else {
           dirtyValues[key] = currentControl.value;
         }
       }

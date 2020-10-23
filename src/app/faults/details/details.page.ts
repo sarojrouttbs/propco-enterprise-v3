@@ -7,7 +7,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
-import { propertyData } from './cat.json';
 
 @Component({
   selector: 'fault-details',
@@ -17,7 +16,6 @@ import { propertyData } from './cat.json';
 export class DetailsPage implements OnInit {
 
   faultCategories: any[] = [];
-  propertyData = propertyData;
   pageNo = 1;
   propertyId = null;
   propertyDetails:any = {};

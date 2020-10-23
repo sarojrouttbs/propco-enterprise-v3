@@ -73,22 +73,21 @@
             <ion-col size-xl="25" size="33.3">
               <span class="text">Rent Arrears</span>
               <br />
-              {{propertyDetails | json}}
               {{propertyDetails?.tenantArrears || 0 | currency : "£" }}
             </ion-col>
           </ion-row>
           <ion-row class="fault-meter-row">
             <ion-col size="25">
-              <img src="assets/images/fault-categories/info.png"/>&nbsp; Electric Meter
+              <img src="assets/images/fault-categories/info.png" matTooltip="{{propertyDetails.electricMeterLocation || 'N/A'}}" />&nbsp; Electric Meter
             </ion-col>
             <ion-col size="25">
-              <img src="assets/images/fault-categories/info.png"/>&nbsp; Water Meter
+              <img src="assets/images/fault-categories/info.png" matTooltip="{{propertyDetails.waterMeterLocation || 'N/A'}}" />&nbsp; Water Meter
             </ion-col>
             <ion-col size="25">
-              <img src="assets/images/fault-categories/info.png"/>&nbsp; Gas Meter
+              <img src="assets/images/fault-categories/info.png" matTooltip="{{propertyDetails.gasMeterLocation || 'N/A'}}" />&nbsp; Gas Meter
             </ion-col>
             <ion-col size="25">
-              <img src="assets/images/fault-categories/info.png"/>&nbsp; Stop Tap
+              <img src="assets/images/fault-categories/info.png" matTooltip="{{propertyDetails.stopTapLocation || 'N/A'}}" />&nbsp; Stop Tap
             </ion-col>
           </ion-row>
         </ion-grid>

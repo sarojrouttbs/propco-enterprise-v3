@@ -522,19 +522,19 @@
 </ng-template>
 
 <ion-content id="fault-details">
-  <ion-grid *ngIf="pageNo===1">
+  <ion-grid *ngIf="pageNo===1 && propertyDetails?.propertyId">
     <ion-row>
       <ion-col>
         <h2 class="heading">Log a fault</h2>
         <h2>
           What do you want to report in
           <b>
-            {{ propertyData?.address?.addressLine1 ?
-            propertyData?.address?.addressLine1 + ',' : ''}} {{
-            propertyData?.address?.addressLine2 ?
-            propertyData?.address?.addressLine2 + ',' : ''}} {{
-            propertyData?.address?.locality ? propertyData?.address?.locality +
-            ',' : ''}} {{ propertyData?.address?.postcode }} ?
+            {{ propertyDetails?.address?.addressLine1 ?
+            propertyDetails?.address?.addressLine1 + ',' : ''}} {{
+            propertyDetails?.address?.addressLine2 ?
+            propertyDetails?.address?.addressLine2 + ',' : ''}} {{
+            propertyDetails?.address?.locality ? propertyDetails?.address?.locality +
+            ',' : ''}} {{ propertyDetails?.address?.postcode }} ?
           </b>
         </h2>
       </ion-col>
@@ -556,12 +556,12 @@
         <h2>
           Describe the issue with <b>{{getLookupValue(describeFaultForm?.controls?.category?.value, faultCategories)}}</b> in
           <b>
-            {{ propertyData?.address?.addressLine1 ?
-            propertyData?.address?.addressLine1 + ',' : ''}} {{
-            propertyData?.address?.addressLine2 ?
-            propertyData?.address?.addressLine2 + ',' : ''}} {{
-            propertyData?.address?.locality ? propertyData?.address?.locality +
-            ',' : ''}} {{ propertyData?.address?.postcode }} ?
+            {{ propertyDetails?.address?.addressLine1 ?
+            propertyDetails?.address?.addressLine1 + ',' : ''}} {{
+            propertyDetails?.address?.addressLine2 ?
+            propertyDetails?.address?.addressLine2 + ',' : ''}} {{
+            propertyDetails?.address?.locality ? propertyDetails?.address?.locality +
+            ',' : ''}} {{ propertyDetails?.address?.postcode }} ?
           </b>
         </h2>
         <div class="priority-heading">Select the priority</div>
