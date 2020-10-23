@@ -45,8 +45,8 @@ export class AppHttpInterceptor implements HttpInterceptor {
           this._commonService.showMessage('Something went wrong on server, please try again.', 'Service Unavailable', 'error');
           return throwError(error);
         }
-        else if (error.status === 400) {
-          // this._commonService.showMessage(error.error, error.error.errorCode, 'error');
+        else if (error.status === 400 || error.status === 412) {
+          this._commonService.showMessage(error.error, error.error.errorCode, 'error');
           return throwError(error);
         } else if (error.status === 401) {
           if (error) {
