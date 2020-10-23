@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
-import { landlordsOfProperty, tenancyData, catList, propertyData } from './cat.json';
+import { propertyData } from './cat.json';
 
 @Component({
   selector: 'fault-details',
@@ -16,14 +16,12 @@ import { landlordsOfProperty, tenancyData, catList, propertyData } from './cat.j
 })
 export class DetailsPage implements OnInit {
 
-  catList: any[] = catList;
-  tenancyDataList: any[] = tenancyData;
+  faultCategories: any[] = [];
   propertyData = propertyData;
   pageNo = 1;
-  // propertyId = 'ac1137a8-71c8-16d3-8171-c827cdf47675';
   propertyId = null;
   propertyDetails = [];
-  propertyTenancyDetails;
+  propertyTenancyDetails: any[];
   propertyHMODetails;
   addtionalInfo;
   files = [];
@@ -55,8 +53,11 @@ export class DetailsPage implements OnInit {
   lookupdata: any;
   agreementStatuses: any[];
   landlordsOfproperty = [];
-  landlordPropertytmpData = landlordsOfProperty;
   faultReportedByThirdParty: any[];
+  propertyTenants: any[] = [];
+  allGuarantors: any[] = [];
+  tenantId: any = [];
+  tenantArrear: any;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -83,11 +84,19 @@ export class DetailsPage implements OnInit {
   }
 
   ionViewDidEnter() {
+    this.propertyId = this.route.snapshot.queryParamMap.get('pId');
     this.initiateFault();
   }
 
   ngOnInit() {
-    this.catList.map((cat, index) => {
+    // this.catList.map((cat, index) => {
+    //   this.categoryMap.set(cat.index, cat.value);
+    //   cat.imgPath = this.categoryIconList[index];
+    // });
+  }
+
+  setCategoryMap(){
+    this.faultCategories.map((cat, index) => {
       this.categoryMap.set(cat.index, cat.value);
       cat.imgPath = this.categoryIconList[index];
     });
@@ -98,7 +107,7 @@ export class DetailsPage implements OnInit {
   }
 
   initiateFault() {
-    if (!this.propertyId && !this.route.snapshot.paramMap.get('propertyId')) {
+    if (!this.propertyId) {
       this.searchProperty();
     } else {
       this.getLookupData();
@@ -128,6 +137,8 @@ export class DetailsPage implements OnInit {
   private setLookupData(data) {
     this.agreementStatuses = data.agreementStatuses;
     this.faultReportedByThirdParty = data.faultReportedByThirdParty;
+    this.faultCategories = data.faultCategories;
+    this.setCategoryMap();
   }
 
   initiateForms() {
@@ -176,14 +187,14 @@ export class DetailsPage implements OnInit {
       reportedById: ['', Validators.required],
       propertyId: '',
       isDraft: false,
-      tenantId: ['', Validators.required],
+      // tenantId: ['', Validators.required],
       title: [{ value: '', disabled: true }],
       forename: [{ value: '', disabled: true }],
       surname: [{ value: '', disabled: true }],
       email: [{ value: '', disabled: true }],
       mobile: [{ value: '', disabled: true }],
       homeTelephoneNo: [{ value: '', disabled: true }],
-      selectedEntity: ''
+      selectedEntity: ['', Validators.required]
     });
   }
 
@@ -197,7 +208,7 @@ export class DetailsPage implements OnInit {
     forkJoin([
       this.getFaultAdditionalInfo(),
       this.getPropertyById(),
-      this.getPpropertyTenancies(),
+      this.getPropertyTenancies(),
       this.getHMOLicenceDetails()
     ]);
   }
@@ -215,12 +226,23 @@ export class DetailsPage implements OnInit {
     );
   }
 
-  getPpropertyTenancies(): void {
+  getPropertyTenancies(): void {
     this.faultService.getPropertyTenancies(this.propertyId).subscribe(
       res => {
-        this.propertyTenancyDetails = this.tenancyDataList.filter(x => x.hasCheckedIn);
         if (res && res.data) {
-          this.propertyTenancyDetails = res.data;
+          this.propertyTenancyDetails = res.data.filter(x => x.hasCheckedIn);
+          if (this.propertyTenancyDetails) {
+            for (let i = 0; i < this.propertyTenancyDetails.length; i++) {
+              const tenants = this.propertyTenancyDetails[i].tenants;
+              for (let j = 0; j < tenants.length; j++) {
+                let filterTenantsId = tenants.filter(data => data.tenantId);
+                this.tenantId = filterTenantsId.map(d => d.tenantId)
+              }
+            }
+          }
+        }
+        if(this.tenantId){
+          this.getTenantArrear(this.tenantId)
         }
       },
       error => {
@@ -228,6 +250,33 @@ export class DetailsPage implements OnInit {
       }
     );
   }
+
+  private onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+
+  getTenantArrear(tenantId) {
+    const uniqueSet = tenantId.filter(this.onlyUnique);
+    let apiObservableArray = [];
+    uniqueSet.forEach(id => {
+      apiObservableArray.push(this.faultService.getTenantArrearsDetails(id));
+    });
+    setTimeout(() => {
+      forkJoin(apiObservableArray).subscribe(res => {
+        if (res) {
+          this.returnTenantArrear(res);
+        }
+      }, error => {
+      });
+    }, 500);
+  }
+
+  returnTenantArrear(res){
+    let arrearResponse = res.map(data => data.rentArrears);
+    const reducer = (accumulator, currentValue) => accumulator + currentValue;
+    this.tenantArrear = arrearResponse.reduce(reducer);
+  }
+
 
   getHMOLicenceDetails(): void {
     this.faultService.getHMOLicenceDetailsAgainstProperty(this.propertyId).subscribe(
@@ -260,8 +309,6 @@ export class DetailsPage implements OnInit {
       res => {
         if (res && res.data) {
           this.landlordsOfproperty = res.data;
-        } else {
-          this.landlordsOfproperty = this.landlordPropertytmpData.data;
         }
       },
       error => {
@@ -270,12 +317,21 @@ export class DetailsPage implements OnInit {
     );
   }
 
-
-  getAgreementDetails(agreementId): void {
-    this.faultService.getPropertyAgreementDetails(this.propertyId, agreementId).subscribe(
+  getPropertyTenants(propertyId, agreementId): void {
+    this.faultService.getPropertyTenants(propertyId, agreementId).subscribe(
       res => {
-        if (res && res.data) {
-        }
+        this.propertyTenants = res && res.data ? res.data : [];
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  getTenantsGuarantors(tenantId) {
+    this.faultService.getTenantGuarantors(tenantId).subscribe(
+      res => {
+        this.allGuarantors = res && res.data ? this.allGuarantors.concat(res.data) : this.allGuarantors;
       },
       error => {
         console.log(error);
@@ -442,7 +498,14 @@ export class DetailsPage implements OnInit {
   onSelectReprtedByType() {
     if (this.reportedByForm.get('reportedBy').value === 'TENANT' || this.reportedByForm.get('reportedBy').value === 'GUARANTOR') {
       this.reportedByForm.get('agreementId').setValidators(Validators.required);
+      this.reportedByForm.get('selectedEntity').setValidators(Validators.required);
     } else {
+      if (this.reportedByForm.get('reportedBy').value === 'LANDLORD') {
+        this.reportedByForm.get('selectedEntity').setValidators(Validators.required);
+      } else {
+        this.reportedByForm.get('selectedEntity').clearValidators();
+        this.reportedByForm.get('selectedEntity').updateValueAndValidity();
+      }
       this.reportedByForm.get('agreementId').clearValidators();
       this.reportedByForm.get('agreementId').updateValueAndValidity();
     }
@@ -464,6 +527,22 @@ export class DetailsPage implements OnInit {
     if (reportedBy === 'LANDLORD') {
       this.getLandlordsOfProperty(this.propertyId);
     }
+    else if (reportedBy === 'TENANT') {
+      this.getPropertyTenants(this.propertyId, this.reportedByForm.get('agreementId').value);
+    }
+    else if (reportedBy === 'GUARANTOR') {
+      const agreementId = this.reportedByForm.get('agreementId').value;
+      let agreement = this.propertyTenancyDetails.find(function (tenancy) {
+        return (tenancy.agreementId == agreementId)
+      });
+      this.allGuarantors = [];
+      if (agreement && agreement.tenants) {
+        agreement.tenants.forEach(tenant => {
+          this.getTenantsGuarantors(tenant.tenantId); 
+        });
+      }
+    }
+
   }
 
   onSelectAgreement() {
@@ -478,7 +557,12 @@ export class DetailsPage implements OnInit {
     let reportedBy = this.reportedByForm.get('reportedBy').value;
     if (reportedBy == 'LANDLORD') {
       this.reportedByForm.get('reportedById').setValue(entity.landlordId);
+    } else if (reportedBy == 'TENANT') {
+      this.reportedByForm.get('reportedById').setValue(entity.tenantId);
+    } else if (reportedBy == 'GUARANTOR') {
+      this.reportedByForm.get('reportedById').setValue(entity.guarantorId);
     }
+
     this.reportedByForm.patchValue({
       title: entity.title,
       forename: entity.forename,

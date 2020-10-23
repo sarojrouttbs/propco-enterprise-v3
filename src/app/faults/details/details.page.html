@@ -6,7 +6,7 @@
           <ion-item>
             <ion-label position="floating">Urgency Status</ion-label>
             <ion-select interface="popover">
-              <ion-select-option [value]="item.index" *ngFor="let item of catList"
+              <ion-select-option [value]="item.index" *ngFor="let item of faultCategories"
                 >{{ item.value }}
               </ion-select-option>
             </ion-select>
@@ -107,19 +107,21 @@
               </ion-select-option>
             </ion-select>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          <app-validation-message [control]="reportedByForm.controls.reportedBy"></app-validation-message>
         </ion-col>
         <ion-col size="66.6">
           <ion-item>
             <ion-label position="floating">Select agreement</ion-label>
-            <ion-select formControlName="agreementId" interface="popover" (ionChange)="onSelectAgreement()" [disabled]="reportedByForm.controls.reportedBy.value != 'TENANT' && reportedByForm.controls.reportedBy.value != 'GUARANTOR'">
+            <ion-select formControlName="agreementId" interface="popover" (ionChange)="onSelectAgreement()" 
+                  [disabled]="reportedByForm.controls.reportedBy.value != 'TENANT' && reportedByForm.controls.reportedBy.value != 'GUARANTOR'">
               <ion-select-option [value]="item.agreementId" *ngFor="let item of propertyTenancyDetails" 
                 > {{getLookupValue(item.status, agreementStatuses)}} {{item.tenancyStartDate | date:'dd/MM/yyyy'}} - {{item.tenancyEndDate| date:'dd/MM/yyyy'}}
               </ion-select-option>
             </ion-select>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          <app-validation-message [control]="reportedByForm.controls.agreementId"></app-validation-message>
         </ion-col>
+
         <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'LANDLORD'" >
           <ion-item>
             <ion-label position="floating">Select Landlord</ion-label>
@@ -129,8 +131,33 @@
               </ion-select-option>
             </ion-select>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          <app-validation-message [control]="reportedByForm.controls.selectedEntity"></app-validation-message>
         </ion-col>
+
+        <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'TENANT'" >
+          <ion-item>
+            <ion-label position="floating">Select Tenant</ion-label>
+            <ion-select interface="popover" formControlName="selectedEntity" (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
+              <ion-select-option [value]="item" *ngFor="let item of propertyTenants"
+                >{{item.addressee || item.name}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="reportedByForm.controls.selectedEntity"></app-validation-message>
+        </ion-col>
+
+        <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'GUARANTOR'" >
+          <ion-item>
+            <ion-label position="floating">Select Guarantor</ion-label>
+            <ion-select interface="popover" formControlName="selectedEntity" (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
+              <ion-select-option [value]="item" *ngFor="let item of allGuarantors">
+                {{item.displayAs}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="reportedByForm.controls.selectedEntity"></app-validation-message>
+        </ion-col>
+
         <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'THIRD_PARTY'" >
           <ion-item>
             <ion-label position="floating">Select Third Party</ion-label>
@@ -140,7 +167,7 @@
               </ion-select-option>
             </ion-select>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          <app-validation-message [control]="reportedByForm.controls.reportedById"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
@@ -202,7 +229,7 @@
               </ion-select-option>
             </ion-select>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          <app-validation-message [control]="accessInfoForm.controls.isTenantPresenceRequired"></app-validation-message>
         </ion-col>
         <ion-col size="65">
           <ion-item lines="none" style="margin-top: 6px;">
@@ -513,7 +540,7 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col size-xl="20" size="25" *ngFor="let item of catList">
+      <ion-col size-xl="20" size="25" *ngFor="let item of faultCategories">
         <div class="block" [class.active]="item.index == describeFaultForm?.controls?.category?.value" (click)="goToPage(2);setCategory(item.index)">
           <img [src]="item.imgPath" />
           <h4 class="no-margin">{{item.value}}</h4>
@@ -527,7 +554,7 @@
       <ion-col>
         <h2 class="heading">Log a fault</h2>
         <h2>
-          Describe the issue with <b>Alarms and Smoke Detectors</b> in
+          Describe the issue with <b>{{getLookupValue(describeFaultForm?.controls?.category?.value, faultCategories)}}</b> in
           <b>
             {{ propertyData?.address?.addressLine1 ?
             propertyData?.address?.addressLine1 + ',' : ''}} {{
