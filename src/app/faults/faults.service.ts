@@ -29,9 +29,9 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenancies`, { params: params });
   }
 
-  getPropertyAgreementDetails(propertyId: string, agreementId: string): Observable<any> {
-    let params = new HttpParams();
-    params.set('agreementId', agreementId);
+  getPropertyTenants(propertyId: string, agreementId?: string): Observable<any> {
+    let params = new HttpParams()
+    .set('agreementId', agreementId);
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenants`, { params: params });
   }
 
@@ -44,7 +44,6 @@ export class FaultsService {
   }
 
   uploadDocument(formData: FormData, faultId): Observable<any> {
-    // faultId = "205e5506-ce3c-4bdf-820a-99d5e49e8066";
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/documents/upload`, formData);
   }
 
@@ -58,6 +57,10 @@ export class FaultsService {
 
   getLandlordsOfProperty(propertyId): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/landlords`);
+  }
+
+  getTenantGuarantors(tenantId): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}/guarantors`);
   }
 
   createFault(requestObj): Observable<any> {
