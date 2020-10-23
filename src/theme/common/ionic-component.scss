@@ -171,28 +171,26 @@ ion-item {
   }
 }
 
-.mat-option{
+.mat-option {
   font-size: 15px;
 }
 
-ion-select-popover{
+ion-select-popover {
   ion-list ion-item {
     --border-width: 0;
     --inner-border-width: 0;
     --padding-start: 10px;
-    
+
     ion-radio {
       --color: transparent;
       --color-checked: transparent;
     }
   }
 
-  ion-list ion-item.item-radio-checked{
+  ion-list ion-item.item-radio-checked {
     --background: var(--ion-color-step-1650);
   }
 }
-
-
 
 .dataTables_wrapper .dataTables_length,
 .dataTables_wrapper .dataTables_filter,
@@ -206,48 +204,65 @@ ion-select-popover{
   margin-bottom: 10px;
 }
 
-.mat-tab-group{
-  .mat-tab-header{
+.mat-tab-group {
+  .mat-tab-header {
     margin: 0 10px;
 
-    .mat-tab-label{
-      color: var(--ion-color-step-200);
-    }
+    .mat-tab-label-container {
+      background-color: var(--ion-color-step-1900);
 
-    .success-border {
-      border-bottom: 2px solid var(--ion-color-success) !important;
-    }
-    
-    .error-border {
-      border-bottom: 2px solid var(--ion-color-danger) !important;
+      .mat-tab-label {
+        color: var(--ion-color-step-200);
+        padding: 0;
+        height: 55px;
+
+        .mat-tab-label-content {
+          width: 100%;
+          height: 100%;
+
+          .label-text {
+            width: 100%;
+            height: 100%;
+            padding-top: 20px;
+          }
+
+          .success-border {
+            border-bottom: 2px solid var(--ion-color-success);
+          }
+      
+          .error-border {
+            border-bottom: 2px solid var(--ion-color-danger);
+          }
+        }
+      }
+
+      .mat-tab-label-active {
+        background-color: var(--ion-color-success);
+        opacity: 1;
+        color: var(--ion-color-step-2000);
+      }
     }
   }
 
   .mat-tab-body {
-    .action-btn-group{
+    .action-btn-group {
       text-align: right;
       margin: 25px 0 10px;
 
-      ion-button{
+      ion-button {
         margin: 0 5px;
       }
-      .cancel-button{
-        --background: var(--ion-color-danger) ;
+      .cancel-button {
+        --background: var(--ion-color-danger);
       }
 
-      .save-button{
-        --background: var(--ion-color-success) ;
+      .save-button {
+        --background: var(--ion-color-success);
       }
 
-      .submit-button{
-        --background: var(--ion-color-success) ;
+      .submit-button {
+        --background: var(--ion-color-success);
       }
     }
   }
 }
-
-.mat-tab-group.mat-primary .mat-ink-bar,
-.mat-tab-nav-bar.mat-primary .mat-ink-bar {
-  background-color: transparent;
-}
-
