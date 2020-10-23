@@ -21,12 +21,15 @@
           </ion-item>
      </ion-list> -->
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
-      <mat-option *ngFor="let result of (filteredProperty | async)?.data" [value]="result">
+      <mat-option *ngFor="let result of (filteredProperty | async)?.data" [value]="result" style="border-bottom: 1px solid gray;">
         <!-- <span class="text-color-lightblue">{{getLookupValue(result.officeCode, officeLookupDetails)}}&nbsp;</span> -->
-        <span>{{result.address}}&nbsp;</span>
-        <span class="text-color-gray-six">{{result.reference}}</span>&nbsp;
-        <span ng-if="result.entityType === 'PROPERTY'">{{result.propertyAdvertisedRent | currency : "£"}}</span>&nbsp;
-        <span class="text-color-lightgreen">{{result.status}}</span>&nbsp;
+        <span>
+          <i class="propcoicon no-background propcoicon-property" style="background: transparent;vertical-align:sub"></i>
+        </span>&nbsp;
+        <span style="color: var(--ion-color-step-200)">{{result.address}}&nbsp;</span>
+        <span style="color: var(--ion-color-step-1000)">{{result.reference}}</span>&nbsp;
+        <span ng-if="result.entityType === 'PROPERTY'" style="color: var(--ion-color-step-200)">{{result.propertyAdvertisedRent | currency : "£"}}</span>&nbsp;
+        <span class="text-color-lightgreen" style="color: var(--ion-color-primary)">{{result.status}}</span>&nbsp;
       </mat-option>
     </mat-autocomplete>
   </form>

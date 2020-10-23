@@ -270,10 +270,10 @@
                 <ion-col size="100">
                   <img [src]="file.url">
                 </ion-col>
-                <ion-col size="50">
-                  <span class="file-name">{{file.name}}</span>
+                <ion-col size-xl="90" size="80">
+                  <div class="file-name">{{file.name}}</div>
                 </ion-col>
-                <ion-col size="50" class="ion-text-end ion-no-padding">
+                <ion-col size-xl="10" size="20" class="ion-text-end ion-no-padding">
                   <ion-icon (click)="removeFile(i)" class="delete-icon" name="close-circle"></ion-icon>
                 </ion-col>
               </ion-row>
@@ -412,22 +412,23 @@
 <ion-grid style="margin-bottom:10px">
     <ion-row class="ion-justify-content-start">
       <ion-col size="auto">
-        <h2>{{categoryMap.get(describeFaultForm.controls['category'].value)}} <ion-text color="success">›</ion-text><ion-text></ion-text></h2>
+        <h2>{{categoryMap.get(describeFaultForm.controls['category'].value)}} <ion-text color="success">&gt;</ion-text><ion-text></ion-text></h2>
       </ion-col>
       <ion-col size="auto">
-        <ion-item lines="none" class="edit-title">
+        <ion-item lines="none" class="edit-title" *ngIf="faultId">
           <ion-input #title [value] ="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"></ion-input>
         </ion-item>
+        <h2 *ngIf="!faultId">{{describeFaultForm.controls['title'].value}} </h2>
       </ion-col>
-      <ion-col size="auto" class="ion-no-padding">
+      <ion-col size="auto" class="ion-no-padding" *ngIf="faultId">
         <ion-button (click)="editTitle(title.value)">Edit</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
   <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #caseTabs  (selectedIndexChange)="currentSelected($event)">
     <mat-tab>
-      <ng-template mat-tab-label><span class="add" [class.success-border]='isCaseDetailSubmit && faultDetailsForm.valid'
-        [class.error-border]='isCaseDetailSubmit && !faultDetailsForm.valid'>Case Detail</span></ng-template>
+      <ng-template mat-tab-label><div class="label-text" [class.success-border]='isCaseDetailSubmit && faultDetailsForm.valid'
+        [class.error-border]='isCaseDetailSubmit && !faultDetailsForm.valid'>Fault Detail</div></ng-template>
       <ng-container *ngTemplateOutlet="caseDetails"></ng-container>
       <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
       <div class="action-btn-group">
@@ -438,8 +439,8 @@
       </div>
     </mat-tab>
     <mat-tab>
-      <ng-template mat-tab-label><span class="add" [class.success-border]='isReportedSubmit && reportedByForm.valid'
-        [class.error-border]='isReportedSubmit && !reportedByForm.valid'>Reported By</span></ng-template>
+      <ng-template mat-tab-label><div class="label-text" [class.success-border]='isReportedSubmit && reportedByForm.valid'
+        [class.error-border]='isReportedSubmit && !reportedByForm.valid'>Reported By</div></ng-template>
       <ng-container *ngTemplateOutlet="reportedBy"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
@@ -449,8 +450,8 @@
       </div>
     </mat-tab>
     <mat-tab>
-      <ng-template mat-tab-label><span class="add" [class.success-border]='isAccessInfoSubmit && accessInfoForm.valid'
-        [class.error-border]='isAccessInfoSubmit && !accessInfoForm.valid'>Access Information</span></ng-template>
+      <ng-template mat-tab-label><div class="label-text" [class.success-border]='isAccessInfoSubmit && accessInfoForm.valid'
+        [class.error-border]='isAccessInfoSubmit && !accessInfoForm.valid'>Access Information</div></ng-template>
       <ng-container *ngTemplateOutlet="accessInformation"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
@@ -460,8 +461,8 @@
       </div>
     </mat-tab>
     <mat-tab>
-      <ng-template mat-tab-label><span class="add" [class.success-border]='isManageMediaSubmit && files.length !== 0'
-        [class.error-border]='isManageMediaSubmit && files.length === 0'>Manage media / Documents</span></ng-template>
+      <ng-template mat-tab-label><div class="label-text" [class.success-border]='isManageMediaSubmit && files.length !== 0'
+        [class.error-border]='isManageMediaSubmit && files.length === 0'>Manage media / Documents</div></ng-template>
       <ng-container *ngTemplateOutlet="media"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
@@ -470,16 +471,8 @@
         <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button">Next</ion-button>
       </div>
     </mat-tab>
-    <mat-tab label="Fault History">
-      <ng-container *ngTemplateOutlet="faultHistory"></ng-container>
-      <div class="action-btn-group">
-        <ion-button class="cancel-button">Cancel</ion-button>
-        <ion-button class="save-button">Save for later</ion-button>
-        <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button">Back</ion-button>
-        <ion-button (click)="caseTabs.selectedIndex = 5" class="next-button">Next</ion-button>
-      </div>
-    </mat-tab>
-    <mat-tab label="Review">
+    <mat-tab>
+      <ng-template mat-tab-label><div class="label-text">Review</div></ng-template>
       <ng-container *ngTemplateOutlet="finalView"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>

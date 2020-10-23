@@ -40,7 +40,7 @@
         border-right: 1px solid var(--ion-color-step-1750);
       }
       tr.escalated{
-        background-color: var(--ion-color-danger);
+        background-color: rgba(var(--ion-color-danger-rgb), 0.35);
       }
     }
   }

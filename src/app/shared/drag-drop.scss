@@ -1,6 +1,6 @@
 .drop-zone {
   background-color: #fff;
-  padding: 25px 5px;
+  padding: 27px 5px;
   text-align: center;
   border: 2px solid #92949c;
   border-radius: 4px;
@@ -96,7 +96,13 @@
     width: 100%;
   }
 
-  .delete-icon{
+  .file-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .delete-icon {
     font-size: 30px;
     color: var(--ion-color-danger);
     cursor: pointer;
