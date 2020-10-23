@@ -18,7 +18,7 @@ export class DetailsPage implements OnInit {
   faultCategories: any[] = [];
   pageNo = 1;
   propertyId = null;
-  propertyDetails:any = {};
+  propertyDetails: any = {};
   propertyTenancyDetails: any[];
   propertyHMODetails: any[] = [];
   addtionalInfo;
@@ -263,12 +263,12 @@ export class DetailsPage implements OnInit {
       apiObservableArray.push(this.faultService.getTenantArrearsDetails(id));
     });
     // setTimeout(() => {
-      forkJoin(apiObservableArray).subscribe(res => {
-        if (res) {
-          this.returnTenantArrears(res);
-        }
-      }, error => {
-      });
+    forkJoin(apiObservableArray).subscribe(res => {
+      if (res) {
+        this.returnTenantArrears(res);
+      }
+    }, error => {
+    });
     // }, 200);
   }
 
@@ -575,7 +575,16 @@ export class DetailsPage implements OnInit {
     });
   }
 
-  createAFault() {
+  async createAFault() {
+    let isValid = await this.checkFormsValidity();
+    if (!isValid) {
+      this.commonService.showMessage('Please fill all required fields.', 'Log a Fault', 'error');
+      return;
+    }
+    if (!this.files.length) {
+      this.commonService.showMessage('At least one fault image is required', 'Log a Fault', 'error');
+      return;
+    }
     this.commonService.showLoader();
     let faultDetails = {
       urgencyStatus: this.describeFaultForm.get('urgencyStatus').value,
@@ -606,6 +615,21 @@ export class DetailsPage implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  checkFormsValidity() {
+    return new Promise((resolve, reject) => {
+      let valid = false;
+      let describeFaultForm = this.describeFaultForm.valid;
+      let faultDetailsForm = this.faultDetailsForm.valid;
+      let reportedByForm = this.reportedByForm.valid;
+      let accessInfoForm = this.accessInfoForm.valid;
+
+      if (describeFaultForm && faultDetailsForm && reportedByForm && accessInfoForm) {
+        valid = true;
+      }
+      return resolve(valid);
+    });
   }
 
   async searchProperty() {
