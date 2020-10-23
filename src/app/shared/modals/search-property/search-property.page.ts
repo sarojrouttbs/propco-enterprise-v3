@@ -45,6 +45,14 @@ export class SearchPropertyPage implements OnInit {
     }
   }
 
+  getSuggestion(event) {
+    if (event && event.detail.value && event.detail.value.length > 2) {
+      this.filteredProperty = this.faultService.searchPropertyByText(event.detail.value);
+    } else {
+      this.filteredProperty = new Observable<IPropertyResponse>();
+    }
+  }
+
   dismiss() {
     this.modalController.dismiss({
       'propertyId': this.propertyId
