@@ -135,14 +135,13 @@
     border-radius: 4px;
     display: inline-block;
     padding-top: 15px;
-    /* height: 761px;
-    max-height: 761px; */
+    background: var(--ion-color-step-2000);
 
     .mat-horizontal-content-container {
       background: var(--ion-color-step-2000);
       border-radius: 5px;
       position: relative;
-      margin: 0 20px 25px;
+      margin: 20px;
     }
 
     .stepper-next, .stepper-back, .stepper-submit, .stepper-cancle, .stepper-save {
@@ -162,11 +161,6 @@
     .stepper-save {
       background-color: var(--ion-color-success);
     }
-
-    .stepper-save {
-      background-color: var(--ion-color-success);
-    }
-
 
     .mat-icon-button[disabled] {
       opacity: 0.5;

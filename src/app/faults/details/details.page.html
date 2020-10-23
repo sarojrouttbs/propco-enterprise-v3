@@ -1,19 +1,6 @@
 <ng-template #caseDetails>
   <form [formGroup]="faultDetailsForm">
     <ion-grid>
-      <ion-row class="ion-justify-content-start">
-        <ion-col size="auto">
-          <h2>{{categoryMap.get(describeFaultForm.controls['category'].value)}} <ion-text color="success">›</ion-text><ion-text></ion-text></h2>
-        </ion-col>
-        <ion-col size="auto">
-          <ion-item lines="none" class="edit-title">
-            <ion-input #title [value] ="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col size="auto" class="ion-no-padding">
-          <ion-button (click)="editTitle(title.value)">Edit</ion-button>
-        </ion-col>
-      </ion-row>
       <ion-row>
         <ion-col size="100" *ngIf="faultId" >
           <ion-item>
@@ -42,7 +29,7 @@
   <form [formGroup]="addAdditionalDetForm">
     <ion-grid>
       <ion-row>
-        <ion-col size="50">
+        <ion-col size-xl="50" size="100">
           <ion-grid class="additional-info-container">
             <ion-row>
               <ion-col size="30">
@@ -75,7 +62,7 @@
   <form [formGroup]="faultDetailsForm">
     <ion-grid>
       <ion-row formArrayName="additionalInfo">
-        <ion-col size="50" *ngFor="let item of additionalInfoControls; let i = index;">
+        <ion-col size-xl="50" size="100" *ngFor="let item of additionalInfoControls; let i = index;">
           <ng-container [formGroupName]="i">
           <ion-grid>
             <ion-row>
@@ -238,40 +225,68 @@
 
 <ng-template #media>
   <form>
-    <ion-grid>
+    <ion-grid style="margin: 20px 0">
       <ion-row>
-        <form class="drop-zone" [formGroup]="uploadDocForm" file-drop (files)="submit($event)">
-          <ion-icon class="icon" name="cloud-upload"></ion-icon>
-          <input type="file" class="custom-file-input form-control" id="files" multiple (change)="submit($event.target.files)"
-          accept="image/x-png,image/jpeg">
-          <span class="drag-text">Drag files to upload here</span> <br>
-          <label for="files" class="browse-btn">Browse Files</label>
-        </form>
-        <!-- <form [formGroup]="uploadDocForm" >
-          <ion-row size="col-20">
-            <div class="images-preview mt-2" *ngIf="photos.length">
-              <div formArrayName="photos" *ngFor="let photo of photos.controls; let i = index;">
-                <div [formGroupName]="i">
-                  <img [src]="photo.controls.url.value" class="card-img-top" alt="Image Preview"  width="200px" height="200px">
-                  <button (click)="removeFile(i)">Delete</button>
-                </div>
-              </div>
-            </div>
-          </ion-row>
-        </form> -->
-        <div class="delete-icon-wrapper" *ngFor="let file of files; let i=index;">
-          <img [src]="file.url" width="250px" height="180px">
-          <span class="file-name">{{file.name}}</span>
-          <ion-icon (click)="removeFile(i)" class="delete-icon" name="close-circle"></ion-icon>
-        </div>
+        <ion-col size-xl="20" size="25">
+          <form class="drop-zone" [formGroup]="uploadDocForm" file-drop (files)="submit($event)">
+            <ion-icon class="icon" name="cloud-upload"></ion-icon>
+            <input type="file" class="custom-file-input form-control" id="files" multiple (change)="submit($event.target.files)"
+            accept="image/x-png,image/jpeg">
+            <span class="drag-text">Drag files to upload here</span> <br>
+            <label for="files" class="browse-btn">Browse Files</label>
+          </form>
+        </ion-col>
+        <ion-col size-xl="20" size="25" *ngFor="let file of files; let i=index;">
+          <div class="delete-icon-wrapper">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="100">
+                  <img [src]="file.url">
+                </ion-col>
+                <ion-col size="50">
+                  <span class="file-name">{{file.name}}</span>
+                </ion-col>
+                <ion-col size="50" class="ion-text-end ion-no-padding">
+                  <ion-icon (click)="removeFile(i)" class="delete-icon" name="close-circle"></ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-col>
       </ion-row>
       <!-- <button (click)="uploadFile()">Upload</button> -->
     </ion-grid>
   </form>
 </ng-template>
 
+<ng-template #faultHistory>
+  <ion-grid class="view-details">
+    <ion-row class="ion-justify-content-between">
+      <ion-col size="100">
+        <div class="title">Fault History</div>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Last Repair</ion-text><br />
+        <ion-text class="content">bvn</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Last Repair Date</ion-text><br />
+        <ion-text class="content">f</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Type</ion-text><br />
+        <ion-text class="content">gfghrt</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Contractor Name</ion-text><br />
+        <ion-text class="content">rtrt</ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ng-template>
+
 <ng-template #finalView>
-  <ion-grid id="final-view">
+  <ion-grid class="view-details">
     <ion-row class="ion-justify-content-between">
       <ion-col size="100">
         <div class="title">Please review case details and Start Progress when you’re ready</div>
@@ -367,41 +382,84 @@
 </ng-template>
 
 <ng-template #caseLogged>
-  <mat-tab-group  mat-stretch-tabs mat-align-tabs="start" #caseTabs  (selectedIndexChange)="currentSelected($event)">
+<ion-grid style="margin-bottom:10px">
+    <ion-row class="ion-justify-content-start">
+      <ion-col size="auto">
+        <h2>{{categoryMap.get(describeFaultForm.controls['category'].value)}} <ion-text color="success">›</ion-text><ion-text></ion-text></h2>
+      </ion-col>
+      <ion-col size="auto">
+        <ion-item lines="none" class="edit-title">
+          <ion-input #title [value] ="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="auto" class="ion-no-padding">
+        <ion-button (click)="editTitle(title.value)">Edit</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #caseTabs  (selectedIndexChange)="currentSelected($event)">
     <mat-tab>
-      <ng-template mat-tab-label><span class="add" [class.green-border]='isCaseDetailSubmit && faultDetailsForm.valid'
-        [class.red-border]='isCaseDetailSubmit && !faultDetailsForm.valid'>Case Detail</span></ng-template>
+      <ng-template mat-tab-label><span class="add" [class.success-border]='isCaseDetailSubmit && faultDetailsForm.valid'
+        [class.error-border]='isCaseDetailSubmit && !faultDetailsForm.valid'>Case Detail</span></ng-template>
       <ng-container *ngTemplateOutlet="caseDetails"></ng-container>
       <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
-      <button mat-raised-button (click)="caseTabs.selectedIndex = 1" type="button" color="warn">Next</button>
+      <div class="action-btn-group">
+        <ion-button class="cancel-button">Cancel</ion-button>
+        <ion-button class="save-button">Save for later</ion-button>
+        <ion-button (click)="pageNo = 2" class="next-button">Back</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 1" class="next-button">Next</ion-button>
+      </div>
     </mat-tab>
     <mat-tab>
-      <ng-template mat-tab-label><span class="add" [class.green-border]='isReportedSubmit && reportedByForm.valid'
-        [class.red-border]='isReportedSubmit && !reportedByForm.valid'>Reported By</span></ng-template>
-
+      <ng-template mat-tab-label><span class="add" [class.success-border]='isReportedSubmit && reportedByForm.valid'
+        [class.error-border]='isReportedSubmit && !reportedByForm.valid'>Reported By</span></ng-template>
       <ng-container *ngTemplateOutlet="reportedBy"></ng-container>
-      <button mat-raised-button (click)="caseTabs.selectedIndex = 0" type="button" color="primary">Back</button>
-      <button mat-raised-button (click)="caseTabs.selectedIndex = 2" type="button" color="warn">Next</button>
+      <div class="action-btn-group">
+        <ion-button class="cancel-button">Cancel</ion-button>
+        <ion-button class="save-button">Save for later</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 0" class="next-button">Back</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 2" class="next-button">Next</ion-button>
+      </div>
     </mat-tab>
     <mat-tab>
-      <ng-template mat-tab-label><span class="add" [class.green-border]='isAccessInfoSubmit && accessInfoForm.valid'
-        [class.red-border]='isAccessInfoSubmit && !accessInfoForm.valid'>Access Information</span></ng-template>
-
+      <ng-template mat-tab-label><span class="add" [class.success-border]='isAccessInfoSubmit && accessInfoForm.valid'
+        [class.error-border]='isAccessInfoSubmit && !accessInfoForm.valid'>Access Information</span></ng-template>
       <ng-container *ngTemplateOutlet="accessInformation"></ng-container>
-      <button mat-raised-button (click)="caseTabs.selectedIndex = 1" type="button" color="primary">Back</button>
-      <button mat-raised-button (click)="caseTabs.selectedIndex = 3" type="button" color="warn">Next</button>
+      <div class="action-btn-group">
+        <ion-button class="cancel-button">Cancel</ion-button>
+        <ion-button class="save-button">Save for later</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 1" class="next-button">Back</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button">Next</ion-button>
+      </div>
     </mat-tab>
     <mat-tab>
-      <ng-template mat-tab-label><span class="add" [class.green-border]='isManageMediaSubmit && files.length !== 0'
-        [class.red-border]='isManageMediaSubmit && files.length === 0'>Manage media / Documents</span></ng-template>
+      <ng-template mat-tab-label><span class="add" [class.success-border]='isManageMediaSubmit && files.length !== 0'
+        [class.error-border]='isManageMediaSubmit && files.length === 0'>Manage media / Documents</span></ng-template>
       <ng-container *ngTemplateOutlet="media"></ng-container>
-      <button mat-raised-button (click)="caseTabs.selectedIndex = 2" type="button" color="primary">Back</button>
-      <button mat-raised-button (click)="caseTabs.selectedIndex = 4" type="button" color="warn">Next</button>
+      <div class="action-btn-group">
+        <ion-button class="cancel-button">Cancel</ion-button>
+        <ion-button class="save-button">Save for later</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 2" class="next-button">Back</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button">Next</ion-button>
+      </div>
+    </mat-tab>
+    <mat-tab label="Fault History">
+      <ng-container *ngTemplateOutlet="faultHistory"></ng-container>
+      <div class="action-btn-group">
+        <ion-button class="cancel-button">Cancel</ion-button>
+        <ion-button class="save-button">Save for later</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button">Back</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 5" class="next-button">Next</ion-button>
+      </div>
     </mat-tab>
     <mat-tab label="Review">
       <ng-container *ngTemplateOutlet="finalView"></ng-container>
-      <button mat-raised-button (click)="caseTabs.selectedIndex = 3" type="button" color="primary">Back</button>
-      <button mat-raised-button (click)="createAFault()" type="button" color="primary">Submit</button>
+      <div class="action-btn-group">
+        <ion-button class="cancel-button">Cancel</ion-button>
+        <ion-button class="save-button">Save for later</ion-button>
+        <ion-button class="submit-button">Submit</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button">Back</ion-button>
+      </div>
     </mat-tab>
   </mat-tab-group>
 </ng-template>
@@ -455,10 +513,10 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col size="20" *ngFor="let item of catList">
-        <div class="block" (click)="goToPriorityPage(2);setCategory(item.index)">
+      <ion-col size-xl="20" size="25" *ngFor="let item of catList">
+        <div class="block" [class.active]="item.index == describeFaultForm?.controls?.category?.value" (click)="goToPage(2);setCategory(item.index)">
           <img [src]="item.imgPath" />
-          <h4>{{item.value}}</h4>
+          <h4 class="no-margin">{{item.value}}</h4>
         </div>
       </ion-col>
     </ion-row>
@@ -480,9 +538,9 @@
           </b>
         </h2>
         <div class="priority-heading">Select the priority</div>
-        <ion-button (click)="setUrgencyStatus(1)" [class]="describeFaultForm.controls.urgencyStatus.value ===1 ? 'urgency-selected non-urgent-btn' : 'non-urgent-btn'">Non urgent</ion-button>
-        <ion-button (click)="setUrgencyStatus(2)" [class]="describeFaultForm.controls.urgencyStatus.value===2 ? 'urgency-selected urgent-btn' : 'urgent-btn'">Urgent</ion-button>
-        <ion-button (click)="setUrgencyStatus(3)" [class]="describeFaultForm.controls.urgencyStatus.value===3 ? 'urgency-selected emergency-btn' : 'emergency-btn'">Emergency</ion-button>
+        <ion-button (click)="setUrgencyStatus(1)" class="non-urgent-btn" [class.urgency-selected]="describeFaultForm.controls.urgencyStatus.value ===1">Non urgent</ion-button>
+        <ion-button (click)="setUrgencyStatus(2)" class="urgent-btn" [class.urgency-selected]="describeFaultForm.controls.urgencyStatus.value===2">Urgent</ion-button>
+        <ion-button (click)="setUrgencyStatus(3)" class="emergency-btn" [class.urgency-selected]="describeFaultForm.controls.urgencyStatus.value===3">Emergency</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -492,15 +550,15 @@
       <ion-row class="main-row">
         <ion-col size="100" class="col1">
           <ion-item>
-            <ion-label position="floating">Title</ion-label>
+            <ion-label position="floating">Title<ion-text class="mandatory">*</ion-text></ion-label>
             <ion-input type="text" formControlName="title"> </ion-input>
           </ion-item>
           <app-validation-message [control]="describeFaultForm.controls.title"></app-validation-message>
         </ion-col>
         <ion-col size="100" class="col2">
-          <ion-button>Cancel</ion-button>
-          <ion-button (click)="goToPriorityPage(1)">Back</ion-button>
-          <ion-button (click)="goToPriorityPage(3)" [disabled]="!describeFaultForm.valid">Next</ion-button>
+          <ion-button class="cancel-button">Cancel</ion-button>
+          <ion-button (click)="goToPage(1)">Back</ion-button>
+          <ion-button (click)="goToPage(3)" [disabled]="!describeFaultForm.valid">Next</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -534,56 +592,56 @@
             <mat-step>
               <ng-container *ngTemplateOutlet="caseLogged"></ng-container>
               <ng-template matStepLabel>Case Logged</ng-template>
-              <div class="ion-text-end margin-top-16">
+              <!-- <div class="ion-text-end margin-top-16">
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
-              <div class="blank-div">&nbsp;</div>
+              <div class="blank-div">&nbsp;</div> -->
             </mat-step>
             <mat-step>
               <ng-container *ngTemplateOutlet="caseQualification"></ng-container>
               <ng-template matStepLabel>Case Qualification</ng-template>
-              <div class="ion-text-end margin-top-16">
+              <!-- <div class="ion-text-end margin-top-16">
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
-              <div class="blank-div">&nbsp;</div>
+              <div class="blank-div">&nbsp;</div> -->
             </mat-step>
             <mat-step>
               <ng-container *ngTemplateOutlet="landlordInstructions"></ng-container>
               <ng-template matStepLabel>Landlord Instructions</ng-template>
-              <div class="ion-text-end margin-top-16">
+              <!-- <div class="ion-text-end margin-top-16">
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
-              <div class="blank-div">&nbsp;</div>
+              <div class="blank-div">&nbsp;</div> -->
             </mat-step>
             <mat-step>
               <ng-container *ngTemplateOutlet="arrangingContractor"></ng-container>
               <ng-template matStepLabel>Arranging Contractor</ng-template>
-              <div class="ion-text-end margin-top-16">
+              <!-- <div class="ion-text-end margin-top-16">
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
-              <div class="blank-div">&nbsp;</div>
+              <div class="blank-div">&nbsp;</div> -->
             </mat-step>
             <mat-step>
               <ng-container *ngTemplateOutlet="jobCompletion"></ng-container>
               <ng-template matStepLabel>Job Completion</ng-template>
-              <div class="ion-text-end margin-top-16">
+              <!-- <div class="ion-text-end margin-top-16">
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
-              <div class="blank-div">&nbsp;</div>
+              <div class="blank-div">&nbsp;</div> -->
             </mat-step>
             <mat-step>
               <ng-container *ngTemplateOutlet="payment"></ng-container>
               <ng-template matStepLabel>Payment</ng-template>
-              <div class="ion-text-end margin-top-16">
+              <!-- <div class="ion-text-end margin-top-16">
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
-              <div class="blank-div">&nbsp;</div>
+              <div class="blank-div">&nbsp;</div> -->
             </mat-step>
           </mat-horizontal-stepper>
         </ion-col>

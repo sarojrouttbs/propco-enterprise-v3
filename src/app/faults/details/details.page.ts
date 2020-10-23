@@ -93,7 +93,7 @@ export class DetailsPage implements OnInit {
     });
   }
 
-  goToPriorityPage(pageNo) {
+  goToPage(pageNo) {
     this.pageNo = pageNo;
   }
 
