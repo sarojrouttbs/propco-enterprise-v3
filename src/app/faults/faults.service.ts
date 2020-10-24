@@ -31,7 +31,7 @@ export class FaultsService {
 
   getPropertyTenants(propertyId: string, agreementId?: string): Observable<any> {
     let params = new HttpParams()
-    .set('agreementId', agreementId);
+      .set('agreementId', agreementId);
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenants`, { params: params });
   }
 
@@ -69,15 +69,19 @@ export class FaultsService {
 
   searchPropertyByText(text: string): Observable<any> {
     let params = new HttpParams()
-    .set('limit', '10')
-    .set('page', '1')
-    .set('prop.mantypeLetCat', '3346')
-    .set('text', text)
-    .set('types', 'PROPERTY')
+      .set('limit', '10')
+      .set('page', '1')
+      .set('prop.mantypeLetCat', '3346')
+      .set('text', text)
+      .set('types', 'PROPERTY')
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params: params });
-    }
+  }
 
   getTenantArrearsDetails(tenantId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}/arrears`);
+  }
+
+  getFaultDetails(faultId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}`);
   }
 }

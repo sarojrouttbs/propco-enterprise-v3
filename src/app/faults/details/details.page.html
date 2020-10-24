@@ -5,9 +5,9 @@
         <ion-col size="100" *ngIf="faultId" >
           <ion-item>
             <ion-label position="floating">Urgency Status</ion-label>
-            <ion-select interface="popover">
-              <ion-select-option [value]="item.index" *ngFor="let item of faultCategories"
-                >{{ item.value }}
+            <ion-select interface="popover" formControlName="urgencyStatus">
+              <ion-select-option [value]="item.value" *ngFor="let item of priorityList"
+                >{{ item.title }}
               </ion-select-option>
             </ion-select>
           </ion-item>
@@ -433,8 +433,8 @@
       <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
-        <ion-button class="save-button">Save for later</ion-button>
-        <ion-button (click)="pageNo = 2" class="next-button">Back</ion-button>
+        <ion-button class="save-button" (click)="saveLater()" *ngIf="faultId" >Save for later</ion-button>
+        <ion-button (click)="pageNo = 2" class="next-button" *ngIf="!faultId" >Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 1" class="next-button">Next</ion-button>
       </div>
     </mat-tab>
@@ -476,9 +476,8 @@
       <ng-container *ngTemplateOutlet="finalView"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
-        <ion-button class="save-button">Save for later</ion-button>
         <ion-button class="submit-button" (click)="createAFault()">Submit</ion-button>
-        <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button">Back</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button">Back</ion-button>
       </div>
     </mat-tab>
   </mat-tab-group>
@@ -558,9 +557,9 @@
           </b>
         </h2>
         <div class="priority-heading">Select the priority</div>
-        <ion-button (click)="setUrgencyStatus(1)" class="non-urgent-btn" [class.urgency-selected]="describeFaultForm.controls.urgencyStatus.value ===1">Non urgent</ion-button>
-        <ion-button (click)="setUrgencyStatus(2)" class="urgent-btn" [class.urgency-selected]="describeFaultForm.controls.urgencyStatus.value===2">Urgent</ion-button>
-        <ion-button (click)="setUrgencyStatus(3)" class="emergency-btn" [class.urgency-selected]="describeFaultForm.controls.urgencyStatus.value===3">Emergency</ion-button>
+        <ion-button (click)="setUrgencyStatus(1)" class="non-urgent-btn" [class.urgency-selected]="faultDetailsForm.controls.urgencyStatus.value ===1">Non urgent</ion-button>
+        <ion-button (click)="setUrgencyStatus(2)" class="urgent-btn" [class.urgency-selected]="faultDetailsForm.controls.urgencyStatus.value===2">Urgent</ion-button>
+        <ion-button (click)="setUrgencyStatus(3)" class="emergency-btn" [class.urgency-selected]="faultDetailsForm.controls.urgencyStatus.value===3">Emergency</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -577,7 +576,7 @@
         </ion-col>
         <ion-col size="100" class="col2">
           <ion-button class="cancel-button">Cancel</ion-button>
-          <ion-button (click)="goToPage(1)">Back</ion-button>
+          <ion-button (click)="goToPage(1)" *ngIf="!faultId">Back</ion-button>
           <ion-button (click)="goToPage(3)" [disabled]="!describeFaultForm.valid">Next</ion-button>
         </ion-col>
       </ion-row>
