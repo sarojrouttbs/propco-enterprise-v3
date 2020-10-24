@@ -13,6 +13,7 @@ export class PropertyDetailsComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Input() files;
   @Input() hmoDetails;
+  @Input() urgencyStatus;
   lookupdata: any;
   @Output()
   getUploadedFile = new EventEmitter<any>();
