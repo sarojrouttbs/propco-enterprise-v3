@@ -1,7 +1,6 @@
-@mixin set-text-style($size, $lheight, $family) {
+@mixin set-text-style($size, $lheight) {
   font-size: $size;
   line-height: $lheight;
-  font-family: $family;
 }
 
 @mixin border-radius($radius) {
@@ -58,7 +57,7 @@
   }
 
   .priority-heading{
-    font-size: 14px;
+    @include set-text-style(14px, 17px);
     margin-top: 25px;
   }
 
@@ -66,9 +65,9 @@
   .urgent-btn,
   .emergency-btn {
     --color: var(--ion-color-step-2000);
+    @include set-text-style(16px, 20px);
     width: 200px;
     height: 40px;
-    font-size: 16px;
     margin: 0;
   }
 
@@ -178,23 +177,23 @@
       margin-bottom: 15px;
       margin-top: 40px;
       font-weight: 700;
-      @include set-text-style(24px, 30px, 'Lato');
+      @include set-text-style(24px, 30px);
     }
 
     .sub-heading {
       margin-top: 15px;
       margin-bottom: 5px;
-      @include set-text-style(20px, 26px, 'Lato');
+      @include set-text-style(20px, 26px);
     }
 
     .header-content {
       .header {
-        color: gray;
-        @include set-text-style(14px, 19px, 'Lato');
+        color: var(--ion-color-step-800);
+        @include set-text-style(14px, 19px);
       }
   
       .content {
-        @include set-text-style(16px, 20px, 'Lato');
+        @include set-text-style(16px, 20px);
       }
     }
 

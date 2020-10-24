@@ -1,7 +1,13 @@
-@mixin set-text-style($size, $lheight, $family) {
+@mixin set-text-style($size, $lheight) {
   font-size: $size;
   line-height: $lheight;
-  font-family: $family;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
 }
 
 .mat-stepper-horizontal {
@@ -57,11 +63,8 @@
       }
 
       .mat-step-label {
-        font-size: 16px;
+        @include set-text-style(16px, 20px);
         padding: 10px 0 0 0;
-        /* white-space: normal;
-        word-wrap: break-word;
-        word-break: break-all; */
 
         &.mat-step-label-error {
           color: var(--ion-color-danger);
@@ -103,9 +106,8 @@
   }
   button.mat-button.stepper-btn, button.mat-button.stepper-btn-green {
     border: 2px solid var(--ion-color-tertiary);
+    @include set-text-style(14px, 32px);
     font-weight: 400;
-    font-size: 14px;
-    line-height: 32px;
     height: 36px;
     margin: 4px 2px;
     color: var(--ion-color-tertiary);
@@ -248,7 +250,7 @@
 
       .mat-step-label {
         color: var(--ion-color-dark);
-        @include set-text-style(20px, 26px, 'Inter-Regular');
+        @include set-text-style(20px, 26px);
 
         &.mat-step-label-error {
           color: var(--ion-color-danger);

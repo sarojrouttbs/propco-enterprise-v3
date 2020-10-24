@@ -26,7 +26,7 @@ export class SearchPropertyPage implements OnInit {
   ) {
     this.initPropertySearchForm();
     this.filteredProperty = this.propertySearchForm.get('text').valueChanges.pipe(debounceTime(300),
-      switchMap((value:string) => (value.length > 2) ? this.faultService.searchPropertyByText(value) : new Observable())
+      switchMap((value: string) => (value.length > 2) ? this.faultService.searchPropertyByText(value) : new Observable())
     );
   }
 

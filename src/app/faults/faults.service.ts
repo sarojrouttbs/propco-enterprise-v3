@@ -84,4 +84,8 @@ export class FaultsService {
   getFaultDetails(faultId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}`);
   }
+
+  getFaultHistory(faultId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/history`);
+  }
 }

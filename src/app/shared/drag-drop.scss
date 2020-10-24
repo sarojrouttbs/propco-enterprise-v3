@@ -1,5 +1,17 @@
+@mixin set-text-style($size, $lheight) {
+  font-size: $size;
+  line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
 .drop-zone {
-  background-color: #fff;
+  background-color: var(--ion-color-step-2000);
   padding: 27px 5px;
   text-align: center;
   border: 2px solid #92949c;
@@ -15,19 +27,19 @@
   }
 
   &.has-drag-n-drop {
-    border: 2px solid #92949c;
+    border: 2px solid var(--ion-color-step-1150);
     border-radius: 4px;
 
     .icon {
       width: 100%;
       height: 80px;
-      fill: #92949c;
+      fill: var(--ion-color-step-1150);
       display: block;
       margin-bottom: 15px;
     }
     .drag-text {
-      font-size: 16px;
-      color: #92949c;
+      @include set-text-style(16px, 20px);
+      color: var(--ion-color-step-1150);
       margin-bottom: 15px;
       display: inline-block;
     }
@@ -38,8 +50,8 @@
 
     &.is-over {
       outline-offset: -10px;
-      outline-color: #b1b1b1;
-      background-color: #fff;
+      outline-color: var(--ion-color-step-1400);
+      background-color: var(--ion-color-step-2000);
     }
   }
 
@@ -67,14 +79,14 @@
 
     &:focus + label strong,
     & + label:hover strong {
-      color: #b1b1b1;
+      color: var(--ion-color-step-1400);
     }
   }
 
   .browse-btn {
-    background: #92949c;
-    color: white;
-    font-size: 14px;
+    @include set-text-style(14px, 17px);
+    background: var(--ion-color-step-1150);
+    color: var(--ion-color-step-2000);
     padding: 8px 15px;
     border-radius: 4px;
     cursor: pointer;
@@ -82,13 +94,13 @@
     margin-bottom: 10px;
   }
   .browse-btn:hover {
-    background: #878787;
+    background: var(--ion-color-step-1050);
   }
 }
 
 .delete-icon-wrapper {
   border-radius: 4px;
-  border: 2px solid #92949c;
+  border: 2px solid var(--ion-color-step-1150);
 
   img {
     height: 165px;
@@ -103,7 +115,7 @@
   }
 
   .delete-icon {
-    font-size: 30px;
+    @include set-text-style(30px, 36px);
     color: var(--ion-color-danger);
     cursor: pointer;
     text-align: right;

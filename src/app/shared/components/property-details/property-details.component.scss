@@ -1,7 +1,13 @@
-@mixin set-text-style($size, $lheight, $family) {
+@mixin set-text-style($size, $lheight) {
   font-size: $size;
   line-height: $lheight;
-  font-family: $family;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
 }
 
 #property-details {
@@ -25,14 +31,13 @@
 
   ion-row.fault-data-row {
     ion-col {
-      line-height: 20px;
+      @include set-text-style(16px, 20px);
       margin: 0;
-      font-size: 16px;
 
       .text {
+        @include set-text-style(14px, 17px);
         color: grey;
         display: inline-block;
-        font-size: 14px;
       }
     }
   }
@@ -40,9 +45,8 @@
   ion-row.fault-meter-row {
     margin-top: 12px;
     ion-col {
-      line-height: 20px;
+      @include set-text-style(16px, 20px);
       margin: 0;
-      font-size: 16px;
 
       img {
         vertical-align: bottom;
@@ -51,154 +55,3 @@
     }
   }
 }
-
-/* #property-details {
-  min-height: 96px;
-  padding: 0;
-  color: var(--ion-color-step-250);
-  background-color: var(--ion-color-step-2000);
-  height: 100%;
-  border-radius: 10px 0 0 10px;
-  padding: 15px;
-
-  .main-row {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-row-gap: 10px;
-
-    .property-details-row {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-row-gap: 10px;
-
-      .col1{
-        .heading {
-          margin-bottom: 12px;
-          margin-top: 10px;
-          @include set-text-style(16px, 22px, 'Inter-Regular');
-        }
-  
-        .desc {
-          font-size: 16px;
-          @include set-text-style(16px, 22px, 'Inter-Regular');
-        }
-      }
-
-      .col2{
-        .rent {
-          color: var(--ion-color-primary);
-          @include set-text-style(22px, 28px, 'Inter-Regular');
-  
-          .rent-frequency {
-            @include set-text-style(16px, 22px, 'Inter-Regular');
-          }
-        }
-      }
-      
-      .col3{
-        .deposit {
-          @include set-text-style(16px, 22px, 'Inter-Regular');
-        }
-      }
-    }
-  }
-}
-
-// Extra small view
-@media screen and (min-width: 0px) and (max-width: 600px) {
-  #property-details {
-    .main-row {
-      display: grid;
-      grid-template-columns: 1fr 3fr;
-      grid-column-gap: 10px;
-
-      .property-details-row {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-column-gap: 10px;
-        height: 100%;
-
-        .col1{
-          .heading {
-            margin-top: 0;
-            margin-bottom: 0;
-          }
-        }
-
-        .col2{
-          align-self: end;
-        }
-
-        .col3{
-          align-self: end;
-        }
-      }
-    }
-  }
-}
-
-//  Small view 
-@media screen and (min-width: 601px) and (max-width: 960px) {
-  #property-details {
-    .main-row {
-      display: grid;
-      grid-template-columns: 1fr 3fr;
-      grid-column-gap: 10px;
-
-      .property-details-row {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-column-gap: 10px;
-        height: 100%;
-
-        .col1{
-          .heading {
-            margin-top: 0;
-            margin-bottom: 0;
-          }
-        }
-
-        .col2{
-          align-self: end;
-        }
-
-        .col3{
-          align-self: end;
-        }
-      }
-    }
-  }
-}
-
-//  Medium view 
-@media screen and (min-width: 961px) and (max-width: 1280px) {
-  #property-details {
-    .main-row {
-      display: grid;
-      grid-template-columns: 1fr 3fr;
-      grid-column-gap: 10px;
-
-      .property-details-row {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-column-gap: 10px;
-        height: 100%;
-
-        .col1{
-          .heading {
-            margin-top: 0;
-            margin-bottom: 0;
-          }
-        }
-
-        .col2{
-          align-self: end;
-        }
-
-        .col3{
-          align-self: end;
-        }
-      }
-    }
-  }
-} */

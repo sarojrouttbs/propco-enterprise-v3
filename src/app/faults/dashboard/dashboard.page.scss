@@ -1,57 +1,69 @@
-#fault-list{
+@mixin set-text-style($size, $lheight) {
+  font-size: $size;
+  line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
+#fault-list {
   --padding-top: var(--ion-padding-top);
   --padding-end: var(--ion-padding-end);
   --padding-bottom: var(--ion-padding-bottom);
   --padding-start: var(--ion-padding-start);
 
   table.dataTable {
-    font-size: 14px;
+    @include set-text-style(14px, 16px);
 
     &.no-footer {
       border-bottom: none;
     }
-  
+
     thead {
       background-color: var(--ion-color-step-750);
       color: var(--ion-color-step-2000);
-  
+
       th {
         text-align: left;
         padding: 15px 10px;
         font-weight: 500;
       }
     }
-  
+
     tbody {
       background-color: var(--ion-color-step-1900);
-      
+
       td {
         padding: 6px 10px;
       }
 
-      tr{
+      tr {
         height: 49px;
       }
-  
+
       tr td:first-child {
         border-left: 1px solid var(--ion-color-step-1750);
       }
       tr td:last-child {
         border-right: 1px solid var(--ion-color-step-1750);
       }
-      tr.escalated{
-        background-color: rgba(var(--ion-color-danger-rgb), 0.35);
+      tr.escalated {
+        background-color: rgba(var(--ion-color-danger-rgb), 0.6);
       }
     }
   }
-  
+
   .resp-action-icon {
     min-width: 36px;
     width: 36px;
     max-width: 36px;
     cursor: pointer;
   }
-  
+
   #divOverlay,
   #divOverlayChild,
   #divOverlay2,
@@ -64,29 +76,24 @@
     z-index: 10;
     padding-right: 10px;
     color: var(--ion-color-step-2000);
-  
+
     ion-button {
       --background: var(--ion-color-step-900);
       --color: var(--ion-color-step-2000);
-      font-size: 16px;
+      @include set-text-style(16px, 20px);
       margin: 0 10px 7px;
     }
-  
-    .md-button:hover {
-      //background-color: $bg-color-twentynine;
-    }
-  
+
     .propcoicon {
       display: inline-block;
       padding: 5px;
     }
-  
+
     .propcoicon-actions-on {
       background-color: var(--ion-color-step-900);
-      margin: 6px 0 6px 6px;
+      margin: 8px 0 6px 6px;
       color: var(--ion-color-step-2000);
       cursor: pointer;
     }
   }
 }
-
