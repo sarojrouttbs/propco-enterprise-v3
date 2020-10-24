@@ -48,7 +48,7 @@ ion-button {
 
 ion-button.button-disabled {
   cursor: not-allowed;
-  border-radius: 5px;
+  @include border-radius(5px);
 }
 
 /* .propco-form {
@@ -129,9 +129,9 @@ ion-item {
 
 .modal-container {
   .modal-wrapper {
+    @include border-radius(10px);
     --color: var(--ion-color-step-2000);
     width: 500px;
-    border-radius: 10px;
     height: auto;
     min-height: 400px;
 

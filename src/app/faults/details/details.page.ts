@@ -58,6 +58,7 @@ export class DetailsPage implements OnInit {
   tenantIds: any[] = [];
   tenantArrears: any;
   faultDetails: any;
+  isEditable = false;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -568,9 +569,15 @@ export class DetailsPage implements OnInit {
     return this.priorityList.find(x => x.value === this.faultDetailsForm.controls['urgencyStatus'].value).title;
   }
 
-  editTitle(title: any) {
-    this.describeFaultForm.controls['title'].setValue(title);
+  editTitle() {
+    this.isEditable = true;
   }
+
+  changeTitle(title: any){
+    this.describeFaultForm.controls['title'].setValue(title);
+    this.isEditable = false;
+  }
+
 
   get additionalInfoControls() {
     return this.faultDetailsForm.get('additionalInfo')['controls'];
