@@ -465,7 +465,9 @@ export class DetailsPage implements OnInit {
     });
     setTimeout(() => {
       forkJoin(apiObservableArray).subscribe(() => {
-        this.router.navigate(['faults/dashboard'], { replaceUrl: true })
+        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+      }, err => {
+        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
       });
     }, 1000);
   }
