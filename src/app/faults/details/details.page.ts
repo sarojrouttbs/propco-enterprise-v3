@@ -56,6 +56,7 @@ export class DetailsPage implements OnInit {
   allGuarantors: any[] = [];
   tenantIds: any[] = [];
   tenantArrears: any;
+  faultDetails: any;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -83,6 +84,7 @@ export class DetailsPage implements OnInit {
 
   ionViewDidEnter() {
     this.propertyId = this.route.snapshot.queryParamMap.get('pId');
+    this.faultId = this.route.snapshot.paramMap.get('id');
     this.initiateFault();
   }
 
@@ -93,26 +95,11 @@ export class DetailsPage implements OnInit {
     // });
   }
 
-  setCategoryMap() {
-    this.faultCategories.map((cat, index) => {
-      this.categoryMap.set(cat.index, cat.value);
-      cat.imgPath = this.categoryIconList[index];
-    });
-  }
-
-  goToPage(pageNo) {
-    this.pageNo = pageNo;
-  }
-
   initiateFault() {
-    if (!this.propertyId) {
+    if (!this.propertyId && !this.faultId) {
       this.searchProperty();
     } else {
       this.getLookupData();
-      this.faultId = this.route.snapshot.paramMap.get('faultId');
-      if (this.faultId) {
-        /*update process*/
-      }
       this.initiateForms();
       this.initialApiCall();
     }
@@ -151,7 +138,6 @@ export class DetailsPage implements OnInit {
   initDescribeFaultForm(): void {
     this.describeFaultForm = this.fb.group({
       title: ['', Validators.required],
-      urgencyStatus: [1, Validators.required],
       category: ['', Validators.required]
     });
   }
@@ -159,6 +145,7 @@ export class DetailsPage implements OnInit {
   initFaultDetailsForm(): void {
     this.faultDetailsForm = this.fb.group({
       notes: ['', Validators.required],
+      urgencyStatus: [1, Validators.required],
       additionalInfo: this.fb.array([])
     });
   }
@@ -166,14 +153,15 @@ export class DetailsPage implements OnInit {
   initaddAdditionalDetForm(): void {
     this.addAdditionalDetForm = this.fb.group({
       label: ['', Validators.required],
-      value: ['', Validators.required]
+      value: ['', Validators.required],
+      id: ''
     });
   }
 
   initAccessInfiForm(): void {
     this.accessInfoForm = this.fb.group({
       tenantNotes: '',
-      areOccupiersVulnerable: '',
+      areOccupiersVulnerable: false,
       isTenantPresenceRequired: ['', Validators.required]
     });
   }
@@ -202,54 +190,111 @@ export class DetailsPage implements OnInit {
     });
   }
 
-  initialApiCall() {
+  async initialApiCall() {
+    if (this.faultId) {
+      this.goToPage(3);
+      const details: any = await this.getFaultDetails();
+      this.faultDetails = details;
+      this.propertyId = details.propertyId;
+    }
+
     forkJoin([
       this.getFaultAdditionalInfo(),
       this.getPropertyById(),
       this.getPropertyTenancies(),
       this.getHMOLicenceDetails()
-    ]);
-  }
-
-  getPropertyById(): void {
-    this.faultService.getPropertyById(this.propertyId).subscribe(
-      res => {
-        if (res && res.data) {
-          this.propertyDetails = res.data;
-        } else {
-          this.propertyDetails = {};
-        }
-      },
-      error => {
-        console.log(error);
+    ]).subscribe((values) => {
+      if (this.faultId) {
+        this.initPatching();
       }
-    );
+    });
   }
 
-  getPropertyTenancies(): void {
-    this.faultService.getPropertyTenancies(this.propertyId).subscribe(
-      res => {
-        if (res && res.data) {
-          this.propertyTenancyDetails = res.data.filter(x => x.hasCheckedIn);
-          if (this.propertyTenancyDetails) {
-            this.propertyDetails.isPropertyCheckedIn = true;
-            for (let i = 0; i < this.propertyTenancyDetails.length; i++) {
-              const tenants = this.propertyTenancyDetails[i].tenants;
-              for (let j = 0; j < tenants.length; j++) {
-                let filterTenantsId = tenants.filter(data => data.tenantId);
-                this.tenantIds = filterTenantsId.map(d => d.tenantId)
+  private initPatching(): void {
+    this.describeFaultForm.patchValue({
+      title: this.faultDetails.title,
+      category: this.faultDetails.category
+    });
+
+    this.faultDetailsForm.patchValue({
+      urgencyStatus: this.faultDetails.urgencyStatus,
+      notes: this.faultDetails.notes
+    });
+    this.faultDetails.additionalInfo.map((x) => { this.createAdditionalInfo(x, true) });
+    this.accessInfoForm.patchValue({
+      tenantNotes: this.faultDetails.tenantNotes,
+      areOccupiersVulnerable: this.faultDetails.areOccupiersVulnerable,
+      isTenantPresenceRequired: this.faultDetails.isTenantPresenceRequired
+    });
+    this.reportedByForm.patchValue({
+      reportedBy: this.faultDetails.reportedBy,
+      agreementId: this.faultDetails.agreementId,
+      reportedById: this.faultDetails.reportedById,
+      propertyId: this.faultDetails.propertyId,
+      isDraft: this.faultDetails.isDraft
+    });
+  }
+
+  setCategoryMap() {
+    this.faultCategories.map((cat, index) => {
+      this.categoryMap.set(cat.index + "", cat.value);
+      cat.imgPath = this.categoryIconList[index];
+    });
+  }
+
+  goToPage(pageNo) {
+    this.pageNo = pageNo;
+  }
+
+  getPropertyById() {
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.getPropertyById(this.propertyId).subscribe(
+        res => {
+          if (res && res.data) {
+            this.propertyDetails = res.data;
+          } else {
+            this.propertyDetails = {};
+          }
+          resolve(1);
+        },
+        error => {
+          console.log(error);
+          resolve();
+        }
+      );
+    });
+    return promise;
+  }
+
+  getPropertyTenancies() {
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.getPropertyTenancies(this.propertyId).subscribe(
+        res => {
+          if (res && res.data) {
+            this.propertyTenancyDetails = res.data.filter(x => x.hasCheckedIn);
+            if (this.propertyTenancyDetails) {
+              this.propertyDetails.isPropertyCheckedIn = true;
+              for (let i = 0; i < this.propertyTenancyDetails.length; i++) {
+                const tenants = this.propertyTenancyDetails[i].tenants;
+                for (let j = 0; j < tenants.length; j++) {
+                  let filterTenantsId = tenants.filter(data => data.tenantId);
+                  this.tenantIds = filterTenantsId.map(d => d.tenantId)
+                }
               }
             }
           }
+          if (this.tenantIds) {
+            this.getTenantArrears(this.tenantIds)
+          }
+          resolve();
+        },
+        error => {
+          console.log(error);
+          reject();
         }
-        if (this.tenantIds) {
-          this.getTenantArrears(this.tenantIds)
-        }
-      },
-      error => {
-        console.log(error);
-      }
-    );
+      );
+    });
+    return promise;
   }
 
   private onlyUnique(value, index, self) {
@@ -280,30 +325,39 @@ export class DetailsPage implements OnInit {
   }
 
 
-  getHMOLicenceDetails(): void {
-    this.faultService.getHMOLicenceDetailsAgainstProperty(this.propertyId).subscribe(
-      res => {
-        if (res && res.data) {
-          this.propertyHMODetails = res.data;
+  getHMOLicenceDetails() {
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.getHMOLicenceDetailsAgainstProperty(this.propertyId).subscribe(
+        res => {
+          if (res && res.data) {
+            this.propertyHMODetails = res.data;
+          }
+          resolve();
+        },
+        error => {
+          console.log(error);
+          reject();
         }
-      },
-      error => {
-        console.log(error);
-      }
-    );
+      );
+    });
+    return promise;
   }
 
-  getFaultAdditionalInfo(): void {
-    this.faultService.getFaultAdditionalInfo().subscribe(
-      res => {
-        if (res) {
-          this.addtionalInfo = res;
+  getFaultAdditionalInfo() {
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.getFaultAdditionalInfo().subscribe(
+        res => {
+          if (res) {
+            this.addtionalInfo = res;
+          }
+          resolve();
+        },
+        error => {
+          reject();
         }
-      },
-      error => {
-        console.log(error);
-      }
-    );
+      );
+    });
+    return promise;
   }
 
   getLandlordsOfProperty(propertyId): void {
@@ -339,6 +393,23 @@ export class DetailsPage implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  getFaultDetails() {
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.getFaultDetails(this.faultId).subscribe(
+        res => {
+          if (res) {
+            resolve(res);
+          }
+        },
+        error => {
+          console.log(error);
+          resolve(null);
+        }
+      );
+    });
+    return promise;
   }
 
   getUploadedFile(files: FileList) {
@@ -394,7 +465,9 @@ export class DetailsPage implements OnInit {
     });
     setTimeout(() => {
       forkJoin(apiObservableArray).subscribe(() => {
-        this.router.navigate(['faults/dashboard'], { replaceUrl: true })
+        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+      }, err => {
+        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
       });
     }, 1000);
   }
@@ -459,12 +532,12 @@ export class DetailsPage implements OnInit {
 
   /*method to update category control*/
   setCategory(catId: number): void {
-    this.describeFaultForm.get('category').setValue(catId);
+    this.describeFaultForm.get('category').setValue(catId + "");
   }
 
   /*method to update urgencyStatus control*/
   setUrgencyStatus(urgencyStatus: number): void {
-    this.describeFaultForm.get('urgencyStatus').setValue(urgencyStatus);
+    this.faultDetailsForm.get('urgencyStatus').setValue(urgencyStatus);
   }
 
   getCategoryName() {
@@ -472,7 +545,7 @@ export class DetailsPage implements OnInit {
   }
 
   getUrgencyName() {
-    return this.priorityList.find(x => x.value === this.describeFaultForm.controls['urgencyStatus'].value).title;
+    return this.priorityList.find(x => x.value === this.faultDetailsForm.controls['urgencyStatus'].value).title;
   }
 
   editTitle(title: any) {
@@ -483,13 +556,17 @@ export class DetailsPage implements OnInit {
     return this.faultDetailsForm.get('additionalInfo')['controls'];
   }
 
-  createAdditionalInfo(detail) {
+  createAdditionalInfo(detail, isPatching = false) {
     const infoArray = this.faultDetailsForm.get('additionalInfo') as FormArray;
-    infoArray.push(this.fb.group({
+    let grup = {
       label: [detail.label, Validators.required],
-      value: [detail.value, Validators.required]
-    }));
-    this.addAdditionalDetForm.reset();
+      value: [detail.value, Validators.required],
+      id: detail.id
+    }
+    if (!isPatching) {
+      this.addAdditionalDetForm.reset();
+    }
+    infoArray.push(this.fb.group(grup));
   }
 
   removeInfo(i: number) {
@@ -557,11 +634,11 @@ export class DetailsPage implements OnInit {
 
   setEntityData(entity) {
     let reportedBy = this.reportedByForm.get('reportedBy').value;
-    if (reportedBy == 'LANDLORD') {
+    if (reportedBy === 'LANDLORD') {
       this.reportedByForm.get('reportedById').setValue(entity.landlordId);
-    } else if (reportedBy == 'TENANT') {
+    } else if (reportedBy === 'TENANT') {
       this.reportedByForm.get('reportedById').setValue(entity.tenantId);
-    } else if (reportedBy == 'GUARANTOR') {
+    } else if (reportedBy === 'GUARANTOR') {
       this.reportedByForm.get('reportedById').setValue(entity.guarantorId);
     }
 
@@ -587,7 +664,7 @@ export class DetailsPage implements OnInit {
     }
     this.commonService.showLoader();
     let faultDetails = {
-      urgencyStatus: this.describeFaultForm.get('urgencyStatus').value,
+      urgencyStatus: this.faultDetailsForm.get('urgencyStatus').value,
       reportedBy: this.reportedByForm.get('reportedBy').value,
       category: this.describeFaultForm.get('category').value,
       title: this.describeFaultForm.get('title').value,
@@ -640,7 +717,6 @@ export class DetailsPage implements OnInit {
     });
 
     const data = modal.onDidDismiss().then(res => {
-      console.log(res)
       if (res.data.propertyId) {
         this.propertyId = res.data.propertyId;
         this.initiateFault();
@@ -649,6 +725,14 @@ export class DetailsPage implements OnInit {
       }
     });
     await modal.present();
+  }
+
+  saveLater() {
+    switch (this.pageNo) {
+      case 3: {
+        break;
+      }
+    }
   }
 
 }

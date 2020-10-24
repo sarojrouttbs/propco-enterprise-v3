@@ -58,10 +58,10 @@ export class DashboardPage implements OnInit {
       ordering: false,
       pageLength: 10,
       ajax: (tableParams: any, callback) => {
-          let params = new HttpParams()
+        let params = new HttpParams()
           .set('limit', tableParams.length)
-          .set('page', tableParams.start ? (Math.floor(tableParams.start/tableParams.length)+1)+'': '1');
-          that.faultsService.getAllFaults(params).subscribe(res => {
+          .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');
+        that.faultsService.getAllFaults(params).subscribe(res => {
           that.faultList = res && res.data ? res.data : [];
           callback({
             recordsTotal: res ? res.count : 0,
@@ -254,13 +254,17 @@ export class DashboardPage implements OnInit {
 
   rerenderFaults(): void {
     this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.ajax.reload((res)=>{}, false);
+      dtInstance.ajax.reload((res) => { }, false);
     });
   }
 
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
     this.notesDtTrigger.unsubscribe();
+  }
+
+  goToFaultDetails() {
+    this.router.navigate([`faults/${this.selectedData.faultId}/details`]);
   }
 
 }
