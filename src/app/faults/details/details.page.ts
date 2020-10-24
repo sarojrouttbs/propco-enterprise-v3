@@ -21,6 +21,7 @@ export class DetailsPage implements OnInit {
   propertyDetails: any = {};
   propertyTenancyDetails: any[];
   propertyHMODetails: any[] = [];
+  faultHistory: any = {};
   addtionalInfo;
   files = [];
   describeFaultForm: FormGroup;
@@ -194,6 +195,7 @@ export class DetailsPage implements OnInit {
     if (this.faultId) {
       this.goToPage(3);
       const details: any = await this.getFaultDetails();
+      const faultHistory: any = await this.getFaultHistory();
       this.faultDetails = details;
       this.propertyId = details.propertyId;
     }
@@ -331,6 +333,24 @@ export class DetailsPage implements OnInit {
         res => {
           if (res && res.data) {
             this.propertyHMODetails = res.data;
+          }
+          resolve();
+        },
+        error => {
+          console.log(error);
+          reject();
+        }
+      );
+    });
+    return promise;
+  }
+
+  getFaultHistory() {
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.getFaultHistory(this.faultId).subscribe(
+        res => {
+          if (res && res.data) {
+            this.faultHistory = res;
           }
           resolve();
         },

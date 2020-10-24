@@ -1,3 +1,15 @@
+@mixin set-text-style($size, $lheight) {
+  font-size: $size;
+  line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
 #container {
   text-align: center;
 
@@ -9,16 +21,12 @@
 }
 
 #container strong {
-  font-size: 20px;
-  line-height: 26px;
+  @include set-text-style(20px, 26px);
 }
 
 #container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
+  @include set-text-style(16px, 20px);
+  color: var(--ion-color-step-1100);
   margin: 0;
 }
 

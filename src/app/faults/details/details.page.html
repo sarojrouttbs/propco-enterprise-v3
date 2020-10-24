@@ -415,14 +415,14 @@
         <h2>{{categoryMap.get(describeFaultForm.controls['category'].value)}} <ion-text color="success">&gt;</ion-text><ion-text></ion-text></h2>
       </ion-col>
       <ion-col size="auto">
-        <ion-item lines="none" class="edit-title" *ngIf="faultId">
-          <ion-input #title [value] ="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"></ion-input>
+        <ion-item class="edit-title" *ngIf="isEditable">
+          <ion-input #title [value] ="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0" (ionBlur)="changeTitle(describeFaultForm.controls['title'].value)"></ion-input>
         </ion-item>
-        <h2 *ngIf="!faultId">{{describeFaultForm.controls['title'].value}} </h2>
+        <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
       </ion-col>
-      <!-- <ion-col size="auto" class="ion-no-padding" *ngIf="faultId">
-        <ion-button (click)="editTitle(title.value)">Edit</ion-button>
-      </ion-col> -->
+      <ion-col size="auto" class="ion-no-padding ion-align-self-center" offset="3">
+        <ion-button (click)="editTitle()">Edit</ion-button>
+      </ion-col>
     </ion-row>
   </ion-grid>
   <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #caseTabs  (selectedIndexChange)="currentSelected($event)">
@@ -462,7 +462,7 @@
     </mat-tab>
     <mat-tab>
       <ng-template mat-tab-label><div class="label-text" [class.success-border]='isManageMediaSubmit && files.length !== 0'
-        [class.error-border]='isManageMediaSubmit && files.length === 0'>Manage media / Documents</div></ng-template>
+        [class.error-border]='isManageMediaSubmit && files.length === 0'>Manage Media / Documents</div></ng-template>
       <ng-container *ngTemplateOutlet="media"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
@@ -472,12 +472,23 @@
       </div>
     </mat-tab>
     <mat-tab>
+      <ng-template mat-tab-label><div class="label-text">Fault History</div></ng-template>
+      <ng-container *ngTemplateOutlet="faultHistory"></ng-container>
+      <div class="action-btn-group">
+        <ion-button class="cancel-button">Cancel</ion-button>
+        <ion-button class="save-button">Save for later</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button">Back</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 5" class="next-button">Next</ion-button>
+      </div>
+    </mat-tab>
+    <mat-tab>
       <ng-template mat-tab-label><div class="label-text">Review</div></ng-template>
       <ng-container *ngTemplateOutlet="finalView"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
+        <ion-button class="save-button">Save for later</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 5" class="next-button">Back</ion-button>
         <ion-button class="submit-button" (click)="createAFault()">Submit</ion-button>
-        <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button">Back</ion-button>
       </div>
     </mat-tab>
   </mat-tab-group>
