@@ -39,6 +39,7 @@
 }
 
 .propcoicon {
+  @include border-radius(4px);
   display: table-cell;
   font-family: "PropCoIcons";
   font-style: normal;
@@ -49,7 +50,6 @@
   height: 36px;
   text-align: center;
   vertical-align: middle;
-  border-radius: 4px;
 }
 
 .material-icons {
