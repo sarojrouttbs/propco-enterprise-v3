@@ -416,11 +416,11 @@
       </ion-col>
       <ion-col size="auto">
         <ion-item class="edit-title" *ngIf="isEditable">
-          <ion-input #title [value] ="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0" (ionBlur)="changeTitle(describeFaultForm.controls['title'].value)"></ion-input>
+          <ion-input #title [value] ="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0" (ionBlur)="changeTitle(title.value)"></ion-input>
         </ion-item>
         <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
       </ion-col>
-      <ion-col size="auto" class="ion-no-padding ion-align-self-center" offset="3">
+      <ion-col size="auto" class="ion-no-padding ion-align-self-center" offset="3" *ngIf="faultId">
         <ion-button (click)="editTitle()">Edit</ion-button>
       </ion-col>
     </ion-row>

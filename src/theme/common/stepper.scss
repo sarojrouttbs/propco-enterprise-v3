@@ -11,6 +11,7 @@
 }
 
 .mat-stepper-horizontal {
+  font-family: var(--ion-font-family);
   .mat-horizontal-stepper-header-container {
     margin: 0 20px;
     .mat-stepper-horizontal-line {
@@ -180,6 +181,7 @@
   }
 
   .mat-stepper-vertical {
+    font-family: var(--ion-font-family);
     margin-left: 15%;
     width: 80%;
     background: var(--ion-color-step-2000);
