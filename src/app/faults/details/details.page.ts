@@ -241,7 +241,7 @@ export class DetailsPage implements OnInit {
 
   setCategoryMap() {
     this.faultCategories.map((cat, index) => {
-      this.categoryMap.set(cat.index + "", cat.value);
+      this.categoryMap.set(cat.index, cat.value);
       cat.imgPath = this.categoryIconList[index];
     });
   }
