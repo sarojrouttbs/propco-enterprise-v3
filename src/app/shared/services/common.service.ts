@@ -310,12 +310,19 @@ export class CommonService {
     }));
   }
 
-  downloadDocument(response) {
-    const blob = new Blob([response], { type: 'application/pdf' });
+  downloadDocument(response, fileName, fileType) {
+    let type = null;
+    if (fileType == 'JPEG' || fileType == 'jpeg' || fileType == 'PNG' || fileType == 'png' || fileType == 'JPG' || fileType == 'jpg') {
+      type = 'png/jpeg'
+    }
+    if (fileType == 'PDF' || fileType == 'pdf') {
+      type = 'application/pdf'
+    }
+    const blob = new Blob([response], { type: type });
     const downloadURL = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = downloadURL;
-    link.download = 'file.pdf';
+    link.download = "file." + fileName;
     link.click();
   }
 

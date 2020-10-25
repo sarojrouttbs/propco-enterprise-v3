@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'fault-details',
@@ -83,7 +84,10 @@ export class DetailsPage implements OnInit {
     private fb: FormBuilder,
     private commonService: CommonService,
     private route: ActivatedRoute,
-    private router: Router, private modalController: ModalController) {
+    private router: Router,
+    private modalController: ModalController,
+    private sanitizer: DomSanitizer
+    ) {
   }
 
   ionViewDidEnter() {
@@ -203,6 +207,7 @@ export class DetailsPage implements OnInit {
       await this.getFaultHistory();
       this.faultDetails = details;
       this.propertyId = details.propertyId;
+      this.getFaultDocuments(this.faultId);
     } else {
       this.faultDetails = {};
       this.faultDetails.status = 1;
@@ -469,7 +474,7 @@ export class DetailsPage implements OnInit {
         let reader = new FileReader();
         reader.onload = (e: any) => {
           this.files.push({
-            url: e.target.result,
+            documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
             name: file.name
           })
         }
@@ -486,7 +491,7 @@ export class DetailsPage implements OnInit {
       const formData = new FormData();
       formData.append('file', data.file);
       formData.append('name', data.file.name);
-      formData.append('folderName', '1');
+      formData.append('folderName', this.faultDetails.status  || '1');
       formData.append('headCategory', 'Legal');
       formData.append('subCategory', 'Addendum');
       apiObservableArray.push(this.faultService.uploadDocument(formData, faultId));
@@ -498,6 +503,24 @@ export class DetailsPage implements OnInit {
         this.router.navigate(['faults/dashboard'], { replaceUrl: true });
       });
     }, 1000);
+  }
+
+  getFaultDocuments(faultId) {
+    this.faultService.getFaultDocuments(faultId).subscribe(response => {
+      if (response) {
+        this.files = response.data;
+      }
+    })
+  }
+
+  downloadFaultDocument(documentId, name) {
+    let fileType = name.split('.')[1];
+    let fileName = name;
+    this.faultService.downloadDocument(documentId).subscribe(response => {
+      if (response) {
+        this.commonService.downloadDocument(response, fileType, fileName);
+      }
+    })
   }
 
   //MAT METHODS//
