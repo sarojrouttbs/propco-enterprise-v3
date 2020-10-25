@@ -47,12 +47,13 @@ export class DetailsPage implements OnInit {
   categoryMap = new Map();
   faultId: string;
   accessInfoList = [{ title: 'Tenant Presense Required', value: true }, { title: 'Access with management keys', value: false }];
-  priorityList = [{ title: 'Non urgent', value: 1 }, { title: 'Urgent', value: 2 }, { title: 'Emergency', value: 3 }];
+  faultUrgencyStatuses:any[];
   reportedByTypes = REPORTED_BY_TYPES;
   lookupdata: any;
   agreementStatuses: any[];
   landlordsOfproperty = [];
   faultReportedByThirdParty: any[];
+  faultStatuses:any[];
   propertyTenants: any[] = [];
   allGuarantors: any[] = [];
   tenantIds: any[] = [];
@@ -126,6 +127,8 @@ export class DetailsPage implements OnInit {
     this.agreementStatuses = data.agreementStatuses;
     this.faultReportedByThirdParty = data.faultReportedByThirdParty;
     this.faultCategories = data.faultCategories;
+    this.faultUrgencyStatuses = data.faultUrgencyStatuses;
+    this.faultStatuses = data.faultStatuses;
     this.setCategoryMap();
   }
 
@@ -183,7 +186,7 @@ export class DetailsPage implements OnInit {
       email: [{ value: '', disabled: true }],
       mobile: [{ value: '', disabled: true }],
       homeTelephoneNo: [{ value: '', disabled: true }],
-      selectedEntity: ['', Validators.required]
+      selectedEntity: ['', Validators.required],
     });
   }
 
@@ -200,6 +203,9 @@ export class DetailsPage implements OnInit {
       await this.getFaultHistory();
       this.faultDetails = details;
       this.propertyId = details.propertyId;
+    }else{
+      this.faultDetails = {};
+      this.faultDetails.status = 1;
     }
 
     forkJoin([
@@ -230,10 +236,11 @@ export class DetailsPage implements OnInit {
       areOccupiersVulnerable: this.faultDetails.areOccupiersVulnerable,
       isTenantPresenceRequired: this.faultDetails.isTenantPresenceRequired
     });
+    let reportedById = (this.faultDetails.reportedBy === 'THIRD_PARTY') ? Number(this.faultDetails.reportedById) : this.faultDetails.reportedById;
     this.reportedByForm.patchValue({
       reportedBy: this.faultDetails.reportedBy,
       agreementId: this.faultDetails.agreementId,
-      reportedById: this.faultDetails.reportedById,
+      reportedById: reportedById,
       propertyId: this.faultDetails.propertyId,
       isDraft: this.faultDetails.isDraft
     });
@@ -563,10 +570,6 @@ export class DetailsPage implements OnInit {
 
   getCategoryName() {
     return this.categoryMap.get(this.describeFaultForm.controls['category'].value);
-  }
-
-  getUrgencyName() {
-    return this.priorityList.find(x => x.value === this.faultDetailsForm.controls['urgencyStatus'].value).title;
   }
 
   editTitle() {
