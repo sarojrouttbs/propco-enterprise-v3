@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from './../../environments/environment';
 
 @Injectable()
@@ -103,5 +104,22 @@ export class FaultsService {
 
   updateFaultStatus(faultId: string, status: number): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/status/${status}`, {});
+  }
+
+  getFaultDocuments(faultId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/documents`);
+  }
+
+  downloadDocument(documentId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `documents/${documentId}/download`, { responseType: 'arraybuffer' }).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.log(`${operation} failed: ${error.message}`);
+      return throwError(error);
+    };
   }
 }
