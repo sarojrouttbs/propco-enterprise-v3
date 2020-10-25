@@ -1,6 +1,6 @@
 import { ModalController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES } from './../../shared/constants';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE } from './../../shared/constants';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -860,6 +860,20 @@ export class DetailsPage implements OnInit {
       this.commonService.hideLoader();
     }, error => {
       this.commonService.hideLoader();
+    });
+  }
+
+  startProgress() {
+    this.commonService.showConfirm('Start Progress', 'This will change the fault status, Do you want to continue?').then(res => {
+      if (res) {
+        const UNDER_REVIEW = 2; // Under review
+        this.faultService.updateFaultStatus(this.faultId, UNDER_REVIEW).subscribe(data => {
+          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+        }, error => {
+          this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Start Progress', 'Error');
+          console.log(error);
+        });
+      }
     });
   }
 

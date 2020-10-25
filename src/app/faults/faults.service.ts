@@ -100,4 +100,8 @@ export class FaultsService {
   updateAdditionalInfo(id, requestObj): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `faults/additional-info/${id}`, requestObj);
   }
+
+  updateFaultStatus(faultId: string, status: number): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/status/${status}`, {});
+  }
 }
