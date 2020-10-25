@@ -195,7 +195,7 @@ export class DetailsPage implements OnInit {
     if (this.faultId) {
       this.goToPage(3);
       const details: any = await this.getFaultDetails();
-      const faultHistory: any = await this.getFaultHistory();
+      await this.getFaultHistory();
       this.faultDetails = details;
       this.propertyId = details.propertyId;
     }

@@ -286,7 +286,7 @@
   </form>
 </ng-template>
 
-<ng-template #faultHistory>
+<ng-template #faultHistoryTab>
   <ion-grid class="view-details">
     <ion-row class="ion-justify-content-between">
       <ion-col size="100">
@@ -294,19 +294,19 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Last Repair</ion-text><br />
-        <ion-text class="content">bvn</ion-text>
+        <ion-text class="content">{{faultHistory?.description || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Last Repair Date</ion-text><br />
-        <ion-text class="content">f</ion-text>
+        <ion-text class="content">{{faultHistory?.lastRepairDate ? (faultHistory?.lastRepairDate | date:'MMM d, y') : 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Type</ion-text><br />
-        <ion-text class="content">gfghrt</ion-text>
+        <ion-text class="content">{{faultHistory?.maintType || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Contractor Name</ion-text><br />
-        <ion-text class="content">rtrt</ion-text>
+        <ion-text class="content">{{faultHistory?.contractorName || 'N/A'}}</ion-text>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -471,9 +471,9 @@
         <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button">Next</ion-button>
       </div>
     </mat-tab>
-    <mat-tab>
+    <mat-tab *ngIf="faultId" >
       <ng-template mat-tab-label><div class="label-text">Fault History</div></ng-template>
-      <ng-container *ngTemplateOutlet="faultHistory"></ng-container>
+      <ng-container *ngTemplateOutlet="faultHistoryTab"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
         <ion-button class="save-button">Save for later</ion-button>
@@ -487,7 +487,8 @@
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
         <ion-button class="save-button">Save for later</ion-button>
-        <ion-button (click)="caseTabs.selectedIndex = 5" class="next-button">Back</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button" *ngIf="faultId" >Back</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button" *ngIf="!faultId">Back</ion-button>
         <ion-button class="submit-button" (click)="createAFault()">Submit</ion-button>
       </div>
     </mat-tab>
