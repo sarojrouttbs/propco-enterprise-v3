@@ -21,7 +21,7 @@ export class DetailsPage implements OnInit {
   propertyDetails: any = {};
   propertyTenancyDetails: any[];
   propertyHMODetails: any[] = [];
-  faultHistory: any[] = [];
+  faultHistory;
   addtionalInfo;
   files = [];
   describeFaultForm: FormGroup;
@@ -197,7 +197,7 @@ export class DetailsPage implements OnInit {
     if (this.faultId) {
       this.goToPage(3);
       const details: any = await this.getFaultDetails();
-      const faultHistory: any = await this.getFaultHistory();
+      await this.getFaultHistory();
       this.faultDetails = details;
       this.propertyId = details.propertyId;
     }
