@@ -11,6 +11,7 @@
 }
 
 .mat-stepper-horizontal {
+  font-family: var(--ion-font-family);
   .mat-horizontal-stepper-header-container {
     margin: 0 20px;
     .mat-stepper-horizontal-line {
@@ -132,16 +133,16 @@
 
 #fault-details {
   .mat-stepper-horizontal {
+    @include border-radius(4px);
     width: 100%;
     margin: 10px 15px 30px 0;
-    border-radius: 4px;
     display: inline-block;
     padding-top: 15px;
     background: var(--ion-color-step-2000);
 
     .mat-horizontal-content-container {
       background: var(--ion-color-step-2000);
-      border-radius: 5px;
+      @include border-radius(5px);
       position: relative;
       margin: 20px;
     }
@@ -180,11 +181,12 @@
   }
 
   .mat-stepper-vertical {
+    font-family: var(--ion-font-family);
     margin-left: 15%;
     width: 80%;
     background: var(--ion-color-step-2000);
     margin-top: 50px;
-    border-radius: 10px;
+    @include border-radius(10px);
     position: relative;
     min-height: 665px;
     margin-bottom: 25px;

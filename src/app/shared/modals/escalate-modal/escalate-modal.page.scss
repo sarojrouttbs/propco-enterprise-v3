@@ -14,7 +14,7 @@
     .modal-wrapper {
       --color: var(--ion-color-step-2000);
       width: 500px;
-      border-radius: 10px;
+      @include border-radius(10px);
       height: auto;
     
       ion-item{

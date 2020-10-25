@@ -1,6 +1,6 @@
 import { ModalController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO } from './../../shared/constants';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES } from './../../shared/constants';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,7 +21,7 @@ export class DetailsPage implements OnInit {
   propertyDetails: any = {};
   propertyTenancyDetails: any[];
   propertyHMODetails: any[] = [];
-  faultHistory: any = {};
+  faultHistory: any[] = [];
   addtionalInfo;
   files = [];
   describeFaultForm: FormGroup;
@@ -58,6 +58,7 @@ export class DetailsPage implements OnInit {
   tenantIds: any[] = [];
   tenantArrears: any;
   faultDetails: any;
+  isEditable = false;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -72,6 +73,7 @@ export class DetailsPage implements OnInit {
     'assets/images/fault-categories/others.svg',
     'assets/images/fault-categories/smell-oil-or-gas.svg',
     'assets/images/fault-categories/toilet.svg',
+    'assets/images/fault-categories/others.svg',
     'assets/images/fault-categories/water-and-leaks.svg'
   ];
 
@@ -138,7 +140,7 @@ export class DetailsPage implements OnInit {
 
   initDescribeFaultForm(): void {
     this.describeFaultForm = this.fb.group({
-      title: ['', Validators.required],
+      title: ['', [Validators.required, Validators.maxLength(70)]],
       category: ['', Validators.required]
     });
   }
@@ -146,7 +148,7 @@ export class DetailsPage implements OnInit {
   initFaultDetailsForm(): void {
     this.faultDetailsForm = this.fb.group({
       notes: ['', Validators.required],
-      urgencyStatus: [1, Validators.required],
+      urgencyStatus: [3, Validators.required],
       additionalInfo: this.fb.array([])
     });
   }
@@ -239,7 +241,7 @@ export class DetailsPage implements OnInit {
 
   setCategoryMap() {
     this.faultCategories.map((cat, index) => {
-      this.categoryMap.set(cat.index + "", cat.value);
+      this.categoryMap.set(cat.index, cat.value);
       cat.imgPath = this.categoryIconList[index];
     });
   }
@@ -278,15 +280,13 @@ export class DetailsPage implements OnInit {
               this.propertyDetails.isPropertyCheckedIn = true;
               for (let i = 0; i < this.propertyTenancyDetails.length; i++) {
                 const tenants = this.propertyTenancyDetails[i].tenants;
-                for (let j = 0; j < tenants.length; j++) {
-                  let filterTenantsId = tenants.filter(data => data.tenantId);
-                  this.tenantIds = filterTenantsId.map(d => d.tenantId)
-                }
+                let tenantIdList = tenants.filter(data => data.tenantId).map(d => d.tenantId);
+                this.tenantIds = this.tenantIds.concat(tenantIdList);
               }
             }
           }
-          if (this.tenantIds) {
-            this.getTenantArrears(this.tenantIds)
+          if (this.tenantIds && this.tenantIds.length) {
+            this.getTenantArrears(this.tenantIds);
           }
           resolve();
         },
@@ -472,12 +472,13 @@ export class DetailsPage implements OnInit {
   }
 
 
-  uploadFile(faultId) {
+  uploadFiles(faultId) {
     let apiObservableArray = [];
     let uploadedDoc = this.uploadDocForm.controls.photos.value;
     uploadedDoc.forEach(data => {
       const formData = new FormData();
       formData.append('file', data.file);
+      formData.append('name', data.file.name);
       formData.append('folderName', '1');
       formData.append('headCategory', 'Legal');
       formData.append('subCategory', 'Addendum');
@@ -552,7 +553,7 @@ export class DetailsPage implements OnInit {
 
   /*method to update category control*/
   setCategory(catId: number): void {
-    this.describeFaultForm.get('category').setValue(catId + "");
+    this.describeFaultForm.get('category').setValue(catId);
   }
 
   /*method to update urgencyStatus control*/
@@ -568,9 +569,15 @@ export class DetailsPage implements OnInit {
     return this.priorityList.find(x => x.value === this.faultDetailsForm.controls['urgencyStatus'].value).title;
   }
 
-  editTitle(title: any) {
-    this.describeFaultForm.controls['title'].setValue(title);
+  editTitle() {
+    this.isEditable = true;
   }
+
+  changeTitle(title: any) {
+    this.describeFaultForm.controls['title'].setValue(title);
+    this.isEditable = false;
+  }
+
 
   get additionalInfoControls() {
     return this.faultDetailsForm.get('additionalInfo')['controls'];
@@ -683,6 +690,38 @@ export class DetailsPage implements OnInit {
       return;
     }
     this.commonService.showLoader();
+    let faultRequestObj = this.createFaultFormValues();
+
+    this.faultService.createFault(faultRequestObj).subscribe(
+      res => {
+        this.commonService.hideLoader();
+        this.commonService.showMessage('Fault has been logged successfully.', 'Log a Fault', 'success');
+        this.uploadFiles(res.faultId);
+      },
+      error => {
+        this.commonService.hideLoader();
+        // this.commonService.showMessage('Something went wrong on server, please try again.', 'Log a Fault', 'Error');
+        console.log(error);
+      }
+    );
+  }
+
+  private checkFormsValidity() {
+    return new Promise((resolve, reject) => {
+      let valid = false;
+      let describeFaultForm = this.describeFaultForm.valid;
+      let faultDetailsForm = this.faultDetailsForm.valid;
+      let reportedByForm = this.reportedByForm.valid;
+      let accessInfoForm = this.accessInfoForm.valid;
+
+      if (describeFaultForm && faultDetailsForm && reportedByForm && accessInfoForm) {
+        valid = true;
+      }
+      return resolve(valid);
+    });
+  }
+
+  private createFaultFormValues(): any {
     let faultDetails = {
       urgencyStatus: this.faultDetailsForm.get('urgencyStatus').value,
       reportedBy: this.reportedByForm.get('reportedBy').value,
@@ -697,36 +736,10 @@ export class DetailsPage implements OnInit {
       propertyId: this.propertyId,
       sourceType: "FAULT",
       additionalInfo: this.faultDetailsForm.get('additionalInfo').value,
-      isDraft: false
+      isDraft: false,
+      stage: FAULT_STAGES.FAULT_LOGGED
     }
-
-    this.faultService.createFault(faultDetails).subscribe(
-      res => {
-        this.commonService.hideLoader();
-        this.commonService.showMessage('Fault Created Successfully', 'Fault', 'success');
-        this.uploadFile(res.faultId);
-      },
-      error => {
-        this.commonService.hideLoader();
-        this.commonService.showMessage('Something went wrong', 'Fault', 'Error');
-        console.log(error);
-      }
-    );
-  }
-
-  checkFormsValidity() {
-    return new Promise((resolve, reject) => {
-      let valid = false;
-      let describeFaultForm = this.describeFaultForm.valid;
-      let faultDetailsForm = this.faultDetailsForm.valid;
-      let reportedByForm = this.reportedByForm.valid;
-      let accessInfoForm = this.accessInfoForm.valid;
-
-      if (describeFaultForm && faultDetailsForm && reportedByForm && accessInfoForm) {
-        valid = true;
-      }
-      return resolve(valid);
-    });
+    return faultDetails;
   }
 
   async searchProperty() {
@@ -747,11 +760,23 @@ export class DetailsPage implements OnInit {
     await modal.present();
   }
 
-  saveLater() {
-    switch (this.pageNo) {
-      case 3: {
-        break;
-      }
+  saveForLater() {
+    if (!this.faultId) {
+      this.commonService.showLoader();
+      let faultRequestObj = this.createFaultFormValues();
+      faultRequestObj.isDraft = true;
+      this.faultService.createFault(faultRequestObj).subscribe(
+        res => {
+          this.commonService.hideLoader();
+          this.commonService.showMessage('Fault has been logged successfully.', 'Log a Fault', 'success');
+          this.uploadFiles(res.faultId);
+        },
+        error => {
+          this.commonService.hideLoader();
+          // this.commonService.showMessage('Something went wrong on server, please try again.', 'Log a Fault', 'Error');
+          console.log(error);
+        }
+      );
     }
   }
 

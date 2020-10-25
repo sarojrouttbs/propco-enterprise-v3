@@ -203,11 +203,11 @@ body {
   }
 
   .toast-container .ngx-toastr {
+    @include border-radius(3px);
     position: relative;
     overflow: hidden;
     margin: 0 0 6px;
     padding: 0;
-    border-radius: 3px 3px 3px 3px;
     background-position: 15px center;
     background-repeat: no-repeat;
     background-size: 0;
