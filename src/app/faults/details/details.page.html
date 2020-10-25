@@ -6,8 +6,8 @@
           <ion-item>
             <ion-label position="floating">Urgency Status</ion-label>
             <ion-select interface="popover" formControlName="urgencyStatus">
-              <ion-select-option [value]="item.value" *ngFor="let item of priorityList"
-                >{{ item.title }}
+              <ion-select-option [value]="item.index" *ngFor="let item of faultUrgencyStatuses">
+                {{ item.value }}
               </ion-select-option>
             </ion-select>
           </ion-item>
@@ -327,7 +327,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Urgency Status</ion-text><br />
-        <ion-text class="content">{{getUrgencyName()  || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getLookupValue(faultDetailsForm.controls.urgencyStatus.value, faultUrgencyStatuses) || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Title</ion-text><br />
@@ -602,7 +602,7 @@
           <h2 class="heading">Log a fault</h2>
         </ion-col>
         <ion-col size="50">
-          <h2 class="heading-initial">Initial Issue &nbsp;<img src="assets/images/fault-categories/escalation.svg" /></h2>
+          <h2 class="heading-initial">{{getLookupValue(faultDetails?.status, faultStatuses)}} &nbsp;<img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.isEscalated"/></h2>
         </ion-col>
       
         <ion-col size="100">
