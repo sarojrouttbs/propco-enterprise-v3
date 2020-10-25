@@ -21,7 +21,7 @@ export class DetailsPage implements OnInit {
   propertyDetails: any = {};
   propertyTenancyDetails: any[];
   propertyHMODetails: any[] = [];
-  faultHistory: any[] = [];
+  faultHistory;
   addtionalInfo;
   files = [];
   describeFaultForm: FormGroup;
