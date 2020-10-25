@@ -557,6 +557,9 @@ export class DetailsPage implements OnInit {
         this.router.navigate(['faults/dashboard'], { replaceUrl: true });
       });
     }, 1000);
+    if (!apiObservableArray.length) {
+      this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+    }
   }
 
   getFaultDocuments(faultId) {
@@ -866,7 +869,7 @@ export class DetailsPage implements OnInit {
     await modal.present();
   }
 
-  saveForLater() {
+  async saveForLater() {
     if (!this.faultId) {
       this.commonService.showLoader();
       let faultRequestObj = this.createFaultFormValues();
@@ -885,29 +888,56 @@ export class DetailsPage implements OnInit {
       );
     } else {
       if (this.pageNo === 3) {
-        this.saveAdditionalInfoForm();
+        await this.saveAdditionalInfoForm();
       }
+      /*update fault summary*/
+      this.updateFaultSummary();
     }
   }
-  private saveAdditionalInfoForm() {
+
+  private updateFaultSummary() {
     this.commonService.showLoader();
-    let apiObservableArray = [];
-    this.faultDetailsForm.controls['additionalInfo'].value.forEach(info => {
-      if (info.id) {
-        apiObservableArray.push(this.updateAdditionalInfo(info.id, info));
-      } else {
-        apiObservableArray.push(this.addAdditionalInfo(this.faultId, info));
+    let faultRequestObj = this.createFaultFormValues();
+    faultRequestObj.isDraft = true;
+    this.faultService.updateFault(this.faultId, faultRequestObj).subscribe(
+      res => {
+        this.commonService.hideLoader();
+        this.commonService.showMessage('Fault has been updated successfully.', 'Update a Fault', 'success');
+        this.uploadFiles(this.faultId);
+      },
+      error => {
+        this.commonService.hideLoader();
+        console.log(error);
       }
-    });
-    forkJoin(apiObservableArray).subscribe(res => {
-      if (res) {
-        this.commonService.showMessage('Updated successfully.', 'Update Addtional Info', 'success');
-        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+    );
+  }
+
+  private saveAdditionalInfoForm() {
+    const promise = new Promise((resolve, reject) => {
+      this.commonService.showLoader();
+      let apiObservableArray = [];
+      this.faultDetailsForm.controls['additionalInfo'].value.forEach(info => {
+        if (info.id) {
+          apiObservableArray.push(this.updateAdditionalInfo(info.id, info));
+        } else {
+          apiObservableArray.push(this.addAdditionalInfo(this.faultId, info));
+        }
+      });
+      if(!apiObservableArray.length){
+        resolve();
       }
-      this.commonService.hideLoader();
-    }, error => {
-      this.commonService.hideLoader();
+      forkJoin(apiObservableArray).subscribe(res => {
+        if (res) {
+          this.commonService.showMessage('Updated successfully.', 'Update Addtional Info', 'success');
+          resolve();
+        }
+        this.commonService.hideLoader();
+      }, error => {
+        this.commonService.hideLoader();
+        resolve();
+      });
     });
+    return promise;
   }
 
   startProgress() {
