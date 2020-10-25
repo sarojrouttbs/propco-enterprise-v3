@@ -116,6 +116,10 @@ export class FaultsService {
     );
   }
 
+  updateFault(faultId: string, requestObj: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}`, requestObj);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
