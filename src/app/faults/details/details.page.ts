@@ -311,6 +311,51 @@ export class DetailsPage implements OnInit {
     return promise;
   }
 
+  deleteAdditionalInfo(infoId: string) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.deleteAdditionalInfo(infoId).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          console.log(error);
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+  addAdditionalInfo(faultId: string, requestObj: any) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.addAdditionalInfo(faultId, requestObj).subscribe(
+        res => {
+          resolve();
+        },
+        error => {
+          console.log(error);
+          resolve();
+        }
+      );
+    });
+    return promise;
+  }
+
+  updateAdditionalInfo(id: string, requestObj: any) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.updateAdditionalInfo(id, requestObj).subscribe(
+        res => {
+          resolve();
+        },
+        error => {
+          console.log(error);
+          resolve();
+        }
+      );
+    });
+    return promise;
+  }
+
   private onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
   }
@@ -622,9 +667,20 @@ export class DetailsPage implements OnInit {
     infoArray.push(this.fb.group(grup));
   }
 
-  removeInfo(i: number) {
+  async removeInfo(i: number) {
     const infoArray = this.faultDetailsForm.get('additionalInfo') as FormArray;
-    infoArray.removeAt(i);
+    if (infoArray.at(i).get('id').value) {
+      const hardDelete = await this.commonService.showConfirm('Delete Additional Info', 'Do you want to delete the info?');
+      if (hardDelete) {
+        const isDeleted = await this.deleteAdditionalInfo(infoArray.at(i).get('id').value);
+        if (isDeleted) {
+          infoArray.removeAt(i);
+        }
+      }
+    } else {
+      infoArray.removeAt(i);
+    }
+
   }
 
   onSelectReprtedByType() {
@@ -803,7 +859,31 @@ export class DetailsPage implements OnInit {
           console.log(error);
         }
       );
+    } else {
+      if (this.pageNo === 3) {
+        this.saveAdditionalInfoForm();
+      }
     }
+  }
+  private saveAdditionalInfoForm() {
+    this.commonService.showLoader();
+    let apiObservableArray = [];
+    this.faultDetailsForm.controls['additionalInfo'].value.forEach(info => {
+      if (info.id) {
+        apiObservableArray.push(this.updateAdditionalInfo(info.id, info));
+      } else {
+        apiObservableArray.push(this.addAdditionalInfo(this.faultId, info));
+      }
+    });
+    forkJoin(apiObservableArray).subscribe(res => {
+      if (res) {
+        this.commonService.showMessage('Updated successfully.', 'Update Addtional Info', 'success');
+        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+      }
+      this.commonService.hideLoader();
+    }, error => {
+      this.commonService.hideLoader();
+    });
   }
 
   startProgress() {

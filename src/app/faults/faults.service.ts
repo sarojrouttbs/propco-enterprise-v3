@@ -90,7 +90,19 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/history`);
   }
 
-  updateFaultStatus(faultId:string, status:number): Observable<any> {
+  addAdditionalInfo(faultId, requestObj): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/additional-info`, requestObj);
+  }
+
+  deleteAdditionalInfo(id): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + `faults/additional-info/${id}`, {});
+  }
+
+  updateAdditionalInfo(id, requestObj): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `faults/additional-info/${id}`, requestObj);
+  }
+
+  updateFaultStatus(faultId: string, status: number): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/status/${status}`, {});
   }
 
