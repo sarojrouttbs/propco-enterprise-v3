@@ -101,7 +101,7 @@
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Who reported the fault?</ion-label>
-            <ion-select interface="popover" formControlName="reportedBy" (ionChange)="onSelectReprtedByType()">
+            <ion-select interface="popover" formControlName="reportedBy" (ionChange)="onSelectReportedByType()">
               <ion-select-option [value]="item.index" *ngFor="let item of reportedByTypes"
                 >{{ item.value }}
               </ion-select-option>
