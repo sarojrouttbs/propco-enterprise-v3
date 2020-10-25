@@ -88,4 +88,16 @@ export class FaultsService {
   getFaultHistory(faultId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/history`);
   }
+
+  addAdditionalInfo(faultId, requestObj): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/additional-info`, requestObj);
+  }
+
+  deleteAdditionalInfo(id): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + `faults/additional-info/${id}`, {});
+  }
+
+  updateAdditionalInfo(id, requestObj): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `faults/additional-info/${id}`, requestObj);
+  }
 }
