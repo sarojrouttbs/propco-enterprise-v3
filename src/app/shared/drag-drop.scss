@@ -121,4 +121,11 @@
     cursor: pointer;
     text-align: right;
   }
+
+  .download-icon {
+    @include set-text-style(30px, 36px);
+    color: var(--ion-color-medium);
+    cursor: pointer;
+    text-align: right;
+  }
 }

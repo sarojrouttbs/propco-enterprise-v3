@@ -257,8 +257,7 @@
         <ion-col size-xl="20" size="25">
           <form class="drop-zone" [formGroup]="uploadDocForm" file-drop (files)="submit($event)">
             <ion-icon class="icon" name="cloud-upload"></ion-icon>
-            <input type="file" class="custom-file-input form-control" id="files" multiple (change)="submit($event.target.files)"
-            accept="image/x-png,image/jpeg">
+            <input type="file" class="custom-file-input form-control" id="files" accept="image/x-png,image/jpeg,.pdf" multiple (change)="submit($event.target.files)">
             <span class="drag-text">Drag files to upload here</span> <br>
             <label for="files" class="browse-btn">Browse Files</label>
           </form>
@@ -268,15 +267,20 @@
             <ion-grid>
               <ion-row>
                 <ion-col size="100">
-                  <img [src]="file.url">
-                </ion-col>
-                <ion-col size-xl="90" size="80">
-                  <div class="file-name">{{file.name}}</div>
-                </ion-col>
-                <ion-col size-xl="10" size="20" class="ion-text-end ion-no-padding">
-                  <ion-icon (click)="removeFile(i)" class="delete-icon" name="close-circle"></ion-icon>
+                  <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'">
                 </ion-col>
               </ion-row>
+              <ion-row class="ion-justify-content-between">
+                <ion-col size-xl="80" size="80">
+                  <div class="file-name">{{file.name}}</div>
+                </ion-col>
+                <ion-col size-xl="10" size="10" class="ion-text-end ion-no-padding" *ngIf="file.documentId">
+                  <ion-icon (click)="downloadFaultDocument(file.documentId, file.name)" title="Download File" class="download-icon" name="arrow-down-circle-outline"></ion-icon>
+                </ion-col>
+                <ion-col size-xl="10" size="10" class="ion-text-end ion-no-padding">
+                  <ion-icon (click)="removeFile(i)" title="Delete File" class="delete-icon" name="close-circle"></ion-icon>
+                </ion-col>
+               </ion-row> 
             </ion-grid>
           </div>
         </ion-col>
