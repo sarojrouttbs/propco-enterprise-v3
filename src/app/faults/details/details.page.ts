@@ -1,6 +1,6 @@
 import { ModalController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES } from './../../shared/constants';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE } from './../../shared/constants';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -47,13 +47,13 @@ export class DetailsPage implements OnInit {
   categoryMap = new Map();
   faultId: string;
   accessInfoList = [{ title: 'Tenant Presense Required', value: true }, { title: 'Access with management keys', value: false }];
-  faultUrgencyStatuses:any[];
+  faultUrgencyStatuses: any[];
   reportedByTypes = REPORTED_BY_TYPES;
   lookupdata: any;
   agreementStatuses: any[];
   landlordsOfproperty = [];
   faultReportedByThirdParty: any[];
-  faultStatuses:any[];
+  faultStatuses: any[];
   propertyTenants: any[] = [];
   allGuarantors: any[] = [];
   tenantIds: any[] = [];
@@ -203,7 +203,7 @@ export class DetailsPage implements OnInit {
       await this.getFaultHistory();
       this.faultDetails = details;
       this.propertyId = details.propertyId;
-    }else{
+    } else {
       this.faultDetails = {};
       this.faultDetails.status = 1;
     }
@@ -781,6 +781,20 @@ export class DetailsPage implements OnInit {
         }
       );
     }
+  }
+
+  startProgress() {
+    this.commonService.showConfirm('Start Progress', 'This will change the fault status, Do you want to continue?').then(res => {
+      if (res) {
+        const UNDER_REVIEW = 2; // Under review
+        this.faultService.updateFaultStatus(this.faultId, UNDER_REVIEW).subscribe(data => {
+          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+        }, error => {
+          this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Start Progress', 'Error');
+          console.log(error);
+        });
+      }
+    });
   }
 
 }

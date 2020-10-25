@@ -433,7 +433,7 @@
       <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
-        <ion-button class="save-button" (click)="saveForLater()">Save for later</ion-button>
+        <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
         <ion-button (click)="pageNo = 2" class="next-button" *ngIf="!faultId" >Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 1" class="next-button">Next</ion-button>
       </div>
@@ -444,7 +444,7 @@
       <ng-container *ngTemplateOutlet="reportedBy"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
-        <ion-button class="save-button" (click)="saveForLater()">Save for later</ion-button>
+        <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 0" class="next-button">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 2" class="next-button">Next</ion-button>
       </div>
@@ -455,7 +455,7 @@
       <ng-container *ngTemplateOutlet="accessInformation"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
-        <ion-button class="save-button" (click)="saveForLater()">Save for later</ion-button>
+        <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 1" class="next-button">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button">Next</ion-button>
       </div>
@@ -466,7 +466,7 @@
       <ng-container *ngTemplateOutlet="media"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
-        <ion-button class="save-button" (click)="saveForLater()">Save for later</ion-button>
+        <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 2" class="next-button">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button">Next</ion-button>
       </div>
@@ -476,7 +476,7 @@
       <ng-container *ngTemplateOutlet="faultHistoryTab"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
-        <ion-button class="save-button" (click)="saveForLater()">Save for later</ion-button>
+        <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 5" class="next-button">Next</ion-button>
       </div>
@@ -486,10 +486,11 @@
       <ng-container *ngTemplateOutlet="finalView"></ng-container>
       <div class="action-btn-group">
         <ion-button class="cancel-button">Cancel</ion-button>
-        <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button" *ngIf="faultId" >Back</ion-button>
+        <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
+        <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button" *ngIf="faultId">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button" *ngIf="!faultId">Back</ion-button>
-        <ion-button class="save-button" (click)="saveForLater()">Save for later</ion-button>
-        <ion-button class="submit-button" (click)="createAFault()">Submit</ion-button>
+        <ion-button class="submit-button" (click)="createAFault()" *ngIf="!faultId">Submit</ion-button>
+        <ion-button class="save-button" (click)="startProgress()" *ngIf="faultId && faultDetails?.status == 1">Start Progress</ion-button>
       </div>
     </mat-tab>
   </mat-tab-group>
