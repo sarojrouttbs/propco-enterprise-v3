@@ -87,7 +87,7 @@ export class DetailsPage implements OnInit {
     private router: Router,
     private modalController: ModalController,
     private sanitizer: DomSanitizer
-    ) {
+  ) {
   }
 
   ionViewDidEnter() {
@@ -221,6 +221,7 @@ export class DetailsPage implements OnInit {
     ]).subscribe((values) => {
       if (this.faultId) {
         this.initPatching();
+        this.onSelectReportedByType();
       }
     });
   }
@@ -437,28 +438,36 @@ export class DetailsPage implements OnInit {
     return promise;
   }
 
-  getLandlordsOfProperty(propertyId): void {
-    this.faultService.getLandlordsOfProperty(propertyId).subscribe(
-      res => {
-        if (res && res.data) {
-          this.landlordsOfproperty = res.data;
+  getLandlordsOfProperty(propertyId) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.getLandlordsOfProperty(propertyId).subscribe(
+        res => {
+          this.landlordsOfproperty = res && res.data ? res.data : [];
+          resolve(this.landlordsOfproperty);
+        },
+        error => {
+          console.log(error);
+          reject(null);
         }
-      },
-      error => {
-        console.log(error);
-      }
-    );
+      );
+    });
+    return promise;
   }
 
-  getPropertyTenants(propertyId, agreementId): void {
-    this.faultService.getPropertyTenants(propertyId, agreementId).subscribe(
-      res => {
-        this.propertyTenants = res && res.data ? res.data : [];
-      },
-      error => {
-        console.log(error);
-      }
-    );
+  getPropertyTenants(propertyId, agreementId) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.getPropertyTenants(propertyId, agreementId).subscribe(
+        res => {
+          this.propertyTenants = res && res.data ? res.data : [];
+          resolve(this.propertyTenants);
+        },
+        error => {
+          console.log(error);
+          reject(null);
+        }
+      );
+    });
+    return promise;
   }
 
   getTenantsGuarantors(tenantId) {
@@ -536,7 +545,7 @@ export class DetailsPage implements OnInit {
       const formData = new FormData();
       formData.append('file', data.file);
       formData.append('name', data.file.name);
-      formData.append('folderName', this.faultDetails.status  || '1');
+      formData.append('folderName', this.faultDetails.status || '1');
       formData.append('headCategory', 'Legal');
       formData.append('subCategory', 'Addendum');
       apiObservableArray.push(this.faultService.uploadDocument(formData, faultId));
@@ -683,7 +692,7 @@ export class DetailsPage implements OnInit {
 
   }
 
-  onSelectReprtedByType() {
+  onSelectReportedByType() {
     if (this.reportedByForm.get('reportedBy').value === 'TENANT' || this.reportedByForm.get('reportedBy').value === 'GUARANTOR') {
       this.reportedByForm.get('agreementId').setValidators(Validators.required);
       this.reportedByForm.get('selectedEntity').setValidators(Validators.required);
@@ -696,9 +705,12 @@ export class DetailsPage implements OnInit {
       }
       this.reportedByForm.get('agreementId').clearValidators();
       this.reportedByForm.get('agreementId').updateValueAndValidity();
+      this.reportedByForm.patchValue({
+        agreementId: null
+      });
     }
+
     this.reportedByForm.patchValue({
-      agreementId: null,
       title: '',
       forename: '',
       surname: '',
@@ -710,13 +722,25 @@ export class DetailsPage implements OnInit {
     this.getReportedByIdList();
   }
 
-  getReportedByIdList() {
+  async getReportedByIdList() {
     let reportedBy = this.reportedByForm.get('reportedBy').value;
     if (reportedBy === 'LANDLORD') {
-      this.getLandlordsOfProperty(this.propertyId);
+      this.getLandlordsOfProperty(this.propertyId).then((data: any[]) => {
+        if (this.faultId && data && data.length) {
+          let entityData = data.find(x => x.landlordId === this.reportedByForm.get('reportedById').value);
+          this.reportedByForm.get('selectedEntity').setValue(entityData);
+          this.setEntityData(entityData);
+        }
+      });
     }
     else if (reportedBy === 'TENANT') {
-      this.getPropertyTenants(this.propertyId, this.reportedByForm.get('agreementId').value);
+      this.getPropertyTenants(this.propertyId, this.reportedByForm.get('agreementId').value).then((tenantList: any[]) => {
+        if (this.faultId && tenantList && tenantList.length) {
+          let entityData = tenantList.find(x => x.tenantId === this.reportedByForm.get('reportedById').value);
+          this.reportedByForm.get('selectedEntity').setValue(entityData);
+          this.setEntityData(entityData);
+        }
+      })
     }
     else if (reportedBy === 'GUARANTOR') {
       const agreementId = this.reportedByForm.get('agreementId').value;
