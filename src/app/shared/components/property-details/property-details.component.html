@@ -25,9 +25,11 @@
           <ion-row class="property-details-row">
             <ion-col class="no-padding-top col1" size="70">
               <h1 class="heading" *ngIf="propertyDetails?.publishedAddress">
+                {{propertyDetails?.reference ? propertyDetails?.reference + ',' : ''}}
                 {{propertyDetails.publishedAddress}}
               </h1>
               <h1 class="heading" *ngIf="!propertyDetails?.publishedAddress">
+                  {{propertyDetails?.reference ? propertyDetails?.reference + ',' : ''}}
                   {{ propertyDetails?.address?.addressLine1 ? propertyDetails?.address?.addressLine1 + ',' : ''}}
                   {{ propertyDetails?.address?.addressLine2 ? propertyDetails?.address?.addressLine2 + ',' : ''}}
                   {{ propertyDetails?.address?.locality ? propertyDetails?.address?.locality + ',' : ''}}
@@ -62,7 +64,7 @@
             <ion-col size-xl="25" size="33.3">
               <span class="text">Licence Details</span>
               <br />
-              Has HMO License? {{ hmoDetails[0]?.isPropertyLicensed ? 'True' : 'N/A' }}
+              Has HMO License? {{ hmoDetails[0]?.isPropertyLicensed ? 'Yes' : 'No' }}
             </ion-col>
             <ion-col size-xl="25" size="33.3">
               <span class="text">Licence Scheme</span>
