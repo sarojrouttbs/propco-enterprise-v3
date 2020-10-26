@@ -526,16 +526,34 @@ export class DetailsPage implements OnInit {
     }
     if (files) {
       for (let file of files) {
+        let isImage: boolean = false;
+        console.log(file.type.split("/")[0])
+        if(file.type.split("/")[0] !== 'image'){
+          isImage = false;
+        }
+        else if(file.type.split("/")[0] == 'image'){
+          isImage = true;
+        }
         this.photos.push(this.createItem({
           file: file
         }));
         let reader = new FileReader();
+        if(isImage){
         reader.onload = (e: any) => {
           this.files.push({
             documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
             name: file.name
           })
+        } 
+       }
+       else{
+        reader.onload = (e: any) => {
+          this.files.push({
+            documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/default.jpg'),
+            name: file.name
+          })
         }
+       }
         reader.readAsDataURL(file);
       }
     }
@@ -576,10 +594,9 @@ export class DetailsPage implements OnInit {
 
   downloadFaultDocument(documentId, name) {
     let fileType = name.split('.')[1];
-    let fileName = name;
     this.faultService.downloadDocument(documentId).subscribe(response => {
       if (response) {
-        this.commonService.downloadDocument(response, fileType, fileName);
+        this.commonService.downloadDocument(response, fileType);
       }
     })
   }
