@@ -310,7 +310,7 @@ export class CommonService {
     }));
   }
 
-  downloadDocument(response, fileName, fileType) {
+  downloadDocument(response, fileName, fileType?) {
     let type = null;
     if (fileType == 'JPEG' || fileType == 'jpeg' || fileType == 'PNG' || fileType == 'png' || fileType == 'JPG' || fileType == 'jpg') {
       type = 'png/jpeg'

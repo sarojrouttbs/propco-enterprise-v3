@@ -593,10 +593,10 @@ export class DetailsPage implements OnInit {
   }
 
   downloadFaultDocument(documentId, name) {
-    let fileType = name.split('.')[1];
+    let fileName = name.split('.')[1];
     this.faultService.downloadDocument(documentId).subscribe(response => {
       if (response) {
-        this.commonService.downloadDocument(response, fileType);
+        this.commonService.downloadDocument(response, fileName);
       }
     })
   }
