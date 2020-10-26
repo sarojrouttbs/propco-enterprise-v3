@@ -32,7 +32,7 @@ export class FaultsService {
 
   getPropertyTenants(propertyId: string, agreementId?: string): Observable<any> {
     let params = new HttpParams()
-      .set('agreementId', agreementId);
+      .set('agreementId', agreementId ? agreementId : '');
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenants`, { params: params });
   }
 

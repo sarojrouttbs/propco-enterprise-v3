@@ -367,14 +367,12 @@ export class DetailsPage implements OnInit {
     uniqueSet.forEach(id => {
       apiObservableArray.push(this.faultService.getTenantArrearsDetails(id));
     });
-    // setTimeout(() => {
     forkJoin(apiObservableArray).subscribe(res => {
       if (res) {
         this.returnTenantArrears(res);
       }
     }, error => {
     });
-    // }, 200);
   }
 
   private returnTenantArrears(res) {
@@ -471,14 +469,20 @@ export class DetailsPage implements OnInit {
   }
 
   getTenantsGuarantors(tenantId) {
-    this.faultService.getTenantGuarantors(tenantId).subscribe(
-      res => {
-        this.allGuarantors = res && res.data ? this.allGuarantors.concat(res.data) : this.allGuarantors;
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.getTenantGuarantors(tenantId).subscribe(
+        res => {
+          var guarantorList = res && res.data ? res.data : [];
+          this.allGuarantors = this.allGuarantors.concat(guarantorList);
+          resolve(res);
+        },
+        error => {
+          console.log(error);
+          reject();
+        }
+      );
+    });
+    return promise;
   }
 
   getFaultDetails() {
@@ -743,7 +747,7 @@ export class DetailsPage implements OnInit {
           this.reportedByForm.get('selectedEntity').setValue(entityData);
           this.setEntityData(entityData);
         }
-      })
+      });
     }
     else if (reportedBy === 'GUARANTOR') {
       const agreementId = this.reportedByForm.get('agreementId').value;
@@ -754,6 +758,21 @@ export class DetailsPage implements OnInit {
       if (agreement && agreement.tenants) {
         agreement.tenants.forEach(tenant => {
           this.getTenantsGuarantors(tenant.tenantId);
+        });
+
+        let apiObservableArray = [];
+        agreement.tenants.forEach(tenant => {
+          apiObservableArray.push(this.getTenantsGuarantors(tenant.tenantId));
+        });
+        forkJoin(apiObservableArray).subscribe((res:any[]) => {
+          if (res) {
+            if (this.faultId && this.allGuarantors && this.allGuarantors.length) {
+              let entityData = res.find(x => x.guarantorId === this.reportedByForm.get('reportedById').value);
+              this.reportedByForm.get('selectedEntity').setValue(entityData);
+              this.setEntityData(entityData);
+            }
+          }
+        }, error => {
         });
       }
     }
@@ -898,11 +917,12 @@ export class DetailsPage implements OnInit {
   private updateFaultSummary() {
     this.commonService.showLoader();
     let faultRequestObj = this.createFaultFormValues();
-    faultRequestObj.isDraft = true;
+    faultRequestObj.isDraft = this.faultDetails.isDraft;
+
     this.faultService.updateFault(this.faultId, faultRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
-        this.commonService.showMessage('Fault has been updated successfully.', 'Update a Fault', 'success');
+        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
         this.uploadFiles(this.faultId);
       },
       error => {
@@ -923,7 +943,7 @@ export class DetailsPage implements OnInit {
           apiObservableArray.push(this.addAdditionalInfo(this.faultId, info));
         }
       });
-      if(!apiObservableArray.length){
+      if (!apiObservableArray.length) {
         resolve();
       }
       forkJoin(apiObservableArray).subscribe(res => {
