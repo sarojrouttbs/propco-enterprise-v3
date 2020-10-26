@@ -989,4 +989,8 @@ export class DetailsPage implements OnInit {
     });
   }
 
+  goTolistPage(){
+    this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+  }
+
 }

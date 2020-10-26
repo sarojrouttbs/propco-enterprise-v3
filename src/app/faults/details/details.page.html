@@ -397,7 +397,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Access Information</ion-text><br />
-        <ion-text class="content">{{accessInfoForm.controls.isTenantPresenceRequired.value?'YES':'NO' || 'N/A'}}</ion-text>
+        <ion-text class="content">{{(accessInfoForm.controls.isTenantPresenceRequired.value?accessInfoList[0].title:accessInfoList[1].title) || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Is there a vulnerable occupier at this property?</ion-text><br />
@@ -436,7 +436,7 @@
       <ng-container *ngTemplateOutlet="caseDetails"></ng-container>
       <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
       <div class="action-btn-group">
-        <ion-button class="cancel-button">Cancel</ion-button>
+        <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
         <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
         <ion-button (click)="pageNo = 2" class="next-button" *ngIf="!faultId" >Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 1" class="next-button">Next</ion-button>
@@ -447,7 +447,7 @@
         [class.error-border]='isReportedSubmit && !reportedByForm.valid'>Reported By</div></ng-template>
       <ng-container *ngTemplateOutlet="reportedBy"></ng-container>
       <div class="action-btn-group">
-        <ion-button class="cancel-button">Cancel</ion-button>
+        <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
         <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 0" class="next-button">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 2" class="next-button">Next</ion-button>
@@ -458,7 +458,7 @@
         [class.error-border]='isAccessInfoSubmit && !accessInfoForm.valid'>Access Information</div></ng-template>
       <ng-container *ngTemplateOutlet="accessInformation"></ng-container>
       <div class="action-btn-group">
-        <ion-button class="cancel-button">Cancel</ion-button>
+        <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
         <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 1" class="next-button">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button">Next</ion-button>
@@ -469,7 +469,7 @@
         [class.error-border]='isManageMediaSubmit && files.length === 0'>Manage Media / Documents</div></ng-template>
       <ng-container *ngTemplateOutlet="media"></ng-container>
       <div class="action-btn-group">
-        <ion-button class="cancel-button">Cancel</ion-button>
+        <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
         <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 2" class="next-button">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button">Next</ion-button>
@@ -479,7 +479,7 @@
       <ng-template mat-tab-label><div class="label-text">Fault History</div></ng-template>
       <ng-container *ngTemplateOutlet="faultHistoryTab"></ng-container>
       <div class="action-btn-group">
-        <ion-button class="cancel-button">Cancel</ion-button>
+        <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
         <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 5" class="next-button">Next</ion-button>
@@ -489,7 +489,7 @@
       <ng-template mat-tab-label><div class="label-text">Review</div></ng-template>
       <ng-container *ngTemplateOutlet="finalView"></ng-container>
       <div class="action-btn-group">
-        <ion-button class="cancel-button">Cancel</ion-button>
+        <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
         <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button" *ngIf="faultId">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button" *ngIf="!faultId">Back</ion-button>
@@ -592,7 +592,7 @@
           <app-validation-message [control]="describeFaultForm.controls.title"></app-validation-message>
         </ion-col>
         <ion-col size="100" class="col2">
-          <ion-button class="cancel-button">Cancel</ion-button>
+          <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
           <ion-button (click)="goToPage(1)" *ngIf="!faultId">Back</ion-button>
           <ion-button (click)="goToPage(3)" [disabled]="!describeFaultForm.valid">Next</ion-button>
         </ion-col>
