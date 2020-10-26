@@ -202,7 +202,7 @@ export class CommonService {
     });
   }
 
-  async showConfirm(title: string, displayText: string, subtitle?: string) {
+  async showConfirm(title: string, displayText: string, subtitle?: string, okText?: string, cancelText?: string) {
     return new Promise((resolve, reject) => {
       let alertPopup: any;
       this.alertCtrl.create({
@@ -212,7 +212,7 @@ export class CommonService {
         cssClass: 'common-alert-box',
         buttons: [
           {
-            text: 'Cancel',
+            text: cancelText ? cancelText : 'Cancel',
             cssClass: 'ion-color-danger',
             role: 'cancel',
             handler: () => {
@@ -223,7 +223,7 @@ export class CommonService {
             }
           },
           {
-            text: 'OK',
+            text: okText ? okText : 'Ok',
             cssClass: 'ion-color-success',
             handler: () => {
               alertPopup.dismiss().then((res) => {
@@ -310,14 +310,8 @@ export class CommonService {
     }));
   }
 
-  downloadDocument(response, fileName, fileType) {
-    let type = null;
-    if (fileType == 'JPEG' || fileType == 'jpeg' || fileType == 'PNG' || fileType == 'png' || fileType == 'JPG' || fileType == 'jpg') {
-      type = 'png/jpeg'
-    }
-    if (fileType == 'PDF' || fileType == 'pdf') {
-      type = 'application/pdf'
-    }
+  downloadDocument(response, fileName) {
+    const type = null;
     const blob = new Blob([response], { type: type });
     const downloadURL = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
