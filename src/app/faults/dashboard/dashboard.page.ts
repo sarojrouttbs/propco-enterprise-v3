@@ -169,16 +169,18 @@ export class DashboardPage implements OnInit {
         this.commonService.showAlert('Escalate Fault', 'Fault has been escalated to the Property Manager');
         this.rerenderFaults();
         this.getFaultNotes(this.selectedData.faultId);
+        this.hideMenu('', 'divOverlay');
       }
     });
     await modal.present();
   }
 
   async deEscalateFault() {
-    this.commonService.showConfirm('De-Escalate Fault', 'Are you sure, you want to de-escalate the fault?').then(res => {
+    this.commonService.showConfirm('De-Escalate Fault', 'Are you sure, you want to de-escalate the fault?', '', 'Yes', 'No').then(res => {
       if (res) {
         this.faultsService.deEscalateFault(this.selectedData.faultId, {}).subscribe(res => {
           this.rerenderFaults();
+          this.hideMenu('', 'divOverlay');
         }, error => {
           // this.commonService.showMessage();
         });
@@ -237,7 +239,7 @@ export class DashboardPage implements OnInit {
     event.stopPropagation();
   }
 
-  hideMenu(event, id) {
+  hideMenu(event?, id?) {
     const $divOverlay = $('#' + id);
     $divOverlay.delay(200).slideUp('fast');
     if (event) {

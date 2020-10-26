@@ -285,7 +285,47 @@ ion-select-popover {
   }
 }
 
+.mat-tab-nav-bar, .mat-tab-header{
+  border-bottom: none;
+}
+
 .mat-autocomplete-panel {
   background-color: var(--ion-color-step-1900);
   color: var(--ion-color-step-200);
+}
+
+ion-alert.common-alert-box {
+  --background: var(--ion-color-step-1800);
+
+  .alert-head {
+    background: var(--ion-color-step-900);
+    padding: 10px;
+    h2 {
+      color: var(--ion-color-step-2000);
+      @include set-text-style(16px, 20px);
+    }
+  }
+
+  .alert-message {
+    background: var(--ion-color-step-1800);
+    color: var(--ion-color-step-200);
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .alert-button-group {
+    .alert-button {
+      background: var(--ion-color-step-900);
+      color: var(--ion-color-step-2000);
+      border-radius: 4px;
+      padding: 5px 10px;
+      height: 30px;
+      .alert-button-inner {
+      }
+    }
+  }
 }
