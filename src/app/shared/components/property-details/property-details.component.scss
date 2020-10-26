@@ -26,6 +26,18 @@
 
   ion-row.property-details-row {
     margin-bottom: 10px;
+
+    .non-urgent {
+      color: var(--ion-color-primary);
+    }
+  
+    .urgent {
+      color: var(--ion-color-warning);
+    }
+  
+    .emergency {
+      color: var(--ion-color-danger);
+    }
   }
 
   ion-row.fault-data-row {

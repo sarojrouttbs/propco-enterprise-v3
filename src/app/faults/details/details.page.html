@@ -2,7 +2,7 @@
   <form [formGroup]="faultDetailsForm">
     <ion-grid>
       <ion-row>
-        <ion-col size="100" *ngIf="faultId" >
+        <ion-col size="25" *ngIf="faultId" >
           <ion-item>
             <ion-label position="floating">Urgency Status</ion-label>
             <ion-select interface="popover" formControlName="urgencyStatus">
@@ -13,9 +13,9 @@
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
-        <ion-col size="100">
+        <ion-col [size]="faultId? 75 : 100">
           <ion-item>
-            <ion-label position="floating">Fault description</ion-label>
+            <ion-label position="floating">Fault description<ion-text class="mandatory">*</ion-text></ion-label>
             <ion-input formControlName="notes"></ion-input>
           </ion-item>
           <app-validation-message [control]="faultDetailsForm.controls.notes"></app-validation-message>
@@ -100,7 +100,7 @@
       <ion-row>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Who reported the fault?</ion-label>
+            <ion-label position="floating">Who reported the fault?<ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="reportedBy" (ionChange)="onSelectReportedByType()">
               <ion-select-option [value]="item.index" *ngFor="let item of reportedByTypes"
                 >{{ item.value }}
@@ -111,7 +111,7 @@
         </ion-col>
         <ion-col size="66.6">
           <ion-item>
-            <ion-label position="floating">Select agreement</ion-label>
+            <ion-label position="floating">Select agreement<ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select formControlName="agreementId" interface="popover" (ionChange)="onSelectAgreement()" 
                   [disabled]="reportedByForm.controls.reportedBy.value != 'TENANT' && reportedByForm.controls.reportedBy.value != 'GUARANTOR'">
               <ion-select-option [value]="item.agreementId" *ngFor="let item of propertyTenancyDetails" 
@@ -124,7 +124,7 @@
 
         <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'LANDLORD'" >
           <ion-item>
-            <ion-label position="floating">Select Landlord</ion-label>
+            <ion-label position="floating">Select Landlord<ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="selectedEntity" (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
               <ion-select-option [value]="item" *ngFor="let item of landlordsOfproperty"
                 >{{item.addressee || item.name}}
@@ -136,7 +136,7 @@
 
         <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'TENANT'" >
           <ion-item>
-            <ion-label position="floating">Select Tenant</ion-label>
+            <ion-label position="floating">Select Tenant<ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="selectedEntity" (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
               <ion-select-option [value]="item" *ngFor="let item of propertyTenants"
                 >{{item.addressee || item.name}}
@@ -148,7 +148,7 @@
 
         <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'GUARANTOR'" >
           <ion-item>
-            <ion-label position="floating">Select Guarantor</ion-label>
+            <ion-label position="floating">Select Guarantor<ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="selectedEntity" (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
               <ion-select-option [value]="item" *ngFor="let item of allGuarantors">
                 {{item.displayAs}}
@@ -160,7 +160,7 @@
 
         <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'THIRD_PARTY'" >
           <ion-item>
-            <ion-label position="floating">Select Third Party</ion-label>
+            <ion-label position="floating">Select Third Party<ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="reportedById">
               <ion-select-option [value]="item.index" *ngFor="let item of faultReportedByThirdParty"
                 >{{item.value}}
@@ -222,7 +222,7 @@
       <ion-row>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Access information</ion-label>
+            <ion-label position="floating">Access information<ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="isTenantPresenceRequired">
               <ion-select-option [value]="item.value" *ngFor="let item of accessInfoList"
                 >{{ item.title }}
@@ -293,9 +293,9 @@
 <ng-template #faultHistoryTab>
   <ion-grid class="view-details">
     <ion-row class="ion-justify-content-between">
-      <ion-col size="100">
+      <!-- <ion-col size="100">
         <div class="title">Fault History</div>
-      </ion-col>
+      </ion-col> -->
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Last Repair</ion-text><br />
         <ion-text class="content">{{faultHistory?.description || 'N/A'}}</ion-text>
@@ -359,12 +359,12 @@
         <ion-text class="header">Who reported the fault?</ion-text><br />
         <ion-text class="content">{{reportedByForm.controls.reportedBy.value || 'N/A'}}</ion-text>
       </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
+     <!--  <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Agreement</ion-text><br />
         <ion-text class="content"></ion-text>
-      </ion-col>
+      </ion-col> -->
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Tenant</ion-text><br />
+        <ion-text class="header ion-text-capitalize">{{(reportedByForm.controls.reportedBy.value | lowercase) || 'N/A'}}</ion-text><br />
         <ion-text class="content">{{reportedByForm.controls.forename.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -636,7 +636,7 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step>
+            <mat-step aria-labelledby="disabled_stepper_step">
               <ng-container *ngTemplateOutlet="caseQualification"></ng-container>
               <ng-template matStepLabel>Case Qualification</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
@@ -645,7 +645,7 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step>
+            <mat-step aria-labelledby="disabled_stepper_step">
               <ng-container *ngTemplateOutlet="landlordInstructions"></ng-container>
               <ng-template matStepLabel>Landlord Instructions</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
@@ -654,7 +654,7 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step>
+            <mat-step aria-labelledby="disabled_stepper_step">
               <ng-container *ngTemplateOutlet="arrangingContractor"></ng-container>
               <ng-template matStepLabel>Arranging Contractor</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
@@ -663,7 +663,7 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step>
+            <mat-step aria-labelledby="disabled_stepper_step">
               <ng-container *ngTemplateOutlet="jobCompletion"></ng-container>
               <ng-template matStepLabel>Job Completion</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
@@ -672,7 +672,7 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step>
+            <mat-step aria-labelledby="disabled_stepper_step">
               <ng-container *ngTemplateOutlet="payment"></ng-container>
               <ng-template matStepLabel>Payment</ng-template>
               <!-- <div class="ion-text-end margin-top-16">

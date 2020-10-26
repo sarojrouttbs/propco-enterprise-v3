@@ -18,9 +18,9 @@ export class PropertyDetailsComponent implements OnInit {
   @Output()
   getUploadedFile = new EventEmitter<any>();
   advertisementRentFrequencies: any[];
-  officeCodes:any[];
-  hmoLicenceSchemes:any[];
-  faultUrgencyStatuses:any[];
+  officeCodes: any[];
+  hmoLicenceSchemes: any[];
+  faultUrgencyStatuses: any[];
 
   constructor(public commonService: CommonService) {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
