@@ -117,7 +117,7 @@ export class FaultsService {
   }
 
   updateFault(faultId: string, requestObj: any): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}`, requestObj);
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/details`, requestObj);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
