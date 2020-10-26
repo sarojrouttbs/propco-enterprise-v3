@@ -5,7 +5,7 @@
         <form class="drop-zone" *ngIf="!files.length" [formGroup]="parentForm" file-drop (files)="submit($event)">
           <ion-icon class="icon" name="cloud-upload"></ion-icon>
           <input type="file" class="custom-file-input form-control" id="files" multiple (change)="submit($event.target.files)"
-          accept="image/x-png,image/jpeg/,.pdf">
+          accept="image/x-png,image/jpeg,.pdf,image/gif,.bmp,.text,.doc,.csv,.docx,.odt">
           <label for="files" class="browse-btn">Browse Files</label>
         </form>
 

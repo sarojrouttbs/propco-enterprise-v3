@@ -257,7 +257,7 @@
         <ion-col size-xl="20" size="25">
           <form class="drop-zone" [formGroup]="uploadDocForm" file-drop (files)="submit($event)">
             <ion-icon class="icon" name="cloud-upload"></ion-icon>
-            <input type="file" class="custom-file-input form-control" id="files" accept="image/x-png,image/jpeg,.pdf" multiple (change)="submit($event.target.files)">
+            <input type="file" class="custom-file-input form-control" id="files" accept="image/x-png,image/jpeg,.pdf,image/gif,.bmp,.text,.doc,.csv,.docx,.odt" multiple (change)="submit($event.target.files)">
             <span class="drag-text">Drag files to upload here</span> <br>
             <label for="files" class="browse-btn">Browse Files</label>
           </form>
