@@ -906,9 +906,7 @@ export class DetailsPage implements OnInit {
         }
       );
     } else {
-      if (this.pageNo === 3) {
         await this.saveAdditionalInfoForm();
-      }
       /*update fault summary*/
       this.updateFaultSummary();
     }

@@ -93,18 +93,6 @@
     }
   }
 
-  .non-urgent {
-    --color: var(--ion-color-primary);
-  }
-
-  .urgent {
-    --color: var(--ion-color-warning);
-  }
-
-  .emergency {
-    --color: $var(--ion-color-danger);
-  }
-
   .panel-block-normal {
     background-color: var(--ion-color-step-2000);
     @include border-radius(5px);

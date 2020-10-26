@@ -35,7 +35,7 @@
               </h1>
             </ion-col>
             <ion-col class="no-padding-top col2 ion-text-end" size="30">
-              <h1>{{getLookupValue(urgencyStatus, faultUrgencyStatuses)}}</h1>              
+              <h1 [class]="urgencyStatus==1 ? 'emergency' : (urgencyStatus==2? 'urgent' : 'non-urgent')">{{(getLookupValue(urgencyStatus, faultUrgencyStatuses)) | uppercase}}</h1>              
             </ion-col>
           </ion-row>
           <ion-row class="fault-data-row">

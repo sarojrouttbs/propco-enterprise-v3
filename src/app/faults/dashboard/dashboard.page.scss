@@ -43,6 +43,7 @@
 
       tr {
         height: 49px;
+        cursor: pointer;
       }
 
       tr td:first-child {
@@ -52,7 +53,7 @@
         border-right: 1px solid var(--ion-color-step-1750);
       }
       tr.escalated {
-        background-color: rgba(var(--ion-color-danger-rgb), 0.6);
+        background-color: var(--ion-color-danger);
       }
     }
   }

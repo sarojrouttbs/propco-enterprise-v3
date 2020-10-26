@@ -221,13 +221,18 @@ ion-select-popover {
     margin: 0 10px;
 
     .mat-tab-label-container {
-      background-color: var(--ion-color-step-1900);
+      .mat-ink-bar {
+        display: none;
+      }
 
       .mat-tab-label {
+        background-color: var(--ion-color-step-1900);
         color: var(--ion-color-step-200);
         padding: 0;
         height: 55px;
+        font-size: 16px;
         opacity: 1;
+        margin: 0 2px !important;
 
         .mat-tab-label-content {
           width: 100%;
@@ -240,11 +245,11 @@ ion-select-popover {
           }
 
           .success-border {
-            border-bottom: 2px solid var(--ion-color-success);
+            border-bottom: 3px solid var(--ion-color-success);
           }
-      
+
           .error-border {
-            border-bottom: 2px solid var(--ion-color-danger);
+            border-bottom: 3px solid var(--ion-color-danger);
           }
         }
       }
