@@ -599,6 +599,10 @@ export class DetailsPage implements OnInit {
     })
   }
 
+  downloadFaultDocumentByUrl(url){
+    this.commonService.downloadDocumentByUrl(url);
+  }
+
   //MAT METHODS//
   caseDeatil(): void {
     this.isCaseDetailSubmit = true;

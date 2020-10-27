@@ -320,6 +320,15 @@ export class CommonService {
     link.click();
   }
 
+  downloadDocumentByUrl(url) {
+    let a = document.createElement("a");
+    document.body.appendChild(a);
+    a.href = url;
+    a.download = '';
+    a.click();
+    document.body.removeChild(a);
+  }
+
   getFileNameFromContent(content) {
     let fileName = '';
     const startIndex = content.indexOf('filename') + 10;
