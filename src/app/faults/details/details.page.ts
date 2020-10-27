@@ -61,7 +61,6 @@ export class DetailsPage implements OnInit {
   tenantArrears: any;
   faultDetails: any;
   isEditable = false;
-  backbuttonSubscription:any;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -98,13 +97,7 @@ export class DetailsPage implements OnInit {
   }
 
   ngOnInit() {
-    const event = fromEvent(document, 'backbutton');
-    this.backbuttonSubscription = event.subscribe(async () => {
-        const modal = await this.modalController.getTop();
-        if (modal) {
-            modal.dismiss();
-        }
-    });
+    
   }
 
   initiateFault() {
@@ -533,32 +526,32 @@ export class DetailsPage implements OnInit {
       for (let file of files) {
         let isImage: boolean = false;
         console.log(file.type.split("/")[0])
-        if(file.type.split("/")[0] !== 'image'){
+        if (file.type.split("/")[0] !== 'image') {
           isImage = false;
         }
-        else if(file.type.split("/")[0] == 'image'){
+        else if (file.type.split("/")[0] == 'image') {
           isImage = true;
         }
         this.photos.push(this.createItem({
           file: file
         }));
         let reader = new FileReader();
-        if(isImage){
-        reader.onload = (e: any) => {
-          this.files.push({
-            documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
-            name: file.name
-          })
-        } 
-       }
-       else{
-        reader.onload = (e: any) => {
-          this.files.push({
-            documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/default.jpg'),
-            name: file.name
-          })
+        if (isImage) {
+          reader.onload = (e: any) => {
+            this.files.push({
+              documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
+              name: file.name
+            })
+          }
         }
-       }
+        else {
+          reader.onload = (e: any) => {
+            this.files.push({
+              documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/default.jpg'),
+              name: file.name
+            })
+          }
+        }
         reader.readAsDataURL(file);
       }
     }
@@ -734,7 +727,7 @@ export class DetailsPage implements OnInit {
     this.getReportedByIdList();
   }
 
-  private setValidatorsForReportedBy(){
+  private setValidatorsForReportedBy() {
     if (this.reportedByForm.get('reportedBy').value === 'TENANT' || this.reportedByForm.get('reportedBy').value === 'GUARANTOR') {
       this.reportedByForm.get('agreementId').setValidators(Validators.required);
       this.reportedByForm.get('selectedEntity').setValidators(Validators.required);
@@ -788,7 +781,7 @@ export class DetailsPage implements OnInit {
         agreement.tenants.forEach(tenant => {
           apiObservableArray.push(this.getTenantsGuarantors(tenant.tenantId));
         });
-        forkJoin(apiObservableArray).subscribe((res:any[]) => {
+        forkJoin(apiObservableArray).subscribe((res: any[]) => {
           if (res) {
             if (this.faultId && this.allGuarantors && this.allGuarantors.length) {
               let entityData = res.find(x => x.guarantorId === this.reportedByForm.get('reportedById').value);
@@ -930,7 +923,7 @@ export class DetailsPage implements OnInit {
         }
       );
     } else {
-        await this.saveAdditionalInfoForm();
+      await this.saveAdditionalInfoForm();
       /*update fault summary*/
       this.updateFaultSummary();
     }
@@ -996,11 +989,9 @@ export class DetailsPage implements OnInit {
     });
   }
 
-  goTolistPage(){
+  goTolistPage() {
     this.router.navigate(['faults/dashboard'], { replaceUrl: true });
   }
+  
 
-  ngOnDestroy() {
-    this.backbuttonSubscription.unsubscribe();
-}
 }
