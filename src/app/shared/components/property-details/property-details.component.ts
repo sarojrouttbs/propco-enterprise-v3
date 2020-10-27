@@ -14,6 +14,8 @@ export class PropertyDetailsComponent implements OnInit {
   @Input() files;
   @Input() hmoDetails;
   @Input() urgencyStatus;
+  @Input() faultId;
+  @Input() createdAt;
   lookupdata: any;
   @Output()
   getUploadedFile = new EventEmitter<any>();
