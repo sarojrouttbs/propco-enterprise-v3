@@ -416,7 +416,7 @@
 <ion-grid style="margin-bottom:10px">
     <ion-row class="ion-justify-content-start">
       <ion-col size="auto">
-        <h2>{{categoryMap.get(describeFaultForm.controls['category'].value)}} <ion-text color="success">&gt;</ion-text><ion-text></ion-text></h2>
+        <h2><ion-text *ngIf="faultId">{{faultDetails.reference || ''}} </ion-text>{{categoryMap.get(describeFaultForm.controls['category'].value)}} <ion-text color="success">&gt;</ion-text><ion-text></ion-text></h2>
       </ion-col>
       <ion-col size="auto">
         <ion-item class="edit-title" *ngIf="isEditable">
@@ -466,7 +466,7 @@
     </mat-tab>
     <mat-tab>
       <ng-template mat-tab-label><div class="label-text" [class.success-border]='isManageMediaSubmit && files.length !== 0'
-        [class.error-border]='isManageMediaSubmit && files.length === 0'>Manage Media / Documents</div></ng-template>
+        [class.error-border]='isManageMediaSubmit && files.length === 0'>Media / Documents</div></ng-template>
       <ng-container *ngTemplateOutlet="media"></ng-container>
       <div class="action-btn-group">
         <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
@@ -604,10 +604,16 @@
    <ion-grid>
       <ion-row>
         <ion-col size="50">
-          <h2 class="heading">Log a fault</h2>
+          <h2 class="heading">{{faultId ? 'Fault Summary' : 'Log a fault'}}</h2>
         </ion-col>
         <ion-col size="50">
-          <h2 class="heading-initial">{{getLookupValue(faultDetails?.status, faultStatuses)}} &nbsp;<img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.isEscalated"/></h2>
+          <h2 class="heading-initial">
+            <span *ngIf="!faultId">Initial Issue</span>
+            <span *ngIf="faultId">
+              {{getLookupValue(faultDetails?.status, faultStatuses)}} &nbsp;
+              <img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.isEscalated"/>
+            </span>
+          </h2>
         </ion-col>
       
         <ion-col size="100">
@@ -618,7 +624,10 @@
               [parentForm]="uploadDocForm"
               (getUploadedFile)="getUploadedFile($event)"
               [hmoDetails]="propertyHMODetails"
-              [urgencyStatus]="faultDetailsForm.controls.urgencyStatus.value" >
+              [urgencyStatus]="faultDetailsForm.controls.urgencyStatus.value" 
+              [faultId]="faultId? faultId : ''"
+              [createdAt]="faultDetails.createdAt? faultDetails.createdAt : ''"
+            >
             </app-property-details>
           </ion-card>
         </ion-col>
