@@ -277,6 +277,9 @@
                 <ion-col size-xl="10" size="10" class="ion-text-end ion-no-padding" *ngIf="file.documentId">
                   <ion-icon (click)="downloadFaultDocument(file.documentId, file.name)" title="Download File" class="download-icon" name="arrow-down-circle-outline"></ion-icon>
                 </ion-col>
+                <ion-col size-xl="10" size="10" class="ion-text-end ion-no-padding" *ngIf="file.documentUrl">
+                  <ion-icon (click)="downloadFaultDocumentByUrl(file.documentUrl)" title="Download File" class="download-icon" name="arrow-down-circle-outline"></ion-icon>
+                </ion-col>
                 <ion-col size-xl="10" size="10" class="ion-text-end ion-no-padding">
                   <ion-icon (click)="removeFile(i)" title="Delete File" class="delete-icon" name="close-circle"></ion-icon>
                 </ion-col>
