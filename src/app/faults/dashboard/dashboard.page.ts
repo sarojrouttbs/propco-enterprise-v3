@@ -79,6 +79,11 @@ export class DashboardPage implements OnInit {
     }, 1000);
   }
 
+  ionViewDidEnter() {
+    this.rerenderFaults(true);
+    this.hideMenu('', 'divOverlay');
+  }
+
   private getLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
     if (this.lookupdata) {
@@ -167,7 +172,7 @@ export class DashboardPage implements OnInit {
     modal.onDidDismiss().then(res => {
       if (res.data == 'success') {
         this.commonService.showAlert('Escalate Fault', 'Fault has been escalated to the Property Manager');
-        this.rerenderFaults();
+        this.rerenderFaults(false);
         this.getFaultNotes(this.selectedData.faultId);
         this.hideMenu('', 'divOverlay');
       }
@@ -179,7 +184,7 @@ export class DashboardPage implements OnInit {
     this.commonService.showConfirm('De-Escalate Fault', 'Are you sure, you want to de-escalate the fault?', '', 'Yes', 'No').then(res => {
       if (res) {
         this.faultsService.deEscalateFault(this.selectedData.faultId, {}).subscribe(res => {
-          this.rerenderFaults();
+          this.rerenderFaults(false);
           this.hideMenu('', 'divOverlay');
         }, error => {
           // this.commonService.showMessage();
@@ -248,16 +253,20 @@ export class DashboardPage implements OnInit {
   }
 
   rerenderNotes(): void {
-    this.dtElements.last.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.destroy();
-      this.notesDtTrigger.next();
-    })
+    if (this.dtElements && this.dtElements.last.dtInstance) {
+      this.dtElements.last.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.destroy();
+        this.notesDtTrigger.next();
+      });
+    }
   }
 
-  rerenderFaults(): void {
-    this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.ajax.reload((res) => { }, false);
-    });
+  rerenderFaults(resetPaging?): void {
+    if (this.dtElements && this.dtElements.first.dtInstance) {
+      this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.ajax.reload((res) => { }, resetPaging);
+      });
+    }
   }
 
   ngOnDestroy() {
