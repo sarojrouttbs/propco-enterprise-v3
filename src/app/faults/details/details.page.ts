@@ -403,7 +403,7 @@ export class DetailsPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultService.getFaultHistory(this.faultId).subscribe(
         res => {
-          if (res && res.data) {
+          if (res) {
             this.faultHistory = res;
           }
           resolve();
