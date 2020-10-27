@@ -4,7 +4,7 @@ import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE } from './../../
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, fromEvent } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -97,7 +97,7 @@ export class DetailsPage implements OnInit {
   }
 
   ngOnInit() {
-    
+
   }
 
   initiateFault() {
@@ -992,6 +992,6 @@ export class DetailsPage implements OnInit {
   goTolistPage() {
     this.router.navigate(['faults/dashboard'], { replaceUrl: true });
   }
-  
+
 
 }
