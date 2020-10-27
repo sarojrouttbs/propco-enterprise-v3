@@ -416,7 +416,7 @@
 <ion-grid style="margin-bottom:10px">
     <ion-row class="ion-justify-content-start">
       <ion-col size="auto">
-        <h2><ion-text *ngIf="faultId">{{faultDetails.reference || ''}} </ion-text>{{categoryMap.get(describeFaultForm.controls['category'].value)}} <ion-text color="success">&gt;</ion-text><ion-text></ion-text></h2>
+        <h2><ion-text *ngIf="faultId">{{faultDetails.reference || ''}} </ion-text>{{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text color="success">&gt;</ion-text><ion-text></ion-text></h2>
       </ion-col>
       <ion-col size="auto">
         <ion-item class="edit-title" *ngIf="isEditable">
