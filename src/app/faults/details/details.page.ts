@@ -97,10 +97,7 @@ export class DetailsPage implements OnInit {
   }
 
   ngOnInit() {
-    // this.catList.map((cat, index) => {
-    //   this.categoryMap.set(cat.index, cat.value);
-    //   cat.imgPath = this.categoryIconList[index];
-    // });
+
   }
 
   initiateFault() {
@@ -221,7 +218,8 @@ export class DetailsPage implements OnInit {
     ]).subscribe((values) => {
       if (this.faultId) {
         this.initPatching();
-        this.onSelectReportedByType();
+        this.setValidatorsForReportedBy();
+        this.getReportedByIdList();
       }
     });
   }
@@ -528,32 +526,32 @@ export class DetailsPage implements OnInit {
       for (let file of files) {
         let isImage: boolean = false;
         console.log(file.type.split("/")[0])
-        if(file.type.split("/")[0] !== 'image'){
+        if (file.type.split("/")[0] !== 'image') {
           isImage = false;
         }
-        else if(file.type.split("/")[0] == 'image'){
+        else if (file.type.split("/")[0] == 'image') {
           isImage = true;
         }
         this.photos.push(this.createItem({
           file: file
         }));
         let reader = new FileReader();
-        if(isImage){
-        reader.onload = (e: any) => {
-          this.files.push({
-            documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
-            name: file.name
-          })
-        } 
-       }
-       else{
-        reader.onload = (e: any) => {
-          this.files.push({
-            documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/default.jpg'),
-            name: file.name
-          })
+        if (isImage) {
+          reader.onload = (e: any) => {
+            this.files.push({
+              documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
+              name: file.name
+            })
+          }
         }
-       }
+        else {
+          reader.onload = (e: any) => {
+            this.files.push({
+              documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/default.jpg'),
+              name: file.name
+            })
+          }
+        }
         reader.readAsDataURL(file);
       }
     }
@@ -716,6 +714,20 @@ export class DetailsPage implements OnInit {
   }
 
   onSelectReportedByType() {
+    this.setValidatorsForReportedBy();
+    this.reportedByForm.patchValue({
+      title: '',
+      forename: '',
+      surname: '',
+      email: '',
+      mobile: '',
+      homeTelephoneNo: '',
+      selectedEntity: ''
+    });
+    this.getReportedByIdList();
+  }
+
+  private setValidatorsForReportedBy() {
     if (this.reportedByForm.get('reportedBy').value === 'TENANT' || this.reportedByForm.get('reportedBy').value === 'GUARANTOR') {
       this.reportedByForm.get('agreementId').setValidators(Validators.required);
       this.reportedByForm.get('selectedEntity').setValidators(Validators.required);
@@ -732,17 +744,6 @@ export class DetailsPage implements OnInit {
         agreementId: null
       });
     }
-
-    this.reportedByForm.patchValue({
-      title: '',
-      forename: '',
-      surname: '',
-      email: '',
-      mobile: '',
-      homeTelephoneNo: '',
-      selectedEntity: ''
-    });
-    this.getReportedByIdList();
   }
 
   async getReportedByIdList() {
@@ -756,7 +757,7 @@ export class DetailsPage implements OnInit {
         }
       });
     }
-    else if (reportedBy === 'TENANT') {
+    else if (reportedBy === 'TENANT' && this.reportedByForm.get('agreementId').value) {
       this.getPropertyTenants(this.propertyId, this.reportedByForm.get('agreementId').value).then((tenantList: any[]) => {
         if (this.faultId && tenantList && tenantList.length) {
           let entityData = tenantList.find(x => x.tenantId === this.reportedByForm.get('reportedById').value);
@@ -765,7 +766,7 @@ export class DetailsPage implements OnInit {
         }
       });
     }
-    else if (reportedBy === 'GUARANTOR') {
+    else if (reportedBy === 'GUARANTOR' && this.reportedByForm.get('agreementId').value) {
       const agreementId = this.reportedByForm.get('agreementId').value;
       let agreement = this.propertyTenancyDetails.find(function (tenancy) {
         return (tenancy.agreementId == agreementId)
@@ -780,7 +781,7 @@ export class DetailsPage implements OnInit {
         agreement.tenants.forEach(tenant => {
           apiObservableArray.push(this.getTenantsGuarantors(tenant.tenantId));
         });
-        forkJoin(apiObservableArray).subscribe((res:any[]) => {
+        forkJoin(apiObservableArray).subscribe((res: any[]) => {
           if (res) {
             if (this.faultId && this.allGuarantors && this.allGuarantors.length) {
               let entityData = res.find(x => x.guarantorId === this.reportedByForm.get('reportedById').value);
@@ -922,7 +923,7 @@ export class DetailsPage implements OnInit {
         }
       );
     } else {
-        await this.saveAdditionalInfoForm();
+      await this.saveAdditionalInfoForm();
       /*update fault summary*/
       this.updateFaultSummary();
     }
@@ -988,8 +989,9 @@ export class DetailsPage implements OnInit {
     });
   }
 
-  goTolistPage(){
+  goTolistPage() {
     this.router.navigate(['faults/dashboard'], { replaceUrl: true });
   }
+
 
 }
