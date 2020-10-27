@@ -57,6 +57,7 @@ export class DashboardPage implements OnInit {
       searching: false,
       ordering: false,
       pageLength: 10,
+      // responsive: true,
       ajax: (tableParams: any, callback) => {
         const params = new HttpParams()
           .set('limit', tableParams.length)
@@ -123,7 +124,8 @@ export class DashboardPage implements OnInit {
     return {
       paging: true,
       searching: false,
-      ordering: false
+      ordering: false,
+      responsive: true
     };
   }
 

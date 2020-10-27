@@ -346,20 +346,20 @@ mat-form-field {
   background-color: var(--ion-color-step-1900);
 }
 
-.my-class {
-  ::ng-deep {
-    .mat-tab-label {
-      opacity: 1;
-      padding: 5px;
-      border: 1px solid var(--ion-color-danger) !important;
-      border-bottom: none;
-      color: var(--ion-color-step-400);
-    }
-  }
-}
+// .my-class {
+//   ::ng-deep {
+//     .mat-tab-label {
+//       opacity: 1;
+//       padding: 5px;
+//       border: 1px solid var(--ion-color-danger) !important;
+//       border-bottom: none;
+//       color: var(--ion-color-step-400);
+//     }
+//   }
+// }
 
 .common-alert-box .alert-wrapper {
-  min-width: 400px;
+  min-width: 450px;
 }
 
 .mat-tooltip {

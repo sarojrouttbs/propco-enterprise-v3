@@ -18,7 +18,11 @@
   height: 100%;
   padding: 15px;
 
-  .fault-image img{
+  .heading {
+    @include set-text-style(22px, 26px);
+  }
+
+  .fault-image img {
     height: 190px;
     width: 100%;
     object-fit: cover;
@@ -29,14 +33,17 @@
 
     .non-urgent {
       color: var(--ion-color-primary);
+      @include set-text-style(22px, 26px);
     }
-  
+
     .urgent {
       color: var(--ion-color-warning);
+      @include set-text-style(22px, 26px);
     }
-  
+
     .emergency {
       color: var(--ion-color-danger);
+      @include set-text-style(22px, 26px);
     }
   }
 

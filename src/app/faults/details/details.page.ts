@@ -993,6 +993,20 @@ export class DetailsPage implements OnInit {
     });
   }
 
+  reOpenFault(){
+    this.commonService.showConfirm('Re-open Fault', 'This will reopen the fault and notify the property manager. Are you sure?').then(res => {
+      if (res) {
+        const UNDER_REVIEW = 2; // Under review
+        this.faultService.updateFaultStatus(this.faultId, UNDER_REVIEW).subscribe(data => {
+          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+        }, error => {
+          this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Re-open Fault', 'Error');
+          console.log(error);
+        });
+      }
+    });
+  }
+
   goTolistPage() {
     this.router.navigate(['faults/dashboard'], { replaceUrl: true });
   }
