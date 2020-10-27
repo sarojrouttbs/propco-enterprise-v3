@@ -419,7 +419,8 @@
 <ion-grid style="margin-bottom:10px">
     <ion-row class="ion-justify-content-start">
       <ion-col size="auto">
-        <h2><ion-text *ngIf="faultId">{{faultDetails.reference || ''}} </ion-text>{{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text color="success">&gt;</ion-text><ion-text></ion-text></h2>
+        <h2>
+          <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>{{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text color="success">&gt;</ion-text></h2>
       </ion-col>
       <ion-col size="auto">
         <ion-item class="edit-title" *ngIf="isEditable">
@@ -435,7 +436,7 @@
   <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #caseTabs  (selectedIndexChange)="currentSelected($event)">
     <mat-tab>
       <ng-template mat-tab-label><div class="label-text" [class.success-border]='isCaseDetailSubmit && faultDetailsForm.valid'
-        [class.error-border]='isCaseDetailSubmit && !faultDetailsForm.valid'>Fault Detail</div></ng-template>
+        [class.error-border]='isCaseDetailSubmit && !faultDetailsForm.valid'>Fault Details</div></ng-template>
       <ng-container *ngTemplateOutlet="caseDetails"></ng-container>
       <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
       <div class="action-btn-group">
@@ -629,7 +630,7 @@
               [hmoDetails]="propertyHMODetails"
               [urgencyStatus]="faultDetailsForm.controls.urgencyStatus.value" 
               [faultId]="faultId? faultId : ''"
-              [createdAt]="faultDetails.createdAt? faultDetails.createdAt : ''"
+              [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''"
             >
             </app-property-details>
           </ion-card>
