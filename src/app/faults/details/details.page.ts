@@ -702,18 +702,17 @@ export class DetailsPage implements OnInit {
 
   async removeInfo(i: number) {
     const infoArray = this.faultDetailsForm.get('additionalInfo') as FormArray;
-    if (infoArray.at(i).get('id').value) {
-      const hardDelete = await this.commonService.showConfirm('Delete Additional Info', 'Do you want to delete the info?');
-      if (hardDelete) {
+    const hardDelete = await this.commonService.showConfirm('Delete Additional Info', 'Do you want to delete the info?');
+    if (hardDelete) {
+      if (infoArray.at(i).get('id').value) {
         const isDeleted = await this.deleteAdditionalInfo(infoArray.at(i).get('id').value);
         if (isDeleted) {
           infoArray.removeAt(i);
         }
+      } else {
+        infoArray.removeAt(i);
       }
-    } else {
-      infoArray.removeAt(i);
     }
-
   }
 
   onSelectReportedByType() {
