@@ -24,20 +24,20 @@
         <ion-grid style="height:100%;" class="no-padding-top">
           <ion-row class="property-details-row">
             <ion-col class="no-padding-top col1" size="70">
-              <h1 class="heading" *ngIf="propertyDetails?.publishedAddress">
+              <h2 class="heading" *ngIf="propertyDetails?.publishedAddress">
                 {{propertyDetails?.reference ? propertyDetails?.reference + ',' : ''}}
                 {{propertyDetails.publishedAddress}}
-              </h1>
-              <h1 class="heading" *ngIf="!propertyDetails?.publishedAddress">
+              </h2>
+              <h2 class="heading" *ngIf="!propertyDetails?.publishedAddress">
                   {{propertyDetails?.reference ? propertyDetails?.reference + ',' : ''}}
                   {{ propertyDetails?.address?.addressLine1 ? propertyDetails?.address?.addressLine1 + ',' : ''}}
                   {{ propertyDetails?.address?.addressLine2 ? propertyDetails?.address?.addressLine2 + ',' : ''}}
                   {{ propertyDetails?.address?.locality ? propertyDetails?.address?.locality + ',' : ''}}
                   {{ propertyDetails?.address?.postcode }}
-              </h1>
+              </h2>
             </ion-col>
             <ion-col class="no-padding-top col2 ion-text-end" size="30">
-              <h1 [class]="urgencyStatus==1 ? 'emergency' : (urgencyStatus==2? 'urgent' : 'non-urgent')">{{(getLookupValue(urgencyStatus, faultUrgencyStatuses)) | uppercase}}</h1>              
+              <h2 [class]="urgencyStatus==1 ? 'emergency' : (urgencyStatus==2? 'urgent' : 'non-urgent')">{{(getLookupValue(urgencyStatus, faultUrgencyStatuses)) | uppercase}}</h2>              
             </ion-col>
           </ion-row>
           <ion-row class="fault-data-row">
