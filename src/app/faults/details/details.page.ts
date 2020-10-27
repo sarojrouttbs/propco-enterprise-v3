@@ -4,7 +4,7 @@ import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE } from './../../
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, fromEvent } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -61,6 +61,7 @@ export class DetailsPage implements OnInit {
   tenantArrears: any;
   faultDetails: any;
   isEditable = false;
+  backbuttonSubscription:any;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -97,10 +98,13 @@ export class DetailsPage implements OnInit {
   }
 
   ngOnInit() {
-    // this.catList.map((cat, index) => {
-    //   this.categoryMap.set(cat.index, cat.value);
-    //   cat.imgPath = this.categoryIconList[index];
-    // });
+    const event = fromEvent(document, 'backbutton');
+    this.backbuttonSubscription = event.subscribe(async () => {
+        const modal = await this.modalController.getTop();
+        if (modal) {
+            modal.dismiss();
+        }
+    });
   }
 
   initiateFault() {
@@ -221,7 +225,8 @@ export class DetailsPage implements OnInit {
     ]).subscribe((values) => {
       if (this.faultId) {
         this.initPatching();
-        this.onSelectReportedByType();
+        this.setValidatorsForReportedBy();
+        this.getReportedByIdList();
       }
     });
   }
@@ -716,6 +721,20 @@ export class DetailsPage implements OnInit {
   }
 
   onSelectReportedByType() {
+    this.setValidatorsForReportedBy();
+    this.reportedByForm.patchValue({
+      title: '',
+      forename: '',
+      surname: '',
+      email: '',
+      mobile: '',
+      homeTelephoneNo: '',
+      selectedEntity: ''
+    });
+    this.getReportedByIdList();
+  }
+
+  private setValidatorsForReportedBy(){
     if (this.reportedByForm.get('reportedBy').value === 'TENANT' || this.reportedByForm.get('reportedBy').value === 'GUARANTOR') {
       this.reportedByForm.get('agreementId').setValidators(Validators.required);
       this.reportedByForm.get('selectedEntity').setValidators(Validators.required);
@@ -732,17 +751,6 @@ export class DetailsPage implements OnInit {
         agreementId: null
       });
     }
-
-    this.reportedByForm.patchValue({
-      title: '',
-      forename: '',
-      surname: '',
-      email: '',
-      mobile: '',
-      homeTelephoneNo: '',
-      selectedEntity: ''
-    });
-    this.getReportedByIdList();
   }
 
   async getReportedByIdList() {
@@ -756,7 +764,7 @@ export class DetailsPage implements OnInit {
         }
       });
     }
-    else if (reportedBy === 'TENANT') {
+    else if (reportedBy === 'TENANT' && this.reportedByForm.get('agreementId').value) {
       this.getPropertyTenants(this.propertyId, this.reportedByForm.get('agreementId').value).then((tenantList: any[]) => {
         if (this.faultId && tenantList && tenantList.length) {
           let entityData = tenantList.find(x => x.tenantId === this.reportedByForm.get('reportedById').value);
@@ -765,7 +773,7 @@ export class DetailsPage implements OnInit {
         }
       });
     }
-    else if (reportedBy === 'GUARANTOR') {
+    else if (reportedBy === 'GUARANTOR' && this.reportedByForm.get('agreementId').value) {
       const agreementId = this.reportedByForm.get('agreementId').value;
       let agreement = this.propertyTenancyDetails.find(function (tenancy) {
         return (tenancy.agreementId == agreementId)
@@ -992,4 +1000,7 @@ export class DetailsPage implements OnInit {
     this.router.navigate(['faults/dashboard'], { replaceUrl: true });
   }
 
+  ngOnDestroy() {
+    this.backbuttonSubscription.unsubscribe();
+}
 }
