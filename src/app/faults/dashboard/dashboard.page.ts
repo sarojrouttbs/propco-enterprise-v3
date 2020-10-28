@@ -271,6 +271,12 @@ export class DashboardPage implements OnInit {
     }
   }
 
+  showNoteDescription(noteText): void{
+    if (noteText) {
+      this.commonService.showAlert('Notes', noteText);
+    }
+  }
+
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
     this.notesDtTrigger.unsubscribe();

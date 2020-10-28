@@ -41,42 +41,42 @@
             </ion-col>
           </ion-row>
           <ion-row class="fault-data-row">
-            <ion-col size-xl="25" size="33.3">
+            <ion-col size-lg="25" size="33.3">
               <span class="text">Office</span>
               <br />
               {{getLookupValue(propertyDetails.office, officeCodes) || 'N/A'}}
             </ion-col>
-            <ion-col size-xl="25" size="33.3">
+            <ion-col size-lg="25" size="33.3">
               <span class="text">Management Service</span>
               <br />
               {{propertyDetails.managementTypeDescription || 'N/A'}}
             </ion-col>
-            <ion-col size-xl="25" size="33.3">
+            <ion-col size-lg="25" size="33.3">
               <span class="text">Property Manager</span>
               <br />
               {{propertyDetails.propertyManager || 'N/A'}}
             </ion-col>
-            <ion-col size-xl="25" size="33.3">
+            <ion-col size-lg="25" size="33.3">
               <span class="text">Occupancy Status</span>
               <br />
               {{propertyDetails.isOwnerOccupied ? 'Landlord Occupied': propertyDetails.isPropertyCheckedIn ? 'Tenanted' : 'Vacant' }}
             </ion-col>
-            <ion-col size-xl="25" size="33.3">
+            <ion-col size-lg="25" size="33.3">
               <span class="text">Licence Details</span>
               <br />
               Has HMO License? {{ hmoDetails[0]?.isPropertyLicensed ? 'Yes' : 'No' }}
             </ion-col>
-            <ion-col size-xl="25" size="33.3">
+            <ion-col size-lg="25" size="33.3">
               <span class="text">Licence Scheme</span>
               <br />
               {{getLookupValue(hmoDetails[0]?.licenceSchemeLookup, hmoLicenceSchemes) || 'N/A'}}
             </ion-col>
-            <ion-col size-xl="25" size="33.3" *ngIf="faultId">
+            <ion-col size-lg="25" size="33.3" *ngIf="faultId">
               <span class="text">Reported On</span>
               <br />
               {{createdAt | date: 'dd/MM/yyyy HH:mm:ss' || '-'}}
             </ion-col>
-            <ion-col size-xl="25" size="33.3">
+            <ion-col size-lg="25" size="33.3">
               <span class="text">Rent Arrears</span>
               <br />
               {{propertyDetails?.tenantArrears || 0 | currency : "£" }}

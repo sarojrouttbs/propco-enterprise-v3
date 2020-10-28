@@ -271,16 +271,16 @@
                 </ion-col>
               </ion-row>
               <ion-row class="ion-justify-content-between">
-                <ion-col size-xl="80" size="80">
+                <ion-col size-xl="80" size-lg="70" size="80">
                   <div class="file-name">{{file.name}}</div>
                 </ion-col>
-                <ion-col size-xl="10" size="10" class="ion-text-end ion-no-padding" *ngIf="file.documentId">
+                <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding" *ngIf="file.documentId">
                   <ion-icon (click)="downloadFaultDocument(file.documentId, file.name)" title="Download File" class="download-icon" name="arrow-down-circle-outline"></ion-icon>
                 </ion-col>
-                <ion-col size-xl="10" size="10" class="ion-text-end ion-no-padding" *ngIf="file.documentUrl">
+                <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding" *ngIf="file.documentUrl">
                   <ion-icon (click)="downloadFaultDocumentByUrl(file.documentUrl)" title="Download File" class="download-icon" name="arrow-down-circle-outline"></ion-icon>
                 </ion-col>
-                <ion-col size-xl="10" size="10" class="ion-text-end ion-no-padding">
+                <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding">
                   <ion-icon (click)="removeFile(i)" title="Delete File" class="delete-icon" name="close-circle"></ion-icon>
                 </ion-col>
                </ion-row> 
@@ -428,8 +428,11 @@
         </ion-item>
         <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
       </ion-col>
-      <ion-col size="auto" class="ion-no-padding ion-align-self-center" offset="3" *ngIf="faultId">
-        <ion-button (click)="editTitle()">Edit</ion-button>
+      <ion-col size="auto" class="ion-align-self-center" offset="3" *ngIf="faultId">
+        <!-- <ion-icon name="create" (click)="editTitle()" style="font-size: 35px;"></ion-icon> -->
+        <span class="material-icons" (click)="editTitle()">
+          edit
+        </span>
       </ion-col>
     </ion-row>
   </ion-grid>

@@ -69,13 +69,13 @@
             style="width: 100%; position: relative" #faultNotesTable>
             <thead>
               <tr>
-                <th style="width:13%">Date</th>
-                <th style="width:13%">Time</th>
-                <th style="width:13%">Type</th>
-                <th style="width:13%">Complaint</th>
-                <th style="width:13%">Category</th>
-                <th style="width:13%">User</th>
-                <th style="width:22%">Notes</th>                
+                <th style="width:15%">Date</th>
+                <th style="width:15%">Time</th>
+                <th style="width:15%">Type</th>
+                <th style="width:15%">Complaint</th>
+                <th style="width:15%">Category</th>
+                <th>User</th>
+                <th style="width:40px">Notes</th>                
                 <!-- <th style="width:5%"></th> -->
               </tr>
             </thead>
@@ -87,7 +87,7 @@
                 <td>{{getLookupValue(notes.complaint, notesComplaints) || '-'}}</td>
                 <td>{{getLookupValue(notes.category, notesCategories) || '-'}}</td>
                 <td>{{getLookupValue(notes.user, userLookupDetails) || '-'}}</td>
-                <td>{{notes.notes|| '-'}}</td>
+                <td><i (click)="showNoteDescription(notes.notes);" class="propcoicon propcoicon-property-description"></i></td>
                 <!-- <td class="resp-action-icon">
                   <i (click)="showMenu($event,'divOverlay', notes, 'table-row')"
                     class="propcoicon propcoicon-actions-on"></i>
