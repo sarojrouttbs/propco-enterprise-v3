@@ -994,7 +994,7 @@ export class DetailsPage implements OnInit {
   }
 
   reOpenFault(){
-    this.commonService.showConfirm('Re-open Fault', 'This will reopen the fault and notify the property manager. Are you sure?').then(res => {
+    this.commonService.showConfirm('Re-open Fault', 'This will reopen the fault and notify the property manager.<br/> Are you sure?').then(res => {
       if (res) {
         const UNDER_REVIEW = 2; // Under review
         this.faultService.updateFaultStatus(this.faultId, UNDER_REVIEW).subscribe(data => {

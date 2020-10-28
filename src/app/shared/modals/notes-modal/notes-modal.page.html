@@ -56,7 +56,7 @@
         <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Notes</ion-label>
-            <ion-input formControlName="notes"></ion-input>
+            <ion-textarea formControlName="notes" spellcheck="true" rows="1"></ion-textarea>
           </ion-item>
           <app-validation-message [control]="notesForm.controls.notes"></app-validation-message>
         </ion-col>
