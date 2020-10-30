@@ -257,7 +257,7 @@
         <ion-col size-xl="20" size="25">
           <form class="drop-zone" [formGroup]="uploadDocForm" file-drop (files)="submit($event)">
             <ion-icon class="icon" name="cloud-upload"></ion-icon>
-            <input type="file" class="custom-file-input form-control" id="files" accept="image/x-png,image/jpeg,.pdf,image/gif,.bmp,.text,.doc,.csv,.docx,.odt" multiple (change)="submit($event.target.files)">
+            <input type="file" class="custom-file-input form-control" id="files" accept=".png,.jpeg,.pdf,.jpg,.gif,.bmp,.text,.doc,.csv,.docx,.odt"  multiple (change)="submit($event.target.files)">
             <span class="drag-text">Drag files to upload here</span> <br>
             <label for="files" class="browse-btn">Browse Files</label>
           </form>
@@ -277,7 +277,7 @@
                 <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding" *ngIf="file.documentId">
                   <ion-icon (click)="downloadFaultDocument(file.documentId, file.name)" title="Download File" class="download-icon" name="arrow-down-circle-outline"></ion-icon>
                 </ion-col>
-                <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding" *ngIf="file.documentUrl">
+                <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding" *ngIf="file.documentUrl && file.documentId == 'null'">
                   <ion-icon (click)="downloadFaultDocumentByUrl(file.documentUrl)" title="Download File" class="download-icon" name="arrow-down-circle-outline"></ion-icon>
                 </ion-col>
                 <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding">
@@ -288,7 +288,7 @@
           </div>
         </ion-col>
       </ion-row>
-      <!-- <button (click)="uploadFile()">Upload</button> -->
+      <!-- <button (click)="uploadFiles()">Upload</button> -->
     </ion-grid>
   </form>
 </ng-template>
