@@ -515,9 +515,191 @@
 </ng-template>
 
 <ng-template #landlordInstructions>
-  <ion-card class="ion-no-margin">
-    <h2 class="ion-text-center">This page is in pogress...</h2>
-  </ion-card>
+  <ion-grid style="margin-bottom:10px">
+    <ion-row class="ion-justify-content-start">
+      <ion-col size="auto">
+        <h2>
+          <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>{{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text color="success">&gt;</ion-text></h2>
+      </ion-col>
+      <ion-col size="auto">
+        <ion-item class="edit-title" *ngIf="isEditable">
+          <ion-input #title [value] ="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0" (ionBlur)="changeTitle(title.value)"></ion-input>
+        </ion-item>
+        <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
+      </ion-col>
+      <ion-col size="auto" class="ion-align-self-center" offset="3" *ngIf="faultId">
+        <span class="material-icons" (click)="editTitle()">
+          edit
+        </span>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="100">
+        <div class="landlord-instructions">
+          <div class="banner">
+            <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
+            <ion-button color="success" class="icon-button">Proceed with work order <ion-icon name="checkmark-circle-outline"></ion-icon> </ion-button>
+            <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-button color="success" fill="outline" >Pass to Landlord to do their own repairs</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button color="success" fill="outline" >Obtain Landlord authorisation</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button color="success" fill="outline" >Obtain Quote</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button color="success" fill="outline" >Emergency / Urgent - proceed as necessary</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <div class="banner">
+            <h2 class="banner-heading">Awaiting response</h2>
+            <h6 class="banner-title">Here’s the action you choose:</h6>
+            <ion-button color="success" class="icon-button">Pass to Landlord to do their own repairs <ion-icon name="checkmark-circle-outline"></ion-icon> </ion-button>
+            <h6 class="banner-title"> <strong>Awaiting response from the Landlord</strong> </h6>
+            <h6 class="banner-title">Next chase due: 15th Oct 2020, 09:30</h6>
+          </div>
+          <div class="question-answer">
+            <h6>Does the landlord want to proceed with their own repairs?</h6>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-button color="success">Yes, Landlord wants to do their own repairs</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button color="success" >No, continue with CW Contractors</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <h6>
+              <ion-text color="danger">Please note:</ion-text> 
+              The fault will beclosed automatically if the Landlord does
+            not respond within 18 working hours.
+            </h6>
+            <div class="border-bottom"></div>
+          </div>
+          <div class="question-answer">
+            <h6>Want to proceed in a different way? Choose one of the following instead:</h6>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-button color="success" fill="outline" >Pass to Landlord to do their own repairs</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button color="success" fill="outline" >Obtain Landlord authorisation</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button color="success" fill="outline" >Obtain Quote</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button color="success" fill="outline" >Emergency / Urgent - proceed as necessary</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+
+          <div class="contractor-selection">
+            <form>
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="50">
+                    <ion-item>
+                      <ion-label position="floating">Select Contractor</ion-label>
+                      <ion-select interface="popover">
+                        <ion-select-option>Choose</ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="50">
+                    <ion-item>
+                      <ion-label position="floating">Confirmed Estimate</ion-label>
+                      <ion-input></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="stacked">Notes</ion-label>
+                    <ion-textarea placeholder="Enter more information here..."></ion-textarea>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </form>
+          </div>
+
+          <div class="landlord-preferences">
+            <ion-grid class="view-details" style="width: 100%;">
+              <ion-row class="ion-justify-content-between">
+                <h2 class="banner-heading">Landlord preferences and other information</h2>
+                <!-- <ion-col size="100">
+                  <div class="sub-heading">Fault Details</div>
+                </ion-col> -->
+                <ion-col size-xs="100" class="header-content">
+                  <ion-text class="header">Contractor Instructions</ion-text><br />
+                  <ion-text class="content">Landlord does their own repairs</ion-text>
+                </ion-col>
+                <ion-col size-xs="100" size-sm="50" class="header-content">
+                  <ion-text class="header">Branch holds management keys?</ion-text><br />
+                  <ion-text class="content">Yes</ion-text>
+                </ion-col>
+                <ion-col size-xs="100" size-sm="50" class="header-content">
+                  <ion-text class="header">Expenditure Limit</ion-text><br />
+                  <ion-text class="content">£500</ion-text>
+                </ion-col>
+                <ion-col size-xs="100" size-sm="50" class="header-content">
+                  <ion-text class="header">Vulnerable Tenant</ion-text><br />
+                  <ion-text class="content">Yes</ion-text>
+                </ion-col>
+                <ion-col size-xs="100" size-sm="50" class="header-content">
+                  <ion-text class="header">Tenant allows access</ion-text><br />
+                  <ion-text class="content">Yes</ion-text>
+                </ion-col>
+                <ion-col size="100" class="border-bottom"></ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+
+          <div class="preferred-supplier">
+            <h2>Preferred Suppliers</h2>
+            <table>
+              <tr>
+                <th>REF</th>
+                <th>SUPPLIER / CONTRACTOR</th>
+                <th>TRADE</th>
+              </tr>
+              <tr>
+                <td>C5873586</td>
+                <td>Rawlsby </td>
+                <td>Electrical</td>
+              </tr>
+              <tr>
+                <td>C5873586</td>
+                <td>Rawlsby </td>
+                <td>Electrical</td>
+              </tr>
+              <tr>
+                <td>C5873586</td>
+                <td>Rawlsby </td>
+                <td>Electrical</td>
+              </tr>
+              <tr>
+                <td>C5873586</td>
+                <td>Rawlsby </td>
+                <td>Electrical</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ng-template>
 
 <ng-template #arrangingContractor>
@@ -662,7 +844,7 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step aria-labelledby="disabled_stepper_step">
+            <mat-step>
               <ng-container *ngTemplateOutlet="landlordInstructions"></ng-container>
               <ng-template matStepLabel>Landlord Instructions</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
