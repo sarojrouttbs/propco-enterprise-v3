@@ -120,6 +120,14 @@ export class FaultsService {
     return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/details`, requestObj);
   }
 
+  getLandlordDetails(landlordId:string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `landlords/${landlordId}`);
+  }
+
+  getPreferredSuppliers(landlordId:string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `landlords/${landlordId}/preferred-contractors`);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
