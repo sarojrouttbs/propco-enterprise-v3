@@ -2,6 +2,7 @@ import { PROPCO } from './../../constants';
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 import { FormGroup } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-property-details',
@@ -24,7 +25,7 @@ export class PropertyDetailsComponent implements OnInit {
   hmoLicenceSchemes: any[];
   faultUrgencyStatuses: any[];
 
-  constructor(public commonService: CommonService) {
+  constructor(public commonService: CommonService, public sanitizer: DomSanitizer) {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
     if (this.lookupdata) {
       this.setLookupData();
