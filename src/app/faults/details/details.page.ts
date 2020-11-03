@@ -86,7 +86,7 @@ export class DetailsPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private modalController: ModalController,
-    private sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer
   ) {
   }
 
