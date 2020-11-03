@@ -542,8 +542,10 @@ export class DetailsPage implements OnInit {
         res => {
           let categoryNames = [];
           this.landlordDetails = res ? res : [];
-          for (let category of this.landlordDetails.repairCategories) {
-            categoryNames.push(this.commonService.getLookupValue(category, this.faultCategories));
+          if (this.landlordDetails.repairCategories) {
+            for (let category of this.landlordDetails.repairCategories) {
+              categoryNames.push(this.commonService.getLookupValue(category, this.faultCategories));
+            }
           }
           this.landlordDetails.repairCategoriesText = categoryNames;
           resolve(this.landlordDetails);
