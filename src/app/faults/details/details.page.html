@@ -540,11 +540,23 @@
         <div class="landlord-instructions">
           <div class="banner">
             <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
-            <ion-button color="success" class="icon-button">Proceed with work order <ion-icon name="checkmark-circle-outline"></ion-icon> </ion-button>
+            <ion-button color="success" class="icon-button" (click)="setUserAction(suggestedAction)" 
+                  fill="{{(faultDetails?.userSelectedAction == suggestedAction) ? 'solid' :'outline'}}">
+               {{getLookupValue(suggestedAction, landlordInstructionTypes)}} 
+               <ion-icon name="checkmark-circle-outline" *ngIf="(faultDetails?.userSelectedAction == suggestedAction)" ></ion-icon> 
+            </ion-button>
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
               <ion-row>
-                <ion-col>
+                <ng-container *ngFor="let instruction of landlordInstructionTypes">
+                  <ion-col *ngIf="suggestedAction!= instruction.index">
+                    <ion-button color="success" fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}" (click)="setUserAction(instruction.index)">
+                      {{instruction.value}} 
+                      <ion-icon name="checkmark-circle-outline" *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+                </ng-container>
+                <!-- <ion-col>
                   <ion-button color="success" fill="outline" >Pass to Landlord to do their own repairs</ion-button>
                 </ion-col>
                 <ion-col>
@@ -555,11 +567,11 @@
                 </ion-col>
                 <ion-col>
                   <ion-button color="success" fill="outline" >Emergency / Urgent - proceed as necessary</ion-button>
-                </ion-col>
+                </ion-col> -->
               </ion-row>
             </ion-grid>
           </div>
-          <div class="banner">
+          <!-- <div class="banner">
             <h2 class="banner-heading">Awaiting response</h2>
             <h6 class="banner-title">Here’s the action you choose:</h6>
             <ion-button color="success" class="icon-button">Pass to Landlord to do their own repairs <ion-icon name="checkmark-circle-outline"></ion-icon> </ion-button>
@@ -584,7 +596,7 @@
             not respond within 18 working hours.
             </h6>
             <div class="border-bottom"></div>
-          </div>
+          </div> 
           <div class="question-answer">
             <h6>Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
@@ -603,7 +615,7 @@
                 </ion-col>
               </ion-row>
             </ion-grid>
-          </div>
+          </div> -->
 
           <div class="contractor-selection">
             <form>
@@ -637,35 +649,35 @@
           <div class="landlord-preferences">
             <ion-grid class="view-details" style="width: 100%;">
               <ion-row class="ion-justify-content-between">
-                <h2 class="banner-heading">Landlord preferences and other information</h2>
-                <!-- <ion-col size="100">
-                  <div class="sub-heading">Fault Details</div>
-                </ion-col> -->
+                <h2 class="banner-heading">Landlord preferences and other information </h2>
+                
                 <ion-col size-xs="100" class="header-content">
                   <ion-text class="header">Contractor Instructions</ion-text><br />
-                  <ion-text class="content">Landlord does their own repairs</ion-text>
+                  <ion-text class="content">
+                    {{landlordDetails?.doesOwnRepairs ? 'Landlord does their own repairs' : 'Landlord does not do their own repairs'}}
+                  </ion-text>
+                  <ion-button color="success" fill="outline" matTooltip="{{landlordDetails?.repairCategoriesText}}">Repair Categories</ion-button>
                 </ion-col>
                 <ion-col size-xs="100" size-sm="50" class="header-content">
                   <ion-text class="header">Branch holds management keys?</ion-text><br />
-                  <ion-text class="content">Yes</ion-text>
+                  <ion-text class="content">N/A</ion-text>
                 </ion-col>
                 <ion-col size-xs="100" size-sm="50" class="header-content">
                   <ion-text class="header">Expenditure Limit</ion-text><br />
-                  <ion-text class="content">£500</ion-text>
+                  <ion-text class="content">{{propertyDetails?.expenditureLimit | currency: '£'}}</ion-text>
                 </ion-col>
                 <ion-col size-xs="100" size-sm="50" class="header-content">
                   <ion-text class="header">Vulnerable Tenant</ion-text><br />
-                  <ion-text class="content">Yes</ion-text>
+                  <ion-text class="content">{{accessInfoForm?.controls?.areOccupiersVulnerable?.value ? 'Yes' : 'No'}}</ion-text>
                 </ion-col>
                 <ion-col size-xs="100" size-sm="50" class="header-content">
                   <ion-text class="header">Tenant allows access</ion-text><br />
-                  <ion-text class="content">Yes</ion-text>
+                  <ion-text class="content">{{accessInfoForm?.controls?.isTenantPresenceRequired?.value ? 'Yes' : 'No'}}</ion-text>
                 </ion-col>
                 <ion-col size="100" class="border-bottom"></ion-col>
               </ion-row>
             </ion-grid>
           </div>
-
           <div class="preferred-supplier">
             <h2>Preferred Suppliers</h2>
             <table>
@@ -674,7 +686,15 @@
                 <th>SUPPLIER / CONTRACTOR</th>
                 <th>TRADE</th>
               </tr>
+              <tr *ngFor="let supplier of preferredSuppliers">
+                <td>{{supplier.reference}}</td>
+                <td>{{supplier.company}}</td>
+                <td>{{supplier.occupation}}</td>
+              </tr>
               <tr>
+
+              </tr>
+              <!-- <tr>
                 <td>C5873586</td>
                 <td>Rawlsby </td>
                 <td>Electrical</td>
@@ -683,17 +703,7 @@
                 <td>C5873586</td>
                 <td>Rawlsby </td>
                 <td>Electrical</td>
-              </tr>
-              <tr>
-                <td>C5873586</td>
-                <td>Rawlsby </td>
-                <td>Electrical</td>
-              </tr>
-              <tr>
-                <td>C5873586</td>
-                <td>Rawlsby </td>
-                <td>Electrical</td>
-              </tr>
+              </tr> -->
             </table>
           </div>
         </div>
