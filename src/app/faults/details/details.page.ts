@@ -95,7 +95,7 @@ export class DetailsPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private modalController: ModalController,
-    private sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer
   ) {
     this.initContractorForm();
     this.selectedContractor = this.contractorSearchForm.get('text').valueChanges.pipe(debounceTime(300),
@@ -252,9 +252,9 @@ export class DetailsPage implements OnInit {
         this.getReportedByIdList();
         this.checkForLLSuggestedAction();
         let propertyLandlords = await this.getLandlordsOfProperty(this.propertyId);
-        // let landlordId = propertyLandlords[0].landlordId;
-        let landlordId = 'cd2766b6-525c-11e9-9cbf-0cc47a54d954';
-        this.getLandlordDetails('156b9215-525e-11e9-9cbf-0cc47a54d954');
+        let landlordId = propertyLandlords[0].landlordId;
+        // let landlordId = 'cd2766b6-525c-11e9-9cbf-0cc47a54d954';
+        this.getLandlordDetails(landlordId);
         this.getPreferredSuppliers(landlordId);
       }
     });
