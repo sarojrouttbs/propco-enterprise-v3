@@ -56,8 +56,9 @@ export class DashboardPage implements OnInit {
       processing: true,
       searching: false,
       ordering: false,
-      pageLength: 10,
+      pageLength: 5,
       // responsive: true,
+      lengthMenu:[5, 10, 15],
       ajax: (tableParams: any, callback) => {
         const params = new HttpParams()
           .set('limit', tableParams.length)
@@ -125,7 +126,9 @@ export class DashboardPage implements OnInit {
       paging: true,
       searching: false,
       ordering: false,
-      responsive: true
+      responsive: true,
+      lengthMenu:[5, 10, 15],
+      pageLength: 5,
     };
   }
 
@@ -173,7 +176,7 @@ export class DashboardPage implements OnInit {
 
     modal.onDidDismiss().then(res => {
       if (res.data == 'success') {
-        this.commonService.showAlert('Escalate Fault', 'Fault has been escalated to the Property Manager');
+        this.commonService.showAlert('Escalate Fault', 'Fault has been escalated to the property manager.');
         this.rerenderFaults(false);
         this.getFaultNotes(this.selectedData.faultId);
         this.hideMenu('', 'divOverlay');
@@ -186,6 +189,7 @@ export class DashboardPage implements OnInit {
     this.commonService.showConfirm('De-Escalate Fault', 'Are you sure, you want to de-escalate the fault?', '', 'Yes', 'No').then(res => {
       if (res) {
         this.faultsService.deEscalateFault(this.selectedData.faultId, {}).subscribe(res => {
+          this.commonService.showAlert('De-Escalate Fault', 'Fault has been de-escalated to the property manager.');
           this.rerenderFaults(false);
           this.hideMenu('', 'divOverlay');
         }, error => {
