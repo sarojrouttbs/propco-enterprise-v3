@@ -4,10 +4,12 @@ import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYP
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin,Observable } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { IPropertyResponse } from './details-model';
+import { debounceTime, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'fault-details',
@@ -31,6 +33,9 @@ export class DetailsPage implements OnInit {
   reportedByForm: FormGroup;
   accessInfoForm: FormGroup;
   uploadDocForm: FormGroup;
+  selectedContractor: Observable<IPropertyResponse>;
+  contractorSearchForm: FormGroup;
+  contractorId;
 
   //MAT TABS//
   caseDetail: FormGroup;
@@ -92,6 +97,11 @@ export class DetailsPage implements OnInit {
     private modalController: ModalController,
     private sanitizer: DomSanitizer
   ) {
+    this.initContractorForm();
+    this.selectedContractor = this.contractorSearchForm.get('text').valueChanges.pipe(debounceTime(300),
+      switchMap((value: string) => (value.length > 2) ? this.faultService.searchContractorByText(value) :
+      new Observable())
+    );
   }
 
   ionViewDidEnter() {
@@ -114,6 +124,15 @@ export class DetailsPage implements OnInit {
     }
   }
 
+  displayFn(subject){
+    return subject ? subject.fullName + ',' + ' ' + subject.reference + ',' + ' ' + subject.status : undefined ;
+  }
+
+  onSelectionChange(data) {
+    if (data) {
+      this.contractorId = data.option.value.entityId;
+    }
+  }
 
   private getLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -198,6 +217,12 @@ export class DetailsPage implements OnInit {
   private initUploadDocForm(): void {
     this.uploadDocForm = this.fb.group({
       photos: this.fb.array([])
+    });
+  }
+
+  private initContractorForm(): void {
+    this.contractorSearchForm = this.fb.group({
+      text:''
     });
   }
 

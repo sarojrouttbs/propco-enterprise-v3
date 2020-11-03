@@ -78,6 +78,17 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params: params });
   }
 
+  searchContractorByText(text: string): Observable<any> {
+    let params = new HttpParams()
+      .set('limit', '10')
+      .set('page', '1')
+      .set('text', text)
+      .set('types', 'CONTRACTOR')
+    return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params: params });
+  }
+
+
+
   getTenantArrearsDetails(tenantId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}/arrears`);
   }
