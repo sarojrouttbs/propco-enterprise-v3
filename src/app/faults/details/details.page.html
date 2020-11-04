@@ -566,45 +566,46 @@
               </ion-row>
             </ion-grid>
           </div>
-
-          <div class="banner">
-            <h2 class="banner-heading">Awaiting response</h2>
-            <h6 class="banner-title">Here’s the action you choose:</h6>
-            <ion-button color="success" class="icon-button">Pass to Landlord to do their own repairs <ion-icon name="checkmark-circle-outline"></ion-icon> </ion-button>
-            <h6 class="banner-title"> <strong>Awaiting response from the Landlord</strong> </h6>
-            <h6 class="banner-title">Next chase due: {{faultNotifications ? faultNotifications[0].nextChaseDueAt : ''}}</h6>
-          </div>
-          <div class="question-answer" *ngIf="notificationQuesAnswer">
-            <h6>{{notificationQuesAnswer.question}}</h6>
-            <ion-grid>
-              <ion-row>
-                <ng-container *ngFor="let data of notificationQuesAnswer.options">
-                  <ion-col>
-                    <ion-button color="success" fill="{{data?.isAccepted ? 'solid' :'outline'}}">{{data.text}}</ion-button>
-                  </ion-col>
-                </ng-container>
-              </ion-row>
-            </ion-grid>
-            <h6>
-              <ion-text color="danger">Please note:</ion-text> 
-              The fault will beclosed automatically if the Landlord doesn't respond within 18 working hours.
-            </h6>
-            <div class="border-bottom"></div>
-          </div> 
-          <div class="question-answer">
-            <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
-            <ion-grid>
-              <ion-row>
-                <ng-container *ngFor="let instruction of landlordInstructionTypes">
-                  <ion-col *ngIf="suggestedAction!= instruction.index">
-                    <ion-button color="success" expand="block" fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}" (click)="setUserAction(instruction.index)">
-                      {{instruction.value}} 
-                      <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
-                    </ion-button>
-                  </ion-col>
-                </ng-container>
-              </ion-row>
-            </ion-grid>
+          <div *ngIf="faultDetails?.status == 15">
+            <div class="banner">
+              <h2 class="banner-heading">Awaiting response</h2>
+              <h6 class="banner-title">Here’s the action you choose:</h6>
+              <ion-button color="success" class="icon-button">Pass to Landlord to do their own repairs <ion-icon name="checkmark-circle-outline"></ion-icon> </ion-button>
+              <h6 class="banner-title"> <strong>Awaiting response from the Landlord</strong> </h6>
+              <h6 class="banner-title">Next chase due: {{faultNotifications ? faultNotifications[0].nextChaseDueAt : ''}}</h6>
+            </div>
+            <div class="question-answer" *ngIf="notificationQuesAnswer">
+              <h6>{{notificationQuesAnswer.question}}</h6>
+              <ion-grid>
+                <ion-row>
+                  <ng-container *ngFor="let data of notificationQuesAnswer.options">
+                    <ion-col>
+                      <ion-button color="success" fill="{{data?.isAccepted ? 'solid' :'outline'}}">{{data.text}}</ion-button>
+                    </ion-col>
+                  </ng-container>
+                </ion-row>
+              </ion-grid>
+              <h6>
+                <ion-text color="danger">Please note:</ion-text> 
+                The fault will beclosed automatically if the Landlord doesn't respond within 18 working hours.
+              </h6>
+              <div class="border-bottom"></div>
+            </div> 
+            <div class="question-answer">
+              <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
+              <ion-grid>
+                <ion-row>
+                  <ng-container *ngFor="let instruction of landlordInstructionTypes">
+                    <ion-col *ngIf="suggestedAction!= instruction.index">
+                      <ion-button color="success" expand="block" fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}" (click)="setUserAction(instruction.index)">
+                        {{instruction.value}} 
+                        <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
+                      </ion-button>
+                    </ion-col>
+                  </ng-container>
+                </ion-row>
+              </ion-grid>
+            </div>
           </div>
 
           <div class="contractor-selection">
