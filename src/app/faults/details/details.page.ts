@@ -1,13 +1,14 @@
 import { ModalController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES } from './../../shared/constants';
-import { Component, OnInit } from '@angular/core';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX } from './../../shared/constants';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'fault-details',
@@ -15,7 +16,8 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./details.page.scss', '../../shared/drag-drop.scss'],
 })
 export class DetailsPage implements OnInit {
-
+  @ViewChild("stepper", { static: false }) stepper: MatStepper;
+  currentStepperIndex = 0;
   faultCategories: any[] = [];
   pageNo = 1;
   propertyId = null;
@@ -205,6 +207,7 @@ export class DetailsPage implements OnInit {
     if (this.faultId) {
       this.goToPage(3);
       const details: any = await this.getFaultDetails();
+      this.selectStageStepper(details.stage);
       this.faultDetails = details;
       this.propertyId = details.propertyId;
       this.getFaultDocuments(this.faultId);
@@ -233,6 +236,35 @@ export class DetailsPage implements OnInit {
         this.getPreferredSuppliers(landlordId);
       }
     });
+  }
+
+  selectStageStepper(stage: any) {
+    switch (stage) {
+      case FAULT_STAGES.FAULT_QUALIFICATION: {
+        this.changeStep(FAULT_STAGES_INDEX.FAULT_QUALIFICATION);
+        break;
+      }
+      case FAULT_STAGES.LANDLORD_INSTRUCTION: {
+        this.changeStep(FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION);
+        break;
+      }
+      case FAULT_STAGES.ARRANGING_CONTRACTOR: {
+        this.changeStep(FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR);
+        break;
+      }
+      case FAULT_STAGES.JOB_COMPLETION: {
+        this.changeStep(FAULT_STAGES_INDEX.JOB_COMPLETION);
+        break;
+      }
+      case FAULT_STAGES.PAYMENT: {
+        this.changeStep(FAULT_STAGES_INDEX.PAYMENT);
+        break;
+      }
+      default: {
+        this.changeStep(FAULT_STAGES_INDEX.FAULT_LOGGED);
+        break;
+      }
+    }
   }
 
   private initPatching(): void {
@@ -973,7 +1005,9 @@ export class DetailsPage implements OnInit {
         }
       );
     } else {
-      await this.saveAdditionalInfoForm();
+      if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_LOGGED) {
+        await this.saveAdditionalInfoForm();
+      }
       /*update fault summary*/
       this.updateFaultSummary();
     }
@@ -983,12 +1017,21 @@ export class DetailsPage implements OnInit {
     this.commonService.showLoader();
     let faultRequestObj = this.createFaultFormValues();
     faultRequestObj.isDraft = this.faultDetails.isDraft;
+    if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
+      delete faultRequestObj.stage;
+      delete faultRequestObj.isDraft;
+      faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+    }
 
     this.faultService.updateFault(this.faultId, faultRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
         this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
-        this.uploadFiles(this.faultId);
+        if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_LOGGED) {
+          this.uploadFiles(this.faultId);
+        } else {
+          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+        }
       },
       error => {
         this.commonService.hideLoader();
@@ -1057,10 +1100,10 @@ export class DetailsPage implements OnInit {
     this.faultDetails.userSelectedAction = index;
   }
 
-  private checkForLLSuggestedAction(){
+  private checkForLLSuggestedAction() {
     this.suggestedAction = '';
     let confirmedEstimate = this.faultDetails.confirmedEstimate || 0;
-    if(confirmedEstimate <= this.propertyDetails.expenditureLimit){
+    if (confirmedEstimate <= this.propertyDetails.expenditureLimit) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[1].index;
     }
   }
@@ -1069,5 +1112,35 @@ export class DetailsPage implements OnInit {
     this.router.navigate(['faults/dashboard'], { replaceUrl: true });
   }
 
+  changeStep(index: number) {
+    this.stepper.selectedIndex = index;
+  }
+
+  proceedToNextStage() {
+    this.commonService.showConfirm('Proceed', 'This will change the fault stage, Do you want to continue?').then(res => {
+      if (res) {
+        this.commonService.showLoader();
+        let faultRequestObj = this.createFaultFormValues();
+        delete faultRequestObj.isDraft;
+        if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
+          faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+          faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+        } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
+          faultRequestObj.stage = FAULT_STAGES.FAULT_QUALIFICATION;
+        }
+
+        this.faultService.updateFault(this.faultId, faultRequestObj).subscribe(
+          res => {
+            this.commonService.hideLoader();
+            this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
+          },
+          error => {
+            this.commonService.hideLoader();
+            console.log(error);
+          }
+        );
+      }
+    });
+  }
 
 }
