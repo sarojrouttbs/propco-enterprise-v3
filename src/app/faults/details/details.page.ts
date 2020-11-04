@@ -1025,8 +1025,8 @@ export class DetailsPage implements OnInit {
     let faultRequestObj = this.createFaultFormValues();
     faultRequestObj.isDraft = this.faultDetails.isDraft;
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
-      delete faultRequestObj.stage;
-      delete faultRequestObj.isDraft;
+      faultRequestObj.stage = this.faultDetails.stage;
+      faultRequestObj.isDraft = this.faultDetails.isDraft;
       faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
     }
 
@@ -1163,7 +1163,7 @@ export class DetailsPage implements OnInit {
       return;
     }
     // const res = await this.commonService.showConfirm('Proceed', 'This will change the fault stage, Do you want to continue?');
-    this.commonService.showLoader();
+    // this.commonService.showLoader();
     let faultRequestObj = this.createFaultFormValues();
     faultRequestObj.isDraft = this.faultDetails.isDraft;
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
@@ -1171,13 +1171,14 @@ export class DetailsPage implements OnInit {
       let res = await this.updateFaultDetails(faultRequestObj);
       if (res) {
         this.stepper.selectedIndex = FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION;
+        this.faultDetails.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
       }
     }
     else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
 
       switch (this.faultDetails.userSelectedAction) {
         case LL_INSTRUCTION_TYPES[1].index: //cli006b
-          var response = await this.commonService.showAlert('Proceed', 'You have selected the "Proceed with Worksorder" action. This will send out a notification to Landlord, Tenant and a Contractor. Are you sure?');
+          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action. This will send out a notification to Landlord, Tenant and a Contractor. Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
@@ -1188,7 +1189,7 @@ export class DetailsPage implements OnInit {
           }
           break;
         case LL_INSTRUCTION_TYPES[2].index: //cli006c
-          var response = await this.commonService.showAlert('Proceed', 'You have selected the "Obtain Quote" action. Are you sure');
+          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action. Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
@@ -1199,7 +1200,7 @@ export class DetailsPage implements OnInit {
           }
           break;
         case LL_INSTRUCTION_TYPES[4].index: //cli006e
-          var response = await this.commonService.showAlert('Proceed', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action. Are you sure?');
+          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action. Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
@@ -1210,7 +1211,7 @@ export class DetailsPage implements OnInit {
           }
           break;
         case LL_INSTRUCTION_TYPES[0].index: //cli006a
-          var response = await this.commonService.showAlert('Proceed', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. Are you sure?');
+          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
@@ -1223,6 +1224,9 @@ export class DetailsPage implements OnInit {
         case LL_INSTRUCTION_TYPES[3].index: //cli006d
           break;
         case LL_INSTRUCTION_TYPES[5].index: //cli006f
+          break;
+          default: 
+          this.commonService.showAlert('Landlord Instructions', 'Please select any action');
           break;
 
       }
