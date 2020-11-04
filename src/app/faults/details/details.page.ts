@@ -1,6 +1,6 @@
 import { ModalController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX } from './../../shared/constants';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES } from './../../shared/constants';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -62,7 +62,7 @@ export class DetailsPage implements OnInit {
   tenantIds: any[] = [];
   preferredSuppliers: any[] = [];
   tenantArrears: any;
-  faultDetails: any;
+  faultDetails: FaultModels.IFaultResponse;
   landlordDetails: any;
   isEditable = false;
   landlordInstructionTypes = LL_INSTRUCTION_TYPES;
@@ -213,7 +213,7 @@ export class DetailsPage implements OnInit {
       this.getFaultDocuments(this.faultId);
       this.getFaultHistory();
     } else {
-      this.faultDetails = {};
+      this.faultDetails = <FaultModels.IFaultResponse>{};
       this.faultDetails.status = 1;
     }
     this.commonService.showLoader();
@@ -645,7 +645,7 @@ export class DetailsPage implements OnInit {
       const formData = new FormData();
       formData.append('file', data.file);
       formData.append('name', data.file.name);
-      formData.append('folderName', this.faultDetails.status || '1');
+      formData.append('folderName', this.faultDetails.status + '' || '1');
       formData.append('headCategory', 'Legal');
       formData.append('subCategory', 'Addendum');
       apiObservableArray.push(this.faultService.uploadDocument(formData, faultId));
@@ -1104,9 +1104,15 @@ export class DetailsPage implements OnInit {
 
   private checkForLLSuggestedAction() {
     this.suggestedAction = '';
-    let confirmedEstimate = this.faultDetails.confirmedEstimate || 0;
-    if (confirmedEstimate <= this.propertyDetails.expenditureLimit) {
+    let confirmedEstimate = this.faultDetails.confirmedEstimate || 500;
+    if (this.faultDetails.urgencyStatus === URGENCY_TYPES.EMERGENCY || this.faultDetails.urgencyStatus === URGENCY_TYPES.URGENT) {
+      this.suggestedAction = LL_INSTRUCTION_TYPES[4].index;
+    }
+    else if (confirmedEstimate <= this.propertyDetails.expenditureLimit) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[1].index;
+    }
+    else if (confirmedEstimate > this.propertyDetails.expenditureLimit) {
+      this.suggestedAction = LL_INSTRUCTION_TYPES[2].index;
     }
   }
 
@@ -1114,35 +1120,118 @@ export class DetailsPage implements OnInit {
     this.router.navigate(['faults/dashboard'], { replaceUrl: true });
   }
 
-  changeStep(index: number) {
+  private changeStep(index: number) {
     this.stepper.selectedIndex = index;
   }
 
-  proceedToNextStage() {
-    this.commonService.showConfirm('Proceed', 'This will change the fault stage, Do you want to continue?').then(res => {
+  goToLastStage() {
+    if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
+      this.stepper.selectedIndex = FAULT_STAGES_INDEX.FAULT_LOGGED;
+    }
+  }
+
+  async proceedToNextStage() {
+    if (this.stepper.selectedIndex < FAULT_STAGES_INDEX[this.faultDetails.stage]) {
+      this.stepper.selectedIndex = this.stepper.selectedIndex + 1;
+      return;
+    }
+    // const res = await this.commonService.showConfirm('Proceed', 'This will change the fault stage, Do you want to continue?');
+    // if (res) {
+    this.commonService.showLoader();
+    let faultRequestObj = this.createFaultFormValues();
+    faultRequestObj.isDraft = this.faultDetails.isDraft;
+    if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
+      faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+      let res = await this.updateFaultDetails(faultRequestObj);
       if (res) {
-        this.commonService.showLoader();
-        let faultRequestObj = this.createFaultFormValues();
-        delete faultRequestObj.isDraft;
-        if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
+        this.stepper.selectedIndex = FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION;
+      }
+    }
+    else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
+
+      switch (this.faultDetails.userSelectedAction) {
+        case LL_INSTRUCTION_TYPES[1].index: //cli006b
+          var response = await this.commonService.showAlert('Proceed', 'You have selected the "Proceed with Worksorder" action. This will send out a notification to Landlord, Tenant and a Contractor. Are you sure?');
+          if (response) {
+            faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
+            faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+            let res = await this.updateFaultDetails(faultRequestObj);
+            if (res) {
+              this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+            }
+          }
+          break;
+        case LL_INSTRUCTION_TYPES[2].index: //cli006c
+          var response = await this.commonService.showAlert('Proceed', 'You have selected the "Obtain Quote" action. Are you sure');
+          if (response) {
+            faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
+            faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+            let res = await this.updateFaultDetails(faultRequestObj);
+            if (res) {
+              this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+            }
+          }
+          break;
+        case LL_INSTRUCTION_TYPES[4].index: //cli006e
+          var response = await this.commonService.showAlert('Proceed', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action. Are you sure?');
+          if (response) {
+            faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
+            faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+            const WORKS_ORDER_PENDING = 19;
+            forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(WORKS_ORDER_PENDING)]).subscribe(data=>{
+              this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+            });
+          }
+          break;
+        case LL_INSTRUCTION_TYPES[0].index: //cli006a
+        var response = await this.commonService.showAlert('Proceed', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. Are you sure?');
+        if (response) {
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
-        } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
-          faultRequestObj.stage = FAULT_STAGES.FAULT_QUALIFICATION;
+          const AWAITING_RESPONSE_LANDLORD = 15;
+          forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD)]).subscribe(data=>{
+            // this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+          });          
         }
+        
+        // You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. "Are you sure? "
+          break;
+        case LL_INSTRUCTION_TYPES[3].index: //cli006d
+          break;
+        case LL_INSTRUCTION_TYPES[5].index: //cli006f
+          break;
 
-        this.faultService.updateFault(this.faultId, faultRequestObj).subscribe(
-          res => {
-            this.commonService.hideLoader();
-            this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
-          },
-          error => {
-            this.commonService.hideLoader();
-            console.log(error);
-          }
-        );
       }
-    });
+      if (this.faultDetails.userSelectedAction !== LL_INSTRUCTION_TYPES[0].index)
+        faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+      faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+    }
+
+
+    // }
+
+  }
+
+  private updateFaultStatus(status): Promise<any> {
+    return this.faultService.updateFaultStatus(this.faultId, status).toPromise();
+  }
+
+  private updateFaultDetails(requestObj): Promise<any> {
+    // const promise = new Promise((resolve, reject)=>{
+
+    // });
+    return this.faultService.updateFault(this.faultId, requestObj).toPromise();
+    // this.faultService.updateFault(this.faultId, requestObj).subscribe(
+    //   res => {
+    //     this.commonService.hideLoader();
+    //     this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
+
+    //   },
+    //   error => {
+    //     this.commonService.hideLoader();
+    //     console.log(error);
+    //   }
+    // );
   }
 
 }
