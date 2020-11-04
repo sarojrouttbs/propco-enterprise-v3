@@ -510,7 +510,8 @@
 
 <ng-template #caseQualification>
   <ion-card class="ion-no-margin">
-    <h2 class="ion-text-center">This page is in pogress...</h2>
+    <!-- <h2 class="ion-text-center">This page is in pogress...</h2> -->
+    <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button>
   </ion-card>
 </ng-template>
 
@@ -705,6 +706,8 @@
                 <td>Electrical</td>
               </tr> -->
             </table>
+            <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
+            <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button>
           </div>
         </div>
       </ion-col>
@@ -835,6 +838,7 @@
           <mat-horizontal-stepper
             #stepper
             labelPosition="bottom"
+            [selectedIndex]="currentStepperIndex"
             >
             <mat-step>
               <ng-container *ngTemplateOutlet="caseLogged"></ng-container>
@@ -845,7 +849,8 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step aria-labelledby="disabled_stepper_step">
+            <mat-step>
+              <!-- <mat-step aria-labelledby="disabled_stepper_step"> -->
               <ng-container *ngTemplateOutlet="caseQualification"></ng-container>
               <ng-template matStepLabel>Case Qualification</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
