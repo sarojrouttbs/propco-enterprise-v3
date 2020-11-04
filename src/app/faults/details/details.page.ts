@@ -9,8 +9,6 @@ import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material/stepper';
-import { rejects } from 'assert';
-import { resolve } from 'dns';
 
 @Component({
   selector: 'fault-details',
