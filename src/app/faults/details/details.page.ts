@@ -66,7 +66,7 @@ export class DetailsPage implements OnInit {
   landlordDetails: any;
   isEditable = false;
   landlordInstructionTypes = LL_INSTRUCTION_TYPES;
-  suggestedAction;
+  suggestedAction; oldUserSelectedAction;
   faultNotifications: any[];
   notificationQuesAnswer: any;
 
@@ -1134,7 +1134,8 @@ export class DetailsPage implements OnInit {
 
     }
 
-    if (this.suggestedAction === LL_INSTRUCTION_TYPES[0].index && this.faultDetails.status === 15) {
+    this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
+    if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index && this.faultDetails.status === 15) {
       this.initLandlordInstructions(this.faultId);
     }
   }
