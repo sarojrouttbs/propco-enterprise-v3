@@ -551,9 +551,9 @@
               <ion-row>
                 <ng-container *ngFor="let instruction of landlordInstructionTypes">
                   <ion-col *ngIf="suggestedAction!= instruction.index">
-                    <ion-button color="success" fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}" (click)="setUserAction(instruction.index)">
+                    <ion-button color="success" expand="block" fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}" (click)="setUserAction(instruction.index)">
                       {{instruction.value}} 
-                      <ion-icon name="checkmark-circle-outline" *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
+                      <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
                     </ion-button>
                   </ion-col>
                 </ng-container>
