@@ -360,7 +360,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Who reported the fault?</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.reportedBy.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}</ion-text>
       </ion-col>
      <!--  <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Agreement</ion-text><br />
@@ -510,8 +510,14 @@
 
 <ng-template #caseQualification>
   <ion-card class="ion-no-margin">
-    <!-- <h2 class="ion-text-center">This page is in pogress...</h2> -->
-    <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button>
+    <h2 class="ion-text-center">Case has been qualified. click on proceed to move further. </h2>
+    <br/>
+    <br/>
+    <div class="action-btn-group text" >
+      <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
+      <ion-button (click)="goToLastStage()">Back</ion-button>
+      <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button>
+    </div>
   </ion-card>
 </ng-template>
 
@@ -557,18 +563,6 @@
                     </ion-button>
                   </ion-col>
                 </ng-container>
-                <!-- <ion-col>
-                  <ion-button color="success" fill="outline" >Pass to Landlord to do their own repairs</ion-button>
-                </ion-col>
-                <ion-col>
-                  <ion-button color="success" fill="outline" >Obtain Landlord authorisation</ion-button>
-                </ion-col>
-                <ion-col>
-                  <ion-button color="success" fill="outline" >Obtain Quote</ion-button>
-                </ion-col>
-                <ion-col>
-                  <ion-button color="success" fill="outline" >Emergency / Urgent - proceed as necessary</ion-button>
-                </ion-col> -->
               </ion-row>
             </ion-grid>
           </div>
@@ -692,19 +686,9 @@
                 <td>{{supplier.company}}</td>
                 <td>{{supplier.occupation}}</td>
               </tr>
-              <tr>
-
+              <tr *ngIf="!preferredSuppliers?.length" >
+                <td colspan="12" class="ion-text-center">No data to display</td>
               </tr>
-              <!-- <tr>
-                <td>C5873586</td>
-                <td>Rawlsby </td>
-                <td>Electrical</td>
-              </tr>
-              <tr>
-                <td>C5873586</td>
-                <td>Rawlsby </td>
-                <td>Electrical</td>
-              </tr> -->
             </table>
             <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
             <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button>

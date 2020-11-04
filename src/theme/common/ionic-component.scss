@@ -273,8 +273,8 @@ ion-select-popover {
   .mat-tab-body-wrapper{
     margin-top: 20px;
   }
-
-  .mat-tab-body {
+}
+  // .mat-tab-body {
     .action-btn-group {
       text-align: right;
       margin: 25px 0 10px;
@@ -294,8 +294,8 @@ ion-select-popover {
         --background: var(--ion-color-success);
       }
     }
-  }
-}
+  // }
+// }
 
 .mat-tab-nav-bar, .mat-tab-header{
   border-bottom: none;

@@ -4,7 +4,7 @@ import { ModalController, NavParams } from '@ionic/angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { switchMap, debounceTime } from 'rxjs/operators';
-import { IPropertyResponse } from '../../../faults/details/details-model';
+// import { IPropertyResponse } from '../../../faults/details/details-model';
 import { Observable } from 'rxjs';
 
 
@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
 })
 export class SearchPropertyPage implements OnInit {
   propertySearchForm: FormGroup;
-  filteredProperty: Observable<IPropertyResponse>;
+  filteredProperty: Observable<FaultModels.IPropertyResponse>;
   propertyId;
 
   constructor(
@@ -49,7 +49,7 @@ export class SearchPropertyPage implements OnInit {
     if (event && event.detail.value && event.detail.value.length > 2) {
       this.filteredProperty = this.faultService.searchPropertyByText(event.detail.value);
     } else {
-      this.filteredProperty = new Observable<IPropertyResponse>();
+      this.filteredProperty = new Observable<FaultModels.IPropertyResponse>();
     }
   }
 
