@@ -545,7 +545,7 @@
     <ion-row>
       <ion-col size="100">
         <div class="landlord-instructions">
-          <div class="banner">
+          <div class="banner" *ngIf="faultDetails?.status != 15">
             <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
             <ion-button color="success" class="icon-button" (click)="setUserAction(suggestedAction)" 
                   fill="{{(faultDetails?.userSelectedAction == suggestedAction) ? 'solid' :'outline'}}">
@@ -596,7 +596,7 @@
               <ion-grid>
                 <ion-row>
                   <ng-container *ngFor="let instruction of landlordInstructionTypes">
-                    <ion-col *ngIf="suggestedAction!= instruction.index">
+                    <ion-col *ngIf="oldUserSelectedAction != instruction.index">
                       <ion-button color="success" expand="block" fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}" (click)="setUserAction(instruction.index)">
                         {{instruction.value}} 
                         <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
