@@ -69,6 +69,16 @@ export const FAULT_STAGES = {
   PAYMENT: 'PAYMENT'
 }
 
+export const FAULT_STAGES_INDEX = {
+  FAULT_LOGGED: 0,
+  FAULT_QUALIFICATION: 1,
+  LANDLORD_INSTRUCTION: 2,
+  ARRANGING_CONTRACTOR: 3,
+  JOB_COMPLETION: 4,
+  PAYMENT: 5
+}
+
+
 export const LL_INSTRUCTION_TYPES = [
   {
     index: 'DOES_OWN_REPAIRS',
@@ -79,12 +89,12 @@ export const LL_INSTRUCTION_TYPES = [
     value: 'Proceed with Works Order'
   },
   {
-    index: 'OBTAIN_AUTHORISATION',
-    value: 'Obtain LL authorisation',
-  },
-  {
     index: 'OBTAIN_QUOTE',
     value: 'Obtain Quote'
+  },
+  {
+    index: 'OBTAIN_AUTHORISATION',
+    value: 'Obtain LL authorisation',
   },
   {
     index: 'PROCEED_AS_NECESSARY',
@@ -106,3 +116,9 @@ export const ACCESS_INFO_TYPES = [
     value: false
   }
 ];
+
+export const URGENCY_TYPES = {
+  EMERGENCY: 1,
+  URGENT: 2,
+  NON_URGENT: 3
+}

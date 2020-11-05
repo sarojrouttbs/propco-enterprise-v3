@@ -360,7 +360,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Who reported the fault?</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.reportedBy.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}</ion-text>
       </ion-col>
      <!--  <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Agreement</ion-text><br />
@@ -510,7 +510,14 @@
 
 <ng-template #caseQualification>
   <ion-card class="ion-no-margin">
-    <h2 class="ion-text-center">This page is in pogress...</h2>
+    <h2 class="ion-text-center">Case has been qualified. click on proceed to move further. </h2>
+    <br/>
+    <br/>
+    <div class="action-btn-group text" >
+      <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
+      <ion-button (click)="goToLastStage()">Back</ion-button>
+      <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button>
+    </div>
   </ion-card>
 </ng-template>
 
@@ -538,9 +545,9 @@
     <ion-row>
       <ion-col size="100">
         <div class="landlord-instructions">
-          <div class="banner">
+          <div class="banner" *ngIf="faultDetails?.status != 15">
             <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
-            <ion-button color="success" class="icon-button" (click)="setUserAction(suggestedAction)" 
+            <ion-button color="{{(suggestedAction == 'PROCEED_AS_NECESSARY') ? 'danger' : 'success'}}" class="icon-button" (click)="setUserAction(suggestedAction)" 
                   fill="{{(faultDetails?.userSelectedAction == suggestedAction) ? 'solid' :'outline'}}">
                {{getLookupValue(suggestedAction, landlordInstructionTypes)}} 
                <ion-icon name="checkmark-circle-outline" *ngIf="(faultDetails?.userSelectedAction == suggestedAction)" ></ion-icon> 
@@ -550,113 +557,79 @@
               <ion-row>
                 <ng-container *ngFor="let instruction of landlordInstructionTypes">
                   <ion-col *ngIf="suggestedAction!= instruction.index">
-                    <ion-button color="success" expand="block" fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}" (click)="setUserAction(instruction.index)">
+                    <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}" expand="block" fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}" (click)="setUserAction(instruction.index)">
                       {{instruction.value}} 
                       <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
                     </ion-button>
                   </ion-col>
                 </ng-container>
-                <!-- <ion-col>
-                  <ion-button color="success" fill="outline" >Pass to Landlord to do their own repairs</ion-button>
-                </ion-col>
-                <ion-col>
-                  <ion-button color="success" fill="outline" >Obtain Landlord authorisation</ion-button>
-                </ion-col>
-                <ion-col>
-                  <ion-button color="success" fill="outline" >Obtain Quote</ion-button>
-                </ion-col>
-                <ion-col>
-                  <ion-button color="success" fill="outline" >Emergency / Urgent - proceed as necessary</ion-button>
-                </ion-col> -->
               </ion-row>
             </ion-grid>
           </div>
-          <!-- <div class="banner">
-            <h2 class="banner-heading">Awaiting response</h2>
-            <h6 class="banner-title">Here’s the action you choose:</h6>
-            <ion-button color="success" class="icon-button">Pass to Landlord to do their own repairs <ion-icon name="checkmark-circle-outline"></ion-icon> </ion-button>
-            <h6 class="banner-title"> <strong>Awaiting response from the Landlord</strong> </h6>
-            <h6 class="banner-title">Next chase due: 15th Oct 2020, 09:30</h6>
+          <div *ngIf="faultDetails?.status == 15">
+            <div class="banner">
+              <h2 class="banner-heading">Awaiting response</h2>
+              <h6 class="banner-title">Here’s the action you choose:</h6>
+              <ion-button color="success" class="icon-button">Pass to Landlord to do their own repairs <ion-icon name="checkmark-circle-outline"></ion-icon> </ion-button>
+              <h6 class="banner-title"> <strong>Awaiting response from the Landlord</strong> </h6>
+              <h6 class="banner-title">Next chase due: {{faultNotifications ? faultNotifications[0].nextChaseDueAt : ''}}</h6>
+            </div>
+            <div class="question-answer" *ngIf="notificationQuesAnswer">
+              <h6>{{notificationQuesAnswer.question}}</h6>
+              <ion-grid>
+                <ion-row>
+                  <ng-container *ngFor="let data of notificationQuesAnswer.options">
+                    <ion-col>
+                      <ion-button color="success" fill="{{data?.isAccepted ? 'solid' :'outline'}}" (click)="questionAction(data)" >{{data.text}}</ion-button>
+                    </ion-col>
+                  </ng-container>
+                </ion-row>
+              </ion-grid>
+              <h6>
+                <ion-text color="danger">Please note:</ion-text> 
+                The fault will beclosed automatically if the Landlord doesn't respond within 18 hours.
+              </h6>
+              <div class="border-bottom"></div>
+            </div> 
+            <div class="question-answer">
+              <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
+              <ion-grid>
+                <ion-row>
+                  <ng-container *ngFor="let instruction of landlordInstructionTypes">
+                    <ion-col *ngIf="oldUserSelectedAction != instruction.index">
+                      <ion-button color="success" expand="block" fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}" (click)="setUserAction(instruction.index)">
+                        {{instruction.value}} 
+                        <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
+                      </ion-button>
+                    </ion-col>
+                  </ng-container>
+                </ion-row>
+              </ion-grid>
+            </div>
           </div>
-          <div class="question-answer">
-            <h6>Does the landlord want to proceed with their own repairs?</h6>
-            <ion-grid>
-              <ion-row>
-                <ion-col>
-                  <ion-button color="success">Yes, Landlord wants to do their own repairs</ion-button>
-                </ion-col>
-                <ion-col>
-                  <ion-button color="success" >No, continue with CW Contractors</ion-button>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-            <h6>
-              <ion-text color="danger">Please note:</ion-text> 
-              The fault will beclosed automatically if the Landlord does
-            not respond within 18 working hours.
-            </h6>
-            <div class="border-bottom"></div>
-          </div> 
-          <div class="question-answer">
-            <h6>Want to proceed in a different way? Choose one of the following instead:</h6>
-            <ion-grid>
-              <ion-row>
-                <ion-col>
-                  <ion-button color="success" fill="outline" >Pass to Landlord to do their own repairs</ion-button>
-                </ion-col>
-                <ion-col>
-                  <ion-button color="success" fill="outline" >Obtain Landlord authorisation</ion-button>
-                </ion-col>
-                <ion-col>
-                  <ion-button color="success" fill="outline" >Obtain Quote</ion-button>
-                </ion-col>
-                <ion-col>
-                  <ion-button color="success" fill="outline" >Emergency / Urgent - proceed as necessary</ion-button>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </div> -->
 
           <div class="contractor-selection">
-                    <form [formGroup]='contractorSearchForm'>
-                      <ion-grid>
-                        <ion-row>
-                          
-                          <ion-col size="50">
-                    <!--      <ion-item>
-                                 <ion-label position="floating">Select Contractor</ion-label>
-                              <ion-select interface="popover"> -->
-                                <mat-form-field class="example-full-width" appearance="legacy" style="line-height: 2;">
-                                  <mat-label>Select Contractor</mat-label>
-                                  <input matInput appearance="legacy" [matAutocomplete]="selectContractor" formControlName='text'>
-                                </mat-form-field>
-                                <mat-autocomplete #selectContractor="matAutocomplete"  [displayWith]="displayFn"
-                                 (optionSelected)="onSelectionChange($event)">
-                                  <mat-option appearance="none" *ngFor="let result of (selectedContractor | async)?.data" 
-                                  [value]="result" style="border-bottom: 1px solid gray;">
-                                    <span>
-                                      <i class="propcoicon no-background propcoicon-property"
-                                       style="background: transparent;vertical-align:sub"></i>
-                                    </span>&nbsp;
-                                    <span style="color: var(--ion-color-step-200)">{{result.address}}&nbsp;</span>
-                                    <span style="color: var(--ion-color-step-1000)">{{result.reference}}</span>&nbsp;
-                                    <span class="text-color-lightgreen" style="color: var(--ion-color-primary)">{{result.status}}</span>&nbsp;
-                                  </mat-option>
-                                </mat-autocomplete>
-                            <!--   </ion-select>
-                          </ion-item>  --> 
-            
+            <form [formGroup]="landlordInstFrom">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="50">
+                    <ion-item>
+                      <ion-label position="floating">Select Contractor</ion-label>
+                      <ion-select interface="popover" formControlName="contractorId">
+                        <ion-select-option>Choose</ion-select-option>
+                      </ion-select>
+                    </ion-item>
                   </ion-col>
                   <ion-col size="50">
                     <ion-item>
                       <ion-label position="floating">Confirmed Estimate</ion-label>
-                      <ion-input></ion-input>
+                      <ion-input formControlName="confirmedEstimate"></ion-input>
                     </ion-item>
                   </ion-col>
                   <ion-col size="100">
                     <ion-item>
                       <ion-label position="stacked">Notes</ion-label>
-                    <ion-textarea placeholder="Enter more information here..."></ion-textarea>
+                    <ion-textarea placeholder="Enter more information here..." formControlName="estimateNotes"></ion-textarea>
                     </ion-item>
                   </ion-col>
                 </ion-row>
@@ -678,7 +651,7 @@
                 </ion-col>
                 <ion-col size-xs="100" size-sm="50" class="header-content">
                   <ion-text class="header">Branch holds management keys?</ion-text><br />
-                  <ion-text class="content">N/A</ion-text>
+                  <ion-text class="content">{{faultDetails?.doesBranchHoldKeys ? 'Yes' : 'No'}}</ion-text>
                 </ion-col>
                 <ion-col size-xs="100" size-sm="50" class="header-content">
                   <ion-text class="header">Expenditure Limit</ion-text><br />
@@ -709,20 +682,16 @@
                 <td>{{supplier.company}}</td>
                 <td>{{supplier.occupation}}</td>
               </tr>
-              <tr>
-
+              <tr *ngIf="!preferredSuppliers?.length" >
+                <td colspan="12" class="ion-text-center">No data to display</td>
               </tr>
-              <!-- <tr>
-                <td>C5873586</td>
-                <td>Rawlsby </td>
-                <td>Electrical</td>
-              </tr>
-              <tr>
-                <td>C5873586</td>
-                <td>Rawlsby </td>
-                <td>Electrical</td>
-              </tr> -->
             </table>
+            <div class="action-btn-group">
+              <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
+              <ion-button (click)="goToLastStage()">Back</ion-button>
+              <ion-button class="save-button" (click)="saveForLater()">{{faultId ? 'Save':'Save for later'}}</ion-button>
+              <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button>
+            </div>
           </div>
         </div>
       </ion-col>
@@ -853,6 +822,7 @@
           <mat-horizontal-stepper
             #stepper
             labelPosition="bottom"
+            [selectedIndex]="currentStepperIndex"
             >
             <mat-step>
               <ng-container *ngTemplateOutlet="caseLogged"></ng-container>
@@ -863,7 +833,8 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step aria-labelledby="disabled_stepper_step">
+            <mat-step>
+              <!-- <mat-step aria-labelledby="disabled_stepper_step"> -->
               <ng-container *ngTemplateOutlet="caseQualification"></ng-container>
               <ng-template matStepLabel>Case Qualification</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
