@@ -267,7 +267,7 @@
             <ion-grid>
               <ion-row>
                 <ion-col size="100">
-                  <img [src]="file.documentUrl ? sanitizer.bypassSecurityTrustResourceUrl(file.documentUrl) : 'assets/images/default.jpg'" (click)="downloadFaultDocumentByUrl(file.documentUrl)">
+                  <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'" (click)="downloadFaultDocumentByUrl(file.documentUrl)">
                 </ion-col>
               </ion-row>
               <ion-row class="ion-justify-content-between">
