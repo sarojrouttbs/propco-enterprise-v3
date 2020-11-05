@@ -1177,7 +1177,7 @@ export class DetailsPage implements OnInit {
 
       switch (this.faultDetails.userSelectedAction) {
         case LL_INSTRUCTION_TYPES[1].index: //cli006b
-          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action. This will send out a notification to Landlord, Tenant and a Contractor. Are you sure?', '', 'Yes', 'No');
+          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action. This will send out a notification to Landlord, Tenant and a Contractor. <br/> Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
@@ -1188,7 +1188,7 @@ export class DetailsPage implements OnInit {
           }
           break;
         case LL_INSTRUCTION_TYPES[2].index: //cli006c
-          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action. Are you sure?', '', 'Yes', 'No');
+          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action.<br/>  Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
@@ -1199,7 +1199,7 @@ export class DetailsPage implements OnInit {
           }
           break;
         case LL_INSTRUCTION_TYPES[4].index: //cli006e
-          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action. Are you sure?', '', 'Yes', 'No');
+          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action. <br/> Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
@@ -1210,12 +1210,13 @@ export class DetailsPage implements OnInit {
           }
           break;
         case LL_INSTRUCTION_TYPES[0].index: //cli006a
-          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. Are you sure?', '', 'Yes', 'No');
+          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. <br/> Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
             const AWAITING_RESPONSE_LANDLORD = 15;
             forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD)]).subscribe(data => {
+              this.refreshDetailsAndStage();
               this.initLandlordInstructions(this.faultId);
             });
           }
@@ -1257,11 +1258,31 @@ export class DetailsPage implements OnInit {
     this.faultService.getFaultNotifications(faultId).subscribe(response => {
       if (response) {
         this.faultNotifications = response;
-        for (let i = 0; i < this.faultNotifications.length; i++) {
-          this.notificationQuesAnswer = this.faultNotifications[i].notification;
+        this.notificationQuesAnswer = this.faultNotifications[0].notification;
+        let data = this.notificationQuesAnswer.options.filter(res => res.isAccepted == true);
+        if (data[0].isAccepted) {
+          this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
         }
       }
     })
   }
+
+  questionAction(data) {
+    if(!data.isAccepted){
+      this.commonService.showConfirm(data.text, 'This will change status back to Checking Landlord. </br> Are you Sure?', 'Yes', 'No').then(res => {
+        if (res) {
+          let faultRequestObj = this.createFaultFormValues();
+          faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+          // faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+          const CHECKING_LANDLORD_INSTRUCTIONS = 13;
+          forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS)]).subscribe(data => {
+           if(data){
+            this.refreshDetailsAndStage();
+           }
+          });
+        }
+      });
+    }
+    }
 
 }
