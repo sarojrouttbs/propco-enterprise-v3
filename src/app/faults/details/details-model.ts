@@ -74,6 +74,7 @@ declare namespace FaultModels {
         submittedBy: string;
         assignedTo: string;
         contractorId?: any;
+        estimateNotes?:string;
     }
 
 }
