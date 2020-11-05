@@ -1063,6 +1063,7 @@ export class DetailsPage implements OnInit {
       faultRequestObj.stage = this.faultDetails.stage;
       faultRequestObj.isDraft = this.faultDetails.isDraft;
       faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+      Object.assign(faultRequestObj, this.landlordInstFrom.value);
     }
 
     this.faultService.updateFault(this.faultId, faultRequestObj).subscribe(
