@@ -547,7 +547,7 @@
         <div class="landlord-instructions">
           <div class="banner" *ngIf="faultDetails?.status != 15">
             <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
-            <ion-button color="success" class="icon-button" (click)="setUserAction(suggestedAction)" 
+            <ion-button color="{{(suggestedAction == 'PROCEED_AS_NECESSARY') ? 'danger' : 'success'}}" class="icon-button" (click)="setUserAction(suggestedAction)" 
                   fill="{{(faultDetails?.userSelectedAction == suggestedAction) ? 'solid' :'outline'}}">
                {{getLookupValue(suggestedAction, landlordInstructionTypes)}} 
                <ion-icon name="checkmark-circle-outline" *ngIf="(faultDetails?.userSelectedAction == suggestedAction)" ></ion-icon> 
@@ -557,7 +557,7 @@
               <ion-row>
                 <ng-container *ngFor="let instruction of landlordInstructionTypes">
                   <ion-col *ngIf="suggestedAction!= instruction.index">
-                    <ion-button color="success" expand="block" fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}" (click)="setUserAction(instruction.index)">
+                    <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}" expand="block" fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}" (click)="setUserAction(instruction.index)">
                       {{instruction.value}} 
                       <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
                     </ion-button>
@@ -580,7 +580,7 @@
                 <ion-row>
                   <ng-container *ngFor="let data of notificationQuesAnswer.options">
                     <ion-col>
-                      <ion-button color="success" fill="{{data?.isAccepted ? 'solid' :'outline'}}">{{data.text}}</ion-button>
+                      <ion-button color="success" fill="{{data?.isAccepted ? 'solid' :'outline'}}" (click)="questionAction(data)" >{{data.text}}</ion-button>
                     </ion-col>
                   </ng-container>
                 </ion-row>
