@@ -4,11 +4,12 @@ import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYP
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin,Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material/stepper';
+import { debounceTime, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'fault-details',
@@ -34,6 +35,7 @@ export class DetailsPage implements OnInit {
   accessInfoForm: FormGroup;
   uploadDocForm: FormGroup;
   landlordInstFrom: FormGroup;
+  selectedContractor: Observable<FaultModels.IContractorResponse>;
 
   //MAT TABS//
   caseDetail: FormGroup;
@@ -87,6 +89,7 @@ export class DetailsPage implements OnInit {
     'assets/images/fault-categories/others.svg',
     'assets/images/fault-categories/water-and-leaks.svg'
   ];
+  contractorEntityId: any;
 
   constructor(
     private faultService: FaultsService,
@@ -97,11 +100,12 @@ export class DetailsPage implements OnInit {
     private modalController: ModalController,
     public sanitizer: DomSanitizer
   ) {
-    this.initContractorForm();
-    this.selectedContractor = this.contractorSearchForm.get('text').valueChanges.pipe(debounceTime(300),
+    this.initLandLordInstForm();
+    this.selectedContractor = this.landlordInstFrom.get('contractorId').valueChanges.pipe(debounceTime(300),
       switchMap((value: string) => (value.length > 2) ? this.faultService.searchContractorByText(value) :
       new Observable())
     );
+    console.log(this.selectedContractor);
   }
 
   ionViewDidEnter() {
@@ -130,7 +134,7 @@ export class DetailsPage implements OnInit {
 
   onSelectionChange(data) {
     if (data) {
-      this.contractorId = data.option.value.entityId;
+      this.contractorEntityId = data.option.value.entityId;
     }
   }
 
@@ -163,7 +167,6 @@ export class DetailsPage implements OnInit {
     this.initReportedByForm();
     this.initAccessInfiForm();
     this.initUploadDocForm();
-    this.initLandLordInstForm();
   }
 
   private initDescribeFaultForm(): void {
