@@ -609,13 +609,13 @@
           </div>
 
           <div class="contractor-selection">
-            <form>
+            <form [formGroup]="landlordInstFrom">
               <ion-grid>
                 <ion-row>
                   <ion-col size="50">
                     <ion-item>
                       <ion-label position="floating">Select Contractor</ion-label>
-                      <ion-select interface="popover">
+                      <ion-select interface="popover" formControlName="contractorId">
                         <ion-select-option>Choose</ion-select-option>
                       </ion-select>
                     </ion-item>
@@ -623,13 +623,13 @@
                   <ion-col size="50">
                     <ion-item>
                       <ion-label position="floating">Confirmed Estimate</ion-label>
-                      <ion-input></ion-input>
+                      <ion-input formControlName="confirmedEstimate"></ion-input>
                     </ion-item>
                   </ion-col>
                   <ion-col size="100">
                     <ion-item>
                       <ion-label position="stacked">Notes</ion-label>
-                    <ion-textarea placeholder="Enter more information here..."></ion-textarea>
+                    <ion-textarea placeholder="Enter more information here..." formControlName="estimateNotes"></ion-textarea>
                     </ion-item>
                   </ion-col>
                 </ion-row>
