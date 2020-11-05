@@ -212,7 +212,7 @@ export class DetailsPage implements OnInit {
       contractorId: '',
       confirmedEstimate: '',
       userSelectedAction: '',
-      notes: ''
+      estimateNotes: ''
     });
   }
 
