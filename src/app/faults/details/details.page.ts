@@ -1149,7 +1149,12 @@ export class DetailsPage implements OnInit {
   }
 
   setUserAction(index) {
+    if ( this.faultDetails.status == 15){
+      this.commonService.showAlert('Landlord Instructions', 'Please select repair action first.');
+      return;
+    }
     this.faultDetails.userSelectedAction = index;
+    
   }
 
   private checkForLLSuggestedAction() {
@@ -1194,14 +1199,15 @@ export class DetailsPage implements OnInit {
   }
 
   async proceedToNextStage() {
-    if (this.stepper.selectedIndex < FAULT_STAGES_INDEX[this.faultDetails.stage]) {
-      this.stepper.selectedIndex = this.stepper.selectedIndex + 1;
-      return;
-    }
+    // if (this.stepper.selectedIndex < FAULT_STAGES_INDEX[this.faultDetails.stage]) {
+    //   this.stepper.selectedIndex = this.stepper.selectedIndex + 1;
+    //   return;
+    // }
     // const res = await this.commonService.showConfirm('Proceed', 'This will change the fault stage, Do you want to continue?');
     // this.commonService.showLoader();
     let faultRequestObj = this.createFaultFormValues();
     faultRequestObj.isDraft = this.faultDetails.isDraft;
+    Object.assign(faultRequestObj, this.landlordInstFrom.value);
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
       faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
       let res = await this.updateFaultDetails(faultRequestObj);
@@ -1296,9 +1302,8 @@ export class DetailsPage implements OnInit {
       if (response) {
         this.faultNotifications = response;
         this.notificationQuesAnswer = this.faultNotifications[0].notification;
-        let data = this.notificationQuesAnswer.options.filter(res => res.isAccepted == true);
-        if (data[0].isAccepted) {
-          this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
+        if (this.notificationQuesAnswer.responseReceived && this.notificationQuesAnswer.responseReceived.isAccepted) {
+            this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
         }
       }
     })
@@ -1306,11 +1311,10 @@ export class DetailsPage implements OnInit {
 
   questionAction(data) {
     if(!data.isAccepted){
-      this.commonService.showConfirm(data.text, 'This will change status back to Checking Landlord. </br> Are you Sure?', 'Yes', 'No').then(res => {
+      this.commonService.showConfirm(data.text, 'This will change status back to Checking Landlord. </br> Are you Sure?', '', 'Yes', 'No').then(res => {
         if (res) {
           let faultRequestObj = this.createFaultFormValues();
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
-          // faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
           const CHECKING_LANDLORD_INSTRUCTIONS = 13;
           forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS)]).subscribe(data => {
            if(data){
@@ -1320,6 +1324,20 @@ export class DetailsPage implements OnInit {
         }
       });
     }
+    else if(data.isAccepted){
+      this.commonService.showConfirm(data.text, 'This will change status back to Checking Landlord. </br> Are you Sure?', '', 'Yes', 'No').then(res => {
+        if (res) {
+          let faultRequestObj = this.createFaultFormValues();
+          faultRequestObj.stage = FAULT_STAGES.JOB_COMPLETION;
+          forkJoin([this.updateFaultDetails(faultRequestObj)]).subscribe(data => {
+           if(data){
+            this.refreshDetailsAndStage();
+           }
+          });
+        }
+      });
+    }
+
     }
 
 }
