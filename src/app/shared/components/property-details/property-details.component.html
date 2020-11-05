@@ -17,7 +17,7 @@
           <label for="files" class="browse-btn">Browse Files</label>
         </form> -->
         <div *ngIf="files.length" class="fault-image">
-          <img [src]="files[0].documentUrl ? sanitizer.bypassSecurityTrustResourceUrl(files[0].documentUrl) : 'assets/images/default.jpg'">
+          <img [src]="files[0].documentUrl ? files[0].documentUrl : 'assets/images/default.jpg'">
         </div>
       </ion-col>
       <ion-col class="" size-xl="83" size="77">
