@@ -242,14 +242,32 @@ export class DetailsPage implements OnInit {
         this.initPatching();
         this.setValidatorsForReportedBy();
         this.getReportedByIdList();
-        let propertyLandlords = await this.getLandlordsOfProperty(this.propertyId);
-        let landlordId = propertyLandlords[0].landlordId;
+        let propertyLandlords: any = await this.getLandlordsOfProperty(this.propertyId);
+        let landlordId;
+        if (propertyLandlords.length > 1) {
+          let landlord = this.getMaxRentShareLandlord(propertyLandlords);
+          landlordId = landlord.landlordId
+        } else {
+          landlordId = propertyLandlords[0].landlordId;
+        }
         // let landlordId = 'cd2766b6-525c-11e9-9cbf-0cc47a54d954';
         await this.getLandlordDetails(landlordId);
         this.checkForLLSuggestedAction();
         this.getPreferredSuppliers(landlordId);
       }
     });
+  }
+
+  private getMaxRentShareLandlord(landlords) {
+    let maxRent = 0;
+    let mLandlord;
+    landlords.forEach(landlord => {
+      if (landlord.rentPercentage > maxRent) {
+        maxRent = landlord.rentPercentage;
+        mLandlord = landlord;
+      }
+    });
+    return mLandlord;
   }
 
   selectStageStepper(stage: any) {
