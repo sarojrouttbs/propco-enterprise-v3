@@ -1116,7 +1116,7 @@ export class DetailsPage implements OnInit {
   }
 
   private checkForLLSuggestedAction() {
-    if (this.faultDetails.status === 2 || this.faultDetails.status === 13) { //In Assessment" or " Checking Landlord's Instructions "
+    // if (this.faultDetails.status === 2 || this.faultDetails.status === 13) { //In Assessment" or " Checking Landlord's Instructions "
       this.suggestedAction = '';
       let confirmedEstimate = this.faultDetails.confirmedEstimate || 0;
       if (this.faultDetails.urgencyStatus === URGENCY_TYPES.EMERGENCY || this.faultDetails.urgencyStatus === URGENCY_TYPES.URGENT) {
@@ -1132,7 +1132,7 @@ export class DetailsPage implements OnInit {
         this.suggestedAction = LL_INSTRUCTION_TYPES[1].index;
       }
 
-    }
+    // }
 
     this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
     if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index && this.faultDetails.status === 15) {
