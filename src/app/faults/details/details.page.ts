@@ -33,6 +33,7 @@ export class DetailsPage implements OnInit {
   reportedByForm: FormGroup;
   accessInfoForm: FormGroup;
   uploadDocForm: FormGroup;
+  landlordInstFrom: FormGroup;
 
   //MAT TABS//
   caseDetail: FormGroup;
@@ -148,6 +149,7 @@ export class DetailsPage implements OnInit {
     this.initReportedByForm();
     this.initAccessInfiForm();
     this.initUploadDocForm();
+    this.initLandLordInstForm();
   }
 
   private initDescribeFaultForm(): void {
@@ -205,6 +207,16 @@ export class DetailsPage implements OnInit {
     });
   }
 
+  private initLandLordInstForm(): void {
+    this.landlordInstFrom = this.fb.group({
+      contractorId: '',
+      confirmedEstimate: '',
+      userSelectedAction: '',
+      estimateNotes: ''
+    });
+  }
+
+
   private async initialApiCall() {
     if (this.faultId) {
       this.goToPage(3);
@@ -230,14 +242,32 @@ export class DetailsPage implements OnInit {
         this.initPatching();
         this.setValidatorsForReportedBy();
         this.getReportedByIdList();
-        let propertyLandlords = await this.getLandlordsOfProperty(this.propertyId);
-        let landlordId = propertyLandlords[0].landlordId;
+        let propertyLandlords: any = await this.getLandlordsOfProperty(this.propertyId);
+        let landlordId;
+        if (propertyLandlords.length > 1) {
+          let landlord = this.getMaxRentShareLandlord(propertyLandlords);
+          landlordId = landlord.landlordId
+        } else {
+          landlordId = propertyLandlords[0].landlordId;
+        }
         // let landlordId = 'cd2766b6-525c-11e9-9cbf-0cc47a54d954';
         await this.getLandlordDetails(landlordId);
         this.checkForLLSuggestedAction();
         this.getPreferredSuppliers(landlordId);
       }
     });
+  }
+
+  private getMaxRentShareLandlord(landlords) {
+    let maxRent = 0;
+    let mLandlord;
+    landlords.forEach(landlord => {
+      if (landlord.rentPercentage > maxRent) {
+        maxRent = landlord.rentPercentage;
+        mLandlord = landlord;
+      }
+    });
+    return mLandlord;
   }
 
   selectStageStepper(stage: any) {
@@ -293,6 +323,13 @@ export class DetailsPage implements OnInit {
       reportedById: reportedById,
       propertyId: this.faultDetails.propertyId,
       isDraft: this.faultDetails.isDraft
+    });
+    /*Landlord Instructions*/
+    this.landlordInstFrom.patchValue({
+      contractorId: this.faultDetails.contractorId,
+      confirmedEstimate: this.faultDetails.confirmedEstimate,
+      userSelectedAction: this.faultDetails.userSelectedAction,
+      estimateNotes: this.faultDetails.estimateNotes
     });
   }
 
@@ -1117,20 +1154,20 @@ export class DetailsPage implements OnInit {
 
   private checkForLLSuggestedAction() {
     // if (this.faultDetails.status === 2 || this.faultDetails.status === 13) { //In Assessment" or " Checking Landlord's Instructions "
-      this.suggestedAction = '';
-      let confirmedEstimate = this.faultDetails.confirmedEstimate || 0;
-      if (this.faultDetails.urgencyStatus === URGENCY_TYPES.EMERGENCY || this.faultDetails.urgencyStatus === URGENCY_TYPES.URGENT) {
-        this.suggestedAction = LL_INSTRUCTION_TYPES[4].index;
-      }
-      else if (this.landlordDetails.doesOwnRepairs) {
-        this.suggestedAction = LL_INSTRUCTION_TYPES[0].index;
-      }
-      else if (confirmedEstimate > this.propertyDetails.expenditureLimit) {
-        this.suggestedAction = LL_INSTRUCTION_TYPES[2].index;
-      }
-      else if (confirmedEstimate <= this.propertyDetails.expenditureLimit) {
-        this.suggestedAction = LL_INSTRUCTION_TYPES[1].index;
-      }
+    this.suggestedAction = '';
+    let confirmedEstimate = this.faultDetails.confirmedEstimate || 0;
+    if (this.faultDetails.urgencyStatus === URGENCY_TYPES.EMERGENCY || this.faultDetails.urgencyStatus === URGENCY_TYPES.URGENT) {
+      this.suggestedAction = LL_INSTRUCTION_TYPES[4].index;
+    }
+    else if (this.landlordDetails.doesOwnRepairs) {
+      this.suggestedAction = LL_INSTRUCTION_TYPES[0].index;
+    }
+    else if (confirmedEstimate > this.propertyDetails.expenditureLimit) {
+      this.suggestedAction = LL_INSTRUCTION_TYPES[2].index;
+    }
+    else if (confirmedEstimate <= this.propertyDetails.expenditureLimit) {
+      this.suggestedAction = LL_INSTRUCTION_TYPES[1].index;
+    }
 
     // }
 
@@ -1225,7 +1262,7 @@ export class DetailsPage implements OnInit {
           break;
         case LL_INSTRUCTION_TYPES[5].index: //cli006f
           break;
-          default: 
+        default:
           this.commonService.showAlert('Landlord Instructions', 'Please select any action');
           break;
 
