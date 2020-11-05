@@ -629,10 +629,10 @@
                      <mat-option appearance="none" *ngFor="let result of (selectedContractor | async)?.data" 
                      [value]="result" style="border-bottom: 1px solid gray;">
                        <span>
-                         <i class="propcoicon no-background propcoicon-property"
+                         <i class="propcoicon no-background propcoicon-contractor"
                           style="background: transparent;vertical-align:sub"></i>
                        </span>&nbsp;
-                       <span style="color: var(--ion-color-step-200)">{{result.address}}&nbsp;</span>
+                       <span style="color: var(--ion-color-step-200)">{{result.fullName}}&nbsp;</span>
                        <span style="color: var(--ion-color-step-1000)">{{result.reference}}</span>&nbsp;
                        <span class="text-color-lightgreen" style="color: var(--ion-color-primary)">{{result.status}}</span>&nbsp;
                      </mat-option>
@@ -843,7 +843,7 @@
             labelPosition="bottom"
             [selectedIndex]="currentStepperIndex"
             >
-            <mat-step>
+            <mat-step aria-labelledby="disabled_stepper_step">
               <ng-container *ngTemplateOutlet="caseLogged"></ng-container>
               <ng-template matStepLabel>Case Logged</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
@@ -852,8 +852,8 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step>
-              <!-- <mat-step aria-labelledby="disabled_stepper_step"> -->
+            <!-- <mat-step> -->
+            <mat-step aria-labelledby="disabled_stepper_step">
               <ng-container *ngTemplateOutlet="caseQualification"></ng-container>
               <ng-template matStepLabel>Case Qualification</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
@@ -862,7 +862,7 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step>
+            <mat-step aria-labelledby="disabled_stepper_steps">
               <ng-container *ngTemplateOutlet="landlordInstructions"></ng-container>
               <ng-template matStepLabel>Landlord Instructions</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
