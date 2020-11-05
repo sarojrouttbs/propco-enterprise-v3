@@ -1,3 +1,4 @@
+// tslint:disable-next-line: no-namespace
 declare namespace FaultModels {
 
     export interface IPropertyResponse {
@@ -75,6 +76,25 @@ declare namespace FaultModels {
         assignedTo: string;
         contractorId?: any;
         estimateNotes?:string;
+    }
+
+    export interface IContractorResponse {
+        entityType: string;
+        propcoId: string;
+        legacyReference?: any;
+        address: string;
+        status: string;
+        email?: any;
+        fullName?: any;
+        dateOfBirth?: any;
+        postcode: string;
+        entitySuggestion?: any;
+        officeCode: string[];
+        isVatRegistered: any;
+        occupation: any;
+        isAgentContractorApproved: any;
+        entityId: string;
+        reference: string; 
     }
 
 }

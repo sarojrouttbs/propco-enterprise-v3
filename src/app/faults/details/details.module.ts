@@ -20,6 +20,8 @@ import { MatIconModule} from '@angular/material/icon';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatButtonModule} from '@angular/material/button';
 import { MatCardModule} from '@angular/material/card';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
 
 @NgModule({
   imports: [
@@ -36,6 +38,7 @@ import { MatCardModule} from '@angular/material/card';
     MatSelectModule,
     MatFormFieldModule,
     MatTabsModule,
+    MatAutocompleteModule,
     MatCardModule,
     SearchPropertyPageModule
   ],
