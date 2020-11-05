@@ -100,12 +100,6 @@ export class DetailsPage implements OnInit {
     private modalController: ModalController,
     public sanitizer: DomSanitizer
   ) {
-    this.initLandLordInstForm();
-    this.selectedContractor = this.landlordInstFrom.get('contractorId').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value.length > 2) ? this.faultService.searchContractorByText(value) :
-      new Observable())
-    );
-    console.log(this.selectedContractor);
   }
 
   ionViewDidEnter() {
@@ -128,8 +122,8 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  displayFn(subject){
-    return subject ? subject.fullName + ',' + ' ' + subject.reference + ',' + ' ' + subject.status : undefined ;
+  displayFn(subject) {
+    return subject ? subject.fullName + ',' + ' ' + subject.reference : undefined;
   }
 
   onSelectionChange(data) {
@@ -167,6 +161,7 @@ export class DetailsPage implements OnInit {
     this.initReportedByForm();
     this.initAccessInfiForm();
     this.initUploadDocForm();
+    this.initLandLordInstForm();
   }
 
   private initDescribeFaultForm(): void {
@@ -231,6 +226,10 @@ export class DetailsPage implements OnInit {
       userSelectedAction: '',
       estimateNotes: ''
     });
+    this.selectedContractor = this.landlordInstFrom.get('contractorId').valueChanges.pipe(debounceTime(300),
+      switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractorByText(value) :
+        new Observable())
+    );
   }
 
 
@@ -241,6 +240,7 @@ export class DetailsPage implements OnInit {
       this.selectStageStepper(details.stage);
       this.faultDetails = details;
       this.propertyId = details.propertyId;
+      this.contractorEntityId = details.contractorId;
       this.getFaultDocuments(this.faultId);
       this.getFaultHistory();
     } else {
@@ -1081,7 +1081,12 @@ export class DetailsPage implements OnInit {
       faultRequestObj.isDraft = this.faultDetails.isDraft;
       faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
       Object.assign(faultRequestObj, this.landlordInstFrom.value);
-      delete faultRequestObj.contractorId;
+      if (this.contractorEntityId) {
+        faultRequestObj.contractorId = this.contractorEntityId;
+      } else {
+        delete faultRequestObj.contractorId;
+      }
+      // faultRequestObj.contractorId ? faultRequestObj.contractorId : delete faultRequestObj.contractorId;
     }
 
     this.faultService.updateFault(this.faultId, faultRequestObj).subscribe(
@@ -1168,12 +1173,12 @@ export class DetailsPage implements OnInit {
   }
 
   setUserAction(index) {
-    if ( this.faultDetails.status == 15){
+    if (this.faultDetails.status == 15) {
       this.commonService.showAlert('Landlord Instructions', 'Please select repair action first.');
       return;
     }
     this.faultDetails.userSelectedAction = index;
-    
+
   }
 
   private checkForLLSuggestedAction() {
@@ -1227,7 +1232,12 @@ export class DetailsPage implements OnInit {
     let faultRequestObj = this.createFaultFormValues();
     faultRequestObj.isDraft = this.faultDetails.isDraft;
     Object.assign(faultRequestObj, this.landlordInstFrom.value);
-    delete faultRequestObj.contractorId;
+    if (this.contractorEntityId) {
+      faultRequestObj.contractorId = this.contractorEntityId;
+    } else {
+      delete faultRequestObj.contractorId;
+    }
+    //faultRequestObj.contractorId ? faultRequestObj.contractorId : delete faultRequestObj.contractorId;
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
       faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
       let res = await this.updateFaultDetails(faultRequestObj);
@@ -1318,46 +1328,56 @@ export class DetailsPage implements OnInit {
   }
 
   initLandlordInstructions(faultId) {
-    this.faultService.getFaultNotifications(faultId).subscribe(response => {
+    this.faultService.getFaultNotifications(faultId).subscribe(async (response) => {
       if (response) {
         this.faultNotifications = response;
         this.notificationQuesAnswer = this.faultNotifications[0].notification;
         if (this.notificationQuesAnswer.responseReceived && this.notificationQuesAnswer.responseReceived.isAccepted) {
-            this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
+          // this.refreshDetailsAndStage();
+          this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
+          // let requestObj = {} as FaultModels.IFaultResponse;
+          // requestObj.stage = FAULT_STAGES.JOB_COMPLETION;
+          // requestObj.isDraft = this.faultDetails.isDraft;
+          // let res = await this.updateFaultDetails(requestObj);
+          // if(res){
+          //   this.refreshDetailsAndStage();
+          // }
         }
       }
     })
   }
 
   questionAction(data) {
-    if(!data.isAccepted){
-      this.commonService.showConfirm(data.text, 'This will change status back to Checking Landlord. </br> Are you Sure?', '', 'Yes', 'No').then(res => {
+    if (!data.isAccepted) {
+      this.commonService.showConfirm(data.text, 'This will change status back to "Checking Landlord Instruction". </br> Are you Sure?', '', 'Yes', 'No').then(res => {
         if (res) {
-          let faultRequestObj = this.createFaultFormValues();
+          let faultRequestObj = {} as FaultModels.IFaultResponse
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+          faultRequestObj.isDraft = this.faultDetails.isDraft;
           const CHECKING_LANDLORD_INSTRUCTIONS = 13;
           forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS)]).subscribe(data => {
-           if(data){
-            this.refreshDetailsAndStage();
-           }
+            if (data) {
+              this.refreshDetailsAndStage();
+            }
           });
         }
       });
     }
-    else if(data.isAccepted){
-      this.commonService.showConfirm(data.text, 'This will change status back to Checking Landlord. </br> Are you Sure?', '', 'Yes', 'No').then(res => {
+    else if (data.isAccepted) {
+      this.commonService.showConfirm(data.text, 'This will change the stage to "Job Completion". </br> Are you Sure?', '', 'Yes', 'No').then(res => {
         if (res) {
-          let faultRequestObj = this.createFaultFormValues();
+          let faultRequestObj = {} as FaultModels.IFaultResponse
           faultRequestObj.stage = FAULT_STAGES.JOB_COMPLETION;
+          faultRequestObj.isDraft = this.faultDetails.isDraft;
           forkJoin([this.updateFaultDetails(faultRequestObj)]).subscribe(data => {
-           if(data){
-            this.refreshDetailsAndStage();
-           }
+            if (data) {
+              this.refreshDetailsAndStage();
+            }
           });
         }
       });
     }
 
-    }
+  }
 
 }
