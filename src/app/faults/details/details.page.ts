@@ -1081,6 +1081,7 @@ export class DetailsPage implements OnInit {
       faultRequestObj.isDraft = this.faultDetails.isDraft;
       faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
       Object.assign(faultRequestObj, this.landlordInstFrom.value);
+      delete faultRequestObj.contractorId;
     }
 
     this.faultService.updateFault(this.faultId, faultRequestObj).subscribe(
@@ -1226,6 +1227,7 @@ export class DetailsPage implements OnInit {
     let faultRequestObj = this.createFaultFormValues();
     faultRequestObj.isDraft = this.faultDetails.isDraft;
     Object.assign(faultRequestObj, this.landlordInstFrom.value);
+    delete faultRequestObj.contractorId;
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
       faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
       let res = await this.updateFaultDetails(faultRequestObj);
