@@ -1280,13 +1280,14 @@ export class DetailsPage implements OnInit {
       switch (this.faultDetails.userSelectedAction) {
         case LL_INSTRUCTION_TYPES[1].index: //cli006b
           var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action. This will send out a notification to Landlord, Tenant and a Contractor. <br/> Are you sure?', '', 'Yes', 'No');
-          if (response) {
+          if (response) {          
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
-            let res = await this.updateFaultDetails(faultRequestObj);
-            if (res) {
-              this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
-            }
+            const WORKS_ORDER_PENDING = 19;
+            forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(WORKS_ORDER_PENDING)]).subscribe(data => {
+              // this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+              this.refreshDetailsAndStage();
+            });
           }
           break;
         case LL_INSTRUCTION_TYPES[2].index: //cli006c
@@ -1294,10 +1295,11 @@ export class DetailsPage implements OnInit {
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
-            let res = await this.updateFaultDetails(faultRequestObj);
-            if (res) {
-              this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
-            }
+            const AWAITING_QUOTE = 14;
+            forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(AWAITING_QUOTE)]).subscribe(data => {
+              // this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+              this.refreshDetailsAndStage();
+            });
           }
           break;
         case LL_INSTRUCTION_TYPES[4].index: //cli006e
@@ -1307,7 +1309,8 @@ export class DetailsPage implements OnInit {
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
             const WORKS_ORDER_PENDING = 19;
             forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(WORKS_ORDER_PENDING)]).subscribe(data => {
-              this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+              // this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+              this.refreshDetailsAndStage();
             });
           }
           break;
