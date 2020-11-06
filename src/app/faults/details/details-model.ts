@@ -75,7 +75,7 @@ declare namespace FaultModels {
         submittedBy: string;
         assignedTo: string;
         contractorId?: any;
-        estimateNotes?:string;
+        estimationNotes?:string;
     }
 
     export interface IContractorResponse {
