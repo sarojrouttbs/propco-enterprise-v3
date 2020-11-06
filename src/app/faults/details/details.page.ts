@@ -1257,23 +1257,19 @@ export class DetailsPage implements OnInit {
     //   this.stepper.selectedIndex = this.stepper.selectedIndex + 1;
     //   return;
     // }
-    // const res = await this.commonService.showConfirm('Proceed', 'This will change the fault stage, Do you want to continue?');
-    // this.commonService.showLoader();
-    let faultRequestObj = this.createFaultFormValues();
-    faultRequestObj.isDraft = this.faultDetails.isDraft;
-    Object.assign(faultRequestObj, this.landlordInstFrom.value);
-    if (this.contractorEntityId) {
-      faultRequestObj.contractorId = this.contractorEntityId;
-    } else {
-      delete faultRequestObj.contractorId;
-    }
+
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_LOGGED) {
+      let faultRequestObj = this.createFaultFormValues();
+      faultRequestObj.isDraft = this.faultDetails.isDraft;
+      faultRequestObj.stage = this.faultDetails.stage;
       let res = await this.updateFaultDetails(faultRequestObj);
       if (res) {
         this.stepper.selectedIndex = FAULT_STAGES_INDEX.FAULT_QUALIFICATION;
       }
     }
     else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
+      let faultRequestObj = {} as FaultModels.IFaultResponse;
+      faultRequestObj.isDraft = this.faultDetails.isDraft;
       faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
       let res = await this.updateFaultDetails(faultRequestObj);
       if (res) {
@@ -1282,6 +1278,14 @@ export class DetailsPage implements OnInit {
       }
     }
     else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
+      let faultRequestObj = {} as FaultModels.IFaultResponse;
+      faultRequestObj.isDraft = this.faultDetails.isDraft;
+      Object.assign(faultRequestObj, this.landlordInstFrom.value);
+      if (this.contractorEntityId) {
+        faultRequestObj.contractorId = this.contractorEntityId;
+      } else {
+        delete faultRequestObj.contractorId;
+      }
 
       switch (this.faultDetails.userSelectedAction) {
         case LL_INSTRUCTION_TYPES[1].index: //cli006b
@@ -1335,7 +1339,7 @@ export class DetailsPage implements OnInit {
         case LL_INSTRUCTION_TYPES[3].index: //cli006d
           break;
         case LL_INSTRUCTION_TYPES[5].index: //cli006f
-          break;
+            break;
         default:
           this.commonService.showAlert('Landlord Instructions', 'Please select any action');
           break;
