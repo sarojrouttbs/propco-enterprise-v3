@@ -1267,7 +1267,13 @@ export class DetailsPage implements OnInit {
     } else {
       delete faultRequestObj.contractorId;
     }
-    if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
+    if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_LOGGED) {
+      let res = await this.updateFaultDetails(faultRequestObj);
+      if (res) {
+        this.stepper.selectedIndex = FAULT_STAGES_INDEX.FAULT_QUALIFICATION;
+      }
+    }
+    else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
       faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
       let res = await this.updateFaultDetails(faultRequestObj);
       if (res) {
@@ -1280,7 +1286,7 @@ export class DetailsPage implements OnInit {
       switch (this.faultDetails.userSelectedAction) {
         case LL_INSTRUCTION_TYPES[1].index: //cli006b
           var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action. This will send out a notification to Landlord, Tenant and a Contractor. <br/> Are you sure?', '', 'Yes', 'No');
-          if (response) {          
+          if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
             const WORKS_ORDER_PENDING = 19;
