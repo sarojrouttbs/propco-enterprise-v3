@@ -1252,6 +1252,10 @@ export class DetailsPage implements OnInit {
       this.stepper.selectedIndex = FAULT_STAGES_INDEX.FAULT_LOGGED;
     } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
       this.stepper.selectedIndex = FAULT_STAGES_INDEX.FAULT_QUALIFICATION;
+    } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR) {
+      this.stepper.selectedIndex = FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION
+    } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.JOB_COMPLETION) {
+      this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
     }
   }
 
@@ -1350,7 +1354,7 @@ export class DetailsPage implements OnInit {
             faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
             // faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
             let res = await this.updateFaultDetails(faultRequestObj);
-            if(res){
+            if (res) {
               await this.refreshDetailsAndStage();
               this.checkForLLSuggestedAction();
             }
