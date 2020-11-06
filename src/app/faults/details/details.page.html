@@ -622,7 +622,7 @@
                     
                     <mat-form-field class="example-full-width" appearance="legacy" style="line-height: 2;">
                       <mat-label>Select Contractor</mat-label>
-                      <input matInput appearance="legacy" [matAutocomplete]="selectContractor" formControlName='contractorId'>
+                      <input matInput appearance="legacy" [matAutocomplete]="selectContractor" formControlName='contractor'>
                     </mat-form-field>
                     <mat-autocomplete #selectContractor="matAutocomplete"  [displayWith]="displayFn"
                     (optionSelected)="onSelectionChange($event)">
@@ -648,7 +648,7 @@
                   <ion-col size="100">
                     <ion-item>
                       <ion-label position="stacked">Notes</ion-label>
-                    <ion-textarea placeholder="Enter more information here..." formControlName="estimateNotes"></ion-textarea>
+                    <ion-textarea placeholder="Enter more information here..." formControlName="estimationNotes"></ion-textarea>
                     </ion-item>
                   </ion-col>
                 </ion-row>
@@ -862,7 +862,7 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step aria-labelledby="disabled_stepper_step">
+            <mat-step aria-labelledby="disabled_stepper_steps">
               <ng-container *ngTemplateOutlet="landlordInstructions"></ng-container>
               <ng-template matStepLabel>Landlord Instructions</ng-template>
               <!-- <div class="ion-text-end margin-top-16">

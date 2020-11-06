@@ -221,12 +221,12 @@ export class DetailsPage implements OnInit {
 
   private initLandLordInstForm(): void {
     this.landlordInstFrom = this.fb.group({
-      contractorId: '',
+      contractor: '',
       confirmedEstimate: '',
       userSelectedAction: '',
-      estimateNotes: ''
+      estimationNotes: ''
     });
-    this.selectedContractor = this.landlordInstFrom.get('contractorId').valueChanges.pipe(debounceTime(300),
+    this.selectedContractor = this.landlordInstFrom.get('contractor').valueChanges.pipe(debounceTime(300),
       switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractorByText(value) :
         new Observable())
     );
@@ -243,6 +243,15 @@ export class DetailsPage implements OnInit {
       this.contractorEntityId = details.contractorId;
       this.getFaultDocuments(this.faultId);
       this.getFaultHistory();
+      if (this.contractorEntityId) {
+        let contractorDetails: any = await this.getContractorDetails(this.contractorEntityId);
+        if (contractorDetails) {
+          contractorDetails.fullName = contractorDetails.name;
+          this.landlordInstFrom.patchValue({
+            contractor: contractorDetails
+          });
+        }
+      }
     } else {
       this.faultDetails = <FaultModels.IFaultResponse>{};
       this.faultDetails.status = 1;
@@ -255,17 +264,21 @@ export class DetailsPage implements OnInit {
       this.getHMOLicenceDetails()
     ]).subscribe(async (values) => {
       if (this.faultId) {
-        this.commonService.hideLoader();
+        // this.commonService.hideLoader();
         this.initPatching();
         this.setValidatorsForReportedBy();
-        this.getReportedByIdList();
-        let propertyLandlords: any = await this.getLandlordsOfProperty(this.propertyId);
+        if (this.faultDetails.reportedBy === 'LANDLORD') {
+          await this.getReportedByIdList();
+        } else {
+          this.getReportedByIdList();
+          await this.getLandlordsOfProperty(this.propertyId);
+        }
         let landlordId;
-        if (propertyLandlords.length > 1) {
-          let landlord = this.getMaxRentShareLandlord(propertyLandlords);
+        if (this.landlordsOfproperty.length > 1) {
+          let landlord = this.getMaxRentShareLandlord(this.landlordsOfproperty);
           landlordId = landlord.landlordId
         } else {
-          landlordId = propertyLandlords[0].landlordId;
+          landlordId = this.landlordsOfproperty[0].landlordId;
         }
         // let landlordId = 'cd2766b6-525c-11e9-9cbf-0cc47a54d954';
         await this.getLandlordDetails(landlordId);
@@ -343,10 +356,10 @@ export class DetailsPage implements OnInit {
     });
     /*Landlord Instructions*/
     this.landlordInstFrom.patchValue({
-      contractorId: this.faultDetails.contractorId,
+      // contractor: this.faultDetails.contractorId,
       confirmedEstimate: this.faultDetails.confirmedEstimate,
       userSelectedAction: this.faultDetails.userSelectedAction,
-      estimateNotes: this.faultDetails.estimateNotes
+      estimationNotes: this.faultDetails.estimationNotes
     });
   }
 
@@ -381,7 +394,7 @@ export class DetailsPage implements OnInit {
     return promise;
   }
 
-  getPropertyTenancies() {
+  private getPropertyTenancies() {
     const promise = new Promise((resolve, reject) => {
       this.faultService.getPropertyTenancies(this.propertyId).subscribe(
         res => {
@@ -410,7 +423,7 @@ export class DetailsPage implements OnInit {
     return promise;
   }
 
-  deleteAdditionalInfo(infoId: string) {
+  private deleteAdditionalInfo(infoId: string) {
     const promise = new Promise((resolve, reject) => {
       this.faultService.deleteAdditionalInfo(infoId).subscribe(
         res => {
@@ -425,7 +438,7 @@ export class DetailsPage implements OnInit {
     return promise;
   }
 
-  addAdditionalInfo(faultId: string, requestObj: any) {
+  private addAdditionalInfo(faultId: string, requestObj: any) {
     const promise = new Promise((resolve, reject) => {
       this.faultService.addAdditionalInfo(faultId, requestObj).subscribe(
         res => {
@@ -440,7 +453,7 @@ export class DetailsPage implements OnInit {
     return promise;
   }
 
-  updateAdditionalInfo(id: string, requestObj: any) {
+  private updateAdditionalInfo(id: string, requestObj: any) {
     const promise = new Promise((resolve, reject) => {
       this.faultService.updateAdditionalInfo(id, requestObj).subscribe(
         res => {
@@ -633,6 +646,17 @@ export class DetailsPage implements OnInit {
           reject(null);
         }
       );
+    });
+    return promise;
+  }
+
+  private getContractorDetails(contractorId) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.getContractorDetails(contractorId).subscribe(res => {
+        resolve(res);
+      }, error => {
+        reject(null);
+      });
     });
     return promise;
   }
@@ -888,52 +912,59 @@ export class DetailsPage implements OnInit {
   }
 
   async getReportedByIdList() {
-    let reportedBy = this.reportedByForm.get('reportedBy').value;
-    if (reportedBy === 'LANDLORD') {
-      this.getLandlordsOfProperty(this.propertyId).then((data: any[]) => {
-        if (this.faultId && data && data.length) {
-          let entityData = data.find(x => x.landlordId === this.reportedByForm.get('reportedById').value);
-          this.reportedByForm.get('selectedEntity').setValue(entityData);
-          this.setEntityData(entityData);
-        }
-      });
-    }
-    else if (reportedBy === 'TENANT' && this.reportedByForm.get('agreementId').value) {
-      this.getPropertyTenants(this.propertyId, this.reportedByForm.get('agreementId').value).then((tenantList: any[]) => {
-        if (this.faultId && tenantList && tenantList.length) {
-          let entityData = tenantList.find(x => x.tenantId === this.reportedByForm.get('reportedById').value);
-          this.reportedByForm.get('selectedEntity').setValue(entityData);
-          this.setEntityData(entityData);
-        }
-      });
-    }
-    else if (reportedBy === 'GUARANTOR' && this.reportedByForm.get('agreementId').value) {
-      const agreementId = this.reportedByForm.get('agreementId').value;
-      let agreement = this.propertyTenancyDetails.find(function (tenancy) {
-        return (tenancy.agreementId == agreementId)
-      });
-      this.allGuarantors = [];
-      if (agreement && agreement.tenants) {
-        agreement.tenants.forEach(tenant => {
-          this.getTenantsGuarantors(tenant.tenantId);
-        });
-
-        let apiObservableArray = [];
-        agreement.tenants.forEach(tenant => {
-          apiObservableArray.push(this.getTenantsGuarantors(tenant.tenantId));
-        });
-        forkJoin(apiObservableArray).subscribe((res: any[]) => {
-          if (res) {
-            if (this.faultId && this.allGuarantors && this.allGuarantors.length) {
-              let entityData = res.find(x => x.guarantorId === this.reportedByForm.get('reportedById').value);
-              this.reportedByForm.get('selectedEntity').setValue(entityData);
-              this.setEntityData(entityData);
-            }
+    const promise = new Promise((resolve, reject) => {
+      let reportedBy = this.reportedByForm.get('reportedBy').value;
+      if (reportedBy === 'LANDLORD') {
+        this.getLandlordsOfProperty(this.propertyId).then((data: any[]) => {
+          if (this.faultId && data && data.length) {
+            let entityData = data.find(x => x.landlordId === this.reportedByForm.get('reportedById').value);
+            this.reportedByForm.get('selectedEntity').setValue(entityData);
+            this.setEntityData(entityData);
           }
-        }, error => {
+          resolve(data);
         });
       }
-    }
+      else if (reportedBy === 'TENANT' && this.reportedByForm.get('agreementId').value) {
+        this.getPropertyTenants(this.propertyId, this.reportedByForm.get('agreementId').value).then((tenantList: any[]) => {
+          if (this.faultId && tenantList && tenantList.length) {
+            let entityData = tenantList.find(x => x.tenantId === this.reportedByForm.get('reportedById').value);
+            this.reportedByForm.get('selectedEntity').setValue(entityData);
+            this.setEntityData(entityData);
+          }
+          resolve(tenantList);
+        });
+      }
+      else if (reportedBy === 'GUARANTOR' && this.reportedByForm.get('agreementId').value) {
+        const agreementId = this.reportedByForm.get('agreementId').value;
+        let agreement = this.propertyTenancyDetails.find(function (tenancy) {
+          return (tenancy.agreementId == agreementId)
+        });
+        this.allGuarantors = [];
+        if (agreement && agreement.tenants) {
+          agreement.tenants.forEach(tenant => {
+            this.getTenantsGuarantors(tenant.tenantId);
+          });
+
+          let apiObservableArray = [];
+          agreement.tenants.forEach(tenant => {
+            apiObservableArray.push(this.getTenantsGuarantors(tenant.tenantId));
+          });
+          forkJoin(apiObservableArray).subscribe((res: any[]) => {
+            if (res) {
+              if (this.faultId && this.allGuarantors && this.allGuarantors.length) {
+                let entityData = res.find(x => x.guarantorId === this.reportedByForm.get('reportedById').value);
+                this.reportedByForm.get('selectedEntity').setValue(entityData);
+                this.setEntityData(entityData);
+              }
+            }
+            resolve(res);
+          }, error => {
+          });
+        }
+      }
+
+    });
+    return promise;
 
   }
 
@@ -1086,7 +1117,6 @@ export class DetailsPage implements OnInit {
       } else {
         delete faultRequestObj.contractorId;
       }
-      // faultRequestObj.contractorId ? faultRequestObj.contractorId : delete faultRequestObj.contractorId;
     }
 
     this.faultService.updateFault(this.faultId, faultRequestObj).subscribe(
@@ -1237,7 +1267,6 @@ export class DetailsPage implements OnInit {
     } else {
       delete faultRequestObj.contractorId;
     }
-    //faultRequestObj.contractorId ? faultRequestObj.contractorId : delete faultRequestObj.contractorId;
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
       faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
       let res = await this.updateFaultDetails(faultRequestObj);
