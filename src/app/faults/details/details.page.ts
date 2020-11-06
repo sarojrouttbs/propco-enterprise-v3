@@ -1260,18 +1260,24 @@ export class DetailsPage implements OnInit {
     //   this.stepper.selectedIndex = this.stepper.selectedIndex + 1;
     //   return;
     // }
-    // const res = await this.commonService.showConfirm('Proceed', 'This will change the fault stage, Do you want to continue?');
-    // this.commonService.showLoader();
-    let faultRequestObj = this.createFaultFormValues();
-    faultRequestObj.isDraft = this.faultDetails.isDraft;
-    Object.assign(faultRequestObj, this.landlordInstFrom.value);
-    if (this.contractorEntityId) {
-      faultRequestObj.contractorId = this.contractorEntityId;
-    } else {
-      delete faultRequestObj.contractorId;
+
+    if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_LOGGED) {
+      let faultRequestObj = this.createFaultFormValues();
+      faultRequestObj.isDraft = this.faultDetails.isDraft;
+      faultRequestObj.stage = this.faultDetails.stage;
+      let res = await this.updateFaultDetails(faultRequestObj);
+      if (res) {
+        this.stepper.selectedIndex = FAULT_STAGES_INDEX.FAULT_QUALIFICATION;
+      }
     }
-    if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
-      faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+    else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
+      let faultRequestObj = {} as FaultModels.IFaultResponse;
+      faultRequestObj.isDraft = this.faultDetails.isDraft;
+      if (this.stepper.selectedIndex < FAULT_STAGES_INDEX[this.faultDetails.stage]) {
+        faultRequestObj.stage = this.faultDetails.stage;
+      } else {
+        faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+      }
       let res = await this.updateFaultDetails(faultRequestObj);
       if (res) {
         this.stepper.selectedIndex = FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION;
@@ -1279,6 +1285,14 @@ export class DetailsPage implements OnInit {
       }
     }
     else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
+      let faultRequestObj = {} as FaultModels.IFaultResponse;
+      faultRequestObj.isDraft = this.faultDetails.isDraft;
+      Object.assign(faultRequestObj, this.landlordInstFrom.value);
+      if (this.contractorEntityId) {
+        faultRequestObj.contractorId = this.contractorEntityId;
+      } else {
+        delete faultRequestObj.contractorId;
+      }
 
       switch (this.faultDetails.userSelectedAction) {
         case LL_INSTRUCTION_TYPES[1].index: //cli006b
@@ -1286,10 +1300,11 @@ export class DetailsPage implements OnInit {
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
-            let res = await this.updateFaultDetails(faultRequestObj);
-            if (res) {
-              this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
-            }
+            const WORKS_ORDER_PENDING = 19;
+            forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(WORKS_ORDER_PENDING)]).subscribe(data => {
+              // this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+              this.refreshDetailsAndStage();
+            });
           }
           break;
         case LL_INSTRUCTION_TYPES[2].index: //cli006c
@@ -1297,10 +1312,11 @@ export class DetailsPage implements OnInit {
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
-            let res = await this.updateFaultDetails(faultRequestObj);
-            if (res) {
-              this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
-            }
+            const AWAITING_QUOTE = 14;
+            forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(AWAITING_QUOTE)]).subscribe(data => {
+              // this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+              this.refreshDetailsAndStage();
+            });
           }
           break;
         case LL_INSTRUCTION_TYPES[4].index: //cli006e
@@ -1310,7 +1326,8 @@ export class DetailsPage implements OnInit {
             faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
             const WORKS_ORDER_PENDING = 19;
             forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(WORKS_ORDER_PENDING)]).subscribe(data => {
-              this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+              // this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+              this.refreshDetailsAndStage();
             });
           }
           break;
@@ -1329,6 +1346,17 @@ export class DetailsPage implements OnInit {
         case LL_INSTRUCTION_TYPES[3].index: //cli006d
           break;
         case LL_INSTRUCTION_TYPES[5].index: //cli006f
+          if (this.landlordInstFrom.get('confirmedEstimate').value > 0) {
+            faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+            // faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+            let res = await this.updateFaultDetails(faultRequestObj);
+            if(res){
+              await this.refreshDetailsAndStage();
+              this.checkForLLSuggestedAction();
+            }
+          } else {
+            this.commonService.showAlert('Get an Estimate?', 'Please fill the confirmed estimate.');
+          }
           break;
         default:
           this.commonService.showAlert('Landlord Instructions', 'Please select any action');
