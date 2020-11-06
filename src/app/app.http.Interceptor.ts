@@ -15,7 +15,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.totalRequests = 0;
+    // this.totalRequests = 0;
     //if (!req.url.includes('applicant/search')) {
       //this._commonService.showLoader();
     //}
@@ -36,9 +36,9 @@ export class AppHttpInterceptor implements HttpInterceptor {
 
       const authReq = req.clone({ headers: requestHeader });
       this.totalRequests++;
-      if (this.totalRequests === 1) {
+      // if (this.totalRequests === 1) {
         this._commonService.showLoader();
-      }
+      // }
       return next.handle(authReq).pipe(catchError((error: HttpErrorResponse) => {
         this._commonService.hideLoader();
         if (error.status === 404 || error.status === 502 || error.status === 503 || error.status === 500) {
