@@ -21,7 +21,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatButtonModule} from '@angular/material/button';
 import { MatCardModule} from '@angular/material/card';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-
+import { SimplePopoverPageModule } from 'src/app/shared/popover/simple-popover/simple-popover.module';
 
 @NgModule({
   imports: [
@@ -40,7 +40,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatTabsModule,
     MatAutocompleteModule,
     MatCardModule,
-    SearchPropertyPageModule
+    SearchPropertyPageModule,
+    SimplePopoverPageModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective]
 })

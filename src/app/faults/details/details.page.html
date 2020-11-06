@@ -666,7 +666,7 @@
                   <ion-text class="content">
                     {{landlordDetails?.doesOwnRepairs ? 'Landlord does their own repairs' : 'Landlord does not do their own repairs'}}
                   </ion-text>
-                  <ion-button color="success" fill="outline" matTooltip="{{landlordDetails?.repairCategoriesText}}">Repair Categories</ion-button>
+                  <ion-button (click)="presentRepairCategories($event)" color="success" fill="outline">Repair Categories</ion-button>
                 </ion-col>
                 <ion-col size-xs="100" size-sm="50" class="header-content">
                   <ion-text class="header">Branch holds management keys?</ion-text><br />
