@@ -1217,12 +1217,15 @@ export class DetailsPage implements OnInit {
   private checkForLLSuggestedAction() {
     // if (this.faultDetails.status === 2 || this.faultDetails.status === 13) { //In Assessment" or " Checking Landlord's Instructions "
     this.suggestedAction = '';
-    let confirmedEstimate = this.faultDetails.confirmedEstimate || 0;
+    let confirmedEstimate = this.faultDetails.confirmedEstimate;
     if (this.faultDetails.urgencyStatus === URGENCY_TYPES.EMERGENCY || this.faultDetails.urgencyStatus === URGENCY_TYPES.URGENT) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[4].index;
     }
     else if (this.landlordDetails.doesOwnRepairs) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[0].index;
+    }
+    else if(confirmedEstimate == null){
+      this.suggestedAction = LL_INSTRUCTION_TYPES[5].index;
     }
     else if (confirmedEstimate > this.propertyDetails.expenditureLimit) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[2].index;
