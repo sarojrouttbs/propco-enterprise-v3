@@ -1,4 +1,4 @@
-import { ModalController } from '@ionic/angular';
+import { ModalController, PopoverController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
 import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES } from './../../shared/constants';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -10,6 +10,8 @@ import { FaultsService } from '../faults.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material/stepper';
 import { debounceTime, switchMap } from 'rxjs/operators';
+import { SimplePopoverPage } from 'src/app/shared/popover/simple-popover/simple-popover.page';
+
 
 @Component({
   selector: 'fault-details',
@@ -98,7 +100,8 @@ export class DetailsPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private modalController: ModalController,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    private popoverController: PopoverController
   ) {
   }
 
@@ -1435,6 +1438,19 @@ export class DetailsPage implements OnInit {
       });
     }
 
+  }
+
+  async presentRepairCategories(ev: any) {
+    const popover = await this.popoverController.create({
+      component: SimplePopoverPage,
+      cssClass: 'my-custom-class',
+      event: ev,
+      translucent: true,
+      componentProps: {
+        data: this.landlordDetails.repairCategoriesText
+      },
+    });
+    return await popover.present();
   }
 
 }

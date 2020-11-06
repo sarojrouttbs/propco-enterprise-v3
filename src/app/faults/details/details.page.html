@@ -668,8 +668,7 @@
                   <ion-text class="content">
                     {{landlordDetails?.doesOwnRepairs ? "Landlord does their own repairs" : "Agent's own contractor"}}
                   </ion-text>
-                  <ion-button color="success" fill="outline" matTooltip="{{landlordDetails?.repairCategoriesText}}" *ngIf="landlordDetails?.doesOwnRepairs">
-                    Repair Categories</ion-button>
+                  <ion-button color="success" fill="outline" (click)="presentRepairCategories($event)" *ngIf="landlordDetails?.doesOwnRepairs" >Repair Categories</ion-button>
                 </ion-col>
                 <ion-col size-xs="100" size-sm="50" class="header-content">
                   <ion-text class="header">Branch holds management keys?</ion-text><br />
