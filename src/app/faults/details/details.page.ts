@@ -1224,7 +1224,7 @@ export class DetailsPage implements OnInit {
     else if (this.landlordDetails.doesOwnRepairs) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[0].index;
     }
-    else if(confirmedEstimate == null){
+    else if (confirmedEstimate == null || confirmedEstimate <= 0) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[5].index;
     }
     else if (confirmedEstimate > this.propertyDetails.expenditureLimit) {
