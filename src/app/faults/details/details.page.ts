@@ -1270,7 +1270,11 @@ export class DetailsPage implements OnInit {
     else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
       let faultRequestObj = {} as FaultModels.IFaultResponse;
       faultRequestObj.isDraft = this.faultDetails.isDraft;
-      faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+      if (this.stepper.selectedIndex < FAULT_STAGES_INDEX[this.faultDetails.stage]) {
+        faultRequestObj.stage = this.faultDetails.stage;
+      } else {
+        faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+      }
       let res = await this.updateFaultDetails(faultRequestObj);
       if (res) {
         this.stepper.selectedIndex = FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION;
@@ -1339,7 +1343,7 @@ export class DetailsPage implements OnInit {
         case LL_INSTRUCTION_TYPES[3].index: //cli006d
           break;
         case LL_INSTRUCTION_TYPES[5].index: //cli006f
-            break;
+          break;
         default:
           this.commonService.showAlert('Landlord Instructions', 'Please select any action');
           break;
