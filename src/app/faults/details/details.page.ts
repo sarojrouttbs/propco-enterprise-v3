@@ -1193,6 +1193,7 @@ export class DetailsPage implements OnInit {
     const details: any = await this.getFaultDetails();
     this.selectStageStepper(details.stage);
     this.faultDetails = details;
+    this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
   }
 
 
@@ -1240,8 +1241,6 @@ export class DetailsPage implements OnInit {
     }
 
     // }
-
-    this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
     if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index && this.faultDetails.status === 15) {
       this.initLandlordInstructions(this.faultId);
     }
