@@ -1404,8 +1404,10 @@ export class DetailsPage implements OnInit {
     this.faultService.getFaultNotifications(faultId).subscribe(async (response) => {
       if (response) {
         this.faultNotifications = response;
-        this.notificationQuesAnswer = this.faultNotifications[0].notification;
-        if (this.notificationQuesAnswer.responseReceived && this.notificationQuesAnswer.responseReceived.isAccepted) {
+        for (let i = 0; i < this.faultNotifications.length; i++) {
+          this.notificationQuesAnswer = this.faultNotifications[i].notifications;
+        }
+        if (this.faultNotifications[0].responseReceived && this.faultNotifications[0].responseReceived.isAccepted) {
           // this.refreshDetailsAndStage();
           this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
           // let requestObj = {} as FaultModels.IFaultResponse;
@@ -1421,14 +1423,14 @@ export class DetailsPage implements OnInit {
   }
 
   questionAction(data) {
-    if (!data.isAccepted) {
+    if (!data.value) {
       this.commonService.showConfirm(data.text, 'This will change status back to "Checking Landlord Instruction". </br> Are you Sure?', '', 'Yes', 'No').then(res => {
         if (res) {
           let faultRequestObj = {} as FaultModels.IFaultResponse
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.isDraft = this.faultDetails.isDraft;
           const CHECKING_LANDLORD_INSTRUCTIONS = 13;
-          forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS)]).subscribe(data => {
+          forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS), this.updateFaultNotification(data.value)]).subscribe(data => {
             if (data) {
               this.refreshDetailsAndStage();
             }
@@ -1436,13 +1438,13 @@ export class DetailsPage implements OnInit {
         }
       });
     }
-    else if (data.isAccepted) {
+    else if (data.value) {
       this.commonService.showConfirm(data.text, 'This will change the stage to "Job Completion". </br> Are you Sure?', '', 'Yes', 'No').then(res => {
         if (res) {
           let faultRequestObj = {} as FaultModels.IFaultResponse
           faultRequestObj.stage = FAULT_STAGES.JOB_COMPLETION;
           faultRequestObj.isDraft = this.faultDetails.isDraft;
-          forkJoin([this.updateFaultDetails(faultRequestObj)]).subscribe(data => {
+          forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultNotification(data.value)]).subscribe(data => {
             if (data) {
               this.refreshDetailsAndStage();
             }
@@ -1464,6 +1466,15 @@ export class DetailsPage implements OnInit {
       },
     });
     return await popover.present();
+  }
+
+  private updateFaultNotification(data){
+    console.log(data)
+    const faultNotificationId = this.faultNotifications[0].faultNotificationId;
+    let notificationObj = {} as FaultModels.IUpdateNotification;
+    debugger
+    notificationObj.isAccepted = data;
+    this.faultService.updateNotification(faultNotificationId, notificationObj).subscribe();
   }
 
 }

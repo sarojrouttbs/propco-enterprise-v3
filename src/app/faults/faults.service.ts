@@ -147,6 +147,10 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `contractors/${contractorId}`);
   }
 
+  updateNotification(faultNotificationId, notificationObj): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response`, notificationObj);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
