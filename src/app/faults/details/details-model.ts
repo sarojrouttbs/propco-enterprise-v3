@@ -97,5 +97,8 @@ declare namespace FaultModels {
         reference: string; 
     }
 
+    export interface IUpdateNotification {
+        isAccepted: boolean;
+    }
 }
 
