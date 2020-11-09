@@ -244,6 +244,7 @@ export class DetailsPage implements OnInit {
       this.faultDetails = details;
       this.propertyId = details.propertyId;
       this.contractorEntityId = details.contractorId;
+      this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
       this.getFaultDocuments(this.faultId);
       this.getFaultHistory();
       if (this.contractorEntityId) {

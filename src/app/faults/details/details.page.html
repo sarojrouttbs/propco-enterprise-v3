@@ -629,7 +629,8 @@
                     
                     <mat-form-field class="example-full-width" appearance="legacy" style="line-height: 2;">
                       <mat-label>Select Contractor</mat-label>
-                      <input matInput appearance="legacy" [matAutocomplete]="selectContractor" formControlName='contractor' [disabled]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'">
+                      <input matInput appearance="legacy" [matAutocomplete]="selectContractor" formControlName='contractor' 
+                        [disabled]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'" [readonly]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'">
                     </mat-form-field>
                     <mat-autocomplete #selectContractor="matAutocomplete"  [displayWith]="displayFn"
                     (optionSelected)="onSelectionChange($event)">
