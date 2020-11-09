@@ -666,9 +666,9 @@
                 <ion-col size-xs="100" class="header-content">
                   <ion-text class="header">Contractor Instructions</ion-text><br />
                   <ion-text class="content">
-                    {{landlordDetails?.doesOwnRepairs ? 'Landlord does their own repairs' : 'Landlord does not do their own repairs'}}
+                    {{landlordDetails?.doesOwnRepairs ? "Landlord does their own repairs" : "Agent's own contractor"}}
                   </ion-text>
-                  <ion-button color="success" fill="outline" matTooltip="{{landlordDetails?.repairCategoriesText}}">Repair Categories</ion-button>
+                  <ion-button color="success" fill="outline" (click)="presentRepairCategories($event)" *ngIf="landlordDetails?.doesOwnRepairs" >Repair Categories</ion-button>
                 </ion-col>
                 <ion-col size-xs="100" size-sm="50" class="header-content">
                   <ion-text class="header">Branch holds management keys?</ion-text><br />
@@ -723,12 +723,24 @@
 <ng-template #arrangingContractor>
   <ion-card class="ion-no-margin">
     <h2 class="ion-text-center">This page is in pogress...</h2>
+    <div class="action-btn-group">
+      <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
+      <ion-button (click)="goToLastStage()">Back</ion-button>
+      <!-- <ion-button class="save-button" (click)="saveForLater()">Save for later</ion-button> -->
+      <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button>
+    </div>
   </ion-card>
 </ng-template>
 
 <ng-template #jobCompletion>
   <ion-card class="ion-no-margin">
     <h2 class="ion-text-center">This page is in pogress...</h2>
+    <div class="action-btn-group">
+      <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
+      <ion-button (click)="goToLastStage()">Back</ion-button>
+      <!-- <ion-button class="save-button" (click)="saveForLater()">Save for later</ion-button> -->
+      <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button>
+    </div>
   </ion-card>
 </ng-template>
 

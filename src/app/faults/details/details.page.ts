@@ -1,4 +1,4 @@
-import { ModalController } from '@ionic/angular';
+import { ModalController, PopoverController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
 import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES } from './../../shared/constants';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -10,6 +10,8 @@ import { FaultsService } from '../faults.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material/stepper';
 import { debounceTime, switchMap } from 'rxjs/operators';
+import { SimplePopoverPage } from 'src/app/shared/popover/simple-popover/simple-popover.page';
+
 
 @Component({
   selector: 'fault-details',
@@ -98,7 +100,8 @@ export class DetailsPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private modalController: ModalController,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    private popoverController: PopoverController
   ) {
   }
 
@@ -1219,12 +1222,15 @@ export class DetailsPage implements OnInit {
   private checkForLLSuggestedAction() {
     // if (this.faultDetails.status === 2 || this.faultDetails.status === 13) { //In Assessment" or " Checking Landlord's Instructions "
     this.suggestedAction = '';
-    let confirmedEstimate = this.faultDetails.confirmedEstimate || 0;
+    let confirmedEstimate = this.faultDetails.confirmedEstimate;
     if (this.faultDetails.urgencyStatus === URGENCY_TYPES.EMERGENCY || this.faultDetails.urgencyStatus === URGENCY_TYPES.URGENT) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[4].index;
     }
     else if (this.landlordDetails.doesOwnRepairs) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[0].index;
+    }
+    else if (confirmedEstimate == null || confirmedEstimate <= 0) {
+      this.suggestedAction = LL_INSTRUCTION_TYPES[5].index;
     }
     else if (confirmedEstimate > this.propertyDetails.expenditureLimit) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[2].index;
@@ -1254,6 +1260,10 @@ export class DetailsPage implements OnInit {
       this.stepper.selectedIndex = FAULT_STAGES_INDEX.FAULT_LOGGED;
     } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
       this.stepper.selectedIndex = FAULT_STAGES_INDEX.FAULT_QUALIFICATION;
+    } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR) {
+      this.stepper.selectedIndex = FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION
+    } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.JOB_COMPLETION) {
+      this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
     }
   }
 
@@ -1349,6 +1359,17 @@ export class DetailsPage implements OnInit {
         case LL_INSTRUCTION_TYPES[3].index: //cli006d
           break;
         case LL_INSTRUCTION_TYPES[5].index: //cli006f
+          if (this.landlordInstFrom.get('confirmedEstimate').value > 0) {
+            faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+            // faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+            let res = await this.updateFaultDetails(faultRequestObj);
+            if (res) {
+              await this.refreshDetailsAndStage();
+              this.checkForLLSuggestedAction();
+            }
+          } else {
+            this.commonService.showAlert('Get an Estimate?', 'Please fill the confirmed estimate.');
+          }
           break;
         default:
           this.commonService.showAlert('Landlord Instructions', 'Please select any action');
@@ -1430,6 +1451,19 @@ export class DetailsPage implements OnInit {
       });
     }
 
+  }
+
+  async presentRepairCategories(ev: any) {
+    const popover = await this.popoverController.create({
+      component: SimplePopoverPage,
+      cssClass: 'my-custom-class',
+      event: ev,
+      translucent: true,
+      componentProps: {
+        data: this.landlordDetails.repairCategoriesText
+      },
+    });
+    return await popover.present();
   }
 
 }
