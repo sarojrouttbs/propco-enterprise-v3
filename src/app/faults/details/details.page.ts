@@ -719,7 +719,7 @@ export class DetailsPage implements OnInit {
   }
 
 
-  uploadFiles(faultId) {
+  uploadFiles(faultId, reDir = true) {
     let apiObservableArray = [];
     let uploadedDoc = this.uploadDocForm.controls.photos.value;
     uploadedDoc.forEach(data => {
@@ -731,16 +731,20 @@ export class DetailsPage implements OnInit {
       formData.append('subCategory', 'Addendum');
       apiObservableArray.push(this.faultService.uploadDocument(formData, faultId));
     });
-    setTimeout(() => {
-      forkJoin(apiObservableArray).subscribe(() => {
-        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
-      }, err => {
-        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
-      });
-    }, 1000);
-    if (!apiObservableArray.length) {
+    if (!apiObservableArray.length && reDir) {
       this.router.navigate(['faults/dashboard'], { replaceUrl: true });
     }
+    setTimeout(() => {
+      forkJoin(apiObservableArray).subscribe(() => {
+        if (reDir) {
+          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+        }
+      }, err => {
+        if (reDir) {
+          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+        }
+      });
+    }, 1000);
   }
 
   getFaultDocuments(faultId) {
@@ -1171,6 +1175,7 @@ export class DetailsPage implements OnInit {
       faultRequestObj.stage = FAULT_STAGES.FAULT_QUALIFICATION;
       faultRequestObj.isDraft = this.faultDetails.isDraft;
       await this.updateFaultDetails(faultRequestObj);
+      this.uploadFiles(this.faultId, false);
       const UNDER_REVIEW = 2; // Under review
       this.faultService.updateFaultStatus(this.faultId, UNDER_REVIEW).subscribe(data => {
         this.refreshDetailsAndStage();
@@ -1263,6 +1268,7 @@ export class DetailsPage implements OnInit {
       faultRequestObj.isDraft = this.faultDetails.isDraft;
       faultRequestObj.stage = this.faultDetails.stage;
       let res = await this.updateFaultDetails(faultRequestObj);
+      this.uploadFiles(this.faultId, false);
       if (res) {
         this.stepper.selectedIndex = FAULT_STAGES_INDEX.FAULT_QUALIFICATION;
       }
