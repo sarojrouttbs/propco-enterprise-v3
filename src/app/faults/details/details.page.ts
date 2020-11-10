@@ -1040,6 +1040,15 @@ export class DetailsPage implements OnInit {
       let faultDetailsForm = this.faultDetailsForm.valid;
       let reportedByForm = this.reportedByForm.valid;
       let accessInfoForm = this.accessInfoForm.valid;
+      if (!reportedByForm) {
+        this.reportedBy();
+      }
+      if (!accessInfoForm) {
+        this.saveAccessInfo();
+      }
+      if (!faultDetailsForm) {
+        this.caseDeatil();
+      }
 
       if (describeFaultForm && faultDetailsForm && reportedByForm && accessInfoForm) {
         valid = true;
@@ -1367,7 +1376,10 @@ export class DetailsPage implements OnInit {
             const AWAITING_RESPONSE_LANDLORD = 15;
             forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD)]).subscribe(data => {
               this.refreshDetailsAndStage();
-              this.initLandlordInstructions(this.faultId);
+              this.commonService.showLoader();
+              setTimeout(() => {
+                this.initLandlordInstructions(this.faultId);
+              }, 3000);
             });
           }
           break;
@@ -1483,7 +1495,7 @@ export class DetailsPage implements OnInit {
     return await popover.present();
   }
 
-  private updateFaultNotification(data){
+  private updateFaultNotification(data) {
     console.log(data)
     const faultNotificationId = this.faultNotifications[0].faultNotificationId;
     let notificationObj = {} as FaultModels.IUpdateNotification;
