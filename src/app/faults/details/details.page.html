@@ -573,7 +573,7 @@
               <h6 class="banner-title">Here’s the action you choose:</h6>
               <ion-button color="success" class="icon-button">Pass to Landlord to do their own repairs <ion-icon name="checkmark-circle-outline"></ion-icon> </ion-button>
               <h6 class="banner-title"> <strong>Awaiting response from the Landlord</strong> </h6>
-              <h6 class="banner-title">Next chase due: {{faultNotifications ? (faultNotifications[0].nextChaseDueAt | date: 'dd/MM/yyyy') : ''}}</h6>
+              <h6 class="banner-title">Next chase due: {{faultNotifications ? (faultNotifications[0].nextChaseDueAt | date: 'dd-MM-yyyy') : ''}}</h6>
             </div>
             <div class="question-answer" *ngIf="faultNotifications && faultNotifications[0]?.responseReceived !== null">
               <h6>{{notificationQuesAnswer[0]?.text}}</h6>
@@ -648,7 +648,7 @@
 
                   </ion-col>
                   <ion-col size="50">
-                    <ion-item>
+                    <ion-item style="padding-top: 1px;">
                       <ion-label position="floating">Confirmed Estimate</ion-label>
                       <ion-input formControlName="confirmedEstimate" [disabled]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'"></ion-input>
                     </ion-item>
