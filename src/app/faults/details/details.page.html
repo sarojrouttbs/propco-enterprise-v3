@@ -725,14 +725,14 @@
           </div>
 
           <div class="landlord-preferences">
-            <ion-grid class="view-details" style="width: 100%;">
+            <ion-grid class="view-details" style="width: 100%;"> 
               <ion-row class="ion-justify-content-between">
                 <h2 class="banner-heading">Landlord preferences and other information </h2>
 
                 <ion-col size-xs="100" class="header-content">
                   <ion-text class="header">Contractor Instructions</ion-text><br />
-                  <ion-text class="content">
-                    {{landlordDetails?.doesOwnRepairs ? "Landlord does their own repairs" : "Agent's own contractor"}}
+                  <ion-text class="content" color= "{{landlordDetails?.doesOwnRepairs ? isMatch ? '' : 'danger' : ''}}">
+                    {{landlordDetails?.doesOwnRepairs ? isMatch ? "Landlord does their own repairs" : "Landlord owned Repair Category does not match the Fault Category" : "Agent's own contractor"}}
                   </ion-text>
                   <ion-button color="success" fill="outline" (click)="presentRepairCategories($event)"
                     *ngIf="landlordDetails?.doesOwnRepairs">Repair Categories</ion-button>

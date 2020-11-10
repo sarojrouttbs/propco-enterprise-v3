@@ -74,6 +74,7 @@ export class DetailsPage implements OnInit {
   suggestedAction; oldUserSelectedAction;
   faultNotifications: any[];
   notificationQuesAnswer: any;
+  isMatch = false;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -630,6 +631,7 @@ export class DetailsPage implements OnInit {
           }
           this.landlordDetails.repairCategoriesText = categoryNames;
           resolve(this.landlordDetails);
+          console.log(this.landlordDetails.repairCategoriesText);
         },
         error => {
           reject(null);
@@ -1229,7 +1231,10 @@ export class DetailsPage implements OnInit {
       this.suggestedAction = LL_INSTRUCTION_TYPES[4].index;
     }
     else if (this.landlordDetails.doesOwnRepairs) {
+
       this.suggestedAction = LL_INSTRUCTION_TYPES[0].index;
+      this.matchCategory();
+
     }
     else if (confirmedEstimate == null || confirmedEstimate <= 0) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[5].index;
@@ -1244,6 +1249,16 @@ export class DetailsPage implements OnInit {
     // }
     if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index && this.faultDetails.status === 15) {
       this.initLandlordInstructions(this.faultId);
+    }
+  }
+
+  private matchCategory(){
+    if (this.landlordDetails.repairCategories){
+      this.landlordDetails.repairCategories.forEach(category => {
+        if (category === this.faultDetails.category) {
+          this.isMatch = true;
+        }
+      });
     }
   }
 
