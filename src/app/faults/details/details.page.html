@@ -2,7 +2,7 @@
   <form [formGroup]="faultDetailsForm">
     <ion-grid>
       <ion-row>
-        <ion-col size="25" *ngIf="faultId" >
+        <ion-col size="25" *ngIf="faultId">
           <ion-item>
             <ion-label position="floating">Urgency Status</ion-label>
             <ion-select interface="popover" formControlName="urgencyStatus">
@@ -15,7 +15,8 @@
         </ion-col>
         <ion-col [size]="faultId? 75 : 100">
           <ion-item>
-            <ion-label position="floating">Fault description<ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-label position="floating">Fault description<ion-text class="mandatory">*</ion-text>
+            </ion-label>
             <ion-input formControlName="notes"></ion-input>
           </ion-item>
           <app-validation-message [control]="faultDetailsForm.controls.notes"></app-validation-message>
@@ -35,10 +36,9 @@
               <ion-col size="30">
                 <ion-item>
                   <ion-label position="floating">Type</ion-label>
-                 
+
                   <ion-select interface="popover" formControlName="label">
-                    <ion-select-option [value]="item" *ngFor="let item of addtionalInfo"
-                      >{{ item }}
+                    <ion-select-option [value]="item" *ngFor="let item of addtionalInfo">{{ item }}
                     </ion-select-option>
                   </ion-select>
                 </ion-item>
@@ -50,7 +50,8 @@
                 </ion-item>
               </ion-col>
               <ion-col size="10">
-                <ion-button class="margin-top-16" [disabled]="!addAdditionalDetForm.valid" (click)="createAdditionalInfo(addAdditionalDetForm.value)">Add</ion-button>
+                <ion-button class="margin-top-16" [disabled]="!addAdditionalDetForm.valid"
+                  (click)="createAdditionalInfo(addAdditionalDetForm.value)">Add</ion-button>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -64,30 +65,29 @@
       <ion-row formArrayName="additionalInfo">
         <ion-col size-xl="50" size="100" *ngFor="let item of additionalInfoControls; let i = index;">
           <ng-container [formGroupName]="i">
-          <ion-grid>
-            <ion-row>
-              <ion-col size="30">
-                <ion-item>
-                  <ion-label position="floating">Type</ion-label>
-                  <ion-select interface="popover" formControlName="label">
-                    <ion-select-option [value]="item" *ngFor="let item of addtionalInfo"
-                      >{{ item }}
-                    </ion-select-option>
-                  </ion-select>
-                </ion-item>
-              </ion-col>
-              <ion-col size="60">
-                <ion-item>
-                  <ion-label position="floating">Additional Info</ion-label>
-                  <ion-input formControlName="value"></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="10">
-                <ion-icon name="close-circle" class="close-circle" (click)="removeInfo(i)"></ion-icon>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ng-container>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="30">
+                  <ion-item>
+                    <ion-label position="floating">Type</ion-label>
+                    <ion-select interface="popover" formControlName="label">
+                      <ion-select-option [value]="item" *ngFor="let item of addtionalInfo">{{ item }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="60">
+                  <ion-item>
+                    <ion-label position="floating">Additional Info</ion-label>
+                    <ion-input formControlName="value"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="10">
+                  <ion-icon name="close-circle" class="close-circle" (click)="removeInfo(i)"></ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ng-container>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -100,10 +100,10 @@
       <ion-row>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Who reported the fault?<ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-label position="floating">Who reported the fault?<ion-text class="mandatory">*</ion-text>
+            </ion-label>
             <ion-select interface="popover" formControlName="reportedBy" (ionChange)="onSelectReportedByType()">
-              <ion-select-option [value]="item.index" *ngFor="let item of reportedByTypes"
-                >{{ item.value }}
+              <ion-select-option [value]="item.index" *ngFor="let item of reportedByTypes">{{ item.value }}
               </ion-select-option>
             </ion-select>
           </ion-item>
@@ -111,45 +111,51 @@
         </ion-col>
         <ion-col size="66.6">
           <ion-item>
-            <ion-label position="floating">Select agreement<ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-select formControlName="agreementId" interface="popover" (ionChange)="onSelectAgreement()" 
-                  [disabled]="reportedByForm.controls.reportedBy.value != 'TENANT' && reportedByForm.controls.reportedBy.value != 'GUARANTOR'">
-              <ion-select-option [value]="item.agreementId" *ngFor="let item of propertyTenancyDetails" 
-                > {{getLookupValue(item.status, agreementStatuses)}} {{item.tenancyStartDate | date:'dd/MM/yyyy'}} - {{item.tenancyEndDate| date:'dd/MM/yyyy'}}
+            <ion-label position="floating">Select agreement<ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-select formControlName="agreementId" interface="popover" (ionChange)="onSelectAgreement()"
+              [disabled]="reportedByForm.controls.reportedBy.value != 'TENANT' && reportedByForm.controls.reportedBy.value != 'GUARANTOR'">
+              <ion-select-option [value]="item.agreementId" *ngFor="let item of propertyTenancyDetails">
+                {{getLookupValue(item.status, agreementStatuses)}} {{item.tenancyStartDate | date:'dd/MM/yyyy'}} -
+                {{item.tenancyEndDate| date:'dd/MM/yyyy'}}
               </ion-select-option>
             </ion-select>
           </ion-item>
           <app-validation-message [control]="reportedByForm.controls.agreementId"></app-validation-message>
         </ion-col>
 
-        <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'LANDLORD'" >
+        <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'LANDLORD'">
           <ion-item>
-            <ion-label position="floating">Select Landlord<ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-select interface="popover" formControlName="selectedEntity" (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
-              <ion-select-option [value]="item" *ngFor="let item of landlordsOfproperty"
-                >{{item.addressee || item.name}}
+            <ion-label position="floating">Select Landlord<ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-select interface="popover" formControlName="selectedEntity"
+              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
+              <ion-select-option [value]="item" *ngFor="let item of landlordsOfproperty">{{item.addressee || item.name}}
               </ion-select-option>
             </ion-select>
           </ion-item>
           <app-validation-message [control]="reportedByForm.controls.selectedEntity"></app-validation-message>
         </ion-col>
 
-        <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'TENANT'" >
+        <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'TENANT'">
           <ion-item>
-            <ion-label position="floating">Select Tenant<ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-select interface="popover" formControlName="selectedEntity" (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
-              <ion-select-option [value]="item" *ngFor="let item of propertyTenants"
-                >{{item.addressee || item.name}}
+            <ion-label position="floating">Select Tenant<ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-select interface="popover" formControlName="selectedEntity"
+              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
+              <ion-select-option [value]="item" *ngFor="let item of propertyTenants">{{item.addressee || item.name}}
               </ion-select-option>
             </ion-select>
           </ion-item>
           <app-validation-message [control]="reportedByForm.controls.selectedEntity"></app-validation-message>
         </ion-col>
 
-        <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'GUARANTOR'" >
+        <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'GUARANTOR'">
           <ion-item>
-            <ion-label position="floating">Select Guarantor<ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-select interface="popover" formControlName="selectedEntity" (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
+            <ion-label position="floating">Select Guarantor<ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-select interface="popover" formControlName="selectedEntity"
+              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
               <ion-select-option [value]="item" *ngFor="let item of allGuarantors">
                 {{item.displayAs}}
               </ion-select-option>
@@ -158,12 +164,12 @@
           <app-validation-message [control]="reportedByForm.controls.selectedEntity"></app-validation-message>
         </ion-col>
 
-        <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'THIRD_PARTY'" >
+        <ion-col size="33.3" *ngIf="reportedByForm.controls.reportedBy.value === 'THIRD_PARTY'">
           <ion-item>
-            <ion-label position="floating">Select Third Party<ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-label position="floating">Select Third Party<ion-text class="mandatory">*</ion-text>
+            </ion-label>
             <ion-select interface="popover" formControlName="reportedById">
-              <ion-select-option [value]="item.index" *ngFor="let item of faultReportedByThirdParty"
-                >{{item.value}}
+              <ion-select-option [value]="item.index" *ngFor="let item of faultReportedByThirdParty">{{item.value}}
               </ion-select-option>
             </ion-select>
           </ion-item>
@@ -222,10 +228,10 @@
       <ion-row>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Access information<ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-label position="floating">Access information<ion-text class="mandatory">*</ion-text>
+            </ion-label>
             <ion-select interface="popover" formControlName="isTenantPresenceRequired">
-              <ion-select-option [value]="item.value" *ngFor="let item of accessInfoList"
-                >{{ item.title }}
+              <ion-select-option [value]="item.value" *ngFor="let item of accessInfoList">{{ item.title }}
               </ion-select-option>
             </ion-select>
           </ion-item>
@@ -257,7 +263,9 @@
         <ion-col size-xl="20" size="25">
           <form class="drop-zone" [formGroup]="uploadDocForm" file-drop (files)="submit($event)">
             <ion-icon class="icon" name="cloud-upload"></ion-icon>
-            <input type="file" class="custom-file-input form-control" id="files" accept=".png,.jpeg,.pdf,.jpg,.gif,.bmp,.text,.doc,.csv,.docx,.odt"  multiple (change)="submit($event.target.files)">
+            <input type="file" class="custom-file-input form-control" id="files"
+              accept=".png,.jpeg,.pdf,.jpg,.gif,.bmp,.text,.doc,.csv,.docx,.odt" multiple
+              (change)="submit($event.target.files)">
             <span class="drag-text">Drag files to upload here</span> <br>
             <label for="files" class="browse-btn">Browse Files</label>
           </form>
@@ -267,7 +275,8 @@
             <ion-grid>
               <ion-row>
                 <ion-col size="100">
-                  <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'" (click)="downloadFaultDocumentByUrl(file.documentUrl)">
+                  <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'"
+                    (click)="downloadFaultDocumentByUrl(file.documentUrl)">
                 </ion-col>
               </ion-row>
               <ion-row class="ion-justify-content-between">
@@ -281,9 +290,10 @@
                   <ion-icon (click)="downloadFaultDocumentByUrl(file.documentUrl)" title="Download File" class="download-icon" name="arrow-down-circle-outline"></ion-icon>
                 </ion-col> -->
                 <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding">
-                  <ion-icon (click)="removeFile(i)" title="Delete File" class="delete-icon" name="close-circle"></ion-icon>
+                  <ion-icon (click)="removeFile(i)" title="Delete File" class="delete-icon" name="close-circle">
+                  </ion-icon>
                 </ion-col>
-               </ion-row> 
+              </ion-row>
             </ion-grid>
           </div>
         </ion-col>
@@ -305,7 +315,8 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Last Repair Date</ion-text><br />
-        <ion-text class="content">{{faultHistory?.lastRepairDate ? (faultHistory?.lastRepairDate | date:'MMM d, y') : 'N/A'}}</ion-text>
+        <ion-text class="content">
+          {{faultHistory?.lastRepairDate ? (faultHistory?.lastRepairDate | date:'MMM d, y') : 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Type</ion-text><br />
@@ -334,7 +345,8 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Urgency Status</ion-text><br />
-        <ion-text class="content">{{getLookupValue(faultDetailsForm.controls.urgencyStatus.value, faultUrgencyStatuses) || 'N/A'}}</ion-text>
+        <ion-text class="content">
+          {{getLookupValue(faultDetailsForm.controls.urgencyStatus.value, faultUrgencyStatuses) || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Title</ion-text><br />
@@ -360,14 +372,16 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Who reported the fault?</ion-text><br />
-        <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}
+        </ion-text>
       </ion-col>
-     <!--  <ion-col size-xs="100" size-sm="50" class="header-content">
+      <!--  <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Agreement</ion-text><br />
         <ion-text class="content"></ion-text>
       </ion-col> -->
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header ion-text-capitalize">{{(reportedByForm.controls.reportedBy.value | lowercase) || 'N/A'}}</ion-text><br />
+        <ion-text class="header ion-text-capitalize">{{(reportedByForm.controls.reportedBy.value | lowercase) || 'N/A'}}
+        </ion-text><br />
         <ion-text class="content">{{reportedByForm.controls.forename.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -400,11 +414,14 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Access Information</ion-text><br />
-        <ion-text class="content">{{(accessInfoForm.controls.isTenantPresenceRequired.value?accessInfoList[0].title:accessInfoList[1].title) || 'N/A'}}</ion-text>
+        <ion-text class="content">
+          {{(accessInfoForm.controls.isTenantPresenceRequired.value?accessInfoList[0].title:accessInfoList[1].title) || 'N/A'}}
+        </ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Is there a vulnerable occupier at this property?</ion-text><br />
-        <ion-text class="content">{{accessInfoForm.controls.areOccupiersVulnerable.value?'YES':'NO' || 'N/A'}}</ion-text>
+        <ion-text class="content">{{accessInfoForm.controls.areOccupiersVulnerable.value?'YES':'NO' || 'N/A'}}
+        </ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Useful Instruction</ion-text><br />
@@ -416,15 +433,19 @@
 </ng-template>
 
 <ng-template #caseLogged>
-<ion-grid style="margin-bottom:10px">
+  <ion-grid style="margin-bottom:10px">
     <ion-row class="ion-justify-content-start">
       <ion-col size="auto">
         <h2>
-          <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>{{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text color="success">&gt;</ion-text></h2>
+          <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
+          {{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text
+            color="success">&gt;</ion-text>
+        </h2>
       </ion-col>
       <ion-col size="auto">
         <ion-item class="edit-title" *ngIf="isEditable">
-          <ion-input #title [value] ="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0" (ionBlur)="changeTitle(title.value)"></ion-input>
+          <ion-input #title [value]="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"
+            (ionBlur)="changeTitle(title.value)"></ion-input>
         </ion-item>
         <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
       </ion-col>
@@ -436,22 +457,26 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #caseTabs  (selectedIndexChange)="currentSelected($event)">
+  <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #caseTabs (selectedIndexChange)="currentSelected($event)">
     <mat-tab>
-      <ng-template mat-tab-label><div class="label-text" [class.success-border]='isCaseDetailSubmit && faultDetailsForm.valid'
-        [class.error-border]='isCaseDetailSubmit && !faultDetailsForm.valid'>Fault Details</div></ng-template>
+      <ng-template mat-tab-label>
+        <div class="label-text" [class.success-border]='isCaseDetailSubmit && faultDetailsForm.valid'
+          [class.error-border]='isCaseDetailSubmit && !faultDetailsForm.valid'>Fault Details</div>
+      </ng-template>
       <ng-container *ngTemplateOutlet="caseDetails"></ng-container>
       <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
       <div class="action-btn-group">
         <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
         <ion-button class="save-button" (click)="saveForLater()">Save for later</ion-button>
-        <ion-button (click)="pageNo = 2" class="next-button" *ngIf="!faultId" >Back</ion-button>
+        <ion-button (click)="pageNo = 2" class="next-button" *ngIf="!faultId">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 1" class="next-button">Next</ion-button>
       </div>
     </mat-tab>
     <mat-tab>
-      <ng-template mat-tab-label><div class="label-text" [class.success-border]='isReportedSubmit && reportedByForm.valid'
-        [class.error-border]='isReportedSubmit && !reportedByForm.valid'>Reported By</div></ng-template>
+      <ng-template mat-tab-label>
+        <div class="label-text" [class.success-border]='isReportedSubmit && reportedByForm.valid'
+          [class.error-border]='isReportedSubmit && !reportedByForm.valid'>Reported By</div>
+      </ng-template>
       <ng-container *ngTemplateOutlet="reportedBy"></ng-container>
       <div class="action-btn-group">
         <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
@@ -461,8 +486,10 @@
       </div>
     </mat-tab>
     <mat-tab>
-      <ng-template mat-tab-label><div class="label-text" [class.success-border]='isAccessInfoSubmit && accessInfoForm.valid'
-        [class.error-border]='isAccessInfoSubmit && !accessInfoForm.valid'>Access Information</div></ng-template>
+      <ng-template mat-tab-label>
+        <div class="label-text" [class.success-border]='isAccessInfoSubmit && accessInfoForm.valid'
+          [class.error-border]='isAccessInfoSubmit && !accessInfoForm.valid'>Access Information</div>
+      </ng-template>
       <ng-container *ngTemplateOutlet="accessInformation"></ng-container>
       <div class="action-btn-group">
         <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
@@ -472,8 +499,10 @@
       </div>
     </mat-tab>
     <mat-tab>
-      <ng-template mat-tab-label><div class="label-text" [class.success-border]='isManageMediaSubmit && files.length !== 0'
-        [class.error-border]='isManageMediaSubmit && files.length === 0'>Media / Documents</div></ng-template>
+      <ng-template mat-tab-label>
+        <div class="label-text" [class.success-border]='isManageMediaSubmit && files.length !== 0'
+          [class.error-border]='isManageMediaSubmit && files.length === 0'>Media / Documents</div>
+      </ng-template>
       <ng-container *ngTemplateOutlet="media"></ng-container>
       <div class="action-btn-group">
         <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
@@ -482,8 +511,10 @@
         <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button">Next</ion-button>
       </div>
     </mat-tab>
-    <mat-tab *ngIf="faultId" >
-      <ng-template mat-tab-label><div class="label-text">Fault History</div></ng-template>
+    <mat-tab *ngIf="faultId">
+      <ng-template mat-tab-label>
+        <div class="label-text">Fault History</div>
+      </ng-template>
       <ng-container *ngTemplateOutlet="faultHistoryTab"></ng-container>
       <div class="action-btn-group">
         <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
@@ -493,7 +524,9 @@
       </div>
     </mat-tab>
     <mat-tab>
-      <ng-template mat-tab-label><div class="label-text">Review</div></ng-template>
+      <ng-template mat-tab-label>
+        <div class="label-text">Review</div>
+      </ng-template>
       <ng-container *ngTemplateOutlet="finalView"></ng-container>
       <div class="action-btn-group">
         <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
@@ -501,9 +534,12 @@
         <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button" *ngIf="faultId">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button" *ngIf="!faultId">Back</ion-button>
         <ion-button class="submit-button" (click)="createAFault()" *ngIf="!faultId">Submit</ion-button>
-        <ion-button class="save-button" (click)="startProgress()" *ngIf="faultId && faultDetails?.status == 1">Start Progress</ion-button>
-        <ion-button class="save-button" (click)="proceedToNextStage()" *ngIf="faultId && faultDetails?.status != 1">Proceed</ion-button>
-        <ion-button class="save-button" (click)="reOpenFault()" *ngIf="faultId && faultDetails?.status == 12">Re-open</ion-button>
+        <ion-button class="save-button" (click)="startProgress()" *ngIf="faultId && faultDetails?.status == 1">Start
+          Progress</ion-button>
+        <ion-button class="save-button" (click)="proceedToNextStage()" *ngIf="faultId && faultDetails?.status != 1">
+          Proceed</ion-button>
+        <ion-button class="save-button" (click)="reOpenFault()" *ngIf="faultId && faultDetails?.status == 12">Re-open
+        </ion-button>
       </div>
     </mat-tab>
   </mat-tab-group>
@@ -512,9 +548,9 @@
 <ng-template #caseQualification>
   <ion-card class="ion-no-margin">
     <h2 class="ion-text-center">Case has been qualified. click on proceed to move further. </h2>
-    <br/>
-    <br/>
-    <div class="action-btn-group text" >
+    <br />
+    <br />
+    <div class="action-btn-group text">
       <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
       <ion-button (click)="goToLastStage()">Back</ion-button>
       <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button>
@@ -527,11 +563,15 @@
     <ion-row class="ion-justify-content-start">
       <ion-col size="auto">
         <h2>
-          <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>{{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text color="success">&gt;</ion-text></h2>
+          <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
+          {{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text
+            color="success">&gt;</ion-text>
+        </h2>
       </ion-col>
       <ion-col size="auto">
         <ion-item class="edit-title" *ngIf="isEditable">
-          <ion-input #title [value] ="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0" (ionBlur)="changeTitle(title.value)"></ion-input>
+          <ion-input #title [value]="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"
+            (ionBlur)="changeTitle(title.value)"></ion-input>
         </ion-item>
         <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
       </ion-col>
@@ -548,19 +588,25 @@
         <div class="landlord-instructions">
           <div class="banner" *ngIf="faultDetails?.status != 15">
             <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
-            <ion-button color="{{(suggestedAction == 'PROCEED_AS_NECESSARY') ? 'danger' : 'success'}}" class="icon-button" (click)="setUserAction(suggestedAction)" 
-                  fill="{{(faultDetails?.userSelectedAction == suggestedAction) ? 'solid' :'outline'}}">
-               {{getLookupValue(suggestedAction, landlordInstructionTypes)}} 
-               <ion-icon name="checkmark-circle-outline" *ngIf="(faultDetails?.userSelectedAction == suggestedAction)" ></ion-icon> 
+            <ion-button color="{{(suggestedAction == 'PROCEED_AS_NECESSARY') ? 'danger' : 'success'}}"
+              class="icon-button" (click)="setUserAction(suggestedAction)"
+              fill="{{(faultDetails?.userSelectedAction == suggestedAction) ? 'solid' :'outline'}}">
+              {{getLookupValue(suggestedAction, landlordInstructionTypes)}}
+              <ion-icon name="checkmark-circle-outline" *ngIf="(faultDetails?.userSelectedAction == suggestedAction)">
+              </ion-icon>
             </ion-button>
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
               <ion-row>
                 <ng-container *ngFor="let instruction of landlordInstructionTypes">
                   <ion-col *ngIf="suggestedAction!= instruction.index">
-                    <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}" expand="block" fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}" (click)="setUserAction(instruction.index)">
-                      {{instruction.value}} 
-                      <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
+                    <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}"
+                      expand="block"
+                      fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}"
+                      (click)="setUserAction(instruction.index)">
+                      {{instruction.value}}
+                      <ion-icon name="checkmark-circle-outline" class="check-icon"
+                        *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
                     </ion-button>
                   </ion-col>
                 </ng-container>
@@ -571,9 +617,12 @@
             <div class="banner">
               <h2 class="banner-heading">Awaiting response</h2>
               <h6 class="banner-title">Here’s the action you choose:</h6>
-              <ion-button color="success" class="icon-button">Pass to Landlord to do their own repairs <ion-icon name="checkmark-circle-outline"></ion-icon> </ion-button>
+              <ion-button color="success" class="icon-button">Pass to Landlord to do their own repairs <ion-icon
+                  name="checkmark-circle-outline"></ion-icon>
+              </ion-button>
               <h6 class="banner-title"> <strong>Awaiting response from the Landlord</strong> </h6>
-              <h6 class="banner-title">Next chase due: {{faultNotifications ? (faultNotifications[0].nextChaseDueAt | date: 'dd/MM/yyyy') : ''}}</h6>
+              <h6 class="banner-title">Next chase due:
+                {{faultNotifications ? (faultNotifications[0].nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}</h6>
             </div>
             <div class="question-answer" *ngIf="faultNotifications && faultNotifications[0]?.responseReceived !== null">
               <h6>{{notificationQuesAnswer[0]?.text}}</h6>
@@ -581,20 +630,24 @@
                 <ion-row>
                   <ng-container *ngFor="let data of notificationQuesAnswer[0].options">
                     <ion-col>
-                      <ion-button color="success" fill="{{data?.value ==  faultNotifications[0]?.responseReceived?.isAccepted ? 'solid' :'outline'}}" (click)="questionAction(data)" >{{data.text}}</ion-button>
+                      <ion-button color="success"
+                        fill="{{data?.value ==  faultNotifications[0]?.responseReceived?.isAccepted ? 'solid' :'outline'}}"
+                        (click)="questionAction(data)">{{data.text}}</ion-button>
                     </ion-col>
                   </ng-container>
                 </ion-row>
               </ion-grid>
-                <h6 *ngIf="faultNotifications && !faultNotifications[0]?.responseReceived?.isAccepted">
-                  <ion-text color="danger">Please select an appropriate action.</ion-text> 
-                </h6>
+              <h6 *ngIf="faultNotifications && !faultNotifications[0]?.responseReceived?.isAccepted">
+                <ion-text color="danger">Please select an appropriate action.</ion-text>
+              </h6>
               <div class="border-bottom"></div>
-            </div> 
+            </div>
             <div class="question-answer" *ngIf="faultNotifications && faultNotifications[0]?.responseReceived == null">
               <h6>
-                <ion-text color="danger">Please note:</ion-text> 
-                The fault will beclosed automatically if the Landlord doesn't respond within {{faultNotifications[0].allowedNumberOfChases - faultNotifications[0].numberOfChasesDone * faultNotifications[0].chaseInterval}} hours.
+                <ion-text color="danger">Please note:</ion-text>
+                The fault will beclosed automatically if the Landlord doesn't respond within
+                {{faultNotifications[0].allowedNumberOfChases - faultNotifications[0].numberOfChasesDone * faultNotifications[0].chaseInterval}}
+                hours.
               </h6>
               <div class="border-bottom"></div>
             </div>
@@ -604,9 +657,12 @@
                 <ion-row>
                   <ng-container *ngFor="let instruction of landlordInstructionTypes">
                     <ion-col *ngIf="oldUserSelectedAction != instruction.index">
-                      <ion-button color="success" expand="block" fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}" (click)="setUserAction(instruction.index)">
-                        {{instruction.value}} 
-                        <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
+                      <ion-button color="success" expand="block"
+                        fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}"
+                        (click)="setUserAction(instruction.index)">
+                        {{instruction.value}}
+                        <ion-icon name="checkmark-circle-outline" class="check-icon"
+                          *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
                       </ion-button>
                     </ion-col>
                   </ng-container>
@@ -626,38 +682,41 @@
                         <ion-select-option>Choose</ion-select-option>
                       </ion-select>
                     </ion-item> -->
-                    
+
                     <mat-form-field class="example-full-width" appearance="legacy" style="line-height: 2;">
                       <mat-label>Select Contractor</mat-label>
-                      <input matInput appearance="legacy" [matAutocomplete]="selectContractor" formControlName='contractor' 
-                        [disabled]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'" [readonly]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'">
+                      <input matInput appearance="legacy" [matAutocomplete]="selectContractor"
+                        formControlName='contractor' [disabled]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'"
+                        [readonly]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'">
                     </mat-form-field>
-                    <mat-autocomplete #selectContractor="matAutocomplete"  [displayWith]="displayFn"
-                    (optionSelected)="onSelectionChange($event)">
-                     <mat-option appearance="none" *ngFor="let result of (selectedContractor | async)?.data" 
-                     [value]="result" style="border-bottom: 1px solid gray;">
-                       <span>
-                         <i class="propcoicon no-background propcoicon-contractor"
-                          style="background: transparent;vertical-align:sub"></i>
-                       </span>&nbsp;
-                       <span style="color: var(--ion-color-step-200)">{{result.fullName}}&nbsp;</span>
-                       <span style="color: var(--ion-color-step-1000)">{{result.reference}}</span>&nbsp;
-                       <span class="text-color-lightgreen" style="color: var(--ion-color-primary)">{{result.status}}</span>&nbsp;
-                     </mat-option>
-                   </mat-autocomplete>
+                    <mat-autocomplete #selectContractor="matAutocomplete" [displayWith]="displayFn"
+                      (optionSelected)="onSelectionChange($event)">
+                      <mat-option appearance="none" *ngFor="let result of (selectedContractor | async)?.data"
+                        [value]="result" style="border-bottom: 1px solid gray;">
+                        <span>
+                          <i class="propcoicon no-background propcoicon-contractor"
+                            style="background: transparent;vertical-align:sub"></i>
+                        </span>&nbsp;
+                        <span style="color: var(--ion-color-step-200)">{{result.fullName}}&nbsp;</span>
+                        <span style="color: var(--ion-color-step-1000)">{{result.reference}}</span>&nbsp;
+                        <span class="text-color-lightgreen"
+                          style="color: var(--ion-color-primary)">{{result.status}}</span>&nbsp;
+                      </mat-option>
+                    </mat-autocomplete>
 
                   </ion-col>
                   <ion-col size="50">
-                    <ion-item>
+                    <ion-item style="padding-top: 1px;">
                       <ion-label position="floating">Confirmed Estimate</ion-label>
-                      <ion-input formControlName="confirmedEstimate" [disabled]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'"></ion-input>
+                      <ion-input formControlName="confirmedEstimate"
+                        [disabled]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'"></ion-input>
                     </ion-item>
                   </ion-col>
                   <ion-col size="100">
                     <ion-item>
                       <ion-label position="stacked">Notes</ion-label>
-                      <ion-textarea placeholder="Enter more information here..." formControlName="estimationNotes" 
-                      [disabled]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'"></ion-textarea>
+                      <ion-textarea placeholder="Enter more information here..." formControlName="estimationNotes"
+                        [disabled]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'"></ion-textarea>
                     </ion-item>
                   </ion-col>
                 </ion-row>
@@ -669,13 +728,14 @@
             <ion-grid class="view-details" style="width: 100%;">
               <ion-row class="ion-justify-content-between">
                 <h2 class="banner-heading">Landlord preferences and other information </h2>
-                
+
                 <ion-col size-xs="100" class="header-content">
                   <ion-text class="header">Contractor Instructions</ion-text><br />
                   <ion-text class="content">
                     {{landlordDetails?.doesOwnRepairs ? "Landlord does their own repairs" : "Agent's own contractor"}}
                   </ion-text>
-                  <ion-button color="success" fill="outline" (click)="presentRepairCategories($event)" *ngIf="landlordDetails?.doesOwnRepairs" >Repair Categories</ion-button>
+                  <ion-button color="success" fill="outline" (click)="presentRepairCategories($event)"
+                    *ngIf="landlordDetails?.doesOwnRepairs">Repair Categories</ion-button>
                 </ion-col>
                 <ion-col size-xs="100" size-sm="50" class="header-content">
                   <ion-text class="header">Branch holds management keys?</ion-text><br />
@@ -687,11 +747,13 @@
                 </ion-col>
                 <ion-col size-xs="100" size-sm="50" class="header-content">
                   <ion-text class="header">Vulnerable Tenant</ion-text><br />
-                  <ion-text class="content">{{accessInfoForm?.controls?.areOccupiersVulnerable?.value ? 'Yes' : 'No'}}</ion-text>
+                  <ion-text class="content">{{accessInfoForm?.controls?.areOccupiersVulnerable?.value ? 'Yes' : 'No'}}
+                  </ion-text>
                 </ion-col>
                 <ion-col size-xs="100" size-sm="50" class="header-content">
                   <ion-text class="header">Tenant allows access</ion-text><br />
-                  <ion-text class="content">{{accessInfoForm?.controls?.isTenantPresenceRequired?.value ? 'Yes' : 'No'}}</ion-text>
+                  <ion-text class="content">{{accessInfoForm?.controls?.isTenantPresenceRequired?.value ? 'Yes' : 'No'}}
+                  </ion-text>
                 </ion-col>
                 <ion-col size="100" class="border-bottom"></ion-col>
               </ion-row>
@@ -710,7 +772,7 @@
                 <td>{{supplier.company}}</td>
                 <td>{{supplier.occupation}}</td>
               </tr>
-              <tr *ngIf="!preferredSuppliers?.length" >
+              <tr *ngIf="!preferredSuppliers?.length">
                 <td colspan="12" class="ion-text-center">No data to display</td>
               </tr>
             </table>
@@ -777,7 +839,8 @@
     </ion-row>
     <ion-row>
       <ion-col size-xl="20" size="25" *ngFor="let item of faultCategories">
-        <div class="block" [class.active]="item.index == describeFaultForm?.controls?.category?.value" (click)="goToPage(2);setCategory(item.index)">
+        <div class="block" [class.active]="item.index == describeFaultForm?.controls?.category?.value"
+          (click)="goToPage(2);setCategory(item.index)">
           <img [src]="item.imgPath" />
           <h4 class="no-margin">{{item.value}}</h4>
         </div>
@@ -790,7 +853,8 @@
       <ion-col>
         <h2 class="heading">Log a fault</h2>
         <h2>
-          Describe the issue with <b>{{getLookupValue(describeFaultForm?.controls?.category?.value, faultCategories)}}</b> in
+          Describe the issue with
+          <b>{{getLookupValue(describeFaultForm?.controls?.category?.value, faultCategories)}}</b> in
           <b>
             {{ propertyDetails?.address?.addressLine1 ?
             propertyDetails?.address?.addressLine1 + ',' : ''}} {{
@@ -801,19 +865,23 @@
           </b>
         </h2>
         <div class="priority-heading">Select the priority</div>
-        <ion-button (click)="setUrgencyStatus(3)" class="non-urgent-btn" [class.urgency-selected]="faultDetailsForm.controls.urgencyStatus.value ===3">Non urgent</ion-button>
-        <ion-button (click)="setUrgencyStatus(2)" class="urgent-btn" [class.urgency-selected]="faultDetailsForm.controls.urgencyStatus.value===2">Urgent</ion-button>
-        <ion-button (click)="setUrgencyStatus(1)" class="emergency-btn" [class.urgency-selected]="faultDetailsForm.controls.urgencyStatus.value===1">Emergency</ion-button>
+        <ion-button (click)="setUrgencyStatus(3)" class="non-urgent-btn"
+          [class.urgency-selected]="faultDetailsForm.controls.urgencyStatus.value ===3">Non urgent</ion-button>
+        <ion-button (click)="setUrgencyStatus(2)" class="urgent-btn"
+          [class.urgency-selected]="faultDetailsForm.controls.urgencyStatus.value===2">Urgent</ion-button>
+        <ion-button (click)="setUrgencyStatus(1)" class="emergency-btn"
+          [class.urgency-selected]="faultDetailsForm.controls.urgencyStatus.value===1">Emergency</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
-  
+
   <form class="panel-block-normal propco-form" *ngIf="pageNo===2" [formGroup]="describeFaultForm">
     <ion-grid>
       <ion-row class="main-row">
         <ion-col size="100" class="col1">
           <ion-item>
-            <ion-label position="floating">Title<ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-label position="floating">Title<ion-text class="mandatory">*</ion-text>
+            </ion-label>
             <ion-input type="text" formControlName="title"> </ion-input>
           </ion-item>
           <app-validation-message [control]="describeFaultForm.controls.title"></app-validation-message>
@@ -828,7 +896,7 @@
   </form>
 
   <ng-container *ngIf="pageNo===3">
-   <ion-grid>
+    <ion-grid>
       <ion-row>
         <ion-col size="50">
           <h2 class="heading">{{faultId ? 'Fault Summary' : 'Log a fault'}}</h2>
@@ -838,32 +906,22 @@
             <span *ngIf="!faultId">Initial Issue</span>
             <span *ngIf="faultId">
               {{getLookupValue(faultDetails?.status, faultStatuses)}} &nbsp;
-              <img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.isEscalated"/>
+              <img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.isEscalated" />
             </span>
           </h2>
         </ion-col>
-      
+
         <ion-col size="100">
           <ion-card class="ion-no-margin" id="property-details-card">
-            <app-property-details
-              [propertyDetails]="propertyDetails"
-              [files]="files"
-              [parentForm]="uploadDocForm"
-              (getUploadedFile)="getUploadedFile($event)"
-              [hmoDetails]="propertyHMODetails"
-              [urgencyStatus]="faultDetailsForm.controls.urgencyStatus.value" 
-              [faultId]="faultId? faultId : ''"
-              [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''"
-            >
+            <app-property-details [propertyDetails]="propertyDetails" [files]="files" [parentForm]="uploadDocForm"
+              (getUploadedFile)="getUploadedFile($event)" [hmoDetails]="propertyHMODetails"
+              [urgencyStatus]="faultDetailsForm.controls.urgencyStatus.value" [faultId]="faultId? faultId : ''"
+              [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''">
             </app-property-details>
           </ion-card>
         </ion-col>
         <ion-col size="100">
-          <mat-horizontal-stepper
-            #stepper
-            labelPosition="bottom"
-            [selectedIndex]="currentStepperIndex"
-            >
+          <mat-horizontal-stepper #stepper labelPosition="bottom" [selectedIndex]="currentStepperIndex">
             <mat-step aria-labelledby="disabled_stepper_step">
               <ng-container *ngTemplateOutlet="caseLogged"></ng-container>
               <ng-template matStepLabel>Case Logged</ng-template>
