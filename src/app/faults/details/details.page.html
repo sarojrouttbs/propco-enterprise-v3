@@ -599,10 +599,11 @@
         
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
-              <ion-row>
+              <ion-row class="ion-justify-content-center">
                 <ng-container *ngFor="let instruction of landlordInstructionTypes">
-                  <ion-col *ngIf="suggestedAction!= instruction.index">
+                  <ng-container *ngIf="suggestedAction!= instruction.index">
                     <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}"
+                      class="action-btn"
                       expand="block"
                       fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}"
                       (click)="setUserAction(instruction.index)">
@@ -611,36 +612,37 @@
                         *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
                     </ion-button>
                     <h6 style="color: red;" *ngIf= "(landlordDetails?.doesOwnRepairs && instruction.index == 'DOES_OWN_REPAIRS' && !isMatch )">Landlord owned Repair Category does not match the Fault Category</h6>
-                  </ion-col>
+                  </ng-container>
                 </ng-container>
               </ion-row>
             </ion-grid>
           </div>
           <div *ngIf="faultDetails?.status == 15">
             <div class="banner">
-              <h2 class="banner-heading">Awaiting response</h2>
+              <h2 class="banner-heading">{{faultNotifications && faultNotifications[0]?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
               <h6 class="banner-title">Here’s the action you choose:</h6>
               <ion-button color="success" class="icon-button">Pass to Landlord to do their own repairs <ion-icon
                   name="checkmark-circle-outline"></ion-icon>
               </ion-button>
-              <h6 class="banner-title"> <strong>Awaiting response from the Landlord</strong> </h6>
-              <h6 class="banner-title">Next chase due:
-                {{faultNotifications ? (faultNotifications[0].nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}</h6>
+              <ng-container *ngIf="faultNotifications && !faultNotifications[0]?.responseReceived">
+                <h6 class="banner-title"> <strong>Awaiting response from the Landlord</strong> </h6>
+                <h6 class="banner-title">Next chase due:
+                  {{faultNotifications ? (faultNotifications[0].nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
+                </h6>
+              </ng-container>
             </div>
             <div class="question-answer" *ngIf="faultNotifications">
               <h6>{{notificationQuesAnswer[0]?.qtext}}</h6>
               <ion-grid>
-                <ion-row>
+                <ion-row class="ion-justify-content-center">
                   <ng-container *ngFor="let data of notificationQuesAnswer[0].options">
-                    <ion-col>
-                      <ion-button color="success"
+                      <ion-button color="success" class="action-btn"
                         fill="{{data?.value ==  faultNotifications[0]?.responseReceived?.isAccepted ? 'solid' :'outline'}}"
                         (click)="questionAction(data)">{{data.text}}</ion-button>
-                    </ion-col>
                   </ng-container>
                 </ion-row>
               </ion-grid>
-              <h6 *ngIf="faultNotifications && !faultNotifications[0]?.responseReceived?.isAccepted">
+              <h6 *ngIf="faultNotifications && faultNotifications[0]?.responseReceived && !faultNotifications[0]?.responseReceived?.isAccepted">
                 <ion-text color="danger">Please select an appropriate action.</ion-text>
               </h6>
               <div class="border-bottom"></div>
@@ -657,17 +659,18 @@
             <div class="question-answer">
               <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
               <ion-grid>
-                <ion-row>
+                <ion-row class="ion-justify-content-center">
                   <ng-container *ngFor="let instruction of landlordInstructionTypes">
-                    <ion-col *ngIf="oldUserSelectedAction != instruction.index">
-                      <ion-button color="success" expand="block"
+                    <ng-container *ngIf="oldUserSelectedAction != instruction.index">
+                      <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}" expand="block"
+                      class="action-btn"
                         fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}"
                         (click)="setUserAction(instruction.index)">
                         {{instruction.value}}
                         <ion-icon name="checkmark-circle-outline" class="check-icon"
                           *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
                       </ion-button>
-                    </ion-col>
+                    </ng-container>
                   </ng-container>
                 </ion-row>
               </ion-grid>
