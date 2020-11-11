@@ -594,7 +594,9 @@
               {{getLookupValue(suggestedAction, landlordInstructionTypes)}}
               <ion-icon name="checkmark-circle-outline" *ngIf="(faultDetails?.userSelectedAction == suggestedAction)">
               </ion-icon>
-            </ion-button>
+               </ion-button>
+               <h6 style="color: red;" *ngIf= "(landlordDetails?.doesOwnRepairs && !isMatch && suggestedAction == 'DOES_OWN_REPAIRS')">Landlord owned Repair Category does not match the Fault Category</h6>
+        
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
               <ion-row>
@@ -608,6 +610,7 @@
                       <ion-icon name="checkmark-circle-outline" class="check-icon"
                         *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
                     </ion-button>
+                    <h6 style="color: red;" *ngIf= "(landlordDetails?.doesOwnRepairs && instruction.index == 'DOES_OWN_REPAIRS' && !isMatch )">Landlord owned Repair Category does not match the Fault Category</h6>
                   </ion-col>
                 </ng-container>
               </ion-row>
@@ -725,14 +728,16 @@
           </div>
 
           <div class="landlord-preferences">
-            <ion-grid class="view-details" style="width: 100%;">
+            <ion-grid class="view-details" style="width: 100%;"> 
               <ion-row class="ion-justify-content-between">
                 <h2 class="banner-heading">Landlord preferences and other information </h2>
 
                 <ion-col size-xs="100" class="header-content">
                   <ion-text class="header">Contractor Instructions</ion-text><br />
                   <ion-text class="content">
+                    <!-- {{landlordDetails?.doesOwnRepairs ? isMatch ? "Landlord does their own repairs" : "Landlord owned Repair Category does not match the Fault Category" : "Agent's own contractor"}} -->
                     {{landlordDetails?.doesOwnRepairs ? "Landlord does their own repairs" : "Agent's own contractor"}}
+
                   </ion-text>
                   <ion-button color="success" fill="outline" (click)="presentRepairCategories($event)"
                     *ngIf="landlordDetails?.doesOwnRepairs">Repair Categories</ion-button>
