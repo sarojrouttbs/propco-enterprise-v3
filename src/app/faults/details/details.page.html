@@ -595,7 +595,7 @@
               <ion-icon name="checkmark-circle-outline" *ngIf="(faultDetails?.userSelectedAction == suggestedAction)">
               </ion-icon>
                </ion-button>
-               <h6 style="color: red;" *ngIf= "(landlordDetails?.doesOwnRepairs && !isMatch && suggestedAction == 'DOES_OWN_REPAIRS')">Landlord owned Repair Category does not match the Fault Category</h6>
+               <h6 class="ownRepair" *ngIf= "(landlordDetails?.doesOwnRepairs && !isMatch && suggestedAction == 'DOES_OWN_REPAIRS')">Landlord owned Repair Category does not match the Fault Category</h6>
         
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
@@ -611,7 +611,7 @@
                       <ion-icon name="checkmark-circle-outline" class="check-icon"
                         *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
                     </ion-button>
-                    <h6 style="color: red;" *ngIf= "(landlordDetails?.doesOwnRepairs && instruction.index == 'DOES_OWN_REPAIRS' && !isMatch )">Landlord owned Repair Category does not match the Fault Category</h6>
+                    <h6 class="ownRepair" *ngIf="(instruction.index == 'DOES_OWN_REPAIRS' && !isMatch )">Landlord owned Repair Category does not match the Fault Category</h6>
                   </ng-container>
                 </ng-container>
               </ion-row>
