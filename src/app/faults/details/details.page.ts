@@ -1430,9 +1430,9 @@ export class DetailsPage implements OnInit {
   initLandlordInstructions(faultId) {
     this.faultService.getFaultNotifications(faultId).subscribe(async (response) => {
       if (response) {
-        this.faultNotifications = response;
+        this.faultNotifications = response.data;
         for (let i = 0; i < this.faultNotifications.length; i++) {
-          this.notificationQuesAnswer = this.faultNotifications[i].notifications;
+          this.notificationQuesAnswer = this.faultNotifications[i].questions;
         }
         if (this.faultNotifications[0].responseReceived && this.faultNotifications[0].responseReceived.isAccepted) {
           // this.refreshDetailsAndStage();
@@ -1499,7 +1499,6 @@ export class DetailsPage implements OnInit {
     console.log(data)
     const faultNotificationId = this.faultNotifications[0].faultNotificationId;
     let notificationObj = {} as FaultModels.IUpdateNotification;
-    debugger
     notificationObj.isAccepted = data;
     this.faultService.updateNotification(faultNotificationId, notificationObj).subscribe();
   }

@@ -6,6 +6,7 @@ import { FaultsService } from 'src/app/faults/faults.service';
 import { switchMap, debounceTime } from 'rxjs/operators';
 // import { IPropertyResponse } from '../../../faults/details/details-model';
 import { Observable } from 'rxjs';
+import { PlatformLocation } from '@angular/common';
 
 
 @Component({
@@ -22,12 +23,14 @@ export class SearchPropertyPage implements OnInit {
     private navParams: NavParams,
     private modalController: ModalController,
     private fb: FormBuilder,
-    private faultService: FaultsService
+    private faultService: FaultsService,
+    private location: PlatformLocation
   ) {
     this.initPropertySearchForm();
     this.filteredProperty = this.propertySearchForm.get('text').valueChanges.pipe(debounceTime(300),
       switchMap((value: string) => (value.length > 2) ? this.faultService.searchPropertyByText(value) : new Observable())
     );
+    location.onPopState(() => this.dismiss());
   }
 
   ngOnInit() {

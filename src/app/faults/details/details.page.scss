@@ -194,8 +194,6 @@
 }
 
 .landlord-instructions{
-  width: 50%;
-  margin: auto;
   .banner{
     text-align: center;
     background: var(--background);
@@ -246,11 +244,5 @@
     tr:nth-child(odd) {
       background-color: var(--ion-color-step-1600);
     }
-  }
-}
-
-@media screen and (min-width: 0px) and (max-width: 1200px){
-  .landlord-instructions{
-    width: 100%;
   }
 }

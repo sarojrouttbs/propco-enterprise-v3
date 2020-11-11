@@ -584,7 +584,7 @@
   </ion-grid>
   <ion-grid>
     <ion-row>
-      <ion-col size="100">
+      <ion-col offset-xl="25" size-xl="50" offset ="0" size="100"> 
         <div class="landlord-instructions">
           <div class="banner" *ngIf="faultDetails?.status != 15">
             <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
@@ -628,7 +628,7 @@
                 {{faultNotifications ? (faultNotifications[0].nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}</h6>
             </div>
             <div class="question-answer" *ngIf="faultNotifications && faultNotifications[0]?.responseReceived !== null">
-              <h6>{{notificationQuesAnswer[0]?.text}}</h6>
+              <h6>{{notificationQuesAnswer[0]?.qtext}}</h6>
               <ion-grid>
                 <ion-row>
                   <ng-container *ngFor="let data of notificationQuesAnswer[0].options">
@@ -719,7 +719,7 @@
                     <ion-item>
                       <ion-label position="stacked">Notes</ion-label>
                       <ion-textarea placeholder="Enter more information here..." formControlName="estimationNotes"
-                        [disabled]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'"></ion-textarea>
+                        [disabled]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'" rows=1></ion-textarea>
                     </ion-item>
                   </ion-col>
                 </ion-row>
@@ -929,7 +929,7 @@
           <mat-horizontal-stepper #stepper labelPosition="bottom" [selectedIndex]="currentStepperIndex">
             <mat-step aria-labelledby="disabled_stepper_step">
               <ng-container *ngTemplateOutlet="caseLogged"></ng-container>
-              <ng-template matStepLabel>Case Logged</ng-template>
+              <ng-template matStepLabel>Fault Logged</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>
                 <button mat-button matStepperNext class="stepper-next">Next</button>
@@ -939,7 +939,7 @@
             <!-- <mat-step> -->
             <mat-step aria-labelledby="disabled_stepper_step">
               <ng-container *ngTemplateOutlet="caseQualification"></ng-container>
-              <ng-template matStepLabel>Case Qualification</ng-template>
+              <ng-template matStepLabel>Fault Qualification</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>
                 <button mat-button matStepperNext class="stepper-next">Next</button>
