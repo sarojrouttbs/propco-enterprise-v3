@@ -289,6 +289,7 @@ export class DetailsPage implements OnInit {
         await this.getLandlordDetails(landlordId);
         this.checkForLLSuggestedAction();
         this.getPreferredSuppliers(landlordId);
+        this.matchCategory();
       }
     });
   }
@@ -1242,7 +1243,6 @@ export class DetailsPage implements OnInit {
     else if (this.landlordDetails.doesOwnRepairs) {
 
       this.suggestedAction = LL_INSTRUCTION_TYPES[0].index;
-      this.matchCategory();
 
     }
     else if (confirmedEstimate == null || confirmedEstimate <= 0) {
