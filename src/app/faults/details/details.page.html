@@ -625,7 +625,7 @@
                 {{faultNotifications ? (faultNotifications[0].nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}</h6>
             </div>
             <div class="question-answer" *ngIf="faultNotifications && faultNotifications[0]?.responseReceived !== null">
-              <h6>{{notificationQuesAnswer[0]?.text}}</h6>
+              <h6>{{notificationQuesAnswer[0]?.qtext}}</h6>
               <ion-grid>
                 <ion-row>
                   <ng-container *ngFor="let data of notificationQuesAnswer[0].options">
