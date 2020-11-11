@@ -632,7 +632,6 @@ export class DetailsPage implements OnInit {
           }
           this.landlordDetails.repairCategoriesText = categoryNames;
           resolve(this.landlordDetails);
-          console.log(this.landlordDetails.repairCategoriesText);
         },
         error => {
           reject(null);
@@ -1458,9 +1457,7 @@ export class DetailsPage implements OnInit {
           faultRequestObj.isDraft = this.faultDetails.isDraft;
           const CHECKING_LANDLORD_INSTRUCTIONS = 13;
           forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS), this.updateFaultNotification(data.value)]).subscribe(data => {
-            if (data) {
-              this.refreshDetailsAndStage();
-            }
+            this.refreshDetailsAndStage();
           });
         }
       });
@@ -1472,9 +1469,7 @@ export class DetailsPage implements OnInit {
           faultRequestObj.stage = FAULT_STAGES.JOB_COMPLETION;
           faultRequestObj.isDraft = this.faultDetails.isDraft;
           forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultNotification(data.value)]).subscribe(data => {
-            if (data) {
-              this.refreshDetailsAndStage();
-            }
+            this.refreshDetailsAndStage();
           });
         }
       });
