@@ -1490,12 +1490,12 @@ export class DetailsPage implements OnInit {
     return await popover.present();
   }
 
-  private updateFaultNotification(data) {
+  private updateFaultNotification(data) :Promise<any>{
     console.log(data)
     const faultNotificationId = this.faultNotifications[0].faultNotificationId;
     let notificationObj = {} as FaultModels.IUpdateNotification;
     notificationObj.isAccepted = data;
-    this.faultService.updateNotification(faultNotificationId, notificationObj).subscribe();
+    return this.faultService.updateNotification(faultNotificationId, notificationObj).toPromise();
   }
 
 }
