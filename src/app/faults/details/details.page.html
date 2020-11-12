@@ -652,7 +652,7 @@
               <h6>
                 <ion-text color="danger">Please note:</ion-text>
                 The fault will beclosed automatically if the Landlord doesn't respond within
-                {{faultNotifications[0].allowedNumberOfChases - faultNotifications[0].numberOfChasesDone * faultNotifications[0].chaseInterval}}
+                {{(faultNotifications[0].allowedNumberOfChases - faultNotifications[0].numberOfChasesDone) * faultNotifications[0].chaseInterval}}
                 hours.
               </h6>
               <div class="border-bottom"></div>
