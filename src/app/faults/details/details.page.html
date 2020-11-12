@@ -33,7 +33,7 @@
         <ion-col size-xl="50" size="100">
           <ion-grid class="additional-info-container">
             <ion-row>
-              <ion-col size="20">
+              <ion-col size="30">
                 <ion-item>
                   <ion-label position="floating">Type</ion-label>
 
@@ -652,7 +652,7 @@
               <h6>
                 <ion-text color="danger">Please note:</ion-text>
                 The fault will beclosed automatically if the Landlord doesn't respond within
-                {{(faultNotifications[0].allowedNumberOfChases - faultNotifications[0].numberOfChasesDone) * faultNotifications[0].chaseInterval}}
+                {{faultNotifications[0].allowedNumberOfChases - faultNotifications[0].numberOfChasesDone * faultNotifications[0].chaseInterval}}
                 hours.
               </h6>
               <div class="border-bottom"></div>
@@ -692,7 +692,7 @@
                       </ion-select>
                     </ion-item> -->
 
-                    <mat-form-field class="example-full-width" appearance="legacy" >
+                    <mat-form-field class="example-full-width" appearance="legacy">
                       <mat-label>Select Contractor</mat-label>
                       <input matInput appearance="legacy" [matAutocomplete]="selectContractor"
                         formControlName='contractor' [disabled]="faultDetails?.userSelectedAction !== 'GET_AN_ESTIMATE'"
