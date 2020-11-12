@@ -1449,7 +1449,7 @@ export class DetailsPage implements OnInit {
   }
 
   questionAction(data) {
-    if(this.faultNotifications && !this.faultNotifications[0].responseReceived){
+    if(this.faultNotifications && this.faultNotifications[0].responseReceived != null){
       return;
     }
     if (!data.value) {
