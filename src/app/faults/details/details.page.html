@@ -849,8 +849,8 @@
       <ion-col size-xl="20" size="25" *ngFor="let item of faultCategories">
         <div class="block" [class.active]="item.index == describeFaultForm?.controls?.category?.value"
           (click)="goToPage(2);setCategory(item.index)">
-          <img [src]="item.imgPath" />
-          <h4 class="no-margin">{{item.value}}</h4>
+          <!-- <img [src]="item.imgPath" /> -->
+          <h4 class="center">{{item.value}}</h4>
         </div>
       </ion-col>
     </ion-row>
