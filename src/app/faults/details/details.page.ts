@@ -1224,7 +1224,7 @@ export class DetailsPage implements OnInit {
   }
 
   setUserAction(index) {
-    if (this.faultDetails.status == 15) {
+    if (this.faultDetails.status == 15 && (this.faultNotifications && !this.faultNotifications[0].responseReceived)) {
       this.commonService.showAlert('Landlord Instructions', 'Please select repair action first.');
       return;
     }
@@ -1490,12 +1490,12 @@ export class DetailsPage implements OnInit {
     return await popover.present();
   }
 
-  private updateFaultNotification(data) {
+  private updateFaultNotification(data) :Promise<any>{
     console.log(data)
     const faultNotificationId = this.faultNotifications[0].faultNotificationId;
     let notificationObj = {} as FaultModels.IUpdateNotification;
     notificationObj.isAccepted = data;
-    this.faultService.updateNotification(faultNotificationId, notificationObj).subscribe();
+    return this.faultService.updateNotification(faultNotificationId, notificationObj).toPromise();
   }
 
 }
