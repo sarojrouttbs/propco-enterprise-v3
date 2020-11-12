@@ -639,7 +639,7 @@
                   <ng-container *ngFor="let data of notificationQuesAnswer[0].options">
                       <ion-button color="success" class="action-btn"
                         fill="{{data?.value ==  faultNotifications[0]?.responseReceived?.isAccepted ? 'solid' :'outline'}}"
-                        (click)="!faultNotifications[0]?.responseReceived ? questionAction(data): return;">{{data.text}}</ion-button>
+                        (click)="questionAction(data)">{{data.text}}</ion-button>
                   </ng-container>
                 </ion-row>
               </ion-grid>

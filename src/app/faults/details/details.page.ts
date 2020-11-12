@@ -1449,6 +1449,9 @@ export class DetailsPage implements OnInit {
   }
 
   questionAction(data) {
+    if(this.faultNotifications && !this.faultNotifications[0].responseReceived){
+      return;
+    }
     if (!data.value) {
       this.commonService.showConfirm(data.text, 'This will change status back to "Checking Landlord Instruction". </br> Are you Sure?', '', 'Yes', 'No').then(res => {
         if (res) {
@@ -1491,7 +1494,6 @@ export class DetailsPage implements OnInit {
   }
 
   private updateFaultNotification(data) :Promise<any>{
-    console.log(data)
     const faultNotificationId = this.faultNotifications[0].faultNotificationId;
     let notificationObj = {} as FaultModels.IUpdateNotification;
     notificationObj.isAccepted = data;
