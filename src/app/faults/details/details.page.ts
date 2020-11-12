@@ -557,7 +557,8 @@ export class DetailsPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultService.getLandlordsOfProperty(propertyId).subscribe(
         res => {
-          this.landlordsOfproperty = res && res.data ? res.data : [];
+          /*filter out LL which have link with the property*/
+          this.landlordsOfproperty = res && res.data ? res.data.filter((llDetail => llDetail.propertyLinkStatus === 'Current')) : [];
           resolve(this.landlordsOfproperty);
         },
         error => {
