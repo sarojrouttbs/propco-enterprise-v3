@@ -1255,9 +1255,9 @@ export class DetailsPage implements OnInit {
     }
 
     // }
-    if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index && this.faultDetails.status === 15) {
+    // if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index && this.faultDetails.status === 15) {
       this.initLandlordInstructions(this.faultId);
-    }
+    // }
   }
 
   private matchCategory(){
@@ -1435,14 +1435,7 @@ export class DetailsPage implements OnInit {
         }
         if (this.faultNotifications[0].responseReceived && this.faultNotifications[0].responseReceived.isAccepted) {
           // this.refreshDetailsAndStage();
-          this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
-          // let requestObj = {} as FaultModels.IFaultResponse;
-          // requestObj.stage = FAULT_STAGES.JOB_COMPLETION;
-          // requestObj.isDraft = this.faultDetails.isDraft;
-          // let res = await this.updateFaultDetails(requestObj);
-          // if(res){
-          //   this.refreshDetailsAndStage();
-          // }
+          this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);        
         }
       }
     })
@@ -1455,12 +1448,10 @@ export class DetailsPage implements OnInit {
     if (!data.value) {
       this.commonService.showConfirm(data.text, 'This will change status back to "Checking Landlord Instruction". </br> Are you Sure?', '', 'Yes', 'No').then(res => {
         if (res) {
-          let faultRequestObj = {} as FaultModels.IFaultResponse
-          faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
-          faultRequestObj.isDraft = this.faultDetails.isDraft;
           const CHECKING_LANDLORD_INSTRUCTIONS = 13;
-          forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS), this.updateFaultNotification(data.value)]).subscribe(data => {
+          forkJoin([this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS), this.updateFaultNotification(data.value)]).subscribe(data => {
             this.refreshDetailsAndStage();
+            this.initLandlordInstructions(this.faultId);
           });
         }
       });
@@ -1473,6 +1464,7 @@ export class DetailsPage implements OnInit {
           faultRequestObj.isDraft = this.faultDetails.isDraft;
           forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultNotification(data.value)]).subscribe(data => {
             this.refreshDetailsAndStage();
+            this.initLandlordInstructions(this.faultId);
           });
         }
       });
