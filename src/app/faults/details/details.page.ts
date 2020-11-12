@@ -1224,7 +1224,7 @@ export class DetailsPage implements OnInit {
   }
 
   setUserAction(index) {
-    if (this.faultDetails.status == 15) {
+    if (this.faultDetails.status == 15 && (this.faultNotifications && !this.faultNotifications[0].responseReceived)) {
       this.commonService.showAlert('Landlord Instructions', 'Please select repair action first.');
       return;
     }

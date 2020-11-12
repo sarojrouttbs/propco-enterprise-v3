@@ -589,19 +589,20 @@
           <div class="banner" *ngIf="faultDetails?.status != 15">
             <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
             <ion-button color="{{(suggestedAction == 'PROCEED_AS_NECESSARY') ? 'danger' : 'success'}}"
-              class="icon-button" (click)="setUserAction(suggestedAction)"
-              fill="{{(faultDetails?.userSelectedAction == suggestedAction) ? 'solid' :'outline'}}">
-              {{getLookupValue(suggestedAction, landlordInstructionTypes)}}
-              <ion-icon name="checkmark-circle-outline" *ngIf="(faultDetails?.userSelectedAction == suggestedAction)">
-              </ion-icon>
-               </ion-button>
-               <h6 class="ownRepair" *ngIf= "(landlordDetails?.doesOwnRepairs && !isMatch && suggestedAction == 'DOES_OWN_REPAIRS')">Landlord owned Repair Category does not match the Fault Category</h6>
+                class="icon-button" (click)="setUserAction(suggestedAction)"
+                fill="{{(faultDetails?.userSelectedAction == suggestedAction) ? 'solid' :'outline'}}">
+                {{getLookupValue(suggestedAction, landlordInstructionTypes)}}
+                <ion-icon name="checkmark-circle-outline" *ngIf="(faultDetails?.userSelectedAction == suggestedAction)">
+                </ion-icon>
+              </ion-button>
+              <h6 class="ownRepair" *ngIf= "(!isMatch && suggestedAction == 'DOES_OWN_REPAIRS')">
+                 Landlord owned Repair Category does not match the Fault Category</h6>
         
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
               <ion-row class="ion-justify-content-center">
                 <ng-container *ngFor="let instruction of landlordInstructionTypes">
-                  <ng-container *ngIf="suggestedAction!= instruction.index">
+                  <div *ngIf="suggestedAction!= instruction.index" >
                     <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}"
                       class="action-btn"
                       expand="block"
@@ -612,7 +613,7 @@
                         *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
                     </ion-button>
                     <h6 class="ownRepair" *ngIf="(instruction.index == 'DOES_OWN_REPAIRS' && !isMatch )">Landlord owned Repair Category does not match the Fault Category</h6>
-                  </ng-container>
+                  </div>
                 </ng-container>
               </ion-row>
             </ion-grid>
@@ -638,7 +639,7 @@
                   <ng-container *ngFor="let data of notificationQuesAnswer[0].options">
                       <ion-button color="success" class="action-btn"
                         fill="{{data?.value ==  faultNotifications[0]?.responseReceived?.isAccepted ? 'solid' :'outline'}}"
-                        (click)="questionAction(data)">{{data.text}}</ion-button>
+                        (click)="!faultNotifications[0]?.responseReceived ? questionAction(data): return;">{{data.text}}</ion-button>
                   </ng-container>
                 </ion-row>
               </ion-grid>
@@ -661,7 +662,7 @@
               <ion-grid>
                 <ion-row class="ion-justify-content-center">
                   <ng-container *ngFor="let instruction of landlordInstructionTypes">
-                    <ng-container *ngIf="oldUserSelectedAction != instruction.index">
+                    <div *ngIf="oldUserSelectedAction != instruction.index">
                       <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}" expand="block"
                       class="action-btn"
                         fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}"
@@ -670,7 +671,9 @@
                         <ion-icon name="checkmark-circle-outline" class="check-icon"
                           *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
                       </ion-button>
-                    </ng-container>
+                      <h6 class="ownRepair" *ngIf= "(!isMatch && instruction.index == 'DOES_OWN_REPAIRS')">
+                        Landlord owned Repair Category does not match the Fault Category</h6>
+                      </div>
                   </ng-container>
                 </ion-row>
               </ion-grid>
@@ -738,9 +741,7 @@
                 <ion-col size-xs="100" class="header-content">
                   <ion-text class="header">Contractor Instructions</ion-text><br />
                   <ion-text class="content">
-                    <!-- {{landlordDetails?.doesOwnRepairs ? isMatch ? "Landlord does their own repairs" : "Landlord owned Repair Category does not match the Fault Category" : "Agent's own contractor"}} -->
                     {{landlordDetails?.doesOwnRepairs ? "Landlord does their own repairs" : "Agent's own contractor"}}
-
                   </ion-text>
                   <ion-button color="success" fill="outline" (click)="presentRepairCategories($event)"
                     *ngIf="landlordDetails?.doesOwnRepairs">Repair Categories</ion-button>
