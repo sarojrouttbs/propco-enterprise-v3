@@ -265,3 +265,7 @@
     }
   }
 }
+:host ::ng-deep .mat-form-field-wrapper {
+  position: absolute !important;
+  width: 100%;
+}
