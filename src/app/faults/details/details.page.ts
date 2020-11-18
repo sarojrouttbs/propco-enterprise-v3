@@ -76,6 +76,7 @@ export class DetailsPage implements OnInit {
   cliNotification: any;
   isMatch = false;
   userSelectedActionControl = new FormControl();
+  private QUOTE_THRESOLD = 500;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -1249,10 +1250,10 @@ export class DetailsPage implements OnInit {
     else if (confirmedEstimate == null || confirmedEstimate <= 0) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[5].index;
     }
-    else if (this.landlordDetails.isAuthorizationRequired || this.propertyDetails.expenditureLimit == 0) {
+    else if (this.landlordDetails.isAuthorizationRequired || this.propertyDetails.expenditureLimit == 0 || confirmedEstimate > this.propertyDetails.expenditureLimit) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[3].index; //OBTAIN_AUTHORISATION
     }
-    else if (confirmedEstimate > this.propertyDetails.expenditureLimit) {
+    else if (confirmedEstimate > this.QUOTE_THRESOLD) { 
       this.suggestedAction = LL_INSTRUCTION_TYPES[2].index;
     }
     else if (confirmedEstimate <= this.propertyDetails.expenditureLimit) {
