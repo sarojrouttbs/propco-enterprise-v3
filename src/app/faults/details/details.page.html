@@ -590,9 +590,9 @@
             <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
             <ion-button color="{{(suggestedAction == 'PROCEED_AS_NECESSARY') ? 'danger' : 'success'}}"
                 class="icon-button" (click)="setUserAction(suggestedAction)"
-                fill="{{(faultDetails?.userSelectedAction == suggestedAction) ? 'solid' :'outline'}}">
+                fill="{{(userSelectedActionControl.value == suggestedAction) ? 'solid' :'outline'}}">
                 {{getLookupValue(suggestedAction, landlordInstructionTypes)}}
-                <ion-icon name="checkmark-circle-outline" *ngIf="(faultDetails?.userSelectedAction == suggestedAction)">
+                <ion-icon name="checkmark-circle-outline" *ngIf="(userSelectedActionControl.value == suggestedAction)">
                 </ion-icon>
               </ion-button>
               <h6 class="ownRepair" *ngIf= "(!isMatch && suggestedAction == 'DOES_OWN_REPAIRS')">
@@ -606,11 +606,11 @@
                     <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}"
                       class="action-btn"
                       expand="block"
-                      fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}"
+                      fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
                       (click)="setUserAction(instruction.index)">
                       {{instruction.value}}
                       <ion-icon name="checkmark-circle-outline" class="check-icon"
-                        *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
+                        *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
                     </ion-button>
                     <h6 class="ownRepair" *ngIf="(instruction.index == 'DOES_OWN_REPAIRS' && !isMatch )">Landlord owned Repair Category does not match the Fault Category</h6>
                   </div>
@@ -665,11 +665,11 @@
                     <div *ngIf="oldUserSelectedAction != instruction.index">
                       <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}" expand="block"
                       class="action-btn"
-                        fill="{{faultDetails?.userSelectedAction == instruction.index ? 'solid' :'outline'}}"
+                        fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
                         (click)="setUserAction(instruction.index)">
                         {{instruction.value}}
                         <ion-icon name="checkmark-circle-outline" class="check-icon"
-                          *ngIf="(faultDetails?.userSelectedAction == instruction.index)"></ion-icon>
+                          *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
                       </ion-button>
                       <h6 class="ownRepair" *ngIf= "(!isMatch && instruction.index == 'DOES_OWN_REPAIRS')">
                         Landlord owned Repair Category does not match the Fault Category</h6>
@@ -695,8 +695,8 @@
                     <mat-form-field class="example-full-width" appearance="legacy">
                       <mat-label>Select Contractor</mat-label>
                       <input matInput appearance="legacy" [matAutocomplete]="selectContractor"
-                        formControlName='contractor' [disabled]="!(faultDetails?.userSelectedAction == 'GET_AN_ESTIMATE' || faultDetails?.userSelectedAction == 'OBTAIN_AUTHORISATION')"
-                        [readonly]="!(faultDetails?.userSelectedAction == 'GET_AN_ESTIMATE' || faultDetails?.userSelectedAction == 'OBTAIN_AUTHORISATION')">
+                        formControlName='contractor' [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')"
+                        [readonly]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')">
                     </mat-form-field>
                     <mat-autocomplete #selectContractor="matAutocomplete" [displayWith]="displayFn"
                       (optionSelected)="onSelectionChange($event)">
@@ -718,14 +718,14 @@
                     <ion-item style="padding-top: 3px;">
                       <ion-label position="floating">Confirmed Estimate</ion-label>
                       <ion-input formControlName="confirmedEstimate"
-                        [disabled]="!(faultDetails?.userSelectedAction == 'GET_AN_ESTIMATE' || faultDetails?.userSelectedAction == 'OBTAIN_AUTHORISATION')"></ion-input>
+                        [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')"></ion-input>
                     </ion-item>
                   </ion-col>
                   <ion-col size="100">
                     <ion-item>
                       <ion-label position="stacked">Notes</ion-label>
                       <ion-textarea placeholder="Enter more information here..." formControlName="estimationNotes"
-                        [disabled]="!(faultDetails?.userSelectedAction == 'GET_AN_ESTIMATE' || faultDetails?.userSelectedAction == 'OBTAIN_AUTHORISATION')" rows=1></ion-textarea>
+                        [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')" rows=1></ion-textarea>
                     </ion-item>
                   </ion-col>
                 </ion-row>
