@@ -74,7 +74,6 @@ export class DetailsPage implements OnInit {
   suggestedAction; oldUserSelectedAction;
   faultNotifications: any;
   cliNotification: any;
-  notificationQuesAnswer: any;
   isMatch = false;
   userSelectedActionControl = new FormControl();
 
@@ -1237,7 +1236,7 @@ export class DetailsPage implements OnInit {
 
   }
 
-  private checkForLLSuggestedAction() {
+  private async checkForLLSuggestedAction() {
     // if (this.faultDetails.status === 2 || this.faultDetails.status === 13) { //In Assessment" or " Checking Landlord's Instructions "
     this.suggestedAction = '';
     let confirmedEstimate = this.faultDetails.confirmedEstimate;
@@ -1261,9 +1260,22 @@ export class DetailsPage implements OnInit {
     }
 
     // }
-    // if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index && this.faultDetails.status === 15) {
-    this.checkFaultNotifications(this.faultId);
-    // }
+    await this.checkFaultNotifications(this.faultId);
+    this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, this.faultDetails.userSelectedAction);
+    if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index) {
+      if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
+        this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
+      }
+    } else if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
+      if (this.cliNotification && this.cliNotification.responseReceived) {
+        if (this.cliNotification.responseReceived.isAccepted) {
+          this.faultDetails.userSelectedAction = LL_INSTRUCTION_TYPES[1].index;
+        } else {
+          this.faultDetails.userSelectedAction = LL_INSTRUCTION_TYPES[2].index;
+        }
+      }
+    }
+
   }
 
   private matchCategory() {
@@ -1343,8 +1355,12 @@ export class DetailsPage implements OnInit {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
             const WORKS_ORDER_PENDING = 19;
-            forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(WORKS_ORDER_PENDING)]).subscribe(data => {
-              // this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+            let requestArray = [];
+            requestArray.push(this.updateFaultDetails(faultRequestObj));
+            if(this.faultDetails.status !== WORKS_ORDER_PENDING){
+              requestArray.push(this.updateFaultStatus(WORKS_ORDER_PENDING));
+            }
+            forkJoin(requestArray).subscribe(data => {
               this.refreshDetailsAndStage();
             });
           }
@@ -1355,8 +1371,12 @@ export class DetailsPage implements OnInit {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
             const AWAITING_QUOTE = 14;
-            forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(AWAITING_QUOTE)]).subscribe(data => {
-              // this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+            let requestArray = [];
+            requestArray.push(this.updateFaultDetails(faultRequestObj));
+            if(this.faultDetails.status !== AWAITING_QUOTE){
+              requestArray.push(this.updateFaultStatus(AWAITING_QUOTE));
+            }
+            forkJoin(requestArray).subscribe(data => {
               this.refreshDetailsAndStage();
             });
           }
@@ -1367,8 +1387,12 @@ export class DetailsPage implements OnInit {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
             const WORKS_ORDER_PENDING = 19;
-            forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(WORKS_ORDER_PENDING)]).subscribe(data => {
-              // this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+            let requestArray = [];
+            requestArray.push(this.updateFaultDetails(faultRequestObj));
+            if(this.faultDetails.status !== WORKS_ORDER_PENDING){
+              requestArray.push(this.updateFaultStatus(WORKS_ORDER_PENDING));
+            }
+            forkJoin(requestArray).subscribe(data => {
               this.refreshDetailsAndStage();
             });
           }
@@ -1379,7 +1403,12 @@ export class DetailsPage implements OnInit {
             faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
             const AWAITING_RESPONSE_LANDLORD = 15;
-            forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD)]).subscribe(data => {
+            let requestArray = [];
+            requestArray.push(this.updateFaultDetails(faultRequestObj));
+            if(this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD){
+              requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
+            }
+            forkJoin(requestArray).subscribe(data => {
               this.refreshDetailsAndStage();
               this.commonService.showLoader();
               setTimeout(() => {
@@ -1390,7 +1419,7 @@ export class DetailsPage implements OnInit {
           break;
         case LL_INSTRUCTION_TYPES[3].index: //cli006d
           if (!this.landlordInstFrom.value.confirmedEstimate) {
-            this.commonService.showAlert('Landlord Instructions', 'Please add confirmed estimate');
+            this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
             return;
           }
           var response = await this.commonService.showConfirm('Landlord Instructions', `You have selected the "Obtain Landlord's Authorisation" action. This will send out a notification to Landlord. <br/> Are you sure?`, '', 'Yes', 'No');
@@ -1398,7 +1427,12 @@ export class DetailsPage implements OnInit {
             faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
             const AWAITING_RESPONSE_LANDLORD = 15;
-            forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD)]).subscribe(data => {
+            let requestArray = [];
+            requestArray.push(this.updateFaultDetails(faultRequestObj));
+            if(this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD){
+              requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
+            }
+            forkJoin(requestArray).subscribe(data => {
               this.refreshDetailsAndStage();
               this.commonService.showLoader();
               setTimeout(() => {
@@ -1448,25 +1482,28 @@ export class DetailsPage implements OnInit {
     return promise;
   }
 
-  checkFaultNotifications(faultId) {
-    this.faultService.getFaultNotifications(faultId).subscribe(async (response) => {
-      if (response) {
-        // this.faultNotifications = await this.filterNotifications(response.data);
-        this.cliNotification = await this.filterNotifications(response.data);
-        // this.notificationQuesAnswer = this.faultNotifications.questions;
-        if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
-          // this.refreshDetailsAndStage();
-          this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
-        }
-      }
-    })
+  async checkFaultNotifications(faultId) {
+    return new Promise((resolve, reject) => {
+      this.faultService.getFaultNotifications(faultId).subscribe(async (response) => {
+        // if (response) {
+        //   this.cliNotification = await this.filterNotifications(response.data, this.faultDetails.stage, this.faultDetails.userSelectedAction);
+        //   if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
+        //     this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
+        //   }
+        // }
+        this.faultNotifications = response && response.data ? response.data : [];
+        resolve(this.faultNotifications);
+      }, error => {
+        reject(error)
+      });
+    });
   }
 
-  filterNotifications(data) {
+  private filterNotifications(data, stage, action) {
     const promise = new Promise((resolve, reject) => {
       let filtereData = null;
-      let currentStage = this.faultDetails.stage;
-      let currentAction = this.userSelectedActionControl.value;
+      let currentStage = stage;
+      let currentAction = action;
       if (data.length == 0)
         resolve(null);
       filtereData = data.filter((x => x.faultStage === currentStage)).filter((x => x.faultStageAction === currentAction));
@@ -1488,52 +1525,90 @@ export class DetailsPage implements OnInit {
     if (this.cliNotification && this.cliNotification.responseReceived != null) {
       return;
     }
-    if (this.cliNotification.faultStageAction === LL_INSTRUCTION_TYPES[3]) {
-      if (!data.value) {
-        this.commonService.showConfirm(data.text, 'Are you Sure?', '', 'Yes', 'No').then(async res => {
-          if (res) {
-            await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
-            this.refreshDetailsAndStage();
-            this.checkFaultNotifications(this.faultId);
-          }
-        });
-      }
-      else if (data.value) {
-        this.commonService.showConfirm(data.text, 'Are you Sure?', '', 'Yes', 'No').then(async res => {
-          if (res) {
-            await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
-            this.refreshDetailsAndStage();
-            this.checkFaultNotifications(this.faultId);
-          }
-        });
-      }
-    } else {
-      if (!data.value) {
-        this.commonService.showConfirm(data.text, 'This will change status back to "Checking Landlord Instruction". </br> Are you Sure?', '', 'Yes', 'No').then(res => {
-          if (res) {
-            const CHECKING_LANDLORD_INSTRUCTIONS = 13;
-            forkJoin([this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS), this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId)]).subscribe(data => {
-              this.refreshDetailsAndStage();
-              this.checkFaultNotifications(this.faultId);
-            });
-          }
-        });
-      }
-      else if (data.value) {
-        this.commonService.showConfirm(data.text, 'This will change the stage to "Job Completion". </br> Are you Sure?', '', 'Yes', 'No').then(res => {
-          if (res) {
-            let faultRequestObj = {} as FaultModels.IFaultResponse
-            faultRequestObj.stage = FAULT_STAGES.JOB_COMPLETION;
-            faultRequestObj.isDraft = this.faultDetails.isDraft;
-            forkJoin([this.updateFaultDetails(faultRequestObj), this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId)]).subscribe(data => {
-              this.refreshDetailsAndStage();
-              this.checkFaultNotifications(this.faultId);
-            });
-          }
-        });
-      }
+    if (this.cliNotification.faultStageAction === LL_INSTRUCTION_TYPES[0].index) {
+      this.questionActionDoesOwnRepair(data);
+    }
+    else if (this.cliNotification.faultStageAction === LL_INSTRUCTION_TYPES[3].index) {
+      this.questionActionLandlordAuth(data);
     }
   }
+
+  private questionActionDoesOwnRepair(data) {
+    if (!data.value) {
+      this.commonService.showConfirm(data.text, 'This will change status back to "Checking Landlord Instruction". </br> Are you Sure?', '', 'Yes', 'No').then(res => {
+        if (res) {
+          const CHECKING_LANDLORD_INSTRUCTIONS = 13;
+          forkJoin([this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS),
+          this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId)]).subscribe(async data => {
+            this.refreshDetailsAndStage();
+            await this.checkFaultNotifications(this.faultId);
+            this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+            if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
+              this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
+            }
+          });
+        }
+      });
+    }
+    else if (data.value) {
+      this.commonService.showConfirm(data.text, 'This will change the stage to "Job Completion". </br> Are you Sure?', '', 'Yes', 'No').then(res => {
+        if (res) {
+          let faultRequestObj = {} as FaultModels.IFaultResponse
+          faultRequestObj.stage = FAULT_STAGES.JOB_COMPLETION;
+          faultRequestObj.isDraft = this.faultDetails.isDraft;
+          forkJoin([this.updateFaultDetails(faultRequestObj),
+          this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId)]).subscribe(async data => {
+            this.refreshDetailsAndStage();
+            await this.checkFaultNotifications(this.faultId);
+            this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+            if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
+              this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
+            }
+          });
+        }
+      });
+    }
+  }
+
+  private questionActionLandlordAuth(data) {
+    if (!data.value) {
+      this.commonService.showConfirm(data.text, 'Are you sure?', '', 'Yes', 'No').then(async res => {
+        if (res) {
+          await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
+          this.refreshDetailsAndStage();
+          await this.checkFaultNotifications(this.faultId);
+          this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
+          if (this.cliNotification && this.cliNotification.responseReceived) {
+            if (this.cliNotification.responseReceived.isAccepted) {
+              this.faultDetails.userSelectedAction = LL_INSTRUCTION_TYPES[1].index;
+            } else {
+              this.faultDetails.userSelectedAction = LL_INSTRUCTION_TYPES[2].index;
+            }
+          }
+        }
+      });
+    }
+    else if (data.value) {
+      this.commonService.showConfirm(data.text, 'Are you sure?', '', 'Yes', 'No').then(async res => {
+        if (res) {
+          await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
+          this.refreshDetailsAndStage();
+          await this.checkFaultNotifications(this.faultId);
+          this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
+          if (this.cliNotification && this.cliNotification.responseReceived) {
+            if (this.cliNotification.responseReceived.isAccepted) {
+              this.faultDetails.userSelectedAction = LL_INSTRUCTION_TYPES[1].index;
+            } else {
+              this.faultDetails.userSelectedAction = LL_INSTRUCTION_TYPES[2].index;
+            }
+
+          }
+        }
+      });
+    }
+  }
+
+
 
   async presentRepairCategories(ev: any) {
     const popover = await this.popoverController.create({
