@@ -1,6 +1,6 @@
 import { ModalController, PopoverController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES } from './../../shared/constants';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX } from './../../shared/constants';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -228,7 +228,7 @@ export class DetailsPage implements OnInit {
   private initLandLordInstForm(): void {
     this.landlordInstFrom = this.fb.group({
       contractor: '',
-      confirmedEstimate: '',
+      confirmedEstimate: ['', Validators.pattern(REGEX.DECIMAL_REGEX)],
       userSelectedAction: '',
       estimationNotes: ''
     });
@@ -1253,7 +1253,7 @@ export class DetailsPage implements OnInit {
     else if (this.landlordDetails.isAuthorizationRequired || this.propertyDetails.expenditureLimit == 0 || confirmedEstimate > this.propertyDetails.expenditureLimit) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[3].index; //OBTAIN_AUTHORISATION
     }
-    else if (confirmedEstimate > this.QUOTE_THRESOLD) { 
+    else if (confirmedEstimate > this.QUOTE_THRESOLD) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[2].index;
     }
     else if (confirmedEstimate <= this.propertyDetails.expenditureLimit) {
@@ -1415,7 +1415,7 @@ export class DetailsPage implements OnInit {
               setTimeout(async () => {
                 await this.checkFaultNotifications(this.faultId);
                 this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
-                if (this.cliNotification && this.cliNotification.responseReceived) {                
+                if (this.cliNotification && this.cliNotification.responseReceived) {
                   if (this.cliNotification.responseReceived.isAccepted) {
                     this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
                   } else {
@@ -1463,7 +1463,12 @@ export class DetailsPage implements OnInit {
               this.checkForLLSuggestedAction();
             }
           } else {
-            this.commonService.showAlert('Get an Estimate?', 'Please fill the confirmed estimate.');
+            if (this.landlordInstFrom.get('confirmedEstimate').hasError('pattern')) {
+              this.commonService.showAlert('Get an Estimate?', 'Please fill the valid confirmed estimate.');
+            } else {
+              this.commonService.showAlert('Get an Estimate?', 'Please fill the confirmed estimate.');
+            }
+
           }
           break;
         default:
@@ -1523,10 +1528,10 @@ export class DetailsPage implements OnInit {
       if (filtereData.length == 0)
         resolve(null);
       // if (filtereData[0].firstEmailSentAt) {
-        filtereData = filtereData.sort((a, b) => {
-          return <any>new Date(b.firstEmailSentAt) - <any>new Date(a.firstEmailSentAt);
-        });
-        resolve(filtereData[0]);
+      filtereData = filtereData.sort((a, b) => {
+        return <any>new Date(b.firstEmailSentAt) - <any>new Date(a.firstEmailSentAt);
+      });
+      resolve(filtereData[0]);
       // } else {
       //   resolve(filtereData[0]);
       // }
@@ -1642,4 +1647,13 @@ export class DetailsPage implements OnInit {
     return this.faultService.updateNotification(faultNotificationId, notificationObj).toPromise();
   }
 
+  async showRefreshPopup(val) {
+    if (val != '' && this.landlordInstFrom.get('confirmedEstimate').valid && val !== this.faultDetails.confirmedEstimate) {
+      var response = await this.commonService.showConfirm('Landlord Instructions', 'Please click Refresh to check if the Suggested Action has changed based on the estimate you have entered', '', 'yes', 'No');
+      if (response) {
+        this.proceedToNextStage();
+      }
+    }
+
+  }
 }

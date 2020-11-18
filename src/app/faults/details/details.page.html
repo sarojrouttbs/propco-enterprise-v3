@@ -719,7 +719,8 @@
                     <ion-item style="padding-top: 3px;">
                       <ion-label position="floating">Confirmed Estimate</ion-label>
                       <ion-input formControlName="confirmedEstimate"
-                        [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')"></ion-input>
+                        [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')" #estimate (ionBlur)="showRefreshPopup(estimate.value)"
+                        ></ion-input>
                     </ion-item>
                   </ion-col>
                   <ion-col size="100">

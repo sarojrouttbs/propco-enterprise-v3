@@ -5,7 +5,7 @@ export const PROPCO = {
   USER_DETAILS: 'user_details',
   PREVIOUS_URL: 'previous_url',
   WEB_KEY: 'web_key',
-  LOOKUP_DATA: 'lookup_data'
+  LOOKUP_DATA: 'lookup_data',
 };
 
 export const USER_TYPES = {
@@ -121,4 +121,8 @@ export const URGENCY_TYPES = {
   EMERGENCY: 1,
   URGENT: 2,
   NON_URGENT: 3
+}
+
+export const REGEX = {
+  DECIMAL_REGEX: '[0-9]+(\.[0-9][0-9]?)?'
 }
