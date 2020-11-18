@@ -5,7 +5,8 @@ export const PROPCO = {
   USER_DETAILS: 'user_details',
   PREVIOUS_URL: 'previous_url',
   WEB_KEY: 'web_key',
-  LOOKUP_DATA: 'lookup_data'
+  LOOKUP_DATA: 'lookup_data',
+  LA_LOOKUP_DATA: 'la_lookup_data'
 };
 
 export const USER_TYPES = {
