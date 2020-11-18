@@ -1651,7 +1651,7 @@ export class DetailsPage implements OnInit {
   async showRefreshPopup(val) {
     if (val != '' && this.landlordInstFrom.get('confirmedEstimate').valid && val !== this.faultDetails.confirmedEstimate) {
       this.isEstimateChange = true;
-      var response = await this.commonService.showConfirm('Landlord Instructions', 'Please click Refresh to check if the Suggested Action has changed based on the estimate you have entered', '', 'Ok', '');      
+      var response = await this.commonService.showAlert('Landlord Instructions', 'Please click Refresh to check if the Suggested Action has changed based on the estimate you have entered');      
     }else{
       this.isEstimateChange = false;
     }
