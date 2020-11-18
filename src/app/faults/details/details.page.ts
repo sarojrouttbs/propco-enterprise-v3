@@ -75,6 +75,7 @@ export class DetailsPage implements OnInit {
   faultNotifications: any;
   cliNotification: any;
   isMatch = false;
+  userSelectedActionControl = new FormControl();
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -246,6 +247,7 @@ export class DetailsPage implements OnInit {
       this.propertyId = details.propertyId;
       this.contractorEntityId = details.contractorId;
       this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
+      this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
       this.getFaultDocuments(this.faultId);
       this.getFaultHistory();
       if (this.contractorEntityId) {
@@ -1130,7 +1132,7 @@ export class DetailsPage implements OnInit {
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
       faultRequestObj.stage = this.faultDetails.stage;
       faultRequestObj.isDraft = this.faultDetails.isDraft;
-      faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+      faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
       Object.assign(faultRequestObj, this.landlordInstFrom.value);
       if (this.contractorEntityId) {
         faultRequestObj.contractorId = this.contractorEntityId;
@@ -1206,7 +1208,8 @@ export class DetailsPage implements OnInit {
     const details: any = await this.getFaultDetails();
     this.selectStageStepper(details.stage);
     this.faultDetails = details;
-    this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
+    this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
+    this.oldUserSelectedAction = this.userSelectedActionControl.value;
   }
 
 
@@ -1229,7 +1232,7 @@ export class DetailsPage implements OnInit {
       this.commonService.showAlert('Landlord Instructions', 'Please select repair action first.');
       return;
     }
-    this.faultDetails.userSelectedAction = index;
+    this.userSelectedActionControl.setValue(index);
 
   }
 
@@ -1345,12 +1348,12 @@ export class DetailsPage implements OnInit {
         delete faultRequestObj.contractorId;
       }
 
-      switch (this.faultDetails.userSelectedAction) {
+      switch (this.userSelectedActionControl.value) {
         case LL_INSTRUCTION_TYPES[1].index: //cli006b
           var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action. This will send out a notification to Landlord, Tenant and a Contractor. <br/> Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
-            faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+            faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
             const WORKS_ORDER_PENDING = 19;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -1366,7 +1369,7 @@ export class DetailsPage implements OnInit {
           var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action.<br/>  Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
-            faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+            faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
             const AWAITING_QUOTE = 14;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -1382,7 +1385,7 @@ export class DetailsPage implements OnInit {
           var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action. <br/> Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
-            faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+            faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
             const WORKS_ORDER_PENDING = 19;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -1398,7 +1401,7 @@ export class DetailsPage implements OnInit {
           var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. <br/> Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
-            faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+            faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
             const AWAITING_RESPONSE_LANDLORD = 15;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -1422,7 +1425,7 @@ export class DetailsPage implements OnInit {
           var response = await this.commonService.showConfirm('Landlord Instructions', `You have selected the "Obtain Landlord's Authorisation" action. This will send out a notification to Landlord. <br/> Are you sure?`, '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
-            faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
+            faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
             const AWAITING_RESPONSE_LANDLORD = 15;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -1441,7 +1444,6 @@ export class DetailsPage implements OnInit {
         case LL_INSTRUCTION_TYPES[5].index: //cli006f
           if (this.landlordInstFrom.get('confirmedEstimate').value > 0) {
             faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
-            // faultRequestObj.userSelectedAction = this.faultDetails.userSelectedAction;
             let res = await this.updateFaultDetails(faultRequestObj);
             if (res) {
               await this.refreshDetailsAndStage();
