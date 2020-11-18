@@ -1,0 +1,112 @@
+<ion-content id="application-list">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="50" class="heading">
+        <div>
+          <ion-icon name="arrow-back-outline" style="vertical-align: bottom;cursor: pointer;" (click)="goBack()"></ion-icon>
+           &nbsp;View Applications &nbsp;
+          <i class="propcoicon propcoicon-refresh icon-primary" style="display: inline; background: transparent; cursor: pointer;" (click)="refresh()"></i></div>
+      </ion-col>
+      <ion-col size="50" class="la-logo">
+        <img src="assets/images/referencing/homelet-logo.svg"/>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <form [formGroup]="applicationFilterForm">
+      <ion-grid>
+        <ion-row>
+          <ion-col size-xl="21" size-lg="20" size-md="50" size-sm="50" size-xs="50">
+            <ion-item>
+              <ion-label position="floating">Office Filter</ion-label>
+              <ion-select interface="popover" formControlName="officeCodes">
+                <ion-select-option [value]="officeLookup.index" *ngFor="let officeLookup of officeCodes">
+                  {{ officeLookup.value }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size-xl="21" size-lg="20" size-md="50" size-sm="50" size-xs="50">
+              <ion-item>
+                <ion-label position="floating">Search Text</ion-label>
+                <ion-input formControlName="searchKey"></ion-input>
+              </ion-item>
+          </ion-col>
+          <ion-col size-xl="21" size-lg="20" size-md="38" size-sm="32" size-xs="50">
+            <ion-item>
+              <ion-label position="floating">Date From
+              </ion-label>
+              <ion-datetime formControlName="fromDate" displayFormat="DD MMM YYYY" interface="popover"></ion-datetime>
+            </ion-item>
+          </ion-col>
+          <ion-col size-xl="21" size-lg="20" size-md="38" size-sm="32" size-xs="50">
+            <ion-item>
+              <ion-label position="floating">Date To
+              </ion-label>
+              <ion-datetime formControlName="toDate" displayFormat="DD MMM YYYY" interface="popover"></ion-datetime>
+            </ion-item>
+          </ion-col>
+          <ion-col class="ion-text-end ion-align-self-end" size-xl="16" size-lg="20" size-md="24" size-sm="36" size-xs="100">
+            <ion-button (click)="getLAApplicationList()">Submit</ion-button>
+            <ion-button class="reset-button no-margin-right">Reset</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="100">
+          <div class="overlay-container" style="position: relative">
+            <table datatable [dtOptions]="dtOptions" class="row-border hover"
+              style="width: 100%; position: relative" id="applicationListTable">
+              <thead>
+                <tr>
+                  <th style="width:7%">Reference No.</th>
+                  <th style="width:7%">Property Ref</th>
+                  <th>Property Address</th>
+                  <th style="width:10%">Applicant Name</th>
+                  <th style="width:8%">Branch</th>
+                  <th style="width:8%">Tenancy Start</th>
+                  <th style="width:8%">	Rent Share</th>
+                  <th style="width:11%">Guarantor Name</th>
+                  <th style="width:11%">Product Type</th>
+                  <th style="width:8%">Application Status</th>
+                  <th style="width:40px"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let application of applicationList" class="table-row">
+                  <td>{{application.referenceNumber || '-'}}</td>
+                  <td>{{application.propertyDetail.reference || '-'}}</td>
+                  <td>{{application.propertyDetail.address.addressLine1}} {{application.propertyDetail.address.addressLine5}} 
+                    {{application.propertyDetail.address.postcode}}</td>
+                  <td>{{application.applicantDetail.displayAs || '-'}}</td>
+                  <td>{{application.office || '-'}}</td>
+                  <td>{{application.tenancyStartDate|| '-' | date : 'dd/MM/yyyy' }}</td>
+                  <td>{{application.rentShare || '0' | currency: '£'}}</td>
+                  <td>{{application.guarantorDisplayAs || '-'}}</td>
+                  <td>{{getProductType(application.product) || '-'}}</td>
+                  <td></td>
+                  <td class="resp-action-icon">
+                    <i (click)="commonService.showMenu($event,'divOverlay', application, 'table-row')"
+                      class="propcoicon propcoicon-actions-on"></i>
+                  </td>
+                </tr>
+                <tr *ngIf="applicationList?.length == 0">
+                  <td colspan="11" class="no-data-available">No data!</td>
+              </tr>
+              </tbody>
+            </table>
+            <div id="divOverlay">
+              <ion-button>Print Report</ion-button>
+              <ion-button>Status Update</ion-button>
+              <ion-button>Resend Link</ion-button>
+              <ion-button>Guarantor</ion-button>
+              <ion-button>Submit</ion-button>
+              <ion-button>View</ion-button>
+              <i (click)="commonService.hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+  </ion-grid>
+</ion-content>

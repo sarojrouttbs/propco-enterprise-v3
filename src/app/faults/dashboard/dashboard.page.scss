@@ -16,7 +16,7 @@
   --padding-bottom: var(--ion-padding-bottom);
   --padding-start: var(--ion-padding-start);
 
-  table.dataTable {
+  /* table.dataTable {
     @include set-text-style(14px, 16px);
 
     &.no-footer {
@@ -100,5 +100,5 @@
       color: var(--ion-color-step-2000);
       cursor: pointer;
     }
-  }
+  } */
 }
