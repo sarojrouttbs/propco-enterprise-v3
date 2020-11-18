@@ -1503,12 +1503,6 @@ export class DetailsPage implements OnInit {
   async checkFaultNotifications(faultId) {
     return new Promise((resolve, reject) => {
       this.faultService.getFaultNotifications(faultId).subscribe(async (response) => {
-        // if (response) {
-        //   this.cliNotification = await this.filterNotifications(response.data, this.faultDetails.stage, this.faultDetails.userSelectedAction);
-        //   if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
-        //     this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
-        //   }
-        // }
         this.faultNotifications = response && response.data ? response.data : [];
         resolve(this.faultNotifications);
       }, error => {
@@ -1553,11 +1547,11 @@ export class DetailsPage implements OnInit {
 
   private questionActionDoesOwnRepair(data) {
     if (!data.value) {
-      this.commonService.showConfirm(data.text, 'This will change status back to "Checking Landlord Instruction". </br> Are you Sure?', '', 'Yes', 'No').then(res => {
+      this.commonService.showConfirm(data.text, 'This will change status back to "Checking Landlord Instruction". </br> Are you Sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
           const CHECKING_LANDLORD_INSTRUCTIONS = 13;
-          forkJoin([this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS),
-          this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId)]).subscribe(async data => {
+          await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
+          this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS).then(async data => {
             this.refreshDetailsAndStage();
             await this.checkFaultNotifications(this.faultId);
             this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
@@ -1569,13 +1563,14 @@ export class DetailsPage implements OnInit {
       });
     }
     else if (data.value) {
-      this.commonService.showConfirm(data.text, 'This will change the stage to "Job Completion". </br> Are you Sure?', '', 'Yes', 'No').then(res => {
+      this.commonService.showConfirm(data.text, 'This will change the stage to "Job Completion". </br> Are you Sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
           let faultRequestObj = {} as FaultModels.IFaultResponse
           faultRequestObj.stage = FAULT_STAGES.JOB_COMPLETION;
           faultRequestObj.isDraft = this.faultDetails.isDraft;
-          forkJoin([this.updateFaultDetails(faultRequestObj),
-          this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId)]).subscribe(async data => {
+
+          await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
+          this.updateFaultDetails(faultRequestObj).then(async data => {
             this.refreshDetailsAndStage();
             await this.checkFaultNotifications(this.faultId);
             this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
@@ -1641,7 +1636,7 @@ export class DetailsPage implements OnInit {
     return await popover.present();
   }
 
-  private updateFaultNotification(data, faultNotificationId): Promise<any> {
+  private async updateFaultNotification(data, faultNotificationId): Promise<any> {
     let notificationObj = {} as FaultModels.IUpdateNotification;
     notificationObj.isAccepted = data;
     return this.faultService.updateNotification(faultNotificationId, notificationObj).toPromise();
@@ -1649,7 +1644,7 @@ export class DetailsPage implements OnInit {
 
   async showRefreshPopup(val) {
     if (val != '' && this.landlordInstFrom.get('confirmedEstimate').valid && val !== this.faultDetails.confirmedEstimate) {
-      var response = await this.commonService.showAlert('Landlord Instructions', 'Please click Refresh to check if the Suggested Action has changed based on the estimate you have entered');      
+      var response = await this.commonService.showAlert('Landlord Instructions', 'Please click Refresh to check if the Suggested Action has changed based on the estimate you have entered');
     }
   }
 }
