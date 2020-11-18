@@ -77,6 +77,7 @@ export class DetailsPage implements OnInit {
   isMatch = false;
   userSelectedActionControl = new FormControl();
   private QUOTE_THRESOLD = 500;
+  isEstimateChange = false;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -1649,10 +1650,10 @@ export class DetailsPage implements OnInit {
 
   async showRefreshPopup(val) {
     if (val != '' && this.landlordInstFrom.get('confirmedEstimate').valid && val !== this.faultDetails.confirmedEstimate) {
-      var response = await this.commonService.showConfirm('Landlord Instructions', 'Please click Refresh to check if the Suggested Action has changed based on the estimate you have entered', '', 'yes', 'No');
-      if (response) {
-        this.proceedToNextStage();
-      }
+      this.isEstimateChange = true;
+      var response = await this.commonService.showConfirm('Landlord Instructions', 'Please click Refresh to check if the Suggested Action has changed based on the estimate you have entered', '', 'Ok', '');      
+    }else{
+      this.isEstimateChange = false;
     }
 
   }
