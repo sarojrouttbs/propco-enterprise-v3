@@ -584,7 +584,8 @@
   </ion-grid>
   <ion-grid>
     <ion-row>
-      <ion-col offset-xl="25" size-xl="50" offset ="0" size="100"> 
+      <!-- <ion-col offset-xl="25" size-xl="50" offset ="0" size="100">  -->
+      <ion-col offset-xl="20" size-xl="60" offset ="0" size="100"> 
         <div class="landlord-instructions">
           <div class="banner" *ngIf="!cliNotification">
             <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
@@ -719,7 +720,8 @@
                     <ion-item style="padding-top: 3px;">
                       <ion-label position="floating">Confirmed Estimate</ion-label>
                       <ion-input formControlName="confirmedEstimate"
-                        [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')"></ion-input>
+                        [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')" #estimate (ionBlur)="showRefreshPopup(estimate.value)"
+                        ></ion-input>
                     </ion-item>
                   </ion-col>
                   <ion-col size="100">
@@ -790,6 +792,7 @@
               <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
               <ion-button (click)="goToLastStage()">Back</ion-button>
               <ion-button class="save-button" (click)="saveForLater()">Save for later</ion-button>
+              <ion-button class="submit-button" (click)="proceedToNextStage()">Refresh</ion-button>
               <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button>
             </div>
           </div>

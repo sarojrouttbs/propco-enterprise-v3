@@ -123,3 +123,7 @@ export const URGENCY_TYPES = {
   URGENT: 2,
   NON_URGENT: 3
 }
+
+export const REGEX = {
+  DECIMAL_REGEX: '[0-9]+(\.[0-9][0-9]?)?'
+}
