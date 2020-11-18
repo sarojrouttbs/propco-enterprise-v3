@@ -1417,7 +1417,7 @@ export class DetailsPage implements OnInit {
                 this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
                 if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
                   this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
-                }                
+                }
               }, 3000);
             });
           }
@@ -1449,7 +1449,7 @@ export class DetailsPage implements OnInit {
                   } else {
                     this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
                   }
-                }                
+                }
               }, 3000);
             });
           }
@@ -1533,7 +1533,7 @@ export class DetailsPage implements OnInit {
     return promise;
   }
 
-  private handleCLInotification(notification){
+  private handleCLInotification(notification) {
 
   }
 
@@ -1641,9 +1641,19 @@ export class DetailsPage implements OnInit {
   }
 
   private async updateFaultNotification(data, faultNotificationId): Promise<any> {
-    let notificationObj = {} as FaultModels.IUpdateNotification;
-    notificationObj.isAccepted = data;
-    return this.faultService.updateNotification(faultNotificationId, notificationObj).toPromise();
+    const promise = new Promise((resolve, reject) => {
+      let notificationObj = {} as FaultModels.IUpdateNotification;
+      notificationObj.isAccepted = data;
+      this.faultService.updateNotification(faultNotificationId, notificationObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          reject(error)
+        }
+      );
+    });
+    return promise;
   }
 
   async showRefreshPopup(val) {
@@ -1651,5 +1661,5 @@ export class DetailsPage implements OnInit {
     //   var response = await this.commonService.showAlert('Landlord Instructions', 'Please click Refresh to check if the Suggested Action has changed based on the estimate you have entered');
     // }
   }
-  
+
 }
