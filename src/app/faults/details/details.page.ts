@@ -25,7 +25,7 @@ export class DetailsPage implements OnInit {
   pageNo = 1;
   propertyId = null;
   propertyDetails: any = {};
-  propertyTenancyDetails: any[];
+  propertyTenancyList: any[];
   propertyHMODetails: any[] = [];
   faultHistory;
   addtionalInfo;
@@ -407,11 +407,11 @@ export class DetailsPage implements OnInit {
       this.faultService.getPropertyTenancies(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
-            this.propertyTenancyDetails = res.data.filter(x => x.hasCheckedIn);
-            if (this.propertyTenancyDetails) {
+            this.propertyTenancyList = res.data.filter(x => x.hasCheckedIn);
+            if (this.propertyTenancyList && this.propertyTenancyList.length) {
               this.propertyDetails.isPropertyCheckedIn = true;
-              for (let i = 0; i < this.propertyTenancyDetails.length; i++) {
-                const tenants = this.propertyTenancyDetails[i].tenants;
+              for (let i = 0; i < this.propertyTenancyList.length; i++) {
+                const tenants = this.propertyTenancyList[i].tenants;
                 let tenantIdList = tenants.filter(data => data.tenantId).map(d => d.tenantId);
                 this.tenantIds = this.tenantIds.concat(tenantIdList);
               }
@@ -949,7 +949,7 @@ export class DetailsPage implements OnInit {
       }
       else if (reportedBy === 'GUARANTOR' && this.reportedByForm.get('agreementId').value) {
         const agreementId = this.reportedByForm.get('agreementId').value;
-        let agreement = this.propertyTenancyDetails.find(function (tenancy) {
+        let agreement = this.propertyTenancyList.find(function (tenancy) {
           return (tenancy.agreementId == agreementId)
         });
         this.allGuarantors = [];
@@ -1228,8 +1228,8 @@ export class DetailsPage implements OnInit {
   }
 
   setUserAction(index) {
-    if (this.faultDetails.status == 15 && (this.cliNotification && !this.cliNotification.responseReceived)) {
-      this.commonService.showAlert('Landlord Instructions', 'Please select repair action first.');
+    if (this.cliNotification && !this.cliNotification.responseReceived) {
+      this.commonService.showAlert('Landlord Instructions', 'Please select response before proceeding with other action.');
       return;
     }
     this.userSelectedActionControl.setValue(index);
@@ -1269,9 +1269,9 @@ export class DetailsPage implements OnInit {
     } else if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
       if (this.cliNotification && this.cliNotification.responseReceived) {
         if (this.cliNotification.responseReceived.isAccepted) {
-          this.faultDetails.userSelectedAction = LL_INSTRUCTION_TYPES[1].index;
+          this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
         } else {
-          this.faultDetails.userSelectedAction = LL_INSTRUCTION_TYPES[2].index;
+          this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
         }
       }
     }
@@ -1357,7 +1357,7 @@ export class DetailsPage implements OnInit {
             const WORKS_ORDER_PENDING = 19;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
-            if(this.faultDetails.status !== WORKS_ORDER_PENDING){
+            if (this.faultDetails.status !== WORKS_ORDER_PENDING) {
               requestArray.push(this.updateFaultStatus(WORKS_ORDER_PENDING));
             }
             forkJoin(requestArray).subscribe(data => {
@@ -1373,7 +1373,7 @@ export class DetailsPage implements OnInit {
             const AWAITING_QUOTE = 14;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
-            if(this.faultDetails.status !== AWAITING_QUOTE){
+            if (this.faultDetails.status !== AWAITING_QUOTE) {
               requestArray.push(this.updateFaultStatus(AWAITING_QUOTE));
             }
             forkJoin(requestArray).subscribe(data => {
@@ -1389,7 +1389,7 @@ export class DetailsPage implements OnInit {
             const WORKS_ORDER_PENDING = 19;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
-            if(this.faultDetails.status !== WORKS_ORDER_PENDING){
+            if (this.faultDetails.status !== WORKS_ORDER_PENDING) {
               requestArray.push(this.updateFaultStatus(WORKS_ORDER_PENDING));
             }
             forkJoin(requestArray).subscribe(data => {
@@ -1405,14 +1405,22 @@ export class DetailsPage implements OnInit {
             const AWAITING_RESPONSE_LANDLORD = 15;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
-            if(this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD){
+            if (this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD) {
               requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
             }
             forkJoin(requestArray).subscribe(data => {
               this.refreshDetailsAndStage();
               this.commonService.showLoader();
-              setTimeout(() => {
-                this.checkFaultNotifications(this.faultId);
+              setTimeout(async () => {
+                await this.checkFaultNotifications(this.faultId);
+                this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
+                if (this.cliNotification && this.cliNotification.responseReceived) {                
+                  if (this.cliNotification.responseReceived.isAccepted) {
+                    this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
+                  } else {
+                    this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
+                  }
+                }
               }, 3000);
             });
           }
@@ -1429,14 +1437,18 @@ export class DetailsPage implements OnInit {
             const AWAITING_RESPONSE_LANDLORD = 15;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
-            if(this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD){
+            if (this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD) {
               requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
             }
             forkJoin(requestArray).subscribe(data => {
               this.refreshDetailsAndStage();
               this.commonService.showLoader();
-              setTimeout(() => {
-                this.checkFaultNotifications(this.faultId);
+              setTimeout(async () => {
+                await this.checkFaultNotifications(this.faultId);
+                this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+                if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
+                  this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
+                }
               }, 3000);
             });
           }
@@ -1509,14 +1521,14 @@ export class DetailsPage implements OnInit {
       filtereData = data.filter((x => x.faultStage === currentStage)).filter((x => x.faultStageAction === currentAction));
       if (filtereData.length == 0)
         resolve(null);
-      if (filtereData[0].firstEmailSentAt) {
+      // if (filtereData[0].firstEmailSentAt) {
         filtereData = filtereData.sort((a, b) => {
           return <any>new Date(b.firstEmailSentAt) - <any>new Date(a.firstEmailSentAt);
         });
         resolve(filtereData[0]);
-      } else {
-        resolve(filtereData[0]);
-      }
+      // } else {
+      //   resolve(filtereData[0]);
+      // }
     });
     return promise;
   }
@@ -1580,9 +1592,9 @@ export class DetailsPage implements OnInit {
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
           if (this.cliNotification && this.cliNotification.responseReceived) {
             if (this.cliNotification.responseReceived.isAccepted) {
-              this.faultDetails.userSelectedAction = LL_INSTRUCTION_TYPES[1].index;
+              this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
             } else {
-              this.faultDetails.userSelectedAction = LL_INSTRUCTION_TYPES[2].index;
+              this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
             }
           }
         }
@@ -1597,9 +1609,9 @@ export class DetailsPage implements OnInit {
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
           if (this.cliNotification && this.cliNotification.responseReceived) {
             if (this.cliNotification.responseReceived.isAccepted) {
-              this.faultDetails.userSelectedAction = LL_INSTRUCTION_TYPES[1].index;
+              this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
             } else {
-              this.faultDetails.userSelectedAction = LL_INSTRUCTION_TYPES[2].index;
+              this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
             }
 
           }
