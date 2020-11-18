@@ -14,6 +14,10 @@ const routes: Routes = [
   {
     path: 'faults',
     loadChildren: () => import('./faults/faults.module').then( m => m.FaultsPageModule)
+  },
+  {
+    path: 'let-alliance',
+    loadChildren: () => import('./referencing/let-alliance/let-alliance.module').then( m => m.LetAlliancePageModule)
   }
 ];
 
