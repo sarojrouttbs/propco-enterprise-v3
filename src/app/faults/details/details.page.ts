@@ -74,7 +74,7 @@ export class DetailsPage implements OnInit {
   suggestedAction; oldUserSelectedAction;
   faultNotifications: any;
   cliNotification: any;
-  isMatch = false;
+  isMatch;
   userSelectedActionControl = new FormControl();
   private QUOTE_THRESOLD = 500;
 
@@ -1280,6 +1280,7 @@ export class DetailsPage implements OnInit {
   }
 
   private matchCategory() {
+    this.isMatch = false;
     if (this.landlordDetails.repairCategories) {
       this.landlordDetails.repairCategories.forEach(category => {
         if (category === this.faultDetails.category) {
@@ -1298,6 +1299,7 @@ export class DetailsPage implements OnInit {
   }
 
   goToLastStage() {
+    document.querySelector('ion-content').scrollToTop(500);
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
       this.stepper.selectedIndex = FAULT_STAGES_INDEX.FAULT_LOGGED;
     } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
@@ -1314,6 +1316,7 @@ export class DetailsPage implements OnInit {
     //   this.stepper.selectedIndex = this.stepper.selectedIndex + 1;
     //   return;
     // }
+    document.querySelector('ion-content').scrollToTop(500);
 
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_LOGGED) {
       let faultRequestObj = this.createFaultFormValues();
