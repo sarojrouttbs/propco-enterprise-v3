@@ -1320,7 +1320,7 @@ export class DetailsPage implements OnInit {
 
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_LOGGED) {
       let faultRequestObj = this.createFaultFormValues();
-      faultRequestObj.isDraft = this.faultDetails.isDraft;
+      faultRequestObj.isDraft = false;
       faultRequestObj.stage = this.faultDetails.stage;
       let res = await this.updateFaultDetails(faultRequestObj);
       this.uploadFiles(this.faultId, false);
@@ -1330,7 +1330,7 @@ export class DetailsPage implements OnInit {
     }
     else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
       let faultRequestObj = {} as FaultModels.IFaultResponse;
-      faultRequestObj.isDraft = this.faultDetails.isDraft;
+      faultRequestObj.isDraft = false;
       if (this.stepper.selectedIndex < FAULT_STAGES_INDEX[this.faultDetails.stage]) {
         faultRequestObj.stage = this.faultDetails.stage;
       } else {
@@ -1344,7 +1344,7 @@ export class DetailsPage implements OnInit {
     }
     else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
       let faultRequestObj = {} as FaultModels.IFaultResponse;
-      faultRequestObj.isDraft = this.faultDetails.isDraft;
+      faultRequestObj.isDraft = false;
       Object.assign(faultRequestObj, this.landlordInstFrom.value);
       if (this.contractorEntityId) {
         faultRequestObj.contractorId = this.contractorEntityId;
@@ -1575,7 +1575,7 @@ export class DetailsPage implements OnInit {
         if (res) {
           let faultRequestObj = {} as FaultModels.IFaultResponse
           faultRequestObj.stage = FAULT_STAGES.JOB_COMPLETION;
-          faultRequestObj.isDraft = this.faultDetails.isDraft;
+          faultRequestObj.isDraft = false;
 
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
           this.updateFaultDetails(faultRequestObj).then(async data => {
