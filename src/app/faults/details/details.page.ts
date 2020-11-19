@@ -1129,10 +1129,10 @@ export class DetailsPage implements OnInit {
   private updateFaultSummary() {
     this.commonService.showLoader();
     let faultRequestObj = this.createFaultFormValues();
-    faultRequestObj.isDraft = this.faultDetails.isDraft;
+    faultRequestObj.stage = this.faultDetails.stage;
+    faultRequestObj.isDraft = true;
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
       faultRequestObj.stage = this.faultDetails.stage;
-      faultRequestObj.isDraft = this.faultDetails.isDraft;
       faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
       Object.assign(faultRequestObj, this.landlordInstFrom.value);
       if (this.contractorEntityId) {
