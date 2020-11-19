@@ -1460,6 +1460,7 @@ export class DetailsPage implements OnInit {
         case LL_INSTRUCTION_TYPES[5].index: //cli006f
           if (this.landlordInstFrom.get('confirmedEstimate').value > 0) {
             faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+            faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
             let res = await this.updateFaultDetails(faultRequestObj);
             if (res) {
               await this.refreshDetailsAndStage();
