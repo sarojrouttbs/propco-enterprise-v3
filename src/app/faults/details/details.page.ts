@@ -78,6 +78,9 @@ export class DetailsPage implements OnInit {
   userSelectedActionControl = new FormControl();
   private QUOTE_THRESOLD = 500;
 
+  resultsAvailable: boolean = false;
+  results: string[] = [];
+
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
     'assets/images/fault-categories/bathroom.svg',
@@ -132,11 +135,11 @@ export class DetailsPage implements OnInit {
     return subject ? subject.fullName + ',' + ' ' + subject.reference : undefined;
   }
 
-  onSelectionChange(data) {
-    if (data) {
-      this.contractorEntityId = data.option.value.entityId;
-    }
-  }
+  // onSelectionChange(data) {
+  //   if (data) {
+  //     this.contractorEntityId = data.option.value.entityId;
+  //   }
+  // }
 
   private getLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -255,9 +258,11 @@ export class DetailsPage implements OnInit {
         let contractorDetails: any = await this.getContractorDetails(this.contractorEntityId);
         if (contractorDetails) {
           contractorDetails.fullName = contractorDetails.name;
-          this.landlordInstFrom.patchValue({
-            contractor: contractorDetails
-          });
+          // this.landlordInstFrom.patchValue({
+          //   contractor: contractorDetails
+          // });
+
+          this.contractorSelected(contractorDetails);
         }
       }
     } else {
@@ -1664,6 +1669,21 @@ export class DetailsPage implements OnInit {
     // if (val != '' && this.landlordInstFrom.get('confirmedEstimate').valid && val !== this.faultDetails.confirmedEstimate) {
     //   var response = await this.commonService.showAlert('Landlord Instructions', 'Please click Refresh to check if the Suggested Action has changed based on the estimate you have entered');
     // }
+  }
+
+  onSearchChange(event: any) {
+    const searchString = event.target.value;
+    if (searchString.length > 2) {
+      this.resultsAvailable = true;
+    } else {
+      this.resultsAvailable = false;
+    }
+  }
+
+  contractorSelected(selected: any): void {
+    this.landlordInstFrom.get('contractor').setValue(selected ? selected.fullName + ',' + ' ' + selected.reference : undefined);
+    this.resultsAvailable = false;
+    this.contractorEntityId = selected.entityId;
   }
 
 }
