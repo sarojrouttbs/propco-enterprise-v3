@@ -534,7 +534,8 @@
         <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button" *ngIf="faultId">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button" *ngIf="!faultId">Back</ion-button>
         <ion-button class="submit-button" (click)="createAFault()" *ngIf="!faultId">Submit</ion-button>
-        <ion-button class="save-button" (click)="startProgress()" *ngIf="faultId && faultDetails?.status == 1 && reportedByForm.value.reportedById">Start
+        <ion-button class="save-button" (click)="startProgress()"
+          *ngIf="faultId && faultDetails?.status == 1 && reportedByForm.value.reportedById">Start
           Progress</ion-button>
         <ion-button class="save-button" (click)="proceedToNextStage()" *ngIf="faultId && faultDetails?.status != 1">
           Proceed</ion-button>
@@ -585,28 +586,27 @@
   <ion-grid>
     <ion-row>
       <!-- <ion-col offset-xl="25" size-xl="50" offset ="0" size="100">  -->
-      <ion-col offset-xl="20" size-xl="60" offset ="0" size="100"> 
+      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
         <div class="landlord-instructions">
           <div class="banner" *ngIf="!cliNotification">
             <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
             <ion-button color="{{(suggestedAction == 'PROCEED_AS_NECESSARY') ? 'danger' : 'success'}}"
-                class="icon-button" (click)="setUserAction(suggestedAction)"
-                fill="{{(userSelectedActionControl.value == suggestedAction) ? 'solid' :'outline'}}">
-                {{getLookupValue(suggestedAction, landlordInstructionTypes)}}
-                <ion-icon name="checkmark-circle-outline" *ngIf="(userSelectedActionControl.value == suggestedAction)">
-                </ion-icon>
-              </ion-button>
-              <h6 class="ownRepair" *ngIf="(isMatch === false && suggestedAction == 'DOES_OWN_REPAIRS')">
-                 Landlord owned Repair Category does not match the Fault Category</h6>
-        
+              class="icon-button" (click)="setUserAction(suggestedAction)"
+              fill="{{(userSelectedActionControl.value == suggestedAction) ? 'solid' :'outline'}}">
+              {{getLookupValue(suggestedAction, landlordInstructionTypes)}}
+              <ion-icon name="checkmark-circle-outline" *ngIf="(userSelectedActionControl.value == suggestedAction)">
+              </ion-icon>
+            </ion-button>
+            <h6 class="ownRepair" *ngIf="(isMatch === false && suggestedAction == 'DOES_OWN_REPAIRS')">
+              Landlord owned Repair Category does not match the Fault Category</h6>
+
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
               <ion-row class="ion-justify-content-center">
                 <ng-container *ngFor="let instruction of landlordInstructionTypes">
-                  <div *ngIf="suggestedAction!= instruction.index" >
+                  <div *ngIf="suggestedAction!= instruction.index">
                     <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}"
-                      class="action-btn"
-                      expand="block"
+                      class="action-btn" expand="block"
                       fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
                       (click)="setUserAction(instruction.index)">
                       {{instruction.value}}
@@ -622,10 +622,11 @@
           </div>
           <div *ngIf="cliNotification">
             <div class="banner">
-              <h2 class="banner-heading">{{cliNotification && cliNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
+              <h2 class="banner-heading">
+                {{cliNotification && cliNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
               <h6 class="banner-title">Here’s the action you choose:</h6>
               <ion-button color="success" class="icon-button">
-                {{getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes)}} 
+                {{getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes)}}
                 <ion-icon name="checkmark-circle-outline"></ion-icon>
               </ion-button>
               <ng-container *ngIf="cliNotification && !cliNotification?.responseReceived">
@@ -640,13 +641,14 @@
               <ion-grid>
                 <ion-row class="ion-justify-content-center">
                   <ng-container *ngFor="let data of cliNotification.questions[0].options">
-                      <ion-button color="success" class="action-btn"
-                        fill="{{data?.value ==  cliNotification?.responseReceived?.isAccepted ? 'solid' :'outline'}}"
-                        (click)="questionAction(data)">{{data.text}}</ion-button>
+                    <ion-button color="success" class="action-btn"
+                      fill="{{data?.value ==  cliNotification?.responseReceived?.isAccepted ? 'solid' :'outline'}}"
+                      (click)="questionAction(data)">{{data.text}}</ion-button>
                   </ng-container>
                 </ion-row>
               </ion-grid>
-              <h6 *ngIf="cliNotification?.faultStageAction === 'DOES_OWN_REPAIRS' && cliNotification?.responseReceived?.isAccepted === false">
+              <h6
+                *ngIf="cliNotification?.faultStageAction === 'DOES_OWN_REPAIRS' && cliNotification?.responseReceived?.isAccepted === false">
                 <ion-text color="danger">Please select an appropriate action.</ion-text>
               </h6>
               <div class="border-bottom"></div>
@@ -666,8 +668,8 @@
                 <ion-row class="ion-justify-content-center">
                   <ng-container *ngFor="let instruction of landlordInstructionTypes">
                     <div *ngIf="oldUserSelectedAction != instruction.index">
-                      <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}" expand="block"
-                      class="action-btn"
+                      <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}"
+                        expand="block" class="action-btn"
                         fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
                         (click)="setUserAction(instruction.index)">
                         {{instruction.value}}
@@ -676,7 +678,7 @@
                       </ion-button>
                       <h6 class="ownRepair" *ngIf="(isMatch === false && instruction.index == 'DOES_OWN_REPAIRS')">
                         Landlord owned Repair Category does not match the Fault Category</h6>
-                      </div>
+                    </div>
                   </ng-container>
                 </ion-row>
               </ion-grid>
@@ -694,7 +696,7 @@
                         <ion-select-option>Choose</ion-select-option>
                       </ion-select>
                     </ion-item> -->
-
+                    <!-- 
                     <mat-form-field class="example-full-width" appearance="legacy">
                       <mat-label>Select Contractor</mat-label>
                       <input matInput appearance="legacy" [matAutocomplete]="selectContractor"
@@ -714,22 +716,51 @@
                         <span class="text-color-lightgreen"
                           style="color: var(--ion-color-primary)">{{result.status}}</span>&nbsp;
                       </mat-option>
-                    </mat-autocomplete>
-
+                    </mat-autocomplete> -->
+                    <ion-item>
+                      <ion-label position="floating">Select Contractor</ion-label>
+                      <ion-input type="text" debounce="500" (ionInput)="onSearchChange($event)"
+                        formControlName='contractor'
+                        [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')"
+                        placeholder="Search Contractor">
+                      </ion-input>
+                    </ion-item>
+<!-- *ngIf="resultsAvailable" -->
+                    <ion-list class="contractor-list" *ngIf="resultsAvailable">
+                      <ion-item *ngFor="let result of (selectedContractor | async)?.data" (click)="contractorSelected(result)" button
+                        style="font-size: 13px !important; ">
+                        <span>
+                          <i class="propcoicon no-background propcoicon-contractor"
+                            style="background: transparent;"></i>
+                        </span>&nbsp;
+                        <label style="color: var(--ion-color-step-200);
+                        padding-right: 5px;
+                    ">{{result.fullName}}&nbsp;
+                  <span style="color: var(--ion-color-step-1000);
+                  padding-right: 5px;
+              ">{{result.reference}}</span>&nbsp;
+                  <span class="text-color-lightgreen" style="color: var(--ion-color-primary);
+                    padding-right: 5px;
+                ">{{result.status}}</span>&nbsp;  
+                  </label>
+                        
+                      </ion-item>
+                    </ion-list>
                   </ion-col>
                   <ion-col size="50">
-                    <ion-item style="padding-top: 3px;">
+                    <ion-item>
                       <ion-label position="floating">Confirmed Estimate</ion-label>
                       <ion-input formControlName="confirmedEstimate"
-                        [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')" #estimate (ionBlur)="showRefreshPopup(estimate.value)"
-                        ></ion-input>
+                        [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')"
+                        #estimate (ionBlur)="showRefreshPopup(estimate.value)"></ion-input>
                     </ion-item>
                   </ion-col>
                   <ion-col size="100">
                     <ion-item>
                       <ion-label position="stacked">Notes</ion-label>
                       <ion-textarea placeholder="Enter more information here..." formControlName="estimationNotes"
-                        [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')" rows=1></ion-textarea>
+                        [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')"
+                        rows=1></ion-textarea>
                     </ion-item>
                   </ion-col>
                 </ion-row>
@@ -738,7 +769,7 @@
           </div>
 
           <div class="landlord-preferences">
-            <ion-grid class="view-details" style="width: 100%;"> 
+            <ion-grid class="view-details" style="width: 100%;">
               <ion-row class="ion-justify-content-between">
                 <h2 class="banner-heading">Landlord preferences and other information </h2>
 

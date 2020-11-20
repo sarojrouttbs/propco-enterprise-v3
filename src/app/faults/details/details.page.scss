@@ -269,3 +269,11 @@
   position: absolute !important;
   width: 100%;
 }
+
+.contractor-list{
+  width: 100%;
+    max-height: 200px;
+    overflow-y: scroll;
+    position: absolute !important;
+    z-index: 5 !important;
+}
