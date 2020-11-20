@@ -78,11 +78,8 @@ export class DetailsPage implements OnInit {
   userSelectedActionControl = new FormControl();
   private QUOTE_THRESOLD = 500;
 
-
   resultsAvailable: boolean = false;
   results: string[] = [];
-  ignoreNextChange: boolean = false;
-
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
