@@ -138,11 +138,11 @@ export class DetailsPage implements OnInit {
     return subject ? subject.fullName + ',' + ' ' + subject.reference : undefined;
   }
 
-  onSelectionChange(data) {
-    if (data) {
-      this.contractorEntityId = data.option.value.entityId;
-    }
-  }
+  // onSelectionChange(data) {
+  //   if (data) {
+  //     this.contractorEntityId = data.option.value.entityId;
+  //   }
+  // }
 
   private getLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -1678,7 +1678,7 @@ export class DetailsPage implements OnInit {
     const searchString = event.target.value;
     if (searchString.length > 2) {
       this.resultsAvailable = true;
-    }else{
+    } else {
       this.resultsAvailable = false;
     }
   }
@@ -1686,6 +1686,7 @@ export class DetailsPage implements OnInit {
   contractorSelected(selected: any): void {
     this.landlordInstFrom.get('contractor').setValue(selected ? selected.fullName + ',' + ' ' + selected.reference : undefined);
     this.resultsAvailable = false;
+    this.contractorEntityId = selected.entityId;
   }
 
 }
