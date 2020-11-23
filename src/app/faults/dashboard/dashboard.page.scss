@@ -16,6 +16,13 @@
   --padding-bottom: var(--ion-padding-bottom);
   --padding-start: var(--ion-padding-start);
 
+  table.dataTable {
+    tbody tr.escalated {
+      background-color: rgba(var(--ion-color-danger-rgb), 0.5);
+      color: var(--ion-color-step-2000);
+    }
+  }
+
   /* table.dataTable {
     @include set-text-style(14px, 16px);
 
