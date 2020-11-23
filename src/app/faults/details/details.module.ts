@@ -1,3 +1,4 @@
+import { ArrangingContractorsComponent } from './arranging-contractors/arranging-contractors.component';
 import { SearchPropertyPageModule } from './../../shared/modals/search-property/search-property.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -43,6 +44,6 @@ import { SimplePopoverPageModule } from 'src/app/shared/popover/simple-popover/s
     SearchPropertyPageModule,
     SimplePopoverPageModule
   ],
-  declarations: [DetailsPage, FileDirective, FileDropDirective]
+  declarations: [DetailsPage, FileDirective, FileDropDirective,ArrangingContractorsComponent]
 })
 export class DetailsPageModule {}
