@@ -239,7 +239,7 @@ export class DetailsPage implements OnInit {
       estimationNotes: ''
     });
     this.selectedContractor = this.landlordInstFrom.get('contractor').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractorByText(value) :
+      switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractor(value) :
         new Observable())
     );
   }
