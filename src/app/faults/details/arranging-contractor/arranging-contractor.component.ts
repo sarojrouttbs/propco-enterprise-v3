@@ -1,5 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, switchMap } from 'rxjs/operators';
+import { CommonService } from 'src/app/shared/services/common.service';
+import { FaultsService } from '../../faults.service';
+import { PROPCO } from './../../../shared/constants';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -13,7 +18,16 @@ export class ArrangingContractorComponent implements OnInit {
   @Input() quoteId;
   @Input() faultDetails: FaultModels.IFaultResponse;
   faultMaintenanceDetails;
-  constructor(private fb: FormBuilder) { }
+  contractors: Observable<FaultModels.IContractorResponse>;
+  private subject: Subject<string> = new Subject();
+  resultsAvailable = false;
+  contractorList: any;
+  lookupdata: any;
+  contractorSkill: any;
+
+  constructor(private fb: FormBuilder, private faultService: FaultsService, private commonService: CommonService,
+
+  ) { }
 
   ngOnInit() {
     this.initiateArrangingContractors();
@@ -22,11 +36,13 @@ export class ArrangingContractorComponent implements OnInit {
   private initiateArrangingContractors(): void {
     this.initForms();
     this.initApiCalls();
+    this.getLookupData();
   }
   private initForms(): void {
     this.initQuoteForm();
     this.initAddContractorForm();
     this.initContractorListForm();
+
   }
 
   private initQuoteForm(): void {
@@ -39,10 +55,39 @@ export class ArrangingContractorComponent implements OnInit {
       requiredBy: '',
       contactOnSite: '',
       accessDetails: [{ value: '', disabled: true }],
-      nominalCode: ['', Validators.required],
-      contractor: '',
-      skillSet: ''
+      // nominalCode: ['', Validators.required],
+      contractorForm:
+        this.fb.group({
+          contractor: ['', Validators.required],
+          skillSet: '',
+          contractorObj: ''
+        }),
+      contractorList: this.fb.array([this.createContractorsList()]),
     });
+    
+    this.contractors = this.subject.pipe(debounceTime(300),
+      switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractor(value) :
+        new Observable())
+    );
+  }
+
+  createContractorsList(): FormGroup {
+    let val = this.raiseQuoteForm?.get('contractorForm').value;
+    return this.fb.group({
+      company: { value: val ? val.contractor : '', disabled: true },
+      contactTel: { value: '', disabled: true },
+      trade: { value: val ? val.skillSet : '', disabled: true }
+    });
+  }
+
+  addContractor(): void {
+    this.contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
+    this.contractorList.push(this.createContractorsList());
+    this.raiseQuoteForm.get('contractorForm').reset();
+  }
+
+  removeContractor(index: any) {
+    this.contractorList.removeAt(index);
   }
 
   private initAddContractorForm(): void {
@@ -54,7 +99,6 @@ export class ArrangingContractorComponent implements OnInit {
     this.addContractorForm = this.fb.group({
     });
   }
-
 
   private async initApiCalls() {
     this.faultMaintenanceDetails = await this.getFaultMaintenance();
@@ -68,5 +112,37 @@ export class ArrangingContractorComponent implements OnInit {
 
   initPatching(): void {
   }
+
+  onSearch(event: any) {
+    const searchString = event.target.value;
+    if (searchString.length > 2) {
+      this.resultsAvailable = true;
+    } else {
+      this.resultsAvailable = false;
+    }
+    this.subject.next(searchString);
+  }
+
+  selectContractor(selected) {
+    this.raiseQuoteForm.get('contractorForm').patchValue({ contractor: selected ? selected.fullName + ',' + ' ' + selected.reference : undefined, contractorObj: selected ? selected : undefined });
+    this.resultsAvailable = false;
+  }
+
+  private getLookupData() {
+    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
+    if (this.lookupdata) {
+      this.setLookupData(this.lookupdata);
+    } else {
+      this.commonService.getLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
+        this.lookupdata = data;
+        this.setLookupData(data);
+      });
+    }
+  }
+
+  private setLookupData(data) {
+    this.contractorSkill = data.contractorSkills;
+    }
 
 }

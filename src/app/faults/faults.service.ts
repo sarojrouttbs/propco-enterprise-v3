@@ -78,7 +78,7 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params: params });
   }
 
-  searchContractorByText(text: string): Observable<any> {
+  searchContractor(text: string): Observable<any> {
     let params = new HttpParams()
       .set('limit', '10')
       .set('page', '1')

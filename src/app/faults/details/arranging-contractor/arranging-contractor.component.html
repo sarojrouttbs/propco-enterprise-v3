@@ -1,5 +1,5 @@
 <ion-grid style="margin-bottom:10px">
-  <ion-row class="ion-justify-content-start" *ngIf="quoteId" >
+  <ion-row class="ion-justify-content-start" *ngIf="quoteId">
     <ion-col size="auto">
       <h2>
         <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
@@ -39,7 +39,7 @@
               <ion-item>
                 <ion-label position="floating">Category<ion-text class="mandatory">*</ion-text>
                 </ion-label>
-                <ion-select interface="popover" formControlName="category">
+                <ion-select interface="popover" formControlName="category" class="ion-select-options">
                   <ion-select-option>Option one </ion-select-option>
                   <ion-select-option>Option two </ion-select-option>
                   <ion-select-option>Option three </ion-select-option>
@@ -87,75 +87,95 @@
               </ion-item>
             </ion-col>
 
-            <ion-col size="66.66">
+            <ion-col size="100">
               <ion-item>
                 <ion-label position="floating">Access details </ion-label>
                 <ion-input formControlName="accessDetails"></ion-input>
               </ion-item>
             </ion-col>
 
-            <ion-col size="33.33">
+            <!-- <ion-col size="33.33">
               <ion-item>
                 <ion-label position="floating">Nominal Code <ion-text class="mandatory">*</ion-text>
                 </ion-label>
                 <ion-input formControlName="nominalCode"></ion-input>
               </ion-item>
-            </ion-col>
+            </ion-col> -->
           </ion-row>
 
-          <!-- <div class="contractor-block">
-            <ion-row id="row_1" class="row-banner">
-              <ion-col size="35">
-                <ion-item>
-                  <ion-label position="floating">Company </ion-label>
-                  <ion-input></ion-input>
-                </ion-item>
-              </ion-col>
+          <div class="contractor-block">
 
-              <ion-col size="22.5">
-                <ion-item>
-                  <ion-label position="floating">Contact Tel.</ion-label>
-                  <ion-input></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="22.5">
-                <ion-item>
-                  <ion-label position="floating">Trade</ion-label>
-                  <ion-input></ion-input>
-                </ion-item>
-              </ion-col>
-              <ion-col size="20">
-                <div class="button-container">
-                  <button mat-mini-fab>
-                    <mat-icon>add</mat-icon>
-                  </button>
-                  <button mat-mini-fab style="margin-left: 30px;">
-                    <mat-icon>close</mat-icon>
-                  </button>
-                </div>
-              </ion-col>
-            </ion-row>
+            <div formArrayName="contractorList"
+              *ngFor="let item of raiseQuoteForm.get('contractorList')['controls']; let i = index;">
+              <ion-row id="row_1" class="row-banner" [formGroupName]="i">
+                <ion-col size="35">
+                  <ion-item>
+                    <ion-label position="floating">Company </ion-label>
+                    <ion-input formControlName='company'></ion-input>
+                  </ion-item>
+                </ion-col>
 
-            <ion-row id="row_1" class="row-banner">
+                <ion-col size="22.5">
+                  <ion-item>
+                    <ion-label position="floating">Contact Tel.</ion-label>
+                    <ion-input formControlName='contactTel'></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="22.5">
+                  <ion-item>
+                    <ion-label position="floating">Trade</ion-label>
+                    <ion-input formControlName="trade"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="20">
+
+                  <div class="button-container">
+                    <ion-checkbox color="primary" style="    height: 25px;
+                    width: 25px;
+                    bottom: -5px;"></ion-checkbox>
+
+                    <ion-fab-button class="remove-contractor list-button" style="margin-left: 25px;">
+                      <ion-icon (click)="removeContractor(i)" name="close"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-button class="list-button">
+                      <ion-icon name="checkmark"></ion-icon>
+                    </ion-fab-button>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </div>
+
+            <ion-row id="row_1" class="row-banner" formGroupName="contractorForm">
               <ion-col size="42.5">
                 <ion-item>
-                  <ion-label position="floating"></ion-label>
+                  <ion-label position="floating">Skill Set
+                  </ion-label>
+                  <ion-select interface="popover" formControlName="skillSet" class="ion-select-options">
+                    <ion-select-option [value]="item.index" *ngFor="let item of contractorSkill">
+                      {{ item.value }}
+                    </ion-select-option>
+                  </ion-select>
 
-                  <ion-input type="text" debounce="500" (ionInput)="onSearchChange($event)"
-                    formControlName='contractor' placeholder="Start Typing to Search Contractors">
+                </ion-item>
+              </ion-col>
+              <ion-col size="42.5">
+                <ion-item>
+                  <ion-label position="floating">Start Typing to Search Contractors</ion-label>
+
+                  <ion-input type="text" debounce="500" (ionInput)="onSearch($event)" formControlName='contractor'
+                    placeholder="">
                   </ion-input>
                 </ion-item>
 
                 <ion-list class="contractor-list" *ngIf="resultsAvailable">
-                  <ion-item *ngFor="let result of (selectedContractor | async)?.data"
-                    (click)="contractorSelected(result)" button style="font-size: 13px !important; ">
+                  <ion-item *ngFor="let result of (contractors| async)?.data" (click)="selectContractor(result)" button
+                    style="font-size: 13px !important; ">
                     <span>
                       <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
                     </span>&nbsp;
-                    <label
-                      style="color: var(--ion-color-step-200);                     padding-right: 5px;">{{result.fullName}}&nbsp;
+                    <label style="color: var(--ion-color-step-200); padding-right: 5px;">{{result.fullName}}&nbsp;
                       <span
-                        style="color: var(--ion-color-step-1000);                  padding-right: 5px;">{{result.reference}}</span>&nbsp;
+                        style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
                       <span class="text-color-lightgreen"
                         style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
                     </label>
@@ -164,23 +184,16 @@
                 </ion-list>
               </ion-col>
 
-              <ion-col size="42.5">
-                <ion-item>
-                  <ion-label position="floating">Skill Set</ion-label>
-                  <ion-input formControlName='skillSet'></ion-input>
-                </ion-item>
-              </ion-col>
-
               <ion-col size="1">
                 <div class="button-container" style="margin-left: 40px;">
-                  <button mat-mini-fab>
-                    <mat-icon>add</mat-icon>
-                  </button>
+                  <ion-fab-button (click)="addContractor()"
+                    [disabled]="!this.raiseQuoteForm?.get('contractorForm').valid" class="add-contractor list-button">
+                    <ion-icon name="add-sharp"></ion-icon>
+                  </ion-fab-button>
                 </div>
               </ion-col>
             </ion-row>
-
-          </div> -->
+          </div>
         </ion-grid>
       </ion-col>
     </ion-row>
