@@ -2,11 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-arranging-contractors',
-  templateUrl: './arranging-contractors.component.html',
-  styleUrls: ['./arranging-contractors.component.scss'],
+  selector: 'app-arranging-contractor',
+  templateUrl: './arranging-contractor.component.html',
+  styleUrls: ['./arranging-contractor.component.scss'],
 })
-export class ArrangingContractorsComponent implements OnInit {
+export class ArrangingContractorComponent implements OnInit {
   raiseQuoteForm: FormGroup;
   addContractorForm: FormGroup;
   contractorListForm: FormGroup;
