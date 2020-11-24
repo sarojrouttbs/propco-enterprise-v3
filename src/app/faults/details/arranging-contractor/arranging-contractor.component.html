@@ -1,0 +1,194 @@
+<ion-grid style="margin-bottom:10px">
+  <ion-row class="ion-justify-content-start" *ngIf="quoteId" >
+    <ion-col size="auto">
+      <h2>
+        <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
+        {{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text
+          color="success">&gt;</ion-text>
+      </h2>
+    </ion-col>
+    <ion-col size="auto">
+      <ion-item class="edit-title" *ngIf="isEditable">
+        <ion-input #title [value]="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"
+          (ionBlur)="changeTitle(title.value)"></ion-input>
+      </ion-item>
+      <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
+    </ion-col>
+    <ion-col size="auto" class="ion-align-self-center" offset="3" *ngIf="faultId">
+      <span class="material-icons" (click)="editTitle()">
+        edit
+      </span>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<form [formGroup]="raiseQuoteForm">
+  <ion-grid>
+    <ion-row>
+      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="33.33">
+              <ion-item>
+                <ion-label position="floating">Quotation Number<ion-text class="mandatory">*</ion-text>
+                </ion-label>
+                <ion-input formControlName="quotationNum"></ion-input>
+              </ion-item>
+
+            </ion-col>
+            <ion-col size="33.33">
+              <ion-item>
+                <ion-label position="floating">Category<ion-text class="mandatory">*</ion-text>
+                </ion-label>
+                <ion-select interface="popover" formControlName="category">
+                  <ion-select-option>Option one </ion-select-option>
+                  <ion-select-option>Option two </ion-select-option>
+                  <ion-select-option>Option three </ion-select-option>
+                </ion-select>
+              </ion-item>
+
+            </ion-col>
+            <ion-col size="33.33">
+              <ion-item>
+                <ion-label position="floating">Status<ion-text class="mandatory">*</ion-text>
+                </ion-label>
+                <ion-input formControlName="status"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="100">
+              <ion-item>
+                <ion-label position="floating">Description<ion-text class="mandatory">*</ion-text>
+                </ion-label>
+                <ion-input formControlName="descption"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="33.33">
+              <ion-item>
+                <ion-label position="floating">Ordered By<ion-text class="mandatory">*</ion-text>
+                </ion-label>
+                <ion-input formControlName="orderedBy"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="33.33">
+              <ion-item>
+                <ion-label position="floating">Required By
+                </ion-label>
+                <ion-input formControlName="requiredBy"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="33.33">
+              <ion-item>
+                <ion-label position="floating">Contact On-site<ion-text class="mandatory">*</ion-text>
+                </ion-label>
+                <ion-input formControlName="contactOnSite"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="66.66">
+              <ion-item>
+                <ion-label position="floating">Access details </ion-label>
+                <ion-input formControlName="accessDetails"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="33.33">
+              <ion-item>
+                <ion-label position="floating">Nominal Code <ion-text class="mandatory">*</ion-text>
+                </ion-label>
+                <ion-input formControlName="nominalCode"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <!-- <div class="contractor-block">
+            <ion-row id="row_1" class="row-banner">
+              <ion-col size="35">
+                <ion-item>
+                  <ion-label position="floating">Company </ion-label>
+                  <ion-input></ion-input>
+                </ion-item>
+              </ion-col>
+
+              <ion-col size="22.5">
+                <ion-item>
+                  <ion-label position="floating">Contact Tel.</ion-label>
+                  <ion-input></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="22.5">
+                <ion-item>
+                  <ion-label position="floating">Trade</ion-label>
+                  <ion-input></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="20">
+                <div class="button-container">
+                  <button mat-mini-fab>
+                    <mat-icon>add</mat-icon>
+                  </button>
+                  <button mat-mini-fab style="margin-left: 30px;">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              </ion-col>
+            </ion-row>
+
+            <ion-row id="row_1" class="row-banner">
+              <ion-col size="42.5">
+                <ion-item>
+                  <ion-label position="floating"></ion-label>
+
+                  <ion-input type="text" debounce="500" (ionInput)="onSearchChange($event)"
+                    formControlName='contractor' placeholder="Start Typing to Search Contractors">
+                  </ion-input>
+                </ion-item>
+
+                <ion-list class="contractor-list" *ngIf="resultsAvailable">
+                  <ion-item *ngFor="let result of (selectedContractor | async)?.data"
+                    (click)="contractorSelected(result)" button style="font-size: 13px !important; ">
+                    <span>
+                      <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
+                    </span>&nbsp;
+                    <label
+                      style="color: var(--ion-color-step-200);                     padding-right: 5px;">{{result.fullName}}&nbsp;
+                      <span
+                        style="color: var(--ion-color-step-1000);                  padding-right: 5px;">{{result.reference}}</span>&nbsp;
+                      <span class="text-color-lightgreen"
+                        style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
+                    </label>
+
+                  </ion-item>
+                </ion-list>
+              </ion-col>
+
+              <ion-col size="42.5">
+                <ion-item>
+                  <ion-label position="floating">Skill Set</ion-label>
+                  <ion-input formControlName='skillSet'></ion-input>
+                </ion-item>
+              </ion-col>
+
+              <ion-col size="1">
+                <div class="button-container" style="margin-left: 40px;">
+                  <button mat-mini-fab>
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+              </ion-col>
+            </ion-row>
+
+          </div> -->
+        </ion-grid>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</form>
+<div class="action-btn-group">
+  <!-- <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
+  <ion-button (click)="goToLastStage()">Back</ion-button>
+  <ion-button class="save-button" (click)="saveForLater()">Save for later</ion-button>
+  <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button> -->
+</div>

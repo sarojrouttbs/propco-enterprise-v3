@@ -37,6 +37,8 @@ export class DetailsPage implements OnInit {
   accessInfoForm: FormGroup;
   uploadDocForm: FormGroup;
   landlordInstFrom: FormGroup;
+  arrangeContractorForm: FormGroup;
+
   selectedContractor: Observable<FaultModels.IContractorResponse>;
 
   //MAT TABS//
@@ -171,6 +173,7 @@ export class DetailsPage implements OnInit {
     this.initAccessInfiForm();
     this.initUploadDocForm();
     this.initLandLordInstForm();
+    this.initArrangeContratorForm();
   }
 
   private initDescribeFaultForm(): void {
@@ -239,6 +242,22 @@ export class DetailsPage implements OnInit {
       switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractorByText(value) :
         new Observable())
     );
+  }
+
+  private initArrangeContratorForm(): void {
+    this.arrangeContractorForm = this.fb.group({
+      quotationNum: ['', Validators.required],
+      category: [{ value: '', disabled: true }, Validators.required],
+      status: ['', Validators.required],
+      descption: ['', Validators.required],
+      orderedBy: [{ value: '', disabled: true }, Validators.required],
+      requiredBy: '',
+      contactOnSite: '',
+      accessDetails: [{ value: '', disabled: true }],
+      nominalCode: ['', Validators.required],
+      contractor: '',
+      skillSet: ''
+    });
   }
 
 
