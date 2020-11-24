@@ -50,7 +50,7 @@ export class ArrangingContractorComponent implements OnInit {
   private initQuoteForm(): void {
     this.raiseQuoteForm = this.fb.group({
       quotationNum: ['', Validators.required],
-      category: [{ value: this.categoryMap.get(this.faultDetails.category), disabled: true }, Validators.required],
+      category: [{ value: Number(this.faultDetails.category), disabled: true }, Validators.required],
       status: ['', Validators.required],
       descption: ['', Validators.required],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
@@ -71,6 +71,7 @@ export class ArrangingContractorComponent implements OnInit {
       switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractor(value) :
         new Observable())
     );
+
   }
 
   createContractorsList(): FormGroup {
