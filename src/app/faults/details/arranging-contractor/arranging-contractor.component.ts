@@ -67,7 +67,7 @@ export class ArrangingContractorComponent implements OnInit {
       contractorList: this.fb.array([this.createContractorsList()]),
     });
 
-    this.contractors = this.subject.pipe(debounceTime(300),
+    this.contractors = this.raiseQuoteForm.get('contractorForm.contractor').valueChanges.pipe(debounceTime(300),
       switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractor(value) :
         new Observable())
     );
@@ -123,7 +123,6 @@ export class ArrangingContractorComponent implements OnInit {
     } else {
       this.resultsAvailable = false;
     }
-    this.subject.next(searchString);
   }
 
   selectContractor(selected) {
