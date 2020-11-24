@@ -21,22 +21,22 @@
   margin-top: 25px;
 }
 
-.list-button{
+.list-button {
   width: 30px;
   height: 30px;
   float: right;
 }
 
 .add-contractor {
-  // background-color: var(--ion-color-primary-shade);
-  /* width: 47px; */
-  // width: 30px;
-  // height: 30px;
-  // --background:var(--ion-color-primary-shade);
+  --background: var(--ion-color-primary-shade);
 }
 
 .remove-contractor {
-  // background-color: var(--ion-color-danger-tint);
+  --background: var(--ion-color-danger-tint);
+}
+
+.mark-contractor {
+  --background: var(--ion-color-primary-shade);
 }
 
 .ion-select-options {

@@ -24,6 +24,8 @@ export class ArrangingContractorComponent implements OnInit {
   contractorList: any;
   lookupdata: any;
   contractorSkill: any;
+  faultCategories: any;
+  categoryMap = new Map();
 
   constructor(private fb: FormBuilder, private faultService: FaultsService, private commonService: CommonService,
 
@@ -34,21 +36,21 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private initiateArrangingContractors(): void {
+    this.getLookupData();
     this.initForms();
     this.initApiCalls();
-    this.getLookupData();
   }
+
   private initForms(): void {
     this.initQuoteForm();
     this.initAddContractorForm();
     this.initContractorListForm();
-
   }
 
   private initQuoteForm(): void {
     this.raiseQuoteForm = this.fb.group({
       quotationNum: ['', Validators.required],
-      category: [{ value: '', disabled: true }, Validators.required],
+      category: [{ value: this.categoryMap.get(this.faultDetails.category), disabled: true }, Validators.required],
       status: ['', Validators.required],
       descption: ['', Validators.required],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
@@ -64,7 +66,7 @@ export class ArrangingContractorComponent implements OnInit {
         }),
       contractorList: this.fb.array([this.createContractorsList()]),
     });
-    
+
     this.contractors = this.subject.pipe(debounceTime(300),
       switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractor(value) :
         new Observable())
@@ -76,7 +78,8 @@ export class ArrangingContractorComponent implements OnInit {
     return this.fb.group({
       company: { value: val ? val.contractor : '', disabled: true },
       contactTel: { value: '', disabled: true },
-      trade: { value: val ? val.skillSet : '', disabled: true }
+      trade: { value: val ? val.skillSet : '', disabled: true },
+      select: 0
     });
   }
 
@@ -143,6 +146,14 @@ export class ArrangingContractorComponent implements OnInit {
 
   private setLookupData(data) {
     this.contractorSkill = data.contractorSkills;
-    }
+    this.faultCategories = data.faultCategories;
+    this.setCategoryMap();
+  }
 
+  private setCategoryMap() {
+    this.faultCategories.map((cat, index) => {
+      this.categoryMap.set(cat.index, cat.value);
+      // cat.imgPath = this.categoryIconList[index];
+    });
+  }
 }
