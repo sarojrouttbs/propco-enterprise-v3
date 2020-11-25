@@ -837,6 +837,29 @@
 <ng-template #arrangingContractor>
   <ion-card class="ion-no-margin">
     <ng-container *ngIf="faultDetails">
+      <ion-grid style="margin-bottom:10px">
+        <ion-row class="ion-justify-content-start">
+          <ion-col size="auto">
+            <h2>
+              <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
+              {{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text
+                color="success">&gt;</ion-text>
+            </h2>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-item class="edit-title" *ngIf="isEditable">
+              <ion-input #title [value]="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"
+                (ionBlur)="changeTitle(title.value)"></ion-input>
+            </ion-item>
+            <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
+          </ion-col>
+          <ion-col size="auto" class="ion-align-self-center" offset="3" *ngIf="faultId">
+            <span class="material-icons" (click)="editTitle()">
+              edit
+            </span>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
       <app-arranging-contractor [faultDetails]="faultDetails"></app-arranging-contractor>
     </ng-container>
     <!-- <div class="action-btn-group">
