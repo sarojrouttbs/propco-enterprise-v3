@@ -1382,6 +1382,7 @@ export class DetailsPage implements OnInit {
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+            faultRequestObj.stageAction = this.userSelectedActionControl.value;
             const WORKS_ORDER_PENDING = 19;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -1398,6 +1399,7 @@ export class DetailsPage implements OnInit {
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+            faultRequestObj.stageAction = this.userSelectedActionControl.value;
             const AWAITING_QUOTE = 14;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -1414,6 +1416,7 @@ export class DetailsPage implements OnInit {
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+            faultRequestObj.stageAction = this.userSelectedActionControl.value;
             const WORKS_ORDER_PENDING = 19;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -1430,6 +1433,7 @@ export class DetailsPage implements OnInit {
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+            faultRequestObj.stageAction = this.userSelectedActionControl.value;
             const AWAITING_RESPONSE_LANDLORD = 15;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -1458,6 +1462,7 @@ export class DetailsPage implements OnInit {
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+            faultRequestObj.stageAction = this.userSelectedActionControl.value;
             const AWAITING_RESPONSE_LANDLORD = 15;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -1485,6 +1490,7 @@ export class DetailsPage implements OnInit {
           if (this.landlordInstFrom.get('confirmedEstimate').value > 0) {
             faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+            faultRequestObj.stageAction = this.userSelectedActionControl.value;
             let res = await this.updateFaultDetails(faultRequestObj);
             if (res) {
               await this.refreshDetailsAndStage();
