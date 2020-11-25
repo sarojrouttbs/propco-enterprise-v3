@@ -1711,4 +1711,17 @@ export class DetailsPage implements OnInit {
     this.contractorEntityId = selected.entityId;
   }
 
+  _arrangingContHandler(type: string) {
+    switch (type) {
+      case 'cancel': {
+        this.goTolistPage();
+        break;
+      }
+      case 'back': {
+        this.goToLastStage();
+        break;
+      }
+    }
+  }
+
 }

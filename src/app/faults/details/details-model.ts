@@ -34,7 +34,7 @@ declare namespace FaultModels {
         numberOfBedroom?: any;
         furnishingType?: any;
     }
-    
+
     export interface IFaultResponse {
         title: string;
         reference: string;
@@ -75,8 +75,8 @@ declare namespace FaultModels {
         submittedBy: string;
         assignedTo: string;
         contractorId?: any;
-        estimationNotes?:string;
-        stageAction:string;
+        estimationNotes?: string;
+        stageAction: string;
     }
 
     export interface IContractorResponse {
@@ -95,11 +95,76 @@ declare namespace FaultModels {
         occupation: any;
         isAgentContractorApproved: any;
         entityId: string;
-        reference: string; 
+        reference: string;
     }
 
     export interface IUpdateNotification {
         isAccepted: boolean;
     }
+
+    export interface IMaintenanceQuoteResponse {
+        worksOrderNumber: string;
+        invoiceNumber?: any;
+        amount?: any;
+        raisedAmount?: any;
+        paidAmount?: any;
+        description: string;
+        postdate: string;
+        status?: any;
+        jobType?: any;
+        repairSource?: any;
+        contact?: any;
+        orderedBy: string;
+        orderedByContact?: any;
+        requiredStartDate?: any;
+        requiredCompletionDate: string;
+        actualCompletionDate?: any;
+        keysLocation?: any;
+        returnKeysTo?: any;
+        accessDetails?: any;
+        fullDescription: string;
+        itemType: number;
+        isAuthorised?: any;
+        isDisputed?: any;
+        isCancelled?: any;
+        isCompleted?: any;
+        completedDate?: any;
+        quoteStatus: boolean;
+        nominalCode?: any;
+        invoiceDate?: any;
+        quoteContractors: QuoteContractor[];
+        createdAt: string;
+        modifiedAt: string;
+        selectedContractorId: string;
+        maintenanceId: string;
+    }
+
+    export interface QuoteContractor {
+        reference: string;
+        name: string;
+        company: string;
+        email: string;
+        mobile: string;
+        address: Address;
+        contractorId: string;
+    }
+
+    export interface Address {
+        addressLine1: string;
+        addressLine2: string;
+        addressLine3?: any;
+        county: string;
+        country?: any;
+        street?: any;
+        buildingName?: any;
+        buildingNumber: string;
+        postcode: string;
+        latitude?: any;
+        longitude?: any;
+        locality?: any;
+        town: string;
+        pafReference: string;
+    }
+
 }
 
