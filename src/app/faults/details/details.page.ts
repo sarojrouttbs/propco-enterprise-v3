@@ -312,7 +312,6 @@ export class DetailsPage implements OnInit {
         } else {
           landlordId = this.landlordsOfproperty[0].landlordId;
         }
-        // let landlordId = 'cd2766b6-525c-11e9-9cbf-0cc47a54d954';
         await this.getLandlordDetails(landlordId);
         this.checkForLLSuggestedAction();
         this.getPreferredSuppliers(landlordId);

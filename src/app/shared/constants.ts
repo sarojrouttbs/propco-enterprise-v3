@@ -107,6 +107,22 @@ export const LL_INSTRUCTION_TYPES = [
   }
 ];
 
+export const ARRANING_CONTRACTOR_ACTIONS = [
+  {
+    index: 'PROCEED_WITH_WORKSORDER',
+    value: 'Proceed with Works Order'
+  },
+  {
+    index: 'OBTAIN_QUOTE',
+    value: 'Obtain Quote'
+  },
+  {
+    index: 'PROPERTY_VISIT_FOR_QUOTE',
+    value: 'Property visit for quote',
+  },
+  
+];
+
 export const ACCESS_INFO_TYPES = [
   {
     title: 'Tenant Presence Required',

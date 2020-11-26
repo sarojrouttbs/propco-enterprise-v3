@@ -1,20 +1,21 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS } from './../../../shared/constants';
 
 @Component({
   selector: 'app-arranging-contractor',
   templateUrl: './arranging-contractor.component.html',
-  styleUrls: ['./arranging-contractor.component.scss'],
+  styleUrls: ['./arranging-contractor.component.scss', '../details.page.scss'],
 })
 export class ArrangingContractorComponent implements OnInit {
   raiseQuoteForm: FormGroup;
   addContractorForm: FormGroup;
   contractorListForm: FormGroup;
+  userSelectedActionControl = new FormControl();
   @Input() quoteId;
   @Input() faultDetails: FaultModels.IFaultResponse;
   @Output() public btnAction: EventEmitter<any> = new EventEmitter();
@@ -31,6 +32,8 @@ export class ArrangingContractorComponent implements OnInit {
   isSelected = false;
   contratctorArr: string[] = [];
   isContratorSelected = false;
+  iacNotification;
+  iacStageActions = ARRANING_CONTRACTOR_ACTIONS.filter(action => { return action.index !== 'PROPERTY_VISIT_FOR_QUOTE' });
 
   constructor(
     private fb: FormBuilder,
@@ -40,7 +43,6 @@ export class ArrangingContractorComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.initiateArrangingContractors();
   }
 
@@ -146,9 +148,17 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async initApiCalls() {
-    await this.getUserDetails();
     this.faultMaintenanceDetails = await this.getFaultMaintenance() as FaultModels.IMaintenanceQuoteResponse;
-    if (this.faultMaintenanceDetails) { this.initPatching(); }
+    if (this.faultMaintenanceDetails) {
+      this.initPatching();
+      let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+      this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+    }else {
+      let userDetails:any = await this.getUserDetails();
+      if (userDetails) {
+          this.raiseQuoteForm.get('orderedBy').setValue(userDetails.name);
+        }
+    }
   }
 
   private getFaultMaintenance() {
@@ -168,7 +178,7 @@ export class ArrangingContractorComponent implements OnInit {
       {
         worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
         description: this.faultMaintenanceDetails.description,
-        // orderedBy: this.faultMaintenanceDetails.orderedBy,
+        orderedBy: this.faultMaintenanceDetails.orderedBy,
         requiredStartDate: this.faultMaintenanceDetails.requiredStartDate,
         accessDetails: this.faultMaintenanceDetails.accessDetails,
         selectedContractorId: this.faultMaintenanceDetails.selectedContractorId
@@ -219,6 +229,10 @@ export class ArrangingContractorComponent implements OnInit {
       this.categoryMap.set(cat.index, cat.value);
       // cat.imgPath = this.categoryIconList[index];
     });
+  }
+
+  getLookupValue(index, lookup) {
+    return this.commonService.getLookupValue(index, lookup);
   }
 
   _btnHandler(type: string) {
@@ -391,7 +405,7 @@ export class ArrangingContractorComponent implements OnInit {
         }
       });
       if (contractIds.length) {
-        this.faultService.addContractor(this.faultMaintenanceDetails.maintenanceId, { contractorIds: contractIds }).subscribe(
+        this.faultService.addContractors(this.faultMaintenanceDetails.maintenanceId, { contractorIds: contractIds }).subscribe(
           res => {
             resolve(true);
           },
@@ -421,13 +435,14 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  getUserDetails() {
-    this.faultService.getUserDetails().subscribe((res) => {
-      let data = res ? res.data[0] : '';
-      if (data) {
-        this.raiseQuoteForm.get('orderedBy').setValue(data.name);
-      }
-    }, error => {
+  private getUserDetails() {
+    return new Promise((resolve, reject) => {
+      this.faultService.getUserDetails().subscribe((res) => {
+        let data = res ? res.data[0] : '';
+        resolve(data);
+      }, error => {
+        reject(error)
+      });
     });
   }
 
@@ -458,5 +473,35 @@ export class ArrangingContractorComponent implements OnInit {
     });
     return promise;
   }
-}
 
+  async checkFaultNotifications(faultId) {
+    return new Promise((resolve, reject) => {
+      this.faultService.getFaultNotifications(faultId).subscribe(async (response) => {
+        let notifications = response && response.data ? response.data : [];
+        resolve(notifications);
+      }, error => {
+        reject(error)
+      });
+    });
+  }
+
+  private filterNotifications(data, stage, action) {
+    const promise = new Promise((resolve, reject) => {
+      let filtereData = null;
+      if (data.length === 0) {
+        resolve(null);
+      }
+      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action));
+      if (filtereData.length === 0) {
+        resolve(null);
+      }
+      filtereData = filtereData.sort((a, b) => {
+        return <any>new Date(b.firstEmailSentAt) - <any>new Date(a.firstEmailSentAt);
+      });
+      resolve(filtereData[0]);
+    });
+    return promise;
+  }
+
+
+}
