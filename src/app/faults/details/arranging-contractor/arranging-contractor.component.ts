@@ -44,7 +44,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.initiateArrangingContractors();
   }
 
-  ngOnChanges() {   
+  ngOnChanges() {
     this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
   }
 
@@ -93,7 +93,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.isContratorSelected = true;
       return;
     }
-    
+
     const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
     let grup = {
       reference: [{ value: data ? data.reference : '', disabled: true }],
@@ -414,7 +414,7 @@ export class ArrangingContractorComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultService.getPreferredSuppliers(landlordId).subscribe(
         res => {
-          res && res.data ? this.addContractor(res.data[0], true) : [];
+          res && res.data ? res.data.map((x) => { this.addContractor(x, true) }) : [];
           resolve(true);
         },
         error => {
@@ -425,3 +425,4 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 }
+
