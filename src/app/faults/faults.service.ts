@@ -87,8 +87,6 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 
-
-
   getTenantArrearsDetails(tenantId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}/arrears`);
   }
@@ -157,8 +155,7 @@ export class FaultsService {
   }
 
   getQuoteDetails(faultId): Observable<any> {
-    const params = new HttpParams()
-      .set('itemType', '4');
+    const params = new HttpParams().set('itemType', '4');
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/maintenance`, { params });
   }
 
@@ -170,7 +167,7 @@ export class FaultsService {
     return this.httpClient.put(environment.API_BASE_URL + `maintenance/${maintenanceId}`, data);
   }
 
-  addContractor(maintenanceId, requestObj): Observable<any> {
+  addContractors(maintenanceId, requestObj): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `maintenance/quote/${maintenanceId}/contractors`, requestObj);
   }
 
