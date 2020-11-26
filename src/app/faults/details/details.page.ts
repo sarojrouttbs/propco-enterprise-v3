@@ -673,7 +673,7 @@ export class DetailsPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultService.getPreferredSuppliers(landlordId).subscribe(
         res => {
-          this.preferredSuppliers = res && res.data ? res.data : [];
+          this.preferredSuppliers = res && res.data ? res.data : [];         
           resolve(this.preferredSuppliers);
         },
         error => {

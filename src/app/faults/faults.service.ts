@@ -165,9 +165,17 @@ export class FaultsService {
   updateFaultQuoteContractor(data, faultId, maintenanceId): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/maintenance/${maintenanceId}`, data);
   }
-  
+
   updateQuoteDetails(data, maintenanceId): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `maintenance/${maintenanceId}`, data);
+  }
+
+  addContractor(maintenanceId, requestObj): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `maintenance/quote/${maintenanceId}`, requestObj);
+  }
+
+  deleteContractor(maintenanceId, contractorId): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + `maintenance/quote/${maintenanceId}/contractors/${contractorId}`);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
