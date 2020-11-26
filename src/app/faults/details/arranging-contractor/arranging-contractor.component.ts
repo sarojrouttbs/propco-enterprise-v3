@@ -64,10 +64,10 @@ export class ArrangingContractorComponent implements OnInit {
       worksOrderNumber: [this.faultDetails.reference, Validators.required],
       paidBy: ['LANDLORD', Validators.required],
       propertyId: [this.faultDetails.propertyId, Validators.required],
-      category: [{ value: Number(this.faultDetails.category), disabled: true }, Validators.required],
+      category: [{ value: Number(this.faultDetails.category), disabled: true }],
       description: ['', Validators.required],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
-      requiredStartDate: ['', Validators.required],
+      requiredStartDate: [''],
       contactOnSite: '',
       accessDetails: [{ value: '', disabled: true }],
       contractorForm:
@@ -102,7 +102,7 @@ export class ArrangingContractorComponent implements OnInit {
       address: '',
       contractorId: data.contractorId ? data.contractorId : data.contractorObj.entityId,
       select: '',
-      oldContractor: isPatching,
+      isPreferred: isPatching,
       prefered: ''
     }
     contractorList.push(this.fb.group(grup));
@@ -363,7 +363,7 @@ export class ArrangingContractorComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       let contractIds = [];
       this.raiseQuoteForm.get('contractorList').value.forEach(info => {
-        if (info.oldContractor === false) {
+        if (info.isPreferred === false) {
           contractIds.push(info.contractorId);
         }
       });
