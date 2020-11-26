@@ -27,6 +27,7 @@ export class ArrangingContractorComponent implements OnInit {
   contractorSkill: any;
   faultCategories: any;
   categoryMap = new Map();
+  @Input() preferredSuppliers;
 
   constructor(
     private fb: FormBuilder,
@@ -37,6 +38,10 @@ export class ArrangingContractorComponent implements OnInit {
 
   ngOnInit() {
     this.initiateArrangingContractors();
+  }
+
+  ngOnChanges() {
+    this.preferredSuppliers.map((x) => { this.addContractor(x, true) });
   }
 
   private initiateArrangingContractors(): void {
@@ -65,7 +70,7 @@ export class ArrangingContractorComponent implements OnInit {
       contractorForm:
         this.fb.group({
           contractor: ['', Validators.required],
-          skillSet: '',
+          skillSet: ['', Validators.required],
           contractorObj: ''
         }),
       contractorList: this.fb.array([]),
@@ -79,24 +84,37 @@ export class ArrangingContractorComponent implements OnInit {
     );
   }
 
-  createContractorsList(): FormGroup {
-    const val = this.raiseQuoteForm?.get('contractorForm').value;
-    return this.fb.group({
-      company: { value: val ? val.contractor : '', disabled: true },
-      contactTel: { value: '', disabled: true },
-      trade: { value: val ? val.skillSet : '', disabled: true },
-      select: 0
-    });
+  addContractor(data, isPatching = false): void {
+    const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
+    let grup = {
+      reference: [{ value: data ? data.reference : '', disabled: true }],
+      name: '',
+      company: [{ value: data ? data.company : '', disabled: true }],
+      email: '',
+      mobile: [{ value: '', disabled: true }],
+      address: '',
+      contractorId: data.contractorId ? data.contractorId : data.contractorObj.entityId,
+      select: ''
+    }
+    contractorList.push(this.fb.group(grup));
+    if (!isPatching) {
+      this.raiseQuoteForm.get('contractorForm').reset();
+    }
   }
 
-  addContractor(): void {
-    this.contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
-    this.contractorList.push(this.createContractorsList());
-    this.raiseQuoteForm.get('contractorForm').reset();
-  }
-
-  removeContractor(index: any) {
-    this.contractorList.removeAt(index);
+  async removeContractor(i: any) {
+    const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
+    const deleteContractor = await this.commonService.showConfirm('Delete Contrator', 'Do you want to delete contractor from the list?');
+    if (deleteContractor) {
+      if (!this.faultMaintenanceDetails) {
+        contractorList.removeAt(i);
+        return;
+      }
+      const isDeleted = await this.deleteContrator(this.faultMaintenanceDetails.maintenanceId, contractorList.at(i).get('contractorId').value);
+      if (isDeleted) {
+        contractorList.removeAt(i);
+      }
+    }
   }
 
   private initAddContractorForm(): void {
@@ -150,10 +168,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   selectContractor(selected) {
-    this.raiseQuoteForm.get('contractorForm').patchValue({
-      contractor: selected ? selected.fullName + ','
-        + ' ' + selected.reference : undefined, contractorObj: selected ? selected : undefined
-    });
+    this.raiseQuoteForm.get('contractorForm').patchValue({ contractor: selected ? selected.fullName : undefined, contractorObj: selected ? selected : undefined });
     this.resultsAvailable = false;
   }
 
@@ -215,9 +230,11 @@ export class ArrangingContractorComponent implements OnInit {
     } else {
       /*update a quote*/
       const quoteUpdated = await this.updateQuote();
+      const addContractors = await this.addContractors();
       const faultContUpdated = await this.updateFaultQuoteContractor();
-      if (quoteUpdated && faultContUpdated) {
+      if (quoteUpdated && faultContUpdated && addContractors) {
         this.updateFault();
+
       }
     }
   }
@@ -281,9 +298,11 @@ export class ArrangingContractorComponent implements OnInit {
   private prepareQuoteData() {
     const quoteReqObj = JSON.parse(JSON.stringify(this.raiseQuoteForm.value));
     quoteReqObj.requiredStartDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requiredStartDate));
+
     // quoteReqObj.contractorList = [{contractorId:'df33ad85-c600-4298-a72a-d572d93dbddb'}]
     // quoteReqObj.selectedContractorId = 'df33ad85-c600-4298-a72a-d572d93dbddb';
-    // quoteReqObj.descption = "test";
+    // quoteReqObj.descption = "kitchen management task";
+
     delete quoteReqObj.contractorForm;
     if (!this.faultMaintenanceDetails) {
       quoteReqObj.contractorIds = quoteReqObj.contractorList.map(x => x.contractorId).filter(x => x);
@@ -321,5 +340,42 @@ export class ArrangingContractorComponent implements OnInit {
       }
     }
   }
+
+  addContractors() {
+    const promise = new Promise((resolve, reject) => {
+      let contractIds = [];
+      this.raiseQuoteForm.get('contractorList').value.forEach(info => {
+        contractIds.push(info.contractorId);
+      });
+      if (contractIds.length) {
+        this.faultService.addContractor(this.faultMaintenanceDetails.maintenanceId, contractIds).subscribe(
+          res => {
+            resolve(true);
+          },
+          error => {
+            console.log(error);
+            resolve(false);
+          }
+        );
+      }
+    });
+    return promise;
+  }
+
+  private deleteContrator(maintenanceId: string, contractorId: string) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.deleteContractor(maintenanceId, contractorId).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          console.log(error);
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
 
 }
