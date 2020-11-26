@@ -10,10 +10,10 @@ export class FaultsService {
   constructor(private httpClient: HttpClient) { }
 
   getAllFaults(params?: any): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + 'faults/list', { params: params });
+    return this.httpClient.get(environment.API_BASE_URL + 'faults/list', { params });
   }
 
-  getFaultNotes(faultId: String): Observable<any> {
+  getFaultNotes(faultId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/notes`);
   }
 
@@ -22,18 +22,18 @@ export class FaultsService {
   }
 
   getPropertyTenancies(propertyId: string): Observable<any> {
-    let params = new HttpParams()
+    const params = new HttpParams()
       .append('status', '1')
       .append('status', '2')
       .append('status', '5')
       .append('status', '6');
-    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenancies`, { params: params });
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenancies`, { params });
   }
 
   getPropertyTenants(propertyId: string, agreementId?: string): Observable<any> {
-    let params = new HttpParams()
+    const params = new HttpParams()
       .set('agreementId', agreementId ? agreementId : '');
-    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenants`, { params: params });
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenants`, { params });
   }
 
   getHMOLicenceDetailsAgainstProperty(propertyId: string): Observable<any> {
@@ -69,22 +69,22 @@ export class FaultsService {
   }
 
   searchPropertyByText(text: string): Observable<any> {
-    let params = new HttpParams()
+    const params = new HttpParams()
       .set('limit', '10')
       .set('page', '1')
       .set('prop.mantypeLetCat', '3346')
       .set('text', text)
       .set('types', 'PROPERTY')
-    return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params: params });
+    return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 
   searchContractor(text: string): Observable<any> {
-    let params = new HttpParams()
+    const params = new HttpParams()
       .set('limit', '10')
       .set('page', '1')
       .set('text', text)
       .set('types', 'CONTRACTOR')
-    return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params: params });
+    return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 
 
@@ -122,9 +122,10 @@ export class FaultsService {
   }
 
   downloadDocument(documentId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `documents/${documentId}/download`, { responseType: 'arraybuffer' }).pipe(tap((res: any) => { }),
-      catchError(this.handleError<any>(''))
-    );
+    return this.httpClient.get(environment.API_BASE_URL + `documents/${documentId}/download`,
+      { responseType: 'arraybuffer' }).pipe(tap((res: any) => { }),
+        catchError(this.handleError<any>(''))
+      );
   }
 
   updateFault(faultId: string, requestObj: any): Observable<any> {
@@ -143,12 +144,30 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/notifications`);
   }
 
-  getContractorDetails(contractorId): Observable<any>{
+  getContractorDetails(contractorId): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `contractors/${contractorId}`);
   }
 
   updateNotification(faultNotificationId, notificationObj): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response`, notificationObj);
+  }
+
+  raiseQuote(data, faultId): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/maintenance`, data);
+  }
+
+  getQuoteDetails(faultId): Observable<any> {
+    const params = new HttpParams()
+      .set('itemType', '4');
+    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/maintenance`, { params });
+  }
+
+  updateFaultQuoteContractor(data, faultId, maintenanceId): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/maintenance/${maintenanceId}`, data);
+  }
+  
+  updateQuoteDetails(data, maintenanceId): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `maintenance/${maintenanceId}`, data);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

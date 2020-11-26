@@ -9,7 +9,7 @@
               <ion-item>
                 <ion-label position="floating">Quotation Number<ion-text class="mandatory">*</ion-text>
                 </ion-label>
-                <ion-input formControlName="quotationNum"></ion-input>
+                <ion-input formControlName="worksOrderNumber"></ion-input>
               </ion-item>
 
             </ion-col>
@@ -26,19 +26,12 @@
               </ion-item>
 
             </ion-col>
-            <ion-col size="33.33">
-              <ion-item>
-                <ion-label position="floating">Status<ion-text class="mandatory">*</ion-text>
-                </ion-label>
-                <ion-input formControlName="status"></ion-input>
-              </ion-item>
-            </ion-col>
 
             <ion-col size="100">
               <ion-item>
                 <ion-label position="floating">Description<ion-text class="mandatory">*</ion-text>
                 </ion-label>
-                <ion-input formControlName="descption"></ion-input>
+                <ion-input formControlName="description"></ion-input>
               </ion-item>
             </ion-col>
 
@@ -52,9 +45,9 @@
 
             <ion-col size="33.33">
               <ion-item>
-                <ion-label position="floating">Required By
+                <ion-label position="floating">Required By<ion-text class="mandatory">*</ion-text>
                 </ion-label>
-                <ion-input formControlName="requiredBy"></ion-input>
+                <ion-datetime formControlName="requiredStartDate" displayFormat="YYYY MMM DD" interface="popover"></ion-datetime>
               </ion-item>
             </ion-col>
 
@@ -179,8 +172,8 @@
   </ion-grid>
 </form>
 <div class="action-btn-group">
-  <!-- <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
-  <ion-button (click)="goToLastStage()">Back</ion-button>
-  <ion-button class="save-button" (click)="saveForLater()">Save for later</ion-button>
-  <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button> -->
+  <ion-button (click)="_btnHandler('cancel')" class="cancel-button">Cancel</ion-button>
+  <ion-button (click)="_btnHandler('back')">Back</ion-button>
+  <ion-button class="save-button" (click)="_btnHandler('save')">Save for later</ion-button>
+  <ion-button class="submit-button" (click)="_btnHandler('proceed')">Proceed</ion-button>
 </div>
