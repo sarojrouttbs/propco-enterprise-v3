@@ -28,7 +28,12 @@
 }
 
 .add-contractor {
-  --background: var(--ion-color-primary-shade);
+  --background: var(--ion-color-success.error-message{
+    color: var(--ion-color-danger);
+    padding-top:2px;
+    font-size: 14px;
+    line-height: 18px;
+});
 }
 
 .remove-contractor {
@@ -36,9 +41,24 @@
 }
 
 .mark-contractor {
-  --background: var(--ion-color-primary-shade);
+  --background: var(--ion-color-success.error-message{
+    color: var(--ion-color-danger);
+    padding-top:2px;
+    font-size: 14px;
+    line-height: 18px;
+});
 }
 
 .ion-select-options {
   padding-bottom: 8px !important;
+}
+
+.request-start-date {
+  padding-bottom: 6px;
+}
+.error-message{
+    color: var(--ion-color-danger);
+    padding-top:2px;
+    font-size: 14px;
+    line-height: 18px;
 }

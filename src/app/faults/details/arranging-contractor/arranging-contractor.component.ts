@@ -28,6 +28,9 @@ export class ArrangingContractorComponent implements OnInit {
   faultCategories: any;
   categoryMap = new Map();
   @Input() preferredSuppliers;
+  isSelected = false;
+  contratctorArr: string[] = [];
+  isContratorSelected = false;
 
   constructor(
     private fb: FormBuilder,
@@ -85,6 +88,10 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   addContractor(data, isPatching = false): void {
+    if (this.contratctorArr.includes(data?.contractorObj?.entityId)) {
+      this.isContratorSelected = true;
+      return;
+    }
     const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
     let grup = {
       reference: [{ value: data ? data.reference : '', disabled: true }],
@@ -94,11 +101,16 @@ export class ArrangingContractorComponent implements OnInit {
       mobile: [{ value: '', disabled: true }],
       address: '',
       contractorId: data.contractorId ? data.contractorId : data.contractorObj.entityId,
-      select: ''
+      select: '',
+      oldContractor: isPatching,
+      prefered: ''
     }
     contractorList.push(this.fb.group(grup));
+    this.contratctorArr.push(data.contractorId ? data.contractorId : data.contractorObj.entityId);
+
     if (!isPatching) {
       this.raiseQuoteForm.get('contractorForm').reset();
+      this.isSelected = false;
     }
   }
 
@@ -106,6 +118,9 @@ export class ArrangingContractorComponent implements OnInit {
     const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
     const deleteContractor = await this.commonService.showConfirm('Delete Contrator', 'Do you want to delete contractor from the list?');
     if (deleteContractor) {
+      var index = this.contratctorArr.indexOf(contractorList.at(i).get('contractorId').value);
+      this.contratctorArr.splice(index, 1);
+
       if (!this.faultMaintenanceDetails) {
         contractorList.removeAt(i);
         return;
@@ -159,6 +174,8 @@ export class ArrangingContractorComponent implements OnInit {
 
 
   onSearch(event: any) {
+    this.isSelected = false;
+    this.isContratorSelected = false;
     const searchString = event.target.value;
     if (searchString.length > 2) {
       this.resultsAvailable = true;
@@ -170,6 +187,7 @@ export class ArrangingContractorComponent implements OnInit {
   selectContractor(selected) {
     this.raiseQuoteForm.get('contractorForm').patchValue({ contractor: selected ? selected.fullName : undefined, contractorObj: selected ? selected : undefined });
     this.resultsAvailable = false;
+    this.isSelected = true;
   }
 
   private getLookupData() {
@@ -299,7 +317,7 @@ export class ArrangingContractorComponent implements OnInit {
     const quoteReqObj = JSON.parse(JSON.stringify(this.raiseQuoteForm.value));
     quoteReqObj.requiredStartDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requiredStartDate));
 
-    // quoteReqObj.contractorList = [{contractorId:'df33ad85-c600-4298-a72a-d572d93dbddb'}]
+    // quoteReqObj.contractorList = [{ contractorId: 'df33ad85-c600-4298-a72a-d572d93dbddb' }]
     // quoteReqObj.selectedContractorId = 'df33ad85-c600-4298-a72a-d572d93dbddb';
     // quoteReqObj.descption = "kitchen management task";
 
@@ -345,7 +363,9 @@ export class ArrangingContractorComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       let contractIds = [];
       this.raiseQuoteForm.get('contractorList').value.forEach(info => {
-        contractIds.push(info.contractorId);
+        if (info.oldContractor === false) {
+          contractIds.push(info.contractorId);
+        }
       });
       if (contractIds.length) {
         this.faultService.addContractor(this.faultMaintenanceDetails.maintenanceId, contractIds).subscribe(

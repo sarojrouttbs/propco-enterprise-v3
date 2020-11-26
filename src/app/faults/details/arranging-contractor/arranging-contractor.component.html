@@ -4,15 +4,15 @@
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
         <ion-grid>
           <ion-row>
-            <ion-col size="33.33">
+            <ion-col size="50">
               <ion-item>
                 <ion-label position="floating">Quotation Number<ion-text class="mandatory">*</ion-text>
                 </ion-label>
                 <ion-input formControlName="worksOrderNumber"></ion-input>
               </ion-item>
-
+              <app-validation-message [control]="raiseQuoteForm.controls.worksOrderNumber"></app-validation-message>
             </ion-col>
-            <ion-col size="33.33">
+            <ion-col size="50">
               <ion-item>
                 <ion-label position="floating">Category <ion-text class="mandatory">*</ion-text>
                 </ion-label>
@@ -23,7 +23,7 @@
                 <!-- faultCategories -->
                 <!-- <ion-input formControlName="category" [value]="categoryMap.get(faultDetails.category)"></ion-input> -->
               </ion-item>
-
+              <app-validation-message [control]="raiseQuoteForm.controls.category"></app-validation-message>
             </ion-col>
 
             <ion-col size="100">
@@ -32,6 +32,7 @@
                 </ion-label>
                 <ion-input formControlName="description"></ion-input>
               </ion-item>
+              <app-validation-message [control]="raiseQuoteForm.controls.description"></app-validation-message>
             </ion-col>
 
             <ion-col size="33.33">
@@ -40,21 +41,23 @@
                 </ion-label>
                 <ion-input formControlName="orderedBy"></ion-input>
               </ion-item>
+              <app-validation-message [control]="raiseQuoteForm.controls.orderedBy"></app-validation-message>
             </ion-col>
 
             <ion-col size="33.33">
               <ion-item>
                 <ion-label position="floating">Required By<ion-text class="mandatory">*</ion-text>
                 </ion-label>
-                <ion-datetime formControlName="requiredStartDate" displayFormat="YYYY MMM DD" interface="popover">
+                <ion-datetime formControlName="requiredStartDate" displayFormat="YYYY MMM DD" interface="popover"
+                  class="request-start-date">
                 </ion-datetime>
               </ion-item>
+              <app-validation-message [control]="raiseQuoteForm.controls.requiredStartDate"></app-validation-message>
             </ion-col>
 
             <ion-col size="33.33">
               <ion-item>
-                <ion-label position="floating">Contact On-site<ion-text class="mandatory">*</ion-text>
-                </ion-label>
+                <ion-label position="floating">Contact On-site </ion-label>
                 <ion-input formControlName="contactOnSite"></ion-input>
               </ion-item>
             </ion-col>
@@ -105,12 +108,17 @@
                     <ion-checkbox color="primary" style="height: 25px;
                     width: 25px;bottom: -5px;" formControlName="select">
                     </ion-checkbox>
+                    <!-- <ion-checkbox color="primary" style="height: 25px;
+                    width: 25px;bottom: -5px;margin-left: 16px;" formControlName="prefered">
+                    </ion-checkbox> -->
                     <ion-fab-button class="remove-contractor list-button" style="margin-left: 25px;">
                       <ion-icon (click)="removeContractor(i)" name="close"></ion-icon>
                     </ion-fab-button>
-                    <ion-fab-button class="list-button mark-contractor">
+
+
+                    <!-- <ion-fab-button class="list-button mark-contractor">
                       <ion-icon name="checkmark"></ion-icon>
-                    </ion-fab-button>
+                    </ion-fab-button> -->
                   </div>
                 </ion-col>
               </ion-row>
@@ -140,7 +148,7 @@
 
                 <ion-list class="contractor-list" *ngIf="resultsAvailable">
                   <ion-item *ngFor="let result of (contractors| async)?.data" (click)="selectContractor(result)" button
-                    style="font-size: 13px !important; ">
+                    style="font-size: 13px !important;">
                     <span>
                       <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
                     </span>&nbsp;
@@ -153,12 +161,15 @@
 
                   </ion-item>
                 </ion-list>
+                <ion-text *ngIf="isContratorSelected" class="error-message">This contractor is already selected
+                </ion-text>
               </ion-col>
 
               <ion-col size="1">
                 <div class="button-container" style="margin-left: 40px;">
                   <ion-fab-button (click)="addContractor(this.raiseQuoteForm?.get('contractorForm').value)"
-                    [disabled]="!this.raiseQuoteForm?.get('contractorForm').valid" class="add-contractor list-button">
+                    [disabled]="!this.raiseQuoteForm?.get('contractorForm').valid || !isSelected"
+                    class="add-contractor list-button">
                     <ion-icon name="add-sharp"></ion-icon>
                   </ion-fab-button>
                 </div>
