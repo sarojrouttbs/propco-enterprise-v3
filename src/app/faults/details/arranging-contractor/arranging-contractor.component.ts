@@ -27,7 +27,7 @@ export class ArrangingContractorComponent implements OnInit {
   contractorSkill: any;
   faultCategories: any;
   categoryMap = new Map();
-  @Input() landlordsOfproperty;
+  @Input() propertyLandlords;
   isSelected = false;
   contratctorArr: string[] = [];
   isContratorSelected = false;
@@ -45,7 +45,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   ngOnChanges() {   
-    this.landlordsOfproperty.map((x) => { this.getPreferredSuppliers(x.landlordId) });
+    this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
   }
 
   private initiateArrangingContractors(): void {
