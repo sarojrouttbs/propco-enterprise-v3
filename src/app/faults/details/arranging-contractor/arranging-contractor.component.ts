@@ -27,7 +27,7 @@ export class ArrangingContractorComponent implements OnInit {
   contractorSkill: any;
   faultCategories: any;
   categoryMap = new Map();
-  @Input() preferredSuppliers;
+  @Input() landlordsOfproperty;
   isSelected = false;
   contratctorArr: string[] = [];
   isContratorSelected = false;
@@ -40,11 +40,12 @@ export class ArrangingContractorComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.initiateArrangingContractors();
   }
 
-  ngOnChanges() {
-    this.preferredSuppliers.map((x) => { this.addContractor(x, true) });
+  ngOnChanges() {   
+    this.landlordsOfproperty.map((x) => { this.getPreferredSuppliers(x.landlordId) });
   }
 
   private initiateArrangingContractors(): void {
@@ -92,6 +93,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.isContratorSelected = true;
       return;
     }
+    
     const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
     let grup = {
       reference: [{ value: data ? data.reference : '', disabled: true }],
@@ -406,5 +408,20 @@ export class ArrangingContractorComponent implements OnInit {
       }
     }, error => {
     });
+  }
+
+  private getPreferredSuppliers(landlordId) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.getPreferredSuppliers(landlordId).subscribe(
+        res => {
+          res && res.data ? this.addContractor(res.data[0], true) : [];
+          resolve(true);
+        },
+        error => {
+          reject(false);
+        }
+      );
+    });
+    return promise;
   }
 }
