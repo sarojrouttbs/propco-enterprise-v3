@@ -143,6 +143,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async initApiCalls() {
+    await this.getUserDetails();
     this.faultMaintenanceDetails = await this.getFaultMaintenance() as FaultModels.IMaintenanceQuoteResponse;
     if (this.faultMaintenanceDetails) { this.initPatching(); }
   }
@@ -164,7 +165,7 @@ export class ArrangingContractorComponent implements OnInit {
       {
         worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
         description: this.faultMaintenanceDetails.description,
-        orderedBy: this.faultMaintenanceDetails.orderedBy,
+        // orderedBy: this.faultMaintenanceDetails.orderedBy,
         requiredStartDate: this.faultMaintenanceDetails.requiredStartDate,
         accessDetails: this.faultMaintenanceDetails.accessDetails,
         selectedContractorId: this.faultMaintenanceDetails.selectedContractorId
@@ -397,5 +398,13 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-
+  getUserDetails() {
+    this.faultService.getUserDetails().subscribe((res) => {
+      let data = res ? res.data[0] : '';
+      if (data) {
+        this.raiseQuoteForm.get('orderedBy').setValue(data.name);
+      }
+    }, error => {
+    });
+  }
 }
