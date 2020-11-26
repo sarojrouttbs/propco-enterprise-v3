@@ -171,7 +171,7 @@ export class FaultsService {
   }
 
   addContractor(maintenanceId, requestObj): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + `maintenance/quote/${maintenanceId}`, requestObj);
+    return this.httpClient.post(environment.API_BASE_URL + `maintenance/quote/${maintenanceId}/contractors`, requestObj);
   }
 
   deleteContractor(maintenanceId, contractorId): Observable<any> {
