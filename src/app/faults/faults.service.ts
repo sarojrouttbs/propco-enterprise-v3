@@ -178,6 +178,10 @@ export class FaultsService {
     return this.httpClient.delete(environment.API_BASE_URL + `maintenance/quote/${maintenanceId}/contractors/${contractorId}`);
   }
 
+  getUserDetails(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `user/logged-in`);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
