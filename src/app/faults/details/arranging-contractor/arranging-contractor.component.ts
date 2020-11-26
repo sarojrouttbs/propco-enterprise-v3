@@ -382,7 +382,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.faultService.getUserDetails().subscribe((res) => {
       let data = res ? res.data[0] : '';
       if (data) {
-        this.raiseQuoteForm.patchValue({orderedBy: data.name});
+        this.raiseQuoteForm.get('orderedBy').setValue(data.name);
       }
     }, error => {
     });
