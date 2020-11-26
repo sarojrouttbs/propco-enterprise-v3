@@ -67,18 +67,18 @@ export class ArrangingContractorComponent implements OnInit {
       category: [{ value: Number(this.faultDetails.category), disabled: true }],
       description: ['', Validators.required],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
-      requiredStartDate: [''],
+      requiredStartDate: ['', Validators.required],
       contactOnSite: '',
       accessDetails: [{ value: '', disabled: true }],
       contractorForm:
         this.fb.group({
-          contractor: ['', Validators.required],
-          skillSet: ['', Validators.required],
+          contractor: '',
+          skillSet: '',
           contractorObj: ''
         }),
       contractorList: this.fb.array([]),
       contractorIds: [],
-      selectedContractorId: ['', Validators.required]
+      selectedContractorId: ''
     });
 
     this.contractors = this.raiseQuoteForm.get('contractorForm.contractor').valueChanges.pipe(debounceTime(300),
@@ -103,7 +103,8 @@ export class ArrangingContractorComponent implements OnInit {
       contractorId: data.contractorId ? data.contractorId : data.contractorObj.entityId,
       select: '',
       isPreferred: isPatching,
-      prefered: ''
+      prefered: '',
+      checked: !isPatching ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value ? true : false)
     }
     contractorList.push(this.fb.group(grup));
     this.contratctorArr.push(data.contractorId ? data.contractorId : data.contractorObj.entityId);
@@ -171,6 +172,7 @@ export class ArrangingContractorComponent implements OnInit {
         selectedContractorId: this.faultMaintenanceDetails.selectedContractorId
       }
     );
+    this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, true) });
   }
 
 
@@ -236,10 +238,6 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async saveForLater() {
     if (!this.faultMaintenanceDetails) {
-      // if (!this.raiseQuoteForm.valid && this.raiseQuoteForm.value.contractorList.length == 0) {
-      //   this.commonService.showMessage('Please fill all required fields.', 'Raise a Quote', 'error');
-      //   return;
-      // }
       /*raise a quote*/
       const quoteRaised = await this.raiseQuote();
       if (quoteRaised) {
@@ -249,16 +247,32 @@ export class ArrangingContractorComponent implements OnInit {
     } else {
       /*update a quote*/
       const quoteUpdated = await this.updateQuote();
-      const addContractors = await this.addContractors();
-      const faultContUpdated = await this.updateFaultQuoteContractor();
-      if (quoteUpdated && faultContUpdated && addContractors) {
-        this.updateFault();
-
+      if (quoteUpdated) {
+        const addContractors = await this.addContractors();
+        if (addContractors) {
+          const faultContUpdated = await this.updateFaultQuoteContractor();
+          if (faultContUpdated) {
+            this.updateFault();
+          }
+        }
       }
     }
   }
 
   private raiseQuote() {
+    if (!this.raiseQuoteForm.valid) {
+      this.commonService.showMessage('Please fill all required fields.', 'Raise a Quote', 'error');
+      this.raiseQuoteForm.markAllAsTouched();
+      return;
+    }
+    if (this.raiseQuoteForm.value.contractorList.length == 0) {
+      this.commonService.showMessage('Add atleast 1 contractor', 'Raise a Quote', 'error');
+      return;
+    }
+    if (!this.raiseQuoteForm.get('selectedContractorId').value) {
+      this.commonService.showMessage('Select atleast 1 contractor.', 'Raise a Quote', 'error');
+      return;
+    }
     const promise = new Promise((resolve, reject) => {
       this.faultService.raiseQuote(this.prepareQuoteData(), this.faultDetails.faultId).subscribe((res) => {
         resolve(res);
@@ -272,6 +286,19 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private updateQuote() {
+    if (!this.raiseQuoteForm.valid) {
+      this.commonService.showMessage('Please fill all required fields.', 'Update a Quote', 'error');
+      this.raiseQuoteForm.markAllAsTouched();
+      return false;
+    }
+    if (this.raiseQuoteForm.value.contractorList.length == 0) {
+      this.commonService.showMessage('Add atleast 1 contractor', 'Update a Quote', 'error');
+      return false;
+    }
+    if (!this.raiseQuoteForm.get('selectedContractorId').value) {
+      this.commonService.showMessage('Select atleast 1 contractor.', 'Update a Quote', 'error');
+      return false;
+    }
     const promise = new Promise((resolve, reject) => {
       this.faultService.updateQuoteDetails(
         this.prepareQuoteData(), this.faultMaintenanceDetails.maintenanceId).subscribe((res) => {
@@ -317,9 +344,6 @@ export class ArrangingContractorComponent implements OnInit {
   private prepareQuoteData() {
     const quoteReqObj = JSON.parse(JSON.stringify(this.raiseQuoteForm.value));
     quoteReqObj.requiredStartDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requiredStartDate));
-
-    // quoteReqObj.contractorList = [{ contractorId: 'df33ad85-c600-4298-a72a-d572d93dbddb' }]
-    // quoteReqObj.selectedContractorId = 'df33ad85-c600-4298-a72a-d572d93dbddb';
     // quoteReqObj.descption = "kitchen management task";
 
     delete quoteReqObj.contractorForm;
@@ -340,10 +364,6 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async proceed() {
-    if (!this.raiseQuoteForm.valid) {
-      this.commonService.showMessage('Please fill all required fields.', 'Raise a Quote', 'error');
-      return;
-    }
     if (!this.faultMaintenanceDetails) {
       /*raise a quote*/
       const quoteRaised = await this.raiseQuote();
@@ -369,15 +389,16 @@ export class ArrangingContractorComponent implements OnInit {
         }
       });
       if (contractIds.length) {
-        this.faultService.addContractor(this.faultMaintenanceDetails.maintenanceId, contractIds).subscribe(
+        this.faultService.addContractor(this.faultMaintenanceDetails.maintenanceId, {contractorIds:contractIds}).subscribe(
           res => {
             resolve(true);
           },
           error => {
-            console.log(error);
             resolve(false);
           }
         );
+      } else {
+        resolve(true);
       }
     });
     return promise;
@@ -406,5 +427,18 @@ export class ArrangingContractorComponent implements OnInit {
       }
     }, error => {
     });
+  }
+
+  updateSelection(item, i) {
+    this.raiseQuoteForm.get('selectedContractorId').setValue('');
+    const contlistArray = this.raiseQuoteForm.get('contractorList') as FormArray;
+    if (!item.checked) {
+      this.raiseQuoteForm.get('selectedContractorId').setValue(item.contractorId);
+      contlistArray.controls.forEach((element, index) => {
+        if (i != index) {
+          element.get('checked').setValue(false);
+        }
+      });
+    }
   }
 }

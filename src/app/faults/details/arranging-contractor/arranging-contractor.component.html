@@ -77,7 +77,6 @@
           </ion-row>
 
           <div class="contractor-block">
-
             <div formArrayName="contractorList"
               *ngFor="let item of raiseQuoteForm.get('contractorList')['controls']; let i = index;">
               <ion-row id="row_1" class="row-banner" [formGroupName]="i">
@@ -104,7 +103,7 @@
 
                   <div class="button-container">
                     <ion-checkbox color="primary" style="height: 25px;
-                    width: 25px;bottom: -5px;" formControlName="select">
+                    width: 25px;bottom: -5px;"  formControlName="checked" (click)="updateSelection(item.value,i)" [name]="item">
                     </ion-checkbox>
                     <!-- <ion-checkbox color="primary" style="height: 25px;
                     width: 25px;bottom: -5px;margin-left: 16px;" formControlName="prefered">
@@ -166,7 +165,7 @@
               <ion-col size="1">
                 <div class="button-container" style="margin-left: 40px;">
                   <ion-fab-button (click)="addContractor(this.raiseQuoteForm?.get('contractorForm').value)"
-                    [disabled]="!this.raiseQuoteForm?.get('contractorForm').valid || !isSelected"
+                    [disabled]="!this.raiseQuoteForm?.get('contractorForm.contractor').value || !this.raiseQuoteForm?.get('contractorForm.skillSet').value || !isSelected"
                     class="add-contractor list-button">
                     <ion-icon name="add-sharp"></ion-icon>
                   </ion-fab-button>
