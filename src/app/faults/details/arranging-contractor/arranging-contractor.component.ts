@@ -153,11 +153,11 @@ export class ArrangingContractorComponent implements OnInit {
       this.initPatching();
       let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
       this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
-    }else {
-      let userDetails:any = await this.getUserDetails();
+    } else {
+      let userDetails: any = await this.getUserDetails();
       if (userDetails) {
-          this.raiseQuoteForm.get('orderedBy').setValue(userDetails.name);
-        }
+        this.raiseQuoteForm.get('orderedBy').setValue(userDetails.name);
+      }
     }
   }
 
@@ -384,7 +384,12 @@ export class ArrangingContractorComponent implements OnInit {
       /*raise a quote*/
       const quoteRaised = await this.raiseQuote();
       if (quoteRaised) {
-        this.updateFault(true);
+        await this.updateFault(true);
+        this.commonService.showLoader();
+        setTimeout(async () => {
+          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+        }, 3000);
       }
     } else {
       /*update a quote*/
@@ -392,6 +397,11 @@ export class ArrangingContractorComponent implements OnInit {
       const faultContUpdated = await this.updateFaultQuoteContractor();
       if (quoteUpdated && faultContUpdated) {
         this.updateFault(true);
+        this.commonService.showLoader();
+        setTimeout(async () => {
+          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+        }, 3000);
       }
     }
   }
@@ -501,6 +511,15 @@ export class ArrangingContractorComponent implements OnInit {
       resolve(filtereData[0]);
     });
     return promise;
+  }
+
+  setUserAction(index) {
+    // if (this.iacNotification && !this.iacNotification.responseReceived) {
+    //   this.commonService.showAlert('Arrangig Contractor', 'Please select response before proceeding with other action.');
+    //   return;
+    // }
+    this.userSelectedActionControl.setValue(index);
+
   }
 
 

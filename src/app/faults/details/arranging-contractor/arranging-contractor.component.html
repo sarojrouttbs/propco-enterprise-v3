@@ -20,8 +20,6 @@
                   <ion-select-option [value]="item.index" *ngFor="let item of faultCategories">{{ item.value }}
                   </ion-select-option>
                 </ion-select>
-                <!-- faultCategories -->
-                <!-- <ion-input formControlName="category" [value]="categoryMap.get(faultDetails.category)"></ion-input> -->
               </ion-item>
             </ion-col>
 
@@ -213,7 +211,7 @@
           </div>
           <div class="question-answer" *ngIf="iacNotification && iacNotification?.responseReceived == null">
             <h6>
-              <ion-text color="danger">Please note:</ion-text>
+              <ion-text color="danger">Please note: </ion-text>
               <span>The fault will be closed automatically if the contractor doesn't respond within
               {{(iacNotification?.allowedNumberOfChases - iacNotification?.numberOfChasesDone) * iacNotification?.chaseInterval}} hours.
               </span>
