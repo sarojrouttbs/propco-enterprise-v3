@@ -364,7 +364,7 @@ export class ArrangingContractorComponent implements OnInit {
   private prepareQuoteData() {
     const quoteReqObj = JSON.parse(JSON.stringify(this.raiseQuoteForm.value));
     quoteReqObj.requiredStartDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requiredStartDate));
-    // quoteReqObj.descption = "kitchen management task";
+    quoteReqObj.descption = "kitchen management task";
 
     delete quoteReqObj.contractorForm;
     if (!this.faultMaintenanceDetails) {
