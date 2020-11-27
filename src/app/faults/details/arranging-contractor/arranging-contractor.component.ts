@@ -390,12 +390,14 @@ export class ArrangingContractorComponent implements OnInit {
         /*raise a quote*/
         const quoteRaised = await this.raiseQuote();
         if (quoteRaised) {
-          await this.updateFault(true);
-          this.commonService.showLoader();
-          setTimeout(async () => {
-            let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-            this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
-          }, 3000);
+          const faultUpdated = await this.updateFault(true);
+          if (faultUpdated) {
+            this.commonService.showLoader();
+            setTimeout(async () => {
+              let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+              this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+            }, 3000);
+          }
         }
       } else {
         /*update a quote*/
