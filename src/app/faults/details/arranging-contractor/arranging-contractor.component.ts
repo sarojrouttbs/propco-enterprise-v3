@@ -295,11 +295,11 @@ export class ArrangingContractorComponent implements OnInit {
       return;
     }
     if (this.raiseQuoteForm.value.contractorList.length == 0) {
-      this.commonService.showMessage('Add atleast 1 contractor', 'Raise a Quote', 'error');
+      this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Raise a Quote', 'error');
       return;
     }
     if (!this.raiseQuoteForm.get('selectedContractorId').value) {
-      this.commonService.showMessage('Select atleast 1 contractor.', 'Raise a Quote', 'error');
+      this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Raise a Quote', 'error');
       return;
     }
     const promise = new Promise((resolve, reject) => {
@@ -321,11 +321,11 @@ export class ArrangingContractorComponent implements OnInit {
       return false;
     }
     if (this.raiseQuoteForm.value.contractorList.length == 0) {
-      this.commonService.showMessage('Add atleast 1 contractor', 'Update a Quote', 'error');
+      this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Update a Quote', 'error');
       return false;
     }
     if (!this.raiseQuoteForm.get('selectedContractorId').value) {
-      this.commonService.showMessage('Select atleast 1 contractor.', 'Update a Quote', 'error');
+      this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Update a Quote', 'error');
       return false;
     }
     const promise = new Promise((resolve, reject) => {
