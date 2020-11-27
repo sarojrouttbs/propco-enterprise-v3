@@ -836,7 +836,7 @@
 
 <ng-template #arrangingContractor>
   <ion-card class="ion-no-margin">
-    <ng-container *ngIf="faultDetails && faultDetails.stage === 'ARRANGING_CONTRACTOR'">
+    <ng-container *ngIf="faultDetails && (faultDetails.stage === 'ARRANGING_CONTRACTOR' || stepper.selectedIndex == 3)">
       <ion-grid style="margin-bottom:10px">
         <ion-row class="ion-justify-content-start">
           <ion-col size="auto">
