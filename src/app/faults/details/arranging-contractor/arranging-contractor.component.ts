@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES } from './../../../shared/constants';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -19,6 +19,7 @@ export class ArrangingContractorComponent implements OnInit {
   @Input() quoteId;
   @Input() faultDetails: FaultModels.IFaultResponse;
   @Output() public btnAction: EventEmitter<any> = new EventEmitter();
+  @Input() leadTenantId: any;
   faultMaintenanceDetails: FaultModels.IMaintenanceQuoteResponse;
   contractors: Observable<FaultModels.IContractorResponse>;
   private subject: Subject<string> = new Subject();
@@ -34,6 +35,8 @@ export class ArrangingContractorComponent implements OnInit {
   isContratorSelected = false;
   iacNotification;
   iacStageActions = ARRANING_CONTRACTOR_ACTIONS.filter(action => { return action.index !== 'PROPERTY_VISIT_FOR_QUOTE' });
+  accessInfoList = ACCESS_INFO_TYPES;
+  isMaintenanceDetails = false;
 
   constructor(
     private fb: FormBuilder,
@@ -46,8 +49,10 @@ export class ArrangingContractorComponent implements OnInit {
     this.initiateArrangingContractors();
   }
 
-  ngOnChanges() {
-    this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes.leadTenantId && changes.leadTenantId.currentValue){
+      this.checkMaintenanceDetail();
+    }
   }
 
   private initiateArrangingContractors(): void {
@@ -71,8 +76,8 @@ export class ArrangingContractorComponent implements OnInit {
       description: ['', Validators.required],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
       requiredStartDate: ['', Validators.required],
-      contactOnSite: '',
-      accessDetails: [{ value: '', disabled: true }],
+      contact: '',
+      accessDetails: [{ value :(this.faultDetails.isTenantPresenceRequired), disabled: true }],
       contractorForm:
         this.fb.group({
           contractor: '',
@@ -154,6 +159,8 @@ export class ArrangingContractorComponent implements OnInit {
       let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
       this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
     } else {
+      this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
+      this.checkMaintenanceDetail();
       let userDetails: any = await this.getUserDetails();
       if (userDetails) {
         this.raiseQuoteForm.get('orderedBy').setValue(userDetails.name);
@@ -164,6 +171,7 @@ export class ArrangingContractorComponent implements OnInit {
   private getFaultMaintenance() {
     const promise = new Promise((resolve, reject) => {
       this.faultService.getQuoteDetails(this.faultDetails.faultId).subscribe((res) => {
+        this.isMaintenanceDetails = true;
         resolve(res ? res.data[0] : undefined);
       }, error => {
         this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
@@ -181,7 +189,8 @@ export class ArrangingContractorComponent implements OnInit {
         orderedBy: this.faultMaintenanceDetails.orderedBy,
         requiredStartDate: this.faultMaintenanceDetails.requiredStartDate,
         accessDetails: this.faultMaintenanceDetails.accessDetails,
-        selectedContractorId: this.faultMaintenanceDetails.selectedContractorId
+        selectedContractorId: this.faultMaintenanceDetails.selectedContractorId,
+        contact: this.faultMaintenanceDetails.contact
       }
     );
     this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, true) });
@@ -521,5 +530,29 @@ export class ArrangingContractorComponent implements OnInit {
 
   }
 
+  private getTenantDetail(tenantId) {
+    // return new Promise((resolve, reject) => {
+     if(tenantId){
+      this.faultService.getTenantDetails(tenantId).subscribe((res) => {
+        let data = res ? res : '';
+        this.raiseQuoteForm.get('contact').setValue(data.fullName + " " + data.mobile);
+        // resolve(data);
+      }, error => {
+        // reject(error)
+      });
+     }
+    // });
+  }
 
+  private checkMaintenanceDetail(){
+    if (this.isMaintenanceDetails && !this.faultMaintenanceDetails) {   
+      if(this.leadTenantId){
+        this.getTenantDetail(this.leadTenantId)
+      }
+    }
+  }
+
+  questionAction(data){
+
+  }
 }

@@ -61,7 +61,7 @@ export class DetailsPage implements OnInit {
   reportedByTypes = REPORTED_BY_TYPES;
   lookupdata: any;
   agreementStatuses: any[];
-  landlordsOfproperty = [];
+  landlordsOfproperty: any[];
   faultReportedByThirdParty: any[];
   faultStatuses: any[];
   propertyTenants: any[] = [];
@@ -82,6 +82,7 @@ export class DetailsPage implements OnInit {
 
   resultsAvailable: boolean = false;
   results: string[] = [];
+  leadTenantId: any;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -437,6 +438,10 @@ export class DetailsPage implements OnInit {
               for (let i = 0; i < this.propertyTenancyList.length; i++) {
                 const tenants = this.propertyTenancyList[i].tenants;
                 let tenantIdList = tenants.filter(data => data.tenantId).map(d => d.tenantId);
+                let tenantData = tenants.find(data => data.isLead === true);
+                if(tenantData){
+                  this.leadTenantId = tenantData.tenantId;
+                }
                 this.tenantIds = this.tenantIds.concat(tenantIdList);
               }
             }

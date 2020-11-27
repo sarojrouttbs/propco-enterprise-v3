@@ -32,7 +32,7 @@
               <app-validation-message [control]="raiseQuoteForm.controls.description"></app-validation-message>
             </ion-col>
 
-            <ion-col size="33.33">
+            <ion-col size="50">
               <ion-item>
                 <ion-label position="floating">Ordered By<ion-text class="mandatory">*</ion-text>
                 </ion-label>
@@ -40,28 +40,32 @@
               </ion-item>
             </ion-col>
 
-            <ion-col size="33.33">
+            <ion-col size="50">
               <ion-item>
                 <ion-label position="floating">Required By<ion-text class="mandatory">*</ion-text>
                 </ion-label>
-                <ion-datetime formControlName="requiredStartDate" displayFormat="YYYY MMM DD" interface="popover"
+                <ion-datetime formControlName="requiredStartDate" displayFormat="DD/MM/YYYY" interface="popover"
                   class="request-start-date">
                 </ion-datetime>
               </ion-item>
               <app-validation-message [control]="raiseQuoteForm.controls.requiredStartDate"></app-validation-message>
             </ion-col>
 
-            <ion-col size="33.33">
+            <ion-col size="50">
               <ion-item>
                 <ion-label position="floating">Contact On-site </ion-label>
-                <ion-input formControlName="contactOnSite"></ion-input>
+                <ion-input formControlName="contact"></ion-input>
               </ion-item>
             </ion-col>
 
-            <ion-col size="100">
+            <ion-col size="50">
               <ion-item>
-                <ion-label position="floating">Access details </ion-label>
-                <ion-input formControlName="accessDetails"></ion-input>
+                <ion-label position="floating">Access Information </ion-label>
+                <!-- <ion-input formControlName="accessDetails"></ion-input> -->
+                <ion-select interface="popover" formControlName="accessDetails">
+                  <ion-select-option [value]="item.value" *ngFor="let item of accessInfoList">{{ item.title }}
+                  </ion-select-option>
+                </ion-select>
               </ion-item>
             </ion-col>
 
@@ -78,26 +82,26 @@
             <div formArrayName="contractorList"
               *ngFor="let item of raiseQuoteForm.get('contractorList')['controls']; let i = index;">
               <ion-row id="row_1" class="row-banner" [formGroupName]="i">
-                <ion-col size="35">
+                <ion-col size="30">
                   <ion-item>
                     <ion-label position="floating">Company </ion-label>
                     <ion-input formControlName='company'></ion-input>
                   </ion-item>
                 </ion-col>
 
-                <ion-col size="22.5">
+                <ion-col size="30">
                   <ion-item>
                     <ion-label position="floating">Contact Tel.</ion-label>
                     <ion-input formControlName='mobile'></ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col size="22.5">
+                <ion-col size="30">
                   <ion-item>
                     <ion-label position="floating">Trade</ion-label>
                     <ion-input formControlName="reference"></ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col size="20">
+                <ion-col size="10">
 
                   <div class="button-container">
                     <ion-checkbox color="primary" style="height: 25px;
@@ -107,7 +111,7 @@
                     width: 25px;bottom: -5px;margin-left: 16px;" formControlName="prefered">
                     </ion-checkbox> -->
                     <ion-fab-button class="remove-contractor list-button" style="margin-left: 25px;">
-                      <ion-icon (click)="removeContractor(i)" name="close"></ion-icon>
+                      <ion-icon (click)="removeContractor(i)" name="close" style="color: white;"></ion-icon>
                     </ion-fab-button>
 
 
@@ -120,7 +124,7 @@
             </div>
 
             <ion-row id="row_1" class="row-banner" formGroupName="contractorForm">
-              <ion-col size="42.5">
+              <ion-col size="45">
                 <ion-item>
                   <ion-label position="floating">Skill Set
                   </ion-label>
@@ -132,7 +136,7 @@
 
                 </ion-item>
               </ion-col>
-              <ion-col size="42.5">
+              <ion-col size="45">
                 <ion-item>
                   <ion-label position="floating">Start Typing to Search Contractors</ion-label>
 
@@ -160,12 +164,12 @@
                 </ion-text>
               </ion-col>
 
-              <ion-col size="1">
-                <div class="button-container" style="margin-left: 40px;">
+              <ion-col size="10">
+                <div class="button-container">
                   <ion-fab-button (click)="addContractor(this.raiseQuoteForm?.get('contractorForm').value)"
                     [disabled]="!this.raiseQuoteForm?.get('contractorForm.contractor').value || !this.raiseQuoteForm?.get('contractorForm.skillSet').value || !isSelected"
                     class="add-contractor list-button">
-                    <ion-icon name="add-sharp"></ion-icon>
+                    <ion-icon name="add-sharp" style="color: white;"></ion-icon>
                   </ion-fab-button>
                 </div>
               </ion-col>
@@ -223,7 +227,7 @@
             <ion-grid>
               <ion-row class="ion-justify-content-center">
                 <ng-container *ngFor="let instruction of iacStageActions">
-                  <div *ngIf="oldUserSelectedAction != instruction.index">
+                  <div>
                     <ion-button color="success" expand="block" class="action-btn"
                       fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
                       (click)="setUserAction(instruction.index)">

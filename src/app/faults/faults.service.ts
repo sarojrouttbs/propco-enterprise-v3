@@ -179,6 +179,12 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `user/logged-in`);
   }
 
+  getTenantDetails(tenantId: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}`).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
