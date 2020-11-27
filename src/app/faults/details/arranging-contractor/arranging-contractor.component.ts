@@ -265,8 +265,10 @@ export class ArrangingContractorComponent implements OnInit {
       /*raise a quote*/
       const quoteRaised = await this.raiseQuote();
       if (quoteRaised) {
-        await this.getFaultMaintenance();
-        this.updateFault();
+        const faultUpdated = await this.updateFault();
+        if (faultUpdated) {
+          this._btnHandler('cancel');
+        }
       }
     } else {
       /*update a quote*/
@@ -276,7 +278,10 @@ export class ArrangingContractorComponent implements OnInit {
         if (addContractors) {
           const faultContUpdated = await this.updateFaultQuoteContractor();
           if (faultContUpdated) {
-            this.updateFault();
+            const faultUpdated = await this.updateFault();
+            if (faultUpdated) {
+              this._btnHandler('cancel');
+            }
           }
         }
       }
@@ -368,7 +373,7 @@ export class ArrangingContractorComponent implements OnInit {
   private prepareQuoteData() {
     const quoteReqObj = JSON.parse(JSON.stringify(this.raiseQuoteForm.value));
     quoteReqObj.requiredStartDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requiredStartDate));
-    // quoteReqObj.descption = "kitchen management task";
+    quoteReqObj.descption = quoteReqObj.description;
 
     delete quoteReqObj.contractorForm;
     if (!this.faultMaintenanceDetails) {
@@ -388,28 +393,37 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async proceed() {
-    if (!this.faultMaintenanceDetails) {
-      /*raise a quote*/
-      const quoteRaised = await this.raiseQuote();
-      if (quoteRaised) {
-        await this.updateFault(true);
-        this.commonService.showLoader();
-        setTimeout(async () => {
-          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
-        }, 3000);
-      }
-    } else {
-      /*update a quote*/
-      const quoteUpdated = await this.updateQuote();
-      const faultContUpdated = await this.updateFaultQuoteContractor();
-      if (quoteUpdated && faultContUpdated) {
-        this.updateFault(true);
-        this.commonService.showLoader();
-        setTimeout(async () => {
-          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
-        }, 3000);
+    const proceed = await this.commonService.showConfirm('Proceed', 'Do you want to Continue?');
+    if (proceed) {
+      if (!this.faultMaintenanceDetails) {
+        /*raise a quote*/
+        const quoteRaised = await this.raiseQuote();
+        if (quoteRaised) {
+          const faultUpdated = await this.updateFault(true);
+          if (faultUpdated) {
+            this.commonService.showLoader();
+            setTimeout(async () => {
+              let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+              this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+            }, 3000);
+          }
+        }
+      } else {
+        /*update a quote*/
+        const quoteUpdated = await this.updateQuote();
+        if (quoteUpdated) {
+          const faultContUpdated = await this.updateFaultQuoteContractor();
+          if (faultContUpdated) {
+            const faultUpdated = await this.updateFault(true);
+            if (faultUpdated) {
+              this.commonService.showLoader();
+              setTimeout(async () => {
+                let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+                this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+              }, 3000);
+            }
+          }
+        }
       }
     }
   }
