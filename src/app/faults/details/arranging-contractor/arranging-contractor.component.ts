@@ -394,7 +394,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async proceed() {
-    const proceed = await this.commonService.showConfirm('Proceed', 'Do you want to Continue?');
+    const proceed = await this.commonService.showConfirm('Raise a quote', 'Are you sure you want to send a quote request to the selected contractor(s) ?');
     if (proceed) {
       if (!this.faultMaintenanceDetails) {
         /*raise a quote*/
