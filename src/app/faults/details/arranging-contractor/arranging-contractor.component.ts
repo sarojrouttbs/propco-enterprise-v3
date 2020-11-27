@@ -50,7 +50,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if(changes.leadTenantId && changes.leadTenantId.currentValue){
+    if (changes.leadTenantId && changes.leadTenantId.currentValue) {
       this.checkMaintenanceDetail();
     }
   }
@@ -77,7 +77,7 @@ export class ArrangingContractorComponent implements OnInit {
       orderedBy: [{ value: '', disabled: true }, Validators.required],
       requiredStartDate: ['', Validators.required],
       contact: '',
-      accessDetails: [{ value :(this.faultDetails.isTenantPresenceRequired), disabled: true }],
+      accessDetails: [{ value: (this.faultDetails.isTenantPresenceRequired), disabled: true }],
       contractorForm:
         this.fb.group({
           contractor: '',
@@ -371,7 +371,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private prepareQuoteData() {
-    const quoteReqObj = JSON.parse(JSON.stringify(this.raiseQuoteForm.value));
+    const quoteReqObj = JSON.parse(JSON.stringify(this.raiseQuoteForm.getRawValue()));
     quoteReqObj.requiredStartDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requiredStartDate));
     quoteReqObj.descption = quoteReqObj.description;
 
@@ -382,6 +382,7 @@ export class ArrangingContractorComponent implements OnInit {
       delete quoteReqObj.contractorIds;
     }
     delete quoteReqObj.contractorList;
+
     return quoteReqObj;
   }
 
@@ -459,7 +460,6 @@ export class ArrangingContractorComponent implements OnInit {
           resolve(true);
         },
         error => {
-          console.log(error);
           resolve(false);
         }
       );
@@ -545,28 +545,26 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private getTenantDetail(tenantId) {
-    // return new Promise((resolve, reject) => {
-     if(tenantId){
+    if (tenantId) {
       this.faultService.getTenantDetails(tenantId).subscribe((res) => {
-        let data = res ? res : '';
-        this.raiseQuoteForm.get('contact').setValue(data.fullName + " " + data.mobile);
-        // resolve(data);
+        const data = res ? res : '';
+        if (data) {
+          this.raiseQuoteForm.get('contact').setValue(data.fullName + ' ' + data.mobile);
+        }
       }, error => {
-        // reject(error)
       });
-     }
-    // });
+    }
   }
 
-  private checkMaintenanceDetail(){
-    if (this.isMaintenanceDetails && !this.faultMaintenanceDetails) {   
-      if(this.leadTenantId){
+  private checkMaintenanceDetail() {
+    if (this.isMaintenanceDetails && !this.faultMaintenanceDetails) {
+      if (this.leadTenantId) {
         this.getTenantDetail(this.leadTenantId)
       }
     }
   }
 
-  questionAction(data){
+  questionAction(data) {
 
   }
 }
