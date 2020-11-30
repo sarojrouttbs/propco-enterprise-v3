@@ -124,7 +124,7 @@
               </ion-row>
             </div>
 
-            <ion-row id="row_1" class="row-banner" formGroupName="contractorForm">
+            <ion-row id="row_1" class="row-banner" [formGroup]="addContractorForm">
               <ion-col size="45">
                 <ion-item>
                   <ion-label position="floating">Skill Set
@@ -167,9 +167,10 @@
 
               <ion-col size="10">
                 <!-- <div class="button-container"> -->
-                  <ion-fab-button class="button-container" (click)="addContractor(this.raiseQuoteForm?.get('contractorForm').value)"
-                    [disabled]="!this.raiseQuoteForm?.get('contractorForm.contractor').value || !this.raiseQuoteForm?.get('contractorForm.skillSet').value || !isSelected">
-                    <ion-icon name="add-sharp" class="add-contractor list-button"></ion-icon>
+                  <ion-fab-button (click)="addContractor(this.addContractorForm?.value)"
+                    [disabled]="!this.addContractorForm?.get('contractor').value || !this.addContractorForm?.get('skillSet').value || !isSelected"
+                    class="add-contractor list-button">
+                    <ion-icon name="add-sharp" style="color: white;"></ion-icon>
                   </ion-fab-button>
                 <!-- </div> -->
               </ion-col>

@@ -64,7 +64,7 @@ export class ArrangingContractorComponent implements OnInit {
   private initForms(): void {
     this.initQuoteForm();
     this.initAddContractorForm();
-    this.initContractorListForm();
+    // this.initContractorListForm();
   }
 
   private initQuoteForm(): void {
@@ -78,49 +78,27 @@ export class ArrangingContractorComponent implements OnInit {
       requiredStartDate: ['', Validators.required],
       contact: '',
       accessDetails: [{ value: (this.faultDetails.isTenantPresenceRequired), disabled: true }],
-      contractorForm:
-        this.fb.group({
-          contractor: '',
-          skillSet: '',
-          contractorObj: ''
-        }),
+      // contractorForm:
+      // this.fb.group({
+      //   contractor: '',
+      //   skillSet: '',
+      //   contractorObj: ''
+      // }),
       contractorList: this.fb.array([]),
       contractorIds: [],
       selectedContractorId: ''
     });
-
-    this.contractors = this.raiseQuoteForm.get('contractorForm.contractor').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractor(value) :
-        new Observable())
-    );
   }
 
-  addContractor(data, isPatching = false, isPreferred = false): void {
+  async addContractor(data, isPatching, isPreferred) {
     if (this.contratctorArr.includes(data?.contractorObj?.entityId)) {
       this.isContratorSelected = true;
       return;
     }
-
-    const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
-    let grup = {
-      reference: [{ value: data ? data.reference : '', disabled: true }],
-      name: '',
-      company: [{ value: data ? data.company : '', disabled: true }],
-      email: '',
-      mobile: [{ value: '', disabled: true }],
-      address: '',
-      contractorId: data.contractorId ? data.contractorId : data.contractorObj.entityId,
-      select: '',
-      isPreferred: isPreferred,
-      isNew: !isPatching,
-      checked: !isPatching ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value ? true : false)
-    }
-    contractorList.push(this.fb.group(grup));
-    this.contratctorArr.push(data.contractorId ? data.contractorId : data.contractorObj.entityId);
-
-    if (!isPatching) {
-      this.raiseQuoteForm.get('contractorForm').reset();
-      this.isSelected = false;
+    if (data?.contractorObj?.entityId) {
+      let contarctorDetails = await this.getContractorDetails(data?.contractorObj?.entityId);
+    } else {
+      this.patchContartorList(data, isPatching, isPreferred);
     }
   }
 
@@ -144,12 +122,20 @@ export class ArrangingContractorComponent implements OnInit {
 
   private initAddContractorForm(): void {
     this.addContractorForm = this.fb.group({
+      contractor: '',
+      skillSet: '',
+      contractorObj: ''
     });
+
+    this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
+      switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractor(value) :
+        new Observable())
+    );
   }
 
   private initContractorListForm(): void {
-    this.addContractorForm = this.fb.group({
-    });
+    // this.addContractorForm = this.fb.group({
+    // });
   }
 
   private async initApiCalls() {
@@ -209,7 +195,9 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   selectContractor(selected) {
-    this.raiseQuoteForm.get('contractorForm').patchValue({ contractor: selected ? selected.fullName : undefined, contractorObj: selected ? selected : undefined });
+    console.log("selected", selected);
+
+    this.addContractorForm.patchValue({ contractor: selected ? selected.fullName : undefined, contractorObj: selected ? selected : undefined });
     this.resultsAvailable = false;
     this.isSelected = true;
   }
@@ -567,4 +555,38 @@ export class ArrangingContractorComponent implements OnInit {
   questionAction(data) {
 
   }
+
+  getContractorDetails(contractId) {
+    this.faultService.getContractorDetails(contractId).subscribe((res) => {
+      let data = res ? res : '';
+      this.patchContartorList(data, false, false);
+
+    }, error => {
+    });
+  }
+  patchContartorList(data, isPatching, isPreferred) {
+    const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
+
+    let grup = {
+      reference: [{ value: data.skills ? data.skills.toString() : '', disabled: true }],
+      name: '',
+      company: [{ value: data.company ? data.company : data.companyName, disabled: true }],
+      email: '',
+      mobile: [{ value: data.businessTelephone ? data.businessTelephone : '', disabled: true }],
+      address: '',
+      contractorId: data.contractorId ? data.contractorId : data.contractorObj.entityId,
+      select: '',
+      isPreferred: isPreferred,
+      isNew: !isPatching,
+      checked: !isPatching ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value ? true : false)
+    }
+    contractorList.push(this.fb.group(grup));
+    this.contratctorArr.push(data.contractorId ? data.contractorId : data.contractorObj.entityId);
+
+    if (!isPatching) {
+      this.addContractorForm.reset();
+      this.isSelected = false;
+    }
+  }
+
 }
