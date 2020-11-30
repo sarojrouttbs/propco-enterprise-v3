@@ -17,7 +17,7 @@
                 <ion-label position="floating">Category <ion-text class="mandatory">*</ion-text>
                 </ion-label>
                 <ion-select interface="popover" formControlName="category">
-                  <ion-select-option [value]="item.index" *ngFor="let item of faultCategories">{{ item.value }}
+                  <ion-select-option [value]="item.value" *ngFor="let item of faultCategories">{{ item.value }}
                   </ion-select-option>
                 </ion-select>
               </ion-item>
