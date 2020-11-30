@@ -72,18 +72,12 @@ export class ArrangingContractorComponent implements OnInit {
       worksOrderNumber: [this.faultDetails.reference, Validators.required],
       paidBy: ['LANDLORD', Validators.required],
       propertyId: [this.faultDetails.propertyId, Validators.required],
-      category: [{ value: Number(this.faultDetails.category), disabled: true }],
+      category: [{ value: this.categoryMap.get(this.faultDetails.category), disabled: true }],
       description: ['', Validators.required],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
       requiredStartDate: ['', Validators.required],
       contact: '',
       accessDetails: [{ value: (this.faultDetails.isTenantPresenceRequired), disabled: true }],
-      // contractorForm:
-      // this.fb.group({
-      //   contractor: '',
-      //   skillSet: '',
-      //   contractorObj: ''
-      // }),
       contractorList: this.fb.array([]),
       contractorIds: [],
       selectedContractorId: ''
@@ -195,8 +189,6 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   selectContractor(selected) {
-    console.log("selected", selected);
-
     this.addContractorForm.patchValue({ contractor: selected ? selected.fullName : undefined, contractorObj: selected ? selected : undefined });
     this.resultsAvailable = false;
     this.isSelected = true;
@@ -576,7 +568,7 @@ export class ArrangingContractorComponent implements OnInit {
       address: '',
       contractorId: data.contractorId ? data.contractorId : data.contractorObj.entityId,
       select: '',
-      isPreferred: isPreferred,
+      isPreferred,
       isNew: !isPatching,
       checked: !isPatching ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value ? true : false)
     }
