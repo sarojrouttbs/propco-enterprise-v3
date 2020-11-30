@@ -88,41 +88,17 @@ export class ArrangingContractorComponent implements OnInit {
       contractorIds: [],
       selectedContractorId: ''
     });
-
-
   }
 
-  async addContractor(data, isPatching = false, isPreferred = false) {
+  async addContractor(data, isPatching, isPreferred) {
     if (this.contratctorArr.includes(data?.contractorObj?.entityId)) {
       this.isContratorSelected = true;
       return;
     }
-
-    const contarctorDetails = await this.getContractorDetails(data?.contractorObj?.entityId);
-
-    console.log("contarctorDetails", contarctorDetails);
-
-
-    const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
-    let grup = {
-      reference: [{ value: data ? data.reference : '', disabled: true }],
-      name: '',
-      company: [{ value: data ? data.company : '', disabled: true }],
-      email: '',
-      mobile: [{ value: '', disabled: true }],
-      address: '',
-      contractorId: data.contractorId ? data.contractorId : data.contractorObj.entityId,
-      select: '',
-      isPreferred: isPreferred,
-      isNew: !isPatching,
-      checked: !isPatching ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value ? true : false)
-    }
-    contractorList.push(this.fb.group(grup));
-    this.contratctorArr.push(data.contractorId ? data.contractorId : data.contractorObj.entityId);
-
-    if (!isPatching) {
-      this.addContractorForm.reset();
-      this.isSelected = false;
+    if (data?.contractorObj?.entityId) {
+      let contarctorDetails = await this.getContractorDetails(data?.contractorObj?.entityId);
+    } else {
+      this.patchContartorList(data, isPatching, isPreferred);
     }
   }
 
@@ -582,15 +558,35 @@ export class ArrangingContractorComponent implements OnInit {
 
   getContractorDetails(contractId) {
     this.faultService.getContractorDetails(contractId).subscribe((res) => {
-      const data = res ? res : '';
-      if (data) {
-        console.log("data=========", data);
+      let data = res ? res : '';
+      this.patchContartorList(data, false, false);
 
-        // this.raiseQuoteForm.get('contact').setValue(data.fullName + ' ' + data.mobile);
-      }
     }, error => {
     });
   }
+  patchContartorList(data, isPatching, isPreferred) {
+    const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
 
+    let grup = {
+      reference: [{ value: data.skills ? data.skills.toString() : '', disabled: true }],
+      name: '',
+      company: [{ value: data.company ? data.company : data.companyName, disabled: true }],
+      email: '',
+      mobile: [{ value: data.businessTelephone ? data.businessTelephone : '', disabled: true }],
+      address: '',
+      contractorId: data.contractorId ? data.contractorId : data.contractorObj.entityId,
+      select: '',
+      isPreferred: isPreferred,
+      isNew: !isPatching,
+      checked: !isPatching ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value ? true : false)
+    }
+    contractorList.push(this.fb.group(grup));
+    this.contratctorArr.push(data.contractorId ? data.contractorId : data.contractorObj.entityId);
+
+    if (!isPatching) {
+      this.addContractorForm.reset();
+      this.isSelected = false;
+    }
+  }
 
 }
