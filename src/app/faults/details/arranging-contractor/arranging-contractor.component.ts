@@ -75,7 +75,7 @@ export class ArrangingContractorComponent implements OnInit {
       category: [{ value: this.categoryMap.get(this.faultDetails.category), disabled: true }],
       description: ['', Validators.required],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
-      requiredStartDate: ['', Validators.required],
+      requestStartDate: ['', Validators.required],
       contact: '',
       accessDetails: [{ value: (this.faultDetails.isTenantPresenceRequired), disabled: true }],
       contractorList: this.fb.array([]),
@@ -84,15 +84,15 @@ export class ArrangingContractorComponent implements OnInit {
     });
   }
 
-  async addContractor(data, isPatching = false, isPreferred = false) {
+  async addContractor(data, isNew = true, isPreferred = false) {
     if (this.contratctorArr.includes(data?.contractorObj?.entityId)) {
       this.isContratorSelected = true;
       return;
     }
-    if (data?.contractorObj?.entityId) {
-      let contarctorDetails = await this.getContractorDetails(data?.contractorObj?.entityId);
+    if (isNew) {
+      this.getContractorDetails(data?.contractorObj?.entityId);
     } else {
-      this.patchContartorList(data, isPatching, isPreferred);
+      this.patchContartorList(data, isNew, isPreferred);
     }
   }
 
@@ -100,17 +100,28 @@ export class ArrangingContractorComponent implements OnInit {
     const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
     const deleteContractor = await this.commonService.showConfirm('Delete Contrator', 'Do you want to delete contractor from the list?');
     if (deleteContractor) {
-      var index = this.contratctorArr.indexOf(contractorList.at(i).get('contractorId').value);
-      this.contratctorArr.splice(index, 1);
+      const deleteConId = contractorList.at(i).get('contractorId').value;
+      const index = this.contratctorArr.indexOf(deleteConId);
 
       if (!this.faultMaintenanceDetails) {
+        this.resetSelectedContractor(deleteConId);
         contractorList.removeAt(i);
+        this.contratctorArr.splice(index, 1);
         return;
       }
-      const isDeleted = await this.deleteContrator(this.faultMaintenanceDetails.maintenanceId, contractorList.at(i).get('contractorId').value);
+      const isDeleted = await this.deleteContrator(this.faultMaintenanceDetails.maintenanceId,
+        deleteConId);
       if (isDeleted) {
+        this.resetSelectedContractor(deleteConId);
         contractorList.removeAt(i);
+        this.contratctorArr.splice(index, 1);
       }
+    }
+  }
+
+  private resetSelectedContractor(deleteConId): void {
+    if (deleteConId === this.raiseQuoteForm.get('selectedContractorId').value) {
+      this.raiseQuoteForm.get('selectedContractorId').setValue('');
     }
   }
 
@@ -167,13 +178,13 @@ export class ArrangingContractorComponent implements OnInit {
         worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
         description: this.faultMaintenanceDetails.description,
         orderedBy: this.faultMaintenanceDetails.orderedBy,
-        requiredStartDate: this.faultMaintenanceDetails.requiredStartDate,
+        requestStartDate: this.faultMaintenanceDetails.requiredStartDate,
         accessDetails: this.faultMaintenanceDetails.accessDetails,
         selectedContractorId: this.faultMaintenanceDetails.selectedContractorId,
         contact: this.faultMaintenanceDetails.contact
       }
     );
-    this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, true, false) });
+    this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
   }
 
 
@@ -351,14 +362,14 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private prepareQuoteData() {
-    const quoteReqObj = JSON.parse(JSON.stringify(this.raiseQuoteForm.getRawValue()));
-    quoteReqObj.requiredStartDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requiredStartDate));
+    const quoteReqObj: any = JSON.parse(JSON.stringify(this.raiseQuoteForm.getRawValue()));
     quoteReqObj.descption = quoteReqObj.description;
-
     delete quoteReqObj.contractorForm;
     if (!this.faultMaintenanceDetails) {
       quoteReqObj.contractorIds = quoteReqObj.contractorList.map(x => x.contractorId).filter(x => x);
+      quoteReqObj.requestStartDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requestStartDate));
     } else {
+      quoteReqObj.requiredStartDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requestStartDate));
       delete quoteReqObj.contractorIds;
     }
     delete quoteReqObj.contractorList;
@@ -549,33 +560,33 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   getContractorDetails(contractId) {
-    this.faultService.getContractorDetails(contractId).subscribe((res) => {
-      let data = res ? res : '';
-      this.patchContartorList(data, false, false);
-
-    }, error => {
+    return new Promise((resolve, reject) => {
+      this.faultService.getContractorDetails(contractId).subscribe((res) => {
+        let data = res ? res : '';
+        this.patchContartorList(data, true, false);
+      }, error => {
+      });
     });
   }
-  patchContartorList(data, isPatching, isPreferred) {
+  patchContartorList(data, isNew, isPreferred) {
     const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
-
-    let grup = {
-      reference: [{ value: data.skills ? data.skills.toString() : '', disabled: true }],
+    const contGrup = this.fb.group({
+      reference: [{ value: data.skills ? data.skills.toString() : data.occupation, disabled: true }],
       name: '',
       company: [{ value: data.company ? data.company : data.companyName, disabled: true }],
       email: '',
-      mobile: [{ value: data.businessTelephone ? data.businessTelephone : '', disabled: true }],
+      mobile: [{ value: data.mobile ? data.mobile : '', disabled: true }],
       address: '',
       contractorId: data.contractorId ? data.contractorId : data.contractorObj.entityId,
       select: '',
       isPreferred,
-      isNew: !isPatching,
-      checked: !isPatching ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value ? true : false)
-    }
-    contractorList.push(this.fb.group(grup));
+      isNew: isNew,
+      checked: isNew ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value ? true : false)
+    });
+    contractorList.push(contGrup);
     this.contratctorArr.push(data.contractorId ? data.contractorId : data.contractorObj.entityId);
 
-    if (!isPatching) {
+    if (isNew) {
       this.addContractorForm.reset();
       this.isSelected = false;
     }
