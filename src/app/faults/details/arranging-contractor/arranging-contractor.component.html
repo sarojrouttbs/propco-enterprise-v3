@@ -89,30 +89,31 @@
                   </ion-item>
                 </ion-col>
 
-                <ion-col size="30">
+                <ion-col size="30 ">
                   <ion-item>
                     <ion-label position="floating">Contact Tel.</ion-label>
                     <ion-input formControlName='mobile'></ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col size="30">
+                <ion-col size="25">
                   <ion-item>
                     <ion-label position="floating">Trade</ion-label>
                     <ion-input formControlName="reference"></ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col size="10">
+                <ion-col size="15">
 
-                  <div class="button-container">
-                    <ion-checkbox color="primary" style="height: 25px;
-                    width: 25px;bottom: -5px;"  formControlName="checked" (click)="updateSelection(item.value,i)" [name]="item">
-                    </ion-checkbox>
+                  <div class="action-btn-container">
+                    <ion-checkbox color="success" class="list-checkbox" formControlName="checked" (click)="updateSelection(item.value,i)" [name]="item"></ion-checkbox>
                     <!-- <ion-checkbox color="primary" style="height: 25px;
-                    width: 25px;bottom: -5px;margin-left: 16px;" formControlName="prefered">
+                    width: 25px;bottom: -5px;margin-left: 16px;" formControlName="isPreferred">
                     </ion-checkbox> -->
-                    <ion-fab-button class="remove-contractor list-button" style="margin-left: 25px;">
-                      <ion-icon (click)="removeContractor(i)" name="close" style="color: white;"></ion-icon>
-                    </ion-fab-button>
+                      <ion-icon class="list-button" *ngIf="item.get('isPreferred').value" matTooltip="Preferred Contractor" matTooltipPosition="above" name="checkmark-circle-outline"></ion-icon>
+                    <!-- {{item | json}} -->
+                    <!-- <ion-icon class="remove-contractor list-button" name="checkmark-circle-outline"></ion-icon> -->
+                    <!-- <ion-fab-button class="remove-contractor list-button" style="margin-left: 25px;"> -->
+                      <ion-icon class="list-button" color="danger" (click)="removeContractor(i)" name="close-circle-outline"></ion-icon>
+                    <!-- </ion-fab-button> -->
 
 
                     <!-- <ion-fab-button class="list-button mark-contractor">
@@ -165,13 +166,12 @@
               </ion-col>
 
               <ion-col size="10">
-                <div class="button-container">
-                  <ion-fab-button (click)="addContractor(this.raiseQuoteForm?.get('contractorForm').value)"
-                    [disabled]="!this.raiseQuoteForm?.get('contractorForm.contractor').value || !this.raiseQuoteForm?.get('contractorForm.skillSet').value || !isSelected"
-                    class="add-contractor list-button">
-                    <ion-icon name="add-sharp" style="color: white;"></ion-icon>
+                <!-- <div class="button-container"> -->
+                  <ion-fab-button class="button-container" (click)="addContractor(this.raiseQuoteForm?.get('contractorForm').value)"
+                    [disabled]="!this.raiseQuoteForm?.get('contractorForm.contractor').value || !this.raiseQuoteForm?.get('contractorForm.skillSet').value || !isSelected">
+                    <ion-icon name="add-sharp" class="add-contractor list-button"></ion-icon>
                   </ion-fab-button>
-                </div>
+                <!-- </div> -->
               </ion-col>
             </ion-row>
           </div>

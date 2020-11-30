@@ -17,23 +17,29 @@
   margin-bottom: 10px;
 }
 
+.action-btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 13px;
+  .list-checkbox {
+    height: 25px;
+    width: 25px;
+  }
+  .list-button {
+    font-size: 32px;
+  }
+}
+
 .button-container {
-  margin-top: 25px;
-}
-
-.list-button {
-  width: 30px;
   height: 30px;
-  float: right;
-}
-
-.add-contractor {
-  --background: var(--ion-color-success.error-message{
-    color: var(--ion-color-danger);
-    padding-top:2px;
-    font-size: 14px;
-    line-height: 18px;
-});
+  width: 30px;
+  margin-top: 13px;
+  .add-contractor {
+    --background: var(--ion-color-success);
+    color: var(--ion-color-step-2000);
+    font-size: 25px;
+  }
 }
 
 .remove-contractor {
@@ -41,12 +47,10 @@
 }
 
 .mark-contractor {
-  --background: var(--ion-color-success.error-message{
-    color: var(--ion-color-danger);
-    padding-top:2px;
-    font-size: 14px;
-    line-height: 18px;
-});
+  --background: var(
+    --ion-color-success.error-message{color: var(--ion-color-danger) ; padding-top: 2px; font-size: 14px; line-height:
+      18px;}
+  );
 }
 
 .ion-select-options {
@@ -56,9 +60,9 @@
 .request-start-date {
   padding-bottom: 6px;
 }
-.error-message{
-    color: var(--ion-color-danger);
-    padding-top:2px;
-    font-size: 14px;
-    line-height: 18px;
+.error-message {
+  color: var(--ion-color-danger);
+  padding-top: 2px;
+  font-size: 14px;
+  line-height: 18px;
 }
