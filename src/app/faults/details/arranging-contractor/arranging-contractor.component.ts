@@ -95,7 +95,7 @@ export class ArrangingContractorComponent implements OnInit {
     );
   }
 
-  addContractor(data, isPatching = false): void {
+  addContractor(data, isPatching = false, isPreferred = false): void {
     if (this.contratctorArr.includes(data?.contractorObj?.entityId)) {
       this.isContratorSelected = true;
       return;
@@ -111,8 +111,8 @@ export class ArrangingContractorComponent implements OnInit {
       address: '',
       contractorId: data.contractorId ? data.contractorId : data.contractorObj.entityId,
       select: '',
-      isPreferred: isPatching,
-      prefered: '',
+      isPreferred: isPreferred,
+      isNew: !isPatching,
       checked: !isPatching ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value ? true : false)
     }
     contractorList.push(this.fb.group(grup));
@@ -193,7 +193,7 @@ export class ArrangingContractorComponent implements OnInit {
         contact: this.faultMaintenanceDetails.contact
       }
     );
-    this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, true) });
+    this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, true, false) });
   }
 
 
@@ -433,7 +433,7 @@ export class ArrangingContractorComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       let contractIds = [];
       this.raiseQuoteForm.get('contractorList').value.forEach(info => {
-        if (info.isPreferred === false) {
+        if (info.isNew === true) {
           contractIds.push(info.contractorId);
         }
       });
@@ -495,7 +495,7 @@ export class ArrangingContractorComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultService.getPreferredSuppliers(landlordId).subscribe(
         res => {
-          res && res.data ? res.data.map((x) => { this.addContractor(x, true) }) : [];
+          res && res.data ? res.data.map((x) => { this.addContractor(x, true, true) }) : [];
           resolve(true);
         },
         error => {
