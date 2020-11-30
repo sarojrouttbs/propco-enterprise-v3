@@ -84,7 +84,7 @@ export class ArrangingContractorComponent implements OnInit {
     });
   }
 
-  async addContractor(data, isPatching, isPreferred) {
+  async addContractor(data, isPatching = false, isPreferred = false) {
     if (this.contratctorArr.includes(data?.contractorObj?.entityId)) {
       this.isContratorSelected = true;
       return;
