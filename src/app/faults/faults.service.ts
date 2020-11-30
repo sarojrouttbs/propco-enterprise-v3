@@ -155,7 +155,7 @@ export class FaultsService {
   }
 
   getQuoteDetails(faultId): Observable<any> {
-    const params = new HttpParams().set('itemType', 'quote');
+    const params = new HttpParams().set('type', 'quote');
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/maintenance`, { params });
   }
 
