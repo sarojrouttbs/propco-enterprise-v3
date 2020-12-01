@@ -167,10 +167,10 @@
 
               <ion-col size="10">
                 <!-- <div class="button-container"> -->
-                  <ion-fab-button (click)="addContractor(this.addContractorForm?.value)"
+                  <ion-fab-button class="button-container" (click)="addContractor(this.addContractorForm?.value)"
                     [disabled]="!this.addContractorForm?.get('contractor').value || !this.addContractorForm?.get('skillSet').value || !isSelected"
-                    class="add-contractor list-button">
-                    <ion-icon name="add-sharp" style="color: white;"></ion-icon>
+                    >
+                    <ion-icon name="add-sharp" class="add-contractor list-button"></ion-icon>
                   </ion-fab-button>
                 <!-- </div> -->
               </ion-col>
