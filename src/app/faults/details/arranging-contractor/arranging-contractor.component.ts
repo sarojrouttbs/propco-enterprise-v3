@@ -87,7 +87,7 @@ export class ArrangingContractorComponent implements OnInit {
   private getAccessDetails(tenantPresence): string {
     if (tenantPresence != null) {
       let data = this.accessInfoList.filter(data => data.value == tenantPresence);
-      return data && data[0] ? data[0].title: '';
+      return data && data[0] ? data[0].title : '';
     }
   }
 
@@ -259,6 +259,9 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async saveForLater() {
+    if (this.validateReq()) {
+      return;
+    }
     if (!this.faultMaintenanceDetails) {
       /*raise a quote*/
       const quoteRaised = await this.raiseQuote();
@@ -287,19 +290,6 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private raiseQuote() {
-    if (!this.raiseQuoteForm.valid) {
-      this.commonService.showMessage('Please fill all required fields.', 'Raise a Quote', 'error');
-      this.raiseQuoteForm.markAllAsTouched();
-      return;
-    }
-    if (this.raiseQuoteForm.value.contractorList.length == 0) {
-      this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Raise a Quote', 'error');
-      return;
-    }
-    if (!this.raiseQuoteForm.get('selectedContractorId').value) {
-      this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Raise a Quote', 'error');
-      return;
-    }
     const promise = new Promise((resolve, reject) => {
       this.faultService.raiseQuote(this.prepareQuoteData(), this.faultDetails.faultId).subscribe((res) => {
         resolve(res);
@@ -313,19 +303,6 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private updateQuote() {
-    if (!this.raiseQuoteForm.valid) {
-      this.commonService.showMessage('Please fill all required fields.', 'Update a Quote', 'error');
-      this.raiseQuoteForm.markAllAsTouched();
-      return false;
-    }
-    if (this.raiseQuoteForm.value.contractorList.length == 0) {
-      this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Update a Quote', 'error');
-      return false;
-    }
-    if (!this.raiseQuoteForm.get('selectedContractorId').value) {
-      this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Update a Quote', 'error');
-      return false;
-    }
     const promise = new Promise((resolve, reject) => {
       this.faultService.updateQuoteDetails(
         this.prepareQuoteData(), this.faultMaintenanceDetails.maintenanceId).subscribe((res) => {
@@ -337,6 +314,24 @@ export class ArrangingContractorComponent implements OnInit {
         });
     });
     return promise;
+  }
+
+  private validateReq() {
+    let invalid = true;
+    if (!this.raiseQuoteForm.valid) {
+      this.commonService.showMessage('Please fill all required fields.', 'Quote', 'error');
+      this.raiseQuoteForm.markAllAsTouched();
+      return invalid;
+    }
+    if (this.raiseQuoteForm.value.contractorList.length == 0) {
+      this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Quote', 'error');
+      return invalid;
+    }
+    if (!this.raiseQuoteForm.get('selectedContractorId').value) {
+      this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
+      return invalid;
+    }
+    return invalid = false;
   }
 
   private updateFaultQuoteContractor() {
@@ -392,6 +387,9 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async proceed() {
+    if (this.validateReq()) {
+      return;
+    }
     const proceed = await this.commonService.showConfirm('Raise a quote', 'Are you sure you want to send a quote request to the selected contractor(s) ?');
     if (proceed) {
       if (!this.faultMaintenanceDetails) {
