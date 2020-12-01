@@ -77,16 +77,18 @@ export class ArrangingContractorComponent implements OnInit {
       orderedBy: [{ value: '', disabled: true }, Validators.required],
       requestStartDate: ['', Validators.required],
       contact: '',
-      accessDetails: [{ value: this.getAccessDetails(), disabled: true }],
+      accessDetails: [{ value: this.getAccessDetails(this.faultDetails.isTenantPresenceRequired), disabled: true }],
       contractorList: this.fb.array([]),
       contractorIds: [],
       selectedContractorId: ''
     });
   }
 
-  private getAccessDetails(): string{
-    let data = this.accessInfoList.filter(data => data.value == this.faultDetails.isTenantPresenceRequired);
-    return data[0].title;
+  private getAccessDetails(tenantPresence): string {
+    if (tenantPresence != null) {
+      let data = this.accessInfoList.filter(data => data.value == tenantPresence);
+      return data && data[0] ? data[0].title: '';
+    }
   }
 
   async addContractor(data, isNew = true, isPreferred = false) {
