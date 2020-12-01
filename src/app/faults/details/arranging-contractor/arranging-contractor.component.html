@@ -61,11 +61,11 @@
             <ion-col size="50">
               <ion-item>
                 <ion-label position="floating">Access Information </ion-label>
-                <!-- <ion-input formControlName="accessDetails"></ion-input> -->
-                <ion-select interface="popover" formControlName="accessDetails">
+                <ion-input formControlName="accessDetails"></ion-input>
+                <!-- <ion-select interface="popover" formControlName="accessDetails">
                   <ion-select-option [value]="item.value" *ngFor="let item of accessInfoList">{{ item.title }}
                   </ion-select-option>
-                </ion-select>
+                </ion-select> -->
               </ion-item>
             </ion-col>
 
@@ -175,6 +175,9 @@
                 <!-- </div> -->
               </ion-col>
             </ion-row>
+            <ion-col size="100" >
+             <ion-text color="dark"> Note: Please click Add to add another contractor to the list.</ion-text>
+            </ion-col>
           </div>
         </ion-grid>
       </ion-col>

@@ -73,15 +73,20 @@ export class ArrangingContractorComponent implements OnInit {
       paidBy: ['LANDLORD', Validators.required],
       propertyId: [this.faultDetails.propertyId, Validators.required],
       category: [{ value: this.categoryMap.get(this.faultDetails.category), disabled: true }],
-      description: ['', Validators.required],
+      description: [this.faultDetails.notes, Validators.required],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
       requestStartDate: ['', Validators.required],
       contact: '',
-      accessDetails: [{ value: (this.faultDetails.isTenantPresenceRequired), disabled: true }],
+      accessDetails: [{ value: this.getAccessDetails(), disabled: true }],
       contractorList: this.fb.array([]),
       contractorIds: [],
       selectedContractorId: ''
     });
+  }
+
+  private getAccessDetails(): string{
+    let data = this.accessInfoList.filter(data => data.value == this.faultDetails.isTenantPresenceRequired);
+    return data[0].title;
   }
 
   async addContractor(data, isNew = true, isPreferred = false) {
@@ -133,7 +138,7 @@ export class ArrangingContractorComponent implements OnInit {
     });
 
     this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractor(value) :
+      switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
         new Observable())
     );
   }
