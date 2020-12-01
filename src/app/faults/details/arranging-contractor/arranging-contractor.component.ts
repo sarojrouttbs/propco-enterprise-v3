@@ -486,7 +486,7 @@ export class ArrangingContractorComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultService.getPreferredSuppliers(landlordId).subscribe(
         res => {
-          res && res.data ? res.data.map((x) => { this.addContractor(x, true, true) }) : [];
+          res && res.data ? res.data.map((x) => { this.addContractor(x, false, true) }) : [];
           resolve(true);
         },
         error => {
