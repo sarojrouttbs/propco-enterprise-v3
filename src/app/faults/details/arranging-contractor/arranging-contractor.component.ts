@@ -380,7 +380,7 @@ export class ArrangingContractorComponent implements OnInit {
   private prepareFaultData(isSubmit: boolean) {
     const faultReqObj: any = {};
     faultReqObj.isDraft = isSubmit ? false : true;
-    faultReqObj.stage = isSubmit ? FAULT_STAGES.JOB_COMPLETION : this.faultDetails.stage;
+    faultReqObj.stage = this.faultDetails.stage;
     return faultReqObj;
   }
 
