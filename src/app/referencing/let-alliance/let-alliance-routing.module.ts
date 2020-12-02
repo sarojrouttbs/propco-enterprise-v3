@@ -22,6 +22,14 @@ const routes: Routes = [
       {
         path: 'application-list',
         loadChildren: () => import('./application-list/application-list.module').then( m => m.ApplicationListPageModule)
+      },
+      {
+        path: 'property-search',
+        loadChildren: () => import('./application-details/application-details.module').then( m => m.ApplicationDetailsPageModule)
+      },
+      {
+        path: 'application-details',
+        loadChildren: () => import('./application-details/application-details.module').then( m => m.ApplicationDetailsPageModule)
       }
     ]
   }

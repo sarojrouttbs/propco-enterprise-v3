@@ -137,7 +137,7 @@
   }
 }
 
-#fault-details {
+#fault-details, #la-application-details {
   .mat-stepper-horizontal {
     @include border-radius(4px);
     width: 100%;
@@ -205,6 +205,16 @@
 
     ion-item{
       --background: transparent;
+    }
+  }
+}
+
+#la-application-details {
+  .mat-stepper-horizontal {
+    .mat-horizontal-content-container {
+      background: var(--ion-color-step-1750);
+      margin: 0;
+      border-radius: 0;
     }
   }
 }

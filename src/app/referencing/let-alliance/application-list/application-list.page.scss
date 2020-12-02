@@ -19,14 +19,15 @@
   .la-logo {
     text-align: right;
     img {
-      width: 170px;
+      width: 210px;
       background: var(--ion-color-step-2000);
-      padding: 5px;
+      padding: 10px;
       border-radius: 5px;
     }
   }
 
   .heading {
     @include set-text-style(30px, 35px);
+    align-self: center;
   }
 }

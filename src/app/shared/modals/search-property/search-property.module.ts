@@ -8,7 +8,6 @@ import { SearchPropertyPageRoutingModule } from './search-property-routing.modul
 
 import { SearchPropertyPage } from './search-property.page';
 import { MaterialModule } from 'src/app/material.module';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -19,8 +18,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     SearchPropertyPageRoutingModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule
+    ReactiveFormsModule
   ],
   declarations: [SearchPropertyPage]
 })
