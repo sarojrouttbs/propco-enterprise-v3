@@ -4,6 +4,9 @@ import { LetAllianceService } from '../let-alliance.service';
 import { PROPCO } from 'src/app/shared/constants';
 import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
+import { SearchPropertyPage } from 'src/app/shared/modals/search-property/search-property.page';
+import { ModalController } from '@ionic/angular';
+import { async } from 'q';
 
 @Component({
   selector: 'la-dashboard',
@@ -16,11 +19,14 @@ export class DashboardPage implements OnInit {
   laLookupdata: any;
   userLookupDetails: any[];
   applicationList: any;
+  propertyId: any;
 
   constructor(
     private commonService: CommonService,
     private letAllianceService: LetAllianceService,
     private router: Router,
+    private modalController: ModalController
+  
     ) {
     this.getLookupData();
   }
@@ -77,6 +83,14 @@ export class DashboardPage implements OnInit {
 
   goToApplicationList() {
     this.router.navigate([`let-alliance/application-list`]);
+  }
+
+   /* tenantList() {
+    this.router.navigate([`let-alliance/tenant-list`]);
+  } */
+
+  startApplication() {
+    this.router.navigate([`let-alliance/application-details`]);
   }
 
 }

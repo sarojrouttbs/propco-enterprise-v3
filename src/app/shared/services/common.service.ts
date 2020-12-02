@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Plugins } from '@capacitor/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { PROPCO } from '../constants';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
@@ -250,6 +250,16 @@ export class CommonService {
       color: color ? color : 'primary',
     });
     toast.present();
+  }
+
+  searchPropertyByText(text: string): Observable<any> {
+    const params = new HttpParams()
+      .set('limit', '10')
+      .set('page', '1')
+      .set('prop.mantypeLetCat', '3346')
+      .set('text', text)
+      .set('types', 'PROPERTY');
+    return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 
   showLoader(duration?: number) {

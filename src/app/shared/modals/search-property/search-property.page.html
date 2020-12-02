@@ -8,9 +8,9 @@
 </ion-header>
 
 <ion-content>
-  <form class="example-form" [formGroup]='propertySearchForm'>
+  <form [formGroup]='propertySearchForm'>
     <br>
-    <mat-form-field class="example-full-width">
+    <mat-form-field>
       <input matInput placeholder="Start typing to search" [matAutocomplete]="auto" formControlName='text'>
     </mat-form-field>
     <!-- <ion-searchbar placeholder="Start typing to search" [matAutocomplete]="auto" formControlName='text'></ion-searchbar> -->
@@ -25,7 +25,7 @@
         <!-- <span class="text-color-lightblue">{{getLookupValue(result.officeCode, officeLookupDetails)}}&nbsp;</span> -->
         <span>
           <i class="propcoicon no-background propcoicon-property" style="background: transparent;vertical-align:sub"></i>
-        </span>&nbsp;
+        </span>
         <span style="color: var(--ion-color-step-200)">{{result.address}}&nbsp;</span>
         <span style="color: var(--ion-color-step-1000)">{{result.reference}}</span>&nbsp;
         <span ng-if="result.entityType === 'PROPERTY'" style="color: var(--ion-color-step-200)">{{result.propertyAdvertisedRent | currency : "£"}}</span>&nbsp;

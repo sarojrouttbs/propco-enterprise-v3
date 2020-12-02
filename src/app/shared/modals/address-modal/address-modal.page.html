@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Registered Address</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<form [formGroup]="addressDetails">  
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-label position="floating">PostCode</ion-label>
+        <ion-input formControlName="postCode"></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-button (click)="lookupAddress()" style="float: right;">Lookup</ion-button>
+    </ion-col>
+
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-label position="floating">Organisation Name</ion-label>
+        <ion-input formControlName="organisation"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-label position="floating">Building Name</ion-label>
+        <ion-input formControlName="buildingName"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-label position="floating">Building Number</ion-label>
+        <ion-input formControlName="buildingNumber"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-label position="floating">Street</ion-label>
+        <ion-input formControlName="street"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-label position="floating">Address Line 1</ion-label>
+        <ion-input formControlName="address1"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-item>
+        <ion-label position="floating">Address Line 2</ion-label>
+        <ion-input formControlName="address2"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</form>
+
+</ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-end">
+        <ion-button (click)="saveAddress()">Save</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

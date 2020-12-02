@@ -7,14 +7,17 @@ import { IonicModule } from '@ionic/angular';
 import { DashboardPageRoutingModule } from './dashboard-routing.module';
 
 import { DashboardPage } from './dashboard.page';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DashboardPageRoutingModule
+    DashboardPageRoutingModule,
+    MatAutocompleteModule
   ],
-  declarations: [DashboardPage]
+  declarations: [DashboardPage],
+  providers: []
 })
 export class DashboardPageModule {}

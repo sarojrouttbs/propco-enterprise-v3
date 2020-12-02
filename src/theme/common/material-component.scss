@@ -1,0 +1,126 @@
+@mixin set-text-style($size, $lheight) {
+  font-size: $size;
+  line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
+.mat-option {
+  @include set-text-style(15px, 19px);
+}
+
+.mat-form-field-label span {
+  font-family: "Lato", san-serif, verdana;
+}
+
+.mat-tab-group {
+  .mat-tab-header {
+    margin: 0 10px;
+
+    .mat-tab-label-container {
+      .mat-ink-bar {
+        display: none;
+      }
+
+      .mat-tab-label {
+        background-color: var(--ion-color-step-1900);
+        color: var(--ion-color-step-200);
+        padding: 0;
+        height: 55px;
+        font-size: 16px;
+        opacity: 1;
+        margin: 0 2px !important;
+
+        .mat-tab-label-content {
+          width: 100%;
+          height: 100%;
+
+          .label-text {
+            width: 100%;
+            height: 100%;
+            padding-top: 20px;
+          }
+
+          .success-border {
+            border-bottom: 3px solid var(--ion-color-success);
+          }
+
+          .error-border {
+            border-bottom: 3px solid var(--ion-color-danger);
+          }
+        }
+      }
+
+      .mat-tab-label:first-child {
+        margin-left: 0 !important;
+      }
+
+      .mat-tab-label:last-child {
+        margin-right: 0 !important;
+      }
+
+      .mat-tab-label-active {
+        background-color: var(--ion-color-success);
+        opacity: 1;
+        color: var(--ion-color-step-2000);
+      }
+    }
+  }
+
+  .mat-tab-body-wrapper {
+    margin-top: 20px;
+  }
+}
+// .mat-tab-body {
+.action-btn-group {
+  text-align: right;
+  margin: 25px 0 10px;
+
+  ion-button {
+    margin: 0 5px;
+  }
+  .cancel-button {
+    --background: var(--ion-color-danger);
+  }
+
+  .save-button {
+    --background: var(--ion-color-success);
+  }
+
+  .submit-button {
+    --background: var(--ion-color-success);
+  }
+}
+// }
+// }
+
+.mat-tab-nav-bar,
+.mat-tab-header {
+  border-bottom: none;
+}
+
+.mat-autocomplete-panel {
+  background-color: var(--ion-color-step-1900);
+  color: var(--ion-color-step-200);
+
+  .mat-option {
+    padding: 0 5px;
+  }
+}
+
+#la-application-details{
+    .mat-tab-group {
+        .mat-tab-header {
+          margin: 0;
+        }
+
+        .mat-tab-body-wrapper{
+            margin: 0;
+        }
+    }
+}
