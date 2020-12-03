@@ -9,6 +9,7 @@ import { ApplicationDetailsPageRoutingModule } from './application-details-routi
 import { ApplicationDetailsPage } from './application-details.page';
 import { MaterialModule } from 'src/app/material.module';
 import { ComponentsModule } from 'src/app/shared/components/components.module';
+import { TenantListModalPageModule } from 'src/app/shared/modals/tenant-list-modal/tenant-list-modal.module';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { ComponentsModule } from 'src/app/shared/components/components.module';
     IonicModule,
     ApplicationDetailsPageRoutingModule,
     MaterialModule,
-    ComponentsModule
+    ComponentsModule,
+    TenantListModalPageModule
   ],
   declarations: [ApplicationDetailsPage]
 })

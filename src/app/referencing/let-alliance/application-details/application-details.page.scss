@@ -62,5 +62,41 @@
         margin-right: 0;
       }
     }
+
+    .view-details {
+      width: 60%;
+      margin: 0 auto;
+  
+      .title {
+        text-align: center;
+        margin-bottom: 15px;
+        margin-top: 40px;
+        font-weight: 700;
+        @include set-text-style(24px, 30px);
+      }
+  
+      .sub-heading {
+        margin-top: 15px;
+        margin-bottom: 5px;
+        @include set-text-style(20px, 26px);
+      }
+  
+      .header-content {
+        .header {
+          color: var(--ion-color-step-800);
+          @include set-text-style(14px, 19px);
+        }
+  
+        .content {
+          @include set-text-style(16px, 20px);
+        }
+      }
+  
+      .border-bottom {
+        padding-left: 0;
+        outline-offset: -6px;
+        outline: 1px solid var(--ion-color-step-1050);
+      }
+    }
   }
 }

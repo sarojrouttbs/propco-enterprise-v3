@@ -22,4 +22,40 @@ export class LetAllianceService {
   getLAProducts(): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + 'referencing/3/products');
   }
+
+  getPropertyById(propertyId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}`);
+  }
+
+  getPropertyTenantList(propertyId: string, agreementStatus?: string): Observable<any> {
+    const params = new HttpParams()
+      .set('agreementStatus', agreementStatus ? agreementStatus : '');
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenants`, { params });
+  }
+
+  getPropertyTenancyList(propertyId: string): Observable<any> {
+    const params = new HttpParams()
+      .append('status', '1')
+      .append('status', '2')
+      .append('status', '5')
+      .append('status', '6');
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenancies`, { params });
+  }
+
+  getTenantDetails(tenantId: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}`).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  createApplication(requestObj: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/create`, requestObj);
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.log(`${operation} failed: ${error.message}`);
+      return throwError(error);
+    };
+  }
 }
