@@ -17,7 +17,6 @@ export class DashboardPage implements OnInit {
 
   private lookupdata: any;
   laLookupdata: any;
-  userLookupDetails: any[];
   applicationList: any;
   propertyId: any;
 
@@ -60,11 +59,9 @@ export class DashboardPage implements OnInit {
   }
 
   private setLookupData(data: any) {
-    this.userLookupDetails = data.userLookupDetails;
   }
 
   private setLALookupData(data: any) {
-    this.userLookupDetails = data.userLookupDetails;
   }
 
   getLAApplicationList(){

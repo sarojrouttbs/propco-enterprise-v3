@@ -9,12 +9,14 @@
               <ion-select-option>Choose</ion-select-option>
             </ion-select>
           </ion-item>
+          <app-validation-message [control]="tenancyDetailsForm.controls.product"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">No of Occupants</ion-label>
             <ion-input formControlName="occupants"></ion-input>
           </ion-item>
+          <app-validation-message [control]="tenancyDetailsForm.controls.occupants"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
@@ -25,27 +27,28 @@
               interface="popover"
             ></ion-datetime>
           </ion-item>
+          <app-validation-message [control]="tenancyDetailsForm.controls.tenancyStartDate"></app-validation-message>
         </ion-col>
-      </ion-row>
-
-      <ion-row>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Term(in months)</ion-label>
             <ion-input formControlName="terms"></ion-input>
           </ion-item>
-        </ion-col>
-        <ion-col size="33.3">
-          <ion-item>
-            <ion-label position="floating">Do you want to offer NDS?</ion-label>
-            <ion-input formControlName="offerNDS"></ion-input>
-          </ion-item>
+          <app-validation-message [control]="tenancyDetailsForm.controls.terms"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Reference Paid By Tenant?</ion-label>
             <ion-input formControlName="referencePaid"></ion-input>
           </ion-item>
+          <app-validation-message [control]="tenancyDetailsForm.controls.referencePaid"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item lines="none" style="margin-top: 6px;">
+            <ion-label>Do you want to offer NDS?</ion-label>
+            <ion-toggle slot="start" formControlName="offerNDS"></ion-toggle>
+          </ion-item>
+          <app-validation-message [control]="tenancyDetailsForm.controls.offerNDS"></app-validation-message>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -78,18 +81,20 @@
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Property Let Type</ion-label>
-            <ion-select interface="popover" formControlName="propertyLetType">
-              <ion-select-option>Choose</ion-select-option>
+            <ion-select interface="popover" formControlName="managementType">
+              <ion-select-option [value]="item.index" *ngFor="let item of managementStatusTypes">
+                {{ item.value }}
+              </ion-select-option>
             </ion-select>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          <app-validation-message [control]="propertyDetailsForm.controls.managementType"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Property Rent</ion-label>
-            <ion-input formControlName="propertyRent"></ion-input>
+            <ion-input formControlName="advertisementRent"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          <app-validation-message [control]="propertyDetailsForm.controls.advertisementRent"></app-validation-message>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -101,165 +106,259 @@
   <form [formGroup]="tenantDetailsForm">
     <ion-grid>
       <ion-row>
-        <ion-col size="50">
+        <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Completion Method</ion-label>
-            <ion-select interface="popover" formControlName="completeMethod">
+            <ion-select interface="popover" formControlName="completeMethod" [disabled]="true">
               <ion-select-option>Email to Tenant</ion-select-option>
             </ion-select>
           </ion-item>
         </ion-col>
-        <ion-col size="50">
+        <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Product</ion-label>
             <ion-select interface="popover" formControlName="product">
               <ion-select-option>Choose</ion-select-option>
             </ion-select>
           </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.product"></app-validation-message>
         </ion-col>
-      </ion-row>
-  
-      <ion-row>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Tenant Type</ion-label>
             <ion-select interface="popover" formControlName="tenantType">
-              <ion-select-option>Choose</ion-select-option>
+              <ion-select-option [value]="item.index" *ngFor="let item of tenantTypes">
+                {{ item.value }}
+              </ion-select-option>
             </ion-select>
-            
           </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.tenantType"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Title</ion-label>
             <ion-select interface="popover" formControlName="title">
-              <ion-select-option>choose</ion-select-option>
+              <ion-select-option [value]="item.index" *ngFor="let item of titleTypes">
+                {{ item.value }}
+              </ion-select-option>
             </ion-select>
           </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.title"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Other Title</ion-label>
             <ion-input formControlName="otherTitle"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          <app-validation-message [control]="tenantDetailsForm.controls.otherTitle"></app-validation-message>
         </ion-col>
-      </ion-row>
-
-      <ion-row>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">First Name</ion-label>
-            <ion-input formControlName="firstName"></ion-input>
+            <ion-input formControlName="forename"></ion-input>
           </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.forename"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Middle Name</ion-label>
             <ion-input formControlName="middleName"></ion-input>
           </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.middleName"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Last Name</ion-label>
-            <ion-input formControlName="lastName"></ion-input>
+            <ion-input formControlName="surname"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          <app-validation-message [control]="tenantDetailsForm.controls.surname"></app-validation-message>
         </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col size="66.6">
-          <ion-item>
-            <ion-label position="floating">Date of Birth</ion-label>
-            <ion-datetime formControlName="dateOfBirth" displayFormat="DD MMM YYYY" interface="popover"></ion-datetime>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col size="50">
-            <ion-item lines="none" style="margin-top: 6px;">
-              <ion-label>Had tenant been known by any other name ?</ion-label>
-              <ion-toggle slot="start" formControlName="tenantOtherName"></ion-toggle>
-          </ion-item>
-        </ion-col>
-        <ion-col size="50">
-          <ion-item>
-            <ion-label position="floating">Title</ion-label>
-            <ion-select interface="popover" formControlName="tenantTypeTitle">
-              <ion-select-option>Choose</ion-select-option>
-            </ion-select>
-            
-          </ion-item>
-        </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col size="33.3">
-          <ion-item>
-            <ion-label position="floating">Forename</ion-label>
-            <ion-input formControlName="foreName"></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col size="33.3">
-          <ion-item>
-            <ion-label position="floating">Middlename</ion-label>
-            <ion-input formControlName="otherMiddle"></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col size="33.3">
-          <ion-item>
-            <ion-label position="floating">Surname</ion-label>
-            <ion-input formControlName="otherSurname"></ion-input>
-          </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
-        </ion-col>
-      </ion-row>
-
-
-      <ion-row>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Email</ion-label>
             <ion-input formControlName="email"></ion-input>
           </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.email"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">Date of Birth</ion-label>
+            <ion-datetime formControlName="dateOfBirth" displayFormat="DD MMM YYYY" interface="popover"></ion-datetime>
+          </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.dateOfBirth"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Marital Status</ion-label>
             <ion-select interface="popover" formControlName="maritalStatus">
-              <ion-select-option>Email to Tenant</ion-select-option>
+              <ion-select-option [value]="item.index" *ngFor="let item of maritalStatusTypes">
+                {{ item.value }}
+              </ion-select-option>
             </ion-select>
           </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.maritalStatus"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Nationality</ion-label>
             <ion-input formControlName="nationality"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          <app-validation-message [control]="tenantDetailsForm.controls.nationality"></app-validation-message>
         </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col size="66.6">
+        <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Registration Number</ion-label>
             <ion-input formControlName="registerationNumber"></ion-input>
           </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.registerationNumber"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Rent Share</ion-label>
             <ion-input formControlName="rentShare"></ion-input>
           </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.rentShare"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item lines="none" style="margin-top: 6px;">
+            <ion-label>Had tenant been known by any other name ?</ion-label>
+            <ion-toggle slot="start" formControlName="tenantOtherName"></ion-toggle>
+          </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.tenantOtherName"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">Title</ion-label>
+            <ion-select interface="popover" formControlName="tenantTypeTitle">
+              <ion-select-option [value]="item.index" *ngFor="let item of titleTypes">
+                {{ item.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.tenantTypeTitle"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">Forename</ion-label>
+            <ion-input formControlName="otherforeName"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.otherforeName"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">Middlename</ion-label>
+            <ion-input formControlName="otherMiddle"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.otherMiddle"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">Surname</ion-label>
+            <ion-input formControlName="otherSurname"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.otherSurname"></app-validation-message>
         </ion-col>
       </ion-row>
-
-
     </ion-grid>
   </form>
+</ng-template>
+
+<ng-template #finalView>
+  <ion-grid class="view-details">
+    <ion-row class="ion-justify-content-between">
+      <ion-col size="100">
+        <div class="title">Please review application details.</div>
+      </ion-col>
+      <ion-col size="100">
+        <div class="sub-heading">Fault Details</div>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Fault Category</ion-text><br />
+        <ion-text class="content">aaa</ion-text>
+      </ion-col>
+      <!-- <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Urgency Status</ion-text><br />
+        <ion-text class="content">
+          {{getLookupValue(faultDetailsForm.controls.urgencyStatus.value, faultUrgencyStatuses) || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Title</ion-text><br />
+        <ion-text class="content">{{describeFaultForm.controls.title.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Fault Description</ion-text><br />
+        <ion-text class="content">{{faultDetailsForm.controls.notes.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ng-container *ngFor="let item of additionalInfoControls; let i = index;">
+        <ion-col size-xs="100" size-sm="50" class="header-content">
+          <ion-text class="header">Type</ion-text><br />
+          <ion-text class="content">{{item.value.label}}</ion-text>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="50" class="header-content">
+          <ion-text class="header">Additional Info</ion-text><br />
+          <ion-text class="content">{{item.value.value}}</ion-text>
+        </ion-col>
+      </ng-container>
+      <ion-col size="100" class="border-bottom"></ion-col>
+      <ion-col size="100">
+        <div class="sub-heading">Reported By</div>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Who reported the fault?</ion-text><br />
+        <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}
+        </ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header ion-text-capitalize">{{(reportedByForm.controls.reportedBy.value | lowercase) || 'N/A'}}
+        </ion-text><br />
+        <ion-text class="content">{{reportedByForm.controls.forename.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Title</ion-text><br />
+        <ion-text class="content">{{reportedByForm.controls.title.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Forename</ion-text><br />
+        <ion-text class="content">{{reportedByForm.controls.forename.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Surname</ion-text><br />
+        <ion-text class="content">{{reportedByForm.controls.surname.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">E-mail</ion-text><br />
+        <ion-text class="content">{{reportedByForm.controls.email.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Mobile</ion-text><br />
+        <ion-text class="content">{{reportedByForm.controls.mobile.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Telephone</ion-text><br />
+        <ion-text class="content">{{reportedByForm.controls.homeTelephoneNo.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size="100" class="border-bottom"></ion-col>
+      <ion-col size="100">
+        <div class="sub-heading">Access Information</div>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Access Information</ion-text><br />
+        <ion-text class="content">
+          {{(accessInfoForm.controls.isTenantPresenceRequired.value?accessInfoList[0].title:accessInfoList[1].title) || 'N/A'}}
+        </ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Is there a vulnerable occupier at this property?</ion-text><br />
+        <ion-text class="content">{{accessInfoForm.controls.areOccupiersVulnerable.value?'YES':'NO' || 'N/A'}}
+        </ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Useful Instruction</ion-text><br />
+        <ion-text class="content">{{accessInfoForm.controls.tenantNotes.value || 'N/A'}}</ion-text>
+      </ion-col> -->
+      <ion-col size="100" class="border-bottom"></ion-col>
+    </ion-row>
+  </ion-grid>
 </ng-template>
 
 
@@ -314,14 +413,24 @@
         </mat-horizontal-stepper> -->
 
         <div class="tab-container">
-          <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #propertyTabs (selectedIndexChange)="currentSelected($event)">
+          <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #applicationTabs (selectedIndexChange)="currentSelected($event)">
             <mat-tab>
               <ng-template mat-tab-label>
                 <div class="label-text">Property/ Rental Details</div>
               </ng-template>
               <div class="accordion-container">
                 <div class="accordion-header" (click)="tenancyDetailsAccordion.expanded = !tenancyDetailsAccordion.expanded">
-                  Tenancy Details
+                  <ion-grid class="ion-no-padding">
+                    <ion-row class="ion-justify-content-between">
+                      <ion-col>
+                        Tenancy Details
+                      </ion-col>
+                      <ion-col class="ion-text-end">
+                        <ion-icon name="add" *ngIf="!tenancyDetailsAccordion.expanded"></ion-icon>
+                        <ion-icon name="remove" *ngIf="tenancyDetailsAccordion.expanded"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
                 </div>
                 <app-accordion-list [expanded]="tenancyDetailsAccordion.expanded">
                     <ng-container *ngTemplateOutlet="tenancyDetailsTemp"></ng-container>
@@ -330,7 +439,17 @@
               <div class="space-break"></div>
               <div class="accordion-container">
                 <div class="accordion-header" (click)="propertyDetailsAccordion.expanded = !propertyDetailsAccordion.expanded">
-                  Property Details
+                  <ion-grid class="ion-no-padding">
+                    <ion-row class="ion-justify-content-between">
+                      <ion-col>
+                        Property Details
+                      </ion-col>
+                      <ion-col class="ion-text-end">
+                        <ion-icon name="add" *ngIf="!propertyDetailsAccordion.expanded"></ion-icon>
+                        <ion-icon name="remove" *ngIf="propertyDetailsAccordion.expanded"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
                 </div>
                 <app-accordion-list [expanded]="propertyDetailsAccordion.expanded">
                     <ng-container *ngTemplateOutlet="propertyDetailsTemp"></ng-container>
@@ -339,7 +458,7 @@
               <div class="action-btn-group">
                 <ion-button class="cancel-button">Cancel</ion-button>
                 <ion-button class="next-button">Back</ion-button>
-                <ion-button (click)="propertyTabs.selectedIndex = 1" class="next-button">Next</ion-button>
+                <ion-button (click)="applicationTabs.selectedIndex = 1" class="next-button">Next</ion-button>
               </div>
             </mat-tab>
             <mat-tab>
@@ -348,7 +467,17 @@
               </ng-template>
               <div class="accordion-container">
                 <div class="accordion-header" (click)="tenantDetailsAccordion.expanded = !tenantDetailsAccordion.expanded">
-                  Tenant Details
+                  <ion-grid class="ion-no-padding">
+                    <ion-row class="ion-justify-content-between">
+                      <ion-col>
+                        Tenant Details
+                      </ion-col>
+                      <ion-col class="ion-text-end">
+                        <ion-icon name="add" *ngIf="!tenantDetailsAccordion.expanded"></ion-icon>
+                        <ion-icon name="remove" *ngIf="tenantDetailsAccordion.expanded"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
                 </div>
                 <app-accordion-list [expanded]="tenantDetailsAccordion.expanded">
                     <ng-container *ngTemplateOutlet="tenantDetailsTemp"></ng-container>
@@ -356,8 +485,25 @@
               </div>
               <div class="action-btn-group">
                 <ion-button class="cancel-button">Cancel</ion-button>
-                <ion-button (click)="propertyTabs.selectedIndex = 0" class="next-button">Back</ion-button>
+                <ion-button (click)="applicationTabs.selectedIndex = 0" class="next-button">Back</ion-button>
+                <ion-button (click)="applicationTabs.selectedIndex = 2" class="next-button">Next</ion-button>
+              </div>
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <div class="label-text">Review</div>
+              </ng-template>
+              <div class="accordion-container">
+                <app-accordion-list [expanded]="true">
+                    <ng-container *ngTemplateOutlet="finalView"></ng-container>
+                  </app-accordion-list>
+              </div>
+              <div class="action-btn-group">
+                <ion-button class="cancel-button">Cancel</ion-button>
+                <ion-button (click)="applicationTabs.selectedIndex = 1" class="next-button">Back</ion-button>
                 <ion-button class="next-button">Next</ion-button>
+                <ion-button class="submit-button">Submit</ion-button>
               </div>
             </mat-tab>
           </mat-tab-group>
