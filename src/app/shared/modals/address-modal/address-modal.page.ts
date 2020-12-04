@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-address-modal',
@@ -8,7 +9,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class AddressModalPage implements OnInit {
   addressDetails: FormGroup;
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private fb: FormBuilder,
+    private modalController: ModalController
+  ) { }
 
   ngOnInit() {
     this.addressDetails = this.fb.group({
@@ -25,4 +29,10 @@ export class AddressModalPage implements OnInit {
   saveAddress(){}
 
   lookupAddress(){}
+
+  dismiss() {
+    this.modalController.dismiss({
+      dismissed: true
+    });
+  }
 }

@@ -189,6 +189,13 @@ ion-item {
   }
 }
 
+.tenant-list {
+  .modal-wrapper {
+    min-height: 250px;
+    min-width: 60%;
+  }
+}
+
 ion-select-popover {
   ion-list ion-item {
     --border-width: 0;

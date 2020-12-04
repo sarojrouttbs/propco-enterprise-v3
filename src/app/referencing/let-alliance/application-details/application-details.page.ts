@@ -10,6 +10,7 @@ import { TenantListModalPage } from 'src/app/shared/modals/tenant-list-modal/ten
 import { MatStepper } from '@angular/material/stepper';
 import { LetAllianceService } from '../let-alliance.service';
 import { forkJoin } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-application-details',
@@ -28,6 +29,7 @@ export class ApplicationDetailsPage implements OnInit {
   propertyTenancyList: applicationModels.ITenancyResponse;
   propertyTenantList: applicationModels.ITenantListResponse;
   tenantDetails: applicationModels.ITenantResponse;
+  LAProductList: any[] = [];
   propertyId = null;
   lookupdata: any;
   laLookupdata: any;
@@ -37,6 +39,8 @@ export class ApplicationDetailsPage implements OnInit {
   isTenantTabDetailSubmit;
   current = 0;
   previous;
+  tenantId;
+  futureDate: string;
 
   managementStatusTypes: any;
   tenantTypes: any;
@@ -56,7 +60,8 @@ export class ApplicationDetailsPage implements OnInit {
     private commonService: CommonService,
     private route: ActivatedRoute,
     private router: Router,
-    private letAllianceService: LetAllianceService
+    private letAllianceService: LetAllianceService,
+    public datepipe: DatePipe
     ) {
   }
 
@@ -64,6 +69,9 @@ export class ApplicationDetailsPage implements OnInit {
     this.tenancyDetailsAccordion.expanded = true;
     this.propertyDetailsAccordion.expanded = false;
     this.tenantDetailsAccordion.expanded = true;
+    let date = new Date();
+    date.setDate(date.getDate() + 60);
+    this.futureDate = this.datepipe.transform(date, "yyyy-MM-dd"); 
   }
   
   ionViewDidEnter() {
@@ -107,7 +115,7 @@ export class ApplicationDetailsPage implements OnInit {
 
   private setLookupData(data: any) {
   }
-  
+
   private setLALookupData(data: any) {
     this.managementStatusTypes = this.laLookupdata.managementStatusTypes;
     this.tenantTypes = this.laLookupdata.tenantTypes;
@@ -145,8 +153,10 @@ export class ApplicationDetailsPage implements OnInit {
     });
 
     const data = modal.onDidDismiss().then(res => {
-       if (res.data.length > 0) {
+       if (res.data.tenantId) {
          this.hasTenants = true;
+         console.log(res.data.tenantId);
+         this.tenantId = res.data.tenantId;
          this.initiateApplication();
        } else {
          this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
@@ -164,43 +174,44 @@ export class ApplicationDetailsPage implements OnInit {
 
   private initTenancyDetailsForm(): void {
     this.tenancyDetailsForm = this.fb.group({
-      product: ['', Validators.required],
+      productId: ['', Validators.required],
       occupants: ['', Validators.required],
       tenancyStartDate: ['', Validators.required],
-      terms: ['', [Validators.required, Validators.min(1), Validators.max(36)]],
-      offerNDS: [''],
+      tenancyTerm: ['', [Validators.required, Validators.min(1), Validators.max(36)]],
+      offerNDS: [false],
       referencePaid: ['', Validators.required],
     });
   }
 
   private initPropertyDetailsForm(): void {
     this.propertyDetailsForm = this.fb.group({
-      managementType: ['', Validators.required],
-      advertisementRent: ['', Validators.required],
+      managementStatus: ['', Validators.required],
+      monthlyRent: ['', Validators.required],
     });
   }
 
   private initTenantDetailsTabForm(): void {
     this.tenantDetailsForm = this.fb.group({
-      completeMethod: ['', Validators.required],
-      product: ['', Validators.required],
-      tenantType: ['', Validators.required],
+      completeMethod: [''],
+      productId: ['', Validators.required],
+      tenantTypeId: [1, Validators.required],
       title: ['', Validators.required],
       otherTitle: [''],
+      companyName: [''],
       forename: [''],
       middleName: [''],
       surname: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
-      tenantOtherName: ['', Validators.required],
-      tenantTypeTitle: [''],
-      otherforeName: [''],
-      otherMiddle: [''],
-      otherSurname: [''],
       email: [''],
       maritalStatus: [''],
       nationality: [''],
       registerationNumber: [''],
       rentShare: ['', Validators.required],
+      hasTenantOtherName: [false],
+      tenantTypeTitle: [''],
+      otherforeName: [''],
+      otherMiddle: [''],
+      otherSurname: [''],
 
     });
   }
@@ -211,7 +222,8 @@ export class ApplicationDetailsPage implements OnInit {
       this.getPropertyById(),
       this.getPropertyTenantList(),
       this.getTenantDetails(),
-      this.getPropertyTenancyList()
+      this.getPropertyTenancyList(),
+      this.getLAProductList()
     ]).subscribe(async (values) => {
       // this.commonService.hideLoader();
       this.initPatching();
@@ -269,10 +281,26 @@ export class ApplicationDetailsPage implements OnInit {
 
   getTenantDetails() {
     const promise = new Promise((resolve, reject) => {
-      this.letAllianceService.getTenantDetails('ac1137a8-71c8-16d3-8171-c82704230240').subscribe(
+      this.letAllianceService.getTenantDetails(this.tenantId).subscribe(
         res => {
           this.tenantDetails = res ? res : {};
           resolve(this.tenantDetails);
+        },
+        error => {
+          console.log(error);
+          resolve();
+        }
+      );
+    });
+    return promise;
+  }
+
+  getLAProductList() {
+    const promise = new Promise((resolve, reject) => {
+      this.letAllianceService.getLAProductList().subscribe(
+        res => {
+          this.LAProductList = res ? res : [];
+          resolve(this.LAProductList);
         },
         error => {
           console.log(error);
@@ -289,8 +317,8 @@ export class ApplicationDetailsPage implements OnInit {
     });
 
     this.propertyDetailsForm.patchValue({
-      managementType: this.propertyDetails.managementType,
-      advertisementRent: this.propertyDetails.advertisementRent,
+      managementStatus: this.propertyDetails.managementType,
+      monthlyRent: this.propertyDetails.advertisementRent,
     });
     this.tenantDetailsForm.patchValue({
       title: this.tenantDetails.title,
@@ -300,18 +328,6 @@ export class ApplicationDetailsPage implements OnInit {
       email: this.tenantDetails.email,
       maritalStatus: this.tenantDetails.maritalStatus,
       nationality: this.tenantDetails.nationality,
-      //completeMethod: this.tenantDetails.urgencyStatus,
-      //product: this.faultDetails.urgencyStatus,
-      //tenantType: this.faultDetails.urgencyStatus,
-      //otherTitle: this.tenantDetails.urgencyStatus,
-      //middleName: this.tenantDetails.urgencyStatus,
-      //tenantOtherName: this.tenantDetails.urgencyStatus,
-      //tenantTypeTitle: this.tenantDetails.urgencyStatus,
-      //otherforeName: this.tenantDetails.urgencyStatus,
-      //otherMiddle: this.tenantDetails.urgencyStatus,
-      //otherSurname: this.tenantDetails.urgencyStatus,
-      //registerationNumber: this.tenantDetails.urgencyStatus,
-      //rentShare: this.tenantDetails.urgencyStatus,
     });
   }
 
@@ -423,41 +439,41 @@ export class ApplicationDetailsPage implements OnInit {
   private createApplicationFormValues(): any {
     const applicationDetails =
       {
-        propertyId: 'ac1137a8-71c8-16d3-8171-c8270420023c',
-        applicantId: 'ac1137a8-71c8-16d3-8171-c82704230240',
-        agreementId: 9,
-        applicantItemType: 'M',
+        propertyId: this.propertyDetails.propertyId,
+        applicantId: this.tenantDetails.tenantId,
+        agreementId: 9, // not suraj
+        applicantItemType: 'M', // not suraj
         case: {
-        tenancyStartDate: '2020-11-25',
-        tenancyEndDate: '2020-11-12',
-        address: {
-        addressLine1: '1',
-        postcode: 'CV31 2DW',
-        town: 'leamington',
-        country: 'UK'
-        },
-        noOfTenantToBeReferenced: 1,
-        typeId: 1,
-        tenancyTerm: 12,
-        monthlyRent: 500,
-        managementStatus: 1,
-        productId: 42
+          tenancyStartDate: this.tenancyDetailsForm.get('tenancyStartDate').value,
+          tenancyEndDate: this.propertyTenancyList[0].tenancyEndDate,
+          address: {
+            addressLine1: '1',
+            postcode: 'CV31 2DW',
+            town: 'leamington',
+            country: 'UK'
+          },
+          noOfTenantToBeReferenced: 1, // not Suraj
+          typeId: 1, // suraj
+          tenancyTerm: this.tenancyDetailsForm.get('tenancyTerm').value,
+          monthlyRent: this.tenancyDetailsForm.get('monthlyRent').value,
+          managementStatus: this.tenancyDetailsForm.get('managementStatus').value,
+          productId: this.tenancyDetailsForm.get('productId').value
         },
         application: {
-          tenantTypeId: 1,
-          title: 1,
-          forename: 'Edgar',
-          surname: 'Cooke',
-          dateOfBirth: '1990-11-11',
-          rentShare: 500,
-          productId: 2,
-          sendTenantLink: true,
-          autoSubmitLink: true,
-          email: 'suraj.raturi@techblue.co.uk',
-          maritalStatus: 1,
-          nationality: 'UK',
-          isGuarantor: false,
-          hasTenantOtherName: false
+          tenantTypeId: this.tenantDetailsForm.get('tenantTypeId').value,
+          title: this.tenantDetailsForm.get('title').value,
+          forename: this.tenantDetailsForm.get('forename').value,
+          surname: this.tenantDetailsForm.get('surname').value,
+          dateOfBirth: this.tenantDetailsForm.get('dateOfBirth').value,
+          rentShare: 500, // suraj
+          productId: this.tenancyDetailsForm.get('productId').value, // why 2 productId
+          sendTenantLink: true, // not suraj
+          autoSubmitLink: true, // not suraj
+          email: this.tenantDetailsForm.get('email').value,
+          maritalStatus: this.tenantDetailsForm.get('maritalStatus').value,
+          nationality: this.tenantDetailsForm.get('nationality').value,
+          isGuarantor: false, // suraj
+          hasTenantOtherName: this.tenantDetailsForm.get('hasTenantOtherName').value,
         }
       };
       /* urgencyStatus: this.faultDetailsForm.get('urgencyStatus').value,
@@ -476,5 +492,9 @@ export class ApplicationDetailsPage implements OnInit {
       isDraft: false,
       stage: FAULT_STAGES.FAULT_LOGGED */
     return applicationDetails;
+  }
+
+  getLookupValue(index, lookup) {
+    return this.commonService.getLookupValue(index, lookup);
   }
 }

@@ -16,10 +16,10 @@ export class LetAllianceService {
   }
 
   getLAApplicationList(params: any): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + 'referencing/applications', { params });
+    return this.httpClient.get(environment.API_BASE_URL + 'referencing/3/applications', { params });
   }
 
-  getLAProducts(): Observable<any> {
+  getLAProductList(): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + 'referencing/3/products');
   }
 
