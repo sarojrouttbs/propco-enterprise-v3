@@ -66,7 +66,6 @@ export class DashboardPage implements OnInit {
 
   getLAApplicationList(){
     const params = new HttpParams()
-      .set('referencingType', 'LET_ALLIANCE')
       .set('limit', '5')
       .set('page', '1');
     this.letAllianceService.getLAApplicationList(params).subscribe(data => {

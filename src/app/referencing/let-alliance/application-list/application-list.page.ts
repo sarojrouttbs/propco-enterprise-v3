@@ -154,7 +154,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   }
 
   getLAProducts(){
-    this.letAllianceService.getLAProducts().subscribe(data => {
+    this.letAllianceService.getLAProductList().subscribe(data => {
       this.laProductList = data;
     });
   }

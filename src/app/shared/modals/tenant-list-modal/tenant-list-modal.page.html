@@ -55,14 +55,15 @@
           </thead>
           <tbody>
             <tr *ngFor="let tenant of laTenantList; let i=index;"  class="table-row">
-              <td><ion-checkbox [disabled]='!toggled' [(ngModel)]=selected color="primary" style="height: 25px;width: 25px; bottom: -5px;" ></ion-checkbox>
+              <td><ion-checkbox [checked]="tenant?.rowChecked" [disabled]="!tenant?.toggled" 
+                (ionChange)="submitButtonStatus(tenant, $event)" color="primary" style="height: 25px;width: 25px; bottom: -5px;" ></ion-checkbox>
               </td>
               <td>{{tenant?.reference}}</td>
               <ng-container *ngFor="let title of titleList"><td *ngIf='tenant.title && title.value===tenant.title'>
-                {{title.type + ' ' + tenant.name}}</td></ng-container>
-              <td *ngIf='!tenant.title'>{{tenant.name}}</td>  
-              <td>{{tenant.isLead ? 'Lead Tenant' : '' }}</td>
-              <td><ion-toggle [(ngModel)]=toggled slot="start"></ion-toggle></td>
+                {{title.type + ' ' + tenant?.name}}</td></ng-container>
+              <td *ngIf='!tenant.title'>{{tenant?.name}}</td>  
+              <td>{{tenant?.isLead ? 'Lead Tenant' : 'Co-tenant' }}</td>
+              <td><ion-toggle (ionChange)="toggleButtons(tenant, $event)" slot="start"></ion-toggle></td>
              <ng-container *ngFor="let status of statusList"><td *ngIf='tenant.status && status.value===tenant.status'>{{status.type}}</td></ng-container>
             </tr>
           </tbody>
@@ -72,7 +73,7 @@
           <ion-col>
             <div style="float: right;">        
           <ion-button>Cancel</ion-button>
-          <ion-button [disabled]="!selected" (click)="dismiss()">Ok</ion-button>
+          <ion-button [disabled]="!selected" (click)="tenantDetail()">Ok</ion-button>
           
             </div>
           </ion-col>

@@ -5,15 +5,17 @@
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Product</ion-label>
-            <ion-select interface="popover" formControlName="product">
-              <ion-select-option>Choose</ion-select-option>
+            <ion-select interface="popover" formControlName="productId">
+              <ion-select-option [value]="item.productId" *ngFor="let item of LAProductList">
+                {{ item.productName }}
+              </ion-select-option>
             </ion-select>
           </ion-item>
-          <app-validation-message [control]="tenancyDetailsForm.controls.product"></app-validation-message>
+          <app-validation-message [control]="tenancyDetailsForm.controls.productId"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">No of Occupants</ion-label>
+            <ion-label position="floating">No. of Occupants</ion-label>
             <ion-input formControlName="occupants"></ion-input>
           </ion-item>
           <app-validation-message [control]="tenancyDetailsForm.controls.occupants"></app-validation-message>
@@ -22,8 +24,9 @@
           <ion-item>
             <ion-label position="floating">Tenancy Start Date </ion-label>
             <ion-datetime
+            [max]="futureDate"
               formControlName="tenancyStartDate"
-              displayFormat="DD MMM YYYY"
+              displayFormat="DD/MM/YYYY"
               interface="popover"
             ></ion-datetime>
           </ion-item>
@@ -32,9 +35,9 @@
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Term(in months)</ion-label>
-            <ion-input formControlName="terms"></ion-input>
+            <ion-input formControlName="tenancyTerm"></ion-input>
           </ion-item>
-          <app-validation-message [control]="tenancyDetailsForm.controls.terms"></app-validation-message>
+          <app-validation-message [control]="tenancyDetailsForm.controls.tenancyTerm"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
@@ -81,20 +84,20 @@
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Property Let Type</ion-label>
-            <ion-select interface="popover" formControlName="managementType">
+            <ion-select interface="popover" formControlName="managementStatus">
               <ion-select-option [value]="item.index" *ngFor="let item of managementStatusTypes">
                 {{ item.value }}
               </ion-select-option>
             </ion-select>
           </ion-item>
-          <app-validation-message [control]="propertyDetailsForm.controls.managementType"></app-validation-message>
+          <app-validation-message [control]="propertyDetailsForm.controls.managementStatus"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Property Rent</ion-label>
-            <ion-input formControlName="advertisementRent"></ion-input>
+            <ion-input formControlName="monthlyRent"></ion-input>
           </ion-item>
-          <app-validation-message [control]="propertyDetailsForm.controls.advertisementRent"></app-validation-message>
+          <app-validation-message [control]="propertyDetailsForm.controls.monthlyRent"></app-validation-message>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -117,22 +120,29 @@
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Product</ion-label>
-            <ion-select interface="popover" formControlName="product">
+            <ion-select interface="popover" formControlName="productId">
               <ion-select-option>Choose</ion-select-option>
             </ion-select>
           </ion-item>
-          <app-validation-message [control]="tenantDetailsForm.controls.product"></app-validation-message>
+          <app-validation-message [control]="tenantDetailsForm.controls.productId"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Tenant Type</ion-label>
-            <ion-select interface="popover" formControlName="tenantType">
+            <ion-select interface="popover" formControlName="tenantTypeId">
               <ion-select-option [value]="item.index" *ngFor="let item of tenantTypes">
                 {{ item.value }}
               </ion-select-option>
             </ion-select>
           </ion-item>
-          <app-validation-message [control]="tenantDetailsForm.controls.tenantType"></app-validation-message>
+          <app-validation-message [control]="tenantDetailsForm.controls.tenantTypeId"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3" *ngIf="getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
+          <ion-item>
+            <ion-label position="floating">Company Name</ion-label>
+            <ion-input formControlName="companyName"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="tenantDetailsForm.controls.title"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
@@ -205,7 +215,7 @@
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.nationality"></app-validation-message>
         </ion-col>
-        <ion-col size="33.3">
+        <ion-col size="33.3" *ngIf="getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
           <ion-item>
             <ion-label position="floating">Registration Number</ion-label>
             <ion-input formControlName="registerationNumber"></ion-input>
@@ -221,12 +231,12 @@
         </ion-col>
         <ion-col size="33.3">
           <ion-item lines="none" style="margin-top: 6px;">
-            <ion-label>Had tenant been known by any other name ?</ion-label>
-            <ion-toggle slot="start" formControlName="tenantOtherName"></ion-toggle>
+            <ion-label>Had tenant been known by any other name?</ion-label>
+            <ion-toggle slot="start" formControlName="hasTenantOtherName"></ion-toggle>
           </ion-item>
-          <app-validation-message [control]="tenantDetailsForm.controls.tenantOtherName"></app-validation-message>
+          <app-validation-message [control]="tenantDetailsForm.controls.hasTenantOtherName"></app-validation-message>
         </ion-col>
-        <ion-col size="33.3">
+        <ion-col size="33.3" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
           <ion-item>
             <ion-label position="floating">Title</ion-label>
             <ion-select interface="popover" formControlName="tenantTypeTitle">
@@ -237,23 +247,23 @@
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.tenantTypeTitle"></app-validation-message>
         </ion-col>
-        <ion-col size="33.3">
+        <ion-col size="33.3" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
           <ion-item>
-            <ion-label position="floating">Forename</ion-label>
+            <ion-label position="floating">First Name</ion-label>
             <ion-input formControlName="otherforeName"></ion-input>
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.otherforeName"></app-validation-message>
         </ion-col>
-        <ion-col size="33.3">
+        <ion-col size="33.3" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
           <ion-item>
-            <ion-label position="floating">Middlename</ion-label>
+            <ion-label position="floating">Middle Name</ion-label>
             <ion-input formControlName="otherMiddle"></ion-input>
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.otherMiddle"></app-validation-message>
         </ion-col>
-        <ion-col size="33.3">
+        <ion-col size="33.3" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
           <ion-item>
-            <ion-label position="floating">Surname</ion-label>
+            <ion-label position="floating">Last Name</ion-label>
             <ion-input formControlName="otherSurname"></ion-input>
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.otherSurname"></app-validation-message>
@@ -270,99 +280,135 @@
         <div class="title">Please review application details.</div>
       </ion-col>
       <ion-col size="100">
-        <div class="sub-heading">Fault Details</div>
+        <div class="sub-heading">Tenancy Details</div>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Fault Category</ion-text><br />
-        <ion-text class="content">aaa</ion-text>
-      </ion-col>
-      <!-- <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Urgency Status</ion-text><br />
-        <ion-text class="content">
-          {{getLookupValue(faultDetailsForm.controls.urgencyStatus.value, faultUrgencyStatuses) || 'N/A'}}</ion-text>
+        <ion-text class="header">Product</ion-text><br />
+        <ion-text class="content">{{tenancyDetailsForm.controls.productId.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Title</ion-text><br />
-        <ion-text class="content">{{describeFaultForm.controls.title.value || 'N/A'}}</ion-text>
+        <ion-text class="header">No. of Occupants</ion-text><br />
+        <ion-text class="content">{{tenancyDetailsForm.controls.occupants.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Fault Description</ion-text><br />
-        <ion-text class="content">{{faultDetailsForm.controls.notes.value || 'N/A'}}</ion-text>
-      </ion-col>
-      <ng-container *ngFor="let item of additionalInfoControls; let i = index;">
-        <ion-col size-xs="100" size-sm="50" class="header-content">
-          <ion-text class="header">Type</ion-text><br />
-          <ion-text class="content">{{item.value.label}}</ion-text>
-        </ion-col>
-        <ion-col size-xs="100" size-sm="50" class="header-content">
-          <ion-text class="header">Additional Info</ion-text><br />
-          <ion-text class="content">{{item.value.value}}</ion-text>
-        </ion-col>
-      </ng-container>
-      <ion-col size="100" class="border-bottom"></ion-col>
-      <ion-col size="100">
-        <div class="sub-heading">Reported By</div>
+        <ion-text class="header">Tenancy Start Date</ion-text><br />
+        <ion-text class="content">{{tenancyDetailsForm.controls.tenancyStartDate.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Who reported the fault?</ion-text><br />
-        <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}
-        </ion-text>
+        <ion-text class="header">Term(in months)</ion-text><br />
+        <ion-text class="content">{{tenancyDetailsForm.controls.tenancyTerm.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header ion-text-capitalize">{{(reportedByForm.controls.reportedBy.value | lowercase) || 'N/A'}}
-        </ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.forename.value || 'N/A'}}</ion-text>
+        <ion-text class="header">Reference Paid By Tenant?</ion-text><br />
+        <ion-text class="content">{{tenancyDetailsForm.controls.referencePaid.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Title</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.title.value || 'N/A'}}</ion-text>
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Forename</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.forename.value || 'N/A'}}</ion-text>
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Surname</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.surname.value || 'N/A'}}</ion-text>
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">E-mail</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.email.value || 'N/A'}}</ion-text>
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Mobile</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.mobile.value || 'N/A'}}</ion-text>
-      </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Telephone</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.homeTelephoneNo.value || 'N/A'}}</ion-text>
+        <ion-text class="header">Do you want to offer NDS?</ion-text><br />
+        <ion-text class="content">{{tenancyDetailsForm.controls.offerNDS.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size="100" class="border-bottom"></ion-col>
       <ion-col size="100">
-        <div class="sub-heading">Access Information</div>
+        <div class="sub-heading">Property Details</div>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Access Information</ion-text><br />
-        <ion-text class="content">
-          {{(accessInfoForm.controls.isTenantPresenceRequired.value?accessInfoList[0].title:accessInfoList[1].title) || 'N/A'}}
-        </ion-text>
+        <ion-text class="header">Property Let Type</ion-text><br />
+        <ion-text class="content">{{propertyDetailsForm.controls.managementStatus.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Is there a vulnerable occupier at this property?</ion-text><br />
-        <ion-text class="content">{{accessInfoForm.controls.areOccupiersVulnerable.value?'YES':'NO' || 'N/A'}}
-        </ion-text>
+        <ion-text class="header">Property Rent</ion-text><br />
+        <ion-text class="content">{{propertyDetailsForm.controls.monthlyRent.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size="100" class="border-bottom"></ion-col>
+      <ion-col size="100">
+        <div class="sub-heading">Tenant Details</div>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Useful Instruction</ion-text><br />
-        <ion-text class="content">{{accessInfoForm.controls.tenantNotes.value || 'N/A'}}</ion-text>
-      </ion-col> -->
+        <ion-text class="header">Completion Method</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.completeMethod.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Product</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.productId.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Tenant Type</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.tenantTypeId.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Title</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.title.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Other Title</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.otherTitle.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">First Name</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.forename.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
+        <ion-text class="header">Company Name</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.companyName.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Middle Name</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.middleName.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Last Name</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.surname.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Email</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.email.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Date of Birth</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.dateOfBirth.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Marital Status</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.maritalStatus.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Nationality</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.nationality.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
+        <ion-text class="header">Registration Number</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.registerationNumber.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Rent Share</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.rentShare.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Had tenant been known by any other name?</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.hasTenantOtherName.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Title</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.tenantTypeTitle.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">First Name</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.otherforeName.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Middle Name</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.otherMiddle.value || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Last Name</ion-text><br />
+        <ion-text class="content">{{tenantDetailsForm.controls.otherSurname.value || 'N/A'}}</ion-text>
+      </ion-col>
       <ion-col size="100" class="border-bottom"></ion-col>
     </ion-row>
   </ion-grid>
 </ng-template>
 
 
-<ion-content id="la-application-details" *ngIf="propertyId">
+<ion-content id="la-application-details" *ngIf="propertyId && tenantId">
   <ion-grid>
     <ion-row>
       <ion-col size="50" class="heading">
