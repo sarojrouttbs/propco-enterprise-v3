@@ -141,6 +141,10 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response`, notificationObj);
   }
 
+  saveContractorVisit(faultNotificationId, notificationObj): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/contractor-visit`, notificationObj);
+  }
+
   raiseQuote(data, faultId): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/maintenance`, data);
   }

@@ -368,7 +368,7 @@ export class CommonService {
   }
 
   getFormatedDate(date, format?): string {
-    if (typeof date !== 'undefined' && !isNaN(date)) {
+    if (typeof date !== 'undefined') {
       return new DatePipe('en-UK').transform(new Date(date), format || 'yyyy-MM-dd');
     }
   }
