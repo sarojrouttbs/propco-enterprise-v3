@@ -103,7 +103,7 @@ export class DetailsPage implements OnInit {
   contractorEntityId: any;
 
   constructor(
-    private faultService: FaultsService,
+    private faultsService: FaultsService,
     private fb: FormBuilder,
     private commonService: CommonService,
     private route: ActivatedRoute,
@@ -240,7 +240,7 @@ export class DetailsPage implements OnInit {
       estimationNotes: ''
     });
     this.selectedContractor = this.landlordInstFrom.get('contractor').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractor(value) :
+      switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
         new Observable())
     );
   }
@@ -409,7 +409,7 @@ export class DetailsPage implements OnInit {
 
   getPropertyById() {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.getPropertyById(this.propertyId).subscribe(
+      this.faultsService.getPropertyById(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
             this.propertyDetails = res.data;
@@ -429,7 +429,7 @@ export class DetailsPage implements OnInit {
 
   private getPropertyTenancies() {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.getPropertyTenancies(this.propertyId).subscribe(
+      this.faultsService.getPropertyTenancies(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
             this.propertyTenancyList = res.data.filter(x => x.hasCheckedIn);
@@ -462,7 +462,7 @@ export class DetailsPage implements OnInit {
 
   private deleteAdditionalInfo(infoId: string) {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.deleteAdditionalInfo(infoId).subscribe(
+      this.faultsService.deleteAdditionalInfo(infoId).subscribe(
         res => {
           resolve(true);
         },
@@ -477,7 +477,7 @@ export class DetailsPage implements OnInit {
 
   private addAdditionalInfo(faultId: string, requestObj: any) {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.addAdditionalInfo(faultId, requestObj).subscribe(
+      this.faultsService.addAdditionalInfo(faultId, requestObj).subscribe(
         res => {
           resolve();
         },
@@ -492,7 +492,7 @@ export class DetailsPage implements OnInit {
 
   private updateAdditionalInfo(id: string, requestObj: any) {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.updateAdditionalInfo(id, requestObj).subscribe(
+      this.faultsService.updateAdditionalInfo(id, requestObj).subscribe(
         res => {
           resolve();
         },
@@ -513,7 +513,7 @@ export class DetailsPage implements OnInit {
     const uniqueSet = tenantId.filter(this.onlyUnique);
     let apiObservableArray = [];
     uniqueSet.forEach(id => {
-      apiObservableArray.push(this.faultService.getTenantArrearsDetails(id));
+      apiObservableArray.push(this.faultsService.getTenantArrearsDetails(id));
     });
     forkJoin(apiObservableArray).subscribe(res => {
       if (res) {
@@ -533,7 +533,7 @@ export class DetailsPage implements OnInit {
 
   private getHMOLicenceDetails() {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.getHMOLicenceDetailsAgainstProperty(this.propertyId).subscribe(
+      this.faultsService.getHMOLicenceDetailsAgainstProperty(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
             this.propertyHMODetails = res.data;
@@ -551,7 +551,7 @@ export class DetailsPage implements OnInit {
 
   private getFaultHistory() {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.getFaultHistory(this.faultId).subscribe(
+      this.faultsService.getFaultHistory(this.faultId).subscribe(
         res => {
           if (res) {
             this.faultHistory = res;
@@ -569,7 +569,7 @@ export class DetailsPage implements OnInit {
 
   private getFaultAdditionalInfo() {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.getFaultAdditionalInfo().subscribe(
+      this.faultsService.getFaultAdditionalInfo().subscribe(
         res => {
           if (res) {
             this.addtionalInfo = res;
@@ -586,7 +586,7 @@ export class DetailsPage implements OnInit {
 
   private getLandlordsOfProperty(propertyId) {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.getLandlordsOfProperty(propertyId).subscribe(
+      this.faultsService.getLandlordsOfProperty(propertyId).subscribe(
         res => {
           /*filter out LL which have link with the property*/
           this.landlordsOfproperty = res && res.data ? res.data.filter((llDetail => llDetail.propertyLinkStatus === 'Current')) : [];
@@ -603,7 +603,7 @@ export class DetailsPage implements OnInit {
 
   private getPropertyTenants(propertyId, agreementId) {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.getPropertyTenants(propertyId, agreementId).subscribe(
+      this.faultsService.getPropertyTenants(propertyId, agreementId).subscribe(
         res => {
           this.propertyTenants = res && res.data ? res.data : [];
           resolve(this.propertyTenants);
@@ -619,7 +619,7 @@ export class DetailsPage implements OnInit {
 
   private getTenantsGuarantors(tenantId) {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.getTenantGuarantors(tenantId).subscribe(
+      this.faultsService.getTenantGuarantors(tenantId).subscribe(
         res => {
           var guarantorList = res && res.data ? res.data : [];
           this.allGuarantors = this.allGuarantors.concat(guarantorList);
@@ -636,7 +636,7 @@ export class DetailsPage implements OnInit {
 
   private getFaultDetails() {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.getFaultDetails(this.faultId).subscribe(
+      this.faultsService.getFaultDetails(this.faultId).subscribe(
         res => {
           if (res) {
             resolve(res);
@@ -653,7 +653,7 @@ export class DetailsPage implements OnInit {
 
   private getLandlordDetails(landlordId) {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.getLandlordDetails(landlordId).subscribe(
+      this.faultsService.getLandlordDetails(landlordId).subscribe(
         res => {
           let categoryNames = [];
           this.landlordDetails = res ? res : [];
@@ -675,7 +675,7 @@ export class DetailsPage implements OnInit {
 
   private getPreferredSuppliers(landlordId) {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.getPreferredSuppliers(landlordId).subscribe(
+      this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         res => {
           this.preferredSuppliers = res && res.data ? res.data : [];         
           resolve(this.preferredSuppliers);
@@ -690,7 +690,7 @@ export class DetailsPage implements OnInit {
 
   private getContractorDetails(contractorId) {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.getContractorDetails(contractorId).subscribe(res => {
+      this.faultsService.getContractorDetails(contractorId).subscribe(res => {
         resolve(res);
       }, error => {
         reject(null);
@@ -767,7 +767,7 @@ export class DetailsPage implements OnInit {
       formData.append('folderName', this.faultDetails.status + '' || '1');
       formData.append('headCategory', 'Legal');
       formData.append('subCategory', 'Addendum');
-      apiObservableArray.push(this.faultService.uploadDocument(formData, faultId));
+      apiObservableArray.push(this.faultsService.uploadDocument(formData, faultId));
     });
     if (!apiObservableArray.length && reDir) {
       this.router.navigate(['faults/dashboard'], { replaceUrl: true });
@@ -786,7 +786,7 @@ export class DetailsPage implements OnInit {
   }
 
   getFaultDocuments(faultId) {
-    this.faultService.getFaultDocuments(faultId).subscribe(response => {
+    this.faultsService.getFaultDocuments(faultId).subscribe(response => {
       if (response) {
         this.files = response.data;
       }
@@ -795,7 +795,7 @@ export class DetailsPage implements OnInit {
 
   downloadFaultDocument(documentId, name) {
     let fileName = name.split('.')[1];
-    this.faultService.downloadDocument(documentId).subscribe(response => {
+    this.faultsService.downloadDocument(documentId).subscribe(response => {
       if (response) {
         this.commonService.downloadDocument(response, fileName);
       }
@@ -1051,7 +1051,7 @@ export class DetailsPage implements OnInit {
     this.commonService.showLoader();
     let faultRequestObj = this.createFaultFormValues();
 
-    this.faultService.createFault(faultRequestObj).subscribe(
+    this.faultsService.createFault(faultRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
         this.commonService.showMessage('Fault has been logged successfully.', 'Log a Fault', 'success');
@@ -1133,7 +1133,7 @@ export class DetailsPage implements OnInit {
       this.commonService.showLoader();
       let faultRequestObj = this.createFaultFormValues();
       faultRequestObj.isDraft = true;
-      this.faultService.createFault(faultRequestObj).subscribe(
+      this.faultsService.createFault(faultRequestObj).subscribe(
         res => {
           this.commonService.hideLoader();
           this.commonService.showMessage('Fault has been logged successfully.', 'Log a Fault', 'success');
@@ -1170,7 +1170,7 @@ export class DetailsPage implements OnInit {
       }
     }
 
-    this.faultService.updateFault(this.faultId, faultRequestObj).subscribe(
+    this.faultsService.updateFault(this.faultId, faultRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
         this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
@@ -1224,7 +1224,7 @@ export class DetailsPage implements OnInit {
       await this.updateFaultDetails(faultRequestObj);
       this.uploadFiles(this.faultId, false);
       const UNDER_REVIEW = 2; // Under review
-      this.faultService.updateFaultStatus(this.faultId, UNDER_REVIEW).subscribe(data => {
+      this.faultsService.updateFaultStatus(this.faultId, UNDER_REVIEW).subscribe(data => {
         this.refreshDetailsAndStage();
       }, error => {
         this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Start Progress', 'Error');
@@ -1246,7 +1246,7 @@ export class DetailsPage implements OnInit {
     this.commonService.showConfirm('Re-open Fault', 'This will reopen the fault and notify the property manager.<br/> Are you sure?').then(res => {
       if (res) {
         const UNDER_REVIEW = 2; // Under review
-        this.faultService.updateFaultStatus(this.faultId, UNDER_REVIEW).subscribe(data => {
+        this.faultsService.updateFaultStatus(this.faultId, UNDER_REVIEW).subscribe(data => {
           this.router.navigate(['faults/dashboard'], { replaceUrl: true });
         }, error => {
           this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Re-open Fault', 'Error');
@@ -1520,12 +1520,12 @@ export class DetailsPage implements OnInit {
   }
 
   private updateFaultStatus(status): Promise<any> {
-    return this.faultService.updateFaultStatus(this.faultId, status).toPromise();
+    return this.faultsService.updateFaultStatus(this.faultId, status).toPromise();
   }
 
   private updateFaultDetails(requestObj): Promise<any> {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.updateFault(this.faultId, requestObj).subscribe(
+      this.faultsService.updateFault(this.faultId, requestObj).subscribe(
         res => {
           // this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
           resolve(true);
@@ -1540,7 +1540,7 @@ export class DetailsPage implements OnInit {
 
   async checkFaultNotifications(faultId) {
     return new Promise((resolve, reject) => {
-      this.faultService.getFaultNotifications(faultId).subscribe(async (response) => {
+      this.faultsService.getFaultNotifications(faultId).subscribe(async (response) => {
         this.faultNotifications = response && response.data ? response.data : [];
         resolve(this.faultNotifications);
       }, error => {
@@ -1682,7 +1682,8 @@ export class DetailsPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       let notificationObj = {} as FaultModels.IUpdateNotification;
       notificationObj.isAccepted = data;
-      this.faultService.updateNotification(faultNotificationId, notificationObj).subscribe(
+      notificationObj.submittedByType = 'AGENT';
+      this.faultsService.updateNotification(faultNotificationId, notificationObj).subscribe(
         res => {
           resolve(true);
         },

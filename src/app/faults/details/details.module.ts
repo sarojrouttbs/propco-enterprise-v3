@@ -23,6 +23,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SimplePopoverPageModule } from 'src/app/shared/popover/simple-popover/simple-popover.module';
+import { AppoinmentModalPageModule } from 'src/app/shared/modals/appoinment-modal/appoinment-modal.module';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { SimplePopoverPageModule } from 'src/app/shared/popover/simple-popover/s
     MatAutocompleteModule,
     MatCardModule,
     SearchPropertyPageModule,
-    SimplePopoverPageModule
+    SimplePopoverPageModule,
+    AppoinmentModalPageModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent]
 })

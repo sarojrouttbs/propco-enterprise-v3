@@ -5,6 +5,8 @@ import { debounceTime, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
 import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES } from './../../../shared/constants';
+import { AppoinmentModalPage } from 'src/app/shared/modals/appoinment-modal/appoinment-modal.page';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -40,9 +42,9 @@ export class ArrangingContractorComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private faultService: FaultsService,
-    private commonService: CommonService
-
+    private faultsService: FaultsService,
+    private commonService: CommonService,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
@@ -140,7 +142,7 @@ export class ArrangingContractorComponent implements OnInit {
     });
 
     this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value && value.length > 2) ? this.faultService.searchContractor(value) :
+      switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
         new Observable())
     );
   }
@@ -168,7 +170,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private getFaultMaintenance() {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.getQuoteDetails(this.faultDetails.faultId).subscribe((res) => {
+      this.faultsService.getQuoteDetails(this.faultDetails.faultId).subscribe((res) => {
         this.isMaintenanceDetails = true;
         resolve(res ? res.data[0] : undefined);
       }, error => {
@@ -291,7 +293,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private raiseQuote() {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.raiseQuote(this.prepareQuoteData(), this.faultDetails.faultId).subscribe((res) => {
+      this.faultsService.raiseQuote(this.prepareQuoteData(), this.faultDetails.faultId).subscribe((res) => {
         resolve(res);
         this.commonService.showMessage('Successfully Raised', 'Raise a Quote', 'success');
       }, error => {
@@ -304,7 +306,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private updateQuote() {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.updateQuoteDetails(
+      this.faultsService.updateQuoteDetails(
         this.prepareQuoteData(), this.faultMaintenanceDetails.maintenanceId).subscribe((res) => {
           resolve(true);
           this.commonService.showMessage('Successfully Updated', 'Update Quote', 'success');
@@ -336,7 +338,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private updateFaultQuoteContractor() {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.updateFaultQuoteContractor(
+      this.faultsService.updateFaultQuoteContractor(
         { selectedContractorId: this.raiseQuoteForm.value.selectedContractorId },
         this.faultDetails.faultId,
         this.faultMaintenanceDetails.maintenanceId).subscribe((res) => {
@@ -352,7 +354,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private updateFault(isSubmit = false) {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.updateFault(
+      this.faultsService.updateFault(
         this.faultDetails.faultId, this.prepareFaultData(isSubmit)).subscribe((res) => {
           resolve(true);
         }, error => {
@@ -434,7 +436,7 @@ export class ArrangingContractorComponent implements OnInit {
         }
       });
       if (contractIds.length) {
-        this.faultService.addContractors(this.faultMaintenanceDetails.maintenanceId, { contractorIds: contractIds }).subscribe(
+        this.faultsService.addContractors(this.faultMaintenanceDetails.maintenanceId, { contractorIds: contractIds }).subscribe(
           res => {
             resolve(true);
           },
@@ -451,7 +453,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private deleteContrator(maintenanceId: string, contractorId: string) {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.deleteContractor(maintenanceId, contractorId).subscribe(
+      this.faultsService.deleteContractor(maintenanceId, contractorId).subscribe(
         res => {
           resolve(true);
         },
@@ -465,7 +467,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private getUserDetails() {
     return new Promise((resolve, reject) => {
-      this.faultService.getUserDetails().subscribe((res) => {
+      this.faultsService.getUserDetails().subscribe((res) => {
         let data = res ? res.data[0] : '';
         resolve(data);
       }, error => {
@@ -489,7 +491,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private getPreferredSuppliers(landlordId) {
     const promise = new Promise((resolve, reject) => {
-      this.faultService.getPreferredSuppliers(landlordId).subscribe(
+      this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         res => {
           res && res.data ? res.data.map((x) => { this.addContractor(x, false, true) }) : [];
           resolve(true);
@@ -504,7 +506,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   async checkFaultNotifications(faultId) {
     return new Promise((resolve, reject) => {
-      this.faultService.getFaultNotifications(faultId).subscribe(async (response) => {
+      this.faultsService.getFaultNotifications(faultId).subscribe(async (response) => {
         let notifications = response && response.data ? response.data : [];
         resolve(notifications);
       }, error => {
@@ -542,7 +544,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private getTenantDetail(tenantId) {
     if (tenantId) {
-      this.faultService.getTenantDetails(tenantId).subscribe((res) => {
+      this.faultsService.getTenantDetails(tenantId).subscribe((res) => {
         const data = res ? res : '';
         if (data) {
           this.raiseQuoteForm.get('contact').setValue(data.fullName + ' ' + data.mobile);
@@ -560,19 +562,91 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  questionAction(data) {
+  async questionAction(data) {
+    if (this.iacNotification && this.iacNotification.responseReceived != null) {
+      return;
+    }
 
+    if (this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[1].index) {
+      if (this.iacNotification.templateCode === 'CQ-NA-C-E') {
+        this.questionActionAcceptRequest(data);
+      } else if (this.iacNotification.templateCode === 'CDT-C-E') {
+        this.questionActionVisitTime(data);
+      }
+    }
   }
 
-  getContractorDetails(contractId) {
+  private questionActionAcceptRequest(data) {
+    if (data.value) {
+      this.commonService.showConfirm(data.text, 'Are you sure, you want to accept the quote request', '', 'Yes', 'No').then(async res => {
+        if (res) {
+          await this.updateFaultNotification(data.value, this.iacNotification.faultNotificationId);
+          this.commonService.showLoader();
+          // setTimeout(async () => {
+          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+          // }, 1000);
+
+        }
+      });
+    } else if (!data.value) {
+      this.commonService.showConfirm(data.text, 'Are you sure, you want to reject the quote request', '', 'Yes', 'No').then(async res => {
+        if (res) {
+          await this.updateFaultNotification(data.value, this.iacNotification.faultNotificationId);
+          this.commonService.showLoader();
+          // setTimeout(async () => {
+          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+          // }, 1000);
+
+        }
+      });
+    }
+  }
+
+  private async questionActionVisitTime(data) {
+    if (!data.value) {
+      this.commonService.showConfirm(data.text, 'Are you sure, you want to send notification to tenant/landlord.', '', 'Yes', 'No').then(async res => {
+        if(res){
+          await this.saveContractorVisitResponse(data.value, this.iacNotification.faultNotificationId);
+          this.commonService.showLoader();
+          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+    
+        }
+      });
+    } else if (data.value) {
+      const modal = await this.modalController.create({
+        component: AppoinmentModalPage,
+        cssClass: 'modal-container',
+        componentProps: {
+          faultNotificationId: this.iacNotification.faultNotificationId,  
+        },
+        backdropDismiss: false
+      });
+
+      modal.onDidDismiss().then(async res => {
+        if (res.data && res.data =='success') {
+          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+        }
+      });
+
+      await modal.present();
+
+    }
+  }
+
+  private getContractorDetails(contractId) {
     return new Promise((resolve, reject) => {
-      this.faultService.getContractorDetails(contractId).subscribe((res) => {
+      this.faultsService.getContractorDetails(contractId).subscribe((res) => {
         let data = res ? res : '';
         this.patchContartorList(data, true, false);
       }, error => {
       });
     });
   }
+
   patchContartorList(data, isNew, isPreferred) {
     const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
     const contGrup = this.fb.group({
@@ -595,6 +669,40 @@ export class ArrangingContractorComponent implements OnInit {
       this.addContractorForm.reset();
       this.isSelected = false;
     }
+  }
+
+  private async updateFaultNotification(data, faultNotificationId): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      let notificationObj = {} as FaultModels.IUpdateNotification;
+      notificationObj.isAccepted = data;
+      notificationObj.submittedByType = 'AGENT';
+      this.faultsService.updateNotification(faultNotificationId, notificationObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          reject(error)
+        }
+      );
+    });
+    return promise;
+  }
+
+  private async saveContractorVisitResponse(data, faultNotificationId): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      let notificationObj = {} as FaultModels.IUpdateNotification;
+      notificationObj.isAccepted = data;
+      notificationObj.submittedByType = 'AGENT';
+      this.faultsService.saveContractorVisit(faultNotificationId, notificationObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          reject(error)
+        }
+      );
+    });
+    return promise;
   }
 
 }
