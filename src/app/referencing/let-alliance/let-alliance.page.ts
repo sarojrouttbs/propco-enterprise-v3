@@ -11,7 +11,4 @@ export class LetAlliancePage implements OnInit {
 
   ngOnInit() {
   }
-
-  
-
 }

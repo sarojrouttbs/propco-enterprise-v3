@@ -40,26 +40,26 @@ export const HEAD_CATEGORY = {
   ADMIN: 'Admin',
   TENANT: 'Tenant',
   CONTRACTOR: 'Contractor'
-}
+};
 
 export const REPORTED_BY_TYPES = [
   {
-    "index": "LANDLORD",
-    "value": "Landlord"
+    index: 'LANDLORD',
+    value: 'Landlord'
   },
   {
-    "index": "TENANT",
-    "value": "Tenant"
+    index: 'TENANT',
+    value: 'Tenant'
   },
   {
-    "index": "GUARANTOR",
-    "value": "Guarantor"
+    index: 'GUARANTOR',
+    value: 'Guarantor'
   },
   {
-    "index": "THIRD_PARTY",
-    "value": "Third Party"
+    index: 'THIRD_PARTY',
+    value: 'Third Party'
   }
-]
+];
 
 export const FAULT_STAGES = {
   FAULT_LOGGED: 'FAULT_LOGGED',
@@ -68,7 +68,7 @@ export const FAULT_STAGES = {
   ARRANGING_CONTRACTOR: 'ARRANGING_CONTRACTOR',
   JOB_COMPLETION: 'JOB_COMPLETION',
   PAYMENT: 'PAYMENT'
-}
+};
 
 export const FAULT_STAGES_INDEX = {
   FAULT_LOGGED: 0,
@@ -77,8 +77,7 @@ export const FAULT_STAGES_INDEX = {
   ARRANGING_CONTRACTOR: 3,
   JOB_COMPLETION: 4,
   PAYMENT: 5
-}
-
+};
 
 export const LL_INSTRUCTION_TYPES = [
   {
@@ -119,8 +118,7 @@ export const ARRANING_CONTRACTOR_ACTIONS = [
   {
     index: 'PROPERTY_VISIT_FOR_QUOTE',
     value: 'Property visit for quote',
-  },
-  
+  }
 ];
 
 export const ACCESS_INFO_TYPES = [
@@ -138,8 +136,19 @@ export const URGENCY_TYPES = {
   EMERGENCY: 1,
   URGENT: 2,
   NON_URGENT: 3
-}
+};
 
 export const REGEX = {
   DECIMAL_REGEX: '[0-9]+(\.[0-9][0-9]?)?'
-}
+};
+
+export const COMPLETION_METHODS = [
+  {
+    index: 1,
+    value: 'Complete Now'
+  },
+  {
+    index: 2,
+    value: 'Email to Tenant'
+  }
+];

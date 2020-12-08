@@ -10,6 +10,8 @@ import { ApplicationDetailsPage } from './application-details.page';
 import { MaterialModule } from 'src/app/material.module';
 import { ComponentsModule } from 'src/app/shared/components/components.module';
 import { TenantListModalPageModule } from 'src/app/shared/modals/tenant-list-modal/tenant-list-modal.module';
+import { AddressModalPageModule } from 'src/app/shared/modals/address-modal/address-modal.module';
+import { SearchPropertyPageModule } from 'src/app/shared/modals/search-property/search-property.module';
 
 @NgModule({
   imports: [
@@ -20,7 +22,9 @@ import { TenantListModalPageModule } from 'src/app/shared/modals/tenant-list-mod
     ApplicationDetailsPageRoutingModule,
     MaterialModule,
     ComponentsModule,
-    TenantListModalPageModule
+    TenantListModalPageModule,
+    AddressModalPageModule,
+    SearchPropertyPageModule
   ],
   declarations: [ApplicationDetailsPage]
 })

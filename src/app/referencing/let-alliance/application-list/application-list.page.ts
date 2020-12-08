@@ -24,6 +24,8 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   officeCodes: any[];
   applicationList: any[];
   laProductList: any[];
+  laCaseProductList: any[];
+  laApplicationProductList: any[];
 
   selectedData: any;
   applicationFilterForm: FormGroup;
@@ -56,6 +58,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
         .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');
         this.letAllianceService.getLAApplicationList(params).subscribe(res => {
           this.applicationList = res && res.data ? res.data : [];
+          this.getLAProductList();
           callback({
             recordsTotal: res ? res.count : 0,
             recordsFiltered: res ? res.count : 0,
@@ -153,9 +156,13 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     });
   }
 
-  getLAProducts(){
-    this.letAllianceService.getLAProductList().subscribe(data => {
-      this.laProductList = data;
+  getLAProductList() {
+    this.letAllianceService.getLAProductList().subscribe(
+      res => {
+        this.laProductList = res ? res : [];
+      },
+      error => {
+        console.log(error);
     });
   }
 
@@ -166,8 +173,13 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       if (obj.productId === productId) {
         productType = obj.productName;
       }
-    })
+    });
     return productType;
+  }
+
+  removeDuplicateObjects(array: any[]) {
+    return [...new Set(array.map(res => JSON.stringify(res)))]
+      .map(res1 => JSON.parse(res1));
   }
 
   refresh(){

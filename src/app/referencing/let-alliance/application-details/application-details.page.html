@@ -6,7 +6,7 @@
           <ion-item>
             <ion-label position="floating">Product</ion-label>
             <ion-select interface="popover" formControlName="productId">
-              <ion-select-option [value]="item.productId" *ngFor="let item of LAProductList">
+              <ion-select-option [value]="item.productId" *ngFor="let item of laCaseProductList">
                 {{ item.productName }}
               </ion-select-option>
             </ion-select>
@@ -16,14 +16,15 @@
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">No. of Occupants</ion-label>
-            <ion-input formControlName="occupants"></ion-input>
+            <ion-input formControlName="noOfTenantToBeReferenced"></ion-input>
           </ion-item>
-          <app-validation-message [control]="tenancyDetailsForm.controls.occupants"></app-validation-message>
+          <app-validation-message [control]="tenancyDetailsForm.controls.noOfTenantToBeReferenced"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Tenancy Start Date </ion-label>
             <ion-datetime
+            [min]="currentDate"
             [max]="futureDate"
               formControlName="tenancyStartDate"
               displayFormat="DD/MM/YYYY"
@@ -39,13 +40,13 @@
           </ion-item>
           <app-validation-message [control]="tenancyDetailsForm.controls.tenancyTerm"></app-validation-message>
         </ion-col>
-        <ion-col size="33.3">
+        <!-- <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Reference Paid By Tenant?</ion-label>
             <ion-input formControlName="referencePaid"></ion-input>
           </ion-item>
           <app-validation-message [control]="tenancyDetailsForm.controls.referencePaid"></app-validation-message>
-        </ion-col>
+        </ion-col> -->
         <ion-col size="33.3">
           <ion-item lines="none" style="margin-top: 6px;">
             <ion-label>Do you want to offer NDS?</ion-label>
@@ -112,8 +113,10 @@
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Completion Method</ion-label>
-            <ion-select interface="popover" formControlName="completeMethod" [disabled]="true">
-              <ion-select-option>Email to Tenant</ion-select-option>
+            <ion-select interface="popover" formControlName="completeMethod">
+              <ion-select-option [value]="item.index" *ngFor="let item of completionMethods">
+                {{ item.value }}
+              </ion-select-option>
             </ion-select>
           </ion-item>
         </ion-col>
@@ -121,7 +124,9 @@
           <ion-item>
             <ion-label position="floating">Product</ion-label>
             <ion-select interface="popover" formControlName="productId">
-              <ion-select-option>Choose</ion-select-option>
+              <ion-select-option [value]="item.productId" *ngFor="let item of laApplicationProductList">
+                {{ item.productName }}
+              </ion-select-option>
             </ion-select>
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.productId"></app-validation-message>
@@ -193,7 +198,7 @@
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Date of Birth</ion-label>
-            <ion-datetime formControlName="dateOfBirth" displayFormat="DD MMM YYYY" interface="popover"></ion-datetime>
+            <ion-datetime formControlName="dateOfBirth" displayFormat="DD MMM YYYY" interface="popover" [max]="adultDate"></ion-datetime>
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.dateOfBirth"></app-validation-message>
         </ion-col>
@@ -284,24 +289,24 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Product</ion-text><br />
-        <ion-text class="content">{{tenancyDetailsForm.controls.productId.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getProductType(tenancyDetailsForm.controls.productId.value) || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">No. of Occupants</ion-text><br />
-        <ion-text class="content">{{tenancyDetailsForm.controls.occupants.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenancyDetailsForm.controls.noOfTenantToBeReferenced.value  || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Tenancy Start Date</ion-text><br />
-        <ion-text class="content">{{tenancyDetailsForm.controls.tenancyStartDate.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenancyDetailsForm.controls.tenancyStartDate.value | date: 'dd/MM/yyyy' || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Term(in months)</ion-text><br />
         <ion-text class="content">{{tenancyDetailsForm.controls.tenancyTerm.value || 'N/A'}}</ion-text>
       </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
+      <!-- <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Reference Paid By Tenant?</ion-text><br />
         <ion-text class="content">{{tenancyDetailsForm.controls.referencePaid.value || 'N/A'}}</ion-text>
-      </ion-col>
+      </ion-col> -->
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Do you want to offer NDS?</ion-text><br />
         <ion-text class="content">{{tenancyDetailsForm.controls.offerNDS.value || 'N/A'}}</ion-text>
@@ -312,11 +317,11 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Property Let Type</ion-text><br />
-        <ion-text class="content">{{propertyDetailsForm.controls.managementStatus.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getLookupValue(propertyDetailsForm.controls.managementStatus.value, tenantTypes) || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Property Rent</ion-text><br />
-        <ion-text class="content">{{propertyDetailsForm.controls.monthlyRent.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{propertyDetailsForm.controls.monthlyRent.value | currency: '£' || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size="100" class="border-bottom"></ion-col>
       <ion-col size="100">
@@ -324,19 +329,19 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Completion Method</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.completeMethod.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.completeMethod.value, completionMethods) || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Product</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.productId.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getProductType(tenantDetailsForm.controls.productId.value) || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Tenant Type</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.tenantTypeId.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Title</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.title.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.title.value, titleTypes) || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Other Title</ion-text><br />
@@ -364,11 +369,11 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Date of Birth</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.dateOfBirth.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenantDetailsForm.controls.dateOfBirth.value | date: 'dd/MM/yyyy'  || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Marital Status</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.maritalStatus.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.maritalStatus.value, maritalStatusTypes) || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Nationality</ion-text><br />
@@ -380,25 +385,25 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Rent Share</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.rentShare.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenantDetailsForm.controls.rentShare.value | currency: '£'  || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Had tenant been known by any other name?</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.hasTenantOtherName.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenantDetailsForm.controls.hasTenantOtherName.value || 'False'}}</ion-text>
       </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
+      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
         <ion-text class="header">Title</ion-text><br />
         <ion-text class="content">{{tenantDetailsForm.controls.tenantTypeTitle.value || 'N/A'}}</ion-text>
       </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
+      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
         <ion-text class="header">First Name</ion-text><br />
         <ion-text class="content">{{tenantDetailsForm.controls.otherforeName.value || 'N/A'}}</ion-text>
       </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
+      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
         <ion-text class="header">Middle Name</ion-text><br />
         <ion-text class="content">{{tenantDetailsForm.controls.otherMiddle.value || 'N/A'}}</ion-text>
       </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content">
+      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
         <ion-text class="header">Last Name</ion-text><br />
         <ion-text class="content">{{tenantDetailsForm.controls.otherSurname.value || 'N/A'}}</ion-text>
       </ion-col>
@@ -549,7 +554,7 @@
                 <ion-button class="cancel-button">Cancel</ion-button>
                 <ion-button (click)="applicationTabs.selectedIndex = 1" class="next-button">Back</ion-button>
                 <ion-button class="next-button">Next</ion-button>
-                <ion-button class="submit-button">Submit</ion-button>
+                <ion-button class="submit-button" (click)=createApplication()>Submit</ion-button>
               </div>
             </mat-tab>
           </mat-tab-group>
