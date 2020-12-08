@@ -186,6 +186,9 @@
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
         <div class="arranging-contractor">
           <div class="banner">
+            <div class="ion-text-left">
+              <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd-MM-yyyy HH:mm aa' }}</b>
+            </div>
             <h2 class="banner-heading">
               {{iacNotification && iacNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
             <h6 class="banner-title">Here’s the action you choose:</h6>
