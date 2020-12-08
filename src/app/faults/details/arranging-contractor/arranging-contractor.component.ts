@@ -568,9 +568,9 @@ export class ArrangingContractorComponent implements OnInit {
     }
 
     if (this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[1].index) {
-      if (this.iacNotification.templateCode === 'CQ-NA-C-E') {
+      if (this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') {
         this.questionActionAcceptRequest(data);
-      } else if (this.iacNotification.templateCode === 'CDT-C-E') {
+      } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
         this.questionActionVisitTime(data);
       }
     }
