@@ -11,6 +11,8 @@ import { MatStepper } from '@angular/material/stepper';
 import { LetAllianceService } from '../let-alliance.service';
 import { forkJoin } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { COMPLETION_METHODS } from 'src/app/shared/constants';
+import { ValidationService } from 'src/app/shared/services/validation.service';
 
 @Component({
   selector: 'app-application-details',
@@ -29,7 +31,9 @@ export class ApplicationDetailsPage implements OnInit {
   propertyTenancyList: applicationModels.ITenancyResponse;
   propertyTenantList: applicationModels.ITenantListResponse;
   tenantDetails: applicationModels.ITenantResponse;
-  LAProductList: any[] = [];
+  laProductList: any[] = [];
+  laCaseProductList: any[];
+  laApplicationProductList: any[];
   propertyId = null;
   lookupdata: any;
   laLookupdata: any;
@@ -41,18 +45,16 @@ export class ApplicationDetailsPage implements OnInit {
   previous;
   tenantId;
   futureDate: string;
+  currentDate = this.commonService.getFormatedDate(new Date());
+  adultDate = this.datepipe.transform(new Date().setDate(new Date().getDay() - (18 * 365)), 'yyyy-MM-dd');
 
-  managementStatusTypes: any;
-  tenantTypes: any;
-  titleTypes: any;
-  maritalStatusTypes: any;
+  managementStatusTypes: any[] = [];
+  tenantTypes: any[] = [];
+  titleTypes: any[] = [];
+  maritalStatusTypes: any[] = [];
+  completionMethods: any[] = COMPLETION_METHODS;
 
-  address: any = {
-    addressLine1: 'address Line 1',
-    addressLine2: 'address Line 2',
-    locality: 'address Line 3',
-    postcode: 'address Line 4'
-  };
+  address: any = {};
 
   constructor(
     private fb: FormBuilder,
@@ -69,11 +71,11 @@ export class ApplicationDetailsPage implements OnInit {
     this.tenancyDetailsAccordion.expanded = true;
     this.propertyDetailsAccordion.expanded = false;
     this.tenantDetailsAccordion.expanded = true;
-    let date = new Date();
+    const date = new Date();
     date.setDate(date.getDate() + 60);
-    this.futureDate = this.datepipe.transform(date, "yyyy-MM-dd"); 
+    this.futureDate = this.datepipe.transform(date, 'yyyy-MM-dd');
   }
-  
+
   ionViewDidEnter() {
     this.propertyId = this.route.snapshot.queryParamMap.get('pId');
     this.initiateApplication();
@@ -127,7 +129,10 @@ export class ApplicationDetailsPage implements OnInit {
     const modal = await this.modalController.create({
       component: SearchPropertyPage,
       cssClass: 'modal-container entity-search',
-      backdropDismiss: false
+      backdropDismiss: false,
+      componentProps: {
+        isFAF: false,
+      }
     });
 
     const data = modal.onDidDismiss().then(res => {
@@ -146,7 +151,7 @@ export class ApplicationDetailsPage implements OnInit {
     const modal = await this.modalController.create({
       component: TenantListModalPage,
       cssClass: 'modal-container tenant-list',
-      backdropDismiss: true,
+      backdropDismiss: false,
       componentProps: {
         propertyId: this.propertyId,
       }
@@ -155,7 +160,6 @@ export class ApplicationDetailsPage implements OnInit {
     const data = modal.onDidDismiss().then(res => {
        if (res.data.tenantId) {
          this.hasTenants = true;
-         console.log(res.data.tenantId);
          this.tenantId = res.data.tenantId;
          this.initiateApplication();
        } else {
@@ -175,24 +179,23 @@ export class ApplicationDetailsPage implements OnInit {
   private initTenancyDetailsForm(): void {
     this.tenancyDetailsForm = this.fb.group({
       productId: ['', Validators.required],
-      occupants: ['', Validators.required],
+      noOfTenantToBeReferenced: ['', [Validators.required, ValidationService.numberValidator]],
       tenancyStartDate: ['', Validators.required],
-      tenancyTerm: ['', [Validators.required, Validators.min(1), Validators.max(36)]],
-      offerNDS: [false],
-      referencePaid: ['', Validators.required],
+      tenancyTerm: ['', [Validators.required, Validators.min(1), Validators.max(36), ValidationService.numberValidator]],
+      offerNDS: [false]
     });
   }
 
   private initPropertyDetailsForm(): void {
     this.propertyDetailsForm = this.fb.group({
       managementStatus: ['', Validators.required],
-      monthlyRent: ['', Validators.required],
+      monthlyRent: ['', [Validators.required]],
     });
   }
 
   private initTenantDetailsTabForm(): void {
     this.tenantDetailsForm = this.fb.group({
-      completeMethod: [''],
+      completeMethod: [{ value: 2, disabled: true }],
       productId: ['', Validators.required],
       tenantTypeId: [1, Validators.required],
       title: ['', Validators.required],
@@ -206,7 +209,7 @@ export class ApplicationDetailsPage implements OnInit {
       maritalStatus: [''],
       nationality: [''],
       registerationNumber: [''],
-      rentShare: ['', Validators.required],
+      rentShare: ['', [Validators.required, ValidationService.numberValidator]],
       hasTenantOtherName: [false],
       tenantTypeTitle: [''],
       otherforeName: [''],
@@ -236,6 +239,7 @@ export class ApplicationDetailsPage implements OnInit {
       this.letAllianceService.getPropertyById(this.propertyId).subscribe(
         res => {
           this.propertyDetails = res && res.data ? res.data : {};
+          this.address = this.propertyDetails.address;
           resolve(this.propertyDetails);
         },
         error => {
@@ -299,15 +303,22 @@ export class ApplicationDetailsPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.letAllianceService.getLAProductList().subscribe(
         res => {
-          this.LAProductList = res ? res : [];
-          resolve(this.LAProductList);
+          this.laProductList = res ? this.removeDuplicateObjects(res) : [];
+          this.laCaseProductList = this.laProductList.filter(obj => {
+            return obj.productName.includes('Per Property');
+          });
+  
+          this.laApplicationProductList = this.laProductList.filter(obj => {
+            return !obj.productName.includes('Per Property');
+          });
+          resolve(this.laProductList);
         },
         error => {
           console.log(error);
-          resolve();
-        }
-      );
+          resolve(this.laProductList);
+      });
     });
+
     return promise;
   }
 
@@ -341,7 +352,17 @@ export class ApplicationDetailsPage implements OnInit {
   async editAddress() {
     const modal = await this.modalController.create({
       component: AddressModalPage,
-      cssClass: 'modal-container'
+      cssClass: 'modal-container',
+      backdropDismiss: false,
+      componentProps: {
+        address: this.address
+      }
+    });
+    const data = modal.onDidDismiss().then(res => {
+      if (res.data.address) {
+        this.address = res.data.address;
+        console.log(res);
+      }
     });
     await modal.present();
   }
@@ -400,10 +421,17 @@ export class ApplicationDetailsPage implements OnInit {
     this.commonService.showLoader();
     const applicationRequestObj = this.createApplicationFormValues();
 
+    console.log('applicationRequestObj--' + JSON.stringify(applicationRequestObj));
+
     this.letAllianceService.createApplication(applicationRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
         this.commonService.showMessage('Application has been created successfully.', 'Create an Application', 'success');
+        setTimeout(() => {
+          this.router.navigate(['/let-alliance/dashboard']).then(() => {
+            location.reload();
+          });
+        }, 5000);
       },
       error => {
         this.commonService.hideLoader();
@@ -437,26 +465,23 @@ export class ApplicationDetailsPage implements OnInit {
   }
 
   private createApplicationFormValues(): any {
+    const tmpDate = new Date(this.tenancyDetailsForm.get('tenancyStartDate').value);
+    tmpDate.setDate(tmpDate.getDate() + (this.tenancyDetailsForm.get('tenancyTerm').value * 30));
     const applicationDetails =
       {
         propertyId: this.propertyDetails.propertyId,
         applicantId: this.tenantDetails.tenantId,
-        agreementId: 9, // not suraj
+        agreementId: this.propertyTenancyList[0].propcoAgreementId, // not suraj
         applicantItemType: 'M', // not suraj
         case: {
-          tenancyStartDate: this.tenancyDetailsForm.get('tenancyStartDate').value,
-          tenancyEndDate: this.propertyTenancyList[0].tenancyEndDate,
-          address: {
-            addressLine1: '1',
-            postcode: 'CV31 2DW',
-            town: 'leamington',
-            country: 'UK'
-          },
-          noOfTenantToBeReferenced: 1, // not Suraj
-          typeId: 1, // suraj
+          tenancyStartDate: this.datepipe.transform(this.tenancyDetailsForm.get('tenancyStartDate').value, 'yyyy-MM-dd'),
+          tenancyEndDate: this.datepipe.transform(tmpDate, 'yyyy-MM-dd'),
+          address: this.address,
+          noOfTenantToBeReferenced: this.tenancyDetailsForm.get('noOfTenantToBeReferenced').value,
+          typeId: this.tenantDetailsForm.get('tenantTypeId').value,
           tenancyTerm: this.tenancyDetailsForm.get('tenancyTerm').value,
-          monthlyRent: this.tenancyDetailsForm.get('monthlyRent').value,
-          managementStatus: this.tenancyDetailsForm.get('managementStatus').value,
+          monthlyRent: this.propertyDetailsForm.get('monthlyRent').value,
+          managementStatus: this.propertyDetailsForm.get('managementStatus').value,
           productId: this.tenancyDetailsForm.get('productId').value
         },
         application: {
@@ -464,37 +489,38 @@ export class ApplicationDetailsPage implements OnInit {
           title: this.tenantDetailsForm.get('title').value,
           forename: this.tenantDetailsForm.get('forename').value,
           surname: this.tenantDetailsForm.get('surname').value,
-          dateOfBirth: this.tenantDetailsForm.get('dateOfBirth').value,
-          rentShare: 500, // suraj
-          productId: this.tenancyDetailsForm.get('productId').value, // why 2 productId
-          sendTenantLink: true, // not suraj
-          autoSubmitLink: true, // not suraj
+          dateOfBirth: this.datepipe.transform(this.tenantDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
+          rentShare: this.tenantDetailsForm.get('rentShare').value,
+          productId: this.tenantDetailsForm.get('productId').value,
+          sendTenantLink: false,
+          autoSubmitLink: false,
           email: this.tenantDetailsForm.get('email').value,
           maritalStatus: this.tenantDetailsForm.get('maritalStatus').value,
-          nationality: this.tenantDetailsForm.get('nationality').value,
-          isGuarantor: false, // suraj
+          nationality: 'British', //this.tenantDetailsForm.get('nationality').value, // British
+          isGuarantor: false,
           hasTenantOtherName: this.tenantDetailsForm.get('hasTenantOtherName').value,
         }
       };
-      /* urgencyStatus: this.faultDetailsForm.get('urgencyStatus').value,
-      reportedBy: this.reportedByForm.get('reportedBy').value,
-      category: this.describeFaultForm.get('category').value,
-      title: this.describeFaultForm.get('title').value,
-      notes: this.faultDetailsForm.get('notes').value,
-      agreementId: this.reportedByForm.get('agreementId').value,
-      reportedById: this.reportedByForm.get('reportedById').value,
-      isTenantPresenceRequired: this.accessInfoForm.get('isTenantPresenceRequired').value,
-      areOccupiersVulnerable: this.accessInfoForm.get('areOccupiersVulnerable').value,
-      tenantNotes: this.accessInfoForm.get('tenantNotes').value,
-      propertyId: this.propertyId,
-      sourceType: "FAULT",
-      additionalInfo: this.faultDetailsForm.get('additionalInfo').value,
-      isDraft: false,
-      stage: FAULT_STAGES.FAULT_LOGGED */
     return applicationDetails;
   }
 
   getLookupValue(index, lookup) {
     return this.commonService.getLookupValue(index, lookup);
+  }
+
+  removeDuplicateObjects(array: any[]) {
+    return [...new Set(array.map(res => JSON.stringify(res)))]
+      .map(res1 => JSON.parse(res1));
+  }
+
+  getProductType(productId): string{
+    let productType;
+    this.laProductList = this.laProductList && this.laProductList.length ? this.laProductList : [];
+    this.laProductList.find((obj) => {
+      if (obj.productId === productId) {
+        productType = obj.productName;
+      }
+    });
+    return productType;
   }
 }

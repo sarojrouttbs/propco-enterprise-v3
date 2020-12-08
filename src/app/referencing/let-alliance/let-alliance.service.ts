@@ -49,7 +49,7 @@ export class LetAllianceService {
   }
 
   createApplication(requestObj: any): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + `faults/create`, requestObj);
+    return this.httpClient.post(environment.API_BASE_URL + `referencing/3/application`, requestObj);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

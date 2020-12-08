@@ -252,13 +252,23 @@ export class CommonService {
     toast.present();
   }
 
-  searchPropertyByText(text: string): Observable<any> {
-    const params = new HttpParams()
+  searchPropertyByText(text: string, isFAF?: boolean): Observable<any> {
+    let params;
+    if (isFAF) {
+      params = new HttpParams()
       .set('limit', '10')
       .set('page', '1')
       .set('prop.mantypeLetCat', '3346')
       .set('text', text)
       .set('types', 'PROPERTY');
+    }
+    else{
+      params = new HttpParams()
+      .set('limit', '10')
+      .set('page', '1')
+      .set('text', text)
+      .set('types', 'PROPERTY');
+    }
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 

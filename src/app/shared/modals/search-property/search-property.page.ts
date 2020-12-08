@@ -19,6 +19,7 @@ export class SearchPropertyPage implements OnInit {
   propertySearchForm: FormGroup;
   filteredProperty: Observable<FaultModels.IPropertyResponse>;
   propertyId;
+  isFAF;
 
   constructor(
     private navParams: NavParams,
@@ -27,9 +28,10 @@ export class SearchPropertyPage implements OnInit {
     private commonService: CommonService,
     private location: PlatformLocation
   ) {
+    this.isFAF = this.navParams.get('isFAF');
     this.initPropertySearchForm();
     this.filteredProperty = this.propertySearchForm.get('text').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value.length > 2) ? this.commonService.searchPropertyByText(value) : new Observable())
+      switchMap((value: string) => (value.length > 2) ? this.commonService.searchPropertyByText(value, this.isFAF) : new Observable())
     );
     location.onPopState(() => this.dismiss());
   }
