@@ -622,6 +622,7 @@
           </div>
           <div *ngIf="cliNotification">
             <div class="banner">
+              <div class="ion-text-left">{{cliNotification?.templateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm aa' }}</div>
               <h2 class="banner-heading">
                 {{cliNotification && cliNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
               <h6 class="banner-title">Here’s the action you choose:</h6>
