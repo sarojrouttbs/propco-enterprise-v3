@@ -46,7 +46,7 @@ export class AppoinmentModalPage implements OnInit {
       const requestObj = this.appoinmentForm.value;
       requestObj.contractorPropertyVisitAt = this.commonService.getFormatedDate(requestObj.dateTime, 'yyyy-MM-dd HH:mm:ss');
       requestObj.isAccepted = true;
-      requestObj.submittedByType = 'AGENT';
+      requestObj.submittedByType = 'SECUR_USER';
       this.faultsService.saveContractorVisit(this.faultNotificationId, requestObj).subscribe(res => {
         this.modalController.dismiss('success');
       }, error => {

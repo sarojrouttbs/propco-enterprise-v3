@@ -1685,7 +1685,7 @@ export class DetailsPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       let notificationObj = {} as FaultModels.IUpdateNotification;
       notificationObj.isAccepted = data;
-      notificationObj.submittedByType = 'AGENT';
+      notificationObj.submittedByType = 'SECUR_USER';
       this.faultsService.updateNotification(faultNotificationId, notificationObj).subscribe(
         res => {
           resolve(true);
