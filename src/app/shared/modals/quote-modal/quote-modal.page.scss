@@ -5,3 +5,10 @@
 :host ::ng-deep .picker-wrapper {
     top: 73px !important;
 }
+
+ion-segment-button{
+    height: 60px;
+    .button-native {
+        margin: 0 !important;
+    }
+}
