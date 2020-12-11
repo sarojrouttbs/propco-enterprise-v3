@@ -578,7 +578,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private questionActionAcceptRequest(data) {
     if (data.value) {
-      this.commonService.showConfirm(data.text, 'Are you sure, you want to accept the quote request', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, 'Are you sure, you want to accept the quote request?', '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(data.value, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
@@ -590,7 +590,7 @@ export class ArrangingContractorComponent implements OnInit {
         }
       });
     } else if (!data.value) {
-      this.commonService.showConfirm(data.text, 'Are you sure, you want to reject the quote request', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, 'Are you sure, you want to reject the quote request?', '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(data.value, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
@@ -606,7 +606,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async questionActionVisitTime(data) {
     if (!data.value) {
-      this.commonService.showConfirm(data.text, 'Are you sure, you want to send notification to tenant/landlord.', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, 'Are you sure?', '', 'Yes', 'No').then(async res => {
         if(res){
           await this.saveContractorVisitResponse(data.value, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
@@ -675,7 +675,7 @@ export class ArrangingContractorComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       let notificationObj = {} as FaultModels.IUpdateNotification;
       notificationObj.isAccepted = data;
-      notificationObj.submittedByType = 'AGENT';
+      notificationObj.submittedByType = 'SECUR_USER';
       this.faultsService.updateNotification(faultNotificationId, notificationObj).subscribe(
         res => {
           resolve(true);
@@ -692,7 +692,7 @@ export class ArrangingContractorComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       let notificationObj = {} as FaultModels.IUpdateNotification;
       notificationObj.isAccepted = data;
-      notificationObj.submittedByType = 'AGENT';
+      notificationObj.submittedByType = 'SECUR_USER';
       this.faultsService.saveContractorVisit(faultNotificationId, notificationObj).subscribe(
         res => {
           resolve(true);
