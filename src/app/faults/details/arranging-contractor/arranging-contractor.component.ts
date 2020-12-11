@@ -7,6 +7,7 @@ import { FaultsService } from '../../faults.service';
 import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES } from './../../../shared/constants';
 import { AppoinmentModalPage } from 'src/app/shared/modals/appoinment-modal/appoinment-modal.page';
 import { ModalController } from '@ionic/angular';
+import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -572,6 +573,8 @@ export class ArrangingContractorComponent implements OnInit {
         this.questionActionAcceptRequest(data);
       } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
         this.questionActionVisitTime(data);
+      } else if (this.iacNotification.templateCode === 'CQ-C-E') {
+        this.questionActionQuoteUpload(data);
       }
     }
   }
@@ -634,6 +637,28 @@ export class ArrangingContractorComponent implements OnInit {
 
       await modal.present();
 
+    }
+  }
+
+  private async questionActionQuoteUpload(data) {
+    if (data.value) {
+      const modal = await this.modalController.create({
+        component: QuoteModalPage,
+        cssClass: 'modal-container',
+        componentProps: {
+          faultNotificationId: this.iacNotification.faultNotificationId,
+        },
+        backdropDismiss: false
+      });
+
+      modal.onDidDismiss().then(async res => {
+        if (res.data && res.data == 'success') {
+          // let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+          // this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+        }
+      });
+      await modal.present();
+    } else {
     }
   }
 
