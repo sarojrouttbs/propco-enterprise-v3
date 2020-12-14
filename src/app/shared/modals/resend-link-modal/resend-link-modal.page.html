@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Resend Application Link</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<ion-grid>
+  <ion-row>
+    <ion-col size="80">
+      <h6 style="margin-bottom: 0; margin-left: 10px;">
+        {{ propertyAddress?.addressLine1 ? propertyAddress?.addressLine1 + ', ' : ''}}
+        {{ propertyAddress?.addressLine2 ? propertyAddress?.addressLine2 + ', ' : ''}}
+        {{ propertyAddress?.addressLine3 ? propertyAddress?.addressLine3 + ', ' : ''}}
+        {{ propertyAddress?.postcode }}</h6>
+    </ion-col>
+    <ion-col size="20">    
+        <ng-container *ngFor='let item of titleTypes'>
+        <small style="float: right; margin-right: 10px;" *ngIf='tenantDetails?.title && tenantDetails?.title == item.value'>
+          {{item.value + ' ' + tenantDetails?.fullName}}
+        </small>
+        </ng-container>
+        <small style="float: right; margin:16px 10px 0px 0px;" *ngIf='!tenantDetails?.title'>
+          {{tenantDetails?.fullName}}
+        </small>
+      </ion-col>
+  </ion-row>
+
+  <ion-row>   
+      <ion-col size="100">
+        <div class="overlay-container" style="position: relative">
+          <table datatable class="row-border hover"
+            style="width: 100%; position: relative" id="applicationListTable">
+            <thead>
+              <tr id="tenant-list">
+                <th style="width:5%"></th>
+                <th style="width:40%" >Type</th>
+                <th style="width:55%"></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor='let item of emailList; let i=index'>
+                <td>
+                    <ion-checkbox [checked]='item.selected' (ionChange)='disableCheckbox(item.emailId, $event)' color="primary">
+                    </ion-checkbox>
+                </td>
+                <td>{{item.label}}</td>
+                <td *ngIf='i < 3'>{{item?.emailAdress}}</td>
+                <td *ngIf='i == 3'>
+                 <form [formGroup]='newEmailAddress'>
+                    <ion-item>
+                    <ion-input [disabled]='!item.selected' [required]='item.selected' formControlName="email">
+                    </ion-input>
+                  </ion-item>
+                  <app-validation-message [control]="newEmailAddress.controls.email"></app-validation-message>
+                </form> 
+                </td>
+              </tr>
+            </tbody>
+          </table>  
+
+          <ion-row style="margin-top: 1%;">
+            <ion-col>
+              <div style="float: right;">        
+              <ion-button [disabled]="!(selectedCheckbox)"
+                 (click)='resendLink()'>Resend
+              </ion-button>
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

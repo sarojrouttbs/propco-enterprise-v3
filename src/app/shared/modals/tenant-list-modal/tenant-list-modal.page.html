@@ -6,146 +6,42 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
-<ion-content>
-
-<!-- <ion-grid>
-    <ion-row>
-      <form>
- 
-      </form>
-      
-      <div class="overlay-container" style="position: relative">
-      <table datatable class="row-border hover"
-      style="width: 100%; position: relative" id="faultListTable">
-       <tr class="table-row">
-         <th>Select</th>
-         <th>Ref</th>
-         <th>Name</th>
-         <th>Type</th>
-         <th>Referencing Required</th>
-         <th>Application Status</th>
-       </tr>
-       <tr>
-         <td>yes</td>
-         <td>0000000</td>
-         <td>hhhhhhhhh</td>
-         <td>tenant lead</td>
-         <td>hhhhhhhhhh</td>
-       </tr>
-     </table>
-      </div>
-    </ion-row>
-</ion-grid>
- -->
-
-<form></form>
-<!-- 
-  
-  <ion-row>
-    <ion-col size="100">
-      <div class="overlay-container" style="position: relative" >
-        <table class="row-border hover"
-          style="width: 100%; position: relative; padding: 5px"  id="tenantListTable">
-          <thead>
-            <tr  id="tenant-list">
-              <th style="width:5%">Select</th>
-              <th style="width:5%">Ref</th>
-              <th style="width:7%">Name</th>
-              <th style="width:8%">Type</th>
-              <th style="width:8%">Referencing Required</th>
-              <th style="width:8%">Application Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let tenant of laTenantList; let i=index;"  class="table-row">
-              <td>
-                <ion-radio-group>
-                  <ion-radio [checked]="tenant?.rowChecked"  [disabled]="!tenant?.toggled" 
-                  (ionChange)="submitButtonStatus(tenant, $event)" color="primary" value="select"></ion-radio>
-              </ion-radio-group>
-
-              </td>
-              <td>{{tenant?.reference}}</td>
-              <ng-container *ngFor="let title of titleList">
-                <td *ngIf='tenant.title && title.value===tenant.title'>{{title.type + ' ' + tenant?.name}}</td>
-              </ng-container>
-              <td *ngIf='!tenant.title'>{{tenant?.name}}</td>  
-              <td>{{tenant?.isLead ? 'Lead Tenant' : 'Co-tenant' }}</td>
-              <td><ion-toggle (ionChange)="toggleButtons(tenant, $event)" slot="start"></ion-toggle></td>
-             <ng-container *ngFor="let status of statusList">
-               <td *ngIf='tenant.status && status.value===tenant.status'>{{status.type}}</td>
-             </ng-container>
-            </tr>
-          </tbody>
-        </table>
-
-        <ion-row>
-          <ion-col>
-            <div style="float: right;">        
-          <ion-button (click)="dismiss()">Cancel</ion-button>
-          <ion-button [disabled]="!selected" (click)="tenantDetail()">Ok</ion-button>
-          
-            </div>
-          </ion-col>
-        </ion-row>
-
-      </div>
-    </ion-col>
-  </ion-row>
-</ion-grid> -->
-
-
-<ion-grid>
-  <ion-row>
-    <ion-col size="100">
-      <div class="overlay-container" style="position: relative">
-        <table datatable class="row-border hover"
-          style="width: 100%; position: relative" id="applicationListTable">
-          <thead>
-            <tr  id="tenant-list">
-              <th style="width:5%">Select</th>
-              <th style="width:5%">Ref</th>
-              <th style="width:7%">Name</th>
-              <th style="width:8%">Type</th>
-              <th style="width:8%">Referencing Required</th>
-              <th style="width:8%">Application Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let tenant of laTenantList; let i=index;"  class="table-row">
-              <td><ion-checkbox [checked]="tenant?.rowChecked" [disabled]="!tenant?.toggled"
-                (ionChange)="submitButtonStatus(tenant, $event)" 
-                 color="primary" style="height: 25px;width: 25px; bottom: -5px;" ></ion-checkbox>
-              </td>
-              <td>{{tenant?.reference}}</td>
-              <ng-container *ngFor="let title of titleList">
-                <td *ngIf='tenant.title && title.value===tenant.title'>{{title.type + ' ' + tenant?.name}}</td>
-              </ng-container>
-              <td *ngIf='!tenant.title'>{{tenant?.name}}</td>  
-              <td>{{tenant?.isLead ? 'Lead Tenant' : 'Co-tenant' }}</td>
-              <td>
-                <ion-toggle (ionChange)="toggleButtons(tenant, $event)" slot="start"></ion-toggle>
-              </td>
-              <ng-container *ngFor="let status of statusList">
-               <td *ngIf='tenant.status && status.value===tenant.status'>{{status.type}}</td>
-              </ng-container>
-            </tr>
-          </tbody>
-        </table>
-
-        <ion-row>
-          <ion-col>
-            <div style="float: right;">        
-          <ion-button (click)="dismiss()">Cancel</ion-button>
-          <ion-button [disabled]="!selected" (click)="tenantDetail()">Ok</ion-button>
-          
-            </div>
-          </ion-col>
-        </ion-row>
-      </div>
-    </ion-col>
-  </ion-row>
-</ion-grid>
-
+<ion-content id="tenant-list-modal">
+  <div class="table-container">
+    <table datatable [dtOptions]="dtOptions" class="row-border hover" style="width: 100%;">
+      <thead>
+        <tr>
+          <th style="width:8%">Select</th>
+          <th style="width:23%">Ref</th>
+          <th style="width:23%">Name</th>
+          <th style="width:23%">Type</th>
+          <th style="width:23%">Referencing Required</th>
+          <!-- <th style="width:8%">Application Status</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tenant of laTenantList; let i=index;"  class="table-row">
+          <td><ion-checkbox [checked]="tenant?.isRowChecked" [disabled]="!tenant?.isReferencingRequired"
+            (ionChange)="selectTenant(tenant, $event)" 
+            color="primary" style="height: 25px;width: 25px; bottom: -5px;" ></ion-checkbox>
+          </td>
+          <td>{{tenant?.reference ? tenant?.reference : '-'}}</td>
+          <td>{{tenant?.addressee ? tenant?.addressee : (tenant?.title + ' ' + tenant?.name)}}
+          </td>  
+          <td>{{tenant?.isLead ? 'Lead Tenant' : 'Co Tenant' }}</td>
+          <td>
+            <ion-toggle (ionChange)="toggleReferencing(tenant, $event)" slot="start"></ion-toggle>
+          </td>
+          <!-- <td></td> -->
+        </tr>
+      </tbody>
+    </table>
+    <ion-grid class="ion-no-padding" style="margin-top:15px;">
+      <ion-row>
+        <ion-col class="ion-text-end">
+          <ion-button [disabled]="!isSelected" (click)="dismiss()">OK</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>

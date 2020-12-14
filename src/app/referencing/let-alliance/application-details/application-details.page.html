@@ -66,19 +66,18 @@
       <ion-row>
         <ion-col size="33.3">
           <ion-row>
-            <ion-col>
-              <h2 class="heading">Registered Address</h2>
-              <h6>
+            <ion-col class="ion-no-padding" size="75">
+              <h5 class="no-margin-top">Registered Address</h5>
+              <div>
                 {{ address?.addressLine1 ? address?.addressLine1 + ',' : ''}}<br />
-                {{ address?.addressLine2 ? address?.addressLine2 + ',' : ''}}
-                <br />{{ address?.locality ? address?.locality + ',' : ''}}<br />
+                {{ address?.addressLine2 ? address?.addressLine2 + ',' : ''}}<br />
+                {{ address?.locality ? address?.locality + ',' : ''}}<br />
+                {{ address?.town ? address?.town + ',' : ''}}<br />
                 {{ address?.postcode }}
-              </h6>
+              </div>
             </ion-col>
-            <ion-col>
-              <ion-button (click)="editAddress()" style="float: right"
-                >Edit</ion-button
-              >
+            <ion-col size="25" class="ion-text-center">
+              <ion-button (click)="editAddress()">Edit</ion-button>
             </ion-col>
           </ion-row>
         </ion-col>
@@ -103,7 +102,6 @@
       </ion-row>
     </ion-grid>
   </form>
-
 </ng-template>
 
 <ng-template #tenantDetailsTemp>
@@ -464,10 +462,11 @@
         </mat-horizontal-stepper> -->
 
         <div class="tab-container">
-          <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #applicationTabs (selectedIndexChange)="currentSelected($event)">
+          <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #applicationTabs (selectedIndexChange)="currentSelectedTab($event)">
             <mat-tab>
               <ng-template mat-tab-label>
-                <div class="label-text">Property/ Rental Details</div>
+                <div class="label-text" [class.success-border]='isPropertyTabDetailSubmit && propertyDetailsForm.valid && tenancyDetailsForm.valid'
+                [class.error-border]='isPropertyTabDetailSubmit && !propertyDetailsForm.valid && !tenancyDetailsForm.valid'>Property/ Rental Details</div>
               </ng-template>
               <div class="accordion-container">
                 <div class="accordion-header" (click)="tenancyDetailsAccordion.expanded = !tenancyDetailsAccordion.expanded">
@@ -514,7 +513,8 @@
             </mat-tab>
             <mat-tab>
               <ng-template mat-tab-label>
-                <div class="label-text">Tenant Details</div>
+                <div class="label-text" [class.success-border]='isTenantTabDetailSubmit && tenantDetailsForm.valid'
+                [class.error-border]='isTenantTabDetailSubmit && !tenantDetailsForm.valid'>Tenant Details</div>
               </ng-template>
               <div class="accordion-container">
                 <div class="accordion-header" (click)="tenantDetailsAccordion.expanded = !tenantDetailsAccordion.expanded">

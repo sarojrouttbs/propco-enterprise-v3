@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Upload Quote</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="onCancel()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-segment [(ngModel)]="type" class="segment-card">
+    <ion-segment-button value="quote" checked>
+      <ion-label>Amount/Quote</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="document">
+      <ion-label>Photos (optional)</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content>
+  <div [hidden]="type != 'quote'">
+    <ion-text>
+      You have selected 'Yes, Upload Quote and Photos'.
+    </ion-text>
+    <form style="margin: 15px 0 20px 0;" [formGroup]="quoteAssessmentForm">
+      <ion-grid class="ion-no-padding">
+        <ion-row class="offer-row">
+          <ion-col size-xs="100" size-sm="30" class="offer-amount">
+            <ion-label class="offer-amount">Quote Amount:
+            </ion-label>
+          </ion-col>
+          <ion-col size-xs="100" size-sm="70" class="offer-amount-value">
+            <input currencyMask formControlName="quoteAmount" />
+            <app-validation-message [control]="quoteAssessmentForm.controls.quoteAmount"></app-validation-message>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+    <ion-text>
+      Please upload the formal quote (mandatory) and photos (optional) otherwise the response will not be recorded. Do you want to proceed?
+    </ion-text>
+    <div style="margin-top: 20px; padding-bottom: 20px;">
+      NB: Selecting 'No' will not record the response.
+    </div>
+    <div class="border-bottom"></div>
+    <h3>Upload Document</h3>
+    <form class="drop-zone" style="margin: 20px 0; padding: 10px 10px 0px 10px; text-align: left; border: 0;"
+    [formGroup]="uploadDocumentForm" file-drop (files)="uploadDocument($event)">
+    <!-- <ion-icon class="icon" name="cloud-upload"></ion-icon> -->
+    <input type="file" class="custom-file-input form-control" id="docFiles"
+      accept=".png,.jpeg,.pdf,.jpg,.gif,.bmp,.text,.doc,.csv,.docx,.odt" multiple
+      (change)="uploadDocument($event.target.files)">
+    <!-- <span class="drag-text">Drag files to upload here</span> <br> -->
+    <label for="docFiles" class="browse-btn">Browse Files</label>
+  </form>
+  <ion-grid class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <ion-col size="33" *ngFor="let file of uploadedDocument; let i=index;">
+       <div class="delete-icon-wrapper img-count">
+         <ion-grid>
+           <ion-row>
+             <ion-col size="100">
+               <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'" style="height: 130px;">
+               <!-- (click)="downloadFaultDocumentByUrl(file.documentUrl)"> -->
+             </ion-col>
+           </ion-row>
+           <ion-row class="ion-justify-content-between">
+             <ion-col size-xl="80" size-lg="70" size="70">
+               <div class="file-name">{{file.name}}</div>
+             </ion-col>
+             <ion-col size-xl="20" size-lg="30" size="30" class="ion-text-end ion-no-padding">
+               <ion-icon (click)="removeFile(i)" title="Delete File" class="delete-icon" name="close-circle">
+               </ion-icon>
+             </ion-col>
+           </ion-row>
+         </ion-grid>
+       </div>
+      </ion-col>
+     </ion-row>
+  </ion-grid>
+  </div>
+  <div [hidden]="type != 'document'">
+  
+  </div>
+</ion-content>
+<ion-footer class="ion-text-right">
+  <ion-button color="danger" size="small" (click)="onCancel()">Cancel</ion-button>
+  <ion-button color="{{type == 'photos' ? 'success': ''}}" size="small" (click)="onProceed()">
+    {{type == 'photos' ? 'Proceed':'Next'}}</ion-button>
+</ion-footer>
