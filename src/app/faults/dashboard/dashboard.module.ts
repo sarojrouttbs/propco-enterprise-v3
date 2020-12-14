@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -11,7 +11,6 @@ import { DashboardPage } from './dashboard.page';
 import { NotesModalPageModule } from '../../shared/modals/notes-modal/notes-modal.module';
 import { EscalateModalPageModule } from '../../shared/modals/escalate-modal/escalate-modal.module';
 import { DataTablesModule } from 'angular-datatables';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -20,8 +19,9 @@ import { DataTablesModule } from 'angular-datatables';
     DashboardPageRoutingModule,
     NotesModalPageModule,
     EscalateModalPageModule,
-    DataTablesModule
-  ],
+    DataTablesModule,
+    ReactiveFormsModule
+    ],
   declarations: [DashboardPage]
 })
 export class DashboardPageModule {}

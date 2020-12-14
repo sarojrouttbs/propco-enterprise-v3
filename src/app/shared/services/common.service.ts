@@ -256,18 +256,18 @@ export class CommonService {
     let params;
     if (isFAF) {
       params = new HttpParams()
-      .set('limit', '10')
-      .set('page', '1')
-      .set('prop.mantypeLetCat', '3346')
-      .set('text', text)
-      .set('types', 'PROPERTY');
+        .set('limit', '10')
+        .set('page', '1')
+        .set('prop.mantypeLetCat', '3346')
+        .set('text', text)
+        .set('types', 'PROPERTY');
     }
-    else{
+    else {
       params = new HttpParams()
-      .set('limit', '10')
-      .set('page', '1')
-      .set('text', text)
-      .set('types', 'PROPERTY');
+        .set('limit', '10')
+        .set('page', '1')
+        .set('text', text)
+        .set('types', 'PROPERTY');
     }
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
@@ -469,4 +469,48 @@ export class CommonService {
       event.stopPropagation();
     }
   }
+
+  async showCheckBoxConfirm(title: string, okText?: string, cancelText?: string, input?: any) {
+    return new Promise((resolve, reject) => {
+      let alertPopup: any;
+      this.alertCtrl.create({
+        header: title,
+        cssClass: 'common-alert-box',
+        inputs: input ? input : '',
+        buttons: [
+          {
+            text: cancelText ? cancelText : 'Cancel',
+            cssClass: 'ion-color-danger',
+            role: 'cancel',
+            handler: () => {
+              alertPopup.dismiss().then((res) => {
+                resolve(false);
+              });
+              return false;
+            }
+          },
+          {
+            text: okText ? okText : 'Ok',
+            cssClass: 'ion-color-success',
+            handler: (data) => {
+              if (data.length > 0) {
+                alertPopup.dismiss().then((res) => {
+                  resolve(data);
+                });
+              } else {
+                resolve("error");
+              }
+              return false;
+            }
+          }
+        ],
+        backdropDismiss: false,
+      }).then(res => {
+        alertPopup = res;
+        res.present();
+      });
+
+    });
+  }
+
 }

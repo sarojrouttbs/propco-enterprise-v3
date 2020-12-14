@@ -74,7 +74,7 @@ export class FaultsService {
       .set('page', '1')
       .set('text', text)
       .set('types', 'CONTRACTOR')
-      .set('con.ocp', skillSet )
+      .set('con.ocp', skillSet)
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 
@@ -180,10 +180,29 @@ export class FaultsService {
     );
   }
 
+  getaccessibleOffices(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `accessible-offices`).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  getMgntServiceType(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `management-types`).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  getAssignedUsers(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `accessible-users`).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
       return throwError(error);
     };
   }
+
 }
