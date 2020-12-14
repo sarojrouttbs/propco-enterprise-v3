@@ -1,3 +1,4 @@
+import { QuoteService } from './../quote-modal/quote.service';
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -25,7 +26,7 @@ const routes: Routes = [
     ComponentsModule
   ],
   declarations: [QuoteModalPage],
-  providers: [DatePipe, FaultsService],
+  providers: [DatePipe, FaultsService,QuoteService],
   exports: [QuoteModalPage]
 })
 export class QuoteModalPageModule { }

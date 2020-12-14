@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Arranging Contractor</ion-title>
+    <ion-title>Quote Assessment</ion-title>
     <ion-buttons slot="end">
-      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+      <ion-icon name="close" (click)="onCancel()"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -12,17 +12,26 @@
   <div>
     <ion-segment [(ngModel)]="type" class="segment-card">
       <ion-segment-button value="quote" checked>
-        <ion-text>Quote Amount</ion-text>
+        <ion-text>Amount</ion-text>
       </ion-segment-button>
       <ion-segment-button value="document">
-        <ion-label>Fault Documents</ion-label>
+        <ion-label>Quote</ion-label>
       </ion-segment-button>
       <ion-segment-button value="photos">
-        <ion-label>Fault Photos</ion-label>
+        <ion-label>Photos</ion-label>
       </ion-segment-button>
     </ion-segment>
   </div>
 
+  <div [hidden]="type != 'quote'">
+    <form style="margin-top: 15px; padding: 10px 10px 0px 10px; text-align: left;" [formGroup]="quoteAssessmentForm">
+      <ion-item>
+        <ion-label position="floating">Quote Amount</ion-label>
+      <ion-input type="text" formControlName='quoteAmount'
+        placeholder=""> </ion-input>
+      </ion-item>
+    </form>
+  </div>
 <div [hidden]="type != 'document'">
   <form class="drop-zone" style="margin-top: 15px; padding: 10px 10px 0px 10px; text-align: left;" [formGroup]="uploadDocumentForm" file-drop (files)="uploadDocument($event)">
     <!-- <ion-icon class="icon" name="cloud-upload"></ion-icon> -->
@@ -37,8 +46,8 @@
       <ion-grid>
         <ion-row>
           <ion-col size="100">
-            <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'"
-              (click)="downloadFaultDocumentByUrl(file.documentUrl)">
+            <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'">
+              <!-- (click)="downloadFaultDocumentByUrl(file.documentUrl)"> -->
           </ion-col>
         </ion-row>
         <ion-row class="ion-justify-content-between">
@@ -59,6 +68,6 @@
 </div>
 </ion-content>
 <ion-footer class="ion-text-right ion-padding">
-  <ion-button>Cancel</ion-button>
-  <ion-button>Submit</ion-button> 
+  <ion-button (click)="onCancel()">Cancel</ion-button>
+  <ion-button (click)="onProceed()">{{type == 'photos'?'Proceed':'Next'}}</ion-button> 
 </ion-footer>
