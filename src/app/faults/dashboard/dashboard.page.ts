@@ -9,9 +9,8 @@ import { DataTableDirective } from 'angular-datatables';
 import { NotesModalPage } from '../../shared/modals/notes-modal/notes-modal.page';
 import { EscalateModalPage } from '../../shared/modals/escalate-modal/escalate-modal.page';
 import { ModalController } from '@ionic/angular';
-import { async } from 'q';
-
-
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -37,12 +36,33 @@ export class DashboardPage implements OnInit {
   notesComplaints: any[];
   notesTypes: any[];
   reportedByTypes = REPORTED_BY_TYPES;
+  filterValue: number;
+  isBranchFilter = false;
+  isManagementFilter = false;
+  isStatusFilter = false;
+  isAssignToFilter = false;
+  filterForm: FormGroup;
+  invoiceArr = [{ key: 8, value: 'Invoice Submitted' }, { key: 9, value: 'Paid' }];
+  accessibleOffices: any;
+  faultParams = new HttpParams();
+  fs: number[] = [];
+  fus: number[] = [];
+  fcfd: string = '';
+  fctd: string = '';
+  managementType: any;
+  assignedUsers: any;
+  fat: number[] = [];
+  fpo: number[] = [];
+  fpm: number[] = [];
 
   constructor(
     private commonService: CommonService,
     private modalController: ModalController,
     private router: Router,
-    private faultsService: FaultsService) {
+    private faultsService: FaultsService,
+    private fb: FormBuilder,
+    public datepipe: DatePipe,
+  ) {
     this.getLookupData();
   }
 
@@ -58,12 +78,12 @@ export class DashboardPage implements OnInit {
       ordering: false,
       pageLength: 5,
       // responsive: true,
-      lengthMenu:[5, 10, 15],
+      lengthMenu: [5, 10, 15],
       ajax: (tableParams: any, callback) => {
-        const params = new HttpParams()
+        this.faultParams = this.faultParams
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');
-        that.faultsService.getAllFaults(params).subscribe(res => {
+        that.faultsService.getAllFaults(this.faultParams).subscribe(res => {
           that.faultList = res && res.data ? res.data : [];
           callback({
             recordsTotal: res ? res.count : 0,
@@ -79,6 +99,31 @@ export class DashboardPage implements OnInit {
     setTimeout(() => {
       this.notesDtTrigger.next();
     }, 1000);
+
+    this.initFilterForm();
+    this.getMgntServiceType();
+  }
+
+  initFilterForm() {
+    this.filterForm = this.fb.group({
+      fromDate: [],
+      toDate: [],
+      filterType: [],
+      branchfilter: [],
+      managementFilter: [],
+      statusFilter: [],
+      repairCheckbox: [],
+      newRepairs: [],
+      emergency: [],
+      urgent: [],
+      nonUrgent: [],
+      assessment: [],
+      automation: [],
+      invoice: [],
+      escalation: [],
+      selectedPorts: [],
+      assignToFilter: []
+    });
   }
 
   ionViewDidEnter() {
@@ -127,7 +172,7 @@ export class DashboardPage implements OnInit {
       searching: false,
       ordering: false,
       responsive: true,
-      lengthMenu:[5, 10, 15],
+      lengthMenu: [5, 10, 15],
       pageLength: 5,
     };
   }
@@ -275,7 +320,7 @@ export class DashboardPage implements OnInit {
     }
   }
 
-  showNoteDescription(noteText): void{
+  showNoteDescription(noteText): void {
     if (noteText) {
       this.commonService.showAlert('Notes', noteText);
     }
@@ -290,4 +335,226 @@ export class DashboardPage implements OnInit {
     this.router.navigate([`faults/${this.selectedData.faultId}/details`]);
   }
 
+  getaccessibleOffices() {
+    this.faultsService.getaccessibleOffices().subscribe(res => {
+      this.accessibleOffices = res && res.data ? res.data : [];
+    });
+  }
+
+  getMgntServiceType() {
+    this.faultsService.getMgntServiceType().subscribe(res => {
+      this.managementType = res ? res : [];
+      if (this.managementType) {
+        for (var val of this.managementType) {
+          if (val.letCategory === 3346) {
+            this.fpm.push(val.index);
+          }
+        }
+      }
+    });
+  }
+
+  getAssignedUsers() {
+    this.faultsService.getAssignedUsers().subscribe(res => {
+      this.assignedUsers = res && res.data ? res.data : [];
+    });
+  }
+
+  onFiletrChange(e) {
+    this.filterValue = e.detail.value;
+    if (this.filterValue == 1) {
+      this.getaccessibleOffices();
+      this.isBranchFilter = true;
+    }
+
+    if (this.filterValue == 2) {
+      this.isManagementFilter = true;
+    }
+
+    if (this.filterValue == 3) {
+      this.isStatusFilter = true;
+    }
+
+    if (this.filterValue == 4) {
+      this.getAssignedUsers();
+      this.isAssignToFilter = true;
+    }
+  }
+
+  closeFilter(val) {
+    if (val == 1) {
+      this.isBranchFilter = false;
+    }
+
+    if (val == 2) {
+      this.isManagementFilter = false;
+    }
+
+    if (val == 3) {
+      this.isStatusFilter = false;
+    }
+
+    if (val == 4) {
+      this.isAssignToFilter = false;
+    }
+
+    this.filterForm.get('filterType').reset();
+  }
+
+  resetFilter() {
+    this.filterForm.reset();
+    this.isBranchFilter = false;
+    this.isManagementFilter = false;
+    this.isStatusFilter = false;
+    this.isAssignToFilter = false;
+    this.faultParams = this.faultParams.set('limit', '5').set('page', '1').set('fpm', this.fpm.toString());
+    this.rerenderFaults();
+    this.fs = [];
+    this.fcfd = '';
+    this.fctd = '';
+  }
+
+  async checkboxClick() {
+
+    if (this.filterForm.get('repairCheckbox').value) {
+      this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+    }
+
+    if (this.filterForm.get('newRepairs').value) {
+      this.fs.push(1);
+    }
+
+    if (this.filterForm.get('emergency').value) {
+      this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+      this.fus.push(1);
+    }
+
+    if (this.filterForm.get('urgent').value) {
+      this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+      this.fus.push(2);
+    }
+
+    if (this.filterForm.get('nonUrgent').value) {
+      this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+      this.fus.push(3);
+    }
+
+    if (this.filterForm.get('assessment').value) {
+      this.fs.push(2, 13);
+    }
+
+    if (this.filterForm.get('automation').value) {
+      this.fs.push(2, 3, 4, 5, 6, 7, 14, 15, 16, 17, 18, 19, 20, 21);
+    }
+
+    if (this.filterForm.get('invoice').value) {
+      let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancle', this.createInputs())
+      if (response) {
+        this.fs.push(response);
+      }
+    }
+
+    if (this.filterForm.get('escalation').value) {
+      this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+    }
+
+    if (this.filterForm.get('fromDate').value) {
+      this.fcfd = this.filterForm.get('fromDate').value ? this.datepipe.transform(this.filterForm.get('fromDate').value, 'yyyy-MM-dd') : '';
+    }
+
+    if (this.filterForm.get('toDate').value) {
+      this.fctd = this.filterForm.get('toDate').value ? this.datepipe.transform(this.filterForm.get('toDate').value, 'yyyy-MM-dd') : '';
+    }
+
+    let filteredStatus = this.fs.filter(function (elem, index, self) {
+      return index === self.indexOf(elem);
+    });
+
+    this.filterForm.get('statusFilter').setValue(filteredStatus);
+    this.getList(filteredStatus);
+  }
+
+  async onStatusChange() {
+
+    if (this.filterForm.get('statusFilter').value) {
+      for (var val of this.filterForm.get('statusFilter').value) {
+        this.fs.push(val);
+      }
+    }
+
+    let filteredStatus = this.fs.filter(function (elem, index, self) {
+      return index === self.indexOf(elem);
+    });
+    this.getList(filteredStatus);
+  }
+
+  async onUserChange() {
+
+    if (this.filterForm.get('assignToFilter').value) {
+      for (var val of this.filterForm.get('assignToFilter').value) {
+        this.fat.push(val);
+      }
+    }
+    this.getList();
+  }
+
+  async onBranchChange() {
+
+    if (this.filterForm.get('branchfilter').value) {
+      for (var val of this.filterForm.get('branchfilter').value) {
+        this.fpo.push(val);
+      }
+    }
+    this.getList();
+  }
+
+  async onMgmtTypeChange() {
+    if (this.filterForm.get('managementFilter').value) {
+      for (var val of this.filterForm.get('managementFilter').value) {
+        this.fpm.push(val);
+      }
+    }
+    this.getList();
+  }
+
+  getList(filteredStatus?) {
+    this.faultParams = this.faultParams.set('limit', '5').set('page', '1');
+    if (filteredStatus) {
+      this.faultParams = this.faultParams.set('fs', filteredStatus.toString());
+    }
+    if (this.fat) {
+      this.faultParams = this.faultParams.set('fat', this.fat.toString());
+    }
+    if (this.fpo) {
+      this.faultParams = this.faultParams.set('fpo', this.fpo.toString());
+    }
+    if (this.fpm) {
+      this.faultParams = this.faultParams.set('fpm', this.fpm.toString());
+    }
+    if (this.fcfd) {
+      this.faultParams = this.faultParams.set('fcfd', this.fcfd);
+    }
+    if (this.fctd) {
+      this.faultParams = this.faultParams.set('fctd', this.fctd);
+    }
+    console.log("this.faultParams ", this.faultParams);
+
+
+    this.rerenderFaults();
+  }
+
+  createInputs() {
+    const theNewInputs = [];
+    for (let i = 0; i < this.invoiceArr.length; i++) {
+      theNewInputs.push(
+        {
+          type: 'checkbox',
+          label: this.invoiceArr[i].value,
+          value: '' + this.invoiceArr[i].key,
+          checked: false
+        }
+      );
+    }
+    return theNewInputs;
+  }
 }
