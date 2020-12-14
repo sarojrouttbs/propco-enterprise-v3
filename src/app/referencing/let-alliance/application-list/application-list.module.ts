@@ -8,6 +8,7 @@ import { ApplicationListPageRoutingModule } from './application-list-routing.mod
 
 import { ApplicationListPage } from './application-list.page';
 import { DataTablesModule } from 'angular-datatables';
+import { ResendLinkModalPageModule } from 'src/app/shared/modals/resend-link-modal/resend-link-modal.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { DataTablesModule } from 'angular-datatables';
     ReactiveFormsModule,
     IonicModule,
     ApplicationListPageRoutingModule,
-    DataTablesModule
+    DataTablesModule,
+    ResendLinkModalPageModule
   ],
   declarations: [ApplicationListPage]
 })
