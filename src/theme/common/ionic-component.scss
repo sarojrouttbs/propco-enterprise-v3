@@ -192,7 +192,14 @@ ion-item {
 .tenant-list {
   .modal-wrapper {
     min-height: 250px;
-    min-width: 60%;
+    min-width: 767px;
+  }
+}
+
+.resend-link{
+  .modal-wrapper {
+    min-height: 450px;
+    min-width: 55%;
   }
 }
 

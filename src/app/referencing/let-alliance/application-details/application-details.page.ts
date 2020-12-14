@@ -10,7 +10,7 @@ import { TenantListModalPage } from 'src/app/shared/modals/tenant-list-modal/ten
 import { MatStepper } from '@angular/material/stepper';
 import { LetAllianceService } from '../let-alliance.service';
 import { forkJoin } from 'rxjs';
-import { DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { COMPLETION_METHODS } from 'src/app/shared/constants';
 import { ValidationService } from 'src/app/shared/services/validation.service';
 
@@ -38,7 +38,6 @@ export class ApplicationDetailsPage implements OnInit {
   lookupdata: any;
   laLookupdata: any;
   currentStepperIndex = 0;
-  hasTenants = false;
   isPropertyTabDetailSubmit;
   isTenantTabDetailSubmit;
   current = 0;
@@ -55,6 +54,8 @@ export class ApplicationDetailsPage implements OnInit {
   completionMethods: any[] = COMPLETION_METHODS;
 
   address: any = {};
+  isPropertyDetailsSubmit: boolean;
+  maskedVal: any;
 
   constructor(
     private fb: FormBuilder,
@@ -63,7 +64,8 @@ export class ApplicationDetailsPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private letAllianceService: LetAllianceService,
-    public datepipe: DatePipe
+    public datepipe: DatePipe,
+    private currencyPipe: CurrencyPipe
     ) {
   }
 
@@ -159,7 +161,6 @@ export class ApplicationDetailsPage implements OnInit {
 
     const data = modal.onDidDismiss().then(res => {
        if (res.data.tenantId) {
-         this.hasTenants = true;
          this.tenantId = res.data.tenantId;
          this.initiateApplication();
        } else {
@@ -209,7 +210,7 @@ export class ApplicationDetailsPage implements OnInit {
       maritalStatus: [''],
       nationality: [''],
       registerationNumber: [''],
-      rentShare: ['', [Validators.required, ValidationService.numberValidator]],
+      rentShare: ['', [Validators.required]],
       hasTenantOtherName: [false],
       tenantTypeTitle: [''],
       otherforeName: [''],
@@ -375,7 +376,7 @@ export class ApplicationDetailsPage implements OnInit {
     history.back();
   }
 
-  currentSelected(event): void {
+  currentSelectedTab(event: any): void {
     this.previous = this.current;
     this.current = event;
 
@@ -441,7 +442,7 @@ export class ApplicationDetailsPage implements OnInit {
     );
   }
 
-  private checkFormsValidity() {
+  private checkFormsValidity(): any {
     return new Promise((resolve, reject) => {
       let valid = false;
       const isValidTenancyDetailsForm = this.tenancyDetailsForm.valid;
@@ -471,7 +472,7 @@ export class ApplicationDetailsPage implements OnInit {
       {
         propertyId: this.propertyDetails.propertyId,
         applicantId: this.tenantDetails.tenantId,
-        agreementId: this.propertyTenancyList[0].propcoAgreementId, // not suraj
+        agreementId: this.propertyTenancyList[0].propcoAgreementId,
         applicantItemType: 'M', // not suraj
         case: {
           tenancyStartDate: this.datepipe.transform(this.tenancyDetailsForm.get('tenancyStartDate').value, 'yyyy-MM-dd'),
@@ -504,7 +505,7 @@ export class ApplicationDetailsPage implements OnInit {
     return applicationDetails;
   }
 
-  getLookupValue(index, lookup) {
+  getLookupValue(index: any, lookup: any) {
     return this.commonService.getLookupValue(index, lookup);
   }
 
@@ -513,7 +514,7 @@ export class ApplicationDetailsPage implements OnInit {
       .map(res1 => JSON.parse(res1));
   }
 
-  getProductType(productId): string{
+  getProductType(productId: any): string{
     let productType;
     this.laProductList = this.laProductList && this.laProductList.length ? this.laProductList : [];
     this.laProductList.find((obj) => {

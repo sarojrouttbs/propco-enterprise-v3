@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
@@ -26,6 +26,7 @@ import { SearchPropertyPageModule } from 'src/app/shared/modals/search-property/
     AddressModalPageModule,
     SearchPropertyPageModule
   ],
-  declarations: [ApplicationDetailsPage]
+  declarations: [ApplicationDetailsPage],
+  providers: [CurrencyPipe]
 })
 export class ApplicationDetailsPageModule {}

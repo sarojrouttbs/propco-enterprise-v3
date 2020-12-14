@@ -93,11 +93,11 @@ export class CommonService {
   }
 
   getPostcodeAddressList(postcode: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + postcode + '/fetch');
+    return this.httpClient.get(environment.API_BASE_URL + `postcode/${postcode}/fetch`);
   }
 
   getPostcodeAddressDetails(addressId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + addressId + '/retrieve');
+    return this.httpClient.get(environment.API_BASE_URL + `postcode/${addressId}/retrieve`);
   }
 
 
@@ -412,7 +412,7 @@ export class CommonService {
     return dirtyValues;
   }
 
-  showMenu(event, id, data, className, isCard?) {
+  showMenu(event: any, id: any, data: any, className: any, isCard?: any) {
     const baseContainer = $(event.target).parents('.' + className);
     const divOverlay = $('#' + id);
     const baseContainerWidth = baseContainer.outerWidth(true);
@@ -462,7 +462,7 @@ export class CommonService {
     event.stopPropagation();
   }
 
-  hideMenu(event?, id?) {
+  hideMenu(event?: any, id?: any) {
     const $divOverlay = $('#' + id);
     $divOverlay.delay(200).slideUp('fast');
     if (event) {
