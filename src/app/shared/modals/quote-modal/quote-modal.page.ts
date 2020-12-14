@@ -14,9 +14,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class QuoteModalPage implements OnInit {
   faultNotificationId;
+  quoteAssessmentForm: FormGroup;
   uploadDocumentForm: FormGroup;
   uploadedDocument = [];
-  type: string;
+  type: string = 'quote';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -37,8 +38,8 @@ export class QuoteModalPage implements OnInit {
   }
 
   ngOnInit() {
-    this.type = 'quote'
     this.initUploadDocForm();
+    this.initquoteAssessmentForm();
   }
 
   dismiss() {
@@ -49,10 +50,23 @@ export class QuoteModalPage implements OnInit {
     return this.uploadDocumentForm.get('photos') as FormArray;
   };
 
+  get quotes(): FormArray {
+    return this.uploadDocumentForm.get('quotes') as FormArray;
+  };
+
+  private initquoteAssessmentForm(): void {
+    this.quoteAssessmentForm = this.formBuilder.group({
+      quoteAmount: ['', Validators.required],
+      isAccepted: true,
+      submittedById: '',
+      submittedByType: 'AGENT'
+    });
+  }
 
   private initUploadDocForm(): void {
     this.uploadDocumentForm = this.formBuilder.group({
-      photos: this.formBuilder.array([])
+      photos: this.formBuilder.array([]),
+      quotes: this.formBuilder.array([])
     });
   }
 
@@ -66,7 +80,6 @@ export class QuoteModalPage implements OnInit {
   }
 
   uploadDocument(uploadedDocument) {
-    console.log(uploadedDocument)
     if (this.uploadedDocument.length + uploadedDocument.length > 5) {
       this.commonService.showMessage("You are only allowed to upload a maximum of 5 uploadedDocument", "Warning", "warning");
       return;
@@ -104,5 +117,38 @@ export class QuoteModalPage implements OnInit {
         reader.readAsDataURL(file);
       }
     }
+  }
+
+  onCancel() {
+    // const cancel = this.commonService.showConfirm('Quote Assessment', 'Are you sure to cancel ?', '', 'Yes', 'No');
+    // if (!cancel) return;
+    this.dismiss();
+  }
+
+  onProceed() {
+    switch (this.type) {
+      case 'quote': {
+        this.type = 'document'
+        break;
+      }
+      case 'document': {
+        this.type = 'photos'
+        break;
+      } default: {
+        this.submit();
+        break;
+      }
+    }
+  }
+
+  private async submit() {
+    if (!this.validateReq()) return;
+  }
+
+  private async validateReq() {
+    let valid = true;
+    if (!this.quoteAssessmentForm.valid) { this.commonService.showMessage('Quote Amount is required', 'Quote Assessment', 'error'); return valid = false; }
+    if (this.quotes.value.length == 0) { this.commonService.showMessage('Quote is required', 'Quote Assessment', 'error'); return valid = false; }
+    return valid;
   }
 }
