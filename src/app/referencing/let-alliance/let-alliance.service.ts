@@ -19,6 +19,12 @@ export class LetAllianceService {
     return this.httpClient.get(environment.API_BASE_URL + 'referencing/3/applications', { params });
   }
 
+  /* getApplicationNotes(applicationId: any): Observable<any> {
+
+    return {};
+    //return this.httpClient.get(environment.API_BASE_URL + 'referencing/3/applications', { params });
+  } */
+
   getLAProductList(): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + 'referencing/3/products');
   }
@@ -50,6 +56,10 @@ export class LetAllianceService {
 
   createApplication(requestObj: any): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `referencing/3/application`, requestObj);
+  }
+
+  resendLinkToApplicant(requestObj: any, applicationId: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `referencing/3/applications/${applicationId}/resend-link`, requestObj);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
