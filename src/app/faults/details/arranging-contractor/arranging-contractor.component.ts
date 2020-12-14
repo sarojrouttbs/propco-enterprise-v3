@@ -644,7 +644,7 @@ export class ArrangingContractorComponent implements OnInit {
     if (data.value) {
       const modal = await this.modalController.create({
         component: QuoteModalPage,
-        cssClass: 'modal-container',
+        cssClass: 'modal-container upload-container',
         componentProps: {
           faultNotificationId: this.iacNotification.faultNotificationId,
         },

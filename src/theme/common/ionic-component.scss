@@ -255,3 +255,27 @@ ion-alert.common-alert-box {
     }
   }
 }
+
+
+.upload-container {
+  .modal-wrapper {
+    @include border-radius(10px);
+    // --color: var(--ion-color-step-2000);
+    width: 750px;
+    height: auto;
+    min-height: 600px;
+    ion-content {
+      --background: var(--ion-color-step-1800);
+      --color: var(--ion-color-step-200);
+      --padding-top: 25px;
+      --padding-bottom: 0px;
+      --padding-start: 20px;
+      --padding-end: 20px;
+    }
+
+    ion-footer {
+      border-top: 1px solid var(--ion-color-step-800);
+      padding: 3px 5px;
+    }
+  }
+}

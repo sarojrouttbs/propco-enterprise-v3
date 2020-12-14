@@ -148,7 +148,7 @@ export class QuoteModalPage implements OnInit {
   private async validateReq() {
     let valid = true;
     if (!this.quoteAssessmentForm.valid) { this.commonService.showMessage('Quote Amount is required', 'Quote Assessment', 'error'); return valid = false; }
-    if (this.quotes.value.length == 0) { this.commonService.showMessage('Quote is required', 'Quote Assessment', 'error'); return valid = false; }
+    if (this.uploadedDocument.length == 0) { this.commonService.showMessage('Quote is required', 'Quote Assessment', 'error'); return valid = false; }
     return valid;
   }
 }
