@@ -93,11 +93,11 @@ export class CommonService {
   }
 
   getPostcodeAddressList(postcode: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `/postcode/${postcode}/fetch`);
+    return this.httpClient.get(environment.API_BASE_URL + `postcode/${postcode}/fetch`);
   }
 
   getPostcodeAddressDetails(addressId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `/postcode/${addressId}/retrieve`);
+    return this.httpClient.get(environment.API_BASE_URL + `postcode/${addressId}/retrieve`);
   }
 
 
