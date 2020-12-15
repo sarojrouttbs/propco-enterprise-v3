@@ -82,7 +82,8 @@ export class DashboardPage implements OnInit {
       ajax: (tableParams: any, callback) => {
         this.faultParams = this.faultParams
           .set('limit', tableParams.length)
-          .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');
+          .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
+          .set('fpm', '17,18,20,24,27,32,35,36');
         that.faultsService.getAllFaults(this.faultParams).subscribe(res => {
           that.faultList = res && res.data ? res.data : [];
           callback({
@@ -407,7 +408,7 @@ export class DashboardPage implements OnInit {
     this.isManagementFilter = false;
     this.isStatusFilter = false;
     this.isAssignToFilter = false;
-    this.faultParams = this.faultParams.set('limit', '5').set('page', '1').set('fpm', this.fpm.toString());
+    this.faultParams = new HttpParams().set('limit', '5').set('page', '1').set('fpm', this.fpm.toString());
     this.rerenderFaults();
     this.fs = [];
     this.fcfd = '';
@@ -522,13 +523,13 @@ export class DashboardPage implements OnInit {
     if (filteredStatus) {
       this.faultParams = this.faultParams.set('fs', filteredStatus.toString());
     }
-    if (this.fat) {
+    if (this.fat.length > 0) {
       this.faultParams = this.faultParams.set('fat', this.fat.toString());
     }
-    if (this.fpo) {
+    if (this.fpo.length > 0) {
       this.faultParams = this.faultParams.set('fpo', this.fpo.toString());
     }
-    if (this.fpm) {
+    if (this.fpm.length > 0) {
       this.faultParams = this.faultParams.set('fpm', this.fpm.toString());
     }
     if (this.fcfd) {
@@ -537,9 +538,9 @@ export class DashboardPage implements OnInit {
     if (this.fctd) {
       this.faultParams = this.faultParams.set('fctd', this.fctd);
     }
-    console.log("this.faultParams ", this.faultParams);
-
-
+    if (this.fus.length > 0) {
+      this.faultParams = this.faultParams.set('fus', this.fus.toString());
+    }
     this.rerenderFaults();
   }
 
