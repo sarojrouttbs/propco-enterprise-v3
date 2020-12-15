@@ -82,7 +82,8 @@ export class DashboardPage implements OnInit {
       ajax: (tableParams: any, callback) => {
         this.faultParams = this.faultParams
           .set('limit', tableParams.length)
-          .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');
+          .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
+          .set('fpm', '17,18,20,24,27,32,35,36');
         that.faultsService.getAllFaults(this.faultParams).subscribe(res => {
           that.faultList = res && res.data ? res.data : [];
           callback({
