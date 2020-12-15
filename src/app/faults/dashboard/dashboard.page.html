@@ -230,9 +230,8 @@
                 [ngClass]="{'escalated': fault.isEscalated}">
                 <td>
                   <ion-fab-button size="small" class="table-fab-btn" *ngIf="fault.urgencyStatus === 3"></ion-fab-button>
-                  <ion-fab-button size="small" class="table-fab-btn" *ngIf="fault.urgencyStatus === 2" color="danger">
-                  </ion-fab-button>
-                  <ion-fab-button size="small" class="table-fab-btn" *ngIf="fault.urgencyStatus === 1" color="warning">
+                  <ion-fab-button size="small" class="table-fab-btn" *ngIf="fault.urgencyStatus === 2" color="warning"></ion-fab-button>
+                  <ion-fab-button size="small" class="table-fab-btn" *ngIf="fault.urgencyStatus === 1" color="danger">
                   </ion-fab-button>
                 </td>
                 <td>{{fault.reference || '-'}}</td>
