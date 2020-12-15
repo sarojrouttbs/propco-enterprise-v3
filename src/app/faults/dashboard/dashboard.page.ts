@@ -416,7 +416,8 @@ export class DashboardPage implements OnInit {
   }
 
   async checkboxClick() {
-
+    this.fs = [];
+    this.fus = [];
     if (this.filterForm.get('repairCheckbox').value) {
       this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
     }
@@ -476,7 +477,7 @@ export class DashboardPage implements OnInit {
   }
 
   async onStatusChange() {
-
+    this.fs = [];
     if (this.filterForm.get('statusFilter').value) {
       for (var val of this.filterForm.get('statusFilter').value) {
         this.fs.push(val);
@@ -490,7 +491,7 @@ export class DashboardPage implements OnInit {
   }
 
   async onUserChange() {
-
+    this.fat = [];
     if (this.filterForm.get('assignToFilter').value) {
       for (var val of this.filterForm.get('assignToFilter').value) {
         this.fat.push(val);
@@ -500,7 +501,7 @@ export class DashboardPage implements OnInit {
   }
 
   async onBranchChange() {
-
+    this.fpo = [];
     if (this.filterForm.get('branchfilter').value) {
       for (var val of this.filterForm.get('branchfilter').value) {
         this.fpo.push(val);
@@ -510,6 +511,7 @@ export class DashboardPage implements OnInit {
   }
 
   async onMgmtTypeChange() {
+    this.fpm = [];
     if (this.filterForm.get('managementFilter').value) {
       for (var val of this.filterForm.get('managementFilter').value) {
         this.fpm.push(val);
@@ -519,7 +521,15 @@ export class DashboardPage implements OnInit {
   }
 
   getList(filteredStatus?) {
-    this.faultParams = this.faultParams.set('limit', '5').set('page', '1');
+    // this.faultParams = this.faultParams.set('limit', '5').set('page', '1');
+    this.faultParams = this.faultParams.delete('fs');
+    this.faultParams = this.faultParams.delete('fat');
+    this.faultParams = this.faultParams.delete('fpo');
+    this.faultParams = this.faultParams.delete('fpm');
+    this.faultParams = this.faultParams.delete('fcfd');
+    this.faultParams = this.faultParams.delete('fctd');
+    this.faultParams = this.faultParams.delete('fus');
+
     if (filteredStatus) {
       this.faultParams = this.faultParams.set('fs', filteredStatus.toString());
     }
