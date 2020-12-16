@@ -92,7 +92,7 @@ export class QuoteModalPage implements OnInit {
   }
 
   uploadDocument(uploadedDocument, type: string) {
-    if ((this.uploadedQuote.length > 5 && type === 'photo') || (this.uploadedQuote.length > 5 && type === 'quote')) {
+    if ((this.uploadedPhoto.length > 5 && type === 'photo') || (this.uploadedQuote.length > 5 && type === 'quote')) {
       this.commonService.showMessage("You are only allowed to upload a maximum of 5 uploadedDocument", "Warning", "warning");
       return;
     }
