@@ -157,7 +157,7 @@
             <ion-label position="floating">Branch(es)</ion-label>
             <ion-select interface="popover" formControlName="branchfilter" multiple="true" okText="Apply"
               cancelText="Cancel" (ionChange)="onBranchChange()">
-              <ion-select-option [value]="office.officeId" *ngFor="let office of accessibleOffices">
+              <ion-select-option [value]="office.officeCode" *ngFor="let office of accessibleOffices">
                 {{ office.officeName }}
               </ion-select-option>
             </ion-select>
