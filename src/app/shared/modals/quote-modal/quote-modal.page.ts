@@ -1,11 +1,12 @@
+import { QuoteService } from './quote.service';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { PlatformLocation } from '@angular/common';
-import { FaultsService } from 'src/app/faults/faults.service';
 import { CommonService } from '../../services/common.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-quote-modal',
@@ -14,16 +15,20 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class QuoteModalPage implements OnInit {
   faultNotificationId;
+  faultId;
+  maintenanceId;
   quoteAssessmentForm: FormGroup;
   uploadDocumentForm: FormGroup;
-  uploadedDocument = [];
+  uploadPhotoForm: FormGroup;
+  uploadedQuote = [];
+  uploadedPhoto = [];
   type: string = 'quote';
 
   constructor(
     private formBuilder: FormBuilder,
     private modalController: ModalController,
     private commonService: CommonService,
-    private faultsService: FaultsService,
+    private quoteService: QuoteService,
     private location: PlatformLocation,
     private router: Router,
     private sanitizer: DomSanitizer) {
@@ -47,7 +52,7 @@ export class QuoteModalPage implements OnInit {
   }
 
   get photos(): FormArray {
-    return this.uploadDocumentForm.get('photos') as FormArray;
+    return this.uploadPhotoForm.get('photos') as FormArray;
   };
 
   get quotes(): FormArray {
@@ -65,42 +70,62 @@ export class QuoteModalPage implements OnInit {
 
   private initUploadDocForm(): void {
     this.uploadDocumentForm = this.formBuilder.group({
-      photos: this.formBuilder.array([]),
       quotes: this.formBuilder.array([])
+    });
+    this.uploadPhotoForm = this.formBuilder.group({
+      photos: this.formBuilder.array([])
     });
   }
 
-  removeFile(i) {
-    this.uploadedDocument.splice(i, 1);
-    this.photos.removeAt(i);
+  removeFile(i, type: string) {
+    if (type === 'quote') {
+      this.uploadedQuote.splice(i, 1);
+      this.quotes.removeAt(i);
+    } else {
+      this.uploadedPhoto.splice(i, 1);
+      this.photos.removeAt(i);
+    }
   }
 
   private createItem(data): FormGroup {
     return this.formBuilder.group(data);
   }
 
-  uploadDocument(uploadedDocument) {
-    if (this.uploadedDocument.length + uploadedDocument.length > 5) {
+  uploadDocument(uploadedDocument, type: string) {
+    if ((this.uploadedQuote.length > 5 && type === 'photo') || (this.uploadedQuote.length > 5 && type === 'quote')) {
       this.commonService.showMessage("You are only allowed to upload a maximum of 5 uploadedDocument", "Warning", "warning");
       return;
     }
     if (uploadedDocument) {
       for (let file of uploadedDocument) {
         let isImage: boolean = false;
-        // console.log(file.type.split("/")[0])
         if (file.type.split("/")[0] !== 'image') {
           isImage = false;
         }
         else if (file.type.split("/")[0] == 'image') {
           isImage = true;
         }
-        this.photos.push(this.createItem({
-          file: file
-        }));
+        if (type === 'photo') {
+          this.photos.push(this.createItem({
+            file: file
+          }));
+        } else {
+          this.quotes.push(this.createItem({
+            file: file
+          }));
+        }
         let reader = new FileReader();
-        if (isImage) {
+        if (isImage && type === 'photo') {
           reader.onload = (e: any) => {
-            this.uploadedDocument.push({
+            this.uploadedPhoto.push({
+              documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
+              name: file.name
+            })
+          }
+        }
+        else if (isImage && type === 'quote') {
+          reader.onload = (e: any) => {
+            this.uploadedQuote.push({
               documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
               name: file.name
             })
@@ -108,7 +133,7 @@ export class QuoteModalPage implements OnInit {
         }
         else {
           reader.onload = (e: any) => {
-            this.uploadedDocument.push({
+            this.uploadedQuote.push({
               documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/default.jpg'),
               name: file.name
             })
@@ -125,30 +150,80 @@ export class QuoteModalPage implements OnInit {
     this.dismiss();
   }
 
-  onProceed() {
-    switch (this.type) {
-      case 'quote': {
-        this.type = 'document'
-        break;
-      }
-      case 'document': {
-        this.type = 'photos'
-        break;
-      } default: {
-        this.submit();
-        break;
+  async onProceed() {
+    if (this.validateReq()) {
+      const docsUploaded = await this.uploadQuotes();
+      if (docsUploaded) {
+        const amountUpdated = await this.submitQuoteAmout();
+        if (amountUpdated) {
+          this.modalController.dismiss('success');
+        }
       }
     }
   }
 
-  private async submit() {
-    if (!this.validateReq()) return;
+  async uploadQuotes() {
+    let apiObservableArray = [];
+    const maintData = await this.prepareUploadData('fault');
+    const faultData = await this.prepareUploadData('maint');
+    const photos = await this.prepareUploadData('photo');
+    apiObservableArray = apiObservableArray.concat(maintData);
+    apiObservableArray = apiObservableArray.concat(faultData);
+    apiObservableArray = apiObservableArray.concat(photos);
+    const promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        forkJoin(apiObservableArray).subscribe(() => {
+          resolve(true);
+        }, err => {
+          this.commonService.showMessage('Something went wrong', 'Upload Quote', 'error');
+          resolve(false);
+        });
+      }, 1000);
+    });
+    return promise;
   }
 
-  private async validateReq() {
+  private async prepareUploadData(type) {
+    const promise = new Promise((resolve, reject) => {
+      let apiObservableArray = [];
+      let uploadedDoc = (type === 'fault' || type === 'maint') ? this.uploadDocumentForm.controls.quotes.value : this.uploadPhotoForm.controls.photos.value;
+      uploadedDoc.forEach(data => {
+        const formData = new FormData();
+        formData.append('file', data.file);
+        formData.append('name', data.file.name);
+        if (type === 'fault' || type === 'photo') {
+          formData.append('folderName', 'quote_estimates');
+          apiObservableArray.push(this.quoteService.uploadFaultDocument(formData, this.faultId));
+        } else {
+          formData.append('headCategory', 'Accounts');
+          formData.append('subCategory', 'Invoices');
+          apiObservableArray.push(this.quoteService.uploadMaintDocument(formData, this.maintenanceId));
+        }
+      });
+      resolve(apiObservableArray);
+    });
+    return promise;
+  }
+
+  async submitQuoteAmout() {
+    const promise = new Promise((resolve, reject) => {
+      this.quoteService.saveNotificationQuoteAmount(this.quoteAssessmentForm.value, this.faultNotificationId).subscribe(
+        res => {
+          this.commonService.showMessage('Successfully Added', 'Quote Assessment', 'success');
+          resolve(true);
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private validateReq() {
     let valid = true;
     if (!this.quoteAssessmentForm.valid) { this.commonService.showMessage('Quote Amount is required', 'Quote Assessment', 'error'); return valid = false; }
-    if (this.uploadedDocument.length == 0) { this.commonService.showMessage('Quote is required', 'Quote Assessment', 'error'); return valid = false; }
+    if (this.uploadedQuote.length == 0) { this.commonService.showMessage('Quote Document is required', 'Quote Assessment', 'error'); return valid = false; }
     return valid;
   }
 }
