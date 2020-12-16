@@ -610,12 +610,12 @@ export class ArrangingContractorComponent implements OnInit {
   private async questionActionVisitTime(data) {
     if (!data.value) {
       this.commonService.showConfirm(data.text, 'Are you sure?', '', 'Yes', 'No').then(async res => {
-        if(res){
+        if (res) {
           await this.saveContractorVisitResponse(data.value, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
           let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
           this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
-    
+
         }
       });
     } else if (data.value) {
@@ -623,13 +623,13 @@ export class ArrangingContractorComponent implements OnInit {
         component: AppointmentModalPage,
         cssClass: 'modal-container',
         componentProps: {
-          faultNotificationId: this.iacNotification.faultNotificationId,  
+          faultNotificationId: this.iacNotification.faultNotificationId,
         },
         backdropDismiss: false
       });
 
       modal.onDidDismiss().then(async res => {
-        if (res.data && res.data =='success') {
+        if (res.data && res.data == 'success') {
           let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
           this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
         }
@@ -647,14 +647,16 @@ export class ArrangingContractorComponent implements OnInit {
         cssClass: 'modal-container upload-container',
         componentProps: {
           faultNotificationId: this.iacNotification.faultNotificationId,
+          faultId: this.faultDetails.faultId,
+          maintenanceId: this.faultMaintenanceDetails.maintenanceId
         },
         backdropDismiss: false
       });
 
       modal.onDidDismiss().then(async res => {
         if (res.data && res.data == 'success') {
-          // let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-          // this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
         }
       });
       await modal.present();
