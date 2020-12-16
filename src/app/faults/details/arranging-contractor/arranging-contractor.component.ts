@@ -615,7 +615,7 @@ export class ArrangingContractorComponent implements OnInit {
           notificationObj.isAccepted = data.value;
           notificationObj.submittedByType = 'SECUR_USER';
           if(this.iacNotification.templateCode === 'CDT-T-E'){
-            notificationObj.escalateFault = true;
+            notificationObj.isEscalateFault = true;
           }
           await this.saveContractorVisitResponse(this.iacNotification.faultNotificationId, notificationObj);
           this.commonService.showLoader();
