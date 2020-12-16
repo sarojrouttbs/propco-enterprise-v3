@@ -449,7 +449,7 @@ export class DashboardPage implements OnInit {
     }
 
     if (this.filterForm.get('invoice').value) {
-      let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancle', this.createInputs())
+      let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancel', this.createInputs())
       if (response) {
         this.fs.push(response);
       }
