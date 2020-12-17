@@ -74,8 +74,8 @@ export class LetAllianceService {
     );
   }
 
-  createGuarantorApplication(requestObj: any): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + `referencing/3/applications/${requestObj.applicationId}/guarantor`, requestObj);
+  createGuarantorApplication(requestObj: any, applicationId: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `referencing/3/applications/${applicationId}/guarantor`, requestObj);
   }
 
   getApplicationStatus(applicationId: any): Observable<any> {

@@ -20,7 +20,7 @@ export class GuarantorDetailsPage implements OnInit {
   guarantorDetailsForm: FormGroup;
   selectGuarantorForm: FormGroup;
   guarantorDetailsAccordion: any = {};
-  guarantorDetails: applicationModels.ITenantResponse;
+  guarantorDetails: applicationModels.IGuarantorResponse;
   applicantId: any;
   applicationId: any;
   lookupdata: any;
@@ -228,7 +228,7 @@ export class GuarantorDetailsPage implements OnInit {
     this.commonService.showLoader();
     const applicationRequestObj = this.createApplicationFormValues();
 
-    this.letAllianceService.createGuarantorApplication(applicationRequestObj).subscribe(
+    this.letAllianceService.createGuarantorApplication(applicationRequestObj, this.applicationId).subscribe(
       res => {
         this.commonService.hideLoader();
         this.commonService.showMessage('Application has been created successfully.', 'Create an Application', 'success');
@@ -264,8 +264,8 @@ export class GuarantorDetailsPage implements OnInit {
   private createApplicationFormValues(): any {
     const applicationDetails =
       {
-        //applicantId: this.guarantorDetails.tenantId,
-        applicantItemType: 'G', // not suraj
+        applicantId: this.guarantorDetails.guarantorId ? this.guarantorDetails.guarantorId : '',
+        applicantItemType: 'G',
         case: {
         },
         application: {

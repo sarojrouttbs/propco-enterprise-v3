@@ -281,7 +281,7 @@ export class ApplicationDetailsPage implements OnInit {
         },
         error => {
           console.log(error);
-          resolve();
+          resolve(this.propertyDetails);
         }
       );
     });
@@ -297,7 +297,7 @@ export class ApplicationDetailsPage implements OnInit {
         },
         error => {
           console.log(error);
-          resolve();
+          resolve(this.propertyTenancyList);
         }
       );
     });
@@ -313,7 +313,7 @@ export class ApplicationDetailsPage implements OnInit {
         },
         error => {
           console.log(error);
-          resolve();
+          resolve(this.tenantDetails);
         }
       );
     });
