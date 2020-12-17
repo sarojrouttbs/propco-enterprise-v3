@@ -203,6 +203,13 @@ ion-item {
   }
 }
 
+.alert-prompt{
+  .modal-wrapper {
+    min-height: 200px;
+    min-width: 300px;
+  }
+}
+
 ion-select-popover {
   ion-list ion-item {
     --border-width: 0;
