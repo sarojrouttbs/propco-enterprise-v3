@@ -11,6 +11,7 @@ import { DashboardPage } from './dashboard.page';
 import { NotesModalPageModule } from '../../shared/modals/notes-modal/notes-modal.module';
 import { EscalateModalPageModule } from '../../shared/modals/escalate-modal/escalate-modal.module';
 import { DataTablesModule } from 'angular-datatables';
+import { IonicSelectableModule } from 'ionic-selectable';
 @NgModule({
   imports: [
     CommonModule,
@@ -20,7 +21,8 @@ import { DataTablesModule } from 'angular-datatables';
     NotesModalPageModule,
     EscalateModalPageModule,
     DataTablesModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    IonicSelectableModule
     ],
   declarations: [DashboardPage]
 })

@@ -11,7 +11,7 @@
     </ion-row>
 
     <ion-row style="margin-bottom: 10px">
-        <h5 style="color: gray;" class="ion-text-left">Filter by type or status</h5>
+      <h5 style="color: gray;" class="ion-text-left">Filter by type or status</h5>
     </ion-row>
 
     <form [formGroup]="filterForm">
@@ -19,7 +19,8 @@
         <ion-col size="12" size-md
           [ngClass]="filterForm.get('repairCheckbox').value?'filter-grid-active':'filter-grid'">
           <div>
-            <ion-checkbox color="medium" mode="ios" formControlName="repairCheckbox" (ionChange)="checkboxClick()">
+            <ion-checkbox color="medium" mode="ios" formControlName="repairCheckbox"
+              (ionChange)="checkboxClick('repairCheckbox')">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -27,7 +28,8 @@
         </ion-col>
         <ion-col size="12" size-md [ngClass]="filterForm.get('newRepairs').value?'filter-grid-active':'filter-grid'">
           <div>
-            <ion-checkbox color="medium" mode="ios" formControlName="newRepairs" (ionChange)="checkboxClick()">
+            <ion-checkbox color="medium" mode="ios" formControlName="newRepairs"
+              (ionChange)="checkboxClick('newRepairs')">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -35,7 +37,8 @@
         </ion-col>
         <ion-col size="12" size-md [ngClass]="filterForm.get('emergency').value?'filter-grid-active':'filter-grid'">
           <div>
-            <ion-checkbox color="danger" mode="ios" formControlName="emergency" (ionChange)="checkboxClick()" style="--border-color:var(--background-checked);">
+            <ion-checkbox color="danger" mode="ios" formControlName="emergency" (ionChange)="checkboxClick('emergency')"
+              style="--border-color:var(--background-checked);" [checked]="true">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -43,7 +46,8 @@
         </ion-col>
         <ion-col size="12" size-md [ngClass]="filterForm.get('urgent').value?'filter-grid-active':'filter-grid'">
           <div>
-            <ion-checkbox color="warning" mode="ios" formControlName="urgent" (ionChange)="checkboxClick()" style="--border-color:var(--background-checked);">
+            <ion-checkbox color="warning" mode="ios" formControlName="urgent" (ionChange)="checkboxClick('urgent')"
+              style="--border-color:var(--background-checked);">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -51,7 +55,8 @@
         </ion-col>
         <ion-col size="12" size-md [ngClass]="filterForm.get('nonUrgent').value?'filter-grid-active':'filter-grid'">
           <div>
-            <ion-checkbox color="success" mode="ios" formControlName="nonUrgent" (ionChange)="checkboxClick()" style="--border-color:var(--background-checked);">
+            <ion-checkbox color="success" mode="ios" formControlName="nonUrgent"
+              (ionChange)="checkboxClick('nonUrgent')" style="--border-color:var(--background-checked);">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -59,7 +64,8 @@
         </ion-col>
         <ion-col size="12" size-md [ngClass]="filterForm.get('assessment').value?'filter-grid-active':'filter-grid'">
           <div>
-            <ion-checkbox color="medium" mode="ios" formControlName="assessment" (ionChange)="checkboxClick()">
+            <ion-checkbox color="medium" mode="ios" formControlName="assessment"
+              (ionChange)="checkboxClick('assessment')">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -67,7 +73,8 @@
         </ion-col>
         <ion-col size="12" size-md [ngClass]="filterForm.get('automation').value?'filter-grid-active':'filter-grid'">
           <div>
-            <ion-checkbox color="medium" mode="ios" formControlName="automation" (ionChange)="checkboxClick()">
+            <ion-checkbox color="medium" mode="ios" formControlName="automation"
+              (ionChange)="checkboxClick('automation')">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -75,7 +82,7 @@
         </ion-col>
         <ion-col size="12" size-md [ngClass]="filterForm.get('invoice').value?'filter-grid-active':'filter-grid'">
           <div>
-            <ion-checkbox color="medium" mode="ios" formControlName="invoice" (ionChange)="checkboxClick()">
+            <ion-checkbox color="medium" mode="ios" formControlName="invoice" (ionChange)="checkboxClick('invoice')">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -83,7 +90,8 @@
         </ion-col>
         <ion-col size="12" size-md [ngClass]="filterForm.get('escalation').value?'filter-grid-active':'filter-grid'">
           <div>
-            <ion-checkbox color="medium" mode="ios" formControlName="escalation" (ionChange)="checkboxClick()">
+            <ion-checkbox color="medium" mode="ios" formControlName="escalation"
+              (ionChange)="checkboxClick('escalation')">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -96,7 +104,7 @@
           <ion-item>
             <ion-label position="floating">From</ion-label>
             <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" style="padding-bottom: 0px;"
-              formControlName="fromDate" (ionChange)="checkboxClick()">
+              formControlName="fromDate" (ionChange)="onFilterChange()">
             </ion-datetime>
             <ion-icon name="calendar" slot="start" class="datetime-icon"></ion-icon>
           </ion-item>
@@ -106,7 +114,7 @@
           <ion-item>
             <ion-label position="floating">To</ion-label>
             <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" style="padding-bottom: 0px;"
-              formControlName="toDate" (ionChange)="checkboxClick()">
+              formControlName="toDate" (ionChange)="onFilterChange()">
             </ion-datetime>
             <ion-icon name="calendar" slot="start" class="datetime-icon"></ion-icon>
           </ion-item>
@@ -125,54 +133,76 @@
           </ion-item>
         </ion-col>
 
-
-        <!-- <ion-col size=15>
-          <ion-item>
-            <ion-label>Port</ion-label>
-            <ionic-selectable item-content formControlName="selectedPorts" itemValueField="index" itemTextField="value" [items]="ports" [isMultiple]="true"
-             [canClear]="true" [canSearch]="true">
-              <ng-template ionicSelectableValueTemplate let-ports="value">
-                <div class="ionic-selectable-value-item" *ngFor="let port of ports">
-                  {{port.value}}
-                </div>
-              </ng-template>
-            </ionic-selectable>
-          </ion-item>
-        </ion-col> -->
-
-
         <ion-col class="ion-text-right">
-          <!-- <ion-button color="success" class="action-btn" fill="outline"
-            style="--border-radius: 4px !important;margin-top: 20px;" (click)="applyFilter()">Apply Filters</ion-button> -->
           <ion-button color="danger" class="action-btn" fill="outline"
             style="--border-radius: 4px !important;margin-top: 20px;" (click)="resetFilter()">Reset Filters</ion-button>
-
         </ion-col>
 
       </ion-row>
 
       <ion-row>
+        <!-- *ngIf="isBranchFilter" -->
         <ion-col size=20 *ngIf="isBranchFilter">
           <ion-item class="select-block">
             <ion-label position="floating">Branch(es)</ion-label>
-            <ion-select interface="popover" formControlName="branchfilter" multiple="true" okText="Apply"
+            <!-- <ion-select interface="popover" formControlName="branchfilter" multiple="true" okText="Apply"
               cancelText="Cancel" (ionChange)="onBranchChange()">
               <ion-select-option [value]="office.officeId" *ngFor="let office of accessibleOffices">
                 {{ office.officeName }}
               </ion-select-option>
-            </ion-select>
+            </ion-select> -->
+
+            <ionic-selectable item-content formControlName="branchfilter" itemValueField="officeName"
+              itemTextField="officeName" [items]="accessibleOffices" [canSearch]="true" (onChange)="onBranchChange()"
+              [isMultiple]="true" style="max-height: 30px;" [canClear]="true" clearButtonText="Clear"
+              closeButtonSlot="end" [shouldStoreItemValue]="false" #selectUtilizadores>
+
+              <ng-template ionicSelectableValueTemplate let-ports="value">
+                <div class="ionic-selectable-value-item" *ngFor="let office of accessibleOffices">
+                  {{office.officeName}})
+                </div>
+              </ng-template>
+              <!-- <ng-template ionicSelectableFooterTemplate>
+                <ion-toolbar>
+                  <div class="customFooter">
+                    <ion-button >Default</ion-button>
+
+                    <ion-button >Default</ion-button>
+                    <ion-button class="ion-activatable ripple-parent">
+                      A ion-button with an unbounded ripple effect
+                      <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+                    </ion-button>
+                    <ion-button type="button" class="alert-button ion-focusable alert-button-role-cancel sc-ion-alert-md ion-activated" tabindex="0"><span class="alert-button-inner sc-ion-alert-md">Cancel</span><ion-ripple-effect class="sc-ion-alert-md md hydrated" role="presentation"></ion-ripple-effect></ion-button>
+                    <ion-button class="bottomButtons" expand="block"  mode="md" (click)="confirm()"
+                   -   style="float:right;">
+                      <p style="font-size: 20px;" color="success">Apply</p>
+                    </ion-button> 
+                 <ion-button class="bottomButtons" expand="block" color="success" mode="md"
+                      (click)="selectUtilizadores.close()" style="float:right;">
+                      <p style="font-size: 20px;">Cancel</p>
+                   </ion-button> 
+                  </div>
+                </ion-toolbar>
+              </ng-template> -->
+            </ionic-selectable>
+
           </ion-item>
           <ion-icon name="close-circle" class="close-btn" (click)="closeFilter(1)"> </ion-icon>
         </ion-col>
         <ion-col size=25 *ngIf="isManagementFilter">
           <ion-item class="select-block">
             <ion-label position="floating">Management Service Type</ion-label>
-            <ion-select interface="popover" formControlName="managementFilter" multiple="true" okText="Apply"
+            <!-- <ion-select interface="popover" formControlName="managementFilter" multiple="true" okText="Apply"
               cancelText="Cancel" (ionChange)="onMgmtTypeChange()">
               <ion-select-option [value]="type.index" *ngFor="let type of managementType">
                 {{ type.description }}
               </ion-select-option>
-            </ion-select>
+            </ion-select> -->
+            <ionic-selectable item-content formControlName="managementFilter" itemValueField="description"
+              itemTextField="description" [items]="managementType" [canSearch]="true" (onChange)="onMgmtTypeChange()"
+              [isMultiple]="true" style="max-height: 30px;">
+            </ionic-selectable>
+
           </ion-item>
           <ion-icon name="close-circle" class="close-btn" (click)="closeFilter(2)"> </ion-icon>
         </ion-col>
@@ -230,7 +260,8 @@
                 [ngClass]="{'escalated': fault.isEscalated}">
                 <td>
                   <ion-fab-button size="small" class="table-fab-btn" *ngIf="fault.urgencyStatus === 3"></ion-fab-button>
-                  <ion-fab-button size="small" class="table-fab-btn" *ngIf="fault.urgencyStatus === 2" color="warning"></ion-fab-button>
+                  <ion-fab-button size="small" class="table-fab-btn" *ngIf="fault.urgencyStatus === 2" color="warning">
+                  </ion-fab-button>
                   <ion-fab-button size="small" class="table-fab-btn" *ngIf="fault.urgencyStatus === 1" color="danger">
                   </ion-fab-button>
                 </td>
@@ -253,7 +284,7 @@
                 </td>
               </tr>
               <tr *ngIf="faultList?.length == 0">
-                <td colspan="11" class="no-data-available">No data!</td>
+                <td colspan="11" class="no-data-available" style="text-align: center;"><b>No data found!</b></td>
               </tr>
             </tbody>
           </table>
