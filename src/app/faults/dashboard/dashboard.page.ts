@@ -88,10 +88,13 @@ export class DashboardPage implements OnInit {
       lengthMenu: [5, 10, 15],
       ajax: (tableParams: any, callback) => {
         // if (!this.isFilter) {
-          this.faultParams = this.faultParams
-            .set('limit', tableParams.length)
-            .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
-            // .set('fpm', );
+        this.faultParams = this.faultParams
+          .set('limit', tableParams.length)
+          .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');
+        if (this.fpm.length > 0) {
+          this.faultParams = this.faultParams.set('fpm', this.fpm);
+        }
+
         // }
         that.faultsService.getAllFaults(this.faultParams).subscribe(res => {
           that.faultList = res && res.data ? res.data : [];
@@ -442,15 +445,15 @@ export class DashboardPage implements OnInit {
     this.isFilter = true;
     this.fs = [];
     this.fus = [];
-    let checkBoxControls = ['repairCheckbox', 'newRepairs', 'emergency', 'urgent', 'nonUrgent', 'assessment', 'automation', 'invoice', 'escalation']
+    // let checkBoxControls = ['repairCheckbox', 'newRepairs', 'emergency', 'urgent', 'nonUrgent', 'assessment', 'automation', 'invoice', 'escalation']
 
-    if (controlName) {
-      checkBoxControls.forEach(key => {
-        if (this.filterForm.get(controlName).value && controlName !== key) {
-          this.filterForm.get(key).setValue(false);
-        }
-      });
-    }
+    // if (controlName) {
+    //   checkBoxControls.forEach(key => {
+    //     if (this.filterForm.get(controlName).value && controlName !== key) {
+    //       this.filterForm.get(key).setValue(false);
+    //     }
+    //   });
+    // }
 
     if (this.filterForm.get('repairCheckbox').value) {
       this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
@@ -525,11 +528,11 @@ export class DashboardPage implements OnInit {
       return index === self.indexOf(elem);
     });
 
-    let checkBoxControls = ['repairCheckbox', 'newRepairs', 'emergency', 'urgent', 'nonUrgent', 'assessment', 'automation', 'invoice', 'escalation']
+    // let checkBoxControls = ['repairCheckbox', 'newRepairs', 'emergency', 'urgent', 'nonUrgent', 'assessment', 'automation', 'invoice', 'escalation']
 
-    checkBoxControls.forEach(key => {
-      this.filterForm.get(key).setValue(false);
-    });
+    // checkBoxControls.forEach(key => {
+    //   this.filterForm.get(key).setValue(false);
+    // });
 
     this.getList(filteredStatus);
   }
@@ -570,7 +573,7 @@ export class DashboardPage implements OnInit {
   }
 
   getList(filteredStatus?) {
-    
+
     // this.faultParams = new HttpParams();
 
     // this.faultParams = this.faultParams.set('limit', '5').set('page', '1');
@@ -631,10 +634,10 @@ export class DashboardPage implements OnInit {
   }) {
     let text = (event.text || '').trim().toLowerCase();
 
-    if (this.page > 3) {
-      event.component.disableInfiniteScroll();
-      return;
-    }
+    // if (this.page > 3) {
+    //   event.component.disableInfiniteScroll();
+    //   return;
+    // }
 
     this.getUsersAsync(this.page, 10).subscribe(users => {
       users = event.component.items.concat(users);
