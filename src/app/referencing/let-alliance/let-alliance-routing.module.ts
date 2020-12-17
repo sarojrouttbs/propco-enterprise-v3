@@ -24,12 +24,12 @@ const routes: Routes = [
         loadChildren: () => import('./application-list/application-list.module').then( m => m.ApplicationListPageModule)
       },
       {
-        path: 'property-search',
+        path: 'application-details',
         loadChildren: () => import('./application-details/application-details.module').then( m => m.ApplicationDetailsPageModule)
       },
       {
-        path: 'application-details',
-        loadChildren: () => import('./application-details/application-details.module').then( m => m.ApplicationDetailsPageModule)
+        path: 'guarantor-details',
+        loadChildren: () => import('./guarantor-details/guarantor-details.module').then( m => m.GuarantorDetailsPageModule)
       }
     ]
   }

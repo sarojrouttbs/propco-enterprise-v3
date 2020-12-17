@@ -9,6 +9,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResendLinkModalPage } from 'src/app/shared/modals/resend-link-modal/resend-link-modal.page';
 import { ModalController } from '@ionic/angular';
+import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 
 @Component({
   selector: 'la-application-list',
@@ -28,10 +29,14 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   officeCodes: any[] = [];
   applicationList: any[] = [];
   applicationNotes: any[] = [];
+  applicationStatus: any= {};
+  applicationGrade: any= {};
 
   laProductList: any[] = [];
   laCaseProductList: any[] = [];
   laApplicationProductList: any[] = [];
+  laApplicantStatusTypes: any[] = [];
+  laApplicantReferencingResultTypes: any[] = [];
 
   notesCategories: any[] = [];
   notesComplaints: any[] = [];
@@ -150,7 +155,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     }
 
     if (this.laLookupdata) {
-      this.setLALookupData(this.lookupdata);
+      this.setLALookupData(this.laLookupdata);
     } else {
       this.letAllianceService.getLALookupData().subscribe(data => {
         this.commonService.setItem(PROPCO.LA_LOOKUP_DATA, data);
@@ -169,7 +174,8 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   }
 
   private setLALookupData(data: any): void {
-    this.userLookupDetails = data.userLookupDetails;
+    this.laApplicantStatusTypes = data.applicantStatusTypes;
+    this.laApplicantReferencingResultTypes = data.applicantReferencingResultTypes;
   }
 
   getLAApplicationList(): void {
@@ -254,6 +260,77 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       });
     }
   }
+
+  async checkApplicationGuarantor() {
+    const modal = await this.modalController.create({
+      component: SimpleModalPage,
+      cssClass: 'modal-container alert-prompt',
+      backdropDismiss: false,
+      componentProps: {
+        data: 'There are no guarantors with this application, Do you wish to add one now?',
+        heading: 'Guarantor',
+        buttonList: [
+          {
+            text: 'No',
+            value: false
+          },
+          {
+            text: 'Yes',
+            value: true
+          }
+        ]
+      }
+    });
+
+    const data = modal.onDidDismiss().then(res => {
+      if (res.data.userInput) {
+        this.router.navigate(['/let-alliance/guarantor-details'], { queryParams: { 
+          applicantId: this.selectedData.applicantDetail.applicantId,
+          applicationId: this.selectedData.applicationId,
+         }, replaceUrl: true });
+      } else {
+      }
+    });
+
+    await modal.present();
+  }
+
+  async openApplicationStatus() {
+    this.applicationStatus = await this.getApplicationStatus();
+    const modal = await this.modalController.create({
+      component: SimpleModalPage,
+      cssClass: 'modal-container alert-prompt',
+      backdropDismiss: false,
+      componentProps: {
+        data: `<b>Application Status - </b>${this.getLookupValue(this.applicationStatus.status, this.laApplicantStatusTypes)}
+        </br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.laApplicantReferencingResultTypes)}
+        `,
+        heading: 'Status',
+        buttonList: [
+          {
+            text: 'OK',
+            value: false
+          }
+        ]
+      }
+    });
+
+    await modal.present();
+  }
+
+  getApplicationStatus() {
+    //this.showLoader = true;
+    return new Promise((resolve, reject) => {
+      this.letAllianceService.getApplicationStatus(this.selectedData.applicationId).subscribe(res => {
+        //this.showLoader = false;
+        return resolve(res);
+      }, error => {
+        //this.showLoader = false;
+        return reject(false);
+      });
+    });
+  }
+
 
   removeDuplicateObjects(array: any[]) {
     return [...new Set(array.map(res => JSON.stringify(res)))]

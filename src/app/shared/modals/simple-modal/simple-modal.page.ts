@@ -12,7 +12,7 @@ export class SimpleModalPage implements OnInit, OnDestroy {
 
   data: any;
   heading: string;
-  button: string;
+  buttonList: any[];
   sessionTimer: boolean;
   counter: any;
   startInterval;
@@ -22,16 +22,17 @@ export class SimpleModalPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.data = this.navParams.get('data');
     this.heading = this.navParams.get('heading');
-    this.button = this.navParams.get('button');
+    this.buttonList = this.navParams.get('buttonList');
   }
 
   logout() {
     this.commonService.logout();
-    this.dismiss();
+    //this.dismiss();
   }
   
-  dismiss() {
+  dismiss(userInputValue: any) {
     this.modalController.dismiss({
+      userInput: userInputValue,
       'dismissed': true
     });
   }

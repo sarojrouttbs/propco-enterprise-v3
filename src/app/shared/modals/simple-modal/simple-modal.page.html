@@ -5,13 +5,22 @@
 </ion-header>
 
 <ion-content class="ion-padding ion-margin">
-  <!-- <p class="modal-content">{{ data }}</p> -->
-  <div class="modal-content" [innerHtml]="data">
-  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="modal-content" [innerHtml]="data">
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 
 <ion-footer>
-  <div class="ion-text-end ion-padding" *ngIf="button">
-    <ion-button fill="outline" color="success" class="" (click)="dismiss()">{{ button }}</ion-button>
-  </div>
+  <ion-grid>
+    <ion-row class="ion-justify-content-between">
+      <ion-col *ngFor="let item of buttonList">
+        <ion-button (click)="dismiss(item.value)" style="width:100%">{{ item.text }}</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-footer>

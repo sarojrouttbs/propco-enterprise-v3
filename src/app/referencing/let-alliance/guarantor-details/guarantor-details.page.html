@@ -1,0 +1,166 @@
+<ng-template #selectGuarantorTemp>
+  <form [formGroup]="selectGuarantorForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">Select Guarantor</ion-label>
+            <ion-select interface="popover" formControlName="guarantor" (ionChange)="getGuarantorDetails(selectGuarantorForm.controls.guarantor.value)">
+              <ion-select-option [value]="0">
+                New Guarantor
+              </ion-select-option>
+              <ion-select-option [value]="item.guarantorId" *ngFor="let item of guarantorList">
+                {{ item.fullName ? item.fullName : item.forename + ' ' + item.surname }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="selectGuarantorForm.controls.guarantor"></app-validation-message>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ng-template>
+
+<ng-template #guarantorDetailsTemp>
+  <form [formGroup]="guarantorDetailsForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">Product</ion-label>
+            <ion-select interface="popover" formControlName="productId">
+              <ion-select-option [value]="item.productId" *ngFor="let item of laApplicationProductList">
+                {{ item.productName }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="guarantorDetailsForm.controls.productId"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">Title</ion-label>
+            <ion-select interface="popover" formControlName="title">
+              <ion-select-option [value]="item.index" *ngFor="let item of titleTypes">
+                {{ item.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="guarantorDetailsForm.controls.title"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">First Name</ion-label>
+            <ion-input formControlName="forename"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="guarantorDetailsForm.controls.forename"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">Middle Name</ion-label>
+            <ion-input formControlName="middleName"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="guarantorDetailsForm.controls.middleName"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">Last Name</ion-label>
+            <ion-input formControlName="surname"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="guarantorDetailsForm.controls.surname"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input formControlName="email"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="guarantorDetailsForm.controls.email"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">Date of Birth</ion-label>
+            <ion-datetime formControlName="dateOfBirth" displayFormat="DD MMM YYYY" interface="popover" [max]="adultDate"></ion-datetime>
+          </ion-item>
+          <app-validation-message [control]="guarantorDetailsForm.controls.dateOfBirth"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">Marital Status</ion-label>
+            <ion-select interface="popover" formControlName="maritalStatus">
+              <ion-select-option [value]="item.index" *ngFor="let item of maritalStatusTypes">
+                {{ item.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="guarantorDetailsForm.controls.maritalStatus"></app-validation-message>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-item>
+            <ion-label position="floating">Nationality</ion-label>
+            <ion-input formControlName="nationality"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="guarantorDetailsForm.controls.nationality"></app-validation-message>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ng-template>
+
+
+<ion-content id="la-guarantor-details">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="50" class="heading">
+        <div>
+          <ion-icon name="arrow-back-outline" style="vertical-align: bottom;cursor: pointer;" (click)="goBack()"></ion-icon>
+           &nbsp;View Applications &nbsp;
+          <i class="propcoicon propcoicon-refresh icon-primary" style="display: inline; background: transparent; cursor: pointer;" (click)="refresh()"></i></div>
+      </ion-col>
+      <ion-col size="50" class="la-logo">
+        <img src="assets/images/referencing/la-logo.svg"/>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="tab-container">
+          <mat-tab-group mat-stretch-tabs mat-align-tabs="start">
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <div class="label-text">Guarantor Details</div>
+              </ng-template>
+              <div class="accordion-container">
+                <app-accordion-list [expanded]="true">
+                    <ng-container *ngTemplateOutlet="selectGuarantorTemp"></ng-container>
+                </app-accordion-list>
+              </div>
+              <div class="space-break"></div>
+              <div class="accordion-container">
+                <div class="accordion-header" (click)="guarantorDetailsAccordion.expanded = !guarantorDetailsAccordion.expanded">
+                  <ion-grid class="ion-no-padding">
+                    <ion-row class="ion-justify-content-between">
+                      <ion-col>
+                        Guarantor Details
+                      </ion-col>
+                      <ion-col class="ion-text-end">
+                        <ion-icon name="add" *ngIf="!guarantorDetailsAccordion.expanded"></ion-icon>
+                        <ion-icon name="remove" *ngIf="guarantorDetailsAccordion.expanded"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </div>
+                <app-accordion-list [expanded]="guarantorDetailsAccordion.expanded">
+                    <ng-container *ngTemplateOutlet="guarantorDetailsTemp"></ng-container>
+                  </app-accordion-list>
+              </div>
+              <div class="action-btn-group">
+                <ion-button class="cancel-button" (click)=cancelApplication()>Cancel</ion-button>
+                <ion-button class="submit-button" (click)="createApplication()">Submit</ion-button>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

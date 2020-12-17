@@ -1,5 +1,9 @@
-ion-content{
-    .table-container{
-        margin: 20px 10px;
-    }
+ion-content {
+  .table-container {
+    margin: 20px 10px;
+  }
+
+  ion-checkbox {
+    --checkmark-color: var(--ion-color-step-2000);
+  }
 }
