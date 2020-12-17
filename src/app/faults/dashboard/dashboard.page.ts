@@ -577,7 +577,7 @@ export class DashboardPage implements OnInit {
     this.faultParams = this.faultParams.delete('fctd');
     this.faultParams = this.faultParams.delete('fus');
 
-    if (filteredStatus.length > 0) {
+    if (filteredStatus && filteredStatus.length > 0) {
       this.faultParams = this.faultParams.set('fs', filteredStatus.toString());
     }
     if (this.fat.length > 0) {
