@@ -171,3 +171,9 @@
     width: 20px;
   }
 }
+.filter-checkbox {
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-radius: 11px;
+  border-color: var(--background-checked);
+}
