@@ -3,7 +3,7 @@ import { PROPCO, REPORTED_BY_TYPES } from './../../shared/constants';
 import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Component, OnInit, ViewChildren, QueryList, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { NotesModalPage } from '../../shared/modals/notes-modal/notes-modal.page';
@@ -12,6 +12,7 @@ import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { IonicSelectableComponent } from 'ionic-selectable';
+import { delay } from 'rxjs/operators';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -51,12 +52,13 @@ export class DashboardPage implements OnInit {
   fcfd: string = '';
   fctd: string = '';
   managementType: any;
-  assignedUsers: any;
+  assignedUsers: AssignedUsers[];
   fat: string[] = [];
   fpo: string[] = [];
   fpm: number[] = [];
   isFilter = false;
   selectedMgmtType: any = [];
+  page = 2;
 
   constructor(
     private commonService: CommonService,
@@ -370,6 +372,8 @@ export class DashboardPage implements OnInit {
 
   onFiletrChange(e) {
     this.filterValue = e.detail.value;
+    this.isFilter = true;
+
     if (this.filterValue == 1) {
       this.getaccessibleOffices();
       this.isBranchFilter = true;
@@ -397,7 +401,7 @@ export class DashboardPage implements OnInit {
 
     if (val == 2) {
       this.isManagementFilter = false;
-      // this.fpm = [];
+      this.fpm = [];
     }
 
     if (val == 3) {
@@ -470,13 +474,15 @@ export class DashboardPage implements OnInit {
     }
 
     if (this.filterForm.get('automation').value) {
-      this.fs.push(2, 3, 4, 5, 6, 7, 14, 15, 16, 17, 18, 19, 20, 21);
+      this.fs.push(3, 4, 5, 6, 7, 14, 15, 16, 17, 18, 19, 20, 21);
     }
 
     if (this.filterForm.get('invoice').value) {
       let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancel', this.createInputs())
       if (response) {
         this.fs.push(response);
+      } else {
+        return;
       }
     }
 
@@ -518,7 +524,7 @@ export class DashboardPage implements OnInit {
     checkBoxControls.forEach(key => {
       this.filterForm.get(key).setValue(false);
     });
-    
+
     this.getList(filteredStatus);
   }
 
@@ -527,7 +533,7 @@ export class DashboardPage implements OnInit {
     this.fat = [];
     if (this.filterForm.get('assignToFilter').value) {
       for (var val of this.filterForm.get('assignToFilter').value) {
-        this.fat.push(val);
+        this.fat.push(val.userId);
       }
     }
     this.getList();
@@ -569,7 +575,7 @@ export class DashboardPage implements OnInit {
     this.faultParams = this.faultParams.delete('fctd');
     this.faultParams = this.faultParams.delete('fus');
 
-    if (filteredStatus) {
+    if (filteredStatus.length > 0) {
       this.faultParams = this.faultParams.set('fs', filteredStatus.toString());
     }
     if (this.fat.length > 0) {
@@ -590,6 +596,9 @@ export class DashboardPage implements OnInit {
     if (this.fus.length > 0) {
       this.faultParams = this.faultParams.set('fus', this.fus.toString());
     }
+    if (this.fs.length > 0) {
+      this.faultParams = this.faultParams.set('fs', this.fs.toString());
+    }
 
     this.rerenderFaults();
   }
@@ -608,4 +617,64 @@ export class DashboardPage implements OnInit {
     }
     return theNewInputs;
   }
+
+  getMoreUsers(event: {
+    component: IonicSelectableComponent,
+    text: string
+  }) {
+    let text = (event.text || '').trim().toLowerCase();
+
+    if (this.page > 3) {
+      event.component.disableInfiniteScroll();
+      return;
+    }
+
+    this.getUsersAsync(this.page, 10).subscribe(users => {
+      users = event.component.items.concat(users);
+
+      if (text) {
+        users = this.filterUsers(users, text);
+      }
+
+      event.component.items = users;
+      event.component.endInfiniteScroll();
+      this.page++;
+    });
+  }
+
+  getUsers(page?: number, size?: number) {
+    let users = [];
+
+    // this.assignedUsers.forEach(user => {
+    //   users.push(user);
+    // });
+
+    if (page && size) {
+      users = this.assignedUsers.slice((page - 1) * size, ((page - 1) * size) + size);
+    }
+    return users;
+  }
+
+  getUsersAsync(page?: number, size?: number, timeout = 2000): Observable<AssignedUsers[]> {
+    return new Observable<AssignedUsers[]>(observer => {
+      observer.next(this.getUsers(page, size));
+      observer.complete();
+    }).pipe(delay(timeout));
+  }
+
+  filterUsers(users: AssignedUsers[], text: string) {
+    return users.filter(user => {
+      return user.name.toLowerCase().indexOf(text) !== -1
+    });
+  }
+}
+
+export class AssignedUsers {
+  email: string
+  name: string
+  officeCode: string
+  telephone1: string
+  telephone2: string
+  telephone3: string
+  userId: string
 }
