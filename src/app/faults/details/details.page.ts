@@ -79,6 +79,7 @@ export class DetailsPage implements OnInit {
   isMatch;
   userSelectedActionControl = new FormControl();
   private QUOTE_THRESOLD = 500;
+  quoteDocuments: any;
 
   resultsAvailable: boolean = false;
   results: string[] = [];
@@ -789,6 +790,7 @@ export class DetailsPage implements OnInit {
     this.faultsService.getFaultDocuments(faultId).subscribe(response => {
       if (response) {
         this.files = response.data;
+        this.quoteDocuments = this.files.filter(data => data.folderName === 'quote_estimates');
       }
     })
   }

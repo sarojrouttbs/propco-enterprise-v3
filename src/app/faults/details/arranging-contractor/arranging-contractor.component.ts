@@ -23,6 +23,7 @@ export class ArrangingContractorComponent implements OnInit {
   @Input() faultDetails: FaultModels.IFaultResponse;
   @Output() public btnAction: EventEmitter<any> = new EventEmitter();
   @Input() leadTenantId: any;
+  @Input() quoteDocuments: any;
   faultMaintenanceDetails: FaultModels.IMaintenanceQuoteResponse;
   contractors: Observable<FaultModels.IContractorResponse>;
   private subject: Subject<string> = new Subject();
@@ -771,6 +772,19 @@ export class ArrangingContractorComponent implements OnInit {
       );
     });
     return promise;
+  }
+
+  getFileType(name): boolean {
+    if (name != null) {
+      let data = name.split('.')[1]  === 'pdf';
+      if (data) {
+        return true;
+      }
+    }
+  }
+
+  downloadDocumentByURl(url){
+    this.commonService.downloadDocumentByUrl(url);
   }
 
 }
