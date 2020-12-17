@@ -440,11 +440,13 @@ export class DashboardPage implements OnInit {
     this.fus = [];
     let checkBoxControls = ['repairCheckbox', 'newRepairs', 'emergency', 'urgent', 'nonUrgent', 'assessment', 'automation', 'invoice', 'escalation']
 
-    checkBoxControls.forEach(key => {
-      if (this.filterForm.get(controlName).value && controlName !== key) {
-        this.filterForm.get(key).setValue(false);
-      }
-    });
+    if (controlName) {
+      checkBoxControls.forEach(key => {
+        if (this.filterForm.get(controlName).value && controlName !== key) {
+          this.filterForm.get(key).setValue(false);
+        }
+      });
+    }
 
     if (this.filterForm.get('repairCheckbox').value) {
       this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
