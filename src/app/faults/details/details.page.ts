@@ -1729,6 +1729,10 @@ export class DetailsPage implements OnInit {
         this.goToLastStage();
         break;
       }
+      case 'refresh': {
+        this.refreshDetailsAndStage();
+        break;
+      }
     }
   }
 
