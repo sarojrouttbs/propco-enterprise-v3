@@ -786,5 +786,4 @@ export class ArrangingContractorComponent implements OnInit {
   downloadDocumentByURl(url){
     this.commonService.downloadDocumentByUrl(url);
   }
-
 }
