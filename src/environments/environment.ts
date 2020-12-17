@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  API_BASE_URL: "https://saas-uat-api.propco.co.uk/v3-dev/api/" 
+  // API_BASE_URL: "https://saas-uat-api.propco.co.uk/v3-dev/api/" 
+  API_BASE_URL: "http://localhost:3001/api/v1/" 
 };
 
 /*
