@@ -481,6 +481,8 @@ export class DashboardPage implements OnInit {
       let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancel', this.createInputs())
       if (response) {
         this.fs.push(response);
+      } else {
+        return;
       }
     }
 
@@ -573,7 +575,7 @@ export class DashboardPage implements OnInit {
     this.faultParams = this.faultParams.delete('fctd');
     this.faultParams = this.faultParams.delete('fus');
 
-    if (filteredStatus) {
+    if (filteredStatus.length > 0) {
       this.faultParams = this.faultParams.set('fs', filteredStatus.toString());
     }
     if (this.fat.length > 0) {
@@ -582,7 +584,7 @@ export class DashboardPage implements OnInit {
     if (this.fpo.length > 0) {
       this.faultParams = this.faultParams.set('fpo', this.fpo.toString());
     }
-    if (this.fpm.length > 0) {      
+    if (this.fpm.length > 0) {
       this.faultParams = this.faultParams.set('fpm', this.fpm.toString());
     }
     if (this.fcfd) {

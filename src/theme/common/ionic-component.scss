@@ -282,7 +282,11 @@ ion-alert.common-alert-box {
 .ionic-selectable-group .ionic-selectable-item {
   --padding-start: 8px !important;
   --padding-end: 8px !important;
-  ion-icon{
+  ion-icon {
     margin-inline-end: 15px;
   }
+}
+
+.alert-wrapper {
+  min-width: 30% !important;
 }
