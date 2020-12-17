@@ -64,7 +64,7 @@ export class QuoteModalPage implements OnInit {
       quoteAmount: ['', Validators.required],
       isAccepted: true,
       submittedById: '',
-      submittedByType: 'AGENT'
+      submittedByType: 'SECUR_USER'
     });
   }
 
@@ -92,8 +92,8 @@ export class QuoteModalPage implements OnInit {
   }
 
   uploadDocument(uploadedDocument, type: string) {
-    if ((this.uploadedPhoto.length > 5 && type === 'photo') || (this.uploadedQuote.length > 5 && type === 'quote')) {
-      this.commonService.showMessage("You are only allowed to upload a maximum of 5 uploadedDocument", "Warning", "warning");
+    if (((this.uploadedPhoto.length + uploadedDocument.length) > 5 && type === 'photo') || ((this.uploadedQuote.length + uploadedDocument.length) > 5 && type === 'quote')) {
+      this.commonService.showMessage("You are only allowed to upload a maximum of 5 document", "Warning", "warning");
       return;
     }
     if (uploadedDocument) {

@@ -3,81 +3,7 @@
     <ion-row *ngIf="!iacNotification">
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
         <ion-grid>
-          <ion-row>
-            <ion-col size="50">
-              <ion-item>
-                <ion-label position="floating">Quotation Number<ion-text class="mandatory">*</ion-text>
-                </ion-label>
-                <ion-input formControlName="worksOrderNumber"></ion-input>
-              </ion-item>
-              <app-validation-message [control]="raiseQuoteForm.controls.worksOrderNumber"></app-validation-message>
-            </ion-col>
-            <ion-col size="50">
-              <ion-item>
-                <ion-label position="floating">Category <ion-text class="mandatory">*</ion-text>
-                </ion-label>
-                <ion-select interface="popover" formControlName="category">
-                  <ion-select-option [value]="item.value" *ngFor="let item of faultCategories">{{ item.value }}
-                  </ion-select-option>
-                </ion-select>
-              </ion-item>
-            </ion-col>
-
-            <ion-col size="100">
-              <ion-item>
-                <ion-label position="floating">Description<ion-text class="mandatory">*</ion-text>
-                </ion-label>
-                <ion-input formControlName="description"></ion-input>
-              </ion-item>
-              <app-validation-message [control]="raiseQuoteForm.controls.description"></app-validation-message>
-            </ion-col>
-
-            <ion-col size="50">
-              <ion-item>
-                <ion-label position="floating">Ordered By<ion-text class="mandatory">*</ion-text>
-                </ion-label>
-                <ion-input formControlName="orderedBy"></ion-input>
-              </ion-item>
-            </ion-col>
-
-            <ion-col size="50">
-              <ion-item>
-                <ion-label position="floating">Required By<ion-text class="mandatory">*</ion-text>
-                </ion-label>
-                <ion-datetime formControlName="requestStartDate" displayFormat="DD/MM/YYYY" interface="popover"
-                  class="request-start-date">
-                </ion-datetime>
-              </ion-item>
-              <app-validation-message [control]="raiseQuoteForm.controls.requestStartDate"></app-validation-message>
-            </ion-col>
-
-            <ion-col size="50">
-              <ion-item>
-                <ion-label position="floating">Contact On-site </ion-label>
-                <ion-input formControlName="contact"></ion-input>
-              </ion-item>
-            </ion-col>
-
-            <ion-col size="50">
-              <ion-item>
-                <ion-label position="floating">Access Information </ion-label>
-                <ion-input formControlName="accessDetails"></ion-input>
-                <!-- <ion-select interface="popover" formControlName="accessDetails">
-                  <ion-select-option [value]="item.value" *ngFor="let item of accessInfoList">{{ item.title }}
-                  </ion-select-option>
-                </ion-select> -->
-              </ion-item>
-            </ion-col>
-
-            <!-- <ion-col size="33.33">
-              <ion-item>
-                <ion-label position="floating">Nominal Code <ion-text class="mandatory">*</ion-text>
-                </ion-label>
-                <ion-input formControlName="nominalCode"></ion-input>
-              </ion-item>
-            </ion-col> -->
-          </ion-row>
-
+          <ng-container *ngTemplateOutlet="quoteDetails"></ng-container>
           <div class="contractor-block">
             <div formArrayName="contractorList"
               *ngFor="let item of raiseQuoteForm.get('contractorList')['controls']; let i = index;">
@@ -249,10 +175,77 @@
           </div>
           <!-- <ion-button (click)="questionActionQuoteUpload(true)">Upload</ion-button> -->
         </div>
+        <ng-container *ngIf="iacNotification.templateCode === 'CQ-C-E'" >
+          <h2>Quotation Request</h2>
+          <ng-container *ngTemplateOutlet="quoteDetails"></ng-container>
+        </ng-container>
       </ion-col>
     </ion-row>
   </ion-grid>
+<ng-template #quoteDetails>
+  <ion-row>
+    <ion-col size="50">
+      <ion-item>
+        <ion-label position="floating">Quotation Number<ion-text class="mandatory">*</ion-text>
+        </ion-label>
+        <ion-input formControlName="worksOrderNumber"></ion-input>
+      </ion-item>
+      <app-validation-message [control]="raiseQuoteForm.controls.worksOrderNumber"></app-validation-message>
+    </ion-col>
+    <ion-col size="50">
+      <ion-item>
+        <ion-label position="floating">Category <ion-text class="mandatory">*</ion-text>
+        </ion-label>
+        <ion-select interface="popover" formControlName="category">
+          <ion-select-option [value]="item.value" *ngFor="let item of faultCategories">{{ item.value }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
 
+    <ion-col size="100">
+      <ion-item>
+        <ion-label position="floating">Description<ion-text class="mandatory">*</ion-text>
+        </ion-label>
+        <ion-input formControlName="description"></ion-input>
+      </ion-item>
+      <app-validation-message [control]="raiseQuoteForm.controls.description"></app-validation-message>
+    </ion-col>
+
+    <ion-col size="50">
+      <ion-item>
+        <ion-label position="floating">Ordered By<ion-text class="mandatory">*</ion-text>
+        </ion-label>
+        <ion-input formControlName="orderedBy"></ion-input>
+      </ion-item>
+    </ion-col>
+
+    <ion-col size="50">
+      <ion-item>
+        <ion-label position="floating">Required By<ion-text class="mandatory">*</ion-text>
+        </ion-label>
+        <ion-datetime formControlName="requestStartDate" displayFormat="DD/MM/YYYY" interface="popover"
+          class="request-start-date">
+        </ion-datetime>
+      </ion-item>
+      <app-validation-message [control]="raiseQuoteForm.controls.requestStartDate"></app-validation-message>
+    </ion-col>
+
+    <ion-col size="50">
+      <ion-item>
+        <ion-label position="floating">Contact On-site </ion-label>
+        <ion-input formControlName="contact"></ion-input>
+      </ion-item>
+    </ion-col>
+
+    <ion-col size="50">
+      <ion-item>
+        <ion-label position="floating">Access Information </ion-label>
+        <ion-input formControlName="accessDetails"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ng-template>
 </form>
 <div class="action-btn-group">
   <ion-button (click)="_btnHandler('cancel')" class="cancel-button">Cancel</ion-button>
