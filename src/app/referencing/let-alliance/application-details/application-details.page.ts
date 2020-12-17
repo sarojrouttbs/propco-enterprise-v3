@@ -216,7 +216,7 @@ export class ApplicationDetailsPage implements OnInit {
     this.tenancyDetailsForm = this.fb.group({
       productId: ['', Validators.required],
       noOfTenantToBeReferenced: ['', [Validators.required, ValidationService.numberValidator]],
-      tenancyStartDate: ['', [Validators.required, ValidationService.dateValidator]],
+      tenancyStartDate: ['', [Validators.required, ValidationService.futureDateSelectValidator]],
       tenancyTerm: ['', [Validators.required, Validators.min(1), Validators.max(36), ValidationService.numberValidator]],
       paidBy: ['', [Validators.min(0), Validators.max(1)]],
       offerNds: [false]

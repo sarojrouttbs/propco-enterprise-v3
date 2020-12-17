@@ -30,7 +30,7 @@ export class ValidationService {
       invalidBankCode: 'Please enter valid sort code',
       whitespace: 'Please enter valid data',
       commonPassword: 'Password is too easy to guess',
-      invalidDate: 'Please enter date between today to next 60 days'
+      invalidFutureDate: 'Please enter date between today to next 60 days'
     };
 
     return config[validatorName];
@@ -194,14 +194,14 @@ export class ValidationService {
     return isValid ? null : { 'whitespace': true };
   }
 
-  static dateValidator(control){
+  static futureDateSelectValidator(control){
     if (typeof control !== 'undefined' && control.value) {
      const futureDate = new Date();
      futureDate.setDate(futureDate.getDate() + 60);
      const todayDate = new Date();
      let currentDate = new Date(control.value);
      if(currentDate.toISOString() < todayDate.toISOString() || currentDate.toISOString() > futureDate.toISOString()){
-      return {invalidDate: true};
+      return {invalidFutureDate: true};
      }
      else{
       return null;
