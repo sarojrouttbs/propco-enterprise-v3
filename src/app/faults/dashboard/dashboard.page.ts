@@ -3,7 +3,7 @@ import { PROPCO, REPORTED_BY_TYPES } from './../../shared/constants';
 import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
 import { Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { Component, OnInit, ViewChildren, QueryList, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { NotesModalPage } from '../../shared/modals/notes-modal/notes-modal.page';
@@ -46,7 +46,7 @@ export class DashboardPage implements OnInit {
   filterForm: FormGroup;
   invoiceArr = [{ key: 8, value: 'Invoice Submitted' }, { key: 9, value: 'Paid' }];
   accessibleOffices: any
-  faultParams: any;
+  faultParams: any = new HttpParams();
   fs: number[] = [];
   fus: number[] = [];
   fcfd: string = '';
@@ -59,6 +59,8 @@ export class DashboardPage implements OnInit {
   isFilter = false;
   selectedMgmtType: any = [];
   page = 2;
+  userList: any;
+  portsSubscription: Subscription;
 
   constructor(
     private commonService: CommonService,
@@ -85,12 +87,12 @@ export class DashboardPage implements OnInit {
       // responsive: true,
       lengthMenu: [5, 10, 15],
       ajax: (tableParams: any, callback) => {
-        if (!this.isFilter) {
-          this.faultParams = new HttpParams()
+        // if (!this.isFilter) {
+          this.faultParams = this.faultParams
             .set('limit', tableParams.length)
             .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
-            .set('fpm', '17,18,20,24,27,32,35,36');
-        }
+            // .set('fpm', );
+        // }
         that.faultsService.getAllFaults(this.faultParams).subscribe(res => {
           that.faultList = res && res.data ? res.data : [];
           callback({
@@ -366,7 +368,9 @@ export class DashboardPage implements OnInit {
 
   getAssignedUsers() {
     this.faultsService.getAssignedUsers().subscribe(res => {
-      this.assignedUsers = res && res.data ? res.data : [];
+      this.userList = res && res.data ? res.data : [];
+      this.assignedUsers = this.getUsers();
+
     });
   }
 
@@ -566,9 +570,10 @@ export class DashboardPage implements OnInit {
   }
 
   getList(filteredStatus?) {
-    this.faultParams = new HttpParams();
+    
+    // this.faultParams = new HttpParams();
 
-    this.faultParams = this.faultParams.set('limit', '5').set('page', '1');
+    // this.faultParams = this.faultParams.set('limit', '5').set('page', '1');
     this.faultParams = this.faultParams.delete('fs');
     this.faultParams = this.faultParams.delete('fat');
     this.faultParams = this.faultParams.delete('fpo');
@@ -647,13 +652,14 @@ export class DashboardPage implements OnInit {
   getUsers(page?: number, size?: number) {
     let users = [];
 
-    // this.assignedUsers.forEach(user => {
-    //   users.push(user);
-    // });
+    this.userList.forEach(user => {
+      users.push(user);
+    });
 
     if (page && size) {
-      users = this.assignedUsers.slice((page - 1) * size, ((page - 1) * size) + size);
+      users = this.userList.slice((page - 1) * size, ((page - 1) * size) + size);
     }
+
     return users;
   }
 
@@ -668,6 +674,44 @@ export class DashboardPage implements OnInit {
     return users.filter(user => {
       return user.name.toLowerCase().indexOf(text) !== -1
     });
+  }
+
+
+  searchUsers(event: { component: IonicSelectableComponent; text: string }) {
+    let text = event.text.trim().toLowerCase();
+    event.component.startSearch();
+
+    // Close any running subscription.
+    if (this.portsSubscription) {
+      this.portsSubscription.unsubscribe();
+    }
+
+    if (!text) {
+      // Close any running subscription.
+      if (this.portsSubscription) {
+        this.portsSubscription.unsubscribe();
+      }
+
+      event.component.items = this.getUsers(1, 15);
+
+      // Enable and start infinite scroll from the beginning.
+      this.page = 2;
+      event.component.endSearch();
+      event.component.enableInfiniteScroll();
+      return;
+    }
+
+    this.portsSubscription = this
+      .getUsersAsync()
+      .subscribe(ports => {
+        // Subscription will be closed when unsubscribed manually.
+        if (this.portsSubscription.closed) {
+          return;
+        }
+
+        event.component.items = this.filterUsers(ports, text);
+        event.component.endSearch();
+      });
   }
 }
 
