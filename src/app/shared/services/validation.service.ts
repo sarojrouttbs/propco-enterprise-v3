@@ -18,6 +18,7 @@ export class ValidationService {
       invalidAlphaNumeric: 'Only alphanumeric values are allowed.',
       invalidContact: 'Please enter valid contact number.',
       invalidNumber: 'Please enter number only.',
+      invalidAmount: 'Please enter valid amount and two digits are allowed after decimal',
       minlength: `Minimum length ${validatorValue.requiredLength}`,
       maxlength: `Maximum length ${validatorValue.requiredLength}`,
       min: `Minimum number should be greater than and equal to ${validatorValue.min}`,
@@ -28,7 +29,8 @@ export class ValidationService {
       invalidAlphabetWithPunctuation: "Only alphabets with punctuation(',-) are allowed",
       invalidBankCode: 'Please enter valid sort code',
       whitespace: 'Please enter valid data',
-      commonPassword: 'Password is too easy to guess'
+      commonPassword: 'Password is too easy to guess',
+      invalidFutureDate: 'Please enter date between today to next 60 days'
     };
 
     return config[validatorName];
@@ -93,6 +95,16 @@ export class ValidationService {
         return null;
       } else {
         return { invalidNumber: true };
+      }
+    }
+  }
+
+  static amountValidator(control) {
+    if (typeof control !== 'undefined' && control.value) {
+      if (control.value.match(/^(£\d*|[1-9]\d*)(,\d+)?(.\d{1,2})?$/)) {
+        return null; 
+      } else {
+        return { invalidAmount: true }; 
       }
     }
   }
@@ -181,4 +193,19 @@ export class ValidationService {
     const isValid = !isWhitespace;
     return isValid ? null : { 'whitespace': true };
   }
+
+  static futureDateSelectValidator(control){
+    if (typeof control !== 'undefined' && control.value) {
+     const futureDate = new Date();
+     futureDate.setDate(futureDate.getDate() + 60);
+     const todayDate = new Date();
+     let currentDate = new Date(control.value);
+     if(currentDate.toISOString() < todayDate.toISOString() || currentDate.toISOString() > futureDate.toISOString()){
+      return {invalidFutureDate: true};
+     }
+     else{
+      return null;
+     }
+    }
+  } 
 }

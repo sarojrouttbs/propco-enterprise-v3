@@ -62,6 +62,28 @@ export class LetAllianceService {
     return this.httpClient.post(environment.API_BASE_URL + `referencing/3/applications/${applicationId}/resend-link`, requestObj);
   }
 
+  getTenantGuarantorList(tenantId: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}/guarantors`).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  getGuarantorDetails(guarantorId: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `guarantors/${guarantorId}`).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  createGuarantorApplication(requestObj: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `referencing/3/applications/${requestObj.applicationId}/guarantor`, requestObj);
+  }
+
+  getApplicationStatus(applicationId: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `referencing/3/applications/${applicationId}/status`).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);

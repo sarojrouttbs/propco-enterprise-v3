@@ -13,6 +13,7 @@ import { forkJoin } from 'rxjs';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { COMPLETION_METHODS } from 'src/app/shared/constants';
 import { ValidationService } from 'src/app/shared/services/validation.service';
+import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 
 @Component({
   selector: 'app-application-details',
@@ -66,7 +67,7 @@ export class ApplicationDetailsPage implements OnInit {
     private letAllianceService: LetAllianceService,
     public datepipe: DatePipe,
     private currencyPipe: CurrencyPipe
-    ) {
+  ) {
   }
 
   ngOnInit() {
@@ -92,6 +93,40 @@ export class ApplicationDetailsPage implements OnInit {
       this.initialApiCall();
     }
   }
+
+  onBlurCurrency(val: any, form: FormGroup) {
+    if (val) {
+      if (form == this.propertyDetailsForm) {
+        this.propertyDetailsForm.patchValue({ monthlyRent: this.currencyPipe.transform(val, 'GBP', 'symbol', '1.2-5') }, { emitEvent: false });
+      }
+      if (form == this.tenantDetailsForm) {
+        this.tenantDetailsForm.patchValue({ rentShare: this.currencyPipe.transform(val, 'GBP', 'symbol', '1.2-5') }, { emitEvent: false });
+      }
+    }
+
+  }
+
+  formatCurrency(val: any, form: FormGroup) {
+    let latestDigit = val.replace(/.00/g, '').replace(/\£/, '').replace(/,/g, '');
+
+    if (form == this.propertyDetailsForm) {
+      this.propertyDetailsForm.patchValue({
+        monthlyRent: latestDigit
+      }, { emitEvent: false });
+    }
+    if (form == this.tenantDetailsForm) {
+      this.tenantDetailsForm.patchValue({
+        rentShare: latestDigit
+      }, { emitEvent: false });
+    }
+
+  }
+
+  private setDefaultAmount(val: any) {
+    let latestDigit = val.replace(/.00/g, '').replace(/\£/, '').replace(/,/g, '');
+    return latestDigit; 
+  }
+
 
   private getLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -138,14 +173,14 @@ export class ApplicationDetailsPage implements OnInit {
     });
 
     const data = modal.onDidDismiss().then(res => {
-       if (res.data.propertyId) {
-         this.propertyId = res.data.propertyId;
-         //this.initiateApplication();
-         this.selectTenant();
-       } else {
-         this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
-       }
-     });
+      if (res.data.propertyId) {
+        this.propertyId = res.data.propertyId;
+        //this.initiateApplication();
+        this.selectTenant();
+      } else {
+        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+      }
+    });
     await modal.present();
   }
 
@@ -160,13 +195,13 @@ export class ApplicationDetailsPage implements OnInit {
     });
 
     const data = modal.onDidDismiss().then(res => {
-       if (res.data.tenantId) {
-         this.tenantId = res.data.tenantId;
-         this.initiateApplication();
-       } else {
-         this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
-       }
-     });
+      if (res.data.tenantId) {
+        this.tenantId = res.data.tenantId;
+        this.initiateApplication();
+      } else {
+        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+      }
+    });
     await modal.present();
   }
 
@@ -181,16 +216,17 @@ export class ApplicationDetailsPage implements OnInit {
     this.tenancyDetailsForm = this.fb.group({
       productId: ['', Validators.required],
       noOfTenantToBeReferenced: ['', [Validators.required, ValidationService.numberValidator]],
-      tenancyStartDate: ['', Validators.required],
+      tenancyStartDate: ['', [Validators.required, ValidationService.futureDateSelectValidator]],
       tenancyTerm: ['', [Validators.required, Validators.min(1), Validators.max(36), ValidationService.numberValidator]],
-      offerNDS: [false]
+      paidBy: ['', [Validators.min(0), Validators.max(1)]],
+      offerNds: [false]
     });
   }
 
   private initPropertyDetailsForm(): void {
     this.propertyDetailsForm = this.fb.group({
       managementStatus: ['', Validators.required],
-      monthlyRent: ['', [Validators.required]],
+      monthlyRent: ['', [Validators.required, ValidationService.amountValidator]],
     });
   }
 
@@ -203,20 +239,21 @@ export class ApplicationDetailsPage implements OnInit {
       otherTitle: [''],
       companyName: [''],
       forename: [''],
-      middleName: [''],
+      middlename: [''],
       surname: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
       email: [''],
       maritalStatus: [''],
       nationality: [''],
       registerationNumber: [''],
-      rentShare: ['', [Validators.required]],
+      rentShare: ['', [Validators.required, ValidationService.amountValidator]],
       hasTenantOtherName: [false],
-      tenantTypeTitle: [''],
-      otherforeName: [''],
-      otherMiddle: [''],
-      otherSurname: [''],
-
+      otherNames: this.fb.group({
+        title: '',
+        forename: [''],
+        middlename: [''],
+        surname: ['']
+      }),
     });
   }
 
@@ -224,7 +261,6 @@ export class ApplicationDetailsPage implements OnInit {
     this.commonService.showLoader();
     forkJoin([
       this.getPropertyById(),
-      this.getPropertyTenantList(),
       this.getTenantDetails(),
       this.getPropertyTenancyList(),
       this.getLAProductList()
@@ -268,22 +304,6 @@ export class ApplicationDetailsPage implements OnInit {
     return promise;
   }
 
-  private getPropertyTenantList() {
-    const promise = new Promise((resolve, reject) => {
-      this.letAllianceService.getPropertyTenantList(this.propertyId).subscribe(
-        res => {
-          this.propertyTenantList = res && res.data ? res.data : [];
-          resolve(this.propertyTenantList);
-        },
-        error => {
-          console.log(error);
-          resolve();
-        }
-      );
-    });
-    return promise;
-  }
-
   getTenantDetails() {
     const promise = new Promise((resolve, reject) => {
       this.letAllianceService.getTenantDetails(this.tenantId).subscribe(
@@ -308,7 +328,7 @@ export class ApplicationDetailsPage implements OnInit {
           this.laCaseProductList = this.laProductList.filter(obj => {
             return obj.productName.includes('Per Property');
           });
-  
+
           this.laApplicationProductList = this.laProductList.filter(obj => {
             return !obj.productName.includes('Per Property');
           });
@@ -317,7 +337,7 @@ export class ApplicationDetailsPage implements OnInit {
         error => {
           console.log(error);
           resolve(this.laProductList);
-      });
+        });
     });
 
     return promise;
@@ -327,11 +347,13 @@ export class ApplicationDetailsPage implements OnInit {
     this.tenancyDetailsForm.patchValue({
       tenancyStartDate: this.propertyTenancyList[0].tenancyStartDate,
     });
+    this.tenancyDetailsForm.controls['tenancyStartDate'].markAsTouched();
 
     this.propertyDetailsForm.patchValue({
       managementStatus: this.propertyDetails.managementType,
-      monthlyRent: this.propertyDetails.advertisementRent,
-    });
+      monthlyRent: this.currencyPipe.transform(this.propertyDetails.advertisementRent, 'GBP', 'symbol')
+    }, { emitEvent: false });
+
     this.tenantDetailsForm.patchValue({
       title: this.tenantDetails.title,
       forename: this.tenantDetails.forename,
@@ -368,7 +390,7 @@ export class ApplicationDetailsPage implements OnInit {
     await modal.present();
   }
 
-  refresh(){
+  refresh() {
     location.reload();
   }
 
@@ -422,8 +444,6 @@ export class ApplicationDetailsPage implements OnInit {
     this.commonService.showLoader();
     const applicationRequestObj = this.createApplicationFormValues();
 
-    console.log('applicationRequestObj--' + JSON.stringify(applicationRequestObj));
-
     this.letAllianceService.createApplication(applicationRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
@@ -468,41 +488,80 @@ export class ApplicationDetailsPage implements OnInit {
   private createApplicationFormValues(): any {
     const tmpDate = new Date(this.tenancyDetailsForm.get('tenancyStartDate').value);
     tmpDate.setDate(tmpDate.getDate() + (this.tenancyDetailsForm.get('tenancyTerm').value * 30));
+
+    const tmpTenant = this.propertyTenancyList[0].tenants.find(obj => obj.tenantId === this.tenantDetails.tenantId);
+
     const applicationDetails =
-      {
-        propertyId: this.propertyDetails.propertyId,
-        applicantId: this.tenantDetails.tenantId,
-        agreementId: this.propertyTenancyList[0].propcoAgreementId,
-        applicantItemType: 'M', // not suraj
-        case: {
-          tenancyStartDate: this.datepipe.transform(this.tenancyDetailsForm.get('tenancyStartDate').value, 'yyyy-MM-dd'),
-          tenancyEndDate: this.datepipe.transform(tmpDate, 'yyyy-MM-dd'),
-          address: this.address,
-          noOfTenantToBeReferenced: this.tenancyDetailsForm.get('noOfTenantToBeReferenced').value,
-          typeId: this.tenantDetailsForm.get('tenantTypeId').value,
-          tenancyTerm: this.tenancyDetailsForm.get('tenancyTerm').value,
-          monthlyRent: this.propertyDetailsForm.get('monthlyRent').value,
-          managementStatus: this.propertyDetailsForm.get('managementStatus').value,
-          productId: this.tenancyDetailsForm.get('productId').value
-        },
-        application: {
-          tenantTypeId: this.tenantDetailsForm.get('tenantTypeId').value,
-          title: this.tenantDetailsForm.get('title').value,
-          forename: this.tenantDetailsForm.get('forename').value,
-          surname: this.tenantDetailsForm.get('surname').value,
-          dateOfBirth: this.datepipe.transform(this.tenantDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
-          rentShare: this.tenantDetailsForm.get('rentShare').value,
-          productId: this.tenantDetailsForm.get('productId').value,
-          sendTenantLink: false,
-          autoSubmitLink: false,
-          email: this.tenantDetailsForm.get('email').value,
-          maritalStatus: this.tenantDetailsForm.get('maritalStatus').value,
-          nationality: 'British', //this.tenantDetailsForm.get('nationality').value, // British
-          isGuarantor: false,
-          hasTenantOtherName: this.tenantDetailsForm.get('hasTenantOtherName').value,
-        }
-      };
+    {
+      propertyId: this.propertyDetails.propertyId,
+      applicantId: this.tenantDetails.tenantId,
+      agreementId: this.propertyTenancyList[0].propcoAgreementId,
+      applicantItemType: tmpTenant.isLead ? 'M' : 'S',
+      case: {
+        productId: this.tenancyDetailsForm.get('productId').value,
+        noOfTenantToBeReferenced: this.tenancyDetailsForm.get('noOfTenantToBeReferenced').value,
+        tenancyStartDate: this.datepipe.transform(this.tenancyDetailsForm.get('tenancyStartDate').value, 'yyyy-MM-dd'),
+        tenancyEndDate: this.datepipe.transform(tmpDate, 'yyyy-MM-dd'),
+        tenancyTerm: this.tenancyDetailsForm.get('tenancyTerm').value,
+        paidBy: this.tenancyDetailsForm.get('paidBy').value,
+        offerNds: this.tenancyDetailsForm.get('offerNds').value,
+        address: this.address,
+        typeId: this.tenantDetailsForm.get('tenantTypeId').value,
+        monthlyRent: this.setDefaultAmount(this.propertyDetailsForm.get('monthlyRent').value),
+        managementStatus: this.propertyDetailsForm.get('managementStatus').value,
+      },
+      application: {
+        productId: this.tenantDetailsForm.get('productId').value,
+        tenantTypeId: this.tenantDetailsForm.get('tenantTypeId').value,
+        title: this.tenantDetailsForm.get('title').value,
+        otherTitle: this.tenantDetailsForm.get('otherTitle').value,
+        forename: this.tenantDetailsForm.get('forename').value,
+        middlename: this.tenantDetailsForm.get('middlename').value,
+        surname: this.tenantDetailsForm.get('surname').value,
+        email: this.tenantDetailsForm.get('email').value,
+        dateOfBirth: this.datepipe.transform(this.tenantDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
+        rentShare: this.setDefaultAmount(this.tenantDetailsForm.get('rentShare').value),
+        maritalStatus: this.tenantDetailsForm.get('maritalStatus').value,
+        nationality: 'British', //this.tenantDetailsForm.get('nationality').value, // British
+        //registerationNumber: this.tenantDetailsForm.get('registerationNumber').value,
+        sendTenantLink: false,
+        autoSubmitLink: false,
+        isGuarantor: false,
+        hasTenantOtherName: this.tenantDetailsForm.get('hasTenantOtherName').value,
+        otherNames: this.tenantDetailsForm.get('hasTenantOtherName').value ? [this.tenantDetailsForm.get('otherNames').value] : []
+      }
+    };
     return applicationDetails;
+  }
+
+  async cancelApplication() {
+    const modal = await this.modalController.create({
+      component: SimpleModalPage,
+      cssClass: 'modal-container alert-prompt',
+      backdropDismiss: false,
+      componentProps: {
+        data: `The data entered has not been saved. Are you sure?`,
+        heading: 'Application',
+        buttonList: [
+          {
+            text: 'Cancel',
+            value: false
+          },
+          {
+            text: 'OK',
+            value: true
+          }
+        ]
+      }
+    });
+
+    const data = modal.onDidDismiss().then(res => {
+      if (res.data.userInput) {
+        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+      }
+    });
+
+    await modal.present();
   }
 
   getLookupValue(index: any, lookup: any) {
@@ -514,7 +573,7 @@ export class ApplicationDetailsPage implements OnInit {
       .map(res1 => JSON.parse(res1));
   }
 
-  getProductType(productId: any): string{
+  getProductType(productId: any): string {
     let productType;
     this.laProductList = this.laProductList && this.laProductList.length ? this.laProductList : [];
     this.laProductList.find((obj) => {
