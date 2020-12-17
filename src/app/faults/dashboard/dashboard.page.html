@@ -265,10 +265,10 @@
                 {{ user.name }}
               </ion-select-option>
             </ion-select> -->
-            <ionic-selectable item-content formControlName="branchfilter" itemValueField="name" itemTextField="name"
+            <ionic-selectable item-content formControlName="assignToFilter" itemValueField="userId" itemTextField="name"
               [items]="assignedUsers" [canSearch]="true" (onChange)="onUserChange()" [isMultiple]="true"
               style="max-height: 30px;" [canClear]="true" clearButtonText="Clear" closeButtonSlot="end"
-              [shouldStoreItemValue]="false" [hasInfiniteScroll]="true" (onInfiniteScroll)="getMoreUsers($event)">
+              [shouldStoreItemValue]="false" [hasInfiniteScroll]="true" (onInfiniteScroll)="getMoreUsers($event)"  (onSearch)="searchUsers($event)">
 
               <ng-template ionicSelectableValueTemplate let-ports="value">
                 <div class="ionic-selectable-value-item" *ngFor="let user of assignedUsers">
