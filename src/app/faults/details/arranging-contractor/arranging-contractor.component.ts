@@ -786,4 +786,15 @@ export class ArrangingContractorComponent implements OnInit {
   downloadDocumentByURl(url){
     this.commonService.downloadDocumentByUrl(url);
   }
+
+  deleteDocument(documentId, i){
+    this.faultsService.deleteDocument(documentId).subscribe(response => {
+        this.removeFile(i);
+    })
+  }
+
+  removeFile(i) {
+    this.quoteDocuments.splice(i, 1);
+  }
+
 }
