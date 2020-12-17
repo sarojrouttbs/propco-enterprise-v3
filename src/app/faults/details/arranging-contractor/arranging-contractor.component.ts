@@ -621,6 +621,7 @@ export class ArrangingContractorComponent implements OnInit {
           this.commonService.showLoader();
           let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
           this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+          this._btnHandler('refresh');
 
         }
       });
