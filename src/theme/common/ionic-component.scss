@@ -196,7 +196,7 @@ ion-item {
   }
 }
 
-.resend-link{
+.resend-link {
   .modal-wrapper {
     min-height: 450px;
     min-width: 55%;
@@ -263,7 +263,6 @@ ion-alert.common-alert-box {
   }
 }
 
-
 .upload-container {
   .modal-wrapper {
     @include border-radius(10px);
@@ -285,4 +284,16 @@ ion-alert.common-alert-box {
       padding: 3px 5px;
     }
   }
+}
+
+.ionic-selectable-group .ionic-selectable-item {
+  --padding-start: 8px !important;
+  --padding-end: 8px !important;
+  ion-icon {
+    margin-inline-end: 15px;
+  }
+}
+
+.alert-wrapper {
+  min-width: 30% !important;
 }
