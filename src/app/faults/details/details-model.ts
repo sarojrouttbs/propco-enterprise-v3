@@ -101,6 +101,7 @@ declare namespace FaultModels {
     export interface IUpdateNotification {
         isAccepted: boolean;
         submittedByType: string;
+        isEscalateFault: boolean;
     }
 
     export interface IMaintenanceQuoteResponse {

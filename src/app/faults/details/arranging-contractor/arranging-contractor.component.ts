@@ -611,7 +611,13 @@ export class ArrangingContractorComponent implements OnInit {
     if (!data.value) {
       this.commonService.showConfirm(data.text, 'Are you sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
-          await this.saveContractorVisitResponse(data.value, this.iacNotification.faultNotificationId);
+          let notificationObj = {} as FaultModels.IUpdateNotification;
+          notificationObj.isAccepted = data.value;
+          notificationObj.submittedByType = 'SECUR_USER';
+          if(this.iacNotification.templateCode === 'CDT-T-E'){
+            notificationObj.isEscalateFault = true;
+          }
+          await this.saveContractorVisitResponse(this.iacNotification.faultNotificationId, notificationObj);
           this.commonService.showLoader();
           let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
           this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
@@ -715,11 +721,8 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  private async saveContractorVisitResponse(data, faultNotificationId): Promise<any> {
+  private async saveContractorVisitResponse(faultNotificationId, notificationObj): Promise<any> {
     const promise = new Promise((resolve, reject) => {
-      let notificationObj = {} as FaultModels.IUpdateNotification;
-      notificationObj.isAccepted = data;
-      notificationObj.submittedByType = 'SECUR_USER';
       this.faultsService.saveContractorVisit(faultNotificationId, notificationObj).subscribe(
         res => {
           resolve(true);
