@@ -7,12 +7,12 @@ import { FaultsService } from 'src/app/faults/faults.service';
 import { CommonService } from '../../services/common.service';
 
 @Component({
-  selector: 'app-appoinment-modal',
-  templateUrl: './appoinment-modal.page.html',
-  styleUrls: ['./appoinment-modal.page.scss'],
+  selector: 'app-appointment-modal',
+  templateUrl: './appointment-modal.page.html',
+  styleUrls: ['./appointment-modal.page.scss'],
 })
-export class AppoinmentModalPage implements OnInit {
-  appoinmentForm: FormGroup;
+export class AppointmentModalPage implements OnInit {
+  appointmentForm: FormGroup;
   faultNotificationId;
   minDate;
 
@@ -34,7 +34,7 @@ export class AppoinmentModalPage implements OnInit {
   }
 
   ngOnInit() {
-    this.appoinmentForm = this.formBuilder.group({
+    this.appointmentForm = this.formBuilder.group({
       dateTime: ['', Validators.required],
     });
     this.minDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
@@ -42,8 +42,8 @@ export class AppoinmentModalPage implements OnInit {
   }
 
   saveContractorVisit() {
-    if (this.appoinmentForm.valid) {
-      const requestObj = this.appoinmentForm.value;
+    if (this.appointmentForm.valid) {
+      const requestObj = this.appointmentForm.value;
       requestObj.contractorPropertyVisitAt = this.commonService.getFormatedDate(requestObj.dateTime, 'yyyy-MM-dd HH:mm:ss');
       requestObj.isAccepted = true;
       requestObj.submittedByType = 'SECUR_USER';
@@ -53,7 +53,7 @@ export class AppoinmentModalPage implements OnInit {
         this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Yes, agreed Date/Time with Tenant', 'error');
       })
     } else {
-      this.appoinmentForm.markAllAsTouched();
+      this.appointmentForm.markAllAsTouched();
     }
 
   }

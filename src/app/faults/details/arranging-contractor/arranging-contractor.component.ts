@@ -5,7 +5,7 @@ import { debounceTime, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
 import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES } from './../../../shared/constants';
-import { AppoinmentModalPage } from 'src/app/shared/modals/appoinment-modal/appoinment-modal.page';
+import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
 
@@ -158,12 +158,12 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.faultMaintenanceDetails) {
       this.initPatching();
       let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-      this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+      this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');      
     } else {
       this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
       this.checkMaintenanceDetail();
       let userDetails: any = await this.getUserDetails();
-      if (userDetails) {
+      if (userDetails) {        
         this.raiseQuoteForm.get('orderedBy').setValue(userDetails.name);
       }
     }
@@ -626,7 +626,7 @@ export class ArrangingContractorComponent implements OnInit {
       });
     } else if (data.value) {
       const modal = await this.modalController.create({
-        component: AppoinmentModalPage,
+        component: AppointmentModalPage,
         cssClass: 'modal-container',
         componentProps: {
           faultNotificationId: this.iacNotification.faultNotificationId,

@@ -11,6 +11,7 @@ import { EscalateModalPage } from '../../shared/modals/escalate-modal/escalate-m
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { IonicSelectableComponent } from 'ionic-selectable';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -43,17 +44,19 @@ export class DashboardPage implements OnInit {
   isAssignToFilter = false;
   filterForm: FormGroup;
   invoiceArr = [{ key: 8, value: 'Invoice Submitted' }, { key: 9, value: 'Paid' }];
-  accessibleOffices: any;
-  faultParams = new HttpParams();
+  accessibleOffices: any
+  faultParams: any;
   fs: number[] = [];
   fus: number[] = [];
   fcfd: string = '';
   fctd: string = '';
   managementType: any;
   assignedUsers: any;
-  fat: number[] = [];
-  fpo: number[] = [];
+  fat: string[] = [];
+  fpo: string[] = [];
   fpm: number[] = [];
+  isFilter = false;
+  selectedMgmtType: any = [];
 
   constructor(
     private commonService: CommonService,
@@ -80,10 +83,12 @@ export class DashboardPage implements OnInit {
       // responsive: true,
       lengthMenu: [5, 10, 15],
       ajax: (tableParams: any, callback) => {
-        this.faultParams = this.faultParams
-          .set('limit', tableParams.length)
-          .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
-          .set('fpm', '17,18,20,24,27,32,35,36');
+        if (!this.isFilter) {
+          this.faultParams = new HttpParams()
+            .set('limit', tableParams.length)
+            .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
+            .set('fpm', '17,18,20,24,27,32,35,36');
+        }
         that.faultsService.getAllFaults(this.faultParams).subscribe(res => {
           that.faultList = res && res.data ? res.data : [];
           callback({
@@ -123,7 +128,7 @@ export class DashboardPage implements OnInit {
       invoice: [],
       escalation: [],
       selectedPorts: [],
-      assignToFilter: []
+      assignToFilter: [],
     });
   }
 
@@ -349,8 +354,10 @@ export class DashboardPage implements OnInit {
         for (var val of this.managementType) {
           if (val.letCategory === 3346) {
             this.fpm.push(val.index);
+            this.selectedMgmtType.push(val)
           }
         }
+        this.filterForm.get('managementFilter').setValue(this.selectedMgmtType);
       }
     });
   }
@@ -385,39 +392,56 @@ export class DashboardPage implements OnInit {
   closeFilter(val) {
     if (val == 1) {
       this.isBranchFilter = false;
+      this.fpo = [];
     }
 
     if (val == 2) {
       this.isManagementFilter = false;
+      // this.fpm = [];
     }
 
     if (val == 3) {
       this.isStatusFilter = false;
+      this.fs = [];
     }
 
     if (val == 4) {
       this.isAssignToFilter = false;
+      this.fat = [];
     }
 
     this.filterForm.get('filterType').reset();
+    this.getList();
+
   }
 
   resetFilter() {
+    this.isFilter = false;
     this.filterForm.reset();
     this.isBranchFilter = false;
     this.isManagementFilter = false;
     this.isStatusFilter = false;
     this.isAssignToFilter = false;
-    this.faultParams = new HttpParams().set('limit', '5').set('page', '1').set('fpm', this.fpm.toString());
+    this.faultParams = new HttpParams().set('limit', '5').set('page', '1').set('fpm', '17,18,20,24,27,32,35,36');
     this.rerenderFaults();
     this.fs = [];
     this.fcfd = '';
     this.fctd = '';
+    this.filterForm.get('managementFilter').setValue(this.selectedMgmtType);
   }
 
-  async checkboxClick() {
+  async checkboxClick(controlName) {
+    this.isFilter = true;
     this.fs = [];
     this.fus = [];
+    let checkBoxControls = ['repairCheckbox', 'newRepairs', 'emergency', 'urgent', 'nonUrgent', 'assessment', 'automation', 'invoice', 'escalation']
+
+    checkBoxControls.forEach(key => {
+      if (this.filterForm.get(controlName).value && controlName !== key) {
+        this.filterForm.get(key).setValue(false);
+      }
+    });
+
     if (this.filterForm.get('repairCheckbox').value) {
       this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
     }
@@ -450,7 +474,7 @@ export class DashboardPage implements OnInit {
     }
 
     if (this.filterForm.get('invoice').value) {
-      let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancle', this.createInputs())
+      let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancel', this.createInputs())
       if (response) {
         this.fs.push(response);
       }
@@ -477,6 +501,7 @@ export class DashboardPage implements OnInit {
   }
 
   async onStatusChange() {
+    this.isFilter = true;
     this.fs = [];
     if (this.filterForm.get('statusFilter').value) {
       for (var val of this.filterForm.get('statusFilter').value) {
@@ -487,10 +512,18 @@ export class DashboardPage implements OnInit {
     let filteredStatus = this.fs.filter(function (elem, index, self) {
       return index === self.indexOf(elem);
     });
+
+    let checkBoxControls = ['repairCheckbox', 'newRepairs', 'emergency', 'urgent', 'nonUrgent', 'assessment', 'automation', 'invoice', 'escalation']
+
+    checkBoxControls.forEach(key => {
+      this.filterForm.get(key).setValue(false);
+    });
+    
     this.getList(filteredStatus);
   }
 
   async onUserChange() {
+    this.isFilter = true;
     this.fat = [];
     if (this.filterForm.get('assignToFilter').value) {
       for (var val of this.filterForm.get('assignToFilter').value) {
@@ -501,27 +534,33 @@ export class DashboardPage implements OnInit {
   }
 
   async onBranchChange() {
-    this.fpo = [];
     if (this.filterForm.get('branchfilter').value) {
-      for (var val of this.filterForm.get('branchfilter').value) {
-        this.fpo.push(val);
+      this.isFilter = true;
+      this.fpo = [];
+      if (this.filterForm.get('branchfilter').value) {
+        for (var val of this.filterForm.get('branchfilter').value) {
+          this.fpo.push(val.officeCode);
+        }
       }
+      this.getList();
     }
-    this.getList();
   }
 
   async onMgmtTypeChange() {
+    this.isFilter = true;
     this.fpm = [];
     if (this.filterForm.get('managementFilter').value) {
       for (var val of this.filterForm.get('managementFilter').value) {
-        this.fpm.push(val);
+        this.fpm.push(val.index);
       }
     }
     this.getList();
   }
 
   getList(filteredStatus?) {
-    // this.faultParams = this.faultParams.set('limit', '5').set('page', '1');
+    this.faultParams = new HttpParams();
+
+    this.faultParams = this.faultParams.set('limit', '5').set('page', '1');
     this.faultParams = this.faultParams.delete('fs');
     this.faultParams = this.faultParams.delete('fat');
     this.faultParams = this.faultParams.delete('fpo');
@@ -551,6 +590,7 @@ export class DashboardPage implements OnInit {
     if (this.fus.length > 0) {
       this.faultParams = this.faultParams.set('fus', this.fus.toString());
     }
+
     this.rerenderFaults();
   }
 

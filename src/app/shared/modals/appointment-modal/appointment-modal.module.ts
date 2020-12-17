@@ -5,14 +5,14 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { AppoinmentModalPage } from './appoinment-modal.page';
+import { AppointmentModalPage } from './appointment-modal.page';
 import { ComponentsModule } from '../../components/components.module';
 import { FaultsService } from 'src/app/faults/faults.service';
 
 const routes: Routes = [
   {
     path: '',
-    component: AppoinmentModalPage
+    component: AppointmentModalPage
   }
 ];
 
@@ -25,8 +25,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ComponentsModule
   ],
-  declarations: [AppoinmentModalPage],
+  declarations: [AppointmentModalPage],
   providers: [DatePipe, FaultsService],
-  exports : [AppoinmentModalPage]
+  exports : [AppointmentModalPage]
 })
-export class AppoinmentModalPageModule {}
+export class AppointmentModalPageModule {}
