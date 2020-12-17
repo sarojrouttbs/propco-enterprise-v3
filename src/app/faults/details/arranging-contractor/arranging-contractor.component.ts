@@ -529,9 +529,19 @@ export class ArrangingContractorComponent implements OnInit {
       filtereData = filtereData.sort((a, b) => {
         return <any>new Date(b.firstEmailSentAt) - <any>new Date(a.firstEmailSentAt);
       });
+      this.disableQuoteDetail(filtereData[0]);
       resolve(filtereData[0]);
     });
     return promise;
+  }
+
+  private disableQuoteDetail(iacNotification) {
+    if (iacNotification.templateCode === 'CQ-C-E') {
+      this.raiseQuoteForm.get('worksOrderNumber').disable();
+      this.raiseQuoteForm.get('description').disable();
+      this.raiseQuoteForm.get('requestStartDate').disable();
+      this.raiseQuoteForm.get('contact').disable();
+    }
   }
 
   setUserAction(index) {
@@ -614,7 +624,7 @@ export class ArrangingContractorComponent implements OnInit {
           let notificationObj = {} as FaultModels.IUpdateNotification;
           notificationObj.isAccepted = data.value;
           notificationObj.submittedByType = 'SECUR_USER';
-          if(this.iacNotification.templateCode === 'CDT-T-E'){
+          if (this.iacNotification.templateCode === 'CDT-T-E') {
             notificationObj.isEscalateFault = true;
           }
           await this.saveContractorVisitResponse(this.iacNotification.faultNotificationId, notificationObj);
@@ -668,7 +678,34 @@ export class ArrangingContractorComponent implements OnInit {
       });
       await modal.present();
     } else {
+      this.commonService.showConfirm(data.text, `You have selected 'No, couldn't carry out the Quote'. The fault will be escalated tor manual intervention. Do you want to proceed?`, '', 'Yes', 'No').then(async res => {
+        if (res) {
+          const submit = await this.submitQuoteAmout();
+          if(submit){
+            this.commonService.showLoader();
+            let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+            this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+          }
+        }
+      });
     }
+  }
+
+  async submitQuoteAmout() {
+    let notificationObj = {} as any;
+    notificationObj.isAccepted = false;
+    notificationObj.submittedByType = 'SECUR_USER';
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.saveNotificationQuoteAmount(notificationObj, this.iacNotification.faultNotificationId).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
   }
 
   private getContractorDetails(contractId) {

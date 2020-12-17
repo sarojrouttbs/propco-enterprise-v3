@@ -197,6 +197,10 @@ export class FaultsService {
       catchError(this.handleError<any>(''))
     );
   }
+  
+  saveNotificationQuoteAmount(body: any, faultNotificationId): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/quote-amount`, body);
+  }
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
