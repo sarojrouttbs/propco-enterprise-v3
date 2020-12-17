@@ -114,7 +114,7 @@ export class ResendLinkModalPage implements OnInit {
     }
   }
 
-  private setLookupData(data: any) {}
+  private setLookupData(data: any) { }
 
   private setLALookupData(data: any) {
     this.titleTypes = this.laLookupdata.titleTypes;
@@ -133,6 +133,9 @@ export class ResendLinkModalPage implements OnInit {
     } else {
       this.emailList.forEach((ele) => {
         if (ele.emailId == emailId && this.selectedCheckbox) {
+          if (emailId == '3') {
+            this.newEmailAddress.patchValue({ email: '' });
+          }
           if (this.selectedCheckbox == emailId) {
             ele.selected = false;
             this.selectedCheckbox = null;
