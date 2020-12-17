@@ -430,7 +430,7 @@ export class DashboardPage implements OnInit {
     this.filterForm.get('managementFilter').setValue(this.selectedMgmtType);
   }
 
-  async checkboxClick(controlName) {
+  async checkboxClick(controlName?) {
     this.isFilter = true;
     this.fs = [];
     this.fus = [];
