@@ -1,3 +1,14 @@
+@mixin set-text-style($size, $lheight) {
+  font-size: $size;
+  line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
 .contractor-list {
   width: 100%;
   max-height: 200px;
@@ -17,6 +28,10 @@
   margin-bottom: 10px;
 }
 
+.border-bottom {
+  border: 1px solid var(--ion-color-step-1400);
+  margin: 20px 0px;
+}
 .action-btn-container {
   display: flex;
   align-items: center;
@@ -65,4 +80,28 @@
   padding-top: 2px;
   font-size: 14px;
   line-height: 18px;
+}
+
+.delete-icon-wrapper {
+  @include border-radius(4px);
+  border: 2px solid var(--ion-color-step-1150);
+
+  img {
+    height: 165px;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .file-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .delete-icon {
+    @include set-text-style(30px, 36px);
+    color: var(--ion-color-danger);
+    cursor: pointer;
+    text-align: right;
+  }
 }
