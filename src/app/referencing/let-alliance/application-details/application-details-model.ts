@@ -193,5 +193,38 @@ declare namespace applicationModels {
         propcoId: number;
         tenantId: string;
     }
+
+    export interface IGuarantorResponse {
+        reference: string;
+        displayAs?: any;
+        rentGuaranteed?: any;
+        address: Address;
+        name?: any;
+        homeTelephoneNo?: any;
+        businessTelephoneNo?: any;
+        alternativeEmail?: any;
+        esignatureEmail?: any;
+        alternativeNo?: any;
+        fax?: any;
+        alternativeFax?: any;
+        emergencyNo?: any;
+        booker?: any;
+        fullName?: any;
+        dateOfBirth?: any;
+        enrolmentNo?: any;
+        rentAmount?: any;
+        maritalStatus?: any;
+        gender?: any;
+        nationality?: any;
+        ethnicOrigin?: any;
+        legacyReference?: any;
+        forename: string;
+        surname: string;
+        email: string;
+        mobile: string;
+        title: string;
+        propcoId: number;
+        guarantorId: string;
+    }
 }
 
