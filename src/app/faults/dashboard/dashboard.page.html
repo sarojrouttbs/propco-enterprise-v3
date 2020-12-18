@@ -38,8 +38,7 @@
         <ion-col size="12" size-md [ngClass]="filterForm.get('emergency').value?'filter-grid-active':'filter-grid'">
           <div>
             <ion-checkbox class="filter-checkbox" color="danger" mode="ios" formControlName="emergency"
-              (ionChange)="checkboxClick('emergency')" style="--border-color:var(--background-checked);"
-              [checked]="true">
+              (ionChange)="checkboxClick('emergency')" style="--border-color:var(--background-checked);">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
