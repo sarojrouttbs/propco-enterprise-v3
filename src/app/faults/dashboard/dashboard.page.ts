@@ -442,6 +442,7 @@ export class DashboardPage implements OnInit {
   }
 
   async checkboxClick(controlName?) {
+
     this.isFilter = true;
     this.fs = [];
     this.fus = [];
@@ -487,10 +488,11 @@ export class DashboardPage implements OnInit {
     }
 
     if (this.filterForm.get('invoice').value) {
-      let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancel', this.createInputs())
-      if (response) {
+      let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancel', this.createInputs());
+      if (response && response.length > 0) {
         this.fs.push(response);
       } else {
+        this.filterForm.get('invoice').setValue(false)
         return;
       }
     }
