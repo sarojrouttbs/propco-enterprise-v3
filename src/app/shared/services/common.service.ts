@@ -497,8 +497,6 @@ export class CommonService {
                 alertPopup.dismiss().then((res) => {
                   resolve(data);
                 });
-              } else {
-                resolve("error");
               }
               return false;
             }
