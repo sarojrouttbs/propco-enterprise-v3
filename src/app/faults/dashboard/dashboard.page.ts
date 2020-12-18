@@ -701,7 +701,7 @@ export class DashboardPage implements OnInit {
       });
   }
 
-  onDateChnage() {
+  onDateChange() {
     if (this.filterForm.get('fromDate').value) {
       this.fcfd = this.filterForm.get('fromDate').value ? this.datepipe.transform(this.filterForm.get('fromDate').value, 'yyyy-MM-dd') : '';
     }
