@@ -442,7 +442,6 @@ export class DashboardPage implements OnInit {
   }
 
   async checkboxClick(controlName?) {
-
     this.isFilter = true;
     this.fs = [];
     this.fus = [];
@@ -712,6 +711,15 @@ export class DashboardPage implements OnInit {
 
     this.getList();
   }
+
+  clickCheckbox(controlName) {
+    if (this.filterForm.get(controlName).value) {
+      this.filterForm.get(controlName).setValue(!this.filterForm.get(controlName).value);
+      return;
+    }
+    this.filterForm.get(controlName).setValue(true);
+  }
+
 }
 
 export class AssignedUsers {
