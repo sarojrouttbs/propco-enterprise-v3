@@ -1,6 +1,6 @@
 import { ModalController, PopoverController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX } from './../../shared/constants';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES } from './../../shared/constants';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -440,7 +440,7 @@ export class DetailsPage implements OnInit {
                 const tenants = this.propertyTenancyList[i].tenants;
                 let tenantIdList = tenants.filter(data => data.tenantId).map(d => d.tenantId);
                 let tenantData = tenants.find(data => data.isLead === true);
-                if(tenantData){
+                if (tenantData) {
                   this.leadTenantId = tenantData.tenantId;
                 }
                 this.tenantIds = this.tenantIds.concat(tenantIdList);
@@ -678,7 +678,7 @@ export class DetailsPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         res => {
-          this.preferredSuppliers = res && res.data ? res.data : [];         
+          this.preferredSuppliers = res && res.data ? res.data : [];
           resolve(this.preferredSuppliers);
         },
         error => {
@@ -765,7 +765,8 @@ export class DetailsPage implements OnInit {
       const formData = new FormData();
       formData.append('file', data.file);
       formData.append('name', data.file.name);
-      formData.append('folderName', this.faultDetails.status + '' || '1');
+      // formData.append('folderName', this.faultDetails.status + '' || '1');
+      formData.append('folderName', FOLDER_NAMES[0]['index']);
       formData.append('headCategory', 'Legal');
       formData.append('subCategory', 'Addendum');
       apiObservableArray.push(this.faultsService.uploadDocument(formData, faultId));
@@ -790,7 +791,7 @@ export class DetailsPage implements OnInit {
     this.faultsService.getFaultDocuments(faultId).subscribe(response => {
       if (response) {
         this.files = response.data;
-        this.quoteDocuments = this.files.filter(data => data.folderName === 'quote_estimates');
+        this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[1]['index']);
       }
     })
   }
