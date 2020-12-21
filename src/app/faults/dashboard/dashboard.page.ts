@@ -720,6 +720,15 @@ export class DashboardPage implements OnInit {
     this.filterForm.get(controlName).setValue(true);
   }
 
+  beginLoading() {
+    this.commonService.showLoader();
+  }
+
+  endLoading() {
+    this.commonService.hideLoader();
+
+
+  }
 }
 
 export class AssignedUsers {
