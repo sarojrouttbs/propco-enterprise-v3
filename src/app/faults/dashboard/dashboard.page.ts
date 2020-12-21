@@ -51,7 +51,7 @@ export class DashboardPage implements OnInit {
   fus: number[] = [];
   fcfd: string = '';
   fctd: string = '';
-  managementType: any;
+  managementTypeList: any;
   assignedUsers: AssignedUsers[];
   fat: string[] = [];
   fpo: string[] = [];
@@ -60,7 +60,7 @@ export class DashboardPage implements OnInit {
   selectedMgmtType: any = [];
   page = 2;
   userList: any;
-  portsSubscription: Subscription;
+  assignToSubscription: Subscription;
 
   constructor(
     private commonService: CommonService,
@@ -356,9 +356,9 @@ export class DashboardPage implements OnInit {
 
   getMgntServiceType() {
     this.faultsService.getMgntServiceType().subscribe(res => {
-      this.managementType = res ? res : [];
-      if (this.managementType) {
-        for (var val of this.managementType) {
+      this.managementTypeList = res ? res : [];
+      if (this.managementTypeList) {
+        for (var val of this.managementTypeList) {
           if (val.letCategory === 3346) {
             this.fpm.push(val.index);
             this.selectedMgmtType.push(val)
@@ -501,20 +501,17 @@ export class DashboardPage implements OnInit {
       this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21);
     }
 
-    if (this.filterForm.get('fromDate').value) {
-      this.fcfd = this.filterForm.get('fromDate').value ? this.datepipe.transform(this.filterForm.get('fromDate').value, 'yyyy-MM-dd') : '';
-    }
-
-    if (this.filterForm.get('toDate').value) {
-      this.fctd = this.filterForm.get('toDate').value ? this.datepipe.transform(this.filterForm.get('toDate').value, 'yyyy-MM-dd') : '';
-    }
-
-    let filteredStatus = this.fs.filter(function (elem, index, self) {
-      return index === self.indexOf(elem);
-    });
+    const filteredStatus: any = [];
+    this.fs.filter((elem) =>
+      this.faultStatuses.find((e) => {
+        if (elem === e.index) {
+          filteredStatus.push(e);
+        }
+      })
+    );
 
     this.filterForm.get('statusFilter').setValue(filteredStatus);
-    this.getList(filteredStatus);
+    this.getList();
   }
 
   async onStatusChange() {
@@ -522,21 +519,10 @@ export class DashboardPage implements OnInit {
     this.fs = [];
     if (this.filterForm.get('statusFilter').value) {
       for (var val of this.filterForm.get('statusFilter').value) {
-        this.fs.push(val);
+        this.fs.push(val.index);
       }
     }
-
-    let filteredStatus = this.fs.filter(function (elem, index, self) {
-      return index === self.indexOf(elem);
-    });
-
-    // let checkBoxControls = ['repairCheckbox', 'newRepairs', 'emergency', 'urgent', 'nonUrgent', 'assessment', 'automation', 'invoice', 'escalation']
-
-    // checkBoxControls.forEach(key => {
-    //   this.filterForm.get(key).setValue(false);
-    // });
-
-    this.getList(filteredStatus);
+    this.getList();
   }
 
   async onUserChange() {
@@ -574,11 +560,7 @@ export class DashboardPage implements OnInit {
     this.getList();
   }
 
-  getList(filteredStatus?) {
-
-    // this.faultParams = new HttpParams();
-
-    // this.faultParams = this.faultParams.set('limit', '5').set('page', '1');
+  getList() {
     this.faultParams = this.faultParams.delete('fs');
     this.faultParams = this.faultParams.delete('fat');
     this.faultParams = this.faultParams.delete('fpo');
@@ -587,9 +569,6 @@ export class DashboardPage implements OnInit {
     this.faultParams = this.faultParams.delete('fctd');
     this.faultParams = this.faultParams.delete('fus');
 
-    if (filteredStatus && filteredStatus.length > 0) {
-      this.faultParams = this.faultParams.set('fs', filteredStatus.toString());
-    }
     if (this.fat.length > 0) {
       this.faultParams = this.faultParams.set('fat', this.fat.toString());
     }
@@ -609,9 +588,9 @@ export class DashboardPage implements OnInit {
       this.faultParams = this.faultParams.set('fus', this.fus.toString());
     }
     if (this.fs.length > 0) {
-      this.faultParams = this.faultParams.set('fs', this.fs.toString());
+      let unique = this.fs.filter((v, i, a) => a.indexOf(v) === i);
+      this.faultParams = this.faultParams.set('fs', unique.toString());
     }
-
     this.rerenderFaults();
   }
 
@@ -634,24 +613,27 @@ export class DashboardPage implements OnInit {
     component: IonicSelectableComponent,
     text: string
   }) {
-    let text = (event.text || '').trim().toLowerCase();
+    if (event) {
+      let text = (event.text || '').trim().toLowerCase();
 
-    // if (this.page > 3) {
-    //   event.component.disableInfiniteScroll();
-    //   return;
-    // }
+      // if (this.page > 3) {
+      //   event.component.disableInfiniteScroll();
+      //   return;
+      // }
 
-    this.getUsersAsync(this.page, 10).subscribe(users => {
-      users = event.component.items.concat(users);
+      this.getUsersAsync(this.page, 10).subscribe(users => {
+        users = event.component.items.concat(users);
 
-      if (text) {
-        users = this.filterUsers(users, text);
-      }
+        if (text) {
+          users = this.filterUsers(users, text);
+        }
 
-      event.component.items = users;
-      event.component.endInfiniteScroll();
-      this.page++;
-    });
+        event.component.items = users;
+        event.component.endInfiniteScroll();
+        this.page++;
+      });
+    }
+
   }
 
   getUsers(page?: number, size?: number) {
@@ -687,14 +669,14 @@ export class DashboardPage implements OnInit {
     event.component.startSearch();
 
     // Close any running subscription.
-    if (this.portsSubscription) {
-      this.portsSubscription.unsubscribe();
+    if (this.assignToSubscription) {
+      this.assignToSubscription.unsubscribe();
     }
 
     if (!text) {
       // Close any running subscription.
-      if (this.portsSubscription) {
-        this.portsSubscription.unsubscribe();
+      if (this.assignToSubscription) {
+        this.assignToSubscription.unsubscribe();
       }
 
       event.component.items = this.getUsers(1, 15);
@@ -706,17 +688,29 @@ export class DashboardPage implements OnInit {
       return;
     }
 
-    this.portsSubscription = this
+    this.assignToSubscription = this
       .getUsersAsync()
       .subscribe(ports => {
         // Subscription will be closed when unsubscribed manually.
-        if (this.portsSubscription.closed) {
+        if (this.assignToSubscription.closed) {
           return;
         }
 
         event.component.items = this.filterUsers(ports, text);
         event.component.endSearch();
       });
+  }
+
+  onDateChange() {
+    if (this.filterForm.get('fromDate').value) {
+      this.fcfd = this.filterForm.get('fromDate').value ? this.datepipe.transform(this.filterForm.get('fromDate').value, 'yyyy-MM-dd') : '';
+    }
+
+    if (this.filterForm.get('toDate').value) {
+      this.fctd = this.filterForm.get('toDate').value ? this.datepipe.transform(this.filterForm.get('toDate').value, 'yyyy-MM-dd') : '';
+    }
+
+    this.getList();
   }
 }
 

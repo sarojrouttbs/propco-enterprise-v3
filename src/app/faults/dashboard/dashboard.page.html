@@ -105,7 +105,7 @@
           <ion-item>
             <ion-label position="floating">From</ion-label>
             <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" style="padding-bottom: 0px;"
-              formControlName="fromDate" (ionChange)="checkboxClick()">
+              formControlName="fromDate" (ionChange)="onDateChange()">
             </ion-datetime>
             <ion-icon name="calendar" slot="start" class="datetime-icon"></ion-icon>
           </ion-item>
@@ -115,7 +115,7 @@
           <ion-item>
             <ion-label position="floating">To</ion-label>
             <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" style="padding-bottom: 0px;"
-              formControlName="toDate" (ionChange)="checkboxClick()">
+              formControlName="toDate" (ionChange)="onDateChange()">
             </ion-datetime>
             <ion-icon name="calendar" slot="start" class="datetime-icon"></ion-icon>
           </ion-item>
@@ -142,52 +142,107 @@
       </ion-row>
 
       <ion-row>
-        <!-- *ngIf="isBranchFilter" -->
         <ion-col size=20 *ngIf="isBranchFilter">
           <ion-item class="select-block">
             <ion-label position="floating">Branch(es)</ion-label>
-            <!-- <ion-select interface="popover" formControlName="branchfilter" multiple="true" okText="Apply"
-              cancelText="Cancel" (ionChange)="onBranchChange()">
-              <ion-select-option [value]="office.officeId" *ngFor="let office of accessibleOffices">
-                {{ office.officeName }}
-              </ion-select-option>
-            </ion-select> -->
+            <ionic-selectable item-content itemValueField="officeCode" itemTextField="officeName"
+              [items]="accessibleOffices" [canSearch]="true" [isMultiple]="true" style="max-height: 30px;"
+              [canClear]="true" clearButtonText="Clear" closeButtonSlot="end" confirmButtonText="Apply"
+              searchPlaceholder="Search Branch(es)" #BranchType formControlName="branchfilter"
+              [shouldStoreItemValue]="false">
 
-            <ionic-selectable item-content formControlName="branchfilter" itemValueField="officeCode"
-              itemTextField="officeName" [items]="accessibleOffices" [canSearch]="true" (onChange)="onBranchChange()"
-              [isMultiple]="true" style="max-height: 30px;" [canClear]="true" clearButtonText="Clear"
-              closeButtonSlot="end" [shouldStoreItemValue]="false" confirmButtonText="Apply">
-
-              <ng-template ionicSelectableValueTemplate let-accessibleOffices="value">
-                <div class="ionic-selectable-value-item" *ngFor="let office of accessibleOffices">
-                  {{office.officeName}})
-                </div>
+              <ng-template ionicSelectableHeaderTemplate>
+                <ion-toolbar>
+                  <ion-buttons end>
+                  </ion-buttons>
+                  <ion-title>
+                    {{BranchType.label}}
+                  </ion-title>
+                </ion-toolbar>
               </ng-template>
 
+              <ng-template ionicSelectableValueTemplate let-accessibleOffices="value">
+                <div class="ionic-selectable-value-item" *ngFor="let type of accessibleOffices">
+                  {{type.officeName}})
+                </div>
+              </ng-template>
+              <ng-template ionicSelectableFooterTemplate>
+                <ion-toolbar>
+                  <ion-button color="success" class="action-btn" fill="outline"
+                    style="--border-radius: 4px !important; float: right;margin-right: 15px;"
+                    (click)="this.BranchType.confirm();this.BranchType.close();onBranchChange();"
+                    [disabled]="!BranchType.itemsToConfirm.length">
+                    Apply
+                  </ion-button>
+
+                  <ion-button color="danger" class="action-btn" fill="outline"
+                    style="--border-radius: 4px !important;float: right;margin-right: 15px;"
+                    (click)="BranchType.clear();BranchType.close();onBranchChange();"
+                    [disabled]="!BranchType.itemsToConfirm.length">
+                    Clear
+                  </ion-button>
+                  <ion-button color="danger" class="action-btn" fill="outline"
+                    style="--border-radius: 4px !important;float: right;margin-right: 15px;"
+                    (click)="BranchType.close()">
+                    Cancel
+                  </ion-button>
+                </ion-toolbar>
+              </ng-template>
             </ionic-selectable>
+
+
 
           </ion-item>
           <ion-icon name="close-circle" class="close-btn" (click)="closeFilter(1)"> </ion-icon>
         </ion-col>
+
         <ion-col size=25 *ngIf="isManagementFilter">
           <ion-item class="select-block">
             <ion-label position="floating">Management Service Type</ion-label>
-            <!-- <ion-select interface="popover" formControlName="managementFilter" multiple="true" okText="Apply"
-              cancelText="Cancel" (ionChange)="onMgmtTypeChange()">
-              <ion-select-option [value]="type.index" *ngFor="let type of managementType">
-                {{ type.description }}
-              </ion-select-option>
-            </ion-select> -->
+            <ionic-selectable item-content itemValueField="index" itemTextField="description"
+              [items]="managementTypeList" [canSearch]="true" [isMultiple]="true" style="max-height: 30px;"
+              [canClear]="true" clearButtonText="Clear" closeButtonSlot="end" confirmButtonText="Apply"
+              searchPlaceholder="Search Management Type Service" #managementType formControlName="managementFilter"
+              [shouldStoreItemValue]="false">
 
-            <ionic-selectable item-content formControlName="managementFilter" itemValueField="index"
-              itemTextField="description" [items]="managementType" [canSearch]="true" (onChange)="onMgmtTypeChange()"
-              [isMultiple]="true" style="max-height: 30px;" [canClear]="true" clearButtonText="Clear"
-              closeButtonSlot="end" [shouldStoreItemValue]="false" confirmButtonText="Apply">
+              <ng-template ionicSelectableHeaderTemplate>
+                <ion-toolbar>
+                  <ion-buttons end>
+                  </ion-buttons>
+                  <ion-title>
+                    {{managementType.label}}
+                  </ion-title>
+                </ion-toolbar>
+              </ng-template>
 
-              <ng-template ionicSelectableValueTemplate let-managementType="value">
-                <div class="ionic-selectable-value-item" *ngFor="let type of managementType">
-                  {{type.description}})
+              <ng-template ionicSelectableValueTemplate let-managementTypeList="value">
+                <div class="ionic-selectable-value-item" *ngFor="let type of managementTypeList">
+                  {{type.description}}
                 </div>
+              </ng-template>
+              <ng-template ionicSelectableFooterTemplate>
+                <ion-toolbar>
+                  <ion-button color="success" class="action-btn" fill="outline"
+                    style="--border-radius: 4px !important; float: right;margin-right: 15px;"
+                    (click)="this.managementType.confirm();this.managementType.close();onMgmtTypeChange();"
+                    [disabled]="!managementType.itemsToConfirm.length">
+                    Apply
+                  </ion-button>
+
+                  <ion-button color="danger" class="action-btn" fill="outline"
+                    style="--border-radius: 4px !important;float: right;margin-right: 15px;"
+                    (click)="managementType.clear();managementType.close();onMgmtTypeChange();"
+                    [disabled]="!managementType.itemsToConfirm.length">
+                    Clear
+                  </ion-button>
+                  <ion-button color="danger" class="action-btn" fill="outline"
+                    style="--border-radius: 4px !important;float: right;margin-right: 15px;"
+                    (click)="managementType.close()">
+                    Cancel
+                  </ion-button>
+
+
+                </ion-toolbar>
               </ng-template>
             </ionic-selectable>
           </ion-item>
@@ -197,12 +252,59 @@
         <ion-col size=20 *ngIf="isStatusFilter">
           <ion-item class="select-block">
             <ion-label position="floating">Status</ion-label>
-            <ion-select formControlName="statusFilter" multiple="true" okText="Apply" cancelText="Cancel"
+            <!-- <ion-select formControlName="statusFilter" multiple="true" okText="Apply" cancelText="Cancel"
               (ionChange)="onStatusChange()">
               <ion-select-option [value]="status.index" *ngFor="let status of faultStatuses">
                 {{ status.value }}
               </ion-select-option>
-            </ion-select>
+            </ion-select> -->
+
+            <ionic-selectable item-content itemValueField="index" itemTextField="value" [items]="faultStatuses"
+              [canSearch]="true" [isMultiple]="true" style="max-height: 30px;" [canClear]="true" clearButtonText="Clear"
+              closeButtonSlot="end" confirmButtonText="Apply" searchPlaceholder="Search Status"
+              #statusType formControlName="statusFilter" [shouldStoreItemValue]="false">
+
+              <ng-template ionicSelectableHeaderTemplate>
+                <ion-toolbar>
+                  <ion-buttons end>
+                  </ion-buttons>
+                  <ion-title>
+                    {{statusType.label}}
+                  </ion-title>
+                </ion-toolbar>
+              </ng-template>
+
+              <ng-template ionicSelectableValueTemplate let-faultStatuses="value">
+                <div class="ionic-selectable-value-item" *ngFor="let status of faultStatuses">
+                  {{status.value}}
+                </div>
+              </ng-template>
+              <ng-template ionicSelectableFooterTemplate>
+                <ion-toolbar>
+                  <ion-button color="success" class="action-btn" fill="outline"
+                    style="--border-radius: 4px !important; float: right;margin-right: 15px;"
+                    (click)="this.statusType.confirm();this.statusType.close();onStatusChange();"
+                    [disabled]="!statusType.itemsToConfirm.length">
+                    Apply
+                  </ion-button>
+
+                  <ion-button color="danger" class="action-btn" fill="outline"
+                    style="--border-radius: 4px !important;float: right;margin-right: 15px;"
+                    (click)="statusType.clear();statusType.close();onStatusChange();"
+                    [disabled]="!statusType.itemsToConfirm.length">
+                    Clear
+                  </ion-button>
+                  <ion-button color="danger" class="action-btn" fill="outline"
+                    style="--border-radius: 4px !important;float: right;margin-right: 15px;"
+                    (click)="statusType.close()">
+                    Cancel
+                  </ion-button>
+
+
+                </ion-toolbar>
+              </ng-template>
+            </ionic-selectable>
+
           </ion-item>
           <ion-icon name="close-circle" class="close-btn" (click)="closeFilter(3)"> </ion-icon>
         </ion-col>
@@ -210,24 +312,52 @@
         <ion-col size=20 *ngIf="isAssignToFilter">
           <ion-item class="select-block">
             <ion-label position="floating">Assigned To</ion-label>
-            <!-- <ion-select interface="popover" formControlName="assignToFilter" multiple="true" okText="Apply"
-              cancelText="Cancel" (ionChange)="onUserChange()">
-              <ion-select-option [value]="user.userId" *ngFor="let user of assignedUsers">
-                {{ user.name }}
-              </ion-select-option>
-            </ion-select> -->
-            <ionic-selectable item-content formControlName="assignToFilter" itemValueField="userId" itemTextField="name"
-              [items]="assignedUsers" [canSearch]="true" (onChange)="onUserChange()" [isMultiple]="true"
-              style="max-height: 30px;" [canClear]="true" clearButtonText="Clear" closeButtonSlot="end"
-              [shouldStoreItemValue]="false" [hasInfiniteScroll]="true" (onInfiniteScroll)="getMoreUsers($event)"
-              (onSearch)="searchUsers($event)" confirmButtonText="Apply">
+            <ionic-selectable item-content itemValueField="userId" itemTextField="name" [items]="assignedUsers"
+              [canSearch]="true" [isMultiple]="true" style="max-height: 30px;" [canClear]="true" clearButtonText="Clear"
+              closeButtonSlot="end" confirmButtonText="Apply" searchPlaceholder="Search Assigned To" #userType
+              formControlName="assignToFilter" [shouldStoreItemValue]="false" [hasInfiniteScroll]="true"
+              (onInfiniteScroll)="getMoreUsers($event)" (onSearch)="searchUsers($event)">
+
+              <ng-template ionicSelectableHeaderTemplate>
+                <ion-toolbar>
+                  <ion-buttons end>
+                  </ion-buttons>
+                  <ion-title>
+                    {{userType.label}}
+                  </ion-title>
+                </ion-toolbar>
+              </ng-template>
 
               <ng-template ionicSelectableValueTemplate let-assignedUsers="value">
-                <div class="ionic-selectable-value-item" *ngFor="let user of assignedUsers">
-                  {{user.name}})
+                <div class="ionic-selectable-value-item" *ngFor="let type of assignedUsers">
+                  {{type.name}})
                 </div>
               </ng-template>
+              <ng-template ionicSelectableFooterTemplate>
+                <ion-toolbar>
+                  <ion-button color="success" class="action-btn" fill="outline"
+                    style="--border-radius: 4px !important; float: right;margin-right: 15px;"
+                    (click)="this.userType.confirm();this.userType.close();onUserChange();"
+                    [disabled]="!userType.itemsToConfirm.length">
+                    Apply
+                  </ion-button>
+
+                  <ion-button color="danger" class="action-btn" fill="outline"
+                    style="--border-radius: 4px !important;float: right;margin-right: 15px;"
+                    (click)="userType.clear();userType.close();onUserChange();"
+                    [disabled]="!userType.itemsToConfirm.length">
+                    Clear
+                  </ion-button>
+                  <ion-button color="danger" class="action-btn" fill="outline"
+                    style="--border-radius: 4px !important;float: right;margin-right: 15px;" (click)="userType.close()">
+                    Cancel
+                  </ion-button>
+
+
+                </ion-toolbar>
+              </ng-template>
             </ionic-selectable>
+
 
           </ion-item>
           <ion-icon name="close-circle" class="close-btn" (click)="closeFilter(4)"> </ion-icon>

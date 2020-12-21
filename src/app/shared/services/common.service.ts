@@ -22,6 +22,7 @@ interface Lookupdata {
 export class CommonService {
   private loader;
   entityType;
+  public alertPresented: any;
 
   constructor(
     private alertCtrl: AlertController,
@@ -31,6 +32,7 @@ export class CommonService {
     public toastController: ToastController,
     private toastr: ToastrService,
   ) {
+    this.alertPresented = false;
   }
 
   private dataChange = new Subject<any>();
@@ -471,44 +473,52 @@ export class CommonService {
   }
 
   async showCheckBoxConfirm(title: string, okText?: string, cancelText?: string, input?: any) {
-    return new Promise((resolve, reject) => {
-      let alertPopup: any;
-      this.alertCtrl.create({
-        header: title,
-        cssClass: 'common-alert-box',
-        inputs: input ? input : '',
-        buttons: [
-          {
-            text: cancelText ? cancelText : 'Cancel',
-            cssClass: 'ion-color-danger',
-            role: 'cancel',
-            handler: () => {
-              alertPopup.dismiss().then((res) => {
-                resolve(false);
-              });
-              return false;
-            }
-          },
-          {
-            text: okText ? okText : 'Ok',
-            cssClass: 'ion-color-success',
-            handler: (data) => {
-              if (data.length > 0) {
+    if (!this.alertPresented) {
+      return new Promise((resolve, reject) => {
+        this.alertPresented = true;
+        let alertPopup: any;
+        this.alertCtrl.create({
+          header: title,
+          cssClass: 'common-alert-box',
+          inputs: input ? input : '',
+          buttons: [
+            {
+              text: cancelText ? cancelText : 'Cancel',
+              cssClass: 'ion-color-danger',
+              role: 'cancel',
+              handler: () => {
                 alertPopup.dismiss().then((res) => {
-                  resolve(data);
-                });
-              }
-              return false;
-            }
-          }
-        ],
-        backdropDismiss: false,
-      }).then(res => {
-        alertPopup = res;
-        res.present();
-      });
+                  this.alertPresented = false;
 
-    });
+                  resolve(false);
+                });
+                return false;
+              }
+            },
+            {
+              text: okText ? okText : 'Ok',
+              cssClass: 'ion-color-success',
+              handler: (data) => {
+                if (data.length > 0) {
+                  alertPopup.dismiss().then((res) => {
+                    this.alertPresented = false;;
+
+                    resolve(data);
+                  });
+                }
+                return false;
+              }
+            }
+          ],
+          backdropDismiss: false,
+        }).then(res => {
+          alertPopup = res;
+          res.present();
+        });
+
+      });
+    }
+
   }
 
 }
