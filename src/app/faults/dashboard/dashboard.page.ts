@@ -82,12 +82,8 @@ export class DashboardPage implements OnInit {
       serverSide: true,
       processing: true,
       searching: false,
-      ordering: true,
-      order: [],
+      ordering: false,
       pageLength: 5,
-      "columnDefs": [
-        { "orderable": false, "targets": [0, 9] }
-      ],
       // responsive: true,
       lengthMenu: [5, 10, 15],
       ajax: (tableParams: any, callback) => {
