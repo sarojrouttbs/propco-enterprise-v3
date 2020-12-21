@@ -1,17 +1,14 @@
 <!-- <div class="dashboard-container"> -->
 <ion-content id="fault-list">
   <ion-grid>
-    <ion-row>
+    <ion-row style="margin-bottom: 10px;">
       <ion-col class="ion-text-left">
         <h1>Fault Dashboard</h1>
       </ion-col>
       <ion-col class="ion-text-right">
-        <ion-button class="no-margin" (click)="addFault()" fill="solid" color="success">Add Fault</ion-button>
+        <ion-button class="no-margin" (click)="addFault()" fill="solid" color="success"
+          style="margin-top: 17px !important;">Add Fault</ion-button>
       </ion-col>
-    </ion-row>
-
-    <ion-row style="margin-bottom: 10px">
-      <h5 style="color: gray;" class="ion-text-left">Filter by type or status</h5>
     </ion-row>
 
     <form [formGroup]="filterForm">
@@ -51,7 +48,8 @@
           (click)="clickCheckbox('urgent');" class="pointer">
           <div>
             <ion-checkbox class="filter-checkbox" color="warning" mode="ios" formControlName="urgent"
-              (ionChange)="checkboxClick('urgent')" style="--border-color:var(--background-checked);" (click)="$event.stopPropagation();">
+              (ionChange)="checkboxClick('urgent')" style="--border-color:var(--background-checked);"
+              (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -61,7 +59,8 @@
           (click)="clickCheckbox('nonUrgent');" class="pointer">
           <div>
             <ion-checkbox class="filter-checkbox" color="success" mode="ios" formControlName="nonUrgent"
-              (ionChange)="checkboxClick('nonUrgent')" style="--border-color:var(--background-checked);" (click)="$event.stopPropagation();">
+              (ionChange)="checkboxClick('nonUrgent')" style="--border-color:var(--background-checked);"
+              (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -116,7 +115,7 @@
             <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" style="padding-bottom: 0px;"
               formControlName="fromDate" (ionChange)="onDateChange()">
             </ion-datetime>
-            <ion-icon name="calendar" slot="start" class="datetime-icon"></ion-icon>
+            <ion-icon ion-datetime-picker name="calendar" slot="start" class="datetime-icon"></ion-icon>
           </ion-item>
         </ion-col>
 
@@ -383,16 +382,16 @@
             id="faultListTable">
             <thead>
               <tr>
-                <th style="width:20px"></th>
-                <th style="width:9%">Issue ID</th>
-                <th style="width:10%">Reported On</th>
-                <th style="min-width:10%">Category</th>
+                <th style="width:1%"></th>
+                <th style="width:11%">Issue ID</th>
+                <th style="width:11%">Reported On</th>
+                <th style="width:11%">Category</th>
                 <th style="width:15%">Property</th>
-                <th style="width:8%">Office</th>
-                <th>Job Title</th>
-                <th style="width:7%">Reported By</th>
-                <th style="width:8%">Fault Status</th>
-                <th style="width:30px"></th>
+                <th style="width:11%">Office</th>
+                <th style="width:15%">Job Title</th>
+                <th style="width:10%">Reported By</th>
+                <th style="width:10%">Fault Status</th>
+                <th style="width:5%"></th>
               </tr>
             </thead>
             <tbody>
