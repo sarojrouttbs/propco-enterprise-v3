@@ -1,17 +1,13 @@
 <!-- <div class="dashboard-container"> -->
 <ion-content id="fault-list">
   <ion-grid>
-    <ion-row>
+    <ion-row class="heading-block">
       <ion-col class="ion-text-left">
-        <h1>Fault Dashboard</h1>
+        <h1 class="title">Fault Dashboard</h1>
       </ion-col>
       <ion-col class="ion-text-right">
         <ion-button class="no-margin" (click)="addFault()" fill="solid" color="success">Add Fault</ion-button>
       </ion-col>
-    </ion-row>
-
-    <ion-row style="margin-bottom: 10px">
-      <h5 style="color: gray;" class="ion-text-left">Filter by type or status</h5>
     </ion-row>
 
     <form [formGroup]="filterForm">
@@ -39,9 +35,8 @@
         <ion-col size="12" size-md [ngClass]="filterForm.get('emergency').value?'filter-grid-active':'filter-grid'"
           (click)="clickCheckbox('emergency');" class="pointer">
           <div>
-            <ion-checkbox class="filter-checkbox" color="danger" mode="ios" formControlName="emergency"
-              (ionChange)="checkboxClick('emergency')" style="--border-color:var(--background-checked);"
-              (click)="$event.stopPropagation();">
+            <ion-checkbox class="filter-checkbox checkbox-border" color="danger" mode="ios" formControlName="emergency"
+              (ionChange)="checkboxClick('emergency')" (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -50,8 +45,8 @@
         <ion-col size="12" size-md [ngClass]="filterForm.get('urgent').value?'filter-grid-active':'filter-grid'"
           (click)="clickCheckbox('urgent');" class="pointer">
           <div>
-            <ion-checkbox class="filter-checkbox" color="warning" mode="ios" formControlName="urgent"
-              (ionChange)="checkboxClick('urgent')" style="--border-color:var(--background-checked);" (click)="$event.stopPropagation();">
+            <ion-checkbox class="filter-checkbox checkbox-border" color="warning" mode="ios" formControlName="urgent"
+              (ionChange)="checkboxClick('urgent')" (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -60,8 +55,8 @@
         <ion-col size="12" size-md [ngClass]="filterForm.get('nonUrgent').value?'filter-grid-active':'filter-grid'"
           (click)="clickCheckbox('nonUrgent');" class="pointer">
           <div>
-            <ion-checkbox class="filter-checkbox" color="success" mode="ios" formControlName="nonUrgent"
-              (ionChange)="checkboxClick('nonUrgent')" style="--border-color:var(--background-checked);" (click)="$event.stopPropagation();">
+            <ion-checkbox class="filter-checkbox checkbox-border" color="success" mode="ios" formControlName="nonUrgent"
+              (ionChange)="checkboxClick('nonUrgent')" (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -113,17 +108,17 @@
         <ion-col size=15>
           <ion-item>
             <ion-label position="floating">From</ion-label>
-            <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" style="padding-bottom: 0px;"
-              formControlName="fromDate" (ionChange)="onDateChange()">
+            <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" formControlName="fromDate"
+              (ionChange)="onDateChange()" class="datetime-padding">
             </ion-datetime>
-            <ion-icon name="calendar" slot="start" class="datetime-icon"></ion-icon>
+            <ion-icon ion-datetime-picker name="calendar" slot="start" class="datetime-icon"></ion-icon>
           </ion-item>
         </ion-col>
 
         <ion-col size=15>
           <ion-item>
             <ion-label position="floating">To</ion-label>
-            <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" style="padding-bottom: 0px;"
+            <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
               formControlName="toDate" (ionChange)="onDateChange()">
             </ion-datetime>
             <ion-icon name="calendar" slot="start" class="datetime-icon"></ion-icon>
@@ -144,8 +139,8 @@
         </ion-col>
 
         <ion-col class="ion-text-right">
-          <ion-button color="danger" class="action-btn" fill="outline"
-            style="--border-radius: 4px !important;margin-top: 20px;" (click)="resetFilter()">Reset Filters</ion-button>
+          <ion-button color="danger reset-filter" class="action-btn" fill="outline" (click)="resetFilter()">Reset
+            Filters</ion-button>
         </ion-col>
 
       </ion-row>
@@ -155,10 +150,10 @@
           <ion-item class="select-block">
             <ion-label position="floating">Branch(es)</ion-label>
             <ionic-selectable item-content itemValueField="officeCode" itemTextField="officeName"
-              [items]="accessibleOffices" [canSearch]="true" [isMultiple]="true" style="max-height: 30px;"
+              [items]="accessibleOffices" [canSearch]="true" [isMultiple]="true"
               [canClear]="true" clearButtonText="Clear" closeButtonSlot="end" confirmButtonText="Apply"
               searchPlaceholder="Search Branch(es)" #BranchType formControlName="branchfilter"
-              [shouldStoreItemValue]="false">
+              [shouldStoreItemValue]="false" class="selectable-height">
 
               <ng-template ionicSelectableHeaderTemplate>
                 <ion-toolbar>
@@ -178,29 +173,26 @@
               <ng-template ionicSelectableFooterTemplate>
                 <ion-toolbar>
                   <ion-button color="success" class="action-btn" fill="outline"
-                    style="--border-radius: 4px !important; float: right;margin-right: 15px;"
+                    class="selectable-btn"
                     (click)="this.BranchType.confirm();this.BranchType.close();onBranchChange();"
                     [disabled]="!BranchType.itemsToConfirm.length">
                     Apply
                   </ion-button>
 
                   <ion-button color="danger" class="action-btn" fill="outline"
-                    style="--border-radius: 4px !important;float: right;margin-right: 15px;"
+                    class="selectable-btn"
                     (click)="BranchType.clear();BranchType.close();onBranchChange();"
                     [disabled]="!BranchType.itemsToConfirm.length">
                     Clear
                   </ion-button>
                   <ion-button color="danger" class="action-btn" fill="outline"
-                    style="--border-radius: 4px !important;float: right;margin-right: 15px;"
+                    class="selectable-btn"
                     (click)="BranchType.close()">
                     Cancel
                   </ion-button>
                 </ion-toolbar>
               </ng-template>
             </ionic-selectable>
-
-
-
           </ion-item>
           <ion-icon name="close-circle" class="close-btn" (click)="closeFilter(1)"> </ion-icon>
         </ion-col>
@@ -209,7 +201,7 @@
           <ion-item class="select-block">
             <ion-label position="floating">Management Service Type</ion-label>
             <ionic-selectable item-content itemValueField="index" itemTextField="description"
-              [items]="managementTypeList" [canSearch]="true" [isMultiple]="true" style="max-height: 30px;"
+              [items]="managementTypeList" [canSearch]="true" [isMultiple]="true" class="selectable-height"
               [canClear]="true" clearButtonText="Clear" closeButtonSlot="end" confirmButtonText="Apply"
               searchPlaceholder="Search Management Type Service" #managementType formControlName="managementFilter"
               [shouldStoreItemValue]="false">
@@ -232,20 +224,20 @@
               <ng-template ionicSelectableFooterTemplate>
                 <ion-toolbar>
                   <ion-button color="success" class="action-btn" fill="outline"
-                    style="--border-radius: 4px !important; float: right;margin-right: 15px;"
+                    class="selectable-btn"
                     (click)="this.managementType.confirm();this.managementType.close();onMgmtTypeChange();"
                     [disabled]="!managementType.itemsToConfirm.length">
                     Apply
                   </ion-button>
 
                   <ion-button color="danger" class="action-btn" fill="outline"
-                    style="--border-radius: 4px !important;float: right;margin-right: 15px;"
+                    class="selectable-btn"
                     (click)="managementType.clear();managementType.close();onMgmtTypeChange();"
                     [disabled]="!managementType.itemsToConfirm.length">
                     Clear
                   </ion-button>
                   <ion-button color="danger" class="action-btn" fill="outline"
-                    style="--border-radius: 4px !important;float: right;margin-right: 15px;"
+                    class="selectable-btn"
                     (click)="managementType.close()">
                     Cancel
                   </ion-button>
@@ -269,7 +261,7 @@
             </ion-select> -->
 
             <ionic-selectable item-content itemValueField="index" itemTextField="value" [items]="faultStatuses"
-              [canSearch]="true" [isMultiple]="true" style="max-height: 30px;" [canClear]="true" clearButtonText="Clear"
+              [canSearch]="true" [isMultiple]="true" class="selectable-height" [canClear]="true" clearButtonText="Clear"
               closeButtonSlot="end" confirmButtonText="Apply" searchPlaceholder="Search Status" #statusType
               formControlName="statusFilter" [shouldStoreItemValue]="false">
 
@@ -291,20 +283,20 @@
               <ng-template ionicSelectableFooterTemplate>
                 <ion-toolbar>
                   <ion-button color="success" class="action-btn" fill="outline"
-                    style="--border-radius: 4px !important; float: right;margin-right: 15px;"
+                    class="selectable-btn"
                     (click)="this.statusType.confirm();this.statusType.close();onStatusChange();"
                     [disabled]="!statusType.itemsToConfirm.length">
                     Apply
                   </ion-button>
 
                   <ion-button color="danger" class="action-btn" fill="outline"
-                    style="--border-radius: 4px !important;float: right;margin-right: 15px;"
+                    class="selectable-btn"
                     (click)="statusType.clear();statusType.close();onStatusChange();"
                     [disabled]="!statusType.itemsToConfirm.length">
                     Clear
                   </ion-button>
                   <ion-button color="danger" class="action-btn" fill="outline"
-                    style="--border-radius: 4px !important;float: right;margin-right: 15px;"
+                    class="selectable-btn"
                     (click)="statusType.close()">
                     Cancel
                   </ion-button>
@@ -322,7 +314,7 @@
           <ion-item class="select-block">
             <ion-label position="floating">Assigned To</ion-label>
             <ionic-selectable item-content itemValueField="userId" itemTextField="name" [items]="assignedUsers"
-              [canSearch]="true" [isMultiple]="true" style="max-height: 30px;" [canClear]="true" clearButtonText="Clear"
+              [canSearch]="true" [isMultiple]="true" class="selectable-height" [canClear]="true" clearButtonText="Clear"
               closeButtonSlot="end" confirmButtonText="Apply" searchPlaceholder="Search Assigned To" #userType
               formControlName="assignToFilter" [shouldStoreItemValue]="false" [hasInfiniteScroll]="true"
               (onInfiniteScroll)="getMoreUsers($event)" (onSearch)="searchUsers($event)">
@@ -345,20 +337,20 @@
               <ng-template ionicSelectableFooterTemplate>
                 <ion-toolbar>
                   <ion-button color="success" class="action-btn" fill="outline"
-                    style="--border-radius: 4px !important; float: right;margin-right: 15px;"
+                    class="selectable-btn"
                     (click)="this.userType.confirm();this.userType.close();onUserChange();"
                     [disabled]="!userType.itemsToConfirm.length">
                     Apply
                   </ion-button>
 
                   <ion-button color="danger" class="action-btn" fill="outline"
-                    style="--border-radius: 4px !important;float: right;margin-right: 15px;"
+                    class="selectable-btn"
                     (click)="userType.clear();userType.close();onUserChange();"
                     [disabled]="!userType.itemsToConfirm.length">
                     Clear
                   </ion-button>
                   <ion-button color="danger" class="action-btn" fill="outline"
-                    style="--border-radius: 4px !important;float: right;margin-right: 15px;" (click)="userType.close()">
+                    class="selectable-btn" (click)="userType.close()">
                     Cancel
                   </ion-button>
 
@@ -383,16 +375,16 @@
             id="faultListTable">
             <thead>
               <tr>
-                <th style="width:20px"></th>
-                <th style="width:9%">Issue ID</th>
-                <th style="width:10%">Reported On</th>
-                <th style="min-width:10%">Category</th>
+                <th style="width:1%"></th>
+                <th style="width:11%">Issue ID</th>
+                <th style="width:11%">Reported On</th>
+                <th style="width:11%">Category</th>
                 <th style="width:15%">Property</th>
-                <th style="width:8%">Office</th>
-                <th>Job Title</th>
-                <th style="width:7%">Reported By</th>
-                <th style="width:8%">Fault Status</th>
-                <th style="width:30px"></th>
+                <th style="width:11%">Office</th>
+                <th style="width:15%">Job Title</th>
+                <th style="width:10%">Reported By</th>
+                <th style="width:10%">Fault Status</th>
+                <th style="width:5%"></th>
               </tr>
             </thead>
             <tbody>
