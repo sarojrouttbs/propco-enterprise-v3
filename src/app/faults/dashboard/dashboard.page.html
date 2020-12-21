@@ -16,83 +16,92 @@
 
     <form [formGroup]="filterForm">
       <ion-row>
-        <ion-col size="12" size-md
-          [ngClass]="filterForm.get('repairCheckbox').value?'filter-grid-active':'filter-grid'">
+        <ion-col size="12" size-md [ngClass]="filterForm.get('repairCheckbox').value?'filter-grid-active':'filter-grid'"
+          (click)="clickCheckbox('repairCheckbox');" class="pointer">
           <div>
             <ion-checkbox class="filter-checkbox" color="medium" mode="ios" formControlName="repairCheckbox"
-              (ionChange)="checkboxClick('repairCheckbox')">
+              (ionChange)="checkboxClick('repairCheckbox');" (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
           <div class="filter-grid-text">Active Repairs</div>
         </ion-col>
-        <ion-col size="12" size-md [ngClass]="filterForm.get('newRepairs').value?'filter-grid-active':'filter-grid'">
+        <ion-col size="12" size-md [ngClass]="filterForm.get('newRepairs').value?'filter-grid-active':'filter-grid'"
+          (click)="clickCheckbox('newRepairs');" class="pointer">
           <div>
             <ion-checkbox class="filter-checkbox" color="medium" mode="ios" formControlName="newRepairs"
-              (ionChange)="checkboxClick('newRepairs')">
+              (ionChange)="checkboxClick('newRepairs')" (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
           <div class="filter-grid-text">New Repairs</div>
         </ion-col>
-        <ion-col size="12" size-md [ngClass]="filterForm.get('emergency').value?'filter-grid-active':'filter-grid'">
+        <ion-col size="12" size-md [ngClass]="filterForm.get('emergency').value?'filter-grid-active':'filter-grid'"
+          (click)="clickCheckbox('emergency');" class="pointer">
           <div>
             <ion-checkbox class="filter-checkbox" color="danger" mode="ios" formControlName="emergency"
-              (ionChange)="checkboxClick('emergency')" style="--border-color:var(--background-checked);">
+              (ionChange)="checkboxClick('emergency')" style="--border-color:var(--background-checked);"
+              (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
           <div class="filter-grid-text">Emergency</div>
         </ion-col>
-        <ion-col size="12" size-md [ngClass]="filterForm.get('urgent').value?'filter-grid-active':'filter-grid'">
+        <ion-col size="12" size-md [ngClass]="filterForm.get('urgent').value?'filter-grid-active':'filter-grid'"
+          (click)="clickCheckbox('urgent');" class="pointer">
           <div>
             <ion-checkbox class="filter-checkbox" color="warning" mode="ios" formControlName="urgent"
-              (ionChange)="checkboxClick('urgent')" style="--border-color:var(--background-checked);">
+              (ionChange)="checkboxClick('urgent')" style="--border-color:var(--background-checked);" (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
           <div class="filter-grid-text">Urgent</div>
         </ion-col>
-        <ion-col size="12" size-md [ngClass]="filterForm.get('nonUrgent').value?'filter-grid-active':'filter-grid'">
+        <ion-col size="12" size-md [ngClass]="filterForm.get('nonUrgent').value?'filter-grid-active':'filter-grid'"
+          (click)="clickCheckbox('nonUrgent');" class="pointer">
           <div>
             <ion-checkbox class="filter-checkbox" color="success" mode="ios" formControlName="nonUrgent"
-              (ionChange)="checkboxClick('nonUrgent')" style="--border-color:var(--background-checked);">
+              (ionChange)="checkboxClick('nonUrgent')" style="--border-color:var(--background-checked);" (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
           <div class="filter-grid-text">Non urgent</div>
         </ion-col>
-        <ion-col size="12" size-md [ngClass]="filterForm.get('assessment').value?'filter-grid-active':'filter-grid'">
+        <ion-col size="12" size-md [ngClass]="filterForm.get('assessment').value?'filter-grid-active':'filter-grid'"
+          (click)="clickCheckbox('assessment');" class="pointer">
           <div>
             <ion-checkbox class="filter-checkbox" color="medium" mode="ios" formControlName="assessment"
-              (ionChange)="checkboxClick('assessment')">
+              (ionChange)="checkboxClick('assessment')" (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
           <div class="filter-grid-text">In Assessment</div>
         </ion-col>
-        <ion-col size="12" size-md [ngClass]="filterForm.get('automation').value?'filter-grid-active':'filter-grid'">
+        <ion-col size="12" size-md [ngClass]="filterForm.get('automation').value?'filter-grid-active':'filter-grid'"
+          (click)="clickCheckbox('automation');" class="pointer">
           <div>
             <ion-checkbox class="filter-checkbox" color="medium" mode="ios" formControlName="automation"
-              (ionChange)="checkboxClick('automation')">
+              (ionChange)="checkboxClick('automation')" (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
           <div class="filter-grid-text">In Automation</div>
         </ion-col>
-        <ion-col size="12" size-md [ngClass]="filterForm.get('invoice').value?'filter-grid-active':'filter-grid'">
+        <ion-col size="12" size-md [ngClass]="filterForm.get('invoice').value?'filter-grid-active':'filter-grid'"
+          (click)="clickCheckbox('invoice');" class="pointer">
           <div>
             <ion-checkbox class="filter-checkbox" color="medium" mode="ios" formControlName="invoice"
-              (ionChange)="checkboxClick('invoice')">
+              (ionChange)="checkboxClick('invoice')" (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
           <div class="filter-grid-text">Invoice</div>
         </ion-col>
-        <ion-col size="12" size-md [ngClass]="filterForm.get('escalation').value?'filter-grid-active':'filter-grid'">
+        <ion-col size="12" size-md [ngClass]="filterForm.get('escalation').value?'filter-grid-active':'filter-grid'"
+          (click)="clickCheckbox('escalation');" class="pointer">
           <div>
             <ion-checkbox class="filter-checkbox" color="medium" mode="ios" formControlName="escalation"
-              (ionChange)="checkboxClick('escalation')">
+              (ionChange)="checkboxClick('escalation')" (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div>
           <!-- <div class="filter-grid-count">269</div> -->
@@ -261,8 +270,8 @@
 
             <ionic-selectable item-content itemValueField="index" itemTextField="value" [items]="faultStatuses"
               [canSearch]="true" [isMultiple]="true" style="max-height: 30px;" [canClear]="true" clearButtonText="Clear"
-              closeButtonSlot="end" confirmButtonText="Apply" searchPlaceholder="Search Status"
-              #statusType formControlName="statusFilter" [shouldStoreItemValue]="false">
+              closeButtonSlot="end" confirmButtonText="Apply" searchPlaceholder="Search Status" #statusType
+              formControlName="statusFilter" [shouldStoreItemValue]="false">
 
               <ng-template ionicSelectableHeaderTemplate>
                 <ion-toolbar>
