@@ -7,6 +7,7 @@ import { PlatformLocation } from '@angular/common';
 import { CommonService } from '../../services/common.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { forkJoin } from 'rxjs';
+import { FOLDER_NAMES } from './../../../shared/constants';
 
 @Component({
   selector: 'app-quote-modal',
@@ -192,7 +193,7 @@ export class QuoteModalPage implements OnInit {
         formData.append('file', data.file);
         formData.append('name', data.file.name);
         if (type === 'fault' || type === 'photo') {
-          formData.append('folderName', 'quote_estimates');
+          formData.append('folderName', FOLDER_NAMES[1]['index']);
           apiObservableArray.push(this.quoteService.uploadFaultDocument(formData, this.faultId));
         } else {
           formData.append('headCategory', 'Accounts');

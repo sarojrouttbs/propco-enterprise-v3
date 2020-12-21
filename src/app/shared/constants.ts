@@ -152,3 +152,34 @@ export const COMPLETION_METHODS = [
     value: 'Email to Tenant'
   }
 ];
+
+export const FOLDER_NAMES = [
+  {
+    "index": "initial_issue",
+    "value": "Initial Issue"
+  },
+  {
+    "index": "quote_estimates",
+    "value": "Quote/Estimates"
+  },
+  {
+    "index": "works_order",
+    "value": "Works Order"
+  },
+  {
+    "index": "job_in_progress",
+    "value": "Job In Progress"
+  },
+  {
+    "index": "completion",
+    "value": "Completion"
+  },
+  {
+    "index": "invoice",
+    "value": "Invoice"
+  },
+  {
+    "index": "other",
+    "value": "Other"
+  }
+];
