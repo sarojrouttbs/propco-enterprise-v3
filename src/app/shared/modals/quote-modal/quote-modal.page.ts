@@ -32,10 +32,10 @@ export class QuoteModalPage implements OnInit {
     private router: Router,
     private sanitizer: DomSanitizer) {
 
-      this.router.events.subscribe(async () => {
-        const isModalOpened = await this.modalController.getTop();
-        if (router.url.toString() === "/login" && isModalOpened) this.dismiss();
-      });
+    this.router.events.subscribe(async () => {
+      const isModalOpened = await this.modalController.getTop();
+      if (router.url.toString() === "/login" && isModalOpened) this.dismiss();
+    });
 
   }
 
@@ -161,18 +161,33 @@ export class QuoteModalPage implements OnInit {
 
   async uploadQuotes() {
     let apiObservableArray = [];
-    const maintData = await this.prepareUploadData('fault');
-    const faultData = await this.prepareUploadData('maint');
-    const photos = await this.prepareUploadData('photo');
-    apiObservableArray = apiObservableArray.concat(maintData);
-    apiObservableArray = apiObservableArray.concat(faultData);
-    apiObservableArray = apiObservableArray.concat(photos);
+    const maintData = await this.prepareUploadData('maint');
+    if (maintData) {
+      const maintSuccess = await this.upload(maintData);
+      if (maintSuccess) {
+        const faultData = await this.prepareUploadData('fault');
+        const photos = await this.prepareUploadData('photo');
+        apiObservableArray = apiObservableArray.concat(faultData);
+        apiObservableArray = apiObservableArray.concat(photos);
+        const faultPhotoSuccess = await this.upload(apiObservableArray);
+        if (faultPhotoSuccess) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        this.commonService.showMessage('Something went wrong', 'Upload Quote', 'error');
+        return false;
+      }
+    }
+  }
+
+  private async upload(apiObservableArray) {
     const promise = new Promise((resolve, reject) => {
       setTimeout(() => {
         forkJoin(apiObservableArray).subscribe(() => {
           resolve(true);
         }, err => {
-          this.commonService.showMessage('Something went wrong', 'Upload Quote', 'error');
           resolve(false);
         });
       }, 1000);
