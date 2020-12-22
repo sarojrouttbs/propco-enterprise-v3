@@ -206,6 +206,12 @@ export class FaultsService {
     return this.httpClient.delete(environment.API_BASE_URL + `faults/documents/${documentId}`, {});
   }
 
+  getNominalCodes(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `nominal-codes`).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);

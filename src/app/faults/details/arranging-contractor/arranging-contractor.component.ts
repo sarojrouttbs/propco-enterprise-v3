@@ -41,6 +41,8 @@ export class ArrangingContractorComponent implements OnInit {
   iacStageActions = ARRANING_CONTRACTOR_ACTIONS.filter(action => { return action.index !== 'PROPERTY_VISIT_FOR_QUOTE' });
   accessInfoList = ACCESS_INFO_TYPES;
   isMaintenanceDetails = false;
+  nominalCodes; 
+  quoteStatuses;
 
   constructor(
     private fb: FormBuilder,
@@ -84,7 +86,9 @@ export class ArrangingContractorComponent implements OnInit {
       accessDetails: [{ value: this.getAccessDetails(this.faultDetails.isTenantPresenceRequired), disabled: true }],
       contractorList: this.fb.array([]),
       contractorIds: [],
-      selectedContractorId: ''
+      selectedContractorId: '',
+      quoteStatus: '',
+      nominalCode: ''
     });
   }
 
@@ -227,11 +231,16 @@ export class ArrangingContractorComponent implements OnInit {
         this.setLookupData(data);
       });
     }
+
+    this.faultsService.getNominalCodes().subscribe(data=>{
+      this.nominalCodes = data;
+    })
   }
 
   private setLookupData(data) {
     this.contractorSkill = data.contractorSkills;
     this.faultCategories = data.faultCategories;
+    this.nominalCodes = data.nominalCodes;
     this.setCategoryMap();
   }
 

@@ -113,7 +113,7 @@
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
-              <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd-MM-yyyy HH:mm aa' }}</b>
+              <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a' }}</b>
             </div>
             <h2 class="banner-heading">
               {{iacNotification && iacNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
@@ -125,7 +125,7 @@
             <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
               <h6 class="banner-title"> <strong>Awaiting response from the Contractor</strong> </h6>
               <h6 class="banner-title">Next chase due:
-                {{iacNotification ? (iacNotification.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
+                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - hh:mm a') : ''}}
               </h6>
             </ng-container>
           </div>
@@ -201,6 +201,26 @@
         <ion-label position="floating">Category <ion-text class="mandatory">*</ion-text>
         </ion-label>
         <ion-select interface="popover" formControlName="category">
+          <ion-select-option [value]="item.value" *ngFor="let item of faultCategories">{{ item.value }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+    <ion-col size="50">
+      <ion-item>
+        <ion-label position="floating">Nominal Code <ion-text class="mandatory">*</ion-text>
+        </ion-label>
+        <ion-select interface="popover" formControlName="nominalCode">
+          <ion-select-option [value]="item.value" *ngFor="let item of faultCategories">{{ item.value }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-col>
+    <ion-col size="50">
+      <ion-item>
+        <ion-label position="floating">Quote Status <ion-text class="mandatory">*</ion-text>
+        </ion-label>
+        <ion-select interface="popover" formControlName="quoteStatus">
           <ion-select-option [value]="item.value" *ngFor="let item of faultCategories">{{ item.value }}
           </ion-select-option>
         </ion-select>
