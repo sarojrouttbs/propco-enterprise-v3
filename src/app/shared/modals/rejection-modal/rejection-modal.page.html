@@ -1,13 +1,3 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>appointment-modal</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-
-</ion-content> -->
-
 <ion-header>
   <ion-toolbar>
     <ion-title>No Authorisation</ion-title>
@@ -26,7 +16,9 @@
         </ion-col>
         <ion-col size="100">
           <ion-item>
-            <ion-label position="floating">Please select a reason for rejecting this quote.<ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-label position="floating">Please select a reason for rejecting this quote.<ion-text class="mandatory">*
+              </ion-text>
+            </ion-label>
             <ion-select interface="popover" formControlName="rejectionReason" class="ion-select-options">
               <ion-select-option [value]="item.value" *ngFor="let item of lookupdata?.faultMaintRejectionReasons">
                 {{ item.value === 'Other'? item.value +' (Please specify in the box)':item.value}}
@@ -35,27 +27,35 @@
           </ion-item>
           <app-validation-message [control]="rejectionForm.controls.rejectionReason"></app-validation-message>
         </ion-col>
-        <ion-col size="100" *ngIf="rejectionForm.get('rejectionReason').value === 'Other'" >
+        <ion-col size="100" *ngIf="rejectionForm.get('rejectionReason').value === 'Other'">
           <ion-item>
             <ion-textarea formControlName="other" placeholder="comment..."></ion-textarea>
           </ion-item>
         </ion-col>
-        <ion-col size="100">
-          <ion-item>
+        <!-- <ion-col size="100">
+          <ion-item class="check-box">
             <ion-label>Landlord wants another Quote</ion-label>
             <ion-checkbox slot="start" color="success" class="list-checkbox" formControlName="landlordWantAnotherQuote"></ion-checkbox>
           </ion-item>
-        </ion-col>
+        </ion-col> -->
       </ion-row>
     </ion-grid>
   </form>
 </ion-content>
 <ion-footer>
-    <ion-row>
-      <ion-col class="ion-text-end">
-        <ion-button (click)="dismiss()">NO</ion-button>
-        <ion-button (click)="saveFaultLLAuth()">YES</ion-button>
-      </ion-col>
-     
-    </ion-row>
+  <ion-row>
+    <ion-col size="70" class="checkbox-wrapper">
+      <form [formGroup]="rejectionForm">
+        <div>
+          <ion-checkbox slot="start" color="success" class="check-box" formControlName="landlordWantAnotherQuote">
+          </ion-checkbox>
+          <span>Landlord wants another Quote</span>
+        </div>
+      </form>
+    </ion-col>
+    <ion-col size="30" class="ion-text-end">
+      <ion-button (click)="dismiss()">NO</ion-button>
+      <ion-button (click)="saveFaultLLAuth()">YES</ion-button>
+    </ion-col>
+  </ion-row>
 </ion-footer>
