@@ -1,3 +1,5 @@
+import { RejectionModalPageModule } from './../../shared/modals/rejection-modal/rejection-modal.module';
+import { RejectionModalPage } from './../../shared/modals/rejection-modal/rejection-modal.page';
 import { ArrangingContractorComponent } from './arranging-contractor/arranging-contractor.component';
 import { SearchPropertyPageModule } from './../../shared/modals/search-property/search-property.module';
 import { NgModule } from '@angular/core';
@@ -46,7 +48,8 @@ import { QuoteModalPageModule } from 'src/app/shared/modals/quote-modal/quote-mo
     SearchPropertyPageModule,
     SimplePopoverPageModule,
     AppointmentModalPageModule,
-    QuoteModalPageModule
+    QuoteModalPageModule,
+    RejectionModalPageModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent]
 })
