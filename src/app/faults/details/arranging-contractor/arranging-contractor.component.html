@@ -125,12 +125,12 @@
             <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
               <h6 class="banner-title"> <strong>Awaiting response from the Contractor</strong> </h6>
               <h6 class="banner-title">Next chase due:
-                {{iacNotification ? (iacNotification.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
+                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
               </h6>
             </ng-container>
           </div>
           <div class="question-answer" *ngIf="iacNotification">
-            <h6>{{iacNotification.questions[0]?.qtext}}</h6>
+            <h6>{{iacNotification?.questions[0]?.qtext}}</h6>
             <ion-grid>
               <ion-row class="ion-justify-content-center">
                 <ng-container *ngFor="let data of iacNotification?.questions[0]?.options">
@@ -179,7 +179,7 @@
           </div>
           <!-- <ion-button (click)="questionActionQuoteUpload(true)">Upload</ion-button> -->
         </div>
-        <ng-container *ngIf="iacNotification.templateCode === 'CQ-C-E'" >
+        <ng-container *ngIf="iacNotification?.templateCode === 'CQ-C-E'" >
           <h2>Quotation Request</h2>
           <ng-container *ngTemplateOutlet="quoteDetails"></ng-container>
         </ng-container>
@@ -252,7 +252,7 @@
 </ng-template>
 </form>
 
-<ion-grid style="margin: 20px 0">
+<ion-grid style="margin: 20px 0" *ngIf="iacNotification?.templateCode === 'CQ-C-E'">
   <ion-row>
     <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
       <h2>Quote Documents</h2>

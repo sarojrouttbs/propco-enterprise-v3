@@ -107,12 +107,19 @@
     height: 165px;
     object-fit: cover;
     width: 100%;
+    cursor: pointer;
   }
 
   .file-name {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  
+  .folder-name {
+    font-size: 20px;
+    text-transform: capitalize;
+    text-align: center;
   }
 
   .delete-icon {

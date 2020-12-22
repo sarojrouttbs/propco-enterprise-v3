@@ -774,7 +774,7 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  getFileType(name): boolean {
+  private getFileType(name): boolean {
     if (name != null) {
       let data = name.split('.')[1]  === 'pdf';
       if (data) {
@@ -783,17 +783,20 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  downloadDocumentByURl(url){
+  private downloadDocumentByURl(url){
     this.commonService.downloadDocumentByUrl(url);
   }
 
-  deleteDocument(documentId, i){
-    this.faultsService.deleteDocument(documentId).subscribe(response => {
+  async deleteDocument(documentId, i: number) {
+    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?','', 'YES', 'NO');
+    if (response) {
+      this.faultsService.deleteDocument(documentId).subscribe(response => {
         this.removeFile(i);
-    })
+      });
+    }
   }
 
-  removeFile(i) {
+  private removeFile(i) {
     this.quoteDocuments.splice(i, 1);
   }
 

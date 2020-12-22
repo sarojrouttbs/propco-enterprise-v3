@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { PlatformLocation } from '@angular/common';
 import { CommonService } from '../../services/common.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { forkJoin } from 'rxjs';
@@ -30,16 +29,13 @@ export class QuoteModalPage implements OnInit {
     private modalController: ModalController,
     private commonService: CommonService,
     private quoteService: QuoteService,
-    private location: PlatformLocation,
     private router: Router,
     private sanitizer: DomSanitizer) {
 
-    this.router.events.subscribe((val) => {
-      if (val) {
-        this.dismiss();
-      }
-    });
-    this.location.onPopState(() => this.dismiss());
+      this.router.events.subscribe(async () => {
+        const isModalOpened = await this.modalController.getTop();
+        if (router.url.toString() === "/login" && isModalOpened) this.dismiss();
+      });
 
   }
 
