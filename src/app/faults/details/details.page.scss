@@ -278,3 +278,28 @@
     z-index: 5 !important;
     cursor: pointer;
 }
+
+.back-button{
+  cursor: pointer;
+  font-size: 30px;
+}
+
+.display-none{
+  display: none;
+}
+
+.folder-wrapper{
+  text-align: center;
+  height: 180px;
+  padding-top: 45px;
+  cursor: pointer;
+}
+
+.folder-icon{
+  font-size: 100px;
+  color: #939393bf;
+}
+
+.folder-icon:hover{
+  color: #939393;
+}

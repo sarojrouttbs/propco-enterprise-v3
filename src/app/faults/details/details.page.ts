@@ -84,6 +84,9 @@ export class DetailsPage implements OnInit {
   resultsAvailable: boolean = false;
   results: string[] = [];
   leadTenantId: any;
+  folderNames;
+  filteredDocuments;
+  mediaType: any;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -119,10 +122,10 @@ export class DetailsPage implements OnInit {
     this.propertyId = this.route.snapshot.queryParamMap.get('pId');
     this.faultId = this.route.snapshot.paramMap.get('id');
     this.initiateFault();
+    this.mediaType = 'upload'
   }
 
   ngOnInit() {
-
   }
 
   initiateFault() {
@@ -453,7 +456,6 @@ export class DetailsPage implements OnInit {
           resolve();
         },
         error => {
-          console.log(error);
           reject();
         }
       );
@@ -718,14 +720,13 @@ export class DetailsPage implements OnInit {
   };
 
   submit(files) {
-    if (this.files.length + files.length > 5) {
-      this.commonService.showMessage("You are only allowed to upload a maximum of 5 files", "Warning", "warning");
-      return;
-    }
+    // if (this.files.length + files.length > 5) {
+    //   this.commonService.showMessage("You are only allowed to upload a maximum of 5 files", "Warning", "warning");
+    //   return;
+    // }
     if (files) {
       for (let file of files) {
         let isImage: boolean = false;
-        console.log(file.type.split("/")[0])
         if (file.type.split("/")[0] !== 'image') {
           isImage = false;
         }
@@ -791,6 +792,7 @@ export class DetailsPage implements OnInit {
     this.faultsService.getFaultDocuments(faultId).subscribe(response => {
       if (response) {
         this.files = response.data;
+        this.getDocs();
         this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[1]['index']);
       }
     })
@@ -1739,4 +1741,45 @@ export class DetailsPage implements OnInit {
     }
   }
 
+  private getDocs() {
+    const uniqueSet = this.files.map(data => data.folderName);
+    this.folderNames = uniqueSet.filter(this.onlyUnique);
+  }
+
+  private filterByGroupName(folderName) {
+    this.filteredDocuments = this.files.filter(data => data.folderName === folderName);
+    this.mediaType = 'documents';
+  }
+
+  private goBackToUpload(value) {
+    this.mediaType = value;
+    this.filteredDocuments == null;
+  }
+
+  async deleteDocument(documentId, i: number) {
+    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?','', 'YES', 'NO');
+    if (response) {
+      this.faultsService.deleteDocument(documentId).subscribe(response => {
+        this.removeFile(i);
+        this.filteredDocuments.splice(i, 1);
+        if (this.filteredDocuments.length == 0) {
+          this.getDocs();
+          this.mediaType = 'upload';
+        }
+      });
+    }
+  }
+
+  private changeString(data): string {
+    return data.replace(/_/g, " ");
+  }
+
+  private getFileType(name): boolean {
+    if (name != null) {
+      let data = name.split('.')[1] === 'pdf';
+      if (data) {
+        return true;
+      }
+    }
+  }
 }

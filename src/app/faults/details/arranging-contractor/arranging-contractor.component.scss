@@ -90,6 +90,7 @@
     height: 165px;
     object-fit: cover;
     width: 100%;
+    cursor: pointer;
   }
 
   .file-name {
@@ -99,7 +100,7 @@
   }
 
   .delete-icon {
-    @include set-text-style(30px, 36px);
+    @include set-text-style(22px, 36px);
     color: var(--ion-color-danger);
     cursor: pointer;
     text-align: right;
