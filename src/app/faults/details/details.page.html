@@ -257,7 +257,7 @@
 </ng-template>
 
 <ng-template #media>
-  <form>
+  <form [hidden]="mediaType != 'upload'">
     <ion-grid style="margin: 20px 0">
       <ion-row>
         <ion-col size-xl="20" size="25">
@@ -270,28 +270,19 @@
             <label for="files" class="browse-btn">Browse Files</label>
           </form>
         </ion-col>
-        <ion-col size-xl="20" size="25" *ngFor="let file of files; let i=index;">
+        <ion-col size-xl="20" size="25" *ngFor="let file of folderNames; let i=index;">
           <div class="delete-icon-wrapper">
             <ion-grid>
               <ion-row>
-                <ion-col size="100">
-                  <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'"
-                    (click)="downloadFaultDocumentByUrl(file.documentUrl)">
+                <ion-col size="100" class="folder-wrapper">
+                  <!-- <img src="assets/images/default.jpg" (click)="filterByGroupName(file)"
+                    > -->
+                    <ion-icon name="folder-open-outline" title="Click to View Documents" (click)="filterByGroupName(file)" class="folder-icon"></ion-icon>
                 </ion-col>
               </ion-row>
               <ion-row class="ion-justify-content-between">
-                <ion-col size-xl="80" size-lg="70" size="80">
-                  <div class="file-name">{{file.name}}</div>
-                </ion-col>
-                <!-- <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding" *ngIf="file.documentId">
-                  <ion-icon (click)="downloadFaultDocument(file.documentId, file.name)" title="Download File" class="download-icon" name="arrow-down-circle-outline"></ion-icon>
-                </ion-col> -->
-                <!-- <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding" *ngIf="file.documentUrl">
-                  <ion-icon (click)="downloadFaultDocumentByUrl(file.documentUrl)" title="Download File" class="download-icon" name="arrow-down-circle-outline"></ion-icon>
-                </ion-col> -->
-                <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding">
-                  <ion-icon (click)="removeFile(i)" title="Delete File" class="delete-icon" name="close-circle">
-                  </ion-icon>
+                <ion-col size="100">
+                  <div class="folder-name">{{changeString(file)}}</div>
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -301,6 +292,63 @@
       <!-- <button (click)="uploadFiles()">Upload</button> -->
     </ion-grid>
   </form>
+  <ion-grid [hidden]="mediaType != 'documents'">
+    <ion-row>
+      <ion-col size="100">
+        <ion-icon name="arrow-back" class="back-button" title="Upload Documents" (click)="goBackToUpload('upload')"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-xl="20" size="25" *ngFor="let file of filteredDocuments; let i=index;">
+        <div class="delete-icon-wrapper">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="100" *ngIf="getFileType(file.name)">
+                <img src="assets/images/default.jpg" (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download PDF">
+              </ion-col>
+              <ion-col size="100" *ngIf="!getFileType(file.name)">
+                <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download">
+              </ion-col>
+            </ion-row>
+            <ion-row class="ion-justify-content-between">
+              <ion-col size-xl="80" size-lg="70" size="80">
+                <div class="file-name">{{file.name}}</div>
+              </ion-col>
+              <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding">
+                <ion-icon (click)="deleteDocument(file.documentId, i)" title="Delete File" class="delete-icon" name="close-circle">
+                </ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid [hidden]="mediaType != 'upload'">
+    <ion-row>
+      <ion-col size-xl="20" size="25" *ngFor="let file of files; let i=index;" [ngClass]="{'display-none': file?.documentId}">
+        <div class="delete-icon-wrapper">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="100">
+                <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'"
+                  (click)="downloadFaultDocumentByUrl(file.documentUrl)">
+              </ion-col>
+            </ion-row>
+            <ion-row class="ion-justify-content-between">
+              <ion-col size-xl="80" size-lg="70" size="80">
+                <div class="file-name">{{file.name}}</div>
+              </ion-col>
+              <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding">
+                <ion-icon (click)="removeFile(i)" title="Delete File" class="delete-icon" name="close-circle">
+                </ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ng-template>
 
 <ng-template #faultHistoryTab>
@@ -823,18 +871,18 @@
                 <td colspan="12" class="ion-text-center">No data to display</td>
               </tr>
             </table>
-            <div class="action-btn-group">
-              <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
-              <ion-button (click)="goToLastStage()">Back</ion-button>
-              <ion-button class="save-button" (click)="saveForLater()">Save for later</ion-button>
-              <!-- <ion-button class="submit-button" (click)="proceedToNextStage()">Refresh</ion-button> -->
-              <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button>
-            </div>
           </div>
         </div>
       </ion-col>
     </ion-row>
   </ion-grid>
+  <div class="action-btn-group">
+    <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
+    <ion-button (click)="goToLastStage()">Back</ion-button>
+    <ion-button class="save-button" (click)="saveForLater()">Save for later</ion-button>
+    <!-- <ion-button class="submit-button" (click)="proceedToNextStage()">Refresh</ion-button> -->
+    <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button>
+  </div>
 </ng-template>
 
 <ng-template #arrangingContractor>

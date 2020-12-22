@@ -754,7 +754,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.faultsService.saveFaultLLAuth(requestObj, this.iacNotification.faultNotificationId).subscribe(res => {
         resolve(true);
       }, error => {
-        this.commonService.showMessage('No Authorisation','Something went wrong','error');
+        this.commonService.showMessage('No Authorisation', 'Something went wrong', 'error');
         resolve(false);
       })
     });
@@ -839,13 +839,16 @@ export class ArrangingContractorComponent implements OnInit {
     this.commonService.downloadDocumentByUrl(url);
   }
 
-  deleteDocument(documentId, i) {
-    this.faultsService.deleteDocument(documentId).subscribe(response => {
-      this.removeFile(i);
-    })
+  async deleteDocument(documentId, i: number) {
+    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
+    if (response) {
+      this.faultsService.deleteDocument(documentId).subscribe(response => {
+        this.removeFile(i);
+      });
+    }
   }
 
-  removeFile(i) {
+  private removeFile(i) {
     this.quoteDocuments.splice(i, 1);
   }
 
