@@ -1746,18 +1746,18 @@ export class DetailsPage implements OnInit {
     this.folderNames = uniqueSet.filter(this.onlyUnique);
   }
 
-  private filterByGroupName(folderName) {
+  filterByGroupName(folderName) {
     this.filteredDocuments = this.files.filter(data => data.folderName === folderName);
     this.mediaType = 'documents';
   }
 
-  private goBackToUpload(value) {
+  goBackToUpload(value) {
     this.mediaType = value;
     this.filteredDocuments == null;
   }
 
   async deleteDocument(documentId, i: number) {
-    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?','', 'YES', 'NO');
+    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
     if (response) {
       this.faultsService.deleteDocument(documentId).subscribe(response => {
         this.removeFile(i);
@@ -1770,16 +1770,20 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  private changeString(data): string {
+  changeString(data): string {
     return data.replace(/_/g, " ");
   }
 
-  private getFileType(name): boolean {
+  getFileType(name): boolean {
     if (name != null) {
       let data = name.split('.')[1] === 'pdf';
       if (data) {
         return true;
       }
     }
+  }
+
+  downloadDocumentByURl(url) {
+    this.commonService.downloadDocumentByUrl(url);
   }
 }

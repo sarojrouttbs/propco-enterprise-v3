@@ -206,6 +206,10 @@ export class FaultsService {
     return this.httpClient.delete(environment.API_BASE_URL + `faults/documents/${documentId}`, {});
   }
 
+  saveFaultLLAuth(body: any, faultNotificationId: string): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/quote-auth`, body);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);

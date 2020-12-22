@@ -726,9 +726,9 @@ export class DashboardPage implements OnInit {
 
   endLoading() {
     this.commonService.hideLoader();
-
-
   }
+  
+  startLoading() { }
 }
 
 export class AssignedUsers {

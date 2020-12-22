@@ -1,3 +1,4 @@
+import { RejectionModalPage } from './../../../shared/modals/rejection-modal/rejection-modal.page';
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
@@ -159,12 +160,12 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.faultMaintenanceDetails) {
       this.initPatching();
       let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-      this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');      
+      this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
     } else {
       this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
       this.checkMaintenanceDetail();
       let userDetails: any = await this.getUserDetails();
-      if (userDetails) {        
+      if (userDetails) {
         this.raiseQuoteForm.get('orderedBy').setValue(userDetails.name);
       }
     }
@@ -537,7 +538,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private disableQuoteDetail(iacNotification) {
-    if (iacNotification.templateCode === 'CQ-C-E') {
+    if (iacNotification.templateCode === 'CQ-C-E' || iacNotification.templateCode === 'LAR-L-E') {
       this.raiseQuoteForm.get('worksOrderNumber').disable();
       this.raiseQuoteForm.get('description').disable();
       this.raiseQuoteForm.get('requestStartDate').disable();
@@ -586,6 +587,8 @@ export class ArrangingContractorComponent implements OnInit {
         this.questionActionVisitTime(data);
       } else if (this.iacNotification.templateCode === 'CQ-C-E') {
         this.questionActionQuoteUpload(data);
+      } else if (this.iacNotification.templateCode === 'LAR-L-E') {
+        this.questionActionLLAuth(data);
       }
     }
   }
@@ -682,7 +685,40 @@ export class ArrangingContractorComponent implements OnInit {
       this.commonService.showConfirm(data.text, `You have selected 'No, couldn't carry out the Quote'. The fault will be escalated tor manual intervention. Do you want to proceed?`, '', 'Yes', 'No').then(async res => {
         if (res) {
           const submit = await this.submitQuoteAmout();
-          if(submit){
+          if (submit) {
+            this.commonService.showLoader();
+            let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+            this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+          }
+        }
+      });
+    }
+  }
+
+  private async questionActionLLAuth(data) {
+    if (!data.value) {
+      const modal = await this.modalController.create({
+        component: RejectionModalPage,
+        cssClass: 'modal-container upload-container',
+        componentProps: {
+          faultNotificationId: this.iacNotification.faultNotificationId,
+          lookupdata: this.lookupdata
+        },
+        backdropDismiss: false
+      });
+
+      modal.onDidDismiss().then(async res => {
+        if (res.data && res.data == 'success') {
+          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+        }
+      });
+      await modal.present();
+    } else {
+      this.commonService.showConfirm('Please Confirm selection', `Are you sure you want to authorise this Quote`, '', 'Yes', 'No').then(async res => {
+        if (res) {
+          const submit = await this.saveFaultLLAuth();
+          if (submit) {
             this.commonService.showLoader();
             let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
             this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
@@ -705,6 +741,22 @@ export class ArrangingContractorComponent implements OnInit {
           resolve(false);
         }
       );
+    });
+    return promise;
+  }
+
+  saveFaultLLAuth() {
+    const requestObj: any = {};
+    requestObj.rejectionReason = '';
+    requestObj.isAccepted = true;
+    requestObj.submittedByType = 'SECUR_USER';
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.saveFaultLLAuth(requestObj, this.iacNotification.faultNotificationId).subscribe(res => {
+        resolve(true);
+      }, error => {
+        this.commonService.showMessage('No Authorisation', 'Something went wrong', 'error');
+        resolve(false);
+      })
     });
     return promise;
   }
@@ -774,21 +826,21 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  private getFileType(name): boolean {
+  getFileType(name): boolean {
     if (name != null) {
-      let data = name.split('.')[1]  === 'pdf';
+      let data = name.split('.')[1] === 'pdf';
       if (data) {
         return true;
       }
     }
   }
 
-  private downloadDocumentByURl(url){
+  downloadDocumentByURl(url) {
     this.commonService.downloadDocumentByUrl(url);
   }
 
   async deleteDocument(documentId, i: number) {
-    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?','', 'YES', 'NO');
+    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
     if (response) {
       this.faultsService.deleteDocument(documentId).subscribe(response => {
         this.removeFile(i);

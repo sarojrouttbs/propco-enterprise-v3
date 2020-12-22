@@ -179,7 +179,7 @@
           </div>
           <!-- <ion-button (click)="questionActionQuoteUpload(true)">Upload</ion-button> -->
         </div>
-        <ng-container *ngIf="iacNotification?.templateCode === 'CQ-C-E'" >
+        <ng-container *ngIf="iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'LAR-L-E'" >
           <h2>Quotation Request</h2>
           <ng-container *ngTemplateOutlet="quoteDetails"></ng-container>
         </ng-container>
