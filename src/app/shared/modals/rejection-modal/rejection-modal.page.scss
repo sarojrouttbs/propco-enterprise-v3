@@ -1,0 +1,8 @@
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    .check-box {
+        --inner-border-width: 0 !important;
+        margin: 0 15px -4px 15px;
+    }
+}

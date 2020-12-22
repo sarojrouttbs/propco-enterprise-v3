@@ -711,7 +711,7 @@ export class ArrangingContractorComponent implements OnInit {
     if (!data.value) {
       const modal = await this.modalController.create({
         component: RejectionModalPage,
-        cssClass: 'modal-container upload-container',
+        cssClass: 'modal-container',
         componentProps: {
           faultNotificationId: this.iacNotification.faultNotificationId,
           lookupdata: this.lookupdata
