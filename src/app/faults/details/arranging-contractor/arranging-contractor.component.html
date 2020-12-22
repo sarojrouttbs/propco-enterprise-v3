@@ -208,20 +208,20 @@
     </ion-col>
     <ion-col size="50">
       <ion-item>
-        <ion-label position="floating">Nominal Code <ion-text class="mandatory">*</ion-text>
+        <ion-label position="floating">Nominal Code
+          <!-- <ion-text class="mandatory">*</ion-text> -->
         </ion-label>
         <ion-select interface="popover" formControlName="nominalCode">
-          <ion-select-option [value]="item.value" *ngFor="let item of faultCategories">{{ item.value }}
+          <ion-select-option [value]="item.nominalCode" *ngFor="let item of nominalCodes">{{item.nominalCode}} {{ item.description }}
           </ion-select-option>
         </ion-select>
       </ion-item>
     </ion-col>
     <ion-col size="50">
       <ion-item>
-        <ion-label position="floating">Quote Status <ion-text class="mandatory">*</ion-text>
-        </ion-label>
+        <ion-label position="floating">Quote Status</ion-label>
         <ion-select interface="popover" formControlName="quoteStatus">
-          <ion-select-option [value]="item.value" *ngFor="let item of faultCategories">{{ item.value }}
+          <ion-select-option [value]="item.index" *ngFor="let item of quoteStatuses">{{ item.value }}
           </ion-select-option>
         </ion-select>
       </ion-item>
