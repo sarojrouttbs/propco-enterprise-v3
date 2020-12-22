@@ -88,7 +88,7 @@ export class ArrangingContractorComponent implements OnInit {
       contractorList: this.fb.array([]),
       contractorIds: [],
       selectedContractorId: '',
-      quoteStatus: '',
+      quoteStatus: [{value:1, disabled: true}],
       nominalCode: ''
     });
   }
@@ -197,7 +197,9 @@ export class ArrangingContractorComponent implements OnInit {
         requestStartDate: this.faultMaintenanceDetails.requiredStartDate,
         accessDetails: this.faultMaintenanceDetails.accessDetails,
         selectedContractorId: this.faultMaintenanceDetails.selectedContractorId,
-        contact: this.faultMaintenanceDetails.contact
+        contact: this.faultMaintenanceDetails.contact,
+        quoteStatus: this.faultMaintenanceDetails.quoteStatus,
+        nominalCode: this.faultMaintenanceDetails.nominalCode
       }
     );
     this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
@@ -234,14 +236,14 @@ export class ArrangingContractorComponent implements OnInit {
     }
 
     this.faultsService.getNominalCodes().subscribe(data=>{
-      this.nominalCodes = data;
+      this.nominalCodes = data ? data : [];
     })
   }
 
   private setLookupData(data) {
     this.contractorSkill = data.contractorSkills;
     this.faultCategories = data.faultCategories;
-    this.nominalCodes = data.nominalCodes;
+    this.quoteStatuses = data.maintenanceQuoteStatuses;
     this.setCategoryMap();
   }
 
@@ -552,6 +554,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.raiseQuoteForm.get('description').disable();
       this.raiseQuoteForm.get('requestStartDate').disable();
       this.raiseQuoteForm.get('contact').disable();
+      this.raiseQuoteForm.get('nominalCode').disable();
     }
   }
 
