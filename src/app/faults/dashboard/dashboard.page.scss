@@ -177,3 +177,34 @@
   border-radius: 11px;
   border-color: var(--background-checked);
 }
+
+.heading-block {
+  margin-bottom: 10px;
+}
+
+.title {
+  margin-top: 0px;
+}
+
+.checkbox-border {
+  --border-color: var(--background-checked) !important;
+}
+
+.reset-filter {
+  --border-radius: 4px !important;
+  margin-top: 20px !important;
+}
+
+.datetime-padding {
+  padding-bottom: 0px !important;
+}
+
+.selectable-height {
+  max-height: 30px !important;
+}
+
+.selectable-btn {
+  --border-radius: 4px !important;
+  float: right;
+  margin-right: 15px;
+}
