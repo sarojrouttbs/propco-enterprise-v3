@@ -69,7 +69,6 @@ export class ArrangingContractorComponent implements OnInit {
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
-    this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
   }
 
   private initForms(): void {
