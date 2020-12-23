@@ -428,7 +428,7 @@
         <ion-text class="content"></ion-text>
       </ion-col> -->
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header ion-text-capitalize">{{(reportedByForm.controls.reportedBy.value | lowercase) || 'N/A'}}
+        <ion-text class="header ion-text-capitalize">{{(reportedByForm.controls.reportedBy.value === 'THIRD_PARTY' ? 'Third party' : reportedByForm.controls.reportedBy.value | lowercase) || 'N/A'}}
         </ion-text><br />
         <ion-text class="content">{{reportedByForm.controls.forename.value || 'N/A'}}</ion-text>
       </ion-col>
