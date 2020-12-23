@@ -159,10 +159,23 @@ export class DetailsPage implements OnInit {
         this.setLookupData(data);
       });
     }
+    let faultsLookupData = this.commonService.getItem(PROPCO.FAULTS_LOOKUP_DATA, true);
+    if(faultsLookupData){
+      this.setFaultsLookupData(faultsLookupData);
+    }
+    else{
+      this.commonService.getFaultsLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.FAULTS_LOOKUP_DATA, data);
+        this.setFaultsLookupData(data);
+      });
+    }
   }
 
   private setLookupData(data) {
     this.agreementStatuses = data.agreementStatuses;
+  }
+
+  private setFaultsLookupData(data){
     this.faultReportedByThirdParty = data.faultReportedByThirdParty;
     this.faultCategories = data.faultCategories;
     this.faultUrgencyStatuses = data.faultUrgencyStatuses;

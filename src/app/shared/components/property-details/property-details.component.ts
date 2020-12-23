@@ -35,6 +35,16 @@ export class PropertyDetailsComponent implements OnInit {
         this.setLookupData();
       });
     }
+    let faultsLookupData = this.commonService.getItem(PROPCO.FAULTS_LOOKUP_DATA, true);
+    if(faultsLookupData){
+      this.setFaultsLookupData(faultsLookupData);
+    }
+    else{
+      this.commonService.getFaultsLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.FAULTS_LOOKUP_DATA, data);
+        this.setFaultsLookupData(data);
+      });
+    }
 
   }
 
@@ -46,7 +56,10 @@ export class PropertyDetailsComponent implements OnInit {
     this.advertisementRentFrequencies = this.lookupdata.advertisementRentFrequencies;
     this.officeCodes = this.lookupdata.officeCodes;
     this.hmoLicenceSchemes = this.lookupdata.hmoLicenceSchemes;
-    this.faultUrgencyStatuses = this.lookupdata.faultUrgencyStatuses;
+  }
+  
+  private setFaultsLookupData(data){
+    this.faultUrgencyStatuses = data.faultUrgencyStatuses;
   }
 
   getLookupValue(index, lookup) {

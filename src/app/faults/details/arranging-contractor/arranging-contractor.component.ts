@@ -234,16 +234,29 @@ export class ArrangingContractorComponent implements OnInit {
         this.setLookupData(data);
       });
     }
-
+    let faultsLookupData = this.commonService.getItem(PROPCO.FAULTS_LOOKUP_DATA, true);
+    if(faultsLookupData){
+      this.setFaultsLookupData(faultsLookupData);
+    }
+    else{
+      this.commonService.getFaultsLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.FAULTS_LOOKUP_DATA, data);
+        this.setFaultsLookupData(data);
+      });
+    }
     this.faultsService.getNominalCodes().subscribe(data=>{
       this.nominalCodes = data ? data : [];
-    })
+    });
   }
 
   private setLookupData(data) {
     this.contractorSkill = data.contractorSkills;
-    this.faultCategories = data.faultCategories;
     this.quoteStatuses = data.maintenanceQuoteStatuses;
+    this.setCategoryMap();
+  }
+
+  private setFaultsLookupData(data){
+    this.faultCategories = data.faultCategories;
     this.setCategoryMap();
   }
 
