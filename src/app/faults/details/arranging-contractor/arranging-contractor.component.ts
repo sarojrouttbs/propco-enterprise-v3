@@ -73,7 +73,6 @@ export class ArrangingContractorComponent implements OnInit {
   private initForms(): void {
     this.initQuoteForm();
     this.initAddContractorForm();
-    // this.initContractorListForm();
   }
 
   private initQuoteForm(): void {
@@ -117,7 +116,7 @@ export class ArrangingContractorComponent implements OnInit {
   async removeContractor(i: any, isRejected: boolean) {
     if (this.restrictAction) { return; }
     if (isRejected) {
-      this.commonService.showAlert('Arranging Contractor', 'Deleting the rejected contractor is restricted.');
+      this.commonService.showAlert('Delete Contractor', 'Deleting the rejected contractor is restricted.');
       return;
     }
     const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
@@ -159,11 +158,6 @@ export class ArrangingContractorComponent implements OnInit {
       switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
         new Observable())
     );
-  }
-
-  private initContractorListForm(): void {
-    // this.addContractorForm = this.fb.group({
-    // });
   }
 
   private async initApiCalls() {
@@ -241,16 +235,28 @@ export class ArrangingContractorComponent implements OnInit {
         this.setLookupData(data);
       });
     }
-
+    let faultsLookupData = this.commonService.getItem(PROPCO.FAULTS_LOOKUP_DATA, true);
+    if (faultsLookupData) {
+      this.setFaultsLookupData(faultsLookupData);
+    }
+    else {
+      this.commonService.getFaultsLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.FAULTS_LOOKUP_DATA, data);
+        this.setFaultsLookupData(data);
+      });
+    }
     this.faultsService.getNominalCodes().subscribe(data => {
       this.nominalCodes = data ? data : [];
-    })
+    });
   }
 
   private setLookupData(data) {
     this.contractorSkill = data.contractorSkills;
-    this.faultCategories = data.faultCategories;
     this.quoteStatuses = data.maintenanceQuoteStatuses;
+  }
+
+  private setFaultsLookupData(data) {
+    this.faultCategories = data.faultCategories;
     this.setCategoryMap();
   }
 
@@ -567,6 +573,7 @@ export class ArrangingContractorComponent implements OnInit {
   private disableContractorsList(notification) {
     if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && notification.templateCode === 'LAR-L-E') {
       this.rejectionReason = this.faultMaintenanceDetails.quoteContractors.filter(x => x.isRejected)[0].rejectionReason;
+      this.raiseQuoteForm.get('selectedContractorId').setValue('');
     } else {
       /*disable cont. list actions for other notifications*/
       this.restrictAction = true;
@@ -811,7 +818,7 @@ export class ArrangingContractorComponent implements OnInit {
       select: '',
       isPreferred,
       isNew: isNew,
-      checked: isNew ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value ? true : false),
+      checked: isNew ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value && !data.isRejected ? true : false),
       isRejected: !isNew ? data.isRejected : false,
       rejectionReason: !isNew ? data.rejectionReason : ''
     });
