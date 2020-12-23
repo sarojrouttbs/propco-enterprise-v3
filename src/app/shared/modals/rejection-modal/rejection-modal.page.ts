@@ -14,6 +14,7 @@ import { PlatformLocation } from '@angular/common';
 export class RejectionModalPage implements OnInit {
   rejectionForm: FormGroup;
   faultNotificationId;
+  rejectionReason;
   lookupdata
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -36,7 +37,7 @@ export class RejectionModalPage implements OnInit {
       submittedById: '',
       submittedByType: 'SECUR_USER',
       other: '',
-      landlordWantAnotherQuote: false
+      landlordWantAnotherQuote: this.rejectionReason ? false : true
     });
     this.commonService.sortBy('index', this.lookupdata.faultMaintRejectionReasons)
   }
@@ -53,7 +54,7 @@ export class RejectionModalPage implements OnInit {
     this.faultsService.saveFaultLLAuth(reqObj, this.faultNotificationId).subscribe(res => {
       this.modalController.dismiss('success');
     }, error => {
-      this.commonService.showMessage('No Authorisation','Something went wrong','error');
+      this.commonService.showMessage('No Authorisation', 'Something went wrong', 'error');
     })
   }
 
