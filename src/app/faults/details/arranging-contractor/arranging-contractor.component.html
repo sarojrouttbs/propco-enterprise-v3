@@ -1,13 +1,120 @@
 <form [formGroup]="raiseQuoteForm">
   <ion-grid>
-    <ion-row *ngIf="!iacNotification">
+    <ion-row *ngIf="iacNotification">
+      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+        <div class="arranging-contractor">
+          <div class="banner">
+            <div class="ion-text-left">
+              <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a' }}</b>
+            </div>
+            <h2 class="banner-heading">
+              {{iacNotification && iacNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
+            <h6 class="banner-title">Here’s the action you chose:</h6>
+            <ion-button color="success" class="icon-button">
+              {{getLookupValue(iacNotification?.faultStageAction, iacStageActions)}}
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+            </ion-button>
+            <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
+              <h6 class="banner-title"> <strong>Awaiting response from the Contractor</strong> </h6>
+              <h6 class="banner-title">Next chase due:
+                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - hh:mm a') : ''}}
+              </h6>
+            </ng-container>
+          </div>
+          <div class="question-answer" *ngIf="iacNotification">
+            <h6>{{iacNotification?.questions[0]?.qtext}}</h6>
+            <ion-grid>
+              <ion-row class="ion-justify-content-center">
+                <ng-container *ngFor="let data of iacNotification?.questions[0]?.options">
+                  <ion-button color="success" class="action-btn"
+                    fill="{{data?.value ==  iacNotification?.responseReceived?.isAccepted ? 'solid' :'outline'}}"
+                    (click)="questionAction(data)">{{data.text}}</ion-button>
+                </ng-container>
+              </ion-row>
+            </ion-grid>
+            <ion-text color="danger" *ngIf="rejectionReason" >Reason: {{rejectionReason}}</ion-text>
+            <h6
+              *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false">
+              <ion-text color="danger">Please select an appropriate action.</ion-text>
+            </h6>
+            <div class="border-bottom"></div>
+          </div>
+          <div class="question-answer" *ngIf="iacNotification && (iacNotification?.responseReceived == null || !iacNotification?.responseReceived?.isAccepted)">
+            <h4 claas="ion-text-center">Next Step:</h4>
+            <h6 *ngIf="iacNotification?.responseReceived == null" >
+              <ion-text color="danger">Please note: </ion-text>
+              <span>The fault will be <i>escalated</i> automatically if the contractor doesn't respond within
+              {{(iacNotification?.allowedNumberOfChases - iacNotification?.numberOfChasesDone) * iacNotification?.chaseInterval}} hours.
+              </span>
+            </h6>
+            <h6 *ngIf="iacNotification?.responseReceived?.isAccepted === false" >
+              <b>Fault Escalated - PM to decide the next steps</b>
+            </h6>
+            <div class="border-bottom"></div>
+          </div>
+          <div class="question-answer">
+            <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
+            <ion-grid>
+              <ion-row class="ion-justify-content-center">
+                <ng-container *ngFor="let instruction of iacStageActions">
+                  <div>
+                    <ion-button color="success" expand="block" class="action-btn"
+                      fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
+                      (click)="setUserAction(instruction.index)">
+                      {{instruction.value}}
+                      <ion-icon name="checkmark-circle-outline" class="check-icon"
+                        *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
+                    </ion-button>
+                  </div>
+                </ng-container>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <!-- <ion-button (click)="questionActionQuoteUpload(true)">Upload</ion-button> -->
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-grid style="margin: 20px 0" *ngIf="iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'LAR-L-E'">
+      <ion-row>
+        <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+          <h2>Quote Documents</h2>
+          <div class="border-bottom"></div>
+          <ion-row>
+            <ion-col size-xl="25" size="25" *ngFor="let file of quoteDocuments; let i=index;">
+              <div class="delete-icon-wrapper">
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="100" *ngIf="getFileType(file.name)">
+                      <img src="/assets/images/default.jpg" (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download PDF">
+                    </ion-col>
+                    <ion-col size="100" *ngIf="!getFileType(file.name)">
+                      <img [src]="file.documentUrl ? file.documentUrl : '/assets/images/default.jpg'" (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download">
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="ion-justify-content-between">
+                    <ion-col size-xl="80" size-lg="70" size="80">
+                      <div class="file-name">{{file.name}}</div>
+                    </ion-col>
+                    <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding">
+                      <ion-icon (click)="deleteDocument(file?.documentId, i)" title="Delete File" class="delete-icon" name="close-circle">
+                      </ion-icon>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-row>
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
         <ion-grid>
           <ng-container *ngTemplateOutlet="quoteDetails"></ng-container>
           <div class="contractor-block">
             <div formArrayName="contractorList"
               *ngFor="let item of raiseQuoteForm.get('contractorList')['controls']; let i = index;">
-              <ion-row id="row_1" class="row-banner" [formGroupName]="i">
+              <ion-row id="row_1" class="row-banner" [formGroupName]="i" [ngClass]="{'isRejected': item.get('isRejected').value }">
                 <ion-col size="30">
                   <ion-item>
                     <ion-label position="floating">Company </ion-label>
@@ -30,27 +137,15 @@
                 <ion-col size="15">
 
                   <div class="action-btn-container">
-                    <ion-checkbox color="success" class="list-checkbox" formControlName="checked" (click)="updateSelection(item.value,i)" [name]="item"></ion-checkbox>
-                    <!-- <ion-checkbox color="primary" style="height: 25px;
-                    width: 25px;bottom: -5px;margin-left: 16px;" formControlName="isPreferred">
-                    </ion-checkbox> -->
-                      <ion-icon class="list-button" *ngIf="item.get('isPreferred').value" matTooltip="Preferred Contractor" matTooltipPosition="above" name="checkmark-circle-outline"></ion-icon>
-                    <!-- {{item | json}} -->
-                    <!-- <ion-icon class="remove-contractor list-button" name="checkmark-circle-outline"></ion-icon> -->
-                    <!-- <ion-fab-button class="remove-contractor list-button" style="margin-left: 25px;"> -->
-                      <ion-icon class="list-button" color="danger" (click)="removeContractor(i)" name="close-circle-outline"></ion-icon>
-                    <!-- </ion-fab-button> -->
-
-
-                    <!-- <ion-fab-button class="list-button mark-contractor">
-                      <ion-icon name="checkmark"></ion-icon>
-                    </ion-fab-button> -->
+                    <ion-checkbox color="success" class="list-checkbox" formControlName="checked" (click)="updateSelection(item.value,i)" [name]="item" [disabled]="restrictAction"></ion-checkbox>
+                    <ion-icon class="list-button" *ngIf="item.get('isPreferred').value" matTooltip="Preferred Contractor" matTooltipPosition="above" name="checkmark-circle-outline"></ion-icon>
+                    <ion-icon class="list-button" color="danger" (click)="removeContractor(i,item.get('isRejected').value)" name="close-circle-outline"></ion-icon>
                   </div>
                 </ion-col>
               </ion-row>
             </div>
 
-            <ion-row id="row_1" class="row-banner" [formGroup]="addContractorForm">
+            <ion-row id="row_1" class="row-banner" [formGroup]="addContractorForm" *ngIf="!restrictAction" >
               <ion-col size="45">
                 <ion-item>
                   <ion-label position="floating">Skill Set
@@ -101,88 +196,11 @@
                 <!-- </div> -->
               </ion-col>
             </ion-row>
-            <ion-col size="100" >
+            <ion-col size="100" *ngIf="!restrictAction" >
              <ion-text color="dark"> Note: Please click Add to add another contractor to the list.</ion-text>
             </ion-col>
           </div>
         </ion-grid>
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="iacNotification">
-      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
-        <div class="arranging-contractor">
-          <div class="banner">
-            <div class="ion-text-left">
-              <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a' }}</b>
-            </div>
-            <h2 class="banner-heading">
-              {{iacNotification && iacNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
-            <h6 class="banner-title">Here’s the action you chose:</h6>
-            <ion-button color="success" class="icon-button">
-              {{getLookupValue(iacNotification?.faultStageAction, iacStageActions)}}
-              <ion-icon name="checkmark-circle-outline"></ion-icon>
-            </ion-button>
-            <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
-              <h6 class="banner-title"> <strong>Awaiting response from the Contractor</strong> </h6>
-              <h6 class="banner-title">Next chase due:
-                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - hh:mm a') : ''}}
-              </h6>
-            </ng-container>
-          </div>
-          <div class="question-answer" *ngIf="iacNotification">
-            <h6>{{iacNotification?.questions[0]?.qtext}}</h6>
-            <ion-grid>
-              <ion-row class="ion-justify-content-center">
-                <ng-container *ngFor="let data of iacNotification?.questions[0]?.options">
-                  <ion-button color="success" class="action-btn"
-                    fill="{{data?.value ==  iacNotification?.responseReceived?.isAccepted ? 'solid' :'outline'}}"
-                    (click)="questionAction(data)">{{data.text}}</ion-button>
-                </ng-container>
-              </ion-row>
-            </ion-grid>
-            <h6
-              *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false">
-              <ion-text color="danger">Please select an appropriate action.</ion-text>
-            </h6>
-            <div class="border-bottom"></div>
-          </div>
-          <div class="question-answer" *ngIf="iacNotification && (iacNotification?.responseReceived == null || !iacNotification?.responseReceived?.isAccepted)">
-            <h4 claas="ion-text-center">Next Step:</h4>
-            <h6 *ngIf="iacNotification?.responseReceived == null" >
-              <ion-text color="danger">Please note: </ion-text>
-              <span>The fault will be <i>escalated</i> automatically if the contractor doesn't respond within
-              {{(iacNotification?.allowedNumberOfChases - iacNotification?.numberOfChasesDone) * iacNotification?.chaseInterval}} hours.
-              </span>
-            </h6>
-            <h6 *ngIf="iacNotification?.responseReceived?.isAccepted === false" >
-              <b>Fault Escalated - PM to decide the next steps</b>
-            </h6>
-            <div class="border-bottom"></div>
-          </div>
-          <div class="question-answer">
-            <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
-            <ion-grid>
-              <ion-row class="ion-justify-content-center">
-                <ng-container *ngFor="let instruction of iacStageActions">
-                  <div>
-                    <ion-button color="success" expand="block" class="action-btn"
-                      fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
-                      (click)="setUserAction(instruction.index)">
-                      {{instruction.value}}
-                      <ion-icon name="checkmark-circle-outline" class="check-icon"
-                        *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
-                    </ion-button>
-                  </div>
-                </ng-container>
-              </ion-row>
-            </ion-grid>
-          </div>
-          <!-- <ion-button (click)="questionActionQuoteUpload(true)">Upload</ion-button> -->
-        </div>
-        <ng-container *ngIf="iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'LAR-L-E'" >
-          <h2>Quotation Request</h2>
-          <ng-container *ngTemplateOutlet="quoteDetails"></ng-container>
-        </ng-container>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -272,39 +290,6 @@
 </ng-template>
 </form>
 
-<ion-grid style="margin: 20px 0" *ngIf="iacNotification?.templateCode === 'CQ-C-E'">
-  <ion-row>
-    <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
-      <h2>Quote Documents</h2>
-      <div class="border-bottom"></div>
-      <ion-row>
-        <ion-col size-xl="25" size="25" *ngFor="let file of quoteDocuments; let i=index;">
-          <div class="delete-icon-wrapper">
-            <ion-grid>
-              <ion-row>
-                <ion-col size="100" *ngIf="getFileType(file.name)">
-                  <img src="/assets/images/default.jpg" (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download PDF">
-                </ion-col>
-                <ion-col size="100" *ngIf="!getFileType(file.name)">
-                  <img [src]="file.documentUrl ? file.documentUrl : '/assets/images/default.jpg'" (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download">
-                </ion-col>
-              </ion-row>
-              <ion-row class="ion-justify-content-between">
-                <ion-col size-xl="80" size-lg="70" size="80">
-                  <div class="file-name">{{file.name}}</div>
-                </ion-col>
-                <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding">
-                  <ion-icon (click)="deleteDocument(file?.documentId, i)" title="Delete File" class="delete-icon" name="close-circle">
-                  </ion-icon>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-col>
-  </ion-row>
-</ion-grid>
 <div class="action-btn-group">
   <ion-button (click)="_btnHandler('cancel')" class="cancel-button">Cancel</ion-button>
   <ion-button (click)="_btnHandler('back')">Back</ion-button>

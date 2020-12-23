@@ -45,7 +45,7 @@
 <ion-footer>
   <ion-row>
     <ion-col size="70" class="checkbox-wrapper">
-      <form [formGroup]="rejectionForm">
+      <form [formGroup]="rejectionForm" *ngIf="!rejectionReason">
         <div>
           <ion-checkbox slot="start" color="success" class="check-box" formControlName="landlordWantAnotherQuote">
           </ion-checkbox>

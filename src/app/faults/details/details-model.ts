@@ -147,7 +147,10 @@ declare namespace FaultModels {
         company: string;
         email: string;
         mobile: string;
+        skills: string[];
         address: Address;
+        isRejected: boolean;
+        rejectionReason?: any;
         contractorId: string;
     }
 
