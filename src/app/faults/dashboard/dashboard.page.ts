@@ -155,18 +155,30 @@ export class DashboardPage implements OnInit {
         this.setLookupData(data);
       });
     }
+    let faultsLookupData = this.commonService.getItem(PROPCO.FAULTS_LOOKUP_DATA, true);
+    if(faultsLookupData){
+      this.setFaultsLookupData(faultsLookupData);
+    }
+    else{
+      this.commonService.getFaultsLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.FAULTS_LOOKUP_DATA, data);
+        this.setFaultsLookupData(data);
+      });
+    }
   }
 
   private setLookupData(data) {
-    this.faultCategories = data.faultCategories;
     this.officeCodes = data.officeCodes;
-    this.faultStatuses = data.faultStatuses;
-    this.faultUrgencyStatuses = data.faultUrgencyStatuses;
-
     this.notesCategories = data.notesCategories;
     this.userLookupDetails = data.userLookupDetails;
     this.notesComplaints = data.notesComplaint;
     this.notesTypes = data.notesType;
+  }
+
+  private setFaultsLookupData(data){
+    this.faultCategories = data.faultCategories;
+    this.faultStatuses = data.faultStatuses;
+    this.faultUrgencyStatuses = data.faultUrgencyStatuses;
   }
 
   getLookupValue(index, lookup, type?) {
