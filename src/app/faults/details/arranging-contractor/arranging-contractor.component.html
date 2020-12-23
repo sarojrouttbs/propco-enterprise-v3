@@ -230,7 +230,7 @@
           <!-- <ion-text class="mandatory">*</ion-text> -->
         </ion-label>
         <ion-select interface="popover" formControlName="nominalCode">
-          <ion-select-option [value]="item.nominalCode" *ngFor="let item of nominalCodes">{{item.nominalCode}} {{ item.description }}
+          <ion-select-option [value]="item.nominalCode" *ngFor="let item of nominalCodes">{{item.nominalCode}} - {{item.description}}
           </ion-select-option>
         </ion-select>
       </ion-item>

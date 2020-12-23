@@ -46,6 +46,7 @@ export class ArrangingContractorComponent implements OnInit {
   quoteStatuses;
   rejectionReason: string = null;
   restrictAction: boolean = false;
+  isUserActionChange: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -68,6 +69,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
+    this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
   }
 
   private initForms(): void {
@@ -288,29 +290,34 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async saveForLater() {
-    if (this.validateReq()) {
-      return;
+    if (this.iacNotification.responseReceived == null && this.isUserActionChange) {
+      this.voidNotification('saveForLater');
     }
-    if (!this.faultMaintenanceDetails) {
-      /*raise a quote*/
-      const quoteRaised = await this.raiseQuote();
-      if (quoteRaised) {
-        const faultUpdated = await this.updateFault();
-        if (faultUpdated) {
-          this._btnHandler('cancel');
-        }
+    else {
+      if (this.validateReq()) {
+        return;
       }
-    } else {
-      /*update a quote*/
-      const quoteUpdated = await this.updateQuote();
-      if (quoteUpdated) {
-        const addContractors = await this.addContractors();
-        if (addContractors) {
-          const faultContUpdated = await this.updateFaultQuoteContractor();
-          if (faultContUpdated) {
-            const faultUpdated = await this.updateFault();
-            if (faultUpdated) {
-              this._btnHandler('cancel');
+      if (!this.faultMaintenanceDetails) {
+        /*raise a quote*/
+        const quoteRaised = await this.raiseQuote();
+        if (quoteRaised) {
+          const faultUpdated = await this.updateFault();
+          if (faultUpdated) {
+            this._btnHandler('cancel');
+          }
+        }
+      } else {
+        /*update a quote*/
+        const quoteUpdated = await this.updateQuote();
+        if (quoteUpdated) {
+          const addContractors = await this.addContractors();
+          if (addContractors) {
+            const faultContUpdated = await this.updateFaultQuoteContractor();
+            if (faultContUpdated) {
+              const faultUpdated = await this.updateFault();
+              if (faultUpdated) {
+                this._btnHandler('cancel');
+              }
             }
           }
         }
@@ -416,30 +423,19 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async proceed() {
-    if (this.validateReq()) {
-      return;
+    if (this.iacNotification.responseReceived == null && this.isUserActionChange) {
+      this.voidNotification(null);
     }
-    const proceed = await this.commonService.showConfirm('Raise a quote', 'Are you sure you want to send a quote request to the selected contractor(s) ?');
-    if (proceed) {
-      if (!this.faultMaintenanceDetails) {
-        /*raise a quote*/
-        const quoteRaised = await this.raiseQuote();
-        if (quoteRaised) {
-          const faultUpdated = await this.updateFault(true);
-          if (faultUpdated) {
-            this.commonService.showLoader();
-            setTimeout(async () => {
-              let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-              this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
-            }, 3000);
-          }
-        }
-      } else {
-        /*update a quote*/
-        const quoteUpdated = await this.updateQuote();
-        if (quoteUpdated) {
-          const faultContUpdated = await this.updateFaultQuoteContractor();
-          if (faultContUpdated) {
+    else {
+      if (this.validateReq()) {
+        return;
+      }
+      const proceed = await this.commonService.showConfirm('Raise a quote', 'Are you sure you want to send a quote request to the selected contractor(s) ?');
+      if (proceed) {
+        if (!this.faultMaintenanceDetails) {
+          /*raise a quote*/
+          const quoteRaised = await this.raiseQuote();
+          if (quoteRaised) {
             const faultUpdated = await this.updateFault(true);
             if (faultUpdated) {
               this.commonService.showLoader();
@@ -447,6 +443,22 @@ export class ArrangingContractorComponent implements OnInit {
                 let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
                 this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
               }, 3000);
+            }
+          }
+        } else {
+          /*update a quote*/
+          const quoteUpdated = await this.updateQuote();
+          if (quoteUpdated) {
+            const faultContUpdated = await this.updateFaultQuoteContractor();
+            if (faultContUpdated) {
+              const faultUpdated = await this.updateFault(true);
+              if (faultUpdated) {
+                this.commonService.showLoader();
+                setTimeout(async () => {
+                  let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+                  this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+                }, 3000);
+              }
             }
           }
         }
@@ -581,12 +593,12 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   setUserAction(index) {
+    this.isUserActionChange = true;
     // if (this.iacNotification && !this.iacNotification.responseReceived) {
     //   this.commonService.showAlert('Arrangig Contractor', 'Please select response before proceeding with other action.');
     //   return;
     // }
     this.userSelectedActionControl.setValue(index);
-
   }
 
   private getTenantDetail(tenantId) {
@@ -628,10 +640,13 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private questionActionAcceptRequest(data) {
+    let notificationObj = {} as FaultModels.IUpdateNotification;
+    notificationObj.isAccepted = data.value;
+    notificationObj.submittedByType = 'SECUR_USER';
     if (data.value) {
       this.commonService.showConfirm(data.text, 'Are you sure, you want to accept the quote request?', '', 'Yes', 'No').then(async res => {
         if (res) {
-          await this.updateFaultNotification(data.value, this.iacNotification.faultNotificationId);
+          await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
           // setTimeout(async () => {
           let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
@@ -643,7 +658,7 @@ export class ArrangingContractorComponent implements OnInit {
     } else if (!data.value) {
       this.commonService.showConfirm(data.text, 'Are you sure, you want to reject the quote request?', '', 'Yes', 'No').then(async res => {
         if (res) {
-          await this.updateFaultNotification(data.value, this.iacNotification.faultNotificationId);
+          await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
           // setTimeout(async () => {
           let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
@@ -831,17 +846,14 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  private async updateFaultNotification(data, faultNotificationId): Promise<any> {
+  private async updateFaultNotification(notificationObj, faultNotificationId): Promise<any> {
     const promise = new Promise((resolve, reject) => {
-      let notificationObj = {} as FaultModels.IUpdateNotification;
-      notificationObj.isAccepted = data;
-      notificationObj.submittedByType = 'SECUR_USER';
       this.faultsService.updateNotification(faultNotificationId, notificationObj).subscribe(
         res => {
           resolve(true);
         },
         error => {
-          reject(error)
+          resolve(false);
         }
       );
     });
@@ -886,6 +898,40 @@ export class ArrangingContractorComponent implements OnInit {
 
   private removeFile(i) {
     this.quoteDocuments.splice(i, 1);
+  }
+
+  async voidNotification(value) {
+    let notificationObj = {} as FaultModels.IUpdateNotification;
+    notificationObj.isVoided = true;
+    notificationObj.submittedByType = 'SECUR_USER';
+    const updated = await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
+    if (updated) {
+      let faultRequestObj: any;
+      faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+      const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
+      if (isFaultUpdated) {
+        if (value) {
+          this._btnHandler('cancel');
+        }
+        else {
+          this._btnHandler('refresh');
+        }
+      }
+    }
+  }
+
+  updateFaultSummary(faultRequestObj) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.updateFault(this.faultDetails.faultId, faultRequestObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
   }
 
 }
