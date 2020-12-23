@@ -102,6 +102,7 @@ declare namespace FaultModels {
         isAccepted: boolean;
         submittedByType: string;
         isEscalateFault: boolean;
+        isVoided: boolean;
     }
 
     export interface IMaintenanceQuoteResponse {
