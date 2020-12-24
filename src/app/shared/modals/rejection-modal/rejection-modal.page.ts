@@ -15,7 +15,7 @@ export class RejectionModalPage implements OnInit {
   rejectionForm: FormGroup;
   faultNotificationId;
   rejectionReason;
-  lookupdata
+  faultMaintRejectionReasons
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
     private commonService: CommonService,
@@ -39,7 +39,7 @@ export class RejectionModalPage implements OnInit {
       other: '',
       landlordWantAnotherQuote: this.rejectionReason ? false : true
     });
-    this.commonService.sortBy('index', this.lookupdata.faultMaintRejectionReasons)
+    this.commonService.sortBy('index', this.faultMaintRejectionReasons)
   }
 
   saveFaultLLAuth() {
