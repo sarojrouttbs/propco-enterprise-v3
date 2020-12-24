@@ -20,7 +20,7 @@
               </ion-text>
             </ion-label>
             <ion-select interface="popover" formControlName="rejectionReason" class="ion-select-options">
-              <ion-select-option [value]="item.value" *ngFor="let item of lookupdata?.faultMaintRejectionReasons">
+              <ion-select-option [value]="item.value" *ngFor="let item of faultMaintRejectionReasons">
                 {{ item.value === 'Other'? item.value +' (Please specify in the box)':item.value}}
               </ion-select-option>
             </ion-select>
