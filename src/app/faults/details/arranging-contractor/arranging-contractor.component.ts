@@ -289,7 +289,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async saveForLater() {
-    if (this.iacNotification.responseReceived == null && this.isUserActionChange) {
+    if (this.iacNotification && this.iacNotification.responseReceived == null && this.isUserActionChange) {
       this.voidNotification('saveForLater');
     }
     else {
@@ -422,7 +422,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async proceed() {
-    if (this.iacNotification.responseReceived == null && this.isUserActionChange) {
+    if (this.iacNotification && this.iacNotification.responseReceived == null && this.isUserActionChange) {
       this.voidNotification(null);
     }
     else {
