@@ -42,8 +42,11 @@ export class ArrangingContractorComponent implements OnInit {
   iacStageActions = ARRANING_CONTRACTOR_ACTIONS.filter(action => { return action.index !== 'PROPERTY_VISIT_FOR_QUOTE' });
   accessInfoList = ACCESS_INFO_TYPES;
   isMaintenanceDetails = false;
-  nominalCodes; 
+  nominalCodes;
   quoteStatuses;
+  rejectionReason: string = null;
+  restrictAction: boolean = false;
+  isUserActionChange: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -71,7 +74,6 @@ export class ArrangingContractorComponent implements OnInit {
   private initForms(): void {
     this.initQuoteForm();
     this.initAddContractorForm();
-    // this.initContractorListForm();
   }
 
   private initQuoteForm(): void {
@@ -88,7 +90,7 @@ export class ArrangingContractorComponent implements OnInit {
       contractorList: this.fb.array([]),
       contractorIds: [],
       selectedContractorId: '',
-      quoteStatus: [{value:1, disabled: true}],
+      quoteStatus: [{ value: 1, disabled: true }],
       nominalCode: ''
     });
   }
@@ -112,7 +114,12 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  async removeContractor(i: any) {
+  async removeContractor(i: any, isRejected: boolean) {
+    if (this.restrictAction) { return; }
+    if (isRejected) {
+      this.commonService.showAlert('Delete Contractor', 'Deleting the rejected contractor is restricted.');
+      return;
+    }
     const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
     const deleteContractor = await this.commonService.showConfirm('Delete Contrator', 'Do you want to delete contractor from the list?');
     if (deleteContractor) {
@@ -152,11 +159,6 @@ export class ArrangingContractorComponent implements OnInit {
       switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
         new Observable())
     );
-  }
-
-  private initContractorListForm(): void {
-    // this.addContractorForm = this.fb.group({
-    // });
   }
 
   private async initApiCalls() {
@@ -235,16 +237,16 @@ export class ArrangingContractorComponent implements OnInit {
       });
     }
     let faultsLookupData = this.commonService.getItem(PROPCO.FAULTS_LOOKUP_DATA, true);
-    if(faultsLookupData){
+    if (faultsLookupData) {
       this.setFaultsLookupData(faultsLookupData);
     }
-    else{
+    else {
       this.commonService.getFaultsLookup().subscribe(data => {
         this.commonService.setItem(PROPCO.FAULTS_LOOKUP_DATA, data);
         this.setFaultsLookupData(data);
       });
     }
-    this.faultsService.getNominalCodes().subscribe(data=>{
+    this.faultsService.getNominalCodes().subscribe(data => {
       this.nominalCodes = data ? data : [];
     });
   }
@@ -252,10 +254,9 @@ export class ArrangingContractorComponent implements OnInit {
   private setLookupData(data) {
     this.contractorSkill = data.contractorSkills;
     this.quoteStatuses = data.maintenanceQuoteStatuses;
-    this.setCategoryMap();
   }
 
-  private setFaultsLookupData(data){
+  private setFaultsLookupData(data) {
     this.faultCategories = data.faultCategories;
     this.setCategoryMap();
   }
@@ -288,29 +289,34 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async saveForLater() {
-    if (this.validateReq()) {
-      return;
+    if (this.iacNotification.responseReceived == null && this.isUserActionChange) {
+      this.voidNotification('saveForLater');
     }
-    if (!this.faultMaintenanceDetails) {
-      /*raise a quote*/
-      const quoteRaised = await this.raiseQuote();
-      if (quoteRaised) {
-        const faultUpdated = await this.updateFault();
-        if (faultUpdated) {
-          this._btnHandler('cancel');
-        }
+    else {
+      if (this.validateReq()) {
+        return;
       }
-    } else {
-      /*update a quote*/
-      const quoteUpdated = await this.updateQuote();
-      if (quoteUpdated) {
-        const addContractors = await this.addContractors();
-        if (addContractors) {
-          const faultContUpdated = await this.updateFaultQuoteContractor();
-          if (faultContUpdated) {
-            const faultUpdated = await this.updateFault();
-            if (faultUpdated) {
-              this._btnHandler('cancel');
+      if (!this.faultMaintenanceDetails) {
+        /*raise a quote*/
+        const quoteRaised = await this.raiseQuote();
+        if (quoteRaised) {
+          const faultUpdated = await this.updateFault();
+          if (faultUpdated) {
+            this._btnHandler('cancel');
+          }
+        }
+      } else {
+        /*update a quote*/
+        const quoteUpdated = await this.updateQuote();
+        if (quoteUpdated) {
+          const addContractors = await this.addContractors();
+          if (addContractors) {
+            const faultContUpdated = await this.updateFaultQuoteContractor();
+            if (faultContUpdated) {
+              const faultUpdated = await this.updateFault();
+              if (faultUpdated) {
+                this._btnHandler('cancel');
+              }
             }
           }
         }
@@ -416,30 +422,19 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async proceed() {
-    if (this.validateReq()) {
-      return;
+    if (this.iacNotification.responseReceived == null && this.isUserActionChange) {
+      this.voidNotification(null);
     }
-    const proceed = await this.commonService.showConfirm('Raise a quote', 'Are you sure you want to send a quote request to the selected contractor(s) ?');
-    if (proceed) {
-      if (!this.faultMaintenanceDetails) {
-        /*raise a quote*/
-        const quoteRaised = await this.raiseQuote();
-        if (quoteRaised) {
-          const faultUpdated = await this.updateFault(true);
-          if (faultUpdated) {
-            this.commonService.showLoader();
-            setTimeout(async () => {
-              let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-              this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
-            }, 3000);
-          }
-        }
-      } else {
-        /*update a quote*/
-        const quoteUpdated = await this.updateQuote();
-        if (quoteUpdated) {
-          const faultContUpdated = await this.updateFaultQuoteContractor();
-          if (faultContUpdated) {
+    else {
+      if (this.validateReq()) {
+        return;
+      }
+      const proceed = await this.commonService.showConfirm('Raise a quote', 'Are you sure you want to send a quote request to the selected contractor(s) ?');
+      if (proceed) {
+        if (!this.faultMaintenanceDetails) {
+          /*raise a quote*/
+          const quoteRaised = await this.raiseQuote();
+          if (quoteRaised) {
             const faultUpdated = await this.updateFault(true);
             if (faultUpdated) {
               this.commonService.showLoader();
@@ -447,6 +442,22 @@ export class ArrangingContractorComponent implements OnInit {
                 let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
                 this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
               }, 3000);
+            }
+          }
+        } else {
+          /*update a quote*/
+          const quoteUpdated = await this.updateQuote();
+          if (quoteUpdated) {
+            const faultContUpdated = await this.updateFaultQuoteContractor();
+            if (faultContUpdated) {
+              const faultUpdated = await this.updateFault(true);
+              if (faultUpdated) {
+                this.commonService.showLoader();
+                setTimeout(async () => {
+                  let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+                  this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+                }, 3000);
+              }
             }
           }
         }
@@ -555,29 +566,38 @@ export class ArrangingContractorComponent implements OnInit {
       filtereData = filtereData.sort((a, b) => {
         return <any>new Date(b.firstEmailSentAt) - <any>new Date(a.firstEmailSentAt);
       });
-      this.disableQuoteDetail(filtereData[0]);
+      this.disableQuoteDetail();
+      this.disableContractorsList(filtereData[0]);
       resolve(filtereData[0]);
     });
     return promise;
   }
 
-  private disableQuoteDetail(iacNotification) {
-    if (iacNotification.templateCode === 'CQ-C-E' || iacNotification.templateCode === 'LAR-L-E') {
-      this.raiseQuoteForm.get('worksOrderNumber').disable();
-      this.raiseQuoteForm.get('description').disable();
-      this.raiseQuoteForm.get('requestStartDate').disable();
-      this.raiseQuoteForm.get('contact').disable();
-      this.raiseQuoteForm.get('nominalCode').disable();
+  private disableQuoteDetail() {
+    this.raiseQuoteForm.get('worksOrderNumber').disable();
+    this.raiseQuoteForm.get('description').disable();
+    this.raiseQuoteForm.get('requestStartDate').disable();
+    this.raiseQuoteForm.get('contact').disable();
+    this.raiseQuoteForm.get('nominalCode').disable();
+  }
+
+  private disableContractorsList(notification) {
+    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && notification.templateCode === 'LAR-L-E') {
+      this.rejectionReason = this.faultMaintenanceDetails.quoteContractors.filter(x => x.isRejected)[0].rejectionReason;
+      this.raiseQuoteForm.get('selectedContractorId').setValue('');
+    } else {
+      /*disable cont. list actions for other notifications*/
+      this.restrictAction = true;
     }
   }
 
   setUserAction(index) {
+    this.isUserActionChange = true;
     // if (this.iacNotification && !this.iacNotification.responseReceived) {
     //   this.commonService.showAlert('Arrangig Contractor', 'Please select response before proceeding with other action.');
     //   return;
     // }
     this.userSelectedActionControl.setValue(index);
-
   }
 
   private getTenantDetail(tenantId) {
@@ -619,10 +639,13 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private questionActionAcceptRequest(data) {
+    let notificationObj = {} as FaultModels.IUpdateNotification;
+    notificationObj.isAccepted = data.value;
+    notificationObj.submittedByType = 'SECUR_USER';
     if (data.value) {
       this.commonService.showConfirm(data.text, 'Are you sure, you want to accept the quote request?', '', 'Yes', 'No').then(async res => {
         if (res) {
-          await this.updateFaultNotification(data.value, this.iacNotification.faultNotificationId);
+          await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
           // setTimeout(async () => {
           let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
@@ -634,7 +657,7 @@ export class ArrangingContractorComponent implements OnInit {
     } else if (!data.value) {
       this.commonService.showConfirm(data.text, 'Are you sure, you want to reject the quote request?', '', 'Yes', 'No').then(async res => {
         if (res) {
-          await this.updateFaultNotification(data.value, this.iacNotification.faultNotificationId);
+          await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
           // setTimeout(async () => {
           let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
@@ -727,15 +750,15 @@ export class ArrangingContractorComponent implements OnInit {
         cssClass: 'modal-container',
         componentProps: {
           faultNotificationId: this.iacNotification.faultNotificationId,
-          lookupdata: this.lookupdata
+          lookupdata: this.lookupdata,
+          rejectionReason: this.rejectionReason
         },
         backdropDismiss: false
       });
 
       modal.onDidDismiss().then(async res => {
         if (res.data && res.data == 'success') {
-          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+          this.initiateArrangingContractors();
         }
       });
       await modal.present();
@@ -809,7 +832,9 @@ export class ArrangingContractorComponent implements OnInit {
       select: '',
       isPreferred,
       isNew: isNew,
-      checked: isNew ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value ? true : false)
+      checked: isNew ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value && !data.isRejected ? true : false),
+      isRejected: !isNew ? data.isRejected : false,
+      rejectionReason: !isNew ? data.rejectionReason : ''
     });
     contractorList.push(contGrup);
     this.contratctorArr.push(data.contractorId ? data.contractorId : data.contractorObj.entityId);
@@ -820,17 +845,14 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  private async updateFaultNotification(data, faultNotificationId): Promise<any> {
+  private async updateFaultNotification(notificationObj, faultNotificationId): Promise<any> {
     const promise = new Promise((resolve, reject) => {
-      let notificationObj = {} as FaultModels.IUpdateNotification;
-      notificationObj.isAccepted = data;
-      notificationObj.submittedByType = 'SECUR_USER';
       this.faultsService.updateNotification(faultNotificationId, notificationObj).subscribe(
         res => {
           resolve(true);
         },
         error => {
-          reject(error)
+          resolve(false);
         }
       );
     });
@@ -875,6 +897,40 @@ export class ArrangingContractorComponent implements OnInit {
 
   private removeFile(i) {
     this.quoteDocuments.splice(i, 1);
+  }
+
+  async voidNotification(value) {
+    let notificationObj = {} as FaultModels.IUpdateNotification;
+    notificationObj.isVoided = true;
+    notificationObj.submittedByType = 'SECUR_USER';
+    const updated = await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
+    if (updated) {
+      let faultRequestObj: any;
+      faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+      const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
+      if (isFaultUpdated) {
+        if (value) {
+          this._btnHandler('cancel');
+        }
+        else {
+          this._btnHandler('refresh');
+        }
+      }
+    }
+  }
+
+  updateFaultSummary(faultRequestObj) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.updateFault(this.faultDetails.faultId, faultRequestObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
   }
 
 }
