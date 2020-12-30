@@ -1,15 +1,16 @@
-import { Component, OnInit, ViewChildren, QueryList, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, OnDestroy } from '@angular/core';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { LetAllianceService } from '../let-alliance.service';
-import { PROPCO } from 'src/app/shared/constants';
+import { PROPCO, REFERENCING } from 'src/app/shared/constants';
 import { HttpParams } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ResendLinkModalPage } from 'src/app/shared/modals/resend-link-modal/resend-link-modal.page';
 import { ModalController } from '@ionic/angular';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
+import { ReferencingService } from '../../referencing.service';
 
 @Component({
   selector: 'la-application-list',
@@ -21,34 +22,29 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
   dtOptions: DataTables.Settings[] = [];
   dtTrigger: Subject<any> = new Subject();
-  notesDtTrigger: Subject<any> = new Subject();
   
   lookupdata: any;
   laLookupdata: any;
   userLookupDetails: any[] = [];
   officeCodes: any[] = [];
   applicationList: any[] = [];
-  applicationNotes: any[] = [];
   applicationStatus: any= {};
   applicationGrade: any= {};
+  guarantorApplicationList = [];
+  it: any;
+  appId: any;
 
   laProductList: any[] = [];
-  laCaseProductList: any[] = [];
-  laApplicationProductList: any[] = [];
   laApplicantStatusTypes: any[] = [];
   laApplicantReferencingResultTypes: any[] = [];
 
-  notesCategories: any[] = [];
-  notesComplaints: any[] = [];
-  notesTypes: any[] = [];
-
   selectedData: any;
   applicationFilterForm: FormGroup;
-  propertyId: any;
 
   constructor(
     public commonService: CommonService,
-    private letAllianceService: LetAllianceService,
+    private referencingService: ReferencingService,
+    private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
     private modalController: ModalController,
@@ -57,6 +53,9 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.it = this.route.snapshot.queryParamMap.get('it');
+    this.appId = this.route.snapshot.queryParamMap.get('appId');
+
     this.dtOptions[1] = this.buildDtOptions();
     const self = this;
     this.dtOptions[0] = {
@@ -74,47 +73,33 @@ export class ApplicationListPage implements OnInit, OnDestroy {
         const params = new HttpParams()
         .set('limit', tableParams.length)
         .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');
-        self.letAllianceService.getLAApplicationList(params).subscribe(res => {
-          self.applicationList = res && res.data ? res.data : [];
-          self.getLAProductList();
-          callback({
-            recordsTotal: res ? res.count : 0,
-            recordsFiltered: res ? res.count : 0,
-            data: []
+        if(this.it === 'G' && this.appId){
+          self.referencingService.getGuarantorApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.appId, params).subscribe(res => {
+            self.applicationList = res && res.data ? res.data : [];
+            self.getLAProductList();
+            callback({
+              recordsTotal: res ? res.count : 0,
+              recordsFiltered: res ? res.count : 0,
+              data: []
+            });
           });
-          this.applicationNotes = [];
-          this.rerenderNotes();
-        });
+        }
+        else{
+          self.referencingService.getLAApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, params).subscribe(res => {
+            self.applicationList = res && res.data ? res.data : [];
+            self.getLAProductList();
+            callback({
+              recordsTotal: res ? res.count : 0,
+              recordsFiltered: res ? res.count : 0,
+              data: []
+            });
+          });
+        }
       },
-      columns: [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        { orderable: false }
-      ],
+      columns: [null, null, null, null, null, null, null, null, null, null, { orderable: false }],
       responsive: true
     };
-    setTimeout(() => {
-      this.notesDtTrigger.next();
-    }, 1000);
-
     this.initiateForm();
-  }
-
-  private initiateForm(): void {
-    this.applicationFilterForm = this.fb.group({
-      officeCodes: ['', ],
-      searchKey: ['', ],
-      fromDate: ['', ],
-      toDate: ['', ]
-    });
   }
 
   ionViewDidEnter() {
@@ -124,21 +109,15 @@ export class ApplicationListPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
-    this.notesDtTrigger.unsubscribe();
   }
-  
-  async resendLinkToTenant() {
-    const modal = await this.modalController.create({
-      component: ResendLinkModalPage,
-      cssClass: 'modal-container resend-link',
-      backdropDismiss: false,
-      componentProps: {
-        applicantId: this.selectedData.applicantDetail.applicantId,
-        applicationId: this.selectedData.applicationId,
-        propertyAddress: this.selectedData.propertyDetail.address
-      }
+
+  private initiateForm(): void {
+    this.applicationFilterForm = this.fb.group({
+      officeCodes: ['', ],
+      searchKey: ['', ],
+      fromDate: ['', ],
+      toDate: ['', ]
     });
-    await modal.present();
   }
   
   private getLookupData(): void {
@@ -157,7 +136,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     if (this.laLookupdata) {
       this.setLALookupData(this.laLookupdata);
     } else {
-      this.letAllianceService.getLALookupData().subscribe(data => {
+      this.referencingService.getLALookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
         this.commonService.setItem(PROPCO.LA_LOOKUP_DATA, data);
         this.laLookupdata = data;
         this.setLALookupData(data);
@@ -168,14 +147,30 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   private setLookupData(data: any): void {
     this.userLookupDetails = data.userLookupDetails;
     this.officeCodes = data.officeCodes;
-    this.notesCategories = data.notesCategories;
-    this.notesComplaints = data.notesComplaint;
-    this.notesTypes = data.notesType;
   }
 
   private setLALookupData(data: any): void {
     this.laApplicantStatusTypes = data.applicantStatusTypes;
     this.laApplicantReferencingResultTypes = data.applicantReferencingResultTypes;
+  }
+
+  private buildDtOptions(): DataTables.Settings {
+    return {
+      paging: true,
+      searching: false,
+      ordering: false,
+      responsive: true,
+      lengthMenu:[5, 10, 15],
+      pageLength: 5,
+    };
+  }
+
+  rerenderApplications(resetPaging?): void {
+    if (this.dtElements && this.dtElements.first.dtInstance) {
+      this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.ajax.reload((res) => { }, resetPaging);
+      });
+    }
   }
 
   getLAApplicationList(): void {
@@ -186,17 +181,13 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       .set('searchKey', this.applicationFilterForm.controls['searchKey'].value)
       .set('fromDate', this.applicationFilterForm.controls['fromDate'].value)
       .set('toDate', this.applicationFilterForm.controls['toDate'].value);
-    this.letAllianceService.getLAApplicationList(params).subscribe(data => {
+    this.referencingService.getLAApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, params).subscribe(data => {
       this.applicationList = data;
     });
   }
 
-  resendLink() {
-      this.router.navigate([`let-alliance/tenant-list`]);
-    }
-
   getLAProductList(): void {
-    this.letAllianceService.getLAProductList().subscribe(
+    this.referencingService.getLAProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
       res => {
         this.laProductList = res ? res : [];
       },
@@ -216,82 +207,80 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     return productType;
   }
 
-  showMenu(event: any, id: any, data: any, className: any, isCard?: any) {
-    this.selectedData = data;
-    this.commonService.showMenu(event, id, data, className, isCard);
-  }
-
-  onClickRow(data: any, index?: number): void {
-    this.selectedData = data;
-    this.getApplicationNotes(this.selectedData.applicationId);
-  }
-
-  private buildDtOptions(): DataTables.Settings {
-    return {
-      paging: true,
-      searching: false,
-      ordering: false,
-      responsive: true,
-      lengthMenu:[5, 10, 15],
-      pageLength: 5,
-    };
-  }
-
-  private getApplicationNotes(applicationId: any) {
-    /* this.letAllianceService.getApplicationNotes(applicationId).subscribe(res => {
-      this.applicationNotes = res && res.data ? res.data : [];
-      this.rerenderNotes();
-    }); */
-  }
-
-  rerenderNotes(): void {
-    if (this.dtElements && this.dtElements.last.dtInstance) {
-      this.dtElements.last.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.destroy();
-        this.notesDtTrigger.next();
-      });
-    }
-  }
-
-  rerenderApplications(resetPaging?): void {
-    if (this.dtElements && this.dtElements.first.dtInstance) {
-      this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.ajax.reload((res) => { }, resetPaging);
-      });
-    }
+  private getGuarantorApplicationList() {
+    const promise = new Promise((resolve, reject) => {
+      this.referencingService.getGuarantorApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.selectedData.applicationId).subscribe(
+        res => {
+          this.guarantorApplicationList = res && res.data ? res.data : [];
+          resolve(this.guarantorApplicationList);
+        },
+        error => {
+          console.log(error);
+          resolve(this.guarantorApplicationList);
+        }
+      );
+    });
+    return promise;
   }
 
   async checkApplicationGuarantor() {
+    await this.getGuarantorApplicationList();
+    if(this.guarantorApplicationList.length > 0){
+      this.router.navigate([`let-alliance/application-list`], { queryParams: { 
+        it: 'G',
+        appId: this.selectedData.applicationId
+      }})
+      .then(() => {
+        location.reload();
+      });
+    }
+    else{
+      const modal = await this.modalController.create({
+        component: SimpleModalPage,
+        cssClass: 'modal-container alert-prompt',
+        backdropDismiss: false,
+        componentProps: {
+          data: 'There are no guarantors with this application, Do you wish to add one now?',
+          heading: 'Guarantor',
+          buttonList: [
+            {
+              text: 'No',
+              value: false
+            },
+            {
+              text: 'Yes',
+              value: true
+            }
+          ]
+        }
+      });
+  
+      const data = modal.onDidDismiss().then(res => {
+        if (res.data.userInput) {
+          this.router.navigate(['/let-alliance/guarantor-details'], { queryParams: { 
+            applicantId: this.selectedData.applicantDetail.applicantId,
+            applicationId: this.selectedData.applicationId,
+            referenceNumber: this.selectedData.referenceNumber
+           }, replaceUrl: true });
+        } else {
+        }
+      });
+  
+      await modal.present();
+    }
+  }
+
+  async resendLinkToTenant() {
     const modal = await this.modalController.create({
-      component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      component: ResendLinkModalPage,
+      cssClass: 'modal-container resend-link',
       backdropDismiss: false,
       componentProps: {
-        data: 'There are no guarantors with this application, Do you wish to add one now?',
-        heading: 'Guarantor',
-        buttonList: [
-          {
-            text: 'No',
-            value: false
-          },
-          {
-            text: 'Yes',
-            value: true
-          }
-        ]
+        applicantId: this.selectedData.applicantDetail.applicantId,
+        applicationId: this.selectedData.applicationId,
+        propertyAddress: this.selectedData.propertyDetail.address
       }
     });
-
-    const data = modal.onDidDismiss().then(res => {
-      if (res.data.userInput) {
-        this.router.navigate(['/let-alliance/guarantor-details'], { queryParams: { 
-          applicantId: this.selectedData.applicantDetail.applicantId,
-          applicationId: this.selectedData.applicationId,
-         }, replaceUrl: true });
-      } else {
-      }
-    });
-
     await modal.present();
   }
 
@@ -321,7 +310,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   getApplicationStatus() {
     //this.showLoader = true;
     return new Promise((resolve, reject) => {
-      this.letAllianceService.getApplicationStatus(this.selectedData.applicationId).subscribe(res => {
+      this.referencingService.getApplicationStatus(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.selectedData.applicationId).subscribe(res => {
         //this.showLoader = false;
         return resolve(res);
       }, error => {
@@ -331,21 +320,25 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     });
   }
 
+  resetFilter(){
+    this.applicationFilterForm.reset(this.initiateForm());
+    this.applicationFilterForm.markAsPristine();
+    this.applicationFilterForm.markAsUntouched();
+  }
 
-  removeDuplicateObjects(array: any[]) {
-    return [...new Set(array.map(res => JSON.stringify(res)))]
-      .map(res1 => JSON.parse(res1));
+  showMenu(event: any, id: any, data: any, className: any, isCard?: any) {
+    this.selectedData = data;
+    this.commonService.showMenu(event, id, data, className, isCard);
+  }
+
+  hideMenu(event: any, id: any) {
+    this.selectedData = {};
+    this.commonService.hideMenu(event, id);
   }
 
   getLookupValue(index: any, lookup: any, type?: any) {
     index = (type == 'category' && index) ? Number(index) : index;
     return this.commonService.getLookupValue(index, lookup);
-  }
-
-  showNoteDescription(noteText: any): void{
-    if (noteText) {
-      this.commonService.showAlert('Notes', noteText);
-    }
   }
 
   refresh(){

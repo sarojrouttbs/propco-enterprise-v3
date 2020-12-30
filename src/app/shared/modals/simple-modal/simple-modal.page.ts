@@ -33,7 +33,7 @@ export class SimpleModalPage implements OnInit, OnDestroy {
   dismiss(userInputValue: any) {
     this.modalController.dismiss({
       userInput: userInputValue,
-      'dismissed': true
+      dismissed: true
     });
   }
 

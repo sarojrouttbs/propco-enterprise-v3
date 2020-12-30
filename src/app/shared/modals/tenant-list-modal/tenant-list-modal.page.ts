@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { NavParams, ModalController } from '@ionic/angular';
-import { LetAllianceService } from 'src/app/referencing/let-alliance/let-alliance.service';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { ReferencingService } from 'src/app/referencing/referencing.service';
 
 @Component({
   selector: 'app-tenant-list-modal',
@@ -24,7 +23,7 @@ export class TenantListModalPage implements OnInit {
   selectedRow: any;
 
   constructor(
-    private letAllianceService: LetAllianceService,
+    private referencingService: ReferencingService,
     private navParams: NavParams,
     private modalController: ModalController
   ) {}
@@ -44,7 +43,7 @@ export class TenantListModalPage implements OnInit {
   }
 
   getTenantList() {
-    this.letAllianceService.getPropertyTenantList(this.propertyId, '').subscribe(
+    this.referencingService.getPropertyTenantList(this.propertyId, '').subscribe(
       res => {
         this.laTenantList = res ? res.data : [];
         this.laTenantList.forEach((item) => {
@@ -93,6 +92,7 @@ export class TenantListModalPage implements OnInit {
   dismiss() {
     this.modalController.dismiss({
       tenantId: this.tenantId,
+      dismissed: true
     });
   }
 }

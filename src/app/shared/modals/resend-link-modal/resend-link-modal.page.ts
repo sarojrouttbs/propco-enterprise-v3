@@ -1,11 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { ModalController, NavParams } from "@ionic/angular";
-import { LetAllianceService } from "src/app/referencing/let-alliance/let-alliance.service";
-import { PROPCO } from "../../constants";
+import { PROPCO, REFERENCING } from "../../constants";
 import { CommonService } from "../../services/common.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ValidationService } from "../../services/validation.service";
+import { ReferencingService } from 'src/app/referencing/referencing.service';
 
 @Component({
   selector: "app-resend-link-modal",
@@ -49,7 +49,7 @@ export class ResendLinkModalPage implements OnInit {
 
   constructor(
     private router: Router,
-    private letAllianceService: LetAllianceService,
+    private referencingService: ReferencingService,
     private navParams: NavParams,
     private modalController: ModalController,
     private commonService: CommonService,
@@ -68,7 +68,7 @@ export class ResendLinkModalPage implements OnInit {
 
   private getTenantDetail() {
     const promise = new Promise((resolve, reject) => {
-      this.letAllianceService.getTenantDetails(this.applicantId).subscribe(
+      this.referencingService.getTenantDetails(this.applicantId).subscribe(
         (res) => {
           this.tenantDetails = res ? res : {};
           this.emailList[0].emailAdress = this.tenantDetails?.email;
@@ -106,7 +106,7 @@ export class ResendLinkModalPage implements OnInit {
     if (this.laLookupdata) {
       this.setLALookupData(this.lookupdata);
     } else {
-      this.letAllianceService.getLALookupData().subscribe((data) => {
+      this.referencingService.getLALookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe((data) => {
         this.commonService.setItem(PROPCO.LA_LOOKUP_DATA, data);
         this.laLookupdata = data;
         this.setLALookupData(data);
@@ -158,8 +158,8 @@ export class ResendLinkModalPage implements OnInit {
       if (ele.emailId === this.selectedCheckbox) {
         this.resendReqObj.email = ele.emailAdress;
         this.commonService.showLoader();
-        this.letAllianceService
-          .resendLinkToApplicant(this.resendReqObj, this.applicationId)
+        this.referencingService
+          .resendLinkToApplicant(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.resendReqObj, this.applicationId)
           .subscribe(
             (res) => {
               this.commonService.hideLoader();
@@ -185,6 +185,8 @@ export class ResendLinkModalPage implements OnInit {
   }
 
   dismiss() {
-    this.modalController.dismiss();
+    this.modalController.dismiss({
+      dismissed: true
+    });
   }
 }

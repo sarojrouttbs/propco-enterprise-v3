@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PROPCO } from 'src/app/shared/constants';
+import { PROPCO, REFERENCING } from 'src/app/shared/constants';
 import { AddressModalPage } from 'src/app/shared/modals/address-modal/address-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +14,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { COMPLETION_METHODS } from 'src/app/shared/constants';
 import { ValidationService } from 'src/app/shared/services/validation.service';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
+import { ReferencingService } from '../../referencing.service';
 
 @Component({
   selector: 'app-application-details',
@@ -64,7 +65,7 @@ export class ApplicationDetailsPage implements OnInit {
     private commonService: CommonService,
     private route: ActivatedRoute,
     private router: Router,
-    private letAllianceService: LetAllianceService,
+    private referencingService: ReferencingService,
     public datepipe: DatePipe,
     private currencyPipe: CurrencyPipe
   ) {
@@ -119,14 +120,12 @@ export class ApplicationDetailsPage implements OnInit {
         rentShare: latestDigit
       }, { emitEvent: false });
     }
-
   }
 
   private setDefaultAmount(val: any) {
     let latestDigit = val.replace(/.00/g, '').replace(/\£/, '').replace(/,/g, '');
     return latestDigit; 
   }
-
 
   private getLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -144,7 +143,7 @@ export class ApplicationDetailsPage implements OnInit {
     if (this.laLookupdata) {
       this.setLALookupData(this.lookupdata);
     } else {
-      this.letAllianceService.getLALookupData().subscribe(data => {
+      this.referencingService.getLALookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
         this.commonService.setItem(PROPCO.LA_LOOKUP_DATA, data);
         this.laLookupdata = data;
         this.setLALookupData(data);
@@ -243,7 +242,7 @@ export class ApplicationDetailsPage implements OnInit {
       surname: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
       email: [''],
-      maritalStatus: [''],
+      maritalStatus: ['', [Validators.required]],
       nationality: [''],
       registerationNumber: [''],
       rentShare: ['', [Validators.required, ValidationService.amountValidator]],
@@ -273,7 +272,7 @@ export class ApplicationDetailsPage implements OnInit {
 
   getPropertyById() {
     const promise = new Promise((resolve, reject) => {
-      this.letAllianceService.getPropertyById(this.propertyId).subscribe(
+      this.referencingService.getPropertyById(this.propertyId).subscribe(
         res => {
           this.propertyDetails = res && res.data ? res.data : {};
           this.address = this.propertyDetails.address;
@@ -290,7 +289,7 @@ export class ApplicationDetailsPage implements OnInit {
 
   private getPropertyTenancyList() {
     const promise = new Promise((resolve, reject) => {
-      this.letAllianceService.getPropertyTenancyList(this.propertyId).subscribe(
+      this.referencingService.getPropertyTenancyList(this.propertyId).subscribe(
         res => {
           this.propertyTenancyList = res && res.data ? res.data : [];
           resolve(this.propertyTenancyList);
@@ -306,7 +305,7 @@ export class ApplicationDetailsPage implements OnInit {
 
   getTenantDetails() {
     const promise = new Promise((resolve, reject) => {
-      this.letAllianceService.getTenantDetails(this.tenantId).subscribe(
+      this.referencingService.getTenantDetails(this.tenantId).subscribe(
         res => {
           this.tenantDetails = res ? res : {};
           resolve(this.tenantDetails);
@@ -322,7 +321,7 @@ export class ApplicationDetailsPage implements OnInit {
 
   getLAProductList() {
     const promise = new Promise((resolve, reject) => {
-      this.letAllianceService.getLAProductList().subscribe(
+      this.referencingService.getLAProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
         res => {
           this.laProductList = res ? this.removeDuplicateObjects(res) : [];
           this.laCaseProductList = this.laProductList.filter(obj => {
@@ -444,7 +443,7 @@ export class ApplicationDetailsPage implements OnInit {
     this.commonService.showLoader();
     const applicationRequestObj = this.createApplicationFormValues();
 
-    this.letAllianceService.createApplication(applicationRequestObj).subscribe(
+    this.referencingService.createApplication(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, applicationRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
         this.commonService.showMessage('Application has been created successfully.', 'Create an Application', 'success');
@@ -499,28 +498,28 @@ export class ApplicationDetailsPage implements OnInit {
       applicantItemType: tmpTenant.isLead ? 'M' : 'S',
       case: {
         productId: this.tenancyDetailsForm.get('productId').value,
-        noOfTenantToBeReferenced: this.tenancyDetailsForm.get('noOfTenantToBeReferenced').value,
+        noOfTenantToBeReferenced: parseInt(this.tenancyDetailsForm.get('noOfTenantToBeReferenced').value),
         tenancyStartDate: this.datepipe.transform(this.tenancyDetailsForm.get('tenancyStartDate').value, 'yyyy-MM-dd'),
         tenancyEndDate: this.datepipe.transform(tmpDate, 'yyyy-MM-dd'),
         tenancyTerm: this.tenancyDetailsForm.get('tenancyTerm').value,
-        paidBy: this.tenancyDetailsForm.get('paidBy').value,
+        paidBy: parseInt(this.tenancyDetailsForm.get('paidBy').value),
         offerNds: this.tenancyDetailsForm.get('offerNds').value,
         address: this.address,
         typeId: this.tenantDetailsForm.get('tenantTypeId').value,
-        monthlyRent: this.setDefaultAmount(this.propertyDetailsForm.get('monthlyRent').value),
+        monthlyRent: parseFloat(this.setDefaultAmount(this.propertyDetailsForm.get('monthlyRent').value)),
         managementStatus: this.propertyDetailsForm.get('managementStatus').value,
       },
       application: {
         productId: this.tenantDetailsForm.get('productId').value,
         tenantTypeId: this.tenantDetailsForm.get('tenantTypeId').value,
-        title: this.tenantDetailsForm.get('title').value,
+        title: (this.tenantDetailsForm.get('title').value).toString(),
         otherTitle: this.tenantDetailsForm.get('otherTitle').value,
         forename: this.tenantDetailsForm.get('forename').value,
         middlename: this.tenantDetailsForm.get('middlename').value,
         surname: this.tenantDetailsForm.get('surname').value,
         email: this.tenantDetailsForm.get('email').value,
         dateOfBirth: this.datepipe.transform(this.tenantDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
-        rentShare: this.setDefaultAmount(this.tenantDetailsForm.get('rentShare').value),
+        rentShare: parseFloat(this.setDefaultAmount(this.tenantDetailsForm.get('rentShare').value)),
         maritalStatus: this.tenantDetailsForm.get('maritalStatus').value,
         nationality: 'British', //this.tenantDetailsForm.get('nationality').value, // British
         //registerationNumber: this.tenantDetailsForm.get('registerationNumber').value,
