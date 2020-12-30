@@ -106,6 +106,10 @@ export class FaultsService {
     return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/status/${status}`, {});
   }
 
+  startProgress(faultId: string): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/start-progress`, {});
+  }
+
   getFaultDocuments(faultId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/documents`);
   }

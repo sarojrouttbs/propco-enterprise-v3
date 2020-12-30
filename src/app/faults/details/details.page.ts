@@ -1244,13 +1244,15 @@ export class DetailsPage implements OnInit {
       faultRequestObj.isDraft = this.faultDetails.isDraft;
       await this.updateFaultDetails(faultRequestObj);
       this.uploadFiles(this.faultId, false);
-      const UNDER_REVIEW = 2; // Under review
-      this.faultsService.updateFaultStatus(this.faultId, UNDER_REVIEW).subscribe(data => {
+
+      this.faultsService.startProgress(this.faultId).subscribe(data => {
         this.refreshDetailsAndStage();
       }, error => {
         this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Start Progress', 'Error');
         console.log(error);
       });
+
+
     }
   }
 
