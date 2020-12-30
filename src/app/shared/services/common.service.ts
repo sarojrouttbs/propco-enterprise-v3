@@ -538,5 +538,10 @@ export class CommonService {
     });
     return element = element;
   }
+  
+  removeDuplicateObjects(array: any[]) {
+    return [...new Set(array.map(res => JSON.stringify(res)))]
+      .map(res1 => JSON.parse(res1));
+  }
 
 }

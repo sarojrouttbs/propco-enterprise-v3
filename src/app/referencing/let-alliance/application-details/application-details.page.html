@@ -4,7 +4,7 @@
       <ion-row>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Product Type</ion-label>
+            <ion-label position="floating">Product Type <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="productId">
               <ion-select-option [value]="item.productId" *ngFor="let item of laCaseProductList">
                 {{ item.productName }}
@@ -15,7 +15,7 @@
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">No. of Occupants</ion-label>
+            <ion-label position="floating">No. of Occupants <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-input formControlName="noOfTenantToBeReferenced"></ion-input>
           </ion-item>
           <app-validation-message [control]="tenancyDetailsForm.controls.noOfTenantToBeReferenced"></app-validation-message>
@@ -35,7 +35,7 @@
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Term(in months)</ion-label>
+            <ion-label position="floating">Term(in months) <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-input formControlName="tenancyTerm"></ion-input>
           </ion-item>
           <app-validation-message [control]="tenancyDetailsForm.controls.tenancyTerm"></app-validation-message>
@@ -69,6 +69,12 @@
             <ion-col class="ion-no-padding" size="75">
               <h5 class="no-margin-top">Registered Address</h5>
               <div>
+                <p *ngIf="address?.addressLine1"> {{ address?.addressLine1 + ','}}</p>
+              	<p *ngIf="address?.addressLine2">  {{ address?.addressLine2 + ','}}</p>
+              	<p *ngIf="address?.locality">  {{ address?.locality + ','}}</p>
+              	<p *ngIf="address?.town"> {{ address?.town + ','}}</p>
+                <p *ngIf="address?.postcode"> {{ address?.postcode }}</p>
+                
                 {{ address?.addressLine1 ? address?.addressLine1 + ',' : ''}}<br />
                 {{ address?.addressLine2 ? address?.addressLine2 + ',' : ''}}<br />
                 {{ address?.locality ? address?.locality + ',' : ''}}<br />
@@ -83,7 +89,7 @@
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Property Let Type</ion-label>
+            <ion-label position="floating">Property Let Type <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="managementStatus">
               <ion-select-option [value]="item.index" *ngFor="let item of managementStatusTypes">
                 {{ item.value }}
@@ -94,7 +100,7 @@
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Property Rent</ion-label>
+            <ion-label position="floating">Property Rent <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-input formControlName="monthlyRent" (ionBlur)= "onBlurCurrency(propertyDetailsForm.controls.monthlyRent.value, propertyDetailsForm)" (ionFocus)="formatCurrency(propertyDetailsForm.controls.monthlyRent.value, propertyDetailsForm)" ></ion-input>
           </ion-item>
           <app-validation-message [control]="propertyDetailsForm.controls.monthlyRent"></app-validation-message>
@@ -120,7 +126,8 @@
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Product Type</ion-label>
+            <ion-label position="floating">Product Type  <ion-text class="mandatory">*</ion-text>
+            </ion-label>
             <ion-select interface="popover" formControlName="productId">
               <ion-select-option [value]="item.productId" *ngFor="let item of laApplicationProductList">
                 {{ item.productName }}
@@ -131,7 +138,7 @@
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Tenant Type</ion-label>
+            <ion-label position="floating">Tenant Type <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="tenantTypeId">
               <ion-select-option [value]="item.index" *ngFor="let item of tenantTypes">
                 {{ item.value }}
@@ -142,14 +149,15 @@
         </ion-col>
         <ion-col size="33.3" *ngIf="getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
           <ion-item>
-            <ion-label position="floating">Company Name</ion-label>
+            <ion-label position="floating">Company Name <ion-text class="mandatory">*</ion-text>
+            </ion-label>
             <ion-input formControlName="companyName"></ion-input>
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.companyName"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Title</ion-label>
+            <ion-label position="floating">Title <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="title">
               <ion-select-option [value]="item.index" *ngFor="let item of titleTypes">
                 {{ item.value }}
@@ -195,14 +203,14 @@
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Date of Birth</ion-label>
+            <ion-label position="floating">Date of Birth <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-datetime formControlName="dateOfBirth" displayFormat="DD MMM YYYY" interface="popover" [max]="adultDate"></ion-datetime>
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.dateOfBirth"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Marital Status</ion-label>
+            <ion-label position="floating">Marital Status <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="maritalStatus">
               <ion-select-option [value]="item.index" *ngFor="let item of maritalStatusTypes">
                 {{ item.value }}
@@ -220,21 +228,21 @@
         </ion-col>
         <ion-col size="33.3" *ngIf="getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
           <ion-item>
-            <ion-label position="floating">Registration Number</ion-label>
+            <ion-label position="floating">Registration Number <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-input formControlName="registerationNumber"></ion-input>
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.registerationNumber"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Rent Share</ion-label>
+            <ion-label position="floating">Rent Share <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-input formControlName="rentShare" (ionBlur)="onBlurCurrency(tenantDetailsForm.controls.rentShare.value, tenantDetailsForm)" (ionFocus)="formatCurrency(tenantDetailsForm.controls.rentShare.value, tenantDetailsForm)" ></ion-input>
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.rentShare"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item lines="none" style="margin-top: 6px;">
-            <ion-label>Had tenant been known by any other name?</ion-label>
+            <ion-label style="white-space: normal;">Had tenant been known by any other name?</ion-label>
             <ion-toggle slot="start" formControlName="hasTenantOtherName"></ion-toggle>
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.hasTenantOtherName"></app-validation-message>
@@ -389,7 +397,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Had tenant been known by any other name?</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.hasTenantOtherName.value || 'False'}}</ion-text>
+        <ion-text class="content">{{tenantDetailsForm.controls.hasTenantOtherName.value ? 'Yes' : 'No'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
         <ion-text class="header">Title</ion-text><br />
@@ -419,8 +427,7 @@
       <ion-col size="50" class="heading">
         <div>
           <ion-icon name="arrow-back-outline" style="vertical-align: bottom;cursor: pointer;" (click)="goBack()"></ion-icon>
-           &nbsp;View Applications &nbsp;
-          <i class="propcoicon propcoicon-refresh icon-primary" style="display: inline; background: transparent; cursor: pointer;" (click)="refresh()"></i></div>
+           &nbsp;View Applications &nbsp;</div>
       </ion-col>
       <ion-col size="50" class="la-logo">
         <img src="assets/images/referencing/la-logo.svg"/>

@@ -10,6 +10,11 @@
   border-radius: $radius;
 }
 
+p{
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 #la-application-details {
   --padding-top: var(--ion-padding-top);
   --padding-end: var(--ion-padding-end);

@@ -8,6 +8,8 @@ import { DashboardPageRoutingModule } from './dashboard-routing.module';
 
 import { DashboardPage } from './dashboard.page';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { SearchApplicationPageModule } from 'src/app/shared/modals/search-application/search-application.module';
+
 
 @NgModule({
   imports: [
@@ -15,7 +17,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     FormsModule,
     IonicModule,
     DashboardPageRoutingModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    SearchApplicationPageModule
   ],
   declarations: [DashboardPage],
   providers: []

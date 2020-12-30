@@ -46,8 +46,8 @@
             </ion-item>
           </ion-col>
           <ion-col class="ion-text-end ion-align-self-end" size-xl="16" size-lg="20" size-md="24" size-sm="36" size-xs="100">
-            <ion-button (click)="getLAApplicationList()">Submit</ion-button>
-            <ion-button class="reset-button no-margin-right">Reset</ion-button>
+            <ion-button style="margin: 0px 5px;" (click)="getLAApplicationList()">Submit</ion-button>
+            <ion-button class="reset-button no-margin-right" (click)="resetFilter()" style="margin-left: 5px;">Reset</ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -74,7 +74,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let application of applicationList" class="table-row" (click)="onClickRow(application)">
+                <tr *ngFor="let application of applicationList" class="table-row">
                   <td>{{application.referenceNumber || '-'}}</td>
                   <td>{{application.propertyDetail.reference || '-'}}</td>
                   <td>{{application.propertyDetail.address.addressLine1}} {{application.propertyDetail.address.addressLine5}} 
@@ -103,50 +103,6 @@
               <ion-button *ngIf="selectedData?.applicantDetail?.itemType === 'M' || selectedData?.applicantDetail?.itemType === 'S'" (click)='checkApplicationGuarantor()'>Guarantor</ion-button>
               <ion-button *ngIf="!selectedData?.isSubmitted">Submit</ion-button>
               <ion-button>View</ion-button>
-              <i (click)="commonService.hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
-            </div>
-          </div>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size="100">
-          <h4>Application Notes:</h4>
-          <div class="overlay-container" style="position: relative">
-            <table datatable [dtOptions]="dtOptions[1]" [dtTrigger]="notesDtTrigger" class="row-border hover"
-              style="width: 100%; position: relative" #faultNotesTable>
-              <thead>
-                <tr>
-                  <th style="width:15%">Date</th>
-                  <th style="width:15%">Time</th>
-                  <th style="width:15%">Type</th>
-                  <th style="width:15%">Complaint</th>
-                  <th style="width:15%">Category</th>
-                  <th>User</th>
-                  <th style="width:40px">Notes</th>                
-                  <!-- <th style="width:5%"></th> -->
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let notes of applicationNotes" class="table-row">
-                  <td>{{notes.postedAt | date: 'dd/MM/yyyy' || '-'}}</td>
-                  <td>{{notes.postedAt | date: 'HH:mm:ss' || '-'}}</td>
-                  <td>{{getLookupValue(notes.type, notesTypes) || '-'}}</td>
-                  <td>{{getLookupValue(notes.complaint, notesComplaints) || '-'}}</td>
-                  <td>{{getLookupValue(notes.category, notesCategories) || '-'}}</td>
-                  <td>{{getLookupValue(notes.user, userLookupDetails) || '-'}}</td>
-                  <td><i (click)="showNoteDescription(notes.notes);" class="propcoicon propcoicon-property-description"></i></td>
-                  <!-- <td class="resp-action-icon">
-                    <i (click)="showMenu($event,'divOverlay', notes, 'table-row')"
-                      class="propcoicon propcoicon-actions-on"></i>
-                  </td> -->
-                </tr>
-                <!-- <tr *ngIf="!faultNotes" class="table-row odd">
-                  <td colspan="8" class="no-data-available">Please select the fault to view notes!</td>
-                </tr> -->
-              </tbody>
-            </table>
-            <div id="divOverlay">
-              <!-- <ion-button ng-click="viewApplicant()">view</ion-button> -->
               <i (click)="commonService.hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
             </div>
           </div>

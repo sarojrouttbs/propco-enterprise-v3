@@ -184,3 +184,7 @@ export const FOLDER_NAMES = [
     "value": "Other"
   }
 ];
+
+export const REFERENCING = {
+  LET_ALLIANCE_REFERENCING_TYPE: 3
+};
