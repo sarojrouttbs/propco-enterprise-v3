@@ -119,6 +119,10 @@ export const ARRANING_CONTRACTOR_ACTIONS = [
   {
     index: 'PROPERTY_VISIT_FOR_QUOTE',
     value: 'Property visit for quote',
+  },
+  {
+    index: 'OBTAIN_AUTHORISATION',
+    value: 'Obtain LL authorisation',
   }
 ];
 

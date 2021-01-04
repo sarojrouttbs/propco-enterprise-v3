@@ -15,7 +15,10 @@
               <ion-icon name="checkmark-circle-outline"></ion-icon>
             </ion-button>
             <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
-              <h6 class="banner-title"> <strong>Awaiting response from the Contractor</strong> </h6>
+              <h6 class="banner-title"> 
+                <strong>Awaiting response from the <span *ngIf="iacNotification?.faultStageAction === 'OBTAIN_AUTHORISATION'" >Landlord</span>
+                  <span *ngIf="iacNotification?.faultStageAction !== 'OBTAIN_AUTHORISATION'">Contractor</span></strong>
+              </h6>
               <h6 class="banner-title">Next chase due:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - hh:mm a') : ''}}
               </h6>
@@ -56,7 +59,7 @@
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
               <ion-row class="ion-justify-content-center">
-                <ng-container *ngFor="let instruction of iacStageActions">
+                <ng-container *ngFor="let instruction of otherStageActions">
                   <div>
                     <ion-button color="success" expand="block" class="action-btn"
                       fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
