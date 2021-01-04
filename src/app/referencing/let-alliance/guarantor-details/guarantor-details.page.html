@@ -40,7 +40,7 @@
             <ion-label position="floating">Product Type  <ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select interface="popover" formControlName="productId">
-              <ion-select-option [value]="item.productId" *ngFor="let item of laApplicationProductList">
+              <ion-select-option [value]="item.productId" *ngFor="let item of laProductList">
                 {{ item.productName }}
               </ion-select-option>
             </ion-select>
@@ -100,7 +100,7 @@
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Last Name</ion-label>
+            <ion-label position="floating">Last Name <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-input formControlName="surname"></ion-input>
           </ion-item>
           <app-validation-message [control]="guarantorDetailsForm.controls.surname"></app-validation-message>
@@ -195,7 +195,7 @@
 <ion-content id="la-guarantor-details">
   <ion-grid>
     <ion-row>
-      <ion-col size="50" class="heading">
+      <ion-col size="75" class="heading">
         <div *ngIf='!referenceNumber'>
           <ion-icon name="arrow-back-outline" style="vertical-align: bottom;cursor: pointer;" (click)="goBack()"></ion-icon>
            &nbsp;View Applications &nbsp;</div>
@@ -203,7 +203,7 @@
             <ion-icon name="arrow-back-outline" style="vertical-align: bottom;cursor: pointer;" (click)="goBack()"></ion-icon>
              &nbsp;{{"New Guarantor Application for " + referenceNumber }}&nbsp;</div>
       </ion-col>
-      <ion-col size="50" class="la-logo">
+      <ion-col size="25" class="la-logo">
         <img src="assets/images/referencing/la-logo.svg"/>
       </ion-col>
     </ion-row>

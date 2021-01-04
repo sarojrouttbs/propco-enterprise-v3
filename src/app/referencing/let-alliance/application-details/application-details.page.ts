@@ -8,7 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SearchPropertyPage } from 'src/app/shared/modals/search-property/search-property.page';
 import { TenantListModalPage } from 'src/app/shared/modals/tenant-list-modal/tenant-list-modal.page';
 import { MatStepper } from '@angular/material/stepper';
-import { LetAllianceService } from '../let-alliance.service';
 import { forkJoin } from 'rxjs';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { COMPLETION_METHODS } from 'src/app/shared/constants';
@@ -40,8 +39,8 @@ export class ApplicationDetailsPage implements OnInit {
   lookupdata: any;
   laLookupdata: any;
   currentStepperIndex = 0;
-  isPropertyTabDetailSubmit;
-  isTenantTabDetailSubmit;
+  isPropertyTabDetailSubmit: boolean;
+  isTenantTabDetailSubmit: boolean;
   current = 0;
   previous;
   tenantId;
@@ -82,49 +81,65 @@ export class ApplicationDetailsPage implements OnInit {
 
   ionViewDidEnter() {
     this.propertyId = this.route.snapshot.queryParamMap.get('pId');
+    this.tenantId = this.route.snapshot.queryParamMap.get('tId');
     this.initiateApplication();
   }
 
   initiateApplication() {
-    if (!this.propertyId) {
-      this.searchProperty();
+    if (this.propertyId) {
+      if (this.tenantId) {
+        this.getLookupData();
+        this.initiateForms();
+        this.initialApiCall();
+      }
+      else{
+        this.selectTenant();
+      }
     } else {
-      this.getLookupData();
-      this.initiateForms();
-      this.initialApiCall();
+      this.searchProperty();
     }
   }
 
-  onBlurCurrency(val: any, form: FormGroup) {
-    if (val) {
-      if (form == this.propertyDetailsForm) {
-        this.propertyDetailsForm.patchValue({ monthlyRent: this.currencyPipe.transform(val, 'GBP', 'symbol', '1.2-5') }, { emitEvent: false });
+  private async searchProperty() {
+    const modal = await this.modalController.create({
+      component: SearchPropertyPage,
+      cssClass: 'modal-container entity-search',
+      backdropDismiss: false,
+      componentProps: {
+        isFAF: false,
       }
-      if (form == this.tenantDetailsForm) {
-        this.tenantDetailsForm.patchValue({ rentShare: this.currencyPipe.transform(val, 'GBP', 'symbol', '1.2-5') }, { emitEvent: false });
+    });
+
+    const data = modal.onDidDismiss().then(res => {
+      if (res.data.propertyId) {
+        this.propertyId = res.data.propertyId;
+        this.selectTenant();
+      } else {
+        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
       }
-    }
-
+    });
+    await modal.present();
   }
 
-  formatCurrency(val: any, form: FormGroup) {
-    let latestDigit = val.replace(/.00/g, '').replace(/\£/, '').replace(/,/g, '');
+  private async selectTenant() {
+    const modal = await this.modalController.create({
+      component: TenantListModalPage,
+      cssClass: 'modal-container tenant-list',
+      backdropDismiss: false,
+      componentProps: {
+        propertyId: this.propertyId,
+      }
+    });
 
-    if (form == this.propertyDetailsForm) {
-      this.propertyDetailsForm.patchValue({
-        monthlyRent: latestDigit
-      }, { emitEvent: false });
-    }
-    if (form == this.tenantDetailsForm) {
-      this.tenantDetailsForm.patchValue({
-        rentShare: latestDigit
-      }, { emitEvent: false });
-    }
-  }
-
-  private setDefaultAmount(val: any) {
-    let latestDigit = val.replace(/.00/g, '').replace(/\£/, '').replace(/,/g, '');
-    return latestDigit; 
+    const data = modal.onDidDismiss().then(res => {
+      if (res.data.tenantId) {
+        this.tenantId = res.data.tenantId;
+        this.initiateApplication();
+      } else {
+        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+      }
+    });
+    await modal.present();
   }
 
   private getLookupData() {
@@ -160,50 +175,6 @@ export class ApplicationDetailsPage implements OnInit {
     this.titleTypes = this.laLookupdata.titleTypes;
     this.maritalStatusTypes = this.laLookupdata.maritalStatusTypes;
   }
-
-  async searchProperty() {
-    const modal = await this.modalController.create({
-      component: SearchPropertyPage,
-      cssClass: 'modal-container entity-search',
-      backdropDismiss: false,
-      componentProps: {
-        isFAF: false,
-      }
-    });
-
-    const data = modal.onDidDismiss().then(res => {
-      if (res.data.propertyId) {
-        this.propertyId = res.data.propertyId;
-        //this.initiateApplication();
-        this.selectTenant();
-      } else {
-        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
-      }
-    });
-    await modal.present();
-  }
-
-  async selectTenant() {
-    const modal = await this.modalController.create({
-      component: TenantListModalPage,
-      cssClass: 'modal-container tenant-list',
-      backdropDismiss: false,
-      componentProps: {
-        propertyId: this.propertyId,
-      }
-    });
-
-    const data = modal.onDidDismiss().then(res => {
-      if (res.data.tenantId) {
-        this.tenantId = res.data.tenantId;
-        this.initiateApplication();
-      } else {
-        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
-      }
-    });
-    await modal.present();
-  }
-
 
   private initiateForms() {
     this.initTenancyDetailsForm();
@@ -270,7 +241,7 @@ export class ApplicationDetailsPage implements OnInit {
     });
   }
 
-  getPropertyById() {
+  private getPropertyById() {
     const promise = new Promise((resolve, reject) => {
       this.referencingService.getPropertyById(this.propertyId).subscribe(
         res => {
@@ -303,7 +274,7 @@ export class ApplicationDetailsPage implements OnInit {
     return promise;
   }
 
-  getTenantDetails() {
+  private getTenantDetails() {
     const promise = new Promise((resolve, reject) => {
       this.referencingService.getTenantDetails(this.tenantId).subscribe(
         res => {
@@ -319,11 +290,11 @@ export class ApplicationDetailsPage implements OnInit {
     return promise;
   }
 
-  getLAProductList() {
+  private getLAProductList() {
     const promise = new Promise((resolve, reject) => {
       this.referencingService.getLAProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
         res => {
-          this.laProductList = res ? this.removeDuplicateObjects(res) : [];
+          this.laProductList = res ? this.commonService.removeDuplicateObjects(res) : [];
           this.laCaseProductList = this.laProductList.filter(obj => {
             return obj.productName.includes('Per Property');
           });
@@ -346,7 +317,7 @@ export class ApplicationDetailsPage implements OnInit {
     this.tenancyDetailsForm.patchValue({
       tenancyStartDate: this.propertyTenancyList[0].tenancyStartDate,
     });
-    this.tenancyDetailsForm.controls['tenancyStartDate'].markAsTouched();
+    this.tenancyDetailsForm.get('tenancyStartDate').markAsTouched();
 
     this.propertyDetailsForm.patchValue({
       managementStatus: this.propertyDetails.managementType,
@@ -369,6 +340,38 @@ export class ApplicationDetailsPage implements OnInit {
       this.reportedByForm.get('agreementId').setValidators(Validators.required);
       this.reportedByForm.get('selectedEntity').setValidators(Validators.required);
     }  */
+  }
+
+  onBlurCurrency(val: any, form: FormGroup) {
+    if (val) {
+      if (form == this.propertyDetailsForm) {
+        this.propertyDetailsForm.patchValue({ monthlyRent: this.currencyPipe.transform(val, 'GBP', 'symbol', '1.2-5') }, { emitEvent: false });
+      }
+      if (form == this.tenantDetailsForm) {
+        this.tenantDetailsForm.patchValue({ rentShare: this.currencyPipe.transform(val, 'GBP', 'symbol', '1.2-5') }, { emitEvent: false });
+      }
+    }
+
+  }
+
+  formatCurrency(val: any, form: FormGroup) {
+    let latestDigit = val.replace(/.00/g, '').replace(/\£/, '').replace(/,/g, '');
+
+    if (form == this.propertyDetailsForm) {
+      this.propertyDetailsForm.patchValue({
+        monthlyRent: latestDigit
+      }, { emitEvent: false });
+    }
+    if (form == this.tenantDetailsForm) {
+      this.tenantDetailsForm.patchValue({
+        rentShare: latestDigit
+      }, { emitEvent: false });
+    }
+  }
+
+  private setDefaultAmount(val: any) {
+    let latestDigit = val.replace(/.00/g, '').replace(/\£/, '').replace(/,/g, '');
+    return latestDigit; 
   }
 
   async editAddress() {
@@ -416,7 +419,7 @@ export class ApplicationDetailsPage implements OnInit {
     }
   }
 
-  checkPropertyDetailsTabValidation(): void {
+  private checkPropertyDetailsTabValidation(): void {
     this.isPropertyTabDetailSubmit = true;
     if (this.tenancyDetailsForm.invalid) {
       this.tenancyDetailsForm.markAllAsTouched();
@@ -427,7 +430,7 @@ export class ApplicationDetailsPage implements OnInit {
     }
   }
 
-  checkTenantDetailsTabValidation(): void {
+  private checkTenantDetailsTabValidation(): void {
     this.isTenantTabDetailSubmit = true;
     if (this.tenantDetailsForm.invalid) {
       this.tenantDetailsForm.markAllAsTouched();
@@ -565,11 +568,6 @@ export class ApplicationDetailsPage implements OnInit {
 
   getLookupValue(index: any, lookup: any) {
     return this.commonService.getLookupValue(index, lookup);
-  }
-
-  removeDuplicateObjects(array: any[]) {
-    return [...new Set(array.map(res => JSON.stringify(res)))]
-      .map(res1 => JSON.parse(res1));
   }
 
   getProductType(productId: any): string {

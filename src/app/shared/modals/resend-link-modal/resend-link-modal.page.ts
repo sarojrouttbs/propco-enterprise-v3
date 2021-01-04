@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { Router } from "@angular/router";
 import { ModalController, NavParams } from "@ionic/angular";
 import { PROPCO, REFERENCING } from "../../constants";
@@ -6,6 +6,7 @@ import { CommonService } from "../../services/common.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ValidationService } from "../../services/validation.service";
 import { ReferencingService } from 'src/app/referencing/referencing.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: "app-resend-link-modal",
@@ -30,6 +31,9 @@ export class ResendLinkModalPage implements OnInit {
     },
   ];
 
+  dtOptions: DataTables.Settings = {};
+  dtTrigger: Subject<any> = new Subject<any>();
+
   resendReqObj = {
     email: "",
   };
@@ -45,7 +49,11 @@ export class ResendLinkModalPage implements OnInit {
   laLookupdata: any;
   titleTypes: any;
   isValidMail: boolean;
-  newEmailAddress: FormGroup;
+  newEmailAddressForm: FormGroup;
+
+  @Input() paramApplicantId: string;
+  @Input() paramApplicationId: string;
+  @Input() paramAropertyAddress: string;
 
   constructor(
     private router: Router,
@@ -59,35 +67,21 @@ export class ResendLinkModalPage implements OnInit {
   }
 
   ngOnInit() {
-    this.applicantId = this.navParams.get("applicantId");
-    this.applicationId = this.navParams.get("applicationId");
-    this.propertyAddress = this.navParams.get('propertyAddress');
+    this.dtOptions = {
+      paging: false,
+      searching: false,
+      ordering: false,
+      info: false
+    };
+    this.applicantId = this.navParams.get("paramApplicantId");
+    this.applicationId = this.navParams.get("paramApplicationId");
+    this.propertyAddress = this.navParams.get('paramAropertyAddress');
     this.initiateEmailForm();
     this.getTenantDetail();
   }
 
-  private getTenantDetail() {
-    const promise = new Promise((resolve, reject) => {
-      this.referencingService.getTenantDetails(this.applicantId).subscribe(
-        (res) => {
-          this.tenantDetails = res ? res : {};
-          this.emailList[0].emailAdress = this.tenantDetails?.email;
-          this.emailList[1].emailAdress = this.tenantDetails?.alternativeEmail;
-          this.emailList[2].emailAdress = this.tenantDetails?.esignatureEmail;
-          resolve(this.tenantDetails);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    });
-    return promise;
-  }
-
-  private initiateEmailForm() {
-    this.newEmailAddress = this.fb.group({
-      email: ["", [ValidationService.emailValidator]],
-    });
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
   }
 
   private getLookupData() {
@@ -120,6 +114,30 @@ export class ResendLinkModalPage implements OnInit {
     this.titleTypes = this.laLookupdata.titleTypes;
   }
 
+  private initiateEmailForm() {
+    this.newEmailAddressForm = this.fb.group({
+      email: ["", [ValidationService.emailValidator]],
+    });
+  }
+
+  private getTenantDetail() {
+    const promise = new Promise((resolve, reject) => {
+      this.referencingService.getTenantDetails(this.applicantId).subscribe(
+        (res) => {
+          this.tenantDetails = res ? res : {};
+          this.emailList[0].emailAdress = this.tenantDetails?.email;
+          this.emailList[1].emailAdress = this.tenantDetails?.alternativeEmail;
+          this.emailList[2].emailAdress = this.tenantDetails?.esignatureEmail;
+          resolve(this.tenantDetails);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    });
+    return promise;
+  }
+
   disableCheckbox(emailId, event) {
     if (event.target.checked) {
       this.selectedCheckbox = emailId;
@@ -134,7 +152,7 @@ export class ResendLinkModalPage implements OnInit {
       this.emailList.forEach((ele) => {
         if (ele.emailId == emailId && this.selectedCheckbox) {
           if (emailId == '3') {
-            this.newEmailAddress.patchValue({ email: '' });
+            this.newEmailAddressForm.patchValue({ email: '' });
           }
           if (this.selectedCheckbox == emailId) {
             ele.selected = false;
@@ -143,17 +161,15 @@ export class ResendLinkModalPage implements OnInit {
         }
       });
     }
-    this.newEmailAddress.markAsUntouched();
+    this.newEmailAddressForm.markAsUntouched();
   }
 
   resendLink() {
-    if (this.selectedCheckbox == "3" && this.newEmailAddress.invalid) {
-      this.newEmailAddress.markAllAsTouched();
+    if (this.selectedCheckbox == "3" && this.newEmailAddressForm.invalid) {
+      this.newEmailAddressForm.markAllAsTouched();
       return;
     }
-    this.emailList[3].emailAdress = this.newEmailAddress?.controls[
-      "email"
-    ].value;
+    this.emailList[3].emailAdress = this.newEmailAddressForm?.get('email').value;
     this.emailList.forEach((ele) => {
       if (ele.emailId === this.selectedCheckbox) {
         this.resendReqObj.email = ele.emailAdress;

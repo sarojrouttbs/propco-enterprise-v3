@@ -3,9 +3,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 import { PROPCO, REFERENCING } from 'src/app/shared/constants';
 import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
-import { SearchPropertyPage } from 'src/app/shared/modals/search-property/search-property.page';
 import { ModalController } from '@ionic/angular';
-import { async } from 'q';
 import { SearchApplicationPage } from 'src/app/shared/modals/search-application/search-application.page';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 import { ReferencingService } from 'src/app/referencing/referencing.service';
@@ -17,7 +15,7 @@ import { ReferencingService } from 'src/app/referencing/referencing.service';
 })
 export class DashboardPage implements OnInit {
 
-  private lookupdata: any;
+  lookupdata: any;
   laLookupdata: any;
   applicationList: any;
   propertyId: any;
@@ -31,8 +29,7 @@ export class DashboardPage implements OnInit {
     private referencingService: ReferencingService,
     private router: Router,
     private modalController: ModalController
-  
-    ) {
+  ) {
     this.getLookupData();
   }
 
@@ -89,21 +86,15 @@ export class DashboardPage implements OnInit {
     this.router.navigate([`let-alliance/application-list`]);
   }
 
-   /* tenantList() {
-    this.router.navigate([`let-alliance/tenant-list`]);
-  } */
-
   startApplication() {
-    this.router.navigate([`let-alliance/application-details`]);
+    this.router.navigate([`let-alliance/add-application`]);
   }
 
-  async goToQuickSearch(){
-    
+  async quickSearch(){
     const modal = await this.modalController.create({
       component: SearchApplicationPage,
       cssClass: 'modal-container entity-search',
       backdropDismiss: false
-
     });
     const data = modal.onDidDismiss().then(res => {
       if(res.data.applicationId){
@@ -112,7 +103,6 @@ export class DashboardPage implements OnInit {
       }
     });
     await modal.present();
-
   }
  
   async openApplicationStatus() {
@@ -139,21 +129,19 @@ export class DashboardPage implements OnInit {
   }
 
   getApplicationStatus() {
-    //this.showLoader = true;
-    return new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       this.referencingService.getApplicationStatus(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.applicationId).subscribe(res => {
-        //this.showLoader = false;
-        return resolve(res);
-        
+        resolve(res);
       }, error => {
-        //this.showLoader = false;
-        return reject(false);
+        resolve(false);
       });
     });
+
+    return promise;
   }
 
   getLookupValue(index: any, lookup: any, type?: any) {
-    index = (type == 'category' && index) ? Number(index) : index;
+    //index = (type == 'category' && index) ? Number(index) : index;
     return this.commonService.getLookupValue(index, lookup);
   }
 

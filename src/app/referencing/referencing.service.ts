@@ -17,10 +17,20 @@ export class ReferencingService {
     );
   }
 
-  getLAApplicationList(referencingType: number, params: any): Observable<any> {
+  getLAApplicationList(referencingType: number, params?: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `referencing/${referencingType}/applications`, { params }).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
+  }
+
+  searchApplicationByText(referencingType: number, text: string): Observable<any> {
+    let params = new HttpParams()
+        .set('limit', '10')
+        .set('page', '1')
+        .set('text', text)
+        .set('types', 'APPLICATION');
+
+    return this.httpClient.get(environment.API_BASE_URL + `referencing/${referencingType}/applications`, { params });
   }
 
   getLAProductList(referencingType: number): Observable<any> {

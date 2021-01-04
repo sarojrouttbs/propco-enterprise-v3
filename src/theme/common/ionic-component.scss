@@ -207,6 +207,10 @@ ion-item {
   .modal-wrapper {
     min-height: 200px;
     min-width: 300px;
+
+    .status-block{
+      padding: 10px 0 0 30px;
+    }
   }
 }
 

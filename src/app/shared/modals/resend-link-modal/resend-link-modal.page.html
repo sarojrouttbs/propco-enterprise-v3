@@ -32,7 +32,7 @@
   <ion-row>   
       <ion-col size="100">
         <div class="overlay-container" style="position: relative">
-          <table datatable class="row-border hover"
+          <table datatable [dtOptions]="dtOptions" class="row-border hover"
             style="width: 100%; position: relative" id="applicationListTable">
             <thead>
               <tr id="tenant-list">
@@ -51,12 +51,12 @@
                 <td>{{item.label}}</td>
                 <td *ngIf='i < 3'>{{item?.emailAdress}}</td>
                 <td *ngIf='i == 3'>
-                 <form [formGroup]='newEmailAddress'>
+                 <form [formGroup]='newEmailAddressForm'>
                     <ion-item>
                     <ion-input [disabled]='!item.selected' [required]='item.selected' formControlName="email">
                     </ion-input>
                   </ion-item>
-                  <app-validation-message [control]="newEmailAddress.controls.email"></app-validation-message>
+                  <app-validation-message [control]="newEmailAddressForm.controls.email"></app-validation-message>
                 </form> 
                 </td>
               </tr>

@@ -8,9 +8,7 @@ import { ResendLinkModalPageRoutingModule } from './resend-link-modal-routing.mo
 
 import { ResendLinkModalPage } from './resend-link-modal.page';
 import { ComponentsModule } from './../../components/components.module';
-
-
-
+import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
   imports: [
@@ -19,7 +17,8 @@ import { ComponentsModule } from './../../components/components.module';
     ReactiveFormsModule,
     IonicModule,
     ResendLinkModalPageRoutingModule,
-    ComponentsModule
+    ComponentsModule,
+    DataTablesModule
   ],
   declarations: [ResendLinkModalPage]
 })

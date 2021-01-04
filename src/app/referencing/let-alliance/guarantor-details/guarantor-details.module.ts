@@ -6,7 +6,6 @@ import { IonicModule } from '@ionic/angular';
 
 import { MaterialModule } from 'src/app/material.module';
 import { ComponentsModule } from 'src/app/shared/components/components.module';
-import { AddressModalPageModule } from 'src/app/shared/modals/address-modal/address-modal.module';
 
 import { GuarantorDetailsPageRoutingModule } from './guarantor-details-routing.module';
 
@@ -20,8 +19,7 @@ import { GuarantorDetailsPage } from './guarantor-details.page';
     IonicModule,
     GuarantorDetailsPageRoutingModule,
     MaterialModule,
-    ComponentsModule,
-    AddressModalPageModule,
+    ComponentsModule
   ],
   declarations: [GuarantorDetailsPage],
   providers: [CurrencyPipe]
