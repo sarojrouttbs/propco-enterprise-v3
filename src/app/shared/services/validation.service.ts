@@ -30,7 +30,9 @@ export class ValidationService {
       invalidBankCode: 'Please enter valid sort code',
       whitespace: 'Please enter valid data',
       commonPassword: 'Password is too easy to guess',
-      invalidFutureDate: 'Please enter date between today to next 60 days'
+      invalidFutureDate: 'Please enter date between today to next 60 days',
+      invalidFormDate: 'Please enter date less than To Date',
+      invalidEndDate: 'Please enter toDate grater than from date'
     };
 
     return config[validatorName];
@@ -208,4 +210,22 @@ export class ValidationService {
      }
     }
   } 
+
+  static dateRangeValidator(dGroup: FormGroup) {
+    if (dGroup.value) {
+      if (dGroup.controls["toDate"].value) {
+        if (!dGroup.controls["fromDate"].value) {
+          return { startDateRequired: true };
+        } else if (
+          new Date(dGroup.controls["toDate"].value) <
+          new Date(dGroup.controls["fromDate"].value)
+        ) {
+          return { invalidEndDate: true };
+        }
+      } else {
+        return null;
+      }
+    }
+  }
+
 }

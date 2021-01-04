@@ -24,12 +24,17 @@ const routes: Routes = [
         loadChildren: () => import('./application-list/application-list.module').then( m => m.ApplicationListPageModule)
       },
       {
-        path: 'application-details',
+        path: 'add-application',
         loadChildren: () => import('./application-details/application-details.module').then( m => m.ApplicationDetailsPageModule)
       },
       {
-        path: 'guarantor-details',
+        path: 'add-guarantor',
         loadChildren: () => import('./guarantor-details/guarantor-details.module').then( m => m.GuarantorDetailsPageModule)
+        //loadChildren: () => import('./guarantor-application-details/guarantor-application-details.module').then( m => m.GuarantorApplicationDetailsPageModule)
+      },
+      {
+        path: 'guarantor-application-list',
+        loadChildren: () => import('./guarantor-application-list/guarantor-application-list.module').then( m => m.GuarantorApplicationListPageModule)
       }
     ]
   }

@@ -11,14 +11,13 @@ import { ModalController } from '@ionic/angular';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 import { ReferencingService } from '../../referencing.service';
 import { DatePipe } from '@angular/common';
-import { ValidationService } from 'src/app/shared/services/validation.service';
 
 @Component({
-  selector: 'la-application-list',
-  templateUrl: './application-list.page.html',
-  styleUrls: ['./application-list.page.scss'],
+  selector: 'app-guarantor-application-list',
+  templateUrl: './guarantor-application-list.page.html',
+  styleUrls: ['./guarantor-application-list.page.scss'],
 })
-export class ApplicationListPage implements OnInit, OnDestroy {
+export class GuarantorApplicationListPage implements OnInit, OnDestroy {
 
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
   dtOptions: DataTables.Settings[] = [];
@@ -26,11 +25,16 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   
   lookupdata: any;
   laLookupdata: any;
+  userLookupDetails: any[] = [];
   officeCodes: any[] = [];
   applicationList: any[] = [];
   applicationStatus: any= {};
   applicationGrade: any= {};
-  guarantorApplicationList = [];
+
+  it: any;
+  applicationId: any;
+  applicantId: any;
+  referenceNumber: any;
 
   laProductList: any[] = [];
   laApplicantStatusTypes: any[] = [];
@@ -38,14 +42,11 @@ export class ApplicationListPage implements OnInit, OnDestroy {
 
   selectedData: any;
   applicationFilterForm: FormGroup;
-  currentDate: string;
-
-  error: any = { isError: false, errorMessage: "" };
-  errorTo: any = { isError: false, errorMessage: "" };
 
   constructor(
     public commonService: CommonService,
     private referencingService: ReferencingService,
+    private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
     private modalController: ModalController,
@@ -55,6 +56,12 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.it = this.route.snapshot.queryParamMap.get('it');
+    this.applicationId = this.route.snapshot.queryParamMap.get('applicationId');
+    this.applicantId = this.route.snapshot.queryParamMap.get('applicantId');
+    this.referenceNumber = this.route.snapshot.queryParamMap.get('referenceNumber');
+
+    this.dtOptions[1] = this.buildDtOptions();
     const self = this;
     this.dtOptions[0] = {
       paging: true,
@@ -65,13 +72,11 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       ordering: true,
       pageLength: 5,
       lengthMenu: [5, 10, 15],
-      /* scrollY: '435px',
-      scrollCollapse: false, */
       ajax: (tableParams: any, callback) => {
         const params = new HttpParams()
         .set('limit', tableParams.length)
         .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');
-        self.referencingService.getLAApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, params).subscribe(res => {
+        self.referencingService.getGuarantorApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.applicationId, params).subscribe(res => {
           self.applicationList = res && res.data ? res.data : [];
           self.getLAProductList();
           callback({
@@ -102,10 +107,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       searchTerm: ['', ],
       fromDate: ['', ],
       toDate: ['', ]
-    },
-      {
-        validator: ValidationService.dateRangeValidator,
-      });
+    });
   }
   
   private getLookupData(): void {
@@ -141,7 +143,18 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     this.laApplicantReferencingResultTypes = data.applicantReferencingResultTypes;
   }
 
-  private rerenderApplications(resetPaging?: any): void {
+  private buildDtOptions(): DataTables.Settings {
+    return {
+      paging: true,
+      searching: false,
+      ordering: false,
+      responsive: true,
+      lengthMenu:[5, 10, 15],
+      pageLength: 5,
+    };
+  }
+
+  rerenderApplications(resetPaging?: any): void {
     if (this.dtElements && this.dtElements.first.dtInstance) {
       this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.ajax.reload((res) => { }, resetPaging);
@@ -175,55 +188,6 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       });
     });
     return promise;
-  }
-
-  async checkApplicationGuarantor() {
-    await this.getGuarantorApplicationList();
-    if(this.guarantorApplicationList.length > 0){
-      this.router.navigate([`let-alliance/guarantor-application-list`], { queryParams: { 
-        it: 'G',
-        applicantId: this.selectedData.applicantDetail.applicantId,
-        applicationId: this.selectedData.applicationId,
-        referenceNumber: this.selectedData.referenceNumber
-      }})
-      .then(() => {
-        location.reload();
-      });
-    }
-    else{
-      const modal = await this.modalController.create({
-        component: SimpleModalPage,
-        cssClass: 'modal-container alert-prompt',
-        backdropDismiss: false,
-        componentProps: {
-          data: 'There are no guarantors with this application, Do you wish to add one now?',
-          heading: 'Guarantor',
-          buttonList: [
-            {
-              text: 'No',
-              value: false
-            },
-            {
-              text: 'Yes',
-              value: true
-            }
-          ]
-        }
-      });
-  
-      const data = modal.onDidDismiss().then(res => {
-        if (res.data.userInput) {
-          this.router.navigate(['/let-alliance/guarantor-details'], { queryParams: { 
-            applicantId: this.selectedData.applicantDetail.applicantId,
-            applicationId: this.selectedData.applicationId,
-            referenceNumber: this.selectedData.referenceNumber
-           }, replaceUrl: true });
-        } else {
-        }
-      });
-  
-      await modal.present();
-    }
   }
 
   async resendLink() {
@@ -263,23 +227,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     await modal.present();
   }
 
-  private getGuarantorApplicationList() {
-    const promise = new Promise((resolve, reject) => {
-      this.referencingService.getGuarantorApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.selectedData.applicationId).subscribe(
-        res => {
-          this.guarantorApplicationList = res && res.data ? res.data : [];
-          resolve(this.guarantorApplicationList);
-        },
-        error => {
-          console.log(error);
-          resolve(this.guarantorApplicationList);
-        }
-      );
-    });
-    return promise;
-  }
-
-  private getApplicationStatus() {
+  getApplicationStatus() {
     const promise = new Promise((resolve, reject) => {
       this.referencingService.getApplicationStatus(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.selectedData.applicationId).subscribe(res => {
         resolve(res);
@@ -302,26 +250,12 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     return productType;
   }
 
-  compareTwoDates() {
-    if (this.applicationFilterForm.controls["toDate"].value) {
-      if (!this.applicationFilterForm.controls["fromDate"].value) {
-        this.errorTo = { isError: true, errorMessage: "From Date is required" };
-      } else {
-        this.errorTo = { isError: false, errorMessage: "" };
-
-        if (
-          new Date(this.applicationFilterForm.controls["toDate"].value) <
-          new Date(this.applicationFilterForm.controls["fromDate"].value)
-        ) {
-          this.error = {
-            isError: true,
-            errorMessage: "End Date cannot before start date",
-          };
-        } else {
-          this.error = { isError: false, errorMessage: "" };
-        }
-      }
-    }
+  goToGuarantorDetails(){
+    this.router.navigate(['/let-alliance/add-guarantor'], { queryParams: { 
+      applicantId: this.applicantId,
+      applicationId: this.applicationId,
+      referenceNumber: this.referenceNumber
+     }, replaceUrl: true });
   }
 
   resetFilter(){

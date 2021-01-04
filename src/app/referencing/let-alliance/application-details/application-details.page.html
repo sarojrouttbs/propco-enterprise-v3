@@ -6,7 +6,7 @@
           <ion-item>
             <ion-label position="floating">Product Type <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="productId">
-              <ion-select-option [value]="item.productId" *ngFor="let item of laCaseProductList">
+              <ion-select-option [value]="item.productId" *ngFor="let item of laProductList">
                 {{ item.productName }}
               </ion-select-option>
             </ion-select>
@@ -129,7 +129,7 @@
             <ion-label position="floating">Product Type  <ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select interface="popover" formControlName="productId">
-              <ion-select-option [value]="item.productId" *ngFor="let item of laApplicationProductList">
+              <ion-select-option [value]="item.productId" *ngFor="let item of laProductList">
                 {{ item.productName }}
               </ion-select-option>
             </ion-select>
@@ -437,45 +437,12 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <!-- <mat-horizontal-stepper #stepper labelPosition="bottom" [selectedIndex]="currentStepperIndex">
-          <mat-step>
-            <div class="accordion-container">
-              <div class="accordion-header" (click)="tenancyDetailsAccordion.expanded = !tenancyDetailsAccordion.expanded">
-                Tenancy Details
-              </div>
-              <app-accordion-list [expanded]="tenancyDetailsAccordion.expanded">
-                  <ng-container *ngTemplateOutlet="tenancyDetailsTemp"></ng-container>
-              </app-accordion-list>
-            </div>
-            <div class="accordion-container">
-              <div class="accordion-header" (click)="propertyDetailsAccordion.expanded = !propertyDetailsAccordion.expanded">
-                Property Details
-              </div>
-              <app-accordion-list [expanded]="propertyDetailsAccordion.expanded">
-                  <ng-container *ngTemplateOutlet="propertyDetailsTemp"></ng-container>
-                </app-accordion-list>
-            </div>
-            <ng-template matStepLabel>Property/ Rental Details </ng-template>
-          </mat-step>
-          <mat-step>
-            <div class="accordion-container">
-              <div class="accordion-header" (click)="tenantDetailsAccordion.expanded = !tenantDetailsAccordion.expanded">
-                Tenant Details
-              </div>
-              <app-accordion-list [expanded]="tenantDetailsAccordion.expanded">
-                  <ng-container *ngTemplateOutlet="tenantDetailsTemp"></ng-container>
-                </app-accordion-list>
-            </div>
-            <ng-template matStepLabel>Tenant Details </ng-template>
-          </mat-step>
-        </mat-horizontal-stepper> -->
-
         <div class="tab-container">
           <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #applicationTabs (selectedIndexChange)="currentSelectedTab($event)">
             <mat-tab>
               <ng-template mat-tab-label>
                 <div class="label-text" [class.success-border]='isPropertyTabDetailSubmit && propertyDetailsForm.valid && tenancyDetailsForm.valid'
-                [class.error-border]='isPropertyTabDetailSubmit && !propertyDetailsForm.valid && !tenancyDetailsForm.valid'>Property/ Rental Details</div>
+                [class.error-border]='isPropertyTabDetailSubmit && !propertyDetailsForm.valid || !tenancyDetailsForm.valid'>Property/ Rental Details</div>
               </ng-template>
               <div class="accordion-container">
                 <div class="accordion-header" (click)="tenancyDetailsAccordion.expanded = !tenancyDetailsAccordion.expanded">

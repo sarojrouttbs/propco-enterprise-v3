@@ -9,7 +9,6 @@ import { COMPLETION_METHODS } from 'src/app/shared/constants';
 import { forkJoin } from 'rxjs';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 import { ReferencingService } from '../../referencing.service';
-import { ValidationService } from 'src/app/shared/services/validation.service'
 
 @Component({
   selector: 'app-guarantor-details',
@@ -33,7 +32,7 @@ export class GuarantorDetailsPage implements OnInit {
   laCaseProductList: any[];
   laApplicationProductList: any[];
 
-  isGuarantorTabDetailSubmit;
+  isGuarantorTabDetailSubmit: boolean;
 
   managementStatusTypes: any[] = [];
   guarantorTypes: any[] = [];
@@ -167,7 +166,11 @@ export class GuarantorDetailsPage implements OnInit {
   }
 
   getGuarantorDetails(guarantorId: any) {
-    if(guarantorId != 0){
+    if(guarantorId == 0){
+      this.initGuarantorDetailsTabForm();
+      this.guarantorDetails = {} as applicationModels.IGuarantorResponse;
+    }
+    else{
       const promise = new Promise((resolve, reject) => {
         this.referencingService.getGuarantorDetails(guarantorId).subscribe(
           res => {
@@ -191,7 +194,7 @@ export class GuarantorDetailsPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.referencingService.getLAProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
         res => {
-          this.laProductList = res ? this.removeDuplicateObjects(res) : [];
+          this.laProductList = res ? this.commonService.removeDuplicateObjects(res) : [];
           this.laCaseProductList = this.laProductList.filter(obj => {
             return obj.productName.includes('Per Property');
           });
@@ -306,6 +309,11 @@ export class GuarantorDetailsPage implements OnInit {
           otherNames: this.guarantorDetailsForm.get('hasTenantOtherName').value ? [this.guarantorDetailsForm.get('otherNames').value] : []
         }
       };
+
+      if(applicationDetails.applicantId === ''){
+        delete applicationDetails.applicantId;
+      }
+
     return applicationDetails;
   }
 
@@ -337,11 +345,6 @@ export class GuarantorDetailsPage implements OnInit {
     });
 
     await modal.present();
-  }
-
-  removeDuplicateObjects(array: any[]) {
-    return [...new Set(array.map(res => JSON.stringify(res)))]
-      .map(res1 => JSON.parse(res1));
   }
 
   getLookupValue(index: any, lookup: any) {

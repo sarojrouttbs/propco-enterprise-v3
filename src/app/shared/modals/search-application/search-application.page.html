@@ -15,13 +15,11 @@
     </mat-form-field>
 
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
-      <mat-option *ngFor="let result of (filteredProperty | async)" [value]="result" style="border-bottom: 1px solid gray;">
-        <span>
-          <i class="propcoicon no-background propcoicon-property" style="background: transparent;vertical-align:sub"></i>
-        </span>
-        <span style="color: var(--ion-color-step-200)">{{result?.propertyDetail?.address?.addressLine1}}&nbsp;</span>
-        <span style="color: var(--ion-color-step-1000)">{{result?.propertyDetail?.reference}}</span>&nbsp;
-        </mat-option>
+      <mat-option *ngFor="let result of (filteredProperty | async)?.data" [value]="result" style="border-bottom: 1px solid gray;">
+        <span style="color: var(--ion-color-step-1000)">{{result?.referenceNumber}}</span>&nbsp;
+        <span style="color: var(--ion-color-step-1000)">{{result?.caseReferenceNumber}}</span>&nbsp;
+        <span style="color: var(--ion-color-step-1000)">{{result?.applicantDetail?.addressee}}</span>&nbsp;
+      </mat-option>
     </mat-autocomplete>
   </form>
 </ion-content>
