@@ -54,7 +54,7 @@
            </div>
           </ion-col>
           <ion-col class="ion-text-end ion-align-self-end" size-xl="16" size-lg="20" size-md="24" size-sm="36" size-xs="100">
-            <ion-button style="margin: 0px 5px;" (click)="getLAApplicationList()">Submit</ion-button>
+            <ion-button style="margin: 0px 5px;" (click)="getLAApplicationList()" [disabled]="!this.applicationFilterForm.valid">Submit</ion-button>
             <ion-button class="reset-button no-margin-right" (click)="resetFilter()" style="margin-left: 5px;">Reset</ion-button>
           </ion-col>
         </ion-row>
@@ -64,8 +64,7 @@
       <ion-row>
         <ion-col size="100">
           <div class="overlay-container" style="position: relative">
-            <table datatable [dtOptions]="dtOptions[0]" class="row-border hover"
-              style="width: 100%; position: relative" id="applicationListTable">
+            <table datatable [dtOptions]="dtOptions[0]" class="row-border hover" style="width: 100%; position: relative">
               <thead>
                 <tr>
                   <th style="width:7%">Reference No.</th>
