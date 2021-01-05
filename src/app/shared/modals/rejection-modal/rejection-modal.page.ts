@@ -14,8 +14,9 @@ import { PlatformLocation } from '@angular/common';
 export class RejectionModalPage implements OnInit {
   rejectionForm: FormGroup;
   faultNotificationId;
-  rejectionReason;
-  faultMaintRejectionReasons
+  disableAnotherQuote;
+  faultMaintRejectionReasons;
+
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
     private commonService: CommonService,
@@ -37,7 +38,7 @@ export class RejectionModalPage implements OnInit {
       submittedById: '',
       submittedByType: 'SECUR_USER',
       other: '',
-      landlordWantAnotherQuote: this.rejectionReason ? false : true
+      landlordWantAnotherQuote: false
     });
     this.commonService.sortBy('index', this.faultMaintRejectionReasons)
   }
