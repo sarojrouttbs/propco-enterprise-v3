@@ -94,6 +94,11 @@ export class CommonService {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'lookup/faults', { responseType: 'json' });
   }
 
+  getSystemConfig(key:string): Observable<any> {
+    let httpParams = new HttpParams().set('key',key);
+    return this.httpClient.get(environment.API_BASE_URL + 'sysconfig', { params: httpParams });
+  }
+
   getMetaConfig(): Observable<Lookupdata> {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'meta-config', { responseType: 'json' });
   }
@@ -418,32 +423,33 @@ export class CommonService {
     return dirtyValues;
   }
 
-  showMenu(event: any, id: any, data: any, className: any, isCard?: any) {
+  showMenu(event: any, id: any, className: any, ispaging?: any) {
     const baseContainer = $(event.target).parents('.' + className);
     const divOverlay = $('#' + id);
     const baseContainerWidth = baseContainer.outerWidth(true);
     const baseContainerHeight = baseContainer.outerHeight(true);
     const baseContainerPosition = baseContainer.position();
     const baseContainerTop = baseContainerPosition.top;
-    const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
+    //const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    const divOverlayLeft = isCard ? baseContainerPosition.left : overlayContainerLeftPadding;
+    //const divOverlayLeft = isCard ? baseContainerPosition.left : overlayContainerLeftPadding;
+    const divOverlayLeft = overlayContainerLeftPadding;
 
     let origDivOverlayHeight;
     let origDivOverlayTop;
     let divOverlayTopBottomPadding = 0;
-    if (baseContainerHeight > 49) {
+    if (baseContainerHeight > 48) {
       divOverlayTopBottomPadding = (baseContainerHeight - 48) / 2;
     }
 
     if (baseContainerHeight > divOverlayHeight) {
       origDivOverlayHeight = baseContainerHeight;
-      origDivOverlayTop = baseContainerTop + $('.dataTables_length').outerHeight(true);
+      origDivOverlayTop = ispaging ? baseContainerTop + $('.dataTables_length').outerHeight(true) : baseContainerTop;
     } else {
       origDivOverlayHeight = divOverlayHeight + (divOverlayTopBottomPadding * 2);
       const extraHeight = divOverlayHeight - baseContainerHeight;
-      origDivOverlayTop = baseContainerTop - extraHeight - (divOverlayTopBottomPadding * 2) + $('.dataTables_length').outerHeight(true);
+      origDivOverlayTop = ispaging ? (baseContainerTop - extraHeight - (divOverlayTopBottomPadding * 2) + $('.dataTables_length').outerHeight(true)) : (baseContainerTop - extraHeight - (divOverlayTopBottomPadding * 2));
     }
 
     divOverlay.css({

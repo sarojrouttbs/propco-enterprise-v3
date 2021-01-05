@@ -4,8 +4,8 @@
       <ion-col size="50" class="heading">
         <div>
           <ion-icon name="arrow-back-outline" style="vertical-align: bottom;cursor: pointer;" (click)="goBack()"></ion-icon>
-           &nbsp;View Applications &nbsp;
-          <i class="propcoicon propcoicon-refresh icon-primary" style="display: inline; background: transparent; cursor: pointer;" (click)="refresh()"></i></div>
+           &nbsp;Guarantor list for {{referenceNumber}}
+        </div>
       </ion-col>
       <ion-col size="50" class="la-logo">
         <img src="assets/images/referencing/la-logo.svg"/>
@@ -15,40 +15,8 @@
   <form [formGroup]="applicationFilterForm">
       <ion-grid>
         <ion-row>
-          <ion-col size-xl="21" size-lg="20" size-md="50" size-sm="50" size-xs="50">
-            <ion-item>
-              <ion-label position="floating">Office Filter</ion-label>
-              <ion-select interface="popover" formControlName="officeCode" multiple="true">
-                <ion-select-option [value]="officeLookup.index" *ngFor="let officeLookup of officeCodes">
-                  {{ officeLookup.value }}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-col>
-          <ion-col size-xl="21" size-lg="20" size-md="50" size-sm="50" size-xs="50">
-              <ion-item>
-                <ion-label position="floating">Search Text</ion-label>
-                <ion-input formControlName="searchTerm"></ion-input>
-              </ion-item>
-          </ion-col>
-          <ion-col size-xl="21" size-lg="20" size-md="38" size-sm="32" size-xs="50">
-            <ion-item>
-              <ion-label position="floating">Date From
-              </ion-label>
-              <ion-datetime formControlName="fromDate" displayFormat="DD MMM YYYY" interface="popover"></ion-datetime>
-            </ion-item>
-          </ion-col>
-          <ion-col size-xl="21" size-lg="20" size-md="38" size-sm="32" size-xs="50">
-            <ion-item>
-              <ion-label position="floating">Date To
-              </ion-label>
-              <ion-datetime formControlName="toDate" displayFormat="DD MMM YYYY" interface="popover"></ion-datetime>
-            </ion-item>
-          </ion-col>
-          <ion-col class="ion-text-end ion-align-self-end" size-xl="16" size-lg="20" size-md="24" size-sm="36" size-xs="100">
-            <ion-button style="margin: 0px 5px;" (click)="getLAApplicationList()">Submit</ion-button>
-            <ion-button class="reset-button no-margin-right" (click)="resetFilter()" style="margin-left: 5px;">Reset</ion-button>
-            <ion-button *ngIf="it==='G'" class="no-margin-right" (click)="goToGuarantorDetails()" style="margin-left: 5px;">Add Guarantor</ion-button>
+          <ion-col>
+            <ion-button class="no-margin-left" (click)="goToGuarantorDetails()">Add</ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -58,7 +26,7 @@
         <ion-col size="100">
           <div class="overlay-container" style="position: relative">
             <table datatable [dtOptions]="dtOptions[0]" class="row-border hover"
-              style="width: 100%; position: relative" id="applicationListTable">
+              style="width: 100%; position: relative">
               <thead>
                 <tr>
                   <th style="width:7%">Reference No.</th>
