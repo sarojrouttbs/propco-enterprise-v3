@@ -94,6 +94,11 @@ export class CommonService {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'lookup/faults', { responseType: 'json' });
   }
 
+  getSystemConfig(key:string): Observable<any> {
+    let httpParams = new HttpParams().set('key',key);
+    return this.httpClient.get(environment.API_BASE_URL + 'sysconfig', { params: httpParams });
+  }
+
   getMetaConfig(): Observable<Lookupdata> {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'meta-config', { responseType: 'json' });
   }

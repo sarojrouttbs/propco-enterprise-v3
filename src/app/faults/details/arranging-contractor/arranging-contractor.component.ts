@@ -5,7 +5,7 @@ import { Observable, Subject } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -48,6 +48,8 @@ export class ArrangingContractorComponent implements OnInit {
   quoteStatuses;
   rejectionReason: string = null;
   restrictAction: boolean = false;
+  private MAX_QUOTE_REJECTION = 2;
+  private disableAnotherQuote: boolean = false;
   isUserActionChange: boolean = false;
   faultMaintRejectionReasons: any;
 
@@ -168,6 +170,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.faultMaintenanceDetails = await this.getFaultMaintenance() as FaultModels.IMaintenanceQuoteResponse;
     if (this.faultMaintenanceDetails) {
       this.initPatching();
+      await this.getMaxQuoteRejection();
       let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
       this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
     } else {
@@ -593,16 +596,22 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private disableContractorsList(notification) {
+    const data = this.faultMaintenanceDetails.quoteContractors.filter(x => x.isRejected);
+    if (data && data[0]) {
+      this.rejectionReason = data[0].rejectionReason;
+    }
+    this.disableAnotherQuote = false;
+    if ((data.length + 1) >= this.MAX_QUOTE_REJECTION) {
+      this.disableAnotherQuote = true;
+    }
     if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && notification.templateCode === 'LAR-L-E') {
-      const data = this.faultMaintenanceDetails.quoteContractors.filter(x => x.isRejected);
-      if (data && data[0]) {
-        this.rejectionReason = data[0].rejectionReason;
-      }
+      this.restrictAction = false;
       this.raiseQuoteForm.get('selectedContractorId').setValue('');
     } else {
-      /*disable cont. list actions for other notifications*/
       this.restrictAction = true;
     }
+
+
   }
 
   setUserAction(index) {
@@ -639,7 +648,7 @@ export class ArrangingContractorComponent implements OnInit {
       return;
     }
 
-    if (this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[1].index) {
+    if (this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[1].index || this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[3].index) {
       if (this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') {
         this.questionActionAcceptRequest(data);
       } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
@@ -765,7 +774,7 @@ export class ArrangingContractorComponent implements OnInit {
         componentProps: {
           faultNotificationId: this.iacNotification.faultNotificationId,
           faultMaintRejectionReasons: this.faultMaintRejectionReasons,
-          rejectionReason: this.rejectionReason
+          disableAnotherQuote: this.disableAnotherQuote
         },
         backdropDismiss: false
       });
@@ -943,6 +952,18 @@ export class ArrangingContractorComponent implements OnInit {
           resolve(false);
         }
       );
+    });
+    return promise;
+  }
+
+  private async getMaxQuoteRejection(): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.commonService.getSystemConfig(SYSTEM_CONFIG.MAXIMUM_FAULT_QUOTE_REJECTION).subscribe(res => {
+        this.MAX_QUOTE_REJECTION = res ? parseInt(res.MAXIMUM_FAULT_QUOTE_REJECTION, 10) : this.MAX_QUOTE_REJECTION;
+        resolve(true);
+      }, error => {
+        resolve(false);
+      });
     });
     return promise;
   }
