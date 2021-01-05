@@ -1,33 +1,33 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { Router } from "@angular/router";
-import { ModalController, NavParams } from "@ionic/angular";
-import { PROPCO, REFERENCING } from "../../constants";
-import { CommonService } from "../../services/common.service";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ValidationService } from "../../services/validation.service";
+import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { ModalController, NavParams } from '@ionic/angular';
+import { PROPCO, REFERENCING } from '../../constants';
+import { CommonService } from '../../services/common.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ValidationService } from '../../services/validation.service';
 import { ReferencingService } from 'src/app/referencing/referencing.service';
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: "app-resend-link-modal",
-  templateUrl: "./resend-link-modal.page.html",
-  styleUrls: ["./resend-link-modal.page.scss"],
+  selector: 'app-resend-link-modal',
+  templateUrl: './resend-link-modal.page.html',
+  styleUrls: ['./resend-link-modal.page.scss'],
 })
 export class ResendLinkModalPage implements OnInit {
   emailList: any[] = [
-    { emailId: "0", label: "Email", selected: true, emailAdress: "" },
+    { emailId: '0', label: 'Email', selected: true, emailAdress: '' },
     {
-      emailId: "1",
-      label: "Alternate Email",
+      emailId: '1',
+      label: 'Alternate Email',
       selected: false,
-      emailAdress: "",
+      emailAdress: '',
     },
-    { emailId: "2", label: "E-Sign Email", selected: false, emailAdress: "" },
+    { emailId: '2', label: 'E-Sign Email', selected: false, emailAdress: '' },
     {
-      emailId: "3",
-      label: "Have a new email address, type here",
+      emailId: '3',
+      label: 'Have a new email address, type here',
       selected: false,
-      emailAdress: "",
+      emailAdress: '',
     },
   ];
 
@@ -35,15 +35,16 @@ export class ResendLinkModalPage implements OnInit {
   dtTrigger: Subject<any> = new Subject<any>();
 
   resendReqObj = {
-    email: "",
+    email: '',
   };
 
-  tenantDetails: applicationModels.ITenantResponse;
-  selectedCheckbox = "0";
-  newEmailId;
+  applicantDetails: any;
+  selectedCheckbox = '0';
+  newEmailId: any;
   applicationId: any;
   applicantId: any;
   propertyAddress: any;
+  it: any;
   isValidEmail = false;
   lookupdata: any;
   laLookupdata: any;
@@ -53,7 +54,8 @@ export class ResendLinkModalPage implements OnInit {
 
   @Input() paramApplicantId: string;
   @Input() paramApplicationId: string;
-  @Input() paramAropertyAddress: string;
+  @Input() paramPropertyAddress: string;
+  @Input() paramIt: string;
 
   constructor(
     private router: Router,
@@ -73,11 +75,17 @@ export class ResendLinkModalPage implements OnInit {
       ordering: false,
       info: false
     };
-    this.applicantId = this.navParams.get("paramApplicantId");
-    this.applicationId = this.navParams.get("paramApplicationId");
-    this.propertyAddress = this.navParams.get('paramAropertyAddress');
+    this.applicantId = this.navParams.get('paramApplicantId');
+    this.applicationId = this.navParams.get('paramApplicationId');
+    this.propertyAddress = this.navParams.get('paramPropertyAddress');
+    this.it = this.navParams.get('paramIt');
     this.initiateEmailForm();
-    this.getTenantDetail();
+    if(this.it === 'G'){
+      this.getGuarantorDetails();
+    }
+    else{
+      this.getTenantDetails();
+    }
   }
 
   ngOnDestroy(): void {
@@ -116,19 +124,37 @@ export class ResendLinkModalPage implements OnInit {
 
   private initiateEmailForm() {
     this.newEmailAddressForm = this.fb.group({
-      email: ["", [ValidationService.emailValidator]],
+      email: ['', [ValidationService.emailValidator]],
     });
   }
 
-  private getTenantDetail() {
+  private getTenantDetails() {
     const promise = new Promise((resolve, reject) => {
       this.referencingService.getTenantDetails(this.applicantId).subscribe(
         (res) => {
-          this.tenantDetails = res ? res : {};
-          this.emailList[0].emailAdress = this.tenantDetails?.email;
-          this.emailList[1].emailAdress = this.tenantDetails?.alternativeEmail;
-          this.emailList[2].emailAdress = this.tenantDetails?.esignatureEmail;
-          resolve(this.tenantDetails);
+          this.applicantDetails = res ? res : {};
+          this.emailList[0].emailAdress = this.applicantDetails?.email;
+          this.emailList[1].emailAdress = this.applicantDetails?.alternativeEmail;
+          this.emailList[2].emailAdress = this.applicantDetails?.esignatureEmail;
+          resolve(this.applicantDetails);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private getGuarantorDetails() {
+    const promise = new Promise((resolve, reject) => {
+      this.referencingService.getGuarantorDetails(this.applicantId).subscribe(
+        (res) => {
+          this.applicantDetails = res ? res : {};
+          this.emailList[0].emailAdress = this.applicantDetails?.email;
+          this.emailList[1].emailAdress = this.applicantDetails?.alternativeEmail;
+          this.emailList[2].emailAdress = this.applicantDetails?.esignatureEmail;
+          resolve(this.applicantDetails);
         },
         (error) => {
           console.log(error);
@@ -165,7 +191,7 @@ export class ResendLinkModalPage implements OnInit {
   }
 
   resendLink() {
-    if (this.selectedCheckbox == "3" && this.newEmailAddressForm.invalid) {
+    if (this.selectedCheckbox == '3' && this.newEmailAddressForm.invalid) {
       this.newEmailAddressForm.markAllAsTouched();
       return;
     }
@@ -180,17 +206,17 @@ export class ResendLinkModalPage implements OnInit {
             (res) => {
               this.commonService.hideLoader();
               this.commonService.showMessage(
-                "Link has been sent successfully.",
-                "Resend Link",
-                "success"
+                'Link has been sent successfully.',
+                'Resend Link',
+                'success'
               );
             },
             (error) => {
               this.commonService.hideLoader();
               this.commonService.showMessage(
-                "Something went wrong on server, please try again.",
-                "Resend Link",
-                "Error"
+                'Something went wrong on server, please try again.',
+                'Resend Link',
+                'error'
               );
               console.log(error);
             }

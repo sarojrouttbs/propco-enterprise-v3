@@ -51,8 +51,8 @@ export class ReferencingService {
     );
   }
 
-  getGuarantorApplicationList(referencingType: number, applicationId: any, params?: any): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `referencing/${referencingType}/applications/${applicationId}/guarantors`, { params }).pipe(tap((res: any) => { }),
+  getGuarantorApplicationList(referencingType: number, applicationId: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `referencing/${referencingType}/applications/${applicationId}/guarantors`).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
   }

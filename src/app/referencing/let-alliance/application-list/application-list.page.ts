@@ -40,6 +40,8 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   applicationFilterForm: FormGroup;
   currentDate: string;
 
+  applicationParams: any = new HttpParams();
+
   error: any = { isError: false, errorMessage: "" };
   errorTo: any = { isError: false, errorMessage: "" };
 
@@ -68,10 +70,10 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       /* scrollY: '435px',
       scrollCollapse: false, */
       ajax: (tableParams: any, callback) => {
-        const params = new HttpParams()
+        this.applicationParams = this.applicationParams
         .set('limit', tableParams.length)
         .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');
-        self.referencingService.getLAApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, params).subscribe(res => {
+        self.referencingService.getLAApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.applicationParams).subscribe(res => {
           self.applicationList = res && res.data ? res.data : [];
           self.getLAProductList();
           callback({
@@ -150,16 +152,24 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   }
 
   getLAApplicationList(): void {
-    const params = new HttpParams()
-      .set('limit', '5')
-      .set('page', '1')
-      .set('officeCode', this.applicationFilterForm.get('officeCode').value)
-      .set('searchTerm', this.applicationFilterForm.get('searchTerm').value)
-      .set('fromDate', this.datepipe.transform(this.applicationFilterForm.get('fromDate').value, 'yyyy-MM-dd'))
-      .set('toDate', this.datepipe.transform(this.applicationFilterForm.get('toDate').value, 'yyyy-MM-dd'));
-    this.referencingService.getLAApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, params).subscribe(res => {
-      this.applicationList = res && res.data ? res.data : [];
-    });
+
+    if(this.applicationFilterForm.get('officeCode').value){
+      this.applicationParams = this.applicationParams.set('officeCode', this.applicationFilterForm.get('officeCode').value);
+    }
+
+    if(this.applicationFilterForm.get('searchTerm').value){
+      this.applicationParams = this.applicationParams.set('searchTerm', this.applicationFilterForm.get('searchTerm').value);
+    }
+
+    if(this.applicationFilterForm.get('fromDate').value){
+      this.applicationParams = this.applicationParams.set('fromDate', this.datepipe.transform(this.applicationFilterForm.get('fromDate').value, 'yyyy-MM-dd'));
+    }
+
+    if(this.applicationFilterForm.get('toDate').value){
+      this.applicationParams = this.applicationParams.set('toDate', this.datepipe.transform(this.applicationFilterForm.get('toDate').value, 'yyyy-MM-dd'));
+    }
+
+    this.rerenderApplications(true);
   }
 
   private getLAProductList() {
@@ -234,7 +244,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       componentProps: {
         paramApplicantId: this.selectedData.applicantDetail.applicantId,
         paramApplicationId: this.selectedData.applicationId,
-        paramAropertyAddress: this.selectedData.propertyDetail.address
+        paramPropertyAddress: this.selectedData.propertyDetail.address
       }
     });
     await modal.present();
@@ -302,37 +312,17 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     return productType;
   }
 
-  compareTwoDates() {
-    if (this.applicationFilterForm.controls["toDate"].value) {
-      if (!this.applicationFilterForm.controls["fromDate"].value) {
-        this.errorTo = { isError: true, errorMessage: "From Date is required" };
-      } else {
-        this.errorTo = { isError: false, errorMessage: "" };
-
-        if (
-          new Date(this.applicationFilterForm.controls["toDate"].value) <
-          new Date(this.applicationFilterForm.controls["fromDate"].value)
-        ) {
-          this.error = {
-            isError: true,
-            errorMessage: "End Date cannot before start date",
-          };
-        } else {
-          this.error = { isError: false, errorMessage: "" };
-        }
-      }
-    }
-  }
-
   resetFilter(){
     this.applicationFilterForm.reset(this.initiateForm());
     this.applicationFilterForm.markAsPristine();
     this.applicationFilterForm.markAsUntouched();
+    this.applicationParams = new HttpParams().set('limit', '5').set('page', '1');
+    this.rerenderApplications(true);
   }
 
-  showMenu(event: any, id: any, data: any, className: any, isCard?: any) {
+  showMenu(event: any, id: any, data: any, className: any) {
     this.selectedData = data;
-    this.commonService.showMenu(event, id, data, className, isCard);
+    this.commonService.showMenu(event, id, className, true);
   }
 
   hideMenu(event: any, id: any) {
