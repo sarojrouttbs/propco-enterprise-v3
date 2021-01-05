@@ -17,6 +17,7 @@ import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.pa
 })
 export class ArrangingContractorComponent implements OnInit {
   raiseQuoteForm: FormGroup;
+  workOrderForm: FormGroup;
   addContractorForm: FormGroup;
   contractorListForm: FormGroup;
   userSelectedActionControl = new FormControl();
@@ -50,6 +51,9 @@ export class ArrangingContractorComponent implements OnInit {
   restrictAction: boolean = false;
   isUserActionChange: boolean = false;
   faultMaintRejectionReasons: any;
+  woResultsAvailable = false;
+  woContractors: Observable<FaultModels.IContractorResponse>;
+
 
   constructor(
     private fb: FormBuilder,
@@ -60,6 +64,8 @@ export class ArrangingContractorComponent implements OnInit {
 
   ngOnInit() {
     this.initiateArrangingContractors();
+    this.initiateWorkOrder();
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -72,6 +78,10 @@ export class ArrangingContractorComponent implements OnInit {
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
+  }
+
+  private initiateWorkOrder(): void {
+    this.initWorkOrderForms();
   }
 
   private initForms(): void {
@@ -98,6 +108,33 @@ export class ArrangingContractorComponent implements OnInit {
     });
   }
 
+  private initWorkOrderForms(): void {
+    this.workOrderForm = this.fb.group({
+      contractor: ['', Validators.required],
+      company: [{ value: '', disabled: true }],
+      address: [{ value: '', disabled: true }],
+      repairCost: ['', Validators.required],
+      workOrderNumber: [{ value: '', disabled: true }],
+      date: [{ value: '', disabled: true }],
+      nominalCode: ['', Validators.required],
+      description: ['', Validators.required],
+      paidVia: [{ value: '', disabled: true }, Validators.required],
+      paidTo: [{ value: '', disabled: true }],
+      defaultCommision: '',
+      mgntKeys: '',
+      returnKeysTo: '',
+      accessDetails: ['', Validators.required],
+      completionDate: '',
+      jobDescription: ['', Validators.required],
+      orderedBy: ''
+    });
+
+    this.woContractors = this.workOrderForm.get('contractor').valueChanges.pipe(debounceTime(300),
+      switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
+        new Observable())
+    );
+  }
+
   private getAccessDetails(tenantPresence): string {
     if (tenantPresence != null) {
       let data = this.accessInfoList.filter(data => data.value == tenantPresence);
@@ -111,7 +148,7 @@ export class ArrangingContractorComponent implements OnInit {
       return;
     }
     if (isNew) {
-      this.getContractorDetails(data?.contractorObj?.entityId);
+      this.getContractorDetails(data?.contractorObj?.entityId, 'quote');
     } else {
       this.patchContartorList(data, isNew, isPreferred);
     }
@@ -823,11 +860,15 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  private getContractorDetails(contractId) {
+  private getContractorDetails(contractId, type) {
     return new Promise((resolve, reject) => {
       this.faultsService.getContractorDetails(contractId).subscribe((res) => {
         let data = res ? res : '';
-        this.patchContartorList(data, true, false);
+        if (type === 'quote') {
+          this.patchContartorList(data, true, false);
+        } else if (type === 'wo') {
+          this.workOrderForm.patchValue({ company: data ? data.companyName : undefined });
+        }
       }, error => {
       });
     });
@@ -945,6 +986,23 @@ export class ArrangingContractorComponent implements OnInit {
       );
     });
     return promise;
+  }
+
+
+  onSearchContractor(event: any) {
+    const searchString = event.target.value;
+    this.workOrderForm.patchValue({ company: '', address: '' });
+    if (searchString.length > 2) {
+      this.woResultsAvailable = true;
+    } else {
+      this.woResultsAvailable = false;
+    }
+  }
+
+  woSelectContractor(selected) {
+    this.getContractorDetails(selected?.entityId, 'wo');
+    this.workOrderForm.patchValue({ contractor: selected ? selected.fullName : undefined, address: selected ? selected.address : undefined });
+    this.woResultsAvailable = false;
   }
 
 }
