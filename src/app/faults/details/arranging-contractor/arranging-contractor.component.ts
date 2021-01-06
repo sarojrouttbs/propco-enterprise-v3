@@ -1,14 +1,16 @@
 import { RejectionModalPage } from './../../../shared/modals/rejection-modal/rejection-modal.page';
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
 import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
+import { IonicSelectableComponent } from 'ionic-selectable';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -55,13 +57,18 @@ export class ArrangingContractorComponent implements OnInit {
   faultMaintRejectionReasons: any;
   woResultsAvailable = false;
   woContractors: Observable<FaultModels.IContractorResponse>;
+  nominalCodeSubscription: Subscription;
+  page = 2;
+  codes: FaultModels.NominalCode[];
+  currentDate = this.commonService.getFormatedDate(new Date());
 
 
   constructor(
     private fb: FormBuilder,
     private faultsService: FaultsService,
     private commonService: CommonService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    public datepipe: DatePipe
   ) { }
 
   ngOnInit() {
@@ -291,6 +298,8 @@ export class ArrangingContractorComponent implements OnInit {
     }
     this.faultsService.getNominalCodes().subscribe(data => {
       this.nominalCodes = data ? data : [];
+      this.codes = this.getCodes();
+
     });
   }
 
@@ -1024,5 +1033,102 @@ export class ArrangingContractorComponent implements OnInit {
     });
     return promise;
   }
+
+  getMoreCodes(event: {
+    component: IonicSelectableComponent,
+    text: string
+  }) {
+    if (event) {
+      let text = (event.text || '').trim().toLowerCase();
+      this.getCodesAsync(this.page, 10).subscribe(codes => {
+        codes = event.component.items.concat(codes);
+
+        if (text) {
+          codes = this.filterCodes(codes, text);
+        }
+
+        event.component.items = codes;
+        event.component.endInfiniteScroll();
+        this.page++;
+      });
+    }
+
+  }
+
+  getCodes(page?: number, size?: number) {
+    let codes = [];
+
+    this.nominalCodes.forEach(code => {
+      code.concat = code.nominalCode + " - " + code.description;
+      codes.push(code);
+    });
+
+    if (page && size) {
+      codes = this.nominalCodes.slice((page - 1) * size, ((page - 1) * size) + size);
+    }
+
+    return codes;
+  }
+
+  getCodesAsync(page?: number, size?: number, timeout = 2000): Observable<FaultModels.NominalCode[]> {
+    return new Observable<FaultModels.NominalCode[]>(observer => {
+      observer.next(this.getCodes(page, size));
+      observer.complete();
+    }).pipe(delay(timeout));
+  }
+
+  filterCodes(codes: FaultModels.NominalCode[], text: string) {
+    return codes.filter(code => {
+      return code.description.toLowerCase().indexOf(text) !== -1
+    });
+  }
+
+
+  searchCodes(event: { component: IonicSelectableComponent; text: string }) {
+    let text = event.text.trim().toLowerCase();
+    event.component.startSearch();
+
+    // Close any running subscription.
+    if (this.nominalCodeSubscription) {
+      this.nominalCodeSubscription.unsubscribe();
+    }
+
+    if (!text) {
+      // Close any running subscription.
+      if (this.nominalCodeSubscription) {
+        this.nominalCodeSubscription.unsubscribe();
+      }
+
+      event.component.items = this.getCodes(1, 15);
+
+      // Enable and start infinite scroll from the beginning.
+      this.page = 2;
+      event.component.endSearch();
+      event.component.enableInfiniteScroll();
+      return;
+    }
+
+    this.nominalCodeSubscription = this
+      .getCodesAsync()
+      .subscribe(ports => {
+        // Subscription will be closed when unsubscribed manually.
+        if (this.nominalCodeSubscription.closed) {
+          return;
+        }
+
+        event.component.items = this.filterCodes(ports, text);
+        event.component.endSearch();
+      });
+  }
+
+  beginLoading() {
+    this.commonService.showLoader();
+  }
+
+  endLoading() {
+    this.commonService.hideLoader();
+  }
+
+  startLoading() { }
 
 }

@@ -111,3 +111,17 @@
     text-align: right;
   }
 }
+
+.selectable-btn {
+  --border-radius: 4px !important;
+  float: right;
+  margin-right: 15px;
+}
+
+.selectable-height {
+  max-height: 30px !important;
+}
+
+.datetime-padding{
+  padding-bottom: 7px;
+}

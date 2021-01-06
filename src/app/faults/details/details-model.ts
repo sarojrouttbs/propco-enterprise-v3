@@ -172,5 +172,13 @@ declare namespace FaultModels {
         pafReference: string;
     }
 
+    export interface NominalCode {
+        description: string;
+        isVatApplicable: string;
+        nominalCode?: string;
+        nominalType: string;
+        combine: string;
+    }
+
 }
 
