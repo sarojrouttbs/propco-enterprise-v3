@@ -447,7 +447,7 @@ export class ArrangingContractorComponent implements OnInit {
               this.commonService.showLoader();
               setTimeout(async () => {
                 let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-                this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
+                this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
               }, 3000);
             }
           }
@@ -460,11 +460,12 @@ export class ArrangingContractorComponent implements OnInit {
               const faultContUpdated = await this.updateFaultQuoteContractor();
               if (faultContUpdated) {
                 const faultUpdated = await this.updateFault(true);
+                this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
                 if (faultUpdated) {
                   this.commonService.showLoader();
                   setTimeout(async () => {
                     let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-                    this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
+                    this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
                   }, 3000);
                 }
               }
@@ -596,22 +597,22 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private disableContractorsList(notification) {
-    const data = this.faultMaintenanceDetails.quoteContractors.filter(x => x.isRejected);
-    if (data && data[0]) {
-      this.rejectionReason = data[0].rejectionReason;
-    }
-    this.disableAnotherQuote = false;
-    if ((data.length + 1) >= this.MAX_QUOTE_REJECTION) {
-      this.disableAnotherQuote = true;
-    }
     if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && notification.templateCode === 'LAR-L-E') {
       this.restrictAction = false;
       this.raiseQuoteForm.get('selectedContractorId').setValue('');
     } else {
       this.restrictAction = true;
     }
-
-
+    if (this.faultMaintenanceDetails && this.faultMaintenanceDetails.quoteContractors) {
+      const data = this.faultMaintenanceDetails.quoteContractors.filter(x => x.isRejected);
+      if (data && data[0]) {
+        this.rejectionReason = data[0].rejectionReason;
+      }
+      this.disableAnotherQuote = false;
+      if ((data.length + 1) >= this.MAX_QUOTE_REJECTION) {
+        this.disableAnotherQuote = true;
+      }
+    }
   }
 
   setUserAction(index) {
@@ -672,7 +673,7 @@ export class ArrangingContractorComponent implements OnInit {
           this.commonService.showLoader();
           // setTimeout(async () => {
           let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
+          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
           // }, 1000);
 
         }
@@ -684,7 +685,7 @@ export class ArrangingContractorComponent implements OnInit {
           this.commonService.showLoader();
           // setTimeout(async () => {
           let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
+          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
           // }, 1000);
 
         }
@@ -705,7 +706,7 @@ export class ArrangingContractorComponent implements OnInit {
           await this.saveContractorVisitResponse(this.iacNotification.faultNotificationId, notificationObj);
           this.commonService.showLoader();
           let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
+          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
           this._btnHandler('refresh');
 
         }
@@ -723,7 +724,7 @@ export class ArrangingContractorComponent implements OnInit {
       modal.onDidDismiss().then(async res => {
         if (res.data && res.data == 'success') {
           let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
+          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
         }
       });
 
@@ -747,6 +748,7 @@ export class ArrangingContractorComponent implements OnInit {
 
       modal.onDidDismiss().then(async res => {
         if (res.data && res.data == 'success') {
+          this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
           let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
           this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
         }
@@ -759,7 +761,7 @@ export class ArrangingContractorComponent implements OnInit {
           if (submit) {
             this.commonService.showLoader();
             let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-            this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
+            this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
           }
         }
       });
@@ -792,7 +794,7 @@ export class ArrangingContractorComponent implements OnInit {
           if (submit) {
             this.commonService.showLoader();
             let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-            this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
+            this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_AUTHORISATION');
           }
         }
       });
@@ -964,6 +966,23 @@ export class ArrangingContractorComponent implements OnInit {
       }, error => {
         resolve(false);
       });
+    });
+    return promise;
+  }
+
+  private getFaultDetails(faultId): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.getFaultDetails(faultId).subscribe(
+        res => {
+          if (res) {
+            resolve(res);
+          }
+        },
+        error => {
+          console.log(error);
+          resolve(null);
+        }
+      );
     });
     return promise;
   }
