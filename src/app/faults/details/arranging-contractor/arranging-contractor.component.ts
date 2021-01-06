@@ -930,7 +930,7 @@ export class ArrangingContractorComponent implements OnInit {
     notificationObj.submittedByType = 'SECUR_USER';
     const updated = await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
     if (updated) {
-      let faultRequestObj: any;
+      let faultRequestObj: any = {};
       faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
       const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
       if (isFaultUpdated) {
