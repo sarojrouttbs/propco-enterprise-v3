@@ -129,7 +129,7 @@
             <ion-label position="floating">Select Landlord<ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select interface="popover" formControlName="selectedEntity"
-              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
+              (ionChange)="spropertyTenancyListetEntityData(reportedByForm.controls.selectedEntity.value)">
               <ion-select-option [value]="item" *ngFor="let item of landlordsOfproperty">{{item.addressee || item.name}}
               </ion-select-option>
             </ion-select>
@@ -266,7 +266,8 @@
               <ion-col size="100" class="folder-wrapper">
                 <!-- <img src="assets/images/default.jpg" (click)="filterByGroupName(file)"
                   > -->
-                  <ion-icon name="folder-open-outline" title="Click to View Documents" (click)="filterByGroupName(file)" class="folder-icon"></ion-icon>
+                <ion-icon name="folder-open-outline" title="Click to View Documents" (click)="filterByGroupName(file)"
+                  class="folder-icon"></ion-icon>
               </ion-col>
             </ion-row>
             <ion-row class="ion-justify-content-between">
@@ -292,7 +293,8 @@
             <label for="files" class="browse-btn">Browse Files</label>
           </form>
         </ion-col>
-        <ion-col size-xl="20" size="25" *ngFor="let file of files; let i=index;" [ngClass]="{'display-none': file?.documentId}" style="margin-bottom: 10px">
+        <ion-col size-xl="20" size="25" *ngFor="let file of files; let i=index;"
+          [ngClass]="{'display-none': file?.documentId}" style="margin-bottom: 10px">
           <div class="delete-icon-wrapper">
             <ion-grid>
               <ion-row>
@@ -319,7 +321,8 @@
   <ion-grid [hidden]="mediaType != 'documents'">
     <ion-row>
       <ion-col size="100">
-        <ion-icon name="arrow-back" class="back-button" title="Upload Documents" (click)="goBackToUpload('upload')"></ion-icon>
+        <ion-icon name="arrow-back" class="back-button" title="Upload Documents" (click)="goBackToUpload('upload')">
+        </ion-icon>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -328,10 +331,12 @@
           <ion-grid>
             <ion-row>
               <ion-col size="100" *ngIf="getFileType(file.name)">
-                <img src="assets/images/default.jpg" (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download PDF">
+                <img src="assets/images/default.jpg" (click)="downloadDocumentByURl(file.documentUrl)"
+                  title="Click To Download PDF">
               </ion-col>
               <ion-col size="100" *ngIf="!getFileType(file.name)">
-                <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download">
+                <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'"
+                  (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download">
               </ion-col>
             </ion-row>
             <ion-row class="ion-justify-content-between">
@@ -339,7 +344,8 @@
                 <div class="file-name">{{file.name}}</div>
               </ion-col>
               <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding">
-                <ion-icon (click)="deleteDocument(file.documentId, i)" title="Delete File" class="delete-icon" name="close-circle">
+                <ion-icon (click)="deleteDocument(file.documentId, i)" title="Delete File" class="delete-icon"
+                  name="close-circle">
                 </ion-icon>
               </ion-col>
             </ion-row>
@@ -427,7 +433,8 @@
         <ion-text class="content"></ion-text>
       </ion-col> -->
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header ion-text-capitalize">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}
+        <ion-text class="header ion-text-capitalize">{{getLookupValue(reportedByForm.controls.reportedBy.value,
+          reportedByTypes) || 'N/A'}}
         </ion-text><br />
         <ion-text class="content">{{reportedByForm.controls.forename.value || 'N/A'}}</ion-text>
       </ion-col>
@@ -462,7 +469,8 @@
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Access Information</ion-text><br />
         <ion-text class="content">
-          {{(accessInfoForm.controls.isTenantPresenceRequired.value?accessInfoList[0].title:accessInfoList[1].title) || 'N/A'}}
+          {{(accessInfoForm.controls.isTenantPresenceRequired.value?accessInfoList[0].title:accessInfoList[1].title) ||
+          'N/A'}}
         </ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -670,7 +678,8 @@
           <div *ngIf="cliNotification">
             <div class="banner">
               <div class="ion-text-left">
-                <b>{{cliNotification?.templateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd-MM-yyyy HH:mm aa' }}</b>
+                <b>{{cliNotification?.templateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd-MM-yyyy HH:mm aa'
+                  }}</b>
               </div>
               <h2 class="banner-heading">
                 {{cliNotification && cliNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
@@ -707,7 +716,8 @@
               <h6>
                 <ion-text color="danger">Please note:</ion-text>
                 The fault will be closed automatically if the Landlord doesn't respond within
-                {{(cliNotification.allowedNumberOfChases - cliNotification.numberOfChasesDone) * cliNotification.chaseInterval}}
+                {{(cliNotification.allowedNumberOfChases - cliNotification.numberOfChasesDone) *
+                cliNotification.chaseInterval}}
                 hours.
               </h6>
               <div class="border-bottom"></div>
@@ -771,14 +781,13 @@
                       <ion-label position="floating">Select Contractor</ion-label>
                       <ion-input type="text" debounce="500" (ionInput)="onSearchChange($event)"
                         formControlName='contractor'
-                        [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')"
-                       >
+                        [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')">
                       </ion-input>
                     </ion-item>
-<!-- *ngIf="resultsAvailable" -->
+                    <!-- *ngIf="resultsAvailable" -->
                     <ion-list class="contractor-list" *ngIf="resultsAvailable">
-                      <ion-item *ngFor="let result of (selectedContractor | async)?.data" (click)="contractorSelected(result)" button
-                        style="font-size: 13px !important; ">
+                      <ion-item *ngFor="let result of (selectedContractor | async)?.data"
+                        (click)="contractorSelected(result)" button style="font-size: 13px !important; ">
                         <span>
                           <i class="propcoicon no-background propcoicon-contractor"
                             style="background: transparent;"></i>
@@ -786,14 +795,14 @@
                         <label style="color: var(--ion-color-step-200);
                         padding-right: 5px;
                     ">{{result.fullName}}&nbsp;
-                  <span style="color: var(--ion-color-step-1000);
+                          <span style="color: var(--ion-color-step-1000);
                   padding-right: 5px;
               ">{{result.reference}}</span>&nbsp;
-                  <span class="text-color-lightgreen" style="color: var(--ion-color-primary);
+                          <span class="text-color-lightgreen" style="color: var(--ion-color-primary);
                     padding-right: 5px;
-                ">{{result.status}}</span>&nbsp;  
-                  </label>
-                        
+                ">{{result.status}}</span>&nbsp;
+                        </label>
+
                       </ion-item>
                     </ion-list>
                   </ion-col>
@@ -886,20 +895,21 @@
 
 <ng-template #arrangingContractor>
   <ion-card class="ion-no-margin">
-    <ng-container *ngIf="faultDetails && (faultDetails.stage === 'ARRANGING_CONTRACTOR' || stepper?.selectedIndex == 3) && landlordsOfproperty">
+    <ng-container
+      *ngIf="faultDetails && (faultDetails.stage === 'ARRANGING_CONTRACTOR' || stepper?.selectedIndex == 3) && landlordsOfproperty">
       <ion-grid style="margin-bottom:10px">
         <ion-row class="ion-justify-content-start">
           <ion-col size="auto">
             <h2>
               <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
-              {{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text
-                color="success">&gt;</ion-text>
+              {{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}}
+              <ion-text color="success">&gt;</ion-text>
             </h2>
           </ion-col>
           <ion-col size="auto">
             <ion-item class="edit-title" *ngIf="isEditable">
-              <ion-input #title [value]="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"
-                (ionBlur)="changeTitle(title.value)"></ion-input>
+              <ion-input #title [value]="describeFaultForm.controls['title'].value"
+                style="font-size:24px;padding-bottom:0" (ionBlur)="changeTitle(title.value)"></ion-input>
             </ion-item>
             <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
           </ion-col>
@@ -910,7 +920,9 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-      <app-arranging-contractor [faultDetails]="faultDetails" (btnAction)="_arrangingContHandler($event)" [leadTenantId]="leadTenantId" [propertyLandlords]="landlordsOfproperty" [quoteDocuments]="quoteDocuments"></app-arranging-contractor>
+      <app-arranging-contractor [faultDetails]="faultDetails" (btnAction)="_arrangingContHandler($event)"
+        [leadTenantId]="leadTenantId" [propertyLandlords]="landlordsOfproperty" [quoteDocuments]="quoteDocuments"
+        [propertyDetails]="propertyDetails"></app-arranging-contractor>
     </ng-container>
     <!-- <div class="action-btn-group">
       <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>

@@ -61,7 +61,7 @@ export class ArrangingContractorComponent implements OnInit {
   page = 2;
   codes: FaultModels.NominalCode[];
   currentDate = this.commonService.getFormatedDate(new Date());
-
+  @Input() propertyDetails;
 
   constructor(
     private fb: FormBuilder,
@@ -74,7 +74,6 @@ export class ArrangingContractorComponent implements OnInit {
   ngOnInit() {
     this.initiateArrangingContractors();
     this.initiateWorkOrder();
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -91,6 +90,9 @@ export class ArrangingContractorComponent implements OnInit {
 
   private initiateWorkOrder(): void {
     this.initWorkOrderForms();
+    if (this.faultDetails.doesBranchHoldKeys) {
+      this.officeDetails();
+    }
   }
 
   private initForms(): void {
@@ -119,26 +121,27 @@ export class ArrangingContractorComponent implements OnInit {
 
   private initWorkOrderForms(): void {
     this.workOrderForm = this.fb.group({
-      contractor: ['', Validators.required],
+      propertyId: [this.faultDetails.propertyId, Validators.required],
+      contractorId: ['', Validators.required],
       company: [{ value: '', disabled: true }],
       address: [{ value: '', disabled: true }],
       repairCost: ['', Validators.required],
-      workOrderNumber: [{ value: '', disabled: true }],
-      date: [{ value: '', disabled: true }],
+      worksOrderNumber: [{ value: this.faultDetails.reference, disabled: true }],
+      invoiceDate: [{ value: '', disabled: true }],
       nominalCode: ['', Validators.required],
       description: ['', Validators.required],
-      paidVia: [{ value: '', disabled: true }, Validators.required],
+      paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
       paidTo: [{ value: '', disabled: true }],
       defaultCommision: '',
-      mgntKeys: '',
-      returnKeysTo: '',
-      accessDetails: ['', Validators.required],
-      completionDate: '',
-      jobDescription: ['', Validators.required],
+      mgntHoldKey: '',
+      keysLocation: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
+      accessDetails: [this.getAccessDetails(this.faultDetails.isTenantPresenceRequired), Validators.required],
+      completedDate: '',
+      fullDescription: ['', Validators.required],
       orderedBy: ''
     });
 
-    this.woContractors = this.workOrderForm.get('contractor').valueChanges.pipe(debounceTime(300),
+    this.woContractors = this.workOrderForm.get('contractorId').valueChanges.pipe(debounceTime(300),
       switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
         new Observable())
     );
@@ -1018,7 +1021,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   woSelectContractor(selected) {
     this.getContractorDetails(selected?.entityId, 'wo');
-    this.workOrderForm.patchValue({ contractor: selected ? selected.fullName : undefined, address: selected ? selected.address : undefined });
+    this.workOrderForm.patchValue({ contractorId: selected ? selected.fullName : undefined, address: selected ? selected.address : undefined });
     this.woResultsAvailable = false;
   }
 
@@ -1121,14 +1124,26 @@ export class ArrangingContractorComponent implements OnInit {
       });
   }
 
-  beginLoading() {
-    this.commonService.showLoader();
-  }
-
   endLoading() {
     this.commonService.hideLoader();
   }
 
-  startLoading() { }
+  startLoading() {
+    this.commonService.showLoader();
+  }
+
+  officeDetails() {
+    return new Promise((resolve, reject) => {
+      this.faultsService.getOfficeDetails(this.propertyDetails.office).subscribe((res) => {
+        let data = res ? res : '';
+        if (data) {
+          this.workOrderForm.patchValue({
+            mgntHoldKey: "Contact Branch - " + data.branding.phone
+          });
+        }
+      }, error => {
+      });
+    });
+  }
 
 }

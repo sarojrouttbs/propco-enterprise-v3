@@ -215,9 +215,13 @@ export class FaultsService {
       catchError(this.handleError<any>(''))
     );
   }
-  
+
   saveFaultLLAuth(body: any, faultNotificationId: string): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/quote-auth`, body);
+  }
+
+  getOfficeDetails(office): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `offices/${office}`, {});
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

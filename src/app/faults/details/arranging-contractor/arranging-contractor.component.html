@@ -219,7 +219,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ng-template #quoteDetails>
+  <ng-template>
     <ion-row>
       <ion-col size="50">
         <ion-item>
@@ -349,18 +349,18 @@
 </form>
 
 
-<ng-template>
+<ng-template  #quoteDetails>
   <form [formGroup]="workOrderForm">
     <ion-row>
       <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Contractor <ion-text class="mandatory">*</ion-text>
           </ion-label>
-          <ion-input type="text" debounce="300" (ionInput)="onSearchContractor($event)" formControlName='contractor'
+          <ion-input type="text" debounce="300" (ionInput)="onSearchContractor($event)" formControlName='contractorId'
             placeholder="">
           </ion-input>
         </ion-item>
-        <app-validation-message [control]="workOrderForm.controls.contractor"></app-validation-message>
+        <app-validation-message [control]="workOrderForm.controls.contractorId"></app-validation-message>
         <ion-list class="contractor-list" *ngIf="woResultsAvailable">
           <ion-item *ngFor="let result of (woContractors| async)?.data" (click)="woSelectContractor(result)" button
             style="font-size: 13px !important;">
@@ -399,13 +399,13 @@
       <ion-col size="33.33">
         <ion-item>
           <ion-label position="floating">Work Order Number </ion-label>
-          <ion-input formControlName="workOrderNumber"></ion-input>
+          <ion-input formControlName="worksOrderNumber"></ion-input>
         </ion-item>
       </ion-col>
       <ion-col size="33.33">
         <ion-item>
           <ion-label position="floating">Date </ion-label>
-          <ion-input formControlName="date"></ion-input>
+          <ion-input formControlName="invoiceDate"></ion-input>
         </ion-item>
       </ion-col>
       <ion-col size="33.33">
@@ -469,9 +469,9 @@
         <ion-item>
           <ion-label position="floating">Paid Via <ion-text class="mandatory">*</ion-text>
           </ion-label>
-          <ion-input formControlName="paidVia"></ion-input>
+          <ion-input formControlName="paidBy"></ion-input>
         </ion-item>
-        <app-validation-message [control]="workOrderForm.controls.paidVia"></app-validation-message>
+        <app-validation-message [control]="workOrderForm.controls.paidBy"></app-validation-message>
       </ion-col>
       <ion-col size="33.33">
         <ion-item>
@@ -489,13 +489,13 @@
         <ion-item>
           <ion-label position="floating">Does Branch Holds Management Keys?
           </ion-label>
-          <ion-input formControlName="mgntKeys"></ion-input>
+          <ion-input formControlName="mgntHoldKey"></ion-input>
         </ion-item>
       </ion-col>
       <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Return Keys to </ion-label>
-          <ion-input formControlName="returnKeysTo"></ion-input>
+          <ion-input formControlName="keysLocation"></ion-input>
         </ion-item>
       </ion-col>
       <ion-col size="33.33">
@@ -509,9 +509,8 @@
       <ion-col size="33.33">
         <ion-item>
           <ion-label position="floating">Required Completion Date </ion-label>
-          <!-- <ion-input formControlName="completionDate"></ion-input> -->
           <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-            formControlName="completionDate" [min]="currentDate">
+            formControlName="completedDate" [min]="currentDate">
           </ion-datetime>
         </ion-item>
       </ion-col>
@@ -524,9 +523,9 @@
       <ion-col size="100">
         <ion-item>
           <ion-label position="floating">Full Job Description </ion-label>
-          <ion-textarea rows="1" formControlName="jobDescription"></ion-textarea>
+          <ion-textarea rows="1" formControlName="fullDescription"></ion-textarea>
         </ion-item>
-        <app-validation-message [control]="workOrderForm.controls.jobDescription"></app-validation-message>
+        <app-validation-message [control]="workOrderForm.controls.fullDescription"></app-validation-message>
       </ion-col>
     </ion-row>
   </form>
