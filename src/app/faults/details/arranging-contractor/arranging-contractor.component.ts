@@ -1,14 +1,16 @@
 import { RejectionModalPage } from './../../../shared/modals/rejection-modal/rejection-modal.page';
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
 import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
+import { IonicSelectableComponent } from 'ionic-selectable';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -17,6 +19,7 @@ import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.pa
 })
 export class ArrangingContractorComponent implements OnInit {
   raiseQuoteForm: FormGroup;
+  workOrderForm: FormGroup;
   addContractorForm: FormGroup;
   contractorListForm: FormGroup;
   userSelectedActionControl = new FormControl();
@@ -52,16 +55,25 @@ export class ArrangingContractorComponent implements OnInit {
   private disableAnotherQuote: boolean = false;
   isUserActionChange: boolean = false;
   faultMaintRejectionReasons: any;
+  woResultsAvailable = false;
+  woContractors: Observable<FaultModels.IContractorResponse>;
+  nominalCodeSubscription: Subscription;
+  page = 2;
+  codes: FaultModels.NominalCode[];
+  currentDate = this.commonService.getFormatedDate(new Date());
+  @Input() propertyDetails;
 
   constructor(
     private fb: FormBuilder,
     private faultsService: FaultsService,
     private commonService: CommonService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    public datepipe: DatePipe
   ) { }
 
   ngOnInit() {
     this.initiateArrangingContractors();
+    this.initiateWorkOrder();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -74,6 +86,13 @@ export class ArrangingContractorComponent implements OnInit {
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
+  }
+
+  private initiateWorkOrder(): void {
+    this.initWorkOrderForms();
+    if (this.faultDetails.doesBranchHoldKeys) {
+      this.officeDetails();
+    }
   }
 
   private initForms(): void {
@@ -100,6 +119,34 @@ export class ArrangingContractorComponent implements OnInit {
     });
   }
 
+  private initWorkOrderForms(): void {
+    this.workOrderForm = this.fb.group({
+      propertyId: [this.faultDetails.propertyId, Validators.required],
+      contractorId: ['', Validators.required],
+      company: [{ value: '', disabled: true }],
+      address: [{ value: '', disabled: true }],
+      repairCost: ['', Validators.required],
+      worksOrderNumber: [{ value: this.faultDetails.reference, disabled: true }],
+      invoiceDate: [{ value: '', disabled: true }],
+      nominalCode: ['', Validators.required],
+      description: ['', Validators.required],
+      paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
+      paidTo: [{ value: '', disabled: true }],
+      defaultCommision: '',
+      mgntHoldKey: '',
+      keysLocation: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
+      accessDetails: [this.getAccessDetails(this.faultDetails.isTenantPresenceRequired), Validators.required],
+      completedDate: '',
+      fullDescription: ['', Validators.required],
+      orderedBy: ''
+    });
+
+    this.woContractors = this.workOrderForm.get('contractorId').valueChanges.pipe(debounceTime(300),
+      switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
+        new Observable())
+    );
+  }
+
   private getAccessDetails(tenantPresence): string {
     if (tenantPresence != null) {
       let data = this.accessInfoList.filter(data => data.value == tenantPresence);
@@ -113,7 +160,7 @@ export class ArrangingContractorComponent implements OnInit {
       return;
     }
     if (isNew) {
-      this.getContractorDetails(data?.contractorObj?.entityId);
+      this.getContractorDetails(data?.contractorObj?.entityId, 'quote');
     } else {
       this.patchContartorList(data, isNew, isPreferred);
     }
@@ -254,6 +301,8 @@ export class ArrangingContractorComponent implements OnInit {
     }
     this.faultsService.getNominalCodes().subscribe(data => {
       this.nominalCodes = data ? data : [];
+      this.codes = this.getCodes();
+
     });
   }
 
@@ -717,6 +766,9 @@ export class ArrangingContractorComponent implements OnInit {
         cssClass: 'modal-container',
         componentProps: {
           faultNotificationId: this.iacNotification.faultNotificationId,
+          title: "Arranging Contractor",
+          headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
+          headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants."
         },
         backdropDismiss: false
       });
@@ -834,11 +886,15 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  private getContractorDetails(contractId) {
+  private getContractorDetails(contractId, type) {
     return new Promise((resolve, reject) => {
       this.faultsService.getContractorDetails(contractId).subscribe((res) => {
         let data = res ? res : '';
-        this.patchContartorList(data, true, false);
+        if (type === 'quote') {
+          this.patchContartorList(data, true, false);
+        } else if (type === 'wo') {
+          this.workOrderForm.patchValue({ company: data ? data.companyName : undefined });
+        }
       }, error => {
       });
     });
@@ -958,6 +1014,22 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
+  onSearchContractor(event: any) {
+    const searchString = event.target.value;
+    this.workOrderForm.patchValue({ company: '', address: '' });
+    if (searchString.length > 2) {
+      this.woResultsAvailable = true;
+    } else {
+      this.woResultsAvailable = false;
+    }
+  }
+
+  woSelectContractor(selected) {
+    this.getContractorDetails(selected?.entityId, 'wo');
+    this.workOrderForm.patchValue({ contractorId: selected ? selected.fullName : undefined, address: selected ? selected.address : undefined });
+    this.woResultsAvailable = false;
+  }
+
   private async getMaxQuoteRejection(): Promise<any> {
     const promise = new Promise((resolve, reject) => {
       this.commonService.getSystemConfig(SYSTEM_CONFIG.MAXIMUM_FAULT_QUOTE_REJECTION).subscribe(res => {
@@ -968,6 +1040,115 @@ export class ArrangingContractorComponent implements OnInit {
       });
     });
     return promise;
+  }
+
+  getMoreCodes(event: {
+    component: IonicSelectableComponent,
+    text: string
+  }) {
+    if (event) {
+      let text = (event.text || '').trim().toLowerCase();
+      this.getCodesAsync(this.page, 10).subscribe(codes => {
+        codes = event.component.items.concat(codes);
+
+        if (text) {
+          codes = this.filterCodes(codes, text);
+        }
+
+        event.component.items = codes;
+        event.component.endInfiniteScroll();
+        this.page++;
+      });
+    }
+
+  }
+
+  getCodes(page?: number, size?: number) {
+    let codes = [];
+
+    this.nominalCodes.forEach(code => {
+      code.concat = code.nominalCode + " - " + code.description;
+      codes.push(code);
+    });
+
+    if (page && size) {
+      codes = this.nominalCodes.slice((page - 1) * size, ((page - 1) * size) + size);
+    }
+
+    return codes;
+  }
+
+  getCodesAsync(page?: number, size?: number, timeout = 2000): Observable<FaultModels.NominalCode[]> {
+    return new Observable<FaultModels.NominalCode[]>(observer => {
+      observer.next(this.getCodes(page, size));
+      observer.complete();
+    }).pipe(delay(timeout));
+  }
+
+  filterCodes(codes: FaultModels.NominalCode[], text: string) {
+    return codes.filter(code => {
+      return code.description.toLowerCase().indexOf(text) !== -1
+    });
+  }
+
+
+  searchCodes(event: { component: IonicSelectableComponent; text: string }) {
+    let text = event.text.trim().toLowerCase();
+    event.component.startSearch();
+
+    // Close any running subscription.
+    if (this.nominalCodeSubscription) {
+      this.nominalCodeSubscription.unsubscribe();
+    }
+
+    if (!text) {
+      // Close any running subscription.
+      if (this.nominalCodeSubscription) {
+        this.nominalCodeSubscription.unsubscribe();
+      }
+
+      event.component.items = this.getCodes(1, 15);
+
+      // Enable and start infinite scroll from the beginning.
+      this.page = 2;
+      event.component.endSearch();
+      event.component.enableInfiniteScroll();
+      return;
+    }
+
+    this.nominalCodeSubscription = this
+      .getCodesAsync()
+      .subscribe(ports => {
+        // Subscription will be closed when unsubscribed manually.
+        if (this.nominalCodeSubscription.closed) {
+          return;
+        }
+
+        event.component.items = this.filterCodes(ports, text);
+        event.component.endSearch();
+      });
+  }
+
+  endLoading() {
+    this.commonService.hideLoader();
+  }
+
+  startLoading() {
+    this.commonService.showLoader();
+  }
+
+  officeDetails() {
+    return new Promise((resolve, reject) => {
+      this.faultsService.getOfficeDetails(this.propertyDetails.office).subscribe((res) => {
+        let data = res ? res : '';
+        if (data) {
+          this.workOrderForm.patchValue({
+            mgntHoldKey: "Contact Branch - " + data.branding.phone
+          });
+        }
+      }, error => {
+      });
+    });
   }
 
   private getFaultDetails(faultId): Promise<any> {

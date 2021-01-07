@@ -27,6 +27,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SimplePopoverPageModule } from 'src/app/shared/popover/simple-popover/simple-popover.module';
 import { AppointmentModalPageModule } from 'src/app/shared/modals/appointment-modal/appointment-modal.module';
 import { QuoteModalPageModule } from 'src/app/shared/modals/quote-modal/quote-modal.module';
+import { IonicSelectableModule } from 'ionic-selectable';
 
 @NgModule({
   imports: [
@@ -49,7 +50,8 @@ import { QuoteModalPageModule } from 'src/app/shared/modals/quote-modal/quote-mo
     SimplePopoverPageModule,
     AppointmentModalPageModule,
     QuoteModalPageModule,
-    RejectionModalPageModule
+    RejectionModalPageModule,
+    IonicSelectableModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent]
 })
