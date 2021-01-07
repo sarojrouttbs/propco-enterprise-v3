@@ -840,19 +840,15 @@ export class ArrangingContractorComponent implements OnInit {
       });
       await modal.present();
     } else {
-      this.commonService.showConfirm('Please Confirm selection', `Are you sure you want to authorise this Quote`, '', 'Yes', 'No').then(async res => {
-        if (res) {
-          const success = await this.autoRaiseWorksOrder();
-          if (success) {
-            const submit = await this.saveFaultLLAuth();
-            if (submit) {
-              this.commonService.showLoader();
-              let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-              this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
-            }
-          }
+      const paymentRequired = await this.checkForPaymentRules();
+      if (paymentRequired) {
+        const submit = await this.raiseWorksOrderAndNotification(paymentRequired);
+        if (submit) {
+          this.commonService.showLoader();
+          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
         }
-      });
+      }
     }
   }
 
@@ -1172,10 +1168,10 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   /*iac004*/
-  private async autoRaiseWorksOrder() {
+  private async checkForPaymentRules() {
     const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
     if (!rules) {
-      return false;
+      return null;
     }
     const paymentRequired = await this.isPaymentRequired(rules);
     if (paymentRequired) {
@@ -1185,9 +1181,7 @@ export class ArrangingContractorComponent implements OnInit {
        <br/>Do you want to proceed? <br/><br/>
        <small>NB:The landlord can also make an offline payment which can be processed manually via landloard accounts</small>`, '', 'Yes', 'No');
       if (response) {
-        const success = await this.sendLandlordPaymentRequest();
-        if (!success) return false;
-        return true;
+        return paymentRequired;
       }
     } else {
       const response = await this.commonService.showConfirm('Arranging Contractor',
@@ -1195,9 +1189,26 @@ export class ArrangingContractorComponent implements OnInit {
       A notification will be sent out to the Contractor to carry out the job.
      <br/> Are you sure?`, '', 'Yes', 'No');
       if (response) {
-        const success = await this.issueWorksOrderoContractor();
-        if (!success) return false;
-        return true;
+        return paymentRequired;
+      }
+    }
+  }
+
+  private async raiseWorksOrderAndNotification(paymentRequired: boolean, actionType = 'auto') {
+    let submit: boolean;
+    if (actionType === 'auto') {
+      submit = await this.saveFaultLLAuth() as boolean;
+    } else {
+      submit = await this.createFaultMaintenaceWorksOrder() as boolean;
+    }
+    if (!submit) return false;
+    if (submit) {
+      if (paymentRequired) {
+        const success = await this.sendLandlordPaymentRequest() as boolean;
+        return success;
+      } else {
+        const success = await this.issueWorksOrderContractor() as boolean;
+        return success;
       }
     }
   }
@@ -1205,7 +1216,7 @@ export class ArrangingContractorComponent implements OnInit {
   private getWorksOrderPaymentRules() {
     const promise = new Promise((resolve, reject) => {
       // this.faultsService.getWorksOrderPaymentRules('0beb2ead-71bf-4341-a25f-446529686a12').subscribe(
-        this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
+      this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
         res => {
           resolve(res);
         },
@@ -1217,7 +1228,7 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  private issueWorksOrderoContractor() {
+  private issueWorksOrderContractor() {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.issueWorksOrderoContractor(this.faultDetails.faultId).subscribe(
         res => {
@@ -1235,6 +1246,22 @@ export class ArrangingContractorComponent implements OnInit {
   private sendLandlordPaymentRequest() {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.sendLandlordPaymentRequest(this.faultDetails.faultId).subscribe(
+        res => {
+          resolve(true);
+          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private createFaultMaintenaceWorksOrder() {
+    const requestObj: any = {};
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.createFaultMaintenaceWorksOrder(requestObj, this.faultDetails.faultId).subscribe(
         res => {
           resolve(true);
           this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
