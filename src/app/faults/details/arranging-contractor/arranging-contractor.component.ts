@@ -1204,8 +1204,8 @@ export class ArrangingContractorComponent implements OnInit {
 
   private getWorksOrderPaymentRules() {
     const promise = new Promise((resolve, reject) => {
-      this.faultsService.getWorksOrderPaymentRules('0beb2ead-71bf-4341-a25f-446529686a12').subscribe(
-        // this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
+      // this.faultsService.getWorksOrderPaymentRules('0beb2ead-71bf-4341-a25f-446529686a12').subscribe(
+        this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
         res => {
           resolve(res);
         },
