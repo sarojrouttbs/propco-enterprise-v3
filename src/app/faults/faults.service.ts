@@ -235,6 +235,10 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/ll-payment-request`, {});
   }
 
+  createFaultMaintenaceWorksOrder(data, faultId: string) {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/worksorder`, data);
+  }
+
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
