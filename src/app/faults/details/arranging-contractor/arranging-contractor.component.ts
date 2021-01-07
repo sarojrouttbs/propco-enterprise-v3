@@ -767,8 +767,8 @@ export class ArrangingContractorComponent implements OnInit {
         componentProps: {
           faultNotificationId: this.iacNotification.faultNotificationId,
           title: "Arranging Contractor",
-          heading_one: "You have selected 'Yes, agreed Date/Time with Tenant.'",
-          heading_two: "Please input the appointment date and time that the Contractor has agreed with the occupants."
+          headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
+          headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants."
         },
         backdropDismiss: false
       });

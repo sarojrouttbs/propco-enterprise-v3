@@ -15,8 +15,8 @@ export class AppointmentModalPage implements OnInit {
   appointmentForm: FormGroup;
   faultNotificationId;
   title;
-  heading_one;
-  heading_two;
+  headingOne;
+  headingTwo;
   minDate;
 
   constructor(
