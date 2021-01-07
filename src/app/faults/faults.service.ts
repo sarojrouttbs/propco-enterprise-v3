@@ -154,7 +154,6 @@ export class FaultsService {
   }
 
   getQuoteDetails(faultId): Observable<any> {
-    // const params = new HttpParams().set('type', 'quote');
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/maintenance`);
   }
 
@@ -223,6 +222,19 @@ export class FaultsService {
   getOfficeDetails(office): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `offices/${office}`, {});
   }
+
+  getWorksOrderPaymentRules(faultId: string) {
+    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/check-payment-rules`);
+  }
+
+  issueWorksOrderoContractor(faultId: string) {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/issue-wo`, {});
+  }
+
+  sendLandlordPaymentRequest(faultId: string) {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/ll-payment-request`, {});
+  }
+
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

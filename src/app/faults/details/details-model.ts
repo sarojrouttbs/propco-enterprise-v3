@@ -180,5 +180,15 @@ declare namespace FaultModels {
         combine: string;
     }
 
+    export interface IFaultWorksorderRules {
+        hasSufficientReserveBalance: boolean;
+        isFaultEstimateLessThanHalfRentOrThresHoldValue: boolean;
+        hasRentArrears: boolean;
+        hasRentPaidUpFront: boolean;
+        hasTenantPaidRentOnTime: boolean;
+        isTenancyGivenNoticeOrInLastMonth: boolean;
+        hasOtherInvoicesToBePaid: boolean;
+    }
+
 }
 

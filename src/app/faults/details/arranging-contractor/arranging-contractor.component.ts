@@ -842,11 +842,14 @@ export class ArrangingContractorComponent implements OnInit {
     } else {
       this.commonService.showConfirm('Please Confirm selection', `Are you sure you want to authorise this Quote`, '', 'Yes', 'No').then(async res => {
         if (res) {
-          const submit = await this.saveFaultLLAuth();
-          if (submit) {
-            this.commonService.showLoader();
-            let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-            this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_AUTHORISATION');
+          const success = await this.autoRaiseWorksOrder();
+          if (success) {
+            const submit = await this.saveFaultLLAuth();
+            if (submit) {
+              this.commonService.showLoader();
+              let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+              this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
+            }
           }
         }
       });
@@ -1166,6 +1169,95 @@ export class ArrangingContractorComponent implements OnInit {
       );
     });
     return promise;
+  }
+
+  /*iac004*/
+  private async autoRaiseWorksOrder() {
+    const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
+    if (!rules) {
+      return false;
+    }
+    const paymentRequired = await this.isPaymentRequired(rules);
+    if (paymentRequired) {
+      const response = await this.commonService.showConfirm('Arranging Contractor',
+        `You have selected "Landlord accepted the quote".<br/> 
+       Since the Landlord account doesn't have sufficient balance to pay for the works, a payment request will be generated and the Landlord will be notified to make an online payment via the portal. 
+       <br/>Do you want to proceed? <br/><br/>
+       <small>NB:The landlord can also make an offline payment which can be processed manually via landloard accounts</small>`, '', 'Yes', 'No');
+      if (response) {
+        const success = await this.sendLandlordPaymentRequest();
+        if (!success) return false;
+        return true;
+      }
+    } else {
+      const response = await this.commonService.showConfirm('Arranging Contractor',
+        `You have selected "Landlord accepted the quote".<br/> 
+      A notification will be sent out to the Contractor to carry out the job.
+     <br/> Are you sure?`, '', 'Yes', 'No');
+      if (response) {
+        const success = await this.issueWorksOrderoContractor();
+        if (!success) return false;
+        return true;
+      }
+    }
+  }
+
+  private getWorksOrderPaymentRules() {
+    const promise = new Promise((resolve, reject) => {
+      // this.faultsService.getWorksOrderPaymentRules('0beb2ead-71bf-4341-a25f-446529686a12').subscribe(
+        this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
+        res => {
+          resolve(res);
+        },
+        error => {
+          resolve(null);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private issueWorksOrderoContractor() {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.issueWorksOrderoContractor(this.faultDetails.faultId).subscribe(
+        res => {
+          resolve(true);
+          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private sendLandlordPaymentRequest() {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.sendLandlordPaymentRequest(this.faultDetails.faultId).subscribe(
+        res => {
+          resolve(true);
+          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private async isPaymentRequired(rules: FaultModels.IFaultWorksorderRules): Promise<boolean> {
+    let paymentNeeded = false;
+    for (var key in rules) {
+      if (rules.hasOwnProperty(key)) {
+        if (!rules[key]) {
+          paymentNeeded = true;
+          break;
+        }
+      }
+    }
+    return paymentNeeded;
   }
 
 }
