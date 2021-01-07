@@ -14,6 +14,9 @@ import { CommonService } from '../../services/common.service';
 export class AppointmentModalPage implements OnInit {
   appointmentForm: FormGroup;
   faultNotificationId;
+  title;
+  heading_one;
+  heading_two;
   minDate;
 
   constructor(
