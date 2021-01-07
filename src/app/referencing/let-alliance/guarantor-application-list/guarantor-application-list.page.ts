@@ -61,22 +61,17 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
     this.applicantId = this.route.snapshot.queryParamMap.get('applicantId');
     this.referenceNumber = this.route.snapshot.queryParamMap.get('referenceNumber');
 
-    this.dtOptions[1] = this.buildDtOptions();
     const self = this;
     this.dtOptions[0] = {
-      paging: true,
-      pagingType: 'full_numbers',
-      serverSide: true,
-      processing: true,
+      paging: false,
       searching: false,
       ordering: true,
-      pageLength: 5,
-      lengthMenu: [5, 10, 15],
+      info: false,
       ajax: (tableParams: any, callback) => {
         const params = new HttpParams()
         .set('limit', tableParams.length)
         .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');
-        self.referencingService.getGuarantorApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.applicationId, params).subscribe(res => {
+        self.referencingService.getGuarantorApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.applicationId).subscribe(res => {
           self.applicationList = res && res.data ? res.data : [];
           self.getLAProductList();
           callback({
@@ -143,36 +138,12 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
     this.laApplicantReferencingResultTypes = data.applicantReferencingResultTypes;
   }
 
-  private buildDtOptions(): DataTables.Settings {
-    return {
-      paging: true,
-      searching: false,
-      ordering: false,
-      responsive: true,
-      lengthMenu:[5, 10, 15],
-      pageLength: 5,
-    };
-  }
-
   rerenderApplications(resetPaging?: any): void {
     if (this.dtElements && this.dtElements.first.dtInstance) {
       this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.ajax.reload((res) => { }, resetPaging);
       });
     }
-  }
-
-  getLAApplicationList(): void {
-    const params = new HttpParams()
-      .set('limit', '5')
-      .set('page', '1')
-      .set('officeCode', this.applicationFilterForm.get('officeCode').value)
-      .set('searchTerm', this.applicationFilterForm.get('searchTerm').value)
-      .set('fromDate', this.datepipe.transform(this.applicationFilterForm.get('fromDate').value, 'yyyy-MM-dd'))
-      .set('toDate', this.datepipe.transform(this.applicationFilterForm.get('toDate').value, 'yyyy-MM-dd'));
-    this.referencingService.getLAApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, params).subscribe(res => {
-      this.applicationList = res && res.data ? res.data : [];
-    });
   }
 
   private getLAProductList() {
@@ -198,7 +169,8 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
       componentProps: {
         paramApplicantId: this.selectedData.applicantDetail.applicantId,
         paramApplicationId: this.selectedData.applicationId,
-        paramAropertyAddress: this.selectedData.propertyDetail.address
+        paramPropertyAddress: this.selectedData.propertyDetail.address,
+        paramIt: 'G'
       }
     });
     await modal.present();
@@ -258,15 +230,9 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
      }, replaceUrl: true });
   }
 
-  resetFilter(){
-    this.applicationFilterForm.reset(this.initiateForm());
-    this.applicationFilterForm.markAsPristine();
-    this.applicationFilterForm.markAsUntouched();
-  }
-
-  showMenu(event: any, id: any, data: any, className: any, isCard?: any) {
+  showMenu(event: any, id: any, data: any, className: any) {
     this.selectedData = data;
-    this.commonService.showMenu(event, id, data, className, isCard);
+    this.commonService.showMenu(event, id, className, false);
   }
 
   hideMenu(event: any, id: any) {

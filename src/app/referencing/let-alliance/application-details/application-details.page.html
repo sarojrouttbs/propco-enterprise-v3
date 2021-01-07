@@ -69,17 +69,11 @@
             <ion-col class="ion-no-padding" size="75">
               <h5 class="no-margin-top">Registered Address</h5>
               <div>
-                <p *ngIf="address?.addressLine1"> {{ address?.addressLine1 + ','}}</p>
-              	<p *ngIf="address?.addressLine2">  {{ address?.addressLine2 + ','}}</p>
-              	<p *ngIf="address?.locality">  {{ address?.locality + ','}}</p>
-              	<p *ngIf="address?.town"> {{ address?.town + ','}}</p>
-                <p *ngIf="address?.postcode"> {{ address?.postcode }}</p>
-                
-                {{ address?.addressLine1 ? address?.addressLine1 + ',' : ''}}<br />
-                {{ address?.addressLine2 ? address?.addressLine2 + ',' : ''}}<br />
-                {{ address?.locality ? address?.locality + ',' : ''}}<br />
-                {{ address?.town ? address?.town + ',' : ''}}<br />
-                {{ address?.postcode }}
+                <span *ngIf="address?.addressLine1"> {{ address?.addressLine1 + ','}} <br/></span>
+              	<span *ngIf="address?.addressLine2">  {{ address?.addressLine2 + ','}}<br/></span>
+              	<span *ngIf="address?.locality">  {{ address?.locality + ','}}<br/></span>
+              	<span *ngIf="address?.town"> {{ address?.town + ','}}<br/></span>
+                <span *ngIf="address?.postcode"> {{ address?.postcode }}<br/></span>
               </div>
             </ion-col>
             <ion-col size="25" class="ion-text-center">

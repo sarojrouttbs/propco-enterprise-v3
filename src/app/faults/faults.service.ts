@@ -219,6 +219,10 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/quote-auth`, body);
   }
 
+  getOfficeDetails(office): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `offices/${office}`, {});
+  }
+
   getWorksOrderPaymentRules(faultId: string) {
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/check-payment-rules`);
   }
@@ -230,6 +234,7 @@ export class FaultsService {
   sendLandlordPaymentRequest(faultId: string) {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/ll-payment-request`, {});
   }
+
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

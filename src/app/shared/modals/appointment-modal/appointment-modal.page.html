@@ -10,7 +10,7 @@
 
 <ion-header>
   <ion-toolbar>
-    <ion-title>Arranging Contractor</ion-title>
+    <ion-title>{{title}}</ion-title>
     <ion-buttons slot="end">
       <ion-icon name="close" (click)="dismiss()"></ion-icon>
     </ion-buttons>
@@ -22,12 +22,13 @@
     <ion-grid class="">
       <ion-row class="">
         <ion-col size="100">
-          <h6>You have selected 'Yes, agreed Date/Time with Tenant.'</h6>
-          <h6>Please input the appointment date and time that the Contractor has agreed with the occupants.</h6>
+          <h6>{{headingOne}}</h6>
+          <h6>{{headingTwo}}</h6>
         </ion-col>
         <ion-col size="100">
           <ion-item>
-            <ion-label position="floating">Visit Date/Time<ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-label position="floating">Visit Date/Time<ion-text class="mandatory">*</ion-text>
+            </ion-label>
             <ion-datetime formControlName="dateTime" displayFormat="DD/MM/YYYY HH:mm" interface="popover"
               class="request-start-date" [min]="minDate">
             </ion-datetime>
@@ -39,11 +40,11 @@
   </form>
 </ion-content>
 <ion-footer>
-    <ion-row>
-      <ion-col class="ion-text-end">
-        <ion-button (click)="dismiss()">NO</ion-button>
-        <ion-button (click)="saveContractorVisit()">YES</ion-button>
-      </ion-col>
-     
-    </ion-row>
+  <ion-row>
+    <ion-col class="ion-text-end">
+      <ion-button (click)="dismiss()">NO</ion-button>
+      <ion-button (click)="saveContractorVisit()">YES</ion-button>
+    </ion-col>
+
+  </ion-row>
 </ion-footer>

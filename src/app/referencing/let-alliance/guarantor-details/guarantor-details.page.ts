@@ -261,7 +261,7 @@ export class GuarantorDetailsPage implements OnInit {
       },
       error => {
         this.commonService.hideLoader();
-        this.commonService.showMessage('Something went wrong on server, please try again.', 'Create an Application', 'Error');
+        this.commonService.showMessage(error.error.message, 'Create an Application', 'error');
         console.log(error);
       }
     );

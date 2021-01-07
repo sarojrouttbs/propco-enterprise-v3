@@ -458,8 +458,7 @@ export class ApplicationDetailsPage implements OnInit {
       },
       error => {
         this.commonService.hideLoader();
-        this.commonService.showMessage('Something went wrong on server, please try again.', 'Create an Application', 'Error');
-        console.log(error);
+        this.commonService.showMessage(error.error.message, 'Create an Application', 'error');
       }
     );
   }
