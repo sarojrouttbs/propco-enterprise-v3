@@ -248,6 +248,9 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   initPatching(): void {
+
+    console.log("this.faultMaintenanceDetails",this.faultMaintenanceDetails);
+    
     this.raiseQuoteForm.patchValue(
       {
         worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
@@ -462,6 +465,8 @@ export class ArrangingContractorComponent implements OnInit {
     quoteReqObj.descption = quoteReqObj.description;
     quoteReqObj.nominalCode = typeof quoteReqObj.nominalCode === 'object' ? quoteReqObj.nominalCode.nominalCode : quoteReqObj.nominalCode;
     delete quoteReqObj.contractorForm;
+    console.log(" quoteReqObj.nominalCode", quoteReqObj.nominalCode);
+    
     if (!this.faultMaintenanceDetails) {
       quoteReqObj.contractorIds = quoteReqObj.contractorList.map(x => x.contractorId).filter(x => x);
       quoteReqObj.requestStartDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requestStartDate));
@@ -1068,11 +1073,11 @@ export class ArrangingContractorComponent implements OnInit {
 
     this.nominalCodes.forEach(code => {
       code.concat = code.nominalCode + " - " + code.description;
-      if (this.faultMaintenanceDetails.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 4) {
+      if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 4) {
         this.raiseQuoteForm.get('nominalCode').setValue(code);
       }
 
-      if (this.faultMaintenanceDetails.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 6) {
+      if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 6) {
         this.workOrderForm.get('nominalCode').setValue(code);
       }
       codes.push(code);
