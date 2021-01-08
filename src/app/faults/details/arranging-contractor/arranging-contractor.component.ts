@@ -457,6 +457,7 @@ export class ArrangingContractorComponent implements OnInit {
   private prepareQuoteData() {
     const quoteReqObj: any = JSON.parse(JSON.stringify(this.raiseQuoteForm.getRawValue()));
     quoteReqObj.descption = quoteReqObj.description;
+    quoteReqObj.nominalCode = typeof quoteReqObj.nominalCode === 'object' ? quoteReqObj.nominalCode.nominalCode : quoteReqObj.nominalCode;
     delete quoteReqObj.contractorForm;
     if (!this.faultMaintenanceDetails) {
       quoteReqObj.contractorIds = quoteReqObj.contractorList.map(x => x.contractorId).filter(x => x);
@@ -1176,18 +1177,18 @@ export class ArrangingContractorComponent implements OnInit {
     const paymentRequired = await this.isPaymentRequired(rules);
     if (paymentRequired) {
       const response = await this.commonService.showConfirm('Arranging Contractor',
-        `You have selected "Landlord accepted the quote".<br/> 
-       Since the Landlord account doesn't have sufficient balance to pay for the works, a payment request will be generated and the Landlord will be notified to make an online payment via the portal. 
-       <br/>Do you want to proceed? <br/><br/>
-       <small>NB:The landlord can also make an offline payment which can be processed manually via landloard accounts</small>`, '', 'Yes', 'No');
+        `You have selected "Landlord accepted the quote".<br/><br/> 
+         Since the Landlord account doesn't have sufficient balance to pay for the works, a payment request will be generated and the Landlord will be notified to make an online payment via the portal.<br/> 
+         <br/>Do you want to proceed? <br/><br/>
+         <small>NB:The landlord can also make an offline payment which can be processed manually via landloard accounts.</small>`, '', 'Yes', 'No');
       if (response) {
         return paymentRequired;
       }
     } else {
       const response = await this.commonService.showConfirm('Arranging Contractor',
-        `You have selected "Landlord accepted the quote".<br/> 
-      A notification will be sent out to the Contractor to carry out the job.
-     <br/> Are you sure?`, '', 'Yes', 'No');
+        `You have selected "Landlord accepted the quote".<br/><br/> 
+         A notification will be sent out to the Contractor to carry out the job.<br/>
+         <br/> Are you sure?`, '', 'Yes', 'No');
       if (response) {
         return paymentRequired;
       }
