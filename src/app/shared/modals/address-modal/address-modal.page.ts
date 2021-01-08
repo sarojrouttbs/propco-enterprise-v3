@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController, NavParams } from '@ionic/angular';
 import { CommonService } from '../../services/common.service';
@@ -16,6 +16,8 @@ export class AddressModalPage implements OnInit {
   addressList: any[];
   selectedAddress: any;
 
+  @Input() paramAddress: string;
+
   constructor(
     private fb: FormBuilder,
     private modalController: ModalController,
@@ -25,7 +27,7 @@ export class AddressModalPage implements OnInit {
    }
 
   ngOnInit() {
-    this.address = this.navParams.get('address');
+    this.address = this.navParams.get('paramAddress');
     this.initiateAddressForm();
     this.setAddress();
   }

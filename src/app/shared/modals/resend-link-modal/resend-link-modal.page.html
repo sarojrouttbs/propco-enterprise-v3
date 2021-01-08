@@ -41,8 +41,8 @@
             <tbody>
               <tr *ngFor='let item of emailList; let i=index'>
                 <td>
-                    <ion-checkbox [checked]='item.selected' (ionChange)='disableCheckbox(item.emailId, $event)' color="primary">
-                    </ion-checkbox>
+                  <ion-checkbox [checked]='(item.selected && item?.emailAdress && i < 3) || (i == 3 && item.selected)' [disabled]='!item?.emailAdress && i < 3' (ionChange)='disableCheckbox(item.emailId, $event)' color="primary">
+                  </ion-checkbox>
                 </td>
                 <td>{{item.label}}</td>
                 <td *ngIf='i < 3'>{{item?.emailAdress}}</td>

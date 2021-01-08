@@ -30,7 +30,7 @@
           </td>  
           <td>{{tenant?.isLead ? 'Lead Tenant' : 'Co Tenant' }}</td>
           <td>
-            <ion-toggle (ionChange)="toggleReferencing(tenant, $event)" slot="start"></ion-toggle>
+            <ion-toggle (ionChange)="toggleReferencing(tenant, $event)" slot="start" [checked]="tenant.isReferencingRequired"></ion-toggle>
           </td>
           <!-- <td></td> -->
         </tr>

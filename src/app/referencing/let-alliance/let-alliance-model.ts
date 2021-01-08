@@ -1,5 +1,5 @@
 // tslint:disable-next-line: no-namespace
-declare namespace applicationModels {
+declare namespace letAllianceModels {
     interface Address {
         addressLine1: string;
         addressLine2: string;
