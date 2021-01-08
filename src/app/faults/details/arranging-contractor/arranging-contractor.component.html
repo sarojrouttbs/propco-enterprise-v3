@@ -365,7 +365,7 @@
         </ion-item>
         <app-validation-message [control]="workOrderForm.controls.contractorId"></app-validation-message>
         <ion-list class="contractor-list" *ngIf="woResultsAvailable">
-          <ion-item *ngFor="let result of (woContractors| async)?.data" (click)="woSelectContractor(result)" button
+          <ion-item *ngFor="let result of (woContractors| async)?.data" (click)="woSelectContractor(result.entityId)" button
             style="font-size: 13px !important;">
             <span>
               <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
