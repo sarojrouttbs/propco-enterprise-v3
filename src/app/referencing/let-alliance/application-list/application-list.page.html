@@ -76,8 +76,8 @@
                   <th style="width:8%">	Rent Share</th>
                   <th style="width:11%">Guarantor Name</th>
                   <th style="width:11%">Product Type</th>
-                  <th style="width:8%">Application Status</th>
-                  <th style="width:40px"></th>
+                  <th style="width:14%">Application Status</th>
+                  <th style="width:36px"></th>
                 </tr>
               </thead>
               <tbody>
@@ -92,7 +92,7 @@
                   <td>{{application.rentShare || '0' | currency: '£'}}</td>
                   <td>{{application.guarantorDisplayAs || '-'}}</td>
                   <td>{{getProductType(application.product) || '-'}}</td>
-                  <td></td>
+                  <td>{{getLookupValue(application.applicationStatus, laApplicantStatusTypes) || '-'}}</td>
                   <td class="resp-action-icon">
                     <i (click)="showMenu($event, 'divOverlay', application, 'table-row')"
                       class="propcoicon propcoicon-actions-on"></i>
@@ -108,8 +108,6 @@
               <ion-button (click)="openApplicationStatus()">Status Update</ion-button>
               <ion-button (click)="resendLink()">Resend Link</ion-button>
               <ion-button *ngIf="selectedData?.applicantDetail?.itemType === 'M' || selectedData?.applicantDetail?.itemType === 'S'" (click)='checkApplicationGuarantor()'>Guarantor</ion-button>
-              <!-- <ion-button *ngIf="!selectedData?.isSubmitted">Submit</ion-button>
-              <ion-button>View</ion-button> -->
               <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
             </div>
           </div>

@@ -223,7 +223,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   
       const data = modal.onDidDismiss().then(res => {
         if (res.data.userInput) {
-          this.router.navigate(['/let-alliance/guarantor-details'], { queryParams: { 
+          this.router.navigate(['/let-alliance/add-guarantor'], { queryParams: { 
             applicantId: this.selectedData.applicantDetail.applicantId,
             applicationId: this.selectedData.applicationId,
             referenceNumber: this.selectedData.referenceNumber
@@ -326,8 +326,8 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   }
 
   hideMenu(event: any, id: any) {
-    this.selectedData = {};
     this.commonService.hideMenu(event, id);
+    //this.selectedData = {};
   }
 
   getLookupValue(index: any, lookup: any, type?: any) {

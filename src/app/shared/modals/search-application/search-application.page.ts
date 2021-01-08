@@ -28,7 +28,12 @@ export class SearchApplicationPage implements OnInit {
   ) {
     this.initPropertySearchForm();
     this.filteredProperty = this.applicationSearchForm.get('text').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value.length > 2) ? this.referencingService.searchApplicationByText(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, value) : new Observable())
+      switchMap((value: string) => (value.length > 2) ? this.referencingService
+      .getLAApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, 
+        new HttpParams()
+        .set('limit', '10')
+        .set('page', '1')
+        .set('searchTerm', value)) : new Observable())
     );
     location.onPopState(() => this.dismiss());
   }
@@ -41,7 +46,6 @@ export class SearchApplicationPage implements OnInit {
       text: "",
     });
   }
-
 
   onSelectionChange(data) {
     if (data) {

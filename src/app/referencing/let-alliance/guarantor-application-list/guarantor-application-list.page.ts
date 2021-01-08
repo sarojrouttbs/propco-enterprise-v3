@@ -81,7 +81,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
           });
         });
       },
-      columns: [null, null, null, null, null, null, null, null, null, null, { orderable: false }],
+      columns: [null, null, null, null, null, null, null, { orderable: false }],
       responsive: true
     };
     this.initiateForm();
@@ -236,7 +236,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   }
 
   hideMenu(event: any, id: any) {
-    this.selectedData = {};
+    //this.selectedData = {};
     this.commonService.hideMenu(event, id);
   }
 
