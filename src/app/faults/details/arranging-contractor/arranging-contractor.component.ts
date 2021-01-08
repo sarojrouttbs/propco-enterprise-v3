@@ -253,7 +253,6 @@ export class ArrangingContractorComponent implements OnInit {
         selectedContractorId: this.faultMaintenanceDetails.selectedContractorId,
         contact: this.faultMaintenanceDetails.contact,
         quoteStatus: this.faultMaintenanceDetails.quoteStatus,
-        nominalCode: this.faultMaintenanceDetails.nominalCode
       }
     );
     this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
@@ -456,6 +455,7 @@ export class ArrangingContractorComponent implements OnInit {
   private prepareQuoteData() {
     const quoteReqObj: any = JSON.parse(JSON.stringify(this.raiseQuoteForm.getRawValue()));
     quoteReqObj.descption = quoteReqObj.description;
+    quoteReqObj.nominalCode = typeof quoteReqObj.nominalCode === 'object' ? quoteReqObj.nominalCode.nominalCode : quoteReqObj.nominalCode;
     delete quoteReqObj.contractorForm;
     if (!this.faultMaintenanceDetails) {
       quoteReqObj.contractorIds = quoteReqObj.contractorList.map(x => x.contractorId).filter(x => x);
@@ -696,18 +696,22 @@ export class ArrangingContractorComponent implements OnInit {
     }
 
     if (this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[1].index || this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[3].index) {
-      if (this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') {
-        this.questionActionAcceptRequest(data);
-      } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
-        this.questionActionVisitTime(data);
-      } else if (this.iacNotification.templateCode === 'CQ-C-E') {
-        this.questionActionQuoteUpload(data);
-      } else if (this.iacNotification.templateCode === 'LAR-L-E') {
-        this.questionActionLLAuth(data);
-      } else if (this.iacNotification.templateCode === 'CWO-A-C-E' || this.iacNotification.templateCode === 'CWO-NA-C-E') {
-        this.questionActionAcceptRequest(data);
-      } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
-        this.worksOrderActionVisitTime(data);
+      if (this.faultMaintenanceDetails.itemType === 4) {
+        if (this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') {
+          this.questionActionAcceptRequest(data);
+        } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
+          this.questionActionVisitTime(data);
+        } else if (this.iacNotification.templateCode === 'CQ-C-E') {
+          this.questionActionQuoteUpload(data);
+        } else if (this.iacNotification.templateCode === 'LAR-L-E') {
+          this.questionActionLLAuth(data);
+        }
+      } else if (this.faultMaintenanceDetails.itemType === 6) {
+        if (this.iacNotification.templateCode === 'CWO-A-C-E' || this.iacNotification.templateCode === 'CWO-NA-C-E') {
+          this.questionActionAcceptRequest(data);
+        } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
+          this.worksOrderActionVisitTime(data);
+        }
       }
     }
   }
@@ -833,15 +837,14 @@ export class ArrangingContractorComponent implements OnInit {
       });
       await modal.present();
     } else {
-      this.commonService.showConfirm('Please Confirm selection', `Are you sure you want to authorise this Quote`, '', 'Yes', 'No').then(async res => {
-        if (res) {
-          const submit = await this.saveFaultLLAuth();
-          if (submit) {
-            this.commonService.showLoader();
-            await this.faultNotification('OBTAIN_AUTHORISATION');
-          }
+      const paymentRequired = await this.checkForPaymentRules();
+      if (paymentRequired) {
+        const submit = await this.raiseWorksOrderAndNotification(paymentRequired);
+        if (submit) {
+          this.commonService.showLoader();
+          await this.faultNotification(this.faultDetails.stageAction);
         }
-      });
+      }
     }
   }
 
@@ -1060,6 +1063,13 @@ export class ArrangingContractorComponent implements OnInit {
 
     this.nominalCodes.forEach(code => {
       code.concat = code.nominalCode + " - " + code.description;
+      if (this.faultMaintenanceDetails.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 4) {
+        this.raiseQuoteForm.get('nominalCode').setValue(code);
+      }
+
+      if (this.faultMaintenanceDetails.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 6) {
+        this.workOrderForm.get('nominalCode').setValue(code);
+      }
       codes.push(code);
     });
 
@@ -1219,9 +1229,129 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
+  /*iac004*/
+  private async checkForPaymentRules() {
+    const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
+    if (!rules) {
+      return null;
+    }
+    const paymentRequired = await this.isPaymentRequired(rules);
+    if (paymentRequired) {
+      const response = await this.commonService.showConfirm('Arranging Contractor',
+        `You have selected "Landlord accepted the quote".<br/><br/>
+         Since the Landlord account doesn't have sufficient balance to pay for the works, a payment request will be generated and the Landlord will be notified to make an online payment via the portal.<br/>
+         <br/>Do you want to proceed? <br/><br/>
+         <small>NB:The landlord can also make an offline payment which can be processed manually via landloard accounts.</small>`, '', 'Yes', 'No');
+      if (response) {
+        return paymentRequired;
+      }
+    } else {
+      const response = await this.commonService.showConfirm('Arranging Contractor',
+        `You have selected "Landlord accepted the quote".<br/><br/>
+         A notification will be sent out to the Contractor to carry out the job.<br/>
+         <br/> Are you sure?`, '', 'Yes', 'No');
+      if (response) {
+        return paymentRequired;
+      }
+    }
+  }
+
+  private async raiseWorksOrderAndNotification(paymentRequired: boolean, actionType = 'auto') {
+    let submit: boolean;
+    if (actionType === 'auto') {
+      submit = await this.saveFaultLLAuth() as boolean;
+    } else {
+      submit = await this.createFaultMaintenaceWorksOrder() as boolean;
+    }
+    if (!submit) return false;
+    if (submit) {
+      if (paymentRequired) {
+        const success = await this.sendLandlordPaymentRequest() as boolean;
+        return success;
+      } else {
+        const success = await this.issueWorksOrderContractor() as boolean;
+        return success;
+      }
+    }
+  }
+
+  private getWorksOrderPaymentRules() {
+    const promise = new Promise((resolve, reject) => {
+      // this.faultsService.getWorksOrderPaymentRules('0beb2ead-71bf-4341-a25f-446529686a12').subscribe(
+      this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
+        res => {
+          resolve(res);
+        },
+        error => {
+          resolve(null);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private issueWorksOrderContractor() {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.issueWorksOrderoContractor(this.faultDetails.faultId).subscribe(
+        res => {
+          resolve(true);
+          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private sendLandlordPaymentRequest() {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.sendLandlordPaymentRequest(this.faultDetails.faultId).subscribe(
+        res => {
+          resolve(true);
+          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private createFaultMaintenaceWorksOrder() {
+    const requestObj: any = {};
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.createFaultMaintenaceWorksOrder(requestObj, this.faultDetails.faultId).subscribe(
+        res => {
+          resolve(true);
+          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
   async faultNotification(action) {
     let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
     this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, action);
+  }
+
+  private async isPaymentRequired(rules: FaultModels.IFaultWorksorderRules): Promise<boolean> {
+    let paymentNeeded = false;
+    for (var key in rules) {
+      if (rules.hasOwnProperty(key)) {
+        if (!rules[key]) {
+          paymentNeeded = true;
+          break;
+        }
+      }
+    }
+    return paymentNeeded;
   }
 
 }

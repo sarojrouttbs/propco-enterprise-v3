@@ -177,7 +177,17 @@ declare namespace FaultModels {
         isVatApplicable: string;
         nominalCode?: string;
         nominalType: string;
-        combine: string;
+        concat: string;
+    }
+
+    export interface IFaultWorksorderRules {
+        hasSufficientReserveBalance: boolean;
+        isFaultEstimateLessThanHalfRentOrThresHoldValue: boolean;
+        hasRentArrears: boolean;
+        hasRentPaidUpFront: boolean;
+        hasTenantPaidRentOnTime: boolean;
+        isTenancyGivenNoticeOrInLastMonth: boolean;
+        hasOtherInvoicesToBePaid: boolean;
     }
 
 }
