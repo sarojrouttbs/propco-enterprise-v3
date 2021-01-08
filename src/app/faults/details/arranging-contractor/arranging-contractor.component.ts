@@ -128,7 +128,7 @@ export class ArrangingContractorComponent implements OnInit {
       address: [{ value: '', disabled: true }],
       repairCost: ['', Validators.required],
       worksOrderNumber: [{ value: this.faultDetails.reference, disabled: true }],
-      invoiceDate: [{ value: '', disabled: true }],
+      postdate: [{ value: '', disabled: true }],
       nominalCode: ['', Validators.required],
       description: ['', Validators.required],
       paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
@@ -247,20 +247,39 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  initPatching(): void {    
-    this.raiseQuoteForm.patchValue(
-      {
-        worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
-        description: this.faultMaintenanceDetails.description,
-        orderedBy: this.faultMaintenanceDetails.orderedBy,
-        requestStartDate: this.faultMaintenanceDetails.requiredStartDate,
-        accessDetails: this.faultMaintenanceDetails.accessDetails,
-        selectedContractorId: this.faultMaintenanceDetails.selectedContractorId,
-        contact: this.faultMaintenanceDetails.contact,
-        quoteStatus: this.faultMaintenanceDetails.quoteStatus,
+  initPatching(): void {
+    if (!this.isWorksOrder) {
+      this.raiseQuoteForm.patchValue(
+        {
+          worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
+          description: this.faultMaintenanceDetails.description,
+          orderedBy: this.faultMaintenanceDetails.orderedBy,
+          requestStartDate: this.faultMaintenanceDetails.requiredStartDate,
+          accessDetails: this.faultMaintenanceDetails.accessDetails,
+          selectedContractorId: this.faultMaintenanceDetails.selectedContractorId,
+          contact: this.faultMaintenanceDetails.contact,
+          quoteStatus: this.faultMaintenanceDetails.quoteStatus,
+        }
+      );
+      this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
+    } else {
+      if (this.faultDetails.doesBranchHoldKeys) {
+        this.officeDetails();
       }
-    );
-    this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
+      this.workOrderForm.patchValue(
+        {
+          worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
+          description: this.faultMaintenanceDetails.description,
+          orderedBy: this.faultMaintenanceDetails.orderedBy,
+          postdate: this.faultMaintenanceDetails.postdate,
+          accessDetails: this.faultMaintenanceDetails.accessDetails,
+          contractorId: this.faultMaintenanceDetails.selectedContractorId,
+          nominalCode: this.faultMaintenanceDetails.nominalCode,
+          fullDescription: this.faultMaintenanceDetails.fullDescription,
+          repairCost: this.faultMaintenanceDetails.amount
+        }
+      );
+    }
   }
 
 
