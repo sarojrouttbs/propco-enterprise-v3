@@ -247,10 +247,7 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  initPatching(): void {
-
-    console.log("this.faultMaintenanceDetails",this.faultMaintenanceDetails);
-    
+  initPatching(): void {    
     this.raiseQuoteForm.patchValue(
       {
         worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
@@ -464,9 +461,7 @@ export class ArrangingContractorComponent implements OnInit {
     const quoteReqObj: any = JSON.parse(JSON.stringify(this.raiseQuoteForm.getRawValue()));
     quoteReqObj.descption = quoteReqObj.description;
     quoteReqObj.nominalCode = typeof quoteReqObj.nominalCode === 'object' ? quoteReqObj.nominalCode.nominalCode : quoteReqObj.nominalCode;
-    delete quoteReqObj.contractorForm;
-    console.log(" quoteReqObj.nominalCode", quoteReqObj.nominalCode);
-    
+    delete quoteReqObj.contractorForm;    
     if (!this.faultMaintenanceDetails) {
       quoteReqObj.contractorIds = quoteReqObj.contractorList.map(x => x.contractorId).filter(x => x);
       quoteReqObj.requestStartDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requestStartDate));
