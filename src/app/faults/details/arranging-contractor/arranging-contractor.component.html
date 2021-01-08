@@ -120,7 +120,7 @@
     </ion-grid>
     <ion-row>
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
-        <ion-grid>
+        <ion-grid *ngIf="!isWorksOrder">
           <ng-container *ngTemplateOutlet="quoteDetails"></ng-container>
           <div class="contractor-block">
             <div formArrayName="contractorList"
@@ -217,6 +217,9 @@
             </ion-col>
           </div>
         </ion-grid>
+        <ion-grid *ngIf="isWorksOrder">
+           <ng-template *ngTemplateOutlet="worksOrderDetails"></ng-template>
+          </ion-grid>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -350,7 +353,7 @@
 </form>
 
 
-<ng-template >
+<ng-template #worksOrderDetails>
   <form [formGroup]="workOrderForm">
     <ion-row>
       <ion-col size="50">

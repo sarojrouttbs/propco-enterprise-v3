@@ -201,6 +201,7 @@ export class ValidationService {
      const futureDate = new Date();
      futureDate.setDate(futureDate.getDate() + 60);
      const todayDate = new Date();
+     todayDate.setHours(0, 0, 0, 0);
      let currentDate = new Date(control.value);
      if(currentDate.toISOString() < todayDate.toISOString() || currentDate.toISOString() > futureDate.toISOString()){
       return {invalidFutureDate: true};

@@ -1,7 +1,8 @@
+import { HttpParams } from '@angular/common/http';
 import { RejectionModalPage } from './../../../shared/modals/rejection-modal/rejection-modal.page';
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
@@ -30,7 +31,6 @@ export class ArrangingContractorComponent implements OnInit {
   @Input() quoteDocuments: any;
   faultMaintenanceDetails: FaultModels.IMaintenanceQuoteResponse;
   contractors: Observable<FaultModels.IContractorResponse>;
-  private subject: Subject<string> = new Subject();
   resultsAvailable = false;
   contractorList: any;
   lookupdata: any;
@@ -62,6 +62,7 @@ export class ArrangingContractorComponent implements OnInit {
   codes: FaultModels.NominalCode[];
   currentDate = this.commonService.getFormatedDate(new Date());
   @Input() propertyDetails;
+  isWorksOrder: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -216,6 +217,9 @@ export class ArrangingContractorComponent implements OnInit {
   private async initApiCalls() {
     this.faultMaintenanceDetails = await this.getFaultMaintenance() as FaultModels.IMaintenanceQuoteResponse;
     if (this.faultMaintenanceDetails) {
+      if (this.faultMaintenanceDetails.itemType === 6) {
+        this.isWorksOrder = true;
+      }
       this.initPatching();
       await this.getMaxQuoteRejection();
       await this.faultNotification(this.faultDetails.stageAction);
@@ -231,7 +235,8 @@ export class ArrangingContractorComponent implements OnInit {
 
   private getFaultMaintenance() {
     const promise = new Promise((resolve, reject) => {
-      this.faultsService.getQuoteDetails(this.faultDetails.faultId).subscribe((res) => {
+      const params: any = new HttpParams().set('showCancelled', 'false');
+      this.faultsService.getQuoteDetails(this.faultDetails.faultId, params).subscribe((res) => {
         this.isMaintenanceDetails = true;
         resolve(res ? res.data[0] : undefined);
       }, error => {
@@ -1295,9 +1300,9 @@ export class ArrangingContractorComponent implements OnInit {
       this.faultsService.issueWorksOrderoContractor(this.faultDetails.faultId).subscribe(
         res => {
           resolve(true);
-          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
         },
         error => {
+          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
           resolve(false);
         }
       );
@@ -1310,9 +1315,9 @@ export class ArrangingContractorComponent implements OnInit {
       this.faultsService.sendLandlordPaymentRequest(this.faultDetails.faultId).subscribe(
         res => {
           resolve(true);
-          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
         },
         error => {
+          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
           resolve(false);
         }
       );
@@ -1326,9 +1331,9 @@ export class ArrangingContractorComponent implements OnInit {
       this.faultsService.createFaultMaintenaceWorksOrder(requestObj, this.faultDetails.faultId).subscribe(
         res => {
           resolve(true);
-          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
         },
         error => {
+          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
           resolve(false);
         }
       );
