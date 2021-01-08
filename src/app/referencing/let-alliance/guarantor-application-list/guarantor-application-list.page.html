@@ -29,32 +29,25 @@
               style="width: 100%; position: relative">
               <thead>
                 <tr>
-                  <th style="width:7%">Reference No.</th>
-                  <th style="width:7%">Property Ref</th>
-                  <th>Property Address</th>
-                  <th style="width:10%">Applicant Name</th>
-                  <th style="width:8%">Branch</th>
-                  <th style="width:8%">Tenancy Start</th>
-                  <th style="width:8%">	Rent Share</th>
-                  <th style="width:11%">Guarantor Name</th>
-                  <th style="width:11%">Product Type</th>
-                  <th style="width:8%">Application Status</th>
+                  <th style="width:9%">Reference No.</th>
+                  <th style="width:16%">Guarantor Name</th>
+                  <th style="width:12%">Branch</th>
+                  <th style="width:10%">Tenancy Start</th>
+                  <th style="width:9%">Rent Share</th>
+                  <th>Product Type</th>
+                  <th style="width:17%">Application Status</th> 
                   <th style="width:40px"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let application of applicationList" class="table-row">
                   <td>{{application.referenceNumber || '-'}}</td>
-                  <td>{{application.propertyDetail.reference || '-'}}</td>
-                  <td>{{application.propertyDetail.address.addressLine1}} {{application.propertyDetail.address.addressLine5}} 
-                    {{application.propertyDetail.address.postcode}}</td>
                   <td>{{application.applicantDetail.displayAs || '-'}}</td>
                   <td>{{application.office || '-'}}</td>
                   <td>{{application.tenancyStartDate|| '-' | date : 'dd/MM/yyyy' }}</td>
                   <td>{{application.rentShare || '0' | currency: '£'}}</td>
-                  <td>{{application.guarantorDisplayAs || '-'}}</td>
                   <td>{{getProductType(application.product) || '-'}}</td>
-                  <td></td>
+                  <td>{{getLookupValue(application.applicationStatus, laApplicantStatusTypes) || '-'}}</td>
                   <td class="resp-action-icon">
                     <i (click)="showMenu($event, 'divOverlay', application, 'table-row')"
                       class="propcoicon propcoicon-actions-on"></i>

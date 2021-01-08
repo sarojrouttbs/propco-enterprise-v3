@@ -4,11 +4,12 @@ import { ModalController } from '@ionic/angular';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { PROPCO, REFERENCING } from 'src/app/shared/constants';
+import { PROPCO, REFERENCING, REFERENCING_TENANT_TYPE } from 'src/app/shared/constants';
 import { COMPLETION_METHODS } from 'src/app/shared/constants';
 import { forkJoin } from 'rxjs';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 import { ReferencingService } from '../../referencing.service';
+import { ValidationService } from 'src/app/shared/services/validation.service';
 
 @Component({
   selector: 'app-guarantor-details',
@@ -20,7 +21,7 @@ export class GuarantorDetailsPage implements OnInit {
   guarantorDetailsForm: FormGroup;
   selectGuarantorForm: FormGroup;
   guarantorDetailsAccordion: any = {};
-  guarantorDetails: applicationModels.IGuarantorResponse;
+  guarantorDetails: letAllianceModels.IGuarantorResponse;
   applicantId: any;
   applicationId: any;
   lookupdata: any;
@@ -70,6 +71,7 @@ export class GuarantorDetailsPage implements OnInit {
     if(this.applicantId && this.applicationId){
       this.getLookupData();
       this.initGuarantorDetailsTabForm();
+      this.initSelectGuarantorForm();
       this.initialApiCall();
     }
   }
@@ -114,26 +116,29 @@ export class GuarantorDetailsPage implements OnInit {
       completeMethod: [{ value: 2, disabled: true }],
       productId: ['', Validators.required],
       tenantTypeId: [1, Validators.required],
-      title: ['', Validators.required],
+      title: [''],
       otherTitle: [''],
       companyName: [''],
       forename: [''],
       middlename: [''],
-      surname: ['', Validators.required],
+      surname: [''],
       dateOfBirth: ['', Validators.required],
-      email: [''],
-      maritalStatus: ['', [Validators.required]],
+      email: ['', [Validators.required, ValidationService.emailValidator]],
+      maritalStatus: [''],
       nationality: [''],
-      registerationNumber: [''],
+      registrationNumber: [''],
+      rentShare: ['', [Validators.required, ValidationService.amountValidator]],
       hasTenantOtherName: [false],
       otherNames: this.fb.group({
-        title: '',
+        title: [''],
         forename: [''],
         middlename: [''],
         surname: ['']
       }),
     });
+  }
 
+  private initSelectGuarantorForm(): void {
     this.selectGuarantorForm = this.fb.group({
       guarantor: ['']
     });
@@ -145,7 +150,7 @@ export class GuarantorDetailsPage implements OnInit {
       this.getTenantGuarantorList(),
       this.getLAProductList()
     ]).subscribe(async (values) => {
-      //this.setValidatorsForForms();
+      this.setValidatorsForForms();
     });
   }
 
@@ -168,7 +173,7 @@ export class GuarantorDetailsPage implements OnInit {
   getGuarantorDetails(guarantorId: any) {
     if(guarantorId == 0){
       this.initGuarantorDetailsTabForm();
-      this.guarantorDetails = {} as applicationModels.IGuarantorResponse;
+      this.guarantorDetails = {} as letAllianceModels.IGuarantorResponse;
     }
     else{
       const promise = new Promise((resolve, reject) => {
@@ -223,6 +228,79 @@ export class GuarantorDetailsPage implements OnInit {
       maritalStatus: this.guarantorDetails.maritalStatus,
       nationality: this.guarantorDetails.nationality,
     });
+  }
+  
+  setValidatorsForForms() {
+    if (this.guarantorDetailsForm.get('tenantTypeId').value == REFERENCING_TENANT_TYPE.INDIVIDUAL) {
+      this.guarantorDetailsForm.get('forename').setValidators(Validators.required);
+      this.guarantorDetailsForm.get('surname').setValidators(Validators.required);
+      this.guarantorDetailsForm.get('maritalStatus').setValidators(Validators.required);
+      this.guarantorDetailsForm.get('companyName').clearValidators();
+      this.guarantorDetailsForm.get('registrationNumber').clearValidators();
+
+      if(this.guarantorDetailsForm.get('hasTenantOtherName').value){
+        this.guarantorDetailsForm.get('otherNames').get('title').setValidators(Validators.required);
+        this.guarantorDetailsForm.get('otherNames').get('forename').setValidators(Validators.required);
+        this.guarantorDetailsForm.get('otherNames').get('surname').setValidators(Validators.required);
+        
+      }
+      else{
+        this.guarantorDetailsForm.get('otherNames').get('title').clearValidators();
+        this.guarantorDetailsForm.get('otherNames').get('forename').clearValidators();
+        this.guarantorDetailsForm.get('otherNames').get('surname').clearValidators();
+      }
+    } 
+
+    else if (this.guarantorDetailsForm.get('tenantTypeId').value == REFERENCING_TENANT_TYPE.COMPANY) {
+      this.guarantorDetailsForm.get('companyName').setValidators(Validators.required);
+      this.guarantorDetailsForm.get('registrationNumber').setValidators(Validators.required);
+      this.guarantorDetailsForm.get('forename').clearValidators();
+      this.guarantorDetailsForm.get('surname').clearValidators();
+      this.guarantorDetailsForm.get('maritalStatus').clearValidators();
+      this.guarantorDetailsForm.get('otherNames').get('title').clearValidators();
+
+      if(this.guarantorDetailsForm.get('hasTenantOtherName').value){
+        this.guarantorDetailsForm.get('otherNames').get('forename').setValidators(Validators.required);
+        this.guarantorDetailsForm.get('otherNames').get('surname').setValidators(Validators.required);
+        
+      }
+      else{
+        this.guarantorDetailsForm.get('otherNames').get('forename').clearValidators();
+        this.guarantorDetailsForm.get('otherNames').get('surname').clearValidators();
+      }
+    }
+
+    this.guarantorDetailsForm.get('forename').updateValueAndValidity();
+    this.guarantorDetailsForm.get('surname').updateValueAndValidity();
+    this.guarantorDetailsForm.get('companyName').updateValueAndValidity();
+    this.guarantorDetailsForm.get('registrationNumber').updateValueAndValidity();
+    this.guarantorDetailsForm.get('maritalStatus').updateValueAndValidity();
+    this.guarantorDetailsForm.get('otherNames').get('title').updateValueAndValidity();
+    this.guarantorDetailsForm.get('otherNames').get('forename').updateValueAndValidity();
+    this.guarantorDetailsForm.get('otherNames').get('surname').updateValueAndValidity();
+  }
+
+  onBlurCurrency(val: any, form: FormGroup) {
+    if (val) {
+      if (form == this.guarantorDetailsForm) {
+        this.guarantorDetailsForm.patchValue({ rentShare: this.currencyPipe.transform(val, 'GBP', 'symbol', '1.2-5') }, { emitEvent: false });
+      }
+    }
+  }
+
+  formatCurrency(val: any, form: FormGroup) {
+    let latestDigit = val.replace(/\£/, '').replace(/,/g, '').replace(/.0+$/g, '');
+
+    if (form == this.guarantorDetailsForm) {
+      this.guarantorDetailsForm.patchValue({
+        rentShare: latestDigit
+      }, { emitEvent: false });
+    }
+  }
+
+  private setDefaultAmount(val: any) {
+    let latestDigit = val.replace(/\£/, '').replace(/,/g, '').replace(/.0+$/g, '');
+    return latestDigit; 
   }
 
   refresh(){
@@ -289,21 +367,23 @@ export class GuarantorDetailsPage implements OnInit {
         applicantItemType: 'G',
         case: {
         },
+        
         application: {
           productId: this.guarantorDetailsForm.get('productId').value,
           tenantTypeId: this.guarantorDetailsForm.get('tenantTypeId').value,
-          title: (this.guarantorDetailsForm.get('title').value).toString(),
+          title: this.guarantorDetailsForm.get('title').value ? (this.guarantorDetailsForm.get('title').value).toString() : '',
           otherTitle: this.guarantorDetailsForm.get('otherTitle').value,
-          forename: this.guarantorDetailsForm.get('forename').value,
+          forename: this.guarantorDetailsForm.get('tenantTypeId').value == REFERENCING_TENANT_TYPE.INDIVIDUAL ? this.guarantorDetailsForm.get('forename').value : this.guarantorDetailsForm.get('companyName').value,
           middlename: this.guarantorDetailsForm.get('middlename').value,
-          surname: this.guarantorDetailsForm.get('surname').value,
+          surname: this.guarantorDetailsForm.get('tenantTypeId').value == REFERENCING_TENANT_TYPE.INDIVIDUAL ? this.guarantorDetailsForm.get('surname').value : '',
           email: this.guarantorDetailsForm.get('email').value,
           dateOfBirth: this.datepipe.transform(this.guarantorDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
+          rentShare: parseFloat(this.setDefaultAmount(this.guarantorDetailsForm.get('rentShare').value)),
           maritalStatus: this.guarantorDetailsForm.get('maritalStatus').value,
-          nationality: 'British', //this.tenantDetailsForm.get('nationality').value, // British
-          //registerationNumber: this.tenantDetailsForm.get('registerationNumber').value,
-          sendTenantLink: false,
-          autoSubmitLink: false,
+          nationality: 'British', //this.guarantorDetailsForm.get('nationality').value, // British
+          registrationNumber: this.guarantorDetailsForm.get('registrationNumber').value,
+          sendTenantLink: true,
+          autoSubmitLink: true,
           isGuarantor: true,
           hasTenantOtherName: this.guarantorDetailsForm.get('hasTenantOtherName').value,
           otherNames: this.guarantorDetailsForm.get('hasTenantOtherName').value ? [this.guarantorDetailsForm.get('otherNames').value] : []
@@ -323,7 +403,8 @@ export class GuarantorDetailsPage implements OnInit {
       cssClass: 'modal-container alert-prompt',
       backdropDismiss: false,
       componentProps: {
-        data: `The data entered has not been saved. Are you sure?`,
+        data: `<div class="center-block">The data entered has not been saved. Are you sure?
+        </div>`,
         heading: 'Application',
         buttonList: [
           {
