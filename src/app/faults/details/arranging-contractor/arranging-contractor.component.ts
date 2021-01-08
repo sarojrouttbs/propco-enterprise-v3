@@ -139,7 +139,11 @@ export class ArrangingContractorComponent implements OnInit {
       accessDetails: [this.getAccessDetails(this.faultDetails.isTenantPresenceRequired), Validators.required],
       completedDate: '',
       fullDescription: ['', Validators.required],
-      orderedBy: ''
+      orderedBy: '',
+      agentReference: [{ value: '', disabled: true }],
+      defaultCommissionPercentage: [{ value: '', disabled: true }],
+      defaultCommissionAmount: [{ value: '', disabled: true }],
+      businessTelephone: [{ value: '', disabled: true }],
     });
 
     this.woContractors = this.workOrderForm.get('contractorId').valueChanges.pipe(debounceTime(300),
@@ -480,7 +484,7 @@ export class ArrangingContractorComponent implements OnInit {
     const quoteReqObj: any = JSON.parse(JSON.stringify(this.raiseQuoteForm.getRawValue()));
     quoteReqObj.descption = quoteReqObj.description;
     quoteReqObj.nominalCode = typeof quoteReqObj.nominalCode === 'object' ? quoteReqObj.nominalCode.nominalCode : quoteReqObj.nominalCode;
-    delete quoteReqObj.contractorForm;    
+    delete quoteReqObj.contractorForm;
     if (!this.faultMaintenanceDetails) {
       quoteReqObj.contractorIds = quoteReqObj.contractorList.map(x => x.contractorId).filter(x => x);
       quoteReqObj.requestStartDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requestStartDate));
@@ -912,7 +916,16 @@ export class ArrangingContractorComponent implements OnInit {
         if (type === 'quote') {
           this.patchContartorList(data, true, false);
         } else if (type === 'wo') {
-          this.workOrderForm.patchValue({ company: data ? data.companyName : undefined });
+
+          const addressLine1 = data && data.address ? data.address.addressLine1 : '';
+          const addressLine2 = data && data.address ? ", " + data.address.addressLine2 : '';
+          const addressLine3 = data && data.address ? ", " + data.address.addressLine3 : '';
+          const town = data && data.address ? ", " + data.address.town : '';
+          const postcode = data && data.address ? ", " + data.address.postcode : '';
+
+          const address = addressLine1 + "" + addressLine2 + "" + addressLine3 + "" + town + "" + postcode;
+
+          this.workOrderForm.patchValue({ company: data ? data.companyName : undefined, agentReference: data ? data.agentReference : undefined, defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined, defaultCommissionAmount: data ? data.defaultCommissionAmount : undefined, businessTelephone: data ? data.businessTelephone : undefined, contractorId: data ? data.fullName : undefined, address: address ? address : '' });
         }
       }, error => {
       });
@@ -1043,9 +1056,8 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  woSelectContractor(selected) {
-    this.getContractorDetails(selected?.entityId, 'wo');
-    this.workOrderForm.patchValue({ contractorId: selected ? selected.fullName : undefined, address: selected ? selected.address : undefined });
+  woSelectContractor(contractorId) {
+    this.getContractorDetails(contractorId, 'wo');
     this.woResultsAvailable = false;
   }
 
