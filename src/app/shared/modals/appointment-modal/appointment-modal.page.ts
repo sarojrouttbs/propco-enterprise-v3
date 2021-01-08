@@ -18,6 +18,7 @@ export class AppointmentModalPage implements OnInit {
   headingOne;
   headingTwo;
   minDate;
+  type;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,22 +45,61 @@ export class AppointmentModalPage implements OnInit {
 
   }
 
-  saveContractorVisit() {
+  async save() {
     if (this.appointmentForm.valid) {
-      const requestObj = this.appointmentForm.value;
-      requestObj.contractorPropertyVisitAt = this.commonService.getFormatedDate(requestObj.dateTime, 'yyyy-MM-dd HH:mm:ss');
-      requestObj.isAccepted = true;
-      requestObj.submittedByType = 'SECUR_USER';
-      this.faultsService.saveContractorVisit(this.faultNotificationId, requestObj).subscribe(res => {
-        this.modalController.dismiss('success');
-      }, error => {
-        this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Yes, agreed Date/Time with Tenant', 'error');
-      })
+      const requestObj = {
+        contractorPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss'),
+        isAccepted: true,
+        submittedByType: 'SECUR_USER'
+      }
+
+      if (this.type === 'quote') {
+        const updateCCVisit = await this.saveContractorVisit(this.faultNotificationId, requestObj);
+        if (updateCCVisit) {
+          this.dismiss();
+        }
+      } else if (this.type === 'wo') {
+        const updateCCVisit = await this.saveWoContractorVisit(this.faultNotificationId, requestObj);
+        if (updateCCVisit) {
+          this.dismiss();
+        }
+      }
     } else {
       this.appointmentForm.markAllAsTouched();
     }
 
   }
+
+  saveContractorVisit(faultNotificationId, requestObj) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.saveContractorVisit(faultNotificationId, requestObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Yes, agreed Date/Time with Tenant', 'error');
+          resolve(false)
+        }
+      );
+    });
+    return promise;
+  }
+
+  saveWoContractorVisit(faultNotificationId, requestObj) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.updateWOContractorVisit(faultNotificationId, requestObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          resolve(false)
+        }
+      );
+    });
+    return promise;
+
+  }
+
 
   dismiss() {
     this.modalController.dismiss();

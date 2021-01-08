@@ -177,7 +177,7 @@ declare namespace FaultModels {
         isVatApplicable: string;
         nominalCode?: string;
         nominalType: string;
-        combine: string;
+        concat: string;
     }
 
     export interface IFaultWorksorderRules {

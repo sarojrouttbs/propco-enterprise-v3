@@ -222,8 +222,7 @@ export class ArrangingContractorComponent implements OnInit {
       }
       this.initPatching();
       await this.getMaxQuoteRejection();
-      let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-      this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
+      await this.faultNotification(this.faultDetails.stageAction);
     } else {
       this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
       this.checkMaintenanceDetail();
@@ -249,22 +248,19 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   initPatching(): void {
-    if (!this.isWorksOrder) {
-      this.raiseQuoteForm.patchValue(
-        {
-          worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
-          description: this.faultMaintenanceDetails.description,
-          orderedBy: this.faultMaintenanceDetails.orderedBy,
-          requestStartDate: this.faultMaintenanceDetails.requiredStartDate,
-          accessDetails: this.faultMaintenanceDetails.accessDetails,
-          selectedContractorId: this.faultMaintenanceDetails.selectedContractorId,
-          contact: this.faultMaintenanceDetails.contact,
-          quoteStatus: this.faultMaintenanceDetails.quoteStatus,
-          nominalCode: this.faultMaintenanceDetails.nominalCode
-        }
-      );
-      this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
-    }
+    this.raiseQuoteForm.patchValue(
+      {
+        worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
+        description: this.faultMaintenanceDetails.description,
+        orderedBy: this.faultMaintenanceDetails.orderedBy,
+        requestStartDate: this.faultMaintenanceDetails.requiredStartDate,
+        accessDetails: this.faultMaintenanceDetails.accessDetails,
+        selectedContractorId: this.faultMaintenanceDetails.selectedContractorId,
+        contact: this.faultMaintenanceDetails.contact,
+        quoteStatus: this.faultMaintenanceDetails.quoteStatus,
+      }
+    );
+    this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
   }
 
 
@@ -503,8 +499,7 @@ export class ArrangingContractorComponent implements OnInit {
             if (faultUpdated) {
               this.commonService.showLoader();
               setTimeout(async () => {
-                let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-                this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+                await this.faultNotification('OBTAIN_QUOTE');
               }, 3000);
             }
           }
@@ -521,8 +516,7 @@ export class ArrangingContractorComponent implements OnInit {
                 if (faultUpdated) {
                   this.commonService.showLoader();
                   setTimeout(async () => {
-                    let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-                    this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+                    await this.faultNotification('OBTAIN_QUOTE');
                   }, 3000);
                 }
               }
@@ -707,14 +701,22 @@ export class ArrangingContractorComponent implements OnInit {
     }
 
     if (this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[1].index || this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[3].index) {
-      if (this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') {
-        this.questionActionAcceptRequest(data);
-      } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
-        this.questionActionVisitTime(data);
-      } else if (this.iacNotification.templateCode === 'CQ-C-E') {
-        this.questionActionQuoteUpload(data);
-      } else if (this.iacNotification.templateCode === 'LAR-L-E') {
-        this.questionActionLLAuth(data);
+      if (this.faultMaintenanceDetails.itemType === 4) {
+        if (this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') {
+          this.questionActionAcceptRequest(data);
+        } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
+          this.questionActionVisitTime(data);
+        } else if (this.iacNotification.templateCode === 'CQ-C-E') {
+          this.questionActionQuoteUpload(data);
+        } else if (this.iacNotification.templateCode === 'LAR-L-E') {
+          this.questionActionLLAuth(data);
+        }
+      } else if (this.faultMaintenanceDetails.itemType === 6) {
+        if (this.iacNotification.templateCode === 'CWO-A-C-E' || this.iacNotification.templateCode === 'CWO-NA-C-E') {
+          this.questionActionAcceptRequest(data);
+        } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
+          this.worksOrderActionVisitTime(data);
+        }
       }
     }
   }
@@ -728,11 +730,7 @@ export class ArrangingContractorComponent implements OnInit {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
-          // setTimeout(async () => {
-          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
-          // }, 1000);
-
+          await this.faultNotification('OBTAIN_QUOTE');
         }
       });
     } else if (!data.value) {
@@ -740,11 +738,7 @@ export class ArrangingContractorComponent implements OnInit {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
-          // setTimeout(async () => {
-          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
-          // }, 1000);
-
+          await this.faultNotification('OBTAIN_QUOTE');
         }
       });
     }
@@ -762,8 +756,7 @@ export class ArrangingContractorComponent implements OnInit {
           }
           await this.saveContractorVisitResponse(this.iacNotification.faultNotificationId, notificationObj);
           this.commonService.showLoader();
-          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+          await this.faultNotification('OBTAIN_QUOTE');
           this._btnHandler('refresh');
 
         }
@@ -776,15 +769,15 @@ export class ArrangingContractorComponent implements OnInit {
           faultNotificationId: this.iacNotification.faultNotificationId,
           title: "Arranging Contractor",
           headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
-          headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants."
+          headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants.",
+          type: "quote"
         },
         backdropDismiss: false
       });
 
       modal.onDidDismiss().then(async res => {
         if (res.data && res.data == 'success') {
-          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+          await this.faultNotification('OBTAIN_QUOTE');
         }
       });
 
@@ -809,8 +802,7 @@ export class ArrangingContractorComponent implements OnInit {
       modal.onDidDismiss().then(async res => {
         if (res.data && res.data == 'success') {
           this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
-          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
+          await this.faultNotification(this.faultDetails.stageAction);
         }
       });
       await modal.present();
@@ -820,13 +812,15 @@ export class ArrangingContractorComponent implements OnInit {
           const submit = await this.submitQuoteAmout();
           if (submit) {
             this.commonService.showLoader();
-            let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-            this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, 'OBTAIN_QUOTE');
+            await this.faultNotification('OBTAIN_QUOTE');
           }
         }
       });
     }
   }
+
+
+
 
   private async questionActionLLAuth(data) {
     if (!data.value) {
@@ -853,8 +847,7 @@ export class ArrangingContractorComponent implements OnInit {
         const submit = await this.raiseWorksOrderAndNotification(paymentRequired);
         if (submit) {
           this.commonService.showLoader();
-          let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-          this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, this.faultDetails.stageAction);
+          await this.faultNotification(this.faultDetails.stageAction);
         }
       }
     }
@@ -1075,6 +1068,13 @@ export class ArrangingContractorComponent implements OnInit {
 
     this.nominalCodes.forEach(code => {
       code.concat = code.nominalCode + " - " + code.description;
+      if (this.faultMaintenanceDetails.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 4) {
+        this.raiseQuoteForm.get('nominalCode').setValue(code);
+      }
+
+      if (this.faultMaintenanceDetails.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 6) {
+        this.workOrderForm.get('nominalCode').setValue(code);
+      }
       codes.push(code);
     });
 
@@ -1130,7 +1130,6 @@ export class ArrangingContractorComponent implements OnInit {
         if (this.nominalCodeSubscription.closed) {
           return;
         }
-
         event.component.items = this.filterCodes(ports, text);
         event.component.endSearch();
       });
@@ -1175,6 +1174,66 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
+  private async worksOrderActionVisitTime(data) {
+    if (data.value) {
+      const modal = await this.modalController.create({
+        component: AppointmentModalPage,
+        cssClass: 'modal-container',
+        componentProps: {
+          faultNotificationId: this.iacNotification.faultNotificationId,
+          title: "Appointment Date/Time",
+          headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
+          headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
+          type: "wo"
+        },
+        backdropDismiss: false
+      });
+
+      modal.onDidDismiss().then(async res => {
+        if (res.data.updated) {
+          this.commonService.showLoader();
+          if (res.data && res.data == 'success') {
+            this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
+            await this.faultNotification(this.faultDetails.stageAction);
+          }
+          this.commonService.hideLoader();
+        }
+      });
+      await modal.present();
+    } else {
+      const confirm = await this.commonService.showConfirm(data.text, 'Are you sure?', '', 'Yes', 'No');
+      if (confirm) {
+        this.commonService.showLoader();
+        let requestObj = {} as any;
+        requestObj.isAccepted = data.value;
+        requestObj.submittedByType = 'SECUR_USER';
+        if (this.iacNotification.templateCode === 'CWO-NA-T-E2') {
+          requestObj.isEscalateFault = true;
+        }
+        const updateNotf = await this.saveWOContractorVisitResponse(this.iacNotification.faultNotificationId, requestObj);
+        if (updateNotf) {
+          await this.faultNotification('OBTAIN_QUOTE');
+          this.commonService.hideLoader();
+        }
+
+      }
+    }
+  }
+
+  private async saveWOContractorVisitResponse(faultNotificationId, requestObj): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.updateWOContractorVisit(faultNotificationId, requestObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          resolve(false)
+        }
+      );
+    });
+    return promise;
+  }
+
   /*iac004*/
   private async checkForPaymentRules() {
     const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
@@ -1184,8 +1243,8 @@ export class ArrangingContractorComponent implements OnInit {
     const paymentRequired = await this.isPaymentRequired(rules);
     if (paymentRequired) {
       const response = await this.commonService.showConfirm('Arranging Contractor',
-        `You have selected "Landlord accepted the quote".<br/><br/> 
-         Since the Landlord account doesn't have sufficient balance to pay for the works, a payment request will be generated and the Landlord will be notified to make an online payment via the portal.<br/> 
+        `You have selected "Landlord accepted the quote".<br/><br/>
+         Since the Landlord account doesn't have sufficient balance to pay for the works, a payment request will be generated and the Landlord will be notified to make an online payment via the portal.<br/>
          <br/>Do you want to proceed? <br/><br/>
          <small>NB:The landlord can also make an offline payment which can be processed manually via landloard accounts.</small>`, '', 'Yes', 'No');
       if (response) {
@@ -1193,7 +1252,7 @@ export class ArrangingContractorComponent implements OnInit {
       }
     } else {
       const response = await this.commonService.showConfirm('Arranging Contractor',
-        `You have selected "Landlord accepted the quote".<br/><br/> 
+        `You have selected "Landlord accepted the quote".<br/><br/>
          A notification will be sent out to the Contractor to carry out the job.<br/>
          <br/> Are you sure?`, '', 'Yes', 'No');
       if (response) {
@@ -1280,6 +1339,11 @@ export class ArrangingContractorComponent implements OnInit {
       );
     });
     return promise;
+  }
+
+  async faultNotification(action) {
+    let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+    this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, action);
   }
 
   private async isPaymentRequired(rules: FaultModels.IFaultWorksorderRules): Promise<boolean> {

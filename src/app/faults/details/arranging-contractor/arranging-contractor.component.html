@@ -277,7 +277,7 @@
             <ng-template ionicSelectableFooterTemplate>
               <ion-toolbar>
                 <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
-                  (click)="this.nominalCodeType.confirm();this.nominalCodeType.close();"
+                  (click)="nominalCodeType.confirm();nominalCodeType.close();"
                   [disabled]="!nominalCodeType.itemsToConfirm.length">
                   Apply
                 </ion-button>
@@ -441,7 +441,7 @@
             <ng-template ionicSelectableFooterTemplate>
               <ion-toolbar>
                 <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
-                  (click)="this.nominalCodeType.confirm();this.nominalCodeType.close();"
+                  (click)="nominalCodeType.confirm();nominalCodeType.close();"
                   [disabled]="!nominalCodeType.itemsToConfirm.length">
                   Apply
                 </ion-button>
