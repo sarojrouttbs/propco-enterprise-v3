@@ -181,13 +181,13 @@ declare namespace FaultModels {
     }
 
     export interface IFaultWorksorderRules {
-        hasSufficientReserveBalance: boolean;
-        isFaultEstimateLessThanHalfRentOrThresHoldValue: boolean;
+        hasOtherInvoicesToBePaid: boolean;
         hasRentArrears: boolean;
         hasRentPaidUpFront: boolean;
+        hasSufficientReserveBalance: boolean;
         hasTenantPaidRentOnTime: boolean;
+        isFaultEstimateLessThanHalfRentOrThresHoldValue: boolean;
         isTenancyGivenNoticeOrInLastMonth: boolean;
-        hasOtherInvoicesToBePaid: boolean;
     }
 
 }

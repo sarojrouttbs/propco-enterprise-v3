@@ -28,6 +28,8 @@ import { SimplePopoverPageModule } from 'src/app/shared/popover/simple-popover/s
 import { AppointmentModalPageModule } from 'src/app/shared/modals/appointment-modal/appointment-modal.module';
 import { QuoteModalPageModule } from 'src/app/shared/modals/quote-modal/quote-modal.module';
 import { IonicSelectableModule } from 'ionic-selectable';
+import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-received-modal/payment-received-modal.component';
+import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
 
 @NgModule({
   imports: [
@@ -51,8 +53,9 @@ import { IonicSelectableModule } from 'ionic-selectable';
     AppointmentModalPageModule,
     QuoteModalPageModule,
     RejectionModalPageModule,
-    IonicSelectableModule
+    IonicSelectableModule,
   ],
-  declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent]
+  declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
+    PaymentReceivedModalComponent, WithoutPrepaymentModalComponent],
 })
 export class DetailsPageModule { }

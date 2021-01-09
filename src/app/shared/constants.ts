@@ -201,3 +201,24 @@ export const REFERENCING_TENANT_TYPE = {
 export const SYSTEM_CONFIG = {
   MAXIMUM_FAULT_QUOTE_REJECTION: 'MAXIMUM_FAULT_QUOTE_REJECTION'
 }
+
+export const MAINTENANCE_TYPES = {
+  QUOTE: 4,
+  WORKS_ORDER: 6
+};
+
+export const PAYMENT_METHOD_TYPES = [
+  'Bank Transfer',  
+  'Cash', 
+  'Cheque',
+  'Other'
+];
+
+export const PAYMENT_WARNINGS = {
+  'isFaultEstimateLessThanHalfRentOrThresHoldValue': 'The Works Order is over half months rent or £250.',
+  'hasRentArrears': 'The Tenant has rent arrears.',
+  'hasRentPaidUpFront': 'The rent has been paid upfront.',
+  'hasTenantPaidRentOnTime': 'The tenant does not always pay rent on time.',
+  'isTenancyGivenNoticeOrInLastMonth': 'The tenancy is in Given Notice stage.',
+  'hasOtherInvoicesToBePaid': 'There are other invoices to be paid from next months rent.'
+};

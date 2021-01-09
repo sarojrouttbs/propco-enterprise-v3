@@ -367,7 +367,7 @@ export class DashboardPage implements OnInit {
   }
 
   getMgntServiceType() {
-    this.faultsService.getMgntServiceType().subscribe(res => {
+    this.faultsService.getManagementTypes().subscribe(res => {
       this.managementTypeList = res ? res : [];
       if (this.managementTypeList) {
         for (var val of this.managementTypeList) {
