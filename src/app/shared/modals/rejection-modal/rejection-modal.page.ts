@@ -55,7 +55,7 @@ export class RejectionModalPage implements OnInit {
     this.faultsService.saveFaultLLAuth(reqObj, this.faultNotificationId).subscribe(res => {
       this.modalController.dismiss('success');
     }, error => {
-      this.commonService.showMessage('No Authorisation', 'Something went wrong', 'error');
+      this.commonService.showMessage('Something went wrong on server, please try again.', 'No Authorisation', 'error');
     })
   }
 
