@@ -91,8 +91,8 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async initiateArrangingContractors() {
     this.faultMaintenanceDetails = await this.getFaultMaintenance() as FaultModels.IMaintenanceQuoteResponse;
-    if (this.faultDetails.status === 19 || (this.faultMaintenanceDetails && this.faultMaintenanceDetails.itemType === 6)) {
-      /*19: Worksorder Pending , 6: worksorder*/
+    if (this.faultDetails.status === 19 || (this.faultMaintenanceDetails && this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER)) {
+      /*19: Worksorder Pending*/
       this.isWorksOrder = true;
     }
     this.getLookupData();
@@ -1498,21 +1498,6 @@ export class ArrangingContractorComponent implements OnInit {
   private sendLandlordPaymentRequest() {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.sendLandlordPaymentRequest(this.faultDetails.faultId).subscribe(
-        res => {
-          resolve(true);
-        },
-        error => {
-          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
-          resolve(false);
-        }
-      );
-    });
-    return promise;
-  }
-
-  private createFaultMaintenaceWorksOrder(requestObj) {
-    const promise = new Promise((resolve, reject) => {
-      this.faultsService.createFaultMaintenaceWorksOrder(requestObj, this.faultDetails.faultId).subscribe(
         res => {
           resolve(true);
         },
