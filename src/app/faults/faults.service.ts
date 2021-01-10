@@ -189,7 +189,7 @@ export class FaultsService {
     );
   }
 
-  getMgntServiceType(): Observable<any> {
+  getManagementTypes(): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `management-types`).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
@@ -217,6 +217,14 @@ export class FaultsService {
 
   saveFaultLLAuth(body: any, faultNotificationId: string): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/quote-auth`, body);
+  }
+
+  savePaymentReceived(faultNotificationId, body: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/payment-received`, body);
+  }
+
+  saveProceedWithoutPrePayment(faultNotificationId, body: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/proceed-without-prepayment`, body);
   }
 
   getOfficeDetails(office): Observable<any> {

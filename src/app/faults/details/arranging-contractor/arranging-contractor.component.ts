@@ -6,12 +6,14 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
+import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-received-modal/payment-received-modal.component';
+import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -827,7 +829,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
 
     if (this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[1].index || this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[3].index) {
-      if (this.faultMaintenanceDetails.itemType === 4) {
+      if (this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.QUOTE) {
         if (this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') {
           this.questionActionAcceptRequest(data);
         } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
@@ -837,11 +839,13 @@ export class ArrangingContractorComponent implements OnInit {
         } else if (this.iacNotification.templateCode === 'LAR-L-E') {
           this.questionActionLLAuth(data);
         }
-      } else if (this.faultMaintenanceDetails.itemType === 6) {
+      } else if (this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER) {
         if (this.iacNotification.templateCode === 'CWO-A-C-E' || this.iacNotification.templateCode === 'CWO-NA-C-E') {
           this.questionActionAcceptRequest(data);
         } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
           this.worksOrderActionVisitTime(data);
+        } else if (this.iacNotification.templateCode === 'LNP-L-E') {
+          this.questionActionWOPayment(data);
         }
       }
     }
@@ -945,9 +949,6 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-
-
-
   private async questionActionLLAuth(data) {
     if (!data.value) {
       const modal = await this.modalController.create({
@@ -975,6 +976,47 @@ export class ArrangingContractorComponent implements OnInit {
       if (submit) {
         this.initiateArrangingContractors();
       }
+    }
+  }
+
+  private async questionActionWOPayment(data) {
+    if (data.value) {
+      const modal = await this.modalController.create({
+        component: PaymentReceivedModalComponent,
+        cssClass: 'modal-container',
+        componentProps: {
+          faultNotificationId: this.iacNotification.faultNotificationId,
+        },
+        backdropDismiss: false
+      });
+
+      modal.onDidDismiss().then(async res => {
+        if (res.data && res.data == 'success') {
+          this.initiateArrangingContractors();
+        }
+      });
+      await modal.present();
+    } else if (!data.value) {
+      const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
+      if (!rules) {
+        return null;
+      }
+      const modal = await this.modalController.create({
+        component: WithoutPrepaymentModalComponent,
+        cssClass: 'modal-container',
+        componentProps: {
+          faultNotificationId: this.iacNotification.faultNotificationId,
+          paymentRules: rules
+        },
+        backdropDismiss: false
+      });
+
+      modal.onDidDismiss().then(async res => {
+        if (res.data && res.data == 'success') {
+          this.initiateArrangingContractors();
+        }
+      });
+      await modal.present();
     }
   }
 
@@ -1488,14 +1530,29 @@ export class ArrangingContractorComponent implements OnInit {
     this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, action);
   }
 
-  private async isPaymentRequired(rules: FaultModels.IFaultWorksorderRules): Promise<boolean> {
+  private isPaymentRequired(rules: FaultModels.IFaultWorksorderRules): boolean {
     let paymentNeeded = false;
-    for (var key in rules) {
-      if (rules.hasOwnProperty(key)) {
-        if (!rules[key]) {
-          paymentNeeded = true;
-          break;
-        }
+    if (rules && rules.hasOwnProperty('hasOtherInvoicesToBePaid')) {
+      if (rules.hasOtherInvoicesToBePaid === true) {
+        paymentNeeded = true;
+      }
+      else if (rules.hasRentArrears === true) {
+        paymentNeeded = true;
+      }
+      else if (rules.hasRentPaidUpFront === true) {
+        paymentNeeded = true;
+      }
+      else if (rules.hasSufficientReserveBalance === true) {
+        paymentNeeded = true;
+      }
+      else if (rules.hasTenantPaidRentOnTime === false) {
+        paymentNeeded = true;
+      }
+      else if (rules.isFaultEstimateLessThanHalfRentOrThresHoldValue === false) {
+        paymentNeeded = true;
+      }
+      else if (rules.isTenancyGivenNoticeOrInLastMonth === false) {
+        paymentNeeded = true;
       }
     }
     return paymentNeeded;
