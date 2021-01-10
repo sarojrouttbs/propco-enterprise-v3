@@ -910,7 +910,13 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-      <app-arranging-contractor [faultDetails]="faultDetails" (btnAction)="_arrangingContHandler($event)" [leadTenantId]="leadTenantId" [propertyLandlords]="landlordsOfproperty" [quoteDocuments]="quoteDocuments" [propertyDetails]="propertyDetails"></app-arranging-contractor>
+      <app-arranging-contractor [faultDetails]="faultDetails" 
+      (btnAction)="_arrangingContHandler($event)" 
+      [leadTenantId]="leadTenantId" 
+      [propertyLandlords]="landlordsOfproperty" 
+      [quoteDocuments]="quoteDocuments" 
+      [propertyDetails]="propertyDetails"
+      [categoryName]="getCategoryName()"></app-arranging-contractor>
     </ng-container>
     <!-- <div class="action-btn-group">
       <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>

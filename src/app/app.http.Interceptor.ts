@@ -17,7 +17,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // this.totalRequests = 0;
     //if (!req.url.includes('applicant/search')) {
-      //this._commonService.showLoader();
+    //this._commonService.showLoader();
     //}
 
     if (this._commonService.isInternetConnected()) {
@@ -37,7 +37,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
       const authReq = req.clone({ headers: requestHeader });
       this.totalRequests++;
       // if (this.totalRequests === 1) {
-        this._commonService.showLoader();
+      this._commonService.showLoader();
       // }
       return next.handle(authReq).pipe(catchError((error: HttpErrorResponse) => {
         this._commonService.hideLoader();
@@ -62,6 +62,8 @@ export class AppHttpInterceptor implements HttpInterceptor {
           }
         } else if (error.status === 412) {
           // this._commonService.showMessage('Something went wrong on server, please try again.', 'Precondition Failed', 'error');
+          return throwError(error);
+        } else if (error.status === 422) {
           return throwError(error);
         } else {
           if (error.status === 405 || error.status === 403) {
