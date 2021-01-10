@@ -1446,7 +1446,9 @@ export class ArrangingContractorComponent implements OnInit {
     } else {
       if (!this.faultMaintenanceDetails) {
         const isDraft = false;
-        submit = await this.raiseWorksOrder(isDraft) as boolean;
+        const updateWO = await this.raiseWorksOrder(isDraft) as boolean;
+        if (!updateWO) return false;
+        submit = await this.updateFault(true) as boolean;
       } else {
         submit = await this.updateWorksOrder() as boolean;
       }
