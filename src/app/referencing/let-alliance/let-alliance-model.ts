@@ -101,6 +101,8 @@ declare namespace letAllianceModels {
 
     interface Tenant {
         depositStatus?: any;
+        rentShare?: any;
+        isReferencingRequired?: boolean;
         tenantId: string;
         isLead: boolean;
     }
@@ -122,6 +124,7 @@ declare namespace letAllianceModels {
         checkOutDate?: any;
         legacyReference?: any;
         hasCheckedIn?: any;
+        numberOfReferencingOccupants?: number;
         propcoAgreementId: number;
         agreementId: string;
         tenants: Tenant[];

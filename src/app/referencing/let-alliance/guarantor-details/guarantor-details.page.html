@@ -38,7 +38,7 @@
             <ion-label position="floating">Product Type  <ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select interface="popover" formControlName="productId">
-              <ion-select-option [value]="item.productId" *ngFor="let item of laProductList">
+              <ion-select-option [value]="item.productId" *ngFor="let item of referencingProductList">
                 {{ item.productName }}
               </ion-select-option>
             </ion-select>
