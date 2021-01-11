@@ -33,18 +33,18 @@ export class ApplicationDetailsPage implements OnInit {
   propertyTenancyList: letAllianceModels.ITenancyResponse;
   propertyTenantList: letAllianceModels.ITenantListResponse;
   tenantDetails: letAllianceModels.ITenantResponse;
-  laProductList: any[] = [];
-  laCaseProductList: any[];
-  laApplicationProductList: any[];
+  referencingProductList: any[] = [];
+  referencingCaseProductList: any[];
+  referencingApplicationProductList: any[];
   propertyId = null;
   lookupdata: any;
-  laLookupdata: any;
+  referencingLookupdata: any;
   currentStepperIndex = 0;
   isPropertyTabDetailSubmit: boolean;
   isTenantTabDetailSubmit: boolean;
   current = 0;
-  previous;
-  tenantId;
+  previous: any;
+  tenantId: any;
   futureDate: string;
   currentDate = this.commonService.getFormatedDate(new Date());
   adultDate = this.datepipe.transform(new Date().setDate(new Date().getDay() - (18 * 365)), 'yyyy-MM-dd');
@@ -147,7 +147,7 @@ export class ApplicationDetailsPage implements OnInit {
 
   private getLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
-    this.laLookupdata = this.commonService.getItem(PROPCO.LA_LOOKUP_DATA, true);
+    this.referencingLookupdata = this.commonService.getItem(PROPCO.REFERENCING_LOOKUP_DATA, true);
     if (this.lookupdata) {
       this.setLookupData(this.lookupdata);
     } else {
@@ -158,26 +158,26 @@ export class ApplicationDetailsPage implements OnInit {
       });
     }
 
-    if (this.laLookupdata) {
-      this.setLALookupData(this.lookupdata);
+    if (this.referencingLookupdata) {
+      this.setReferencingLookupData(this.referencingLookupdata);
     } else {
-      this.referencingService.getLALookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
-        this.commonService.setItem(PROPCO.LA_LOOKUP_DATA, data);
-        this.laLookupdata = data;
-        this.setLALookupData(data);
+      this.referencingService.getLookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
+        this.commonService.setItem(PROPCO.REFERENCING_LOOKUP_DATA, data);
+        this.referencingLookupdata = data;
+        this.setReferencingLookupData(data);
       });
     }
   }
 
-  private setLookupData(data: any) {
-    this.agreementStatuses = this.lookupdata.agreementStatuses;
+  private setLookupData(data: any): void {
+    this.agreementStatuses = data.agreementStatuses;
   }
 
-  private setLALookupData(data: any) {
-    this.managementStatusTypes = this.laLookupdata.managementStatusTypes;
-    this.tenantTypes = this.laLookupdata.tenantTypes;
-    this.titleTypes = this.laLookupdata.titleTypes;
-    this.maritalStatusTypes = this.laLookupdata.maritalStatusTypes;
+  private setReferencingLookupData(data: any): void {
+    this.managementStatusTypes = data.managementStatusTypes;
+    this.tenantTypes = data.tenantTypes;
+    this.titleTypes = data.titleTypes;
+    this.maritalStatusTypes = data.maritalStatusTypes;
   }
 
   private initiateForms() {
@@ -189,7 +189,7 @@ export class ApplicationDetailsPage implements OnInit {
   private initTenancyDetailsForm(): void {
     this.tenancyDetailsForm = this.fb.group({
       productId: ['', Validators.required],
-      noOfTenantToBeReferenced: ['', [Validators.required, ValidationService.numberValidator]],
+      numberOfReferencingOccupants: ['', [Validators.required]],
       tenancyStartDate: ['', [Validators.required, ValidationService.futureDateSelectValidator]],
       tenancyTerm: ['', [Validators.required, Validators.min(1), Validators.max(36), ValidationService.numberValidator]],
       paidBy: ['', [Validators.min(0), Validators.max(1)]],
@@ -237,7 +237,7 @@ export class ApplicationDetailsPage implements OnInit {
       this.getPropertyById(),
       this.getTenantDetails(),
       this.getPropertyTenancyList(),
-      this.getLAProductList()
+      this.getProductList()
     ]).subscribe(async (values) => {
       // this.commonService.hideLoader();
       this.initPatching();
@@ -298,23 +298,23 @@ export class ApplicationDetailsPage implements OnInit {
     return promise;
   }
 
-  private getLAProductList() {
+  private getProductList() {
     const promise = new Promise((resolve, reject) => {
-      this.referencingService.getLAProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
+      this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
         res => {
-          this.laProductList = res ? this.commonService.removeDuplicateObjects(res) : [];
-          this.laCaseProductList = this.laProductList.filter(obj => {
+          this.referencingProductList = res ? this.commonService.removeDuplicateObjects(res) : [];
+          this.referencingCaseProductList = this.referencingProductList.filter(obj => {
             return obj.productName.includes('Per Property');
           });
 
-          this.laApplicationProductList = this.laProductList.filter(obj => {
+          this.referencingApplicationProductList = this.referencingProductList.filter(obj => {
             return !obj.productName.includes('Per Property');
           });
-          resolve(this.laProductList);
+          resolve(this.referencingProductList);
         },
         error => {
           console.log(error);
-          resolve(this.laProductList);
+          resolve(this.referencingProductList);
         });
     });
 
@@ -322,10 +322,12 @@ export class ApplicationDetailsPage implements OnInit {
   }
 
   private initPatching(): void {
+    const selectedTenantRentShare = this.propertyTenancyList[0].tenants.find(obj => obj.tenantId === this.tenantDetails.tenantId).rentShare;
+
     this.tenancyDetailsForm.patchValue({
       tenancyStartDate: this.propertyTenancyList[0].tenancyStartDate,
+      numberOfReferencingOccupants: this.propertyTenancyList[0].numberOfReferencingOccupants
     });
-    this.tenancyDetailsForm.get('tenancyStartDate').markAsTouched();
 
     this.propertyDetailsForm.patchValue({
       managementStatus: this.propertyDetails.managementType,
@@ -340,7 +342,8 @@ export class ApplicationDetailsPage implements OnInit {
       email: this.tenantDetails.email,
       maritalStatus: this.tenantDetails.maritalStatus,
       nationality: this.tenantDetails.nationality,
-    });
+      rentShare: this.currencyPipe.transform(selectedTenantRentShare, 'GBP', 'symbol')
+    }, { emitEvent: false });
   }
 
   setValidatorsForForms() {
@@ -550,7 +553,7 @@ export class ApplicationDetailsPage implements OnInit {
       applicantItemType: tmpTenant.isLead ? 'M' : 'S',
       case: {
         productId: this.tenancyDetailsForm.get('productId').value,
-        noOfTenantToBeReferenced: parseInt(this.tenancyDetailsForm.get('noOfTenantToBeReferenced').value),
+        numberOfReferencingOccupants: parseInt(this.tenancyDetailsForm.get('numberOfReferencingOccupants').value),
         tenancyStartDate: this.datepipe.transform(this.tenancyDetailsForm.get('tenancyStartDate').value, 'yyyy-MM-dd'),
         tenancyEndDate: this.datepipe.transform(tmpDate, 'yyyy-MM-dd'),
         tenancyTerm: this.tenancyDetailsForm.get('tenancyTerm').value,
@@ -626,8 +629,8 @@ export class ApplicationDetailsPage implements OnInit {
 
   getProductType(productId: any): string {
     let productType: any;
-    this.laProductList = this.laProductList && this.laProductList.length ? this.laProductList : [];
-    this.laProductList.find((obj) => {
+    this.referencingProductList = this.referencingProductList && this.referencingProductList.length ? this.referencingProductList : [];
+    this.referencingProductList.find((obj) => {
       if (obj.productId === productId) {
         productType = obj.productName;
       }

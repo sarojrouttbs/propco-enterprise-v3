@@ -47,7 +47,7 @@ export class ResendLinkModalPage implements OnInit {
   it: any;
   isValidEmail = false;
   lookupdata: any;
-  laLookupdata: any;
+  referencingLookupdata: any;
   titleTypes: any;
   isValidMail: boolean;
   newEmailAddressForm: FormGroup;
@@ -94,7 +94,7 @@ export class ResendLinkModalPage implements OnInit {
 
   private getLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
-    this.laLookupdata = this.commonService.getItem(PROPCO.LA_LOOKUP_DATA, true);
+    this.referencingLookupdata = this.commonService.getItem(PROPCO.REFERENCING_LOOKUP_DATA, true);
     if (this.lookupdata) {
       this.setLookupData(this.lookupdata);
     } else {
@@ -105,21 +105,22 @@ export class ResendLinkModalPage implements OnInit {
       });
     }
 
-    if (this.laLookupdata) {
-      this.setLALookupData(this.lookupdata);
+    if (this.referencingLookupdata) {
+      this.setReferencingLookupData(this.referencingLookupdata);
     } else {
-      this.referencingService.getLALookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe((data) => {
-        this.commonService.setItem(PROPCO.LA_LOOKUP_DATA, data);
-        this.laLookupdata = data;
-        this.setLALookupData(data);
+      this.referencingService.getLookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe((data) => {
+        this.commonService.setItem(PROPCO.REFERENCING_LOOKUP_DATA, data);
+        this.referencingLookupdata = data;
+        this.setReferencingLookupData(data);
       });
     }
   }
 
-  private setLookupData(data: any) { }
+  private setLookupData(data: any): void {
+  }
 
-  private setLALookupData(data: any) {
-    this.titleTypes = this.laLookupdata.titleTypes;
+  private setReferencingLookupData(data: any): void {
+    this.titleTypes = data.titleTypes;
   }
 
   private initiateEmailForm() {

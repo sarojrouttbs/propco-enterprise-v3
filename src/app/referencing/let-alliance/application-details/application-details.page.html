@@ -6,7 +6,7 @@
           <ion-item>
             <ion-label position="floating">Product Type <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="productId">
-              <ion-select-option [value]="item.productId" *ngFor="let item of laProductList">
+              <ion-select-option [value]="item.productId" *ngFor="let item of referencingProductList">
                 {{ item.productName }}
               </ion-select-option>
             </ion-select>
@@ -16,9 +16,9 @@
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">No. of Occupants <ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-input formControlName="noOfTenantToBeReferenced"></ion-input>
+            <ion-input formControlName="numberOfReferencingOccupants"></ion-input>
           </ion-item>
-          <app-validation-message [control]="tenancyDetailsForm.controls.noOfTenantToBeReferenced"></app-validation-message>
+          <app-validation-message [control]="tenancyDetailsForm.controls.numberOfReferencingOccupants"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
@@ -123,7 +123,7 @@
             <ion-label position="floating">Product Type  <ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select interface="popover" formControlName="productId">
-              <ion-select-option [value]="item.productId" *ngFor="let item of laProductList">
+              <ion-select-option [value]="item.productId" *ngFor="let item of referencingProductList">
                 {{ item.productName }}
               </ion-select-option>
             </ion-select>
@@ -295,7 +295,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">No. of Occupants</ion-text><br />
-        <ion-text class="content">{{tenancyDetailsForm.controls.noOfTenantToBeReferenced.value  || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenancyDetailsForm.controls.numberOfReferencingOccupants.value  || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Tenancy Start Date</ion-text><br />
@@ -436,7 +436,7 @@
             <mat-tab>
               <ng-template mat-tab-label>
                 <div class="label-text" [class.success-border]='isPropertyTabDetailSubmit && propertyDetailsForm.valid && tenancyDetailsForm.valid'
-                [class.error-border]='isPropertyTabDetailSubmit && !propertyDetailsForm.valid || !tenancyDetailsForm.valid'>Property/ Rental Details</div>
+                [class.error-border]='(isPropertyTabDetailSubmit) && (!propertyDetailsForm.valid || !tenancyDetailsForm.valid)'>Property/ Rental Details</div>
               </ng-template>
               <div class="accordion-container">
                 <div class="accordion-header" (click)="tenancyDetailsAccordion.expanded = !tenancyDetailsAccordion.expanded">

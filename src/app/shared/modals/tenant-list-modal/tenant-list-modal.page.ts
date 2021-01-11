@@ -26,7 +26,7 @@ export class TenantListModalPage implements OnInit {
   selectedRow: any;
 
   lookupdata: any;
-  laLookupdata: any;
+  referencingLookupdata: any;
   agreementStatuses: any[] = [];
   proposedAgreementStatusIndex: any
 
@@ -55,7 +55,7 @@ export class TenantListModalPage implements OnInit {
 
   private getLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
-    this.laLookupdata = this.commonService.getItem(PROPCO.LA_LOOKUP_DATA, true);
+    this.referencingLookupdata = this.commonService.getItem(PROPCO.REFERENCING_LOOKUP_DATA, true);
     if (this.lookupdata) {
       this.setLookupData(this.lookupdata);
     } else {
@@ -66,22 +66,22 @@ export class TenantListModalPage implements OnInit {
       });
     }
 
-    if (this.laLookupdata) {
-      this.setLALookupData(this.lookupdata);
+    if (this.referencingLookupdata) {
+      this.setReferencingLookupData(this.referencingLookupdata);
     } else {
-      this.referencingService.getLALookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
-        this.commonService.setItem(PROPCO.LA_LOOKUP_DATA, data);
-        this.laLookupdata = data;
-        this.setLALookupData(data);
+      this.referencingService.getLookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
+        this.commonService.setItem(PROPCO.REFERENCING_LOOKUP_DATA, data);
+        this.referencingLookupdata = data;
+        this.setReferencingLookupData(data);
       });
     }
   }
 
-  private setLookupData(data: any) {
-    this.agreementStatuses = this.lookupdata.agreementStatuses;
+  private setLookupData(data: any): void {
+    this.agreementStatuses = data.agreementStatuses;
   }
 
-  private setLALookupData(data: any) {
+  private setReferencingLookupData(data: any): void {
   }
 
   private getTenantList() {
@@ -109,9 +109,28 @@ export class TenantListModalPage implements OnInit {
 
   toggleReferencing(tenant: any, event: any) {
     tenant.isReferencingRequired = event.target.checked;
+    const tmpObj = {
+      isReferencingRequired: tenant.isReferencingRequired,
+    }
     if (!tenant.isReferencingRequired) {
       tenant.isRowChecked = false;
     }
+    this.updateTenantDetails(tenant.tenantId, tmpObj);
+  }
+
+  private updateTenantDetails(tenantId: any, requestObj: any) {
+    const promise = new Promise((resolve, reject) => {
+      this.referencingService.updateTenantDetails(tenantId, requestObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        (error) => {
+          console.log(error);
+          resolve(false);
+        }
+      );
+    });
+    return promise;
   }
 
   selectTenant(tenant: any, event: any) {
