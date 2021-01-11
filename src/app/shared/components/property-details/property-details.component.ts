@@ -1,4 +1,4 @@
-import { PROPCO } from './../../constants';
+import { FOLDER_NAMES, PROPCO } from './../../constants';
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 import { FormGroup } from '@angular/forms';
@@ -36,10 +36,10 @@ export class PropertyDetailsComponent implements OnInit {
       });
     }
     let faultsLookupData = this.commonService.getItem(PROPCO.FAULTS_LOOKUP_DATA, true);
-    if(faultsLookupData){
+    if (faultsLookupData) {
       this.setFaultsLookupData(faultsLookupData);
     }
-    else{
+    else {
       this.commonService.getFaultsLookup().subscribe(data => {
         this.commonService.setItem(PROPCO.FAULTS_LOOKUP_DATA, data);
         this.setFaultsLookupData(data);
@@ -57,8 +57,8 @@ export class PropertyDetailsComponent implements OnInit {
     this.officeCodes = this.lookupdata.officeCodes;
     this.hmoLicenceSchemes = this.lookupdata.hmoLicenceSchemes;
   }
-  
-  private setFaultsLookupData(data){
+
+  private setFaultsLookupData(data) {
     this.faultUrgencyStatuses = data.faultUrgencyStatuses;
   }
 
@@ -67,5 +67,20 @@ export class PropertyDetailsComponent implements OnInit {
   }
   public submit(files: FileList) {
     this.getUploadedFile.emit(files);
+  }
+
+  getFilteredDocs(files: Array<any>): string {
+    let url = null;
+    if (files && files[0].documentId) {
+      const filteredDoc = files.filter(data => data.folderName === FOLDER_NAMES[0]['index']);
+      if (filteredDoc && filteredDoc[0].name.split('.')[1] !== 'pdf') {
+        return url = filteredDoc[0].documentUrl;
+      }
+      else
+        return url = 'assets/images/default.jpg';
+    }
+    if (files && !files[0].documentId) {
+        return url = files[0].documentUrl;
+    }
   }
 }

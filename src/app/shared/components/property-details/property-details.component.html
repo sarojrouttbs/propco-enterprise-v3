@@ -16,8 +16,11 @@
           <span class="drag-text">Drag files to upload here</span> <br>
           <label for="files" class="browse-btn">Browse Files</label>
         </form> -->
-        <div *ngIf="files.length" class="fault-image">
+        <!-- <div *ngIf="files.length" class="fault-image">
           <img [src]="files[0].documentUrl ? files[0].documentUrl : 'assets/images/default.jpg'">
+        </div> -->
+        <div *ngIf="files.length" class="fault-image" >
+          <img [src]="getFilteredDocs(files)">
         </div>
       </ion-col>
       <ion-col class="" size-xl="83" size="77">
