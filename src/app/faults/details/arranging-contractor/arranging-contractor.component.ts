@@ -293,6 +293,7 @@ export class ArrangingContractorComponent implements OnInit {
           requiredDate: this.faultMaintenanceDetails.requiredCompletionDate
         }
       );
+      this.workOrderForm.get('contractorName').disable();
       this.woSelectContractor(this.faultMaintenanceDetails.selectedContractorId);
     }
   }
@@ -416,12 +417,12 @@ export class ArrangingContractorComponent implements OnInit {
           }
         }
       } else {
-        if (this.validateReq()) {
-          return;
-        }
+        // if (this.validateReq()) {
+        //   return;
+        // }
         if (!this.faultMaintenanceDetails) {
           /*raise a worksorder*/
-          // if (!this.workOrderForm.get('contractorId').value) { this.commonService.showMessage('Please select contractor.', 'Works Order', 'error'); return; }
+          if (!this.workOrderForm.get('contractorId').value) { this.commonService.showMessage('Please select a contractor.', 'Works Order', 'error'); return; }
           const woRaised = await this.raiseWorksOrder();
           if (woRaised) { this._btnHandler('cancel'); }
         } else {
@@ -597,8 +598,9 @@ export class ArrangingContractorComponent implements OnInit {
               if (faultUpdated) {
                 this.commonService.showLoader();
                 setTimeout(async () => {
-                  await this.faultNotification('OBTAIN_QUOTE');
-                }, 3000);
+                  // await this.faultNotification('OBTAIN_QUOTE');
+                  this.initiateArrangingContractors();
+                }, 1000);
               }
             }
           } else {
@@ -614,8 +616,9 @@ export class ArrangingContractorComponent implements OnInit {
                   if (faultUpdated) {
                     this.commonService.showLoader();
                     setTimeout(async () => {
-                      await this.faultNotification('OBTAIN_QUOTE');
-                    }, 3000);
+                      // await this.faultNotification('OBTAIN_QUOTE');
+                      this.initiateArrangingContractors();
+                    }, 1000);
                   }
                 }
               }
@@ -828,7 +831,7 @@ export class ArrangingContractorComponent implements OnInit {
       return;
     }
 
-    if (this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[1].index || this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[3].index) {
+    // if (this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[1].index || this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[3].index) {
       if (this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.QUOTE) {
         if (this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') {
           this.questionActionAcceptRequest(data);
@@ -848,7 +851,7 @@ export class ArrangingContractorComponent implements OnInit {
           this.questionActionWOPayment(data);
         }
       }
-    }
+    // }
   }
 
   private questionActionAcceptRequest(data) {
@@ -1446,11 +1449,11 @@ export class ArrangingContractorComponent implements OnInit {
     } else {
       if (!this.faultMaintenanceDetails) {
         const isDraft = false;
-        const updateWO = await this.raiseWorksOrder(isDraft) as boolean;
+        submit = await this.raiseWorksOrder(isDraft) as boolean;
+      } else {
+        const updateWO = await this.updateWorksOrder() as boolean;
         if (!updateWO) return false;
         submit = await this.updateFault(true) as boolean;
-      } else {
-        submit = await this.updateWorksOrder() as boolean;
       }
     }
     if (!submit) return false;
