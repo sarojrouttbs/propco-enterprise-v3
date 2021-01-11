@@ -293,6 +293,7 @@ export class ArrangingContractorComponent implements OnInit {
           requiredDate: this.faultMaintenanceDetails.requiredCompletionDate
         }
       );
+      this.workOrderForm.get('contractorName').disable();
       this.woSelectContractor(this.faultMaintenanceDetails.selectedContractorId);
     }
   }
@@ -416,12 +417,12 @@ export class ArrangingContractorComponent implements OnInit {
           }
         }
       } else {
-        if (this.validateReq()) {
-          return;
-        }
+        // if (this.validateReq()) {
+        //   return;
+        // }
         if (!this.faultMaintenanceDetails) {
           /*raise a worksorder*/
-          // if (!this.workOrderForm.get('contractorId').value) { this.commonService.showMessage('Please select contractor.', 'Works Order', 'error'); return; }
+          if (!this.workOrderForm.get('contractorId').value) { this.commonService.showMessage('Please select a contractor.', 'Works Order', 'error'); return; }
           const woRaised = await this.raiseWorksOrder();
           if (woRaised) { this._btnHandler('cancel'); }
         } else {
@@ -1446,11 +1447,11 @@ export class ArrangingContractorComponent implements OnInit {
     } else {
       if (!this.faultMaintenanceDetails) {
         const isDraft = false;
-        const updateWO = await this.raiseWorksOrder(isDraft) as boolean;
+        submit = await this.raiseWorksOrder(isDraft) as boolean;
+      } else {
+        const updateWO = await this.updateWorksOrder() as boolean;
         if (!updateWO) return false;
         submit = await this.updateFault(true) as boolean;
-      } else {
-        submit = await this.updateWorksOrder() as boolean;
       }
     }
     if (!submit) return false;
