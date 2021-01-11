@@ -83,7 +83,7 @@
 }
 
 .isRejected {
-  background-color: rgba(var(--ion-color-danger-rgb), 0.5);
+  background-color: rgba(var(--ion-color-danger-rgb), 0.5) !important;
   cursor: pointer;
 }
 

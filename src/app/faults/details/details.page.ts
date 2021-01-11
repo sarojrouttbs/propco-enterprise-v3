@@ -160,10 +160,10 @@ export class DetailsPage implements OnInit {
       });
     }
     let faultsLookupData = this.commonService.getItem(PROPCO.FAULTS_LOOKUP_DATA, true);
-    if(faultsLookupData){
+    if (faultsLookupData) {
       this.setFaultsLookupData(faultsLookupData);
     }
-    else{
+    else {
       this.commonService.getFaultsLookup().subscribe(data => {
         this.commonService.setItem(PROPCO.FAULTS_LOOKUP_DATA, data);
         this.setFaultsLookupData(data);
@@ -175,7 +175,7 @@ export class DetailsPage implements OnInit {
     this.agreementStatuses = data.agreementStatuses;
   }
 
-  private setFaultsLookupData(data){
+  private setFaultsLookupData(data) {
     this.faultReportedByThirdParty = data.faultReportedByThirdParty;
     this.faultCategories = data.faultCategories;
     this.faultUrgencyStatuses = data.faultUrgencyStatuses;
@@ -1405,6 +1405,7 @@ export class DetailsPage implements OnInit {
 
       switch (this.userSelectedActionControl.value) {
         case LL_INSTRUCTION_TYPES[1].index: //cli006b
+          if (!this.faultDetails.confirmedEstimate) { this.commonService.showMessage('Confirmed estimate required.', 'Landlord Instructions', 'error'); return; }
           var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action. This will send out a notification to Landlord, Tenant and a Contractor. <br/> Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
@@ -1439,6 +1440,7 @@ export class DetailsPage implements OnInit {
           }
           break;
         case LL_INSTRUCTION_TYPES[4].index: //cli006e
+          if (!this.faultDetails.confirmedEstimate) { this.commonService.showMessage('Confirmed estimate required.', 'Landlord Instructions', 'error'); return; }
           var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action. <br/> Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
@@ -1786,7 +1788,9 @@ export class DetailsPage implements OnInit {
   }
 
   changeString(data): string {
-    return data.replace(/_/g, " ");
+    if (data) {
+      return data.replace(/_/g, " ");
+    }
   }
 
   getFileType(name): boolean {

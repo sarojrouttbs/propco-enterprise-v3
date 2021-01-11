@@ -31,6 +31,9 @@ export class ArrangingContractorComponent implements OnInit {
   @Output() public btnAction: EventEmitter<any> = new EventEmitter();
   @Input() leadTenantId: any;
   @Input() quoteDocuments: any;
+  @Input() propertyDetails;
+  @Input() propertyLandlords;
+  @Input() categoryName;
   faultMaintenanceDetails: FaultModels.IMaintenanceQuoteResponse;
   contractors: Observable<FaultModels.IContractorResponse>;
   resultsAvailable = false;
@@ -39,7 +42,6 @@ export class ArrangingContractorComponent implements OnInit {
   contractorSkill: any;
   faultCategories: any;
   categoryMap = new Map();
-  @Input() propertyLandlords;
   isSelected = false;
   contratctorArr: string[] = [];
   isContratorSelected = false;
@@ -63,8 +65,8 @@ export class ArrangingContractorComponent implements OnInit {
   page = 2;
   codes: FaultModels.NominalCode[];
   currentDate = this.commonService.getFormatedDate(new Date());
-  @Input() propertyDetails;
   isWorksOrder: boolean = false;
+  isFormsReady: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -76,31 +78,36 @@ export class ArrangingContractorComponent implements OnInit {
 
   ngOnInit() {
     this.initiateArrangingContractors();
-    this.initiateWorkOrder();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.leadTenantId && changes.leadTenantId.currentValue) {
       this.checkMaintenanceDetail();
     }
+    if (changes.faultDetails && !changes.faultDetails.firstChange) {
+      this.initiateArrangingContractors();
+    }
   }
 
-  private initiateArrangingContractors(): void {
+  private async initiateArrangingContractors() {
+    this.faultMaintenanceDetails = await this.getFaultMaintenance() as FaultModels.IMaintenanceQuoteResponse;
+    if (this.faultDetails.status === 19 || (this.faultMaintenanceDetails && this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER)) {
+      /*19: Worksorder Pending*/
+      this.isWorksOrder = true;
+    }
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
   }
 
-  private initiateWorkOrder(): void {
-    this.initWorkOrderForms();
-    if (this.faultDetails.doesBranchHoldKeys) {
-      this.officeDetails();
-    }
-  }
-
   private initForms(): void {
-    this.initQuoteForm();
-    this.initAddContractorForm();
+    if (!this.isWorksOrder) {
+      this.initQuoteForm();
+      this.initAddContractorForm();
+    } else {
+      this.initWorkOrderForms();
+    }
+    this.isFormsReady = true;
   }
 
   private initQuoteForm(): void {
@@ -126,29 +133,31 @@ export class ArrangingContractorComponent implements OnInit {
     this.workOrderForm = this.fb.group({
       propertyId: [this.faultDetails.propertyId, Validators.required],
       contractorId: ['', Validators.required],
+      contractorName: ['', Validators.required],
       company: [{ value: '', disabled: true }],
       address: [{ value: '', disabled: true }],
       repairCost: ['', Validators.required],
       worksOrderNumber: [{ value: this.faultDetails.reference, disabled: true }],
       postdate: [{ value: '', disabled: true }],
       nominalCode: ['', Validators.required],
-      description: ['', Validators.required],
+      description: [this.categoryName + " " + this.faultDetails.title, Validators.required],
       paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
-      paidTo: [{ value: '', disabled: true }],
-      defaultCommision: '',
-      mgntHoldKey: '',
+      mgntHoldKey: [{ value: 'No', disabled: true }],
       keysLocation: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
       accessDetails: [this.getAccessDetails(this.faultDetails.isTenantPresenceRequired), Validators.required],
-      completedDate: '',
+      requiredDate: '',
       fullDescription: ['', Validators.required],
-      orderedBy: '',
+      orderedBy: { value: '', disabled: true },
       agentReference: [{ value: '', disabled: true }],
       defaultCommissionPercentage: [{ value: '', disabled: true }],
       defaultCommissionAmount: [{ value: '', disabled: true }],
       businessTelephone: [{ value: '', disabled: true }],
     });
+    if (this.faultDetails.doesBranchHoldKeys) {
+      this.officeDetails();
+    }
 
-    this.woContractors = this.workOrderForm.get('contractorId').valueChanges.pipe(debounceTime(300),
+    this.woContractors = this.workOrderForm.get('contractorName').valueChanges.pipe(debounceTime(300),
       switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
         new Observable())
     );
@@ -221,20 +230,20 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async initApiCalls() {
-    this.faultMaintenanceDetails = await this.getFaultMaintenance() as FaultModels.IMaintenanceQuoteResponse;
     if (this.faultMaintenanceDetails) {
-      if (this.faultMaintenanceDetails.itemType === 6) {
-        this.isWorksOrder = true;
+      if (!this.isWorksOrder) {
+        await this.getMaxQuoteRejection();
       }
       this.initPatching();
-      await this.getMaxQuoteRejection();
       await this.faultNotification(this.faultDetails.stageAction);
     } else {
-      this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
-      this.checkMaintenanceDetail();
+      if (!this.isWorksOrder) {
+        this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
+        this.checkMaintenanceDetail();
+      }
       let userDetails: any = await this.getUserDetails();
       if (userDetails) {
-        this.raiseQuoteForm.get('orderedBy').setValue(userDetails.name);
+        this.isWorksOrder ? this.workOrderForm.get('orderedBy').setValue(userDetails.name) : this.raiseQuoteForm.get('orderedBy').setValue(userDetails.name);
       }
     }
   }
@@ -269,9 +278,6 @@ export class ArrangingContractorComponent implements OnInit {
       );
       this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
     } else {
-      if (this.faultDetails.doesBranchHoldKeys) {
-        this.officeDetails();
-      }
       this.workOrderForm.patchValue(
         {
           worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
@@ -282,9 +288,12 @@ export class ArrangingContractorComponent implements OnInit {
           contractorId: this.faultMaintenanceDetails.selectedContractorId,
           nominalCode: this.faultMaintenanceDetails.nominalCode,
           fullDescription: this.faultMaintenanceDetails.fullDescription,
-          repairCost: this.faultMaintenanceDetails.amount
+          repairCost: this.faultMaintenanceDetails.amount,
+          keysLocation: this.faultMaintenanceDetails.keysLocation,
+          requiredDate: this.faultMaintenanceDetails.requiredCompletionDate
         }
       );
+      this.woSelectContractor(this.faultMaintenanceDetails.selectedContractorId);
     }
   }
 
@@ -377,32 +386,48 @@ export class ArrangingContractorComponent implements OnInit {
       this.voidNotification('saveForLater');
     }
     else {
-      if (this.validateReq()) {
-        return;
-      }
-      if (!this.faultMaintenanceDetails) {
-        /*raise a quote*/
-        const quoteRaised = await this.raiseQuote();
-        if (quoteRaised) {
-          const faultUpdated = await this.updateFault();
-          if (faultUpdated) {
-            this._btnHandler('cancel');
-          }
+      if (!this.isWorksOrder) {
+        if (this.validateReq()) {
+          return;
         }
-      } else {
-        /*update a quote*/
-        const quoteUpdated = await this.updateQuote();
-        if (quoteUpdated) {
-          const addContractors = await this.addContractors();
-          if (addContractors) {
-            const faultContUpdated = await this.updateFaultQuoteContractor();
-            if (faultContUpdated) {
-              const faultUpdated = await this.updateFault();
-              if (faultUpdated) {
-                this._btnHandler('cancel');
+        if (!this.faultMaintenanceDetails) {
+          /*raise a quote*/
+          const quoteRaised = await this.raiseQuote();
+          if (quoteRaised) {
+            const faultUpdated = await this.updateFault();
+            if (faultUpdated) {
+              this._btnHandler('cancel');
+            }
+          }
+        } else {
+          /*update a quote*/
+          const quoteUpdated = await this.updateQuote();
+          if (quoteUpdated) {
+            const addContractors = await this.addContractors();
+            if (addContractors) {
+              const faultContUpdated = await this.updateFaultQuoteContractor();
+              if (faultContUpdated) {
+                const faultUpdated = await this.updateFault();
+                if (faultUpdated) {
+                  this._btnHandler('cancel');
+                }
               }
             }
           }
+        }
+      } else {
+        if (this.validateReq()) {
+          return;
+        }
+        if (!this.faultMaintenanceDetails) {
+          /*raise a worksorder*/
+          // if (!this.workOrderForm.get('contractorId').value) { this.commonService.showMessage('Please select contractor.', 'Works Order', 'error'); return; }
+          const woRaised = await this.raiseWorksOrder();
+          if (woRaised) { this._btnHandler('cancel'); }
+        } else {
+          /*update a worksorder*/
+          const woUpdated = await this.updateWorksOrder();
+          if (woUpdated) { this._btnHandler('cancel'); }
         }
       }
     }
@@ -412,10 +437,10 @@ export class ArrangingContractorComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.raiseQuote(this.prepareQuoteData(), this.faultDetails.faultId).subscribe((res) => {
         resolve(res);
-        this.commonService.showMessage('Successfully Raised', 'Raise a Quote', 'success');
+        this.commonService.showMessage('Successfully Raised', 'Quote', 'success');
       }, error => {
         resolve(false);
-        this.commonService.showMessage('Something went wrong', 'Raise a Quote', 'error');
+        this.commonService.showMessage('Something went wrong', 'Quote', 'error');
       });
     });
     return promise;
@@ -426,10 +451,37 @@ export class ArrangingContractorComponent implements OnInit {
       this.faultsService.updateQuoteDetails(
         this.prepareQuoteData(), this.faultMaintenanceDetails.maintenanceId).subscribe((res) => {
           resolve(true);
-          this.commonService.showMessage('Successfully Updated', 'Update Quote', 'success');
+          this.commonService.showMessage('Successfully Updated', 'Quote', 'success');
         }, error => {
           resolve(false);
-          this.commonService.showMessage('Something went wrong', 'Update Quote', 'error');
+          this.commonService.showMessage('Something went wrong', 'Quote', 'error');
+        });
+    });
+    return promise;
+  }
+
+  private raiseWorksOrder(isDraft: boolean = true) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.createFaultMaintenaceWorksOrder(this.prepareWorksOrderData(isDraft), this.faultDetails.faultId).subscribe((res) => {
+        resolve(res);
+        this.commonService.showMessage('Successfully Raised', 'Works Order', 'success');
+      }, error => {
+        resolve(false);
+        this.commonService.showMessage('Something went wrong', 'Works Order', 'error');
+      });
+    });
+    return promise;
+  }
+
+  private updateWorksOrder() {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.updateQuoteDetails(
+        this.prepareWorksOrderData(), this.faultMaintenanceDetails.maintenanceId).subscribe((res) => {
+          resolve(true);
+          this.commonService.showMessage('Successfully Updated', 'Works Order', 'success');
+        }, error => {
+          resolve(false);
+          this.commonService.showMessage('Something went wrong', 'Works Order', 'error');
         });
     });
     return promise;
@@ -437,18 +489,26 @@ export class ArrangingContractorComponent implements OnInit {
 
   private validateReq() {
     let invalid = true;
-    if (!this.raiseQuoteForm.valid) {
-      this.commonService.showMessage('Please fill all required fields.', 'Quote', 'error');
-      this.raiseQuoteForm.markAllAsTouched();
-      return invalid;
-    }
-    if (this.raiseQuoteForm.value.contractorList.length == 0) {
-      this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Quote', 'error');
-      return invalid;
-    }
-    if (!this.raiseQuoteForm.get('selectedContractorId').value) {
-      this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
-      return invalid;
+    if (!this.isWorksOrder) {
+      if (!this.raiseQuoteForm.valid) {
+        this.commonService.showMessage('Please fill all required fields.', 'Quote', 'error');
+        this.raiseQuoteForm.markAllAsTouched();
+        return invalid;
+      }
+      if (this.raiseQuoteForm.value.contractorList.length == 0) {
+        this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Quote', 'error');
+        return invalid;
+      }
+      if (!this.raiseQuoteForm.get('selectedContractorId').value) {
+        this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
+        return invalid;
+      }
+    } else {
+      if (!this.workOrderForm.valid) {
+        this.commonService.showMessage('Please fill all required fields.', 'Works Order', 'error');
+        this.workOrderForm.markAllAsTouched();
+        return invalid;
+      }
     }
     return invalid = false;
   }
@@ -499,6 +559,18 @@ export class ArrangingContractorComponent implements OnInit {
     return quoteReqObj;
   }
 
+  private prepareWorksOrderData(isDraft: boolean = true) {
+    const quoteReqObj: any = JSON.parse(JSON.stringify(this.workOrderForm.getRawValue()));
+    quoteReqObj.nominalCode = typeof quoteReqObj.nominalCode === 'object' ? quoteReqObj.nominalCode.nominalCode : quoteReqObj.nominalCode;
+    if (!this.faultMaintenanceDetails) {
+      quoteReqObj.isDraft = isDraft;
+      quoteReqObj.requiredDate = quoteReqObj.requiredDate ? this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate)) : '';
+    } else {
+      quoteReqObj.requiredCompletionDate = quoteReqObj.requiredDate ? this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate)) : '';
+    }
+    return quoteReqObj;
+  }
+
   private prepareFaultData(isSubmit: boolean) {
     const faultReqObj: any = {};
     faultReqObj.isDraft = isSubmit ? false : true;
@@ -511,42 +583,56 @@ export class ArrangingContractorComponent implements OnInit {
       this.voidNotification(null);
     }
     else {
-      if (this.validateReq()) {
-        return;
-      }
-      const proceed = await this.commonService.showConfirm('Raise a quote', 'Are you sure you want to send a quote request to the selected contractor(s) ?');
-      if (proceed) {
-        if (!this.faultMaintenanceDetails) {
-          /*raise a quote*/
-          const quoteRaised = await this.raiseQuote();
-          if (quoteRaised) {
-            const faultUpdated = await this.updateFault(true);
-            if (faultUpdated) {
-              this.commonService.showLoader();
-              setTimeout(async () => {
-                await this.faultNotification('OBTAIN_QUOTE');
-              }, 3000);
+      if (!this.isWorksOrder) {
+        if (this.validateReq()) {
+          return;
+        }
+        const proceed = await this.commonService.showConfirm('Raise a quote', 'Are you sure you want to send a quote request to the selected contractor(s) ?');
+        if (proceed) {
+          if (!this.faultMaintenanceDetails) {
+            /*raise a quote*/
+            const quoteRaised = await this.raiseQuote();
+            if (quoteRaised) {
+              const faultUpdated = await this.updateFault(true);
+              if (faultUpdated) {
+                this.commonService.showLoader();
+                setTimeout(async () => {
+                  await this.faultNotification('OBTAIN_QUOTE');
+                }, 3000);
+              }
             }
-          }
-        } else {
-          /*update a quote*/
-          const quoteUpdated = await this.updateQuote();
-          if (quoteUpdated) {
-            const addContractors = await this.addContractors();
-            if (addContractors) {
-              const faultContUpdated = await this.updateFaultQuoteContractor();
-              if (faultContUpdated) {
-                const faultUpdated = await this.updateFault(true);
-                this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
-                if (faultUpdated) {
-                  this.commonService.showLoader();
-                  setTimeout(async () => {
-                    await this.faultNotification('OBTAIN_QUOTE');
-                  }, 3000);
+          } else {
+            /*update a quote*/
+            const quoteUpdated = await this.updateQuote();
+            if (quoteUpdated) {
+              const addContractors = await this.addContractors();
+              if (addContractors) {
+                const faultContUpdated = await this.updateFaultQuoteContractor();
+                if (faultContUpdated) {
+                  const faultUpdated = await this.updateFault(true);
+                  this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
+                  if (faultUpdated) {
+                    this.commonService.showLoader();
+                    setTimeout(async () => {
+                      await this.faultNotification('OBTAIN_QUOTE');
+                    }, 3000);
+                  }
                 }
               }
             }
           }
+        }
+      } else {
+        if (this.validateReq()) {
+          return;
+        }
+        /*raise a worksorder & check paymentRules*/
+        const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
+        if (!rules) { return; }
+        const paymentRequired = await this.checkForPaymentRules(rules);
+        const submit = await this.raiseWorksOrderAndNotification(paymentRequired, 'manual');
+        if (submit) {
+          this.initiateArrangingContractors();
         }
       }
     }
@@ -654,8 +740,12 @@ export class ArrangingContractorComponent implements OnInit {
         return <any>new Date(b.firstEmailSentAt) - <any>new Date(a.firstEmailSentAt);
       });
       if (filtereData && filtereData[0]) {
-        this.disableQuoteDetail();
-        this.disableContractorsList(filtereData[0]);
+        if (!this.isWorksOrder) {
+          this.disableQuoteDetail();
+          this.disableContractorsList(filtereData[0]);
+        } else {
+          this.disableWorksOrderDetail();
+        }
         resolve(filtereData[0]);
       } else {
         resolve(null);
@@ -670,6 +760,19 @@ export class ArrangingContractorComponent implements OnInit {
     this.raiseQuoteForm.get('requestStartDate').disable();
     this.raiseQuoteForm.get('contact').disable();
     this.raiseQuoteForm.get('nominalCode').disable();
+  }
+
+  private disableWorksOrderDetail() {
+    this.workOrderForm.get('worksOrderNumber').disable();
+    this.workOrderForm.get('description').disable();
+    this.workOrderForm.get('fullDescription').disable();
+    this.workOrderForm.get('postdate').disable();
+    this.workOrderForm.get('contractorName').disable();
+    this.workOrderForm.get('nominalCode').disable();
+    this.workOrderForm.get('repairCost').disable();
+    this.workOrderForm.get('requiredDate').disable();
+    this.workOrderForm.get('keysLocation').disable();
+    this.workOrderForm.get('accessDetails').disable();
   }
 
   private disableContractorsList(notification) {
@@ -866,13 +969,12 @@ export class ArrangingContractorComponent implements OnInit {
       });
       await modal.present();
     } else {
-      const paymentRequired = await this.checkForPaymentRules();
-      if (paymentRequired) {
-        const submit = await this.raiseWorksOrderAndNotification(paymentRequired);
-        if (submit) {
-          this.commonService.showLoader();
-          await this.faultNotification(this.faultDetails.stageAction);
-        }
+      const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
+      if (!rules) { return; }
+      const paymentRequired = await this.checkForPaymentRules(rules);
+      const submit = await this.raiseWorksOrderAndNotification(paymentRequired);
+      if (submit) {
+        this.initiateArrangingContractors();
       }
     }
   }
@@ -890,7 +992,7 @@ export class ArrangingContractorComponent implements OnInit {
 
       modal.onDidDismiss().then(async res => {
         if (res.data && res.data == 'success') {
-          // this.initiateArrangingContractors();
+          this.initiateArrangingContractors();
         }
       });
       await modal.present();
@@ -911,7 +1013,7 @@ export class ArrangingContractorComponent implements OnInit {
 
       modal.onDidDismiss().then(async res => {
         if (res.data && res.data == 'success') {
-          // this.initiateArrangingContractors();
+          this.initiateArrangingContractors();
         }
       });
       await modal.present();
@@ -967,7 +1069,14 @@ export class ArrangingContractorComponent implements OnInit {
 
           const address = addressLine1 + "" + addressLine2 + "" + addressLine3 + "" + town + "" + postcode;
 
-          this.workOrderForm.patchValue({ company: data ? data.companyName : undefined, agentReference: data ? data.agentReference : undefined, defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined, defaultCommissionAmount: data ? data.defaultCommissionAmount : undefined, businessTelephone: data ? data.businessTelephone : undefined, contractorId: data ? data.fullName : undefined, address: address ? address : '' });
+          this.workOrderForm.patchValue({
+            company: data ? data.companyName : undefined, agentReference: data ? data.agentReference : undefined,
+            defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined,
+            defaultCommissionAmount: data ? data.defaultCommissionAmount : undefined,
+            businessTelephone: data ? data.businessTelephone : undefined,
+            contractorName: data ? data.fullName : undefined, address: address ? address : '',
+            contractorId: data ? data.contractorId : undefined
+          });
         }
       }, error => {
       });
@@ -1090,7 +1199,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   onSearchContractor(event: any) {
     const searchString = event.target.value;
-    this.workOrderForm.patchValue({ company: '', address: '' });
+    this.workOrderForm.patchValue({ company: '', address: '', contractorId: '' });
     if (searchString.length > 2) {
       this.woResultsAvailable = true;
     } else {
@@ -1307,13 +1416,9 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  /*iac004*/
-  private async checkForPaymentRules() {
-    const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
-    if (!rules) {
-      return null;
-    }
-    const paymentRequired = this.isPaymentRequired(rules);
+  /*iac004 iac007.2*/
+  private async checkForPaymentRules(rules) {
+    const paymentRequired = await this.isPaymentRequired(rules);
     if (paymentRequired) {
       const response = await this.commonService.showConfirm('Arranging Contractor',
         `You have selected "Landlord accepted the quote".<br/><br/>
@@ -1339,7 +1444,14 @@ export class ArrangingContractorComponent implements OnInit {
     if (actionType === 'auto') {
       submit = await this.saveFaultLLAuth() as boolean;
     } else {
-      submit = await this.createFaultMaintenaceWorksOrder() as boolean;
+      if (!this.faultMaintenanceDetails) {
+        const isDraft = false;
+        const updateWO = await this.raiseWorksOrder(isDraft) as boolean;
+        if (!updateWO) return false;
+        submit = await this.updateFault(true) as boolean;
+      } else {
+        submit = await this.updateWorksOrder() as boolean;
+      }
     }
     if (!submit) return false;
     if (submit) {
@@ -1361,6 +1473,8 @@ export class ArrangingContractorComponent implements OnInit {
           resolve(res);
         },
         error => {
+          console.log(error)
+          this.commonService.showMessage(error.error ? error.error.errorCode : 'Something went wrong', 'Arranging Contractor', 'error');
           resolve(null);
         }
       );
@@ -1386,22 +1500,6 @@ export class ArrangingContractorComponent implements OnInit {
   private sendLandlordPaymentRequest() {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.sendLandlordPaymentRequest(this.faultDetails.faultId).subscribe(
-        res => {
-          resolve(true);
-        },
-        error => {
-          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
-          resolve(false);
-        }
-      );
-    });
-    return promise;
-  }
-
-  private createFaultMaintenaceWorksOrder() {
-    const requestObj: any = {};
-    const promise = new Promise((resolve, reject) => {
-      this.faultsService.createFaultMaintenaceWorksOrder(requestObj, this.faultDetails.faultId).subscribe(
         res => {
           resolve(true);
         },
