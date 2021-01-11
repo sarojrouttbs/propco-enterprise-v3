@@ -567,7 +567,7 @@ export class ArrangingContractorComponent implements OnInit {
       quoteReqObj.isDraft = isDraft;
       quoteReqObj.requiredDate = quoteReqObj.requiredDate ? this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate)) : '';
     } else {
-      quoteReqObj.requiredCompletionDate = quoteReqObj.requiredDate ? this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate)) : '';
+      quoteReqObj.requiredCompletionDate = quoteReqObj.requiredDate ? this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate)) : null;
     }
     return quoteReqObj;
   }
