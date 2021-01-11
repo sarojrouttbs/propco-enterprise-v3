@@ -598,8 +598,9 @@ export class ArrangingContractorComponent implements OnInit {
               if (faultUpdated) {
                 this.commonService.showLoader();
                 setTimeout(async () => {
-                  await this.faultNotification('OBTAIN_QUOTE');
-                }, 3000);
+                  // await this.faultNotification('OBTAIN_QUOTE');
+                  this.initiateArrangingContractors();
+                }, 1000);
               }
             }
           } else {
@@ -615,8 +616,9 @@ export class ArrangingContractorComponent implements OnInit {
                   if (faultUpdated) {
                     this.commonService.showLoader();
                     setTimeout(async () => {
-                      await this.faultNotification('OBTAIN_QUOTE');
-                    }, 3000);
+                      // await this.faultNotification('OBTAIN_QUOTE');
+                      this.initiateArrangingContractors();
+                    }, 1000);
                   }
                 }
               }
@@ -829,7 +831,7 @@ export class ArrangingContractorComponent implements OnInit {
       return;
     }
 
-    if (this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[1].index || this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[3].index) {
+    // if (this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[1].index || this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[3].index) {
       if (this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.QUOTE) {
         if (this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') {
           this.questionActionAcceptRequest(data);
@@ -849,7 +851,7 @@ export class ArrangingContractorComponent implements OnInit {
           this.questionActionWOPayment(data);
         }
       }
-    }
+    // }
   }
 
   private questionActionAcceptRequest(data) {
