@@ -16,12 +16,12 @@ import { ReferencingService } from 'src/app/referencing/referencing.service';
 export class DashboardPage implements OnInit {
 
   lookupdata: any;
-  laLookupdata: any;
+  referencingLookupdata: any;
   applicationList: any;
   propertyId: any;
   applicationStatus: any= {};
-  laApplicantStatusTypes: any[] = [];
-  laApplicantReferencingResultTypes: any[] = [];
+  referencingApplicantStatusTypes: any[] = [];
+  referencingApplicantResultTypes: any[] = [];
   applicationId: any;
 
   constructor(
@@ -34,12 +34,12 @@ export class DashboardPage implements OnInit {
   }
 
   ngOnInit() {
-    this.getLAApplicationList();
+    this.getApplicationList();
   }
 
   private getLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
-    this.laLookupdata = this.commonService.getItem(PROPCO.LA_LOOKUP_DATA, true);
+    this.referencingLookupdata = this.commonService.getItem(PROPCO.REFERENCING_LOOKUP_DATA, true);
     if (this.lookupdata) {
       this.setLookupData(this.lookupdata);
     } else {
@@ -50,30 +50,30 @@ export class DashboardPage implements OnInit {
       });
     }
 
-    if (this.laLookupdata) {
-      this.setLALookupData(this.laLookupdata);
+    if (this.referencingLookupdata) {
+      this.setReferencingLookupData(this.referencingLookupdata);
     } else {
-      this.referencingService.getLALookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
-        this.commonService.setItem(PROPCO.LA_LOOKUP_DATA, data);
-        this.laLookupdata = data;
-        this.setLALookupData(data);
+      this.referencingService.getLookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
+        this.commonService.setItem(PROPCO.REFERENCING_LOOKUP_DATA, data);
+        this.referencingLookupdata = data;
+        this.setReferencingLookupData(data);
       });
     }
   }
 
-  private setLookupData(data: any) {
+  private setLookupData(data: any): void {
   }
 
-  private setLALookupData(data: any): void {
-    this.laApplicantStatusTypes = data.applicantStatusTypes;
-    this.laApplicantReferencingResultTypes = data.applicantReferencingResultTypes;
+  private setReferencingLookupData(data: any): void {
+    this.referencingApplicantStatusTypes = data.applicantStatusTypes;
+    this.referencingApplicantResultTypes = data.applicantReferencingResultTypes;
   }
 
-  getLAApplicationList(){
+  getApplicationList(){
     const params = new HttpParams()
       .set('limit', '5')
       .set('page', '1');
-    this.referencingService.getLAApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, params).subscribe(data => {
+    this.referencingService.getApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, params).subscribe(data => {
       this.applicationList = data;
     });
   }
@@ -112,8 +112,8 @@ export class DashboardPage implements OnInit {
       cssClass: 'modal-container alert-prompt',
       backdropDismiss: false,
       componentProps: {
-        data: `<div class='status-block'><b>Application Status - </b>${this.getLookupValue(this.applicationStatus.status, this.laApplicantStatusTypes)}
-        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.laApplicantReferencingResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.laApplicantReferencingResultTypes) : 'N/A' }
+        data: `<div class='status-block'><b>Application Status - </b>${this.getLookupValue(this.applicationStatus.status, this.referencingApplicantStatusTypes)}
+        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes) : 'N/A' }
         </div>`,
         heading: 'Status',
         buttonList: [

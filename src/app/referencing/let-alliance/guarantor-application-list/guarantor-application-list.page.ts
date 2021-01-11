@@ -24,7 +24,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   dtTrigger: Subject<any> = new Subject();
   
   lookupdata: any;
-  laLookupdata: any;
+  referencingLookupdata: any;
   userLookupDetails: any[] = [];
   officeCodes: any[] = [];
   applicationList: any[] = [];
@@ -36,9 +36,9 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   applicantId: any;
   referenceNumber: any;
 
-  laProductList: any[] = [];
-  laApplicantStatusTypes: any[] = [];
-  laApplicantReferencingResultTypes: any[] = [];
+  referencingProductList: any[] = [];
+  referencingApplicantStatusTypes: any[] = [];
+  referencingApplicantResultTypes: any[] = [];
 
   selectedData: any;
   applicationFilterForm: FormGroup;
@@ -73,7 +73,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
         .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');
         self.referencingService.getGuarantorApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.applicationId).subscribe(res => {
           self.applicationList = res && res.data ? res.data : [];
-          self.getLAProductList();
+          self.getProductList();
           callback({
             recordsTotal: res ? res.count : 0,
             recordsFiltered: res ? res.count : 0,
@@ -107,7 +107,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   
   private getLookupData(): void {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
-    this.laLookupdata = this.commonService.getItem(PROPCO.LA_LOOKUP_DATA, true);
+    this.referencingLookupdata = this.commonService.getItem(PROPCO.REFERENCING_LOOKUP_DATA, true);
     if (this.lookupdata) {
       this.setLookupData(this.lookupdata);
     } else {
@@ -118,13 +118,13 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
       });
     }
 
-    if (this.laLookupdata) {
-      this.setLALookupData(this.laLookupdata);
+    if (this.referencingLookupdata) {
+      this.setReferencingLookupData(this.referencingLookupdata);
     } else {
-      this.referencingService.getLALookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
-        this.commonService.setItem(PROPCO.LA_LOOKUP_DATA, data);
-        this.laLookupdata = data;
-        this.setLALookupData(data);
+      this.referencingService.getLookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
+        this.commonService.setItem(PROPCO.REFERENCING_LOOKUP_DATA, data);
+        this.referencingLookupdata = data;
+        this.setReferencingLookupData(data);
       });
     }
   }
@@ -133,9 +133,9 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
     this.officeCodes = data.officeCodes;
   }
 
-  private setLALookupData(data: any): void {
-    this.laApplicantStatusTypes = data.applicantStatusTypes;
-    this.laApplicantReferencingResultTypes = data.applicantReferencingResultTypes;
+  private setReferencingLookupData(data: any): void {
+    this.referencingApplicantStatusTypes = data.applicantStatusTypes;
+    this.referencingApplicantResultTypes = data.applicantReferencingResultTypes;
   }
 
   rerenderApplications(resetPaging?: any): void {
@@ -146,16 +146,16 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
     }
   }
 
-  private getLAProductList() {
+  private getProductList() {
     const promise = new Promise((resolve, reject) => {
-      this.referencingService.getLAProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
+      this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
         res => {
-          this.laProductList = res ? res : [];
-          resolve(this.laProductList);
+          this.referencingProductList = res ? res : [];
+          resolve(this.referencingProductList);
         },
         error => {
           console.log(error);
-          resolve(this.laProductList);
+          resolve(this.referencingProductList);
       });
     });
     return promise;
@@ -183,8 +183,8 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
       cssClass: 'modal-container alert-prompt',
       backdropDismiss: false,
       componentProps: {
-        data: `<div class='status-block'><b>Application Status - </b>${this.getLookupValue(this.applicationStatus.status, this.laApplicantStatusTypes)}
-        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.laApplicantReferencingResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.laApplicantReferencingResultTypes) : 'N/A'}
+        data: `<div class='status-block'><b>Application Status - </b>${this.getLookupValue(this.applicationStatus.status, this.referencingApplicantStatusTypes)}
+        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes) : 'N/A'}
         </div>`,
         heading: 'Status',
         buttonList: [
@@ -213,8 +213,8 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
 
   getProductType(productId: any): string{
     let productType: any;
-    this.laProductList = this.laProductList && this.laProductList.length ? this.laProductList : [];
-    this.laProductList.find((obj) => {
+    this.referencingProductList = this.referencingProductList && this.referencingProductList.length ? this.referencingProductList : [];
+    this.referencingProductList.find((obj) => {
       if (obj.productId === productId) {
         productType = obj.productName;
       }

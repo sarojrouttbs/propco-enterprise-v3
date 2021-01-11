@@ -25,13 +25,13 @@ export class GuarantorDetailsPage implements OnInit {
   applicantId: any;
   applicationId: any;
   lookupdata: any;
-  laLookupdata: any;
+  referencingLookupdata: any;
 
   guarantorList: any[] = [];
 
-  laProductList: any[] = [];
-  laCaseProductList: any[];
-  laApplicationProductList: any[];
+  referencingProductList: any[] = [];
+  referencingCaseProductList: any[];
+  referencingApplicationProductList: any[];
 
   isGuarantorTabDetailSubmit: boolean;
 
@@ -78,7 +78,7 @@ export class GuarantorDetailsPage implements OnInit {
 
   private getLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
-    this.laLookupdata = this.commonService.getItem(PROPCO.LA_LOOKUP_DATA, true);
+    this.referencingLookupdata = this.commonService.getItem(PROPCO.REFERENCING_LOOKUP_DATA, true);
     if (this.lookupdata) {
       this.setLookupData(this.lookupdata);
     } else {
@@ -89,26 +89,26 @@ export class GuarantorDetailsPage implements OnInit {
       });
     }
 
-    if (this.laLookupdata) {
-      this.setLALookupData(this.laLookupdata);
+    if (this.referencingLookupdata) {
+      this.setReferencingLookupData(this.referencingLookupdata);
     } else {
-      this.referencingService.getLALookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
-        this.commonService.setItem(PROPCO.LA_LOOKUP_DATA, data);
-        this.laLookupdata = data;
-        this.setLALookupData(data);
+      this.referencingService.getLookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
+        this.commonService.setItem(PROPCO.REFERENCING_LOOKUP_DATA, data);
+        this.referencingLookupdata = data;
+        this.setReferencingLookupData(data);
       });
     }
   }
 
-  private setLookupData(data: any) {
+  private setLookupData(data: any): void {
   }
 
-  private setLALookupData(data: any) {
-    this.managementStatusTypes = this.laLookupdata.managementStatusTypes;
-    this.guarantorTypes = this.laLookupdata.guarantorTypes;
-    this.titleTypes = this.laLookupdata.titleTypes;
-    this.maritalStatusTypes = this.laLookupdata.maritalStatusTypes;
-    this.tenantTypes = this.laLookupdata.tenantTypes;
+  private setReferencingLookupData(data: any): void {
+    this.managementStatusTypes = data.managementStatusTypes;
+    this.guarantorTypes = data.guarantorTypes;
+    this.titleTypes = data.titleTypes;
+    this.maritalStatusTypes = data.maritalStatusTypes;
+    this.tenantTypes = data.tenantTypes;
   }
 
   private initGuarantorDetailsTabForm(): void {
@@ -148,7 +148,7 @@ export class GuarantorDetailsPage implements OnInit {
     this.commonService.showLoader();
     forkJoin([
       this.getTenantGuarantorList(),
-      this.getLAProductList()
+      this.getProductList()
     ]).subscribe(async (values) => {
       this.setValidatorsForForms();
     });
@@ -159,11 +159,11 @@ export class GuarantorDetailsPage implements OnInit {
       this.referencingService.getTenantGuarantorList(this.applicantId).subscribe(
         res => {
           this.guarantorList = res && res.data? res.data : [];
-          resolve(this.laProductList);
+          resolve(this.referencingProductList);
         },
         error => {
           console.log(error);
-          resolve(this.laProductList);
+          resolve(this.referencingProductList);
       });
     });
 
@@ -195,23 +195,23 @@ export class GuarantorDetailsPage implements OnInit {
     }
   }
 
-  getLAProductList() {
+  getProductList() {
     const promise = new Promise((resolve, reject) => {
-      this.referencingService.getLAProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
+      this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
         res => {
-          this.laProductList = res ? this.commonService.removeDuplicateObjects(res) : [];
-          this.laCaseProductList = this.laProductList.filter(obj => {
+          this.referencingProductList = res ? this.commonService.removeDuplicateObjects(res) : [];
+          this.referencingCaseProductList = this.referencingProductList.filter(obj => {
             return obj.productName.includes('Per Property');
           });
   
-          this.laApplicationProductList = this.laProductList.filter(obj => {
+          this.referencingApplicationProductList = this.referencingProductList.filter(obj => {
             return !obj.productName.includes('Per Property');
           });
-          resolve(this.laProductList);
+          resolve(this.referencingProductList);
         },
         error => {
           console.log(error);
-          resolve(this.laProductList);
+          resolve(this.referencingProductList);
       });
     });
 

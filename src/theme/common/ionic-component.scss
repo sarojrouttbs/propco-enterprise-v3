@@ -66,7 +66,34 @@ ion-button.button-disabled {
   }
 } */
 
+
 ion-item {
+  --padding-start: 0px;
+  --background: transparent;
+
+  ion-datetime {
+    padding-bottom: 6px;
+  }
+
+  ion-label {
+    color: rgba(var(--ion-color-dark-rgb), 0.6) !important;
+  }
+
+  &.item-datetime,
+  &.item-input {
+    &.ion-pristine {
+      .label-floating.sc-ion-label-md-h {
+        transform: translate3d(0, 130%, 0);
+      }
+    }
+
+    &.ion-pristine.item-has-value .label-floating.sc-ion-label-md-h {
+      transform: translate3d(0, 50%, 0) scale(0.75);
+    }
+  }
+}
+
+/* ion-item {
   --padding-start: 0px;
   --background: transparent;
 
@@ -120,7 +147,7 @@ ion-item {
       transform: translate3d(0, 50%, 0) scale(0.75);
     }
   }
-}
+} */
 
 .date-filter {
   ion-item {

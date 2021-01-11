@@ -29,7 +29,7 @@ export class SearchApplicationPage implements OnInit {
     this.initPropertySearchForm();
     this.filteredProperty = this.applicationSearchForm.get('text').valueChanges.pipe(debounceTime(300),
       switchMap((value: string) => (value.length > 2) ? this.referencingService
-      .getLAApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, 
+      .getApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, 
         new HttpParams()
         .set('limit', '10')
         .set('page', '1')

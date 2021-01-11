@@ -11,20 +11,26 @@ export class ReferencingService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getLALookupData(referencingType: number): Observable<any> {
+  getLookupData(referencingType: number): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `referencing/${referencingType}/lookupdata`).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
   }
 
-  getLAApplicationList(referencingType: number, params?: any): Observable<any> {
+  getApplicationList(referencingType: number, params?: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `referencing/${referencingType}/applications`, { params }).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
   }
 
-  getLAProductList(referencingType: number): Observable<any> {
+  getProductList(referencingType: number): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `referencing/${referencingType}/products`).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  createApplication(referencingType: number, requestObj: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `referencing/${referencingType}/application`, requestObj).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
   }
@@ -43,12 +49,6 @@ export class ReferencingService {
 
   getGuarantorApplicationList(referencingType: number, applicationId: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `referencing/${referencingType}/applications/${applicationId}/guarantors`).pipe(tap((res: any) => { }),
-      catchError(this.handleError<any>(''))
-    );
-  }
-
-  createApplication(referencingType: number, requestObj: any): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + `referencing/${referencingType}/application`, requestObj).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
   }
@@ -80,6 +80,12 @@ export class ReferencingService {
   getTenantDetails(tenantId: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}`).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
+    );
+  }
+
+  updateTenantDetails(tenantId: any, requestObj: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `tenants/${tenantId}`, requestObj).pipe(tap((res: any) => { }),
+    catchError(this.handleError<any>(''))
     );
   }
 
