@@ -106,7 +106,7 @@ export class ResendLinkModalPage implements OnInit {
     }
 
     if (this.referencingLookupdata) {
-      this.setReferencingLookupData(this.lookupdata);
+      this.setReferencingLookupData(this.referencingLookupdata);
     } else {
       this.referencingService.getLookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe((data) => {
         this.commonService.setItem(PROPCO.REFERENCING_LOOKUP_DATA, data);
