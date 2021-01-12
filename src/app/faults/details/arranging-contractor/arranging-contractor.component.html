@@ -18,8 +18,8 @@
             <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
               <h6 class="banner-title">
                 <strong>Awaiting response from the <span
-                    *ngIf="iacNotification?.faultStageAction === 'OBTAIN_AUTHORISATION'">Landlord</span>
-                  <span *ngIf="iacNotification?.faultStageAction !== 'OBTAIN_AUTHORISATION'">Contractor</span></strong>
+                    *ngIf="iacNotification?.recipientType === 8">Landlord</span>
+                  <span *ngIf="iacNotification?.recipientType == 11">Contractor</span></strong>
               </h6>
               <h6 class="banner-title">Next chase due:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - hh:mm a') : ''}}
