@@ -1077,10 +1077,7 @@ export class ArrangingContractorComponent implements OnInit {
             if (data.address.town != null && data.address.town != '') { addressArray.push(data.address.town) }
             if (data.address.postcode != null && data.address.postcode != '') { addressArray.push(data.address.postcode) }
           }
-
           const addressString = addressArray.length ? addressArray.join(', ') : '';
-
-
           this.workOrderForm.patchValue({
             company: data ? data.companyName : undefined, agentReference: data ? data.agentReference : undefined,
             defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined,
