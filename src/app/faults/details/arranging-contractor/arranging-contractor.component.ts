@@ -863,7 +863,7 @@ export class ArrangingContractorComponent implements OnInit {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
-          await this.faultNotification(this.isWorksOrder ? 'PROCEED_WITH_WORKSORDER': 'OBTAIN_QUOTE');
+          await this.faultNotification(this.isWorksOrder ? 'PROCEED_WITH_WORKSORDER' : 'OBTAIN_QUOTE');
         }
       });
     } else if (!data.value) {
@@ -871,7 +871,7 @@ export class ArrangingContractorComponent implements OnInit {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
-          await this.faultNotification(this.isWorksOrder ? 'PROCEED_WITH_WORKSORDER': 'OBTAIN_QUOTE');
+          await this.faultNotification(this.isWorksOrder ? 'PROCEED_WITH_WORKSORDER' : 'OBTAIN_QUOTE');
         }
       });
     }
@@ -1065,21 +1065,22 @@ export class ArrangingContractorComponent implements OnInit {
         if (type === 'quote') {
           this.patchContartorList(data, true, false);
         } else if (type === 'wo') {
+          const address = new Array();
 
-          const addressLine1 = data && data.address ? data.address.addressLine1 : '';
-          const addressLine2 = data && data.address ? ", " + data.address.addressLine2 : '';
-          const addressLine3 = data && data.address ? ", " + data.address.addressLine3 : '';
-          const town = data && data.address ? ", " + data.address.town : '';
-          const postcode = data && data.address ? ", " + data.address.postcode : '';
+          const addressLine1 = data && data.address && data.address.addressLine1 != null ? address.push(data.address.addressLine1) : '';
+          const addressLine2 = data && data.address && data.address.addressLine2 != null ? address.push(data.address.addressLine2) : '';
+          const addressLine3 = data && data.address && data.address.addressLine3 != null ? address.push(data.address.addressLine3) : '';
+          const town = data && data.address && data.address.town != null ? address.push(data.address.town) : '';
+          const postcode = data && data.address && data.address.postcode != null ? address.push(data.address.postcode) : '';
 
-          const address = addressLine1 + "" + addressLine2 + "" + addressLine3 + "" + town + "" + postcode;
+          const addressString = address.length ? address.join(', ') : '';
 
           this.workOrderForm.patchValue({
             company: data ? data.companyName : undefined, agentReference: data ? data.agentReference : undefined,
             defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined,
             defaultCommissionAmount: data ? data.defaultCommissionAmount : undefined,
             businessTelephone: data ? data.businessTelephone : undefined,
-            contractorName: data ? data.fullName : undefined, address: address ? address : '',
+            contractorName: data ? data.fullName : undefined, address: addressString ? addressString : '',
             contractorId: data ? data.contractorId : undefined
           });
         }
