@@ -633,10 +633,13 @@ export class ArrangingContractorComponent implements OnInit {
         /*raise a worksorder & check paymentRules*/
         const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
         if (!rules) { return; }
-        const paymentRequired = await this.checkForPaymentRules(rules);
-        const submit = await this.raiseWorksOrderAndNotification(paymentRequired, 'manual');
-        if (submit) {
-          this.initiateArrangingContractors();
+        const paymentRequired = await this.isPaymentRequired(rules);
+        const isConfirm = await this.checkForPaymentRules(paymentRequired);
+        if (isConfirm) {
+          const submit = await this.raiseWorksOrderAndNotification(paymentRequired, 'manual');
+          if (submit) {
+            this.initiateArrangingContractors();
+          }
         }
       }
     }
@@ -978,10 +981,13 @@ export class ArrangingContractorComponent implements OnInit {
     } else {
       const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
       if (!rules) { return; }
-      const paymentRequired = await this.checkForPaymentRules(rules);
-      const submit = await this.raiseWorksOrderAndNotification(paymentRequired);
-      if (submit) {
-        this.initiateArrangingContractors();
+      const paymentRequired = await this.isPaymentRequired(rules);
+      const isConfirm = await this.checkForPaymentRules(paymentRequired);
+      if (isConfirm) {
+        const submit = await this.raiseWorksOrderAndNotification(paymentRequired);
+        if (submit) {
+          this.initiateArrangingContractors();
+        }
       }
     }
   }
@@ -1423,25 +1429,20 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   /*iac004 iac007.2*/
-  private async checkForPaymentRules(rules) {
-    const paymentRequired = await this.isPaymentRequired(rules);
+  private async checkForPaymentRules(paymentRequired) {
     if (paymentRequired) {
       const response = await this.commonService.showConfirm('Arranging Contractor',
         `You have selected "Landlord accepted the quote".<br/><br/>
          Since the Landlord account doesn't have sufficient balance to pay for the works, a payment request will be generated and the Landlord will be notified to make an online payment via the portal.<br/>
          <br/>Do you want to proceed? <br/><br/>
          <small>NB:The landlord can also make an offline payment which can be processed manually via landloard accounts.</small>`, '', 'Yes', 'No');
-      if (response) {
-        return paymentRequired;
-      }
+      return response;
     } else {
       const response = await this.commonService.showConfirm('Arranging Contractor',
         `You have selected "Landlord accepted the quote".<br/><br/>
          A notification will be sent out to the Contractor to carry out the job.<br/>
          <br/> Are you sure?`, '', 'Yes', 'No');
-      if (response) {
-        return paymentRequired;
-      }
+      return response;
     }
   }
 
