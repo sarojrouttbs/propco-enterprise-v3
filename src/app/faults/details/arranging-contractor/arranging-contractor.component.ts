@@ -1065,15 +1065,17 @@ export class ArrangingContractorComponent implements OnInit {
         if (type === 'quote') {
           this.patchContartorList(data, true, false);
         } else if (type === 'wo') {
-          const address = new Array();
+          const addressArray = new Array();
 
-          const addressLine1 = data && data.address && data.address.addressLine1 != null ? address.push(data.address.addressLine1) : '';
-          const addressLine2 = data && data.address && data.address.addressLine2 != null ? address.push(data.address.addressLine2) : '';
-          const addressLine3 = data && data.address && data.address.addressLine3 != null ? address.push(data.address.addressLine3) : '';
-          const town = data && data.address && data.address.town != null ? address.push(data.address.town) : '';
-          const postcode = data && data.address && data.address.postcode != null ? address.push(data.address.postcode) : '';
+          if (data && data.address) {
+            if (data.address.addressLine1 != null && data.address.addressLine1 != '') { addressArray.push(data.address.addressLine1) }
+            if (data.address.addressLine2 != null && data.address.addressLine2 != '') { addressArray.push(data.address.addressLine3) }
+            if (data.address.addressLine3 != null && data.address.addressLine3 != '') { addressArray.push(data.address.addressLine3) }
+            if (data.address.town != null && data.address.town != '') { addressArray.push(data.address.town) }
+            if (data.address.postcode != null && data.address.postcode != '') { addressArray.push(data.address.postcode) }
+          }          
 
-          const addressString = address.length ? address.join(', ') : '';
+          const addressString = addressArray.length ? addressArray.join(', ') : '';
 
           this.workOrderForm.patchValue({
             company: data ? data.companyName : undefined, agentReference: data ? data.agentReference : undefined,
