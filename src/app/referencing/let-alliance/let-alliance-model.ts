@@ -108,6 +108,7 @@ declare namespace letAllianceModels {
     }
 
     export interface ITenancyResponse {
+        [x: string]: any;
         status: number;
         rent: number;
         rentFrequency: number;

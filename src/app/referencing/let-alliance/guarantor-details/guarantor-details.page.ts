@@ -39,6 +39,7 @@ export class GuarantorDetailsPage implements OnInit {
   guarantorTypes: any[] = [];
   titleTypes: any[] = [];
   maritalStatusTypes: any[] = [];
+  nationList: any[] = [];
   completionMethods: any[] = COMPLETION_METHODS;
   referenceNumber: any;
   tenantTypes: any[] = [];
@@ -101,6 +102,7 @@ export class GuarantorDetailsPage implements OnInit {
   }
 
   private setLookupData(data: any): void {
+    this.nationList = data.tenantNations;
   }
 
   private setReferencingLookupData(data: any): void {
@@ -116,7 +118,7 @@ export class GuarantorDetailsPage implements OnInit {
       completeMethod: [{ value: 2, disabled: true }],
       productId: ['', Validators.required],
       tenantTypeId: [1, Validators.required],
-      title: [''],
+      title: ['', Validators.required],
       otherTitle: [''],
       companyName: [''],
       forename: [''],
@@ -239,13 +241,11 @@ export class GuarantorDetailsPage implements OnInit {
       this.guarantorDetailsForm.get('registrationNumber').clearValidators();
 
       if(this.guarantorDetailsForm.get('hasTenantOtherName').value){
-        this.guarantorDetailsForm.get('otherNames').get('title').setValidators(Validators.required);
         this.guarantorDetailsForm.get('otherNames').get('forename').setValidators(Validators.required);
         this.guarantorDetailsForm.get('otherNames').get('surname').setValidators(Validators.required);
         
       }
       else{
-        this.guarantorDetailsForm.get('otherNames').get('title').clearValidators();
         this.guarantorDetailsForm.get('otherNames').get('forename').clearValidators();
         this.guarantorDetailsForm.get('otherNames').get('surname').clearValidators();
       }
@@ -275,7 +275,6 @@ export class GuarantorDetailsPage implements OnInit {
     this.guarantorDetailsForm.get('companyName').updateValueAndValidity();
     this.guarantorDetailsForm.get('registrationNumber').updateValueAndValidity();
     this.guarantorDetailsForm.get('maritalStatus').updateValueAndValidity();
-    this.guarantorDetailsForm.get('otherNames').get('title').updateValueAndValidity();
     this.guarantorDetailsForm.get('otherNames').get('forename').updateValueAndValidity();
     this.guarantorDetailsForm.get('otherNames').get('surname').updateValueAndValidity();
   }
@@ -375,18 +374,19 @@ export class GuarantorDetailsPage implements OnInit {
           otherTitle: this.guarantorDetailsForm.get('otherTitle').value,
           forename: this.guarantorDetailsForm.get('tenantTypeId').value == REFERENCING_TENANT_TYPE.INDIVIDUAL ? this.guarantorDetailsForm.get('forename').value : this.guarantorDetailsForm.get('companyName').value,
           middlename: this.guarantorDetailsForm.get('middlename').value,
-          surname: this.guarantorDetailsForm.get('tenantTypeId').value == REFERENCING_TENANT_TYPE.INDIVIDUAL ? this.guarantorDetailsForm.get('surname').value : '',
+          surname: this.guarantorDetailsForm.get('surname').value,
           email: this.guarantorDetailsForm.get('email').value,
           dateOfBirth: this.datepipe.transform(this.guarantorDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
           rentShare: parseFloat(this.setDefaultAmount(this.guarantorDetailsForm.get('rentShare').value)),
           maritalStatus: this.guarantorDetailsForm.get('maritalStatus').value,
-          nationality: 'British', //this.guarantorDetailsForm.get('nationality').value, // British
+          nationality: this.guarantorDetailsForm.get('nationality').value,
           registrationNumber: this.guarantorDetailsForm.get('registrationNumber').value,
           sendTenantLink: true,
           autoSubmitLink: true,
           isGuarantor: true,
           hasTenantOtherName: this.guarantorDetailsForm.get('hasTenantOtherName').value,
-          otherNames: this.guarantorDetailsForm.get('hasTenantOtherName').value ? [this.guarantorDetailsForm.get('otherNames').value] : []
+          otherNames: this.guarantorDetailsForm.get('hasTenantOtherName').value ? [this.guarantorDetailsForm.get('otherNames').value] : [],
+          applicationStatus: 0
         }
       };
 

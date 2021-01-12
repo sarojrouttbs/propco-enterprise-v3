@@ -114,6 +114,15 @@
   }
 }
 
+.mat-autocomplete-panel.referencing-autocomplete {
+  .mat-option {
+    white-space: pre-wrap;
+    text-overflow: initial;
+    height: 45px;
+    line-height: 20px;
+  }
+}
+
 #la-application-details, #la-guarantor-details{
     .mat-tab-group {
         .mat-tab-header {
