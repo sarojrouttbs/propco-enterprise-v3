@@ -65,7 +65,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
     this.dtOptions[0] = {
       paging: false,
       searching: false,
-      ordering: true,
+      ordering: false,
       info: false,
       ajax: (tableParams: any, callback) => {
         const params = new HttpParams()
@@ -81,7 +81,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
           });
         });
       },
-      columns: [null, null, null, null, null, null, null, { orderable: false }],
+      columns: [null, null, null, null, null, null, null, null],
       responsive: true
     };
     this.initiateForm();

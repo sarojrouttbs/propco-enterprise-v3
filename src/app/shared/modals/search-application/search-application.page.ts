@@ -6,7 +6,8 @@ import { ModalController, NavParams } from "@ionic/angular";
 import { Observable } from "rxjs";
 import { debounceTime, switchMap } from "rxjs/operators";
 import { ReferencingService } from 'src/app/referencing/referencing.service';
-import { REFERENCING } from "../../constants";
+import { REFERENCING, PROPCO } from "../../constants";
+import { CommonService } from '../../services/common.service';
 
 @Component({
   selector: 'app-search-application',
@@ -19,11 +20,19 @@ export class SearchApplicationPage implements OnInit {
   filteredProperty: Observable<any>;
   applicationId: any;
 
+  lookupdata: any;
+  referencingLookupdata: any;
+
+  referencingProductList: any[] = [];
+  referencingApplicantStatusTypes: any[] = [];
+  referencingApplicantResultTypes: any[] = [];
+
   constructor(
     private fb: FormBuilder,
     private modalController: ModalController,
     private referencingService: ReferencingService,
     private location: PlatformLocation,
+    public commonService: CommonService,
 
   ) {
     this.initPropertySearchForm();
@@ -39,6 +48,55 @@ export class SearchApplicationPage implements OnInit {
   }
 
   ngOnInit() {
+    this.getLookupData();
+    this.getProductList();
+  }
+
+  private getLookupData(): void {
+    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
+    this.referencingLookupdata = this.commonService.getItem(PROPCO.REFERENCING_LOOKUP_DATA, true);
+    if (this.lookupdata) {
+      this.setLookupData(this.lookupdata);
+    } else {
+      this.commonService.getLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
+        this.lookupdata = data;
+        this.setLookupData(data);
+      });
+    }
+
+    if (this.referencingLookupdata) {
+      this.setReferencingLookupData(this.referencingLookupdata);
+    } else {
+      this.referencingService.getLookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
+        this.commonService.setItem(PROPCO.REFERENCING_LOOKUP_DATA, data);
+        this.referencingLookupdata = data;
+        this.setReferencingLookupData(data);
+      });
+    }
+  }
+
+  private setLookupData(data: any): void {
+  }
+
+  private setReferencingLookupData(data: any): void {
+    this.referencingApplicantStatusTypes = data.applicantStatusTypes;
+    this.referencingApplicantResultTypes = data.applicantReferencingResultTypes;
+  }
+
+  private getProductList() {
+    const promise = new Promise((resolve, reject) => {
+      this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
+        res => {
+          this.referencingProductList = res ? res : [];
+          resolve(this.referencingProductList);
+        },
+        error => {
+          console.log(error);
+          resolve(this.referencingProductList);
+      });
+    });
+    return promise;
   }
 
   initPropertySearchForm(): void {
@@ -52,6 +110,21 @@ export class SearchApplicationPage implements OnInit {
       this.applicationId = data.option.value.applicationId;
       this.dismiss();
     }
+  }
+
+  getProductType(productId: any): string{
+    let productType: any;
+    this.referencingProductList = this.referencingProductList && this.referencingProductList.length ? this.referencingProductList : [];
+    this.referencingProductList.find((obj) => {
+      if (obj.productId === productId) {
+        productType = obj.productName;
+      }
+    });
+    return productType;
+  }
+
+  getLookupValue(index: any, lookup: any, type?: any) {
+    return this.commonService.getLookupValue(index, lookup);
   }
 
   dismiss() {

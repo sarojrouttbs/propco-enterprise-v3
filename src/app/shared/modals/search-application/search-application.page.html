@@ -14,11 +14,15 @@
       <input matInput placeholder="Start typing to search" [matAutocomplete]="auto" formControlName='text'>
     </mat-form-field>
 
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)" class="referencing-autocomplete">
       <mat-option *ngFor="let result of (filteredProperty | async)?.data" [value]="result" style="border-bottom: 1px solid gray;">
-        <span style="color: var(--ion-color-step-1000)">{{result?.referenceNumber}}</span>&nbsp;
-        <span style="color: var(--ion-color-step-1000)">{{result?.caseReferenceNumber}}</span>&nbsp;
-        <span style="color: var(--ion-color-step-1000)">{{result?.applicantDetail?.addressee}}</span>&nbsp;
+        <span style="color: var(--ion-color-step-800)">{{result?.referenceNumber}}</span>&nbsp;
+        <span style="color: var(--ion-color-step-600)">{{result?.caseReferenceNumber}}</span>&nbsp;
+        <span style="color: var(--ion-color-step-1000)">{{result?.applicantDetail?.displayAs ? result?.applicantDetail?.displayAs : 
+          (result?.applicantDetail?.addressee ? result?.applicantDetail?.addressee : result?.applicantDetail?.forename
+          + ' ' + result?.applicantDetail?.surname)}}</span>&nbsp;
+          <span style="color: var(--ion-color-step-800)">{{getProductType(result?.product)}}</span>&nbsp;
+          <span style="color: var(--ion-color-step-600)">{{getLookupValue(result?.applicationStatus, referencingApplicantStatusTypes)}}</span>
       </mat-option>
     </mat-autocomplete>
   </form>
