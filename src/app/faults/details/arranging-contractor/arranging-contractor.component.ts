@@ -832,25 +832,25 @@ export class ArrangingContractorComponent implements OnInit {
     }
 
     // if (this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[1].index || this.iacNotification.faultStageAction === ARRANING_CONTRACTOR_ACTIONS[3].index) {
-      if (this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.QUOTE) {
-        if (this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') {
-          this.questionActionAcceptRequest(data);
-        } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
-          this.questionActionVisitTime(data);
-        } else if (this.iacNotification.templateCode === 'CQ-C-E') {
-          this.questionActionQuoteUpload(data);
-        } else if (this.iacNotification.templateCode === 'LAR-L-E') {
-          this.questionActionLLAuth(data);
-        }
-      } else if (this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER) {
-        if (this.iacNotification.templateCode === 'CWO-A-C-E' || this.iacNotification.templateCode === 'CWO-NA-C-E') {
-          this.questionActionAcceptRequest(data);
-        } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
-          this.worksOrderActionVisitTime(data);
-        } else if (this.iacNotification.templateCode === 'LNP-L-E') {
-          this.questionActionWOPayment(data);
-        }
+    if (this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.QUOTE) {
+      if (this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') {
+        this.questionActionAcceptRequest(data);
+      } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
+        this.questionActionVisitTime(data);
+      } else if (this.iacNotification.templateCode === 'CQ-C-E') {
+        this.questionActionQuoteUpload(data);
+      } else if (this.iacNotification.templateCode === 'LAR-L-E') {
+        this.questionActionLLAuth(data);
       }
+    } else if (this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER) {
+      if (this.iacNotification.templateCode === 'CWO-A-C-E' || this.iacNotification.templateCode === 'CWO-NA-C-E') {
+        this.questionActionAcceptRequest(data);
+      } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
+        this.worksOrderActionVisitTime(data);
+      } else if (this.iacNotification.templateCode === 'LNP-L-E') {
+        this.questionActionWOPayment(data);
+      }
+    }
     // }
   }
 
@@ -1522,27 +1522,28 @@ export class ArrangingContractorComponent implements OnInit {
 
   private isPaymentRequired(rules: FaultModels.IFaultWorksorderRules): boolean {
     let paymentNeeded = false;
-    if (rules && rules.hasOwnProperty('hasOtherInvoicesToBePaid')) {
-      if (rules.hasOtherInvoicesToBePaid === true) {
-        paymentNeeded = true;
-      }
-      else if (rules.hasRentArrears === true) {
-        paymentNeeded = true;
-      }
-      else if (rules.hasRentPaidUpFront === true) {
-        paymentNeeded = true;
-      }
-      else if (rules.hasSufficientReserveBalance === true) {
-        paymentNeeded = true;
-      }
-      else if (rules.hasTenantPaidRentOnTime === false) {
-        paymentNeeded = true;
-      }
-      else if (rules.isFaultEstimateLessThanHalfRentOrThresHoldValue === false) {
-        paymentNeeded = true;
-      }
-      else if (rules.isTenancyGivenNoticeOrInLastMonth === false) {
-        paymentNeeded = true;
+    if (rules && rules.hasOwnProperty('hasSufficientReserveBalance')) {
+      if (rules.hasSufficientReserveBalance === true) {
+        paymentNeeded = false;
+      } else {
+        if (rules.hasOtherInvoicesToBePaid === true) {
+          paymentNeeded = true;
+        }
+        else if (rules.hasRentArrears === true) {
+          paymentNeeded = true;
+        }
+        else if (rules.hasRentPaidUpFront === true) {
+          paymentNeeded = true;
+        }
+        else if (rules.hasTenantPaidRentOnTime === false) {
+          paymentNeeded = true;
+        }
+        else if (rules.isFaultEstimateLessThanHalfRentOrThresHoldValue === false) {
+          paymentNeeded = true;
+        }
+        else if (rules.isTenancyGivenNoticeOrInLastMonth === false) {
+          paymentNeeded = true;
+        }
       }
     }
     return paymentNeeded;
