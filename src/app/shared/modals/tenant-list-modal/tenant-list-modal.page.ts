@@ -48,7 +48,9 @@ export class TenantListModalPage implements OnInit {
       responsive: true,
       searching: false,
       ordering: false,
-      info: false
+      info: false,
+      scrollY: '115px',
+      scrollCollapse: false,
     };
     this.getTenantList();
   }
