@@ -4,7 +4,6 @@ import { Observable, throwError, empty } from 'rxjs';
 import { finalize, catchError } from 'rxjs/operators';
 import { PROPCO } from './shared/constants';
 import { CommonService } from './shared/services/common.service';
-import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
@@ -50,7 +49,6 @@ export class AppHttpInterceptor implements HttpInterceptor {
           return throwError(error);
         } else if (error.status === 401) {
           if (error) {
-            console.log('error', JSON.stringify(error));
             let errorMessage = (error.error && error.error.message) ? error.error.message : 'Your session has expired, please login again.';
             this._commonService.showMessage(errorMessage, 'Unauthorized', 'error');
             this._commonService.removeItem(PROPCO.ACCESS_TOKEN);
@@ -60,9 +58,6 @@ export class AppHttpInterceptor implements HttpInterceptor {
             this._router.navigate(['/login'], { replaceUrl: true });
             return throwError(error);
           }
-        } else if (error.status === 412) {
-          // this._commonService.showMessage('Something went wrong on server, please try again.', 'Precondition Failed', 'error');
-          return throwError(error);
         } else if (error.status === 422) {
           return throwError(error);
         } else {

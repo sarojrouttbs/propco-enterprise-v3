@@ -232,7 +232,7 @@ export class FaultsService {
   }
 
   updateWOContractorVisit(faultNotificationId, notificationObj): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + `/notifications/${faultNotificationId}/response/wo-contractor-visit`, notificationObj);
+    return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/wo-contractor-visit`, notificationObj);
   }
 
   getWorksOrderPaymentRules(faultId: string) {

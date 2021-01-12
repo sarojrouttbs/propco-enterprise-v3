@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -46,8 +46,8 @@ export class ArrangingContractorComponent implements OnInit {
   contratctorArr: string[] = [];
   isContratorSelected = false;
   iacNotification;
-  iacStageActions = ARRANING_CONTRACTOR_ACTIONS;
-  otherStageActions = ARRANING_CONTRACTOR_ACTIONS.filter(action => { return (action.index !== 'PROPERTY_VISIT_FOR_QUOTE' && action.index !== 'OBTAIN_AUTHORISATION') });
+  iacStageActions = LL_INSTRUCTION_TYPES;
+  otherStageActions = LL_INSTRUCTION_TYPES.filter(action => { return (action.index == 'OBTAIN_QUOTE' || action.index == 'PROCEED_WITH_WORKSORDER') });
 
   accessInfoList = ACCESS_INFO_TYPES;
   isMaintenanceDetails = false;
@@ -156,7 +156,7 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.faultDetails.doesBranchHoldKeys) {
       this.officeDetails();
     }
-
+    if (!this.faultMaintenanceDetails) { this.woSelectContractor(this.faultDetails.contractorId); }
     this.woContractors = this.workOrderForm.get('contractorName').valueChanges.pipe(debounceTime(300),
       switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
         new Observable())
@@ -562,10 +562,11 @@ export class ArrangingContractorComponent implements OnInit {
 
   private prepareWorksOrderData(isDraft: boolean = true) {
     const quoteReqObj: any = JSON.parse(JSON.stringify(this.workOrderForm.getRawValue()));
+    delete quoteReqObj.postdate;
     quoteReqObj.nominalCode = typeof quoteReqObj.nominalCode === 'object' ? quoteReqObj.nominalCode.nominalCode : quoteReqObj.nominalCode;
     if (!this.faultMaintenanceDetails) {
       quoteReqObj.isDraft = isDraft;
-      quoteReqObj.requiredDate = quoteReqObj.requiredDate ? this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate)) : '';
+      quoteReqObj.requiredDate = quoteReqObj.requiredDate ? this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate)) : null;
     } else {
       quoteReqObj.requiredCompletionDate = quoteReqObj.requiredDate ? this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate)) : null;
     }
@@ -847,7 +848,9 @@ export class ArrangingContractorComponent implements OnInit {
         this.questionActionWOPayment(data);
       } else if (this.iacNotification.templateCode === 'CWO-A-C-E' || this.iacNotification.templateCode === 'CWO-NA-C-E') {
         this.questionActionAcceptRequest(data);
-      } else if (this.iacNotification.templateCode === 'CDT-C-E (WO)' || this.iacNotification.templateCode === 'CDT-T-E (WO)' || this.iacNotification.templateCode === 'CWO-NA-T-E') {
+      } else if (this.iacNotification.templateCode === 'CDT-C-E (WO)'
+        || this.iacNotification.templateCode === 'CDT-T-E (WO)'
+        || this.iacNotification.templateCode === 'CWO-NA-T-E-2') {
         this.worksOrderActionVisitTime(data);
       }
     }
@@ -863,7 +866,7 @@ export class ArrangingContractorComponent implements OnInit {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
-          await this.faultNotification(this.isWorksOrder ? 'PROCEED_WITH_WORKSORDER': 'OBTAIN_QUOTE');
+          await this.faultNotification(this.isWorksOrder ? 'PROCEED_WITH_WORKSORDER' : 'OBTAIN_QUOTE');
         }
       });
     } else if (!data.value) {
@@ -871,7 +874,8 @@ export class ArrangingContractorComponent implements OnInit {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
-          await this.faultNotification(this.isWorksOrder ? 'PROCEED_WITH_WORKSORDER': 'OBTAIN_QUOTE');
+          this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
+          await this.faultNotification(this.isWorksOrder ? 'PROCEED_WITH_WORKSORDER' : 'OBTAIN_QUOTE');
         }
       });
     }
@@ -1065,21 +1069,21 @@ export class ArrangingContractorComponent implements OnInit {
         if (type === 'quote') {
           this.patchContartorList(data, true, false);
         } else if (type === 'wo') {
-
-          const addressLine1 = data && data.address ? data.address.addressLine1 : '';
-          const addressLine2 = data && data.address ? ", " + data.address.addressLine2 : '';
-          const addressLine3 = data && data.address ? ", " + data.address.addressLine3 : '';
-          const town = data && data.address ? ", " + data.address.town : '';
-          const postcode = data && data.address ? ", " + data.address.postcode : '';
-
-          const address = addressLine1 + "" + addressLine2 + "" + addressLine3 + "" + town + "" + postcode;
-
+          const addressArray = new Array();
+          if (data && data.address) {
+            if (data.address.addressLine1 != null && data.address.addressLine1 != '') { addressArray.push(data.address.addressLine1) }
+            if (data.address.addressLine2 != null && data.address.addressLine2 != '') { addressArray.push(data.address.addressLine2) }
+            if (data.address.addressLine3 != null && data.address.addressLine3 != '') { addressArray.push(data.address.addressLine3) }
+            if (data.address.town != null && data.address.town != '') { addressArray.push(data.address.town) }
+            if (data.address.postcode != null && data.address.postcode != '') { addressArray.push(data.address.postcode) }
+          }
+          const addressString = addressArray.length ? addressArray.join(', ') : '';
           this.workOrderForm.patchValue({
             company: data ? data.companyName : undefined, agentReference: data ? data.agentReference : undefined,
             defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined,
             defaultCommissionAmount: data ? data.defaultCommissionAmount : undefined,
             businessTelephone: data ? data.businessTelephone : undefined,
-            contractorName: data ? data.fullName : undefined, address: address ? address : '',
+            contractorName: data ? data.fullName : undefined, address: addressString,
             contractorId: data ? data.contractorId : undefined
           });
         }
@@ -1353,7 +1357,6 @@ export class ArrangingContractorComponent implements OnInit {
           }
         },
         error => {
-          console.log(error);
           resolve(null);
         }
       );
@@ -1377,13 +1380,10 @@ export class ArrangingContractorComponent implements OnInit {
       });
 
       modal.onDidDismiss().then(async res => {
-        if (res.data.updated) {
-          this.commonService.showLoader();
-          if (res.data && res.data == 'success') {
-            this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
-            await this.faultNotification(this.faultDetails.stageAction);
-          }
-          this.commonService.hideLoader();
+        this.commonService.showLoader();
+        if (res.data && res.data == 'success') {
+          this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
+          await this.faultNotification(this.faultDetails.stageAction);
         }
       });
       await modal.present();
@@ -1394,11 +1394,12 @@ export class ArrangingContractorComponent implements OnInit {
         let requestObj = {} as any;
         requestObj.isAccepted = data.value;
         requestObj.submittedByType = 'SECUR_USER';
-        if (this.iacNotification.templateCode === 'CWO-NA-T-E') {
+        if (this.iacNotification.templateCode === 'CWO-NA-T-E-2') {
           requestObj.isEscalateFault = true;
         }
         const updateNotf = await this.saveWOContractorVisitResponse(this.iacNotification.faultNotificationId, requestObj);
         if (updateNotf) {
+          this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
           await this.faultNotification('PROCEED_WITH_WORKSORDER');
           this.commonService.hideLoader();
         }
@@ -1472,13 +1473,12 @@ export class ArrangingContractorComponent implements OnInit {
 
   private getWorksOrderPaymentRules() {
     const promise = new Promise((resolve, reject) => {
-      // this.faultsService.getWorksOrderPaymentRules('0beb2ead-71bf-4341-a25f-446529686a12').subscribe(
       this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
         res => {
           resolve(res);
         },
         error => {
-          console.log(error)
+
           this.commonService.showMessage(error.error ? error.error.errorCode : 'Something went wrong', 'Arranging Contractor', 'error');
           resolve(null);
         }

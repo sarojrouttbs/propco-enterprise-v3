@@ -56,12 +56,12 @@ export class AppointmentModalPage implements OnInit {
       if (this.type === 'quote') {
         const updateCCVisit = await this.saveContractorVisit(this.faultNotificationId, requestObj);
         if (updateCCVisit) {
-          this.dismiss();
+          this.modalController.dismiss('success');
         }
       } else if (this.type === 'wo') {
         const updateCCVisit = await this.saveWoContractorVisit(this.faultNotificationId, requestObj);
         if (updateCCVisit) {
-          this.dismiss();
+          this.modalController.dismiss('success');
         }
       }
     } else {
