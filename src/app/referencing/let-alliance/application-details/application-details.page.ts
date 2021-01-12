@@ -54,12 +54,15 @@ export class ApplicationDetailsPage implements OnInit {
   titleTypes: any[] = [];
   maritalStatusTypes: any[] = [];
   agreementStatuses: any[] = [];
+  nationList: any[] = [];
   proposedAgreementStatusIndex: any;
   completionMethods: any[] = COMPLETION_METHODS;
 
   address: any = {};
   isPropertyDetailsSubmit: boolean;
   maskedVal: any;
+
+  selectedTenancyObj: any = {}
 
   constructor(
     private fb: FormBuilder,
@@ -171,6 +174,7 @@ export class ApplicationDetailsPage implements OnInit {
 
   private setLookupData(data: any): void {
     this.agreementStatuses = data.agreementStatuses;
+    this.nationList = data.tenantNations;
   }
 
   private setReferencingLookupData(data: any): void {
@@ -209,7 +213,7 @@ export class ApplicationDetailsPage implements OnInit {
       completeMethod: [{ value: 2, disabled: true }],
       productId: ['', Validators.required],
       tenantTypeId: [1, Validators.required],
-      title: [''],
+      title: ['', Validators.required],
       otherTitle: [''],
       companyName: [''],
       forename: [''],
@@ -322,11 +326,14 @@ export class ApplicationDetailsPage implements OnInit {
   }
 
   private initPatching(): void {
-    const selectedTenantRentShare = this.propertyTenancyList[0].tenants.find(obj => obj.tenantId === this.tenantDetails.tenantId).rentShare;
+
+    this.selectedTenancyObj = this.propertyTenancyList.find(obj1 => obj1.tenants.find(obj => obj.tenantId === this.tenantDetails.tenantId));
+
+    const selectedTenantRentShare = this.selectedTenancyObj.tenants.find(obj => obj.tenantId === this.tenantDetails.tenantId).rentShare;
 
     this.tenancyDetailsForm.patchValue({
-      tenancyStartDate: this.propertyTenancyList[0].tenancyStartDate,
-      numberOfReferencingOccupants: this.propertyTenancyList[0].numberOfReferencingOccupants
+      tenancyStartDate: this.selectedTenancyObj.tenancyStartDate,
+      numberOfReferencingOccupants: this.selectedTenancyObj.numberOfReferencingOccupants
     });
 
     this.propertyDetailsForm.patchValue({
@@ -355,13 +362,11 @@ export class ApplicationDetailsPage implements OnInit {
       this.tenantDetailsForm.get('registrationNumber').clearValidators();
 
       if(this.tenantDetailsForm.get('hasTenantOtherName').value){
-        this.tenantDetailsForm.get('otherNames').get('title').setValidators(Validators.required);
         this.tenantDetailsForm.get('otherNames').get('forename').setValidators(Validators.required);
         this.tenantDetailsForm.get('otherNames').get('surname').setValidators(Validators.required);
         
       }
       else{
-        this.tenantDetailsForm.get('otherNames').get('title').clearValidators();
         this.tenantDetailsForm.get('otherNames').get('forename').clearValidators();
         this.tenantDetailsForm.get('otherNames').get('surname').clearValidators();
       }
@@ -391,7 +396,6 @@ export class ApplicationDetailsPage implements OnInit {
     this.tenantDetailsForm.get('companyName').updateValueAndValidity();
     this.tenantDetailsForm.get('registrationNumber').updateValueAndValidity();
     this.tenantDetailsForm.get('maritalStatus').updateValueAndValidity();
-    this.tenantDetailsForm.get('otherNames').get('title').updateValueAndValidity();
     this.tenantDetailsForm.get('otherNames').get('forename').updateValueAndValidity();
     this.tenantDetailsForm.get('otherNames').get('surname').updateValueAndValidity();
   }
@@ -543,13 +547,13 @@ export class ApplicationDetailsPage implements OnInit {
     const tmpDate = new Date(this.tenancyDetailsForm.get('tenancyStartDate').value);
     tmpDate.setDate(tmpDate.getDate() + (this.tenancyDetailsForm.get('tenancyTerm').value * 30));
 
-    const tmpTenant = this.propertyTenancyList[0].tenants.find(obj => obj.tenantId === this.tenantDetails.tenantId);
+    const tmpTenant = this.selectedTenancyObj.tenants.find(obj => obj.tenantId === this.tenantDetails.tenantId);
 
     const applicationDetails =
     {
       propertyId: this.propertyDetails.propertyId,
       applicantId: this.tenantDetails.tenantId,
-      agreementId: this.propertyTenancyList[0].propcoAgreementId,
+      agreementId: this.selectedTenancyObj.propcoAgreementId,
       applicantItemType: tmpTenant.isLead ? 'M' : 'S',
       case: {
         productId: this.tenancyDetailsForm.get('productId').value,
@@ -571,18 +575,19 @@ export class ApplicationDetailsPage implements OnInit {
         otherTitle: this.tenantDetailsForm.get('otherTitle').value,
         forename: this.tenantDetailsForm.get('tenantTypeId').value == REFERENCING_TENANT_TYPE.INDIVIDUAL ? this.tenantDetailsForm.get('forename').value : this.tenantDetailsForm.get('companyName').value,
         middlename: this.tenantDetailsForm.get('middlename').value,
-        surname: this.tenantDetailsForm.get('tenantTypeId').value == REFERENCING_TENANT_TYPE.INDIVIDUAL ? this.tenantDetailsForm.get('surname').value : '',
+        surname: this.tenantDetailsForm.get('surname').value,
         email: this.tenantDetailsForm.get('email').value,
         dateOfBirth: this.datepipe.transform(this.tenantDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
         rentShare: parseFloat(this.setDefaultAmount(this.tenantDetailsForm.get('rentShare').value)),
         maritalStatus: this.tenantDetailsForm.get('maritalStatus').value,
-        nationality: 'British', //this.tenantDetailsForm.get('nationality').value, // British
+        nationality: this.tenantDetailsForm.get('nationality').value,
         registrationNumber: this.tenantDetailsForm.get('registrationNumber').value,
         sendTenantLink: true,
         autoSubmitLink: true,
         isGuarantor: false,
         hasTenantOtherName: this.tenantDetailsForm.get('hasTenantOtherName').value,
-        otherNames: this.tenantDetailsForm.get('hasTenantOtherName').value ? [this.tenantDetailsForm.get('otherNames').value] : []
+        otherNames: this.tenantDetailsForm.get('hasTenantOtherName').value ? [this.tenantDetailsForm.get('otherNames').value] : [],
+        applicationStatus: 0
       }
     };
 

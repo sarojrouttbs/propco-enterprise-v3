@@ -72,7 +72,10 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       ajax: (tableParams: any, callback) => {
         this.applicationParams = this.applicationParams
         .set('limit', tableParams.length)
-        .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');
+        .set('page', tableParams.start > -1 ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
+        .set('orderByColumn', tableParams.order[0].column > -1 ? tableParams.columns.find(obj => obj.data == tableParams.order[0].column).name : 'referenceNumber')
+        .set('isDescendingOrder', tableParams.order[0].dir == 'asc' ? false : true);
+        
         self.referencingService.getApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.applicationParams).subscribe(res => {
           self.applicationList = res && res.data ? res.data : [];
           self.getProductList();
@@ -83,7 +86,82 @@ export class ApplicationListPage implements OnInit, OnDestroy {
           });
         });
       },
-      columns: [null, null, null, null, null, null, null, null, null, null, { orderable: false }],
+      columns: [{
+        data: 0,
+        name: 'referenceNumber',
+        searchable: true,
+        orderable: true,
+      },
+      {
+        data: 1,
+        name: 'propertyDetail.reference',
+        searchable: true,
+        orderable: true,
+
+      },
+      {
+        data: 2,
+        name: 'propertyDetail.addressLine1',
+        searchable: true,
+        orderable: true,
+
+      },
+      {
+        data: 3,
+        name: 'applicantDetail.displayAs',
+        searchable: true,
+        orderable: true,
+
+      },
+      {
+        data: 4,
+        name: 'office',
+        searchable: true,
+        orderable: true,
+
+      },
+      {
+        data: 5,
+        name: 'tenancyStartDate',
+        searchable: true,
+        orderable: true,
+
+      },
+      {
+        data: 6,
+        name: 'rentShare',
+        searchable: true,
+        orderable: true,
+
+      },
+      {
+        data: 7,
+        name: 'guarantorDisplayAs',
+        searchable: true,
+        orderable: false,
+
+      },
+      {
+        data: 8,
+        name: 'product',
+        searchable: true,
+        orderable: true,
+
+      },
+      {
+        data: 9,
+        name: 'applicationStatus',
+        searchable: true,
+        orderable: true,
+
+      },
+      {
+        data: 10,
+        name: '',
+        searchable: true,
+        orderable: false,
+
+      }],
       responsive: true
     };
     this.initiateForm();

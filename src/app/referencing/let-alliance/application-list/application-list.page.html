@@ -92,7 +92,20 @@
                   <td>{{application.office || '-'}}</td>
                   <td>{{application.tenancyStartDate|| '-' | date : 'dd/MM/yyyy' }}</td>
                   <td>{{application.rentShare || '0' | currency: '£'}}</td>
-                  <td>{{application.guarantorDisplayAs || '-'}}</td>
+                  <td>
+                    <ng-container *ngFor="let item of application.applicantGuarantors; last as isLast">
+                      <ion-text *ngIf="isLast">
+                        {{item.displayAs ? item.displayAs : 
+                          (item.addressee ? item.addressee : item.forename
+                          + ' ' + item.surname)}}
+                        </ion-text>
+                      <ion-text *ngIf="!isLast">
+                        {{item.displayAs ? item.displayAs  + ', ' : 
+                          (item.addressee ? item.addressee  + ', ' : item.forename
+                          + ' ' + item.surname + ', ')}}
+                        </ion-text>
+                    </ng-container>
+                  </td>
                   <td>{{getProductType(application.product) || '-'}}</td>
                   <td>{{getLookupValue(application.applicationStatus, referencingApplicantStatusTypes) || '-'}}</td>
                   <td class="resp-action-icon">
