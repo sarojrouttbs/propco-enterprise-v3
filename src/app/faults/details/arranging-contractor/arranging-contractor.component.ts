@@ -843,12 +843,12 @@ export class ArrangingContractorComponent implements OnInit {
         this.questionActionLLAuth(data);
       }
     } else if (this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER) {
-      if (this.iacNotification.templateCode === 'CWO-A-C-E' || this.iacNotification.templateCode === 'CWO-NA-C-E') {
-        this.questionActionAcceptRequest(data);
-      } else if (this.iacNotification.templateCode === 'CDT-C-E' || this.iacNotification.templateCode === 'CDT-T-E') {
-        this.worksOrderActionVisitTime(data);
-      } else if (this.iacNotification.templateCode === 'LNP-L-E') {
+      if (this.iacNotification.templateCode === 'LNP-L-E') {
         this.questionActionWOPayment(data);
+      } else if (this.iacNotification.templateCode === 'CWO-A-C-E' || this.iacNotification.templateCode === 'CWO-NA-C-E') {
+        this.questionActionAcceptRequest(data);
+      } else if (this.iacNotification.templateCode === 'CDT-C-E (WO)' || this.iacNotification.templateCode === 'CDT-T-E (WO)' || this.iacNotification.templateCode === 'CWO-NA-T-E') {
+        this.worksOrderActionVisitTime(data);
       }
     }
     // }
@@ -863,7 +863,7 @@ export class ArrangingContractorComponent implements OnInit {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
-          await this.faultNotification('OBTAIN_QUOTE');
+          await this.faultNotification(this.isWorksOrder ? 'PROCEED_WITH_WORKSORDER': 'OBTAIN_QUOTE');
         }
       });
     } else if (!data.value) {
@@ -871,7 +871,7 @@ export class ArrangingContractorComponent implements OnInit {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
-          await this.faultNotification('OBTAIN_QUOTE');
+          await this.faultNotification(this.isWorksOrder ? 'PROCEED_WITH_WORKSORDER': 'OBTAIN_QUOTE');
         }
       });
     }
@@ -995,6 +995,7 @@ export class ArrangingContractorComponent implements OnInit {
 
       modal.onDidDismiss().then(async res => {
         if (res.data && res.data == 'success') {
+          this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
           this.initiateArrangingContractors();
         }
       });
@@ -1016,6 +1017,7 @@ export class ArrangingContractorComponent implements OnInit {
 
       modal.onDidDismiss().then(async res => {
         if (res.data && res.data == 'success') {
+          this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
           this.initiateArrangingContractors();
         }
       });
@@ -1392,12 +1394,12 @@ export class ArrangingContractorComponent implements OnInit {
         let requestObj = {} as any;
         requestObj.isAccepted = data.value;
         requestObj.submittedByType = 'SECUR_USER';
-        if (this.iacNotification.templateCode === 'CWO-NA-T-E2') {
+        if (this.iacNotification.templateCode === 'CWO-NA-T-E') {
           requestObj.isEscalateFault = true;
         }
         const updateNotf = await this.saveWOContractorVisitResponse(this.iacNotification.faultNotificationId, requestObj);
         if (updateNotf) {
-          await this.faultNotification('OBTAIN_QUOTE');
+          await this.faultNotification('PROCEED_WITH_WORKSORDER');
           this.commonService.hideLoader();
         }
 
