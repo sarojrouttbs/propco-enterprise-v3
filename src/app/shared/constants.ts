@@ -99,7 +99,7 @@ export const LL_INSTRUCTION_TYPES = [
   },
   {
     index: 'PROCEED_AS_NECESSARY',
-    value: 'EMERGENCY/URGENT – proceed as necessary'
+    value: 'EMERGENCY/URGENT – Proceed as agent of necessity'
   },
   {
     index: 'GET_AN_ESTIMATE',
@@ -208,8 +208,8 @@ export const MAINTENANCE_TYPES = {
 };
 
 export const PAYMENT_METHOD_TYPES = [
-  'Bank Transfer',  
-  'Cash', 
+  'Bank Transfer',
+  'Cash',
   'Cheque',
   'Other'
 ];

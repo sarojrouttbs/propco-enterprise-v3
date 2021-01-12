@@ -21,7 +21,7 @@
                     *ngIf="iacNotification?.recipientType === 8">Landlord</span>
                   <span *ngIf="iacNotification?.recipientType == 11">Contractor</span></strong>
               </h6>
-              <h6 class="banner-title">Next chase due:
+              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt" >Next chase due:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - hh:mm a') : ''}}
               </h6>
             </ng-container>
