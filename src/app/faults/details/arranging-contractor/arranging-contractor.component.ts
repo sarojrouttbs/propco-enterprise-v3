@@ -156,7 +156,9 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.faultDetails.doesBranchHoldKeys) {
       this.officeDetails();
     }
-    if (!this.faultMaintenanceDetails) { this.woSelectContractor(this.faultDetails.contractorId); }
+    if (!this.faultMaintenanceDetails && this.faultDetails.contractorId) {
+      this.woSelectContractor(this.faultDetails.contractorId);
+    }
     this.woContractors = this.workOrderForm.get('contractorName').valueChanges.pipe(debounceTime(300),
       switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
         new Observable())
