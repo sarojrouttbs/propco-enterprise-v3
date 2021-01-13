@@ -60,7 +60,7 @@ export class WithoutPrepaymentModalComponent implements OnInit {
       if (paymentRules.isFaultEstimateLessThanHalfRentOrThresHoldValue === false) {
         this.paymentWarnings.push(PAYMENT_WARNINGS.hasOtherInvoicesToBePaid);
       }
-      if (paymentRules.isTenancyGivenNoticeOrInLastMonth === false) {
+      if (paymentRules.isTenancyGivenNoticeOrInLastMonth === true) {
         this.paymentWarnings.push(PAYMENT_WARNINGS.isTenancyGivenNoticeOrInLastMonth);
       }
     }
