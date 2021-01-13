@@ -1547,7 +1547,7 @@ export class ArrangingContractorComponent implements OnInit {
         else if (rules.isFaultEstimateLessThanHalfRentOrThresHoldValue === false) {
           paymentNeeded = true;
         }
-        else if (rules.isTenancyGivenNoticeOrInLastMonth === false) {
+        else if (rules.isTenancyGivenNoticeOrInLastMonth === true) {
           paymentNeeded = true;
         }
       }
