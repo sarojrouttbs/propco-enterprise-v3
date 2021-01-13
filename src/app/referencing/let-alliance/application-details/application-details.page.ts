@@ -501,9 +501,6 @@ export class ApplicationDetailsPage implements OnInit {
     this.commonService.showLoader();
     const applicationRequestObj = this.createApplicationFormValues();
 
-    console.log('applicationRequestObj--'+JSON.stringify(applicationRequestObj));
-    debugger;
-
     this.referencingService.createApplication(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, applicationRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
