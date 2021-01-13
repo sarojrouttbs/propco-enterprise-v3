@@ -232,7 +232,6 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async initApiCalls() {
-    debugger;
     if (this.faultMaintenanceDetails) {
       if (!this.isWorksOrder) {
         await this.getMaxQuoteRejection();
