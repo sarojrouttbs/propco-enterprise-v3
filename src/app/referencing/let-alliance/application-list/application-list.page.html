@@ -1,4 +1,4 @@
-<ion-content id="application-list">
+<ion-content id="la-application-list">
   <ion-grid>
     <ion-row>
       <ion-col size="50" class="heading">
@@ -33,24 +33,24 @@
           </ion-col>
           <ion-col size-xl="21" size-lg="20" size-md="38" size-sm="32" size-xs="50">
             <ion-item>
-              <ion-label position="floating">Date From
+              <ion-label position="floating">Date of Submission From
               </ion-label>
               <ion-datetime [max]="currentDate" formControlName="fromDate"  displayFormat="DD MMM YYYY" interface="popover"></ion-datetime>
               <ion-icon ion-datetime-picker name="calendar" slot="start" class="datetime-icon"></ion-icon>
             </ion-item>
             <div *ngIf='applicationFilterForm?.errors?.startDateRequired' class="error-message">
-              Please enter from Date
+              Please enter From
            </div>
           </ion-col>
           <ion-col size-xl="21" size-lg="20" size-md="38" size-sm="32" size-xs="50">
             <ion-item>
-              <ion-label position="floating">Date To
+              <ion-label position="floating">Date of Submission To
               </ion-label>
               <ion-datetime [max]='currentDate' formControlName="toDate" displayFormat="DD MMM YYYY" interface="popover"></ion-datetime>
               <ion-icon ion-datetime-picker name="calendar" slot="start" class="datetime-icon"></ion-icon>
             </ion-item>
             <div *ngIf='applicationFilterForm?.errors?.invalidEndDate' class="error-message">
-           Please enter To date greater than from date
+              To cannot be before and equal to From
            </div>
           </ion-col>
           <ion-col class="ion-text-end ion-align-self-end" size-xl="16" size-lg="20" size-md="24" size-sm="36" size-xs="100">

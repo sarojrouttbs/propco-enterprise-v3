@@ -13,7 +13,7 @@ import { ReferencingService } from '../../referencing.service';
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-guarantor-application-list',
+  selector: 'la-guarantor-application-list',
   templateUrl: './guarantor-application-list.page.html',
   styleUrls: ['./guarantor-application-list.page.scss'],
 })
