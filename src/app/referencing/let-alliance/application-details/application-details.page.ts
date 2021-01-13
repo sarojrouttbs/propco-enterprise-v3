@@ -7,7 +7,6 @@ import { CommonService } from 'src/app/shared/services/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SearchPropertyPage } from 'src/app/shared/modals/search-property/search-property.page';
 import { TenantListModalPage } from 'src/app/shared/modals/tenant-list-modal/tenant-list-modal.page';
-import { MatStepper } from '@angular/material/stepper';
 import { forkJoin } from 'rxjs';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { COMPLETION_METHODS } from 'src/app/shared/constants';
@@ -17,12 +16,11 @@ import { ReferencingService } from '../../referencing.service';
 import { HttpParams } from '@angular/common/http';
 
 @Component({
-  selector: 'app-application-details',
+  selector: 'la-application-details',
   templateUrl: './application-details.page.html',
   styleUrls: ['./application-details.page.scss'],
 })
 export class ApplicationDetailsPage implements OnInit {
-  @ViewChild('stepper', { static: false }) stepper: MatStepper;
   tenancyDetailsForm: FormGroup;
   propertyDetailsForm: FormGroup;
   tenantDetailsForm: FormGroup;
@@ -39,7 +37,6 @@ export class ApplicationDetailsPage implements OnInit {
   propertyId = null;
   lookupdata: any;
   referencingLookupdata: any;
-  currentStepperIndex = 0;
   isPropertyTabDetailSubmit: boolean;
   isTenantTabDetailSubmit: boolean;
   current = 0;
@@ -193,7 +190,7 @@ export class ApplicationDetailsPage implements OnInit {
   private initTenancyDetailsForm(): void {
     this.tenancyDetailsForm = this.fb.group({
       productId: ['', Validators.required],
-      numberOfReferencingOccupants: ['', [Validators.required]],
+      noOfTenantToBeReferenced: ['', [Validators.required]],
       tenancyStartDate: ['', [Validators.required, ValidationService.futureDateSelectValidator]],
       tenancyTerm: ['', [Validators.required, Validators.min(1), Validators.max(36), ValidationService.numberValidator]],
       paidBy: ['', [Validators.min(0), Validators.max(1)]],
@@ -327,13 +324,13 @@ export class ApplicationDetailsPage implements OnInit {
 
   private initPatching(): void {
 
-    this.selectedTenancyObj = this.propertyTenancyList.find(obj1 => obj1.tenants.find(obj => obj.tenantId === this.tenantDetails.tenantId));
+    this.selectedTenancyObj = this.propertyTenancyList.find(obj1 => obj1.tenants.find(obj2 => obj2.tenantId === this.tenantDetails.tenantId));
 
     const selectedTenantRentShare = this.selectedTenancyObj.tenants.find(obj => obj.tenantId === this.tenantDetails.tenantId).rentShare;
 
     this.tenancyDetailsForm.patchValue({
       tenancyStartDate: this.selectedTenancyObj.tenancyStartDate,
-      numberOfReferencingOccupants: this.selectedTenancyObj.numberOfReferencingOccupants
+      noOfTenantToBeReferenced: this.selectedTenancyObj.numberOfReferencingOccupants
     });
 
     this.propertyDetailsForm.patchValue({
@@ -349,6 +346,7 @@ export class ApplicationDetailsPage implements OnInit {
       email: this.tenantDetails.email,
       maritalStatus: this.tenantDetails.maritalStatus,
       nationality: this.tenantDetails.nationality,
+      companyName: this.tenantDetails.company,
       rentShare: this.currencyPipe.transform(selectedTenantRentShare, 'GBP', 'symbol')
     }, { emitEvent: false });
   }
@@ -557,7 +555,7 @@ export class ApplicationDetailsPage implements OnInit {
       applicantItemType: tmpTenant.isLead ? 'M' : 'S',
       case: {
         productId: this.tenancyDetailsForm.get('productId').value,
-        numberOfReferencingOccupants: parseInt(this.tenancyDetailsForm.get('numberOfReferencingOccupants').value),
+        noOfTenantToBeReferenced: parseInt(this.tenancyDetailsForm.get('noOfTenantToBeReferenced').value),
         tenancyStartDate: this.datepipe.transform(this.tenancyDetailsForm.get('tenancyStartDate').value, 'yyyy-MM-dd'),
         tenancyEndDate: this.datepipe.transform(tmpDate, 'yyyy-MM-dd'),
         tenancyTerm: this.tenancyDetailsForm.get('tenancyTerm').value,
@@ -587,7 +585,7 @@ export class ApplicationDetailsPage implements OnInit {
         isGuarantor: false,
         hasTenantOtherName: this.tenantDetailsForm.get('hasTenantOtherName').value,
         otherNames: this.tenantDetailsForm.get('hasTenantOtherName').value ? [this.tenantDetailsForm.get('otherNames').value] : [],
-        applicationStatus: 0
+        status: 0
       }
     };
 
