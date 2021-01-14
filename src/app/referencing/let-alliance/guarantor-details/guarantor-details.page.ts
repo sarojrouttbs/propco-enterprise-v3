@@ -129,7 +129,7 @@ export class GuarantorDetailsPage implements OnInit {
       maritalStatus: [''],
       nationality: [''],
       registrationNumber: [''],
-      rentShare: ['', [Validators.required, ValidationService.amountValidator]],
+      rentShare: ['', [Validators.required]],
       hasTenantOtherName: [false],
       otherNames: this.fb.group({
         title: [''],
@@ -142,7 +142,7 @@ export class GuarantorDetailsPage implements OnInit {
 
   private initSelectGuarantorForm(): void {
     this.selectGuarantorForm = this.fb.group({
-      guarantor: ['']
+      guarantor: ['a1']
     });
   }
 
@@ -173,7 +173,7 @@ export class GuarantorDetailsPage implements OnInit {
   }
 
   getGuarantorDetails(guarantorId: any) {
-    if(guarantorId == 0){
+    if(guarantorId == 'a1'){
       this.initGuarantorDetailsTabForm();
       this.guarantorDetails = {} as letAllianceModels.IGuarantorResponse;
     }
@@ -229,6 +229,7 @@ export class GuarantorDetailsPage implements OnInit {
       email: this.guarantorDetails.email,
       maritalStatus: this.guarantorDetails.maritalStatus,
       nationality: this.guarantorDetails.nationality,
+      rentShare: 0
     });
   }
   
@@ -280,28 +281,14 @@ export class GuarantorDetailsPage implements OnInit {
   }
 
   onBlurCurrency(val: any, form: FormGroup) {
-    if (val) {
+    if (!val) {
       if (form == this.guarantorDetailsForm) {
-        this.guarantorDetailsForm.patchValue({ rentShare: this.currencyPipe.transform(val, 'GBP', 'symbol', '1.2-5') }, { emitEvent: false });
+        this.guarantorDetailsForm.patchValue({
+          rentShare: 0
+        });
       }
     }
   }
-
-  formatCurrency(val: any, form: FormGroup) {
-    let latestDigit = val.replace(/\£/, '').replace(/,/g, '').replace(/.0+$/g, '');
-    
-    if (form == this.guarantorDetailsForm) {
-      this.guarantorDetailsForm.patchValue({
-        rentShare: latestDigit
-      }, { emitEvent: false });
-    }
-  }
-
-  private setDefaultAmount(val: any) {
-    let latestDigit = val.replace(/\£/, '').replace(/,/g, '').replace(/.0+$/g, '');
-    return latestDigit; 
-  }
-
 
   refresh(){
     location.reload();
@@ -363,7 +350,7 @@ export class GuarantorDetailsPage implements OnInit {
   private createApplicationFormValues(): any {
     const applicationDetails =
       {
-        applicantId: this.guarantorDetails.guarantorId ? this.guarantorDetails.guarantorId : '',
+        applicantId: this.guarantorDetails ? this.guarantorDetails.guarantorId : 'a1',
         applicantItemType: 'G',
         case: {
         },
@@ -378,7 +365,7 @@ export class GuarantorDetailsPage implements OnInit {
           surname: this.guarantorDetailsForm.get('surname').value,
           email: this.guarantorDetailsForm.get('email').value,
           dateOfBirth: this.datepipe.transform(this.guarantorDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
-          rentShare: parseFloat(this.setDefaultAmount(this.guarantorDetailsForm.get('rentShare').value)),
+          rentShare: parseFloat(this.guarantorDetailsForm.get('rentShare').value),
           maritalStatus: this.guarantorDetailsForm.get('maritalStatus').value,
           nationality: this.guarantorDetailsForm.get('nationality').value,
           registrationNumber: this.guarantorDetailsForm.get('registrationNumber').value,
@@ -387,11 +374,11 @@ export class GuarantorDetailsPage implements OnInit {
           isGuarantor: true,
           hasTenantOtherName: this.guarantorDetailsForm.get('hasTenantOtherName').value,
           otherNames: this.guarantorDetailsForm.get('hasTenantOtherName').value ? [this.guarantorDetailsForm.get('otherNames').value] : [],
-          applicationStatus: 0
+          status: 0
         }
       };
 
-      if(applicationDetails.applicantId === ''){
+      if(applicationDetails.applicantId == 'a1'){
         delete applicationDetails.applicantId;
       }
 

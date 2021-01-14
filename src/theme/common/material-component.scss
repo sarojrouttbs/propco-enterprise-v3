@@ -118,8 +118,9 @@
   .mat-option {
     white-space: pre-wrap;
     text-overflow: initial;
-    height: 45px;
-    line-height: 20px;
+    min-height: 50px;
+    line-height: 22px;
+    height: auto;
   }
 }
 

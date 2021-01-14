@@ -12,6 +12,17 @@ import { ComponentsModule } from 'src/app/shared/components/components.module';
 import { TenantListModalPageModule } from 'src/app/shared/modals/tenant-list-modal/tenant-list-modal.module';
 import { AddressModalPageModule } from 'src/app/shared/modals/address-modal/address-modal.module';
 import { SearchPropertyPageModule } from 'src/app/shared/modals/search-property/search-property.module';
+import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  decimal: ".",
+  precision: 2,
+  prefix: "£ ",
+  suffix: "",
+  thousands: ","
+};
 
 @NgModule({
   imports: [
@@ -24,9 +35,10 @@ import { SearchPropertyPageModule } from 'src/app/shared/modals/search-property/
     ComponentsModule,
     TenantListModalPageModule,
     AddressModalPageModule,
-    SearchPropertyPageModule
+    SearchPropertyPageModule,
+    CurrencyMaskModule
   ],
   declarations: [ApplicationDetailsPage],
-  providers: [CurrencyPipe]
+  providers: [CurrencyPipe, {provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig}]
 })
 export class ApplicationDetailsPageModule {}

@@ -201,7 +201,7 @@ export class ApplicationDetailsPage implements OnInit {
   private initPropertyDetailsForm(): void {
     this.propertyDetailsForm = this.fb.group({
       managementStatus: ['', Validators.required],
-      monthlyRent: ['', [Validators.required, ValidationService.amountValidator]],
+      monthlyRent: ['', [Validators.required]],
     });
   }
 
@@ -221,7 +221,7 @@ export class ApplicationDetailsPage implements OnInit {
       maritalStatus: [''],
       nationality: [''],
       registrationNumber: [''],
-      rentShare: ['', [Validators.required, ValidationService.amountValidator]],
+      rentShare: ['', [Validators.required]],
       hasTenantOtherName: [false],
       otherNames: this.fb.group({
         title: [''],
@@ -335,7 +335,7 @@ export class ApplicationDetailsPage implements OnInit {
 
     this.propertyDetailsForm.patchValue({
       managementStatus: this.propertyDetails.managementType,
-      monthlyRent: this.currencyPipe.transform(this.propertyDetails.advertisementRent, 'GBP', 'symbol')
+      monthlyRent: this.propertyDetails.advertisementRent
     }, { emitEvent: false });
 
     this.tenantDetailsForm.patchValue({
@@ -347,7 +347,7 @@ export class ApplicationDetailsPage implements OnInit {
       maritalStatus: this.tenantDetails.maritalStatus,
       nationality: this.tenantDetails.nationality,
       companyName: this.tenantDetails.company,
-      rentShare: this.currencyPipe.transform(selectedTenantRentShare, 'GBP', 'symbol')
+      rentShare: selectedTenantRentShare ? selectedTenantRentShare : 0
     }, { emitEvent: false });
   }
 
@@ -399,34 +399,18 @@ export class ApplicationDetailsPage implements OnInit {
   }
 
   onBlurCurrency(val: any, form: FormGroup) {
-    if (val) {
+    if (!val) {
       if (form == this.propertyDetailsForm) {
-        this.propertyDetailsForm.patchValue({ monthlyRent: this.currencyPipe.transform(val, 'GBP', 'symbol', '1.2-5') }, { emitEvent: false });
+        this.propertyDetailsForm.patchValue({
+          monthlyRent: 0
+        });
       }
       if (form == this.tenantDetailsForm) {
-        this.tenantDetailsForm.patchValue({ rentShare: this.currencyPipe.transform(val, 'GBP', 'symbol', '1.2-5') }, { emitEvent: false });
+        this.tenantDetailsForm.patchValue({
+          rentShare: 0
+        });
       }
     }
-  }
-
-  formatCurrency(val: any, form: FormGroup) {
-    let latestDigit = val.replace(/\£/, '').replace(/,/g, '').replace(/.0+$/g, '');
-    
-    if (form == this.propertyDetailsForm) {
-      this.propertyDetailsForm.patchValue({
-        monthlyRent: latestDigit
-      }, { emitEvent: false });
-    }
-    if (form == this.tenantDetailsForm) {
-      this.tenantDetailsForm.patchValue({
-        rentShare: latestDigit
-      }, { emitEvent: false });
-    }
-  }
-
-  private setDefaultAmount(val: any) {
-    let latestDigit = val.replace(/\£/, '').replace(/,/g, '').replace(/.0+$/g, '');
-    return latestDigit; 
   }
 
   async editAddress() {
@@ -561,9 +545,23 @@ export class ApplicationDetailsPage implements OnInit {
         tenancyTerm: this.tenancyDetailsForm.get('tenancyTerm').value,
         paidBy: parseInt(this.tenancyDetailsForm.get('paidBy').value),
         offerNds: this.tenancyDetailsForm.get('offerNds').value,
-        address: this.address,
+        address:{
+          addressLine1: this.address.addressLine1 ? this.address.addressLine1 : (this.address.buildingNumber + ', ' + this.address.buildingNumber),
+          addressLine2: this.address.addressLine3 ? (this.address.addressLine2 + ', ' + this.address.addressLine3) : (this.address.addressLine2 + ', ' + this.address.locality),
+          county: this.address.county,
+          country: this.address.country,
+          street: this.address.street,
+          buildingName: this.address.buildingName,
+          buildingNumber: this.address.buildingNumber,
+          postcode: this.address.postcode,
+          latitude: this.address.latitude,
+          longitude: this.address.longitude,
+          locality: this.address.locality,
+          town: this.address.town,
+          pafReference: this.address.pafReference
+        },
         typeId: this.tenantDetailsForm.get('tenantTypeId').value,
-        monthlyRent: parseFloat(this.setDefaultAmount(this.propertyDetailsForm.get('monthlyRent').value)),
+        monthlyRent: parseFloat(this.propertyDetailsForm.get('monthlyRent').value),
         managementStatus: this.propertyDetailsForm.get('managementStatus').value,
       },
       application: {
@@ -576,7 +574,7 @@ export class ApplicationDetailsPage implements OnInit {
         surname: this.tenantDetailsForm.get('surname').value,
         email: this.tenantDetailsForm.get('email').value,
         dateOfBirth: this.datepipe.transform(this.tenantDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
-        rentShare: parseFloat(this.setDefaultAmount(this.tenantDetailsForm.get('rentShare').value)),
+        rentShare: parseFloat(this.tenantDetailsForm.get('rentShare').value),
         maritalStatus: this.tenantDetailsForm.get('maritalStatus').value,
         nationality: this.tenantDetailsForm.get('nationality').value,
         registrationNumber: this.tenantDetailsForm.get('registrationNumber').value,

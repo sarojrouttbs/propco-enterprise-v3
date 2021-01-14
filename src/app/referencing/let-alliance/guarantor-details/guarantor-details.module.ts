@@ -10,6 +10,17 @@ import { ComponentsModule } from 'src/app/shared/components/components.module';
 import { GuarantorDetailsPageRoutingModule } from './guarantor-details-routing.module';
 
 import { GuarantorDetailsPage } from './guarantor-details.page';
+import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  decimal: ".",
+  precision: 2,
+  prefix: "£ ",
+  suffix: "",
+  thousands: ","
+};
 
 @NgModule({
   imports: [
@@ -19,9 +30,10 @@ import { GuarantorDetailsPage } from './guarantor-details.page';
     IonicModule,
     GuarantorDetailsPageRoutingModule,
     MaterialModule,
-    ComponentsModule
+    ComponentsModule,
+    CurrencyMaskModule
   ],
   declarations: [GuarantorDetailsPage],
-  providers: [CurrencyPipe]
+  providers: [CurrencyPipe, {provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig}]
 })
 export class GuarantorDetailsPageModule {}

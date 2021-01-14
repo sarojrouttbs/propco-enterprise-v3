@@ -94,8 +94,8 @@
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Property Rent <ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-input formControlName="monthlyRent" (ionBlur)= "onBlurCurrency(propertyDetailsForm.controls.monthlyRent.value, propertyDetailsForm)" (ionFocus)="formatCurrency(propertyDetailsForm.controls.monthlyRent.value, propertyDetailsForm)" ></ion-input>
+            <ion-label position="stacked">Property Rent <ion-text class="mandatory">*</ion-text></ion-label>
+            <input currencyMask formControlName="monthlyRent" (blur)="onBlurCurrency(propertyDetailsForm.controls.monthlyRent.value, propertyDetailsForm)"/>
           </ion-item>
           <app-validation-message [control]="propertyDetailsForm.controls.monthlyRent"></app-validation-message>
         </ion-col>
@@ -233,8 +233,8 @@
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Rent Share <ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-input formControlName="rentShare" (ionBlur)="onBlurCurrency(tenantDetailsForm.controls.rentShare.value, tenantDetailsForm)" (ionFocus)="formatCurrency(tenantDetailsForm.controls.rentShare.value, tenantDetailsForm)" ></ion-input>
+            <ion-label position="stacked">Rent Share <ion-text class="mandatory">*</ion-text></ion-label>
+            <input currencyMask formControlName="rentShare" (blur)="onBlurCurrency(tenantDetailsForm.controls.rentShare.value, tenantDetailsForm)"/>
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.rentShare"></app-validation-message>
         </ion-col>
@@ -327,7 +327,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Property Rent</ion-text><br />
-        <ion-text class="content">{{propertyDetailsForm.controls.monthlyRent.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{propertyDetailsForm.controls.monthlyRent.value ? '£' + propertyDetailsForm.controls.monthlyRent.value : 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size="100" class="border-bottom"></ion-col>
       <ion-col size="100">
@@ -391,7 +391,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Rent Share</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.rentShare.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{ tenantDetailsForm.controls.rentShare?.value ? '£' +  tenantDetailsForm.controls.rentShare?.value : 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Had tenant been known by any other name?</ion-text><br />
