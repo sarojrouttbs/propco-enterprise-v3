@@ -206,19 +206,10 @@ export class ResendLinkModalPage implements OnInit {
           .subscribe(
             (res) => {
               this.commonService.hideLoader();
-              this.commonService.showMessage(
-                'Link has been sent successfully.',
-                'Resend Link',
-                'success'
-              );
+              this.commonService.showMessage('Email is sent to the applicant.', 'Resend Link', 'success');
             },
             (error) => {
               this.commonService.hideLoader();
-              this.commonService.showMessage(
-                'Something went wrong on server, please try again.',
-                'Resend Link',
-                'error'
-              );
               console.log(error);
             }
           );

@@ -315,17 +315,39 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   }
 
   async resendLink() {
-    const modal = await this.modalController.create({
-      component: ResendLinkModalPage,
-      cssClass: 'modal-container resend-link',
-      backdropDismiss: false,
-      componentProps: {
-        paramApplicantId: this.selectedData.applicantDetail.applicantId,
-        paramApplicationId: this.selectedData.applicationId,
-        paramPropertyAddress: this.selectedData.propertyDetail.address
-      }
-    });
-    await modal.present();
+    if(this.selectedData.applicationStatus == 0){
+      const modal = await this.modalController.create({
+        component: ResendLinkModalPage,
+        cssClass: 'modal-container resend-link',
+        backdropDismiss: false,
+        componentProps: {
+          paramApplicantId: this.selectedData.applicantDetail.applicantId,
+          paramApplicationId: this.selectedData.applicationId,
+          paramPropertyAddress: this.selectedData.propertyDetail.address
+        }
+      });
+      await modal.present();
+    }
+    else{
+      const modal = await this.modalController.create({
+        component: SimpleModalPage,
+        cssClass: 'modal-container alert-prompt',
+        backdropDismiss: false,
+        componentProps: {
+          data: `<div class='status-block'>Applicant has already completed and submitted the application. Cannot resend the link.
+          </div>`,
+          heading: 'Resend link',
+          buttonList: [
+            {
+              text: 'OK',
+              value: false
+            }
+          ]
+        }
+      });
+
+      await modal.present();
+    }
   }
 
   async openApplicationStatus() {

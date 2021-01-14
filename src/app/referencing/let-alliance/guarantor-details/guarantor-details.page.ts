@@ -12,7 +12,7 @@ import { ReferencingService } from '../../referencing.service';
 import { ValidationService } from 'src/app/shared/services/validation.service';
 
 @Component({
-  selector: 'app-guarantor-details',
+  selector: 'la-guarantor-details',
   templateUrl: './guarantor-details.page.html',
   styleUrls: ['./guarantor-details.page.scss'],
 })
@@ -289,7 +289,7 @@ export class GuarantorDetailsPage implements OnInit {
 
   formatCurrency(val: any, form: FormGroup) {
     let latestDigit = val.replace(/\£/, '').replace(/,/g, '').replace(/.0+$/g, '');
-
+    
     if (form == this.guarantorDetailsForm) {
       this.guarantorDetailsForm.patchValue({
         rentShare: latestDigit
@@ -301,6 +301,7 @@ export class GuarantorDetailsPage implements OnInit {
     let latestDigit = val.replace(/\£/, '').replace(/,/g, '').replace(/.0+$/g, '');
     return latestDigit; 
   }
+
 
   refresh(){
     location.reload();

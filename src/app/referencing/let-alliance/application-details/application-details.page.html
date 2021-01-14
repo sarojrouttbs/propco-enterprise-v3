@@ -16,9 +16,9 @@
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">No. of Occupants <ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-input formControlName="numberOfReferencingOccupants"></ion-input>
+            <ion-input formControlName="noOfTenantToBeReferenced"></ion-input>
           </ion-item>
-          <app-validation-message [control]="tenancyDetailsForm.controls.numberOfReferencingOccupants"></app-validation-message>
+          <app-validation-message [control]="tenancyDetailsForm.controls.noOfTenantToBeReferenced"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
@@ -299,7 +299,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">No. of Occupants</ion-text><br />
-        <ion-text class="content">{{tenancyDetailsForm.controls.numberOfReferencingOccupants.value  || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenancyDetailsForm.controls.noOfTenantToBeReferenced.value  || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Tenancy Start Date</ion-text><br />

@@ -18,7 +18,7 @@ export class ValidationService {
       invalidAlphaNumeric: 'Only alphanumeric values are allowed.',
       invalidContact: 'Please enter valid contact number.',
       invalidNumber: 'Please enter number only.',
-      invalidAmount: 'Please enter valid amount and two digits are allowed after decimal',
+      invalidAmount: 'Please enter valid amount (upto two decimal places)',
       minlength: `Minimum length ${validatorValue.requiredLength}`,
       maxlength: `Maximum length ${validatorValue.requiredLength}`,
       min: `Minimum number should be greater than and equal to ${validatorValue.min}`,
@@ -30,9 +30,9 @@ export class ValidationService {
       invalidBankCode: 'Please enter valid sort code',
       whitespace: 'Please enter valid data',
       commonPassword: 'Password is too easy to guess',
-      invalidFutureDate: 'Please enter date between today to next 60 days',
-      invalidFormDate: 'Please enter date less than To Date',
-      invalidEndDate: 'Please enter toDate grater than from date'
+      invalidFutureDate: 'Please enter date between today until next 60 days.',
+      invalidFormDate: 'From cannot be after To',
+      invalidEndDate: 'To cannot be before and equal to From'
     };
 
     return config[validatorName];
@@ -213,13 +213,16 @@ export class ValidationService {
   } 
 
   static dateRangeValidator(dGroup: FormGroup) {
+    let toDate = new Date(dGroup.controls["toDate"].value);
+    let fromDate = new Date(dGroup.controls["fromDate"].value);
+    toDate.setHours(0, 0, 0, 0);
+    fromDate.setHours(0, 0, 0, 0);
     if (dGroup.value) {
       if (dGroup.controls["toDate"].value) {
         if (!dGroup.controls["fromDate"].value) {
           return { startDateRequired: true };
         } else if (
-          new Date(dGroup.controls["toDate"].value) <
-          new Date(dGroup.controls["fromDate"].value)
+          toDate.toISOString() <= fromDate.toISOString()
         ) {
           return { invalidEndDate: true };
         }

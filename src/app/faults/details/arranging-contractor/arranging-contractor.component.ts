@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -156,7 +156,9 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.faultDetails.doesBranchHoldKeys) {
       this.officeDetails();
     }
-    if (!this.faultMaintenanceDetails) { this.woSelectContractor(this.faultDetails.contractorId); }
+    if (!this.faultMaintenanceDetails && this.faultDetails.contractorId) {
+      this.woSelectContractor(this.faultDetails.contractorId);
+    }
     this.woContractors = this.workOrderForm.get('contractorName').valueChanges.pipe(debounceTime(300),
       switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
         new Observable())
@@ -631,12 +633,16 @@ export class ArrangingContractorComponent implements OnInit {
           return;
         }
         /*raise a worksorder & check paymentRules*/
-        const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
+        const rules = await this.getWorksOrderPaymentRules('manual') as FaultModels.IFaultWorksorderRules as any;
         if (!rules) { return; }
-        const paymentRequired = await this.checkForPaymentRules(rules);
-        const submit = await this.raiseWorksOrderAndNotification(paymentRequired, 'manual');
-        if (submit) {
-          this.initiateArrangingContractors();
+        if (rules === 'saveWorksorder') {
+          this.saveForLater();
+        } else {
+          const paymentRequired = await this.checkForPaymentRules(rules);
+          const submit = await this.raiseWorksOrderAndNotification(paymentRequired, 'manual');
+          if (submit) {
+            this.initiateArrangingContractors();
+          }
         }
       }
     }
@@ -1217,8 +1223,10 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   woSelectContractor(contractorId) {
-    this.getContractorDetails(contractorId, 'wo');
-    this.woResultsAvailable = false;
+    if (contractorId) {
+      this.getContractorDetails(contractorId, 'wo');
+      this.woResultsAvailable = false;
+    }
   }
 
   private async getMaxQuoteRejection(): Promise<any> {
@@ -1425,9 +1433,10 @@ export class ArrangingContractorComponent implements OnInit {
   /*iac004 iac007.2*/
   private async checkForPaymentRules(rules) {
     const paymentRequired = await this.isPaymentRequired(rules);
+    const stageAction = this.isWorksOrder ? 'Proceed with worksorder' : 'Landlord accepted the quote';
     if (paymentRequired) {
       const response = await this.commonService.showConfirm('Arranging Contractor',
-        `You have selected "Landlord accepted the quote".<br/><br/>
+        `You have selected "${stageAction}".<br/><br/>
          Since the Landlord account doesn't have sufficient balance to pay for the works, a payment request will be generated and the Landlord will be notified to make an online payment via the portal.<br/>
          <br/>Do you want to proceed? <br/><br/>
          <small>NB:The landlord can also make an offline payment which can be processed manually via landloard accounts.</small>`, '', 'Yes', 'No');
@@ -1436,7 +1445,7 @@ export class ArrangingContractorComponent implements OnInit {
       }
     } else {
       const response = await this.commonService.showConfirm('Arranging Contractor',
-        `You have selected "Landlord accepted the quote".<br/><br/>
+        `You have selected "${stageAction}".<br/><br/>
          A notification will be sent out to the Contractor to carry out the job.<br/>
          <br/> Are you sure?`, '', 'Yes', 'No');
       if (response) {
@@ -1446,6 +1455,11 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async raiseWorksOrderAndNotification(paymentRequired: boolean, actionType = 'auto') {
+    if (typeof paymentRequired === 'undefined') {
+      /*if user selected "No" from the popup*/
+      return false;
+    }
+    
     let submit: boolean;
     if (actionType === 'auto') {
       submit = await this.saveFaultLLAuth() as boolean;
@@ -1458,6 +1472,8 @@ export class ArrangingContractorComponent implements OnInit {
         if (!updateWO) return false;
         submit = await this.updateFault(true) as boolean;
       }
+
+      
     }
     if (!submit) return false;
     if (submit) {
@@ -1471,16 +1487,23 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  private getWorksOrderPaymentRules() {
+  private getWorksOrderPaymentRules(actionType = 'auto') {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
         res => {
           resolve(res);
         },
         error => {
-
-          this.commonService.showMessage(error.error ? error.error.errorCode : 'Something went wrong', 'Arranging Contractor', 'error');
-          resolve(null);
+          if (error.error && error.error.hasOwnProperty('errorCode')) {
+            this.commonService.showMessage(error.error ? error.error.message : 'Something went wrong', 'Arranging Contractor', 'error');
+            if (error.error.errorCode === ERROR_CODE.PAYMENT_RULES_CHECKING_FAILED && actionType !== 'auto') {
+              resolve('saveWorksorder');
+            } else {
+              resolve(null);
+            }
+          } else {
+            resolve(null);
+          }
         }
       );
     });
@@ -1543,7 +1566,7 @@ export class ArrangingContractorComponent implements OnInit {
         else if (rules.isFaultEstimateLessThanHalfRentOrThresHoldValue === false) {
           paymentNeeded = true;
         }
-        else if (rules.isTenancyGivenNoticeOrInLastMonth === false) {
+        else if (rules.isTenancyGivenNoticeOrInLastMonth === true) {
           paymentNeeded = true;
         }
       }
