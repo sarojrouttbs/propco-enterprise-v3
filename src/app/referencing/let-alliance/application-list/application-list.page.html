@@ -15,7 +15,7 @@
   <form [formGroup]="applicationFilterForm">
       <ion-grid>
         <ion-row>
-          <ion-col size-xl="21" size-lg="20" size-md="50" size-sm="50" size-xs="50">
+          <ion-col size-xl="21" size-lg="15" size-md="50" size-sm="50" size-xs="50">
             <ion-item>
               <ion-label position="floating">Office Filter</ion-label>
               <ion-select interface="popover" formControlName="officeCode" multiple="true">
@@ -31,7 +31,7 @@
                 <ion-input formControlName="searchTerm"></ion-input>
               </ion-item>
           </ion-col>
-          <ion-col size-xl="21" size-lg="20" size-md="38" size-sm="32" size-xs="50">
+          <ion-col size-xl="21" size-lg="23" size-md="38" size-sm="32" size-xs="50">
             <ion-item>
               <ion-label position="floating">Date of Submission From
               </ion-label>
@@ -42,7 +42,7 @@
               Please enter From
            </div>
           </ion-col>
-          <ion-col size-xl="21" size-lg="20" size-md="38" size-sm="32" size-xs="50">
+          <ion-col size-xl="21" size-lg="23" size-md="38" size-sm="32" size-xs="50">
             <ion-item>
               <ion-label position="floating">Date of Submission To
               </ion-label>
@@ -53,8 +53,8 @@
               To cannot be before and equal to From
            </div>
           </ion-col>
-          <ion-col class="ion-text-end ion-align-self-end" size-xl="16" size-lg="20" size-md="24" size-sm="36" size-xs="100">
-            <ion-button style="margin: 0px 5px;" (click)="getApplicationList()" [disabled]="!this.applicationFilterForm.valid">Submit</ion-button>
+          <ion-col class="ion-text-end ion-align-self-end" size-xl="16" size-lg="19" size-md="24" size-sm="36" size-xs="100">
+            <ion-button class="submit-button" style="margin: 0px 5px;" (click)="getApplicationList()" [disabled]="!this.applicationFilterForm.valid">Submit</ion-button>
             <ion-button class="reset-button no-margin-right" (click)="resetFilter()" style="margin-left: 5px;">Reset</ion-button>
           </ion-col>
         </ion-row>
@@ -67,24 +67,23 @@
             <table datatable [dtOptions]="dtOptions[0]" class="row-border hover" style="width: 100%; position: relative">
               <thead>
                 <tr>
-                  <th style="width:7%">Reference No.</th>
-                  <th style="width:7%">Property Ref</th>
-                  <th>Property Address</th>
+                  <th style="width:7%; min-width: 80px;">Reference No.</th>
+                  <th >Property</th>
                   <th style="width:10%">Applicant Name</th>
-                  <th style="width:8%">Branch</th>
-                  <th style="width:8%">Tenancy Start</th>
-                  <th style="width:8%">	Rent Share</th>
+                  <th style="width:10%">Branch</th>
+                  <th style="width:8%; min-width:80px;">Tenancy Start</th>
+                  <th style="width:8%; min-width: 80px;">Rent Share</th>
                   <th style="width:11%">Guarantor Name</th>
                   <th style="width:11%">Product Type</th>
-                  <th style="width:14%">Application Status</th>
+                  <th style="width:11%">Application Status</th>
                   <th style="width:36px"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let application of applicationList" class="table-row">
                   <td>{{application.referenceNumber || '-'}}</td>
-                  <td>{{application.propertyDetail.reference || '-'}}</td>
-                  <td>{{application.propertyDetail.address.addressLine1}} {{application.propertyDetail.address.addressLine5}} 
+                  <td>{{application.propertyDetail.reference || '-'}}<br/>
+                    {{application.propertyDetail.address.addressLine1}} {{application.propertyDetail.address.addressLine5}} 
                     {{application.propertyDetail.address.postcode}}</td>
                   <td>{{application.applicantDetail.displayAs ? application.applicantDetail.displayAs : 
                     (application.applicantDetail.addressee ? application.applicantDetail.addressee : application.applicantDetail.forename

@@ -576,7 +576,7 @@ export class ApplicationDetailsPage implements OnInit {
         dateOfBirth: this.datepipe.transform(this.tenantDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
         rentShare: parseFloat(this.tenantDetailsForm.get('rentShare').value),
         maritalStatus: this.tenantDetailsForm.get('maritalStatus').value,
-        nationality: this.tenantDetailsForm.get('nationality').value,
+        nationality: this.getLookupValue(this.tenantDetailsForm.get('nationality').value, this.nationList),
         registrationNumber: this.tenantDetailsForm.get('registrationNumber').value,
         sendTenantLink: true,
         autoSubmitLink: true,

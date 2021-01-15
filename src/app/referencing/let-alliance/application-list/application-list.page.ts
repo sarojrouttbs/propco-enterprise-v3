@@ -38,7 +38,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
 
   selectedData: any;
   applicationFilterForm: FormGroup;
-  currentDate: string;
+  currentDate = this.commonService.getFormatedDate(new Date());
 
   applicationParams: any = new HttpParams();
 
@@ -67,6 +67,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       ordering: true,
       pageLength: 5,
       lengthMenu: [5, 10, 15],
+      order: [[ 0, 'desc' ]],
       /* scrollY: '435px',
       scrollCollapse: false, */
       ajax: (tableParams: any, callback) => {
@@ -84,6 +85,10 @@ export class ApplicationListPage implements OnInit, OnDestroy {
             recordsFiltered: res ? res.count : 0,
             data: []
           });
+        },
+        error => {
+          console.log(error);
+          this.commonService.showMessage(error.error.message, 'Application Filter', 'error');
         });
       },
       columns: [{
@@ -101,62 +106,55 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       },
       {
         data: 2,
-        name: 'propertyDetail.addressLine1',
-        searchable: true,
-        orderable: true,
-
-      },
-      {
-        data: 3,
         name: 'applicantDetail.displayAs',
         searchable: true,
         orderable: true,
 
       },
       {
-        data: 4,
+        data: 3,
         name: 'office',
         searchable: true,
         orderable: true,
 
       },
       {
-        data: 5,
+        data: 4,
         name: 'tenancyStartDate',
         searchable: true,
         orderable: true,
 
       },
       {
-        data: 6,
+        data: 5,
         name: 'rentShare',
         searchable: true,
         orderable: true,
 
       },
       {
-        data: 7,
+        data: 6,
         name: 'guarantorDisplayAs',
         searchable: true,
         orderable: false,
 
       },
       {
-        data: 8,
+        data: 7,
         name: 'product',
         searchable: true,
         orderable: true,
 
       },
       {
-        data: 9,
+        data: 8,
         name: 'applicationStatus',
         searchable: true,
         orderable: true,
 
       },
       {
-        data: 10,
+        data: 9,
         name: '',
         searchable: true,
         orderable: false,
@@ -323,7 +321,8 @@ export class ApplicationListPage implements OnInit, OnDestroy {
         componentProps: {
           paramApplicantId: this.selectedData.applicantDetail.applicantId,
           paramApplicationId: this.selectedData.applicationId,
-          paramPropertyAddress: this.selectedData.propertyDetail.address
+          paramPropertyAddress: this.selectedData.propertyDetail.address,
+          paramIt: this.selectedData.applicantDetail.itemType == 'G' ? 'G' : ''
         }
       });
       await modal.present();
