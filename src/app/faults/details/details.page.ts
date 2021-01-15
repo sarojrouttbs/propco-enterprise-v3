@@ -11,7 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material/stepper';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { SimplePopoverPage } from 'src/app/shared/popover/simple-popover/simple-popover.page';
-
+import { ContractorDetailsModalPage } from 'src/app/shared/modals/contractor-details-modal/contractor-details-modal.page';
 
 @Component({
   selector: 'fault-details',
@@ -1810,5 +1810,25 @@ export class DetailsPage implements OnInit {
 
   downloadDocumentByURl(url) {
     this.commonService.downloadDocumentByUrl(url);
+  }
+
+  async llContractor(){
+     const modal = await this.modalController.create({
+      component: ContractorDetailsModalPage,
+      cssClass: 'modal-container',
+      componentProps: {
+        faultId: this.faultId,
+        // landlordId: "Arranging Contractor",
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      // if (res.data && res.data == 'success') {
+      //   // await this.faultNotification('OBTAIN_QUOTE');
+      // }
+    });
+
+    await modal.present();
   }
 }

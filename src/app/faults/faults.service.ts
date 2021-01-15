@@ -251,6 +251,9 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/worksorder`, data);
   }
 
+  saveOwnContractor(faultId, requestObj): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/ll-own-contractor`, requestObj);
+  }
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

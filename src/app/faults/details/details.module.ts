@@ -30,6 +30,7 @@ import { QuoteModalPageModule } from 'src/app/shared/modals/quote-modal/quote-mo
 import { IonicSelectableModule } from 'ionic-selectable';
 import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-received-modal/payment-received-modal.component';
 import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
+import { ContractorDetailsModalPageModule } from 'src/app/shared/modals/contractor-details-modal/contractor-details-modal.module';
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-p
     QuoteModalPageModule,
     RejectionModalPageModule,
     IonicSelectableModule,
+    ContractorDetailsModalPageModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
     PaymentReceivedModalComponent, WithoutPrepaymentModalComponent],
