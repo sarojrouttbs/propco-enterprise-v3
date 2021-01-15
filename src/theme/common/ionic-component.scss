@@ -49,6 +49,10 @@ ion-button {
   &.reset-button {
     --background: var(--ion-color-danger);
   }
+
+  &.submit-button {
+    --background: var(--ion-color-success);
+  }
 }
 ion-button.button-outline{
   --border-width: 1.5px;
