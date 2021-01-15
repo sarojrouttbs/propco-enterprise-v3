@@ -137,6 +137,7 @@ export class ResendLinkModalPage implements OnInit {
           this.emailList[0].emailAdress = this.applicantDetails?.email;
           this.emailList[1].emailAdress = this.applicantDetails?.alternativeEmail;
           this.emailList[2].emailAdress = this.applicantDetails?.esignatureEmail;
+          this.emailList[3].selected = !(this.emailList.some(email => email.emailAdress));
           resolve(this.applicantDetails);
         },
         (error) => {
@@ -155,6 +156,7 @@ export class ResendLinkModalPage implements OnInit {
           this.emailList[0].emailAdress = this.applicantDetails?.email;
           this.emailList[1].emailAdress = this.applicantDetails?.alternativeEmail;
           this.emailList[2].emailAdress = this.applicantDetails?.esignatureEmail;
+          this.emailList[3].selected = !(this.emailList.some(email => email.emailAdress));
           resolve(this.applicantDetails);
         },
         (error) => {

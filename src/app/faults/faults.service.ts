@@ -22,11 +22,9 @@ export class FaultsService {
   }
 
   getPropertyTenancies(propertyId: string): Observable<any> {
+    const activeTenancyStatuses = [2, 5, 6];
     const params = new HttpParams()
-      .append('status', '1')
-      .append('status', '2')
-      .append('status', '5')
-      .append('status', '6');
+      .set('status', activeTenancyStatuses.toString());
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenancies`, { params });
   }
 

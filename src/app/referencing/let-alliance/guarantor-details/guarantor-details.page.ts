@@ -58,7 +58,7 @@ export class GuarantorDetailsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.guarantorDetailsAccordion.expanded = false;
+    this.guarantorDetailsAccordion.expanded = true;
     this.applicationId = this.route.snapshot.queryParamMap.get('applicationId');
     this.applicantId = this.route.snapshot.queryParamMap.get('applicantId');
     this.referenceNumber = this.route.snapshot.queryParamMap.get('referenceNumber');
@@ -367,7 +367,7 @@ export class GuarantorDetailsPage implements OnInit {
           dateOfBirth: this.datepipe.transform(this.guarantorDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
           rentShare: parseFloat(this.guarantorDetailsForm.get('rentShare').value),
           maritalStatus: this.guarantorDetailsForm.get('maritalStatus').value,
-          nationality: this.guarantorDetailsForm.get('nationality').value,
+          nationality: this.getLookupValue(this.guarantorDetailsForm.get('nationality').value, this.nationList),
           registrationNumber: this.guarantorDetailsForm.get('registrationNumber').value,
           sendTenantLink: true,
           autoSubmitLink: true,

@@ -437,7 +437,7 @@ export class DetailsPage implements OnInit {
         },
         error => {
           console.log(error);
-          resolve();
+          resolve(0);
         }
       );
     });
@@ -466,7 +466,7 @@ export class DetailsPage implements OnInit {
           if (this.tenantIds && this.tenantIds.length) {
             this.getTenantArrears(this.tenantIds);
           }
-          resolve();
+          resolve(true);
         },
         error => {
           reject();
