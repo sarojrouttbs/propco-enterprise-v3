@@ -1116,6 +1116,7 @@ export class DetailsPage implements OnInit {
       notes: this.faultDetailsForm.get('notes').value,
       agreementId: this.reportedByForm.get('agreementId').value,
       reportedById: this.reportedByForm.get('reportedById').value,
+      tenantId: this.reportedByForm.get('reportedBy').value === 'TENANT' ? this.reportedByForm.get('reportedById').value : '',
       isTenantPresenceRequired: this.accessInfoForm.get('isTenantPresenceRequired').value,
       areOccupiersVulnerable: this.accessInfoForm.get('areOccupiersVulnerable').value,
       tenantNotes: this.accessInfoForm.get('tenantNotes').value,
