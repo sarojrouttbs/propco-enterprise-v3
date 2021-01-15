@@ -1410,7 +1410,7 @@ export class DetailsPage implements OnInit {
             this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
             return;
           }
-          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action. This will send out a notification to Landlord, Tenant and a Contractor. <br/> Are you sure?', '', 'Yes', 'No');
+          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action.<br/> Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -1448,7 +1448,7 @@ export class DetailsPage implements OnInit {
             this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
             return;
           }
-          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action. <br/> Are you sure?', '', 'Yes', 'No');
+          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action.<br/> Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;

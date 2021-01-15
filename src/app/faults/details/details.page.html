@@ -670,7 +670,7 @@
           <div *ngIf="cliNotification">
             <div class="banner">
               <div class="ion-text-left">
-                <b>{{cliNotification?.templateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd-MM-yyyy HH:mm aa' }}</b>
+                <b>{{cliNotification?.templateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a' }}</b>
               </div>
               <h2 class="banner-heading">
                 {{cliNotification && cliNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
@@ -682,7 +682,7 @@
               <ng-container *ngIf="cliNotification && !cliNotification?.responseReceived">
                 <h6 class="banner-title"> <strong>Awaiting response from the Landlord</strong> </h6>
                 <h6 class="banner-title">Next chase due:
-                  {{cliNotification ? (cliNotification.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
+                  {{cliNotification ? (cliNotification.nextChaseDueAt | date: 'dd MMM yyyy - hh:mm a') : ''}}
                 </h6>
               </ng-container>
             </div>
