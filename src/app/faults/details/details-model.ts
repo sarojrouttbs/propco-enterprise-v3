@@ -77,6 +77,7 @@ declare namespace FaultModels {
         contractorId?: any;
         estimationNotes?: string;
         stageAction: string;
+        landlordOwnContractor:LandlordOwnContractor[];
     }
 
     export interface IContractorResponse {
@@ -188,6 +189,15 @@ declare namespace FaultModels {
         hasTenantPaidRentOnTime: boolean;
         isFaultEstimateLessThanHalfRentOrThresHoldValue: boolean;
         isTenancyGivenNoticeOrInLastMonth: boolean;
+    }
+
+    export interface LandlordOwnContractor{
+        company: string;
+        email: string;
+        estimatedVisitAt: any;
+        name: string;
+        notes: string;
+        telephone: string;
     }
 
 }

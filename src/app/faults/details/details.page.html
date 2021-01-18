@@ -712,6 +712,17 @@
               </h6>
               <div class="border-bottom"></div>
             </div>
+
+            <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true ">
+              <h6>
+                <ion-text>{{faultDetails?.landlordOwnContractor?.email!==null?"View Lanadloard's own Contractor details":"Add Lanadloard's own Contractor details"}}: </ion-text>
+              </h6>
+              <ion-button color="success" class="action-btn"
+              fill="solid"
+              (click)="llContractor()">{{faultDetails?.landlordOwnContractor?.email!==null?"View Contractor Details":"Add Contractor Details"}}</ion-button>
+              <div class="border-bottom"></div>
+            </div>
+
             <div class="question-answer">
               <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
               <ion-grid>
@@ -746,27 +757,6 @@
                         <ion-select-option>Choose</ion-select-option>
                       </ion-select>
                     </ion-item> -->
-                    <!-- 
-                    <mat-form-field class="example-full-width" appearance="legacy">
-                      <mat-label>Select Contractor</mat-label>
-                      <input matInput appearance="legacy" [matAutocomplete]="selectContractor"
-                        formControlName='contractor' [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')"
-                        [readonly]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION')">
-                    </mat-form-field>
-                    <mat-autocomplete #selectContractor="matAutocomplete" [displayWith]="displayFn"
-                      (optionSelected)="onSelectionChange($event)">
-                      <mat-option appearance="none" *ngFor="let result of (selectedContractor | async)?.data"
-                        [value]="result" style="border-bottom: 1px solid gray;">
-                        <span>
-                          <i class="propcoicon no-background propcoicon-contractor"
-                            style="background: transparent;vertical-align:sub"></i>
-                        </span>&nbsp;
-                        <span style="color: var(--ion-color-step-200)">{{result.fullName}}&nbsp;</span>
-                        <span style="color: var(--ion-color-step-1000)">{{result.reference}}</span>&nbsp;
-                        <span class="text-color-lightgreen"
-                          style="color: var(--ion-color-primary)">{{result.status}}</span>&nbsp;
-                      </mat-option>
-                    </mat-autocomplete> -->
                     <ion-item>
                       <ion-label position="floating">Select Contractor</ion-label>
                       <ion-input type="text" debounce="500" (ionInput)="onSearchChange($event)"
@@ -778,7 +768,6 @@
                        >
                       </ion-input>
                     </ion-item>
-<!-- *ngIf="resultsAvailable" -->
                     <ion-list class="contractor-list" *ngIf="resultsAvailable">
                       <ion-item *ngFor="let result of (selectedContractor | async)?.data" (click)="contractorSelected(result)" button
                         style="font-size: 13px !important; ">

@@ -11,7 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material/stepper';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { SimplePopoverPage } from 'src/app/shared/popover/simple-popover/simple-popover.page';
-
+import { ContractorDetailsModalPage } from 'src/app/shared/modals/contractor-details-modal/contractor-details-modal.page';
 
 @Component({
   selector: 'fault-details',
@@ -1637,23 +1637,16 @@ export class DetailsPage implements OnInit {
       });
     }
     else if (data.value) {
-      this.commonService.showConfirm(data.text, 'This will change the stage to "Job Completion". </br> Are you Sure?', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, 'This will change the status to "Work in Progress". </br> Are you Sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
-          let faultRequestObj = {} as FaultModels.IFaultResponse
-          faultRequestObj.stage = FAULT_STAGES.JOB_COMPLETION;
-          faultRequestObj.isDraft = false;
-
+          const WORK_IN_PROGRESS = 6;
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
-          this.updateFaultDetails(faultRequestObj).then(async data => {
-            this.refreshDetailsAndStage();
-            await this.checkFaultNotifications(this.faultId);
-            this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
-            if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
-              this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
-            }
-          });
+          this.refreshDetailsAndStage();
+          await this.checkFaultNotifications(this.faultId);
+          this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
         }
       });
+
     }
   }
 
@@ -1811,5 +1804,26 @@ export class DetailsPage implements OnInit {
 
   downloadDocumentByURl(url) {
     this.commonService.downloadDocumentByUrl(url);
+  }
+
+  async llContractor() {
+    const modal = await this.modalController.create({
+      component: ContractorDetailsModalPage,
+      cssClass: 'modal-container',
+      componentProps: {
+        faultId: this.faultId,
+        landlordId: this.landlordDetails.landlordId,
+        llContractorDetails: this.faultDetails.landlordOwnContractor
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {     
+      if (res.data && res.data == 'success') {
+        this.refreshDetailsAndStage();
+      }
+    });
+
+    await modal.present();
   }
 }
