@@ -77,6 +77,7 @@ declare namespace FaultModels {
         contractorId?: any;
         estimationNotes?: string;
         stageAction: string;
+        landlordOwnContractor:string[];
     }
 
     export interface IContractorResponse {

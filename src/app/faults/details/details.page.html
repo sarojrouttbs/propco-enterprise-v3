@@ -712,6 +712,17 @@
               </h6>
               <div class="border-bottom"></div>
             </div>
+
+            <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true ">
+              <h6>
+                <ion-text>{{faultDetails.landlordOwnContractor.email!==null?"View Lanadloard's own Contractor details":"Add Lanadloard's own Contractor details"}}: </ion-text>
+              </h6>
+              <ion-button color="success" class="action-btn"
+              fill="solid"
+              (click)="llContractor(data)">{{faultDetails.landlordOwnContractor.email!==null?"View Contractor Details":"Add Contractor Details"}}</ion-button>
+              <div class="border-bottom"></div>
+            </div>
+
             <div class="question-answer">
               <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
               <ion-grid>
@@ -738,11 +749,6 @@
           <div class="contractor-selection">
             <form [formGroup]="landlordInstFrom">
               <ion-grid>
-                <ion-row>
-                  <ion-button color="success" class="action-btn"
-                      fill="solid"
-                      (click)="llContractor(data)">Contractor Details</ion-button>
-                </ion-row>
                 <ion-row>
                   <ion-col size="50">
                     <!-- <ion-item>
