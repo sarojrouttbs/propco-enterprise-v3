@@ -715,11 +715,11 @@
 
             <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true ">
               <h6>
-                <ion-text>{{faultDetails.landlordOwnContractor.email!==null?"View Lanadloard's own Contractor details":"Add Lanadloard's own Contractor details"}}: </ion-text>
+                <ion-text>{{faultDetails?.landlordOwnContractor?.email!==null?"View Lanadloard's own Contractor details":"Add Lanadloard's own Contractor details"}}: </ion-text>
               </h6>
               <ion-button color="success" class="action-btn"
               fill="solid"
-              (click)="llContractor(data)">{{faultDetails.landlordOwnContractor.email!==null?"View Contractor Details":"Add Contractor Details"}}</ion-button>
+              (click)="llContractor()">{{faultDetails?.landlordOwnContractor?.email!==null?"View Contractor Details":"Add Contractor Details"}}</ion-button>
               <div class="border-bottom"></div>
             </div>
 
