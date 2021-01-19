@@ -713,7 +713,7 @@
               <div class="border-bottom"></div>
             </div>
 
-            <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true ">
+            <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true && cliNotification?.templateCode==='LR-L-E'">
               <h6>
                 <ion-text>{{faultDetails?.landlordOwnContractor?.email!==null?"View Lanadloard's own Contractor details":"Add Lanadloard's own Contractor details"}}: </ion-text>
               </h6>
