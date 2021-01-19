@@ -223,6 +223,20 @@ ion-item {
   }
 }
 
+.la-application-search, .la-property-search {
+  .modal-wrapper {
+    min-height: 200px;
+
+    .mat-form-field-appearance-legacy .mat-form-field-infix{
+      padding: .5em 0 !important;
+    }
+
+    .mat-form-field{
+      padding: 0 10px;
+    }
+  }
+}
+
 .tenant-list {
   .modal-wrapper {
     min-height: 300px;
@@ -339,6 +353,17 @@ ion-alert.common-alert-box {
   --padding-end: 8px !important;
   ion-icon {
     margin-inline-end: 15px;
+  }
+}
+
+.ionic-selectable-modal{
+  ion-footer ion-toolbar:last-of-type{
+    text-align: right;
+    padding: 0 10px;
+
+    ion-button{
+      margin: 0 6px;
+    }
   }
 }
 

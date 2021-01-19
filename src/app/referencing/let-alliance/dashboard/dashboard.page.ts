@@ -93,7 +93,7 @@ export class DashboardPage implements OnInit {
   async quickSearch(){
     const modal = await this.modalController.create({
       component: SearchApplicationPage,
-      cssClass: 'modal-container entity-search',
+      cssClass: 'modal-container la-application-search',
       backdropDismiss: false
     });
     const data = modal.onDidDismiss().then(res => {

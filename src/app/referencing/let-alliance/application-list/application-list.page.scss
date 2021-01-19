@@ -39,4 +39,8 @@
   div.error-message{
     color: var(--ion-color-danger);
   }
+
+  .office-selectable {
+    max-height: 30px !important;
+  }
 }

@@ -25,8 +25,7 @@
           {{result?.propertyDetail?.address?.addressLine1 ? result?.propertyDetail?.address?.addressLine1 + ', ' : ''}}
           {{result?.propertyDetail?.address?.postcode}}
         </span>
-        <span style="color: var(--ion-color-step-800)">{{getProductType(result?.product)}}</span>&nbsp;
-        <span style="color: var(--ion-color-step-600)">{{getLookupValue(result?.applicationStatus, referencingApplicantStatusTypes)}}</span>
+        <span style="color: var(--ion-color-step-800)">{{getProductType(result?.product)}}</span>
       </mat-option>
     </mat-autocomplete>
   </form>
