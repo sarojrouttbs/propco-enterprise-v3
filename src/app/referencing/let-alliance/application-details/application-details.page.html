@@ -35,15 +35,15 @@
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Term(in months) <ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-label position="floating">Term (in months) <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-input formControlName="tenancyTerm"></ion-input>
           </ion-item>
           <app-validation-message [control]="tenancyDetailsForm.controls.tenancyTerm"></app-validation-message>
         </ion-col>
         <ion-col size="33.3">
-          <ion-item>
-            <ion-label position="floating">Reference Paid By Tenant?</ion-label>
-            <ion-input formControlName="paidBy"></ion-input>
+          <ion-item lines="none" style="margin-top: 6px;">
+            <ion-label>Reference Paid By Tenant?</ion-label>
+            <ion-toggle slot="start" formControlName="paidBy"></ion-toggle>
           </ion-item>
           <app-validation-message [control]="tenancyDetailsForm.controls.paidBy"></app-validation-message>
         </ion-col>
@@ -240,7 +240,7 @@
         </ion-col>
         <ion-col size="33.3">
           <ion-item lines="none" style="margin-top: 10px;">
-            <ion-label style="white-space: normal;">Had tenant been known by any other name?</ion-label>
+            <ion-label style="white-space: normal;">Has the tenant been known by any other name?</ion-label>
             <ion-toggle slot="start" formControlName="hasTenantOtherName" (ionChange)="setValidatorsForForms()"></ion-toggle>
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.hasTenantOtherName"></app-validation-message>
@@ -311,7 +311,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Reference Paid By Tenant?</ion-text><br />
-        <ion-text class="content">{{tenancyDetailsForm.controls.paidBy.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenancyDetailsForm.controls.paidBy.value ? 'Yes' : 'No'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Do you want to offer NDS?</ion-text><br />
@@ -394,7 +394,7 @@
         <ion-text class="content">{{ tenantDetailsForm.controls.rentShare?.value ? '£' +  tenantDetailsForm.controls.rentShare?.value : 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Had tenant been known by any other name?</ion-text><br />
+        <ion-text class="header">Has the tenant been known by any other name?</ion-text><br />
         <ion-text class="content">{{tenantDetailsForm.controls.hasTenantOtherName.value ? 'Yes' : 'No'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">

@@ -71,6 +71,8 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       /* scrollY: '435px',
       scrollCollapse: false, */
       ajax: (tableParams: any, callback) => {
+        this.hideMenu('', 'divOverlay');
+        
         this.applicationParams = this.applicationParams
         .set('limit', tableParams.length)
         .set('page', tableParams.start > -1 ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
@@ -230,7 +232,11 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   getApplicationList(): void {
 
     if(this.applicationFilterForm.get('officeCode').value){
-      this.applicationParams = this.applicationParams.set('officeCode', this.applicationFilterForm.get('officeCode').value);
+      let tmpArray = [];
+      for (let item of this.applicationFilterForm.get('officeCode').value) {
+        tmpArray.push(item.index);
+      }
+      this.applicationParams = this.applicationParams.set('officeCode', tmpArray.toString());
     }
 
     if(this.applicationFilterForm.get('searchTerm').value){
@@ -325,26 +331,6 @@ export class ApplicationListPage implements OnInit, OnDestroy {
           paramIt: this.selectedData.applicantDetail.itemType == 'G' ? 'G' : ''
         }
       });
-      await modal.present();
-    }
-    else{
-      const modal = await this.modalController.create({
-        component: SimpleModalPage,
-        cssClass: 'modal-container alert-prompt',
-        backdropDismiss: false,
-        componentProps: {
-          data: `<div class='status-block'>Applicant has already completed and submitted the application. Cannot resend the link.
-          </div>`,
-          heading: 'Resend link',
-          buttonList: [
-            {
-              text: 'OK',
-              value: false
-            }
-          ]
-        }
-      });
-
       await modal.present();
     }
   }

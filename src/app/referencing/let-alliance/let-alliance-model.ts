@@ -15,7 +15,6 @@ declare namespace letAllianceModels {
         latitude?: any;
         longitude?: any;
         displayAddress?: any;
-        pafReference?: any;
     }
 
     interface Bullets {

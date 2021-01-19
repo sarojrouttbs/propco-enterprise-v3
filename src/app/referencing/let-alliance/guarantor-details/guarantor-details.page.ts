@@ -28,6 +28,7 @@ export class GuarantorDetailsPage implements OnInit {
   referencingLookupdata: any;
 
   guarantorList: any[] = [];
+  guarantorMaritals: any[] = [];
 
   referencingProductList: any[] = [];
   referencingCaseProductList: any[];
@@ -103,6 +104,7 @@ export class GuarantorDetailsPage implements OnInit {
 
   private setLookupData(data: any): void {
     this.nationList = data.tenantNations;
+    this.guarantorMaritals = data.tenantMaritals;
   }
 
   private setReferencingLookupData(data: any): void {
@@ -221,13 +223,27 @@ export class GuarantorDetailsPage implements OnInit {
   }
 
   private initPatching(): void {
+
+    const titleIndex = this.guarantorDetails.title ? this.getLookupIndex(this.guarantorDetails.title, this.titleTypes) : '';
+
+    const MaritalValueFromLookup = this.guarantorDetails.maritalStatus ? this.getLookupValue(this.guarantorDetails.maritalStatus, this.guarantorMaritals) : '';
+
+    let MaritalIndex: any;
+
+    if(MaritalValueFromLookup == 'Married'){
+      MaritalIndex = this.getLookupIndex('Married', this.maritalStatusTypes);
+    }
+    else if(MaritalValueFromLookup == 'Unmarried'){
+      MaritalIndex = this.getLookupIndex('Not Married', this.maritalStatusTypes);
+    }
     this.guarantorDetailsForm.patchValue({
-      title: this.guarantorDetails.title,
+      title: titleIndex,
       forename: this.guarantorDetails.forename,
       surname: this.guarantorDetails.surname,
       dateOfBirth: this.guarantorDetails.dateOfBirth,
       email: this.guarantorDetails.email,
-      maritalStatus: this.guarantorDetails.maritalStatus,
+      // maritalStatus: this.guarantorDetails.maritalStatus,
+      maritalStatus: MaritalIndex,
       nationality: this.guarantorDetails.nationality,
       rentShare: 0
     });
@@ -418,6 +434,18 @@ export class GuarantorDetailsPage implements OnInit {
 
   getLookupValue(index: any, lookup: any) {
     return this.commonService.getLookupValue(index, lookup);
+  }
+
+
+  getLookupIndex(value: any, listOfArray: any) {
+    let propertyStatus: any;
+    listOfArray = listOfArray && listOfArray.length ? listOfArray : [];
+    listOfArray.find((obj) => {
+      if (obj.value === value) {
+        propertyStatus = obj.index;
+      }
+    })
+    return propertyStatus;
   }
 
 }
