@@ -253,6 +253,10 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/ll-own-contractor`, requestObj);
   }
 
+  markJobComplete(faultId, requestObj): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/mark-job-completed`, requestObj);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);

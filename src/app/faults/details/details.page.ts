@@ -1712,6 +1712,7 @@ export class DetailsPage implements OnInit {
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+          await this.markJobComplete(this.faultId);
         }
       });
     }
@@ -1854,5 +1855,26 @@ export class DetailsPage implements OnInit {
     });
 
     await modal.present();
+  }
+
+  async markJobComplete(faultId) {
+    let requestObj = {
+      'additionalEstimate': 0,
+      'additionalWorkDetails': "",
+      'isAccepted': true,
+      'isAnyFurtherWork': false,
+      'isVoided': false,
+      'jobCompletionDate': this.commonService.getFormatedDate(new Date()),
+      'submittedByType': "LANDLORD"
+    }
+    this.faultsService.markJobComplete(faultId, requestObj).subscribe(data => {
+      this.refreshDetailsAndStage();
+    }, error => {
+      this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Mark Job Complete', 'Error');
+      console.log(error);
+    });
+
+
+
   }
 }
