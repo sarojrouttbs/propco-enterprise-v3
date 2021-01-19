@@ -1434,7 +1434,7 @@ export class ArrangingContractorComponent implements OnInit {
   /*iac004 iac007.2*/
   private async checkForPaymentRules(rules) {
     const paymentRequired = await this.isPaymentRequired(rules);
-    const stageAction = this.isWorksOrder ? 'Proceed with worksorder' : 'Landlord accepted the quote';
+    const stageAction = this.isWorksOrder ? 'Proceed with Worksorder' : 'Landlord accepted the quote';
     if (paymentRequired) {
       const response = await this.commonService.showConfirm(this.isWorksOrder ? 'Proceed with Worksorder' : 'Arranging Contractor',
         `You have selected "${stageAction}".<br/><br/>
