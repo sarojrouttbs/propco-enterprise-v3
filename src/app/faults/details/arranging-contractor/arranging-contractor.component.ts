@@ -136,7 +136,7 @@ export class ArrangingContractorComponent implements OnInit {
       contractorName: ['', Validators.required],
       company: [{ value: '', disabled: true }],
       address: [{ value: '', disabled: true }],
-      repairCost: ['', Validators.required],
+      repairCost: [this.faultDetails.confirmedEstimate, Validators.required],
       worksOrderNumber: [{ value: this.faultDetails.reference, disabled: true }],
       postdate: [{ value: '', disabled: true }],
       nominalCode: ['', Validators.required],
@@ -146,7 +146,7 @@ export class ArrangingContractorComponent implements OnInit {
       keysLocation: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
       accessDetails: [this.getAccessDetails(this.faultDetails.isTenantPresenceRequired), Validators.required],
       requiredDate: '',
-      fullDescription: ['', Validators.required],
+      fullDescription: [this.faultDetails.notes, Validators.required],
       orderedBy: { value: '', disabled: true },
       agentReference: [{ value: '', disabled: true }],
       defaultCommissionPercentage: [{ value: '', disabled: true }],
@@ -867,8 +867,9 @@ export class ArrangingContractorComponent implements OnInit {
     let notificationObj = {} as FaultModels.IUpdateNotification;
     notificationObj.isAccepted = data.value;
     notificationObj.submittedByType = 'SECUR_USER';
+    const titleText = this.isWorksOrder ? 'works order' : 'quote request';
     if (data.value) {
-      this.commonService.showConfirm(data.text, 'Are you sure, you want to accept the quote request?', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, `Are you sure, you want to accept the ${titleText}?`, '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
@@ -876,7 +877,7 @@ export class ArrangingContractorComponent implements OnInit {
         }
       });
     } else if (!data.value) {
-      this.commonService.showConfirm(data.text, 'Are you sure, you want to reject the quote request?', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, `Are you sure, you want to reject the ${titleText}?`, '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this.commonService.showLoader();
@@ -1433,9 +1434,9 @@ export class ArrangingContractorComponent implements OnInit {
   /*iac004 iac007.2*/
   private async checkForPaymentRules(rules) {
     const paymentRequired = await this.isPaymentRequired(rules);
-    const stageAction = this.isWorksOrder ? 'Proceed with worksorder' : 'Landlord accepted the quote';
+    const stageAction = this.isWorksOrder ? 'Proceed with Worksorder' : 'Landlord accepted the quote';
     if (paymentRequired) {
-      const response = await this.commonService.showConfirm('Arranging Contractor',
+      const response = await this.commonService.showConfirm(this.isWorksOrder ? 'Proceed with Worksorder' : 'Arranging Contractor',
         `You have selected "${stageAction}".<br/><br/>
          Since the Landlord account doesn't have sufficient balance to pay for the works, a payment request will be generated and the Landlord will be notified to make an online payment via the portal.<br/>
          <br/>Do you want to proceed? <br/><br/>
@@ -1444,7 +1445,7 @@ export class ArrangingContractorComponent implements OnInit {
         return paymentRequired;
       }
     } else {
-      const response = await this.commonService.showConfirm('Arranging Contractor',
+      const response = await this.commonService.showConfirm(this.isWorksOrder ? 'Proceed with Worksorder' : 'Arranging Contractor',
         `You have selected "${stageAction}".<br/><br/>
          A notification will be sent out to the Contractor to carry out the job.<br/>
          <br/> Are you sure?`, '', 'Yes', 'No');
@@ -1459,7 +1460,7 @@ export class ArrangingContractorComponent implements OnInit {
       /*if user selected "No" from the popup*/
       return false;
     }
-    
+
     let submit: boolean;
     if (actionType === 'auto') {
       submit = await this.saveFaultLLAuth() as boolean;
@@ -1473,7 +1474,7 @@ export class ArrangingContractorComponent implements OnInit {
         submit = await this.updateFault(true) as boolean;
       }
 
-      
+
     }
     if (!submit) return false;
     if (submit) {
