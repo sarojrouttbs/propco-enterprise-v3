@@ -46,7 +46,6 @@ export class AddressModalPage implements OnInit {
       town: ['', Validators.required],
       county: [''],
       country: ['', Validators.required],
-      pafReference: [''],
       latitude: [''],
       longitude: [''],
     });
@@ -65,7 +64,6 @@ export class AddressModalPage implements OnInit {
      town: this.address.town,
      county: this.address.county,
      country: this.address.country,
-     pafReference: this.address.pafReference,
      latitude: this.address.latitude,
      longitude: this.address.longitude,
    });
@@ -113,7 +111,6 @@ export class AddressModalPage implements OnInit {
         this.addressDetailsForm.get('town').setValue(res.line5);
         this.addressDetailsForm.get('county').setValue(res.county);
         this.addressDetailsForm.get('country').setValue(res.countryName);
-        this.addressDetailsForm.get('pafReference').setValue(res.pafReference);
         this.addressDetailsForm.get('latitude').setValue(res.latitude);
         this.addressDetailsForm.get('longitude').setValue(res.longitude);
       }

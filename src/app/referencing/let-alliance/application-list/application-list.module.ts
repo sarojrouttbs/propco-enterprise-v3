@@ -9,6 +9,7 @@ import { ApplicationListPageRoutingModule } from './application-list-routing.mod
 import { ApplicationListPage } from './application-list.page';
 import { DataTablesModule } from 'angular-datatables';
 import { ResendLinkModalPageModule } from 'src/app/shared/modals/resend-link-modal/resend-link-modal.module';
+import { IonicSelectableModule } from 'ionic-selectable';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { ResendLinkModalPageModule } from 'src/app/shared/modals/resend-link-mod
     IonicModule,
     ApplicationListPageRoutingModule,
     DataTablesModule,
-    ResendLinkModalPageModule
+    ResendLinkModalPageModule,
+    IonicSelectableModule
   ],
   declarations: [ApplicationListPage]
 })

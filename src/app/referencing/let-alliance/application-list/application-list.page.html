@@ -18,11 +18,45 @@
           <ion-col size-xl="21" size-lg="15" size-md="50" size-sm="50" size-xs="50">
             <ion-item>
               <ion-label position="floating">Office Filter</ion-label>
-              <ion-select interface="popover" formControlName="officeCode" multiple="true">
+              <!-- <ion-select interface="popover" formControlName="officeCode" multiple="true">
                 <ion-select-option [value]="officeLookup.index" *ngFor="let officeLookup of officeCodes">
                   {{ officeLookup.value }}
                 </ion-select-option>
-              </ion-select>
+              </ion-select> -->
+              <ionic-selectable item-content formControlName="officeCode" itemValueField="index" itemTextField="value" 
+                [items]="officeCodes" [canSearch]="true" [canClear]="true" [isMultiple]="true" [shouldBackdropClose]="false"
+                clearButtonText="Clear" closeButtonSlot="end" confirmButtonText="Apply"
+                searchPlaceholder="Search Office(es)" #OfficeType class="office-selectable">
+
+                <ng-template ionicSelectableHeaderTemplate>
+                  <ion-toolbar>
+                    <ion-buttons end>
+                    </ion-buttons>
+                    <ion-title>
+                      {{OfficeType.label}}
+                    </ion-title>
+                  </ion-toolbar>
+                </ng-template>
+  
+                <ng-template ionicSelectableFooterTemplate>
+                  <ion-toolbar>
+                    <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                      (click)="OfficeType.close()">
+                      Cancel
+                    </ion-button>
+                    <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                      (click)="OfficeType.clear();OfficeType.close();"
+                      [disabled]="!OfficeType.itemsToConfirm.length">
+                      Clear
+                    </ion-button>
+                    <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
+                    (click)="this.OfficeType.confirm();this.OfficeType.close();"
+                    [disabled]="!OfficeType.itemsToConfirm.length">
+                    Apply
+                  	</ion-button>
+                  </ion-toolbar>
+                </ng-template>
+		          </ionic-selectable>
             </ion-item>
           </ion-col>
           <ion-col size-xl="21" size-lg="20" size-md="50" size-sm="50" size-xs="50">
@@ -71,9 +105,9 @@
                   <th >Property</th>
                   <th style="width:10%">Applicant Name</th>
                   <th style="width:10%">Branch</th>
-                  <th style="width:8%; min-width:80px;">Tenancy Start</th>
+                  <th style="width:9%; min-width:80px;">Tenancy Start</th>
                   <th style="width:8%; min-width: 80px;">Rent Share</th>
-                  <th style="width:11%">Guarantor Name</th>
+                  <th style="width:9%; min-width: 80px;">Submission Date</th>
                   <th style="width:11%">Product Type</th>
                   <th style="width:11%">Application Status</th>
                   <th style="width:36px"></th>
@@ -87,24 +121,11 @@
                     {{application.propertyDetail.address.postcode}}</td>
                   <td>{{application.applicantDetail.displayAs ? application.applicantDetail.displayAs : 
                     (application.applicantDetail.addressee ? application.applicantDetail.addressee : application.applicantDetail.forename
-                    + ' ' + application.applicantDetail.surname) || '-'}}</td>
+                    + ' ' + application.applicantDetail.surname) || '-'}}  {{application.applicantDetail.itemType == 'G' ? ' (Guarantor)' : ' (Tenant)'}}</td>
                   <td>{{application.office || '-'}}</td>
                   <td>{{application.tenancyStartDate|| '-' | date : 'dd/MM/yyyy' }}</td>
                   <td>{{application.rentShare || '0' | currency: '£'}}</td>
-                  <td>
-                    <ng-container *ngFor="let item of application.applicantGuarantors; last as isLast">
-                      <ion-text *ngIf="isLast">
-                        {{item.displayAs ? item.displayAs : 
-                          (item.addressee ? item.addressee : item.forename
-                          + ' ' + item.surname)}}
-                        </ion-text>
-                      <ion-text *ngIf="!isLast">
-                        {{item.displayAs ? item.displayAs  + ', ' : 
-                          (item.addressee ? item.addressee  + ', ' : item.forename
-                          + ' ' + item.surname + ', ')}}
-                        </ion-text>
-                    </ng-container>
-                  </td>
+                  <td>{{application.dateOfSubmission|| '-' | date : 'dd/MM/yyyy' }}</td>
                   <td>{{getProductType(application.product) || '-'}}</td>
                   <td>{{getLookupValue(application.applicationStatus, referencingApplicantStatusTypes) || '-'}}</td>
                   <td class="resp-action-icon">
@@ -120,7 +141,7 @@
             <div id="divOverlay">
               <!-- <ion-button>Print Report</ion-button> -->  <!-- Needed in black screen -->
               <ion-button (click)="openApplicationStatus()">Status Update</ion-button>
-              <ion-button (click)="resendLink()">Resend Link</ion-button>
+              <ion-button (click)="resendLink()" *ngIf="selectedData?.applicationStatus == 0">Resend Link</ion-button>
               <ion-button *ngIf="selectedData?.applicantDetail?.itemType === 'M' || selectedData?.applicantDetail?.itemType === 'S'" (click)='checkApplicationGuarantor()'>Guarantor</ion-button>
               <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
             </div>

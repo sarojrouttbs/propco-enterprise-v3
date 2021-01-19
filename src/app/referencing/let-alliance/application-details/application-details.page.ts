@@ -47,9 +47,11 @@ export class ApplicationDetailsPage implements OnInit {
   adultDate = this.datepipe.transform(new Date().setDate(new Date().getDay() - (18 * 365)), 'yyyy-MM-dd');
 
   managementStatusTypes: any[] = [];
+  managementTypes: any[] = [];
   tenantTypes: any[] = [];
   titleTypes: any[] = [];
   maritalStatusTypes: any[] = [];
+  tenantMaritals: any[] = [];
   agreementStatuses: any[] = [];
   nationList: any[] = [];
   proposedAgreementStatusIndex: any;
@@ -106,7 +108,7 @@ export class ApplicationDetailsPage implements OnInit {
   private async searchProperty() {
     const modal = await this.modalController.create({
       component: SearchPropertyPage,
-      cssClass: 'modal-container entity-search',
+      cssClass: 'modal-container la-property-search',
       backdropDismiss: false,
       componentProps: {
         isFAF: false,
@@ -136,12 +138,42 @@ export class ApplicationDetailsPage implements OnInit {
 
     const data = modal.onDidDismiss().then(res => {
       if (res.data.tenantId) {
-        this.tenantId = res.data.tenantId;
-        this.initiateApplication();
+        if(res.data.referencingApplicationStatus == 0 || res.data.referencingApplicationStatus == 1){
+          this.applicationAlert();
+        }
+        else{
+          this.tenantId = res.data.tenantId;
+          this.initiateApplication();
+        }
       } else {
         this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
       }
     });
+    await modal.present();
+  }
+
+  private async applicationAlert(){
+    const modal = await this.modalController.create({
+      component: SimpleModalPage,
+      cssClass: 'modal-container alert-prompt',
+      backdropDismiss: false,
+      componentProps: {
+        data: `<div class='status-block'>Application is already in progress for selected applicant.
+        </div>`,
+        heading: 'Resend link',
+        buttonList: [
+          {
+            text: 'OK',
+            value: false
+          }
+        ]
+      }
+    });
+
+    const data = modal.onDidDismiss().then(res => {
+      this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+    });
+
     await modal.present();
   }
 
@@ -172,6 +204,8 @@ export class ApplicationDetailsPage implements OnInit {
   private setLookupData(data: any): void {
     this.agreementStatuses = data.agreementStatuses;
     this.nationList = data.tenantNations;
+    this.tenantMaritals = data.tenantMaritals;
+    this.managementTypes = data.managementTypes;
   }
 
   private setReferencingLookupData(data: any): void {
@@ -193,7 +227,7 @@ export class ApplicationDetailsPage implements OnInit {
       noOfTenantToBeReferenced: ['', [Validators.required]],
       tenancyStartDate: ['', [Validators.required, ValidationService.futureDateSelectValidator]],
       tenancyTerm: ['', [Validators.required, Validators.min(1), Validators.max(36), ValidationService.numberValidator]],
-      paidBy: ['', [Validators.min(0), Validators.max(1)]],
+      paidBy: [false],
       offerNds: [false]
     });
   }
@@ -328,23 +362,47 @@ export class ApplicationDetailsPage implements OnInit {
 
     const selectedTenantRentShare = this.selectedTenancyObj.tenants.find(obj => obj.tenantId === this.tenantDetails.tenantId).rentShare;
 
+    const titleIndex = this.tenantDetails.title ? this.getLookupIndex(this.tenantDetails.title, this.titleTypes) : '';
+
+    const maritalValueFromLookup = this.tenantDetails.maritalStatus ? this.getLookupValue(this.tenantDetails.maritalStatus, this.tenantMaritals) : '';
+
+    let maritalIndex: any;
+
+    if(maritalValueFromLookup == 'Married'){
+      maritalIndex = this.getLookupIndex('Married', this.maritalStatusTypes);
+    }
+    else if(maritalValueFromLookup == 'Unmarried'){
+      maritalIndex = this.getLookupIndex('Not Married', this.maritalStatusTypes);
+    }
+
+    const managementValueFromLookup = this.propertyDetails.managementType ? this.getLookupValue(this.propertyDetails.managementType, this.managementTypes, true) : '';
+
+    let managementIndex: any;
+
+    if(managementValueFromLookup == 'Fully Managed'){
+      managementIndex = this.getLookupIndex('Fully Managed', this.managementStatusTypes);;
+    }
+    else if(managementValueFromLookup == 'Let Only'){
+      managementIndex = this.getLookupIndex('Let Only', this.managementStatusTypes);;
+    }
+
     this.tenancyDetailsForm.patchValue({
       tenancyStartDate: this.selectedTenancyObj.tenancyStartDate,
       noOfTenantToBeReferenced: this.selectedTenancyObj.numberOfReferencingOccupants
     });
 
     this.propertyDetailsForm.patchValue({
-      managementStatus: this.propertyDetails.managementType,
+      managementStatus: managementIndex,
       monthlyRent: this.propertyDetails.advertisementRent
     }, { emitEvent: false });
 
     this.tenantDetailsForm.patchValue({
-      title: this.tenantDetails.title,
+      title: titleIndex,
       forename: this.tenantDetails.forename,
       surname: this.tenantDetails.surname,
       dateOfBirth: this.tenantDetails.dateOfBirth,
       email: this.tenantDetails.email,
-      maritalStatus: this.tenantDetails.maritalStatus,
+      maritalStatus: maritalIndex,
       nationality: this.tenantDetails.nationality,
       companyName: this.tenantDetails.company,
       rentShare: selectedTenantRentShare ? selectedTenantRentShare : 0
@@ -543,7 +601,7 @@ export class ApplicationDetailsPage implements OnInit {
         tenancyStartDate: this.datepipe.transform(this.tenancyDetailsForm.get('tenancyStartDate').value, 'yyyy-MM-dd'),
         tenancyEndDate: this.datepipe.transform(tmpDate, 'yyyy-MM-dd'),
         tenancyTerm: this.tenancyDetailsForm.get('tenancyTerm').value,
-        paidBy: parseInt(this.tenancyDetailsForm.get('paidBy').value),
+        paidBy: this.tenancyDetailsForm.get('paidBy').value ? 1 : 0,
         offerNds: this.tenancyDetailsForm.get('offerNds').value,
         address:{
           addressLine1: this.address.addressLine1 ? this.address.addressLine1 : (this.address.buildingNumber + ', ' + this.address.buildingNumber),
@@ -557,8 +615,7 @@ export class ApplicationDetailsPage implements OnInit {
           latitude: this.address.latitude,
           longitude: this.address.longitude,
           locality: this.address.locality,
-          town: this.address.town,
-          pafReference: this.address.pafReference
+          town: this.address.town
         },
         typeId: this.tenantDetailsForm.get('tenantTypeId').value,
         monthlyRent: parseFloat(this.propertyDetailsForm.get('monthlyRent').value),
@@ -624,8 +681,20 @@ export class ApplicationDetailsPage implements OnInit {
     await modal.present();
   }
 
-  getLookupValue(index: any, lookup: any) {
+  getLookupValue(index: any, lookup: any, isIndexNumber?: any) {
+    index = (isIndexNumber && index) ? index.toString() :index;
     return this.commonService.getLookupValue(index, lookup);
+  }
+
+  getLookupIndex(value: any, listOfArray: any) {
+    let propertyStatus: any;
+    listOfArray = listOfArray && listOfArray.length ? listOfArray : [];
+    listOfArray.find((obj) => {
+      if (obj.value === value) {
+        propertyStatus = obj.index;
+      }
+    })
+    return propertyStatus;
   }
 
   getProductType(productId: any): string {

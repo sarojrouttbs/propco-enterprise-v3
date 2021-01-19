@@ -23,12 +23,14 @@ export class TenantListModalPage implements OnInit {
   laTenantList: any[] = [];
   propertyId: any;
   tenantId: any;
+  referencingApplicationStatus: any;
   selectedRow: any;
 
   lookupdata: any;
   referencingLookupdata: any;
   agreementStatuses: any[] = [];
   proposedAgreementStatusIndex: any
+  referencingApplicantStatusTypes: any[] = [];
 
   @Input() paramPropertyId: string;
 
@@ -49,7 +51,7 @@ export class TenantListModalPage implements OnInit {
       searching: false,
       ordering: false,
       info: false,
-      scrollY: '115px',
+      scrollY: '97px',
       scrollCollapse: false,
     };
     this.getTenantList();
@@ -84,6 +86,7 @@ export class TenantListModalPage implements OnInit {
   }
 
   private setReferencingLookupData(data: any): void {
+    this.referencingApplicantStatusTypes = data.applicantStatusTypes;
   }
 
   private getTenantList() {
@@ -140,6 +143,7 @@ export class TenantListModalPage implements OnInit {
 
     if(event.target.checked){
       this.tenantId = tenant.tenantId;
+      this.referencingApplicationStatus = tenant.referencingApplicationStatus;
       this.isSelected = true;
       this.laTenantList.forEach(
         ele => { 
@@ -152,18 +156,25 @@ export class TenantListModalPage implements OnInit {
       const selectedRow = this.laTenantList.find(item => item.isRowChecked === true );
       if(selectedRow){
         this.tenantId = selectedRow.tenantId;
+        this.referencingApplicationStatus = selectedRow.referencingApplicationStatus;
         this.isSelected = true;
       }
       else{
         this.isSelected = false;
         this.tenantId = null;
+        this.referencingApplicationStatus = null;
       }
     }
+  }
+
+  getLookupValue(index: any, lookup: any) {
+    return this.commonService.getLookupValue(index, lookup);
   }
 
   dismiss() {
     this.modalController.dismiss({
       tenantId: this.tenantId,
+      referencingApplicationStatus: this.referencingApplicationStatus,
       dismissed: true
     });
   }
