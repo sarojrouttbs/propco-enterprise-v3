@@ -1863,7 +1863,7 @@ export class DetailsPage implements OnInit {
       'additionalWorkDetails': "",
       'isAccepted': true,
       'isAnyFurtherWork': false,
-      'isVoided': true,
+      'isVoided': false,
       'jobCompletionDate': this.commonService.getFormatedDate(new Date()),
       'submittedByType': "LANDLORD"
     }
