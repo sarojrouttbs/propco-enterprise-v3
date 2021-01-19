@@ -31,7 +31,7 @@
             <ion-grid>
               <ion-row class="ion-justify-content-center">
                 <ng-container *ngFor="let data of iacNotification?.questions[0]?.options">
-                  <ion-button color="success" class="action-btn"
+                  <ion-button color="success" class="action-btn option"
                     fill="{{data?.value ==  iacNotification?.responseReceived?.isAccepted ? 'solid' :'outline'}}"
                     (click)="questionAction(data)">{{data.text}}</ion-button>
                 </ng-container>
