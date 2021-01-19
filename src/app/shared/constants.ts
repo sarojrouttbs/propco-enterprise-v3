@@ -88,7 +88,7 @@ export const LL_INSTRUCTION_TYPES = [
   },
   {
     index: 'PROCEED_WITH_WORKSORDER',
-    value: 'Proceed with Works Order'
+    value: 'Proceed with Worksorder'
   },
   {
     index: 'OBTAIN_QUOTE',
@@ -111,7 +111,7 @@ export const LL_INSTRUCTION_TYPES = [
 export const ARRANING_CONTRACTOR_ACTIONS = [
   {
     index: 'PROCEED_WITH_WORKSORDER',
-    value: 'Proceed with Works Order'
+    value: 'Proceed with Worksorder'
   },
   {
     index: 'OBTAIN_QUOTE',
@@ -123,7 +123,7 @@ export const ARRANING_CONTRACTOR_ACTIONS = [
   },
   {
     index: 'OBTAIN_AUTHORISATION',
-    value: 'Obtain LL authorisation',
+    value: 'Obtain LL Authorisation',
   }
 ];
 

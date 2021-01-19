@@ -1315,11 +1315,12 @@ export class DetailsPage implements OnInit {
     // }
     await this.checkFaultNotifications(this.faultId);
     this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, this.faultDetails.userSelectedAction);
-    if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index) {
-      if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
-        this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
-      }
-    } else if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
+    // if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index) {
+    //   if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
+    //     this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
+    //   }
+    // } else 
+    if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
       if (this.cliNotification && this.cliNotification.responseReceived) {
         if (this.cliNotification.responseReceived.isAccepted) {
           this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
@@ -1612,7 +1613,11 @@ export class DetailsPage implements OnInit {
       return;
     }
     if (this.cliNotification.faultStageAction === LL_INSTRUCTION_TYPES[0].index) {
-      this.questionActionDoesOwnRepair(data);
+      if (this.cliNotification.templateCode === 'LC-L-E') {
+        this.questionActionJobComplete(data);
+      } else {
+        this.questionActionDoesOwnRepair(data);
+      }
     }
     else if (this.cliNotification.faultStageAction === LL_INSTRUCTION_TYPES[3].index) {
       this.questionActionLandlordAuth(data);
@@ -1623,30 +1628,31 @@ export class DetailsPage implements OnInit {
     if (!data.value) {
       this.commonService.showConfirm(data.text, 'This will change status back to "Checking Landlord Instruction". </br> Are you Sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
-          const CHECKING_LANDLORD_INSTRUCTIONS = 13;
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
-          this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS).then(async data => {
-            this.refreshDetailsAndStage();
-            await this.checkFaultNotifications(this.faultId);
-            this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
-            if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
-              this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
-            }
-          });
+          this.refreshDetailsAndStage();
+          await this.checkFaultNotifications(this.faultId);
+          this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+          // const CHECKING_LANDLORD_INSTRUCTIONS = 13;
+          // this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS).then(async data => {
+          //   this.refreshDetailsAndStage();
+          //   await this.checkFaultNotifications(this.faultId);
+          //   this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+          //   if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
+          //     this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
+          //   }
+          // });
         }
       });
     }
     else if (data.value) {
       this.commonService.showConfirm(data.text, 'This will change the status to "Work in Progress". </br> Are you Sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
-          const WORK_IN_PROGRESS = 6;
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
         }
       });
-
     }
   }
 
@@ -1683,6 +1689,29 @@ export class DetailsPage implements OnInit {
             }
 
           }
+        }
+      });
+    }
+  }
+
+  private questionActionJobComplete(data) {
+    if (!data.value) {
+      this.commonService.showConfirm(data.text, 'Are you sure to arrange a contractor?', '', 'Yes', 'No').then(async res => {
+        if (res) {
+          await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
+          this.refreshDetailsAndStage();
+          await this.checkFaultNotifications(this.faultId);
+          this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+        }
+      });
+    }
+    else if (data.value) {
+      this.commonService.showConfirm(data.text, 'Are you sure the repair is complete?', '', 'Yes', 'No').then(async res => {
+        if (res) {
+          await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
+          this.refreshDetailsAndStage();
+          await this.checkFaultNotifications(this.faultId);
+          this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
         }
       });
     }
@@ -1818,7 +1847,7 @@ export class DetailsPage implements OnInit {
       backdropDismiss: false
     });
 
-    modal.onDidDismiss().then(async res => {     
+    modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
         this.refreshDetailsAndStage();
       }
