@@ -713,9 +713,17 @@
               <div class="border-bottom"></div>
             </div>
 
-            <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true && (cliNotification?.templateCode === 'LR-L-E' || cliNotification?.templateCode === 'LC-L-E')">
-              <h6>
+              <div class="question-answer"
+              *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true && (cliNotification?.templateCode === 'LR-L-E' || cliNotification?.templateCode === 'LC-L-E')">
+              <h4 claas="ion-text-center">Next Step:</h4>
+              <!-- <h6>
                 <ion-text>{{faultDetails?.landlordOwnContractor?.email!==null?"View Lanadloard's own Contractor details":"Add Lanadloard's own Contractor details"}}: </ion-text>
+              </h6> -->
+
+              <h6 *ngIf="this.faultDetails.landlordOwnContractor.email === null">
+                <ion-text color="danger">Please note: </ion-text>
+                <span>The fault will get <i>escalated</i>, if the Contractor details are not filled within 6/24 hours after acceptance of repair by Landlord
+                </span>
               </h6>
               <ion-button color="success" class="action-btn" fill="solid" (click)="llContractor()">
                 {{faultDetails?.landlordOwnContractor?.email!==null?"View Contractor Details":"Add Contractor Details"}}</ion-button>
