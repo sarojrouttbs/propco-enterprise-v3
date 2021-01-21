@@ -223,3 +223,18 @@ export const PAYMENT_WARNINGS = {
   'isTenancyGivenNoticeOrInLastMonth': 'The tenancy is in Given Notice stage.',
   'hasOtherInvoicesToBePaid': 'There are other invoices to be paid from next months rent.'
 };
+
+export const CANCEL_REASON = [
+  {
+    "index": "FAULT_DOES_NOT_EXIST_ANYMORE",
+    "value": "Fault does not exist anymore"
+  },
+  {
+    "index": "TENANTS_RESPONSIBILITY",
+    "value": "Tenant's responsibility"
+  },
+  {
+    "index": "OTHER",
+    "value": "Other"
+  }
+]

@@ -265,6 +265,10 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${notificationHistoryId}/forward`, {});
   }
 
+  closeFault(faultId, requestObj): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/cancel`, requestObj);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);

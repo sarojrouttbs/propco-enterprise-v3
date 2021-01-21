@@ -32,6 +32,9 @@ import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-rec
 import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
 import { ContractorDetailsModalPageModule } from 'src/app/shared/modals/contractor-details-modal/contractor-details-modal.module';
 import { PendingNotificationModalPageModule } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.module';
+import { FaultQualificationComponent } from './fault-qualification/fault-qualification.component';
+import { BranchDetailsModalPageModule } from 'src/app/shared/modals/branch-details-modal/branch-details-modal.module';
+import { CloseFaultModalPageModule } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.module';
 
 @NgModule({
   imports: [
@@ -57,9 +60,11 @@ import { PendingNotificationModalPageModule } from 'src/app/shared/modals/pendin
     RejectionModalPageModule,
     IonicSelectableModule,
     ContractorDetailsModalPageModule,
-    PendingNotificationModalPageModule
+    PendingNotificationModalPageModule,
+    BranchDetailsModalPageModule,
+    CloseFaultModalPageModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
-    PaymentReceivedModalComponent, WithoutPrepaymentModalComponent],
+    PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent],
 })
 export class DetailsPageModule { }
