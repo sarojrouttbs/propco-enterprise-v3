@@ -1,0 +1,40 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -ms-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+}
+
+.banner {
+    background: var(--ion-background-color);
+    border-radius: 5px;
+    padding: 15px 15px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+}
+
+
+.banner-extra {
+    // background: var(--ion-background-color);
+    border-radius: 5px;
+    padding: 15px 15px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+}
+
+.fault-radio-btn {
+    margin-inline-end: 10px !important;
+}
+
+.popup-view-btn {
+    margin-top: 10px;
+}
+
+.btn-left {
+    float: left;
+}

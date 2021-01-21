@@ -78,6 +78,7 @@ declare namespace FaultModels {
         estimationNotes?: string;
         stageAction: string;
         landlordOwnContractor:LandlordOwnContractor[];
+        isOverrideCommunicationPreference:boolean;
     }
 
     export interface IContractorResponse {
