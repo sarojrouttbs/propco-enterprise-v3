@@ -715,13 +715,12 @@
             <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived == null">
               <h6>
                 <ion-text color="danger">Please note:</ion-text>
-                The fault will be closed automatically if the Landlord doesn't respond within
+                The fault will be <i>escalated</i> automatically if the Landlord doesn't respond within
                 {{(cliNotification.allowedNumberOfChases - cliNotification.numberOfChasesDone) * cliNotification.chaseInterval}}
                 hours.
               </h6>
               <div class="border-bottom"></div>
             </div>
-
               <div class="question-answer"
               *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true && (cliNotification?.templateCode === 'LR-L-E' || cliNotification?.templateCode === 'LC-L-E')">
               <h4 claas="ion-text-center">Next Step:</h4>
@@ -729,7 +728,7 @@
                 <ion-text>{{faultDetails?.landlordOwnContractor?.email!==null?"View Lanadloard's own Contractor details":"Add Lanadloard's own Contractor details"}}: </ion-text>
               </h6> -->
 
-              <h6 *ngIf="this.faultDetails.landlordOwnContractor.email === null">
+              <h6 *ngIf="faultDetails?.landlordOwnContractor?.email === null">
                 <ion-text color="danger">Please note: </ion-text>
                 <span>The fault will get <i>escalated</i>, if the Contractor details are not filled within 6/24 hours after acceptance of repair by Landlord
                 </span>
