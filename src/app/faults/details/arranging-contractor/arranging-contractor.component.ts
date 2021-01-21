@@ -14,6 +14,7 @@ import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
 import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-received-modal/payment-received-modal.component';
 import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
+import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -67,6 +68,7 @@ export class ArrangingContractorComponent implements OnInit {
   currentDate = this.commonService.getFormatedDate(new Date());
   isWorksOrder: boolean = false;
   isFormsReady: boolean = false;
+  pendingNotification: any;
 
   constructor(
     private fb: FormBuilder,
@@ -1574,5 +1576,44 @@ export class ArrangingContractorComponent implements OnInit {
     }
     return paymentNeeded;
   }
+  async viewNotification() {
+    await this.fetchPendingNotification(this.faultDetails.faultId);
+    await this.notificationModal();
+  }
 
+  async fetchPendingNotification(faultId): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.fetchPendingNotification(faultId).subscribe(
+        res => {
+          this.pendingNotification = res ? res : '';
+          resolve(true);
+        },
+        error => {
+          reject(error)
+        }
+      );
+    });
+    return promise;
+  }
+
+  async notificationModal() {
+    const modal = await this.modalController.create({
+      component: PendingNotificationModalPage,
+      cssClass: 'modal-container',
+      componentProps: {
+        notificationHistoryId: this.pendingNotification ? this.pendingNotification.notificationHistoryId : '',
+        notificationSubject: this.pendingNotification ? this.pendingNotification.subject : '',
+        notificationBody: this.pendingNotification ? this.pendingNotification.body : '',
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this._btnHandler('refresh');
+      }
+    });
+
+    await modal.present();
+  }
 }

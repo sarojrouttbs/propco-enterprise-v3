@@ -31,6 +31,7 @@ import { IonicSelectableModule } from 'ionic-selectable';
 import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-received-modal/payment-received-modal.component';
 import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
 import { ContractorDetailsModalPageModule } from 'src/app/shared/modals/contractor-details-modal/contractor-details-modal.module';
+import { PendingNotificationModalPageModule } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.module';
 
 @NgModule({
   imports: [
@@ -55,7 +56,8 @@ import { ContractorDetailsModalPageModule } from 'src/app/shared/modals/contract
     QuoteModalPageModule,
     RejectionModalPageModule,
     IonicSelectableModule,
-    ContractorDetailsModalPageModule
+    ContractorDetailsModalPageModule,
+    PendingNotificationModalPageModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
     PaymentReceivedModalComponent, WithoutPrepaymentModalComponent],

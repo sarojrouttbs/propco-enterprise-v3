@@ -24,6 +24,7 @@ export class PropertyDetailsComponent implements OnInit {
   officeCodes: any[];
   hmoLicenceSchemes: any[];
   faultUrgencyStatuses: any[];
+  @Input() communicationPreference;
 
   constructor(public commonService: CommonService, public sanitizer: DomSanitizer) {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);

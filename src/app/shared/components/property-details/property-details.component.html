@@ -99,6 +99,9 @@
               <img src="assets/images/fault-categories/info.png" matTooltip="{{propertyDetails.stopTapLocation || 'N/A'}}" matTooltipPosition="above"/>&nbsp; Stop Tap
             </ion-col>
           </ion-row>
+          <ion-text class="ion-float-right override-communication" *ngIf="communicationPreference && communicationPreference === true" color="danger">
+            <b>Override Landlord's Communication - Enabled</b>
+          </ion-text>
         </ion-grid>
       </ion-col>
     </ion-row>
