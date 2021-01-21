@@ -12,6 +12,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { SimplePopoverPage } from 'src/app/shared/popover/simple-popover/simple-popover.page';
 import { ContractorDetailsModalPage } from 'src/app/shared/modals/contractor-details-modal/contractor-details-modal.page';
+import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 
 @Component({
   selector: 'fault-details',
@@ -105,6 +106,7 @@ export class DetailsPage implements OnInit {
     'assets/images/fault-categories/water-and-leaks.svg'
   ];
   contractorEntityId: any;
+  pendingNotification: any;
 
   constructor(
     private faultsService: FaultsService,
@@ -1025,7 +1027,6 @@ export class DetailsPage implements OnInit {
 
     });
     return promise;
-
   }
 
   onSelectAgreement() {
@@ -1252,8 +1253,6 @@ export class DetailsPage implements OnInit {
         this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Start Progress', 'Error');
         console.log(error);
       });
-
-
     }
   }
 
@@ -1873,8 +1872,46 @@ export class DetailsPage implements OnInit {
       this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Mark Job Complete', 'Error');
       console.log(error);
     });
+  }
 
+  async viewNotification() {
+    await this.fetchPendingNotification(this.faultId);
+    await this.notificationModal();
+  }
 
+  async fetchPendingNotification(faultId): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.fetchPendingNotification(faultId).subscribe(
+        res => {
+          this.pendingNotification = res ? res : '';
+          resolve(true);
+        },
+        error => {
+          reject(error)
+        }
+      );
+    });
+    return promise;
+  }
 
+  async notificationModal() {
+    const modal = await this.modalController.create({
+      component: PendingNotificationModalPage,
+      cssClass: 'modal-container',
+      componentProps: {
+        notificationHistoryId: this.pendingNotification ? this.pendingNotification.notificationHistoryId : '',
+        notificationSubject: this.pendingNotification ? this.pendingNotification.subject : '',
+        notificationBody: this.pendingNotification ? this.pendingNotification.body : '',
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this.refreshDetailsAndStage();
+      }
+    });
+
+    await modal.present();
   }
 }

@@ -669,9 +669,18 @@
           </div>
           <div *ngIf="cliNotification">
             <div class="banner">
-              <div class="ion-text-left">
+              <ion-row>
+                <ion-col width="50" class="ion-text-left">
+                  <b>{{cliNotification?.templateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a' }}</b>
+                </ion-col>
+                <ion-col width="50" class="ion-text-right" *ngIf="cliNotification?.isResponseExpected === true && cliNotification?.recipientType === 8 && faultDetails?.isOverrideCommunicationPreference === true">
+                  <a color="success" fill="outline" (click)="viewNotification()">
+                    View Notification</a>
+                </ion-col>
+             </ion-row>
+              <!-- <div class="ion-text-left">
                 <b>{{cliNotification?.templateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a' }}</b>
-              </div>
+              </div> -->
               <h2 class="banner-heading">
                 {{cliNotification && cliNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
               <h6 class="banner-title">Here’s the action you choose:</h6>
@@ -1045,7 +1054,7 @@
             <app-property-details [propertyDetails]="propertyDetails" [files]="files" [parentForm]="uploadDocForm"
               (getUploadedFile)="getUploadedFile($event)" [hmoDetails]="propertyHMODetails"
               [urgencyStatus]="faultDetailsForm.controls.urgencyStatus.value" [faultId]="faultId? faultId : ''"
-              [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''">
+              [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''" [communicationPreference]="faultDetails?.isOverrideCommunicationPreference">
             </app-property-details>
           </ion-card>
         </ion-col>
