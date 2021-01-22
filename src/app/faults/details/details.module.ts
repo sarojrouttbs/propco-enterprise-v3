@@ -35,6 +35,7 @@ import { PendingNotificationModalPageModule } from 'src/app/shared/modals/pendin
 import { FaultQualificationComponent } from './fault-qualification/fault-qualification.component';
 import { BranchDetailsModalPageModule } from 'src/app/shared/modals/branch-details-modal/branch-details-modal.module';
 import { CloseFaultModalPageModule } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.module';
+import { TenancyClauseModalPageModule } from 'src/app/shared/modals/tenancy-clause-modal/tenancy-clause-modal.module';
 
 @NgModule({
   imports: [
@@ -62,7 +63,8 @@ import { CloseFaultModalPageModule } from 'src/app/shared/modals/close-fault-mod
     ContractorDetailsModalPageModule,
     PendingNotificationModalPageModule,
     BranchDetailsModalPageModule,
-    CloseFaultModalPageModule
+    CloseFaultModalPageModule,
+    TenancyClauseModalPageModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
     PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent],
