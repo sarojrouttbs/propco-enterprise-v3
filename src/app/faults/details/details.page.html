@@ -1073,7 +1073,7 @@
             <app-property-details [propertyDetails]="propertyDetails" [files]="files" [parentForm]="uploadDocForm"
               (getUploadedFile)="getUploadedFile($event)" [hmoDetails]="propertyHMODetails"
               [urgencyStatus]="faultDetailsForm.controls.urgencyStatus.value" [faultId]="faultId? faultId : ''"
-              [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''" [communicationPreference]="faultDetails?.isOverrideCommunicationPreference">
+              [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''" [communicationPreference]="faultDetails?.isOverrideCommunicationPreference" (getStatus)="getStatus($event)">
             </app-property-details>
           </ion-card>
         </ion-col>

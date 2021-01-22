@@ -273,6 +273,9 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/clauses`);
   }
 
+  fetchAgreementsClauses(agreementId): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `agreements/${agreementId}/clauses`);
+  }
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

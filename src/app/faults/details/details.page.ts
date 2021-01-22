@@ -1914,4 +1914,8 @@ export class DetailsPage implements OnInit {
 
     await modal.present();
   }
+
+  getStatus(status) {
+    console.log("here in parent", status);
+  }
 }

@@ -4,12 +4,13 @@ import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-tenancy-clause-modal',
-  templateUrl: './tenancy-clause-modal.page.html',
-  styleUrls: ['./tenancy-clause-modal.page.scss'],
+  selector: 'app-agreement-clause-modal',
+  templateUrl: './agreement-clause-modal.page.html',
+  styleUrls: ['./agreement-clause-modal.page.scss'],
 })
-export class TenancyClauseModalPage implements OnInit {
-  tenancyClauses;
+export class AgreementClauseModalPage implements OnInit {
+
+  agreementClauses;
 
   constructor(private modalController: ModalController, private location: PlatformLocation,
     private router: Router) {
@@ -27,5 +28,4 @@ export class TenancyClauseModalPage implements OnInit {
   dismiss() {
     this.modalController.dismiss();
   }
-
 }

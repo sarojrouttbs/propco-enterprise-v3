@@ -1,5 +1,6 @@
 import { PlatformLocation } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
 
@@ -18,7 +19,15 @@ export class PendingNotificationModalPage implements OnInit {
     private modalController: ModalController,
     private faultsService: FaultsService,
     private location: PlatformLocation,
-  ) { this.location.onPopState(() => this.dismiss()); }
+    private router: Router
+  ) {
+    this.location.onPopState(() => this.dismiss());
+    this.router.events.subscribe((val) => {
+      if (val) {
+        this.dismiss();
+      }
+    });
+  }
 
   ngOnInit() {
   }

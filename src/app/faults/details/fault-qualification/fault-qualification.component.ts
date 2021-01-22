@@ -2,6 +2,8 @@ import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { ERROR_MESSAGE } from 'src/app/shared/constants';
+import { AgreementClauseModalPageModule } from 'src/app/shared/modals/agreement-clause-modal/agreement-clause-modal.module';
+import { AgreementClauseModalPage } from 'src/app/shared/modals/agreement-clause-modal/agreement-clause-modal.page';
 import { BranchDetailsModalPage } from 'src/app/shared/modals/branch-details-modal/branch-details-modal.page';
 import { CloseFaultModalPage } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.page';
 import { TenantListModalPage } from 'src/app/shared/modals/tenant-list-modal/tenant-list-modal.page';
@@ -26,6 +28,7 @@ export class FaultQualificationComponent implements OnInit {
   isCancelled = true;
   @Output() public btnAction: EventEmitter<any> = new EventEmitter();
   tenancyClauses: any;
+  agreementClauses: any;
 
   constructor(
     private fb: FormBuilder,
@@ -35,17 +38,21 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initFaultQualificationForm();
-    // this.fetchTenancyClauses();
+    this.initFaultQualification();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.faultDetails && !changes.faultDetails.firstChange) {
-      this.initFaultQualificationForm();
+      this.initFaultQualification();
     }
     if (changes.propertyDetails && !changes.propertyDetails.firstChange) {
       this.fetchTenancyClauses();
     }
+  }
+  
+  initFaultQualification() {
+    this.initFaultQualificationForm();
+    this.fetchAgreementsClauses();
   }
 
   private initFaultQualificationForm(): void {
@@ -100,12 +107,10 @@ export class FaultQualificationComponent implements OnInit {
     }
   }
 
-  async viewDetails(type) {
-    if (type === 1) {
-      let branchDetails = await this.getBranchDetails();
-      if(branchDetails){
-        this.openModal(branchDetails);
-      }
+  async viewBranchDetails() {
+    let branchDetails = await this.getBranchDetails();
+    if (branchDetails) {
+      this.openModal(branchDetails);
     }
   }
 
@@ -187,8 +192,6 @@ export class FaultQualificationComponent implements OnInit {
           if (!this.tenancyClauses) {
             this.faultQualificationForm.patchValue({ isTenantPresenceRequired: false });
             this.faultQualificationForm.get('isTenantPresenceRequired').updateValueAndValidity();
-          } else {
-            this.viewTenancyClause();
           }
           resolve(true);
         },
@@ -218,4 +221,47 @@ export class FaultQualificationComponent implements OnInit {
 
     await modal.present();
   }
+
+  fetchAgreementsClauses() {
+    if (this.faultDetails.agreementId) {
+      const promise = new Promise((resolve, reject) => {
+        this.faultsService.fetchAgreementsClauses(this.faultDetails.agreementId).subscribe(
+          res => {
+            this.agreementClauses = res ? res : '';
+            if (!this.agreementClauses) {
+              this.faultQualificationForm.patchValue({ isUnderWarranty: false });
+              this.faultQualificationForm.get('isUnderWarranty').updateValueAndValidity();
+            }
+            resolve(true);
+          },
+          error => {
+            resolve(false);
+          }
+        );
+      });
+      return promise;
+    }
+  }
+
+  async viewAgreementClause() {
+    const modal = await this.modalController.create({
+      component: AgreementClauseModalPage,
+      cssClass: 'modal-container',
+      componentProps: {
+        agreementClauses: this.agreementClauses
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        return;
+      }
+    });
+
+    await modal.present();
+  }
+
+  viewBlockManagement() { }
+  viewServiceContract() { }
 }
