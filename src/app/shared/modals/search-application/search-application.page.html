@@ -27,6 +27,7 @@
         </span>
         <span style="color: var(--ion-color-step-800)">{{getProductType(result?.product)}}</span>
       </mat-option>
+      <mat-option *ngIf='(applicationSearchForm.controls.text.value).length > 2 && isNotFound'>No application found.</mat-option>
     </mat-autocomplete>
   </form>
 </ion-content>

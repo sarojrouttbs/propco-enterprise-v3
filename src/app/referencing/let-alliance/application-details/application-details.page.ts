@@ -31,9 +31,9 @@ export class ApplicationDetailsPage implements OnInit {
   propertyTenancyList: letAllianceModels.ITenancyResponse;
   propertyTenantList: letAllianceModels.ITenantListResponse;
   tenantDetails: letAllianceModels.ITenantResponse;
-  referencingProductList: any[] = [];
-  referencingCaseProductList: any[];
-  referencingApplicationProductList: any[];
+  referencingProductList: any;
+  referencingCaseProductList: any[] = [];
+  referencingApplicationProductList: any[] = [];
   propertyId = null;
   lookupdata: any;
   referencingLookupdata: any;
@@ -54,6 +54,7 @@ export class ApplicationDetailsPage implements OnInit {
   tenantMaritals: any[] = [];
   agreementStatuses: any[] = [];
   nationList: any[] = [];
+  referencingOffices: any[] = [];
   proposedAgreementStatusIndex: any;
   completionMethods: any[] = COMPLETION_METHODS;
 
@@ -61,7 +62,11 @@ export class ApplicationDetailsPage implements OnInit {
   isPropertyDetailsSubmit: boolean;
   maskedVal: any;
 
+  isPidTid: boolean;
+  otherTitleIndex: any;
+  titleIndex: any;
   selectedTenancyObj: any = {}
+  officeList: string;
 
   constructor(
     private fb: FormBuilder,
@@ -87,17 +92,19 @@ export class ApplicationDetailsPage implements OnInit {
   ionViewDidEnter() {
     this.propertyId = this.route.snapshot.queryParamMap.get('pId');
     this.tenantId = this.route.snapshot.queryParamMap.get('tId');
+    this.isPidTid = this.propertyId && this.tenantId ? false : true;
     this.initiateApplication();
   }
 
-  initiateApplication() {
-    this.getLookupData();
+  async initiateApplication() {
+    await this.getLookupData();
+    await this.getReferencingLookupData();
     if (this.propertyId) {
       if (this.tenantId) {
         this.initiateForms();
         this.initialApiCall();
       }
-      else{
+      else {
         this.selectTenant();
       }
     } else {
@@ -112,6 +119,8 @@ export class ApplicationDetailsPage implements OnInit {
       backdropDismiss: false,
       componentProps: {
         isFAF: false,
+        officeList: this.officeList,
+        agreementStatus: this.proposedAgreementStatusIndex
       }
     });
 
@@ -138,10 +147,10 @@ export class ApplicationDetailsPage implements OnInit {
 
     const data = modal.onDidDismiss().then(res => {
       if (res.data.tenantId) {
-        if(res.data.referencingApplicationStatus == 0 || res.data.referencingApplicationStatus == 1){
+        if (res.data.referencingApplicationStatus == 0 || res.data.referencingApplicationStatus == 1) {
           this.applicationAlert();
         }
-        else{
+        else {
           this.tenantId = res.data.tenantId;
           this.initiateApplication();
         }
@@ -152,7 +161,7 @@ export class ApplicationDetailsPage implements OnInit {
     await modal.present();
   }
 
-  private async applicationAlert(){
+  private async applicationAlert() {
     const modal = await this.modalController.create({
       component: SimpleModalPage,
       cssClass: 'modal-container alert-prompt',
@@ -177,28 +186,44 @@ export class ApplicationDetailsPage implements OnInit {
     await modal.present();
   }
 
-  private getLookupData() {
-    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
-    this.referencingLookupdata = this.commonService.getItem(PROPCO.REFERENCING_LOOKUP_DATA, true);
-    if (this.lookupdata) {
-      this.setLookupData(this.lookupdata);
-    } else {
-      this.commonService.getLookup().subscribe(data => {
-        this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
-        this.lookupdata = data;
-        this.setLookupData(data);
-      });
-    }
+  private getLookupData(): any {
+    const promise = new Promise((resolve, reject) => {
+      this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
+      if (this.lookupdata) {
+        this.setLookupData(this.lookupdata);
+        resolve(this.lookupdata);
+      }
+      else {
+        this.commonService.getLookup().subscribe(data => {
+          this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
+          this.lookupdata = data;
+          this.setLookupData(data);
+          resolve(this.lookupdata);
+        });
+      }
+    });
+    return promise;
+  }
 
-    if (this.referencingLookupdata) {
-      this.setReferencingLookupData(this.referencingLookupdata);
-    } else {
-      this.referencingService.getLookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
-        this.commonService.setItem(PROPCO.REFERENCING_LOOKUP_DATA, data);
-        this.referencingLookupdata = data;
-        this.setReferencingLookupData(data);
-      });
-    }
+  private getReferencingLookupData(): any {
+    const promise = new Promise((resolve, reject) => {
+      this.referencingLookupdata = this.commonService.getItem(PROPCO.REFERENCING_LOOKUP_DATA, true);
+      if (this.referencingLookupdata) {
+        this.setReferencingLookupData(this.referencingLookupdata);
+        resolve(this.referencingLookupdata);
+
+      } else {
+        this.referencingService.getLookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
+          this.commonService.setItem(PROPCO.REFERENCING_LOOKUP_DATA, data);
+          this.referencingLookupdata = data;
+          this.setReferencingLookupData(data);
+          resolve(this.referencingLookupdata);
+
+        });
+
+      }
+    });
+    return promise;
   }
 
   private setLookupData(data: any): void {
@@ -206,6 +231,8 @@ export class ApplicationDetailsPage implements OnInit {
     this.nationList = data.tenantNations;
     this.tenantMaritals = data.tenantMaritals;
     this.managementTypes = data.managementTypes;
+
+    this.proposedAgreementStatusIndex = this.agreementStatuses.find(obj => obj.value === 'Proposed').index;
   }
 
   private setReferencingLookupData(data: any): void {
@@ -213,6 +240,13 @@ export class ApplicationDetailsPage implements OnInit {
     this.tenantTypes = data.tenantTypes;
     this.titleTypes = data.titleTypes;
     this.maritalStatusTypes = data.maritalStatusTypes;
+    this.referencingOffices = data.referencingOffices;
+
+    let tmpArray = [];
+    for (let item of this.referencingOffices) {
+      tmpArray.push(item.index);
+    }
+    this.officeList = tmpArray.toString();
   }
 
   private initiateForms() {
@@ -298,7 +332,6 @@ export class ApplicationDetailsPage implements OnInit {
   }
 
   private getPropertyTenancyList() {
-    this.proposedAgreementStatusIndex = this.agreementStatuses.find(obj => obj.value === 'Proposed').index;
     const params = new HttpParams()
       .set('status', this.proposedAgreementStatusIndex ? this.proposedAgreementStatusIndex : '');
 
@@ -337,14 +370,11 @@ export class ApplicationDetailsPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
         res => {
-          this.referencingProductList = res ? this.commonService.removeDuplicateObjects(res) : [];
-          this.referencingCaseProductList = this.referencingProductList.filter(obj => {
-            return obj.productName.includes('Per Property');
-          });
-
-          this.referencingApplicationProductList = this.referencingProductList.filter(obj => {
-            return !obj.productName.includes('Per Property');
-          });
+          this.referencingProductList = res ? res : {};
+          if (this.referencingProductList) {
+            this.referencingCaseProductList = this.referencingProductList?.caseProducts ? this.referencingProductList.caseProducts : [];
+            this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
+          }
           resolve(this.referencingProductList);
         },
         error => {
@@ -362,7 +392,9 @@ export class ApplicationDetailsPage implements OnInit {
 
     const selectedTenantRentShare = this.selectedTenancyObj.tenants.find(obj => obj.tenantId === this.tenantDetails.tenantId).rentShare;
 
-    const titleIndex = this.tenantDetails.title ? this.getLookupIndex(this.tenantDetails.title, this.titleTypes) : '';
+    this.titleIndex = this.tenantDetails.title ? this.getLookupIndex(this.tenantDetails.title, this.titleTypes) : '';
+    this.otherTitleIndex = this.getLookupIndex('Other', this.titleTypes);
+    this.titleIndex = this.tenantDetails.title ? (this.titleIndex ? this.titleIndex : this.otherTitleIndex) : '';
 
     const maritalValueFromLookup = this.tenantDetails.maritalStatus ? this.getLookupValue(this.tenantDetails.maritalStatus, this.tenantMaritals) : '';
 
@@ -388,8 +420,9 @@ export class ApplicationDetailsPage implements OnInit {
 
     this.tenancyDetailsForm.patchValue({
       tenancyStartDate: this.selectedTenancyObj.tenancyStartDate,
-      noOfTenantToBeReferenced: this.selectedTenancyObj.numberOfReferencingOccupants
-    });
+      noOfTenantToBeReferenced: this.selectedTenancyObj.numberOfReferencingOccupants,
+      tenancyTerm: this.monthDiff(this.selectedTenancyObj.tenancyStartDate, this.selectedTenancyObj.tenancyEndDate)
+    }, { emitEvent: false });
 
     this.propertyDetailsForm.patchValue({
       managementStatus: managementIndex,
@@ -397,7 +430,7 @@ export class ApplicationDetailsPage implements OnInit {
     }, { emitEvent: false });
 
     this.tenantDetailsForm.patchValue({
-      title: titleIndex,
+      title: this.titleIndex,
       forename: this.tenantDetails.forename,
       surname: this.tenantDetails.surname,
       dateOfBirth: this.tenantDetails.dateOfBirth,
@@ -405,8 +438,23 @@ export class ApplicationDetailsPage implements OnInit {
       maritalStatus: maritalIndex,
       nationality: this.tenantDetails.nationality,
       companyName: this.tenantDetails.company,
-      rentShare: selectedTenantRentShare ? selectedTenantRentShare : 0
+      rentShare: selectedTenantRentShare ? selectedTenantRentShare : 0,
+      otherTitle: this.titleIndex && this.titleIndex == this.otherTitleIndex ? this.tenantDetails.title : ''
     }, { emitEvent: false });
+  }
+
+  resetOtherTitle() {
+    if (this.tenantDetailsForm.get('title').value !== 'Other') {
+      this.tenantDetailsForm.patchValue({
+        otherTitle: ''
+      });
+    }
+  }
+
+  monthDiff(startDate: any, endDate: any): string {
+    let endDateObj = new Date(endDate);
+    let startDateObj = new Date(startDate);
+    return Math.floor((endDateObj.getFullYear() - startDateObj.getFullYear()) * 12 + (endDateObj.getMonth() - startDateObj.getMonth())).toString();
   }
 
   setValidatorsForForms() {
@@ -483,7 +531,6 @@ export class ApplicationDetailsPage implements OnInit {
     const data = modal.onDidDismiss().then(res => {
       if (res.data.address) {
         this.address = res.data.address;
-        console.log(res);
       }
     });
     await modal.present();

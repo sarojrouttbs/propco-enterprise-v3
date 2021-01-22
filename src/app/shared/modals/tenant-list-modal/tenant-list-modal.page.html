@@ -32,7 +32,7 @@
           <td>
             <ion-toggle (ionChange)="toggleReferencing(tenant, $event)" slot="start" [checked]="tenant.isReferencingRequired"></ion-toggle>
           </td>
-          <td>{{getLookupValue(tenant?.referencingApplicationStatus, referencingApplicantStatusTypes)}}</td>
+          <td>{{getLookupValue(tenant?.referencingApplicationStatus, referencingApplicantStatusTypes) ? getLookupValue(tenant?.referencingApplicationStatus, referencingApplicantStatusTypes) : 'N/A'}}</td>
         </tr>
       </tbody>
     </table>

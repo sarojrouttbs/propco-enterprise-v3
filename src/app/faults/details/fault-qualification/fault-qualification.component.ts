@@ -91,7 +91,11 @@ export class FaultQualificationComponent implements OnInit {
       }
     }
 
+<<<<<<< HEAD
     if (type === 'service') {
+=======
+    if (type === 5) {
+>>>>>>> 8ade96757e5926e57dde921c80ba6129e409cc97
       if (this.faultQualificationForm.value.isUnderServiceContract) {
         this.isService = false;
       } else if (!this.faultQualificationForm.value.isUnderServiceContract) {
@@ -102,14 +106,17 @@ export class FaultQualificationComponent implements OnInit {
 
   async viewDetails(type) {
     if (type === 1) {
-      await this.getBranchDetails();
+      let branchDetails = await this.getBranchDetails();
+      if(branchDetails){
+        this.openModal(branchDetails);
+      }
     }
   }
 
   async getBranchDetails() {
     return new Promise((resolve, reject) => {
       this.faultsService.getOfficeDetails(this.propertyDetails.office).subscribe((res) => {
-        let data = res ? this.openModal(res) : '';
+        let data = res ? res : '';
         resolve(data);
       }, error => {
         reject(error);
