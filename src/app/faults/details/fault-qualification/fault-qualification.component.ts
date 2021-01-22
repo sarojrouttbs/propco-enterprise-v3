@@ -91,11 +91,7 @@ export class FaultQualificationComponent implements OnInit {
       }
     }
 
-<<<<<<< HEAD
     if (type === 'service') {
-=======
-    if (type === 5) {
->>>>>>> 8ade96757e5926e57dde921c80ba6129e409cc97
       if (this.faultQualificationForm.value.isUnderServiceContract) {
         this.isService = false;
       } else if (!this.faultQualificationForm.value.isUnderServiceContract) {
