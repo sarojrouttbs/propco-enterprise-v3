@@ -27,6 +27,8 @@ export class SearchApplicationPage implements OnInit {
   referencingApplicantStatusTypes: any[] = [];
   referencingApplicantResultTypes: any[] = [];
 
+  isNotFound: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private modalController: ModalController,
@@ -37,12 +39,7 @@ export class SearchApplicationPage implements OnInit {
   ) {
     this.initPropertySearchForm();
     this.filteredProperty = this.applicationSearchForm.get('text').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value.length > 2) ? this.referencingService
-      .getApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, 
-        new HttpParams()
-        .set('limit', '10')
-        .set('page', '1')
-        .set('searchTerm', value)) : new Observable())
+      switchMap((value: string) => (value.length > 2) ? this.searchApplication(value) : new Observable())
     );
     location.onPopState(() => this.dismiss());
   }
@@ -50,6 +47,23 @@ export class SearchApplicationPage implements OnInit {
   ngOnInit() {
     this.getLookupData();
     this.getProductList();
+  }
+
+  private searchApplication(value: any): Observable<any> {
+    this.isNotFound = false;
+    let response = this.referencingService.getApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE,
+      new HttpParams()
+        .set('limit', '10')
+        .set('page', '1')
+        .set('searchTerm', value));
+    response.subscribe(res => {
+      this.isNotFound = res && res?.data.length > 0 ? false : true;
+    },
+      error => {
+        console.log(error);
+      }
+    );
+    return response;
   }
 
   private getLookupData(): void {
@@ -94,7 +108,7 @@ export class SearchApplicationPage implements OnInit {
         error => {
           console.log(error);
           resolve(this.referencingProductList);
-      });
+        });
     });
     return promise;
   }
@@ -112,7 +126,7 @@ export class SearchApplicationPage implements OnInit {
     }
   }
 
-  getProductType(productId: any): string{
+  getProductType(productId: any): string {
     let productType: any;
     this.referencingProductList = this.referencingProductList && this.referencingProductList.length ? this.referencingProductList : [];
     this.referencingProductList.find((obj) => {
