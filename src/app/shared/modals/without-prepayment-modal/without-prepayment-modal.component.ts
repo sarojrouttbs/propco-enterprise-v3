@@ -5,7 +5,7 @@ import { CommonService } from '../../services/common.service';
 import { Router } from '@angular/router';
 import { PlatformLocation } from '@angular/common';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { PAYMENT_WARNINGS } from '../../constants';
+import { PAYMENT_WARNINGS, SYSTEM_OPTIONS } from '../../constants';
 
 @Component({
   selector: 'app-without-prepayment-modal',
@@ -18,6 +18,7 @@ export class WithoutPrepaymentModalComponent implements OnInit {
   faultNotificationId;
   paymentRules;
   paymentWarnings: any[] = [];
+  private REPAIR_ESTIMATE_QUOTE_THRESHOLD = 300;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -33,13 +34,14 @@ export class WithoutPrepaymentModalComponent implements OnInit {
     this.location.onPopState(() => this.dismiss());
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.withoutPrePaymentForm = this.formBuilder.group({
       overrideReason: ['', Validators.required],
       isAccepted: false,
       submittedByType: 'SECUR_USER',
       proceedWithoutPaymentAt: ''
     });
+    await this.getSystemOptions();
     this.checkPaymentWarnings(this.paymentRules);
   }
 
@@ -58,13 +60,26 @@ export class WithoutPrepaymentModalComponent implements OnInit {
         this.paymentWarnings.push(PAYMENT_WARNINGS.hasTenantPaidRentOnTime);
       }
       if (paymentRules.isFaultEstimateLessThanHalfRentOrThresHoldValue === false) {
-        this.paymentWarnings.push(PAYMENT_WARNINGS.hasOtherInvoicesToBePaid);
+        let thresoldText = PAYMENT_WARNINGS.isFaultEstimateLessThanHalfRentOrThresHoldValue.replace('£250', `£${this.REPAIR_ESTIMATE_QUOTE_THRESHOLD}`);
+        this.paymentWarnings.push(thresoldText);
       }
       if (paymentRules.isTenancyGivenNoticeOrInLastMonth === true) {
         this.paymentWarnings.push(PAYMENT_WARNINGS.isTenancyGivenNoticeOrInLastMonth);
       }
     }
 
+  }
+
+  private async getSystemOptions(): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.commonService.getSystemOptions(SYSTEM_OPTIONS.REPAIR_ESTIMATE_QUOTE_THRESHOLD).subscribe(res => {
+        this.REPAIR_ESTIMATE_QUOTE_THRESHOLD = res ? parseInt(res.REPAIR_ESTIMATE_QUOTE_THRESHOLD, 10) : this.REPAIR_ESTIMATE_QUOTE_THRESHOLD;
+        resolve(true);
+      }, error => {
+        resolve(false);
+      });
+    });
+    return promise;
   }
 
   submit() {
@@ -80,7 +95,7 @@ export class WithoutPrepaymentModalComponent implements OnInit {
     }, error => {
       // this.commonService.showMessage('Something went wrong on server, please try again.', 'Proceed without pre-payment', 'error');
       this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Proceed without pre-payment', 'error');
-      
+
     })
   }
 
