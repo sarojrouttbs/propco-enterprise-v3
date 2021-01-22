@@ -1770,7 +1770,7 @@ export class DetailsPage implements OnInit {
     this.contractorEntityId = selected.entityId;
   }
 
-  _arrangingContHandler(type: string) {
+  _childComponentHandler(type: string) {
     switch (type) {
       case 'cancel': {
         this.goTolistPage();

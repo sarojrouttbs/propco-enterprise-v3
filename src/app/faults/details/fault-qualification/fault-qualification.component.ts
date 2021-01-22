@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { ERROR_MESSAGE } from 'src/app/shared/constants';
 import { AgreementClauseModalPageModule } from 'src/app/shared/modals/agreement-clause-modal/agreement-clause-modal.module';
@@ -34,7 +35,8 @@ export class FaultQualificationComponent implements OnInit {
     private fb: FormBuilder,
     private faultsService: FaultsService,
     private modalController: ModalController,
-    private commonService: CommonService) {
+    private commonService: CommonService,
+    private router: Router) {
   }
 
   ngOnInit() {
@@ -49,9 +51,10 @@ export class FaultQualificationComponent implements OnInit {
       this.fetchTenancyClauses();
     }
   }
-  
+
   initFaultQualification() {
     this.initFaultQualificationForm();
+    this.patchValue();
     this.fetchAgreementsClauses();
   }
 
@@ -63,6 +66,18 @@ export class FaultQualificationComponent implements OnInit {
       isUnderWarranty: [],
       isUnderServiceContract: []
     });
+  }
+
+  private patchValue() {
+    if (this.faultDetails) {
+      this.faultQualificationForm.patchValue({
+        doesBranchHoldKeys: this.faultDetails.doesBranchHoldKeys,
+        isTenantPresenceRequired: this.faultDetails.isTenantPresenceRequired,
+        isUnderBlockManagement: this.faultDetails.isUnderBlockManagement,
+        isUnderWarranty: this.faultDetails.isUnderWarranty,
+        isUnderServiceContract: this.faultDetails.isUnderServiceContract
+      });
+    }
   }
 
   radioChecked(type) {
@@ -159,7 +174,31 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private async proceed() { }
-  private async saveForLater() { }
+
+  private async saveForLater() {
+    this.commonService.showLoader();
+    let requestObj = {
+      doesBranchHoldKeys: this.faultQualificationForm.value.doesBranchHoldKeys,
+      isTenantPresenceRequired: this.faultQualificationForm.value.isTenantPresenceRequired,
+      isUnderBlockManagement: this.faultQualificationForm.value.isUnderBlockManagement,
+      isUnderWarranty: this.faultQualificationForm.value.isUnderWarranty,
+      isUnderServiceContract: this.faultQualificationForm.value.isUnderServiceContract,
+      stage: this.faultDetails.stage,
+      isDraft: true
+    };
+    this.faultsService.updateFault(this.faultDetails.faultId, requestObj).subscribe(
+      res => {
+        this.commonService.hideLoader();
+        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
+        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+      },
+      error => {
+        this.commonService.hideLoader();
+        console.log(error);
+      }
+    );
+  }
+
 
   async closeFault() {
     const modal = await this.modalController.create({
