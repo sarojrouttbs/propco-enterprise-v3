@@ -31,6 +31,7 @@
         <span ng-if="result.entityType === 'PROPERTY'" style="color: var(--ion-color-step-200)">{{result.propertyAdvertisedRent | currency : "£"}}</span>&nbsp;
         <span class="text-color-lightgreen" style="color: var(--ion-color-primary)">{{result.status}}</span>&nbsp;
       </mat-option>
+      <mat-option *ngIf='(propertySearchForm.controls.text.value).length > 2 && isNotFound'>No record found.</mat-option>
     </mat-autocomplete>
   </form>
 </ion-content>

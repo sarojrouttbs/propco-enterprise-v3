@@ -30,8 +30,7 @@ export class GuarantorDetailsPage implements OnInit {
   guarantorList: any[] = [];
   guarantorMaritals: any[] = [];
 
-  referencingProductList: any[] = [];
-  referencingCaseProductList: any[];
+  referencingProductList: any;
   referencingApplicationProductList: any[];
 
   isGuarantorTabDetailSubmit: boolean;
@@ -203,14 +202,10 @@ export class GuarantorDetailsPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
         res => {
-          this.referencingProductList = res ? this.commonService.removeDuplicateObjects(res) : [];
-          this.referencingCaseProductList = this.referencingProductList.filter(obj => {
-            return obj.productName.includes('Per Property');
-          });
-  
-          this.referencingApplicationProductList = this.referencingProductList.filter(obj => {
-            return !obj.productName.includes('Per Property');
-          });
+          this.referencingProductList = res ? res : {};
+          if(this.referencingProductList) {
+            this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
+          }
           resolve(this.referencingProductList);
         },
         error => {
@@ -218,16 +213,13 @@ export class GuarantorDetailsPage implements OnInit {
           resolve(this.referencingProductList);
       });
     });
-
     return promise;
   }
 
   private initPatching(): void {
 
     const titleIndex = this.guarantorDetails.title ? this.getLookupIndex(this.guarantorDetails.title, this.titleTypes) : '';
-
     const MaritalValueFromLookup = this.guarantorDetails.maritalStatus ? this.getLookupValue(this.guarantorDetails.maritalStatus, this.guarantorMaritals) : '';
-
     let MaritalIndex: any;
 
     if(MaritalValueFromLookup == 'Married'){
@@ -236,13 +228,13 @@ export class GuarantorDetailsPage implements OnInit {
     else if(MaritalValueFromLookup == 'Unmarried'){
       MaritalIndex = this.getLookupIndex('Not Married', this.maritalStatusTypes);
     }
+    
     this.guarantorDetailsForm.patchValue({
       title: titleIndex,
       forename: this.guarantorDetails.forename,
       surname: this.guarantorDetails.surname,
       dateOfBirth: this.guarantorDetails.dateOfBirth,
       email: this.guarantorDetails.email,
-      // maritalStatus: this.guarantorDetails.maritalStatus,
       maritalStatus: MaritalIndex,
       nationality: this.guarantorDetails.nationality,
       rentShare: 0

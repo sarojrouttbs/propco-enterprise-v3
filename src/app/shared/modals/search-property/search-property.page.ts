@@ -20,6 +20,9 @@ export class SearchPropertyPage implements OnInit {
   filteredProperty: Observable<FaultModels.IPropertyResponse>;
   propertyId;
   isFAF;
+  isNotFound: boolean = false;
+  officeList: any[] = [];
+  agreementStatus: any;
 
   constructor(
     private navParams: NavParams,
@@ -29,19 +32,42 @@ export class SearchPropertyPage implements OnInit {
     private location: PlatformLocation
   ) {
     this.isFAF = this.navParams.get('isFAF');
+    this.officeList = this.navParams.get('officeList');
+    this.agreementStatus = this.navParams.get('agreementStatus');
+
+
     this.initPropertySearchForm();
     this.filteredProperty = this.propertySearchForm.get('text').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value.length > 2) ? this.commonService.searchPropertyByText(value, this.isFAF) : new Observable())
+      switchMap((value: string) => (value.length > 2) ? this.searchProperty(value, this.isFAF, this.officeList, this.agreementStatus) : new Observable())
     );
     location.onPopState(() => this.dismiss());
   }
 
   ngOnInit() {
   }
+
   initPropertySearchForm(): void {
     this.propertySearchForm = this.fb.group({
       text: ''
     });
+  }
+
+  private searchProperty(value: any, isFAF: boolean, officeList: any[], agreementStatus: any): Observable<any> {
+    this.isNotFound = false;
+
+    let response = this.commonService.searchPropertyByText(value, isFAF, officeList, agreementStatus);
+    response.subscribe(res => {
+      this.isNotFound = res && res?.data.length > 0 ? false : true;
+    },
+      error => {
+        console.log(error);
+      }
+    );
+    return response;
+  }
+
+  private searchNot() {
+
   }
 
   onSelectionChange(data) {
