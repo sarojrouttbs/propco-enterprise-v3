@@ -26,6 +26,10 @@ export class WorksorderModalPage implements OnInit {
   uploadedPhoto = [];
   type: string = 'invoice';
   showLoader: boolean = null;
+  jobCompletionDate;
+  isAnyFurtherWork;
+  additionalEstimate;
+  additionalWorkDetails;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -61,15 +65,27 @@ export class WorksorderModalPage implements OnInit {
   };
 
   private initjobCompletionForm(): void {
-    this.jobCompletionForm = this.formBuilder.group({
-      isAnyFurtherWork: false,
-      isAccepted: true,
-      additionalWorkDetails: '',
-      jobCompletionDate: ['', Validators.required],
-      submittedById: '',
-      additionalEstimate: null,
-      submittedByType: 'SECUR_USER'
-    });
+    if (this.actionType !== 'view') {
+      this.jobCompletionForm = this.formBuilder.group({
+        isAnyFurtherWork: false,
+        isAccepted: true,
+        additionalWorkDetails: '',
+        jobCompletionDate: ['', Validators.required],
+        submittedById: '',
+        additionalEstimate: null,
+        submittedByType: 'SECUR_USER'
+      });
+    } else {
+      this.jobCompletionForm = this.formBuilder.group({
+        isAnyFurtherWork: { value: this.isAnyFurtherWork, disabled: true },
+        isAccepted: true,
+        additionalWorkDetails: { value: this.additionalWorkDetails, disabled: true },
+        jobCompletionDate: { value: this.jobCompletionDate, disabled: true },
+        submittedById: '',
+        additionalEstimate: { value: this.additionalEstimate, disabled: true },
+        submittedByType: 'SECUR_USER'
+      });
+    }
   }
 
   private initUploadDocForm(): void {
@@ -156,7 +172,7 @@ export class WorksorderModalPage implements OnInit {
 
   async onProceed() {
     if (this.validateReq()) {
-      if (this.actionType === 'update') {
+      if (this.actionType === 'view') {
         this.uploadWODocuments();
       } else {
         const completionDateUpdated = await this.submitWorksOrderCompletion();
@@ -252,11 +268,11 @@ export class WorksorderModalPage implements OnInit {
 
   private validateReq() {
     let valid = true;
-    if (this.actionType !== 'update' && !this.jobCompletionForm.valid) {
+    if (this.actionType !== 'view' && !this.jobCompletionForm.valid) {
       this.commonService.showMessage('Job completion date is required', 'Mark the Job Completed', 'error');
       this.jobCompletionForm.markAllAsTouched(); return valid = false;
     }
-    if (this.actionType === 'update' && this.uploadDocumentForm.controls.invoices.value.length === 0) {
+    if (this.actionType === 'view' && this.uploadDocumentForm.controls.invoices.value.length === 0) {
       this.commonService.showMessage('Please upload Invoice', 'Mark the Job Completed', 'error');
       return valid = false;
     }
