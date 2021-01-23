@@ -619,7 +619,7 @@
             </ion-col>
           </ion-row>
         </ion-grid>
-        <app-fault-qualification [faultDetails]="faultDetails" [propertyDetails]="propertyDetails"  (btnAction)="_arrangingContHandler($event)"></app-fault-qualification>
+        <app-fault-qualification [faultDetails]="faultDetails" [propertyDetails]="propertyDetails"  (btnAction)="_childComponentHandler($event)"></app-fault-qualification>
       </ng-container>
      
   </ion-card>
@@ -943,7 +943,7 @@
         </ion-row>
       </ion-grid>
       <app-arranging-contractor [faultDetails]="faultDetails" 
-      (btnAction)="_arrangingContHandler($event)" 
+      (btnAction)="_childComponentHandler($event)" 
       [leadTenantId]="leadTenantId" 
       [propertyLandlords]="landlordsOfproperty" 
       [quoteDocuments]="quoteDocuments" 
