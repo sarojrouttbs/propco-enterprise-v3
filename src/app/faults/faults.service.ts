@@ -277,6 +277,18 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `agreements/${agreementId}/clauses`);
   }
 
+  saveWorksOrderCompletion(body: any, faultNotificationId): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/wo-completion`, body);
+  }
+
+  pmRejectApproveInvoice(body: any, faultId): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/pm-approve-reject-invoice`, body);
+  }
+
+  getSystemOptions(params: any) {
+    return this.httpClient.get(environment.API_BASE_URL + `options`, { params });
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);

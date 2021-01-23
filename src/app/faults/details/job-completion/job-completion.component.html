@@ -3,39 +3,31 @@
     <ion-row *ngIf="iacNotification">
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
         <div class="arranging-contractor">
-          <div class="banner">
-            <ion-row>
-              <ion-col width="50" class="ion-text-left">
-                <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a' }}</b>
-              </ion-col>
-              <ion-col width="50" class="ion-text-right" *ngIf="iacNotification?.isResponseExpected === true && iacNotification?.recipientType === 8 && faultDetails?.isOverrideCommunicationPreference === true">
-                <a color="success" fill="outline" (click)="viewNotification()">
-                  View Notification</a>
-              </ion-col>
-           </ion-row>
-            <!-- <div class="ion-text-left">
+          <div class="banner" *ngIf="faultDetails?.status !== 8" >
+            <div class="ion-text-left">
               <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a'
                 }}</b>
-            </div> -->
+            </div>
             <h2 class="banner-heading">
               {{iacNotification && iacNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
             <h6 class="banner-title">Here’s the action you choose:</h6>
             <ion-button color="success" class="icon-button">
-              {{getLookupValue(iacNotification?.faultStageAction, iacStageActions)}}
+              {{getLookupValue(iacNotification?.faultStageAction, iacStageActions) || iacNotification?.faultStageAction}}
               <ion-icon name="checkmark-circle-outline"></ion-icon>
             </ion-button>
             <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
               <h6 class="banner-title">
                 <strong>Awaiting response from the <span
                     *ngIf="iacNotification?.recipientType === 8">Landlord</span>
-                  <span *ngIf="iacNotification?.recipientType == 11">Contractor</span></strong>
+                  <span *ngIf="iacNotification?.recipientType == 11">Contractor</span>
+                  <span *ngIf="iacNotification?.recipientType == 1">Tenant</span></strong>
               </h6>
               <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt" >Next chase due:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - hh:mm a') : ''}}
               </h6>
             </ng-container>
           </div>
-          <div class="question-answer" *ngIf="iacNotification">
+          <div class="question-answer" *ngIf="iacNotification && faultDetails?.status !== 8">
             <h6>{{iacNotification?.questions[0]?.qtext}}</h6>
             <ion-grid>
               <ion-row class="ion-justify-content-center">
@@ -51,17 +43,25 @@
             <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false">
               <ion-text color="danger">Please select an appropriate action.</ion-text>
             </h6>
+            <h6 *ngIf="iacNotification?.templateCode === 'CF-T-E'
+             && (quoteDocuments || faultDetails?.isAnyFurtherWork)" >
+              <ion-text color="danger">Note: </ion-text>
+              <span *ngIf="quoteDocuments" >Contractor has submitted Invoice and Completion photos. You can see them in Invoice/Documents section.</span>
+              <span *ngIf="faultDetails?.isAnyFurtherWork"><br/>Please note Contractor would like to quote for another job (See details below)</span>
+            </h6>
             <div class="border-bottom"></div>
           </div>
           <div class="question-answer"
             *ngIf="iacNotification 
-            && (iacNotification?.responseReceived == null 
+            && (
+              faultDetails?.status === 8
+            || iacNotification?.responseReceived == null 
             || !iacNotification?.responseReceived?.isAccepted 
-            || enableMarkCompletedBtn())">
+            || iacNotification?.templateCode === 'CF-T-E')">
             <h4 claas="ion-text-center">Next Step:</h4>
             <h6 *ngIf="iacNotification?.responseReceived == null">
               <ion-text color="danger">Please note: </ion-text>
-              <span>The fault will be <i>escalated</i> automatically if the contractor doesn't respond within
+              <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
                 {{(iacNotification?.allowedNumberOfChases - iacNotification?.numberOfChasesDone) *
                 iacNotification?.chaseInterval}} hours.
               </span>
@@ -69,15 +69,31 @@
             <h6 *ngIf="iacNotification?.responseReceived?.isAccepted === false">
               <b>Fault Escalated - PM to decide the next steps</b>
             </h6>
-            <h6 *ngIf="enableMarkCompletedBtn()">
-              <ion-text>Contractor to visit property on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy hh:mm a'}}</ion-text>
-              <ion-grid>
-                <ion-row class="ion-justify-content-center"><ion-button color="success" fill="outline" class="action-btn option" (click)="openWOJobCompletionModal()">Mark the Job Completed</ion-button></ion-row>
-              </ion-grid>
+            <h6 *ngIf="iacNotification?.templateCode === 'CF-T-E' && faultDetails?.status !== 8">
+              <ion-text>Contractor to visit property to carry out work on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy hh:mm a'}}</ion-text>
+            </h6>
+            <h6 *ngIf="faultDetails?.status === 8">
+              <ng-container *ngIf="faultMaintenanceDetails?.amount > INVOICE_VERIFICATION_THRESHOLD">
+                <ion-text color="danger">Note: </ion-text>
+                <span *ngIf="quoteDocuments" ><b>Please review the Invoice.As the Invoice amount is over the {{INVOICE_VERIFICATION_THRESHOLD || 0 | currency : "£"}}, it needs additional verification before Approval.</b></span>
+              </ng-container>
+              <h6>Do you want to approve this invoice ?</h6>
+            <ion-grid>
+              <ion-row class="ion-justify-content-center">
+                <ion-button color="success" class="action-btn option"
+                    fill="outline"
+                    (click)="approveInvoice()">Yes, Approve the invoice
+                </ion-button>
+                <ion-button color="success" class="action-btn option"
+                    fill="outline"
+                    (click)="rejectInvoice()">No, Reject the invoice
+                </ion-button>
+              </ion-row>
+            </ion-grid>
             </h6>
             <div class="border-bottom"></div>
           </div>
-          <div class="question-answer">
+          <div class="question-answer" *ngIf="faultDetails?.status !== 8" >
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
               <ion-row class="ion-justify-content-center">
@@ -95,16 +111,15 @@
               </ion-row>
             </ion-grid>
           </div>
-          <!-- <ion-button (click)="questionActionQuoteUpload(true)">Upload</ion-button> -->
         </div>
       </ion-col>
     </ion-row>
     <ion-grid style="margin: 20px 0"
-      *ngIf="iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'LAR-L-E'">
+      *ngIf="quoteDocuments && (iacNotification?.templateCode === 'CF-T-E' || faultDetails?.status === 8)">
       <ion-row>
         <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
-          <h2>Quote Documents</h2>
-          <div class="border-bottom"></div>
+          <h2>Invoice / Documents</h2>
+          <!-- <div class="border-bottom"></div> -->
           <ion-row>
             <ion-col size-xl="25" size="25" *ngFor="let file of quoteDocuments; let i=index;">
               <div class="delete-icon-wrapper">
@@ -133,113 +148,13 @@
               </div>
             </ion-col>
           </ion-row>
+          <div class="border-bottom"></div>
         </ion-col>
       </ion-row>
     </ion-grid>
     <ion-row *ngIf="isFormsReady">
       
         <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
-          <ng-container *ngIf="!isWorksOrder">
-            <form [formGroup]="raiseQuoteForm">
-              <ion-grid>
-               <ng-container *ngTemplateOutlet="quoteDetails"></ng-container>
-               <div class="contractor-block">
-                 <div formArrayName="contractorList"
-                   *ngFor="let item of raiseQuoteForm.get('contractorList')['controls']; let i = index;">
-                   <ion-row id="row_1" class="row-banner" [formGroupName]="i"
-                     [ngClass]="{'isRejected': item.get('isRejected').value }">
-                     <ion-col size="30">
-                       <ion-item>
-                         <ion-label position="floating">Company </ion-label>
-                         <ion-input formControlName='company'></ion-input>
-                       </ion-item>
-                     </ion-col>
-     
-                     <ion-col size="30 ">
-                       <ion-item>
-                         <ion-label position="floating">Contact Tel.</ion-label>
-                         <ion-input formControlName='mobile'></ion-input>
-                       </ion-item>
-                     </ion-col>
-                     <ion-col size="25">
-                       <ion-item>
-                         <ion-label position="floating">Trade</ion-label>
-                         <ion-input formControlName="reference"></ion-input>
-                       </ion-item>
-                     </ion-col>
-                     <ion-col size="15">
-     
-                       <div class="action-btn-container">
-                         <ion-checkbox color="success" class="list-checkbox" formControlName="checked"
-                           (click)="updateSelection(item.value,i)" [name]="item"
-                           [disabled]="restrictAction || item.get('isRejected').value"></ion-checkbox>
-                         <ion-icon class="list-button" *ngIf="item.get('isPreferred').value"
-                           matTooltip="Preferred Contractor" matTooltipPosition="above" name="checkmark-circle-outline">
-                         </ion-icon>
-                         <ion-icon class="list-button" color="danger"
-                           (click)="removeContractor(i,item.get('isRejected').value)" name="close-circle-outline"></ion-icon>
-                       </div>
-                     </ion-col>
-                   </ion-row>
-                 </div>
-     
-                 <ion-row id="row_1" class="row-banner" [formGroup]="addContractorForm" *ngIf="!restrictAction">
-                   <ion-col size="45">
-                     <ion-item>
-                       <ion-label position="floating">Skill Set
-                       </ion-label>
-                       <ion-select interface="popover" formControlName="skillSet" class="ion-select-options">
-                         <ion-select-option [value]="item.index" *ngFor="let item of contractorSkill">
-                           {{ item.value }}
-                         </ion-select-option>
-                       </ion-select>
-     
-                     </ion-item>
-                   </ion-col>
-                   <ion-col size="45">
-                     <ion-item>
-                       <ion-label position="floating">Start Typing to Search Contractors</ion-label>
-     
-                       <ion-input type="text" debounce="300" (ionInput)="onSearch($event)" formControlName='contractor'
-                         placeholder="">
-                       </ion-input>
-                     </ion-item>
-     
-                     <ion-list class="contractor-list" *ngIf="resultsAvailable">
-                       <ion-item *ngFor="let result of (contractors| async)?.data" (click)="selectContractor(result)" button
-                         style="font-size: 13px !important;">
-                         <span>
-                           <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
-                         </span>&nbsp;
-                         <label style="color: var(--ion-color-step-200); padding-right: 5px;">{{result.fullName}}&nbsp;
-                           <span
-                             style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-                           <span class="text-color-lightgreen"
-                             style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
-                         </label>
-     
-                       </ion-item>
-                     </ion-list>
-                     <ion-text *ngIf="isContratorSelected" class="error-message">This contractor is already selected
-                     </ion-text>
-                   </ion-col>
-     
-                   <ion-col size="10">
-                     <!-- <div class="button-container"> -->
-                     <ion-fab-button class="button-container" (click)="addContractor(this.addContractorForm?.value)"
-                       [disabled]="!this.addContractorForm?.get('contractor').value || !this.addContractorForm?.get('skillSet').value || !isSelected">
-                       <ion-icon name="add-sharp" class="add-contractor list-button"></ion-icon>
-                     </ion-fab-button>
-                     <!-- </div> -->
-                   </ion-col>
-                 </ion-row>
-                 <ion-col size="100" *ngIf="!restrictAction">
-                   <ion-text color="dark"> Note: Please click Add to add another contractor to the list.</ion-text>
-                 </ion-col>
-               </div>
-             </ion-grid>
-             </form>
-          </ng-container>
           <ng-container *ngIf="isWorksOrder">
             <form [formGroup]="workOrderForm">
               <ion-grid>
@@ -250,136 +165,19 @@
         </ion-col>
       
     </ion-row>
-  </ion-grid>
-<ng-template #quoteDetails>
-  <form [formGroup]="raiseQuoteForm">
+    <ion-grid style="margin: 20px 0"
+    *ngIf="isFormsReady && faultDetails?.isAnyFurtherWork">
     <ion-row>
-      <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Quotation Number<ion-text class="mandatory">*</ion-text>
-          </ion-label>
-          <ion-input formControlName="worksOrderNumber"></ion-input>
-        </ion-item>
-        <app-validation-message [control]="raiseQuoteForm.controls.worksOrderNumber"></app-validation-message>
-      </ion-col>
-      <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Category <ion-text class="mandatory">*</ion-text>
-          </ion-label>
-          <ion-select interface="popover" formControlName="category">
-            <ion-select-option [value]="item.value" *ngFor="let item of faultCategories">{{ item.value }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-col>
-      <ion-col size="50">
-        <!-- <ion-item>
-          <ion-label position="floating">Nominal Code
-            <ion-text class="mandatory">*</ion-text>
-          </ion-label>
-          <ion-select interface="popover" formControlName="nominalCode">
-            <ion-select-option [value]="item.nominalCode" *ngFor="let item of nominalCodes">{{item.nominalCode}} -
-              {{item.description}}
-            </ion-select-option>
-          </ion-select>
-        </ion-item> -->
-  
-        <ion-item class="select-block">
-          <ion-label position="floating">Nominal Code <ion-text class="mandatory">*</ion-text>
-          </ion-label>
-          <ionic-selectable item-content itemValueField="nominalCode" itemTextField="concat" [items]="codes"
-            [canSearch]="true" [canClear]="true" clearButtonText="Clear" closeButtonSlot="end" confirmButtonText="Apply"
-            searchPlaceholder="Search Nominal Code" #nominalCodeType formControlName="nominalCode"
-            [shouldStoreItemValue]="false" class="selectable-height" (click)="startLoading()" (onOpen)="endLoading()"
-            [shouldBackdropClose]="false">
-  
-            <ng-template ionicSelectableHeaderTemplate>
-              <ion-toolbar>
-                <ion-buttons end>
-                </ion-buttons>
-                <ion-title>
-                  {{nominalCodeType.label}}
-                </ion-title>
-              </ion-toolbar>
-            </ng-template>
-  
-            <ng-template ionicSelectableFooterTemplate>
-              <ion-toolbar>
-                <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
-                  (click)="nominalCodeType.confirm();nominalCodeType.close();"
-                  [disabled]="!nominalCodeType.itemsToConfirm.length">
-                  Apply
-                </ion-button>
-  
-                <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
-                  (click)="nominalCodeType.clear();nominalCodeType.close();"
-                  [disabled]="!nominalCodeType.itemsToConfirm.length">
-                  Clear
-                </ion-button>
-                <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
-                  (click)="nominalCodeType.close()">
-                  Cancel
-                </ion-button>
-              </ion-toolbar>
-            </ng-template>
-          </ionic-selectable>
-        </ion-item>
-        <app-validation-message [control]="raiseQuoteForm.controls.nominalCode"></app-validation-message>
-      </ion-col>
-      <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Quote Status</ion-label>
-          <ion-select interface="popover" formControlName="quoteStatus">
-            <ion-select-option [value]="item.index" *ngFor="let item of quoteStatuses">{{ item.value }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-col>
-  
-      <ion-col size="100">
-        <ion-item>
-          <ion-label position="floating">Description<ion-text class="mandatory">*</ion-text>
-          </ion-label>
-          <ion-input formControlName="description"></ion-input>
-        </ion-item>
-        <app-validation-message [control]="raiseQuoteForm.controls.description"></app-validation-message>
-      </ion-col>
-  
-      <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Ordered By<ion-text class="mandatory">*</ion-text>
-          </ion-label>
-          <ion-input formControlName="orderedBy"></ion-input>
-        </ion-item>
-      </ion-col>
-  
-      <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Required By<ion-text class="mandatory">*</ion-text>
-          </ion-label>
-          <ion-datetime formControlName="requestStartDate" displayFormat="DD/MM/YYYY" interface="popover"
-            class="request-start-date">
-          </ion-datetime>
-        </ion-item>
-        <app-validation-message [control]="raiseQuoteForm.controls.requestStartDate"></app-validation-message>
-      </ion-col>
-  
-      <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Contact On-site </ion-label>
-          <ion-input formControlName="contact"></ion-input>
-        </ion-item>
-      </ion-col>
-  
-      <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Access Information </ion-label>
-          <ion-input formControlName="accessDetails"></ion-input>
-        </ion-item>
+      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+        <h2>Further Job(s) Required</h2>
+        <div class="border-bottom"></div>
+        <div>Is there any further work to Quote for ? : <b>Yes</b></div>
+        <div>Estimate : <b>{{faultDetails?.additionalEstimate || 0 | currency : "£"}}</b></div>
+        <div>Additional Details : <b>{{faultDetails?.additionalWorkDetail || 'N/A'}}</b></div>
       </ion-col>
     </ion-row>
-  </form>
-</ng-template>
+  </ion-grid>
+  </ion-grid>
 <ng-template #worksOrderDetails>
   <form [formGroup]="workOrderForm">
     <ion-row class="row-banner">
@@ -472,12 +270,6 @@
         </ion-item>
       </ion-col>
       <ion-col size="50">
-        <!-- <ion-item>
-          <ion-label position="floating">Nominal code <ion-text class="mandatory">*</ion-text>
-          </ion-label>
-          <ion-input formControlName="nominalCode"></ion-input>
-        </ion-item> -->
-
         <ion-item class="select-block">
           <ion-label position="floating">Nominal Code <ion-text class="mandatory">*</ion-text>
           </ion-label>
@@ -528,26 +320,6 @@
         </ion-item>
         <app-validation-message [control]="workOrderForm.controls.description"></app-validation-message>
       </ion-col>
-      <!-- <ion-col size="33.33">
-        <ion-item>
-          <ion-label position="floating">Paid Via <ion-text class="mandatory">*</ion-text>
-          </ion-label>
-          <ion-input formControlName="paidBy"></ion-input>
-        </ion-item>
-        <app-validation-message [control]="workOrderForm.controls.paidBy"></app-validation-message>
-      </ion-col> -->
-      <!-- <ion-col size="33.33">
-        <ion-item>
-          <ion-label position="floating">Paid To </ion-label>
-          <ion-input formControlName="paidTo"></ion-input>
-        </ion-item>
-      </ion-col> -->
-      <!-- <ion-col size="33.33">
-        <ion-item>
-          <ion-label position="floating">Default Commission </ion-label>
-          <ion-input formControlName="defaultCommision"></ion-input>
-        </ion-item>
-      </ion-col> -->
       <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Does Branch Holds Management Keys?

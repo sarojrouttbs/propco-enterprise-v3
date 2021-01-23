@@ -1,0 +1,134 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+  }
+  
+  @mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -ms-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+  }
+  .contractor-list {
+    width: 100%;
+    max-height: 200px;
+    overflow-y: scroll;
+    position: absolute !important;
+    z-index: 5 !important;
+    cursor: pointer;
+  }
+  
+  .contractor-block {
+    margin-top: 20px;
+  }
+  .row-banner {
+    background: lightgray;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .border-bottom {
+    border: 1px solid var(--ion-color-step-1400);
+    margin: 20px 0px;
+  }
+  .action-btn-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 13px;
+    .list-checkbox {
+      height: 25px;
+      width: 25px;
+    }
+    .list-button {
+      font-size: 32px;
+    }
+  }
+  
+  .button-container {
+    height: 30px;
+    width: 30px;
+    margin-top: 13px;
+    .add-contractor {
+      --background: var(--ion-color-success);
+      color: var(--ion-color-step-2000);
+      font-size: 25px;
+    }
+  }
+  
+  .remove-contractor {
+    --background: var(--ion-color-danger-tint);
+  }
+  
+  .mark-contractor {
+    --background: var(
+      --ion-color-success.error-message{color: var(--ion-color-danger) ; padding-top: 2px; font-size: 14px; line-height:
+        18px;}
+    );
+  }
+  
+  .ion-select-options {
+    padding-bottom: 8px !important;
+  }
+  
+  .request-start-date {
+    padding-bottom: 6px;
+  }
+  .error-message {
+    color: var(--ion-color-danger);
+    padding-top: 2px;
+    font-size: 14px;
+    line-height: 18px;
+  }
+  
+  .isRejected {
+    background-color: rgba(var(--ion-color-danger-rgb), 0.5) !important;
+    cursor: pointer;
+  }
+  
+  .delete-icon-wrapper {
+    @include border-radius(4px);
+    border: 2px solid var(--ion-color-step-1150);
+  
+    img {
+      height: 165px;
+      object-fit: cover;
+      width: 100%;
+      cursor: pointer;
+    }
+  
+    .file-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  
+    .delete-icon {
+      @include set-text-style(22px, 36px);
+      color: var(--ion-color-danger);
+      cursor: pointer;
+      text-align: right;
+    }
+  }
+  
+  .selectable-btn {
+    --border-radius: 4px !important;
+    float: right;
+    margin-right: 15px;
+  }
+  
+  .selectable-height {
+    max-height: 30px !important;
+  }
+  
+  .datetime-padding{
+    padding-bottom: 7px;
+  }
+  .row-banner{
+    background: var(--ion-background-color);
+      border-radius: 8px;
+      padding: 15px 0px;
+      margin-bottom: 15px;
+  }
+  

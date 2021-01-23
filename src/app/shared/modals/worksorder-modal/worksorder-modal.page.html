@@ -1,0 +1,132 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Mark the Job Complete</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="onCancel()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-segment [(ngModel)]="type" class="segment-card">
+    <ion-segment-button value="invoice" checked>
+      <ion-label>Job Completion Date/Invoice</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="photos">
+      <ion-label>Photos (optional)</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content>
+  <div [hidden]="type != 'invoice'">
+    <form style="margin: 0px 0 20px 0;" [formGroup]="jobCompletionForm" class="propco-form">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col size="100">
+            <ion-item>
+              <ion-label position="floating">Please add the Job Completion Date<ion-text class="mandatory">*</ion-text></ion-label>
+              <ion-datetime formControlName="jobCompletionDate" displayFormat="DD/MM/YYYY" interface="popover"
+                class="request-start-date">
+              </ion-datetime>
+            </ion-item>
+            <app-validation-message [control]="jobCompletionForm.controls.jobCompletionDate"></app-validation-message>
+          </ion-col>
+          <ion-col size="100">
+            <ion-item lines="full" class="marg-top-16">
+              <ion-label>Is there any further work to quote for?</ion-label>
+              <ion-toggle (ionChange)="enableAnyFurtherWork()" formControlName="isAnyFurtherWork" color="tertiary"></ion-toggle>
+            </ion-item>
+          </ion-col>
+          <ion-col size="100">
+            <ion-item class="marg-top-16" [disabled]="!jobCompletionForm.controls.isAnyFurtherWork.value">
+              <ion-label position="floating">Estimate</ion-label>
+                <ion-input formControlName="additionalEstimate"></ion-input>
+            </ion-item>
+            <app-validation-message [control]="jobCompletionForm.controls.additionalEstimate"></app-validation-message>
+          </ion-col>
+          <ion-col size="100">
+            <ion-item class="marg-top-16" [disabled]="!jobCompletionForm.controls.isAnyFurtherWork.value">
+              <ion-label position="floating">Additional Details</ion-label>
+                <ion-textarea formControlName="additionalWorkDetails"></ion-textarea>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+    <!-- <div class="border-bottom"></div> -->
+    <h3>Upload Invoice</h3>
+    <form class="drop-zone" style="margin: 20px 0 10px; padding: 10px 10px 0px 10px; text-align: left; border: 0;"
+    [formGroup]="uploadDocumentForm">
+    <input type="file" class="custom-file-input form-control" id="docFiles"
+      accept=".png,.jpeg,.pdf,.jpg,.gif,.bmp,.text,.doc,.csv,.docx,.odt" multiple
+      (change)="uploadDocument($event.target.files,'invoice')">
+    <!-- <span class="drag-text">Drag files to upload here</span> <br> -->
+    <label for="docFiles" class="browse-btn">Browse Files</label>
+  </form>
+  <ion-grid class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <ion-col size="33" *ngFor="let file of uploadedInvoice; let i=index;">
+       <div class="delete-icon-wrapper img-count">
+         <ion-grid>
+           <ion-row>
+             <ion-col size="100">
+               <img [src]="file.documentUrl ? file.documentUrl : '/assets/images/default.jpg'">
+               <!-- (click)="downloadFaultDocumentByUrl(file.documentUrl)"> -->
+             </ion-col>
+           </ion-row>
+           <ion-row class="ion-justify-content-between">
+             <ion-col size-xl="80" size-lg="70" size="70">
+               <div class="file-name">{{file.name}}</div>
+             </ion-col>
+             <ion-col size-xl="20" size-lg="30" size="30" class="ion-text-end ion-no-padding">
+               <ion-icon (click)="removeFile(i,'quote')" title="Delete File" class="delete-icon" name="close-circle">
+               </ion-icon>
+             </ion-col>
+           </ion-row>
+         </ion-grid>
+       </div>
+      </ion-col>
+     </ion-row>
+  </ion-grid>
+  </div>
+  <div [hidden]="type != 'photos'">
+    <h3>Upload Photo</h3>
+    <form class="drop-zone" style="margin: 20px 0 10px; padding: 10px 10px 0px 10px; text-align: left; border: 0;"
+    [formGroup]="uploadPhotoForm">
+    <input type="file" class="custom-file-input form-control" id="photoFiles"
+      accept=".png,.jpeg,.jpg" multiple
+      (change)="uploadDocument($event.target.files,'photo')">
+    <!-- <span class="drag-text">Drag files to upload here</span> <br> -->
+    <label for="photoFiles" class="browse-btn">Browse Files</label>
+  </form>
+  <ion-grid class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <ion-col size="33" *ngFor="let file of uploadedPhoto; let i=index;">
+       <div class="delete-icon-wrapper img-count">
+         <ion-grid>
+           <ion-row>
+             <ion-col size="100">
+               <img [src]="file.documentUrl ? file.documentUrl : '/assets/images/default.jpg'">
+               <!-- (click)="downloadFaultDocumentByUrl(file.documentUrl)"> -->
+             </ion-col>
+           </ion-row>
+           <ion-row class="ion-justify-content-between">
+             <ion-col size-xl="80" size-lg="70" size="70">
+               <div class="file-name">{{file.name}}</div>
+             </ion-col>
+             <ion-col size-xl="20" size-lg="30" size="30" class="ion-text-end ion-no-padding">
+               <ion-icon (click)="removeFile(i,'photo')" title="Delete File" class="delete-icon" name="close-circle">
+               </ion-icon>
+             </ion-col>
+           </ion-row>
+         </ion-grid>
+       </div>
+      </ion-col>
+     </ion-row>
+  </ion-grid>
+  </div>
+</ion-content>
+<ion-footer class="ion-text-right">
+  <ion-button color="danger" fill="outline" (click)="onCancel()">Cancel</ion-button>&nbsp;&nbsp;
+  <ion-button color="success" [disabled]="showLoader" color="success" (click)="onProceed()">Submit
+    <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+  </ion-button>
+</ion-footer>
