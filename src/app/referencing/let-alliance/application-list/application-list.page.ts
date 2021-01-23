@@ -35,6 +35,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   referencingProductList: any[] = [];
   referencingApplicantStatusTypes: any[] = [];
   referencingApplicantResultTypes: any[] = [];
+  referencingOffices: any[] = [];
 
   selectedData: any;
   applicationFilterForm: FormGroup;
@@ -219,6 +220,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   private setReferencingLookupData(data: any): void {
     this.referencingApplicantStatusTypes = data.applicantStatusTypes;
     this.referencingApplicantResultTypes = data.applicantReferencingResultTypes;
+    this.referencingOffices = data.referencingOffices;
   }
 
   private rerenderApplications(resetPaging?: any): void {
@@ -288,7 +290,8 @@ export class ApplicationListPage implements OnInit, OnDestroy {
         cssClass: 'modal-container alert-prompt',
         backdropDismiss: false,
         componentProps: {
-          data: 'There are no guarantors with this application, Do you wish to add one now?',
+          data: `<div class="status-block">There are no guarantors with this application. Do you wish to add one now?
+          </div>`,
           heading: 'Guarantor',
           buttonList: [
             {

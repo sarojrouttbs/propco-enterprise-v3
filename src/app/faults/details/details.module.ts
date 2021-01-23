@@ -33,7 +33,12 @@ import { IonicSelectableModule } from 'ionic-selectable';
 import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-received-modal/payment-received-modal.component';
 import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
 import { ContractorDetailsModalPageModule } from 'src/app/shared/modals/contractor-details-modal/contractor-details-modal.module';
-
+import { PendingNotificationModalPageModule } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.module';
+import { FaultQualificationComponent } from './fault-qualification/fault-qualification.component';
+import { BranchDetailsModalPageModule } from 'src/app/shared/modals/branch-details-modal/branch-details-modal.module';
+import { CloseFaultModalPageModule } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.module';
+import { TenancyClauseModalPageModule } from 'src/app/shared/modals/tenancy-clause-modal/tenancy-clause-modal.module';
+import { AgreementClauseModalPageModule } from 'src/app/shared/modals/agreement-clause-modal/agreement-clause-modal.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -58,10 +63,15 @@ import { ContractorDetailsModalPageModule } from 'src/app/shared/modals/contract
     RejectionModalPageModule,
     IonicSelectableModule,
     ContractorDetailsModalPageModule,
+    PendingNotificationModalPageModule,
+    BranchDetailsModalPageModule,
+    CloseFaultModalPageModule,
+    TenancyClauseModalPageModule,
+    AgreementClauseModalPageModule,
     WorksorderModalPageModule,
     RejectInvoiceModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
-    PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, JobCompletionComponent],
+    PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent,JobCompletionComponent],
 })
 export class DetailsPageModule { }

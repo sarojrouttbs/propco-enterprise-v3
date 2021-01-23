@@ -40,7 +40,20 @@
               </h2>
             </ion-col>
             <ion-col class="no-padding-top col2 ion-text-end" size="30">
-              <h2 [class]="urgencyStatus==1 ? 'emergency' : (urgencyStatus==2? 'urgent' : 'non-urgent')">{{(getLookupValue(urgencyStatus, faultUrgencyStatuses)) | uppercase}}</h2>              
+              <h2 [class]="urgencyStatus==1 ? 'emergency' : (urgencyStatus==2? 'urgent' : 'non-urgent')"
+                (click)="toggleStatusList()" style="cursor: pointer;">
+                {{(getLookupValue(urgencyStatus, faultUrgencyStatuses)) | uppercase}}</h2>
+                
+              <ion-list class="status-list" *ngIf="showList">
+                <ion-item *ngFor="let status of faultUrgencyStatuses" button style="font-size: 13px !important;"
+                  (click)="selectedStatus(status.index)">
+                  <label style="color: var(--ion-color-step-200);
+                    padding-right: 5px;
+                ">{{status.value}}
+                  </label>&nbsp;
+                  <ion-icon *ngIf="urgencyStatus === status.index" name="checkmark-sharp"></ion-icon>
+                </ion-item>
+              </ion-list>             
             </ion-col>
           </ion-row>
           <ion-row class="fault-data-row">
@@ -99,6 +112,9 @@
               <img src="assets/images/fault-categories/info.png" matTooltip="{{propertyDetails.stopTapLocation || 'N/A'}}" matTooltipPosition="above"/>&nbsp; Stop Tap
             </ion-col>
           </ion-row>
+          <ion-text class="ion-float-right override-communication" *ngIf="communicationPreference && communicationPreference === true" color="danger">
+            <b>Override Landlord's Communication - Enabled</b>
+          </ion-text>
         </ion-grid>
       </ion-col>
     </ion-row>

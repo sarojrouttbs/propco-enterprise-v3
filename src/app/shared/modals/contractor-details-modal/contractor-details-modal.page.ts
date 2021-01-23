@@ -24,7 +24,12 @@ export class ContractorDetailsModalPage implements OnInit {
     private faultsService: FaultsService,
     private location: PlatformLocation,
     private router: Router) {
-    this.location.onPopState(() => this.dismiss());
+    this.location.onPopState(() => this.dismiss())
+    this.router.events.subscribe((val) => {
+      if (val) {
+        this.dismiss();
+      }
+    });
   }
 
   ngOnInit() {

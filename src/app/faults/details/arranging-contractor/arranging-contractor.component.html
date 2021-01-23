@@ -4,10 +4,19 @@
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
         <div class="arranging-contractor">
           <div class="banner">
-            <div class="ion-text-left">
+            <ion-row>
+              <ion-col width="50" class="ion-text-left">
+                <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a' }}</b>
+              </ion-col>
+              <ion-col width="50" class="ion-text-right" *ngIf="iacNotification?.isResponseExpected === true && iacNotification?.recipientType === 8 && faultDetails?.isOverrideCommunicationPreference === true">
+                <a color="success" fill="outline" (click)="viewNotification()">
+                  View Notification</a>
+              </ion-col>
+           </ion-row>
+            <!-- <div class="ion-text-left">
               <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a'
                 }}</b>
-            </div>
+            </div> -->
             <h2 class="banner-heading">
               {{iacNotification && iacNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
             <h6 class="banner-title">Here’s the action you choose:</h6>

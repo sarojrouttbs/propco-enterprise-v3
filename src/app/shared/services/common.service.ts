@@ -94,9 +94,14 @@ export class CommonService {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'lookup/faults', { responseType: 'json' });
   }
 
-  getSystemConfig(key:string): Observable<any> {
-    let httpParams = new HttpParams().set('key',key);
+  getSystemConfig(key: string): Observable<any> {
+    let httpParams = new HttpParams().set('key', key);
     return this.httpClient.get(environment.API_BASE_URL + 'sysconfig', { params: httpParams });
+  }
+
+  getSystemOptions(option: string): Observable<any> {
+    let httpParams = new HttpParams().set('option', option);
+    return this.httpClient.get(environment.API_BASE_URL + 'options', { params: httpParams });
   }
 
   getMetaConfig(): Observable<Lookupdata> {
@@ -263,8 +268,8 @@ export class CommonService {
     toast.present();
   }
 
-  searchPropertyByText(text: string, isFAF?: boolean): Observable<any> {
-    let params;
+  searchPropertyByText(text: string, isFAF?: boolean, officeList?: any, agreementStatus?: any): Observable<any> {
+    let params: any;
     if (isFAF) {
       params = new HttpParams()
         .set('limit', '10')
@@ -278,6 +283,8 @@ export class CommonService {
         .set('limit', '10')
         .set('page', '1')
         .set('text', text)
+        //.set('prop.agreeStatus', agreementStatus)
+        //.set('prop.ofc', officeList)
         .set('types', 'PROPERTY');
     }
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
@@ -544,7 +551,7 @@ export class CommonService {
     });
     return element = element;
   }
-  
+
   removeDuplicateObjects(array: any[]) {
     return [...new Set(array.map(res => JSON.stringify(res)))]
       .map(res1 => JSON.parse(res1));

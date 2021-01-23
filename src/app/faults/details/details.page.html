@@ -594,15 +594,34 @@
 </ng-template>
 
 <ng-template #caseQualification>
-  <ion-card class="ion-no-margin">
-    <h2 class="ion-text-center">The fault has been qualified. Click on Proceed to move further. </h2>
-    <br />
-    <br />
-    <div class="action-btn-group text">
-      <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
-      <ion-button (click)="goToLastStage()">Back</ion-button>
-      <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId">Proceed</ion-button>
-    </div>
+    <ion-card class="ion-no-margin">
+      <ng-container *ngIf="faultDetails && (faultDetails?.stage === 'FAULT_QUALIFICATION' || stepper?.selectedIndex == 1)">
+        <ion-grid style="margin-bottom:10px">
+          <ion-row class="ion-justify-content-start">
+            <ion-col size="auto">
+              <h2>
+                <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
+                {{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text
+                  color="success">&gt;</ion-text>
+              </h2>
+            </ion-col>
+            <ion-col size="auto">
+              <ion-item class="edit-title" *ngIf="isEditable">
+                <ion-input #title [value]="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"
+                  (ionBlur)="changeTitle(title.value)"></ion-input>
+              </ion-item>
+              <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
+            </ion-col>
+            <ion-col size="auto" class="ion-align-self-center" offset="3" *ngIf="faultId">
+              <span class="material-icons" (click)="editTitle()">
+                edit
+              </span>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <app-fault-qualification [faultDetails]="faultDetails" [propertyDetails]="propertyDetails"  (btnAction)="_childComponentHandler($event)"></app-fault-qualification>
+      </ng-container>
+     
   </ion-card>
 </ng-template>
 
@@ -669,9 +688,18 @@
           </div>
           <div *ngIf="cliNotification">
             <div class="banner">
-              <div class="ion-text-left">
+              <ion-row>
+                <ion-col width="50" class="ion-text-left">
+                  <b>{{cliNotification?.templateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a' }}</b>
+                </ion-col>
+                <ion-col width="50" class="ion-text-right" *ngIf="cliNotification?.isResponseExpected === true && cliNotification?.recipientType === 8 && faultDetails?.isOverrideCommunicationPreference === true">
+                  <a color="success" fill="outline" (click)="viewNotification()">
+                    View Notification</a>
+                </ion-col>
+             </ion-row>
+              <!-- <div class="ion-text-left">
                 <b>{{cliNotification?.templateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a' }}</b>
-              </div>
+              </div> -->
               <h2 class="banner-heading">
                 {{cliNotification && cliNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
               <h6 class="banner-title">Here’s the action you choose:</h6>
@@ -706,13 +734,12 @@
             <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived == null">
               <h6>
                 <ion-text color="danger">Please note:</ion-text>
-                The fault will be closed automatically if the Landlord doesn't respond within
+                The fault will be <i>escalated</i> automatically if the Landlord doesn't respond within
                 {{(cliNotification.allowedNumberOfChases - cliNotification.numberOfChasesDone) * cliNotification.chaseInterval}}
                 hours.
               </h6>
               <div class="border-bottom"></div>
             </div>
-
               <div class="question-answer"
               *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true && (cliNotification?.templateCode === 'LR-L-E' || cliNotification?.templateCode === 'LC-L-E')">
               <h4 claas="ion-text-center">Next Step:</h4>
@@ -720,7 +747,7 @@
                 <ion-text>{{faultDetails?.landlordOwnContractor?.email!==null?"View Lanadloard's own Contractor details":"Add Lanadloard's own Contractor details"}}: </ion-text>
               </h6> -->
 
-              <h6 *ngIf="this.faultDetails.landlordOwnContractor.email === null">
+              <h6 *ngIf="faultDetails?.landlordOwnContractor?.email === null">
                 <ion-text color="danger">Please note: </ion-text>
                 <span>The fault will get <i>escalated</i>, if the Contractor details are not filled within 6/24 hours after acceptance of repair by Landlord
                 </span>
@@ -916,7 +943,7 @@
         </ion-row>
       </ion-grid>
       <app-arranging-contractor [faultDetails]="faultDetails" 
-      (btnAction)="_arrangingContHandler($event)" 
+      (btnAction)="_childComponentHandler($event)" 
       [leadTenantId]="leadTenantId" 
       [propertyLandlords]="landlordsOfproperty" 
       [quoteDocuments]="quoteDocuments" 
@@ -1065,7 +1092,7 @@
             <app-property-details [propertyDetails]="propertyDetails" [files]="files" [parentForm]="uploadDocForm"
               (getUploadedFile)="getUploadedFile($event)" [hmoDetails]="propertyHMODetails"
               [urgencyStatus]="faultDetailsForm.controls.urgencyStatus.value" [faultId]="faultId? faultId : ''"
-              [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''">
+              [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''" [communicationPreference]="faultDetails?.isOverrideCommunicationPreference" (getStatus)="getStatus($event)">
             </app-property-details>
           </ion-card>
         </ion-col>

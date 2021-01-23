@@ -73,3 +73,17 @@
     }
   }
 }
+
+.override-communication {
+  margin-top: 10px;
+}
+
+.status-list {
+  width: 100%;
+  max-height: 200px;
+  position: absolute !important;
+  z-index: 5 !important;
+  cursor: pointer;
+  padding-left: 10px;
+  padding-right: 10px;
+}

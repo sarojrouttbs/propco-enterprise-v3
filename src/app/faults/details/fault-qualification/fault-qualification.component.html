@@ -1,0 +1,173 @@
+<ion-grid>
+  <form [formGroup]="faultQualificationForm">
+    <ion-row>
+      <ion-col class="card">
+        <h3>Management Keys</h3>
+        <h5>Does branch hold Management Keys?</h5>
+        <ion-row>
+          <ion-col size="70">
+            <ion-radio-group (ionChange)="radioChecked('management')" formControlName="doesBranchHoldKeys">
+              <ion-row class="radio-block">
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start"></ion-radio>
+                    <ion-label>Yes</ion-label>
+                  </ion-item>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start"></ion-radio>
+                    <ion-label>No</ion-label>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-radio-group>
+          </ion-col>
+          <ion-col size="30">
+            <ion-button color="success" class="action-btn popup-view-btn" fill="outline" [disabled]="isManagement"
+              (click)="viewBranchDetails()">View</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+
+      <ion-col class="card">
+        <h3>Tenancy Clause</h3>
+        <h5>Are there any maintenance specific tenancy clauses?</h5>
+        <ion-row>
+          <ion-col size="70">
+            <ion-radio-group (ionChange)="radioChecked('tenant')" formControlName="isTenantPresenceRequired">
+              <ion-row class="radio-block">
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start"
+                      [disabled]="!tenancyClauses"></ion-radio>
+                    <ion-label>Yes</ion-label>
+                  </ion-item>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start"
+                      [disabled]="!tenancyClauses"></ion-radio>
+                    <ion-label>No</ion-label>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-radio-group>
+          </ion-col>
+          <ion-col size="30">
+            <ion-button color="success" class="action-btn popup-view-btn" fill="outline" [disabled]="isTenancy"
+              (click)="viewTenancyClause()">View</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-text color="danger" *ngIf="!tenancyClauses">No details available</ion-text>
+      </ion-col>
+
+      <ion-col class="card">
+        <h3>Block Management</h3>
+        <h5>Is the fault Block Management Company's responsibility?</h5>
+        <ion-row>
+          <ion-col size="70">
+            <ion-radio-group (ionChange)="radioChecked('blockManagement')" formControlName="isUnderBlockManagement">
+              <ion-row class="radio-block">
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start"></ion-radio>
+                    <ion-label>Yes</ion-label>
+                  </ion-item>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start"></ion-radio>
+                    <ion-label>No</ion-label>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-radio-group>
+          </ion-col>
+          <ion-col size="30">
+            <ion-button color="success" class="action-btn popup-view-btn" fill="outline" [disabled]="isBlock"
+              (click)="viewBlockManagement()">View</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="card">
+        <h3>Guarantee / Warranty</h3>
+        <h5>Is the fault covered by a Guarantee / Warranty?</h5>
+        <ion-row>
+          <ion-col size="70">
+            <ion-radio-group (ionChange)="radioChecked('warranty')" formControlName="isUnderWarranty">
+              <ion-row class="radio-block">
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start"
+                      [disabled]="!agreementClauses"></ion-radio>
+                    <ion-label>Yes</ion-label>
+                  </ion-item>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start"
+                      [disabled]="!agreementClauses"></ion-radio>
+                    <ion-label>No</ion-label>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-radio-group>
+          </ion-col>
+          <ion-col size="30">
+            <ion-button color="success" class="action-btn popup-view-btn" fill="outline" [disabled]="isGuarantee"
+              (click)="viewAgreementClause()">View</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-text color="danger" *ngIf="!agreementClauses">No details available</ion-text>
+      </ion-col>
+      <ion-col class="card">
+        <h3>Service Contract</h3>
+        <h5>Is the fault covered by a Service Contract?</h5>
+        <ion-row>
+          <ion-col size="70">
+            <ion-radio-group (ionChange)="radioChecked('service')" formControlName="isUnderServiceContract">
+              <ion-row class="radio-block">
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start"></ion-radio>
+                    <ion-label>Yes</ion-label>
+                  </ion-item>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start"></ion-radio>
+                    <ion-label>No</ion-label>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-radio-group>
+          </ion-col>
+          <ion-col size="30">
+            <ion-button color="success" class="action-btn popup-view-btn" fill="outline" [disabled]="isService"
+              (click)="viewServiceContract()">View</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col class="card-extra"></ion-col>
+    </ion-row>
+  </form>
+</ion-grid>
+<div class="action-btn-group">
+  <ion-button (click)="moreInfo();" class="save-button btn-left" [disabled]="faultDetails?.status===10">Request More
+    Info</ion-button>
+  <ion-button (click)="closeFault();" class="cancel-button btn-left" [disabled]="faultDetails?.status===10">Close Fault
+  </ion-button>
+  <ion-button (click)="_btnHandler('cancel')" class="cancel-button">Cancel</ion-button>
+  <ion-button (click)="_btnHandler('back')">Back</ion-button>
+  <ion-button class="save-button" (click)="_btnHandler('save')">Save for later</ion-button>
+  <ion-button class="submit-button" (click)="_btnHandler('proceed')" [disabled]="faultDetails?.status===10">Proceed
+  </ion-button>
+</div>

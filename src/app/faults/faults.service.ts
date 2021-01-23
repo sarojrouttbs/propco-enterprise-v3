@@ -226,7 +226,7 @@ export class FaultsService {
   }
 
   getOfficeDetails(office): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `offices/${office}`, {});
+    return this.httpClient.get(environment.API_BASE_URL + `offices/${office}`);
   }
 
   updateWOContractorVisit(faultNotificationId, notificationObj): Observable<any> {
@@ -255,6 +255,26 @@ export class FaultsService {
 
   markJobComplete(faultId, requestObj): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/mark-job-completed`, requestObj);
+  }
+
+  fetchPendingNotification(faultId): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/pending-notification`);
+  }
+
+  forwardNotification(notificationHistoryId): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${notificationHistoryId}/forward`, {});
+  }
+
+  closeFault(faultId, requestObj): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/cancel`, requestObj);
+  }
+
+  fetchTenancyClauses(propertyId): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/clauses`);
+  }
+
+  fetchAgreementsClauses(agreementId): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `agreements/${agreementId}/clauses`);
   }
 
   saveWorksOrderCompletion(body: any, faultNotificationId): Observable<any> {

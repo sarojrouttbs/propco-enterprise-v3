@@ -1,4 +1,4 @@
-import { FOLDER_NAMES, PROPCO } from './../../constants';
+import { ERROR_MESSAGE, FOLDER_NAMES, PROPCO } from './../../constants';
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 import { FormGroup } from '@angular/forms';
@@ -24,6 +24,9 @@ export class PropertyDetailsComponent implements OnInit {
   officeCodes: any[];
   hmoLicenceSchemes: any[];
   faultUrgencyStatuses: any[];
+  @Input() communicationPreference
+  showList = false;
+  @Output() getStatus = new EventEmitter<any>();
 
   constructor(public commonService: CommonService, public sanitizer: DomSanitizer) {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -80,7 +83,23 @@ export class PropertyDetailsComponent implements OnInit {
         return url = 'assets/images/default.jpg';
     }
     if (files && !files[0].documentId) {
-        return url = files[0].documentUrl;
+      return url = files[0].documentUrl;
     }
+  }
+
+  toggleStatusList() {
+    this.showList = !this.showList;
+  }
+
+  async selectedStatus(statusType) {
+    const response = await this.commonService.showConfirm('Change Urgency Status', 'This will change the urgency status. Are you sure you want to proceed?', '', 'Submit', 'Cancel');
+    if (response) {
+      this.urgencyStatus = statusType;
+      this.getStatus.emit(statusType);
+      this.toggleStatusList();
+    } else {
+      this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Change Urgency Status', 'Error');
+    }
+
   }
 }

@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Close Fault</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="closeFaultForm">
+    <ion-col>
+      <ion-item>
+        <ion-label position="floating">Please select a reason for closing this fault <ion-text class="mandatory">*
+          </ion-text>
+        </ion-label>
+        <ion-select interface="popover" formControlName="cancelReason" (ionChange)="onReasonChange()"
+          class="reason-dropdown">
+          <ion-select-option [value]="reason.index" *ngFor="let reason of reasons">
+            {{ reason.value }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <app-validation-message [control]="closeFaultForm.controls.cancelReason"></app-validation-message>
+    </ion-col>
+
+    <ion-col>
+      <ion-item>
+        <ion-label position="floating">Other Reason </ion-label>
+        <ion-textarea formControlName="otherReason" rows="1"></ion-textarea>
+      </ion-item>
+      <app-validation-message [control]="closeFaultForm.controls.otherReason"></app-validation-message>
+    </ion-col>
+  </form>
+  <div class="action-btn-group">
+    <ion-button class="cancel-button" (click)="dismiss()">Close </ion-button>
+    <ion-button class="save-button" (click)="save()">Submit </ion-button>
+  </div>
+</ion-content>
