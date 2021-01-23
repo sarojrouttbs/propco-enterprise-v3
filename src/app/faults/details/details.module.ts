@@ -1,5 +1,7 @@
+import { RejectInvoiceModule } from './../../shared/modals/reject-invoice/reject-invoice.module';
+import { JobCompletionComponent } from './job-completion/job-completion.component';
+import { WorksorderModalPageModule } from './../../shared/modals/worksorder-modal/worksorder-modal.module';
 import { RejectionModalPageModule } from './../../shared/modals/rejection-modal/rejection-modal.module';
-import { RejectionModalPage } from './../../shared/modals/rejection-modal/rejection-modal.page';
 import { ArrangingContractorComponent } from './arranging-contractor/arranging-contractor.component';
 import { SearchPropertyPageModule } from './../../shared/modals/search-property/search-property.module';
 import { NgModule } from '@angular/core';
@@ -55,9 +57,11 @@ import { ContractorDetailsModalPageModule } from 'src/app/shared/modals/contract
     QuoteModalPageModule,
     RejectionModalPageModule,
     IonicSelectableModule,
-    ContractorDetailsModalPageModule
+    ContractorDetailsModalPageModule,
+    WorksorderModalPageModule,
+    RejectInvoiceModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
-    PaymentReceivedModalComponent, WithoutPrepaymentModalComponent],
+    PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, JobCompletionComponent],
 })
 export class DetailsPageModule { }

@@ -1,0 +1,45 @@
+.request-start-date {
+    padding-bottom: 6px;
+}
+
+:host ::ng-deep .picker-wrapper {
+    top: 73px !important;
+}
+
+.img-count:nth-child(odd) {
+    margin: 0 5px;
+    margin-bottom: 10px;
+}
+
+.border-bottom {
+    outline: 1px solid var(--ion-color-step-1050);
+}
+
+.delete-icon {
+    font-size: 22px !important;
+}
+
+.submit-loader {
+    margin-left: 10px;
+}
+
+ion-segment {
+    height: 35px;
+    background: var(--ion-color-step-2000);
+    ion-segment-button {
+        min-height: 35px;
+        --background-hover: none;
+        ion-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        border-right: 1px solid var(--ion-color-step-1200);
+        --indicator-height: 0px;
+        --color-checked: var(--ion-color-step-0);
+        --indicator-box-shadow: 0;
+    }
+    ion-segment-button:last-child {
+        border-right: 0px solid var(--ion-color-step-1200);
+    }
+}

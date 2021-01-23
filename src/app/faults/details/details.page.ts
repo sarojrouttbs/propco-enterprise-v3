@@ -283,23 +283,25 @@ export class DetailsPage implements OnInit {
     if (this.faultId) {
       this.goToPage(3);
       const details: any = await this.getFaultDetails();
-      this.selectStageStepper(details.stage);
-      this.faultDetails = details;
-      this.propertyId = details.propertyId;
-      this.contractorEntityId = details.contractorId;
-      this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
-      this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
-      this.getFaultDocuments(this.faultId);
-      this.getFaultHistory();
-      if (this.contractorEntityId) {
-        let contractorDetails: any = await this.getContractorDetails(this.contractorEntityId);
-        if (contractorDetails) {
-          contractorDetails.fullName = contractorDetails.name;
-          // this.landlordInstFrom.patchValue({
-          //   contractor: contractorDetails
-          // });
+      if (details) {
+        this.selectStageStepper(details.stage);
+        this.faultDetails = details;
+        this.propertyId = details.propertyId;
+        this.contractorEntityId = details.contractorId;
+        this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
+        this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
+        this.getFaultDocuments(this.faultId);
+        this.getFaultHistory();
+        if (this.contractorEntityId) {
+          let contractorDetails: any = await this.getContractorDetails(this.contractorEntityId);
+          if (contractorDetails) {
+            contractorDetails.fullName = contractorDetails.name;
+            // this.landlordInstFrom.patchValue({
+            //   contractor: contractorDetails
+            // });
 
-          this.contractorSelected(contractorDetails);
+            this.contractorSelected(contractorDetails);
+          }
         }
       }
     } else {
@@ -806,7 +808,12 @@ export class DetailsPage implements OnInit {
       if (response) {
         this.files = response.data;
         this.getDocs();
-        this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[1]['index']);
+        if (this.faultDetails.stage === FAULT_STAGES.JOB_COMPLETION) {
+          this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[4]['index'] || data.folderName === FOLDER_NAMES[5]['index']);
+        }
+        else {
+          this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[1]['index']);
+        }
       }
     })
   }

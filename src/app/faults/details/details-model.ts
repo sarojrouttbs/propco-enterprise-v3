@@ -50,7 +50,7 @@ declare namespace FaultModels {
         createdAt: string;
         submittedAt: string;
         modifiedAt: string;
-        additionalInfo: any[];
+        additionalInfo: AdditionalInfo[];
         sourceType: string;
         isEscalated?: any;
         escalatedBy?: any;
@@ -60,24 +60,38 @@ declare namespace FaultModels {
         fixfloCategory?: any;
         doesBranchHoldKeys?: any;
         stage: string;
-        userSelectedAction?: any;
-        confirmedEstimate?: any;
+        stageAction: string;
+        userSelectedAction: string;
+        confirmedEstimate: number;
         hasMaintTenancyClause?: any;
         isUnderBlockManagement?: any;
         isUnderWarranty?: any;
         isUnderServiceContract?: any;
+        estimationNotes?: any;
+        llDoesOwnRepairYesResponseAt?: any;
+        isAnyFurtherWork: boolean;
+        additionalWorkDetail?: any;
+        additionalEstimate?: any;
+        landlordOwnContractor: LandlordOwnContractor;
+        contractorQuotePropertyVisitAt?: any;
+        contractorWoPropertyVisitAt: string;
+        invoiceRejectionReason?: any;
+        isOverrideCommunicationPreference: boolean;
         faultId: string;
         propertyId: string;
-        agreementId?: any;
+        agreementId: string;
         tenantId?: any;
         reportedById: string;
         createdBy: string;
         submittedBy: string;
         assignedTo: string;
-        contractorId?: any;
-        estimationNotes?: string;
-        stageAction: string;
-        landlordOwnContractor:LandlordOwnContractor[];
+        contractorId: string;
+    }
+
+    export interface AdditionalInfo {
+        label: string;
+        value: string;
+        id: string;
     }
 
     export interface IContractorResponse {

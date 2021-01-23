@@ -45,7 +45,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
           return throwError(error);
         }
         else if (error.status === 400 || error.status === 412) {
-          this._commonService.showMessage(error.error, error.error.errorCode, 'error');
+          this._commonService.showMessage(error.error ? error.error.message : 'Something went wrong', error.error.errorCode, 'error');
           return throwError(error);
         } else if (error.status === 401) {
           if (error) {

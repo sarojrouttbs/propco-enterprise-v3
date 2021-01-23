@@ -1,3 +1,4 @@
+import { WorksorderModalPage } from 'src/app/shared/modals/worksorder-modal/worksorder-modal.page';
 import { HttpParams } from '@angular/common/http';
 import { RejectionModalPage } from './../../../shared/modals/rejection-modal/rejection-modal.page';
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
@@ -742,7 +743,7 @@ export class ArrangingContractorComponent implements OnInit {
       if (data.length === 0) {
         resolve(null);
       }
-      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action));
+      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
       if (filtereData.length === 0) {
         resolve(null);
       }
@@ -858,6 +859,8 @@ export class ArrangingContractorComponent implements OnInit {
         || this.iacNotification.templateCode === 'CDT-T-E (WO)'
         || this.iacNotification.templateCode === 'CWO-NA-T-E-2') {
         this.worksOrderActionVisitTime(data);
+      } else if (this.iacNotification.templateCode === 'CWO-C-E') {
+        this.questionActionJobCompleted(data)
       }
     }
     // }
@@ -1034,6 +1037,41 @@ export class ArrangingContractorComponent implements OnInit {
       });
       await modal.present();
     }
+  }
+  private async questionActionJobCompleted(data) {
+    if (data.value) {
+      this.openWOJobCompletionModal();
+    } else {
+      this.commonService.showConfirm(data.text, `You have selected 'No, Couldn't Complete the Job'. The fault will be escalated for manual intervention. Do you want to proceed?`, '', 'YES', 'NO').then(async res => {
+        if (res) {
+          const submit = await this.submitJobCompletion();
+          if (submit) {
+            this.btnAction.emit('refresh');
+          }
+        }
+      });
+    }
+  }
+
+  async openWOJobCompletionModal() {
+    const modal = await this.modalController.create({
+      component: WorksorderModalPage,
+      cssClass: 'modal-container upload-container',
+      componentProps: {
+        faultNotificationId: this.iacNotification.faultNotificationId,
+        faultId: this.faultDetails.faultId,
+        maintenanceId: this.faultMaintenanceDetails.maintenanceId,
+        actionType: this.enableMarkCompletedBtn() ? 'advance' : 'regular'
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this.btnAction.emit('refresh');
+      }
+    });
+    await modal.present();
   }
 
   async submitQuoteAmout() {
@@ -1573,6 +1611,38 @@ export class ArrangingContractorComponent implements OnInit {
       }
     }
     return paymentNeeded;
+  }
+
+  private submitJobCompletion() {
+    let notificationObj = {} as any;
+    notificationObj.isAccepted = false;
+    notificationObj.submittedByType = 'SECUR_USER';
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.saveWorksOrderCompletion(notificationObj, this.iacNotification.faultNotificationId).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+  enableMarkCompletedBtn(): boolean {
+    let enable = false;
+    if (this.iacNotification &&
+      (this.iacNotification.responseReceived != null) &&
+      this.iacNotification.templateCode === 'CDT-C-E (WO)' &&
+      this.iacNotification.responseReceived.isAccepted) {
+      const woAgreedDateTime = this.commonService.getFormatedDate(this.faultDetails.contractorWoPropertyVisitAt, 'yyyy-MM-dd HH:mm:ss');
+      const today = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd HH:mm:ss');
+      if (today >= woAgreedDateTime) {
+        enable = true;
+      }
+    }
+    return enable;
   }
 
 }

@@ -1,0 +1,50 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>appointment-modal</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+</ion-content> -->
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{title}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="rejectInvoiceForm">
+    <ion-grid class="">
+      <ion-row class="">
+        <ion-col size="100">
+          <h6>{{headingOne}}</h6>
+          <h6>{{headingTwo}}</h6>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Reason<ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-textarea rows="1" formControlName="rejectionReason"></ion-textarea>
+          </ion-item>
+          <app-validation-message [control]="rejectInvoiceForm.controls.rejectionReason"></app-validation-message>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
+<ion-footer>
+  <ion-row>
+    <ion-col class="ion-text-end">
+      <ion-button (click)="dismiss()">NO</ion-button>
+      <ion-button (click)="pmRejectInvoice()">YES
+        <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+      </ion-button>
+    </ion-col>
+
+  </ion-row>
+</ion-footer>
