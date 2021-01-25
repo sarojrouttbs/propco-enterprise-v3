@@ -167,9 +167,9 @@ export class ApplicationDetailsPage implements OnInit {
       cssClass: 'modal-container alert-prompt',
       backdropDismiss: false,
       componentProps: {
-        data: `<div class='status-block'>Application is already in progress for selected applicant.
+        data: `<div class='status-block'>There is an application in process for this tenant. You cannot start another application until the processing of existing application has been completed.
         </div>`,
-        heading: 'Resend link',
+        heading: 'Application',
         buttonList: [
           {
             text: 'OK',

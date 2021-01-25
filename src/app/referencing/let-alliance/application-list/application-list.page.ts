@@ -32,7 +32,9 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   applicationGrade: any= {};
   guarantorApplicationList = [];
 
-  referencingProductList: any[] = [];
+  referencingProductList: any;
+  referencingCaseProductList: any[] = [];
+  referencingApplicationProductList: any[] = [];
   referencingApplicantStatusTypes: any[] = [];
   referencingApplicantResultTypes: any[] = [];
   referencingOffices: any[] = [];
@@ -260,7 +262,12 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     const promise = new Promise((resolve, reject) => {
       this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
         res => {
-          this.referencingProductList = res ? res : [];
+          this.referencingProductList = res ? res : {};
+          
+          if (this.referencingProductList) {
+            this.referencingCaseProductList = this.referencingProductList?.caseProducts ? this.referencingProductList.caseProducts : [];
+            this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
+          }
           resolve(this.referencingProductList);
         },
         error => {
@@ -391,8 +398,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
 
   getProductType(productId: any): string{
     let productType: any;
-    this.referencingProductList = this.referencingProductList && this.referencingProductList.length ? this.referencingProductList : [];
-    this.referencingProductList.find((obj) => {
+    this.referencingApplicationProductList.find((obj) => {
       if (obj.productId === productId) {
         productType = obj.productName;
       }

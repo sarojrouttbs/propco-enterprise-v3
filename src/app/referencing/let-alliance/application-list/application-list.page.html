@@ -121,7 +121,7 @@
                     {{application.propertyDetail.address.postcode}}</td>
                   <td>{{application.applicantDetail.displayAs ? application.applicantDetail.displayAs : 
                     (application.applicantDetail.addressee ? application.applicantDetail.addressee : application.applicantDetail.forename
-                    + ' ' + application.applicantDetail.surname) || '-'}}  {{application.applicantDetail.itemType == 'G' ? ' (Guarantor)' : ' (Tenant)'}}</td>
+                    + ' ' + application.applicantDetail.surname) || '-'}}  {{application.applicantDetail.itemType == 'G' ? ' (Guarantor)' : (application.applicantDetail.itemType == 'S' ? ' (Co-Tenant)' : ' (Tenant)')}}</td>
                   <td>{{application.office || '-'}}</td>
                   <td>{{application.tenancyStartDate|| '-' | date : 'dd/MM/yyyy' }}</td>
                   <td>{{application.rentShare || '0' | currency: '£'}}</td>
