@@ -1263,7 +1263,10 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  private async refreshDetailsAndStage() {
+  private async refreshDetailsAndStage(reloadFaultDocs = false) {
+    if (reloadFaultDocs) {
+      this.getFaultDocuments(this.faultDetails.faultId);
+    }
     const details: any = await this.getFaultDetails();
     this.selectStageStepper(details.stage);
     this.faultDetails = details;
@@ -1789,6 +1792,11 @@ export class DetailsPage implements OnInit {
       }
       case 'refresh': {
         this.refreshDetailsAndStage();
+        break;
+      }
+      case 'refresh_docs': {
+        const reloadFaultDocs = true;
+        this.refreshDetailsAndStage(reloadFaultDocs);
         break;
       }
     }

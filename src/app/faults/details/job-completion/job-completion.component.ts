@@ -293,7 +293,8 @@ export class JobCompletionComponent implements OnInit {
       if (data.length === 0) {
         resolve(null);
       }
-      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
+      // filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
+      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.isResponseExpected));
       if (filtereData.length === 0) {
         resolve(null);
       }
@@ -338,7 +339,7 @@ export class JobCompletionComponent implements OnInit {
         this.questionActionSatisfyJob(data);
       }
       else if (this.iacNotification.templateCode === 'INR-C-E' || 'IR-C-E') {
-        //TODO add IPD
+        this.questionActionUploadInvoice(data)
       }
     }
   }
@@ -364,7 +365,13 @@ export class JobCompletionComponent implements OnInit {
     }
   }
 
-  async openWOJobCompletionModal() {
+  private async questionActionUploadInvoice(data) {
+    if (data.value) {
+      this.openWOJobCompletionModal();
+    }
+  }
+
+  async openWOJobCompletionModal(updateFaultStatus = false) {
     const modal = await this.modalController.create({
       component: WorksorderModalPage,
       cssClass: 'modal-container upload-container',
@@ -372,6 +379,10 @@ export class JobCompletionComponent implements OnInit {
         faultNotificationId: this.iacNotification.faultNotificationId,
         faultId: this.faultDetails.faultId,
         maintenanceId: this.faultMaintenanceDetails.maintenanceId,
+        jobCompletionDate: this.faultMaintenanceDetails.actualCompletionDate,
+        isAnyFurtherWork: this.faultDetails.isAnyFurtherWork,
+        additionalEstimate: this.faultDetails.additionalEstimate,
+        additionalWorkDetails: this.faultDetails.additionalWorkDetail,
         actionType: 'view'
       },
       backdropDismiss: false
@@ -379,7 +390,15 @@ export class JobCompletionComponent implements OnInit {
 
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
-        this.btnAction.emit('refresh');
+        let notificationObj = {} as FaultModels.IUpdateNotification;
+        notificationObj.isAccepted = true;
+        notificationObj.submittedByType = 'SECUR_USER';
+        if (updateFaultStatus) {
+          await this.invoiceUploaded();
+        } else {
+          await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId)
+        }
+        this.btnAction.emit('refresh_docs');
       }
     });
     await modal.present();
@@ -641,6 +660,22 @@ export class JobCompletionComponent implements OnInit {
         },
         error => {
           this.commonService.showMessage('Failed', 'Invoice Approved', 'error');
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private invoiceUploaded() {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.invoiceUploaded(this.faultDetails.faultId).subscribe(
+        res => {
+          this.commonService.showMessage('Success', 'Invoice Uploaded', 'success');
+          resolve(true);
+        },
+        error => {
+          this.commonService.showMessage('Failed', 'Invoice Uploaded', 'error');
           resolve(false);
         }
       );
