@@ -1922,7 +1922,17 @@ export class DetailsPage implements OnInit {
     await modal.present();
   }
 
-  getStatus(status) {
+  async getStatus(status) {
     console.log("here in parent", status);
+    let requestObj = {
+      urgencyStatus: status,
+      stage: this.faultDetails.stage, 
+      isDraft: true
+    };
+    let res = await this.updateFaultDetails(requestObj);
+    if (res) {
+      await this.refreshDetailsAndStage();
+    }
+
   }
 }

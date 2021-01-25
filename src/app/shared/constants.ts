@@ -221,6 +221,7 @@ export const PAYMENT_METHOD_TYPES = [
 ];
 
 export const PAYMENT_WARNINGS = {
+  'hasSufficientReserveBalance': 'Insufficient funds in Landlord\'s reserve.',
   'isFaultEstimateLessThanHalfRentOrThresHoldValue': 'The Works Order is over half months rent or £250.',
   'hasRentArrears': 'The Tenant has rent arrears.',
   'hasRentPaidUpFront': 'The rent has been paid upfront.',
