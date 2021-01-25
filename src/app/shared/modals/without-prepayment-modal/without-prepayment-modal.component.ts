@@ -47,6 +47,9 @@ export class WithoutPrepaymentModalComponent implements OnInit {
 
   private checkPaymentWarnings(paymentRules: FaultModels.IFaultWorksorderRules) {
     if (paymentRules && paymentRules.hasOwnProperty('hasOtherInvoicesToBePaid')) {
+      if (paymentRules.hasSufficientReserveBalance === false) {
+        this.paymentWarnings.push(PAYMENT_WARNINGS.hasSufficientReserveBalance);
+      }
       if (paymentRules.hasOtherInvoicesToBePaid === true) {
         this.paymentWarnings.push(PAYMENT_WARNINGS.hasOtherInvoicesToBePaid);
       }

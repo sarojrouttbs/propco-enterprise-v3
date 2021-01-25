@@ -2,8 +2,7 @@ import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { ERROR_MESSAGE } from 'src/app/shared/constants';
-import { AgreementClauseModalPageModule } from 'src/app/shared/modals/agreement-clause-modal/agreement-clause-modal.module';
+import { FAULT_STAGES } from 'src/app/shared/constants';
 import { AgreementClauseModalPage } from 'src/app/shared/modals/agreement-clause-modal/agreement-clause-modal.page';
 import { BranchDetailsModalPage } from 'src/app/shared/modals/branch-details-modal/branch-details-modal.page';
 import { CloseFaultModalPage } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.page';
@@ -48,7 +47,7 @@ export class FaultQualificationComponent implements OnInit {
       this.initFaultQualification();
     }
     if (changes.propertyDetails && !changes.propertyDetails.firstChange) {
-      this.fetchTenancyClauses();
+      // this.fetchPropertyClauses();
     }
   }
 
@@ -61,7 +60,7 @@ export class FaultQualificationComponent implements OnInit {
   private initFaultQualificationForm(): void {
     this.faultQualificationForm = this.fb.group({
       doesBranchHoldKeys: '',
-      isTenantPresenceRequired: [],
+      hasMaintTenancyClause: [],
       isUnderBlockManagement: [],
       isUnderWarranty: [],
       isUnderServiceContract: []
@@ -72,7 +71,7 @@ export class FaultQualificationComponent implements OnInit {
     if (this.faultDetails) {
       this.faultQualificationForm.patchValue({
         doesBranchHoldKeys: this.faultDetails.doesBranchHoldKeys,
-        isTenantPresenceRequired: this.faultDetails.isTenantPresenceRequired,
+        hasMaintTenancyClause: this.faultDetails.hasMaintTenancyClause,
         isUnderBlockManagement: this.faultDetails.isUnderBlockManagement,
         isUnderWarranty: this.faultDetails.isUnderWarranty,
         isUnderServiceContract: this.faultDetails.isUnderServiceContract
@@ -90,9 +89,9 @@ export class FaultQualificationComponent implements OnInit {
     }
 
     if (type === 'tenant') {
-      if (this.faultQualificationForm.value.isTenantPresenceRequired) {
+      if (this.faultQualificationForm.value.hasMaintTenancyClause) {
         this.isTenancy = false;
-      } else if (!this.faultQualificationForm.value.isTenantPresenceRequired) {
+      } else if (!this.faultQualificationForm.value.hasMaintTenancyClause) {
         this.isTenancy = true;
       }
     }
@@ -150,7 +149,7 @@ export class FaultQualificationComponent implements OnInit {
       backdropDismiss: false
     });
 
-    modal.onDidDismiss().then(async res => {
+    modal.onDidDismiss().then(async () => {
     });
 
     await modal.present();
@@ -173,13 +172,46 @@ export class FaultQualificationComponent implements OnInit {
     }
   }
 
-  private async proceed() { }
+  private async proceed() {
+    let qualificationForm = this.faultQualificationForm.value;
+    let serviceCounter = 0;
+    if (qualificationForm.isUnderBlockManagement) {
+      serviceCounter++;
+    }
+    if (qualificationForm.isUnderWarranty) {
+      serviceCounter++;
+    }
+    if (qualificationForm.isUnderServiceContract) {
+      serviceCounter++;
+    }
+    if (serviceCounter > 1) {
+      this.commonService.showAlert('Warning', 'Please choose one option from Block Management/Factors Responsibility, Guarantee/Warranty, and Service Contract.');
+      return;
+    }
+
+    let response = await this.commonService.showConfirm('Fault Qualification', `This will change the fault status to "Checking Landlord Instructions". <br/> Are you sure?`, '', 'Yes', 'No');
+    let faultRequestObj = {} as FaultModels.IFaultResponse;
+    faultRequestObj.isDraft = false;
+    if (response) {
+      faultRequestObj.doesBranchHoldKeys = qualificationForm.doesBranchHoldKeys;
+      faultRequestObj.hasMaintTenancyClause = qualificationForm.hasMaintTenancyClause;
+      faultRequestObj.isUnderBlockManagement = qualificationForm.isUnderBlockManagement;
+      faultRequestObj.isUnderWarranty = qualificationForm.isUnderWarranty;
+      faultRequestObj.isUnderServiceContract = qualificationForm.isUnderServiceContract;
+      faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+      let res = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
+      
+      if (res) {
+        this._btnHandler('refresh');
+      }
+    }
+  }
 
   private async saveForLater() {
     this.commonService.showLoader();
     let requestObj = {
       doesBranchHoldKeys: this.faultQualificationForm.value.doesBranchHoldKeys,
-      isTenantPresenceRequired: this.faultQualificationForm.value.isTenantPresenceRequired,
+      hasMaintTenancyClause: this.faultQualificationForm.value.hasMaintTenancyClause,
       isUnderBlockManagement: this.faultQualificationForm.value.isUnderBlockManagement,
       isUnderWarranty: this.faultQualificationForm.value.isUnderWarranty,
       isUnderServiceContract: this.faultQualificationForm.value.isUnderServiceContract,
@@ -187,9 +219,9 @@ export class FaultQualificationComponent implements OnInit {
       isDraft: true
     };
     this.faultsService.updateFault(this.faultDetails.faultId, requestObj).subscribe(
-      res => {
+      () => {
         this.commonService.hideLoader();
-        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
+        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Qualification', 'success');
         this.router.navigate(['faults/dashboard'], { replaceUrl: true });
       },
       error => {
@@ -223,24 +255,24 @@ export class FaultQualificationComponent implements OnInit {
 
   moreInfo() { }
 
-  fetchTenancyClauses() {
-    const promise = new Promise((resolve, reject) => {
-      this.faultsService.fetchTenancyClauses(this.propertyDetails.propertyId).subscribe(
-        res => {
-          this.tenancyClauses = res ? res : '';
-          if (!this.tenancyClauses) {
-            this.faultQualificationForm.patchValue({ isTenantPresenceRequired: false });
-            this.faultQualificationForm.get('isTenantPresenceRequired').updateValueAndValidity();
-          }
-          resolve(true);
-        },
-        error => {
-          resolve(false);
-        }
-      );
-    });
-    return promise;
-  }
+  // private fetchPropertyClauses() {
+  //   const promise = new Promise((resolve, reject) => {
+  //     this.faultsService.fetchPropertyClauses(this.propertyDetails.propertyId).subscribe(
+  //       res => {
+  //         this.tenancyClauses = res ? res : '';
+  //         if (!this.tenancyClauses) {
+  //           this.faultQualificationForm.patchValue({ hasMaintTenancyClause: false });
+  //           this.faultQualificationForm.get('hasMaintTenancyClause').updateValueAndValidity();
+  //         }
+  //         resolve(true);
+  //       },
+  //       error => {
+  //         resolve(false);
+  //       }
+  //     );
+  //   });
+  //   return promise;
+  // }
 
   async viewTenancyClause() {
     const modal = await this.modalController.create({
@@ -261,19 +293,19 @@ export class FaultQualificationComponent implements OnInit {
     await modal.present();
   }
 
-  fetchAgreementsClauses() {
+  private fetchAgreementsClauses() {
     if (this.faultDetails.agreementId) {
-      const promise = new Promise((resolve, reject) => {
+      const promise = new Promise((resolve) => {
         this.faultsService.fetchAgreementsClauses(this.faultDetails.agreementId).subscribe(
           res => {
-            this.agreementClauses = res ? res : '';
-            if (!this.agreementClauses) {
-              this.faultQualificationForm.patchValue({ isUnderWarranty: false });
-              this.faultQualificationForm.get('isUnderWarranty').updateValueAndValidity();
+            this.tenancyClauses = res ? res : '';
+            if (!this.tenancyClauses) {
+              this.faultQualificationForm.patchValue({ hasMaintTenancyClause: false });
+              this.faultQualificationForm.get('hasMaintTenancyClause').updateValueAndValidity();
             }
             resolve(true);
           },
-          error => {
+          () => {
             resolve(false);
           }
         );
@@ -303,4 +335,20 @@ export class FaultQualificationComponent implements OnInit {
 
   viewBlockManagement() { }
   viewServiceContract() { }
+
+  private updateFaultDetails(faultId, requestObj): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.updateFault(faultId, requestObj).subscribe(
+        () => {
+          // this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
+          resolve(true);
+        },
+        error => {
+          reject(error)
+        }
+      );
+    });
+    return promise;
+  }
+
 }
