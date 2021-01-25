@@ -1,5 +1,4 @@
 ion-checkbox {
-  --border-color: transparent;
   --background: var(--ion-color-step-1800);
   --checkmark-color: var(--ion-color-step-2000);
 }
@@ -10,4 +9,13 @@ table.dataTable tbody tr{
   td{
     border: none;
   }
+}
+
+table.dataTable.no-footer{
+  border-bottom: none ;
+}
+
+.notesForm{
+  background: var(--ion-color-step-2000);
+  padding-bottom: 20px;
 }

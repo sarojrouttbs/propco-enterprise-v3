@@ -34,9 +34,9 @@
           <table datatable [dtOptions]="dtOptions" class="row-border hover" style="width: 100%; position: relative">
             <thead>
               <tr>
-                <th>&nbsp;</th>
+                <th style="width:20px">&nbsp;</th>
                 <th>Type</th>
-                <th>Details</th>
+                <th style="width:50%">Details</th>
               </tr>
             </thead>
             <tbody>
@@ -58,12 +58,49 @@
                 </td>
               </tr>
               <tr>
-                <td></td>
-                <td></td>
+                <td>
+                  <ion-checkbox (ionChange)='hideAndResetNotes()'  color="primary"></ion-checkbox>
+                </td>
+                <td>Do you want to add Notes?</td> 
                 <td></td>
               </tr>
             </tbody>
-          </table>  
+          </table>
+          <form [formGroup]='notesForm' class="notesForm"  *ngIf='isNotesVisible'>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Notes Type <ion-text class="mandatory">*</ion-text></ion-label>
+                    <ion-select interface="popover" formControlName='notesType' >
+                      <ion-select-option [value]="item.index"  *ngFor="let item of lookupNotesType">
+                        {{ item.value }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                  <app-validation-message [control]="notesForm.controls.notesType"></app-validation-message>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Notes Category<ion-text class="mandatory">*</ion-text></ion-label>
+                    <ion-select interface="popover" formControlName='notesCategory' >
+                      <ion-select-option [value]="item.index" *ngFor="let item of lookupNotesCategories">
+                        {{ item.value }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                  <app-validation-message [control]="notesForm.controls.notesType"></app-validation-message>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Notes<ion-text class="mandatory">*</ion-text></ion-label>
+                    <ion-input formControlName='notesText'></ion-input> 
+                  </ion-item>
+                  <app-validation-message [control]="notesForm.controls.notesType"></app-validation-message>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </form>
           <ion-grid class="ion-no-padding">
             <ion-row style="margin-top: 15px;">
               <ion-col class="ion-text-end">

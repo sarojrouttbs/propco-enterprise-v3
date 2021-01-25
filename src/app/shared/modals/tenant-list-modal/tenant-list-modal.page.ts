@@ -33,6 +33,7 @@ export class TenantListModalPage implements OnInit {
   referencingApplicantStatusTypes: any[] = [];
 
   @Input() paramPropertyId: string;
+  isTenantList: boolean = false;
 
   constructor(
     private referencingService: ReferencingService,
@@ -98,6 +99,11 @@ export class TenantListModalPage implements OnInit {
       this.referencingService.getPropertyTenantList(this.propertyId, params).subscribe(
         res => {
           this.laTenantList = res ? res.data : [];
+          this.isTenantList = this.laTenantList ? false : true;
+     
+          if(this.laTenantList.length == 0) {
+            this.isTenantList = !this.isTenantList;
+          }
           this.laTenantList.forEach((item) => {
             item.isRowChecked = false;
           });

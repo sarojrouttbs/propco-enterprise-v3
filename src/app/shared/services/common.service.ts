@@ -283,8 +283,8 @@ export class CommonService {
         .set('limit', '10')
         .set('page', '1')
         .set('text', text)
-        //.set('prop.agreeStatus', agreementStatus)
-        //.set('prop.ofc', officeList)
+        .set('prop.agreeStatus', agreementStatus)
+        .set('prop.ofc', officeList)
         .set('types', 'PROPERTY');
     }
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });

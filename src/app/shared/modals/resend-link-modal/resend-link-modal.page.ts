@@ -33,10 +33,9 @@ export class ResendLinkModalPage implements OnInit {
 
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
+  isNotesVisible: boolean = false;
 
-  resendReqObj = {
-    email: '',
-  };
+  resendReqObj: any = {};
 
   applicantDetails: any;
   selectedCheckbox = '0';
@@ -51,6 +50,10 @@ export class ResendLinkModalPage implements OnInit {
   titleTypes: any;
   isValidMail: boolean;
   newEmailAddressForm: FormGroup;
+  notesForm: FormGroup;
+
+  lookupNotesCategories: any[] = [];
+  lookupNotesType: any[] = [];
 
   @Input() paramApplicantId: string;
   @Input() paramApplicationId: string;
@@ -80,10 +83,11 @@ export class ResendLinkModalPage implements OnInit {
     this.propertyAddress = this.navParams.get('paramPropertyAddress');
     this.it = this.navParams.get('paramIt');
     this.initiateEmailForm();
-    if(this.it === 'G'){
+    this.initiateNotesForm();
+    if (this.it === 'G') {
       this.getGuarantorDetails();
     }
-    else{
+    else {
       this.getTenantDetails();
     }
   }
@@ -117,6 +121,8 @@ export class ResendLinkModalPage implements OnInit {
   }
 
   private setLookupData(data: any): void {
+    this.lookupNotesType = data.notesType;
+    this.lookupNotesCategories = data.notesCategories;
   }
 
   private setReferencingLookupData(data: any): void {
@@ -127,6 +133,14 @@ export class ResendLinkModalPage implements OnInit {
     this.newEmailAddressForm = this.fb.group({
       email: ['', [ValidationService.emailValidator]],
     });
+  }
+
+  private initiateNotesForm(): void {
+    this.notesForm = this.fb.group({
+      notesType: ['', Validators.required],
+      notesCategory: ['', Validators.required],
+      notesText: ['', Validators.required]
+    })
   }
 
   private getTenantDetails() {
@@ -167,7 +181,7 @@ export class ResendLinkModalPage implements OnInit {
     return promise;
   }
 
-  disableCheckbox(emailId, event) {
+  disableCheckbox(emailId: any, event: any) {
     if (event.target.checked) {
       this.selectedCheckbox = emailId;
       this.emailList.forEach((ele) => {
@@ -193,31 +207,82 @@ export class ResendLinkModalPage implements OnInit {
     this.newEmailAddressForm.markAsUntouched();
   }
 
-  resendLink() {
-    if (this.selectedCheckbox == '3' && this.newEmailAddressForm.invalid) {
-      this.newEmailAddressForm.markAllAsTouched();
-      return;
+  hideAndResetNotes() {
+    this.isNotesVisible = !this.isNotesVisible;
+    if (!this.isNotesVisible) {
+      this.notesForm.patchValue({
+        notesType: 0,
+        notesCategory: 0,
+        notesText: '',
+      }, { emitEvent: false });
+      this.notesForm.markAsUntouched();
     }
-    this.emailList[3].emailAdress = this.newEmailAddressForm?.get('email').value;
-    this.emailList.forEach((ele) => {
-      if (ele.emailId === this.selectedCheckbox) {
-        this.resendReqObj.email = ele.emailAdress;
-        this.commonService.showLoader();
-        this.referencingService
-          .resendLinkToApplicant(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.resendReqObj, this.applicationId)
-          .subscribe(
-            (res) => {
-              this.commonService.hideLoader();
-              this.commonService.showMessage('Email is sent to the applicant.', 'Resend Link', 'success');
-            },
-            (error) => {
-              this.commonService.hideLoader();
-              console.log(error);
-            }
-          );
+  }
+
+  resendLink() {
+    if(this.selectedCheckbox == '0' || this.selectedCheckbox == '1' || this.selectedCheckbox == '2'){
+      this.emailList.forEach((ele) => {
+        if (ele.emailId === this.selectedCheckbox) {
+          this.resendReqObj.email = ele.emailAdress;
+        }
+      });
+
+      if(this.isNotesVisible) {
+        if(!this.isNotesFormValid()){
+          return;
+        }
       }
-    });
+    }
+
+    else if (this.selectedCheckbox == '3') {
+      if(this.newEmailAddressForm.valid){
+        this.resendReqObj.email = this.newEmailAddressForm.get('email').value;
+        if(this.isNotesVisible) {
+          if(!this.isNotesFormValid()){
+            return;
+          }
+        }
+      }
+      else{
+        this.newEmailAddressForm.markAllAsTouched();
+        if(this.isNotesVisible) {
+          if(!this.isNotesFormValid()){
+            return;
+          }
+        }
+        return;
+      }
+    }
+
+    this.commonService.showLoader();
+    this.referencingService.resendLinkToApplicant(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.resendReqObj, this.applicationId)
+      .subscribe(
+        (res) => {
+          this.commonService.hideLoader();
+          this.commonService.showMessage('Email is sent to the applicant.', 'Resend Link', 'success');
+        },
+        (error) => {
+          this.commonService.hideLoader();
+          console.log(error);
+        }
+      ); 
+    
     this.dismiss();
+  }
+
+  isNotesFormValid(): boolean{
+    if(this.notesForm.valid){
+      this.resendReqObj.noteModel = {};
+      this.resendReqObj.noteModel.type = this.notesForm.get('notesType').value ? this.notesForm.get('notesType').value : 0;
+      this.resendReqObj.noteModel.category = this.notesForm.get('notesCategory').value ? this.notesForm.get('notesCategory').value : 0;
+      this.resendReqObj.noteModel.notes = this.notesForm.get('notesText').value;
+      return true;
+    }
+    else{
+      this.notesForm.markAllAsTouched();
+      this.commonService.showMessage('Please fill all required fields.', 'Resend Link', 'error');
+      return false;
+    }
   }
 
   dismiss() {
