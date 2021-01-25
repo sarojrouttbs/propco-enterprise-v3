@@ -731,11 +731,13 @@
               </h6>
               <div class="border-bottom"></div>
             </div>
-            <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived == null">
+            <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived == null && (cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone)">
               <h6>
                 <ion-text color="danger">Please note:</ion-text>
                 The fault will be <i>escalated</i> automatically if the Landlord doesn't respond within
-                {{(cliNotification.allowedNumberOfChases - cliNotification.numberOfChasesDone) * cliNotification.chaseInterval}}
+                {{ getPendingHours() }}
+                <!-- {{(cliNotification.allowedNumberOfChases - cliNotification.numberOfChasesDone) * cliNotification.chaseInterval}} -->
+                {{getPendingHours()}}
                 hours.
               </h6>
               <div class="border-bottom"></div>

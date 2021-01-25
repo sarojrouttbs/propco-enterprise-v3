@@ -557,4 +557,9 @@ export class CommonService {
       .map(res1 => JSON.parse(res1));
   }
 
+  getFormatedDateTime(date, format?): string {
+    if (typeof date !== 'undefined') {
+      return new DatePipe('en-UK').transform(new Date(date), format || 'yyyy-MM-dd HH:mm:ss');
+    }
+  }
 }

@@ -1931,10 +1931,9 @@ export class DetailsPage implements OnInit {
   }
 
   async getStatus(status) {
-    console.log("here in parent", status);
     let requestObj = {
       urgencyStatus: status,
-      stage: this.faultDetails.stage, 
+      stage: this.faultDetails.stage,
       isDraft: true
     };
     let res = await this.updateFaultDetails(requestObj);
@@ -1942,5 +1941,15 @@ export class DetailsPage implements OnInit {
       await this.refreshDetailsAndStage();
     }
 
+  }
+
+  getPendingHours() {
+    let hours = 0;
+    const currentDateTime = this.commonService.getFormatedDateTime(new Date());
+    if (this.cliNotification.nextChaseDueAt) {
+      const diffInMs = Date.parse(this.cliNotification.nextChaseDueAt) - Date.parse(currentDateTime);
+      hours = diffInMs / 1000 / 60 / 60;
+    }
+    return hours > 0 ? Math.floor(hours) : 0;
   }
 }
