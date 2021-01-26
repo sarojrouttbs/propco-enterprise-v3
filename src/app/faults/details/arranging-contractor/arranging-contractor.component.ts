@@ -1480,7 +1480,7 @@ export class ArrangingContractorComponent implements OnInit {
         `You have selected "${stageAction}".<br/><br/>
          Since the Landlord account doesn't have sufficient balance to pay for the works, a payment request will be generated and the Landlord will be notified to make an online payment via the portal.<br/>
          <br/>Do you want to proceed? <br/><br/>
-         <small>NB:The landlord can also make an offline payment which can be processed manually via landloard accounts.</small>`, '', 'Yes', 'No');
+         <small>NB:The landlord can also make an offline payment which can be processed manually via landlord accounts.</small>`, '', 'Yes', 'No');
       if (response) {
         return paymentRequired;
       }
