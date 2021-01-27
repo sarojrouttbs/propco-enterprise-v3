@@ -138,12 +138,6 @@
     color: #00b5ff;
   }
 
-  .table-fab-btn {
-    height: 20px;
-    width: 20px;
-    --box-shadow: none;
-  }
-
   .action-btn {
     color: var(--ion-color-warning, #ffc409);
   }
@@ -207,4 +201,22 @@
   --border-radius: 4px !important;
   float: right;
   margin-right: 15px;
+}
+
+.non-urgent {
+  color: var(--ion-color-primary);
+  padding-left: 5px;
+  font-size: 25px;
+}
+
+.urgent {
+  color: var(--ion-color-warning);
+  padding-left: 5px;
+  font-size: 25px;
+}
+
+.emergency {
+  color: var(--ion-color-danger);
+  padding-left: 5px;
+  font-size: 25px;
 }

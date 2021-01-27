@@ -384,11 +384,7 @@
               <tr *ngFor="let fault of faultList" class="table-row" (click)="onClickRow(fault)"
                 [ngClass]="{'escalated': fault.isEscalated}">
                 <td>
-                  <ion-fab-button size="small" class="table-fab-btn" *ngIf="fault.urgencyStatus === 3"></ion-fab-button>
-                  <ion-fab-button size="small" class="table-fab-btn" *ngIf="fault.urgencyStatus === 2" color="warning">
-                  </ion-fab-button>
-                  <ion-fab-button size="small" class="table-fab-btn" *ngIf="fault.urgencyStatus === 1" color="danger">
-                  </ion-fab-button>
+                  <ion-icon name="ellipse" [class]="fault.urgencyStatus==1 ? 'emergency' : (fault.urgencyStatus==2? 'urgent' : 'non-urgent')"></ion-icon>
                 </td>
                 <td>{{fault.reference || '-'}}</td>
                 <td>{{fault.createdAt | date: 'dd/MM/yyyy HH:mm:ss' || '-'}}</td>
