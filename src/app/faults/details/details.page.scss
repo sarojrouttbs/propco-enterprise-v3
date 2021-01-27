@@ -311,3 +311,15 @@
 .fault-description{
   --padding-bottom: 0px !important;
 }
+
+.response-recived{
+  color: var(--ion-color-primary);
+}
+
+.awaiting-response{
+  color: var(--ion-color-danger);
+}
+
+.response-circle{
+  font-size: 13px;
+}
