@@ -1635,7 +1635,7 @@ export class DetailsPage implements OnInit {
 
   private questionActionDoesOwnRepair(data) {
     if (!data.value) {
-      this.commonService.showConfirm(data.text, 'The fault status will change to "Escalation". </br> Are you Sure?', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, 'The fault status will change to "Escalation". </br> Are you sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
           this.refreshDetailsAndStage();
@@ -1654,7 +1654,7 @@ export class DetailsPage implements OnInit {
       });
     }
     else if (data.value) {
-      this.commonService.showConfirm(data.text, 'This will change the status to "Work in Progress". </br> Are you Sure?', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, 'This will change the status to "Work in Progress". </br> Are you sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
           this.refreshDetailsAndStage();
