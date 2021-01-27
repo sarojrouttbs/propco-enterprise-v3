@@ -132,7 +132,7 @@
           <ion-item>
             <ion-label position="floating">Nationality</ion-label>
             <ion-select interface="popover" formControlName="nationality">
-              <ion-select-option [value]="item.index" *ngFor="let item of nationList">
+              <ion-select-option [value]="item.index" *ngFor="let item of referencingNationalities">
                 {{ item.value }}
               </ion-select-option>
             </ion-select>
