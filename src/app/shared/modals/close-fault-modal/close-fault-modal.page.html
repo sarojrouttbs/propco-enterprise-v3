@@ -12,7 +12,7 @@
           </ion-text>
         </ion-label>
         <ion-select interface="popover" formControlName="cancelReason" (ionChange)="onReasonChange()"
-          class="reason-dropdown">
+          class="reason-dropdown" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
           <ion-select-option [value]="reason.index" *ngFor="let reason of reasons">
             {{ reason.value }}
           </ion-select-option>

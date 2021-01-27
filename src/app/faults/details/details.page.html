@@ -17,7 +17,7 @@
           <ion-item>
             <ion-label position="floating">Fault description<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-input formControlName="notes"></ion-input>
+            <ion-textarea formControlName="notes" rows="1" class="fault-description"></ion-textarea>
           </ion-item>
           <app-validation-message [control]="faultDetailsForm.controls.notes"></app-validation-message>
         </ion-col>
@@ -114,7 +114,7 @@
             <ion-label position="floating">Select agreement<ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select formControlName="agreementId" interface="popover" (ionChange)="onSelectAgreement()"
-              [disabled]="reportedByForm.controls.reportedBy.value != 'TENANT' && reportedByForm.controls.reportedBy.value != 'GUARANTOR'">
+              [disabled]="reportedByForm.controls.reportedBy.value != 'TENANT' && reportedByForm.controls.reportedBy.value != 'GUARANTOR'" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
               <ion-select-option [value]="item.agreementId" *ngFor="let item of propertyTenancyList">
                 {{getLookupValue(item.status, agreementStatuses)}} {{item.tenancyStartDate | date:'dd/MM/yyyy'}} -
                 {{item.tenancyEndDate| date:'dd/MM/yyyy'}}
@@ -230,7 +230,7 @@
           <ion-item>
             <ion-label position="floating">Access information<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-select interface="popover" formControlName="isTenantPresenceRequired">
+            <ion-select interface="popover" formControlName="isTenantPresenceRequired" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
               <ion-select-option [value]="item.value" *ngFor="let item of accessInfoList">{{ item.title }}
               </ion-select-option>
             </ion-select>

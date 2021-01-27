@@ -421,3 +421,6 @@ mat-form-field {
   animation: rotating 1s linear infinite;
 }
 
+.ion-select-popover-content{
+  --width: auto !important;
+}
