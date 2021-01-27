@@ -39,7 +39,7 @@ export class GuarantorDetailsPage implements OnInit {
   guarantorTypes: any[] = [];
   titleTypes: any[] = [];
   maritalStatusTypes: any[] = [];
-  nationList: any[] = [];
+  referencingNationalities: any[] = [];
   completionMethods: any[] = COMPLETION_METHODS;
   referenceNumber: any;
   tenantTypes: any[] = [];
@@ -102,16 +102,16 @@ export class GuarantorDetailsPage implements OnInit {
   }
 
   private setLookupData(data: any): void {
-    this.nationList = data.tenantNations;
     this.guarantorMaritals = data.tenantMaritals;
   }
-
+  
   private setReferencingLookupData(data: any): void {
     this.managementStatusTypes = data.managementStatusTypes;
     this.guarantorTypes = data.guarantorTypes;
     this.titleTypes = data.titleTypes;
     this.maritalStatusTypes = data.maritalStatusTypes;
     this.tenantTypes = data.tenantTypes;
+    this.referencingNationalities = data.referencingNationalities;
   }
 
   private initGuarantorDetailsTabForm(): void {
@@ -162,15 +162,36 @@ export class GuarantorDetailsPage implements OnInit {
       this.referencingService.getTenantGuarantorList(this.applicantId).subscribe(
         res => {
           this.guarantorList = res && res.data? res.data : [];
-          resolve(this.referencingProductList);
+          resolve(this.guarantorList);
         },
         error => {
           console.log(error);
-          resolve(this.referencingProductList);
+          resolve(this.guarantorList);
       });
     });
 
     return promise;
+  }
+
+  private async applicationAlert() {
+    const modal = await this.modalController.create({
+      component: SimpleModalPage,
+      cssClass: 'modal-container alert-prompt',
+      backdropDismiss: false,
+      componentProps: {
+        data: `<div class='status-block'>There is an application in process for this guarantor. You cannot start another application until the processing of existing application has been completed.
+        </div>`,
+        heading: 'Guarantor Application',
+        buttonList: [
+          {
+            text: 'OK',
+            value: false
+          }
+        ]
+      }
+    });
+
+    await modal.present();
   }
 
   getGuarantorDetails(guarantorId: any) {
@@ -178,23 +199,29 @@ export class GuarantorDetailsPage implements OnInit {
       this.initGuarantorDetailsTabForm();
       this.guarantorDetails = {} as letAllianceModels.IGuarantorResponse;
     }
-    else{
-      const promise = new Promise((resolve, reject) => {
-        this.referencingService.getGuarantorDetails(guarantorId).subscribe(
-          res => {
-            this.guarantorDetails = res ? res : {};
-            if(this.guarantorDetails){
-              this.initPatching();
+    else {
+      const guarantorApplicationStatus = this.guarantorList.find(obj => obj.guarantorId === guarantorId).referencingApplicationStatus;
+      if(guarantorApplicationStatus == 0 || guarantorApplicationStatus == 1){
+        this.applicationAlert();
+      }
+      else{
+        const promise = new Promise((resolve, reject) => {
+          this.referencingService.getGuarantorDetails(guarantorId).subscribe(
+            res => {
+              this.guarantorDetails = res ? res : {};
+              if(this.guarantorDetails){
+                this.initPatching();
+              }
+              resolve(this.guarantorDetails);
+            },
+            error => {
+              console.log(error);
+              resolve(this.guarantorDetails);
             }
-            resolve(this.guarantorDetails);
-          },
-          error => {
-            console.log(error);
-            resolve(this.guarantorDetails);
-          }
-        );
-      });
-      return promise;
+          );
+        });
+        return promise;
+      }
     }
   }
 
@@ -375,7 +402,7 @@ export class GuarantorDetailsPage implements OnInit {
           dateOfBirth: this.datepipe.transform(this.guarantorDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
           rentShare: parseFloat(this.guarantorDetailsForm.get('rentShare').value),
           maritalStatus: this.guarantorDetailsForm.get('maritalStatus').value,
-          nationality: this.getLookupValue(this.guarantorDetailsForm.get('nationality').value, this.nationList),
+          nationality: this.getLookupValue(this.guarantorDetailsForm.get('nationality').value, this.referencingNationalities),
           registrationNumber: this.guarantorDetailsForm.get('registrationNumber').value,
           sendTenantLink: true,
           autoSubmitLink: true,

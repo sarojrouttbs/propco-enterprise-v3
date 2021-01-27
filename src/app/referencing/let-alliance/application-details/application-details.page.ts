@@ -53,7 +53,7 @@ export class ApplicationDetailsPage implements OnInit {
   maritalStatusTypes: any[] = [];
   tenantMaritals: any[] = [];
   agreementStatuses: any[] = [];
-  nationList: any[] = [];
+  referencingNationalities: any[] = [];
   referencingOffices: any[] = [];
   proposedAgreementStatusIndex: any;
   completionMethods: any[] = COMPLETION_METHODS;
@@ -228,14 +228,14 @@ export class ApplicationDetailsPage implements OnInit {
 
   private setLookupData(data: any): void {
     this.agreementStatuses = data.agreementStatuses;
-    this.nationList = data.tenantNations;
     this.tenantMaritals = data.tenantMaritals;
     this.managementTypes = data.managementTypes;
-
+    
     this.proposedAgreementStatusIndex = this.agreementStatuses.find(obj => obj.value === 'Proposed').index;
   }
-
+  
   private setReferencingLookupData(data: any): void {
+    this.referencingNationalities = data.referencingNationalities;
     this.managementStatusTypes = data.managementStatusTypes;
     this.tenantTypes = data.tenantTypes;
     this.titleTypes = data.titleTypes;
@@ -680,7 +680,7 @@ export class ApplicationDetailsPage implements OnInit {
         dateOfBirth: this.datepipe.transform(this.tenantDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
         rentShare: parseFloat(this.tenantDetailsForm.get('rentShare').value),
         maritalStatus: this.tenantDetailsForm.get('maritalStatus').value,
-        nationality: this.getLookupValue(this.tenantDetailsForm.get('nationality').value, this.nationList),
+        nationality: this.getLookupValue(this.tenantDetailsForm.get('nationality').value, this.referencingNationalities),
         registrationNumber: this.tenantDetailsForm.get('registrationNumber').value,
         sendTenantLink: true,
         autoSubmitLink: true,
