@@ -228,6 +228,7 @@ declare namespace letAllianceModels {
         title: string;
         propcoId: number;
         guarantorId: string;
+        referencingApplicationStatus: number;
     }
 }
 

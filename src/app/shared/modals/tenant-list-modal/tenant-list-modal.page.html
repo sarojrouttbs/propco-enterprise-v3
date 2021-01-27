@@ -23,12 +23,12 @@
         <tr *ngFor="let tenant of laTenantList; let i=index;"  class="table-row">
           <td><ion-checkbox [checked]="tenant?.isRowChecked" [disabled]="!tenant?.isReferencingRequired"
             (ionChange)="selectTenant(tenant, $event)" 
-            color="primary" style="height: 25px;width: 25px; bottom: -5px;" ></ion-checkbox>
+            color="primary"></ion-checkbox>
           </td>
           <td>{{tenant?.reference ? tenant?.reference : '-'}}</td>
           <td>{{tenant?.addressee ? tenant?.addressee : ((tenant?.title? tenant?.title + ' ' : '')  + tenant?.name)}}
           </td>  
-          <td>{{tenant?.isLead ? 'Lead Tenant' : 'Co Tenant' }}</td>
+          <td>{{tenant?.isLead ? 'Lead Tenant' : 'Co-Tenant' }}</td>
           <td>
             <ion-toggle (ionChange)="toggleReferencing(tenant, $event)" slot="start" [checked]="tenant.isReferencingRequired"></ion-toggle>
           </td>
