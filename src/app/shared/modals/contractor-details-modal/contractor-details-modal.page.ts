@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { CommonService } from '../../services/common.service';
-
+import { ValidationService } from 'src/app/shared/services/validation.service';
 @Component({
   selector: 'app-contractor-details-modal',
   templateUrl: './contractor-details-modal.page.html',
@@ -44,7 +44,7 @@ export class ContractorDetailsModalPage implements OnInit {
       company: ['', Validators.required],
       name: ['', Validators.required],
       telephone: ['', Validators.required],
-      email: ['', Validators.required],
+      email: ['', Validators.required, ValidationService.emailValidator],
       estimatedVisitAt: ['', Validators.required],
       notes: ''
     });

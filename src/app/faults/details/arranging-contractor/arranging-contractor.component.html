@@ -59,11 +59,10 @@
             || !iacNotification?.responseReceived?.isAccepted 
             || enableMarkCompletedBtn())">
             <h4 claas="ion-text-center">Next Step:</h4>
-            <h6 *ngIf="iacNotification?.responseReceived == null">
+            <h6 *ngIf="iacNotification?.responseReceived == null && (iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone)">
               <ion-text color="danger">Please note: </ion-text>
               <span>The fault will be <i>escalated</i> automatically if the contractor doesn't respond within
-                {{(iacNotification?.allowedNumberOfChases - iacNotification?.numberOfChasesDone) *
-                iacNotification?.chaseInterval}} hours.
+                {{getPendingHours()}} hours.
               </span>
             </h6>
             <h6 *ngIf="iacNotification?.responseReceived?.isAccepted === false">

@@ -1687,4 +1687,14 @@ export class ArrangingContractorComponent implements OnInit {
     }
     return enable;
   }
+
+  getPendingHours() {
+    let hours = 0;
+    const currentDateTime = this.commonService.getFormatedDateTime(new Date());
+    if (this.iacNotification.nextChaseDueAt) {
+      const diffInMs = Date.parse(this.iacNotification.nextChaseDueAt) - Date.parse(currentDateTime);
+      hours = diffInMs / 1000 / 60 / 60;
+    }
+    return hours > 0 ? Math.floor(hours) : 0;
+  }
 }
