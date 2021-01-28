@@ -73,18 +73,18 @@ export class ContractorDetailsModalPage implements OnInit {
         notes: this.contractorDetailForm.value.notes,
         telephone: this.contractorDetailForm.value.telephone
       }
-      // const promise = new Promise((resolve, reject) => {
-      //   this.faultsService.saveOwnContractor(this.faultId, requestObj).subscribe(
-      //     res => {
-      //       resolve(true);
-      //       this.modalController.dismiss('success');
-      //     },
-      //     error => {
-      //       resolve(false);
-      //     }
-      //   );
-      // });
-      // return promise;
+      const promise = new Promise((resolve, reject) => {
+        this.faultsService.saveOwnContractor(this.faultId, requestObj).subscribe(
+          res => {
+            resolve(true);
+            this.modalController.dismiss('success');
+          },
+          error => {
+            resolve(false);
+          }
+        );
+      });
+      return promise;
     } else {
       this.contractorDetailForm.markAllAsTouched();
     }
