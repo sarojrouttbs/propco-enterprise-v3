@@ -17,6 +17,7 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { DataTablesModule } from 'angular-datatables';
+import { ScriptService } from './shared/services/script.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -45,7 +46,8 @@ import { DataTablesModule } from 'angular-datatables';
       useClass: AppHttpInterceptor,
       multi: true
     },
-    CommonService
+    CommonService,
+    ScriptService
   ],
   bootstrap: [AppComponent]
 })
