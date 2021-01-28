@@ -103,7 +103,7 @@
                 <tr>
                   <th style="width:7%; min-width: 80px;">Reference No.</th>
                   <th >Property</th>
-                  <th style="width:10%">Applicant Name</th>
+                  <th style="width:12%">Applicant Name</th>
                   <th style="width:10%">Branch</th>
                   <th style="width:9%; min-width:80px;">Tenancy Start</th>
                   <th style="width:8%; min-width: 80px;">Rent Share</th>
@@ -126,7 +126,7 @@
                   <td>{{application.tenancyStartDate|| '-' | date : 'dd/MM/yyyy' }}</td>
                   <td>{{application.rentShare || '0' | currency: '£'}}</td>
                   <td>{{application.dateOfSubmission|| '-' | date : 'dd/MM/yyyy' }}</td>
-                  <td>{{getProductType(application.product) || '-'}}</td>
+                  <td>{{getProductType(application.product, 'application') || '-'}}</td>
                   <td>{{getLookupValue(application.applicationStatus, referencingApplicantStatusTypes) || '-'}}</td>
                   <td class="resp-action-icon">
                     <i (click)="showMenu($event, 'divOverlay', application, 'table-row')"

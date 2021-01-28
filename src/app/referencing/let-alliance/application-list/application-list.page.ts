@@ -57,6 +57,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     public datepipe: DatePipe
     ) {
     this.getLookupData();
+    this.getProductList();
   }
 
   ngOnInit() {
@@ -84,7 +85,6 @@ export class ApplicationListPage implements OnInit, OnDestroy {
         
         self.referencingService.getApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.applicationParams).subscribe(res => {
           self.applicationList = res && res.data ? res.data : [];
-          self.getProductList();
           callback({
             recordsTotal: res ? res.count : 0,
             recordsFiltered: res ? res.count : 0,
@@ -139,9 +139,9 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       },
       {
         data: 6,
-        name: 'guarantorDisplayAs',
+        name: 'dateOfSubmission',
         searchable: true,
-        orderable: false,
+        orderable: true,
 
       },
       {
@@ -259,23 +259,31 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   }
 
   private getProductList() {
-    const promise = new Promise((resolve, reject) => {
-      this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
-        res => {
-          this.referencingProductList = res ? res : {};
-          
-          if (this.referencingProductList) {
-            this.referencingCaseProductList = this.referencingProductList?.caseProducts ? this.referencingProductList.caseProducts : [];
-            this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
-          }
-          resolve(this.referencingProductList);
-        },
-        error => {
-          console.log(error);
-          resolve(this.referencingProductList);
+    this.referencingProductList = this.commonService.getItem(PROPCO.REFERENCING_PRODUCT_LIST, true);
+    if (this.referencingProductList) {
+      this.referencingCaseProductList = this.referencingProductList?.caseProducts ? this.referencingProductList.caseProducts : [];
+      this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
+    }
+    else{
+      const promise = new Promise((resolve, reject) => {
+        this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
+          res => {
+            this.referencingProductList = res ? res : {};
+            
+            if (this.referencingProductList) {
+              this.commonService.setItem(PROPCO.REFERENCING_PRODUCT_LIST, res);
+              this.referencingCaseProductList = this.referencingProductList?.caseProducts ? this.referencingProductList.caseProducts : [];
+              this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
+            }
+            resolve(this.referencingProductList);
+          },
+          error => {
+            console.log(error);
+            resolve(this.referencingProductList);
+        });
       });
-    });
-    return promise;
+      return promise;
+    }
   }
 
   async checkApplicationGuarantor() {
@@ -396,13 +404,22 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     return promise;
   }
 
-  getProductType(productId: any): string{
+  getProductType(productId: any, name: any): string{
     let productType: any;
-    this.referencingApplicationProductList.find((obj) => {
-      if (obj.productId === productId) {
-        productType = obj.productName;
-      }
-    });
+    if(name == 'case'){
+      this.referencingCaseProductList.find((obj) => {
+        if (obj.productId === productId) {
+          productType = obj.productName;
+        }
+      });
+    }
+    else if(name == 'application'){
+      this.referencingApplicationProductList.find((obj) => {
+        if (obj.productId === productId) {
+          productType = obj.productName;
+        }
+      });
+    }
     return productType;
   }
 
