@@ -31,7 +31,8 @@ export class GuarantorDetailsPage implements OnInit {
   guarantorMaritals: any[] = [];
 
   referencingProductList: any;
-  referencingApplicationProductList: any[];
+  referencingCaseProductList: any[] = [];
+  referencingApplicationProductList: any[] = [];
 
   isGuarantorTabDetailSubmit: boolean;
 
@@ -71,6 +72,7 @@ export class GuarantorDetailsPage implements OnInit {
   initiateApplication() {
     if(this.applicantId && this.applicationId){
       this.getLookupData();
+      this.getProductList();
       this.initGuarantorDetailsTabForm();
       this.initSelectGuarantorForm();
       this.initialApiCall();
@@ -150,8 +152,7 @@ export class GuarantorDetailsPage implements OnInit {
   private async initialApiCall() {
     this.commonService.showLoader();
     forkJoin([
-      this.getTenantGuarantorList(),
-      this.getProductList()
+      this.getTenantGuarantorList()
     ]).subscribe(async (values) => {
       this.setValidatorsForForms();
     });
@@ -202,6 +203,8 @@ export class GuarantorDetailsPage implements OnInit {
     else {
       const guarantorApplicationStatus = this.guarantorList.find(obj => obj.guarantorId === guarantorId).referencingApplicationStatus;
       if(guarantorApplicationStatus == 0 || guarantorApplicationStatus == 1){
+        this.initGuarantorDetailsTabForm();
+        this.initSelectGuarantorForm();
         this.applicationAlert();
       }
       else{
@@ -225,22 +228,32 @@ export class GuarantorDetailsPage implements OnInit {
     }
   }
 
-  getProductList() {
-    const promise = new Promise((resolve, reject) => {
-      this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
-        res => {
-          this.referencingProductList = res ? res : {};
-          if(this.referencingProductList) {
-            this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
-          }
-          resolve(this.referencingProductList);
-        },
-        error => {
-          console.log(error);
-          resolve(this.referencingProductList);
+  private getProductList() {
+    this.referencingProductList = this.commonService.getItem(PROPCO.REFERENCING_PRODUCT_LIST, true);
+    if (this.referencingProductList) {
+      this.referencingCaseProductList = this.referencingProductList?.caseProducts ? this.referencingProductList.caseProducts : [];
+      this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
+    }
+    else{
+      const promise = new Promise((resolve, reject) => {
+        this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
+          res => {
+            this.referencingProductList = res ? res : {};
+            
+            if (this.referencingProductList) {
+              this.commonService.setItem(PROPCO.REFERENCING_PRODUCT_LIST, res);
+              this.referencingCaseProductList = this.referencingProductList?.caseProducts ? this.referencingProductList.caseProducts : [];
+              this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
+            }
+            resolve(this.referencingProductList);
+          },
+          error => {
+            console.log(error);
+            resolve(this.referencingProductList);
+        });
       });
-    });
-    return promise;
+      return promise;
+    }
   }
 
   private initPatching(): void {
@@ -406,6 +419,7 @@ export class GuarantorDetailsPage implements OnInit {
           registrationNumber: this.guarantorDetailsForm.get('registrationNumber').value,
           sendTenantLink: true,
           autoSubmitLink: true,
+          isSubmitted : true,
           isGuarantor: true,
           hasTenantOtherName: this.guarantorDetailsForm.get('hasTenantOtherName').value,
           otherNames: this.guarantorDetailsForm.get('hasTenantOtherName').value ? [this.guarantorDetailsForm.get('otherNames').value] : [],

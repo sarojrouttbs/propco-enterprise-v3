@@ -24,6 +24,10 @@ export class DashboardPage implements OnInit {
   referencingApplicantResultTypes: any[] = [];
   applicationId: any;
 
+  referencingProductList: any;
+  referencingCaseProductList: any[] = [];
+  referencingApplicationProductList: any[] = [];
+
   constructor(
     private commonService: CommonService,
     private referencingService: ReferencingService,
@@ -31,6 +35,7 @@ export class DashboardPage implements OnInit {
     private modalController: ModalController
   ) {
     this.getLookupData();
+    this.getProductList();
   }
 
   ngOnInit() {
@@ -67,6 +72,34 @@ export class DashboardPage implements OnInit {
   private setReferencingLookupData(data: any): void {
     this.referencingApplicantStatusTypes = data.applicantStatusTypes;
     this.referencingApplicantResultTypes = data.applicantReferencingResultTypes;
+  }
+
+  private getProductList() {
+    this.referencingProductList = this.commonService.getItem(PROPCO.REFERENCING_PRODUCT_LIST, true);
+    if (this.referencingProductList) {
+      this.referencingCaseProductList = this.referencingProductList?.caseProducts ? this.referencingProductList.caseProducts : [];
+      this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
+    }
+    else{
+      const promise = new Promise((resolve, reject) => {
+        this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
+          res => {
+            this.referencingProductList = res ? res : {};
+            
+            if (this.referencingProductList) {
+              this.commonService.setItem(PROPCO.REFERENCING_PRODUCT_LIST, res);
+              this.referencingCaseProductList = this.referencingProductList?.caseProducts ? this.referencingProductList.caseProducts : [];
+              this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
+            }
+            resolve(this.referencingProductList);
+          },
+          error => {
+            console.log(error);
+            resolve(this.referencingProductList);
+        });
+      });
+      return promise;
+    }
   }
 
   getApplicationList(){

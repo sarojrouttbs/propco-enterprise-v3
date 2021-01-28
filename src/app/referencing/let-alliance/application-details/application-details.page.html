@@ -4,7 +4,7 @@
       <ion-row>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Property Product Type <ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-label position="floating">Property Product Type</ion-label>
             <ion-select interface="popover" formControlName="productId">
               <ion-select-option [value]="item.productId" *ngFor="let item of referencingCaseProductList">
                 {{ item.productName }}
@@ -295,7 +295,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Product</ion-text><br />
-        <ion-text class="content">{{getProductType(tenancyDetailsForm.controls.productId.value) || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getProductType(tenancyDetailsForm.controls.productId.value, 'case') || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">No. of Occupants</ion-text><br />
@@ -339,7 +339,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Product</ion-text><br />
-        <ion-text class="content">{{getProductType(tenantDetailsForm.controls.productId.value) || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getProductType(tenantDetailsForm.controls.productId.value, 'application') || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Tenant Type</ion-text><br />

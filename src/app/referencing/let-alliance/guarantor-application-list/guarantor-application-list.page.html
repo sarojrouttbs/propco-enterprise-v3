@@ -34,6 +34,7 @@
                   <th style="width:12%">Branch</th>
                   <th style="width:10%; min-width: 80px;">Tenancy Start</th>
                   <th style="width:9%; min-width: 80px;">Rent Share</th>
+                  <th style="width:9%; min-width: 80px;">Submission Date</th>
                   <th>Product Type</th>
                   <th style="width:17%">Application Status</th> 
                   <th style="width:36px"></th>
@@ -48,7 +49,8 @@
                   <td>{{application.office || '-'}}</td>
                   <td>{{application.tenancyStartDate|| '-' | date : 'dd/MM/yyyy' }}</td>
                   <td>{{application.rentShare || '0' | currency: '£'}}</td>
-                  <td>{{getProductType(application.product) || '-'}}</td>
+                  <td>{{application.dateOfSubmission || '-' | date : 'dd/MM/yyyy' }}</td>
+                  <td>{{getProductType(application.product, 'application') || '-'}}</td>
                   <td>{{getLookupValue(application.applicationStatus, referencingApplicantStatusTypes) || '-'}}</td>
                   <td class="resp-action-icon">
                     <i (click)="showMenu($event, 'divOverlay', application, 'table-row')"
