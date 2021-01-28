@@ -44,7 +44,7 @@ export class ContractorDetailsModalPage implements OnInit {
       company: ['', Validators.required],
       name: ['', Validators.required],
       telephone: ['', Validators.required],
-      email: ['', Validators.required, ValidationService.emailValidator],
+      email: ['', [Validators.required, ValidationService.emailValidator]],
       estimatedVisitAt: ['', Validators.required],
       notes: ''
     });
