@@ -84,17 +84,13 @@ export class DashboardPage implements OnInit {
       searching: false,
       ordering: false,
       pageLength: 5,
-      // responsive: true,
       lengthMenu: [5, 10, 15],
       ajax: (tableParams: any, callback) => {
-        // if (!this.isFilter) {
         this.faultParams = this.faultParams
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');
-        if (this.fpm.length > 0) {
-          this.faultParams = this.faultParams.set('fpm', this.fpm);
-        }
-
+        // if (this.fpm.length > 0) {
+        // this.faultParams = this.faultParams.set('fpm', '17,18,20,24,27,32,35,36');
         // }
         that.faultsService.getAllFaults(this.faultParams).subscribe(res => {
           that.faultList = res && res.data ? res.data : [];
@@ -140,6 +136,7 @@ export class DashboardPage implements OnInit {
   }
 
   ionViewDidEnter() {
+    this.faultParams = this.faultParams.set('fpm', '17,18,20,24,27,32,35,36');
     this.rerenderFaults(true);
     this.hideMenu('', 'divOverlay');
   }
@@ -156,10 +153,10 @@ export class DashboardPage implements OnInit {
       });
     }
     let faultsLookupData = this.commonService.getItem(PROPCO.FAULTS_LOOKUP_DATA, true);
-    if(faultsLookupData){
+    if (faultsLookupData) {
       this.setFaultsLookupData(faultsLookupData);
     }
-    else{
+    else {
       this.commonService.getFaultsLookup().subscribe(data => {
         this.commonService.setItem(PROPCO.FAULTS_LOOKUP_DATA, data);
         this.setFaultsLookupData(data);
@@ -175,7 +172,7 @@ export class DashboardPage implements OnInit {
     this.notesTypes = data.notesType;
   }
 
-  private setFaultsLookupData(data){
+  private setFaultsLookupData(data) {
     this.faultCategories = data.faultCategories;
     this.faultStatuses = data.faultStatuses;
     this.faultUrgencyStatuses = data.faultUrgencyStatuses;
@@ -739,7 +736,7 @@ export class DashboardPage implements OnInit {
   endLoading() {
     this.commonService.hideLoader();
   }
-  
+
   startLoading() { }
 }
 
