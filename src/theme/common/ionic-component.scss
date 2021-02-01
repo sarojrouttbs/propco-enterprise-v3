@@ -370,3 +370,18 @@ ion-alert.common-alert-box {
 .alert-wrapper {
   min-width: 30% !important;
 }
+
+.tenancy-clause-modal .modal-wrapper{
+  min-width: 725px;
+}
+
+.property-certificates-list {
+  .modal-wrapper {
+    min-height: 300px;
+    min-width: 800px;
+
+    .dataTables_wrapper.no-footer .dataTables_scrollBody{
+      border-bottom: none;
+    }
+  }
+}

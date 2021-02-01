@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { AgreementClauseModalPage } from './agreement-clause-modal.page';
+import { MoreInfoModalPage } from './more-info-modal.page';
 
-describe('AgreementClauseModalPage', () => {
-  let component: AgreementClauseModalPage;
-  let fixture: ComponentFixture<AgreementClauseModalPage>;
+describe('MoreInfoModalPage', () => {
+  let component: MoreInfoModalPage;
+  let fixture: ComponentFixture<MoreInfoModalPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AgreementClauseModalPage ],
+      declarations: [ MoreInfoModalPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AgreementClauseModalPage);
+    fixture = TestBed.createComponent(MoreInfoModalPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

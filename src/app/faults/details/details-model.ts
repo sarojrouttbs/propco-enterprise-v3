@@ -86,6 +86,8 @@ declare namespace FaultModels {
         submittedBy: string;
         assignedTo: string;
         contractorId: string;
+        serviceContractCertificateId?: string;
+        warranrtCertificateId?: string;
     }
 
     export interface AdditionalInfo {
@@ -205,7 +207,7 @@ declare namespace FaultModels {
         isTenancyGivenNoticeOrInLastMonth: boolean;
     }
 
-    export interface LandlordOwnContractor{
+    export interface LandlordOwnContractor {
         company: string;
         email: string;
         estimatedVisitAt: any;
