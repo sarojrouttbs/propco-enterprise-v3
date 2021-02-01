@@ -89,7 +89,7 @@
           </ion-col>
           <ion-col size="30">
             <ion-button color="success" class="action-btn popup-view-btn" fill="outline" [disabled]="isBlock"
-              (click)="viewBlockManagement()">View</ion-button>
+              (click)="viewBlockManagement();  $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
       </ion-col>
@@ -104,14 +104,16 @@
               <ion-row class="radio-block">
                 <ion-col>
                   <ion-item lines="none">
-                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start"></ion-radio>
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start"
+                      [disabled]="!propertyCertificate"></ion-radio>
                     <ion-label>Yes</ion-label>
                   </ion-item>
                 </ion-col>
 
                 <ion-col>
                   <ion-item lines="none">
-                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start"></ion-radio>
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start"
+                      [disabled]="!propertyCertificate"></ion-radio>
                     <ion-label>No</ion-label>
                   </ion-item>
                 </ion-col>
@@ -120,10 +122,10 @@
           </ion-col>
           <ion-col size="30">
             <ion-button color="success" class="action-btn popup-view-btn" fill="outline" [disabled]="isGuarantee"
-              (click)="viewAgreementClause()">View</ion-button>
+              (click)="viewPropertyCertificate(); $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
-        <!-- <ion-text color="danger" *ngIf="!agreementClauses">No details available</ion-text> -->
+        <ion-text color="danger" *ngIf="!propertyCertificate">No details available</ion-text>
       </ion-col>
       <ion-col class="card">
         <h3>Service Contract</h3>
@@ -159,9 +161,11 @@
   </form>
 </ion-grid>
 <div class="action-btn-group">
-  <ion-button (click)="moreInfo();" class="save-button ion-float-left" [disabled]="faultDetails?.status===10">Request More
+  <ion-button (click)="moreInfo();" class="save-button ion-float-left" [disabled]="faultDetails?.status===10">Request
+    More
     Info</ion-button>
-  <ion-button (click)="closeFault();" class="cancel-button ion-float-left" [disabled]="faultDetails?.status===10">Close Fault
+  <ion-button (click)="closeFault();" class="cancel-button ion-float-left" [disabled]="faultDetails?.status===10">Close
+    Fault
   </ion-button>
   <ion-button (click)="_btnHandler('cancel')" class="cancel-button">Cancel</ion-button>
   <ion-button (click)="_btnHandler('back')">Back</ion-button>

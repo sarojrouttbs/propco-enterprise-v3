@@ -5,6 +5,13 @@
 </ion-header>
 
 <ion-content>
+  <ion-grid>
+    <ion-row *ngFor="let clause of tenancyClauses.data">
+      <ion-text><h3>{{ clause.clauseName }}</h3></ion-text>
+      <p>{{ clause.clauseText }}</p>
+    </ion-row>
+  </ion-grid>
+  <!-- tenancyClauses -->
   <div class="action-btn-group">
     <ion-button class="cancel-button" (click)="dismiss()">Close</ion-button>
   </div>

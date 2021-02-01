@@ -2,14 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { AgreementClauseModalPage } from './agreement-clause-modal.page';
+import { PropertyCertificateModalPage } from './property-certificate-modal.page';
 import { Routes, RouterModule } from '@angular/router';
 import { ComponentsModule } from '../../components/components.module';
+import { DataTablesModule } from 'angular-datatables';
 
 const routes: Routes = [
   {
     path: '',
-    component: AgreementClauseModalPage
+    component: PropertyCertificateModalPage
   }
 ];
 
@@ -19,10 +20,11 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ComponentsModule
+    ComponentsModule,
+    DataTablesModule
   ],
-  declarations: [AgreementClauseModalPage],
+  declarations: [PropertyCertificateModalPage],
   // providers: [FaultsService],
-  exports: [AgreementClauseModalPage]
+  exports: [PropertyCertificateModalPage]
 })
-export class AgreementClauseModalPageModule {}
+export class PropertyCertificateModalPageModule {}

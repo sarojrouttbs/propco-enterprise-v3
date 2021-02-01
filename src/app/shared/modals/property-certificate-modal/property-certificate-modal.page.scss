@@ -1,0 +1,17 @@
+table {
+    // margin-bottom: 20px;
+}
+
+td:focus {
+    outline: none;
+}
+
+.warranty-details-banner {
+    background: var(--ion-color-step-2000);
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.action-btn-block {
+    margin-bottom: 20px;
+}

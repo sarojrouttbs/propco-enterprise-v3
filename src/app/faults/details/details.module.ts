@@ -38,7 +38,8 @@ import { FaultQualificationComponent } from './fault-qualification/fault-qualifi
 import { BranchDetailsModalPageModule } from 'src/app/shared/modals/branch-details-modal/branch-details-modal.module';
 import { CloseFaultModalPageModule } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.module';
 import { TenancyClauseModalPageModule } from 'src/app/shared/modals/tenancy-clause-modal/tenancy-clause-modal.module';
-import { AgreementClauseModalPageModule } from 'src/app/shared/modals/agreement-clause-modal/agreement-clause-modal.module';
+import { PropertyCertificateModalPageModule } from 'src/app/shared/modals/property-certificate-modal/property-certificate-modal.module';
+import { MoreInfoModalPageModule } from 'src/app/shared/modals/more-info-modal/more-info-modal.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -67,9 +68,10 @@ import { AgreementClauseModalPageModule } from 'src/app/shared/modals/agreement-
     BranchDetailsModalPageModule,
     CloseFaultModalPageModule,
     TenancyClauseModalPageModule,
-    AgreementClauseModalPageModule,
+    PropertyCertificateModalPageModule,
     WorksorderModalPageModule,
-    RejectInvoiceModule
+    RejectInvoiceModule,
+    MoreInfoModalPageModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
     PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent,JobCompletionComponent],

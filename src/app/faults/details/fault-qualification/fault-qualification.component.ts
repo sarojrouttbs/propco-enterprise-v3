@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { FAULT_STAGES } from 'src/app/shared/constants';
-import { AgreementClauseModalPage } from 'src/app/shared/modals/agreement-clause-modal/agreement-clause-modal.page';
+import { PropertyCertificateModalPage } from 'src/app/shared/modals/property-certificate-modal/property-certificate-modal.page';
 import { BranchDetailsModalPage } from 'src/app/shared/modals/branch-details-modal/branch-details-modal.page';
 import { CloseFaultModalPage } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.page';
-import { TenantListModalPage } from 'src/app/shared/modals/tenant-list-modal/tenant-list-modal.page';
+import { TenancyClauseModalPage } from 'src/app/shared/modals/tenancy-clause-modal/tenancy-clause-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
 
@@ -28,7 +28,8 @@ export class FaultQualificationComponent implements OnInit {
   isCancelled = true;
   @Output() public btnAction: EventEmitter<any> = new EventEmitter();
   tenancyClauses: any;
-  agreementClauses: any;
+  propertyCertificate: any;
+  iacNotification;
 
   constructor(
     private fb: FormBuilder,
@@ -46,15 +47,14 @@ export class FaultQualificationComponent implements OnInit {
     if (changes.faultDetails && !changes.faultDetails.firstChange) {
       this.initFaultQualification();
     }
-    if (changes.propertyDetails && !changes.propertyDetails.firstChange) {
-      // this.fetchPropertyClauses();
-    }
   }
 
   initFaultQualification() {
     this.initFaultQualificationForm();
     this.patchValue();
     this.fetchAgreementsClauses();
+    this.fetchPropertyCertificates();    
+    this.faultNotification(this.faultDetails.stageAction);
   }
 
   private initFaultQualificationForm(): void {
@@ -77,6 +77,44 @@ export class FaultQualificationComponent implements OnInit {
         isUnderServiceContract: this.faultDetails.isUnderServiceContract
       });
     }
+  }
+
+  async faultNotification(action) {
+    let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+    this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.FAULT_QUALIFICATION, action);
+  }
+
+  async checkFaultNotifications(faultId) {
+    return new Promise((resolve, reject) => {
+      this.faultsService.getFaultNotifications(faultId).subscribe(async (response) => {
+        let notifications = response && response.data ? response.data : [];
+        resolve(notifications);
+      }, error => {
+        reject(error)
+      });
+    });
+  }
+
+  private filterNotifications(data, stage, action) {
+    const promise = new Promise((resolve, reject) => {
+      let filtereData = null;
+      if (data.length === 0) {
+        resolve(null);
+      }
+      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
+      if (filtereData.length === 0) {
+        resolve(null);
+      }
+      filtereData = filtereData.sort((a, b) => {
+        return <any>new Date(b.firstEmailSentAt) - <any>new Date(a.firstEmailSentAt);
+      });
+      if (filtereData && filtereData[0]) {
+        resolve(filtereData[0]);
+      } else {
+        resolve(null);
+      }
+    });
+    return promise;
   }
 
   radioChecked(type) {
@@ -200,8 +238,9 @@ export class FaultQualificationComponent implements OnInit {
       faultRequestObj.isUnderServiceContract = qualificationForm.isUnderServiceContract;
       faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
       let res = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
-      
+
       if (res) {
+        // this.faultNotification();
         this._btnHandler('refresh');
       }
     }
@@ -255,29 +294,10 @@ export class FaultQualificationComponent implements OnInit {
 
   moreInfo() { }
 
-  // private fetchPropertyClauses() {
-  //   const promise = new Promise((resolve, reject) => {
-  //     this.faultsService.fetchPropertyClauses(this.propertyDetails.propertyId).subscribe(
-  //       res => {
-  //         this.tenancyClauses = res ? res : '';
-  //         if (!this.tenancyClauses) {
-  //           this.faultQualificationForm.patchValue({ hasMaintTenancyClause: false });
-  //           this.faultQualificationForm.get('hasMaintTenancyClause').updateValueAndValidity();
-  //         }
-  //         resolve(true);
-  //       },
-  //       error => {
-  //         resolve(false);
-  //       }
-  //     );
-  //   });
-  //   return promise;
-  // }
-
   async viewTenancyClause() {
     const modal = await this.modalController.create({
-      component: TenantListModalPage,
-      cssClass: 'modal-container',
+      component: TenancyClauseModalPage,
+      cssClass: 'modal-container tenancy-clause-modal',
       componentProps: {
         tenancyClauses: this.tenancyClauses
       },
@@ -314,12 +334,12 @@ export class FaultQualificationComponent implements OnInit {
     }
   }
 
-  async viewAgreementClause() {
+  async viewPropertyCertificate() {
     const modal = await this.modalController.create({
-      component: AgreementClauseModalPage,
-      cssClass: 'modal-container',
+      component: PropertyCertificateModalPage,
+      cssClass: 'modal-container property-certificates-list',
       componentProps: {
-        agreementClauses: this.agreementClauses
+        propertyCertificate: this.propertyCertificate
       },
       backdropDismiss: false
     });
@@ -334,6 +354,7 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   viewBlockManagement() { }
+
   viewServiceContract() { }
 
   private updateFaultDetails(faultId, requestObj): Promise<any> {
@@ -349,6 +370,27 @@ export class FaultQualificationComponent implements OnInit {
       );
     });
     return promise;
+  }
+
+  private fetchPropertyCertificates() {
+    if (this.faultDetails.propertyId) {
+      const promise = new Promise((resolve) => {
+        this.faultsService.fetchPropertyCertificates(this.faultDetails.propertyId).subscribe(
+          res => {
+            this.propertyCertificate = res ? res : '';
+            if (!this.propertyCertificate) {
+              this.faultQualificationForm.patchValue({ isUnderWarranty: false });
+              this.faultQualificationForm.get('isUnderWarranty').updateValueAndValidity();
+            }
+            resolve(true);
+          },
+          () => {
+            resolve(false);
+          }
+        );
+      });
+      return promise;
+    }
   }
 
 }

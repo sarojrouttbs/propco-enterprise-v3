@@ -269,10 +269,6 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/cancel`, requestObj);
   }
 
-  fetchPropertyClauses(propertyId): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/clauses`);
-  }
-
   fetchAgreementsClauses(agreementId): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `agreements/${agreementId}/clauses`);
   }
@@ -291,6 +287,10 @@ export class FaultsService {
 
   invoiceUploaded(faultId): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/invoice-uploaded`, {});
+  }
+
+  fetchPropertyCertificates(propertyId): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/certificates`);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
