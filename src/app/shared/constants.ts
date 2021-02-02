@@ -256,3 +256,8 @@ export const ScriptStore = [
    src: 'https://jira.techblue.co.uk/s/6eca38536418f90aec448dac1cd5193f-T/pu9bd5/811001/be09033ea7858348cd8d5cdeb793189a/4.0.1/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-GB&collectorId=26327d00'
   }
 ];
+
+export const CERTIFICATES_CATEGORY = {
+  FAULT_UNDER_SERVICE_CONTRACT_CATEGORY: '4940',
+  FAULT_UNDER_WARRANTY_CATEGORY: '4938'
+}

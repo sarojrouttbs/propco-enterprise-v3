@@ -47,6 +47,7 @@
               <ion-label position="floating">Additional Details</ion-label>
                 <ion-textarea formControlName="additionalWorkDetails"></ion-textarea>
             </ion-item>
+            <app-validation-message [control]="jobCompletionForm.controls.additionalWorkDetails"></app-validation-message>
           </ion-col>
         </ion-row>
       </ion-grid>
