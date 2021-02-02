@@ -290,10 +290,11 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     await this.getGuarantorApplicationList();
     if(this.guarantorApplicationList.length > 0){
       this.router.navigate([`let-alliance/guarantor-application-list`], { queryParams: { 
-        it: 'G',
-        applicantId: this.selectedData.applicantDetail.applicantId,
-        applicationId: this.selectedData.applicationId,
-        referenceNumber: this.selectedData.referenceNumber
+        pId: this.selectedData.propertyDetail.propertyId,
+        tId: this.selectedData.applicantDetail.applicantId,
+        appId: this.selectedData.applicationId,
+        appRef: this.selectedData.referenceNumber,
+        tType: this.selectedData.applicantDetail.itemType
       }})
       .then(() => {
         location.reload();
@@ -324,9 +325,11 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       const data = modal.onDidDismiss().then(res => {
         if (res.data.userInput) {
           this.router.navigate(['/let-alliance/add-guarantor'], { queryParams: { 
-            applicantId: this.selectedData.applicantDetail.applicantId,
-            applicationId: this.selectedData.applicationId,
-            referenceNumber: this.selectedData.referenceNumber
+            pId: this.selectedData.propertyDetail.propertyId,
+            tId: this.selectedData.applicantDetail.applicantId,
+            appId: this.selectedData.applicationId,
+            appRef: this.selectedData.referenceNumber,
+            tType: this.selectedData.applicantDetail.itemType
            }, replaceUrl: true });
         } else {
         }
