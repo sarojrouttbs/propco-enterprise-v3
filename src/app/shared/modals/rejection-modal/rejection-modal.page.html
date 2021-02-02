@@ -38,7 +38,7 @@
 </ion-content>
 <ion-footer>
   <ion-row>
-    <ion-col size="50" class="checkbox-wrapper">
+    <ion-col size="30" class="checkbox-wrapper">
       <form [formGroup]="rejectionForm" *ngIf="!disableAnotherQuote">
         <div>
           <ion-checkbox slot="start" color="success" class="check-box" formControlName="landlordWantAnotherQuote">
@@ -47,7 +47,7 @@
         </div>
       </form>
     </ion-col>
-    <ion-col size="50" class="ion-text-end">
+    <ion-col size="70" class="ion-text-end">
       <ion-button (click)="dismiss()">NO</ion-button>
       <ion-button (click)="saveFaultLLAuth()">YES</ion-button>
     </ion-col>
