@@ -30,6 +30,7 @@ export class FaultQualificationComponent implements OnInit {
   tenancyClauses: any;
   propertyCertificate: any;
   iacNotification;
+  warranrtCertificateId: any;
 
   constructor(
     private fb: FormBuilder,
@@ -53,7 +54,7 @@ export class FaultQualificationComponent implements OnInit {
     this.initFaultQualificationForm();
     this.patchValue();
     this.fetchAgreementsClauses();
-    this.fetchPropertyCertificates();    
+    this.fetchPropertyCertificates();
     this.faultNotification(this.faultDetails.stageAction);
   }
 
@@ -222,27 +223,62 @@ export class FaultQualificationComponent implements OnInit {
     if (qualificationForm.isUnderServiceContract) {
       serviceCounter++;
     }
+
     if (serviceCounter > 1) {
       this.commonService.showAlert('Warning', 'Please choose one option from Block Management/Factors Responsibility, Guarantee/Warranty, and Service Contract.');
       return;
     }
 
+    if (serviceCounter === 1 && qualificationForm.isUnderBlockManagement) {
+      let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected the Block Management option for this repair. Do you want to send an email to inform the Block Management/Factors Company?', '', 'Yes', 'No');
+      if (response) {
+        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION);
+      }
+    }
+
+    if (serviceCounter === 1 && qualificationForm.isUnderWarranty) {
+      let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Guarantee/Warranty option for this repair. Do you want to send an email to inform the Guarantee Management Company?', '', 'Yes', 'No');
+      if (response) {
+        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION);
+      }
+    }
+
+    if (serviceCounter === 1 && qualificationForm.isUnderServiceContract) {
+      let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Service Contract? option for this repair. Do you want to send an email to inform the Service Contract Company? ', '', 'Yes', 'No');
+      if (response) {
+        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION);
+      }
+    }
+
+    if (serviceCounter === 0) {
+      this.changeStage();
+    }
+  }
+
+  private async changeStage() {
     let response = await this.commonService.showConfirm('Fault Qualification', `This will change the fault status to "Checking Landlord Instructions". <br/> Are you sure?`, '', 'Yes', 'No');
+    if (response) {
+      this.saveQualificationDetails(FAULT_STAGES.LANDLORD_INSTRUCTION);
+    }
+  }
+
+  private async saveQualificationDetails(stage) {
+    let qualificationForm = this.faultQualificationForm.value;
     let faultRequestObj = {} as FaultModels.IFaultResponse;
     faultRequestObj.isDraft = false;
-    if (response) {
-      faultRequestObj.doesBranchHoldKeys = qualificationForm.doesBranchHoldKeys;
-      faultRequestObj.hasMaintTenancyClause = qualificationForm.hasMaintTenancyClause;
-      faultRequestObj.isUnderBlockManagement = qualificationForm.isUnderBlockManagement;
-      faultRequestObj.isUnderWarranty = qualificationForm.isUnderWarranty;
-      faultRequestObj.isUnderServiceContract = qualificationForm.isUnderServiceContract;
-      faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
-      let res = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
+    faultRequestObj.doesBranchHoldKeys = qualificationForm.doesBranchHoldKeys;
+    faultRequestObj.hasMaintTenancyClause = qualificationForm.hasMaintTenancyClause;
+    faultRequestObj.isUnderBlockManagement = qualificationForm.isUnderBlockManagement;
+    faultRequestObj.isUnderWarranty = qualificationForm.isUnderWarranty;
+    faultRequestObj.isUnderServiceContract = qualificationForm.isUnderServiceContract;
+    faultRequestObj.stage = stage;
+    faultRequestObj.warrantyCertificateId = this.warranrtCertificateId;
 
-      if (res) {
-        // this.faultNotification();
-        this._btnHandler('refresh');
-      }
+    let res = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
+
+    if (res) {
+      // this.faultNotification();
+      this._btnHandler('refresh');
     }
   }
 
@@ -255,7 +291,9 @@ export class FaultQualificationComponent implements OnInit {
       isUnderWarranty: this.faultQualificationForm.value.isUnderWarranty,
       isUnderServiceContract: this.faultQualificationForm.value.isUnderServiceContract,
       stage: this.faultDetails.stage,
-      isDraft: true
+      isDraft: true,
+      warrantyCertificateId: this.warranrtCertificateId,
+
     };
     this.faultsService.updateFault(this.faultDetails.faultId, requestObj).subscribe(
       () => {
@@ -339,7 +377,8 @@ export class FaultQualificationComponent implements OnInit {
       component: PropertyCertificateModalPage,
       cssClass: 'modal-container property-certificates-list',
       componentProps: {
-        propertyCertificate: this.propertyCertificate
+        propertyCertificate: this.propertyCertificate,
+        warranrtCertificateId: this.warranrtCertificateId
       },
       backdropDismiss: false
     });

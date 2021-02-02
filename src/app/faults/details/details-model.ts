@@ -86,8 +86,8 @@ declare namespace FaultModels {
         submittedBy: string;
         assignedTo: string;
         contractorId: string;
-        serviceContractCertificateId?: string;
-        warranrtCertificateId?: string;
+        serviceContractCertificateId?: number;
+        warrantyCertificateId?: number;
     }
 
     export interface AdditionalInfo {
