@@ -31,10 +31,11 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   applicationStatus: any= {};
   applicationGrade: any= {};
 
-  it: any;
-  applicationId: any;
+  propertyId: any;
   applicantId: any;
+  applicationId: any;
   referenceNumber: any;
+  applicantType: any;
 
   referencingProductList: any;
   referencingCaseProductList: any[] = [];
@@ -60,10 +61,11 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.it = this.route.snapshot.queryParamMap.get('it');
-    this.applicationId = this.route.snapshot.queryParamMap.get('applicationId');
-    this.applicantId = this.route.snapshot.queryParamMap.get('applicantId');
-    this.referenceNumber = this.route.snapshot.queryParamMap.get('referenceNumber');
+    this.propertyId = this.route.snapshot.queryParamMap.get('pId');
+    this.applicantId = this.route.snapshot.queryParamMap.get('tId');
+    this.applicationId = this.route.snapshot.queryParamMap.get('appId');
+    this.referenceNumber = this.route.snapshot.queryParamMap.get('appRef');
+    this.applicantType = this.route.snapshot.queryParamMap.get('tType');
 
     const self = this;
     this.dtOptions[0] = {
@@ -248,9 +250,11 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
 
   goToGuarantorDetails(){
     this.router.navigate(['/let-alliance/add-guarantor'], { queryParams: { 
-      applicantId: this.applicantId,
-      applicationId: this.applicationId,
-      referenceNumber: this.referenceNumber
+      pId: this.propertyId,
+      tId: this.applicantId,
+      appId: this.applicationId,
+      appRef: this.referenceNumber,
+      tType: this.applicantType
      }, replaceUrl: true });
   }
 

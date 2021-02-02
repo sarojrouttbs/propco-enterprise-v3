@@ -22,8 +22,13 @@ export class GuarantorDetailsPage implements OnInit {
   selectGuarantorForm: FormGroup;
   guarantorDetailsAccordion: any = {};
   guarantorDetails: letAllianceModels.IGuarantorResponse;
+
+  propertyId: any;
   applicantId: any;
   applicationId: any;
+  referenceNumber: any;
+  applicantType: any;
+
   lookupdata: any;
   referencingLookupdata: any;
 
@@ -42,7 +47,6 @@ export class GuarantorDetailsPage implements OnInit {
   maritalStatusTypes: any[] = [];
   referencingNationalities: any[] = [];
   completionMethods: any[] = COMPLETION_METHODS;
-  referenceNumber: any;
   tenantTypes: any[] = [];
 
   adultDate = this.datepipe.transform(new Date().setDate(new Date().getDay() - (18 * 365)), 'yyyy-MM-dd');
@@ -60,9 +64,13 @@ export class GuarantorDetailsPage implements OnInit {
 
   ngOnInit() {
     this.guarantorDetailsAccordion.expanded = true;
-    this.applicationId = this.route.snapshot.queryParamMap.get('applicationId');
-    this.applicantId = this.route.snapshot.queryParamMap.get('applicantId');
-    this.referenceNumber = this.route.snapshot.queryParamMap.get('referenceNumber');
+
+    this.propertyId = this.route.snapshot.queryParamMap.get('pId');
+    this.applicantId = this.route.snapshot.queryParamMap.get('tId');
+    this.applicationId = this.route.snapshot.queryParamMap.get('appId');
+    this.referenceNumber = this.route.snapshot.queryParamMap.get('appRef');
+    this.applicantType = this.route.snapshot.queryParamMap.get('tType');
+
     this.initiateApplication();
   }
 
@@ -151,11 +159,23 @@ export class GuarantorDetailsPage implements OnInit {
 
   private async initialApiCall() {
     this.commonService.showLoader();
-    forkJoin([
-      this.getTenantGuarantorList()
-    ]).subscribe(async (values) => {
+    if(this.applicantType == 'M' || this.applicantType == 'S'){
+      forkJoin([
+        this.getTenantGuarantorList()
+      ]).subscribe(async (values) => {
+        this.setValidatorsForForms();
+      });
+    }
+    else if(this.applicantType == 'G'){
+      forkJoin([
+        this.getGuarantorDetailsById(this.applicantId)
+      ]).subscribe(async (values) => {
+        this.setValidatorsForForms();
+      });
+    }
+    else{
       this.setValidatorsForForms();
-    });
+    }
   }
 
   getTenantGuarantorList() {
@@ -208,24 +228,28 @@ export class GuarantorDetailsPage implements OnInit {
         this.applicationAlert();
       }
       else{
-        const promise = new Promise((resolve, reject) => {
-          this.referencingService.getGuarantorDetails(guarantorId).subscribe(
-            res => {
-              this.guarantorDetails = res ? res : {};
-              if(this.guarantorDetails){
-                this.initPatching();
-              }
-              resolve(this.guarantorDetails);
-            },
-            error => {
-              console.log(error);
-              resolve(this.guarantorDetails);
-            }
-          );
-        });
-        return promise;
+        this.getGuarantorDetailsById(guarantorId);
       }
     }
+  }
+
+  private getGuarantorDetailsById(guarantorId: any) {
+    const promise = new Promise((resolve, reject) => {
+      this.referencingService.getGuarantorDetails(guarantorId).subscribe(
+        res => {
+          this.guarantorDetails = res ? res : {};
+          if(this.guarantorDetails){
+            this.initPatching();
+          }
+          resolve(this.guarantorDetails);
+        },
+        error => {
+          console.log(error);
+          resolve(this.guarantorDetails);
+        }
+      );
+    });
+    return promise;
   }
 
   private getProductList() {
