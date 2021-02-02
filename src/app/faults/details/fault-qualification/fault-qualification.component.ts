@@ -232,21 +232,21 @@ export class FaultQualificationComponent implements OnInit {
     if (serviceCounter === 1 && qualificationForm.isUnderBlockManagement) {
       let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected the Block Management option for this repair. Do you want to send an email to inform the Block Management/Factors Company?', '', 'Yes', 'No');
       if (response) {
-        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION);
+        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_BLOCK_MANAGEMENT');
       }
     }
 
     if (serviceCounter === 1 && qualificationForm.isUnderWarranty) {
       let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Guarantee/Warranty option for this repair. Do you want to send an email to inform the Guarantee Management Company?', '', 'Yes', 'No');
       if (response) {
-        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION);
+        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_WARRANTY');
       }
     }
 
     if (serviceCounter === 1 && qualificationForm.isUnderServiceContract) {
       let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Service Contract? option for this repair. Do you want to send an email to inform the Service Contract Company? ', '', 'Yes', 'No');
       if (response) {
-        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION);
+        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_SERVICE_CONTRACT');
       }
     }
 
@@ -262,7 +262,7 @@ export class FaultQualificationComponent implements OnInit {
     }
   }
 
-  private async saveQualificationDetails(stage) {
+  private async saveQualificationDetails(stage: string, stageAction?: string) {
     let qualificationForm = this.faultQualificationForm.value;
     let faultRequestObj = {} as FaultModels.IFaultResponse;
     faultRequestObj.isDraft = false;
@@ -273,6 +273,7 @@ export class FaultQualificationComponent implements OnInit {
     faultRequestObj.isUnderServiceContract = qualificationForm.isUnderServiceContract;
     faultRequestObj.stage = stage;
     faultRequestObj.warrantyCertificateId = this.warranrtCertificateId;
+    faultRequestObj.stageAction = stageAction ? stageAction : '';
 
     let res = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
 
