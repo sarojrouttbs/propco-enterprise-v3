@@ -11,6 +11,7 @@ import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCT
 import { ModalController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
+import { CloseFaultModalPage } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.page';
 @Component({
   selector: 'app-job-completion',
   templateUrl: './job-completion.component.html',
@@ -146,8 +147,8 @@ export class JobCompletionComponent implements OnInit {
         this.INVOICE_VERIFICATION_THRESHOLD = await this.getSystemOptions() as number;
       }
       this.initPatching();
-      await this.faultNotification(this.faultDetails.stageAction);
     }
+    await this.faultNotification(this.faultDetails.stageAction);
   }
 
   private getFaultMaintenance() {
@@ -155,7 +156,7 @@ export class JobCompletionComponent implements OnInit {
       const params: any = new HttpParams().set('showCancelled', 'false');
       this.faultsService.getQuoteDetails(this.faultDetails.faultId, params).subscribe((res) => {
         this.isMaintenanceDetails = true;
-        resolve(res ? res.data[0] : undefined);
+        resolve(res ? res.data[0] : {});
       }, error => {
         this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
         resolve(false);
@@ -334,13 +335,11 @@ export class JobCompletionComponent implements OnInit {
       return;
     }
 
-    if (this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER) {
-      if (this.iacNotification.templateCode === 'CF-T-E') {
-        this.questionActionSatisfyJob(data);
-      }
-      else if (this.iacNotification.templateCode === 'INR-C-E' || 'IR-C-E') {
-        this.questionActionUploadInvoice(data)
-      }
+    if (this.iacNotification.templateCode === 'CF-T-E' || this.iacNotification.templateCode === 'LF-T-E') {
+      this.questionActionSatisfyJob(data);
+    }
+    else if (this.iacNotification.templateCode === 'INR-C-E' || 'IR-C-E') {
+      this.questionActionUploadInvoice(data)
     }
   }
 
@@ -349,14 +348,16 @@ export class JobCompletionComponent implements OnInit {
     notificationObj.isAccepted = data.value;
     notificationObj.submittedByType = 'SECUR_USER';
     if (data.value) {
-      this.commonService.showConfirm(data.text, `Are you sure, you want to accept the request?`, '', 'Yes', 'No').then(async res => {
+      let title = this.iacNotification.templateCode === 'LF-T-E' ? 'Close Fault': data.text;
+      let message = this.iacNotification.templateCode === 'LF-T-E' ? `This will close the Fault. Are you sure?`: `Are you sure, Tenant is satisfied with the Job?`;
+      this.commonService.showConfirm(title, message, '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this._btnHandler('refresh');
         }
       });
     } else if (!data.value) {
-      this.commonService.showConfirm(data.text, `Are you sure, you want to reject the request?`, '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, `Are you sure, Tenant is not satisfied with the Job?`, '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this._btnHandler('refresh');
@@ -683,7 +684,7 @@ export class JobCompletionComponent implements OnInit {
     return promise;
   }
 
-  getPendingHours(){
+  getPendingHours() {
     let hours = 0;
     const currentDateTime = this.commonService.getFormatedDateTime(new Date());
     if (this.iacNotification.nextChaseDueAt) {
@@ -692,4 +693,26 @@ export class JobCompletionComponent implements OnInit {
     }
     return hours > 0 ? Math.floor(hours) : 0;
   }
+
+  async closeFault() {
+    const modal = await this.modalController.create({
+      component: CloseFaultModalPage,
+      cssClass: 'modal-container close-fault-modal',
+      componentProps: {
+        faultId: this.faultDetails.faultId
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this._btnHandler('refresh');
+        this.commonService.showMessage('Fault has been closed successfully.', 'Close a Fault', 'success');
+        return;
+      }
+    });
+
+    await modal.present();
+  }
+
 }
