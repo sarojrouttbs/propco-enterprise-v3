@@ -1721,7 +1721,7 @@ export class DetailsPage implements OnInit {
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
-          await this.markJobComplete(this.faultId);
+          // await this.markJobComplete(this.faultId);
         }
       });
     }
@@ -1879,8 +1879,8 @@ export class DetailsPage implements OnInit {
       'isAnyFurtherWork': false,
       'isVoided': false,
       'jobCompletionDate': this.commonService.getFormatedDate(new Date()),
-      'submittedByType': "LANDLORD"
-    }
+      'submittedByType': "SECUR_USER"
+    };
     this.faultsService.markJobComplete(faultId, requestObj).subscribe(data => {
       this.refreshDetailsAndStage();
     }, error => {
