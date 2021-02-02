@@ -466,6 +466,8 @@ export class ApplicationDetailsPage implements OnInit {
   }
 
   setValidatorsForForms() {
+    this.tenantDetailsForm.get('rentShare').setValidators(Validators.max(this.propertyDetailsForm.get('monthlyRent').value));
+
     if (this.tenantDetailsForm.get('tenantTypeId').value == REFERENCING_TENANT_TYPE.INDIVIDUAL) {
       this.tenantDetailsForm.get('forename').setValidators(Validators.required);
       this.tenantDetailsForm.get('surname').setValidators(Validators.required);

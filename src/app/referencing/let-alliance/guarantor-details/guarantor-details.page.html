@@ -225,12 +225,12 @@
               <ng-template mat-tab-label>
                 <div class="label-text">Guarantor Details</div>
               </ng-template>
-              <div class="accordion-container">
+              <div class="accordion-container" *ngIf="applicantType!='G'">
                 <app-accordion-list [expanded]="true">
                     <ng-container *ngTemplateOutlet="selectGuarantorTemp"></ng-container>
                 </app-accordion-list>
               </div>
-              <div class="space-break"></div>
+              <div class="space-break" *ngIf="applicantType!='G'"></div>
               <div class="accordion-container">
                 <div class="accordion-header" (click)="guarantorDetailsAccordion.expanded = !guarantorDetailsAccordion.expanded">
                   <ion-grid class="ion-no-padding">

@@ -140,7 +140,7 @@
             </table>
             <div id="divOverlay">
               <!-- <ion-button>Print Report</ion-button> -->  <!-- Needed in black screen -->
-              <ion-button (click)="openApplicationStatus()">Status Update</ion-button>
+              <ion-button (click)="openApplicationStatus()">Check Status</ion-button>
               <ion-button (click)="resendLink()" *ngIf="selectedData?.applicationStatus == 0">Resend Link</ion-button>
               <ion-button *ngIf="selectedData?.applicantDetail?.itemType === 'M' || selectedData?.applicantDetail?.itemType === 'S'" (click)='checkApplicationGuarantor()'>Guarantor</ion-button>
               <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
