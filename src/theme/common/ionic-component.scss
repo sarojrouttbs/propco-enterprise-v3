@@ -214,6 +214,18 @@ ion-item {
     .footer-md::before {
       height: 0;
     }
+
+    .cancel-button {
+      --background: var(--ion-color-danger);
+    }
+  
+    .save-button {
+      --background: var(--ion-color-success);
+    }
+  
+    .submit-button {
+      --background: var(--ion-color-success);
+    }
   }
 }
 

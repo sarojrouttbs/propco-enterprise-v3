@@ -275,3 +275,8 @@ export const FAULT_QUALIFICATION_INSTRUCTION_TYPES = [
     value: 'Check Landlord\'s Instructions'
   }
 ];
+
+export const CERTIFICATES_CATEGORY = {
+  FAULT_UNDER_SERVICE_CONTRACT_CATEGORY: '4940',
+  FAULT_UNDER_WARRANTY_CATEGORY: '4938'
+}

@@ -481,7 +481,7 @@
 
 <ng-template #caseLogged>
   <ion-grid style="margin-bottom:10px">
-    <ion-row class="ion-justify-content-start">
+    <ion-row class="ion-justify-content-start fault-title">
       <ion-col size="auto">
         <h2>
           <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
@@ -496,7 +496,7 @@
         </ion-item>
         <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
       </ion-col>
-      <ion-col size="auto" class="ion-align-self-center" offset="3" *ngIf="faultId">
+      <ion-col size="auto" class="ion-align-self-center" offset="2" *ngIf="faultId">
         <!-- <ion-icon name="create" (click)="editTitle()" style="font-size: 35px;"></ion-icon> -->
         <span class="material-icons" (click)="editTitle()">
           edit
@@ -597,7 +597,7 @@
     <ion-card class="ion-no-margin">
       <ng-container *ngIf="faultDetails && (faultDetails?.stage === 'FAULT_QUALIFICATION' || stepper?.selectedIndex == 1)">
         <ion-grid style="margin-bottom:10px">
-          <ion-row class="ion-justify-content-start">
+          <ion-row class="ion-justify-content-start fault-title">
             <ion-col size="auto">
               <h2>
                 <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
@@ -612,7 +612,7 @@
               </ion-item>
               <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
             </ion-col>
-            <ion-col size="auto" class="ion-align-self-center" offset="3" *ngIf="faultId">
+            <ion-col size="auto" class="ion-align-self-center" offset="2" *ngIf="faultId">
               <span class="material-icons" (click)="editTitle()">
                 edit
               </span>
@@ -627,7 +627,7 @@
 
 <ng-template #landlordInstructions>
   <ion-grid style="margin-bottom:10px">
-    <ion-row class="ion-justify-content-start">
+    <ion-row class="ion-justify-content-start fault-title">
       <ion-col size="auto">
         <h2>
           <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
@@ -642,7 +642,7 @@
         </ion-item>
         <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
       </ion-col>
-      <ion-col size="auto" class="ion-align-self-center" offset="3" *ngIf="faultId">
+      <ion-col size="auto" class="ion-align-self-center" offset="2" *ngIf="faultId">
         <span class="material-icons" (click)="editTitle()">
           edit
         </span>
@@ -916,7 +916,7 @@
   <ion-card class="ion-no-margin">
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'ARRANGING_CONTRACTOR' || stepper?.selectedIndex == 3) && landlordsOfproperty">
       <ion-grid style="margin-bottom:10px">
-        <ion-row class="ion-justify-content-start">
+        <ion-row class="ion-justify-content-start fault-title">
           <ion-col size="auto">
             <h2>
               <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
@@ -931,7 +931,7 @@
             </ion-item>
             <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
           </ion-col>
-          <ion-col size="auto" class="ion-align-self-center" offset="3" *ngIf="faultId">
+          <ion-col size="auto" class="ion-align-self-center" offset="2" *ngIf="faultId">
             <span class="material-icons" (click)="editTitle()">
               edit
             </span>
@@ -953,7 +953,7 @@
   <ion-card class="ion-no-margin">
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'JOB_COMPLETION' || stepper?.selectedIndex == 4)">
       <ion-grid style="margin-bottom:10px">
-        <ion-row class="ion-justify-content-start">
+        <ion-row class="ion-justify-content-start fault-title">
           <ion-col size="auto">
             <h2>
               <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
@@ -968,7 +968,7 @@
             </ion-item>
             <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
           </ion-col>
-          <ion-col size="auto" class="ion-align-self-center" offset="3" *ngIf="faultId">
+          <ion-col size="auto" class="ion-align-self-center" offset="2" *ngIf="faultId">
             <span class="material-icons" (click)="editTitle()">
               edit
             </span>

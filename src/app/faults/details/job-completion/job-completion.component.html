@@ -58,8 +58,8 @@
             || iacNotification?.responseReceived == null 
             || !iacNotification?.responseReceived?.isAccepted 
             || iacNotification?.templateCode === 'CF-T-E')">
-            <h4 claas="ion-text-center">Next Step:</h4>
-            <h6 *ngIf="iacNotification?.responseReceived == null && (iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone)">
+            <h4 class="ion-text-center">Next Step:</h4>  
+            <h6 *ngIf="iacNotification?.responseReceived == null">  
               <ion-text color="danger">Please note: </ion-text>
               <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
                 {{getPendingHours()}} hours.
@@ -68,7 +68,7 @@
             <h6 *ngIf="iacNotification?.responseReceived?.isAccepted === false">
               <b>Fault Escalated - PM to decide the next steps</b>
             </h6>
-            <h6 *ngIf="iacNotification?.templateCode === 'CF-T-E' && faultDetails?.status !== 8 && faultDetails?.status !== 7">
+            <h6 *ngIf="iacNotification?.templateCode === 'CF-T-E' && iacNotification?.responseReceived?.isAccepted && faultDetails?.status !== 8 && faultDetails?.status !== 7">
               <ion-text>Contractor to visit property to carry out work on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy hh:mm a'}}</ion-text>
             </h6>
             <h6 *ngIf="faultDetails?.status === 8">
@@ -105,8 +105,7 @@
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
               <ion-row class="ion-justify-content-center">
-                <ng-container *ngFor="let instruction of otherStageActions">
-                  <div>
+                <!-- <ng-container *ngFor="let instruction of otherStageActions">
                     <ion-button color="success" expand="block" class="action-btn"
                       fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
                       (click)="setUserAction(instruction.index)">
@@ -114,15 +113,16 @@
                       <ion-icon name="checkmark-circle-outline" class="check-icon"
                         *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
                     </ion-button>
-                  </div>
-                </ng-container>
+                </ng-container> -->
+                <ion-button color="success" expand="block" class="action-btn" fill="outline" (click)="closeFault()">
+                    Close Fault</ion-button>
               </ion-row>
             </ion-grid>
           </div>
         </div>
       </ion-col>
     </ion-row>
-    <ion-grid style="margin: 20px 0" *ngIf="quoteDocuments?.length !== 0">
+    <ion-grid style="margin: 20px 0" *ngIf="quoteDocuments?.length">
       <!-- <ion-grid style="margin: 20px 0" *ngIf="quoteDocuments?.length != 0 && (iacNotification?.templateCode === 'CF-T-E' || faultDetails?.status === 8)"> -->
       <ion-row>
         <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
