@@ -1,5 +1,98 @@
 <ion-grid>
-  
+  <ion-row *ngIf="iacNotification">
+    <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+      <div class="fault-qualification">
+        <div class="banner">
+          <ion-row>
+            <ion-col width="50" class="ion-text-left">
+              <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a'
+                }}</b>
+            </ion-col>
+          </ion-row>
+          <h2 class="banner-heading">
+            {{iacNotification && iacNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
+          <h6 class="banner-title">Here’s the action you chose:</h6>
+          <ion-button color="success" class="icon-button">
+            {{getLookupValue(iacNotification?.faultStageAction, iacStageActions)}}
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+          </ion-button>
+          <ng-container *ngIf="iacNotification && iacNotification?.responseReceived">
+            <h6 class="banner-title response-recived">
+              <ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from Guarantee Management
+              Company {{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a'
+              }}
+            </h6>
+          </ng-container>
+
+          <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
+            <h6 class="banner-title awaiting-response">
+              <ion-icon name="ellipse" class="response-circle"></ion-icon> Awaiting response from the Guarantee
+              Management Company
+            </h6>
+            <h6 class="banner-title">Next chase due:
+              {{iacNotification ? (iacNotification.nextChaseDueAt | date: 'dd MMM yyyy - hh:mm a') : ''}}
+            </h6>
+          </ng-container>
+        </div>
+        <div class="question-answer" *ngIf="iacNotification">
+          <h6>{{iacNotification?.questions[0]?.qtext}}</h6>
+          <ion-grid>
+            <ion-row class="ion-justify-content-center">
+              <ng-container *ngFor="let data of iacNotification?.questions[0]?.options">
+                <ion-button color="success" class="action-btn option"
+                  fill="{{data?.value ==  iacNotification?.responseReceived?.isAccepted ? 'solid' :'outline'}}"
+                  (click)="questionAction(data)">{{data.text}}</ion-button>
+              </ng-container>
+            </ion-row>
+          </ion-grid>
+
+          <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false">
+            <ion-text color="danger">Please select an appropriate action.</ion-text>
+          </h6>
+          <div class="border-bottom"></div>
+        </div>
+        <div class="question-answer"
+          *ngIf="iacNotification 
+          && (iacNotification?.responseReceived == null) && (iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone)">
+          <h4 claas="ion-text-center">Next Step:</h4>
+          <h6>
+            <ion-text color="danger">Please note: </ion-text>
+            <span>The fault will be <i>escalated</i> automatically if the
+              Tenant doesn't respond within {{getPendingHours()}} hours.
+            </span>
+          </h6>
+          <div class="border-bottom"></div>
+        </div>
+
+        <div class="question-answer" *ngIf="iacNotification 
+          && iacNotification?.responseReceived?.isAccepted === false">
+          <h4 claas="ion-text-center">Next Step:</h4>
+          <h6>
+            <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
+          </h6>
+          <div class="border-bottom"></div>
+        </div>
+        <div class="question-answer">
+          <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
+          <ion-grid>
+            <ion-row class="ion-justify-content-center">
+              <ng-container *ngFor="let instruction of otherStageActions">
+                <div>
+                  <ion-button color="success" expand="block" class="action-btn"
+                    fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
+                    (click)="setUserAction(instruction.index)">
+                    {{instruction.value}}
+                    <ion-icon name="checkmark-circle-outline" class="check-icon"
+                      *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
+                  </ion-button>
+                </div>
+              </ng-container>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
   <form [formGroup]="faultQualificationForm">
     <ion-row>
       <ion-col class="card">
@@ -7,7 +100,7 @@
         <h5>Does branch hold Management Keys?</h5>
         <ion-row>
           <ion-col size="70">
-            <ion-radio-group (ionChange)="radioChecked('management')" formControlName="doesBranchHoldKeys">
+            <ion-radio-group formControlName="doesBranchHoldKeys">
               <ion-row class="radio-block">
                 <ion-col>
                   <ion-item lines="none">
@@ -26,7 +119,8 @@
             </ion-radio-group>
           </ion-col>
           <ion-col size="30">
-            <ion-button color="success" class="action-btn popup-view-btn" fill="outline" [disabled]="isManagement"
+            <ion-button color="success" class="action-btn popup-view-btn" fill="outline"
+              [disabled]="faultQualificationForm.get('doesBranchHoldKeys').value === null || !faultQualificationForm.get('doesBranchHoldKeys').value"
               (click)="viewBranchDetails()">View</ion-button>
           </ion-col>
         </ion-row>
@@ -37,7 +131,7 @@
         <h5>Are there any maintenance specific tenancy clauses?</h5>
         <ion-row>
           <ion-col size="70">
-            <ion-radio-group (ionChange)="radioChecked('tenant')" formControlName="hasMaintTenancyClause">
+            <ion-radio-group formControlName="hasMaintTenancyClause">
               <ion-row class="radio-block">
                 <ion-col>
                   <ion-item lines="none">
@@ -58,7 +152,8 @@
             </ion-radio-group>
           </ion-col>
           <ion-col size="30">
-            <ion-button color="success" class="action-btn popup-view-btn" fill="outline" [disabled]="isTenancy"
+            <ion-button color="success" class="action-btn popup-view-btn" fill="outline"
+              [disabled]="faultQualificationForm.get('hasMaintTenancyClause').value === null || !faultQualificationForm.get('hasMaintTenancyClause').value"
               (click)="viewTenancyClause()">View</ion-button>
           </ion-col>
         </ion-row>
@@ -67,10 +162,10 @@
 
       <ion-col class="card">
         <h3>Block Management</h3>
-        <h5>Is the fault Block Management Company's responsibility?</h5>
+        <h5>Is the fault Block Management Company's responsibility? </h5>
         <ion-row>
           <ion-col size="70">
-            <ion-radio-group (ionChange)="radioChecked('blockManagement')" formControlName="isUnderBlockManagement">
+            <ion-radio-group formControlName="isUnderBlockManagement">
               <ion-row class="radio-block">
                 <ion-col>
                   <ion-item lines="none">
@@ -89,7 +184,8 @@
             </ion-radio-group>
           </ion-col>
           <ion-col size="30">
-            <ion-button color="success" class="action-btn popup-view-btn" fill="outline" [disabled]="isBlock"
+            <ion-button color="success" class="action-btn popup-view-btn" fill="outline"
+              [disabled]="faultQualificationForm.get('isUnderBlockManagement').value === null || !faultQualificationForm.get('isUnderBlockManagement').value"
               (click)="viewBlockManagement();  $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
@@ -98,10 +194,10 @@
     <ion-row>
       <ion-col class="card">
         <h3>Guarantee / Warranty</h3>
-        <h5>Is the fault covered by a Guarantee / Warranty?</h5>
+        <h5>Is the fault covered by a Guarantee / Warranty? </h5>
         <ion-row>
           <ion-col size="70">
-            <ion-radio-group (ionChange)="radioChecked('warranty')" formControlName="isUnderWarranty">
+            <ion-radio-group formControlName="isUnderWarranty">
               <ion-row class="radio-block">
                 <ion-col>
                   <ion-item lines="none">
@@ -122,7 +218,8 @@
             </ion-radio-group>
           </ion-col>
           <ion-col size="30">
-            <ion-button color="success" class="action-btn popup-view-btn" fill="outline" [disabled]="isGuarantee"
+            <ion-button color="success" class="action-btn popup-view-btn" fill="outline"
+              [disabled]="faultQualificationForm.get('isUnderWarranty').value === null || !faultQualificationForm.get('isUnderWarranty').value"
               (click)="viewPropertyCertificate(); $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
@@ -133,7 +230,7 @@
         <h5>Is the fault covered by a Service Contract?</h5>
         <ion-row>
           <ion-col size="70">
-            <ion-radio-group (ionChange)="radioChecked('service')" formControlName="isUnderServiceContract">
+            <ion-radio-group formControlName="isUnderServiceContract">
               <ion-row class="radio-block">
                 <ion-col>
                   <ion-item lines="none">
@@ -152,7 +249,8 @@
             </ion-radio-group>
           </ion-col>
           <ion-col size="30">
-            <ion-button color="success" class="action-btn popup-view-btn" fill="outline" [disabled]="isService"
+            <ion-button color="success" class="action-btn popup-view-btn" fill="outline"
+              [disabled]="faultQualificationForm.get('isUnderServiceContract').value === null || !faultQualificationForm.get('isUnderServiceContract').value"
               (click)="viewServiceContract()">View</ion-button>
           </ion-col>
         </ion-row>

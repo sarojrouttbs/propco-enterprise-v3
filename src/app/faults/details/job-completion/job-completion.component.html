@@ -12,7 +12,7 @@
               {{iacNotification && iacNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
-              {{getLookupValue(iacNotification?.faultStageAction, iacStageActions) || getLookupValue(faultDetails?.userSelectedAction, iacStageActions)}}
+              {{getLookupValue(iacNotification?.faultStageAction, iacStageActions) || getLookupValue(faultDetails?.userSelectedAction, iacStageActions) || getLookupValue(iacNotification?.faultStageAction, faultQualificationsAction)}}
               <ion-icon name="checkmark-circle-outline"></ion-icon>
             </ion-button>
             <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">

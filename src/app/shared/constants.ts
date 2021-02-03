@@ -257,18 +257,18 @@ export const ScriptStore = [
   }
 ];
 
-export const FAULT_QUALIFICATION_INSTRUCTION_TYPES = [
+export const FAULT_QUALIFICATION_ACTIONS = [
   {
     index: 'UNDER_BLOCK_MANAGEMENT',
     value: 'Block Management Company\'s Responsibility'
   },
   {
     index: 'UNDER_WARRANTY',
-    value: 'Guarantee Management Company\'s Responsibility'
+    value: 'Reapir via Guarantee Management'
   },
   {
     index: 'UNDER_SERVICE_CONTRACT',
-    value: 'Service Contract Company\'s Responsibility'
+    value: 'Repair via Service Contract'
   },
   {
     index: 'LANDLORD_INSTRUCTION',
