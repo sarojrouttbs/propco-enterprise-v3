@@ -108,7 +108,7 @@ export class FaultQualificationComponent implements OnInit {
       if (data.length === 0) {
         resolve(null);
       }
-      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
+      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action));
       if (filtereData.length === 0) {
         resolve(null);
       }
@@ -484,22 +484,22 @@ export class FaultQualificationComponent implements OnInit {
     }
   }
 
-  // async viewBlockManagement() {
-  //   const modal = await this.modalController.create({
-  //     component: BlockManagementModalPage,
-  //     cssClass: 'modal-container upload-container',
-  //     componentProps: {
-  //       blockManagement: this.blockManagement,
-  //     },
-  //     backdropDismiss: false
-  //   });
-  //   modal.onDidDismiss().then(async res => {
-  //     if (res.data && res.data == 'success') {
-  //       return;
-  //     }
-  //   });
+  async viewBlockManagement() {
+    // const modal = await this.modalController.create({
+    //   component: BlockManagementModalPage,
+    //   cssClass: 'modal-container upload-container',
+    //   componentProps: {
+    //     blockManagement: this.blockManagement,
+    //   },
+    //   backdropDismiss: false
+    // });
+    // modal.onDidDismiss().then(async res => {
+    //   if (res.data && res.data == 'success') {
+    //     return;
+    //   }
+    // });
 
-  //   await modal.present();
-  // }
+    // await modal.present();
+  }
 
 }
