@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { FAULT_STAGES } from 'src/app/shared/constants';
+import { FAULT_STAGES, FAULT_QUALIFICATION_INSTRUCTION_TYPES } from 'src/app/shared/constants';
 import { PropertyCertificateModalPage } from 'src/app/shared/modals/property-certificate-modal/property-certificate-modal.page';
 import { BranchDetailsModalPage } from 'src/app/shared/modals/branch-details-modal/branch-details-modal.page';
 import { CloseFaultModalPage } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.page';
@@ -13,7 +13,7 @@ import { FaultsService } from '../../faults.service';
 @Component({
   selector: 'app-fault-qualification',
   templateUrl: './fault-qualification.component.html',
-  styleUrls: ['./fault-qualification.component.scss'],
+  styleUrls: ['./fault-qualification.component.scss', '../details.page.scss'],
 })
 export class FaultQualificationComponent implements OnInit {
 
@@ -31,6 +31,10 @@ export class FaultQualificationComponent implements OnInit {
   propertyCertificate: any;
   iacNotification;
   warranrtCertificateId: any;
+  otherStageActions = FAULT_QUALIFICATION_INSTRUCTION_TYPES.filter(action => { return (action.index == "LANDLORD_INSTRUCTION") });
+  userSelectedActionControl = new FormControl();
+  iacStageActions = FAULT_QUALIFICATION_INSTRUCTION_TYPES;
+  isUserActionChange = false;
 
   constructor(
     private fb: FormBuilder,
@@ -102,7 +106,7 @@ export class FaultQualificationComponent implements OnInit {
       if (data.length === 0) {
         resolve(null);
       }
-      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
+      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action));
       if (filtereData.length === 0) {
         resolve(null);
       }
@@ -272,9 +276,11 @@ export class FaultQualificationComponent implements OnInit {
     faultRequestObj.isUnderWarranty = qualificationForm.isUnderWarranty;
     faultRequestObj.isUnderServiceContract = qualificationForm.isUnderServiceContract;
     faultRequestObj.stage = stage;
+    // faultRequestObj.warrantyCertificateId = 24087;
+    if(stageAction){
+      faultRequestObj.stageAction = stageAction;
+    }
     faultRequestObj.warrantyCertificateId = this.warranrtCertificateId;
-    faultRequestObj.stageAction = stageAction ? stageAction : '';
-
     let res = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
 
     if (res) {
@@ -308,7 +314,6 @@ export class FaultQualificationComponent implements OnInit {
       }
     );
   }
-
 
   async closeFault() {
     const modal = await this.modalController.create({
@@ -431,6 +436,31 @@ export class FaultQualificationComponent implements OnInit {
       });
       return promise;
     }
+  }
+
+  getLookupValue(index, lookup) {
+    return this.commonService.getLookupValue(index, lookup);
+  }
+
+  async questionAction(data) {
+    if (this.iacNotification && this.iacNotification.responseReceived != null) {
+      return;
+    }
+  }
+
+  setUserAction(index) {
+    this.isUserActionChange = true;
+    this.userSelectedActionControl.setValue(index);
+  }
+
+  getPendingHours() {
+    let hours = 0;
+    const currentDateTime = this.commonService.getFormatedDateTime(new Date());
+    if (this.iacNotification.nextChaseDueAt) {
+      const diffInMs = Date.parse(this.iacNotification.nextChaseDueAt) - Date.parse(currentDateTime);
+      hours = diffInMs / 1000 / 60 / 60;
+    }
+    return hours > 0 ? Math.floor(hours) : 0;
   }
 
 }
