@@ -431,14 +431,14 @@ export class FaultQualificationComponent implements OnInit {
     notificationObj.isAccepted = data.value;
     notificationObj.submittedByType = 'SECUR_USER';
     if (data.value) {
-      this.commonService.showConfirm('Repair complete', 'Are you sure the Guarantee Management Company has completed the repair?', '', 'Yes I\'m sure', 'No').then(async res => {
+      this.commonService.showConfirm('Repair complete', 'Are you sure the Guarantee Management Company has completed the repair?', '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this._btnHandler('refresh');
         }
       });
     } else if (!data.value) {
-      this.commonService.showConfirm('Repair not complete', 'Are you sure the Guarantee Management Company has not completed the repair', '', 'Yes I\'m sure', 'No').then(async res => {
+      this.commonService.showConfirm('Repair not complete', 'Are you sure the Guarantee Management Company has not completed the repair', '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this._btnHandler('refresh');
