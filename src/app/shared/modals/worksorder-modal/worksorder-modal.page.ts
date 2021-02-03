@@ -280,9 +280,19 @@ export class WorksorderModalPage implements OnInit {
   }
 
   enableAnyFurtherWork() {
-    if (!this.jobCompletionForm.value.isAnyFurtherWork) {
+    if (this.jobCompletionForm.value.isAnyFurtherWork) {
+      this.jobCompletionForm.controls.additionalEstimate.setValidators([Validators.required]);
+      this.jobCompletionForm.controls.additionalWorkDetails.setValidators([Validators.required]);
+      this.jobCompletionForm.controls.additionalEstimate.updateValueAndValidity();
+      this.jobCompletionForm.controls.additionalWorkDetails.updateValueAndValidity();
+    }
+    else {
       this.jobCompletionForm.controls.additionalEstimate.setValue('');
       this.jobCompletionForm.controls.additionalWorkDetails.setValue('');
+      this.jobCompletionForm.controls.additionalEstimate.clearValidators();
+      this.jobCompletionForm.controls.additionalWorkDetails.clearValidators();
+      this.jobCompletionForm.controls.additionalEstimate.updateValueAndValidity();
+      this.jobCompletionForm.controls.additionalWorkDetails.updateValueAndValidity();
     }
   }
 }
