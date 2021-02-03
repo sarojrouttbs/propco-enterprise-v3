@@ -1,4 +1,5 @@
 <ion-grid>
+  
   <form [formGroup]="faultQualificationForm">
     <ion-row>
       <ion-col class="card">
@@ -160,6 +161,7 @@
     </ion-row>
   </form>
 </ion-grid>
+
 <div class="action-btn-group">
   <ion-button (click)="moreInfo();" class="save-button ion-float-left" [disabled]="faultDetails?.status===10">Request
     More
