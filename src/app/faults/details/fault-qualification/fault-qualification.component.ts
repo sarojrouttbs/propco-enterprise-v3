@@ -277,7 +277,9 @@ export class FaultQualificationComponent implements OnInit {
     faultRequestObj.isUnderServiceContract = qualificationForm.isUnderServiceContract;
     faultRequestObj.stage = stage;
     // faultRequestObj.warrantyCertificateId = 24087;
-    faultRequestObj.stageAction = stageAction ? stageAction : null;
+    if(stageAction){
+      faultRequestObj.stageAction = stageAction;
+    }
     faultRequestObj.warrantyCertificateId = this.warranrtCertificateId;
     let res = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
 
