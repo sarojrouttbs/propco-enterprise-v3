@@ -289,8 +289,8 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/invoice-uploaded`, {});
   }
 
-  fetchPropertyCertificates(propertyId): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/certificates`);
+  fetchPropertyCertificates(propertyId, params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/certificates`, { params });
   }
 
   getPropertyHeadLease(propertyId): Observable<any> {
