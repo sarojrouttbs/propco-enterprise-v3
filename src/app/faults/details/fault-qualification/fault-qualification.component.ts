@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { FAULT_STAGES } from 'src/app/shared/constants';
+import { FAULT_STAGES, FAULT_QUALIFICATION_ACTIONS } from 'src/app/shared/constants';
 import { PropertyCertificateModalPage } from 'src/app/shared/modals/property-certificate-modal/property-certificate-modal.page';
 import { BranchDetailsModalPage } from 'src/app/shared/modals/branch-details-modal/branch-details-modal.page';
 import { CloseFaultModalPage } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.page';
@@ -13,7 +13,7 @@ import { FaultsService } from '../../faults.service';
 @Component({
   selector: 'app-fault-qualification',
   templateUrl: './fault-qualification.component.html',
-  styleUrls: ['./fault-qualification.component.scss'],
+  styleUrls: ['./fault-qualification.component.scss', '../details.page.scss'],
 })
 export class FaultQualificationComponent implements OnInit {
 
@@ -31,6 +31,11 @@ export class FaultQualificationComponent implements OnInit {
   propertyCertificate: any;
   iacNotification;
   warranrtCertificateId: any;
+  otherStageActions = FAULT_QUALIFICATION_ACTIONS.filter(action => { return (action.index == "LANDLORD_INSTRUCTION") });
+  userSelectedActionControl = new FormControl();
+  iacStageActions = FAULT_QUALIFICATION_ACTIONS;
+  isUserActionChange = false;
+  blockManagement: any;
 
   constructor(
     private fb: FormBuilder,
@@ -56,6 +61,7 @@ export class FaultQualificationComponent implements OnInit {
     this.fetchAgreementsClauses();
     this.fetchPropertyCertificates();
     this.faultNotification(this.faultDetails.stageAction);
+    this.getPropertyHeadLease();
   }
 
   private initFaultQualificationForm(): void {
@@ -102,7 +108,7 @@ export class FaultQualificationComponent implements OnInit {
       if (data.length === 0) {
         resolve(null);
       }
-      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
+      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action));
       if (filtereData.length === 0) {
         resolve(null);
       }
@@ -116,48 +122,6 @@ export class FaultQualificationComponent implements OnInit {
       }
     });
     return promise;
-  }
-
-  radioChecked(type) {
-    if (type === 'management') {
-      if (this.faultQualificationForm.value.doesBranchHoldKeys) {
-        this.isManagement = false;
-      } else if (!this.faultQualificationForm.value.doesBranchHoldKeys) {
-        this.isManagement = true;
-      }
-    }
-
-    if (type === 'tenant') {
-      if (this.faultQualificationForm.value.hasMaintTenancyClause) {
-        this.isTenancy = false;
-      } else if (!this.faultQualificationForm.value.hasMaintTenancyClause) {
-        this.isTenancy = true;
-      }
-    }
-
-    if (type === 'blockManagement') {
-      if (this.faultQualificationForm.value.isUnderBlockManagement) {
-        this.isBlock = false;
-      } else if (!this.faultQualificationForm.value.isUnderBlockManagement) {
-        this.isBlock = true;
-      }
-    }
-
-    if (type === 'warranty') {
-      if (this.faultQualificationForm.value.isUnderWarranty) {
-        this.isGuarantee = false;
-      } else if (!this.faultQualificationForm.value.isUnderWarranty) {
-        this.isGuarantee = true;
-      }
-    }
-
-    if (type === 'service') {
-      if (this.faultQualificationForm.value.isUnderServiceContract) {
-        this.isService = false;
-      } else if (!this.faultQualificationForm.value.isUnderServiceContract) {
-        this.isService = true;
-      }
-    }
   }
 
   async viewBranchDetails() {
@@ -272,9 +236,11 @@ export class FaultQualificationComponent implements OnInit {
     faultRequestObj.isUnderWarranty = qualificationForm.isUnderWarranty;
     faultRequestObj.isUnderServiceContract = qualificationForm.isUnderServiceContract;
     faultRequestObj.stage = stage;
+    // faultRequestObj.warrantyCertificateId = 24087;
     faultRequestObj.warrantyCertificateId = this.warranrtCertificateId;
-    faultRequestObj.stageAction = stageAction ? stageAction : '';
-
+    if (stageAction) {
+      faultRequestObj.stageAction = stageAction;
+    }
     let res = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
 
     if (res) {
@@ -308,7 +274,6 @@ export class FaultQualificationComponent implements OnInit {
       }
     );
   }
-
 
   async closeFault() {
     const modal = await this.modalController.create({
@@ -393,8 +358,6 @@ export class FaultQualificationComponent implements OnInit {
     await modal.present();
   }
 
-  viewBlockManagement() { }
-
   viewServiceContract() { }
 
   private updateFaultDetails(faultId, requestObj): Promise<any> {
@@ -431,6 +394,112 @@ export class FaultQualificationComponent implements OnInit {
       });
       return promise;
     }
+  }
+
+  getLookupValue(index, lookup) {
+    return this.commonService.getLookupValue(index, lookup);
+  }
+
+  async questionAction(data) {
+    if (this.iacNotification && this.iacNotification.responseReceived != null) {
+      return;
+    }
+
+    if (this.iacNotification.templateCode === 'GA-E') {
+      this.questionActionAcceptRequest(data);
+    }
+
+  }
+
+  setUserAction(index) {
+    this.isUserActionChange = true;
+    this.userSelectedActionControl.setValue(index);
+  }
+
+  getPendingHours() {
+    let hours = 0;
+    const currentDateTime = this.commonService.getFormatedDateTime(new Date());
+    if (this.iacNotification.nextChaseDueAt) {
+      const diffInMs = Date.parse(this.iacNotification.nextChaseDueAt) - Date.parse(currentDateTime);
+      hours = diffInMs / 1000 / 60 / 60;
+    }
+    return hours > 0 ? Math.floor(hours) : 0;
+  }
+
+  private questionActionAcceptRequest(data) {
+    let notificationObj = {} as FaultModels.IUpdateNotification;
+    notificationObj.isAccepted = data.value;
+    notificationObj.submittedByType = 'SECUR_USER';
+    if (data.value) {
+      this.commonService.showConfirm('Repair complete', 'Are you sure the Guarantee Management Company has completed the repair?', '', 'Yes', 'No').then(async res => {
+        if (res) {
+          await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
+          this._btnHandler('refresh');
+        }
+      });
+    } else if (!data.value) {
+      this.commonService.showConfirm('Repair not complete', 'Are you sure the Guarantee Management Company has not completed the repair', '', 'Yes', 'No').then(async res => {
+        if (res) {
+          await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
+          this._btnHandler('refresh');
+        }
+      });
+    }
+  }
+
+  private async updateFaultNotification(notificationObj, faultNotificationId): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.updateNotification(faultNotificationId, notificationObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private getPropertyHeadLease() {
+    if (this.faultDetails.propertyId) {
+      const promise = new Promise((resolve) => {
+        this.faultsService.getPropertyHeadLease(this.faultDetails.propertyId).subscribe(
+          res => {
+            if (res) {
+              this.blockManagement = res ? res : '';
+              if (!this.blockManagement) {
+                this.faultQualificationForm.patchValue({ isUnderBlockManagement: false });
+                this.faultQualificationForm.get('isUnderBlockManagement').updateValueAndValidity();
+              }
+            }
+            resolve(true);
+          },
+          () => {
+            resolve(false);
+          }
+        );
+      });
+      return promise;
+    }
+  }
+
+  async viewBlockManagement() {
+    // const modal = await this.modalController.create({
+    //   component: BlockManagementModalPage,
+    //   cssClass: 'modal-container upload-container',
+    //   componentProps: {
+    //     blockManagement: this.blockManagement,
+    //   },
+    //   backdropDismiss: false
+    // });
+    // modal.onDidDismiss().then(async res => {
+    //   if (res.data && res.data == 'success') {
+    //     return;
+    //   }
+    // });
+
+    // await modal.present();
   }
 
 }
