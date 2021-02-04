@@ -550,14 +550,20 @@ export class FaultQualificationComponent implements OnInit {
     let faultRequestObj: any = {};
     faultRequestObj.isDraft = false;
     faultRequestObj.stage = this.userSelectedActionControl.value;
-    faultRequestObj.status = 13; //CHECKING LL INSTRUCTIONS
+    // faultRequestObj.status = 13; //CHECKING LL INSTRUCTIONS
     const isFaultUpdated = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
     if (isFaultUpdated) {
+      const CHECKING_LANDLORD_INSTRUCTIONS = 13;
+      await this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS);
       if (value) {
         this._btnHandler('cancel');
       } else {
         this._btnHandler('refresh');
       }
     }
+  }
+
+  private updateFaultStatus(status): Promise<any> {    
+    return this.faultsService.updateFaultStatus(this.faultDetails.faultId, status).toPromise();
   }
 }
