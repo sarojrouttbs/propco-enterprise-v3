@@ -176,47 +176,54 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private async proceed() {
-    let qualificationForm = this.faultQualificationForm.value;
-    let serviceCounter = 0;
-    if (qualificationForm.isUnderBlockManagement) {
-      serviceCounter++;
+    if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null) && this.isUserActionChange) {
+      this.voidNotification(null);
     }
-    if (qualificationForm.isUnderWarranty) {
-      serviceCounter++;
-    }
-    if (qualificationForm.isUnderServiceContract) {
-      serviceCounter++;
-    }
+    else {
+      let qualificationForm = this.faultQualificationForm.value;
+      let serviceCounter = 0;
+      if (qualificationForm.isUnderBlockManagement) {
+        serviceCounter++;
+      }
+      if (qualificationForm.isUnderWarranty) {
+        serviceCounter++;
+      }
+      if (qualificationForm.isUnderServiceContract) {
+        serviceCounter++;
+      }
 
-    if (serviceCounter > 1) {
-      this.commonService.showAlert('Warning', 'Please choose one option from Block Management/Factors Responsibility, Guarantee/Warranty, and Service Contract.');
-      return;
-    }
+      if (serviceCounter > 1) {
+        this.commonService.showAlert('Warning', 'Please choose one option from Block Management/Factors Responsibility, Guarantee/Warranty, and Service Contract.');
+        return;
+      }
 
-    if (serviceCounter === 1 && qualificationForm.isUnderBlockManagement) {
-      let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected the Block Management option for this repair. Do you want to send an email to inform the Block Management/Factors Company?', '', 'Yes', 'No');
-      if (response) {
-        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_BLOCK_MANAGEMENT');
+      if (serviceCounter === 1 && qualificationForm.isUnderBlockManagement) {
+        let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected the Block Management option for this repair. Do you want to send an email to inform the Block Management/Factors Company?', '', 'Yes', 'No');
+        if (response) {
+          this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_BLOCK_MANAGEMENT');
+        }
+      }
+
+      if (serviceCounter === 1 && qualificationForm.isUnderWarranty) {
+        let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Guarantee/Warranty option for this repair. Do you want to send an email to inform the Guarantee Management Company?', '', 'Yes', 'No');
+        if (response) {
+          this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_WARRANTY');
+        }
+      }
+
+      if (serviceCounter === 1 && qualificationForm.isUnderServiceContract) {
+        let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Service Contract? option for this repair. Do you want to send an email to inform the Service Contract Company? ', '', 'Yes', 'No');
+        if (response) {
+          this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_SERVICE_CONTRACT');
+        }
+      }
+
+      if (serviceCounter === 0) {
+        this.changeStage();
       }
     }
 
-    if (serviceCounter === 1 && qualificationForm.isUnderWarranty) {
-      let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Guarantee/Warranty option for this repair. Do you want to send an email to inform the Guarantee Management Company?', '', 'Yes', 'No');
-      if (response) {
-        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_WARRANTY');
-      }
-    }
 
-    if (serviceCounter === 1 && qualificationForm.isUnderServiceContract) {
-      let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Service Contract? option for this repair. Do you want to send an email to inform the Service Contract Company? ', '', 'Yes', 'No');
-      if (response) {
-        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_SERVICE_CONTRACT');
-      }
-    }
-
-    if (serviceCounter === 0) {
-      this.changeStage();
-    }
   }
 
   private async changeStage() {
@@ -250,29 +257,34 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private async saveForLater() {
-    this.commonService.showLoader();
-    let requestObj = {
-      doesBranchHoldKeys: this.faultQualificationForm.value.doesBranchHoldKeys,
-      hasMaintTenancyClause: this.faultQualificationForm.value.hasMaintTenancyClause,
-      isUnderBlockManagement: this.faultQualificationForm.value.isUnderBlockManagement,
-      isUnderWarranty: this.faultQualificationForm.value.isUnderWarranty,
-      isUnderServiceContract: this.faultQualificationForm.value.isUnderServiceContract,
-      stage: this.faultDetails.stage,
-      isDraft: true,
-      warrantyCertificateId: this.warranrtCertificateId,
+    if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null) && this.isUserActionChange) {
+      this.voidNotification('saveForLater');
+    } else {
+      this.commonService.showLoader();
+      let requestObj = {
+        doesBranchHoldKeys: this.faultQualificationForm.value.doesBranchHoldKeys,
+        hasMaintTenancyClause: this.faultQualificationForm.value.hasMaintTenancyClause,
+        isUnderBlockManagement: this.faultQualificationForm.value.isUnderBlockManagement,
+        isUnderWarranty: this.faultQualificationForm.value.isUnderWarranty,
+        isUnderServiceContract: this.faultQualificationForm.value.isUnderServiceContract,
+        stage: this.faultDetails.stage,
+        isDraft: true,
+        warrantyCertificateId: this.warranrtCertificateId,
 
-    };
-    this.faultsService.updateFault(this.faultDetails.faultId, requestObj).subscribe(
-      () => {
-        this.commonService.hideLoader();
-        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Qualification', 'success');
-        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
-      },
-      error => {
-        this.commonService.hideLoader();
-        console.log(error);
-      }
-    );
+      };
+      this.faultsService.updateFault(this.faultDetails.faultId, requestObj).subscribe(
+        () => {
+          this.commonService.hideLoader();
+          this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Qualification', 'success');
+          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+        },
+        error => {
+          this.commonService.hideLoader();
+          console.log(error);
+        }
+      );
+    }
+
   }
 
   async closeFault() {
@@ -501,5 +513,44 @@ export class FaultQualificationComponent implements OnInit {
 
     // await modal.present();
   }
+
+  async voidNotification(value) {
+    this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes', 'No').then(async res => {
+      if (res) {
+        let notificationObj = {} as FaultModels.IUpdateNotification;
+        notificationObj.isVoided = true;
+        notificationObj.submittedByType = 'SECUR_USER';
+        const updated = await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
+        if (updated) {
+          let faultRequestObj: any = {};
+          faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+          const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
+          if (isFaultUpdated) {
+            if (value) {
+              this._btnHandler('cancel');
+            } else {
+              this._btnHandler('refresh');
+            }
+          }
+        }
+      }
+    });
+
+  }
+
+  updateFaultSummary(faultRequestObj) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.updateFault(this.faultDetails.faultId, faultRequestObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
 
 }
