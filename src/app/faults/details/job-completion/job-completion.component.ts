@@ -336,10 +336,10 @@ export class JobCompletionComponent implements OnInit {
       return;
     }
 
-    if (this.iacNotification.templateCode === 'CF-T-E' || this.iacNotification.templateCode === 'LF-T-E') {
+    if (this.iacNotification.templateCode === 'CF-T-E' || this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E') {
       this.questionActionSatisfyJob(data);
     }
-    else if (this.iacNotification.templateCode === 'INR-C-E' || 'IR-C-E') {
+    else if (this.iacNotification.templateCode === 'INR-C-E' || this.iacNotification.templateCode === 'IR-C-E') {
       this.questionActionUploadInvoice(data)
     }
   }
@@ -349,8 +349,8 @@ export class JobCompletionComponent implements OnInit {
     notificationObj.isAccepted = data.value;
     notificationObj.submittedByType = 'SECUR_USER';
     if (data.value) {
-      let title = this.iacNotification.templateCode === 'LF-T-E' ? 'Close Fault': data.text;
-      let message = this.iacNotification.templateCode === 'LF-T-E' ? `This will close the Fault. Are you sure?`: `Are you sure, Tenant is satisfied with the Job?`;
+      let title = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E') ? 'Close Fault': data.text;
+      let message = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E') ? `This will close the Fault. Are you sure?`: `Are you sure, Tenant is satisfied with the Job?`;
       this.commonService.showConfirm(title, message, '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
