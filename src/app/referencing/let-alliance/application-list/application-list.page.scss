@@ -16,6 +16,11 @@
   --padding-bottom: var(--ion-padding-bottom);
   --padding-start: var(--ion-padding-start);
 
+  .heading {
+    @include set-text-style(30px, 35px);
+    align-self: center;
+  }
+
   .la-logo {
     text-align: right;
     img {
@@ -24,11 +29,6 @@
       padding: 10px;
       border-radius: 5px;
     }
-  }
-
-  .heading {
-    @include set-text-style(30px, 35px);
-    align-self: center;
   }
 
   .datetime-icon{
@@ -42,5 +42,17 @@
 
   .office-selectable {
     max-height: 30px !important;
+  }
+}
+
+@media screen and (min-width: 0px) and (max-width: 576px) {
+  #la-application-list {
+    .heading,
+    .la-logo {
+      text-align: center;
+    }
+    .heading{
+      padding-bottom: 15px;
+    }
   }
 }

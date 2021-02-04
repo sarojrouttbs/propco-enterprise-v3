@@ -72,6 +72,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       pageLength: 5,
       lengthMenu: [5, 10, 15],
       order: [[ 0, 'desc' ]],
+      responsive: true,
       /* scrollY: '435px',
       scrollCollapse: false, */
       ajax: (tableParams: any, callback) => {
@@ -107,56 +108,48 @@ export class ApplicationListPage implements OnInit, OnDestroy {
         name: 'propertyDetail.reference',
         searchable: true,
         orderable: true,
-
       },
       {
         data: 2,
         name: 'applicantDetail.displayAs',
         searchable: true,
         orderable: true,
-
       },
       {
         data: 3,
         name: 'office',
         searchable: true,
         orderable: true,
-
       },
       {
         data: 4,
         name: 'tenancyStartDate',
         searchable: true,
         orderable: true,
-
       },
       {
         data: 5,
         name: 'rentShare',
         searchable: true,
         orderable: true,
-
       },
       {
         data: 6,
         name: 'dateOfSubmission',
         searchable: true,
         orderable: true,
-
       },
       {
         data: 7,
         name: 'product',
         searchable: true,
         orderable: true,
-
       },
       {
         data: 8,
         name: 'applicationStatus',
         searchable: true,
         orderable: true,
-
       },
       {
         data: 9,
@@ -164,8 +157,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
         searchable: true,
         orderable: false,
 
-      }],
-      responsive: true
+      }]
     };
     this.initiateForm();
   }
@@ -287,18 +279,14 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   }
 
   async checkApplicationGuarantor() {
-    await this.getGuarantorApplicationList();
-    if(this.guarantorApplicationList.length > 0){
+    if(this.selectedData.applicantGuarantors != null && this.selectedData.applicantGuarantors.length > 0){
       this.router.navigate([`let-alliance/guarantor-application-list`], { queryParams: { 
         pId: this.selectedData.propertyDetail.propertyId,
         tId: this.selectedData.applicantDetail.applicantId,
         appId: this.selectedData.applicationId,
         appRef: this.selectedData.referenceNumber,
         tType: this.selectedData.applicantDetail.itemType
-      }})
-      .then(() => {
-        location.reload();
-      });
+      }});
     }
     else{
       const modal = await this.modalController.create({
@@ -377,22 +365,6 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     });
 
     await modal.present();
-  }
-
-  private getGuarantorApplicationList() {
-    const promise = new Promise((resolve, reject) => {
-      this.referencingService.getGuarantorApplicationList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.selectedData.applicationId).subscribe(
-        res => {
-          this.guarantorApplicationList = res && res.data ? res.data : [];
-          resolve(this.guarantorApplicationList);
-        },
-        error => {
-          console.log(error);
-          resolve(this.guarantorApplicationList);
-        }
-      );
-    });
-    return promise;
   }
 
   private getApplicationStatus() {

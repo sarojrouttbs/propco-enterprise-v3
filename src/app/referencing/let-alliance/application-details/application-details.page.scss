@@ -22,6 +22,11 @@ p{
   --padding-start: var(--ion-padding-start);
   --ion-background-color: var(--ion-color-step-1750);
 
+  .heading {
+    @include set-text-style(30px, 35px);
+    align-self: center;
+  }
+
   .la-logo {
     text-align: right;
     img {
@@ -30,11 +35,6 @@ p{
       padding: 10px;
       border-radius: 5px;
     }
-  }
-
-  .heading {
-    @include set-text-style(30px, 35px);
-    align-self: center;
   }
 
   .tab-container{
@@ -109,5 +109,27 @@ p{
     border: 0;
     outline: 0;
     padding: 5px 0;
+  }
+}
+
+@media screen and (min-width: 0px) and (max-width: 576px) {
+  #la-application-details {
+    .heading,
+    .la-logo {
+      text-align: center;
+    }
+    .heading{
+      padding-bottom: 15px;
+    }
+  }
+}
+
+@media screen and (min-width: 0px) and (max-width: 992px) {
+  #la-application-details {
+    .tab-container{
+      .view-details {
+        width: 100%;
+      }
+    }
   }
 }
