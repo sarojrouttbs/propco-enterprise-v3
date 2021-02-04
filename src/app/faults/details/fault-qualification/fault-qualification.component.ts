@@ -1,3 +1,5 @@
+import { CERTIFICATES_CATEGORY } from './../../../shared/constants';
+import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,6 +11,7 @@ import { CloseFaultModalPage } from 'src/app/shared/modals/close-fault-modal/clo
 import { TenancyClauseModalPage } from 'src/app/shared/modals/tenancy-clause-modal/tenancy-clause-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
+import { forkJoin } from 'rxjs';
 import { BlockManagementModalPage } from 'src/app/shared/modals/block-management-modal/block-management-modal.page';
 
 @Component({
@@ -29,14 +32,19 @@ export class FaultQualificationComponent implements OnInit {
   isCancelled = true;
   @Output() public btnAction: EventEmitter<any> = new EventEmitter();
   tenancyClauses: any;
-  propertyCertificate: any;
+  warrantyPropertyCertificate: any;
+  serviceContractyPropertyCertificate: any;
   iacNotification;
-  warranrtCertificateId: any;
+  warrantyCertificateId: any = null;
+  serviceContractCertificateId: any = null;
   otherStageActions = FAULT_QUALIFICATION_ACTIONS.filter(action => { return (action.index == "LANDLORD_INSTRUCTION") });
   userSelectedActionControl = new FormControl();
   iacStageActions = FAULT_QUALIFICATION_ACTIONS;
   isUserActionChange = false;
   blockManagement: any;
+  certificateCategoriesMap: any = new Map();
+  CERTIFICATES_CATEGORY = CERTIFICATES_CATEGORY;
+
 
   constructor(
     private fb: FormBuilder,
@@ -60,10 +68,29 @@ export class FaultQualificationComponent implements OnInit {
     this.initFaultQualificationForm();
     this.patchValue();
     this.fetchAgreementsClauses();
-    this.fetchPropertyCertificates();
+    this.getCertificateCategories();
     this.faultNotification(this.faultDetails.stageAction);
     this.getPropertyHeadLease();
   }
+
+  private async getCertificateCategories() {
+    let categories = CERTIFICATES_CATEGORY;
+    let apiObservableArray = [];
+    if (!categories) return;
+    categories.forEach(category => {
+      apiObservableArray.push(this.commonService.getSystemConfig(category));
+    });
+    forkJoin(apiObservableArray).subscribe((res) => {
+      if (res) {
+        res.forEach((value) => {
+          Object.keys(value).forEach(async (index) => {
+            this.certificateCategoriesMap.set(index, await this.fetchPropertyCertificates(value[index]));
+          });
+        });
+      }
+    });
+  }
+
 
   private initFaultQualificationForm(): void {
     this.faultQualificationForm = this.fb.group({
@@ -257,8 +284,8 @@ export class FaultQualificationComponent implements OnInit {
     faultRequestObj.isUnderWarranty = qualificationForm.isUnderWarranty;
     faultRequestObj.isUnderServiceContract = qualificationForm.isUnderServiceContract;
     faultRequestObj.stage = stage;
-    // faultRequestObj.warrantyCertificateId = 24087;
-    faultRequestObj.warrantyCertificateId = this.warranrtCertificateId;
+    faultRequestObj.warrantyCertificateId = this.warrantyCertificateId ? this.warrantyCertificateId : this.faultDetails.warrantyCertificateId;
+    faultRequestObj.serviceContractCertificateId = this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId;
     if (stageAction) {
       faultRequestObj.stageAction = stageAction;
     }
@@ -271,34 +298,30 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private async saveForLater() {
-    // if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null) && this.isUserActionChange) {
-    //   this.voidNotification('saveForLater');
-    // } else {
-      this.commonService.showLoader();
-      let requestObj = {
-        doesBranchHoldKeys: this.faultQualificationForm.value.doesBranchHoldKeys,
-        hasMaintTenancyClause: this.faultQualificationForm.value.hasMaintTenancyClause,
-        isUnderBlockManagement: this.faultQualificationForm.value.isUnderBlockManagement,
-        isUnderWarranty: this.faultQualificationForm.value.isUnderWarranty,
-        isUnderServiceContract: this.faultQualificationForm.value.isUnderServiceContract,
-        stage: this.faultDetails.stage,
-        isDraft: true,
-        warrantyCertificateId: this.warranrtCertificateId,
+    this.commonService.showLoader();
+    let requestObj = {
+      doesBranchHoldKeys: this.faultQualificationForm.value.doesBranchHoldKeys,
+      hasMaintTenancyClause: this.faultQualificationForm.value.hasMaintTenancyClause,
+      isUnderBlockManagement: this.faultQualificationForm.value.isUnderBlockManagement,
+      isUnderWarranty: this.faultQualificationForm.value.isUnderWarranty,
+      isUnderServiceContract: this.faultQualificationForm.value.isUnderServiceContract,
+      stage: this.faultDetails.stage,
+      isDraft: true,
+      warranrtCertificateId: this.warrantyCertificateId ? this.warrantyCertificateId : this.faultDetails.warrantyCertificateId,
+      serviceContractCertificateId: this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId
 
-      };
-      this.faultsService.updateFault(this.faultDetails.faultId, requestObj).subscribe(
-        () => {
-          this.commonService.hideLoader();
-          this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Qualification', 'success');
-          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
-        },
-        error => {
-          this.commonService.hideLoader();
-          console.log(error);
-        }
-      );
-    // }
-
+    };
+    this.faultsService.updateFault(this.faultDetails.faultId, requestObj).subscribe(
+      () => {
+        this.commonService.hideLoader();
+        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Qualification', 'success');
+        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+      },
+      error => {
+        this.commonService.hideLoader();
+        console.log(error);
+      }
+    );
   }
 
   async closeFault() {
@@ -364,20 +387,25 @@ export class FaultQualificationComponent implements OnInit {
     }
   }
 
-  async viewPropertyCertificate() {
+  async viewPropertyCertificate(category) {
     const modal = await this.modalController.create({
       component: PropertyCertificateModalPage,
       cssClass: 'modal-container property-certificates-list',
       componentProps: {
-        propertyCertificate: this.propertyCertificate,
-        warranrtCertificateId: this.warranrtCertificateId
+        propertyCertificate: category === CERTIFICATES_CATEGORY[0] ? this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0]) : this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1]),
+        certificateId: category === CERTIFICATES_CATEGORY[0] ?
+          (this.warrantyCertificateId ? this.warrantyCertificateId : this.faultDetails.warrantyCertificateId) :
+          this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId,
+        category: category
       },
       backdropDismiss: false
     });
 
     modal.onDidDismiss().then(async res => {
-      if (res.data && res.data == 'success') {
-        return;
+      if (res.data && (res.data != null || res.data != '')) {
+        category === CERTIFICATES_CATEGORY[0] ? this.warrantyCertificateId = res.data : this.serviceContractCertificateId = res.data;
+      } else {
+        category === CERTIFICATES_CATEGORY[0] ? this.faultQualificationForm.get('isUnderWarranty').setValue(false) : this.faultQualificationForm.get('isUnderServiceContract').setValue(false);
       }
     });
 
@@ -401,17 +429,18 @@ export class FaultQualificationComponent implements OnInit {
     return promise;
   }
 
-  private fetchPropertyCertificates() {
+  private fetchPropertyCertificates(category) {
     if (this.faultDetails.propertyId) {
+      const params: any = new HttpParams().set('category', category);
       const promise = new Promise((resolve) => {
-        this.faultsService.fetchPropertyCertificates(this.faultDetails.propertyId).subscribe(
+        this.faultsService.fetchPropertyCertificates('5e8b3e84-f99b-11e8-bd34-0cc47a54d954', params).subscribe(
           res => {
-            this.propertyCertificate = res ? res : '';
-            if (!this.propertyCertificate) {
-              this.faultQualificationForm.patchValue({ isUnderWarranty: false });
-              this.faultQualificationForm.get('isUnderWarranty').updateValueAndValidity();
-            }
-            resolve(true);
+            // this.propertyCertificate = res ? res : '';
+            // if (!this.propertyCertificate) {
+            //   this.faultQualificationForm.patchValue({ isUnderWarranty: false });
+            //   this.faultQualificationForm.get('isUnderWarranty').updateValueAndValidity();
+            // }
+            resolve(res ? res : false);
           },
           () => {
             resolve(false);
@@ -574,7 +603,7 @@ export class FaultQualificationComponent implements OnInit {
     }
   }
 
-  private updateFaultStatus(status): Promise<any> {    
+  private updateFaultStatus(status): Promise<any> {
     return this.faultsService.updateFaultStatus(this.faultDetails.faultId, status).toPromise();
   }
 }

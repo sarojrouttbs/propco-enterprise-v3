@@ -1,3 +1,4 @@
+import { CERTIFICATES_CATEGORY } from './../../constants';
 import { PlatformLocation } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
@@ -13,22 +14,24 @@ import { Subject } from 'rxjs';
 export class PropertyCertificateModalPage implements OnInit {
 
   propertyCertificate;
+  category;
+  certificateId;
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject();
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
   // propertyCertificateList: any[] = [];
-  isWarrantyDetails = false;
+  showDetails = false;
   warrantyDetails;
+  contractDetails;
+  CERTIFICATES_CATEGORY = CERTIFICATES_CATEGORY;
 
   constructor(private modalController: ModalController, private location: PlatformLocation,
     private router: Router) {
-    this.router.events.subscribe((val) => {
-      if (val) {
-        this.dismiss();
-      }
+    this.router.events.subscribe(async () => {
+      const isModalOpened = await this.modalController.getTop();
+      if (router.url.toString() === '/dashboard' && isModalOpened) this.dismiss();
     });
-    this.location.onPopState(() => this.dismiss());
   }
 
   ngOnInit() {
@@ -45,27 +48,37 @@ export class PropertyCertificateModalPage implements OnInit {
     this.propertyCertificate.data.forEach((item) => {
       item.isRowChecked = false;
     });
+    if (this.certificateId) {
+      const certificate = this.propertyCertificate.data.filter(x => x.certificateId === this.certificateId);
+      this.selectCertificate(certificate[0], true);
+    }
   }
 
   selectCertificate(certificate, e) {
-    certificate.isRowChecked = e.target.checked;
-    if (e.target.checked) {
-      this.isWarrantyDetails = true;
-      this.warrantyDetails = certificate;
-      console.log("propertyDetails", this.warrantyDetails);
-      
+    certificate.isRowChecked = e;
+    if (e) {
       this.propertyCertificate.data.forEach(
         ele => {
           if (ele.certificateId != certificate.certificateId) {
             ele.isRowChecked = false;
+          } else {
+            if (this.category === CERTIFICATES_CATEGORY[0]) this.warrantyDetails = certificate;
+            if (this.category === CERTIFICATES_CATEGORY[1]) this.contractDetails = certificate;
+            this.certificateId = this.category === CERTIFICATES_CATEGORY[0] ? this.warrantyDetails.certificateId : this.contractDetails.certificateId;
+            this.showDetails = true;
           }
-        })
-    }else{
-      // this.isPropertyDetails = false;
+        });
+    } else {
+      this.showDetails = false;
+      this.certificateId = null;
     }
   }
 
   dismiss() {
-    this.modalController.dismiss();
+    this.modalController.dismiss(this.certificateId);
+  }
+
+  submit() {
+    this.modalController.dismiss(this.certificateId);
   }
 }

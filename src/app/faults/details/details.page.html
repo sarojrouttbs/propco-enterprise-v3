@@ -1094,7 +1094,7 @@
         </ion-col>
         <ion-col size="100">
           <mat-horizontal-stepper #stepper labelPosition="bottom" [selectedIndex]="currentStepperIndex">
-            <mat-step aria-labelledby="disabled_stepper_step">
+            <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 0">
               <ng-container *ngTemplateOutlet="caseLogged"></ng-container>
               <ng-template matStepLabel>Fault Logged</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
@@ -1104,7 +1104,7 @@
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
             <!-- <mat-step> -->
-            <mat-step aria-labelledby="disabled_stepper_step">
+              <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 1">
               <ng-container *ngTemplateOutlet="caseQualification"></ng-container>
               <ng-template matStepLabel>Fault Qualification</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
@@ -1113,7 +1113,7 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step aria-labelledby="disabled_stepper_step">
+            <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 2">
               <ng-container *ngTemplateOutlet="landlordInstructions"></ng-container>
               <ng-template matStepLabel>Landlord Instructions</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
@@ -1122,7 +1122,7 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step aria-labelledby="disabled_stepper_step">
+            <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 3">
               <ng-container *ngTemplateOutlet="arrangingContractor"></ng-container>
               <ng-template matStepLabel>Arranging Contractor</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
@@ -1131,7 +1131,7 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step aria-labelledby="disabled_stepper_step">
+            <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 4">
               <ng-container *ngTemplateOutlet="jobCompletion"></ng-container>
               <ng-template matStepLabel>Job Completion</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
@@ -1140,7 +1140,7 @@
               </div>
               <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <mat-step aria-labelledby="disabled_stepper_step">
+            <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 5">
               <ng-container *ngTemplateOutlet="payment"></ng-container>
               <ng-template matStepLabel>Payment</ng-template>
               <!-- <div class="ion-text-end margin-top-16">
