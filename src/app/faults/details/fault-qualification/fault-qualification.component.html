@@ -93,6 +93,8 @@
       </div>
     </ion-col>
   </ion-row>
+</ion-grid>
+<ion-grid *ngIf="!iacNotification">
   <form [formGroup]="faultQualificationForm">
     <ion-row>
       <ion-col class="card">
@@ -260,7 +262,7 @@
   </form>
 </ion-grid>
 
-<div class="action-btn-group">
+<div class="action-btn-group" *ngIf="!iacNotification">
   <ion-button (click)="moreInfo();" class="save-button ion-float-left" [disabled]="faultDetails?.status===10">Request
     More
     Info</ion-button>
