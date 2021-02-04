@@ -9,6 +9,7 @@ import { CloseFaultModalPage } from 'src/app/shared/modals/close-fault-modal/clo
 import { TenancyClauseModalPage } from 'src/app/shared/modals/tenancy-clause-modal/tenancy-clause-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
+import { BlockManagementModalPage } from 'src/app/shared/modals/block-management-modal/block-management-modal.page';
 
 @Component({
   selector: 'app-fault-qualification',
@@ -176,10 +177,23 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private async proceed() {
-    if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null) && this.isUserActionChange) {
-      this.voidNotification(null);
-    }
-    else {
+    if (this.isUserActionChange) {
+      if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null) && !this.iacNotification.isVoided) {
+        this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes', 'No').then(async res => {
+          if (res) {
+            this.voidNotification(null);
+          }
+        });
+
+      } else {
+        this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes', 'No').then(async res => {
+          if (res) {
+            this.updateFault(null);
+          }
+        });
+
+      }
+    } else {
       let qualificationForm = this.faultQualificationForm.value;
       let serviceCounter = 0;
       if (qualificationForm.isUnderBlockManagement) {
@@ -257,9 +271,9 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private async saveForLater() {
-    if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null) && this.isUserActionChange) {
-      this.voidNotification('saveForLater');
-    } else {
+    // if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null) && this.isUserActionChange) {
+    //   this.voidNotification('saveForLater');
+    // } else {
       this.commonService.showLoader();
       let requestObj = {
         doesBranchHoldKeys: this.faultQualificationForm.value.doesBranchHoldKeys,
@@ -283,7 +297,7 @@ export class FaultQualificationComponent implements OnInit {
           console.log(error);
         }
       );
-    }
+    // }
 
   }
 
@@ -417,7 +431,7 @@ export class FaultQualificationComponent implements OnInit {
       return;
     }
 
-    if (this.iacNotification.templateCode === 'GA-E') {
+    if (this.iacNotification.templateCode === 'GA-E' || this.iacNotification.templateCode === 'BM-E') {
       this.questionActionAcceptRequest(data);
     }
 
@@ -442,15 +456,22 @@ export class FaultQualificationComponent implements OnInit {
     let notificationObj = {} as FaultModels.IUpdateNotification;
     notificationObj.isAccepted = data.value;
     notificationObj.submittedByType = 'SECUR_USER';
+    let type = '';
+    if (this.iacNotification.templateCode === 'GA-E') {
+      type = 'Guarantee Management Company';
+    }
+    else if (this.iacNotification.templateCode === 'BM-E') {
+      type = 'Block Management/Factors Company';
+    }
     if (data.value) {
-      this.commonService.showConfirm('Repair complete', 'Are you sure the Guarantee Management Company has completed the repair?', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm('Repair complete', `Are you sure the ${type} has completed the repair?`, '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this._btnHandler('refresh');
         }
       });
     } else if (!data.value) {
-      this.commonService.showConfirm('Repair not complete', 'Are you sure the Guarantee Management Company has not completed the repair', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm('Repair not complete', `Are you sure the ${type} has not completed the repair`, '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this._btnHandler('refresh');
@@ -497,60 +518,52 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   async viewBlockManagement() {
-    // const modal = await this.modalController.create({
-    //   component: BlockManagementModalPage,
-    //   cssClass: 'modal-container upload-container',
-    //   componentProps: {
-    //     blockManagement: this.blockManagement,
-    //   },
-    //   backdropDismiss: false
-    // });
-    // modal.onDidDismiss().then(async res => {
-    //   if (res.data && res.data == 'success') {
-    //     return;
-    //   }
-    // });
-
-    // await modal.present();
-  }
-
-  async voidNotification(value) {
-    this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes', 'No').then(async res => {
-      if (res) {
-        let notificationObj = {} as FaultModels.IUpdateNotification;
-        notificationObj.isVoided = true;
-        notificationObj.submittedByType = 'SECUR_USER';
-        const updated = await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
-        if (updated) {
-          let faultRequestObj: any = {};
-          faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
-          const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
-          if (isFaultUpdated) {
-            if (value) {
-              this._btnHandler('cancel');
-            } else {
-              this._btnHandler('refresh');
-            }
-          }
-        }
+    const modal = await this.modalController.create({
+      component: BlockManagementModalPage,
+      cssClass: 'modal-container upload-container',
+      componentProps: {
+        blockManagement: this.blockManagement,
+      },
+      backdropDismiss: false
+    });
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        return;
       }
     });
 
+    await modal.present();
   }
 
-  updateFaultSummary(faultRequestObj) {
-    const promise = new Promise((resolve, reject) => {
-      this.faultsService.updateFault(this.faultDetails.faultId, faultRequestObj).subscribe(
-        res => {
-          resolve(true);
-        },
-        error => {
-          resolve(false);
-        }
-      );
-    });
-    return promise;
+  async voidNotification(value) {
+
+    let notificationObj = {} as FaultModels.IUpdateNotification;
+    notificationObj.isVoided = true;
+    notificationObj.submittedByType = 'SECUR_USER';
+    const updated = await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
+    if (updated) {
+      this.updateFault(value);
+    }
   }
 
+  async updateFault(value) {
+    let faultRequestObj: any = {};
+    faultRequestObj.isDraft = false;
+    faultRequestObj.stage = this.userSelectedActionControl.value;
+    // faultRequestObj.status = 13; //CHECKING LL INSTRUCTIONS
+    const isFaultUpdated = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
+    if (isFaultUpdated) {
+      const CHECKING_LANDLORD_INSTRUCTIONS = 13;
+      await this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS);
+      if (value) {
+        this._btnHandler('cancel');
+      } else {
+        this._btnHandler('refresh');
+      }
+    }
+  }
 
+  private updateFaultStatus(status): Promise<any> {    
+    return this.faultsService.updateFaultStatus(this.faultDetails.faultId, status).toPromise();
+  }
 }
