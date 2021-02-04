@@ -457,21 +457,32 @@ export class FaultQualificationComponent implements OnInit {
     notificationObj.isAccepted = data.value;
     notificationObj.submittedByType = 'SECUR_USER';
     let type = '';
-    if (this.iacNotification.templateCode === 'GA-E') {
-      type = 'Guarantee Management Company';
-    }
-    else if (this.iacNotification.templateCode === 'BM-E') {
-      type = 'Block Management/Factors Company';
+    switch (this.iacNotification.templateCode) {
+      case 'GA-E': {
+        type = 'Guarantee Management';
+        break;
+      }
+      case 'BM-E': {
+        type = 'Block Management/Factors';
+        break;
+      }
+      case 'SM-E': {
+        type = 'Service Contract';
+        break;
+      }
+      default: {
+        break;
+      }
     }
     if (data.value) {
-      this.commonService.showConfirm('Repair complete', `Are you sure the ${type} has completed the repair?`, '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm('Repair complete', `Are you sure the ${type} Company has completed the repair?`, '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this._btnHandler('refresh');
         }
       });
     } else if (!data.value) {
-      this.commonService.showConfirm('Repair not complete', `Are you sure the ${type} has not completed the repair`, '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm('Repair not complete', `Are you sure the ${type} Company has not completed the repair`, '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this._btnHandler('refresh');
