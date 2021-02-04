@@ -293,6 +293,10 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/certificates`);
   }
 
+  getPropertyHeadLease(propertyId): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/headlease-management`);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
