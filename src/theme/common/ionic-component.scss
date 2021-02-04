@@ -252,7 +252,8 @@ ion-item {
 .tenant-list {
   .modal-wrapper {
     min-height: 300px;
-    min-width: 767px;
+    min-width: 400px;
+    width: 767px;
 
     .dataTables_wrapper.no-footer .dataTables_scrollBody{
       border-bottom: none;

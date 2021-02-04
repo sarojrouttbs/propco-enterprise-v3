@@ -15,6 +15,11 @@
     --padding-end: var(--ion-padding-end);
     --padding-bottom: var(--ion-padding-bottom);
     --padding-start: var(--ion-padding-start);
+
+    .heading {
+      @include set-text-style(30px, 35px);
+      align-self: center;
+    }
   
     .la-logo {
       text-align: right;
@@ -25,10 +30,17 @@
         border-radius: 5px;
       }
     }
-  
-    .heading {
-      @include set-text-style(30px, 35px);
-      align-self: center;
+  }
+
+  @media screen and (min-width: 0px) and (max-width: 576px) {
+    #la-guarantor-application-list {
+      .heading,
+      .la-logo {
+        text-align: center;
+      }
+      .heading{
+        padding-bottom: 15px;
+      }
     }
   }
   
