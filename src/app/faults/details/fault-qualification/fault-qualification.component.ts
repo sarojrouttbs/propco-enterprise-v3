@@ -12,6 +12,7 @@ import { TenancyClauseModalPage } from 'src/app/shared/modals/tenancy-clause-mod
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
 import { forkJoin } from 'rxjs';
+import { BlockManagementModalPage } from 'src/app/shared/modals/block-management-modal/block-management-modal.page';
 
 @Component({
   selector: 'app-fault-qualification',
@@ -203,47 +204,67 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private async proceed() {
-    let qualificationForm = this.faultQualificationForm.value;
-    let serviceCounter = 0;
-    if (qualificationForm.isUnderBlockManagement) {
-      serviceCounter++;
-    }
-    if (qualificationForm.isUnderWarranty) {
-      serviceCounter++;
-    }
-    if (qualificationForm.isUnderServiceContract) {
-      serviceCounter++;
-    }
+    if (this.isUserActionChange) {
+      if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null) && !this.iacNotification.isVoided) {
+        this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes', 'No').then(async res => {
+          if (res) {
+            this.voidNotification(null);
+          }
+        });
 
-    if (serviceCounter > 1) {
-      this.commonService.showAlert('Warning', 'Please choose one option from Block Management/Factors Responsibility, Guarantee/Warranty, and Service Contract.');
-      return;
-    }
+      } else {
+        this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes', 'No').then(async res => {
+          if (res) {
+            this.updateFault(null);
+          }
+        });
 
-    if (serviceCounter === 1 && qualificationForm.isUnderBlockManagement) {
-      let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected the Block Management option for this repair. Do you want to send an email to inform the Block Management/Factors Company?', '', 'Yes', 'No');
-      if (response) {
-        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_BLOCK_MANAGEMENT');
+      }
+    } else {
+      let qualificationForm = this.faultQualificationForm.value;
+      let serviceCounter = 0;
+      if (qualificationForm.isUnderBlockManagement) {
+        serviceCounter++;
+      }
+      if (qualificationForm.isUnderWarranty) {
+        serviceCounter++;
+      }
+      if (qualificationForm.isUnderServiceContract) {
+        serviceCounter++;
+      }
+
+      if (serviceCounter > 1) {
+        this.commonService.showAlert('Warning', 'Please choose one option from Block Management/Factors Responsibility, Guarantee/Warranty, and Service Contract.');
+        return;
+      }
+
+      if (serviceCounter === 1 && qualificationForm.isUnderBlockManagement) {
+        let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected the Block Management option for this repair. Do you want to send an email to inform the Block Management/Factors Company?', '', 'Yes', 'No');
+        if (response) {
+          this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_BLOCK_MANAGEMENT');
+        }
+      }
+
+      if (serviceCounter === 1 && qualificationForm.isUnderWarranty) {
+        let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Guarantee/Warranty option for this repair. Do you want to send an email to inform the Guarantee Management Company?', '', 'Yes', 'No');
+        if (response) {
+          this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_WARRANTY');
+        }
+      }
+
+      if (serviceCounter === 1 && qualificationForm.isUnderServiceContract) {
+        let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Service Contract? option for this repair. Do you want to send an email to inform the Service Contract Company? ', '', 'Yes', 'No');
+        if (response) {
+          this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_SERVICE_CONTRACT');
+        }
+      }
+
+      if (serviceCounter === 0) {
+        this.changeStage();
       }
     }
 
-    if (serviceCounter === 1 && qualificationForm.isUnderWarranty) {
-      let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Guarantee/Warranty option for this repair. Do you want to send an email to inform the Guarantee Management Company?', '', 'Yes', 'No');
-      if (response) {
-        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_WARRANTY');
-      }
-    }
 
-    if (serviceCounter === 1 && qualificationForm.isUnderServiceContract) {
-      let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Service Contract? option for this repair. Do you want to send an email to inform the Service Contract Company? ', '', 'Yes', 'No');
-      if (response) {
-        this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_SERVICE_CONTRACT');
-      }
-    }
-
-    if (serviceCounter === 0) {
-      this.changeStage();
-    }
   }
 
   private async changeStage() {
@@ -439,7 +460,7 @@ export class FaultQualificationComponent implements OnInit {
       return;
     }
 
-    if (this.iacNotification.templateCode === 'GA-E') {
+    if (this.iacNotification.templateCode === 'GA-E' || this.iacNotification.templateCode === 'BM-E') {
       this.questionActionAcceptRequest(data);
     }
 
@@ -464,15 +485,33 @@ export class FaultQualificationComponent implements OnInit {
     let notificationObj = {} as FaultModels.IUpdateNotification;
     notificationObj.isAccepted = data.value;
     notificationObj.submittedByType = 'SECUR_USER';
+    let type = '';
+    switch (this.iacNotification.templateCode) {
+      case 'GA-E': {
+        type = 'Guarantee Management';
+        break;
+      }
+      case 'BM-E': {
+        type = 'Block Management/Factors';
+        break;
+      }
+      case 'SM-E': {
+        type = 'Service Contract';
+        break;
+      }
+      default: {
+        break;
+      }
+    }
     if (data.value) {
-      this.commonService.showConfirm('Repair complete', 'Are you sure the Guarantee Management Company has completed the repair?', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm('Repair complete', `Are you sure the ${type} Company has completed the repair?`, '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this._btnHandler('refresh');
         }
       });
     } else if (!data.value) {
-      this.commonService.showConfirm('Repair not complete', 'Are you sure the Guarantee Management Company has not completed the repair', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm('Repair not complete', `Are you sure the ${type} Company has not completed the repair`, '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this._btnHandler('refresh');
@@ -519,21 +558,52 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   async viewBlockManagement() {
-    // const modal = await this.modalController.create({
-    //   component: BlockManagementModalPage,
-    //   cssClass: 'modal-container upload-container',
-    //   componentProps: {
-    //     blockManagement: this.blockManagement,
-    //   },
-    //   backdropDismiss: false
-    // });
-    // modal.onDidDismiss().then(async res => {
-    //   if (res.data && res.data == 'success') {
-    //     return;
-    //   }
-    // });
+    const modal = await this.modalController.create({
+      component: BlockManagementModalPage,
+      cssClass: 'modal-container upload-container',
+      componentProps: {
+        blockManagement: this.blockManagement,
+      },
+      backdropDismiss: false
+    });
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        return;
+      }
+    });
 
-    // await modal.present();
+    await modal.present();
   }
 
+  async voidNotification(value) {
+
+    let notificationObj = {} as FaultModels.IUpdateNotification;
+    notificationObj.isVoided = true;
+    notificationObj.submittedByType = 'SECUR_USER';
+    const updated = await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
+    if (updated) {
+      this.updateFault(value);
+    }
+  }
+
+  async updateFault(value) {
+    let faultRequestObj: any = {};
+    faultRequestObj.isDraft = false;
+    faultRequestObj.stage = this.userSelectedActionControl.value;
+    // faultRequestObj.status = 13; //CHECKING LL INSTRUCTIONS
+    const isFaultUpdated = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
+    if (isFaultUpdated) {
+      const CHECKING_LANDLORD_INSTRUCTIONS = 13;
+      await this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS);
+      if (value) {
+        this._btnHandler('cancel');
+      } else {
+        this._btnHandler('refresh');
+      }
+    }
+  }
+
+  private updateFaultStatus(status): Promise<any> {
+    return this.faultsService.updateFaultStatus(this.faultDetails.faultId, status).toPromise();
+  }
 }
