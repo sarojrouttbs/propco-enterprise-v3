@@ -45,18 +45,6 @@
     margin-top: 5px;
 }
 
-.response-recived {
-    color: var(--ion-color-primary);
-}
-
-.awaiting-response {
-    color: var(--ion-color-danger);
-}
-
-.response-circle {
-    font-size: 13px;
-}
-
 @media screen and (min-width: 768px) and (max-width: 1024px) {
     .radio-block {
         flex-wrap: inherit !important;
