@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Block Management Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- {{blockManagement | json}} -->
+  <ion-grid>
+    <ion-row>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Company Name</ion-text><br />
+        <ion-text class="content">{{blockManagement?.managementCompany?.name || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Contact Name</ion-text><br />
+        <ion-text class="content">{{blockManagement?.managementCompany?.contact || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Phone</ion-text><br />
+        <ion-text class="content">{{blockManagement?.managementCompany?.phone || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Fax</ion-text><br />
+        <ion-text class="content">{{blockManagement?.managementCompany?.fax || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Email</ion-text><br />
+        <ion-text class="content">{{blockManagement?.managementCompany?.email || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Reference</ion-text><br />
+        <ion-text class="content">{{blockManagement?.managementCompany?.reference || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Address</ion-text><br />
+        <ion-text class="content">
+          {{ blockManagement?.managementCompany?.address?.addressLine1 ?
+          blockManagement?.managementCompany?.address?.addressLine1 + ',' : ''}}
+          {{ blockManagement?.managementCompany?.address?.addressLine2 ?
+          blockManagement?.managementCompany?.address?.addressLine2 + ',' : ''}}
+          {{ blockManagement?.managementCompany?.address?.locality ?
+          blockManagement?.managementCompany?.address?.locality + ',' : ''}}
+          {{ blockManagement?.managementCompany?.address?.postcode }}
+        </ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Notes</ion-text><br />
+        <ion-text class="content">{{blockManagement?.managementCompany?.notes || 'N/A'}}</ion-text>
+      </ion-col>
+
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Contact Authorised by landlord</ion-text><br />
+        <ion-text class="content">{{blockManagement?.isLandlordAuthorisedContact ? 'Yes' : 'No'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Who to obtain communal door keys from</ion-text><br />
+        <ion-text class="content">{{blockManagement?.doorKeysFrom ? 'Yes' : 'No'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Cost of communal door keys</ion-text><br />
+        <ion-text class="content">{{blockManagement?.doorKeysCost || 'N/A'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Management Responsibility</ion-text><br />
+        <ion-text class="content">{{blockManagement?.managementResponsibility?.managementResponsibilities || 'N/A'}}
+        </ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Covers Building Insurance</ion-text><br />
+        <ion-text class="content">{{blockManagement?.managementResponsibility?.doesCoversBuildingInsurance ? 'Yes' :
+          'No'}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content">
+        <ion-text class="header">Cover Content Insurance</ion-text><br />
+        <ion-text class="content">{{blockManagement?.managementResponsibility?.doesCoversContentInsurance ? 'Yes' :
+          'No'}}</ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer class="ion-text-right">
+  <ion-button color="danger" size="small" (click)="onCancel()">Cancel</ion-button>
+</ion-footer>
