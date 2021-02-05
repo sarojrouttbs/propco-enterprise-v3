@@ -247,8 +247,12 @@ export class FaultQualificationComponent implements OnInit {
       }
 
       if (serviceCounter === 1 && qualificationForm.isUnderWarranty) {
-        if (this.warrantyEmail == null || this.warrantyEmail == '') {
+        if (this.warrantyCertificateId && (this.warrantyEmail == null || this.warrantyEmail == '')) {
           this.commonService.showAlert('Warning', 'No valid Email address found.');
+          return;
+        }
+        if (this.warrantyCertificateId == null || this.warrantyCertificateId == '') {
+          this.commonService.showAlert('Warning', 'Please select a Guarantee/Warranty');
           return;
         }
         let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Guarantee/Warranty option for this repair. Do you want to send an email to inform the Guarantee Management Company?', '', 'Yes', 'No');
@@ -258,8 +262,12 @@ export class FaultQualificationComponent implements OnInit {
       }
 
       if (serviceCounter === 1 && qualificationForm.isUnderServiceContract) {
-        if (this.serviceContractEmail == null || this.serviceContractEmail == '') {
+        if (this.serviceContractCertificateId && (this.serviceContractEmail == null || this.serviceContractEmail == '')) {
           this.commonService.showAlert('Warning', 'No valid Email address found.');
+          return;
+        }
+        if (this.serviceContractCertificateId == null || this.serviceContractCertificateId == '') {
+          this.commonService.showAlert('Warning', 'Please select a Service Contract');
           return;
         }
         let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Service Contract option for this repair. Do you want to send an email to inform the Service Contract Company? ', '', 'Yes', 'No');
