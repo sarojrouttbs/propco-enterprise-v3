@@ -1,6 +1,4 @@
-import { PlatformLocation } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -11,15 +9,7 @@ import { ModalController } from '@ionic/angular';
 export class BranchDetailsModalPage implements OnInit {
   branchDetails;
 
-  constructor(private modalController: ModalController, private location: PlatformLocation,
-    private router: Router) {
-    this.router.events.subscribe((val) => {
-      if (val) {
-        this.dismiss();
-      }
-    });
-    this.location.onPopState(() => this.dismiss());
-  }
+  constructor(private modalController: ModalController) { }
 
   ngOnInit() { }
 

@@ -1,7 +1,5 @@
-import { PlatformLocation } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { CommonService } from '../../services/common.service';
@@ -17,14 +15,7 @@ export class CloseFaultModalPage implements OnInit {
   closeFaultForm: FormGroup;
   faultId;
   reasons = CANCEL_REASON;
-  constructor(private fb: FormBuilder, private modalController: ModalController, private faultsService: FaultsService, private commonService: CommonService, private location: PlatformLocation, private router: Router) {
-    this.router.events.subscribe((val) => {
-      if (val) {
-        this.dismiss();
-      }
-    });
-    this.location.onPopState(() => this.dismiss());
-  }
+  constructor(private fb: FormBuilder, private modalController: ModalController, private faultsService: FaultsService, private commonService: CommonService) { }
 
   ngOnInit() {
     this.initCloseFaultForm()

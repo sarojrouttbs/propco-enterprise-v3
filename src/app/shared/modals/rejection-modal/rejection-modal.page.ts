@@ -1,11 +1,8 @@
 import { FaultsService } from 'src/app/faults/faults.service';
-import { Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { PlatformLocation } from '@angular/common';
-
 @Component({
   selector: 'app-rejection-modal',
   templateUrl: './rejection-modal.page.html',
@@ -20,16 +17,7 @@ export class RejectionModalPage implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
     private commonService: CommonService,
-    private router: Router,
-    private location: PlatformLocation,
-    private faultsService: FaultsService) {
-    this.router.events.subscribe((val) => {
-      if (val) {
-        this.dismiss();
-      }
-    });
-    this.location.onPopState(() => this.dismiss());
-  }
+    private faultsService: FaultsService) { }
 
   ngOnInit() {
     this.rejectionForm = this.formBuilder.group({

@@ -1,10 +1,7 @@
-import { PlatformLocation } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-
 @Component({
   selector: 'app-property-certificate-modal',
   templateUrl: './property-certificate-modal.page.html',
@@ -17,19 +14,11 @@ export class PropertyCertificateModalPage implements OnInit {
   dtTrigger: Subject<any> = new Subject();
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
-  // propertyCertificateList: any[] = [];
+  propertyCertificateList: any[] = [];
   isWarrantyDetails = false;
   warrantyDetails;
 
-  constructor(private modalController: ModalController, private location: PlatformLocation,
-    private router: Router) {
-    this.router.events.subscribe((val) => {
-      if (val) {
-        this.dismiss();
-      }
-    });
-    this.location.onPopState(() => this.dismiss());
-  }
+  constructor(private modalController: ModalController) { }
 
   ngOnInit() {
     this.dtOptions = {
@@ -41,8 +30,12 @@ export class PropertyCertificateModalPage implements OnInit {
       info: false,
       scrollY: 'auto',
       scrollCollapse: false,
+
+      fixedColumns: true,
+      select: true
     };
-    this.propertyCertificate.data.forEach((item) => {
+    this.propertyCertificateList = this.propertyCertificate?.data;
+    this.propertyCertificateList.forEach((item) => {
       item.isRowChecked = false;
     });
   }
@@ -52,16 +45,12 @@ export class PropertyCertificateModalPage implements OnInit {
     if (e.target.checked) {
       this.isWarrantyDetails = true;
       this.warrantyDetails = certificate;
-      console.log("propertyDetails", this.warrantyDetails);
-      
-      this.propertyCertificate.data.forEach(
+      this.propertyCertificateList.forEach(
         ele => {
           if (ele.certificateId != certificate.certificateId) {
             ele.isRowChecked = false;
           }
         })
-    }else{
-      // this.isPropertyDetails = false;
     }
   }
 

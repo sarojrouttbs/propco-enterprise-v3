@@ -1,3 +1,15 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -ms-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+}
+
 table {
     // margin-bottom: 20px;
 }
@@ -14,4 +26,17 @@ td:focus {
 
 .action-btn-block {
     margin-bottom: 20px;
+}
+
+ion-row.fault-data-row {
+    ion-col {
+        @include set-text-style(16px, 20px);
+        margin: 0;
+
+        .text {
+            @include set-text-style(14px, 17px);
+            color: grey;
+            display: inline-block;
+        }
+    }
 }

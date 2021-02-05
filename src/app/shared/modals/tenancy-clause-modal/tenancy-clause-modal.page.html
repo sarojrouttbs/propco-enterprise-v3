@@ -1,18 +1,22 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Maintenance related tenancy clause</ion-title>
+    <ion-title>Maintenance Related Tenancy Clause</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-grid>
-    <ion-row *ngFor="let clause of tenancyClauses.data">
-      <ion-text><h3>{{ clause.clauseName }}</h3></ion-text>
+    <ion-row *ngFor="let clause of tenancyClauses.data" class="card">
+      <ion-text><h5>{{ clause.clauseName }}</h5></ion-text>
       <p>{{ clause.clauseText }}</p>
     </ion-row>
   </ion-grid>
-  <!-- tenancyClauses -->
-  <div class="action-btn-group">
-    <ion-button class="cancel-button" (click)="dismiss()">Close</ion-button>
-  </div>
 </ion-content>
+
+<ion-footer>
+  <ion-row>
+    <ion-col class="ion-text-end">
+        <ion-button class="cancel-button" (click)="dismiss()" color="success">Close</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>
