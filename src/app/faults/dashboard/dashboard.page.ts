@@ -722,7 +722,7 @@ export class DashboardPage implements OnInit {
     this.getList();
   }
 
-  clickCheckbox(controlName, event?) {
+  clickCheckbox(controlName) {
     if (this.filterForm.get(controlName).value) {
       this.filterForm.get(controlName).setValue(!this.filterForm.get(controlName).value);
       return;
