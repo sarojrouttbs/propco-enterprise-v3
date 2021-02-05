@@ -22,6 +22,7 @@ export class GuarantorDetailsPage implements OnInit {
   selectGuarantorForm: FormGroup;
   guarantorDetailsAccordion: any = {};
   guarantorDetails: letAllianceModels.IGuarantorResponse;
+  propertyDetails: letAllianceModels.IPropertyResponse;
 
   propertyId: any;
   applicantId: any;
@@ -161,16 +162,23 @@ export class GuarantorDetailsPage implements OnInit {
     this.commonService.showLoader();
     if(this.applicantType == 'M' || this.applicantType == 'S'){
       forkJoin([
-        this.getTenantGuarantorList()
+        this.getTenantGuarantorList(),
+        this.getPropertyById()
       ]).subscribe(async (values) => {
         this.setValidatorsForForms();
       });
     }
     else if(this.applicantType == 'G'){
       forkJoin([
-        this.getGuarantorDetailsById(this.applicantId)
+        this.getGuarantorDetailsById(this.applicantId),
+        this.getPropertyById()
       ]).subscribe(async (values) => {
-        this.setValidatorsForForms();
+        if (this.guarantorDetails.referencingApplicationStatus == 0 || this.guarantorDetails.referencingApplicationStatus == 1) {
+          this.applicationAlert(true);
+        }
+        else{
+          this.setValidatorsForForms();
+        }
       });
     }
     else{
@@ -194,7 +202,7 @@ export class GuarantorDetailsPage implements OnInit {
     return promise;
   }
 
-  private async applicationAlert() {
+  private async applicationAlert(isRedirectDashboard?: boolean) {
     const modal = await this.modalController.create({
       component: SimpleModalPage,
       cssClass: 'modal-container alert-prompt',
@@ -211,6 +219,12 @@ export class GuarantorDetailsPage implements OnInit {
         ]
       }
     });
+
+    if(isRedirectDashboard){
+      const data = modal.onDidDismiss().then(res => {
+        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+      });
+    }
 
     await modal.present();
   }
@@ -246,6 +260,22 @@ export class GuarantorDetailsPage implements OnInit {
         error => {
           console.log(error);
           resolve(this.guarantorDetails);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private getPropertyById() {
+    const promise = new Promise((resolve, reject) => {
+      this.referencingService.getPropertyById(this.propertyId).subscribe(
+        res => {
+          this.propertyDetails = res && res.data ? res.data : {};
+          resolve(this.propertyDetails);
+        },
+        error => {
+          console.log(error);
+          resolve(this.propertyDetails);
         }
       );
     });
@@ -306,6 +336,8 @@ export class GuarantorDetailsPage implements OnInit {
   }
   
   setValidatorsForForms() {
+    this.guarantorDetailsForm.get('rentShare').setValidators(Validators.max(this.propertyDetails.advertisementRent));
+
     if (this.guarantorDetailsForm.get('tenantTypeId').value == REFERENCING_TENANT_TYPE.INDIVIDUAL) {
       this.guarantorDetailsForm.get('forename').setValidators(Validators.required);
       this.guarantorDetailsForm.get('surname').setValidators(Validators.required);
@@ -343,6 +375,7 @@ export class GuarantorDetailsPage implements OnInit {
       }
     }
 
+    this.guarantorDetailsForm.get('rentShare').updateValueAndValidity();
     this.guarantorDetailsForm.get('forename').updateValueAndValidity();
     this.guarantorDetailsForm.get('surname').updateValueAndValidity();
     this.guarantorDetailsForm.get('companyName').updateValueAndValidity();
