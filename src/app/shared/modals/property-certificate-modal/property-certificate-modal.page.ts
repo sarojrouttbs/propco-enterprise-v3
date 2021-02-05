@@ -22,6 +22,7 @@ export class PropertyCertificateModalPage implements OnInit {
   warrantyDetails;
   contractDetails;
   CERTIFICATES_CATEGORY = CERTIFICATES_CATEGORY;
+  certificateEmail;
 
   constructor(private modalController: ModalController) { }
 
@@ -60,17 +61,23 @@ export class PropertyCertificateModalPage implements OnInit {
             if (this.category === CERTIFICATES_CATEGORY[0]) this.warrantyDetails = certificate;
             if (this.category === CERTIFICATES_CATEGORY[1]) this.contractDetails = certificate;
             this.certificateId = this.category === CERTIFICATES_CATEGORY[0] ? this.warrantyDetails.certificateId : this.contractDetails.certificateId;
+            this.certificateEmail = this.category === CERTIFICATES_CATEGORY[0] ? this.warrantyDetails.contact : this.contractDetails.contact;
             this.showDetails = true;
           }
         });
     } else {
       this.showDetails = false;
       this.certificateId = null;
+      this.certificateEmail = null;
     }
   }
 
   dismiss() {
-    this.modalController.dismiss(this.certificateId);
+    let obj = {
+      certificateEmail: this.certificateEmail,
+      certificateId: this.certificateId
+    };
+    this.modalController.dismiss(obj);
   }
 
   submit() {
