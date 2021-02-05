@@ -309,8 +309,13 @@ export class ApplicationDetailsPage implements OnInit {
       this.getPropertyTenancyList()
     ]).subscribe(async (values) => {
       // this.commonService.hideLoader();
-      this.initPatching();
-      this.setValidatorsForForms();
+      if (this.tenantDetails.referencingApplicationStatus == 0 || this.tenantDetails.referencingApplicationStatus == 1) {
+        this.applicationAlert();
+      }
+      else{
+        this.initPatching();
+        this.setValidatorsForForms();
+      }
     });
   }
 
@@ -505,6 +510,7 @@ export class ApplicationDetailsPage implements OnInit {
       }
     }
 
+    this.tenantDetailsForm.get('rentShare').updateValueAndValidity();
     this.tenantDetailsForm.get('forename').updateValueAndValidity();
     this.tenantDetailsForm.get('surname').updateValueAndValidity();
     this.tenantDetailsForm.get('companyName').updateValueAndValidity();
@@ -515,7 +521,13 @@ export class ApplicationDetailsPage implements OnInit {
   }
 
   onBlurCurrency(val: any, form: FormGroup) {
-    if (!val) {
+    if (val) {
+      if (form == this.propertyDetailsForm) {
+        this.tenantDetailsForm.get('rentShare').setValidators(Validators.max(this.propertyDetailsForm.get('monthlyRent').value));
+        this.tenantDetailsForm.get('rentShare').updateValueAndValidity();
+      }
+    }
+    else {
       if (form == this.propertyDetailsForm) {
         this.propertyDetailsForm.patchValue({
           monthlyRent: 0

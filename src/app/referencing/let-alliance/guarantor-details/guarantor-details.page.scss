@@ -68,6 +68,13 @@
     outline: 0;
     padding: 5px 0;
   }
+
+  div.error-message {
+    color: var(--ion-color-danger);
+    padding-top: 2px;
+    font-size: 14px;
+    line-height: 18px;
+  }
 }
 
 @media screen and (min-width: 0px) and (max-width: 576px) {
@@ -76,7 +83,7 @@
     .la-logo {
       text-align: center;
     }
-    .heading{
+    .heading {
       padding-bottom: 15px;
     }
   }
