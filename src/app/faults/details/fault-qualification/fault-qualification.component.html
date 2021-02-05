@@ -18,18 +18,24 @@
           </ion-button>
           <ng-container *ngIf="iacNotification && iacNotification?.responseReceived">
             <h6 class="banner-title response-recived">
-              <ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from Guarantee Management
-              Company {{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a'
+              <ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from 
+              <span *ngIf="iacNotification?.recipientType === 147">Guarantee Management Company</span> 
+              <span *ngIf="iacNotification?.recipientType === 148">Service Contract Company</span>
+              <span *ngIf="iacNotification?.recipientType === 146">Block Management Company</span>
+              {{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a'
               }}
             </h6>
           </ng-container>
 
           <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
             <h6 class="banner-title awaiting-response">
-              <ion-icon name="ellipse" class="response-circle"></ion-icon> Awaiting response from the Guarantee
-              Management Company
+              <ion-icon name="ellipse" class="response-circle"></ion-icon> 
+              Awaiting response from the 
+              <span *ngIf="iacNotification?.recipientType === 147">Guarantee Management Company</span> 
+              <span *ngIf="iacNotification?.recipientType === 148">Service Contract Company</span>
+              <span *ngIf="iacNotification?.recipientType === 146">Block Management Company</span>
             </h6>
-            <h6 class="banner-title">Next chase due:
+            <h6 class="banner-title" *ngIf="faultDetails?.status != 18">Next chase due:
               {{iacNotification ? (iacNotification.nextChaseDueAt | date: 'dd MMM yyyy - hh:mm a') : ''}}
             </h6>
           </ng-container>
@@ -53,7 +59,7 @@
         </div>
         <div class="question-answer"
           *ngIf="iacNotification 
-          && (iacNotification?.responseReceived == null) && (iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone)">
+          && (iacNotification?.responseReceived == null) && (iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone) && faultDetails.status !== 18 ">
           <h4 claas="ion-text-center">Next Step:</h4>
           <h6>
             <ion-text color="danger">Please note: </ion-text>
@@ -65,7 +71,7 @@
         </div>
 
         <div class="question-answer" *ngIf="iacNotification 
-          && iacNotification?.responseReceived?.isAccepted === false">
+          && (iacNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18)">
           <h4 claas="ion-text-center">Next Step:</h4>
           <h6>
             <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps

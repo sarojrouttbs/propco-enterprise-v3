@@ -205,21 +205,26 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private async proceed() {
-    if (this.isUserActionChange) {
-      if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null) && !this.iacNotification.isVoided) {
-        this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes', 'No').then(async res => {
-          if (res) {
-            this.voidNotification(null);
-          }
-        });
+    if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null)) {
+      if (this.isUserActionChange) {
+        if (!this.iacNotification.isVoided) {
+          this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes', 'No').then(async res => {
+            if (res) {
+              this.voidNotification(null);
+            }
+          });
 
+        } else {
+          this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes', 'No').then(async res => {
+            if (res) {
+              this.updateFault(null);
+            }
+          });
+
+        }
       } else {
-        this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes', 'No').then(async res => {
-          if (res) {
-            this.updateFault(null);
-          }
-        });
-
+        this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
+        return;
       }
     } else {
       let qualificationForm = this.faultQualificationForm.value;
@@ -309,12 +314,14 @@ export class FaultQualificationComponent implements OnInit {
     let res = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
 
     if (res) {
-      // this.faultNotification();
       this._btnHandler('refresh');
     }
   }
 
   private async saveForLater() {
+    if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null)) {
+      return;
+    }
     this.commonService.showLoader();
     let requestObj = {
       doesBranchHoldKeys: this.faultQualificationForm.value.doesBranchHoldKeys,
@@ -336,7 +343,6 @@ export class FaultQualificationComponent implements OnInit {
       },
       error => {
         this.commonService.hideLoader();
-        console.log(error);
       }
     );
   }
@@ -453,7 +459,7 @@ export class FaultQualificationComponent implements OnInit {
     if (this.faultDetails.propertyId) {
       const params: any = new HttpParams().set('category', category);
       const promise = new Promise((resolve) => {
-        this.faultsService.fetchPropertyCertificates('5e8b3e84-f99b-11e8-bd34-0cc47a54d954', params).subscribe(
+        this.faultsService.fetchPropertyCertificates(this.faultDetails.propertyId, params).subscribe(
           res => {
             // this.propertyCertificate = res ? res : '';
             // if (!this.propertyCertificate) {
@@ -480,7 +486,7 @@ export class FaultQualificationComponent implements OnInit {
       return;
     }
 
-    if (this.iacNotification.templateCode === 'GA-E' || this.iacNotification.templateCode === 'BM-E') {
+    if (this.iacNotification.templateCode === 'GA-E' || this.iacNotification.templateCode === 'BM-E' || this.iacNotification.templateCode === 'SM-E') {
       this.questionActionAcceptRequest(data);
     }
 
