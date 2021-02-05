@@ -10,7 +10,7 @@
   border-radius: $radius;
 }
 
-p{
+p {
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -37,33 +37,33 @@ p{
     }
   }
 
-  .tab-container{
+  .tab-container {
     background-color: var(--ion-color-step-2000);
     .accordion-container {
       background: var(--ion-color-step-2000);
-  
+
       .accordion-header {
         @include set-text-style(18px, 22px);
         padding: 10px 30px;
         cursor: pointer;
       }
     }
-  
-    .accordion-container:first-child{
+
+    .accordion-container:first-child {
       margin-top: 0;
     }
 
-    .space-break{
+    .space-break {
       height: 10px;
       background-color: var(--ion-color-step-1750);
     }
 
-    .action-btn-group{
+    .action-btn-group {
       background-color: var(--ion-color-step-1750);
       margin: 0;
       padding: 25px 0;
 
-      ion-button:last-child{
+      ion-button:last-child {
         margin-right: 0;
       }
     }
@@ -71,7 +71,7 @@ p{
     .view-details {
       width: 60%;
       margin: 0 auto;
-  
+
       .title {
         text-align: center;
         margin-bottom: 15px;
@@ -79,24 +79,24 @@ p{
         font-weight: 700;
         @include set-text-style(24px, 30px);
       }
-  
+
       .sub-heading {
         margin-top: 15px;
         margin-bottom: 5px;
         @include set-text-style(20px, 26px);
       }
-  
+
       .header-content {
         .header {
           color: var(--ion-color-step-800);
           @include set-text-style(14px, 19px);
         }
-  
+
         .content {
           @include set-text-style(16px, 20px);
         }
       }
-  
+
       .border-bottom {
         padding-left: 0;
         outline-offset: -6px;
@@ -110,6 +110,13 @@ p{
     outline: 0;
     padding: 5px 0;
   }
+
+  div.error-message {
+    color: var(--ion-color-danger);
+    padding-top: 2px;
+    font-size: 14px;
+    line-height: 18px;
+  }
 }
 
 @media screen and (min-width: 0px) and (max-width: 576px) {
@@ -118,7 +125,7 @@ p{
     .la-logo {
       text-align: center;
     }
-    .heading{
+    .heading {
       padding-bottom: 15px;
     }
   }
@@ -126,7 +133,7 @@ p{
 
 @media screen and (min-width: 0px) and (max-width: 992px) {
   #la-application-details {
-    .tab-container{
+    .tab-container {
       .view-details {
         width: 100%;
       }

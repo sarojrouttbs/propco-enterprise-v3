@@ -195,6 +195,7 @@ declare namespace letAllianceModels {
         username?: any;
         propcoId: number;
         tenantId: string;
+        referencingApplicationStatus: number;
     }
 
     export interface IGuarantorResponse {
