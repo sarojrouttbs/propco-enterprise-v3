@@ -473,17 +473,18 @@ export class DashboardPage implements OnInit {
     }
 
     if (this.filterForm.get('emergency').value) {
-      this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+      // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+      this.fs.push(1);
       this.fus.push(1);
     }
 
     if (this.filterForm.get('urgent').value) {
-      this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+      this.fs.push(1);
       this.fus.push(2);
     }
 
     if (this.filterForm.get('nonUrgent').value) {
-      this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+      this.fs.push(1);
       this.fus.push(3);
     }
 
