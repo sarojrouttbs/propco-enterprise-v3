@@ -1,7 +1,5 @@
-import { PlatformLocation } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { CommonService } from '../../services/common.service';
@@ -21,16 +19,7 @@ export class ContractorDetailsModalPage implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
     private commonService: CommonService,
-    private faultsService: FaultsService,
-    private location: PlatformLocation,
-    private router: Router) {
-    this.location.onPopState(() => this.dismiss())
-    this.router.events.subscribe((val) => {
-      if (val) {
-        this.dismiss();
-      }
-    });
-  }
+    private faultsService: FaultsService) { }
 
   ngOnInit() {
     this.initContractorDetailForm();

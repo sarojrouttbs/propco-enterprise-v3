@@ -44,7 +44,8 @@ export class FaultQualificationComponent implements OnInit {
   blockManagement: any;
   certificateCategoriesMap: any = new Map();
   CERTIFICATES_CATEGORY = CERTIFICATES_CATEGORY;
-
+  warrantyEmail = null;
+  serviceContractEmail = null;
 
   constructor(
     private fb: FormBuilder,
@@ -246,6 +247,14 @@ export class FaultQualificationComponent implements OnInit {
       }
 
       if (serviceCounter === 1 && qualificationForm.isUnderWarranty) {
+        if (this.warrantyCertificateId && (this.warrantyEmail == null || this.warrantyEmail == '')) {
+          this.commonService.showAlert('Warning', 'No valid Email address found.');
+          return;
+        }
+        if (this.warrantyCertificateId == null || this.warrantyCertificateId == '') {
+          this.commonService.showAlert('Warning', 'Please select a Guarantee/Warranty');
+          return;
+        }
         let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Guarantee/Warranty option for this repair. Do you want to send an email to inform the Guarantee Management Company?', '', 'Yes', 'No');
         if (response) {
           this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_WARRANTY');
@@ -253,7 +262,15 @@ export class FaultQualificationComponent implements OnInit {
       }
 
       if (serviceCounter === 1 && qualificationForm.isUnderServiceContract) {
-        let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Service Contract? option for this repair. Do you want to send an email to inform the Service Contract Company? ', '', 'Yes', 'No');
+        if (this.serviceContractCertificateId && (this.serviceContractEmail == null || this.serviceContractEmail == '')) {
+          this.commonService.showAlert('Warning', 'No valid Email address found.');
+          return;
+        }
+        if (this.serviceContractCertificateId == null || this.serviceContractCertificateId == '') {
+          this.commonService.showAlert('Warning', 'Please select a Service Contract');
+          return;
+        }
+        let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Service Contract option for this repair. Do you want to send an email to inform the Service Contract Company? ', '', 'Yes', 'No');
         if (response) {
           this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_SERVICE_CONTRACT');
         }
@@ -402,8 +419,11 @@ export class FaultQualificationComponent implements OnInit {
     });
 
     modal.onDidDismiss().then(async res => {
-      if (res.data && (res.data != null || res.data != '')) {
-        category === CERTIFICATES_CATEGORY[0] ? this.warrantyCertificateId = res.data : this.serviceContractCertificateId = res.data;
+      if (res.data && (res.data.certificateId != null || res.data.certificateId != '')) {
+        category === CERTIFICATES_CATEGORY[0] ? this.warrantyCertificateId = res.data.certificateId : this.serviceContractCertificateId = res.data.certificateId;
+        if (res.data.certificateEmail != null || res.data.certificateEmail != '') {
+          category === CERTIFICATES_CATEGORY[0] ? this.warrantyEmail = res.data.certificateEmail : this.serviceContractEmail = res.data.certificateEmail;
+        }
       } else {
         category === CERTIFICATES_CATEGORY[0] ? this.faultQualificationForm.get('isUnderWarranty').setValue(false) : this.faultQualificationForm.get('isUnderServiceContract').setValue(false);
       }

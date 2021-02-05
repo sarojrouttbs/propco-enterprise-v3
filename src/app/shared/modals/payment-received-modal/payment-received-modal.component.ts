@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { CommonService } from '../../services/common.service';
-import { Router } from '@angular/router';
-import { PlatformLocation } from '@angular/common';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { PAYMENT_METHOD_TYPES } from '../../constants';
 
@@ -20,16 +18,7 @@ export class PaymentReceivedModalComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
     private commonService: CommonService,
-    private router: Router,
-    private location: PlatformLocation,
-    private faultsService: FaultsService) {
-    this.router.events.subscribe((val) => {
-      if (val) {
-        this.dismiss();
-      }
-    });
-    this.location.onPopState(() => this.dismiss());
-  }
+    private faultsService: FaultsService) { }
 
   ngOnInit() {
     this.paymentReceivedForm = this.formBuilder.group({
@@ -55,7 +44,7 @@ export class PaymentReceivedModalComponent implements OnInit {
       this.modalController.dismiss('success');
     }, error => {
       // this.commonService.showMessage('Something went wrong on server, please try again.', 'Payment Received','error');
-      this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Payment Received','error');
+      this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Payment Received', 'error');
     })
   }
 

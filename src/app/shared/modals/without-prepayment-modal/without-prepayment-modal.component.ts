@@ -2,11 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { CommonService } from '../../services/common.service';
-import { Router } from '@angular/router';
-import { PlatformLocation } from '@angular/common';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { PAYMENT_WARNINGS, SYSTEM_OPTIONS } from '../../constants';
-
 @Component({
   selector: 'app-without-prepayment-modal',
   templateUrl: './without-prepayment-modal.component.html',
@@ -23,16 +20,7 @@ export class WithoutPrepaymentModalComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
     private commonService: CommonService,
-    private router: Router,
-    private location: PlatformLocation,
-    private faultsService: FaultsService) {
-    this.router.events.subscribe((val) => {
-      if (val) {
-        this.dismiss();
-      }
-    });
-    this.location.onPopState(() => this.dismiss());
-  }
+    private faultsService: FaultsService) { }
 
   async ngOnInit() {
     this.withoutPrePaymentForm = this.formBuilder.group({

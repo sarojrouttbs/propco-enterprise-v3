@@ -18,6 +18,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { DataTablesModule } from 'angular-datatables';
 import { ScriptService } from './shared/services/script.service';
+import { AutocloseOverlaysService } from './shared/services/autoclose-overlays.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -47,7 +48,8 @@ import { ScriptService } from './shared/services/script.service';
       multi: true
     },
     CommonService,
-    ScriptService
+    ScriptService,
+    AutocloseOverlaysService
   ],
   bootstrap: [AppComponent]
 })
