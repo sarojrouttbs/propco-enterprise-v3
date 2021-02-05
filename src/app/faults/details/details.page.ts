@@ -1070,10 +1070,10 @@ export class DetailsPage implements OnInit {
       this.commonService.showMessage('Please fill all required fields.', 'Log a Fault', 'error');
       return;
     }
-    if (!this.files.length) {
-      this.commonService.showMessage('At least one fault image is required', 'Log a Fault', 'error');
-      return;
-    }
+    // if (!this.files.length) {
+    //   this.commonService.showMessage('At least one fault image is required', 'Log a Fault', 'error');
+    //   return;
+    // }
     this.commonService.showLoader();
     let faultRequestObj = this.createFaultFormValues();
 

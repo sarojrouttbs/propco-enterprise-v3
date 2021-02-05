@@ -1,10 +1,22 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Guarantee / Warranty Details</ion-title>
+    <ion-title *ngIf="category === CERTIFICATES_CATEGORY[0]">Guarantee / Warranty Details</ion-title>
+    <ion-title *ngIf="category === CERTIFICATES_CATEGORY[1]">Service Contract Details</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ng-container *ngIf="category === CERTIFICATES_CATEGORY[0]">
+    <ng-template *ngTemplateOutlet="warrantyDetailsTemplate"></ng-template>
+  </ng-container>
+  <ng-container *ngIf="category === CERTIFICATES_CATEGORY[1]">
+    <ng-template *ngTemplateOutlet="contractDetailsTemplate"></ng-template>
+  </ng-container>
+</ion-content>
+<ng-template #warrantyDetailsTemplate>
   <ion-grid>
     <ion-row>
       <ion-col class="ion-margin-bottom">
@@ -31,12 +43,12 @@
       <tbody>
         <tr *ngFor="let certificate of propertyCertificateList; let i=index;" class="table-row">
           <td>
-            <ion-checkbox (ionChange)="selectCertificate(certificate, $event)" color="primary"
+            <ion-checkbox (ionChange)="selectCertificate(certificate, $event.target.checked)" color="primary"
               [checked]="certificate?.isRowChecked"></ion-checkbox>
           </td>
           <td>{{certificate?.certificateId || '-'}}</td>
           <td>{{certificate?.appliance || '-'}}</td>
-          <td> - </td>
+          <td> {{warrantyDetails?.contact || '-'}} </td>
           <td>{{certificate?.certificateNumber || '-'}}</td>
           <td>{{certificate?.model || '-'}} </td>
           <td>{{certificate?.serialNumber || '-'}}</td>
@@ -47,18 +59,17 @@
     </table>
   </ion-grid>
 
-  <ion-grid>
-
+  <ion-grid *ngIf="showDetails">
     <ion-row class="fault-data-row">
       <ion-col size="25">
         <span class="text">Appliance</span>
         <br />
-        {{certificate?.appliance || '-'}}
+        {{warrantyDetails?.appliance || '-'}}
       </ion-col>
       <ion-col size="25">
         <span class="text">Company</span>
         <br />
-        -
+        {{warrantyDetails?.contact || '-'}}
       </ion-col>
       <ion-col size="25">
         <span class="text">Warranty Type</span>
@@ -86,7 +97,7 @@
       <ion-col size="25">
         <span class="text">Start Date</span>
         <br />
-        {{warrantyDetails?.startDate || '-'}}
+        {{warrantyDetails?.startDate | date: 'dd/MM/yyyy' || '-'}}
       </ion-col>
     </ion-row>
 
@@ -94,21 +105,96 @@
       <ion-col size="25">
         <span class="text">Phone Number</span>
         <br />
-        {{warrantyDetails?.contactNumber|| '-'}}
+        {{warrantyDetails?.contactNumber || '-'}}
       </ion-col>
       <ion-col size="25">
         <span class="text">Email</span>
         <br />
-        -
+        {{warrantyDetails?.contact || '-'}}
       </ion-col>
       <ion-col size="25">
         <span class="text">End Date</span>
         <br />
-        {{warrantyDetails?.expireDate || '-'}}
+        {{warrantyDetails?.expireDate | date: 'dd/MM/yyyy' || '-'}}
       </ion-col>
     </ion-row>
   </ion-grid>
-</ion-content>
+</ng-template>
+<ng-template #contractDetailsTemplate>
+  <ion-grid>
+    <table datatable [dtOptions]="dtOptions" class="row-border hover" width="100% ">
+      <thead>
+        <tr>
+          <th width="5%">Select</th>
+          <th width="10%">ID</th>
+          <th width="15%">Policy Reference</th>
+          <th width="15%">Company</th>
+          <th width="15%">Start Date</th>
+          <th width="15%">End Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let certificate of propertyCertificate.data; let i=index;" class="table-row">
+          <td>
+            <ion-checkbox (ionChange)="selectCertificate(certificate, $event.target.checked)" color="primary"
+              [checked]="certificate?.isRowChecked"></ion-checkbox>
+          </td>
+          <td>{{certificate?.certificateId || '-'}}</td>
+          <td>{{certificate?.membershipNumber || '-'}} </td>
+          <td>{{certificate?.contact || '-'}}</td>
+          <td>{{certificate?.startDate | date: 'dd/MM/yyyy' || '-'}}</td>
+          <td>{{certificate?.expireDate | date: 'dd/MM/yyyy' || '-'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ion-grid>
+
+  <ion-grid *ngIf="showDetails">
+    <ion-row class="fault-data-row">
+      <ion-col size="33.33">
+        <span class="text">Service Agreement Type</span>
+        <br />
+        -
+      </ion-col>
+      <ion-col size="33.33">
+        <span class="text">Policy Referance</span>
+        <br />
+        {{contractDetails?.membershipNumber || '-'}}
+      </ion-col>
+      <ion-col size="33.33">
+        <span class="text">Company</span>
+        <br />
+        {{certificate?.contact || '-'}}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="fault-data-row">
+      <ion-col size="33.33">
+        <span class="text">Email</span>
+        <br />
+        {{certificate?.contact || '-'}}
+      </ion-col>
+      <ion-col size="33.33">
+        <span class="text">Start Date</span>
+        <br />
+        {{contractDetails?.startDate | date: 'dd/MM/yyyy' || '-'}}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="fault-data-row">
+      <ion-col size="33.33">
+        <span class="text">Phone Number</span>
+        <br />
+        {{contractDetails?.contactNumber || '-'}}
+      </ion-col>
+      <ion-col size="33.33">
+        <span class="text">End Date</span>
+        <br />
+        {{contractDetails?.expireDate | date: 'dd/MM/yyyy' || '-'}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ng-template>
 
 <ion-footer>
   <ion-row>

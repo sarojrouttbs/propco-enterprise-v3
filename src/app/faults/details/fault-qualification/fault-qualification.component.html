@@ -204,7 +204,7 @@
                 <ion-col>
                   <ion-item lines="none">
                     <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start"
-                      [disabled]="!propertyCertificate"></ion-radio>
+                      [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])"></ion-radio>
                     <ion-label>Yes</ion-label>
                   </ion-item>
                 </ion-col>
@@ -212,7 +212,7 @@
                 <ion-col>
                   <ion-item lines="none">
                     <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start"
-                      [disabled]="!propertyCertificate"></ion-radio>
+                      [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])"></ion-radio>
                     <ion-label>No</ion-label>
                   </ion-item>
                 </ion-col>
@@ -222,10 +222,10 @@
           <ion-col size="30">
             <ion-button color="success" class="action-btn popup-view-btn" fill="outline"
               [disabled]="faultQualificationForm.get('isUnderWarranty').value === null || !faultQualificationForm.get('isUnderWarranty').value"
-              (click)="viewPropertyCertificate(); $event.stopPropagation();">View</ion-button>
+              (click)="viewPropertyCertificate(CERTIFICATES_CATEGORY[0]); $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
-        <ion-text color="danger" *ngIf="!propertyCertificate">No details available</ion-text>
+        <ion-text color="danger" *ngIf="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])">No details available</ion-text>
       </ion-col>
       <ion-col class="card">
         <h3>Service Contract</h3>
@@ -236,24 +236,25 @@
               <ion-row class="radio-block">
                 <ion-col>
                   <ion-item lines="none">
-                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start"></ion-radio>
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start" [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1])"></ion-radio>
                     <ion-label>Yes</ion-label>
                   </ion-item>
                 </ion-col>
 
                 <ion-col>
                   <ion-item lines="none">
-                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start"></ion-radio>
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start" [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1])"></ion-radio>
                     <ion-label>No</ion-label>
                   </ion-item>
                 </ion-col>
               </ion-row>
             </ion-radio-group>
+            <ion-text color="danger" *ngIf="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1])">No details available</ion-text>
           </ion-col>
           <ion-col size="30">
             <ion-button color="success" class="action-btn popup-view-btn" fill="outline"
               [disabled]="faultQualificationForm.get('isUnderServiceContract').value === null || !faultQualificationForm.get('isUnderServiceContract').value"
-              (click)="viewServiceContract()">View</ion-button>
+              (click)="viewPropertyCertificate(CERTIFICATES_CATEGORY[1]); $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
       </ion-col>
