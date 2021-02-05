@@ -264,7 +264,7 @@ export const FAULT_QUALIFICATION_ACTIONS = [
   },
   {
     index: 'UNDER_WARRANTY',
-    value: 'Reapir via Guarantee Management'
+    value: 'Repair via Guarantee Management'
   },
   {
     index: 'UNDER_SERVICE_CONTRACT',
