@@ -151,7 +151,10 @@
             <ion-label position="stacked">Rent Share <ion-text class="mandatory">*</ion-text></ion-label>
             <input currencyMask formControlName="rentShare" (blur)="onBlurCurrency(guarantorDetailsForm.controls.rentShare.value, guarantorDetailsForm)"/>
           </ion-item>
-          <app-validation-message [control]="guarantorDetailsForm.controls.rentShare"></app-validation-message>
+          <div *ngIf="guarantorDetailsForm.controls.rentShare.errors" class="error-message">
+            <div *ngIf="guarantorDetailsForm.controls.rentShare.errors.required">Rent share is required</div>
+            <div *ngIf="guarantorDetailsForm.controls.rentShare.errors.max">Rent share should be less than and equal to property rent (£ {{propertyDetails.advertisementRent}})</div>
+          </div>
         </ion-col>
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item lines="none" style="margin-top: 10px;">
