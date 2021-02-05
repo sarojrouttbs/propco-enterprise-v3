@@ -390,11 +390,12 @@ ion-alert.common-alert-box {
 
 .property-certificates-list {
   .modal-wrapper {
-    // min-height: 300px;
-    min-width: 800px;
-
-    .dataTables_wrapper.no-footer .dataTables_scrollBody{
-      border-bottom: none;
+    height: 600px;
+    min-width: 400px;
+    width: 800px;
+    ion-footer {
+      border-top: 1px solid var(--ion-color-step-800);
+      padding: 3px 5px;
     }
   }
 }

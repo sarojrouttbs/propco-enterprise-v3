@@ -28,6 +28,42 @@ td:focus {
     margin-bottom: 20px;
 }
 
+.details-section {
+    margin-top: 10px;
+}
+
+.table-container {
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        border: 1px solid var(--ion-color-step-1600);
+    }
+
+    th {
+        background-color: var(--ion-color-step-1400);
+        text-align: left;
+        padding: 12px 5px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    td {
+        text-align: left;
+        padding: 12px 5px;
+        font-size: 14px;
+    }
+    tbody {
+        tr:hover {
+            background-color: var(--ion-color-step-2000);
+        }
+    }
+    tr:nth-child(even) {
+        background-color: var(--ion-color-step-1800);
+    }
+    tr:nth-child(odd) {
+        background-color: var(--ion-color-step-1600);
+    }
+}
+
 ion-row.fault-data-row {
     ion-col {
         @include set-text-style(16px, 20px);

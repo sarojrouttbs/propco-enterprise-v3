@@ -13,10 +13,10 @@ export class PropertyCertificateModalPage implements OnInit {
   propertyCertificate;
   category;
   certificateId;
-  dtOptions: any = {};
-  dtTrigger: Subject<any> = new Subject();
-  @ViewChild(DataTableDirective, { static: false })
-  dtElement: DataTableDirective;
+  // dtOptions: any = {};
+  // dtTrigger: Subject<any> = new Subject();
+  // @ViewChild(DataTableDirective, { static: false })
+  // dtElement: DataTableDirective;
   propertyCertificateList: any[] = [];
   showDetails = false;
   warrantyDetails;
@@ -27,19 +27,19 @@ export class PropertyCertificateModalPage implements OnInit {
   constructor(private modalController: ModalController) { }
 
   ngOnInit() {
-    this.dtOptions = {
-      paging: false,
-      pagingType: 'full_numbers',
-      responsive: true,
-      searching: false,
-      ordering: false,
-      info: false,
-      scrollY: 'auto',
-      scrollCollapse: false,
+    // this.dtOptions = {
+    //   paging: false,
+    //   pagingType: 'full_numbers',
+    //   responsive: true,
+    //   searching: false,
+    //   ordering: false,
+    //   info: false,
+    //   scrollY: 'auto',
+    //   scrollCollapse: false,
 
-      fixedColumns: true,
-      select: true
-    };
+    //   fixedColumns: true,
+    //   select: true
+    // };
     this.propertyCertificateList = this.propertyCertificate?.data;
     this.propertyCertificateList.forEach((item) => {
       item.isRowChecked = false;
