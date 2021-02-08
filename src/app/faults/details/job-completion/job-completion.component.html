@@ -366,7 +366,7 @@
       <ion-col size="100">
         <ion-item>
           <ion-label position="floating">Full Job Description <ion-text class="mandatory">*</ion-text></ion-label>
-          <ion-textarea rows="1" formControlName="fullDescription"></ion-textarea>
+          <ion-textarea rows="1" formControlName="fullDescription" auto-grow="true"></ion-textarea>
         </ion-item>
         <app-validation-message [control]="workOrderForm.controls.fullDescription"></app-validation-message>
       </ion-col>
