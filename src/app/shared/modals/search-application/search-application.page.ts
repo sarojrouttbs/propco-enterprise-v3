@@ -36,7 +36,6 @@ export class SearchApplicationPage implements OnInit {
     private fb: FormBuilder,
     private modalController: ModalController,
     private referencingService: ReferencingService,
-    private location: PlatformLocation,
     public commonService: CommonService,
 
   ) {
@@ -44,7 +43,6 @@ export class SearchApplicationPage implements OnInit {
     this.filteredProperty = this.applicationSearchForm.get('text').valueChanges.pipe(debounceTime(300),
       switchMap((value: string) => (value.length > 2) ? this.searchApplication(value) : new Observable())
     );
-    location.onPopState(() => this.dismiss());
   }
 
   ngOnInit() {

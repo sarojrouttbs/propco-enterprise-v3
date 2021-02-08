@@ -11,12 +11,11 @@ import { PlatformLocation } from '@angular/common';
 export class BlockManagementModalPage implements OnInit {
   blockManagement: any;
 
-  constructor(private router: Router, private modalController: ModalController, private location: PlatformLocation) { 
+  constructor(private router: Router, private modalController: ModalController) { 
     this.router.events.subscribe(async () => {
       const isModalOpened = await this.modalController.getTop();
       if (router.url.toString() === "/dashboard" && isModalOpened) this.modalController.dismiss();
     });
-    this.location.onPopState(() => this.modalController.dismiss());
   }
 
   ngOnInit() {
