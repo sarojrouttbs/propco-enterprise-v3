@@ -41,10 +41,10 @@
             </ion-col>
             <ion-col class="no-padding-top col2 ion-text-end" size="30">
               <h2 [class]="urgencyStatus==1 ? 'emergency' : (urgencyStatus==2? 'urgent' : 'non-urgent')"
-                (click)="toggleStatusList()" style="cursor: pointer;">
+                (click)="toggleStatusList()" [class.status-pointer]="faultId">
                 {{(getLookupValue(urgencyStatus, faultUrgencyStatuses)) | uppercase}}</h2>
                 
-              <ion-list class="status-list" *ngIf="showList">
+              <ion-list class="status-list" *ngIf="showList && faultId">
                 <ion-item *ngFor="let status of faultUrgencyStatuses" button style="font-size: 13px !important;"
                   (click)="selectedStatus(status.index)">
                   <label style="color: var(--ion-color-step-200);

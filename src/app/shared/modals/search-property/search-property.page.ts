@@ -28,9 +28,7 @@ export class SearchPropertyPage implements OnInit {
     private navParams: NavParams,
     private modalController: ModalController,
     private fb: FormBuilder,
-    private commonService: CommonService,
-    private location: PlatformLocation
-  ) {
+    private commonService: CommonService) {
     this.isFAF = this.navParams.get('isFAF');
     this.officeList = this.navParams.get('officeList');
     this.agreementStatus = this.navParams.get('agreementStatus');
@@ -40,7 +38,6 @@ export class SearchPropertyPage implements OnInit {
     this.filteredProperty = this.propertySearchForm.get('text').valueChanges.pipe(debounceTime(300),
       switchMap((value: string) => (value.length > 2) ? this.searchProperty(value, this.isFAF, this.officeList, this.agreementStatus) : new Observable())
     );
-    location.onPopState(() => this.dismiss());
   }
 
   ngOnInit() {
