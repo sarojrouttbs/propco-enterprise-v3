@@ -1429,8 +1429,8 @@ export class ArrangingContractorComponent implements OnInit {
       });
 
       modal.onDidDismiss().then(async res => {
-        this.commonService.showLoader();
         if (res.data && res.data == 'success') {
+          this.commonService.showLoader();
           this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
           await this.faultNotification(this.faultDetails.stageAction);
         }
