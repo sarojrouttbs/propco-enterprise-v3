@@ -1931,6 +1931,7 @@ export class DetailsPage implements OnInit {
   }
 
   async getStatus(status) {
+    this.faultDetailsForm.get('urgencyStatus').setValue(status);
     let requestObj = {
       urgencyStatus: status,
       stage: this.faultDetails.stage,
@@ -1940,7 +1941,6 @@ export class DetailsPage implements OnInit {
     if (res) {
       await this.refreshDetailsAndStage();
     }
-
   }
 
   getPendingHours() {
