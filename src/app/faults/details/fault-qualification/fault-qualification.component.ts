@@ -34,7 +34,7 @@ export class FaultQualificationComponent implements OnInit {
   tenancyClauses: any;
   warrantyPropertyCertificate: any;
   serviceContractyPropertyCertificate: any;
-  iacNotification;
+  iqfNotification;
   warrantyCertificateId: any = null;
   serviceContractCertificateId: any = null;
   otherStageActions = FAULT_QUALIFICATION_ACTIONS.filter(action => { return (action.index == "LANDLORD_INSTRUCTION") });
@@ -117,7 +117,7 @@ export class FaultQualificationComponent implements OnInit {
 
   async faultNotification(action) {
     let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-    this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.FAULT_QUALIFICATION, action);
+    this.iqfNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.FAULT_QUALIFICATION, action);
   }
 
   async checkFaultNotifications(faultId) {
@@ -205,9 +205,9 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private async proceed() {
-    if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null)) {
+    if (this.iqfNotification && (this.iqfNotification.responseReceived == null || this.iqfNotification.responseReceived?.isAccepted == null)) {
       if (this.isUserActionChange) {
-        if (!this.iacNotification.isVoided) {
+        if (!this.iqfNotification.isVoided) {
           this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes', 'No').then(async res => {
             if (res) {
               this.voidNotification(null);
@@ -319,7 +319,7 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private async saveForLater() {
-    if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null)) {
+    if (this.iqfNotification && (this.iqfNotification.responseReceived == null || this.iqfNotification.responseReceived?.isAccepted == null)) {
       return;
     }
     this.commonService.showLoader();
@@ -482,11 +482,11 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   async questionAction(data) {
-    if (this.iacNotification && this.iacNotification.responseReceived != null) {
+    if (this.iqfNotification && this.iqfNotification.responseReceived != null) {
       return;
     }
 
-    if (this.iacNotification.templateCode === 'GA-E' || this.iacNotification.templateCode === 'BM-E' || this.iacNotification.templateCode === 'SM-E') {
+    if (this.iqfNotification.templateCode === 'GA-E' || this.iqfNotification.templateCode === 'BM-E' || this.iqfNotification.templateCode === 'SM-E') {
       this.questionActionAcceptRequest(data);
     }
 
@@ -500,8 +500,8 @@ export class FaultQualificationComponent implements OnInit {
   getPendingHours() {
     let hours = 0;
     const currentDateTime = this.commonService.getFormatedDateTime(new Date());
-    if (this.iacNotification.nextChaseDueAt) {
-      const diffInMs = Date.parse(this.iacNotification.nextChaseDueAt) - Date.parse(currentDateTime);
+    if (this.iqfNotification.nextChaseDueAt) {
+      const diffInMs = Date.parse(this.iqfNotification.nextChaseDueAt) - Date.parse(currentDateTime);
       hours = diffInMs / 1000 / 60 / 60;
     }
     return hours > 0 ? Math.floor(hours) : 0;
@@ -512,7 +512,7 @@ export class FaultQualificationComponent implements OnInit {
     notificationObj.isAccepted = data.value;
     notificationObj.submittedByType = 'SECUR_USER';
     let type = '';
-    switch (this.iacNotification.templateCode) {
+    switch (this.iqfNotification.templateCode) {
       case 'GA-E': {
         type = 'Guarantee Management';
         break;
@@ -532,14 +532,14 @@ export class FaultQualificationComponent implements OnInit {
     if (data.value) {
       this.commonService.showConfirm('Repair complete', `Are you sure the ${type} Company has completed the repair?`, '', 'Yes', 'No').then(async res => {
         if (res) {
-          await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
+          await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
           this._btnHandler('refresh');
         }
       });
     } else if (!data.value) {
       this.commonService.showConfirm('Repair not complete', `Are you sure the ${type} Company has not completed the repair`, '', 'Yes', 'No').then(async res => {
         if (res) {
-          await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
+          await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
           this._btnHandler('refresh');
         }
       });
@@ -606,7 +606,7 @@ export class FaultQualificationComponent implements OnInit {
     let notificationObj = {} as FaultModels.IUpdateNotification;
     notificationObj.isVoided = true;
     notificationObj.submittedByType = 'SECUR_USER';
-    const updated = await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
+    const updated = await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
     if (updated) {
       this.updateFault(value);
     }

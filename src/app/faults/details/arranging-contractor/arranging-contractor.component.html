@@ -26,9 +26,10 @@
             </ion-button>
             <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
               <h6 class="banner-title awaiting-response">
-                <ion-icon name="ellipse" class="response-circle"></ion-icon> Awaiting response from the <span
-                    *ngIf="iacNotification?.recipientType === 8">Landlord</span>
-                  <span *ngIf="iacNotification?.recipientType == 11">Contractor</span>
+                <ion-icon name="ellipse" class="response-circle"></ion-icon> Awaiting response from the 
+                  <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
+                  <span *ngIf="iacNotification?.recipientType === 11">Contractor</span>
+                  <span *ngIf="iacNotification?.recipientType === 1">Tenant</span>
               </h6>
               <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt" >Next chase due:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - hh:mm a') : ''}}
