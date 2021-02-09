@@ -13,6 +13,7 @@ export class PropertyCertificateModalPage implements OnInit {
   propertyCertificate;
   category;
   certificateId;
+  certificateTypes;
   // dtOptions: any = {};
   // dtTrigger: Subject<any> = new Subject();
   // @ViewChild(DataTableDirective, { static: false })
@@ -58,6 +59,7 @@ export class PropertyCertificateModalPage implements OnInit {
           if (ele.certificateId != certificate.certificateId) {
             ele.isRowChecked = false;
           } else {
+            certificate.typeName = this.getCertificateTypeName(certificate.type);
             if (this.category === CERTIFICATES_CATEGORY[0]) this.warrantyDetails = certificate;
             if (this.category === CERTIFICATES_CATEGORY[1]) this.contractDetails = certificate;
             this.certificateId = this.category === CERTIFICATES_CATEGORY[0] ? this.warrantyDetails.certificateId : this.contractDetails.certificateId;
@@ -69,6 +71,14 @@ export class PropertyCertificateModalPage implements OnInit {
       this.showDetails = false;
       this.certificateId = null;
       this.certificateEmail = null;
+    }
+  }
+
+  private getCertificateTypeName(id) {
+    if (!id || !this.certificateTypes) return;
+    const name = this.certificateTypes.filter(type => type.index === id);
+    if (Array.isArray(name)) {
+      return name[0].value;
     }
   }
 

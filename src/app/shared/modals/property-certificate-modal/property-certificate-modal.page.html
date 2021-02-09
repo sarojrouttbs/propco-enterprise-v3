@@ -51,8 +51,8 @@
           <td>{{certificate?.certificateNumber || '-'}}</td>
           <td>{{certificate?.model || '-'}} </td>
           <td>{{certificate?.serialNumber || '-'}}</td>
-          <td>{{certificate?.startDate || '-'}}</td>
-          <td>{{certificate?.expireDate || '-'}}</td>
+          <td>{{certificate?.startDate | date: 'dd/MM/yyyy' || '-'}}</td>
+          <td>{{certificate?.expireDate | date: 'dd/MM/yyyy' || '-'}}</td>
         </tr>
       </tbody>
       </table>
@@ -74,7 +74,7 @@
       <ion-col size="25">
         <span class="text">Warranty Type</span>
         <br />
-        -
+        {{warrantyDetails?.typeName || '-'}}
       </ion-col>
       <ion-col size="25">
         <span class="text">Warranty Number</span>
@@ -152,7 +152,7 @@
       <ion-col size="33.33">
         <span class="text">Service Agreement Type</span>
         <br />
-        -
+        {{contractDetails?.typeName || '-'}}
       </ion-col>
       <ion-col size="33.33">
         <span class="text">Policy Reference</span>

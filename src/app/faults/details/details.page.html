@@ -17,7 +17,7 @@
           <ion-item>
             <ion-label position="floating">Fault description<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-textarea formControlName="notes" rows="1" class="fault-description"></ion-textarea>
+            <ion-textarea formControlName="notes" rows="1" auto-grow="true" class="fault-description"></ion-textarea>
           </ion-item>
           <app-validation-message [control]="faultDetailsForm.controls.notes"></app-validation-message>
         </ion-col>
@@ -247,7 +247,7 @@
         <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Useful instructions</ion-label>
-            <ion-textarea rows="1" formControlName="tenantNotes"></ion-textarea>
+            <ion-textarea rows="1" formControlName="tenantNotes" auto-grow="true"></ion-textarea>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
@@ -838,7 +838,7 @@
                         || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION'
                         || userSelectedActionControl.value == 'PROCEED_AS_NECESSARY'
                         || userSelectedActionControl.value == 'PROCEED_WITH_WORKSORDER')"
-                        rows=1></ion-textarea>
+                        rows=1 auto-grow="true"></ion-textarea>
                     </ion-item>
                   </ion-col>
                 </ion-row>
