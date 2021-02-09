@@ -175,14 +175,14 @@
               <ion-row class="radio-block">
                 <ion-col>
                   <ion-item lines="none">
-                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start"></ion-radio>
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start" [disabled]="!blockManagement"></ion-radio>
                     <ion-label>Yes</ion-label>
                   </ion-item>
                 </ion-col>
 
                 <ion-col>
                   <ion-item lines="none">
-                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start"></ion-radio>
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start" [disabled]="!blockManagement"></ion-radio>
                     <ion-label>No</ion-label>
                   </ion-item>
                 </ion-col>
@@ -195,6 +195,7 @@
               (click)="viewBlockManagement();  $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
+        <ion-text color="danger" *ngIf="!blockManagement">No details available</ion-text>
       </ion-col>
     </ion-row>
     <ion-row>
