@@ -194,6 +194,12 @@
   </ion-grid>
 </ng-template>
 
-<ion-footer class="ion-text-right">
-  <ion-button class="cancel-button" size="small" (click)="dismiss()" color="success">Close</ion-button>
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-right">
+        <ion-button class="cancel-button" (click)="dismiss()" color="success">Close</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-footer>
