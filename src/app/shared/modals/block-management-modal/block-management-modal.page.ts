@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { Router } from '@angular/router';
-import { PlatformLocation } from '@angular/common';
+import { CommonService } from '../../services/common.service';
 
 @Component({
   selector: 'app-block-management-modal',
@@ -10,18 +9,30 @@ import { PlatformLocation } from '@angular/common';
 })
 export class BlockManagementModalPage implements OnInit {
   blockManagement: any;
+  managementResponsibilities: any = [];
+  faultCategories: any;
 
-  constructor(private router: Router, private modalController: ModalController) { 
-    this.router.events.subscribe(async () => {
-      const isModalOpened = await this.modalController.getTop();
-      if (router.url.toString() === "/dashboard" && isModalOpened) this.modalController.dismiss();
-    });
+  constructor(private modalController: ModalController, private commonService: CommonService) {
   }
 
   ngOnInit() {
+    this.getValue()
   }
 
-  onCancel(){
+  onCancel() {
     this.modalController.dismiss('success');
+  }
+
+  getValue() {
+    let data = this.blockManagement.managementResponsibility.managementResponsibilities;
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        this.managementResponsibilities.push(this.getLookup(data[i], this.faultCategories));
+      }
+    }
+  }
+
+  getLookup(index, value){
+   return this.commonService.getLookupValue(index, value);
   }
 }

@@ -109,7 +109,7 @@
           </ion-item>
           <app-validation-message [control]="reportedByForm.controls.reportedBy"></app-validation-message>
         </ion-col>
-        <ion-col size="66.6">
+        <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Select agreement<ion-text class="mandatory">*</ion-text>
             </ion-label>
@@ -619,7 +619,7 @@
             </ion-col>
           </ion-row>
         </ion-grid>
-        <app-fault-qualification [faultDetails]="faultDetails" [propertyDetails]="propertyDetails"  (btnAction)="_childComponentHandler($event)"></app-fault-qualification>
+        <app-fault-qualification [faultDetails]="faultDetails" [faultCategories]="faultCategories" [propertyDetails]="propertyDetails"  (btnAction)="_childComponentHandler($event)"></app-fault-qualification>
       </ng-container>
      
   </ion-card>
