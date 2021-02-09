@@ -266,7 +266,7 @@ export class FaultQualificationComponent implements OnInit {
       }
 
       if (serviceCounter === 1 && qualificationForm.isUnderBlockManagement) {
-        if (this.blockManagement.managementCompany.email == null || this.blockManagement.managementCompany.email) {
+        if (this.blockManagement.managementCompany.email == null || this.blockManagement.managementCompany.email == '') {
           this.commonService.showAlert('Warning', 'No valid Email address found.');
           return;
         }
@@ -592,7 +592,7 @@ export class FaultQualificationComponent implements OnInit {
         this.faultsService.getPropertyHeadLease(this.faultDetails.propertyId).subscribe(
           res => {
             if (res) {
-              this.blockManagement = res ? res : '';
+              this.blockManagement = (res && res.managementCompany && res.managementCompany.name && res.managementCompany.email) ? res : '';
               if (!this.blockManagement) {
                 this.faultQualificationForm.patchValue({ isUnderBlockManagement: false });
                 this.faultQualificationForm.get('isUnderBlockManagement').updateValueAndValidity();
