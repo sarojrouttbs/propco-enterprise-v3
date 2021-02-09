@@ -23,6 +23,7 @@ export class FaultQualificationComponent implements OnInit {
 
   @Input() faultDetails: FaultModels.IFaultResponse;
   @Input() propertyDetails;
+  @Input() faultCategories;
   faultQualificationForm: FormGroup;
   isManagement = true;
   isTenancy = true;
@@ -245,6 +246,10 @@ export class FaultQualificationComponent implements OnInit {
       }
 
       if (serviceCounter === 1 && qualificationForm.isUnderBlockManagement) {
+        if (this.blockManagement.managementCompany.email == null || this.blockManagement.managementCompany.email) {
+          this.commonService.showAlert('Warning', 'No valid Email address found.');
+          return;
+        }
         let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected the Block Management option for this repair. Do you want to send an email to inform the Block Management/Factors Company?', '', 'Yes', 'No');
         if (response) {
           this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_BLOCK_MANAGEMENT');
@@ -589,6 +594,7 @@ export class FaultQualificationComponent implements OnInit {
       cssClass: 'modal-container upload-container',
       componentProps: {
         blockManagement: this.blockManagement,
+        faultCategories: this.faultCategories
       },
       backdropDismiss: false
     });

@@ -50,20 +50,20 @@
       </ion-col>
 
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Contact Authorised by landlord</ion-text><br />
+        <ion-text class="header">Contact authorised by Landlord</ion-text><br />
         <ion-text class="content">{{blockManagement?.isLandlordAuthorisedContact ? 'Yes' : 'No'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Who to obtain communal door keys from</ion-text><br />
-        <ion-text class="content">{{blockManagement?.doorKeysFrom ? 'Yes' : 'No'}}</ion-text>
+        <ion-text class="content">{{blockManagement?.doorKeysFrom || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Cost of communal door keys</ion-text><br />
-        <ion-text class="content">{{blockManagement?.doorKeysCost || 'N/A'}}</ion-text>
+        <ion-text class="content">{{blockManagement?.doorKeysCost ? ('£' + blockManagement?.doorKeysCost) : '£0' }}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Management Responsibility</ion-text><br />
-        <ion-text class="content">{{blockManagement?.managementResponsibility?.managementResponsibilities || 'N/A'}}
+        <ion-text class="content">{{managementResponsibilities || 'N/A'}}
         </ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -72,7 +72,7 @@
           'No'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Cover Content Insurance</ion-text><br />
+        <ion-text class="header">Covers Content Insurance</ion-text><br />
         <ion-text class="content">{{blockManagement?.managementResponsibility?.doesCoversContentInsurance ? 'Yes' :
           'No'}}</ion-text>
       </ion-col>
@@ -81,5 +81,5 @@
 </ion-content>
 
 <ion-footer class="ion-text-right">
-  <ion-button  size="small"  color="success" (click)="onCancel()">Close</ion-button>
+  <ion-button color="success" (click)="onCancel()">Close</ion-button>
 </ion-footer>
