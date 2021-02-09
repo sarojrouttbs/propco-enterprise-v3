@@ -1,4 +1,4 @@
-import { CERTIFICATES_CATEGORY } from './../../../shared/constants';
+import { CERTIFICATES_CATEGORY, PROPCO } from './../../../shared/constants';
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -46,6 +46,8 @@ export class FaultQualificationComponent implements OnInit {
   CERTIFICATES_CATEGORY = CERTIFICATES_CATEGORY;
   warrantyEmail = null;
   serviceContractEmail = null;
+  lookupdata: any;
+  certificateTypes: any;
 
   constructor(
     private fb: FormBuilder,
@@ -66,12 +68,30 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   initFaultQualification() {
+    this.getLookupData();
     this.initFaultQualificationForm();
     this.patchValue();
     this.fetchAgreementsClauses();
     this.getCertificateCategories();
     this.faultNotification(this.faultDetails.stageAction);
     this.getPropertyHeadLease();
+  }
+
+  private getLookupData() {
+    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
+    if (this.lookupdata) {
+      this.setLookupData(this.lookupdata);
+    } else {
+      this.commonService.getLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
+        this.lookupdata = data;
+        this.setLookupData(data);
+      });
+    }
+  }
+
+  private setLookupData(data) {
+    this.certificateTypes = data.certificateTypes;
   }
 
   private async getCertificateCategories() {
@@ -290,7 +310,7 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private async changeStage() {
-    let response = await this.commonService.showConfirm('Fault Qualification', `This will change the fault status to "Checking Landlord Instructions". <br/> Are you sure?`, '', 'Yes', 'No');
+    let response = await this.commonService.showConfirm('Fault Qualification', `You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?".`, '', 'Yes', 'No');
     if (response) {
       this.saveQualificationDetails(FAULT_STAGES.LANDLORD_INSTRUCTION);
     }
@@ -419,7 +439,8 @@ export class FaultQualificationComponent implements OnInit {
         certificateId: category === CERTIFICATES_CATEGORY[0] ?
           (this.warrantyCertificateId ? this.warrantyCertificateId : this.faultDetails.warrantyCertificateId) :
           this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId,
-        category: category
+        category: category,
+        certificateTypes: this.certificateTypes
       },
       backdropDismiss: false
     });
