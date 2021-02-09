@@ -118,7 +118,7 @@ export class ArrangingContractorComponent implements OnInit {
       worksOrderNumber: [this.faultDetails.reference, Validators.required],
       paidBy: ['LANDLORD', Validators.required],
       propertyId: [this.faultDetails.propertyId, Validators.required],
-      category: [{ value: this.categoryMap.get(this.faultDetails.category), disabled: true }],
+      quoteCategory: [{ value: this.categoryMap.get(this.faultDetails.category), disabled: true }],
       description: [this.faultDetails.notes, Validators.required],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
       requestStartDate: ['', Validators.required],
@@ -154,8 +154,7 @@ export class ArrangingContractorComponent implements OnInit {
       agentReference: [{ value: '', disabled: true }],
       defaultCommissionPercentage: [{ value: '', disabled: true }],
       defaultCommissionAmount: [{ value: '', disabled: true }],
-      businessTelephone: [{ value: '', disabled: true }],
-      category: this.categoryName
+      businessTelephone: [{ value: '', disabled: true }]
     });
     if (this.faultDetails.doesBranchHoldKeys) {
       this.officeDetails();
