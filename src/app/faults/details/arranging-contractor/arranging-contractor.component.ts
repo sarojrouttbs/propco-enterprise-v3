@@ -155,6 +155,7 @@ export class ArrangingContractorComponent implements OnInit {
       defaultCommissionPercentage: [{ value: '', disabled: true }],
       defaultCommissionAmount: [{ value: '', disabled: true }],
       businessTelephone: [{ value: '', disabled: true }],
+      category: this.categoryName
     });
     if (this.faultDetails.doesBranchHoldKeys) {
       this.officeDetails();
