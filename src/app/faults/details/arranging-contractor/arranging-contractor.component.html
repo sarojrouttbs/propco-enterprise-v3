@@ -4,19 +4,10 @@
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
         <div class="arranging-contractor">
           <div class="banner">
-            <ion-row>
-              <ion-col width="50" class="ion-text-left">
-                <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a' }}</b>
-              </ion-col>
-              <ion-col width="50" class="ion-text-right" *ngIf="iacNotification?.isResponseExpected === true && iacNotification?.recipientType === 8 && faultDetails?.isOverrideCommunicationPreference === true">
-                <a color="success" fill="outline" (click)="viewNotification()">
-                  View Notification</a>
-              </ion-col>
-           </ion-row>
-            <!-- <div class="ion-text-left">
+            <div class="ion-text-left">
               <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a'
                 }}</b>
-            </div> -->
+            </div>
             <h2 class="banner-heading">
               {{iacNotification && iacNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
@@ -58,7 +49,7 @@
             *ngIf="iacNotification 
             && (iacNotification?.responseReceived == null 
             || !iacNotification?.responseReceived?.isAccepted 
-            || enableMarkCompletedBtn())">
+            || enableMarkCompletedBtn() && iacNotification?.notificationStatus !== 7)">
             <h4 claas="ion-text-center">Next Step:</h4>
             <h6 *ngIf="iacNotification?.responseReceived == null && (iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone)">
               <ion-text color="danger">Please note: </ion-text>
@@ -77,6 +68,23 @@
             </h6>
             <div class="border-bottom"></div>
           </div>
+
+          <div class="question-answer"
+            *ngIf="iacNotification?.isResponseExpected === true 
+            && iacNotification?.recipientType === 8 
+            && faultDetails?.isOverrideCommunicationPreference === true
+            && iacNotification?.notificationStatus === 7">
+            <h4 claas="ion-text-center">Next Step:</h4>
+            <h6>
+              <ion-text color="danger">Please note: </ion-text>
+              <span>This Fault is escalated as Landlord Override communication option is activated. 
+                Please respond yourself or forward to Landlord for them to take an action by clicking here</span>
+            </h6>
+            <ion-button color="success" class="action-btn" fill="solid" (click)="viewNotification(); $event.stopPropagation();">
+              View Notification</ion-button>
+            <div class="border-bottom"></div>
+          </div>
+
           <div class="question-answer">
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
