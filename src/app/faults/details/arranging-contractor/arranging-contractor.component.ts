@@ -128,7 +128,7 @@ export class ArrangingContractorComponent implements OnInit {
       contractorIds: [],
       selectedContractorId: '',
       quoteStatus: [{ value: 1, disabled: true }],
-      nominalCode: ''
+      nominalCode: ['', Validators.required]
     });
   }
 
@@ -644,7 +644,7 @@ export class ArrangingContractorComponent implements OnInit {
           const paymentRequired = await this.checkForPaymentRules(rules);
           const submit = await this.raiseWorksOrderAndNotification(paymentRequired, 'manual');
           if (submit) {
-            this.initiateArrangingContractors();
+            this._btnHandler('refresh');
           }
         }
       }
@@ -745,7 +745,8 @@ export class ArrangingContractorComponent implements OnInit {
       if (data.length === 0) {
         resolve(null);
       }
-      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
+      // filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
+      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.isResponseExpected));
       if (filtereData.length === 0) {
         resolve(null);
       }
@@ -904,8 +905,6 @@ export class ArrangingContractorComponent implements OnInit {
             notificationObj.isEscalateFault = true;
           }
           await this.saveContractorVisitResponse(this.iacNotification.faultNotificationId, notificationObj);
-          this.commonService.showLoader();
-          await this.faultNotification('OBTAIN_QUOTE');
           this._btnHandler('refresh');
 
         }
@@ -983,7 +982,7 @@ export class ArrangingContractorComponent implements OnInit {
 
       modal.onDidDismiss().then(async res => {
         if (res.data && res.data == 'success') {
-          this.initiateArrangingContractors();
+          this._btnHandler('refresh');
         }
       });
       await modal.present();
@@ -993,7 +992,7 @@ export class ArrangingContractorComponent implements OnInit {
       const paymentRequired = await this.checkForPaymentRules(rules);
       const submit = await this.raiseWorksOrderAndNotification(paymentRequired);
       if (submit) {
-        this.initiateArrangingContractors();
+        this._btnHandler('refresh');
       }
     }
   }
