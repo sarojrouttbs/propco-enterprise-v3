@@ -344,7 +344,7 @@ ion-alert.common-alert-box {
     // --color: var(--ion-color-step-2000);
     width: 750px;
     height: auto;
-    min-height: 600px;
+    min-height: 620px;
     ion-content {
       --background: var(--ion-color-step-1800);
       --color: var(--ion-color-step-200);
@@ -354,10 +354,10 @@ ion-alert.common-alert-box {
       --padding-end: 20px;
     }
 
-    ion-footer {
-      border-top: 1px solid var(--ion-color-step-800);
-      padding: 3px 5px;
-    }
+    // ion-footer {
+    //   border-top: 1px solid var(--ion-color-step-800);
+    //   padding: 3px 5px;
+    // }
   }
 }
 

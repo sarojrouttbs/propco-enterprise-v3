@@ -7,8 +7,10 @@
 <ion-content>
   <ion-grid>
     <ion-row *ngFor="let clause of tenancyClauses.data" class="card">
-      <ion-text><h5>{{ clause.clauseName }}</h5></ion-text>
-      <p>{{ clause.clauseText }}</p>
+      <ion-col>
+        <h5>{{ clause.clauseName }}</h5>        
+        <p [innerHTML]="clause.finalClause" style="white-space: pre-wrap;"></p>
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>

@@ -23,6 +23,10 @@ export class BlockManagementModalPage implements OnInit {
     this.modalController.dismiss('success');
   }
 
+  dismiss() {
+    this.modalController.dismiss();
+  }
+  
   getValue() {
     let data = this.blockManagement.managementResponsibility.managementResponsibilities;
     if (data) {
@@ -32,7 +36,7 @@ export class BlockManagementModalPage implements OnInit {
     }
   }
 
-  getLookup(index, value){
-   return this.commonService.getLookupValue(index, value);
+  getLookup(index, value) {
+    return this.commonService.getLookupValue(index, value);
   }
 }
