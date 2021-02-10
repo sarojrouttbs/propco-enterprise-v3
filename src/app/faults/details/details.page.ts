@@ -1924,6 +1924,9 @@ export class DetailsPage implements OnInit {
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
         this.refreshDetailsAndStage();
+        this.commonService.showLoader();
+        await this.checkFaultNotifications(this.faultId);
+        this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
       }
     });
 
