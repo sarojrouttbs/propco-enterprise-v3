@@ -584,7 +584,8 @@
         <ion-button class="save-button" (click)="startProgress()"
           *ngIf="faultId && faultDetails?.status == 1 && reportedByForm.value.reportedById">Start
           Progress</ion-button>
-        <ion-button class="save-button" (click)="proceedToNextStage()" *ngIf="faultId && faultDetails?.status != 1">
+        <ion-button class="save-button" (click)="proceedToNextStage()" *ngIf="faultId && faultDetails?.status != 1" 
+         [disabled]="cliNotification && (cliNotification.responseReceived == null || cliNotification.responseReceived?.isAccepted == null)">
           Proceed</ion-button>
         <ion-button class="save-button" (click)="reOpenFault()" *ngIf="faultId && faultDetails?.status == 12">Re-open
         </ion-button>
