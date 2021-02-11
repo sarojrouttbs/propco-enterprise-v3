@@ -300,7 +300,7 @@ export class FaultQualificationComponent implements OnInit {
           this.commonService.showAlert('Warning', 'Please select a Service Contract');
           return;
         }
-        let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Service Contract option for this repair. Do you want to send an email to inform the Service Contract Company? ', '', 'Yes', 'No');
+        let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Service Contract option for this repair. Do you want to send an email to inform the Service Contract Company?', '', 'Yes', 'No');
         if (response) {
           this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_SERVICE_CONTRACT');
         }
@@ -315,7 +315,7 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private async changeStage() {
-    let response = await this.commonService.showConfirm('Fault Qualification', `You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?".`, '', 'Yes', 'No');
+    let response = await this.commonService.showConfirm('Fault Qualification', `You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?`, '', 'Yes', 'No');
     if (response) {
       this.saveQualificationDetails(FAULT_STAGES.LANDLORD_INSTRUCTION);
     }
@@ -339,6 +339,10 @@ export class FaultQualificationComponent implements OnInit {
     let res = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
 
     if (res) {
+      if (stage === FAULT_STAGES.LANDLORD_INSTRUCTION && this.faultDetails?.status !== 13) {
+        const CHECKING_LANDLORD_INSTRUCTIONS = 13;
+        await this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS);
+      }
       this._btnHandler('refresh');
     }
   }
@@ -563,7 +567,7 @@ export class FaultQualificationComponent implements OnInit {
         }
       });
     } else if (!data.value) {
-      this.commonService.showConfirm('Repair not complete', `Are you sure the ${type} Company has not completed the repair`, '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm('Repair not complete', `Are you sure the ${type} Company has not completed the repair?`, '', 'Yes', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
           this._btnHandler('refresh');
