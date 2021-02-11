@@ -213,7 +213,7 @@
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Telephone</ion-label>
-            <ion-input formControlName="homeTelephoneNo"></ion-input>
+            <ion-input formControlName="alternativeNo"></ion-input>
           </ion-item>
           <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
@@ -453,7 +453,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Telephone</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.homeTelephoneNo.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{reportedByForm.controls.alternativeNo.value || 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size="100" class="border-bottom"></ion-col>
       <ion-col size="100">
@@ -689,18 +689,9 @@
           </div>
           <div *ngIf="cliNotification">
             <div class="banner">
-              <ion-row>
-                <ion-col width="50" class="ion-text-left">
-                  <b>{{cliNotification?.templateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a' }}</b>
-                </ion-col>
-                <ion-col width="50" class="ion-text-right" *ngIf="cliNotification?.isResponseExpected === true && cliNotification?.recipientType === 8 && faultDetails?.isOverrideCommunicationPreference === true">
-                  <a color="success" fill="outline" (click)="viewNotification()">
-                    View Notification</a>
-                </ion-col>
-             </ion-row>
-              <!-- <div class="ion-text-left">
+              <div class="ion-text-left">
                 <b>{{cliNotification?.templateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a' }}</b>
-              </div> -->
+              </div>
               <h2 class="banner-heading">
                 {{cliNotification && cliNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
               <h6 class="banner-title">Here’s the action you chose:</h6>
@@ -737,15 +728,15 @@
               </h6>
               <div class="border-bottom"></div>
             </div>
-            <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived == null && (cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone)">
+            <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived == null && (cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone) && cliNotification?.notificationStatus !== 7">
               <h6>
                 <ion-text color="danger">Please note:</ion-text>
                 The fault will be <i>escalated</i> automatically if the Landlord doesn't respond within {{ getPendingHours() }} hours.
               </h6>
               <div class="border-bottom"></div>
             </div>
-              <div class="question-answer"
-              *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true && (cliNotification?.templateCode === 'LR-L-E' || cliNotification?.templateCode === 'LC-L-E')">
+            <div class="question-answer"
+              *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true && (cliNotification?.templateCode === 'LR-L-E' || cliNotification?.templateCode === 'LC-L-E') && cliNotification?.notificationStatus !== 7">
               <h4 claas="ion-text-center">Next Step:</h4>
               <!-- <h6>
                 <ion-text>{{faultDetails?.landlordOwnContractor?.email!==null?"View Lanadloard's own Contractor details":"Add Lanadloard's own Contractor details"}}: </ion-text>
@@ -761,6 +752,23 @@
               <div class="border-bottom"></div>
             </div>
 
+            <div class="question-answer"
+            *ngIf="cliNotification?.isResponseExpected === true 
+            && cliNotification?.recipientType === 8 
+            && faultDetails?.isOverrideCommunicationPreference === true
+            && cliNotification?.notificationStatus === 7">
+            <h4 claas="ion-text-center">Next Step:</h4>
+
+            <h6>
+              <ion-text color="danger">Please note: </ion-text>
+              <span>This Fault is escalated as Landlord Override communication option is activated. 
+                Please respond yourself or forward to Landlord for them to take an action by clicking here</span>
+            </h6>
+            <ion-button color="success" class="action-btn" fill="solid" (click)="viewNotification(); $event.stopPropagation();">
+              View Notification</ion-button>
+            <div class="border-bottom"></div>
+          </div>
+            
             <div class="question-answer">
               <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
               <ion-grid>

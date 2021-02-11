@@ -54,10 +54,11 @@
           <div class="question-answer"
             *ngIf="iacNotification 
             && (
-              faultDetails?.status === 8
+              (faultDetails?.status === 8
             || iacNotification?.responseReceived == null 
             || !iacNotification?.responseReceived?.isAccepted 
-            || iacNotification?.templateCode === 'CF-T-E')">
+            || iacNotification?.templateCode === 'CF-T-E') 
+            && iacNotification?.notificationStatus !== 7 )">
             <h4 class="ion-text-center">Next Step:</h4>  
             <h6 *ngIf="iacNotification 
             && (iacNotification?.responseReceived == null) && (iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone) && faultDetails.status !== 18 ">  
@@ -103,6 +104,23 @@
               </div>
             <div class="border-bottom"></div>
           </div>
+
+          <div class="question-answer"
+            *ngIf="iacNotification?.isResponseExpected === true 
+            && iacNotification?.recipientType === 8 
+            && faultDetails?.isOverrideCommunicationPreference === true
+            && iacNotification?.notificationStatus === 7">
+            <h4 claas="ion-text-center">Next Step:</h4>
+            <h6>
+              <ion-text color="danger">Please note: </ion-text>
+              <span>This Fault is escalated as Landlord Override communication option is activated. 
+                Please respond yourself or forward to Landlord for them to take an action by clicking here</span>
+            </h6>
+            <ion-button color="success" class="action-btn" fill="solid" (click)="viewNotification(); $event.stopPropagation();">
+              View Notification</ion-button>
+            <div class="border-bottom"></div>
+          </div>
+
           <div class="question-answer" *ngIf="faultDetails?.status !== 8" >
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>

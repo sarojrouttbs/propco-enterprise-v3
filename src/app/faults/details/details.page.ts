@@ -241,7 +241,7 @@ export class DetailsPage implements OnInit {
       surname: [{ value: '', disabled: true }],
       email: [{ value: '', disabled: true }],
       mobile: [{ value: '', disabled: true }],
-      homeTelephoneNo: [{ value: '', disabled: true }],
+      alternativeNo: [{ value: '', disabled: true }],
       selectedEntity: ['', Validators.required],
     });
   }
@@ -956,7 +956,7 @@ export class DetailsPage implements OnInit {
       surname: '',
       email: '',
       mobile: '',
-      homeTelephoneNo: '',
+      alternativeNo: '',
       selectedEntity: ''
     });
     this.getReportedByIdList();
@@ -1061,7 +1061,7 @@ export class DetailsPage implements OnInit {
       surname: entity.surname,
       email: entity.email,
       mobile: entity.mobile,
-      homeTelephoneNo: entity.homeTelephoneNo
+      alternativeNo: entity.alternativeNo
     });
   }
 
@@ -1951,6 +1951,9 @@ export class DetailsPage implements OnInit {
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
         this.refreshDetailsAndStage();
+        this.commonService.showLoader();
+        await this.checkFaultNotifications(this.faultId);
+        this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
       }
     });
 
