@@ -586,8 +586,13 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async proceed() {
-    if (this.iacNotification && this.iacNotification.responseReceived == null && this.isUserActionChange) {
-      this.voidNotification(null);
+    if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived.isAccepted == null)) {
+      if (this.isUserActionChange) {
+        this.voidNotification(null);
+      } else {
+        this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
+        return;
+      }
     }
     else {
       if (!this.isWorksOrder) {

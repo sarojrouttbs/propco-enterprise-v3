@@ -20,7 +20,7 @@
               <ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from 
               <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === 'UNDER_WARRANTY'">Guarantee Management Company</span> 
               <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === 'UNDER_SERVICE_CONTRACT'">Service Contract Company</span>
-              <span *ngIf="iqfNotification?.recipientType === 148">Block Management Company</span>
+              <span *ngIf="iqfNotification?.recipientType === 148">Block Management/Factors Company</span>
               {{iqfNotification?.templateCode}} {{iqfNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a' }}
             </h6>
           </ng-container>
@@ -31,7 +31,7 @@
               Awaiting response from the 
               <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === 'UNDER_WARRANTY'">Guarantee Management Company</span> 
               <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === 'UNDER_SERVICE_CONTRACT'">Service Contract Company</span>
-              <span *ngIf="iqfNotification?.recipientType === 148">Block Management Company</span>
+              <span *ngIf="iqfNotification?.recipientType === 148">Block Management/Factors Company</span>
             </h6>
             <h6 class="banner-title" *ngIf="faultDetails?.status != 18">Next chase due:
               {{iqfNotification ? (iqfNotification.nextChaseDueAt | date: 'dd MMM yyyy - hh:mm a') : ''}}
@@ -61,8 +61,10 @@
           <h4 claas="ion-text-center">Next Step:</h4>
           <h6>
             <ion-text color="danger">Please note: </ion-text>
-            <span>The fault will be <i>escalated</i> automatically if the
-              Tenant doesn't respond within {{getPendingHours()}} hours.
+            <span>The Fault will be <i>escalated</i> automatically if  
+              <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === 'UNDER_WARRANTY'">Guarantee Management Company</span> 
+              <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === 'UNDER_SERVICE_CONTRACT'">Service Contract Company</span>
+              <span *ngIf="iqfNotification?.recipientType === 148">Block Management/Factors Company</span> does not respond within {{getPendingHours()}} hours.
             </span>
           </h6>
           <div class="border-bottom"></div>

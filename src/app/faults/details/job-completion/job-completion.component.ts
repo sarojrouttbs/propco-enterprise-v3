@@ -12,6 +12,7 @@ import { ModalController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
 import { CloseFaultModalPage } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.page';
+import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 @Component({
   selector: 'app-job-completion',
   templateUrl: './job-completion.component.html',
@@ -61,6 +62,7 @@ export class JobCompletionComponent implements OnInit {
   isFormsReady: boolean = false;
   INVOICE_VERIFICATION_THRESHOLD = 0;
   faultQualificationsAction = FAULT_QUALIFICATION_ACTIONS;
+  pendingNotification: any;
 
   constructor(
     private fb: FormBuilder,
@@ -351,7 +353,7 @@ export class JobCompletionComponent implements OnInit {
     if (data.value) {
       let title = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? 'Close Fault': data.text;
       let message = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? `This will close the Fault. Are you sure?`: `Are you sure, Tenant is satisfied with the Job?`;
-      this.commonService.showConfirm(title, message, '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(title, message, '', 'Yes I\'m sure', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this._btnHandler('refresh');
@@ -710,6 +712,47 @@ export class JobCompletionComponent implements OnInit {
         this._btnHandler('refresh');
         this.commonService.showMessage('Fault has been closed successfully.', 'Close a Fault', 'success');
         return;
+      }
+    });
+
+    await modal.present();
+  }
+
+  async viewNotification() {
+    await this.fetchPendingNotification(this.faultDetails.faultId);
+    await this.notificationModal();
+  }
+
+  async fetchPendingNotification(faultId): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.fetchPendingNotification(faultId).subscribe(
+        res => {
+          this.pendingNotification = res ? res : '';
+          resolve(true);
+        },
+        error => {
+          reject(error)
+        }
+      );
+    });
+    return promise;
+  }
+
+  async notificationModal() {
+    const modal = await this.modalController.create({
+      component: PendingNotificationModalPage,
+      cssClass: 'modal-container',
+      componentProps: {
+        notificationHistoryId: this.pendingNotification ? this.pendingNotification.notificationHistoryId : '',
+        notificationSubject: this.pendingNotification ? this.pendingNotification.subject : '',
+        notificationBody: this.pendingNotification ? this.pendingNotification.body : '',
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this._btnHandler('refresh');
       }
     });
 

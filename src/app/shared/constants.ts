@@ -260,7 +260,7 @@ export const ScriptStore = [
 export const FAULT_QUALIFICATION_ACTIONS = [
   {
     index: 'UNDER_BLOCK_MANAGEMENT',
-    value: 'Block Management Company\'s Responsibility'
+    value: 'Repair via Block Management/Factors'
   },
   {
     index: 'UNDER_WARRANTY',

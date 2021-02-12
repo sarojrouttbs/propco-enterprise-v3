@@ -13,6 +13,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { delay } from 'rxjs/operators';
+import { CloseFaultModalPage } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.page';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -107,6 +108,7 @@ export class DashboardPage implements OnInit {
           this.faultNotes = [];
           this.rerenderNotes();
         })
+        this.hideMenu('', 'divOverlay');
       }
     };
 
@@ -269,6 +271,27 @@ export class DashboardPage implements OnInit {
         });
       }
     })
+  }
+
+  async closeFault() {
+    const modal = await this.modalController.create({
+      component: CloseFaultModalPage,
+      cssClass: 'modal-container close-fault-modal',
+      componentProps: {
+        faultId: this.selectedData.faultId
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this.commonService.showMessage('Fault has been closed successfully.', 'Close Fault', 'success');
+        this.rerenderFaults(false);
+        return;
+      }
+    });
+
+    await modal.present();
   }
 
   showMenu(event, id, data, className, isCard?) {

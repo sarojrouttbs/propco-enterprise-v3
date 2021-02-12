@@ -88,6 +88,7 @@ export class DetailsPage implements OnInit {
   folderNames;
   filteredDocuments;
   mediaType: any;
+  isUserActionChange = false;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -240,7 +241,7 @@ export class DetailsPage implements OnInit {
       surname: [{ value: '', disabled: true }],
       email: [{ value: '', disabled: true }],
       mobile: [{ value: '', disabled: true }],
-      homeTelephoneNo: [{ value: '', disabled: true }],
+      alternativeNo: [{ value: '', disabled: true }],
       selectedEntity: ['', Validators.required],
     });
   }
@@ -955,7 +956,7 @@ export class DetailsPage implements OnInit {
       surname: '',
       email: '',
       mobile: '',
-      homeTelephoneNo: '',
+      alternativeNo: '',
       selectedEntity: ''
     });
     this.getReportedByIdList();
@@ -1060,7 +1061,7 @@ export class DetailsPage implements OnInit {
       surname: entity.surname,
       email: entity.email,
       mobile: entity.mobile,
-      homeTelephoneNo: entity.homeTelephoneNo
+      alternativeNo: entity.alternativeNo
     });
   }
 
@@ -1290,10 +1291,11 @@ export class DetailsPage implements OnInit {
   }
 
   setUserAction(index) {
-    if (this.cliNotification && !this.cliNotification.responseReceived) {
-      this.commonService.showAlert('Landlord Instructions', 'Please select response before proceeding with other action.');
-      return;
-    }
+    // if (this.cliNotification && !this.cliNotification.responseReceived) {
+    //   this.commonService.showAlert('Landlord Instructions', 'Please select response before proceeding with other action.');
+    //   return;
+    // }
+    this.isUserActionChange = true;
     this.userSelectedActionControl.setValue(index);
 
   }
@@ -1374,10 +1376,6 @@ export class DetailsPage implements OnInit {
   }
 
   async proceedToNextStage() {
-    // if (this.stepper.selectedIndex < FAULT_STAGES_INDEX[this.faultDetails.stage]) {
-    //   this.stepper.selectedIndex = this.stepper.selectedIndex + 1;
-    //   return;
-    // }
     document.querySelector('ion-content').scrollToTop(500);
 
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_LOGGED) {
@@ -1405,6 +1403,18 @@ export class DetailsPage implements OnInit {
       }
     }
     else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
+
+      if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null)) {
+        if (this.isUserActionChange) {
+          await this.voidNotification();
+        } else {
+          this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
+          return;
+        }
+      } else {
+        this.isUserActionChange = false;
+      }
+
       let faultRequestObj = {} as FaultModels.IFaultResponse;
       faultRequestObj.isDraft = false;
       Object.assign(faultRequestObj, this.landlordInstFrom.value);
@@ -1559,6 +1569,23 @@ export class DetailsPage implements OnInit {
 
     }
 
+  }
+
+  async voidNotification() {
+    let notificationObj = {} as FaultModels.IUpdateNotification;
+    notificationObj.isVoided = true;
+    notificationObj.submittedByType = 'SECUR_USER';
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.updateNotification(this.cliNotification.faultNotificationId, notificationObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
   }
 
   private updateFaultStatus(status): Promise<any> {
