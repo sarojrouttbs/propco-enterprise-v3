@@ -229,14 +229,14 @@ export class FaultQualificationComponent implements OnInit {
     if (this.iqfNotification && (this.iqfNotification.responseReceived == null || this.iqfNotification.responseReceived?.isAccepted == null)) {
       if (this.isUserActionChange) {
         if (!this.iqfNotification.isVoided) {
-          this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes', 'No').then(async res => {
+          this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes, I\'m sure', 'No').then(async res => {
             if (res) {
               this.voidNotification(null);
             }
           });
 
         } else {
-          this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes', 'No').then(async res => {
+          this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes, I\'m sure', 'No').then(async res => {
             if (res) {
               this.updateFault(null);
             }
@@ -315,7 +315,7 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private async changeStage() {
-    let response = await this.commonService.showConfirm('Fault Qualification', `You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?`, '', 'Yes', 'No');
+    let response = await this.commonService.showConfirm('Fault Qualification', `You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?`, '', 'Yes, I\'m sure', 'No');
     if (response) {
       this.saveQualificationDetails(FAULT_STAGES.LANDLORD_INSTRUCTION);
     }
@@ -560,14 +560,14 @@ export class FaultQualificationComponent implements OnInit {
       }
     }
     if (data.value) {
-      this.commonService.showConfirm('Repair complete', `Are you sure the ${type} Company has completed the repair?`, '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm('Repair complete', `Are you sure the ${type} Company has completed the repair?`, '', 'Yes I\'m sure', 'Cancel').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
           this._btnHandler('refresh');
         }
       });
     } else if (!data.value) {
-      this.commonService.showConfirm('Repair not complete', `Are you sure the ${type} Company has not completed the repair?`, '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm('Repair not complete', `Are you sure the ${type} Company has not completed the repair?`, '', 'Yes I\'m sure', 'Cancel').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
           this._btnHandler('refresh');
