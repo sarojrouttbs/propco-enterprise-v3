@@ -362,7 +362,6 @@
 
 
     <ion-row>
-      {{selectedFaultList | json}}   {{selectedFaultList.length | json}}
       <ion-col size="100">
         <div class="overlay-container" style="position: relative">
           <table datatable [dtOptions]="dtOptions[0]" class="row-border hover" style="width: 100%; position: relative"
@@ -383,7 +382,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let fault of faultList; let i = index;" class="table-row" (click)="onClickRow(fault)"
+              <tr *ngFor="let fault of faultList;" class="table-row" (click)="onClickRow(fault); $event.stopPropagation();"
                 [ngClass]="{'escalated': fault.isEscalated}">
                 <td>
                   <ion-icon name="ellipse" [class]="fault.urgencyStatus==1 ? 'emergency' : (fault.urgencyStatus==2? 'urgent' : 'non-urgent')"></ion-icon>
@@ -400,9 +399,9 @@
                 <td>{{fault.title || '-'}}</td>
                 <td>{{getLookupValue(fault.reportedBy, reportedByTypes) || '-'}}</td>
                 <td>
-                    <ion-checkbox color="medium"
-                    (ionChange)="selectFault(fault, $event, i)" [checked]="fault?.isChecked">
-                  </ion-checkbox>
+                    <ion-checkbox color="success" style="margin-bottom: 0;" 
+                    (ionChange)="selectFault(fault, $event);" (click)="$event.stopPropagation();" [checked]="fault?.isChecked">
+                  </ion-checkbox> 
                 </td>
                 <td>{{getLookupValue(fault.status, faultStatuses) || '-'}}</td>
                 <!-- <td>{{getLookupValue(fault.urgencyStatus, faultUrgencyStatuses) || '-'}}</td> -->

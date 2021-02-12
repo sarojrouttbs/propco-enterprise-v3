@@ -189,7 +189,6 @@ export class DashboardPage implements OnInit {
   }
 
   onClickRow(data, index?) {
-    return
     this.selectedData = data;
     this.getFaultNotes(this.selectedData.faultId);
   }
@@ -794,7 +793,7 @@ export class DashboardPage implements OnInit {
   }
 
   selectCheckedFault() {
-    if (this.selectedFaultList.length > 0) {
+    if (this.selectedFaultList && this.selectedFaultList.length > 0) {
       for (let i = 0; i < this.faultList.length; i++) {
         this.faultList[i].isChecked = this.selectedFaultList.find(data => data.faultId === this.faultList[i].faultId)
       }
@@ -807,6 +806,8 @@ export class DashboardPage implements OnInit {
       let requestObj: any = {};
       requestObj.childFaults = childFaults.map(x => x.faultId);
       this.faultsService.mergeFaults(requestObj, faultId).subscribe(response => {
+        this.hideMenu('', 'divOverlay');
+        this.selectedFaultList = [];
         this.getList();
       });
     }
