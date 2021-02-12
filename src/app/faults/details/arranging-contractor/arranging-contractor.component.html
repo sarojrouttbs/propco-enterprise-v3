@@ -47,9 +47,9 @@
           </div>
           <div class="question-answer"
             *ngIf="iacNotification 
-            && (iacNotification?.responseReceived == null 
+            && ((iacNotification?.responseReceived == null 
             || !iacNotification?.responseReceived?.isAccepted 
-            || enableMarkCompletedBtn() && iacNotification?.notificationStatus !== 7)">
+            || enableMarkCompletedBtn()) && iacNotification?.notificationStatus !== 7)">
             <h4 claas="ion-text-center">Next Step:</h4>
             <h6 *ngIf="iacNotification 
             && (iacNotification?.responseReceived == null) && (iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone) && faultDetails.status !== 18 ">  
