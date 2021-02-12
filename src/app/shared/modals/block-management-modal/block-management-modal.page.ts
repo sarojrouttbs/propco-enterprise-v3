@@ -31,7 +31,7 @@ export class BlockManagementModalPage implements OnInit {
     let data = this.blockManagement.managementResponsibility.managementResponsibilities;
     if (data) {
       for (let i = 0; i < data.length; i++) {
-        this.managementResponsibilities.push(this.getLookup(data[i], this.faultCategories));
+        this.managementResponsibilities.push(' ' + this.getLookup(data[i], this.faultCategories)) ;
       }
     }
   }

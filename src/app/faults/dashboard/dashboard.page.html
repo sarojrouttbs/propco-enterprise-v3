@@ -29,8 +29,8 @@
               (ionChange)="checkboxClick('newRepairs')" (click)="$event.stopPropagation();">
             </ion-checkbox>
           </div> -->
-          <!-- <div class="filter-grid-count">269</div> -->
-          <!-- <div class="filter-grid-text">New Repairs</div>
+        <!-- <div class="filter-grid-count">269</div> -->
+        <!-- <div class="filter-grid-text">New Repairs</div>
         </ion-col> -->
         <ion-col size="12" size-md [ngClass]="filterForm.get('emergency').value?'filter-grid-active':'filter-grid'"
           (click)="clickCheckbox('emergency');" class="pointer">
@@ -376,12 +376,13 @@
                 <th style="width:11%">Office</th>
                 <th style="width:15%">Job Title</th>
                 <th style="width:10%">Reported By</th>
+                <th>Merge Faults</th>
                 <th style="width:10%">Fault Status</th>
                 <th style="width:36px"></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let fault of faultList" class="table-row" (click)="onClickRow(fault)"
+              <tr *ngFor="let fault of faultList;" class="table-row" (click)="onClickRow(fault); $event.stopPropagation();"
                 [ngClass]="{'escalated': fault.isEscalated}">
                 <td>
                   <ion-icon name="ellipse" [class]="fault.urgencyStatus==1 ? 'emergency' : (fault.urgencyStatus==2? 'urgent' : 'non-urgent')"></ion-icon>
@@ -397,6 +398,11 @@
                 <td>{{getLookupValue(fault.propertyOfficeCode, officeCodes) || '-'}}</td>
                 <td>{{fault.title || '-'}}</td>
                 <td>{{getLookupValue(fault.reportedBy, reportedByTypes) || '-'}}</td>
+                <td>
+                    <ion-checkbox color="success" style="margin-bottom: 0;" 
+                    (ionChange)="selectFault(fault, $event);" (click)="$event.stopPropagation();" [checked]="fault?.isChecked">
+                  </ion-checkbox> 
+                </td>
                 <td>{{getLookupValue(fault.status, faultStatuses) || '-'}}</td>
                 <!-- <td>{{getLookupValue(fault.urgencyStatus, faultUrgencyStatuses) || '-'}}</td> -->
                 <td class="resp-action-icon">
@@ -410,6 +416,7 @@
             </tbody>
           </table>
           <div id="divOverlay">
+            <ion-button *ngIf="selectedData?.isChecked" (click)="mergeFault(selectedData?.faultId)">Merge</ion-button>
             <ion-button *ngIf="selectedData?.status != 12 && selectedData?.status != 10" (click)="closeFault()">Close</ion-button>
             <ion-button (click)="notesModal()">Add Note</ion-button>
             <ion-button *ngIf="!selectedData?.isEscalated" (click)="escalateFault()">Escalate</ion-button>

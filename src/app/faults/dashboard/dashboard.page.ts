@@ -62,6 +62,7 @@ export class DashboardPage implements OnInit {
   page = 2;
   userList: any;
   assignToSubscription: Subscription;
+  selectedFaultList: any = [];
 
   constructor(
     private commonService: CommonService,
@@ -95,6 +96,10 @@ export class DashboardPage implements OnInit {
         // }
         that.faultsService.getAllFaults(this.faultParams).subscribe(res => {
           that.faultList = res && res.data ? res.data : [];
+          this.faultList.forEach((item) => {
+            item.isChecked = false;
+          });
+          this.selectCheckedFault();
           callback({
             recordsTotal: res ? res.count : 0,
             recordsFiltered: res ? res.count : 0,
@@ -763,7 +768,88 @@ export class DashboardPage implements OnInit {
 
   startLoading() { }
 
+  selectFault(faultDetail, event) {
+    if (event.target.checked && this.validateFaults(faultDetail) && this.checkMaintenance(faultDetail, event)) {
+      faultDetail.isChecked = true;
+      this.selectedFaultList.push(faultDetail);
+    }
+    else {
+      event.target.checked = false;
+      faultDetail.isChecked = false;
+      this.selectedFaultList.forEach((element, index) => {
+        if (element.faultId == faultDetail.faultId) this.selectedFaultList.splice(index, 1);
+      });
+    }
+  }
+
+  validateFaults(faultDetail) {
+    let valid = true;
+    if (faultDetail.status === 12) {
+      this.commonService.showAlert('Fault Closed', 'Fault status is closed, Please select another fault', '');
+      return valid = false;
+    }
+    if (this.selectedFaultList.length === 3) {
+      this.commonService.showAlert('Maximum Limit', 'Maximum fault merge limit is 3', '');
+      return valid = false;
+    }
+    if (this.selectedFaultList.length > 0) {
+      let matchedProperty = this.selectedFaultList.filter(data => data.propertyId === faultDetail.propertyId);
+      if (matchedProperty.length === 0) {
+        this.commonService.showAlert('Property not matched', 'Please select same property faults', '');
+        return valid = false;
+      }
+    }
+    return valid;
+  }
+
+  async checkMaintenance(faultDetail, event) {
+    let valid = true;
+    const data = await this.getFaultMaintenance(faultDetail.faultId);
+    if (data) {
+      event.target.checked = false;
+      faultDetail.isChecked = false;
+      event.stopPropagation();
+      this.commonService.showAlert('Quote/Works Order', 'Quote or Works Order raised faults can not be merged', '');
+      return valid = false;
+    }
+    return valid;
+  }
+
+  selectCheckedFault() {
+    if (this.selectedFaultList && this.selectedFaultList.length > 0) {
+      for (let i = 0; i < this.faultList.length; i++) {
+        this.faultList[i].isChecked = this.selectedFaultList.find(data => data.faultId === this.faultList[i].faultId)
+      }
+    }
+  }
+
+  mergeFault(faultId) {
+    if (faultId) {
+      let childFaults = this.selectedFaultList.filter(x => x.faultId != faultId);
+      let requestObj: any = {};
+      requestObj.childFaults = childFaults.map(x => x.faultId);
+      this.faultsService.mergeFaults(requestObj, faultId).subscribe(response => {
+        this.hideMenu('', 'divOverlay');
+        this.selectedFaultList = [];
+        this.getList();
+      });
+    }
+  }
+
+  async getFaultMaintenance(faultId) {
+    const promise = new Promise((resolve, reject) => {
+      const params: any = new HttpParams().set('showCancelled', 'false');
+      this.faultsService.getQuoteDetails(faultId, params).subscribe((res) => {
+        resolve(res ? res.data[0] : false);
+      }, error => {
+        resolve(false);
+      });
+    });
+    return promise;
+  }
+
 }
+
 
 export class AssignedUsers {
   email: string
