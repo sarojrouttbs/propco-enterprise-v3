@@ -30,7 +30,6 @@ const routes: Routes = [
       {
         path: 'add-guarantor',
         loadChildren: () => import('./guarantor-details/guarantor-details.module').then( m => m.GuarantorDetailsPageModule)
-        //loadChildren: () => import('./guarantor-application-details/guarantor-application-details.module').then( m => m.GuarantorApplicationDetailsPageModule)
       },
       {
         path: 'guarantor-application-list',
