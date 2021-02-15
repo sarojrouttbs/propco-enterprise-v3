@@ -726,17 +726,17 @@ export class ApplicationDetailsPage implements OnInit {
       cssClass: 'modal-container alert-prompt',
       backdropDismiss: false,
       componentProps: {
-        data: `<div class="center-block">The data entered has not been saved. Are you sure?
+        data: `<div class="center-block">The data entered has not been saved, do you want to exit the Application?
         </div>`,
         heading: 'Application',
         buttonList: [
           {
-            text: 'Cancel',
-            value: false
+            text: 'Yes',
+            value: true
           },
           {
-            text: 'OK',
-            value: true
+            text: 'No',
+            value: false
           }
         ]
       }
