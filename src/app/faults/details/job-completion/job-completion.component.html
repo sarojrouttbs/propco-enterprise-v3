@@ -51,29 +51,44 @@
             </h6>
             <div class="border-bottom"></div>
           </div>
-          <div class="question-answer"
-            *ngIf="iacNotification 
+          <ng-container 
+          *ngIf="iacNotification 
             && (
               (faultDetails?.status === 8
             || iacNotification?.responseReceived == null 
             || !iacNotification?.responseReceived?.isAccepted 
             || iacNotification?.templateCode === 'CF-T-E') 
-            && iacNotification?.notificationStatus !== 7 )">
-            <h4 class="ion-text-center">Next Step:</h4>  
-            <h6 *ngIf="iacNotification 
-            && (iacNotification?.responseReceived == null) && (iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone) && faultDetails.status !== 18 ">  
+            && iacNotification?.notificationStatus !== 7 )"
+          >
+          <div class="question-answer" *ngIf="(iacNotification?.responseReceived == null && faultDetails.status !== 18 && iacNotification?.hoursLeft > 0  && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone))">
+            <h4 class="ion-text-center">Next Step:</h4> 
+            <h6>  
               <ion-text color="danger">Please note: </ion-text>
               <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
-                {{getPendingHours()}} hours.
+                {{iacNotification?.hoursLeft}} hours.
               </span>
             </h6>
-            <h6 *ngIf="iacNotification 
-            && (iacNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18)">
+            <div class="border-bottom"></div>
+          </div>
+
+          <div class="question-answer" *ngIf="(iacNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18)">
+            <h4 class="ion-text-center">Next Step:</h4> 
+            <h6>
               <b>Fault Escalated - PM to decide the next steps</b>
             </h6>
-            <h6 *ngIf="iacNotification?.templateCode === 'CF-T-E' && iacNotification?.responseReceived?.isAccepted && faultDetails?.status !== 8 && faultDetails?.status !== 7">
+            <div class="border-bottom"></div>
+          </div>
+
+          <div class="question-answer" *ngIf="(iacNotification?.templateCode === 'CF-T-E' && iacNotification?.responseReceived?.isAccepted && faultDetails?.status !== 8 && faultDetails?.status !== 7)">
+            <h4 class="ion-text-center">Next Step:</h4> 
+            <h6>
               <ion-text>Contractor to visit property to carry out work on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy hh:mm a'}}</ion-text>
             </h6>
+            <div class="border-bottom"></div>
+          </div>
+
+          <div class="question-answer" *ngIf="faultDetails?.status === 8">
+            <h4 class="ion-text-center">Next Step:</h4> 
             <h6 *ngIf="faultDetails?.status === 8">
               <ng-container *ngIf="faultMaintenanceDetails?.amount > INVOICE_VERIFICATION_THRESHOLD">
                 <ion-text color="danger">Note: </ion-text>
@@ -93,20 +108,26 @@
               </ion-row>
             </ion-grid>
             </h6>
-              <div class="question-answer" *ngIf="iacNotification?.responseReceived?.isAccepted && faultDetails?.status === 7">
-                <h6 class="banner-title">Please upload the Invoice / Photos</h6>
+            <div class="border-bottom"></div>
+          </div>
+
+          <div class="question-answer" *ngIf="iacNotification?.responseReceived?.isAccepted && faultDetails?.status === 7">
+            <h4 class="ion-text-center">Next Step:</h4> 
+            <h6 class="banner-title">Please upload the Invoice / Photos</h6>
                 <ion-grid>
                   <ion-row class="ion-justify-content-center">
                       <ion-button color="success" class="action-btn" fill="outline"
                         (click)="openWOJobCompletionModal(true)" style="--border-radius: 4px !important;">Upload Invoice/Photo</ion-button>
                   </ion-row>
                 </ion-grid>
-              </div>
             <div class="border-bottom"></div>
           </div>
 
+          </ng-container>
+
           <div class="question-answer"
-            *ngIf="iacNotification?.isResponseExpected === true 
+            *ngIf="iacNotification 
+            && iacNotification?.isResponseExpected === true 
             && iacNotification?.recipientType === 8 
             && faultDetails?.isOverrideCommunicationPreference === true
             && iacNotification?.notificationStatus === 7">

@@ -141,7 +141,7 @@ export class ArrangingContractorComponent implements OnInit {
       address: [{ value: '', disabled: true }],
       repairCost: [this.faultDetails.confirmedEstimate, Validators.required],
       worksOrderNumber: [{ value: this.faultDetails.reference, disabled: true }],
-      postdate: [{ value: '', disabled: true }],
+      postdate: [{ value: this.currentDate, disabled: true }],
       nominalCode: ['', Validators.required],
       description: [this.categoryName + " " + this.faultDetails.title, Validators.required],
       paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
@@ -1588,6 +1588,7 @@ export class ArrangingContractorComponent implements OnInit {
   async faultNotification(action) {
     let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
     this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, action);
+    this.getPendingHours();
   }
 
   private isPaymentRequired(rules: FaultModels.IFaultWorksorderRules): boolean {
@@ -1695,10 +1696,10 @@ export class ArrangingContractorComponent implements OnInit {
   getPendingHours() {
     let hours = 0;
     const currentDateTime = this.commonService.getFormatedDateTime(new Date());
-    if (this.iacNotification.nextChaseDueAt) {
+    if (this.iacNotification && this.faultDetails.status !== 18 && this.iacNotification.nextChaseDueAt) {
       const diffInMs = Date.parse(this.iacNotification.nextChaseDueAt) - Date.parse(currentDateTime);
       hours = diffInMs / 1000 / 60 / 60;
+      this.iacNotification.hoursLeft = hours > 0 ? Math.floor(hours) : 0;
     }
-    return hours > 0 ? Math.floor(hours) : 0;
   }
 }

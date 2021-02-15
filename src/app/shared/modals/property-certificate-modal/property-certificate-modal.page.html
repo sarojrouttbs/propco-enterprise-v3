@@ -36,14 +36,14 @@
           <th>Warranty No.</th>
           <th>Model</th>
           <th>Serial No.</th>
-          <th>End Date</th>
           <th>Start Date</th>
+          <th>End Date</th>
         </tr>
       <tbody>
         <tr *ngFor="let certificate of propertyCertificateList; let i=index;" class="table-row">
           <td>
             <ion-checkbox (ionChange)="selectCertificate(certificate, $event.target.checked)" color="primary"
-              [checked]="certificate?.isRowChecked"></ion-checkbox>
+              [checked]="certificate?.isRowChecked" [disabled]="!certificate?.expired"></ion-checkbox>
           </td>
           <td>{{certificate?.certificateId || '-'}}</td>
           <td>{{certificate?.appliance || '-'}}</td>
@@ -135,7 +135,7 @@
       <tr *ngFor="let certificate of propertyCertificate.data; let i=index;" class="table-row">
         <td>
           <ion-checkbox (ionChange)="selectCertificate(certificate, $event.target.checked)" color="primary"
-            [checked]="certificate?.isRowChecked"></ion-checkbox>
+            [checked]="certificate?.isRowChecked" [disabled]="!certificate?.expired"></ion-checkbox>
         </td>
         <td>{{certificate?.certificateId || '-'}}</td>
         <td>{{certificate?.membershipNumber || '-'}} </td>
