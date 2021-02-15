@@ -45,31 +45,38 @@
             </h6>
             <div class="border-bottom"></div>
           </div>
-          <div class="question-answer"
-            *ngIf="iacNotification 
-            && ((iacNotification?.responseReceived == null 
+         <ng-container 
+          *ngIf="iacNotification 
+            && (iacNotification?.responseReceived == null 
             || !iacNotification?.responseReceived?.isAccepted 
-            || enableMarkCompletedBtn()) && iacNotification?.notificationStatus !== 7)">
-            <h4 claas="ion-text-center">Next Step:</h4>
-            <h6 *ngIf="iacNotification 
-            && (iacNotification?.responseReceived == null) && (iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone) && faultDetails.status !== 18 ">  
+            || enableMarkCompletedBtn() && iacNotification?.notificationStatus !== 7)"
+          >
+          <div class="question-answer" *ngIf="(iacNotification?.responseReceived == null && faultDetails.status !== 18 && iacNotification?.hoursLeft > 0 && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone))">
+            <h4 class="ion-text-center">Next Step:</h4> 
+            <h6>  
               <ion-text color="danger">Please note: </ion-text>
               <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
-                {{getPendingHours()}} hours.
+                {{iacNotification?.hoursLeft}} hours.
               </span>
-            </h6>
-            <h6 *ngIf="iacNotification 
-            && (iacNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18)">
-              <b>Fault Escalated - PM to decide the next steps</b>
-            </h6>
-            <h6 *ngIf="enableMarkCompletedBtn()">
-              <ion-text>Contractor to visit property on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy hh:mm a'}}</ion-text>
-              <ion-grid>
-                <ion-row class="ion-justify-content-center"><ion-button color="success" fill="outline" class="action-btn option" (click)="openWOJobCompletionModal()">Mark the Job Completed</ion-button></ion-row>
-              </ion-grid>
             </h6>
             <div class="border-bottom"></div>
           </div>
+
+          <div class="question-answer" *ngIf="(iacNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18)">
+            <h4 class="ion-text-center">Next Step:</h4> 
+            <h6>
+              <b>Fault Escalated - PM to decide the next steps</b>
+            </h6>
+            <div class="border-bottom"></div>
+          </div>
+
+          <h6 *ngIf="enableMarkCompletedBtn()">
+            <ion-text>Contractor to visit property on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy hh:mm a'}}</ion-text>
+            <ion-grid>
+              <ion-row class="ion-justify-content-center"><ion-button color="success" fill="outline" class="action-btn option" (click)="openWOJobCompletionModal()">Mark the Job Completed</ion-button></ion-row>
+            </ion-grid>
+          </h6>
+          </ng-container>
 
           <div class="question-answer"
             *ngIf="iacNotification?.isResponseExpected === true 
@@ -110,7 +117,7 @@
       </ion-col>
     </ion-row>
     <ion-grid style="margin: 20px 0"
-      *ngIf="iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'LAR-L-E'">
+      *ngIf="(iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'LAR-L-E') && quoteDocuments?.length">
       <ion-row>
         <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
           <h2>Quote Documents</h2>

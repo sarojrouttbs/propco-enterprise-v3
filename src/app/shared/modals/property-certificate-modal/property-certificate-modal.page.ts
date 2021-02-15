@@ -1,3 +1,4 @@
+import { CommonService } from './../../services/common.service';
 import { CERTIFICATES_CATEGORY } from './../../constants';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
@@ -25,7 +26,7 @@ export class PropertyCertificateModalPage implements OnInit {
   CERTIFICATES_CATEGORY = CERTIFICATES_CATEGORY;
   certificateEmail;
 
-  constructor(private modalController: ModalController) { }
+  constructor(private modalController: ModalController, private commonCervice: CommonService) { }
 
   ngOnInit() {
     // this.dtOptions = {
@@ -44,6 +45,7 @@ export class PropertyCertificateModalPage implements OnInit {
     this.propertyCertificateList = this.propertyCertificate?.data;
     this.propertyCertificateList.forEach((item) => {
       item.isRowChecked = false;
+      item.expired = this.commonCervice.getFormatedDate(item.expireDate, 'yyyy-MM-dd') > this.commonCervice.getFormatedDate(new Date(), 'yyyy-MM-dd') ? true : false;
     });
     if (this.certificateId) {
       const certificate = this.propertyCertificate.data.filter(x => x.certificateId === this.certificateId);
