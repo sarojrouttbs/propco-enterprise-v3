@@ -785,17 +785,17 @@ export class DashboardPage implements OnInit {
   validateFaults(faultDetail) {
     let valid = true;
     if (faultDetail.status === 12) {
-      this.commonService.showAlert('Fault Closed', 'Fault status is closed, Please select another fault', '');
+      this.commonService.showAlert('Fault Closed', 'Fault status is closed, Please select another fault.', '');
       return valid = false;
     }
     if (this.selectedFaultList.length === 3) {
-      this.commonService.showAlert('Maximum Limit', 'Maximum fault merge limit is 3', '');
+      this.commonService.showAlert('Maximum Limit', 'Maximum allowed limit to merge fault is 3.', '');
       return valid = false;
     }
     if (this.selectedFaultList.length > 0) {
       let matchedProperty = this.selectedFaultList.filter(data => data.propertyId === faultDetail.propertyId);
       if (matchedProperty.length === 0) {
-        this.commonService.showAlert('Property not matched', 'Please select same property faults', '');
+        this.commonService.showAlert('Property not matched', 'You can only merge faults that are reported for the same property.', '');
         return valid = false;
       }
     }
@@ -809,7 +809,7 @@ export class DashboardPage implements OnInit {
       event.target.checked = false;
       faultDetail.isChecked = false;
       event.stopPropagation();
-      this.commonService.showAlert('Quote/Works Order', 'Quote or Works Order raised faults can not be merged', '');
+      this.commonService.showAlert('Quote/Works Order Raised', 'Quote or Works Order raised faults can not be merged', '');
       return valid = false;
     }
     return valid;
@@ -823,12 +823,13 @@ export class DashboardPage implements OnInit {
     }
   }
 
-  mergeFault(faultId) {
-    if (faultId) {
-      let childFaults = this.selectedFaultList.filter(x => x.faultId != faultId);
+  async mergeFault(data) {
+    const isConfirm =  await this.commonService.showConfirm('Selected Faults', `You have selected ${this.selectedFaultList?.length} faults to merge. Information from all the faults will be copied into the Fault ${data?.reference} and the remaining faults will be marked as Closed.`)
+    if (isConfirm && data) {
+      let childFaults = this.selectedFaultList.filter(x => x.faultId != data.faultId);
       let requestObj: any = {};
       requestObj.childFaults = childFaults.map(x => x.faultId);
-      this.faultsService.mergeFaults(requestObj, faultId).subscribe(response => {
+      this.faultsService.mergeFaults(requestObj, data.faultId).subscribe(response => {
         this.hideMenu('', 'divOverlay');
         this.selectedFaultList = [];
         this.getList();
