@@ -229,14 +229,14 @@ export class FaultQualificationComponent implements OnInit {
     if (this.iqfNotification && (this.iqfNotification.responseReceived === null || this.iqfNotification.responseReceived?.isAccepted === null || this.iqfNotification.responseReceived?.isAccepted === false)) {
       if (this.isUserActionChange) {
         if (!this.iqfNotification.isVoided && this.iqfNotification.responseReceived?.isAccepted === null) {
-          this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes, I\'m sure', 'No').then(async res => {            
+          this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes, I\'m sure', 'No').then(async res => {
             if (res) {
               this.voidNotification(null);
             }
           });
 
         } else {
-          this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes, I\'m sure', 'No').then(async res => {            
+          this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes, I\'m sure', 'No').then(async res => {
             if (res) {
               this.updateFault(null);
             }
@@ -349,6 +349,7 @@ export class FaultQualificationComponent implements OnInit {
 
   private async saveForLater() {
     if (this.iqfNotification && (this.iqfNotification.responseReceived == null || this.iqfNotification.responseReceived?.isAccepted == null)) {
+      this._btnHandler('saveLater');
       return;
     }
     this.commonService.showLoader();
@@ -647,7 +648,7 @@ export class FaultQualificationComponent implements OnInit {
     let faultRequestObj: any = {};
     faultRequestObj.isDraft = false;
     faultRequestObj.stage = this.userSelectedActionControl.value;
-    
+
     const isFaultUpdated = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
     if (isFaultUpdated) {
       const CHECKING_LANDLORD_INSTRUCTIONS = 13;
