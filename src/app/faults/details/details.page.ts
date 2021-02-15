@@ -1826,6 +1826,22 @@ export class DetailsPage implements OnInit {
         this.refreshDetailsAndStage(reloadFaultDocs);
         break;
       }
+      case 'saveLater': {
+        this.saveLaterChild();
+        break;
+      }
+    }
+  }
+
+  private async saveLaterChild() {
+    let requestObj = {
+      title: this.describeFaultForm.controls['title'].value,
+      stage: this.faultDetails.stage,
+      isDraft: true
+    };
+    let res = await this.updateFaultDetails(requestObj);
+    if (res) {
+      this.goTolistPage();
     }
   }
 

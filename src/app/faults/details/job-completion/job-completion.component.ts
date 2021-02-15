@@ -275,6 +275,10 @@ export class JobCompletionComponent implements OnInit {
   }
 
   private async saveForLater() {
+     if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null)) {
+      this._btnHandler('saveLater');
+      return;
+    }
   }
 
   private async proceed() {
@@ -695,8 +699,6 @@ export class JobCompletionComponent implements OnInit {
       const diffInMs = Date.parse(this.iacNotification.nextChaseDueAt) - Date.parse(currentDateTime);
       hours = diffInMs / 1000 / 60 / 60;
       this.iacNotification.hoursLeft = hours > 0 ? Math.floor(hours) : 0;
-      console.log( Date.parse(currentDateTime))
-      console.log(this.iacNotification)
     }
   }
 

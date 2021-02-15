@@ -388,6 +388,10 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async saveForLater() {
+    if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null) && !this.isUserActionChange) {
+      this._btnHandler('saveLater');
+      return;
+    }
     if (this.iacNotification && this.iacNotification.responseReceived == null && this.isUserActionChange) {
       this.voidNotification('saveForLater');
     }
