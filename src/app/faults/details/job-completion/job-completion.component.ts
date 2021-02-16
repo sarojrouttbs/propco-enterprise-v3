@@ -275,6 +275,10 @@ export class JobCompletionComponent implements OnInit {
   }
 
   private async saveForLater() {
+     if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null)) {
+      this._btnHandler('saveLater');
+      return;
+    }
   }
 
   private async proceed() {
@@ -605,6 +609,7 @@ export class JobCompletionComponent implements OnInit {
   async faultNotification(action) {
     let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
     this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.JOB_COMPLETION, action);
+    this.getPendingHours();
   }
 
   async approveInvoice() {
@@ -690,11 +695,11 @@ export class JobCompletionComponent implements OnInit {
   getPendingHours() {
     let hours = 0;
     const currentDateTime = this.commonService.getFormatedDateTime(new Date());
-    if (this.iacNotification.nextChaseDueAt) {
+    if (this.iacNotification && this.faultDetails.status !== 18 && this.iacNotification.nextChaseDueAt) {
       const diffInMs = Date.parse(this.iacNotification.nextChaseDueAt) - Date.parse(currentDateTime);
       hours = diffInMs / 1000 / 60 / 60;
+      this.iacNotification.hoursLeft = hours > 0 ? Math.floor(hours) : 0;
     }
-    return hours > 0 ? Math.floor(hours) : 0;
   }
 
   async closeFault() {
