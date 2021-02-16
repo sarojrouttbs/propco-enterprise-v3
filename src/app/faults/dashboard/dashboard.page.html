@@ -369,14 +369,14 @@
             <thead>
               <tr>
                 <th style="width:1%"></th>
-                <th style="width:11%">Issue ID</th>
-                <th style="width:11%">Reported On</th>
+                <th style="width:10%">Issue ID</th>
+                <th style="width:10%">Reported On</th>
                 <th style="width:11%">Category</th>
                 <th style="">Property</th>
                 <th style="width:11%">Office</th>
                 <th style="width:15%">Job Title</th>
                 <th style="width:10%">Reported By</th>
-                <th>Merge Faults</th>
+                <th style="width:40px">Merge Faults</th>
                 <th style="width:10%">Fault Status</th>
                 <th style="width:36px"></th>
               </tr>
@@ -388,7 +388,7 @@
                   <ion-icon name="ellipse" [class]="fault.urgencyStatus==1 ? 'emergency' : (fault.urgencyStatus==2? 'urgent' : 'non-urgent')"></ion-icon>
                 </td>
                 <td>{{fault.reference || '-'}}</td>
-                <td>{{fault.createdAt | date: 'dd/MM/yyyy HH:mm:ss' || '-'}}</td>
+                <td>{{fault.createdAt | date: 'dd/MM/yyyy HH:mm' || '-'}}</td>
                 <td>
                   {{(fault.sourceType === 'FIXFLO') ? (fault.fixfloCategory || '-') : (getLookupValue(fault.category,
                   faultCategories, 'category') || '-')}}
