@@ -127,8 +127,7 @@
             </ion-radio-group>
           </ion-col>
           <ion-col size="30">
-            <ion-button color="success" class="action-btn popup-view-btn" fill="outline"
-              [disabled]="faultQualificationForm.get('doesBranchHoldKeys').value === null || !faultQualificationForm.get('doesBranchHoldKeys').value"
+            <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
               (click)="viewBranchDetails()">View</ion-button>
           </ion-col>
         </ion-row>
@@ -160,8 +159,8 @@
             </ion-radio-group>
           </ion-col>
           <ion-col size="30">
-            <ion-button color="success" class="action-btn popup-view-btn" fill="outline"
-              [disabled]="faultQualificationForm.get('hasMaintTenancyClause').value === null || !faultQualificationForm.get('hasMaintTenancyClause').value"
+            <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
+              [disabled]="!tenancyClauses"
               (click)="viewTenancyClause()">View</ion-button>
           </ion-col>
         </ion-row>
@@ -192,8 +191,8 @@
             </ion-radio-group>
           </ion-col>
           <ion-col size="30">
-            <ion-button color="success" class="action-btn popup-view-btn" fill="outline"
-              [disabled]="faultQualificationForm.get('isUnderBlockManagement').value === null || !faultQualificationForm.get('isUnderBlockManagement').value"
+            <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
+              [disabled]="!blockManagement"
               (click)="viewBlockManagement();  $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
@@ -227,8 +226,8 @@
             </ion-radio-group>
           </ion-col>
           <ion-col size="30">
-            <ion-button color="success" class="action-btn popup-view-btn" fill="outline"
-              [disabled]="faultQualificationForm.get('isUnderWarranty').value === null || !faultQualificationForm.get('isUnderWarranty').value"
+            <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
+              [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])"
               (click)="viewPropertyCertificate(CERTIFICATES_CATEGORY[0]); $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
@@ -256,14 +255,14 @@
                 </ion-col>
               </ion-row>
             </ion-radio-group>
-            <ion-text color="danger" *ngIf="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1])">No details available</ion-text>
           </ion-col>
           <ion-col size="30">
-            <ion-button color="success" class="action-btn popup-view-btn" fill="outline"
-              [disabled]="faultQualificationForm.get('isUnderServiceContract').value === null || !faultQualificationForm.get('isUnderServiceContract').value"
+            <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
+              [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1])"
               (click)="viewPropertyCertificate(CERTIFICATES_CATEGORY[1]); $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
+        <ion-text color="danger" *ngIf="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1])">No details available</ion-text>
       </ion-col>
       <ion-col class="card-extra"></ion-col>
     </ion-row>
