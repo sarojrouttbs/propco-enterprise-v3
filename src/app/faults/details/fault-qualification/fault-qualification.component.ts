@@ -331,8 +331,8 @@ export class FaultQualificationComponent implements OnInit {
     faultRequestObj.isUnderWarranty = qualificationForm.isUnderWarranty;
     faultRequestObj.isUnderServiceContract = qualificationForm.isUnderServiceContract;
     faultRequestObj.stage = stage;
-    faultRequestObj.warrantyCertificateId = this.warrantyCertificateId ? this.warrantyCertificateId : this.faultDetails.warrantyCertificateId;
-    faultRequestObj.serviceContractCertificateId = this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId;
+    faultRequestObj.warrantyCertificateId = qualificationForm.isUnderWarranty && this.warrantyCertificateId ? this.warrantyCertificateId : this.faultDetails.warrantyCertificateId;
+    faultRequestObj.serviceContractCertificateId = qualificationForm.isUnderServiceContract && this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId;
     if (stageAction) {
       faultRequestObj.stageAction = stageAction;
     }
