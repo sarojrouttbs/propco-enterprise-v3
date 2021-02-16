@@ -1630,7 +1630,7 @@ export class DetailsPage implements OnInit {
         resolve(null);
       // if (filtereData[0].firstEmailSentAt) {
       filtereData = filtereData.sort((a, b) => {
-        return <any>new Date(b.firstEmailSentAt) - <any>new Date(a.firstEmailSentAt);
+        return <any>new Date(b.createdAt) - <any>new Date(a.createdAt);
       });
       resolve(filtereData[0]);
       // } else {
