@@ -424,3 +424,10 @@ mat-form-field {
 .ion-select-popover-content{
   --width: auto !important;
 }
+
+.notification-body > a {
+  color: gray !important;
+  cursor: not-allowed !important;
+  text-decoration: underline !important;
+  pointer-events: none;
+}
