@@ -824,7 +824,7 @@ export class DashboardPage implements OnInit {
   }
 
   async mergeFault(data) {
-    const isConfirm =  await this.commonService.showConfirm('Selected Faults', `You have selected ${this.selectedFaultList?.length} faults to merge. Information from all the faults will be copied into the Fault ${data?.reference} and the remaining faults will be marked as Closed.`)
+    const isConfirm =  await this.commonService.showConfirm('Merge Faults', `You have selected ${this.selectedFaultList?.length} faults to merge. Information from all the faults will be copied into the Fault ${data?.reference} and the remaining faults will be marked as Closed. Any communications sent out from the faults being closed will be voided. Are you sure?`)
     if (isConfirm && data) {
       let childFaults = this.selectedFaultList.filter(x => x.faultId != data.faultId);
       let requestObj: any = {};

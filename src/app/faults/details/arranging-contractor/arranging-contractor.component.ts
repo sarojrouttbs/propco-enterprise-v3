@@ -760,7 +760,7 @@ export class ArrangingContractorComponent implements OnInit {
         resolve(null);
       }
       filtereData = filtereData.sort((a, b) => {
-        return <any>new Date(b.firstEmailSentAt) - <any>new Date(a.firstEmailSentAt);
+        return <any>new Date(b.createdAt) - <any>new Date(a.createdAt);
       });
       if (filtereData && filtereData[0]) {
         if (!this.isWorksOrder) {
