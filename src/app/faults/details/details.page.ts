@@ -1625,7 +1625,7 @@ export class DetailsPage implements OnInit {
       let currentAction = action;
       if (data.length == 0)
         resolve(null);
-      filtereData = data.filter((x => x.faultStage === currentStage)).filter((x => x.faultStageAction === currentAction));
+      filtereData = data.filter((x => x.faultStage === currentStage)).filter((x => x.faultStageAction === currentAction)).filter((x => x.isResponseExpected));
       if (filtereData.length == 0)
         resolve(null);
       // if (filtereData[0].firstEmailSentAt) {

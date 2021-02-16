@@ -736,7 +736,7 @@
               <div class="border-bottom"></div>
             </div>
             <div class="question-answer"
-              *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true && (cliNotification?.templateCode === 'LR-L-E' || cliNotification?.templateCode === 'LC-L-E') && cliNotification?.notificationStatus !== 7">
+              *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true && (cliNotification?.templateCode === 'LR-L-E' || cliNotification?.templateCode === 'LC-L-E')">
               <h4 claas="ion-text-center">Next Step:</h4>
               <!-- <h6>
                 <ion-text>{{faultDetails?.landlordOwnContractor?.email!==null?"View Lanadloard's own Contractor details":"Add Lanadloard's own Contractor details"}}: </ion-text>
@@ -753,10 +753,10 @@
             </div>
 
             <div class="question-answer"
-            *ngIf="cliNotification?.isResponseExpected === true 
-            && cliNotification?.recipientType === 8 
+            *ngIf="cliNotification?.recipientType === 8 
             && faultDetails?.isOverrideCommunicationPreference === true
-            && cliNotification?.notificationStatus === 7">
+            && cliNotification?.notificationStatus === 7 
+            && cliNotification?.responseReceived === null">
             <h4 claas="ion-text-center">Next Step:</h4>
 
             <h6>
