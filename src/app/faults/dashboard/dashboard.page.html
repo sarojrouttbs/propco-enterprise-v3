@@ -419,7 +419,7 @@
             <ion-button *ngIf="selectedData?.isChecked" (click)="mergeFault(selectedData)">Merge</ion-button>
             <ion-button *ngIf="selectedData?.status != 12 && selectedData?.status != 10" (click)="closeFault()">Close</ion-button>
             <ion-button (click)="notesModal()">Add Note</ion-button>
-            <ion-button *ngIf="!selectedData?.status == 18" (click)="escalateFault()">Escalate</ion-button>
+            <ion-button *ngIf="selectedData?.status != 18" (click)="escalateFault()">Escalate</ion-button>
             <ion-button *ngIf="selectedData?.status == 18" (click)="deEscalateFault()">De-Escalate</ion-button>
             <ion-button class="" (click)="goToFaultDetails()">View</ion-button>
             <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
