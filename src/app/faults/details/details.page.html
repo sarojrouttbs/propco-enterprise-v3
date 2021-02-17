@@ -753,20 +753,20 @@
             </div>
 
             <div class="question-answer"
-            *ngIf="cliNotification?.recipientType === 8 
-            && faultDetails?.isOverrideCommunicationPreference === true
-            && cliNotification?.notificationStatus === 7 
-            && cliNotification?.responseReceived === null">
-            <h4 claas="ion-text-center">Next Step:</h4>
+              *ngIf="cliNotification?.recipientType === 8 
+              && faultDetails?.isOverrideCommunicationPreference === true
+              && cliNotification?.notificationStatus === 7 
+              && cliNotification?.responseReceived === null">
+              <h4 claas="ion-text-center">Next Step:</h4>
 
-            <h6>
-              <ion-text color="danger">Please note: </ion-text>
-              <span>This Fault is <i>escalated</i> as Landlord Override communication option is activated. 
-                Please respond yourself or forward to Landlord for them to take an action by clicking here</span>
-            </h6>
-            <ion-button color="success" class="action-btn" fill="solid" (click)="viewNotification(); $event.stopPropagation();">
-              View Notification</ion-button>
-            <div class="border-bottom"></div>
+              <h6>
+                <ion-text color="danger">Please note: </ion-text>
+                <span>This Fault is <i>escalated</i> as Landlord Override communication option is activated. 
+                  Please respond yourself or forward to Landlord for them to take an action by clicking here</span>
+              </h6>
+              <ion-button color="success" class="action-btn" fill="solid" (click)="viewNotification(); $event.stopPropagation();">
+                View Notification</ion-button>
+              <div class="border-bottom"></div>
           </div>
             
             <div class="question-answer">
@@ -1087,7 +1087,7 @@
             <span *ngIf="!faultId">Initial Issue</span>
             <span *ngIf="faultId">
               {{getLookupValue(faultDetails?.status, faultStatuses)}} &nbsp;
-              <img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.isEscalated" />
+              <img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.status == 18" />
             </span>
           </h2>
         </ion-col>
