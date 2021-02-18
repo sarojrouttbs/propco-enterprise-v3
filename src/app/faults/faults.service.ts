@@ -301,6 +301,10 @@ export class FaultsService {
     return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/merge`, body);
   }
 
+  requestInfo(faultId): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/request-info`, {});
+  }
+  
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);

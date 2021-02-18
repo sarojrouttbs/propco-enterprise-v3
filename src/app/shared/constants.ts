@@ -273,6 +273,10 @@ export const FAULT_QUALIFICATION_ACTIONS = [
   {
     index: 'LANDLORD_INSTRUCTION',
     value: 'Check Landlord\'s Instructions'
+  },
+  {
+    index: 'REQUEST_MORE_INFO',
+    value: 'Request Info'
   }
 ];
 
