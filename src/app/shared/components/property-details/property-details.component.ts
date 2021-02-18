@@ -76,7 +76,7 @@ export class PropertyDetailsComponent implements OnInit {
     let url = null;
     if (files && files[0].documentId) {
       const filteredDoc = files.filter(data => data.folderName === FOLDER_NAMES[0]['index']);
-      if (filteredDoc && filteredDoc[0].name.split('.')[1] !== 'pdf') {
+      if (filteredDoc.length && filteredDoc[0].name.split('.')[1] !== 'pdf') {
         return url = filteredDoc[0].documentUrl;
       }
       else
