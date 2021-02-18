@@ -1701,9 +1701,10 @@ export class ArrangingContractorComponent implements OnInit {
     let hours = 0;
     const currentDateTime = this.commonService.getFormatedDateTime(new Date());
     if (this.iacNotification && this.faultDetails.status !== 18 && this.iacNotification.nextChaseDueAt) {
-      const diffInMs = Date.parse(this.iacNotification.nextChaseDueAt) - Date.parse(currentDateTime);
-      hours = diffInMs / 1000 / 60 / 60;
-      this.iacNotification.hoursLeft = hours > 0 ? Math.floor(hours) : 0;
+      let msec = new Date(this.iacNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
+      let mins = Math.floor(msec / 60000);
+      let hrs = Math.floor(mins / 60);
+      this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
     }
   }
 }
