@@ -4,7 +4,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { debounceTime, delay, switchMap } from 'rxjs/operators';
+import { debounceTime, delay, min, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
 import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS } from './../../../shared/constants';
@@ -275,7 +275,7 @@ export class JobCompletionComponent implements OnInit {
   }
 
   private async saveForLater() {
-     if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null)) {
+    if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null)) {
       this._btnHandler('saveLater');
       return;
     }
@@ -355,8 +355,8 @@ export class JobCompletionComponent implements OnInit {
     notificationObj.isAccepted = data.value;
     notificationObj.submittedByType = 'SECUR_USER';
     if (data.value) {
-      let title = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? 'Close Fault': data.text;
-      let message = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? `This will close the Fault. Are you sure?`: `Are you sure, Tenant is satisfied with the Job?`;
+      let title = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? 'Close Fault' : data.text;
+      let message = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? `This will close the Fault. Are you sure?` : `Are you sure, Tenant is satisfied with the Job?`;
       this.commonService.showConfirm(title, message, '', 'Yes I\'m sure', 'No').then(async res => {
         if (res) {
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
@@ -696,9 +696,10 @@ export class JobCompletionComponent implements OnInit {
     let hours = 0;
     const currentDateTime = this.commonService.getFormatedDateTime(new Date());
     if (this.iacNotification && this.faultDetails.status !== 18 && this.iacNotification.nextChaseDueAt) {
-      const diffInMs = Date.parse(this.iacNotification.nextChaseDueAt) - Date.parse(currentDateTime);
-      hours = diffInMs / 1000 / 60 / 60;
-      this.iacNotification.hoursLeft = hours > 0 ? Math.floor(hours) : 0;
+      let msec = new Date(this.iacNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
+      let mins = Math.floor(msec / 60000);
+      let hrs = Math.floor(mins / 60);
+      this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
     }
   }
 
