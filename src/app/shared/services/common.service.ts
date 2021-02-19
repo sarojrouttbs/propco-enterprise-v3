@@ -559,7 +559,7 @@ export class CommonService {
 
   getFormatedDateTime(date, format?): string {
     if (typeof date !== 'undefined') {
-      return new DatePipe('en-UK').transform(new Date(date), format || 'yyyy-MM-dd HH:mm:ss','UTC');
+      return new DatePipe('en-UK').transform(new Date(date), format || 'yyyy-MM-dd HH:mm:ss');
     }
   }
 }
