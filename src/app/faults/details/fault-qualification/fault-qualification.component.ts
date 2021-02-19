@@ -314,7 +314,7 @@ export class FaultQualificationComponent implements OnInit {
 
   private async changeStage() {
     let confirmationText: string = 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?';
-    if (this.iqfNotification.responseReceived?.isAccepted === true) {
+    if (this.iqfNotification?.responseReceived?.isAccepted === true) {
       confirmationText = "This will move the fault to 'Landlord Instructions' stage, are you sure?";
     }
     let response = await this.commonService.showConfirm('Fault Qualification', confirmationText, '', 'Yes, I\'m sure', 'No');
