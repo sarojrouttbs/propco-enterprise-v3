@@ -113,7 +113,6 @@ export class FaultQualificationComponent implements OnInit {
     });
   }
 
-
   private initFaultQualificationForm(): void {
     this.faultQualificationForm = this.fb.group({
       doesBranchHoldKeys: '',
@@ -158,7 +157,8 @@ export class FaultQualificationComponent implements OnInit {
       if (data.length === 0) {
         resolve(null);
       }
-      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
+
+      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.isResponseExpected));
       if (filtereData.length === 0) {
         resolve(null);
       }
@@ -310,12 +310,14 @@ export class FaultQualificationComponent implements OnInit {
         this.changeStage();
       }
     }
-
-
   }
 
   private async changeStage() {
-    let response = await this.commonService.showConfirm('Fault Qualification', `You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?`, '', 'Yes, I\'m sure', 'No');
+    let confirmationText: string = 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?';
+    if (this.iqfNotification.responseReceived?.isAccepted === true) {
+      confirmationText = "This will move the fault to 'Landlord Instructions' stage, are you sure?";
+    }
+    let response = await this.commonService.showConfirm('Fault Qualification', confirmationText, '', 'Yes, I\'m sure', 'No');
     if (response) {
       this.saveQualificationDetails(FAULT_STAGES.LANDLORD_INSTRUCTION);
     }
@@ -397,8 +399,6 @@ export class FaultQualificationComponent implements OnInit {
 
     await modal.present();
   }
-
-  moreInfo() { }
 
   async viewTenancyClause() {
     const modal = await this.modalController.create({
@@ -492,11 +492,15 @@ export class FaultQualificationComponent implements OnInit {
       const promise = new Promise((resolve) => {
         this.faultsService.fetchPropertyCertificates(this.faultDetails.propertyId, params).subscribe(
           res => {
-            // this.propertyCertificate = res ? res : '';
-            // if (!this.propertyCertificate) {
-            //   this.faultQualificationForm.patchValue({ isUnderWarranty: false });
-            //   this.faultQualificationForm.get('isUnderWarranty').updateValueAndValidity();
-            // }
+            if (category === "4938" && res === null) {
+              this.faultQualificationForm.patchValue({ isUnderWarranty: false });
+              this.faultQualificationForm.get('isUnderWarranty').updateValueAndValidity();
+            }
+
+            if (category === "4940" && res === null) {
+              this.faultQualificationForm.patchValue({ isUnderServiceContract: false });
+              this.faultQualificationForm.get('isUnderServiceContract').updateValueAndValidity();
+            }
             resolve(res ? res : false);
           },
           () => {
@@ -519,6 +523,10 @@ export class FaultQualificationComponent implements OnInit {
 
     if (this.iqfNotification.templateCode === 'GA-E' || this.iqfNotification.templateCode === 'BM-E' || this.iqfNotification.templateCode === 'SM-E') {
       this.questionActionAcceptRequest(data);
+    }
+
+    if (this.iqfNotification.templateCode === 'FI-T-E-1') {
+      this.questionActionRequestInfo(data);
     }
 
   }
@@ -663,5 +671,55 @@ export class FaultQualificationComponent implements OnInit {
 
   private updateFaultStatus(status): Promise<any> {
     return this.faultsService.updateFaultStatus(this.faultDetails.faultId, status).toPromise();
+  }
+
+  moreInfo() {
+    this.commonService.showConfirm('Request More Info', 'Please be advised this will send a notification to the tenant saying we have tried to contact you. Are you sure?', '', 'Yes, I\'m sure', 'No').then(async res => {
+      if (res) {
+        this.requestInfo(this.faultDetails.faultId);
+        this._btnHandler('refresh');
+      }
+    });
+  }
+
+  private requestInfo(faultId) {
+    return new Promise((resolve, reject) => {
+      this.faultsService.requestInfo(faultId).subscribe(async (response) => {
+        resolve(true);
+      }, error => {
+        reject(error)
+      });
+    });
+  }
+
+  private async questionActionRequestInfo(data) {
+    let notificationObj = {} as FaultModels.IUpdateNotification;
+    notificationObj.isAccepted = data.value;
+    notificationObj.submittedByType = 'SECUR_USER';
+    if (data.value) {
+      this.commonService.showConfirm('Request More Info', 'Are you sure?', '', 'Yes I\'m sure', 'Cancel').then(async res => {
+        if (res) {
+          await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
+          this._btnHandler('refresh');
+        }
+      });
+    } else if (!data.value) {
+      if (this.faultDetails.urgencyStatus === 3) {
+        this.commonService.showConfirm('Request More Info', 'This will close the fault. Are you sure?', '', 'Yes I\'m sure', 'Cancel').then(async res => {
+          if (res) {
+            await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
+            this._btnHandler('refresh');
+          }
+        });
+      } else if (this.faultDetails.urgencyStatus === 1 || this.faultDetails.urgencyStatus === 2) {
+        this.commonService.showConfirm('Request More Info', 'This will Escalate the fault. Are you sure?', '', 'Yes I\'m sure', 'Cancel').then(async res => {
+          if (res) {
+            await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
+            this._btnHandler('refresh');
+          }
+        });
+      }
+
+    }
   }
 }
