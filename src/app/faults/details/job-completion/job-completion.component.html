@@ -157,6 +157,11 @@
                 </ng-container> -->
                 <ion-button color="success" expand="block" class="action-btn" fill="outline" (click)="closeFault()">
                     Close Fault</ion-button>
+                <ion-button color="success" expand="block" class="action-btn" fill="outline" (click)="resendNotification()" 
+                *ngIf="iacNotification 
+                && (iacNotification?.templateCode === 'GNR-T-E' || iacNotification?.templateCode === 'BMF-T-E' || iacNotification?.templateCode === 'SMF-T-E')
+                && iacNotification?.responseReceived?.isAccepted === false" >
+                      Resend Notification</ion-button>
               </ion-row>
             </ion-grid>
           </div>

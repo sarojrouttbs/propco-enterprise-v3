@@ -1403,13 +1403,15 @@ export class DetailsPage implements OnInit {
       }
     }
     else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
-
-      if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null)) {
-        if (this.isUserActionChange) {
-          await this.voidNotification();
-        } else {
+      if (this.cliNotification) {
+        if (!this.isUserActionChange) {
           this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
           return;
+        }
+        if (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) {
+          if (this.isUserActionChange) {
+            await this.voidNotification();
+          }
         }
       } else {
         this.isUserActionChange = false;
