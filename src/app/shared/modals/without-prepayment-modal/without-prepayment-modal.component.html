@@ -11,10 +11,14 @@
   <form [formGroup]="withoutPrePaymentForm">
     <ion-grid class="">
       <ion-row class="payment-warning">
+        <ion-col>
+          Have you checked the LL account and are you sure, you want to proceed without taking pre-payment?
+        </ion-col>
         <ion-col size="100" *ngIf="paymentWarnings && paymentWarnings.length" >
-          <h5><b>Warning(s)</b>: 
+          <h6>
+            <b>Warning(s)</b>: 
             <!-- All the Payment failure reasons based on the payment rules/conditions that system checked and has failed as mentioned below -->
-          </h5>
+          </h6>
           <ul>
             <li *ngFor="let warning of paymentWarnings" style="color: #b81e1e;">{{warning}}</li>
           </ul>
