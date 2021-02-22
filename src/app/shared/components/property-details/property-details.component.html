@@ -47,10 +47,7 @@
               <ion-list class="status-list" *ngIf="showList && faultId">
                 <ion-item *ngFor="let status of faultUrgencyStatuses" button style="font-size: 13px !important;"
                   (click)="selectedStatus(status.index)">
-                  <label style="color: var(--ion-color-step-200);
-                    padding-right: 5px;
-                ">{{status.value}}
-                  </label>&nbsp;
+                  <label style="color: var(--ion-color-step-200);padding-right: 5px;">{{status.value}}</label>&nbsp;
                   <ion-icon *ngIf="urgencyStatus === status.index" name="checkmark-sharp"></ion-icon>
                 </ion-item>
               </ion-list>             
