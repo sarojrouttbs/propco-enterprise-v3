@@ -304,6 +304,10 @@ export class FaultsService {
   requestInfo(faultId): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/request-info`, {});
   }
+
+  resendFaultNotification(faultNotificationId): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/resend`, {});
+  }
   
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

@@ -590,12 +590,25 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async proceed() {
-    if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived.isAccepted == null)) {
-      if (this.isUserActionChange) {
-        this.voidNotification(null);
-      } else {
+    if (this.iacNotification) {
+      if (!this.isUserActionChange) {
         this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
         return;
+      }
+      if (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived.isAccepted == null) {
+        if (this.isUserActionChange) {
+          this.voidNotification(null);
+        }
+      }
+      if (!this.iacNotification.responseReceived.isAccepted) {
+        if (this.isUserActionChange) {
+          let faultRequestObj: any = {};
+          faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+          const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
+          if (isFaultUpdated) {
+            this._btnHandler('refresh');
+          }
+        }
       }
     }
     else {
