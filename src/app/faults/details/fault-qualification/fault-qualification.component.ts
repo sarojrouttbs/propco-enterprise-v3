@@ -40,7 +40,7 @@ export class FaultQualificationComponent implements OnInit {
   serviceContractCertificateId: any = null;
   otherStageActions = FAULT_QUALIFICATION_ACTIONS.filter(action => { return (action.index == "LANDLORD_INSTRUCTION") });
   userSelectedActionControl = new FormControl();
-  iqfStageActions = FAULT_QUALIFICATION_ACTIONS;
+  iacStageActions = FAULT_QUALIFICATION_ACTIONS;
   isUserActionChange = false;
   blockManagement: any;
   certificateCategoriesMap: any = new Map();
@@ -138,7 +138,6 @@ export class FaultQualificationComponent implements OnInit {
   async faultNotification(action) {
     let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
     this.iqfNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.FAULT_QUALIFICATION, action);
-    this.getPendingHours();
   }
 
   async checkFaultNotifications(faultId) {
@@ -540,12 +539,11 @@ export class FaultQualificationComponent implements OnInit {
   getPendingHours() {
     let hours = 0;
     const currentDateTime = this.commonService.getFormatedDateTime(new Date());
-    if (this.iqfNotification && this.faultDetails.status !== 18 && this.iqfNotification.nextChaseDueAt) {
-      let msec = new Date(this.iqfNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
-      let mins = Math.floor(msec / 60000);
-      let hrs = Math.floor(mins / 60);
-      this.iqfNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
+    if (this.iqfNotification.nextChaseDueAt) {
+      const diffInMs = Date.parse(this.iqfNotification.nextChaseDueAt) - Date.parse(currentDateTime);
+      hours = diffInMs / 1000 / 60 / 60;
     }
+    return hours > 0 ? Math.floor(hours) : 0;
   }
 
   private questionActionAcceptRequest(data) {
