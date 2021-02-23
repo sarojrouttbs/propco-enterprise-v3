@@ -5,7 +5,7 @@
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
-              <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a'
+              <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm'
                 }}</b>
             </div>
             <h2 class="banner-heading">
@@ -23,7 +23,7 @@
                   <span *ngIf="iacNotification?.recipientType === 1">Tenant</span>
               </h6>
               <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt" >Next chase due:
-                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - hh:mm a') : ''}}
+                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
               </h6>
             </ng-container>
           </div>
@@ -72,7 +72,7 @@
           </div>
 
           <h6 *ngIf="enableMarkCompletedBtn()" class="ion-text-center">
-            <ion-text>Contractor to visit property on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy hh:mm a'}}</ion-text>
+            <ion-text>Contractor to visit property on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy HH:mm'}}</ion-text>
             <ion-grid>
               <ion-row class="ion-justify-content-center"><ion-button color="success" fill="outline" class="action-btn option" (click)="openWOJobCompletionModal()">Mark the Job Completed</ion-button></ion-row>
             </ion-grid>

@@ -5,7 +5,7 @@
         <div class="arranging-contractor">
           <div class="banner" *ngIf="faultDetails?.status !== 8" >
             <div class="ion-text-left">
-              <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy hh:mm a'
+              <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm'
                 }}</b>
             </div>
             <h2 class="banner-heading">
@@ -23,7 +23,7 @@
                   <span *ngIf="iacNotification?.recipientType == 1">Tenant</span>
               </h6>
               <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt" >Next chase due:
-                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - hh:mm a') : ''}}
+                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
               </h6>
             </ng-container>
           </div>
@@ -82,7 +82,7 @@
           <div class="question-answer ion-text-center" *ngIf="(iacNotification?.templateCode === 'CF-T-E' && iacNotification?.responseReceived?.isAccepted && faultDetails?.status !== 8 && faultDetails?.status !== 7)">
             <h4>Next Step:</h4> 
             <h6>
-              <ion-text>Contractor to visit property to carry out work on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy hh:mm a'}}</ion-text>
+              <ion-text>Contractor to visit property to carry out work on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy HH:mm'}}</ion-text>
             </h6>
             <div class="border-bottom"></div>
           </div>
