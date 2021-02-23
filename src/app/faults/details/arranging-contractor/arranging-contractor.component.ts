@@ -114,7 +114,6 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private initQuoteForm(): void {
-    const branchHoldKeys = this.faultDetails?.doesBranchHoldKeys ? this.faultDetails.doesBranchHoldKeys === true ? 'Yes' : 'No' : '-';
     this.raiseQuoteForm = this.fb.group({
       worksOrderNumber: [this.faultDetails.reference, Validators.required],
       paidBy: ['LANDLORD', Validators.required],
@@ -129,8 +128,7 @@ export class ArrangingContractorComponent implements OnInit {
       contractorIds: [],
       selectedContractorId: '',
       quoteStatus: [{ value: 1, disabled: true }],
-      nominalCode: ['', Validators.required],
-      doesBranchHoldKeys: [{ value: branchHoldKeys, disabled: true }],
+      nominalCode: ['', Validators.required]
     });
   }
 
