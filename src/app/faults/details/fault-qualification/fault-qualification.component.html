@@ -294,9 +294,7 @@
 </ion-grid>
 
 <div class="action-btn-group">
-  <ion-button (click)="moreInfo();" class="save-button ion-float-left" [disabled]="faultDetails?.status===10">Request
-    More
-    Info</ion-button>
+  <ion-button (click)="moreInfo();" class="save-button ion-float-left" [disabled]="faultDetails?.status === 10 || (iqfNotification && !iqfNotification?.responseReceived && iqfNotification?.templateCode === 'FI-T-E-1')">Request More Info</ion-button>
   <ion-button (click)="closeFault();" class="cancel-button ion-float-left" [disabled]="faultDetails?.status===10">Close
     Fault
   </ion-button>
