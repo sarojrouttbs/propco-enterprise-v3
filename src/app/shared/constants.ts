@@ -276,7 +276,7 @@ export const FAULT_QUALIFICATION_ACTIONS = [
   },
   {
     index: 'REQUEST_MORE_INFO',
-    value: 'Request Info'
+    value: 'Request More Info'
   }
 ];
 
