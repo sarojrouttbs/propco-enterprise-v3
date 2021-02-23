@@ -85,14 +85,19 @@
         </div>
 
         <div class="question-answer" *ngIf="iqfNotification 
-          && iqfNotification?.responseReceived?.isAccepted === false">
+          && (iqfNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18)">
           <h4 claas="ion-text-center">Next Step:</h4>
-          <h6 *ngIf="faultDetails.status === 18 || iqfNotification?.templateCode === 'FI-T-E-1' || faultDetails.urgencyStatus === 1 || faultDetails.urgencyStatus === 2">
-            <ion-text color="danger" >Please note: </ion-text>Fault Escalated - PM to decide the next steps
+
+          <h6 *ngIf="iqfNotification?.templateCode !== 'FI-T-E-1'">
+            <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
           </h6>
 
-          <h6 *ngIf="faultDetails.status !== 18 && iqfNotification?.templateCode === 'FI-T-E-1' && faultDetails.urgencyStatus === 3">
-            <ion-text color="danger" >Please note: </ion-text>Fault Closed
+          <h6 *ngIf="iqfNotification?.templateCode === 'FI-T-E-1' && (faultDetails.urgencyStatus === 1 || faultDetails.urgencyStatus === 2)">
+            <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
+          </h6>
+
+          <h6 *ngIf="iqfNotification?.templateCode === 'FI-T-E-1' && faultDetails.urgencyStatus === 3">
+            <ion-text color="danger">Please note: </ion-text>Fault Closed
           </h6>
           <div class="border-bottom"></div>
         </div>
