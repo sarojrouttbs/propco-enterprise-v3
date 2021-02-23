@@ -60,8 +60,8 @@
             || iacNotification?.templateCode === 'CF-T-E') 
             && iacNotification?.notificationStatus !== 7 )"
           >
-          <div class="question-answer" *ngIf="(iacNotification?.responseReceived == null && faultDetails.status !== 18  && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone))">
-            <h4 class="ion-text-center">Next Step:</h4> 
+          <div class="question-answer ion-text-center" *ngIf="(iacNotification?.responseReceived == null && faultDetails.status !== 18  && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone))">
+            <h4>Next Step:</h4> 
             <h6>  
               <ion-text color="danger">Please note: </ion-text>
               <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
@@ -71,16 +71,16 @@
             <div class="border-bottom"></div>
           </div>
 
-          <div class="question-answer" *ngIf="(iacNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18)">
-            <h4 class="ion-text-center">Next Step:</h4> 
+          <div class="question-answer ion-text-center" *ngIf="(iacNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18)">
+            <h4>Next Step:</h4> 
             <h6>
               <b>Fault Escalated - PM to decide the next steps</b>
             </h6>
             <div class="border-bottom"></div>
           </div>
 
-          <div class="question-answer" *ngIf="(iacNotification?.templateCode === 'CF-T-E' && iacNotification?.responseReceived?.isAccepted && faultDetails?.status !== 8 && faultDetails?.status !== 7)">
-            <h4 class="ion-text-center">Next Step:</h4> 
+          <div class="question-answer ion-text-center" *ngIf="(iacNotification?.templateCode === 'CF-T-E' && iacNotification?.responseReceived?.isAccepted && faultDetails?.status !== 8 && faultDetails?.status !== 7)">
+            <h4>Next Step:</h4> 
             <h6>
               <ion-text>Contractor to visit property to carry out work on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy hh:mm a'}}</ion-text>
             </h6>
