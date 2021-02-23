@@ -363,7 +363,7 @@
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Last Repair Date</ion-text><br />
         <ion-text class="content">
-          {{faultHistory?.lastRepairDate ? (faultHistory?.lastRepairDate | date:'MMM d, y') : 'N/A'}}</ion-text>
+          {{faultHistory?.lastRepairDate ? (faultHistory?.lastRepairDate | date: 'dd/MM/yyyy HH:mm') : 'N/A'}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Type</ion-text><br />

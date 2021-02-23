@@ -673,10 +673,10 @@ export class FaultQualificationComponent implements OnInit {
     return this.faultsService.updateFaultStatus(this.faultDetails.faultId, status).toPromise();
   }
 
-  moreInfo() {
+  async moreInfo() {
     this.commonService.showConfirm('Request More Info', 'Please be advised this will send a notification to the tenant saying we have tried to contact you. Are you sure?', '', 'Yes, I\'m sure', 'No').then(async res => {
       if (res) {
-        this.requestInfo(this.faultDetails.faultId);
+        await this.requestInfo(this.faultDetails.faultId);
         this._btnHandler('refresh');
       }
     });

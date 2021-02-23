@@ -425,7 +425,7 @@ mat-form-field {
   --width: auto !important;
 }
 
-.notification-body > a {
+.notification-body > a, .notification-body p > a {
   color: gray !important;
   cursor: not-allowed !important;
   text-decoration: underline !important;
