@@ -62,16 +62,16 @@
             <div class="border-bottom"></div>
           </div>
 
-          <div class="question-answer" 
+          <div class="question-answer ion-text-center" 
             *ngIf="(iacNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18) && iacNotification?.notificationStatus !== 7">
-            <h4 class="ion-text-center">Next Step:</h4> 
+            <h4>Next Step:</h4> 
             <h6>
               <b>Fault Escalated - PM to decide the next steps</b>
             </h6>
             <div class="border-bottom"></div>
           </div>
 
-          <h6 *ngIf="enableMarkCompletedBtn()">
+          <h6 *ngIf="enableMarkCompletedBtn()" class="ion-text-center">
             <ion-text>Contractor to visit property on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy hh:mm a'}}</ion-text>
             <ion-grid>
               <ion-row class="ion-justify-content-center"><ion-button color="success" fill="outline" class="action-btn option" (click)="openWOJobCompletionModal()">Mark the Job Completed</ion-button></ion-row>
