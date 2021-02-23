@@ -13,7 +13,7 @@
             {{iqfNotification && iqfNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
           <h6 class="banner-title">Here’s the action you chose:</h6>
           <ion-button color="success" class="icon-button">
-            {{getLookupValue(iqfNotification?.faultStageAction, iacStageActions)}}
+            {{getLookupValue(iqfNotification?.faultStageAction, iqfStageActions)}}
             <ion-icon name="checkmark-circle-outline"></ion-icon>
           </ion-button>
           <ng-container *ngIf="iqfNotification && iqfNotification?.responseReceived">
@@ -72,13 +72,13 @@
           <h6 *ngIf="iqfNotification?.templateCode === 'FI-T-E-1' && (faultDetails.urgencyStatus === 1 || faultDetails.urgencyStatus === 2)">
             <ion-text color="danger">Please note: </ion-text>
             <span>The Fault will be <i>escalated</i> automatically if  
-              Tenant does not respond within {{getPendingHours()}} hours.
+              Tenant does not respond within {{iqfNotification?.hoursLeft}} hours.
             </span>
           </h6>
           <h6 *ngIf="iqfNotification?.templateCode === 'FI-T-E-1' && faultDetails.urgencyStatus === 3">
             <ion-text color="danger">Please note: </ion-text>
             <span>The Fault will be <i>closed</i> automatically if  
-              Tenant does not respond within {{getPendingHours()}} hours.
+              Tenant does not respond within {{iqfNotification?.hoursLeft}} hours.
             </span>
           </h6>
           <div class="border-bottom"></div>
