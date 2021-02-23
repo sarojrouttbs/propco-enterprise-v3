@@ -679,7 +679,11 @@ export class FaultQualificationComponent implements OnInit {
     this.commonService.showConfirm('Request More Info', 'Please be advised this will send a notification to the tenant saying we have tried to contact you. Are you sure?', '', 'Yes, I\'m sure', 'No').then(async res => {
       if (res) {
         this.requestInfo(this.faultDetails.faultId);
-        this._btnHandler('refresh');
+        this.commonService.showLoader();
+        setTimeout(async () => {
+          this._btnHandler('refresh');
+        }, 1000);
+        this.commonService.hideLoader();
       }
     });
   }
