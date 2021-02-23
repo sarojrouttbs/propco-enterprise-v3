@@ -765,4 +765,18 @@ export class JobCompletionComponent implements OnInit {
     await modal.present();
   }
 
+  resendNotification() {
+    let faultNotificationId = this.iacNotification.faultNotificationId;
+    if (!faultNotificationId) return;
+    this.commonService.showLoader();
+    this.faultsService.resendFaultNotification(faultNotificationId).subscribe((response) => {
+      this.commonService.showMessage('Notification resend successfull.', 'Fault Qualification', 'success');
+      this.commonService.hideLoader();
+      this._btnHandler('refresh');
+    }, error => {
+      this.commonService.showMessage('Notification resend failed.', 'Fault Qualification', 'error');
+      this.commonService.hideLoader();
+    });
+  }
+
 }
