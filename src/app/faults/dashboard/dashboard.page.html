@@ -449,7 +449,7 @@
             <tbody>
               <tr *ngFor="let notes of faultNotes" class="table-row">
                 <td>{{notes.postedAt | date: 'dd/MM/yyyy' || '-'}}</td>
-                <td>{{notes.postedAt | date: 'HH:mm:ss' || '-'}}</td>
+                <td>{{notes.postedAt | date: 'HH:mm' || '-'}}</td>
                 <td>{{getLookupValue(notes.type, notesTypes) || '-'}}</td>
                 <td>{{getLookupValue(notes.complaint, notesComplaints) || '-'}}</td>
                 <td>{{getLookupValue(notes.category, notesCategories) || '-'}}</td>
