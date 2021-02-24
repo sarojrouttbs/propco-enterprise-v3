@@ -59,7 +59,7 @@
         </div>
         <div class="question-answer"
           *ngIf="iqfNotification 
-          && (iqfNotification?.responseReceived == null) && (iqfNotification.allowedNumberOfChases === iqfNotification.numberOfChasesDone) && faultDetails.status !== 18 ">
+          && (iqfNotification?.responseReceived == null) && (iqfNotification.allowedNumberOfChases === iqfNotification.numberOfChasesDone) && faultDetails.status !== 18 && faultDetails.status !== 10 && faultDetails.status !== 12">
           <h4 claas="ion-text-center">Next Step:</h4>
           <h6 *ngIf="iqfNotification?.templateCode !== 'FI-T-E-1'">
             <ion-text color="danger">Please note: </ion-text>

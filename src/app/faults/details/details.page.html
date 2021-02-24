@@ -339,7 +339,7 @@
                 <div class="file-name">{{file.name}}</div>
               </ion-col>
               <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding">
-                <ion-icon (click)="deleteDocument(file.documentId, i)" title="Delete File" class="delete-icon" name="close-circle">
+                <ion-icon (click)="deleteDocument(file?.documentId, i)" title="Delete File" class="delete-icon" name="close-circle">
                 </ion-icon>
               </ion-col>
             </ion-row>
@@ -728,10 +728,11 @@
               </h6>
               <div class="border-bottom"></div>
             </div>
-            <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived == null && (cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone) && cliNotification?.notificationStatus !== 7">
+            <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived == null && (cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone) 
+            && cliNotification?.notificationStatus !== 7 && faultDetails.status !== 18 && faultDetails.status !== 10 && faultDetails.status !== 12">automatically
               <h6>
                 <ion-text color="danger">Please note:</ion-text>
-                The fault will be <i>escalated</i> automatically if the Landlord doesn't respond within {{ getPendingHours() }} hours.
+                The fault will be <i>escalated</i> automatically if the Landlord doesn't respond within {{cliNotification?.hoursLeft}}.
               </h6>
               <div class="border-bottom"></div>
             </div>

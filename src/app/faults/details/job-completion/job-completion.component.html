@@ -69,7 +69,7 @@
             || iacNotification?.templateCode === 'CF-T-E') 
             && iacNotification?.notificationStatus !== 7 )"
           >
-          <div class="question-answer ion-text-center" *ngIf="(iacNotification?.responseReceived == null && faultDetails.status !== 18  && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone))">
+          <div class="question-answer ion-text-center" *ngIf="(iacNotification?.responseReceived == null && faultDetails.status !== 18 && faultDetails.status !== 10 && faultDetails.status !== 12 && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone))">
             <h4>Next Step:</h4> 
             <h6>  
               <ion-text color="danger">Please note: </ion-text>
@@ -167,7 +167,11 @@
                     Close Fault</ion-button>
                 <ion-button color="success" expand="block" class="action-btn" fill="outline" (click)="resendNotification()" 
                 *ngIf="iacNotification 
-                && (iacNotification?.templateCode === 'GNR-T-E' || iacNotification?.templateCode === 'BMF-T-E' || iacNotification?.templateCode === 'SMF-T-E')
+                && (iacNotification?.templateCode === 'GNR-T-E' || 
+                iacNotification?.templateCode === 'BMF-T-E' || 
+                iacNotification?.templateCode === 'SMF-T-E' ||
+                iacNotification?.templateCode === 'CF-T-E' ||
+                iacNotification?.templateCode === 'LF-T-E')
                 && iacNotification?.responseReceived?.isAccepted === false" >
                       Resend Notification</ion-button>
               </ion-row>

@@ -727,8 +727,14 @@ export class DetailsPage implements OnInit {
   }
 
   removeFile(i) {
-    this.files.splice(i, 1);
-    this.photos.removeAt(i);
+    if (this.faultDetails.faultId) {
+      this.files.splice(i, 1);
+      this.photos.removeAt(i - this.files.length);
+    }
+    else{
+      this.files.splice(i, 1);
+      this.photos.removeAt(i);
+    }
   }
 
   private createItem(data): FormGroup {
@@ -2035,10 +2041,11 @@ export class DetailsPage implements OnInit {
   getPendingHours() {
     let hours = 0;
     const currentDateTime = this.commonService.getFormatedDateTime(new Date());
-    if (this.cliNotification.nextChaseDueAt) {
-      const diffInMs = Date.parse(this.cliNotification.nextChaseDueAt) - Date.parse(currentDateTime);
-      hours = diffInMs / 1000 / 60 / 60;
+    if (this.cliNotification && this.faultDetails.status !== 18 && this.cliNotification.nextChaseDueAt) {
+      let msec = new Date(this.cliNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
+      let mins = Math.floor(msec / 60000);
+      let hrs = Math.floor(mins / 60);
+      this.cliNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
     }
-    return hours > 0 ? Math.floor(hours) : 0;
   }
 }
