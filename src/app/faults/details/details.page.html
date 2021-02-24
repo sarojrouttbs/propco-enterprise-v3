@@ -805,7 +805,7 @@
                     </ion-item> -->
                     <ion-item>
                       <ion-label position="floating">Select Contractor</ion-label>
-                      <ion-input type="text" debounce="500" (ionInput)="onSearchChange($event)"
+                      <ion-input type="text" debounce="1000" (ionInput)="onSearchChange($event)"
                         formControlName='contractor'
                         [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' 
                         || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION'
@@ -827,6 +827,7 @@
                         </label>                        
                       </ion-item>
                     </ion-list>
+                    <div *ngIf="landlordInstFrom.get('contractor').hasError('invalidContractor') && landlordInstFrom.get('contractor').touched" class="contractor-error-message">{{landlordInstFrom.get('contractor').errors.message}}</div>
                   </ion-col>
                   <ion-col size="50">
                     <ion-item>
