@@ -108,6 +108,7 @@ export class DetailsPage implements OnInit {
   ];
   contractorEntityId: any;
   pendingNotification: any;
+  isContractorSearch = false;
 
   constructor(
     private faultsService: FaultsService,
@@ -259,7 +260,7 @@ export class DetailsPage implements OnInit {
       userSelectedAction: '',
       estimationNotes: ''
     });
-    this.selectedContractor = this.landlordInstFrom.get('contractor').valueChanges.pipe(debounceTime(300),
+    this.selectedContractor = this.landlordInstFrom.get('contractor').valueChanges.pipe(debounceTime(1000),
       switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
         new Observable())
     );
@@ -296,6 +297,7 @@ export class DetailsPage implements OnInit {
         this.getFaultDocuments(this.faultId);
         this.getFaultHistory();
         if (this.contractorEntityId) {
+          this.isContractorSearch = false;
           let contractorDetails: any = await this.getContractorDetails(this.contractorEntityId);
           if (contractorDetails) {
             contractorDetails.fullName = contractorDetails.name;
@@ -1438,6 +1440,9 @@ export class DetailsPage implements OnInit {
             this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
             return;
           }
+          if (this.landlordInstFrom.controls['contractor'].invalid) {
+            return;
+          }
           var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action.<br/> Are you sure?', '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
@@ -1474,6 +1479,9 @@ export class DetailsPage implements OnInit {
         case LL_INSTRUCTION_TYPES[4].index: //cli006e
           if (!this.landlordInstFrom.value.confirmedEstimate) {
             this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
+            return;
+          }
+          if (this.landlordInstFrom.controls['contractor'].invalid) {
             return;
           }
           var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action.<br/> Are you sure?', '', 'Yes', 'No');
@@ -1522,6 +1530,9 @@ export class DetailsPage implements OnInit {
             this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
             return;
           }
+          if (this.landlordInstFrom.controls['contractor'].invalid) {
+            return;
+          }
           var response = await this.commonService.showConfirm('Landlord Instructions', `You have selected the "Obtain Landlord's Authorisation" action. This will send out a notification to Landlord. <br/> Are you sure?`, '', 'Yes', 'No');
           if (response) {
             faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
@@ -1551,6 +1562,9 @@ export class DetailsPage implements OnInit {
           }
           break;
         case LL_INSTRUCTION_TYPES[5].index: //cli006f
+          if (this.landlordInstFrom.controls['contractor'].invalid) {
+            return;
+          }
           if (this.landlordInstFrom.get('confirmedEstimate').value > 0) {
             faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -1801,6 +1815,7 @@ export class DetailsPage implements OnInit {
   }
 
   onSearchChange(event: any) {
+    this.isContractorSearch = true;
     const searchString = event.target.value;
     if (searchString.length > 2) {
       this.resultsAvailable = true;
@@ -1810,9 +1825,35 @@ export class DetailsPage implements OnInit {
   }
 
   contractorSelected(selected: any): void {
-    this.landlordInstFrom.get('contractor').setValue(selected ? selected.fullName + ',' + ' ' + selected.reference : undefined);
+    const fullName = selected && selected?.fullName ? selected?.fullName + ',' : '';
+    this.landlordInstFrom.get('contractor').setValue(selected ? fullName + selected?.reference : undefined);
     this.resultsAvailable = false;
     this.contractorEntityId = selected.entityId;
+
+    //FF-712 - CONTRACTOR VALIDATIONS
+    if (this.isContractorSearch) {
+      const currentDate = this.commonService.getFormatedDate(new Date());
+
+      if (selected?.employerLiabilityExpiryDate === null || selected?.employerLiabilityExpiryDate < currentDate) {
+        this.commonService.showAlert('Landlord Instructions', 'Does not have valid Employer\'s Liability');
+      }
+
+      if (selected?.employerLiabilityExpiryDate !== null && selected?.employerLiabilityExpiryDate === currentDate) {
+        this.commonService.showAlert('Landlord Instructions', 'Employer\'s Liability is expiring today');
+      }
+
+      if (selected?.supplierLiabilityExpiryDate !== null && selected?.supplierLiabilityExpiryDate === currentDate) {
+        this.commonService.showAlert('Landlord Instructions', 'Supplier liability insurance is expiring today');
+      }
+
+      if (!selected?.isAgentContractorApproved) {
+        this.landlordInstFrom.controls['contractor'].setErrors({ invalidContractor: true, message: 'An Agreement with the Contractor doesn’t exist' });
+      }
+
+      if (selected?.supplierLiabilityExpiryDate === null || selected?.supplierLiabilityExpiryDate < currentDate) {
+        this.landlordInstFrom.controls['contractor'].setErrors({ invalidContractor: true, message: 'Supplier liability insurance date is not active' });
+      }
+    }
   }
 
   _childComponentHandler(type: string) {
@@ -2000,10 +2041,11 @@ export class DetailsPage implements OnInit {
   getPendingHours() {
     let hours = 0;
     const currentDateTime = this.commonService.getFormatedDateTime(new Date());
-    if (this.cliNotification.nextChaseDueAt) {
-      const diffInMs = Date.parse(this.cliNotification.nextChaseDueAt) - Date.parse(currentDateTime);
-      hours = diffInMs / 1000 / 60 / 60;
+    if (this.cliNotification && this.faultDetails.status !== 18 && this.cliNotification.nextChaseDueAt) {
+      let msec = new Date(this.cliNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
+      let mins = Math.floor(msec / 60000);
+      let hrs = Math.floor(mins / 60);
+      this.cliNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
     }
-    return hours > 0 ? Math.floor(hours) : 0;
   }
 }
