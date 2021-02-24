@@ -423,5 +423,5 @@
   <ion-button (click)="_btnHandler('cancel')" class="cancel-button">Cancel</ion-button>
   <ion-button (click)="_btnHandler('back')">Back</ion-button>
   <ion-button class="save-button" (click)="_btnHandler('save')">Save for later</ion-button>
-  <ion-button class="submit-button" (click)="_btnHandler('proceed')">Proceed</ion-button>
+  <ion-button class="submit-button" [disabled]="true" (click)="_btnHandler('proceed')">Proceed</ion-button>
 </div>
