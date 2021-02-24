@@ -15,6 +15,16 @@
               {{getLookupValue(iacNotification?.faultStageAction, iacStageActions)}}
               <ion-icon name="checkmark-circle-outline"></ion-icon>
             </ion-button>
+            <ng-container *ngIf="iacNotification && iacNotification?.responseReceived">
+              <h6 class="banner-title response-recived">
+                <ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from 
+                <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
+                <span *ngIf="iacNotification?.recipientType === 11">Contractor</span>
+                <span *ngIf="iacNotification?.recipientType === 1">Tenant</span>
+                {{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}
+              </h6>
+            </ng-container>
+
             <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
               <h6 class="banner-title awaiting-response">
                 <ion-icon name="ellipse" class="response-circle"></ion-icon> Awaiting response from the 
@@ -64,9 +74,8 @@
 
           <div class="question-answer ion-text-center" 
             *ngIf="(iacNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18) && iacNotification?.notificationStatus !== 7">
-            <h4>Next Step:</h4> 
             <h6>
-              <b>Fault Escalated - PM to decide the next steps</b>
+              <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
             </h6>
             <div class="border-bottom"></div>
           </div>

@@ -1604,7 +1604,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   async faultNotification(action) {
     let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-    this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, action);
+    this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, action);    
     this.getPendingHours();
   }
 
