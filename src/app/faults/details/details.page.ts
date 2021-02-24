@@ -727,8 +727,14 @@ export class DetailsPage implements OnInit {
   }
 
   removeFile(i) {
-    this.files.splice(i, 1);
-    this.photos.removeAt(i);
+    if (this.faultDetails.faultId) {
+      this.files.splice(i, 1);
+      this.photos.removeAt(i - this.files.length);
+    }
+    else{
+      this.files.splice(i, 1);
+      this.photos.removeAt(i);
+    }
   }
 
   private createItem(data): FormGroup {

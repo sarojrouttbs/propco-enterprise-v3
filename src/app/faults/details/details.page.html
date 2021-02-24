@@ -339,7 +339,7 @@
                 <div class="file-name">{{file.name}}</div>
               </ion-col>
               <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding">
-                <ion-icon (click)="deleteDocument(file.documentId, i)" title="Delete File" class="delete-icon" name="close-circle">
+                <ion-icon (click)="deleteDocument(file?.documentId, i)" title="Delete File" class="delete-icon" name="close-circle">
                 </ion-icon>
               </ion-col>
             </ion-row>
