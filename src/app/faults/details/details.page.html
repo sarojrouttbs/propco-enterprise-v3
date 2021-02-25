@@ -1096,11 +1096,12 @@
 
         <ion-col size="100">
           <ion-card class="ion-no-margin" id="property-details-card">
-            <app-property-details [propertyDetails]="propertyDetails" [files]="files" [parentForm]="uploadDocForm"
+            <app-property-details *ngIf="propertyDetails" [propertyDetails]="propertyDetails" [files]="files" [parentForm]="uploadDocForm"
               (getUploadedFile)="getUploadedFile($event)" [hmoDetails]="propertyHMODetails"
               [urgencyStatus]="faultDetailsForm.controls.urgencyStatus.value" [faultId]="faultId? faultId : ''"
               [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''" [communicationPreference]="faultDetails?.isOverrideCommunicationPreference" (getStatus)="getStatus($event)">
             </app-property-details>
+            <app-property-skeleton *ngIf="!propertyDetails"></app-property-skeleton>
           </ion-card>
         </ion-col>
         <ion-col size="100">
@@ -1108,57 +1109,26 @@
             <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 0">
               <ng-container *ngTemplateOutlet="caseLogged"></ng-container>
               <ng-template matStepLabel>Fault Logged</ng-template>
-              <!-- <div class="ion-text-end margin-top-16">
-                <button mat-button matStepperPrevious class="stepper-back">Back</button>
-                <button mat-button matStepperNext class="stepper-next">Next</button>
-              </div>
-              <div class="blank-div">&nbsp;</div> -->
             </mat-step>
-            <!-- <mat-step> -->
-              <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 1">
+            <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 1">
               <ng-container *ngTemplateOutlet="caseQualification"></ng-container>
               <ng-template matStepLabel>Fault Qualification</ng-template>
-              <!-- <div class="ion-text-end margin-top-16">
-                <button mat-button matStepperPrevious class="stepper-back">Back</button>
-                <button mat-button matStepperNext class="stepper-next">Next</button>
-              </div>
-              <div class="blank-div">&nbsp;</div> -->
             </mat-step>
             <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 2">
               <ng-container *ngTemplateOutlet="landlordInstructions"></ng-container>
               <ng-template matStepLabel>Landlord Instructions</ng-template>
-              <!-- <div class="ion-text-end margin-top-16">
-                <button mat-button matStepperPrevious class="stepper-back">Back</button>
-                <button mat-button matStepperNext class="stepper-next">Next</button>
-              </div>
-              <div class="blank-div">&nbsp;</div> -->
             </mat-step>
             <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 3">
               <ng-container *ngTemplateOutlet="arrangingContractor"></ng-container>
               <ng-template matStepLabel>Arranging Contractor</ng-template>
-              <!-- <div class="ion-text-end margin-top-16">
-                <button mat-button matStepperPrevious class="stepper-back">Back</button>
-                <button mat-button matStepperNext class="stepper-next">Next</button>
-              </div>
-              <div class="blank-div">&nbsp;</div> -->
             </mat-step>
             <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 4">
               <ng-container *ngTemplateOutlet="jobCompletion"></ng-container>
               <ng-template matStepLabel>Job Completion</ng-template>
-              <!-- <div class="ion-text-end margin-top-16">
-                <button mat-button matStepperPrevious class="stepper-back">Back</button>
-                <button mat-button matStepperNext class="stepper-next">Next</button>
-              </div>
-              <div class="blank-div">&nbsp;</div> -->
             </mat-step>
             <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 5">
               <ng-container *ngTemplateOutlet="payment"></ng-container>
               <ng-template matStepLabel>Payment</ng-template>
-              <!-- <div class="ion-text-end margin-top-16">
-                <button mat-button matStepperPrevious class="stepper-back">Back</button>
-                <button mat-button matStepperNext class="stepper-next">Next</button>
-              </div>
-              <div class="blank-div">&nbsp;</div> -->
             </mat-step>
           </mat-horizontal-stepper>
         </ion-col>
