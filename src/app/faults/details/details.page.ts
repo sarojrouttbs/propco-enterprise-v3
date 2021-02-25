@@ -731,7 +731,7 @@ export class DetailsPage implements OnInit {
       this.files.splice(i, 1);
       this.photos.removeAt(i - this.files.length);
     }
-    else{
+    else {
       this.files.splice(i, 1);
       this.photos.removeAt(i);
     }
@@ -1281,6 +1281,9 @@ export class DetailsPage implements OnInit {
     this.faultDetails = details;
     this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
     this.oldUserSelectedAction = this.userSelectedActionControl.value;
+    if (this.faultDetails?.stage === FAULT_STAGES.LANDLORD_INSTRUCTION) {
+      this.checkForLLSuggestedAction();
+    }
   }
 
 
@@ -1411,6 +1414,7 @@ export class DetailsPage implements OnInit {
       }
     }
     else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
+
       if (this.cliNotification) {
         if (!this.isUserActionChange) {
           this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
@@ -2035,6 +2039,9 @@ export class DetailsPage implements OnInit {
     let res = await this.updateFaultDetails(requestObj);
     if (res) {
       await this.refreshDetailsAndStage();
+      if (this.faultDetails?.stage === FAULT_STAGES.LANDLORD_INSTRUCTION) {
+        this.checkForLLSuggestedAction();
+      }
     }
   }
 
