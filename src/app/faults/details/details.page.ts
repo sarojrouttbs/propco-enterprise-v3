@@ -1414,7 +1414,6 @@ export class DetailsPage implements OnInit {
       }
     }
     else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
-
       if (this.cliNotification) {
         if (!this.isUserActionChange) {
           this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
