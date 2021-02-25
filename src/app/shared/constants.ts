@@ -8,7 +8,8 @@ export const PROPCO = {
   LOOKUP_DATA: 'lookup_data',
   REFERENCING_LOOKUP_DATA: 'referencing_lookup_data',
   REFERENCING_PRODUCT_LIST: 'referencing_product_list',
-  FAULTS_LOOKUP_DATA: 'faults_lookup_data'
+  FAULTS_LOOKUP_DATA: 'faults_lookup_data',
+  SSO_KEY: 'sso_key'
 };
 
 export const USER_TYPES = {
