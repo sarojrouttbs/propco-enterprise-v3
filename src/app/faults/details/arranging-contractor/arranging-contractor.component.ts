@@ -812,7 +812,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private disableContractorsList(notification) {
-    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && notification.templateCode === 'LAR-L-E') {
+    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && notification.templateCode === 'LAR-L-Q') {
       this.restrictAction = false;
       this.raiseQuoteForm.get('selectedContractorId').setValue('');
     } else {
@@ -872,7 +872,7 @@ export class ArrangingContractorComponent implements OnInit {
         this.questionActionVisitTime(data);
       } else if (this.iacNotification.templateCode === 'CQ-C-E') {
         this.questionActionQuoteUpload(data);
-      } else if (this.iacNotification.templateCode === 'LAR-L-E') {
+      } else if (this.iacNotification.templateCode === 'LAR-L-Q') {
         this.questionActionLLAuth(data);
       }
     } else if (this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER) {
