@@ -731,7 +731,7 @@ export class DetailsPage implements OnInit {
       this.files.splice(i, 1);
       this.photos.removeAt(i - this.files.length);
     }
-    else{
+    else {
       this.files.splice(i, 1);
       this.photos.removeAt(i);
     }
@@ -1281,6 +1281,9 @@ export class DetailsPage implements OnInit {
     this.faultDetails = details;
     this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
     this.oldUserSelectedAction = this.userSelectedActionControl.value;
+    if (this.faultDetails?.stage === FAULT_STAGES.LANDLORD_INSTRUCTION) {
+      this.checkForLLSuggestedAction();
+    }
   }
 
 
