@@ -217,9 +217,10 @@ export const MAINTENANCE_TYPES = {
 
 export const PAYMENT_METHOD_TYPES = [
   'Bank Transfer',
-  'Cash',
-  'Cheque',
-  'Other'
+  'Debit Card'
+  // 'Cash',
+  // 'Cheque',
+  // 'Other'
 ];
 
 export const PAYMENT_WARNINGS = {
