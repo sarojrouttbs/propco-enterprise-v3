@@ -2039,9 +2039,6 @@ export class DetailsPage implements OnInit {
     let res = await this.updateFaultDetails(requestObj);
     if (res) {
       await this.refreshDetailsAndStage();
-      if (this.faultDetails?.stage === FAULT_STAGES.LANDLORD_INSTRUCTION) {
-        this.checkForLLSuggestedAction();
-      }
     }
   }
 
