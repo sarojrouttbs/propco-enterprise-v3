@@ -13,13 +13,15 @@ export class AuthGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const accessToken = this.commonService.getItem(PROPCO.ACCESS_TOKEN);
         const webKey = this.commonService.getItem(PROPCO.WEB_KEY);
+        const ssoKey = encodeURIComponent(route.queryParams.ssoKey);
+        let oldSsoKey = this.commonService.getItem(PROPCO.SSO_KEY);
 
-        if(accessToken && webKey){
+        if(accessToken && webKey && (oldSsoKey && oldSsoKey === ssoKey)){
             return true;
         }
-        const ssoKey = encodeURIComponent(route.queryParams.ssoKey);
         return new Promise<boolean>((resolve, reject) => {
             this.commonService.authenticateSsoToken(ssoKey).toPromise().then(response => {
+                this.commonService.setItem(PROPCO.SSO_KEY, ssoKey);
                 this.commonService.setItem(PROPCO.ACCESS_TOKEN, response.loginId);
                 this.commonService.setItem(PROPCO.WEB_KEY, response.webKey);
                 resolve(true);
