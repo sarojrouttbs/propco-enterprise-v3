@@ -1096,12 +1096,12 @@
 
         <ion-col size="100">
           <ion-card class="ion-no-margin" id="property-details-card">
-            <app-property-details *ngIf="faultDetails" [propertyDetails]="propertyDetails" [files]="files" [parentForm]="uploadDocForm"
+            <app-property-details *ngIf="propertyDetails" [propertyDetails]="propertyDetails" [files]="files" [parentForm]="uploadDocForm"
               (getUploadedFile)="getUploadedFile($event)" [hmoDetails]="propertyHMODetails"
               [urgencyStatus]="faultDetailsForm.controls.urgencyStatus.value" [faultId]="faultId? faultId : ''"
               [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''" [communicationPreference]="faultDetails?.isOverrideCommunicationPreference" (getStatus)="getStatus($event)">
             </app-property-details>
-            <app-property-skeleton *ngIf="!faultDetails"></app-property-skeleton>
+            <app-property-skeleton *ngIf="!propertyDetails"></app-property-skeleton>
           </ion-card>
         </ion-col>
         <ion-col size="100">
