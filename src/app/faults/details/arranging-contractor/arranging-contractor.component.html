@@ -32,7 +32,7 @@
                   <span *ngIf="iacNotification?.recipientType === 11">Contractor</span>
                   <span *ngIf="iacNotification?.recipientType === 1">Tenant</span>
               </h6>
-              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt" >Next chase due:
+              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt" >{{iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone?'Escalation':'Next chase'}} due:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
               </h6>
             </ng-container>
@@ -226,7 +226,6 @@
                    <ion-col size="45">
                      <ion-item>
                        <ion-label position="floating">Start Typing to Search Contractors</ion-label>
-     
                        <ion-input type="text" debounce="300" (ionInput)="onSearch($event)" formControlName='contractor'
                          placeholder="">
                        </ion-input>
@@ -249,15 +248,15 @@
                      </ion-list>
                      <ion-text *ngIf="isContratorSelected" class="error-message">This contractor is already selected
                      </ion-text>
+                     <div *ngIf="addContractorForm.get('contractor').hasError('invalidContractor') && addContractorForm.get('contractor').touched" class="contractor-error-message">{{addContractorForm.get('contractor').errors.message}}</div>
+
                    </ion-col>
      
                    <ion-col size="10">
-                     <!-- <div class="button-container"> -->
-                     <ion-fab-button class="button-container" (click)="addContractor(this.addContractorForm?.value)"
-                       [disabled]="!this.addContractorForm?.get('contractor').value || !this.addContractorForm?.get('skillSet').value || !isSelected">
+                     <ion-fab-button class="button-container" (click)="addContractor(addContractorForm?.value)"
+                       [disabled]="!addContractorForm?.get('contractor').value || !addContractorForm?.get('skillSet').value || !isSelected || addContractorForm.controls['contractor'].invalid">
                        <ion-icon name="add-sharp" class="add-contractor list-button"></ion-icon>
                      </ion-fab-button>
-                     <!-- </div> -->
                    </ion-col>
                  </ion-row>
                  <ion-col size="100" *ngIf="!restrictAction">
@@ -420,7 +419,7 @@
         </ion-item>
         <app-validation-message [control]="workOrderForm.controls.contractorName"></app-validation-message>
         <ion-list class="contractor-list" *ngIf="woResultsAvailable">
-          <ion-item *ngFor="let result of (woContractors| async)?.data" (click)="woSelectContractor(result.entityId)" button
+          <ion-item *ngFor="let result of (woContractors| async)?.data" (click)="woSelectContractor(result)" button
             style="font-size: 13px !important;">
             <span>
               <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
@@ -431,8 +430,9 @@
                 style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
             </label>
           </ion-item>
-
         </ion-list>
+        <div *ngIf="workOrderForm.get('contractorName').hasError('invalidContractor') && workOrderForm.get('contractorName').touched" class="contractor-error-message">{{workOrderForm.get('contractorName').errors.message}}</div>
+
       </ion-col>
       <ion-col size="50">
         <ion-item>

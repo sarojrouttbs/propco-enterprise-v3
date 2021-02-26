@@ -70,6 +70,7 @@ export class ArrangingContractorComponent implements OnInit {
   isWorksOrder: boolean = false;
   isFormsReady: boolean = false;
   pendingNotification: any;
+  isContractorSearch = false;
 
   constructor(
     private fb: FormBuilder,
@@ -161,6 +162,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
     if (!this.faultMaintenanceDetails && this.faultDetails.contractorId) {
       this.woSelectContractor(this.faultDetails.contractorId);
+      this.isContractorSearch = false;
     }
     this.woContractors = this.workOrderForm.get('contractorName').valueChanges.pipe(debounceTime(300),
       switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
@@ -300,6 +302,7 @@ export class ArrangingContractorComponent implements OnInit {
       );
       this.workOrderForm.get('contractorName').disable();
       this.woSelectContractor(this.faultMaintenanceDetails.selectedContractorId);
+      this.isContractorSearch = false;
     }
   }
 
@@ -319,6 +322,28 @@ export class ArrangingContractorComponent implements OnInit {
     this.addContractorForm.patchValue({ contractor: selected ? selected.fullName : undefined, contractorObj: selected ? selected : undefined });
     this.resultsAvailable = false;
     this.isSelected = true;
+
+    const currentDate = this.commonService.getFormatedDate(new Date());
+
+    if (selected?.employerLiabilityExpiryDate === null || selected?.employerLiabilityExpiryDate < currentDate) {
+      this.commonService.showAlert('Landlord Instructions', 'Does not have valid Employer\'s Liability');
+    }
+
+    if (selected?.employerLiabilityExpiryDate !== null && selected?.employerLiabilityExpiryDate === currentDate) {
+      this.commonService.showAlert('Landlord Instructions', 'Employer\'s Liability is expiring today');
+    }
+
+    if (selected?.supplierLiabilityExpiryDate !== null && selected?.supplierLiabilityExpiryDate === currentDate) {
+      this.commonService.showAlert('Landlord Instructions', 'Supplier liability insurance is expiring today');
+    }
+
+    if (!selected?.isAgentContractorApproved) {
+      this.addContractorForm.controls['contractor'].setErrors({ invalidContractor: true, message: 'An Agreement with the Contractor doesn’t exist' });
+    }
+
+    if (selected?.supplierLiabilityExpiryDate === null || selected?.supplierLiabilityExpiryDate < currentDate) {
+      this.addContractorForm.controls['contractor'].setErrors({ invalidContractor: true, message: 'Supplier liability insurance date is not active' });
+    }
   }
 
   private getLookupData() {
@@ -515,6 +540,10 @@ export class ArrangingContractorComponent implements OnInit {
       }
     } else {
       if (!this.workOrderForm.valid) {
+        if (this.workOrderForm.controls['contractorName'].invalid) {
+          this.commonService.showMessage('Invalid Contractor.', 'Works Order', 'error');
+          return invalid;
+        }
         this.commonService.showMessage('Please fill all required fields.', 'Works Order', 'error');
         this.workOrderForm.markAllAsTouched();
         return invalid;
@@ -1130,7 +1159,8 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  private getContractorDetails(contractId, type) {
+  private getContractorDetails(contractor, type) {
+    const contractId = typeof contractor === 'object' ? contractor.entityId : contractor;
     return new Promise((resolve, reject) => {
       this.faultsService.getContractorDetails(contractId).subscribe((res) => {
         let data = res ? res : '';
@@ -1154,6 +1184,30 @@ export class ArrangingContractorComponent implements OnInit {
             contractorName: data ? data.fullName : undefined, address: addressString,
             contractorId: data ? data.contractorId : undefined
           });
+
+          if (this.isContractorSearch && typeof contractor === 'object') {
+            const currentDate = this.commonService.getFormatedDate(new Date());
+
+            if (contractor?.employerLiabilityExpiryDate === null || contractor?.employerLiabilityExpiryDate < currentDate) {
+              this.commonService.showAlert('Landlord Instructions', 'Does not have valid Employer\'s Liability');
+            }
+
+            if (contractor?.employerLiabilityExpiryDate !== null && contractor?.employerLiabilityExpiryDate === currentDate) {
+              this.commonService.showAlert('Landlord Instructions', 'Employer\'s Liability is expiring today');
+            }
+
+            if (contractor?.supplierLiabilityExpiryDate !== null && contractor?.supplierLiabilityExpiryDate === currentDate) {
+              this.commonService.showAlert('Landlord Instructions', 'Supplier liability insurance is expiring today');
+            }
+
+            if (!contractor?.isAgentContractorApproved) {
+              this.workOrderForm.controls['contractorName'].setErrors({ invalidContractor: true, message: 'An Agreement with the Contractor doesn’t exist' });
+            }
+
+            if (contractor?.supplierLiabilityExpiryDate === null || contractor?.supplierLiabilityExpiryDate < currentDate) {
+              this.workOrderForm.controls['contractorName'].setErrors({ invalidContractor: true, message: 'Supplier liability insurance date is not active' });
+            }
+          }
         }
       }, error => {
       });
@@ -1275,6 +1329,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   onSearchContractor(event: any) {
+    this.isContractorSearch = true
     const searchString = event.target.value;
     this.workOrderForm.patchValue({ company: '', address: '', contractorId: '' });
     if (searchString.length > 2) {
@@ -1284,9 +1339,9 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  woSelectContractor(contractorId) {
-    if (contractorId) {
-      this.getContractorDetails(contractorId, 'wo');
+  woSelectContractor(contractor) {
+    if (contractor) {
+      this.getContractorDetails(contractor, 'wo');
       this.woResultsAvailable = false;
     }
   }
@@ -1604,7 +1659,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   async faultNotification(action) {
     let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-    this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, action);    
+    this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, action);
     this.getPendingHours();
   }
 
