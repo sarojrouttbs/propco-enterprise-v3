@@ -706,7 +706,7 @@
 
               <ng-container *ngIf="cliNotification && !cliNotification?.responseReceived">
                 <h6 class="banner-title awaiting-response"><ion-icon name="ellipse" class="response-circle"></ion-icon> Awaiting response from the Landlord</h6>
-                <h6 class="banner-title">Next chase due:
+                <h6 class="banner-title">{{cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone?'Escalation':'Next chase'}} due:
                   {{cliNotification ? (cliNotification.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
                 </h6>
               </ng-container>
