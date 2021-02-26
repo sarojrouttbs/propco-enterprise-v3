@@ -237,12 +237,15 @@ export class FaultQualificationComponent implements OnInit {
           });
 
         } else {
-          this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes, I\'m sure', 'No').then(async res => {
+          let confirmationText: string = 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?';
+          if (this.iqfNotification.responseReceived?.isAccepted === false) {
+            confirmationText = "This will move the fault to 'Landlord Instructions' stage, are you sure?";
+          }
+          this.commonService.showConfirm('Fault Qualification', confirmationText, '', 'Yes, I\'m sure', 'No').then(async res => {
             if (res) {
               this.updateFault(null);
             }
           });
-
         }
       } else {
         this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
