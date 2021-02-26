@@ -203,20 +203,25 @@
   margin-right: 15px;
 }
 
-.non-urgent {
-  color: var(--ion-color-primary);
-  padding-left: 5px;
-  font-size: 25px;
+// .non-urgent {
+//   color: var(--ion-color-primary);
+//   padding-left: 5px;
+//   font-size: 25px;
+// }
+
+// .urgent {
+//   color: var(--ion-color-warning);
+//   padding-left: 5px;
+//   font-size: 25px;
+// }
+
+// .emergency {
+//   color: var(--ion-color-danger);
+//   padding-left: 5px;
+//   font-size: 25px;
+// }
+
+ion-badge{
+  padding: 4px;
 }
 
-.urgent {
-  color: var(--ion-color-warning);
-  padding-left: 5px;
-  font-size: 25px;
-}
-
-.emergency {
-  color: var(--ion-color-danger);
-  padding-left: 5px;
-  font-size: 25px;
-}
