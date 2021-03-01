@@ -131,6 +131,9 @@ export class ArrangingContractorComponent implements OnInit {
       quoteStatus: [{ value: 1, disabled: true }],
       nominalCode: ['', Validators.required]
     });
+    if (!this.faultMaintenanceDetails && this.faultDetails.contractorId) {
+      this.getContractorDetails(this.faultDetails.contractorId, 'quote');
+    }
   }
 
   private initWorkOrderForms(): void {
