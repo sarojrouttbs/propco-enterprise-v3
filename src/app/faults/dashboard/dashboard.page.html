@@ -368,15 +368,16 @@
             id="faultListTable">
             <thead>
               <tr>
-                <th style="width:1%"></th>
-                <th style="width:10%">Issue ID</th>
+                <!-- <th style="width:1%"></th> -->
+                <th style="width:9%">Issue ID</th>
                 <th style="width:10%">Reported On</th>
                 <th style="width:11%">Category</th>
                 <th style="">Property</th>
-                <th style="width:11%">Office</th>
-                <th style="width:15%">Job Title</th>
+                <th style="width:9%">Office</th>
+                <th style="width: 7%;">Manager</th>
+                <th style="width:13%">Job Title</th>
                 <th style="width:10%">Reported By</th>
-                <th style="width:40px">Merge Faults</th>
+                <th style="width:40px">Merge</th>
                 <th style="width:10%">Fault Status</th>
                 <th style="width:36px"></th>
               </tr>
@@ -384,10 +385,14 @@
             <tbody>
               <tr *ngFor="let fault of faultList;" class="table-row" (click)="onClickRow(fault); $event.stopPropagation();"
                 [ngClass]="{'escalated': fault.status == 18}">
-                <td>
+                <!-- <td>
                   <ion-icon name="ellipse" [class]="fault.urgencyStatus==1 ? 'emergency' : (fault.urgencyStatus==2? 'urgent' : 'non-urgent')"></ion-icon>
+                </td> -->
+                <td>
+                  <ion-badge [color]="fault.urgencyStatus==1 ? 'danger' : (fault.urgencyStatus==2? 'warning' : 'success')">
+                    {{fault.reference || '-'}}
+                  </ion-badge>
                 </td>
-                <td>{{fault.reference || '-'}}</td>
                 <td>{{fault.createdAt | date: 'dd/MM/yyyy HH:mm' || '-'}}</td>
                 <td>
                   {{(fault.sourceType === 'FIXFLO') ? (fault.fixfloCategory || '-') : (getLookupValue(fault.category,
@@ -396,6 +401,7 @@
                 <!-- <td></td> -->
                 <td>{{fault.propertyReference || '-'}} <br>{{fault.propertyAddress.addressLine1}}</td>
                 <td>{{getLookupValue(fault.propertyOfficeCode, officeCodes) || '-'}}</td>
+                <td style="">{{fault.propertyManagerName}}</td>
                 <td>{{fault.title || '-'}}</td>
                 <td>{{getLookupValue(fault.reportedBy, reportedByTypes) || '-'}}</td>
                 <td>

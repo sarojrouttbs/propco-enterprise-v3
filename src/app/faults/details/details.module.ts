@@ -40,6 +40,7 @@ import { CloseFaultModalPageModule } from 'src/app/shared/modals/close-fault-mod
 import { TenancyClauseModalPageModule } from 'src/app/shared/modals/tenancy-clause-modal/tenancy-clause-modal.module';
 import { PropertyCertificateModalPageModule } from 'src/app/shared/modals/property-certificate-modal/property-certificate-modal.module';
 import { MoreInfoModalPageModule } from 'src/app/shared/modals/more-info-modal/more-info-modal.module';
+import { PropertySkeletonComponent } from './property-skeleton/property-skeleton.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -74,6 +75,6 @@ import { MoreInfoModalPageModule } from 'src/app/shared/modals/more-info-modal/m
     MoreInfoModalPageModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
-    PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent,JobCompletionComponent],
+    PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent,JobCompletionComponent, PropertySkeletonComponent],
 })
 export class DetailsPageModule { }
