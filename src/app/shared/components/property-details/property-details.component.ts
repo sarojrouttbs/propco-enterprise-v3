@@ -1,4 +1,4 @@
-import { ERROR_MESSAGE, FOLDER_NAMES, PROPCO } from './../../constants';
+import { ERROR_MESSAGE, DOCUMENTS_TYPE, PROPCO } from './../../constants';
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 import { FormGroup } from '@angular/forms';
@@ -75,9 +75,9 @@ export class PropertyDetailsComponent implements OnInit {
   getFilteredDocs(files: Array<any>): string {
     let url = null;
     if (files && files[0].documentId) {
-      const filteredDoc = files.filter(data => data.folderName === FOLDER_NAMES[0]['index']);
-      if (filteredDoc.length && filteredDoc[0].name.split('.')[1] !== 'pdf') {
-        return url = filteredDoc[0].documentUrl;
+      // const filteredDoc = files.filter(data => data.folderName === 'initial issue');
+      if (DOCUMENTS_TYPE.indexOf(files[0].name.split('.')[1]) == -1) {
+        return url = files[0].documentUrl;
       }
       else
         return url = 'assets/images/default.jpg';
