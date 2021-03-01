@@ -69,6 +69,7 @@ export class ArrangingContractorComponent implements OnInit {
   currentDate = this.commonService.getFormatedDate(new Date());
   isWorksOrder: boolean = false;
   isFormsReady: boolean = false;
+  showSkeleton: boolean = true;
   pendingNotification: any;
   isContractorSearch = false;
 
@@ -98,7 +99,7 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.faultDetails.status === 19 || (this.faultMaintenanceDetails && this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER)) {
       /*19: Worksorder Pending*/
       this.isWorksOrder = true;
-    }
+    } else this.isWorksOrder = false;
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
@@ -256,6 +257,7 @@ export class ArrangingContractorComponent implements OnInit {
         this.isWorksOrder ? this.workOrderForm.get('orderedBy').setValue(userDetails.name) : this.raiseQuoteForm.get('orderedBy').setValue(userDetails.name);
       }
     }
+    this.showSkeleton = false;
   }
 
   private getFaultMaintenance() {
@@ -1184,7 +1186,8 @@ export class ArrangingContractorComponent implements OnInit {
             defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined,
             defaultCommissionAmount: data ? data.defaultCommissionAmount : undefined,
             businessTelephone: data ? data.businessTelephone : undefined,
-            contractorName: data ? data.fullName : undefined, address: addressString,
+            contractorName: data ? (data.fullName ? data.fullName : data.name) : undefined,
+            address: addressString,
             contractorId: data ? data.contractorId : undefined
           });
 

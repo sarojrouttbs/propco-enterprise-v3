@@ -1,4 +1,3 @@
-
   <ion-grid>
     <ion-row *ngIf="iacNotification">
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
@@ -166,7 +165,7 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <ion-row *ngIf="isFormsReady">
+    <ion-row *ngIf="isFormsReady && !showSkeleton">
       
         <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
           <ng-container *ngIf="!isWorksOrder">
@@ -278,6 +277,12 @@
           </ng-container>
         </ion-col>
       
+    </ion-row>
+    <ion-row *ngIf="showSkeleton">
+      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+      <div *ngIf="isWorksOrder" ><ng-container *ngTemplateOutlet="worksOrderFormSkeleton"></ng-container></div>
+      <div *ngIf="!isWorksOrder"><ng-container *ngTemplateOutlet="raiseQuoteFormSkeleton"></ng-container></div>
+    </ion-col>
     </ion-row>
   </ion-grid>
 <ng-template #quoteDetails>
@@ -629,3 +634,172 @@
   <ion-button class="save-button" (click)="_btnHandler('save')">Save for later</ion-button>
   <ion-button class="submit-button" (click)="_btnHandler('proceed')">Proceed</ion-button>
 </div>
+
+<ng-template #raiseQuoteFormSkeleton>
+  <div class="custom-skeleton">
+    <div class="skeleton-content">
+      <div class="forms-container" >
+        <ion-grid>
+          <div class="forms-block">
+            <ion-row>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="100">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="100">
+                <p class="icons"  style="height: 70px;border-radius: 10px;">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+            </ion-row>
+          </div>
+        </ion-grid>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #worksOrderFormSkeleton>
+  <div class="custom-skeleton">
+    <div class="skeleton-content">
+      <div class="forms-container" >
+        <ion-grid>
+          <div class="forms-block">
+            <ion-row>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="33.3">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="33.3">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="33.3">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="100">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="50">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="33.3">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="33.3">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="33.3">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+              <ion-col size="100">
+                <p class="icons">
+                  <ion-skeleton-text class="header" animated style="width: 100%"></ion-skeleton-text>
+                </p>
+              </ion-col>
+            </ion-row>
+          </div>
+        </ion-grid>
+      </div>
+    </div>
+  </div>
+</ng-template>

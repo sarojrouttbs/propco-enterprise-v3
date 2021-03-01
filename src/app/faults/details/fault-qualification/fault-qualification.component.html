@@ -124,7 +124,7 @@
     </ion-col>
   </ion-row>
 </ion-grid>
-<ion-grid *ngIf="!iqfNotification || iqfNotification?.templateCode === 'FI-T-E-1'">
+<ion-grid *ngIf="(!iqfNotification || iqfNotification?.templateCode === 'FI-T-E-1') && !showSkeleton">
   <form [formGroup]="faultQualificationForm">
     <ion-row>
       <ion-col class="card">
@@ -292,7 +292,9 @@
     </ion-row>
   </form>
 </ion-grid>
-
+<div *ngIf="showSkeleton" >
+  <ng-container *ngTemplateOutlet="blocksSkeleton"></ng-container>
+</div>
 <div class="action-btn-group">
   <ion-button (click)="moreInfo();" class="save-button ion-float-left" [disabled]="faultDetails?.status === 10 || (iqfNotification && !iqfNotification?.responseReceived && iqfNotification?.templateCode === 'FI-T-E-1')">Request More Info</ion-button>
   <ion-button (click)="closeFault();" class="cancel-button ion-float-left" [disabled]="faultDetails?.status===10">Close
@@ -304,3 +306,91 @@
   <ion-button class="submit-button" (click)="_btnHandler('proceed')" [disabled]="faultDetails?.status===10">Proceed
   </ion-button>
 </div>
+
+<ng-template #blocksSkeleton>
+  <ion-grid class="iqf-block-skeleton">
+    <ion-row>
+      <ion-col class="card" *ngFor="let number of [0,1,2]">
+        <h3>
+          <ion-skeleton-text animated style="width: 50%;"></ion-skeleton-text>
+        </h3>
+        <h5>
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </h5>
+        <ion-row>
+          <ion-col size="70">
+            <ion-radio-group>
+              <ion-row class="radio-block">
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-avatar>
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-avatar>
+                    <ion-skeleton-text animated></ion-skeleton-text>
+                  </ion-item>
+                </ion-col>
+  
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-avatar>
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-avatar>
+                    <ion-skeleton-text animated></ion-skeleton-text>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-radio-group>
+          </ion-col>
+          <ion-col size="30">
+            <ion-item lines="none" class="button-block">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="card" *ngFor="let number of [0,1]">
+        <h3>
+          <ion-skeleton-text animated style="width: 50%;"></ion-skeleton-text>
+        </h3>
+        <h5>
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </h5>
+        <ion-row>
+          <ion-col size="70">
+            <ion-radio-group>
+              <ion-row class="radio-block">
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-avatar>
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-avatar>
+                    <ion-skeleton-text animated></ion-skeleton-text>
+                  </ion-item>
+                </ion-col>
+  
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-avatar>
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-avatar>
+                    <ion-skeleton-text animated></ion-skeleton-text>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-radio-group>
+          </ion-col>
+          <ion-col size="30">
+            <ion-item lines="none" class="button-block">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col class="card-extra"></ion-col>
+    </ion-row>
+  </ion-grid>
+</ng-template>
