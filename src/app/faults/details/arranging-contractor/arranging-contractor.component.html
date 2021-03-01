@@ -137,14 +137,17 @@
               <div class="delete-icon-wrapper">
                 <ion-grid>
                   <ion-row>
-                    <ion-col size="100" *ngIf="getFileType(file.name)">
+                    <!-- <ion-col size="100" *ngIf="getFileType(file.name)">
                       <img src="/assets/images/default.jpg" (click)="downloadDocumentByURl(file.documentUrl)"
                         title="Click To Download PDF">
                     </ion-col>
                     <ion-col size="100" *ngIf="!getFileType(file.name)">
                       <img [src]="file.documentUrl ? file.documentUrl : '/assets/images/default.jpg'"
                         (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download">
-                    </ion-col>
+                    </ion-col> -->
+                    <ion-col size="100">
+                      <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file?.documentUrl)" title="Click To Download">
+                    </ion-col>    
                   </ion-row>
                   <ion-row class="ion-justify-content-between">
                     <ion-col size-xl="80" size-lg="70" size="80">

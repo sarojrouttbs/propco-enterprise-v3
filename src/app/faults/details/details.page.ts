@@ -1,7 +1,7 @@
 import { ModalController, PopoverController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES } from './../../shared/constants';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE } from './../../shared/constants';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
@@ -13,6 +13,7 @@ import { debounceTime, switchMap } from 'rxjs/operators';
 import { SimplePopoverPage } from 'src/app/shared/popover/simple-popover/simple-popover.page';
 import { ContractorDetailsModalPage } from 'src/app/shared/modals/contractor-details-modal/contractor-details-modal.page';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'fault-details',
@@ -118,7 +119,8 @@ export class DetailsPage implements OnInit {
     private router: Router,
     private modalController: ModalController,
     public sanitizer: DomSanitizer,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    @Inject(DOCUMENT) private _document: Document
   ) {
   }
 
@@ -818,13 +820,14 @@ export class DetailsPage implements OnInit {
     this.faultsService.getFaultDocuments(faultId).subscribe(response => {
       if (response) {
         this.files = response.data;
-        this.getDocs();
+        // this.getDocs();
         if (this.faultDetails.stage === FAULT_STAGES.JOB_COMPLETION) {
           this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[4]['index'] || data.folderName === FOLDER_NAMES[5]['index']);
         }
         else {
           this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[1]['index']);
         }
+        this.prepareDocumentsList();
       }
     })
   }
@@ -1267,7 +1270,6 @@ export class DetailsPage implements OnInit {
         this.refreshDetailsAndStage();
       }, error => {
         this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Start Progress', 'Error');
-        console.log(error);
       });
     }
   }
@@ -1281,9 +1283,6 @@ export class DetailsPage implements OnInit {
     this.faultDetails = details;
     this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
     this.oldUserSelectedAction = this.userSelectedActionControl.value;
-    if (this.faultDetails?.stage === FAULT_STAGES.LANDLORD_INSTRUCTION) {
-      this.checkForLLSuggestedAction();
-    }
   }
 
 
@@ -1897,10 +1896,10 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  private getDocs() {
-    const uniqueSet = this.files.map(data => data.folderName);
-    this.folderNames = uniqueSet.filter(this.onlyUnique);
-  }
+  // private getDocs() {
+  //   const uniqueSet = this.files.map(data => data.folderName);
+  //   this.folderNames = uniqueSet.filter(this.onlyUnique);
+  // }
 
   filterByGroupName(folderName) {
     this.filteredDocuments = this.files.filter(data => data.folderName === folderName);
@@ -1919,7 +1918,8 @@ export class DetailsPage implements OnInit {
         this.removeFile(i);
         this.filteredDocuments.splice(i, 1);
         if (this.filteredDocuments.length == 0) {
-          this.getDocs();
+          // this.getDocs();
+          this.prepareDocumentsList();
           this.mediaType = 'upload';
         }
       });
@@ -1932,14 +1932,28 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  getFileType(name): boolean {
-    if (name != null) {
-      let data = name.split('.')[1] === 'pdf';
-      if (data) {
-        return true;
-      }
+  // getFileType(name): boolean {
+  //   if (name != null) {
+  //     let data = name.split('.')[1] === 'pdf';
+  //     if (data) {
+  //       return true;
+  //     }
+  //   }
+  // }
+  private prepareDocumentsList() {
+    if (this.files.length > 0) {
+      this.files.forEach((e, i) => {
+        this.files[i].folderName = e.folderName.replace(/_/g, " ");
+        if (e.name != null && DOCUMENTS_TYPE.indexOf(e.name.split('.')[1]) !== -1) {
+          this.files[i].isImage = false;
+        }
+        else { this.files[i].isImage = true; }
+      });
+      const uniqueSet = this.files.map(data => data.folderName);
+      this.folderNames = uniqueSet.filter(this.onlyUnique);
     }
   }
+
 
   downloadDocumentByURl(url) {
     this.commonService.downloadDocumentByUrl(url);
@@ -2037,7 +2051,7 @@ export class DetailsPage implements OnInit {
     };
     let res = await this.updateFaultDetails(requestObj);
     if (res) {
-      await this.refreshDetailsAndStage();
+      this._document.defaultView.location.reload();
     }
   }
 
