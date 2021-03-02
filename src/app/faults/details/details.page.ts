@@ -315,7 +315,7 @@ export class DetailsPage implements OnInit {
       this.faultDetails = <FaultModels.IFaultResponse>{};
       this.faultDetails.status = 1;
     }
-    this.commonService.showLoader();
+    // this.commonService.showLoader();
     forkJoin([
       this.getFaultAdditionalInfo(),
       this.getPropertyById(),

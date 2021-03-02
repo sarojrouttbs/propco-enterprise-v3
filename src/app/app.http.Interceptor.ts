@@ -36,7 +36,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
       const authReq = req.clone({ headers: requestHeader });
       this.totalRequests++;
       // if (this.totalRequests === 1) {
-      this._commonService.showLoader();
+      // this._commonService.showLoader();
       // }
       return next.handle(authReq).pipe(catchError((error: HttpErrorResponse) => {
         this._commonService.hideLoader();
