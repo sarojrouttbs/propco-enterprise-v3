@@ -49,6 +49,7 @@ export class FaultQualificationComponent implements OnInit {
   serviceContractEmail = null;
   lookupdata: any;
   certificateTypes: any;
+  showSkeleton = true;
 
   constructor(
     private fb: FormBuilder,
@@ -72,10 +73,15 @@ export class FaultQualificationComponent implements OnInit {
     this.getLookupData();
     this.initFaultQualificationForm();
     this.patchValue();
-    this.fetchAgreementsClauses();
-    this.getCertificateCategories();
     this.faultNotification(this.faultDetails.stageAction);
-    this.getPropertyHeadLease();
+    this.initApiCalls();
+  }
+
+  private async initApiCalls() {
+    await this.fetchAgreementsClauses();
+    await this.getCertificateCategories();
+    await this.getPropertyHeadLease();
+    this.showSkeleton = false;
   }
 
   private getLookupData() {
