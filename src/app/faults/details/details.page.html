@@ -507,7 +507,11 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #caseTabs (selectedIndexChange)="currentSelected($event)">
+  <div *ngIf="showSkeleton">
+    <ng-container *ngTemplateOutlet="faultLoggedSkeleton"></ng-container>
+  </div> 
+ 
+  <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #caseTabs (selectedIndexChange)="currentSelected($event)" *ngIf="!showSkeleton">
     <mat-tab>
       <ng-template mat-tab-label>
         <div class="label-text" [class.success-border]='isCaseDetailSubmit && faultDetailsForm.valid'
@@ -1096,15 +1100,14 @@
             </span>
           </h2>
         </ion-col>
-
         <ion-col size="100">
           <ion-card class="ion-no-margin" id="property-details-card">
-            <app-property-details *ngIf="propertyDetails" [propertyDetails]="propertyDetails" [files]="files" [parentForm]="uploadDocForm"
+            <app-property-details [propertyDetails]="propertyDetails" [files]="files" [parentForm]="uploadDocForm"
               (getUploadedFile)="getUploadedFile($event)" [hmoDetails]="propertyHMODetails"
               [urgencyStatus]="faultDetailsForm.controls.urgencyStatus.value" [faultId]="faultId? faultId : ''"
               [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''" [communicationPreference]="faultDetails?.isOverrideCommunicationPreference" (getStatus)="getStatus($event)">
             </app-property-details>
-            <app-property-skeleton *ngIf="!propertyDetails"></app-property-skeleton>
+            <!-- <app-property-skeleton *ngIf="!propertyDetails"></app-property-skeleton> -->
           </ion-card>
         </ion-col>
         <ion-col size="100">
@@ -1140,3 +1143,33 @@
   </ng-container>
 
 </ion-content>
+
+<ng-template #faultLoggedSkeleton>
+  <ion-grid>
+    <ion-row class="tab-skeleton">
+      <ion-col size="16.66"><ion-skeleton-text animated></ion-skeleton-text></ion-col>
+      <ion-col size="16.66"><ion-skeleton-text animated></ion-skeleton-text></ion-col>
+      <ion-col size="16.66"><ion-skeleton-text animated></ion-skeleton-text></ion-col>
+      <ion-col size="16.66"><ion-skeleton-text animated></ion-skeleton-text></ion-col>
+      <ion-col size="16.66"><ion-skeleton-text animated></ion-skeleton-text></ion-col>
+      <ion-col size="16.66"><ion-skeleton-text animated></ion-skeleton-text></ion-col>
+    </ion-row>
+
+    <ion-row class="input-skeleton">
+      <ion-col size="30"><ion-skeleton-text animated></ion-skeleton-text></ion-col>
+      <ion-col size="70"><ion-skeleton-text animated></ion-skeleton-text></ion-col>
+    </ion-row>
+
+    <ion-row class="input-skeleton">
+      <ion-col size-xl="50" size="100">
+        <ion-grid class="additional-info-container">
+          <ion-row>
+            <ion-col size="30"><ion-skeleton-text animated></ion-skeleton-text></ion-col>
+            <ion-col size="60"><ion-skeleton-text animated></ion-skeleton-text></ion-col>
+            <ion-col size="10"><ion-skeleton-text animated></ion-skeleton-text></ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ng-template>

@@ -90,6 +90,7 @@ export class DetailsPage implements OnInit {
   filteredDocuments;
   mediaType: any;
   isUserActionChange = false;
+  showSkeleton = true;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -345,6 +346,7 @@ export class DetailsPage implements OnInit {
         this.matchCategory();
       }
     });
+    this.showSkeleton = false;
   }
 
   private getMaxRentShareLandlord(landlords) {
@@ -1511,9 +1513,9 @@ export class DetailsPage implements OnInit {
             const AWAITING_RESPONSE_LANDLORD = 15;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
-            if (this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD) {
-              requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
-            }
+            // if (this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD) {
+            //   requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
+            // }
             forkJoin(requestArray).subscribe(data => {
               this.refreshDetailsAndStage();
               this.commonService.showLoader();
@@ -1543,9 +1545,9 @@ export class DetailsPage implements OnInit {
             const AWAITING_RESPONSE_LANDLORD = 15;
             let requestArray = [];
             requestArray.push(this.updateFaultDetails(faultRequestObj));
-            if (this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD) {
-              requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
-            }
+            // if (this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD) {
+            //   requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
+            // }
             forkJoin(requestArray).subscribe(data => {
               this.refreshDetailsAndStage();
               this.commonService.showLoader();
