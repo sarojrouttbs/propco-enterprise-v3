@@ -26,7 +26,7 @@ export class RejectionModalPage implements OnInit {
       submittedById: '',
       submittedByType: 'SECUR_USER',
       other: '',
-      landlordWantAnotherQuote: false
+      doesWantAnotherQuote: false
     });
     this.commonService.sortBy('index', this.faultMaintRejectionReasons)
   }
