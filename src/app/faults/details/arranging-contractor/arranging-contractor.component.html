@@ -125,8 +125,7 @@
         </div>
       </ion-col>
     </ion-row>
-    <ion-grid style="margin: 20px 0"
-      *ngIf="(iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'LAR-L-Q') && quoteDocuments?.length">
+    <ion-grid style="margin: 20px 0" *ngIf="(iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'LAR-L-Q') && quoteDocuments?.length && !showSkeleton">
       <ion-row>
         <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
           <h2>Quote Documents</h2>
@@ -280,6 +279,7 @@
     </ion-row>
     <ion-row *ngIf="showSkeleton">
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+      <div><ng-container *ngTemplateOutlet="notificationSkeleton"></ng-container></div>
       <div *ngIf="isWorksOrder" ><ng-container *ngTemplateOutlet="worksOrderFormSkeleton"></ng-container></div>
       <div *ngIf="!isWorksOrder"><ng-container *ngTemplateOutlet="raiseQuoteFormSkeleton"></ng-container></div>
     </ion-col>
@@ -800,6 +800,36 @@
           </div>
         </ion-grid>
       </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #notificationSkeleton>
+  <div class="arranging-contractor">
+    <div class="banner">
+      <div class="ion-text-left">
+        <ion-skeleton-text class="header" animated style="width: 17%;height: 16px;"></ion-skeleton-text>
+      </div>
+      <h2 class="banner-heading">
+        <ion-skeleton-text class="header" animated style="width: 25%;margin: auto;height: 20px;"></ion-skeleton-text></h2>
+      <h6 class="banner-title"><ion-skeleton-text class="header" animated style="width: 20%;margin: auto;"></ion-skeleton-text></h6>
+      <ion-skeleton-text class="header" animated style="width: 29%;margin: auto;height: 31px;border-radius: 5px;"></ion-skeleton-text>
+      <ng-container>
+        <h6 class="banner-title response-recived">
+          <ion-skeleton-text class="header" animated style="width: 31%;height: 12px;margin: auto;"></ion-skeleton-text>
+        </h6>
+      </ng-container>
+
+    </div>
+    <div class="question-answer">
+      <h6>  <ion-skeleton-text class="header" animated style="width: 48%;margin: auto;"></ion-skeleton-text></h6>
+      <ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ng-container>
+            <ion-skeleton-text class="header" animated style="width: 45%;margin: auto;"></ion-skeleton-text>
+            <ion-skeleton-text class="header" animated style="width: 45%;margin: auto;"></ion-skeleton-text>
+          </ng-container>
+        </ion-row>
+      </ion-grid>
     </div>
   </div>
 </ng-template>

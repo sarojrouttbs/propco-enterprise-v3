@@ -90,6 +90,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.checkMaintenanceDetail();
     }
     if (changes.faultDetails && !changes.faultDetails.firstChange) {
+      this.showSkeleton = true;
       this.initiateArrangingContractors();
     }
   }
@@ -1389,7 +1390,8 @@ export class ArrangingContractorComponent implements OnInit {
     let codes = [];
 
     this.nominalCodes.forEach(code => {
-      code.concat = code.nominalCode + " - " + code.description;
+
+      code.concat = code.nominalType + ", " + code.nominalCode + ", " + code.description;
       if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 4) {
         this.raiseQuoteForm.get('nominalCode').setValue(code);
       }

@@ -63,6 +63,7 @@ export class JobCompletionComponent implements OnInit {
   INVOICE_VERIFICATION_THRESHOLD = 0;
   faultQualificationsAction = FAULT_QUALIFICATION_ACTIONS;
   pendingNotification: any;
+  showSkeleton: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -78,6 +79,7 @@ export class JobCompletionComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.faultDetails && !changes.faultDetails.firstChange) {
+      this.showSkeleton = true;
       this.initiateJobCompletion();
     }
   }
@@ -152,6 +154,7 @@ export class JobCompletionComponent implements OnInit {
       this.initPatching();
     }
     await this.faultNotification(this.faultDetails.stageAction);
+    this.showSkeleton = false;
   }
 
   private getFaultMaintenance() {

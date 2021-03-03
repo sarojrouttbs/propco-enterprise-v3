@@ -346,6 +346,29 @@
   font-size: 14px;
 }
 
+.tab-skeleton {
+  padding-left: 5px;
+  padding-right: 10px;
+  ion-col{
+    padding-right: 0px;
+  }
+  ion-skeleton-text{
+    height: 50px;
+  }
+}
+
+.input-skeleton{
+  padding-left: 5px;
+  padding-right: 10px;
+  ion-skeleton-text{
+    height: 25px;
+  }
+  ion-thumbnail > ion-skeleton-text{
+    height: 160px;
+    width: 200px;
+  }
+}
+
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   .landlord-instructions,
   .arranging-contractor,

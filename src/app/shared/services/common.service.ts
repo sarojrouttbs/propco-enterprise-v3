@@ -297,7 +297,7 @@ export class CommonService {
     // });
     // await this.loader.present();
     const elem = document.getElementById('loading');
-    elem.style.display = '';
+    if (elem) elem.style.display = '';
   }
 
   hideLoader() {
@@ -306,7 +306,7 @@ export class CommonService {
     // }
     setTimeout(() => {
       const elem = document.getElementById('loading');
-      elem.style.display = 'none';
+      if (elem) elem.style.display = 'none';
     }, 500);
   }
 
