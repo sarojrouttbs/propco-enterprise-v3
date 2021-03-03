@@ -193,6 +193,13 @@ export class DashboardPage implements OnInit {
   onClickRow(data, index?) {
     this.selectedData = data;
     this.getFaultNotes(this.selectedData.faultId);
+    this.faultList.forEach((e, i) => {
+      if (e.faultId === data.faultId) this.faultList[i].isSelected = true;
+      else this.faultList[i].isSelected = false;
+    });
+    // this.faultList.map(x => x.isSelected = false);
+    // this.faultList.find(x => x.faultId === data.faultId).isSelected = true;
+
   }
 
   private buildDtOptions(): DataTables.Settings {
