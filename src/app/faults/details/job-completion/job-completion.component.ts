@@ -79,6 +79,7 @@ export class JobCompletionComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.faultDetails && !changes.faultDetails.firstChange) {
+      this.showSkeleton = true;
       this.initiateJobCompletion();
     }
   }

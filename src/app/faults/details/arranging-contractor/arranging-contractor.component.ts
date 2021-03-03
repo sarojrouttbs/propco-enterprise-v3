@@ -90,6 +90,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.checkMaintenanceDetail();
     }
     if (changes.faultDetails && !changes.faultDetails.firstChange) {
+      this.showSkeleton = true;
       this.initiateArrangingContractors();
     }
   }
