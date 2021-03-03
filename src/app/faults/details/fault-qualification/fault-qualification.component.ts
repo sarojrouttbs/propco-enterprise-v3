@@ -132,7 +132,7 @@ export class FaultQualificationComponent implements OnInit {
   private patchValue() {
     if (this.faultDetails) {
       this.faultQualificationForm.patchValue({
-        doesBranchHoldKeys: this.faultDetails.doesBranchHoldKeys,
+        doesBranchHoldKeys: this.faultDetails.isTenantPresenceRequired === true ? false : this.faultDetails.doesBranchHoldKeys,
         hasMaintTenancyClause: this.faultDetails.hasMaintTenancyClause,
         isUnderBlockManagement: this.faultDetails.isUnderBlockManagement,
         isUnderWarranty: this.faultDetails.isUnderWarranty,
@@ -314,6 +314,11 @@ export class FaultQualificationComponent implements OnInit {
         if (response) {
           this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_SERVICE_CONTRACT');
         }
+      }
+
+      if (this.faultDetails?.isTenantPresenceRequired === false && this.faultQualificationForm.value.doesBranchHoldKeys === null) {
+        this.commonService.showAlert('Warning', 'Tenant has instructed to access with management keys. Please specify whether Branch holds keys or not before proceeding.');
+        return;
       }
 
       if (serviceCounter === 0) {
