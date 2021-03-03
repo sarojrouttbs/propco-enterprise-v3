@@ -136,14 +136,14 @@
               <ion-row class="radio-block">
                 <ion-col>
                   <ion-item lines="none">
-                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start"></ion-radio>
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start" [disabled]="faultDetails.isTenantPresenceRequired === true"></ion-radio>
                     <ion-label>Yes</ion-label>
                   </ion-item>
                 </ion-col>
 
                 <ion-col>
                   <ion-item lines="none">
-                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start"></ion-radio>
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start" [disabled]="faultDetails.isTenantPresenceRequired === true"></ion-radio>
                     <ion-label>No</ion-label>
                   </ion-item>
                 </ion-col>
@@ -152,9 +152,10 @@
           </ion-col>
           <ion-col size="30">
             <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
-              (click)="viewBranchDetails()">View</ion-button>
+              (click)="viewBranchDetails()" [disabled]="faultDetails.isTenantPresenceRequired === true">View</ion-button>
           </ion-col>
         </ion-row>
+        <ion-text color="danger" *ngIf="faultDetails.isTenantPresenceRequired === true">Tenant presence required</ion-text>
       </ion-col>
 
       <ion-col class="card">
