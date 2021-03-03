@@ -755,12 +755,16 @@
                 </h6> -->
   
                 <h6 *ngIf="faultDetails?.landlordOwnContractor?.email === null">
+                  <ion-button color="success" class="action-btn" fill="solid" (click)="llContractor(); $event.stopPropagation();">
+                    {{faultDetails?.landlordOwnContractor?.email!==null?"View/Edit Contractor details":"Add Contractor Details"}}</ion-button><br>
                   <ion-text color="danger">Please note: </ion-text>
-                  <span>The fault will get <i>escalated</i>, if the Contractor details are not filled within 6/24 hours after acceptance of repair by Landlord
+                  <!-- <span>The fault will get <i>escalated</i>, if the Contractor details are not filled within 6/24 hours after acceptance of repair by Landlord
+                  </span> -->
+                  <span>
+                    The fault will be <i>escalated</i> if the contractor's details including the scheduled date & time of the repair have not been added in the next 6/24 hours
                   </span>
                 </h6>
-                <ion-button color="success" class="action-btn" fill="solid" (click)="llContractor(); $event.stopPropagation();">
-                  {{faultDetails?.landlordOwnContractor?.email!==null?"View Contractor Details":"Add Contractor Details"}}</ion-button>
+                
                 <div class="border-bottom"></div>
               </div>
   

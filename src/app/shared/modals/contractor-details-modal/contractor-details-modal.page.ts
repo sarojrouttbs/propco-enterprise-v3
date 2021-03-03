@@ -33,8 +33,8 @@ export class ContractorDetailsModalPage implements OnInit {
       company: ['', Validators.required],
       name: ['', Validators.required],
       telephone: ['', Validators.required],
-      email: ['', [Validators.required, ValidationService.emailValidator]],
-      estimatedVisitAt: ['', Validators.required],
+      email: ['', [ValidationService.emailValidator]],
+      estimatedVisitAt: [''],
       notes: ''
     });
   }
@@ -48,7 +48,7 @@ export class ContractorDetailsModalPage implements OnInit {
       estimatedVisitAt: this.llContractorDetails.estimatedVisitAt,
       notes: this.llContractorDetails.notes
     });
-    this.contractorDetailForm.disable();
+    // this.contractorDetailForm.disable();
   }
 
   save() {
