@@ -110,6 +110,7 @@ export class DetailsPage implements OnInit {
   contractorEntityId: any;
   pendingNotification: any;
   isContractorSearch = false;
+  folderName: any;
 
   constructor(
     private faultsService: FaultsService,
@@ -1904,6 +1905,7 @@ export class DetailsPage implements OnInit {
   filterByGroupName(folderName) {
     this.filteredDocuments = this.files.filter(data => data.folderName === folderName);
     this.mediaType = 'documents';
+    this.folderName = folderName;
   }
 
   goBackToUpload(value) {

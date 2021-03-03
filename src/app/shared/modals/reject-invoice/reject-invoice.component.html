@@ -29,7 +29,7 @@
           <ion-item>
             <ion-label position="floating">Reason<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-textarea rows="1" formControlName="rejectionReason"></ion-textarea>
+            <ion-textarea  auto-grow="true" formControlName="rejectionReason"></ion-textarea>
           </ion-item>
           <app-validation-message [control]="rejectInvoiceForm.controls.rejectionReason"></app-validation-message>
         </ion-col>
