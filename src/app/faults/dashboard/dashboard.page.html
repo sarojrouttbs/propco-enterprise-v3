@@ -384,7 +384,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let fault of faultList;" class="table-row" (click)="onClickRow(fault); $event.stopPropagation();"
-                [ngClass]="{'escalated': fault.status == 18}">
+                [ngClass]="{'row-selected' : fault.isSelected, 'escalated': fault.status == 18 }" [class.data-selected]="fault.isSelected" >
                 <!-- <td>
                   <ion-icon name="ellipse" [class]="fault.urgencyStatus==1 ? 'emergency' : (fault.urgencyStatus==2? 'urgent' : 'non-urgent')"></ion-icon>
                 </td> -->
