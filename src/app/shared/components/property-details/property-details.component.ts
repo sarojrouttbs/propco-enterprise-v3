@@ -75,9 +75,9 @@ export class PropertyDetailsComponent implements OnInit {
   getFilteredDocs(files: Array<any>): string {
     let url = null;
     if (files && files[0].documentId) {
-      // const filteredDoc = files.filter(data => data.folderName === 'initial issue');
-      if (DOCUMENTS_TYPE.indexOf(files[0].name.split('.')[1]) == -1) {
-        return url = files[0].documentUrl;
+      const filteredDoc = files.filter(data => data.folderName === 'initial issue');
+      if (filteredDoc.length && DOCUMENTS_TYPE.indexOf(filteredDoc[0].name.split('.')[1]) == -1) {
+        return url = filteredDoc[0].documentUrl;
       }
       else
         return url = 'assets/images/default.jpg';
