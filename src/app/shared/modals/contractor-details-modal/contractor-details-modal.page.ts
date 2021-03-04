@@ -23,7 +23,7 @@ export class ContractorDetailsModalPage implements OnInit {
 
   ngOnInit() {
     this.initContractorDetailForm();
-    if (this.llContractorDetails.email !== null) {
+    if (this.llContractorDetails.landlordOwnContractorId !== null) {
       this.patchValue();
     }
   }
@@ -53,15 +53,17 @@ export class ContractorDetailsModalPage implements OnInit {
 
   save() {
     if (this.contractorDetailForm.valid) {
-      let requestObj = {
+      let requestObj: any = {
         company: this.contractorDetailForm.value.company,
-        email: this.contractorDetailForm.value.email,
-        estimatedVisitAt: this.commonService.getFormatedDate(this.contractorDetailForm.value.estimatedVisitAt, 'yyyy-MM-dd HH:mm:ss'),
         landlordId: this.landlordId,
         name: this.contractorDetailForm.value.name,
         notes: this.contractorDetailForm.value.notes,
         telephone: this.contractorDetailForm.value.telephone
       }
+
+      this.contractorDetailForm.value.estimatedVisitAt ? requestObj.estimatedVisitAt = this.contractorDetailForm.value.estimatedVisitAt : '';
+      this.contractorDetailForm.value.email ? requestObj.email = this.contractorDetailForm.value.email : '';
+
       const promise = new Promise((resolve, reject) => {
         this.faultsService.saveOwnContractor(this.faultId, requestObj).subscribe(
           res => {
