@@ -116,6 +116,7 @@ export class DetailsPage implements OnInit {
   proceeding: boolean = false;
   submitting: boolean = false;
   progressing: boolean = false;
+  isContractorModal = false;
 
   constructor(
     private faultsService: FaultsService,
@@ -2007,24 +2008,27 @@ export class DetailsPage implements OnInit {
   }
 
   async llContractor() {
-    const modal = await this.modalController.create({
-      component: ContractorDetailsModalPage,
-      cssClass: 'modal-container',
-      componentProps: {
-        faultId: this.faultId,
-        landlordId: this.landlordDetails.landlordId,
-        llContractorDetails: this.faultDetails.landlordOwnContractor
-      },
-      backdropDismiss: false
-    });
-
-    modal.onDidDismiss().then(async res => {
-      if (res.data && res.data == 'success') {
-        this.refreshDetailsAndStage();
-      }
-    });
-
-    await modal.present();
+    if (!this.isContractorModal){
+      this.isContractorModal = true;
+      const modal = await this.modalController.create({
+        component: ContractorDetailsModalPage,
+        cssClass: 'modal-container',
+        componentProps: {
+          faultId: this.faultId,
+          landlordId: this.landlordDetails.landlordId,
+          llContractorDetails: this.faultDetails.landlordOwnContractor
+        },
+        backdropDismiss: false
+      });
+      modal.onDidDismiss().then(async res => {
+        this.isContractorModal = false;
+        if (res.data && res.data == 'success') {
+          this.refreshDetailsAndStage();
+        }
+      });
+  
+      await modal.present();
+    }  
   }
 
   async markJobComplete(faultId) {

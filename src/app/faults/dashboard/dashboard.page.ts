@@ -817,7 +817,7 @@ export class DashboardPage implements OnInit {
       event.target.checked = false;
       faultDetail.isChecked = false;
       event.stopPropagation();
-      this.commonService.showAlert('Quote/Works Order Raised', 'Quote or Works Order raised faults can not be merged', '');
+      this.commonService.showAlert('Quote/Works Order Raised', 'There is active maintenance linked with this fault, cannot be selected to merge.', '');
       return valid = false;
     }
     return valid;
