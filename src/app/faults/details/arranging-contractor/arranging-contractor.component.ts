@@ -124,7 +124,7 @@ export class ArrangingContractorComponent implements OnInit {
       paidBy: ['LANDLORD', Validators.required],
       propertyId: [this.faultDetails.propertyId, Validators.required],
       quoteCategory: [{ value: this.categoryMap.get(this.faultDetails.category), disabled: true }],
-      description: [this.faultDetails.notes, Validators.required],
+      description: [this.faultDetails.title, [Validators.required, Validators.maxLength(70)]],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
       requestStartDate: ['', Validators.required],
       contact: '',
