@@ -750,17 +750,16 @@
               <div class="question-answer"
                 *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true && (cliNotification?.templateCode === 'LR-L-E' || cliNotification?.templateCode === 'LC-L-E')">
                 <h4 claas="ion-text-center">Next Step:</h4>
-                <!-- <h6>
-                  <ion-text>{{faultDetails?.landlordOwnContractor?.email!==null?"View Lanadloard's own Contractor details":"Add Lanadloard's own Contractor details"}}: </ion-text>
-                </h6> -->
-  
-                <h6 *ngIf="faultDetails?.landlordOwnContractor?.email === null">
-                  <ion-text color="danger">Please note: </ion-text>
-                  <span>The fault will get <i>escalated</i>, if the Contractor details are not filled within 6/24 hours after acceptance of repair by Landlord
+                <h6>
+                  <ion-button color="success" class="action-btn" fill="solid" (click)="llContractor(); $event.stopPropagation();">
+                    {{faultDetails?.landlordOwnContractor?.landlordOwnContractorId!==null?"View/Edit Contractor details":"Add Contractor Details"}}</ion-button><br>
+                  <ion-text color="danger" *ngIf="faultDetails?.landlordOwnContractor?.landlordOwnContractorId === null">Please note: </ion-text>
+                  <!-- <span>The fault will get <i>escalated</i>, if the Contractor details are not filled within 6/24 hours after acceptance of repair by Landlord
+                  </span> -->
+                  <span *ngIf="faultDetails?.landlordOwnContractor?.landlordOwnContractorId === null">
+                    The fault will be <i>escalated</i> if the contractor's details including the scheduled date & time of the repair have not been added in the next 6/24 hours
                   </span>
                 </h6>
-                <ion-button color="success" class="action-btn" fill="solid" (click)="llContractor(); $event.stopPropagation();">
-                  {{faultDetails?.landlordOwnContractor?.email!==null?"View Contractor Details":"Add Contractor Details"}}</ion-button>
                 <div class="border-bottom"></div>
               </div>
   
@@ -925,6 +924,7 @@
         </ion-col>
       </ion-row>
     </ion-grid>
+    
   </ng-container>
     <ion-grid *ngIf="showSkeleton">
       <ion-row>
@@ -933,8 +933,6 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    
-
   <div class="action-btn-group">
     <ion-button (click)="goTolistPage()" class="cancel-button">Cancel</ion-button>
     <ion-button (click)="goToLastStage()">Back</ion-button>
@@ -1193,6 +1191,7 @@
     </div>
   </ion-grid>
 </ng-template>
+
 <ng-template #arrangingContractorSkeleton>
   <div class="custom-skeleton">
     <div class="skeleton-content">
