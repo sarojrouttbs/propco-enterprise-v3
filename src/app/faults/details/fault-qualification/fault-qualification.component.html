@@ -1,5 +1,5 @@
 <ion-grid>
-  <ion-row *ngIf="iqfNotification">
+  <ion-row *ngIf="iqfNotification && !showSkeleton">
     <!-- || (!iqfNotification?.responseReceived && iqfNotification?.templateCode === 'FI-T-E-1') -->
     <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
       <div class="fault-qualification">
@@ -301,10 +301,10 @@
   <ion-button (click)="closeFault();" class="cancel-button ion-float-left" [disabled]="faultDetails?.status===10">Close
     Fault
   </ion-button>
-  <ion-button (click)="_btnHandler('cancel')" class="cancel-button">Cancel</ion-button>
-  <ion-button (click)="_btnHandler('back')">Back</ion-button>
-  <ion-button class="save-button" (click)="_btnHandler('save')">Save for later</ion-button>
-  <ion-button class="submit-button" (click)="_btnHandler('proceed')" [disabled]="faultDetails?.status===10">Proceed
+  <ion-button (click)="_btnHandler('cancel')" class="cancel-button" [disabled]="saving || proceeding">Cancel</ion-button>
+  <ion-button (click)="_btnHandler('back')" [disabled]="saving || proceeding">Back</ion-button>
+  <ion-button class="save-button" (click)="_btnHandler('save')" [disabled]="proceeding">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+  <ion-button class="submit-button" (click)="_btnHandler('proceed')" [disabled]="faultDetails?.status===10 || saving">Proceed <ion-icon *ngIf="proceeding" name="refresh" class="rotating submit-loader"></ion-icon>
   </ion-button>
 </div>
 
