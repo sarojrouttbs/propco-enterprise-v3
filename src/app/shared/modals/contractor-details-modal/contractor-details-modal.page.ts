@@ -61,7 +61,7 @@ export class ContractorDetailsModalPage implements OnInit {
         telephone: this.contractorDetailForm.value.telephone
       }
 
-      this.contractorDetailForm.value.estimatedVisitAt ? requestObj.estimatedVisitAt = this.contractorDetailForm.value.estimatedVisitAt : '';
+      this.contractorDetailForm.value.estimatedVisitAt ? requestObj.estimatedVisitAt = this.commonService.getFormatedDate(this.contractorDetailForm.value.estimatedVisitAt, 'yyyy-MM-dd HH:mm:ss') : '';
       this.contractorDetailForm.value.email ? requestObj.email = this.contractorDetailForm.value.email : '';
 
       const promise = new Promise((resolve, reject) => {
