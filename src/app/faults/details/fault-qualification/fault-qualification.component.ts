@@ -50,6 +50,8 @@ export class FaultQualificationComponent implements OnInit {
   lookupdata: any;
   certificateTypes: any;
   showSkeleton = true;
+  saving: boolean = false;
+  proceeding: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -65,6 +67,7 @@ export class FaultQualificationComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.faultDetails && !changes.faultDetails.firstChange) {
+      this.showSkeleton = true;
       this.initFaultQualification();
     }
   }
@@ -218,10 +221,12 @@ export class FaultQualificationComponent implements OnInit {
   _btnHandler(type: string) {
     switch (type) {
       case 'save': {
+        this.saving = true;
         this.saveForLater();
         break;
       }
       case 'proceed': {
+        this.proceeding = true;
         this.proceed();
         break;
       }
@@ -241,7 +246,6 @@ export class FaultQualificationComponent implements OnInit {
               this.voidNotification(null);
             }
           });
-
         } else {
           let confirmationText: string = 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?';
           if (this.iqfNotification.responseReceived?.isAccepted === false) {
@@ -252,9 +256,11 @@ export class FaultQualificationComponent implements OnInit {
               this.updateFault(null);
             }
           });
-        }
+        };
+        this.proceeding = false
       } else {
         this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
+        this.proceeding = false
         return;
       }
     } else {
@@ -272,12 +278,14 @@ export class FaultQualificationComponent implements OnInit {
 
       if (serviceCounter > 1) {
         this.commonService.showAlert('Warning', 'Please choose one option from Block Management/Factors Responsibility, Guarantee/Warranty, and Service Contract.');
+        this.proceeding = false;
         return;
       }
 
       if (serviceCounter === 1 && qualificationForm.isUnderBlockManagement) {
         if (this.blockManagement.managementCompany.email == null || this.blockManagement.managementCompany.email == '') {
           this.commonService.showAlert('Warning', 'No valid Email address found.');
+          this.proceeding = false;
           return;
         }
         let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected the Block Management option for this repair. Do you want to send an email to inform the Block Management/Factors Company?', '', 'Yes', 'No');
@@ -304,20 +312,24 @@ export class FaultQualificationComponent implements OnInit {
       if (serviceCounter === 1 && qualificationForm.isUnderServiceContract) {
         if (this.serviceContractCertificateId && (this.serviceContractEmail == null || this.serviceContractEmail == '')) {
           this.commonService.showAlert('Warning', 'No valid Email address found.');
+          this.proceeding = false;
           return;
         }
         if (this.serviceContractCertificateId == null || this.serviceContractCertificateId == '') {
           this.commonService.showAlert('Warning', 'Please select a Service Contract');
+          this.proceeding = false;
           return;
         }
         let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Service Contract option for this repair. Do you want to send an email to inform the Service Contract Company?', '', 'Yes', 'No');
         if (response) {
           this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_SERVICE_CONTRACT');
         }
+          this.proceeding = false
       }
 
       if (this.faultDetails?.isTenantPresenceRequired === false && this.faultQualificationForm.value.doesBranchHoldKeys === null) {
         this.commonService.showAlert('Warning', 'Tenant has instructed to access with management keys. Please specify whether Branch holds keys or not before proceeding.');
+        this.proceeding = false
         return;
       }
 
@@ -335,6 +347,8 @@ export class FaultQualificationComponent implements OnInit {
     let response = await this.commonService.showConfirm('Fault Qualification', confirmationText, '', 'Yes, I\'m sure', 'No');
     if (response) {
       this.saveQualificationDetails(FAULT_STAGES.LANDLORD_INSTRUCTION);
+    }else{
+      this.proceeding = false;
     }
   }
 
@@ -360,6 +374,7 @@ export class FaultQualificationComponent implements OnInit {
         const CHECKING_LANDLORD_INSTRUCTIONS = 13;
         await this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS);
       }
+      this.proceeding = false;
       this._btnHandler('refresh');
     }
   }
@@ -369,7 +384,7 @@ export class FaultQualificationComponent implements OnInit {
       this._btnHandler('saveLater');
       return;
     }
-    this.commonService.showLoader();
+    // this.commonService.showLoader();
     let requestObj = {
       doesBranchHoldKeys: this.faultQualificationForm.value.doesBranchHoldKeys,
       hasMaintTenancyClause: this.faultQualificationForm.value.hasMaintTenancyClause,
@@ -384,12 +399,13 @@ export class FaultQualificationComponent implements OnInit {
     };
     this.faultsService.updateFault(this.faultDetails.faultId, requestObj).subscribe(
       () => {
-        this.commonService.hideLoader();
+        // this.commonService.hideLoader();
         this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Qualification', 'success');
         this.router.navigate(['faults/dashboard'], { replaceUrl: true });
       },
       error => {
-        this.commonService.hideLoader();
+        this.saving = false;
+        // this.commonService.hideLoader();
       }
     );
   }
@@ -587,6 +603,7 @@ export class FaultQualificationComponent implements OnInit {
     if (data.value) {
       this.commonService.showConfirm('Repair complete', `Are you sure the ${type} Company has completed the repair?`, '', 'Yes I\'m sure', 'Cancel').then(async res => {
         if (res) {
+          this.commonService.showLoader();
           await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
           this._btnHandler('refresh');
         }
@@ -594,6 +611,7 @@ export class FaultQualificationComponent implements OnInit {
     } else if (!data.value) {
       this.commonService.showConfirm('Repair not complete', `Are you sure the ${type} Company has not completed the repair?`, '', 'Yes I\'m sure', 'Cancel').then(async res => {
         if (res) {
+          this.commonService.showLoader();
           await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
           this._btnHandler('refresh');
         }
@@ -715,6 +733,7 @@ export class FaultQualificationComponent implements OnInit {
     if (data.value) {
       this.commonService.showConfirm('Request More Info', 'Are you sure?', '', 'Yes I\'m sure', 'Cancel').then(async res => {
         if (res) {
+          this.commonService.showLoader();
           await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
           this._btnHandler('refresh');
         }
@@ -723,6 +742,7 @@ export class FaultQualificationComponent implements OnInit {
       if (this.faultDetails.urgencyStatus === 3) {
         this.commonService.showConfirm('Request More Info', 'This will close the fault. Are you sure?', '', 'Yes I\'m sure', 'Cancel').then(async res => {
           if (res) {
+            this.commonService.showLoader();
             await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
             this._btnHandler('refresh');
           }
@@ -730,6 +750,7 @@ export class FaultQualificationComponent implements OnInit {
       } else if (this.faultDetails.urgencyStatus === 1 || this.faultDetails.urgencyStatus === 2) {
         this.commonService.showConfirm('Request More Info', 'This will Escalate the fault. Are you sure?', '', 'Yes I\'m sure', 'Cancel').then(async res => {
           if (res) {
+            this.commonService.showLoader();
             await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
             this._btnHandler('refresh');
           }

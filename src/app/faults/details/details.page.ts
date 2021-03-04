@@ -112,6 +112,10 @@ export class DetailsPage implements OnInit {
   pendingNotification: any;
   isContractorSearch = false;
   folderName: any;
+  saving: boolean = false;
+  proceeding: boolean = false;
+  submitting: boolean = false;
+  progressing: boolean = false;
   isContractorModal = false;
 
   constructor(
@@ -318,7 +322,7 @@ export class DetailsPage implements OnInit {
       this.faultDetails = <FaultModels.IFaultResponse>{};
       this.faultDetails.status = 1;
     }
-    this.commonService.showLoader();
+    // this.commonService.showLoader();
     forkJoin([
       this.getFaultAdditionalInfo(),
       this.getPropertyById(),
@@ -364,6 +368,7 @@ export class DetailsPage implements OnInit {
   }
 
   selectStageStepper(stage: any) {
+    this.proceeding = false;
     switch (stage) {
       case FAULT_STAGES.FAULT_QUALIFICATION: {
         this.changeStep(FAULT_STAGES_INDEX.FAULT_QUALIFICATION);
@@ -1090,19 +1095,21 @@ export class DetailsPage implements OnInit {
     //   this.commonService.showMessage('At least one fault image is required', 'Log a Fault', 'error');
     //   return;
     // }
-    this.commonService.showLoader();
+    // this.commonService.showLoader();
+    this.submitting = true;
     let faultRequestObj = this.createFaultFormValues();
 
     this.faultsService.createFault(faultRequestObj).subscribe(
       res => {
-        this.commonService.hideLoader();
+        // this.commonService.hideLoader();
         this.commonService.showMessage('Fault has been logged successfully.', 'Log a Fault', 'success');
         this.uploadFiles(res.faultId);
       },
       error => {
-        this.commonService.hideLoader();
+        this.submitting = false;
+        // this.commonService.hideLoader();
         // this.commonService.showMessage('Something went wrong on server, please try again.', 'Log a Fault', 'Error');
-        console.log(error);
+        // console.log(error);
       }
     );
   }
@@ -1175,20 +1182,22 @@ export class DetailsPage implements OnInit {
   }
 
   async saveForLater() {
+    this.saving = true;
     if (!this.faultId) {
-      this.commonService.showLoader();
+      // this.commonService.showLoader();
       let faultRequestObj = this.createFaultFormValues();
       faultRequestObj.isDraft = true;
       this.faultsService.createFault(faultRequestObj).subscribe(
         res => {
-          this.commonService.hideLoader();
+          // this.commonService.hideLoader();
           this.commonService.showMessage('Fault has been logged successfully.', 'Log a Fault', 'success');
           this.uploadFiles(res.faultId);
         },
         error => {
-          this.commonService.hideLoader();
+          // this.commonService.hideLoader();
           // this.commonService.showMessage('Something went wrong on server, please try again.', 'Log a Fault', 'Error');
-          console.log(error);
+          // console.log(error);
+          this.saving = false;
         }
       );
     } else {
@@ -1201,7 +1210,7 @@ export class DetailsPage implements OnInit {
   }
 
   private updateFaultSummary() {
-    this.commonService.showLoader();
+    // this.commonService.showLoader();
     let faultRequestObj = this.createFaultFormValues();
     faultRequestObj.stage = this.faultDetails.stage;
     faultRequestObj.isDraft = true;
@@ -1227,15 +1236,16 @@ export class DetailsPage implements OnInit {
         }
       },
       error => {
-        this.commonService.hideLoader();
-        console.log(error);
+        this.saving = false;
+        // this.commonService.hideLoader();
+        // console.log(error);
       }
     );
   }
 
   private saveAdditionalInfoForm() {
     const promise = new Promise((resolve, reject) => {
-      this.commonService.showLoader();
+      // this.commonService.showLoader();
       let apiObservableArray = [];
       this.faultDetailsForm.controls['additionalInfo'].value.forEach(info => {
         if (info.id) {
@@ -1252,9 +1262,9 @@ export class DetailsPage implements OnInit {
           this.commonService.showMessage('Updated successfully.', 'Update Addtional Info', 'success');
           resolve();
         }
-        this.commonService.hideLoader();
+        // this.commonService.hideLoader();
       }, error => {
-        this.commonService.hideLoader();
+        // this.commonService.hideLoader();
         resolve();
       });
     });
@@ -1264,6 +1274,7 @@ export class DetailsPage implements OnInit {
   async startProgress() {
     const check = await this.commonService.showConfirm('Start Progress', 'This will change the fault status, Do you want to continue?');
     if (check) {
+      this.progressing = true;
       let faultRequestObj = this.createFaultFormValues();
       faultRequestObj.stage = FAULT_STAGES.FAULT_QUALIFICATION;
       faultRequestObj.isDraft = this.faultDetails.isDraft;
@@ -1272,8 +1283,10 @@ export class DetailsPage implements OnInit {
 
       this.faultsService.startProgress(this.faultId).subscribe(data => {
         this.refreshDetailsAndStage();
+        this.progressing = false;
       }, error => {
         this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Start Progress', 'Error');
+        this.progressing = false;
       });
     }
   }
@@ -1287,6 +1300,7 @@ export class DetailsPage implements OnInit {
     this.faultDetails = details;
     this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
     this.oldUserSelectedAction = this.userSelectedActionControl.value;
+    this.proceeding = false;
   }
 
 
@@ -1393,6 +1407,7 @@ export class DetailsPage implements OnInit {
     document.querySelector('ion-content').scrollToTop(500);
 
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_LOGGED) {
+      this.proceeding = true;
       let faultRequestObj = this.createFaultFormValues();
       faultRequestObj.isDraft = false;
       faultRequestObj.stage = this.faultDetails.stage;
@@ -1400,6 +1415,7 @@ export class DetailsPage implements OnInit {
       this.uploadFiles(this.faultId, false);
       if (res) {
         this.stepper.selectedIndex = FAULT_STAGES_INDEX.FAULT_QUALIFICATION;
+        this.proceeding = false;
       }
     }
     else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
@@ -1417,9 +1433,11 @@ export class DetailsPage implements OnInit {
       }
     }
     else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
+      this.proceeding = true;
       if (this.cliNotification) {
         if (!this.isUserActionChange) {
           this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
+          this.proceeding = false;
           return;
         }
         if (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) {
@@ -1444,9 +1462,11 @@ export class DetailsPage implements OnInit {
         case LL_INSTRUCTION_TYPES[1].index: //cli006b
           if (!this.landlordInstFrom.value.confirmedEstimate) {
             this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
+            this.proceeding = false;
             return;
           }
           if (this.landlordInstFrom.controls['contractor'].invalid) {
+            this.proceeding = false;
             return;
           }
           var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action.<br/> Are you sure?', '', 'Yes', 'No');
@@ -1463,6 +1483,8 @@ export class DetailsPage implements OnInit {
             forkJoin(requestArray).subscribe(data => {
               this.refreshDetailsAndStage();
             });
+          } else {
+            this.proceeding = false;
           }
           break;
         case LL_INSTRUCTION_TYPES[2].index: //cli006c
@@ -1480,14 +1502,18 @@ export class DetailsPage implements OnInit {
             forkJoin(requestArray).subscribe(data => {
               this.refreshDetailsAndStage();
             });
+          } else {
+            this.proceeding = false;
           }
           break;
         case LL_INSTRUCTION_TYPES[4].index: //cli006e
           if (!this.landlordInstFrom.value.confirmedEstimate) {
             this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
+            this.proceeding = false;
             return;
           }
           if (this.landlordInstFrom.controls['contractor'].invalid) {
+            this.proceeding = false;
             return;
           }
           var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action.<br/> Are you sure?', '', 'Yes', 'No');
@@ -1504,6 +1530,8 @@ export class DetailsPage implements OnInit {
             forkJoin(requestArray).subscribe(data => {
               this.refreshDetailsAndStage();
             });
+          } else {
+            this.proceeding = false;
           }
           break;
         case LL_INSTRUCTION_TYPES[0].index: //cli006a
@@ -1520,23 +1548,28 @@ export class DetailsPage implements OnInit {
             // }
             forkJoin(requestArray).subscribe(data => {
               this.refreshDetailsAndStage();
-              this.commonService.showLoader();
+              // this.commonService.showLoader();
               setTimeout(async () => {
                 await this.checkFaultNotifications(this.faultId);
                 this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
                 if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
                   this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
                 }
+                this.proceeding = false;
               }, 3000);
             });
+          } else {
+            this.proceeding = false;
           }
           break;
         case LL_INSTRUCTION_TYPES[3].index: //cli006d
           if (!this.landlordInstFrom.value.confirmedEstimate) {
             this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
+            this.proceeding = false;
             return;
           }
           if (this.landlordInstFrom.controls['contractor'].invalid) {
+            this.proceeding = false;
             return;
           }
           var response = await this.commonService.showConfirm('Landlord Instructions', `You have selected the "Obtain Landlord's Authorisation" action. This will send out a notification to Landlord. <br/> Are you sure?`, '', 'Yes', 'No');
@@ -1552,7 +1585,7 @@ export class DetailsPage implements OnInit {
             // }
             forkJoin(requestArray).subscribe(data => {
               this.refreshDetailsAndStage();
-              this.commonService.showLoader();
+              // this.commonService.showLoader();
               setTimeout(async () => {
                 await this.checkFaultNotifications(this.faultId);
                 this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
@@ -1565,10 +1598,13 @@ export class DetailsPage implements OnInit {
                 }
               }, 3000);
             });
+          } else {
+            this.proceeding = false;
           }
           break;
         case LL_INSTRUCTION_TYPES[5].index: //cli006f
           if (this.landlordInstFrom.controls['contractor'].invalid) {
+            this.proceeding = false;
             return;
           }
           if (this.landlordInstFrom.get('confirmedEstimate').value > 0) {
@@ -1581,6 +1617,7 @@ export class DetailsPage implements OnInit {
               this.checkForLLSuggestedAction();
             }
           } else {
+            this.proceeding = false;
             if (this.landlordInstFrom.get('confirmedEstimate').hasError('pattern')) {
               this.commonService.showAlert('Get an Estimate?', 'Please fill the valid confirmed estimate.');
             } else {
@@ -1590,9 +1627,9 @@ export class DetailsPage implements OnInit {
           }
           break;
         default:
+          this.proceeding = false;
           this.commonService.showAlert('Landlord Instructions', 'Please select any action');
           break;
-
       }
 
     }
@@ -1609,6 +1646,7 @@ export class DetailsPage implements OnInit {
           resolve(true);
         },
         error => {
+          this.proceeding = false;
           resolve(false);
         }
       );
@@ -1692,6 +1730,7 @@ export class DetailsPage implements OnInit {
     if (!data.value) {
       this.commonService.showConfirm(data.text, 'The fault status will change to "Escalation". </br> Are you sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
+          this.commonService.showLoader();
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
@@ -1724,6 +1763,7 @@ export class DetailsPage implements OnInit {
     if (!data.value) {
       this.commonService.showConfirm(data.text, 'Are you sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
+          this.commonService.showLoader();
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
@@ -1741,6 +1781,7 @@ export class DetailsPage implements OnInit {
     else if (data.value) {
       this.commonService.showConfirm(data.text, 'Are you sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
+          this.commonService.showLoader();
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
@@ -1762,6 +1803,7 @@ export class DetailsPage implements OnInit {
     if (!data.value) {
       this.commonService.showConfirm(data.text, 'Are you sure to arrange a contractor?', '', 'Yes', 'No').then(async res => {
         if (res) {
+          this.commonService.showLoader();
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
@@ -1772,6 +1814,7 @@ export class DetailsPage implements OnInit {
     else if (data.value) {
       this.commonService.showConfirm(data.text, 'Are you sure the repair is complete?', '', 'Yes', 'No').then(async res => {
         if (res) {
+          this.commonService.showLoader();
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);

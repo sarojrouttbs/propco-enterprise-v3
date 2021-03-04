@@ -88,6 +88,7 @@ export class DashboardPage implements OnInit {
       pageLength: 5,
       lengthMenu: [5, 10, 15],
       ajax: (tableParams: any, callback) => {
+        this.commonService.showLoader();
         this.faultParams = this.faultParams
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');

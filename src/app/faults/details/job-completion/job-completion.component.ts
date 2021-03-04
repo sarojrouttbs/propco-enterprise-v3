@@ -64,6 +64,7 @@ export class JobCompletionComponent implements OnInit {
   faultQualificationsAction = FAULT_QUALIFICATION_ACTIONS;
   pendingNotification: any;
   showSkeleton: boolean = true;
+  saving: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -263,6 +264,7 @@ export class JobCompletionComponent implements OnInit {
   _btnHandler(type: string) {
     switch (type) {
       case 'save': {
+        this.saving = true;
         this.saveForLater();
         break;
       }
@@ -282,6 +284,7 @@ export class JobCompletionComponent implements OnInit {
       this._btnHandler('saveLater');
       return;
     }
+    this.saving = false;
   }
 
   private async proceed() {
@@ -362,6 +365,7 @@ export class JobCompletionComponent implements OnInit {
       let message = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? `This will close the Fault. Are you sure?` : `Are you sure, Tenant is satisfied with the Job?`;
       this.commonService.showConfirm(title, message, '', 'Yes I\'m sure', 'No').then(async res => {
         if (res) {
+          this.commonService.showLoader();
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this._btnHandler('refresh');
         }
@@ -369,6 +373,7 @@ export class JobCompletionComponent implements OnInit {
     } else if (!data.value) {
       this.commonService.showConfirm(data.text, `Are you sure, Tenant is not satisfied with the Job?`, '', 'Yes', 'No').then(async res => {
         if (res) {
+          this.commonService.showLoader();
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
           this._btnHandler('refresh');
         }
@@ -404,6 +409,7 @@ export class JobCompletionComponent implements OnInit {
         let notificationObj = {} as FaultModels.IUpdateNotification;
         notificationObj.isAccepted = true;
         notificationObj.submittedByType = 'SECUR_USER';
+        this.commonService.showLoader();
         if (updateFaultStatus) {
           await this.invoiceUploaded();
         } else {
