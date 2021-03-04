@@ -282,6 +282,12 @@ export class FaultQualificationComponent implements OnInit {
         return;
       }
 
+      if (this.faultDetails?.isTenantPresenceRequired === false && this.faultQualificationForm.value.doesBranchHoldKeys === null) {
+        this.commonService.showAlert('Warning', 'Tenant has instructed to access with management keys. Please specify whether Branch holds keys or not before proceeding.');
+        this.proceeding = false
+        return;
+      }
+      
       if (serviceCounter === 1 && qualificationForm.isUnderBlockManagement) {
         if (this.blockManagement.managementCompany.email == null || this.blockManagement.managementCompany.email == '') {
           this.commonService.showAlert('Warning', 'No valid Email address found.');
@@ -327,12 +333,6 @@ export class FaultQualificationComponent implements OnInit {
           this.proceeding = false
       }
 
-      if (this.faultDetails?.isTenantPresenceRequired === false && this.faultQualificationForm.value.doesBranchHoldKeys === null) {
-        this.commonService.showAlert('Warning', 'Tenant has instructed to access with management keys. Please specify whether Branch holds keys or not before proceeding.');
-        this.proceeding = false
-        return;
-      }
-
       if (serviceCounter === 0) {
         this.changeStage();
       }
@@ -367,6 +367,7 @@ export class FaultQualificationComponent implements OnInit {
     if (stageAction) {
       faultRequestObj.stageAction = stageAction;
     }
+    
     let res = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
 
     if (res) {
