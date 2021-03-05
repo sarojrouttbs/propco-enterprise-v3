@@ -351,8 +351,9 @@ export class DetailsPage implements OnInit {
         this.getPreferredSuppliers(landlordId);
         this.matchCategory();
       }
+      this.showSkeleton = false;
     });
-    this.showSkeleton = false;
+   
   }
 
   private getMaxRentShareLandlord(landlords) {
@@ -1274,7 +1275,7 @@ export class DetailsPage implements OnInit {
   async startProgress() {
     const check = await this.commonService.showConfirm('Start Progress', 'This will change the fault status, Do you want to continue?');
     if (check) {
-      this.progressing = true;
+      this.submitting = true;
       let faultRequestObj = this.createFaultFormValues();
       faultRequestObj.stage = FAULT_STAGES.FAULT_QUALIFICATION;
       faultRequestObj.isDraft = this.faultDetails.isDraft;
@@ -1283,10 +1284,10 @@ export class DetailsPage implements OnInit {
 
       this.faultsService.startProgress(this.faultId).subscribe(data => {
         this.refreshDetailsAndStage();
-        this.progressing = false;
+        this.submitting = false;
       }, error => {
         this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Start Progress', 'Error');
-        this.progressing = false;
+        this.submitting = false;
       });
     }
   }
