@@ -740,7 +740,7 @@
                 <div class="border-bottom"></div>
               </div>
               <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived == null && (cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone) 
-              && cliNotification?.notificationStatus !== 7 && faultDetails.status !== 18 && faultDetails.status !== 10 && faultDetails.status !== 12">automatically
+              && cliNotification?.notificationStatus !== 7 && faultDetails.status !== 18 && faultDetails.status !== 10 && faultDetails.status !== 12">
                 <h6>
                   <ion-text color="danger">Please note:</ion-text>
                   The fault will be <i>escalated</i> automatically if the Landlord doesn't respond within {{cliNotification?.hoursLeft}}.
@@ -764,12 +764,9 @@
               </div>
   
               <div class="question-answer"
-                *ngIf="cliNotification?.recipientType === 8 
-                && faultDetails?.isOverrideCommunicationPreference === true
-                && cliNotification?.notificationStatus === 7 
-                && cliNotification?.responseReceived === null">
-                <h4 claas="ion-text-center">Next Step:</h4>
-  
+                *ngIf="cliNotification?.recipientType === 8 && faultDetails?.isOverrideCommunicationPreference === true
+                && cliNotification?.notificationStatus === 7 && cliNotification?.responseReceived === null">
+                <h4 claas="ion-text-center">Next Step:</h4>  
                 <h6>
                   <ion-text color="danger">Please note: </ion-text>
                   <span>This Fault is <i>escalated</i> as Landlord Override communication option is activated. 
@@ -778,9 +775,30 @@
                 <ion-button color="success" class="action-btn" fill="solid" (click)="viewNotification(); $event.stopPropagation();">
                   View Notification</ion-button>
                 <div class="border-bottom"></div>
-            </div>
+              </div>
+              <div class="question-answer ion-text-center" 
+                *ngIf="(cliNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18) && cliNotification?.notificationStatus !== 7">
+                <h4 claas="ion-text-center">Next Step:</h4>
+                <h6 *ngIf="faultDetails.urgencyStatus == 3">
+                  <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
+                </h6>
+                <h6 *ngIf="faultDetails.urgencyStatus != 3" >
+                  <ion-text color="danger">Please note: </ion-text>Fault Escalated - Please proceed with the following action:
+                  <ion-grid>
+                    <ion-row class="ion-justify-content-center">                    
+                      <ion-button color="danger" expand="block" class="action-btn"
+                        fill="{{userSelectedActionControl.value == 'PROCEED_AS_NECESSARY' ? 'solid' :'outline'}}" (click)="setUserAction('PROCEED_AS_NECESSARY')">
+                        {{getLookupValue('PROCEED_AS_NECESSARY', landlordInstructionTypes)}}
+                        <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(userSelectedActionControl.value == 'PROCEED_AS_NECESSARY')"></ion-icon>
+                      </ion-button>
+                    </ion-row>
+                  </ion-grid>
+                </h6>
+                <div class="border-bottom"></div>
+              </div>
               
-              <div class="question-answer">
+              <div class="question-answer" [hidden]="(cliNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18) 
+                    && cliNotification?.notificationStatus !== 7 && faultDetails.urgencyStatus != 3" >
                 <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
                 <ion-grid>
                   <ion-row class="ion-justify-content-center">
