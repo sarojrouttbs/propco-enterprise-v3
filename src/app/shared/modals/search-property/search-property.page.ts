@@ -50,6 +50,7 @@ export class SearchPropertyPage implements OnInit {
   }
 
   private searchProperty(value: any, isFAF: boolean, officeList: any[], agreementStatus: any): Observable<any> {
+    this.commonService.showLoader();
     this.isNotFound = false;
 
     let response = this.commonService.searchPropertyByText(value, isFAF, officeList, agreementStatus);
