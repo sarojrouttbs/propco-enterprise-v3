@@ -124,7 +124,7 @@ export class ArrangingContractorComponent implements OnInit {
       paidBy: ['LANDLORD', Validators.required],
       propertyId: [this.faultDetails.propertyId, Validators.required],
       quoteCategory: [{ value: this.categoryMap.get(this.faultDetails.category), disabled: true }],
-      description: [this.faultDetails.title, [Validators.required, Validators.maxLength(70)]],
+      description: [this.categoryName + " " + this.faultDetails.title, [Validators.required, Validators.maxLength(70)]],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
       requestStartDate: ['', Validators.required],
       contact: '',
@@ -133,7 +133,8 @@ export class ArrangingContractorComponent implements OnInit {
       contractorIds: [],
       selectedContractorId: '',
       quoteStatus: [{ value: 1, disabled: true }],
-      nominalCode: ['', Validators.required]
+      nominalCode: ['', Validators.required],
+      fullDescription: [this.faultDetails.notes, Validators.required],
     });
     if (!this.faultMaintenanceDetails && this.faultDetails.contractorId) {
       this.getContractorDetails(this.faultDetails.contractorId, 'quote');
@@ -151,7 +152,7 @@ export class ArrangingContractorComponent implements OnInit {
       worksOrderNumber: [{ value: this.faultDetails.reference, disabled: true }],
       postdate: [{ value: this.currentDate, disabled: true }],
       nominalCode: ['', Validators.required],
-      description: [this.categoryName + " " + this.faultDetails.title, Validators.required],
+      description: [this.categoryName + " " + this.faultDetails.title, [Validators.required, Validators.maxLength(70)]],
       paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
       mgntHoldKey: [{ value: 'No', disabled: true }],
       keysLocation: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
@@ -289,6 +290,7 @@ export class ArrangingContractorComponent implements OnInit {
           selectedContractorId: this.faultMaintenanceDetails.selectedContractorId,
           contact: this.faultMaintenanceDetails.contact,
           quoteStatus: this.faultMaintenanceDetails.quoteStatus,
+          fullDescription: this.faultMaintenanceDetails.fullDescription
         }
       );
       this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
