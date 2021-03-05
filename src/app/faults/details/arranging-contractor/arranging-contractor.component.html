@@ -306,18 +306,7 @@
           </ion-select>
         </ion-item>
       </ion-col>
-      <ion-col size="50">
-        <!-- <ion-item>
-          <ion-label position="floating">Nominal Code
-            <ion-text class="mandatory">*</ion-text>
-          </ion-label>
-          <ion-select interface="popover" formControlName="nominalCode">
-            <ion-select-option [value]="item.nominalCode" *ngFor="let item of nominalCodes">{{item.nominalCode}} -
-              {{item.description}}
-            </ion-select-option>
-          </ion-select>
-        </ion-item> -->
-  
+      <ion-col size="50">  
         <ion-item class="select-block">
           <ion-label position="floating">Nominal Code <ion-text class="mandatory">*</ion-text>
           </ion-label>
@@ -409,6 +398,12 @@
         <ion-item>
           <ion-label position="floating">Access Information </ion-label>
           <ion-input formControlName="accessDetails"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="100">
+        <ion-item>
+          <ion-label position="floating">Full Job Description <ion-text class="mandatory">*</ion-text></ion-label>
+          <ion-textarea rows="1" formControlName="fullDescription" auto-grow="true"></ion-textarea>
         </ion-item>
       </ion-col>
     </ion-row>
