@@ -1442,7 +1442,7 @@ export class DetailsPage implements OnInit {
           this.proceeding = false;
           return;
         }
-        if (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) {
+        if ((this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided) {
           if (this.isUserActionChange) {
             await this.voidNotification();
           }
@@ -2001,6 +2001,7 @@ export class DetailsPage implements OnInit {
     if (this.files.length > 0) {
       this.files.forEach((e, i) => {
         this.files[i].folderName = e.folderName.replace(/_/g, " ");
+        this.files[i].isUploaded = true;
         if (e.name != null && DOCUMENTS_TYPE.indexOf(e.name.split('.')[1]) !== -1) {
           this.files[i].isImage = false;
         }

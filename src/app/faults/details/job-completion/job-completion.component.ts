@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, min, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS, KEYS_LOCATIONS } from './../../../shared/constants';
 import { ModalController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
@@ -114,8 +114,8 @@ export class JobCompletionComponent implements OnInit {
       nominalCode: ['', Validators.required],
       description: [this.categoryName + " " + this.faultDetails.title, Validators.required],
       paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
-      mgntHoldKey: [{ value: 'No', disabled: true }],
-      keysLocation: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
+      keysLocation: this.faultDetails.doesBranchHoldKeys ? KEYS_LOCATIONS.KEY_IN_BRANCH : KEYS_LOCATIONS.DO_NOT_HOLD_KEY,
+      returnKeysTo: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
       accessDetails: [this.getAccessDetails(this.faultDetails.isTenantPresenceRequired), Validators.required],
       requiredDate: '',
       fullDescription: [this.faultDetails.notes, Validators.required],
@@ -138,10 +138,11 @@ export class JobCompletionComponent implements OnInit {
   }
 
   private getAccessDetails(tenantPresence): string {
-    if (tenantPresence != null) {
-      let data = this.accessInfoList.filter(data => data.value == tenantPresence);
-      return data && data[0] ? data[0].title : '';
-    }
+    return (tenantPresence ? 'Contact Tenant' : 'Tenant approved access via keys');
+    // if (tenantPresence != null) {
+    //   let data = this.accessInfoList.filter(data => data.value == tenantPresence);
+    //   return data && data[0] ? data[0].title : '';
+    // }
   }
 
 
@@ -186,7 +187,8 @@ export class JobCompletionComponent implements OnInit {
           fullDescription: this.faultMaintenanceDetails.fullDescription,
           repairCost: this.faultMaintenanceDetails.amount,
           keysLocation: this.faultMaintenanceDetails.keysLocation,
-          requiredDate: this.faultMaintenanceDetails.requiredCompletionDate
+          requiredDate: this.faultMaintenanceDetails.requiredCompletionDate,
+          returnKeysTo: this.faultMaintenanceDetails.returnKeysTo
         }
       );
       this.workOrderForm.get('contractorName').disable();
@@ -335,6 +337,7 @@ export class JobCompletionComponent implements OnInit {
     this.workOrderForm.get('repairCost').disable();
     this.workOrderForm.get('requiredDate').disable();
     this.workOrderForm.get('keysLocation').disable();
+    this.workOrderForm.get('returnKeysTo').disable();
     this.workOrderForm.get('accessDetails').disable();
   }
 
