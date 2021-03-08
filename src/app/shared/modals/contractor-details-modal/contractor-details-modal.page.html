@@ -66,8 +66,8 @@
     <ion-row class="permission-block">
       <ion-col size="100">
         <ion-item lines="none">
-        <ion-checkbox formControlName="hasContractorConsent" [disabled]="contractorDetailForm.hasContractorConsent === true"></ion-checkbox>&nbsp;
-        <ion-label>I accept that I have the Contractor's permission to share their details.</ion-label>
+        <ion-checkbox formControlName="hasContractorConsent" [disabled]="contractorDetailForm.hasContractorConsent === true"></ion-checkbox>&nbsp;&nbsp;
+        <ion-label class="consent-text">I accept that I have the Contractor's permission to share their details.</ion-label>
         </ion-item>
         <app-validation-message [control]="contractorDetailForm.controls.hasContractorConsent"></app-validation-message>
       </ion-col>
