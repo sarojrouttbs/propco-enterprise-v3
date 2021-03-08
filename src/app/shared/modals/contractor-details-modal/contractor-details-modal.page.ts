@@ -55,7 +55,7 @@ export class ContractorDetailsModalPage implements OnInit {
       this.contractorDetailForm.disable();
   }
 
-  save() {  
+  save() {      
     if (this.contractorDetailForm.valid) {
       let requestObj: any = {
         company: this.contractorDetailForm.value.company,
@@ -63,12 +63,12 @@ export class ContractorDetailsModalPage implements OnInit {
         name: this.contractorDetailForm.value.name,
         notes: this.contractorDetailForm.value.notes,
         telephone: this.contractorDetailForm.value.telephone,
-        hasContractorConsent: this.llContractorDetails.hasContractorConsent
+        hasContractorConsent: this.contractorDetailForm.value.hasContractorConsent
       }
 
       this.contractorDetailForm.value.estimatedVisitAt ? requestObj.estimatedVisitAt = this.commonService.getFormatedDate(this.contractorDetailForm.value.estimatedVisitAt, 'yyyy-MM-dd HH:mm:ss') : '';
       this.contractorDetailForm.value.email ? requestObj.email = this.contractorDetailForm.value.email : '';
-      this.llContractorDetails.llContractorDetails ? requestObj.llContractorDetails = this.contractorDetailForm.value.llContractorDetails : '';
+      this.llContractorDetails.landlordOwnContractorId ? requestObj.landlordOwnContractorId = this.llContractorDetails.landlordOwnContractorId : '';
       const promise = new Promise((resolve, reject) => {
         this.faultsService.saveOwnContractor(this.faultId, requestObj).subscribe(
           res => {
