@@ -1355,6 +1355,7 @@ export class DetailsPage implements OnInit {
     // }
     await this.checkFaultNotifications(this.faultId);
     this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, this.faultDetails.userSelectedAction);
+    this.getPendingHours();
     // if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index) {
     //   if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
     //     this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
@@ -1553,6 +1554,7 @@ export class DetailsPage implements OnInit {
               setTimeout(async () => {
                 await this.checkFaultNotifications(this.faultId);
                 this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+                this.getPendingHours();
                 if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
                   this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
                 }
@@ -1590,6 +1592,7 @@ export class DetailsPage implements OnInit {
               setTimeout(async () => {
                 await this.checkFaultNotifications(this.faultId);
                 this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
+                this.getPendingHours();
                 if (this.cliNotification && this.cliNotification.responseReceived) {
                   if (this.cliNotification.responseReceived.isAccepted) {
                     this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
@@ -1736,6 +1739,7 @@ export class DetailsPage implements OnInit {
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+          this.getPendingHours();
           // const CHECKING_LANDLORD_INSTRUCTIONS = 13;
           // this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS).then(async data => {
           //   this.refreshDetailsAndStage();
@@ -1755,6 +1759,7 @@ export class DetailsPage implements OnInit {
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+          this.getPendingHours();
         }
       });
     }
@@ -1787,6 +1792,7 @@ export class DetailsPage implements OnInit {
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
+          this.getPendingHours();
           if (this.cliNotification && this.cliNotification.responseReceived) {
             if (this.cliNotification.responseReceived.isAccepted) {
               this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
@@ -1809,6 +1815,7 @@ export class DetailsPage implements OnInit {
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+          this.getPendingHours();
         }
       });
     }
@@ -1820,6 +1827,7 @@ export class DetailsPage implements OnInit {
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+          this.getPendingHours();
           // await this.markJobComplete(this.faultId);
         }
       });
@@ -2089,6 +2097,7 @@ export class DetailsPage implements OnInit {
         this.commonService.showLoader();
         await this.checkFaultNotifications(this.faultId);
         this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+        this.getPendingHours();
       }
     });
 
