@@ -2016,7 +2016,7 @@ export class DetailsPage implements OnInit {
     this.commonService.downloadDocumentByUrl(url);
   }
 
-  async llContractor() {
+  async llContractor() {    
     if (!this.isContractorModal){
       this.isContractorModal = true;
       const modal = await this.modalController.create({
@@ -2025,7 +2025,8 @@ export class DetailsPage implements OnInit {
         componentProps: {
           faultId: this.faultId,
           landlordId: this.landlordDetails.landlordId,
-          llContractorDetails: this.faultDetails.landlordOwnContractor
+          llContractorDetails: this.faultDetails.landlordOwnContractor,
+          estimatedVisitAt: this.faultDetails.estimatedVisitAt
         },
         backdropDismiss: false
       });
