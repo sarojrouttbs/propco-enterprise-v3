@@ -1442,7 +1442,7 @@ export class DetailsPage implements OnInit {
           this.proceeding = false;
           return;
         }
-        if (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) {
+        if ((this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided) {
           if (this.isUserActionChange) {
             await this.voidNotification();
           }

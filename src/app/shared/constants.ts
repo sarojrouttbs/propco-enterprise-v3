@@ -283,4 +283,9 @@ export const FAULT_QUALIFICATION_ACTIONS = [
 ];
 
 export const CERTIFICATES_CATEGORY = ['FAULT_WARRANTY_CATEGORY', 'FAULT_SERVICE_CONTRACT_CATEGORY'];
-export const DOCUMENTS_TYPE = ['pdf', 'text', 'doc', 'csv', 'docx', 'odt']
+export const DOCUMENTS_TYPE = ['pdf', 'text', 'doc', 'csv', 'docx', 'odt'];
+
+export const KEYS_LOCATIONS = {
+  KEY_IN_BRANCH: 'Key in branch',
+  DO_NOT_HOLD_KEY: 'We do not hold keys'
+}
