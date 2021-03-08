@@ -292,7 +292,7 @@
             <label for="files" class="browse-btn">Browse Files</label>
           </form>
         </ion-col>
-        <ion-col size-xl="20" size="25" *ngFor="let file of files; let i=index;" [ngClass]="{'display-none': file?.documentId}" style="margin-bottom: 10px">
+        <ion-col size-xl="20" size="25" *ngFor="let file of files; let i=index;" [ngClass]="{'display-none': file?.isUploaded }" style="margin-bottom: 10px">
           <div class="delete-icon-wrapper">
             <ion-grid>
               <ion-row>
