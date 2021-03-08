@@ -66,7 +66,7 @@
     <ion-row class="permission-block">
       <ion-col size="100">
         <ion-item lines="none">
-        <ion-checkbox formControlName="hasContractorConsent" [disabled]="contractorDetailForm.hasContractorConsent === true"></ion-checkbox>&nbsp;&nbsp;
+        <ion-checkbox formControlName="hasContractorConsent" [disabled]="llContractorDetails.hasContractorConsent === true"></ion-checkbox>&nbsp;&nbsp;
         <ion-label class="consent-text">I accept that I have the Contractor's permission to share their details.</ion-label>
         </ion-item>
         <app-validation-message [control]="contractorDetailForm.controls.hasContractorConsent"></app-validation-message>
@@ -75,7 +75,7 @@
   </form>
   <div class="action-btn-group">
     <ion-button class="cancel-button" (click)="dismiss()">CANCEL</ion-button>
-    <ion-button class="save-button" (click)="save()" [disabled]="llContractorDetails.estimatedVisitAt != null">SAVE
+    <ion-button class="save-button" (click)="save()" [disabled]="estimatedVisitAt != null">SAVE
     </ion-button>
   </div>
 </ion-content>
