@@ -89,6 +89,7 @@ declare namespace FaultModels {
         serviceContractCertificateId?: number;
         warrantyCertificateId?: number;
         estimatedVisitAt: string;
+        fixfloTenantContact: string;
     }
 
     export interface AdditionalInfo {
