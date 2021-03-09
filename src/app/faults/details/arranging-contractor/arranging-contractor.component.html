@@ -217,7 +217,7 @@
                        <ion-label position="floating">Skill Set</ion-label>
                        <ion-select interface="popover" formControlName="skillSet" class="ion-select-options">
                          <ion-select-option value="">Please Select</ion-select-option>
-                         <ion-select-option [value]="item.index" *ngFor="let item of contractorSkill">
+                         <ion-select-option [value]="item.value" *ngFor="let item of contractorSkill">
                            {{ item.value }}
                          </ion-select-option>
                        </ion-select>
