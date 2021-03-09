@@ -243,7 +243,7 @@ export class ArrangingContractorComponent implements OnInit {
     });
 
     this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
+      switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
         new Observable())
     );
   }
