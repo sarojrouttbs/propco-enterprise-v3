@@ -73,6 +73,7 @@ export class FaultsService {
       .set('text', text)
       .set('types', 'CONTRACTOR')
       .set('con.ocp', skillSet)
+      .set('status', 'Active')
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 

@@ -214,9 +214,9 @@
                  <ion-row id="row_1" class="row-banner" [formGroup]="addContractorForm" *ngIf="!restrictAction">
                    <ion-col size="45">
                      <ion-item>
-                       <ion-label position="floating">Skill Set
-                       </ion-label>
+                       <ion-label position="floating">Skill Set</ion-label>
                        <ion-select interface="popover" formControlName="skillSet" class="ion-select-options">
+                         <ion-select-option value="">Please Select</ion-select-option>
                          <ion-select-option [value]="item.index" *ngFor="let item of contractorSkill">
                            {{ item.value }}
                          </ion-select-option>
@@ -255,7 +255,7 @@
      
                    <ion-col size="10">
                      <ion-fab-button class="button-container" (click)="addContractor(addContractorForm?.value)"
-                       [disabled]="!addContractorForm?.get('contractor').value || !addContractorForm?.get('skillSet').value || !isSelected || addContractorForm.controls['contractor'].invalid">
+                       [disabled]="!addContractorForm?.get('contractor').value || !isSelected || addContractorForm.controls['contractor'].invalid">
                        <ion-icon name="add-sharp" class="add-contractor list-button"></ion-icon>
                      </ion-fab-button>
                    </ion-col>
