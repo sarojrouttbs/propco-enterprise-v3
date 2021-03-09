@@ -60,7 +60,8 @@ export class ArrangingContractorComponent implements OnInit {
   private MAX_QUOTE_REJECTION = 2;
   private disableAnotherQuote: boolean = false;
   isUserActionChange: boolean = false;
-  faultMaintRejectionReasons: any;
+  landlordMaintRejectionReasons: any;
+  contractorMaintRejectionReasons: any;
   woResultsAvailable = false;
   woContractors: Observable<FaultModels.IContractorResponse>;
   nominalCodeSubscription: Subscription;
@@ -391,7 +392,8 @@ export class ArrangingContractorComponent implements OnInit {
 
   private setFaultsLookupData(data) {
     this.faultCategories = data.faultCategories;
-    this.faultMaintRejectionReasons = data.faultMaintRejectionReasons;
+    this.landlordMaintRejectionReasons = data.landlordQuoteRejectionReasons;
+    this.contractorMaintRejectionReasons = data.contractorQuoteRejectionReasons;
     this.setCategoryMap();
   }
 
@@ -843,6 +845,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.raiseQuoteForm.get('requestStartDate').disable();
     this.raiseQuoteForm.get('contact').disable();
     this.raiseQuoteForm.get('nominalCode').disable();
+    this.raiseQuoteForm.get('fullDescription').disable();
   }
 
   private disableWorksOrderDetail() {
@@ -859,7 +862,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private disableContractorsList(notification) {
-    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && notification.templateCode === 'LAR-L-Q') {
+    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && (notification.templateCode === 'LAR-L-Q' || notification.templateCode === 'CQ-NA-C-E' || notification.templateCode === 'CQ-A-C-E')) {
       this.restrictAction = false;
       this.raiseQuoteForm.get('selectedContractorId').setValue('');
     } else {
@@ -938,7 +941,7 @@ export class ArrangingContractorComponent implements OnInit {
     // }
   }
 
-  private questionActionAcceptRequest(data) {
+  private async questionActionAcceptRequest(data) {
     let notificationObj = {} as FaultModels.IUpdateNotification;
     notificationObj.isAccepted = data.value;
     notificationObj.submittedByType = 'SECUR_USER';
@@ -953,15 +956,25 @@ export class ArrangingContractorComponent implements OnInit {
         }
       });
     } else if (!data.value) {
-      this.commonService.showConfirm(data.text, `Are you sure, you want to reject the ${titleText}?`, '', 'Yes', 'No').then(async res => {
-        if (res) {
-          this.commonService.showLoader();
-          await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
-          // this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
-          // await this.faultNotification(this.isWorksOrder ? 'PROCEED_WITH_WORKSORDER' : 'OBTAIN_QUOTE');
+      const modal = await this.modalController.create({
+        component: RejectionModalPage,
+        cssClass: 'modal-container',
+        componentProps: {
+          faultNotificationId: this.iacNotification.faultNotificationId,
+          faultMaintRejectionReasons: this.contractorMaintRejectionReasons,
+          disableAnotherQuote: this.disableAnotherQuote,
+          userType: 'contractor',
+          title: 'No Acceptance'
+        },
+        backdropDismiss: false
+      });
+
+      modal.onDidDismiss().then(async res => {
+        if (res.data && res.data == 'success') {
           this._btnHandler('refresh');
         }
       });
+      await modal.present();
     }
   }
 
@@ -1049,8 +1062,10 @@ export class ArrangingContractorComponent implements OnInit {
         cssClass: 'modal-container',
         componentProps: {
           faultNotificationId: this.iacNotification.faultNotificationId,
-          faultMaintRejectionReasons: this.faultMaintRejectionReasons,
-          disableAnotherQuote: this.disableAnotherQuote
+          faultMaintRejectionReasons: this.landlordMaintRejectionReasons,
+          disableAnotherQuote: this.disableAnotherQuote,
+          userType: 'landlord',
+          title: 'No Authorisation'
         },
         backdropDismiss: false
       });
