@@ -899,9 +899,9 @@ export class ArrangingContractorComponent implements OnInit {
       this.faultsService.getTenantDetails(tenantId).subscribe((res) => {
         const data = res ? res : '';
         if (data) {
-          let contact = data.fullName + ' ' + data.mobile;
+          let contact = (data.fullName || '') + ' ' + (data.mobile || '');
           if (this.faultDetails.sourceType != 'FAULT' && data.mobile != this.faultDetails.fixfloTenantContact) {
-            contact = data.fullName + ' ' + (data.mobile ? data.mobile + ',' : '') + `${this.faultDetails.fixfloTenantContact || ''}`;
+            contact = (data.fullName || '') + ' ' + (data.mobile ? data.mobile + ',' : '') + `${this.faultDetails.fixfloTenantContact || ''}`;
           }
           this.raiseQuoteForm.get('contact').setValue(contact);
         }
