@@ -292,7 +292,7 @@
             <label for="files" class="browse-btn">Browse Files</label>
           </form>
         </ion-col>
-        <ion-col size-xl="20" size="25" *ngFor="let file of files; let i=index;" [ngClass]="{'display-none': file?.documentId}" style="margin-bottom: 10px">
+        <ion-col size-xl="20" size="25" *ngFor="let file of files; let i=index;" [ngClass]="{'display-none': file?.isUploaded }" style="margin-bottom: 10px">
           <div class="delete-icon-wrapper">
             <ion-grid>
               <ion-row>
@@ -486,7 +486,7 @@
 </ng-template>
 
 <ng-template #caseLogged>
-  <ion-grid style="margin-bottom:10px">
+  <ion-grid style="margin-bottom:10px" *ngIf="!showSkeleton">
     <ion-row class="ion-justify-content-start fault-title">
       <ion-col size="auto">
         <h2>
@@ -510,7 +510,9 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  
   <div *ngIf="showSkeleton">
+    <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
     <ng-container *ngTemplateOutlet="faultLoggedSkeleton"></ng-container>
   </div> 
  
@@ -593,7 +595,7 @@
         <ion-button class="submit-button" (click)="createAFault()" *ngIf="!faultId" [disabled]="saving">Submit<ion-icon *ngIf="submitting" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button class="save-button" (click)="startProgress()"
           *ngIf="faultId && faultDetails?.status == 1 && reportedByForm.value.reportedById" [disabled]="saving">Start
-          progressing<ion-icon *ngIf="submitting" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+          Progress<ion-icon *ngIf="submitting" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button class="save-button" (click)="proceedToNextStage()" *ngIf="faultId && faultDetails?.status != 1" 
          [disabled]="(cliNotification && (cliNotification.responseReceived == null || cliNotification.responseReceived?.isAccepted == null)) || saving || submitting">
           Proceed<ion-icon *ngIf="proceeding" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
@@ -607,7 +609,7 @@
 <ng-template #caseQualification>
     <ion-card class="ion-no-margin">
       <ng-container *ngIf="faultDetails && (faultDetails?.stage === 'FAULT_QUALIFICATION' || stepper?.selectedIndex == 1)">
-        <ion-grid style="margin-bottom:10px">
+        <ion-grid style="margin-bottom:10px" *ngIf="!showSkeleton">
           <ion-row class="ion-justify-content-start fault-title">
             <ion-col size="auto">
               <h2>
@@ -630,15 +632,17 @@
             </ion-col>
           </ion-row>
         </ion-grid>
+        <div *ngIf="showSkeleton">
+          <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
+        </div>
         <app-fault-qualification [faultDetails]="faultDetails" [faultCategories]="faultCategories" [propertyDetails]="propertyDetails"  (btnAction)="_childComponentHandler($event)"></app-fault-qualification>
       </ng-container>
-     
   </ion-card>
 </ng-template>
 
 <ng-template #landlordInstructions>
-  <ng-container *ngIf="!showSkeleton">
-    <ion-grid style="margin-bottom:10px">
+  <ng-container>
+    <ion-grid style="margin-bottom:10px" *ngIf="!showSkeleton">
       <ion-row class="ion-justify-content-start fault-title">
         <ion-col size="auto">
           <h2>
@@ -661,6 +665,9 @@
         </ion-col>
       </ion-row>
     </ion-grid>
+    <div *ngIf="showSkeleton">
+      <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
+    </div>
     <ion-grid>
       <ion-row *ngIf="!showSkeleton">
         <!-- <ion-col offset-xl="25" size-xl="50" offset ="0" size="100">  -->
@@ -750,16 +757,16 @@
               <div class="question-answer"
                 *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true && (cliNotification?.templateCode === 'LR-L-E' || cliNotification?.templateCode === 'LC-L-E')">
                 <h4 claas="ion-text-center">Next Step:</h4>
-                <h6>
-                  <ion-button color="success" class="action-btn" fill="solid" (click)="llContractor(); $event.stopPropagation();">
-                    {{faultDetails?.landlordOwnContractor?.landlordOwnContractorId!==null?"View/Edit Contractor details":"Add Contractor Details"}}</ion-button><br>
-                  <ion-text color="danger" *ngIf="faultDetails?.landlordOwnContractor?.landlordOwnContractorId === null">Please note: </ion-text>
-                  <span *ngIf="faultDetails?.landlordOwnContractor?.landlordOwnContractorId === null">
+                <ion-button color="success" class="action-btn" fill="solid" (click)="llContractor(); $event.stopPropagation();">
+                  {{faultDetails?.landlordOwnContractor?.landlordOwnContractorId!==null?"View/Edit Contractor details":"Add Contractor Details"}}</ion-button>
+                <h6 *ngIf="faultDetails?.landlordOwnContractor?.landlordOwnContractorId === null && faultDetails.status !== 18">
+                  <ion-text color="danger">Please note: </ion-text>
+                  <span>
                     The fault will be <i>escalated</i> if the contractor's details including the scheduled date & time of the repair have not been added in the next 6/24 hours
                   </span>
-                  <h6 *ngIf="faultDetails.status === 18" >
-                    <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
-                  </h6>
+                </h6>
+                <h6 *ngIf="faultDetails.status === 18" >
+                  <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
                 </h6>
                 <div class="border-bottom"></div>
               </div>
@@ -968,7 +975,7 @@
 <ng-template #arrangingContractor>
   <ion-card class="ion-no-margin">
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'ARRANGING_CONTRACTOR' || stepper?.selectedIndex == 3) && landlordsOfproperty">
-      <ion-grid style="margin-bottom:10px">
+      <ion-grid style="margin-bottom:10px" *ngIf="!showSkeleton">
         <ion-row class="ion-justify-content-start fault-title">
           <ion-col size="auto">
             <h2>
@@ -991,6 +998,9 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+      <div *ngIf="showSkeleton">
+        <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
+      </div>
       <app-arranging-contractor [faultDetails]="faultDetails" 
       (btnAction)="_childComponentHandler($event)" 
       [leadTenantId]="leadTenantId" 
@@ -1292,7 +1302,7 @@
 
 <ng-template #landlordInstructionsSkeleton>
   <ion-grid class="landlord-instructions">
-    <ion-row class="ll-skeleton">
+    <ion-row class="ll-skeleton input-skeleton">
       <ion-col>
         <div class="contractor-selection">
             <ion-grid>
@@ -1392,4 +1402,20 @@
       </ion-grid>
     </div>
   </div>
+</ng-template>
+
+<ng-template #faultTitleSkeleton>
+  <ion-grid>
+    <ion-row class="ion-justify-content-start fault-title input-skeleton">
+      <ion-col size="20">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-col>
+      <ion-col size="20">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-col>
+      <ion-col size="10" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ng-template>

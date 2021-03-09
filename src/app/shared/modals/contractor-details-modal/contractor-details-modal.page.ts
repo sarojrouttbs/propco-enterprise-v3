@@ -14,6 +14,7 @@ export class ContractorDetailsModalPage implements OnInit {
   faultId;
   landlordId;
   llContractorDetails;
+  estimatedVisitAt;
   currentDate = this.commonService.getFormatedDate(new Date());
 
   constructor(private formBuilder: FormBuilder,
@@ -35,7 +36,8 @@ export class ContractorDetailsModalPage implements OnInit {
       telephone: ['', Validators.required],
       email: ['', [ValidationService.emailValidator]],
       estimatedVisitAt: [''],
-      notes: ''
+      notes: '',
+      hasContractorConsent: [false, Validators.requiredTrue]
     });
   }
 
@@ -45,25 +47,28 @@ export class ContractorDetailsModalPage implements OnInit {
       name: this.llContractorDetails.name,
       telephone: this.llContractorDetails.telephone,
       email: this.llContractorDetails.email,
-      estimatedVisitAt: this.llContractorDetails.estimatedVisitAt,
-      notes: this.llContractorDetails.notes
+      estimatedVisitAt: this.estimatedVisitAt,
+      notes: this.llContractorDetails.notes,
+      hasContractorConsent: this.llContractorDetails.hasContractorConsent
     });
-    // this.contractorDetailForm.disable();
+    if (this.estimatedVisitAt)
+      this.contractorDetailForm.disable();
   }
 
-  save() {
+  save() {      
     if (this.contractorDetailForm.valid) {
       let requestObj: any = {
         company: this.contractorDetailForm.value.company,
         landlordId: this.landlordId,
         name: this.contractorDetailForm.value.name,
         notes: this.contractorDetailForm.value.notes,
-        telephone: this.contractorDetailForm.value.telephone
+        telephone: this.contractorDetailForm.value.telephone,
+        hasContractorConsent: this.contractorDetailForm.value.hasContractorConsent
       }
 
       this.contractorDetailForm.value.estimatedVisitAt ? requestObj.estimatedVisitAt = this.commonService.getFormatedDate(this.contractorDetailForm.value.estimatedVisitAt, 'yyyy-MM-dd HH:mm:ss') : '';
       this.contractorDetailForm.value.email ? requestObj.email = this.contractorDetailForm.value.email : '';
-
+      this.llContractorDetails.landlordOwnContractorId ? requestObj.landlordOwnContractorId = this.llContractorDetails.landlordOwnContractorId : '';
       const promise = new Promise((resolve, reject) => {
         this.faultsService.saveOwnContractor(this.faultId, requestObj).subscribe(
           res => {

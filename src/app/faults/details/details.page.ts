@@ -1355,6 +1355,7 @@ export class DetailsPage implements OnInit {
     // }
     await this.checkFaultNotifications(this.faultId);
     this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, this.faultDetails.userSelectedAction);
+    this.getPendingHours();
     // if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index) {
     //   if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
     //     this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
@@ -1441,7 +1442,7 @@ export class DetailsPage implements OnInit {
           this.proceeding = false;
           return;
         }
-        if (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) {
+        if ((this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided) {
           if (this.isUserActionChange) {
             await this.voidNotification();
           }
@@ -1553,6 +1554,7 @@ export class DetailsPage implements OnInit {
               setTimeout(async () => {
                 await this.checkFaultNotifications(this.faultId);
                 this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+                this.getPendingHours();
                 if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
                   this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
                 }
@@ -1590,6 +1592,7 @@ export class DetailsPage implements OnInit {
               setTimeout(async () => {
                 await this.checkFaultNotifications(this.faultId);
                 this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
+                this.getPendingHours();
                 if (this.cliNotification && this.cliNotification.responseReceived) {
                   if (this.cliNotification.responseReceived.isAccepted) {
                     this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
@@ -1736,6 +1739,7 @@ export class DetailsPage implements OnInit {
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+          this.getPendingHours();
           // const CHECKING_LANDLORD_INSTRUCTIONS = 13;
           // this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS).then(async data => {
           //   this.refreshDetailsAndStage();
@@ -1755,6 +1759,7 @@ export class DetailsPage implements OnInit {
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+          this.getPendingHours();
         }
       });
     }
@@ -1787,6 +1792,7 @@ export class DetailsPage implements OnInit {
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
+          this.getPendingHours();
           if (this.cliNotification && this.cliNotification.responseReceived) {
             if (this.cliNotification.responseReceived.isAccepted) {
               this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
@@ -1809,6 +1815,7 @@ export class DetailsPage implements OnInit {
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+          this.getPendingHours();
         }
       });
     }
@@ -1820,6 +1827,7 @@ export class DetailsPage implements OnInit {
           this.refreshDetailsAndStage();
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+          this.getPendingHours();
           // await this.markJobComplete(this.faultId);
         }
       });
@@ -1993,6 +2001,7 @@ export class DetailsPage implements OnInit {
     if (this.files.length > 0) {
       this.files.forEach((e, i) => {
         this.files[i].folderName = e.folderName.replace(/_/g, " ");
+        this.files[i].isUploaded = true;
         if (e.name != null && DOCUMENTS_TYPE.indexOf(e.name.split('.')[1]) !== -1) {
           this.files[i].isImage = false;
         }
@@ -2008,7 +2017,7 @@ export class DetailsPage implements OnInit {
     this.commonService.downloadDocumentByUrl(url);
   }
 
-  async llContractor() {
+  async llContractor() {    
     if (!this.isContractorModal){
       this.isContractorModal = true;
       const modal = await this.modalController.create({
@@ -2017,7 +2026,8 @@ export class DetailsPage implements OnInit {
         componentProps: {
           faultId: this.faultId,
           landlordId: this.landlordDetails.landlordId,
-          llContractorDetails: this.faultDetails.landlordOwnContractor
+          llContractorDetails: this.faultDetails.landlordOwnContractor,
+          estimatedVisitAt: this.faultDetails.estimatedVisitAt
         },
         backdropDismiss: false
       });
@@ -2088,6 +2098,7 @@ export class DetailsPage implements OnInit {
         this.commonService.showLoader();
         await this.checkFaultNotifications(this.faultId);
         this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+        this.getPendingHours();
       }
     });
 

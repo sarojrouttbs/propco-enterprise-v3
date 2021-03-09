@@ -35,7 +35,6 @@
         <app-validation-message [control]="contractorDetailForm.controls.telephone"></app-validation-message>
       </ion-col>
 
-
       <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Email Address
@@ -54,7 +53,7 @@
             formControlName="estimatedVisitAt" [min]="currentDate">
           </ion-datetime>
         </ion-item>
-        <app-validation-message [control]="contractorDetailForm.controls.estimatedVisitAt"></app-validation-message>
+        <!-- <app-validation-message [control]="contractorDetailForm.controls.estimatedVisitAt"></app-validation-message> -->
       </ion-col>
 
       <ion-col size="100">
@@ -63,13 +62,20 @@
           <ion-textarea rows="1" formControlName="notes"></ion-textarea>
         </ion-item>
       </ion-col>
-
-
+    </ion-row>
+    <ion-row class="permission-block">
+      <ion-col size="100">
+        <ion-item lines="none">
+        <ion-checkbox formControlName="hasContractorConsent" [disabled]="llContractorDetails.hasContractorConsent === true"></ion-checkbox>&nbsp;&nbsp;
+        <ion-label class="consent-text">I accept that I have the Contractor's permission to share their details.</ion-label>
+        </ion-item>
+        <app-validation-message [control]="contractorDetailForm.controls.hasContractorConsent"></app-validation-message>
+      </ion-col>
     </ion-row>
   </form>
   <div class="action-btn-group">
     <ion-button class="cancel-button" (click)="dismiss()">CANCEL</ion-button>
-    <ion-button class="save-button" (click)="save()" [disabled]="llContractorDetails.estimatedVisitAt != null">SAVE</ion-button>
-    <!-- [disabled]="this.llContractorDetails" -->
+    <ion-button class="save-button" (click)="save()" [disabled]="estimatedVisitAt != null">SAVE
+    </ion-button>
   </div>
 </ion-content>

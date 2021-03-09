@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -129,6 +129,7 @@ export class ArrangingContractorComponent implements OnInit {
       orderedBy: [{ value: '', disabled: true }, Validators.required],
       requestStartDate: ['', Validators.required],
       contact: '',
+      keysLocation: this.faultDetails.doesBranchHoldKeys ? KEYS_LOCATIONS.KEY_IN_BRANCH : KEYS_LOCATIONS.DO_NOT_HOLD_KEY,
       accessDetails: [{ value: this.getAccessDetails(this.faultDetails.isTenantPresenceRequired), disabled: true }],
       contractorList: this.fb.array([]),
       contractorIds: [],
@@ -155,8 +156,8 @@ export class ArrangingContractorComponent implements OnInit {
       nominalCode: ['', Validators.required],
       description: [this.categoryName + " " + this.faultDetails.title, [Validators.required, Validators.maxLength(70)]],
       paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
-      mgntHoldKey: [{ value: 'No', disabled: true }],
-      keysLocation: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
+      keysLocation: this.faultDetails.doesBranchHoldKeys ? KEYS_LOCATIONS.KEY_IN_BRANCH : KEYS_LOCATIONS.DO_NOT_HOLD_KEY,
+      returnKeysTo: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
       accessDetails: [this.getAccessDetails(this.faultDetails.isTenantPresenceRequired), Validators.required],
       requiredDate: '',
       fullDescription: [this.faultDetails.notes, Validators.required],
@@ -180,10 +181,12 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private getAccessDetails(tenantPresence): string {
-    if (tenantPresence != null) {
-      let data = this.accessInfoList.filter(data => data.value == tenantPresence);
-      return data && data[0] ? data[0].title : '';
-    }
+    return (tenantPresence ? 'Contact Tenant' : 'Tenant approved access via keys');
+    // if (tenantPresence != null) {
+    //   let data = this.accessInfoList.filter(data => data.value == tenantPresence);
+    //   return data && data[0] ? data[0].title : '';
+    // }
+
   }
 
   async addContractor(data, isNew = true, isPreferred = false) {
@@ -308,7 +311,8 @@ export class ArrangingContractorComponent implements OnInit {
           fullDescription: this.faultMaintenanceDetails.fullDescription,
           repairCost: this.faultMaintenanceDetails.amount,
           keysLocation: this.faultMaintenanceDetails.keysLocation,
-          requiredDate: this.faultMaintenanceDetails.requiredCompletionDate
+          requiredDate: this.faultMaintenanceDetails.requiredCompletionDate,
+          returnKeysTo: this.faultMaintenanceDetails.returnKeysTo
         }
       );
       this.workOrderForm.get('contractorName').disable();
@@ -858,6 +862,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.workOrderForm.get('repairCost').disable();
     this.workOrderForm.get('requiredDate').disable();
     this.workOrderForm.get('keysLocation').disable();
+    this.workOrderForm.get('returnKeysTo').disable();
     this.workOrderForm.get('accessDetails').disable();
   }
 
