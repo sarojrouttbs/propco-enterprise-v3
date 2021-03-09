@@ -640,11 +640,6 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async proceed() {
     if (this.iacNotification) {
-      if (!this.isUserActionChange) {
-        this.proceeding = false;
-        this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
-        return;
-      }
       if (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived.isAccepted == null && !this.iacNotification.isVoided) {
         if (this.isUserActionChange) {
           this.voidNotification(null);
@@ -659,6 +654,11 @@ export class ArrangingContractorComponent implements OnInit {
             this._btnHandler('refresh');
           }
         }
+      }
+      if (!this.isUserActionChange) {
+        this.proceeding = false;
+        this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
+        return;
       }
     }
     else {
@@ -899,7 +899,11 @@ export class ArrangingContractorComponent implements OnInit {
       this.faultsService.getTenantDetails(tenantId).subscribe((res) => {
         const data = res ? res : '';
         if (data) {
-          this.raiseQuoteForm.get('contact').setValue(data.fullName + ' ' + data.mobile);
+          let contact = (data.fullName || '') + ' ' + (data.mobile || '');
+          if (this.faultDetails.sourceType != 'FAULT' && data.mobile != this.faultDetails.fixfloTenantContact) {
+            contact = (data.fullName || '') + ' ' + (data.mobile ? data.mobile + ',' : '') + `${this.faultDetails.fixfloTenantContact || ''}`;
+          }
+          this.raiseQuoteForm.get('contact').setValue(contact);
         }
       }, error => {
       });
