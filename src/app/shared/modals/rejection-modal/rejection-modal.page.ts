@@ -12,7 +12,9 @@ export class RejectionModalPage implements OnInit {
   rejectionForm: FormGroup;
   faultNotificationId;
   disableAnotherQuote;
+  userType;
   faultMaintRejectionReasons;
+  title;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
