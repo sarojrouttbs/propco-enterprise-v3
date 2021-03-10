@@ -205,6 +205,7 @@ export class QuoteModalPage implements OnInit {
         formData.append('name', data.file.name);
         if (type === 'fault' || type === 'photo') {
           formData.append('folderName', FOLDER_NAMES[1]['index']);
+          formData.append('documentType', 'QUOTE');
           apiObservableArray.push(this.quoteService.uploadFaultDocument(formData, this.faultId));
         } else {
           formData.append('headCategory', 'Accounts');
