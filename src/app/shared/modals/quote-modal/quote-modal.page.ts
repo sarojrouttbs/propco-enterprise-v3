@@ -23,7 +23,7 @@ export class QuoteModalPage implements OnInit {
   uploadedQuote = [];
   uploadedPhoto = [];
   type: string = 'quote';
-  private QUOTE_LIMIT;
+  QUOTE_LIMIT;
   confirmedEstimate;
   isLimitExceed = false;
 
