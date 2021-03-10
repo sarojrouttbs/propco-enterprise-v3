@@ -6,7 +6,7 @@ import { CommonService } from '../../services/common.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { forkJoin } from 'rxjs';
 import { WorksorderService } from './worksorder.service';
-import { FOLDER_NAMES, MAX_QUOTE_LIMIT } from '../../constants';
+import { FOLDER_NAMES } from '../../constants';
 
 
 @Component({
@@ -30,9 +30,6 @@ export class WorksorderModalPage implements OnInit {
   isAnyFurtherWork;
   additionalEstimate;
   additionalWorkDetails;
-  private QUOTE_LIMIT;
-  confirmedEstimate;
-  isLimitExceed = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,7 +50,6 @@ export class WorksorderModalPage implements OnInit {
   ngOnInit() {
     this.initUploadDocForm();
     this.initjobCompletionForm();
-    this.getMaxQuoteRejection();
   }
 
   dismiss() {
@@ -108,9 +104,6 @@ export class WorksorderModalPage implements OnInit {
     } else {
       this.uploadedPhoto.splice(i, 1);
       this.photos.removeAt(i);
-      if (this.uploadedPhoto.length == 0) {
-        this.isLimitExceed = true;
-      }
     }
   }
 
@@ -123,7 +116,6 @@ export class WorksorderModalPage implements OnInit {
       this.commonService.showMessage("You are only allowed to upload a maximum of 5 document", "Warning", "warning");
       return;
     }
-
     if (uploadedDocument) {
       for (let file of uploadedDocument) {
         let isImage: boolean = false;
@@ -134,7 +126,6 @@ export class WorksorderModalPage implements OnInit {
           isImage = true;
         }
         if (type === 'photo') {
-          this.isLimitExceed = false;
           this.photos.push(this.createItem({
             file: file
           }));
@@ -180,12 +171,7 @@ export class WorksorderModalPage implements OnInit {
   }
 
   async onProceed() {
-    this.isLimitExceed = false;
     if (this.validateReq()) {
-      if (this.QUOTE_LIMIT && this.QUOTE_LIMIT < this.confirmedEstimate && this.uploadedPhoto.length == 0) {
-        this.isLimitExceed = true;
-        return;
-      }
       if (this.actionType === 'view') {
         this.uploadWODocuments();
       } else {
@@ -310,17 +296,5 @@ export class WorksorderModalPage implements OnInit {
       this.jobCompletionForm.controls.additionalEstimate.updateValueAndValidity();
       this.jobCompletionForm.controls.additionalWorkDetails.updateValueAndValidity();
     }
-  }
-
-  private getMaxQuoteRejection(): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
-      this.commonService.getSystemConfig(MAX_QUOTE_LIMIT.FAULT_LARGE_QUOTE_LIMIT).subscribe(res => {
-        this.QUOTE_LIMIT = res ? parseInt(res.FAULT_LARGE_QUOTE_LIMIT, 10) : '';
-        resolve(true);
-      }, error => {
-        resolve(false);
-      });
-    });
-    return promise;
   }
 }

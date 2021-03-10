@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { CommonService } from '../../services/common.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { forkJoin } from 'rxjs';
-import { FOLDER_NAMES } from './../../../shared/constants';
+import { FOLDER_NAMES, MAX_QUOTE_LIMIT } from './../../../shared/constants';
 
 @Component({
   selector: 'app-quote-modal',
@@ -23,6 +23,9 @@ export class QuoteModalPage implements OnInit {
   uploadedQuote = [];
   uploadedPhoto = [];
   type: string = 'quote';
+  QUOTE_LIMIT;
+  confirmedEstimate;
+  isLimitExceed = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,6 +45,7 @@ export class QuoteModalPage implements OnInit {
   ngOnInit() {
     this.initUploadDocForm();
     this.initquoteAssessmentForm();
+    this.getMaxQuoteAmount();
   }
 
   dismiss() {
@@ -81,6 +85,9 @@ export class QuoteModalPage implements OnInit {
     } else {
       this.uploadedPhoto.splice(i, 1);
       this.photos.removeAt(i);
+      if (this.uploadedPhoto.length == 0) {
+        this.isLimitExceed = true;
+      }
     }
   }
 
@@ -103,6 +110,7 @@ export class QuoteModalPage implements OnInit {
           isImage = true;
         }
         if (type === 'photo') {
+          this.isLimitExceed = false;
           this.photos.push(this.createItem({
             file: file
           }));
@@ -149,6 +157,10 @@ export class QuoteModalPage implements OnInit {
 
   async onProceed() {
     if (this.validateReq()) {
+      if (this.QUOTE_LIMIT && this.QUOTE_LIMIT < this.confirmedEstimate && this.uploadedPhoto.length === 0) {
+        this.isLimitExceed = true;
+        return;
+      }
       const docsUploaded = await this.uploadQuotes();
       if (docsUploaded) {
         const amountUpdated = await this.submitQuoteAmout();
@@ -238,5 +250,17 @@ export class QuoteModalPage implements OnInit {
     if (!this.quoteAssessmentForm.valid) { this.commonService.showMessage('Quote Amount is required', 'Quote Assessment', 'error'); return valid = false; }
     if (this.uploadedQuote.length == 0) { this.commonService.showMessage('Quote Document is required', 'Quote Assessment', 'error'); return valid = false; }
     return valid;
+  }
+
+  private getMaxQuoteAmount(): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.commonService.getSystemConfig(MAX_QUOTE_LIMIT.FAULT_LARGE_QUOTE_LIMIT).subscribe(res => {
+        this.QUOTE_LIMIT = res ? parseInt(res.FAULT_LARGE_QUOTE_LIMIT, 10) : '';
+        resolve(true);
+      }, error => {
+        resolve(false);
+      });
+    });
+    return promise;
   }
 }

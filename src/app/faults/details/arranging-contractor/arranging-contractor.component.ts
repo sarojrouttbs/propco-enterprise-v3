@@ -1037,7 +1037,8 @@ export class ArrangingContractorComponent implements OnInit {
         componentProps: {
           faultNotificationId: this.iacNotification.faultNotificationId,
           faultId: this.faultDetails.faultId,
-          maintenanceId: this.faultMaintenanceDetails.maintenanceId
+          maintenanceId: this.faultMaintenanceDetails.maintenanceId,
+          confirmedEstimate: this.faultDetails.confirmedEstimate
         },
         backdropDismiss: false
       });
@@ -1164,8 +1165,7 @@ export class ArrangingContractorComponent implements OnInit {
         faultNotificationId: this.iacNotification.faultNotificationId,
         faultId: this.faultDetails.faultId,
         maintenanceId: this.faultMaintenanceDetails.maintenanceId,
-        actionType: this.enableMarkCompletedBtn() ? 'advance' : 'regular',
-        confirmedEstimate: this.faultDetails.confirmedEstimate
+        actionType: this.enableMarkCompletedBtn() ? 'advance' : 'regular'
       },
       backdropDismiss: false
     });
