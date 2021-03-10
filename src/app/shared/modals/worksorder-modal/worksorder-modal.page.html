@@ -129,9 +129,6 @@
 </ion-content>
 <ion-footer>
   <ion-grid>
-    <ion-row *ngIf="isLimitExceed">
-      <div class="error-message">Its mandatory to supply photos along with Quotes with value more than £{{QUOTE_LIMIT}}.</div>
-    </ion-row>
     <ion-row>
       <ion-col class="ion-text-right">
         <ion-button color="danger" fill="outline" (click)="onCancel()">Cancel</ion-button>&nbsp;&nbsp;
