@@ -227,10 +227,12 @@ export class WorksorderModalPage implements OnInit {
         formData.append('name', data.file.name);
         if (type === 'invoice') {
           formData.append('folderName', FOLDER_NAMES[5].index);
+          formData.append('documentType', 'WORKSORDER');
           apiObservableArray.push(this.worksorderService.uploadFaultDocument(formData, this.faultId));
         }
         else if (type === 'completion') {
           formData.append('folderName', FOLDER_NAMES[4].index);
+          formData.append('documentType', 'WORKSORDER');
           apiObservableArray.push(this.worksorderService.uploadFaultDocument(formData, this.faultId));
         }
       });
