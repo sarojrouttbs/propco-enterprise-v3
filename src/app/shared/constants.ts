@@ -289,3 +289,7 @@ export const KEYS_LOCATIONS = {
   KEY_IN_BRANCH: 'Key in branch',
   DO_NOT_HOLD_KEY: 'We do not hold keys'
 }
+
+export const MAX_QUOTE_LIMIT = {
+  FAULT_LARGE_QUOTE_LIMIT: 'FAULT_LARGE_QUOTE_LIMIT'
+}
