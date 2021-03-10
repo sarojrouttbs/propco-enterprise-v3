@@ -60,7 +60,8 @@ export class ArrangingContractorComponent implements OnInit {
   private MAX_QUOTE_REJECTION = 2;
   private disableAnotherQuote: boolean = false;
   isUserActionChange: boolean = false;
-  faultMaintRejectionReasons: any;
+  landlordMaintRejectionReasons: any;
+  contractorMaintRejectionReasons: any;
   woResultsAvailable = false;
   woContractors: Observable<FaultModels.IContractorResponse>;
   nominalCodeSubscription: Subscription;
@@ -124,7 +125,7 @@ export class ArrangingContractorComponent implements OnInit {
       paidBy: ['LANDLORD', Validators.required],
       propertyId: [this.faultDetails.propertyId, Validators.required],
       quoteCategory: [{ value: this.categoryMap.get(this.faultDetails.category), disabled: true }],
-      description: [this.categoryName + " " + this.faultDetails.title, [Validators.required, Validators.maxLength(70)]],
+      description: [(this.faultDetails.sourceType === 'FAULT' ? (this.categoryName + " " + this.faultDetails.title) : (this.faultDetails.fixfloCategory + " " + this.faultDetails.title)), [Validators.required, Validators.maxLength(70)]],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
       requestStartDate: ['', Validators.required],
       contact: '',
@@ -153,7 +154,7 @@ export class ArrangingContractorComponent implements OnInit {
       worksOrderNumber: [{ value: this.faultDetails.reference, disabled: true }],
       postdate: [{ value: this.currentDate, disabled: true }],
       nominalCode: ['', Validators.required],
-      description: [this.categoryName + " " + this.faultDetails.title, [Validators.required, Validators.maxLength(70)]],
+      description: [(this.faultDetails.sourceType === 'FAULT' ? (this.categoryName + " " + this.faultDetails.title) : (this.faultDetails.fixfloCategory + " " + this.faultDetails.title)), [Validators.required, Validators.maxLength(70)]],
       paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
       keysLocation: this.faultDetails.doesBranchHoldKeys ? KEYS_LOCATIONS.KEY_IN_BRANCH : KEYS_LOCATIONS.DO_NOT_HOLD_KEY,
       returnKeysTo: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
@@ -242,7 +243,7 @@ export class ArrangingContractorComponent implements OnInit {
     });
 
     this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
+      switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
         new Observable())
     );
   }
@@ -395,7 +396,8 @@ export class ArrangingContractorComponent implements OnInit {
 
   private setFaultsLookupData(data) {
     this.faultCategories = data.faultCategories;
-    this.faultMaintRejectionReasons = data.faultMaintRejectionReasons;
+    this.landlordMaintRejectionReasons = data.landlordQuoteRejectionReasons;
+    this.contractorMaintRejectionReasons = data.contractorQuoteRejectionReasons;
     this.setCategoryMap();
   }
 
@@ -638,11 +640,6 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async proceed() {
     if (this.iacNotification) {
-      if (!this.isUserActionChange) {
-        this.proceeding = false;
-        this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
-        return;
-      }
       if (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived.isAccepted == null && !this.iacNotification.isVoided) {
         if (this.isUserActionChange) {
           this.voidNotification(null);
@@ -657,6 +654,11 @@ export class ArrangingContractorComponent implements OnInit {
             this._btnHandler('refresh');
           }
         }
+      }
+      if (!this.isUserActionChange) {
+        this.proceeding = false;
+        this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
+        return;
       }
     }
     else {
@@ -847,6 +849,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.raiseQuoteForm.get('requestStartDate').disable();
     this.raiseQuoteForm.get('contact').disable();
     this.raiseQuoteForm.get('nominalCode').disable();
+    this.raiseQuoteForm.get('fullDescription').disable();
   }
 
   private disableWorksOrderDetail() {
@@ -864,7 +867,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private disableContractorsList(notification) {
-    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && notification.templateCode === 'LAR-L-Q') {
+    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && (notification.templateCode === 'LAR-L-Q' || notification.templateCode === 'CQ-NA-C-E' || notification.templateCode === 'CQ-A-C-E')) {
       this.restrictAction = false;
       this.raiseQuoteForm.get('selectedContractorId').setValue('');
     } else {
@@ -896,7 +899,11 @@ export class ArrangingContractorComponent implements OnInit {
       this.faultsService.getTenantDetails(tenantId).subscribe((res) => {
         const data = res ? res : '';
         if (data) {
-          this.raiseQuoteForm.get('contact').setValue(data.fullName + ' ' + data.mobile);
+          let contact = (data.fullName || '') + ' ' + (data.mobile || '');
+          if (this.faultDetails.sourceType != 'FAULT' && data.mobile != this.faultDetails.fixfloTenantContact) {
+            contact = (data.fullName || '') + ' ' + (data.mobile ? data.mobile + ',' : '') + `${this.faultDetails.fixfloTenantContact || ''}`;
+          }
+          this.raiseQuoteForm.get('contact').setValue(contact);
         }
       }, error => {
       });
@@ -943,7 +950,7 @@ export class ArrangingContractorComponent implements OnInit {
     // }
   }
 
-  private questionActionAcceptRequest(data) {
+  private async questionActionAcceptRequest(data) {
     let notificationObj = {} as FaultModels.IUpdateNotification;
     notificationObj.isAccepted = data.value;
     notificationObj.submittedByType = 'SECUR_USER';
@@ -958,15 +965,25 @@ export class ArrangingContractorComponent implements OnInit {
         }
       });
     } else if (!data.value) {
-      this.commonService.showConfirm(data.text, `Are you sure, you want to reject the ${titleText}?`, '', 'Yes', 'No').then(async res => {
-        if (res) {
-          this.commonService.showLoader();
-          await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
-          // this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
-          // await this.faultNotification(this.isWorksOrder ? 'PROCEED_WITH_WORKSORDER' : 'OBTAIN_QUOTE');
+      const modal = await this.modalController.create({
+        component: RejectionModalPage,
+        cssClass: 'modal-container',
+        componentProps: {
+          faultNotificationId: this.iacNotification.faultNotificationId,
+          faultMaintRejectionReasons: this.contractorMaintRejectionReasons,
+          disableAnotherQuote: this.disableAnotherQuote,
+          userType: 'contractor',
+          title: 'No Acceptance'
+        },
+        backdropDismiss: false
+      });
+
+      modal.onDidDismiss().then(async res => {
+        if (res.data && res.data == 'success') {
           this._btnHandler('refresh');
         }
       });
+      await modal.present();
     }
   }
 
@@ -1054,8 +1071,10 @@ export class ArrangingContractorComponent implements OnInit {
         cssClass: 'modal-container',
         componentProps: {
           faultNotificationId: this.iacNotification.faultNotificationId,
-          faultMaintRejectionReasons: this.faultMaintRejectionReasons,
-          disableAnotherQuote: this.disableAnotherQuote
+          faultMaintRejectionReasons: this.landlordMaintRejectionReasons,
+          disableAnotherQuote: this.disableAnotherQuote,
+          userType: 'landlord',
+          title: 'No Authorisation'
         },
         backdropDismiss: false
       });

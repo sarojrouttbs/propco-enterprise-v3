@@ -47,8 +47,8 @@
                 </ng-container>
               </ion-row>
             </ion-grid>
-            <ion-text color="danger" *ngIf="rejectionReason && iacNotification?.templateCode === 'LAR-L-Q'">Reason:
-              {{rejectionReason}}</ion-text>
+            <ion-text color="danger" *ngIf="rejectionReason && (iacNotification?.templateCode === 'LAR-L-Q' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
+              {{rejectionReason || 'N/A'}}</ion-text>
             <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false">
               <ion-text color="danger">Please select an appropriate action.</ion-text>
             </h6>
@@ -214,10 +214,10 @@
                  <ion-row id="row_1" class="row-banner" [formGroup]="addContractorForm" *ngIf="!restrictAction">
                    <ion-col size="45">
                      <ion-item>
-                       <ion-label position="floating">Skill Set
-                       </ion-label>
+                       <ion-label position="floating">Skill Set</ion-label>
                        <ion-select interface="popover" formControlName="skillSet" class="ion-select-options">
-                         <ion-select-option [value]="item.index" *ngFor="let item of contractorSkill">
+                         <ion-select-option value="">Please Select</ion-select-option>
+                         <ion-select-option [value]="item.value" *ngFor="let item of contractorSkill">
                            {{ item.value }}
                          </ion-select-option>
                        </ion-select>
@@ -255,7 +255,7 @@
      
                    <ion-col size="10">
                      <ion-fab-button class="button-container" (click)="addContractor(addContractorForm?.value)"
-                       [disabled]="!addContractorForm?.get('contractor').value || !addContractorForm?.get('skillSet').value || !isSelected || addContractorForm.controls['contractor'].invalid">
+                       [disabled]="!addContractorForm?.get('contractor').value || !isSelected || addContractorForm.controls['contractor'].invalid">
                        <ion-icon name="add-sharp" class="add-contractor list-button"></ion-icon>
                      </ion-fab-button>
                    </ion-col>
