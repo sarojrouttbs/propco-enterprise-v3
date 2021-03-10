@@ -45,7 +45,7 @@ export class QuoteModalPage implements OnInit {
   ngOnInit() {
     this.initUploadDocForm();
     this.initquoteAssessmentForm();
-    this.getMaxQuoteRejection();
+    this.getMaxQuoteAmount();
   }
 
   dismiss() {
@@ -252,7 +252,7 @@ export class QuoteModalPage implements OnInit {
     return valid;
   }
 
-  private getMaxQuoteRejection(): Promise<any> {
+  private getMaxQuoteAmount(): Promise<any> {
     const promise = new Promise((resolve, reject) => {
       this.commonService.getSystemConfig(MAX_QUOTE_LIMIT.FAULT_LARGE_QUOTE_LIMIT).subscribe(res => {
         this.QUOTE_LIMIT = res ? parseInt(res.FAULT_LARGE_QUOTE_LIMIT, 10) : '';
