@@ -3,7 +3,7 @@
     <ion-row *ngIf="iacNotification && !showSkeleton">
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
         <div class="arranging-contractor">
-          <div class="banner" *ngIf="faultDetails?.status !== 8" >
+          <div class="banner">
             <div class="ion-text-left">
               <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm'
                 }}</b>
@@ -36,7 +36,7 @@
               </h6>
             </ng-container>
           </div>
-          <div class="question-answer" *ngIf="iacNotification && faultDetails?.status !== 8">
+          <div class="question-answer" *ngIf="iacNotification">
             <h6>{{iacNotification?.questions[0]?.qtext}}</h6>
             <ion-grid>
               <ion-row class="ion-justify-content-center">
