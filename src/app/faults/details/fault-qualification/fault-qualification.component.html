@@ -6,7 +6,7 @@
         <div class="banner">
           <ion-row>
             <ion-col width="50" class="ion-text-left">
-              <b>{{iqfNotification?.templateCode}} {{iqfNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}</b>
+              <b>{{iqfNotification?.chaseTemplateCode}} {{iqfNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}</b>
             </ion-col>
           </ion-row>
           <h2 class="banner-heading">
@@ -22,7 +22,7 @@
               <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === 'UNDER_WARRANTY'">Guarantee Management Company</span> 
               <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === 'UNDER_SERVICE_CONTRACT'">Service Contract Company</span>
               <span *ngIf="iqfNotification?.recipientType === 148">Block Management/Factors Company</span>
-              {{iqfNotification?.templateCode}} {{iqfNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}
+              {{iqfNotification?.chaseTemplateCode}} {{iqfNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}
             </h6>
           </ng-container>
 

@@ -5,7 +5,7 @@
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
-              <b>{{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm'
+              <b>{{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm'
                 }}</b>
             </div>
             <h2 class="banner-heading">
@@ -21,7 +21,7 @@
                 <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
                 <span *ngIf="iacNotification?.recipientType === 11">Contractor</span>
                 <span *ngIf="iacNotification?.recipientType === 1">Tenant</span>
-                {{iacNotification?.templateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}
+                {{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}
               </h6>
             </ng-container>
             <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
