@@ -26,6 +26,7 @@ export class QuoteModalPage implements OnInit {
   QUOTE_LIMIT;
   confirmedEstimate;
   isLimitExceed = false;
+  isQuoteAmount;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -62,7 +63,7 @@ export class QuoteModalPage implements OnInit {
 
   private initquoteAssessmentForm(): void {
     this.quoteAssessmentForm = this.formBuilder.group({
-      quoteAmount: ['', Validators.required],
+      quoteAmount: ['', this.isQuoteAmount ? [] : Validators.required],
       isAccepted: true,
       submittedById: '',
       submittedByType: 'SECUR_USER'
@@ -162,11 +163,13 @@ export class QuoteModalPage implements OnInit {
         return;
       }
       const docsUploaded = await this.uploadQuotes();
-      if (docsUploaded) {
+      if (docsUploaded && !this.isQuoteAmount) {
         const amountUpdated = await this.submitQuoteAmout();
         if (amountUpdated) {
           this.modalController.dismiss('success');
         }
+      }else{
+        this.modalController.dismiss('success');
       }
     }
   }

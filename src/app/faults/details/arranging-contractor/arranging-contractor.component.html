@@ -54,6 +54,22 @@
             </h6>
             <div class="border-bottom"></div>
           </div>
+          <ng-container *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === true && (iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E')">
+            <div class="question-answer">
+              <h4 class="ion-text-center">Next Step:</h4> 
+              <h6 *ngIf="quoteArray.length === 0">
+                <ion-text color="danger">Please note: </ion-text>
+                <span>The appointment is due on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}
+                </span>
+              </h6>
+              <h6 *ngIf="quoteArray.length > 0">
+                <span>Thank you for carrying out this quote. This is now with the Landlord for review. If we require you to
+                  carry out the job, we will be back in touch.</span>
+              </h6>
+              <ion-button color="success" class="action-btn" fill="solid" (click)="quoteUploadModal('isAmount'); $event.stopPropagation();" *ngIf="quoteArray.length === 0">Upload Quote & Photos</ion-button>
+              <div class="border-bottom"></div>
+            </div>
+          </ng-container>
          <ng-container 
           *ngIf="iacNotification 
             && (iacNotification?.responseReceived == null 

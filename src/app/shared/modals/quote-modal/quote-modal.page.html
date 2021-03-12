@@ -21,7 +21,7 @@
       You have selected 'Yes, Upload Quote and Photos'.
     </ion-text>
     <form style="margin: 15px 0 20px 0;" [formGroup]="quoteAssessmentForm">
-      <ion-grid class="ion-no-padding">
+      <ion-grid class="ion-no-padding" *ngIf="!isQuoteAmount">
         <ion-row class="offer-row">
           <ion-col size-xs="100" size-sm="30" class="offer-amount">
             <ion-label class="offer-amount">Quote Amount:
