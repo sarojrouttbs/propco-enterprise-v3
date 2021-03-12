@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { PROPCO, REPORTED_BY_TYPES } from './../../shared/constants';
+import { FAULT_STATUSES, PROPCO, REPORTED_BY_TYPES, URGENCY_TYPES } from './../../shared/constants';
 import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
 import { Router } from '@angular/router';
@@ -501,7 +501,9 @@ export class DashboardPage implements OnInit {
     }
 
     if (this.filterForm.get('repairCheckbox').value) {
-      this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+      // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+      let statusArray = Object.values(FAULT_STATUSES);
+      this.fs = statusArray.filter(status => status != FAULT_STATUSES.CANCELLED && status != FAULT_STATUSES.CLOSED);
     }
 
     if (this.filterForm.get('newRepairs').value) {
@@ -510,26 +512,31 @@ export class DashboardPage implements OnInit {
 
     if (this.filterForm.get('emergency').value) {
       // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
-      this.fs.push(1);
-      this.fus.push(1);
+      this.fs.push(FAULT_STATUSES.REPORTED);
+      this.fus.push(URGENCY_TYPES.EMERGENCY);
     }
 
     if (this.filterForm.get('urgent').value) {
-      this.fs.push(1);
-      this.fus.push(2);
+      // this.fs.push(1);
+      this.fs.push(FAULT_STATUSES.REPORTED);
+      this.fus.push(URGENCY_TYPES.URGENT);
     }
 
     if (this.filterForm.get('nonUrgent').value) {
-      this.fs.push(1);
-      this.fus.push(3);
+      this.fs.push(FAULT_STATUSES.REPORTED);
+      this.fus.push(URGENCY_TYPES.NON_URGENT);
     }
 
     if (this.filterForm.get('assessment').value) {
-      this.fs.push(2, 13);
+      // this.fs.push(2, 13);
+      this.fs.push(FAULT_STATUSES.IN_ASSESSMENT, FAULT_STATUSES.CHECKING_LANDLORD_INSTRUCTIONS);
     }
 
     if (this.filterForm.get('automation').value) {
-      this.fs.push(3, 4, 5, 6, 7, 14, 15, 16, 17, 18, 19, 20, 21);
+      // this.fs.push(3, 4, 5, 6, 7, 14, 15, 16, 17, 18, 19, 20, 21, 22);
+      this.fs.push(FAULT_STATUSES.QUOTE_REQUESTED, FAULT_STATUSES.QUOTE_RECEIVED, FAULT_STATUSES.WORKSORDER_RAISED, FAULT_STATUSES.WORK_INPROGRESS, FAULT_STATUSES.WORK_COMPLETED,
+        FAULT_STATUSES.QUOTE_PENDING, FAULT_STATUSES.AWAITING_RESPONSE_LANDLORD, FAULT_STATUSES.AWAITING_RESPONSE_TENANT, FAULT_STATUSES.AWAITING_RESPONSE_THIRD_PARTY,
+        FAULT_STATUSES.ESCALATION, FAULT_STATUSES.WORKSORDER_PENDING, FAULT_STATUSES.QUOTE_APPROVED, FAULT_STATUSES.QUOTE_REJECTED, FAULT_STATUSES.AWAITING_JOB_COMPLETION)
     }
 
     if (this.filterForm.get('invoice').value) {
@@ -543,7 +550,7 @@ export class DashboardPage implements OnInit {
     }
 
     if (this.filterForm.get('escalation').value) {
-      this.fs.push(18);
+      this.fs.push(FAULT_STATUSES.ESCALATION);
     }
 
     const filteredStatus: any = [];
