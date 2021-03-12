@@ -94,6 +94,8 @@ export class ArrangingContractorComponent implements OnInit {
       this.checkMaintenanceDetail();
     }
     if (changes.faultDetails && !changes.faultDetails.firstChange) {
+      this.isUserActionChange = false;
+      this.userSelectedActionControl = new FormControl();
       this.showSkeleton = true;
       this.initiateArrangingContractors();
     }
@@ -129,7 +131,7 @@ export class ArrangingContractorComponent implements OnInit {
       quoteCategory: [{ value: this.categoryMap.get(this.faultDetails.category), disabled: true }],
       description: [(this.faultDetails.sourceType === 'FAULT' ? (this.categoryName + " " + this.faultDetails.title) : (this.faultDetails.fixfloCategory + " " + this.faultDetails.title)), [Validators.required, Validators.maxLength(70)]],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
-      requestStartDate: ['', Validators.required],
+      requiredDate: ['', Validators.required],
       contact: '',
       keysLocation: this.faultDetails.doesBranchHoldKeys ? KEYS_LOCATIONS.KEY_IN_BRANCH : KEYS_LOCATIONS.DO_NOT_HOLD_KEY,
       accessDetails: [{ value: this.getAccessDetails(this.faultDetails.isTenantPresenceRequired), disabled: true }],
@@ -291,7 +293,7 @@ export class ArrangingContractorComponent implements OnInit {
           worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
           description: this.faultMaintenanceDetails.description,
           orderedBy: this.faultMaintenanceDetails.orderedBy,
-          requestStartDate: this.faultMaintenanceDetails.requiredStartDate,
+          requiredDate: this.faultMaintenanceDetails.requiredCompletionDate,
           accessDetails: this.faultMaintenanceDetails.accessDetails,
           selectedContractorId: this.faultMaintenanceDetails.selectedContractorId,
           contact: this.faultMaintenanceDetails.contact,
@@ -610,9 +612,9 @@ export class ArrangingContractorComponent implements OnInit {
     delete quoteReqObj.contractorForm;
     if (!this.faultMaintenanceDetails) {
       quoteReqObj.contractorIds = quoteReqObj.contractorList.map(x => x.contractorId).filter(x => x);
-      quoteReqObj.requestStartDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requestStartDate));
+      quoteReqObj.requiredDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate));
     } else {
-      quoteReqObj.requiredStartDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requestStartDate));
+      quoteReqObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate));
       delete quoteReqObj.contractorIds;
     }
     delete quoteReqObj.contractorList;
@@ -651,10 +653,21 @@ export class ArrangingContractorComponent implements OnInit {
         if (this.isUserActionChange) {
           let faultRequestObj: any = {};
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+          faultRequestObj.isDraft = false;
+          faultRequestObj.stage = this.faultDetails.stage;
           const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
           if (isFaultUpdated) {
+            this.proceeding = false;
             this._btnHandler('refresh');
+            return;
           }
+        }
+      }
+      if (this.iacNotification.templateCode === "LAR-L-Q" && this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
+        if (!this.isUserActionChange) {
+          await this.proceedWithQuoteAndWO();
+          this.proceeding = false;
+          return;
         }
       }
       if (!this.isUserActionChange) {
@@ -664,69 +677,74 @@ export class ArrangingContractorComponent implements OnInit {
       }
     }
     else {
-      if (!this.isWorksOrder) {
-        if (this.validateReq()) {
-          this.proceeding = false;
-          return;
-        }
-        const proceed = await this.commonService.showConfirm('Raise a quote', 'Are you sure you want to send a quote request to the selected contractor(s) ?');
-        if (proceed) {
-          if (!this.faultMaintenanceDetails) {
-            /*raise a quote*/
-            const quoteRaised = await this.raiseQuote();
-            if (quoteRaised) {
-              const faultUpdated = await this.updateFault(true);
-              if (faultUpdated) {
-                // this.commonService.showLoader();
-                setTimeout(async () => {
-                  // await this.faultNotification('OBTAIN_QUOTE');
-                  this._btnHandler('refresh');
-                }, 1000);
-              }
+      await this.proceedWithQuoteAndWO();
+    }
+    this.proceeding = false;
+  }
+
+  private async proceedWithQuoteAndWO() {
+    if (!this.isWorksOrder) {
+      if (this.validateReq()) {
+        this.proceeding = false;
+        return;
+      }
+      const proceed = await this.commonService.showConfirm('Raise a quote', 'Are you sure you want to send a quote request to the selected contractor(s) ?');
+      if (proceed) {
+        if (!this.faultMaintenanceDetails) {
+          /*raise a quote*/
+          const quoteRaised = await this.raiseQuote();
+          if (quoteRaised) {
+            const faultUpdated = await this.updateFault(true);
+            if (faultUpdated) {
+              // this.commonService.showLoader();
+              setTimeout(async () => {
+                // await this.faultNotification('OBTAIN_QUOTE');
+                this._btnHandler('refresh');
+              }, 1000);
             }
-          } else {
-            /*update a quote*/
-            const quoteUpdated = await this.updateQuote();
-            if (quoteUpdated) {
-              const addContractors = await this.addContractors();
-              if (addContractors) {
-                const faultContUpdated = await this.updateFaultQuoteContractor();
-                if (faultContUpdated) {
-                  const faultUpdated = await this.updateFault(true);
-                  this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
-                  if (faultUpdated) {
-                    // this.commonService.showLoader();
-                    setTimeout(async () => {
-                      // await this.faultNotification('OBTAIN_QUOTE');
-                      this._btnHandler('refresh');
-                    }, 1000);
-                  }
+          }
+        } else {
+          /*update a quote*/
+          const quoteUpdated = await this.updateQuote();
+          if (quoteUpdated) {
+            const addContractors = await this.addContractors();
+            if (addContractors) {
+              const faultContUpdated = await this.updateFaultQuoteContractor();
+              if (faultContUpdated) {
+                const faultUpdated = await this.updateFault(true);
+                this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
+                if (faultUpdated) {
+                  // this.commonService.showLoader();
+                  setTimeout(async () => {
+                    // await this.faultNotification('OBTAIN_QUOTE');
+                    this._btnHandler('refresh');
+                  }, 1000);
                 }
               }
             }
           }
         }
+      }
+    } else {
+      if (this.validateReq()) {
+        this.proceeding = false;
+        return;
+      }
+      /*raise a worksorder & check paymentRules*/
+      const rules = await this.getWorksOrderPaymentRules('manual') as FaultModels.IFaultWorksorderRules as any;
+      if (!rules) { return; }
+      if (rules === 'saveWorksorder') {
+        this.saveForLater();
       } else {
-        if (this.validateReq()) {
-          this.proceeding = false;
-          return;
-        }
-        /*raise a worksorder & check paymentRules*/
-        const rules = await this.getWorksOrderPaymentRules('manual') as FaultModels.IFaultWorksorderRules as any;
-        if (!rules) { return; }
-        if (rules === 'saveWorksorder') {
-          this.saveForLater();
-        } else {
-          const paymentRequired = await this.checkForPaymentRules(rules);
-          const submit = await this.raiseWorksOrderAndNotification(paymentRequired, 'manual');
-          if (submit) {
-            this._btnHandler('refresh');
-          }
+        const paymentRequired = await this.checkForPaymentRules(rules);
+        const submit = await this.raiseWorksOrderAndNotification(paymentRequired, 'manual');
+        if (submit) {
+          this._btnHandler('refresh');
         }
       }
     }
-    this.proceeding = false;
   }
+
 
   addContractors() {
     const promise = new Promise((resolve, reject) => {
@@ -848,7 +866,7 @@ export class ArrangingContractorComponent implements OnInit {
   private disableQuoteDetail() {
     this.raiseQuoteForm.get('worksOrderNumber').disable();
     this.raiseQuoteForm.get('description').disable();
-    this.raiseQuoteForm.get('requestStartDate').disable();
+    this.raiseQuoteForm.get('requiredDate').disable();
     this.raiseQuoteForm.get('contact').disable();
     this.raiseQuoteForm.get('nominalCode').disable();
     this.raiseQuoteForm.get('fullDescription').disable();
