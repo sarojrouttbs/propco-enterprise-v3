@@ -156,9 +156,9 @@ export class QuoteModalPage implements OnInit {
     this.dismiss();
   }
 
-  async onProceed() {
+  async onProceed() {   
     if (this.validateReq()) {
-      if (this.QUOTE_LIMIT && this.QUOTE_LIMIT < this.confirmedEstimate && this.uploadedPhoto.length === 0) {
+      if (this.QUOTE_LIMIT && this.QUOTE_LIMIT < this.quoteAssessmentForm.value.quoteAmount && this.uploadedPhoto.length === 0) {
         this.isLimitExceed = true;
         return;
       }
@@ -258,7 +258,7 @@ export class QuoteModalPage implements OnInit {
   private getMaxQuoteAmount(): Promise<any> {
     const promise = new Promise((resolve, reject) => {
       this.commonService.getSystemConfig(MAX_QUOTE_LIMIT.FAULT_LARGE_QUOTE_LIMIT).subscribe(res => {
-        this.QUOTE_LIMIT = res ? parseInt(res.FAULT_LARGE_QUOTE_LIMIT, 10) : '';
+        this.QUOTE_LIMIT = res ? parseInt(res.FAULT_LARGE_QUOTE_LIMIT, 10) : '';        
         resolve(true);
       }, error => {
         resolve(false);
