@@ -75,6 +75,7 @@ export class ArrangingContractorComponent implements OnInit {
   isContractorSearch = false;
   saving: boolean = false;
   proceeding: boolean = false;
+  quoteArray:any;
 
   constructor(
     private fb: FormBuilder,
@@ -107,6 +108,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
+    this.quoteArray = this.quoteDocuments.filter(s => s.documentType === 'QUOTE');
   }
 
   private initForms(): void {
@@ -1031,26 +1033,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async questionActionQuoteUpload(data) {
     if (data.value) {
-      const modal = await this.modalController.create({
-        component: QuoteModalPage,
-        cssClass: 'modal-container upload-container',
-        componentProps: {
-          faultNotificationId: this.iacNotification.faultNotificationId,
-          faultId: this.faultDetails.faultId,
-          maintenanceId: this.faultMaintenanceDetails.maintenanceId,
-          confirmedEstimate: this.faultDetails.confirmedEstimate
-        },
-        backdropDismiss: false
-      });
-
-      modal.onDidDismiss().then(async res => {
-        if (res.data && res.data == 'success') {
-          this._btnHandler('refresh');
-          // this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
-          // await this.faultNotification(this.faultDetails.stageAction);
-        }
-      });
-      await modal.present();
+     this.quoteUploadModal();
     } else {
       this.commonService.showConfirm(data.text, `You have selected 'No, couldn't carry out the Quote'. The fault will be escalated tor manual intervention. Do you want to proceed?`, '', 'Yes', 'No').then(async res => {
         if (res) {
@@ -1828,5 +1811,30 @@ export class ArrangingContractorComponent implements OnInit {
       let hrs = Math.floor(mins / 60);
       this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
     }
+  }
+
+  async quoteUploadModal(isQuoteAmount?){
+    const modal = await this.modalController.create({
+      component: QuoteModalPage,
+      cssClass: 'modal-container upload-container',
+      componentProps: {
+        faultNotificationId: this.iacNotification.faultNotificationId,
+        faultId: this.faultDetails.faultId,
+        maintenanceId: this.faultMaintenanceDetails.maintenanceId,
+        confirmedEstimate: this.faultDetails.confirmedEstimate,
+        isQuoteAmount: isQuoteAmount? isQuoteAmount: ''
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        
+        this._btnHandler('refresh_docs');
+        // this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
+        // await this.faultNotification(this.faultDetails.stageAction);
+      }
+    });
+    await modal.present();
   }
 }
