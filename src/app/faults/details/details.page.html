@@ -711,7 +711,9 @@
                   <b>{{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}</b>
                 </div>
                 <h2 class="banner-heading">
-                  {{cliNotification && cliNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
+                  {{cliNotification && cliNotification?.responseReceived ? 'Response Received': 
+                  (cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?'No response':'Awaiting response')}}
+                </h2>
                 <h6 class="banner-title">Here’s the action you chose:</h6>
                 <ion-button color="success" class="icon-button">
                   {{getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes)}}
@@ -723,7 +725,10 @@
                 </ng-container>
   
                 <ng-container *ngIf="cliNotification && !cliNotification?.responseReceived">
-                  <h6 class="banner-title awaiting-response"><ion-icon name="ellipse" class="response-circle"></ion-icon> Awaiting response from the Landlord</h6>
+                  <h6 class="banner-title"
+                    [ngClass]="cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?'no-response':'awaiting-response'"
+                  >
+                    <ion-icon name="ellipse" class="response-circle"></ion-icon> {{cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?'No response':'Awaiting response'}} from the Landlord</h6>
                   <h6 class="banner-title">{{cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone?'Escalation':'Next chase'}} due:
                     {{cliNotification ? (cliNotification.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
                   </h6>

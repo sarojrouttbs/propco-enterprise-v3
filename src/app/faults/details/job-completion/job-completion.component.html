@@ -9,7 +9,9 @@
                 }}</b>
             </div>
             <h2 class="banner-heading">
-              {{iacNotification && iacNotification?.responseReceived ? 'Response Received':'Awaiting response'}}</h2>
+              {{iacNotification && iacNotification?.responseReceived ? 'Response Received': 
+              (iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response')}}
+            </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
               {{getLookupValue(iacNotification?.faultStageAction, iacStageActions) || getLookupValue(faultDetails?.userSelectedAction, iacStageActions) || getLookupValue(iacNotification?.faultStageAction, faultQualificationsAction)}}
@@ -25,9 +27,11 @@
               </h6>
             </ng-container>
             <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
-              <h6 class="banner-title awaiting-response">
-                <ion-icon name="ellipse" class="response-circle"></ion-icon> Awaiting response from the <span
-                    *ngIf="iacNotification?.recipientType === 8">Landlord</span>
+              <h6 class="banner-title"
+              [ngClass]="iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'no-response':'awaiting-response'"
+              >
+                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response'}} from the  
+                  <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
                   <span *ngIf="iacNotification?.recipientType == 11">Contractor</span>
                   <span *ngIf="iacNotification?.recipientType == 1">Tenant</span>
               </h6>
