@@ -323,6 +323,9 @@
 .awaiting-response{
   color: var(--ion-color-warning);
 }
+.no-response{
+  color: var(--ion-color-danger);
+}
 
 .response-circle{
   font-size: 13px;

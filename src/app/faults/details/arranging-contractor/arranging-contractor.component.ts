@@ -110,7 +110,9 @@ export class ArrangingContractorComponent implements OnInit {
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
-    this.quoteArray = this.quoteDocuments.filter(s => s.documentType === 'QUOTE');
+    if(this.quoteDocuments){
+      this.quoteArray = this.quoteDocuments.filter(s => s.documentType === 'QUOTE');
+    }
   }
 
   private initForms(): void {
