@@ -40,23 +40,25 @@
               </h6>
             </ng-container>
           </div>
-          <div class="question-answer" *ngIf="iacNotification">
-            <h6>{{iacNotification?.questions[0]?.qtext}}</h6>
-            <ion-grid>
-              <ion-row class="ion-justify-content-center">
-                <ng-container *ngFor="let data of iacNotification?.questions[0]?.options">
-                  <ion-button color="success" class="action-btn option"
+          <div class="question-answer" *ngFor="let question of iacNotification?.questions">
+            <ng-container *ngIf="question?.entityType == fileIds.FIX_A_FAULT">
+              <h6>{{question?.qtext}}</h6>
+              <ion-grid>
+                <ion-row class="ion-justify-content-center">
+                  <ng-container *ngFor="let data of question?.options">
+                    <ion-button color="success" class="action-btn option"
                     fill="{{data?.value ==  iacNotification?.responseReceived?.isAccepted ? 'solid' :'outline'}}"
                     (click)="questionAction(data)">{{data.text}}</ion-button>
-                </ng-container>
-              </ion-row>
-            </ion-grid>
-            <ion-text color="danger" *ngIf="rejectionReason && (iacNotification?.templateCode === 'LAR-L-Q' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
-              {{rejectionReason || 'N/A'}}</ion-text>
-            <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false">
-              <ion-text color="danger">Please select an appropriate action.</ion-text>
-            </h6>
-            <div class="border-bottom"></div>
+                  </ng-container>
+                </ion-row>
+              </ion-grid>
+              <ion-text color="danger" *ngIf="rejectionReason && (iacNotification?.templateCode === 'LAR-L-Q' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
+                {{rejectionReason || 'N/A'}}</ion-text>
+                <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false">
+                  <ion-text color="danger">Please select an appropriate action.</ion-text>
+                </h6>
+                <div class="border-bottom"></div>
+            </ng-container>
           </div>
           <ng-container *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === true && (iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E')">
             <div class="question-answer">

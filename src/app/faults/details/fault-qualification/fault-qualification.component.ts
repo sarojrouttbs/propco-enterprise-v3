@@ -1,4 +1,4 @@
-import { CERTIFICATES_CATEGORY, PROPCO } from './../../../shared/constants';
+import { CERTIFICATES_CATEGORY, FILE_IDS, PROPCO } from './../../../shared/constants';
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -52,6 +52,7 @@ export class FaultQualificationComponent implements OnInit {
   showSkeleton = true;
   saving: boolean = false;
   proceeding: boolean = false;
+  fileIds = FILE_IDS;
 
   constructor(
     private fb: FormBuilder,
