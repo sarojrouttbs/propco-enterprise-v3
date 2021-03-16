@@ -2126,7 +2126,9 @@ export class DetailsPage implements OnInit {
       let msec = new Date(this.cliNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
       let mins = Math.floor(msec / 60000);
       let hrs = Math.floor(mins / 60);
-      this.cliNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
+      if (hrs >= 0) {
+        this.cliNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
+      }
     }
   }
 }
