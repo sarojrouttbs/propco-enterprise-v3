@@ -249,11 +249,6 @@ export class ArrangingContractorComponent implements OnInit {
       skillSet: '',
       contractorObj: ''
     });
-
-    this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
-        new Observable())
-    );
   }
 
   private async initApiCalls() {
@@ -334,12 +329,29 @@ export class ArrangingContractorComponent implements OnInit {
     this.isSelected = false;
     this.isContratorSelected = false;
     const searchString = event.target.value;
-    if (searchString.length > 2) {
+    const skillSet = this.addContractorForm.get('skillSet').value;
+    if (skillSet || searchString.length > 2) {
       this.resultsAvailable = true;
     } else {
       this.resultsAvailable = false;
     }
+    if(skillSet && !searchString){
+      this.contractors = this.faultsService.searchContractor(searchString, skillSet);
+    }else{
+      this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
+      switchMap((value: string) => 
+      this.addContractorForm.get('skillSet').value ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) : 
+      (value && value.length > 2) ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
+        new Observable())
+    );
+    }
   }
+
+  onBlurContractorSearch(event:any){
+    this.resultsAvailable = false;
+  }
+
+
 
   selectContractor(selected) {
     this.addContractorForm.patchValue({ contractor: selected ? selected.fullName : undefined, contractorObj: selected ? selected : undefined });
