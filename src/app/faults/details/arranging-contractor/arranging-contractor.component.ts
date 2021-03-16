@@ -170,8 +170,8 @@ export class ArrangingContractorComponent implements OnInit {
       fullDescription: [this.faultDetails.notes, Validators.required],
       orderedBy: { value: '', disabled: true },
       agentReference: [{ value: '', disabled: true }],
-      defaultCommissionPercentage: [{ value: '', disabled: true }],
-      defaultCommissionAmount: [{ value: '', disabled: true }],
+      defaultCommissionPercentage: [{ value: ''}],
+      defaultCommissionAmount: [{ value: ''}],
       isUseRate: '',
       businessTelephone: [{ value: '', disabled: true }]
     });
