@@ -249,8 +249,8 @@
                    <ion-col size="45">
                      <ion-item>
                        <ion-label position="floating">Start Typing to Search Contractors</ion-label>
-                       <ion-input type="text" debounce="300" (ionInput)="onSearch($event)" formControlName='contractor'
-                         placeholder="">
+                       <ion-input type="text" debounce="300" (ionChange)="onSearch($event)" formControlName='contractor'
+                         placeholder="" (ionFocus)="onSearch($event)" (ionBlur)="onBlurContractorSearch($event)">
                        </ion-input>
                      </ion-item>
      
