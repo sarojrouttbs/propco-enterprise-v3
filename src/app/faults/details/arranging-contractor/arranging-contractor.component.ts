@@ -249,13 +249,6 @@ export class ArrangingContractorComponent implements OnInit {
       skillSet: '',
       contractorObj: ''
     });
-
-    this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => 
-      this.addContractorForm.get('skillSet').value ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) : 
-      (value && value.length > 2) ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
-        new Observable())
-    );
   }
 
   private async initApiCalls() {
@@ -344,6 +337,13 @@ export class ArrangingContractorComponent implements OnInit {
     }
     if(skillSet && !searchString){
       this.contractors = this.faultsService.searchContractor(searchString, skillSet);
+    }else{
+      this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
+      switchMap((value: string) => 
+      this.addContractorForm.get('skillSet').value ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) : 
+      (value && value.length > 2) ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
+        new Observable())
+    );
     }
   }
 
