@@ -75,7 +75,7 @@ export class ArrangingContractorComponent implements OnInit {
   isContractorSearch = false;
   saving: boolean = false;
   proceeding: boolean = false;
-  quoteArray:any;
+  quoteArray: any;
 
   constructor(
     private fb: FormBuilder,
@@ -110,7 +110,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
-    if(this.quoteDocuments){
+    if (this.quoteDocuments) {
       this.quoteArray = this.quoteDocuments.filter(s => s.documentType === 'QUOTE');
     }
   }
@@ -171,6 +171,7 @@ export class ArrangingContractorComponent implements OnInit {
       agentReference: [{ value: '', disabled: true }],
       defaultCommissionPercentage: [{ value: '', disabled: true }],
       defaultCommissionAmount: [{ value: '', disabled: true }],
+      isUseRate: '',
       businessTelephone: [{ value: '', disabled: true }]
     });
     if (this.faultDetails.doesBranchHoldKeys) {
@@ -810,6 +811,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
+
   private getPreferredSuppliers(landlordId) {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
@@ -1053,7 +1055,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async questionActionQuoteUpload(data) {
     if (data.value) {
-     this.quoteUploadModal();
+      this.quoteUploadModal();
     } else {
       this.commonService.showConfirm(data.text, `You have selected 'No, couldn't carry out the Quote'. The fault will be escalated tor manual intervention. Do you want to proceed?`, '', 'Yes', 'No').then(async res => {
         if (res) {
@@ -1240,7 +1242,15 @@ export class ArrangingContractorComponent implements OnInit {
             address: addressString,
             contractorId: data ? data.contractorId : undefined
           });
-
+          if (!this.faultMaintenanceDetails) {
+            this.workOrderForm.patchValue({
+              isUseRate: data ? (data.isUseAmount) : undefined
+            });
+          } else {
+            this.workOrderForm.patchValue({
+              isUseRate: this.faultMaintenanceDetails.isUseRate
+            });
+          }
           if (this.isContractorSearch && typeof contractor === 'object') {
             const currentDate = this.commonService.getFormatedDate(new Date());
 
@@ -1833,7 +1843,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  async quoteUploadModal(isQuoteAmount?){
+  async quoteUploadModal(isQuoteAmount?) {
     const modal = await this.modalController.create({
       component: QuoteModalPage,
       cssClass: 'modal-container upload-container',
@@ -1842,14 +1852,14 @@ export class ArrangingContractorComponent implements OnInit {
         faultId: this.faultDetails.faultId,
         maintenanceId: this.faultMaintenanceDetails.maintenanceId,
         confirmedEstimate: this.faultDetails.confirmedEstimate,
-        isQuoteAmount: isQuoteAmount? isQuoteAmount: ''
+        isQuoteAmount: isQuoteAmount ? isQuoteAmount : ''
       },
       backdropDismiss: false
     });
 
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
-        
+
         this._btnHandler('refresh_docs');
         // this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
         // await this.faultNotification(this.faultDetails.stageAction);
