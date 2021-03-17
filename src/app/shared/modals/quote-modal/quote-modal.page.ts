@@ -188,10 +188,6 @@ export class QuoteModalPage implements OnInit {
 
   async onProceed() {
     if (this.validateReq()) {
-      if (this.QUOTE_LIMIT && this.QUOTE_LIMIT < this.quoteAssessmentForm.value.quoteAmount && this.uploadedPhoto.length === 0) {
-        this.isLimitExceed = true;
-        return;
-      }
       const docsUploaded = await this.uploadQuotes();
       if (docsUploaded && !this.isQuoteAmount) {
         const amountUpdated = await this.submitQuoteAmout();
@@ -286,6 +282,12 @@ export class QuoteModalPage implements OnInit {
   private validateReq() {
     let valid = true;
     if (!this.quoteAssessmentForm.valid) { this.commonService.showMessage('Quote Amount is required', 'Quote Assessment', 'error'); return valid = false; }
+    if (this.QUOTE_LIMIT && this.QUOTE_LIMIT < this.quoteAssessmentForm.value.quoteAmount && this.uploadedPhoto.length === 0) {
+      this.isLimitExceed = true;
+      return valid = false;
+    } else {
+      this.isLimitExceed = false;
+    }
     if (this.uploadedQuote.length == 0) { this.commonService.showMessage('Quote Document is required', 'Quote Assessment', 'error'); return valid = false; }
     return valid;
   }

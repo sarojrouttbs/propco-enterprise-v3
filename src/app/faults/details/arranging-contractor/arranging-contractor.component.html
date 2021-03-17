@@ -52,8 +52,12 @@
                   </ng-container>
                 </ion-row>
               </ion-grid>
-              <ion-text color="danger" *ngIf="rejectionReason && (iacNotification?.templateCode === 'LAR-L-Q' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
-                {{rejectionReason || 'N/A'}}</ion-text>
+              <ion-text color="danger" *ngIf="
+              iacNotification?.responseReceived?.isAccepted === false &&
+              rejectionReason && 
+              (iacNotification?.templateCode === 'LAR-L-Q' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
+                {{rejectionReason || 'N/A'}}
+              </ion-text>
                 <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false">
                   <ion-text color="danger">Please select an appropriate action.</ion-text>
                 </h6>
