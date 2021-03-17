@@ -1867,7 +1867,8 @@ export class ArrangingContractorComponent implements OnInit {
         faultId: this.faultDetails.faultId,
         maintenanceId: this.faultMaintenanceDetails.maintenanceId,
         confirmedEstimate: this.faultDetails.confirmedEstimate,
-        isQuoteAmount: isQuoteAmount ? isQuoteAmount : ''
+        isQuoteAmount: isQuoteAmount ? isQuoteAmount : '',
+        quoteDocuments: this.quoteDocuments
       },
       backdropDismiss: false
     });
