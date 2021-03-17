@@ -58,7 +58,8 @@
          <ion-grid>
            <ion-row>
              <ion-col size="100">
-               <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'" style="height: 130px;">
+              <img
+              [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" style="height: 130px;">
                <!-- (click)="downloadFaultDocumentByUrl(file.documentUrl)"> -->
              </ion-col>
            </ion-row>
@@ -67,8 +68,10 @@
                <div class="file-name">{{file.name}}</div>
              </ion-col>
              <ion-col size-xl="20" size-lg="30" size="30" class="ion-text-end ion-no-padding">
-               <ion-icon (click)="removeFile(i,'quote')" title="Delete File" class="delete-icon" name="close-circle">
-               </ion-icon>
+              <ion-icon *ngIf="!file?.documentId" (click)="removeFile(i,'quote')" title="Delete File"
+              class="delete-icon" name="close-circle"></ion-icon>
+            <ion-icon *ngIf="file?.documentId" (click)="deleteDocument(i,'quote', file?.documentId)"
+              title="Delete File" class="delete-icon" name="close-circle"></ion-icon>
              </ion-col>
            </ion-row>
          </ion-grid>
@@ -95,7 +98,8 @@
          <ion-grid>
            <ion-row>
              <ion-col size="100">
-               <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'" style="height: 130px;">
+              <img
+              [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" style="height: 130px;">
                <!-- (click)="downloadFaultDocumentByUrl(file.documentUrl)"> -->
              </ion-col>
            </ion-row>
@@ -104,8 +108,11 @@
                <div class="file-name">{{file.name}}</div>
              </ion-col>
              <ion-col size-xl="20" size-lg="30" size="30" class="ion-text-end ion-no-padding">
-               <ion-icon (click)="removeFile(i,'photo')" title="Delete File" class="delete-icon" name="close-circle">
-               </ion-icon>
+              <ion-icon *ngIf="!file?.documentId" (click)="removeFile(i,'photo')" title="Delete File"
+              class="delete-icon" name="close-circle"></ion-icon>
+            <ion-icon *ngIf="file?.documentId" (click)="deleteDocument(i,'photo', file?.documentId)"
+              title="Delete File" class="delete-icon" name="close-circle">
+            </ion-icon>
              </ion-col>
            </ion-row>
          </ion-grid>

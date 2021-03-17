@@ -7,6 +7,7 @@ import { CommonService } from '../../services/common.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { forkJoin } from 'rxjs';
 import { FOLDER_NAMES, MAX_QUOTE_LIMIT } from './../../../shared/constants';
+import { DOCUMENTS_TYPE } from '../../constants';
 
 @Component({
   selector: 'app-quote-modal',
@@ -27,6 +28,7 @@ export class QuoteModalPage implements OnInit {
   confirmedEstimate;
   isLimitExceed = false;
   isQuoteAmount;
+  quoteDocuments;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -47,6 +49,7 @@ export class QuoteModalPage implements OnInit {
     this.initUploadDocForm();
     this.initquoteAssessmentForm();
     this.getMaxQuoteAmount();
+    this.viewUploadedDocuments();
   }
 
   dismiss() {
@@ -79,6 +82,20 @@ export class QuoteModalPage implements OnInit {
     });
   }
 
+  viewUploadedDocuments(): void {
+    if (this.quoteDocuments && this.quoteDocuments.length) {
+      this.quoteDocuments.forEach((e, i) => {
+        this.quoteDocuments[i].isUploaded = true;
+        if (e.name != null && DOCUMENTS_TYPE.indexOf(e.name.split('.')[1]) !== -1) {
+          this.quoteDocuments[i].isImage = false;
+        }
+        else { this.quoteDocuments[i].isImage = true; }
+      });
+      this.uploadedQuote = this.quoteDocuments.filter(data => data.documentType == 'QUOTE');
+      this.uploadedPhoto = this.quoteDocuments.filter(data => data.documentType == null);
+    }
+  }
+
   removeFile(i, type: string) {
     if (type === 'quote') {
       this.uploadedQuote.splice(i, 1);
@@ -89,6 +106,16 @@ export class QuoteModalPage implements OnInit {
       if (this.uploadedPhoto.length == 0) {
         this.isLimitExceed = true;
       }
+    }
+  }
+
+  async deleteDocument(i, type: string, documentId) {
+    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
+    if (response) {
+      this.quoteService.deleteDocument(documentId).subscribe(response => {
+        this.removeFile(i, type);
+        this.quoteDocuments.splice(i, 1);
+      });
     }
   }
 
@@ -125,7 +152,8 @@ export class QuoteModalPage implements OnInit {
           reader.onload = (e: any) => {
             this.uploadedPhoto.push({
               documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
-              name: file.name
+              name: file.name,
+              isImage: true
             })
           }
         }
@@ -133,7 +161,8 @@ export class QuoteModalPage implements OnInit {
           reader.onload = (e: any) => {
             this.uploadedQuote.push({
               documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
-              name: file.name
+              name: file.name,
+              isImage: true
             })
           }
         }
@@ -141,7 +170,8 @@ export class QuoteModalPage implements OnInit {
           reader.onload = (e: any) => {
             this.uploadedQuote.push({
               documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/default.jpg'),
-              name: file.name
+              name: file.name,
+              isImage: false
             })
           }
         }
@@ -171,6 +201,9 @@ export class QuoteModalPage implements OnInit {
   }
 
   async uploadQuotes() {
+    if ((this.uploadDocumentForm.controls.quotes.value === null || this.uploadDocumentForm.controls.quotes.value.length === 0) && this.uploadedQuote.length !== 0) {
+      return true;
+    }
     let apiObservableArray = [];
     const maintData = await this.prepareUploadData('maint');
     if (maintData) {
@@ -216,7 +249,9 @@ export class QuoteModalPage implements OnInit {
         formData.append('name', data.file.name);
         if (type === 'fault' || type === 'photo') {
           formData.append('folderName', FOLDER_NAMES[1]['index']);
-          formData.append('documentType', 'QUOTE');
+          if (type === 'fault') {
+            formData.append('documentType', 'QUOTE');
+          }
           apiObservableArray.push(this.quoteService.uploadFaultDocument(formData, this.faultId));
         } else {
           formData.append('headCategory', 'Accounts');

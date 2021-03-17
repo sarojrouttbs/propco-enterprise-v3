@@ -1,7 +1,7 @@
 import { WorksorderModalPage } from 'src/app/shared/modals/worksorder-modal/worksorder-modal.page';
 import { HttpParams } from '@angular/common/http';
 import { RejectionModalPage } from './../../../shared/modals/rejection-modal/rejection-modal.page';
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ElementRef, ViewChild, SecurityContext } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
@@ -16,6 +16,7 @@ import { DatePipe } from '@angular/common';
 import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-received-modal/payment-received-modal.component';
 import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -76,6 +77,10 @@ export class ArrangingContractorComponent implements OnInit {
   saving: boolean = false;
   proceeding: boolean = false;
   quoteArray: any;
+
+  @ViewChild("outsideElement", { static: true }) outsideElement: ElementRef;
+  @ViewChild('modalView', { static: true }) modalView$: ElementRef;
+  modalData: any;
   fileIds = FILE_IDS;
 
   constructor(
@@ -83,7 +88,8 @@ export class ArrangingContractorComponent implements OnInit {
     private faultsService: FaultsService,
     private commonService: CommonService,
     private modalController: ModalController,
-    public datepipe: DatePipe
+    public datepipe: DatePipe,
+    public sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -249,11 +255,6 @@ export class ArrangingContractorComponent implements OnInit {
       skillSet: '',
       contractorObj: ''
     });
-
-    this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
-        new Observable())
-    );
   }
 
   private async initApiCalls() {
@@ -334,12 +335,29 @@ export class ArrangingContractorComponent implements OnInit {
     this.isSelected = false;
     this.isContratorSelected = false;
     const searchString = event.target.value;
-    if (searchString.length > 2) {
+    const skillSet = this.addContractorForm.get('skillSet').value;
+    if (skillSet || searchString.length > 2) {
       this.resultsAvailable = true;
     } else {
       this.resultsAvailable = false;
     }
+    if(skillSet && !searchString){
+      this.contractors = this.faultsService.searchContractor(searchString, skillSet);
+    }else{
+      this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
+      switchMap((value: string) => 
+      this.addContractorForm.get('skillSet').value ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) : 
+      (value && value.length > 2) ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
+        new Observable())
+    );
+    }
   }
+
+  onBlurContractorSearch(event:any){
+    this.resultsAvailable = false;
+  }
+
+
 
   selectContractor(selected) {
     this.addContractorForm.patchValue({ contractor: selected ? selected.fullName : undefined, contractorObj: selected ? selected : undefined });
@@ -1844,7 +1862,9 @@ export class ArrangingContractorComponent implements OnInit {
       let msec = new Date(this.iacNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
       let mins = Math.floor(msec / 60000);
       let hrs = Math.floor(mins / 60);
-      this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
+      if (hrs >= 0) {
+        this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
+      }
     }
   }
   async quoteUploadModal(isQuoteAmount?) {
@@ -1856,7 +1876,8 @@ export class ArrangingContractorComponent implements OnInit {
         faultId: this.faultDetails.faultId,
         maintenanceId: this.faultMaintenanceDetails.maintenanceId,
         confirmedEstimate: this.faultDetails.confirmedEstimate,
-        isQuoteAmount: isQuoteAmount ? isQuoteAmount : ''
+        isQuoteAmount: isQuoteAmount ? isQuoteAmount : '',
+        quoteDocuments: this.quoteDocuments
       },
       backdropDismiss: false
     });
@@ -1871,4 +1892,20 @@ export class ArrangingContractorComponent implements OnInit {
     });
     await modal.present();
   }
+
+  openModal(url) {
+    console.log("this", url);
+    
+    if (url) {
+      console.log("in if block");
+      
+      this.modalData = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      this.modalView$.nativeElement.classList.add('visible');
+    }
+  }
+
+  closeModal() {
+    this.modalView$.nativeElement.classList.remove('visible');
+  }
+
 }
