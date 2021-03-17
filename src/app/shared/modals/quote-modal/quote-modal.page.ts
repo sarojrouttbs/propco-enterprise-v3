@@ -156,19 +156,15 @@ export class QuoteModalPage implements OnInit {
     this.dismiss();
   }
 
-  async onProceed() {   
+  async onProceed() {
     if (this.validateReq()) {
-      if (this.QUOTE_LIMIT && this.QUOTE_LIMIT < this.quoteAssessmentForm.value.quoteAmount && this.uploadedPhoto.length === 0) {
-        this.isLimitExceed = true;
-        return;
-      }
       const docsUploaded = await this.uploadQuotes();
       if (docsUploaded && !this.isQuoteAmount) {
         const amountUpdated = await this.submitQuoteAmout();
         if (amountUpdated) {
           this.modalController.dismiss('success');
         }
-      }else{
+      } else {
         this.modalController.dismiss('success');
       }
     }
@@ -251,6 +247,12 @@ export class QuoteModalPage implements OnInit {
   private validateReq() {
     let valid = true;
     if (!this.quoteAssessmentForm.valid) { this.commonService.showMessage('Quote Amount is required', 'Quote Assessment', 'error'); return valid = false; }
+    if (this.QUOTE_LIMIT && this.QUOTE_LIMIT < this.quoteAssessmentForm.value.quoteAmount && this.uploadedPhoto.length === 0) {
+      this.isLimitExceed = true;
+      return valid = false;
+    } else {
+      this.isLimitExceed = false;
+    }
     if (this.uploadedQuote.length == 0) { this.commonService.showMessage('Quote Document is required', 'Quote Assessment', 'error'); return valid = false; }
     return valid;
   }
@@ -258,7 +260,7 @@ export class QuoteModalPage implements OnInit {
   private getMaxQuoteAmount(): Promise<any> {
     const promise = new Promise((resolve, reject) => {
       this.commonService.getSystemConfig(MAX_QUOTE_LIMIT.FAULT_LARGE_QUOTE_LIMIT).subscribe(res => {
-        this.QUOTE_LIMIT = res ? parseInt(res.FAULT_LARGE_QUOTE_LIMIT, 10) : '';        
+        this.QUOTE_LIMIT = res ? parseInt(res.FAULT_LARGE_QUOTE_LIMIT, 10) : '';
         resolve(true);
       }, error => {
         resolve(false);

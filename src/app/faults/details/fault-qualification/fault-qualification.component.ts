@@ -288,7 +288,7 @@ export class FaultQualificationComponent implements OnInit {
         this.proceeding = false
         return;
       }
-      
+
       if (serviceCounter === 1 && qualificationForm.isUnderBlockManagement) {
         if (this.blockManagement.managementCompany.email == null || this.blockManagement.managementCompany.email == '') {
           this.commonService.showAlert('Warning', 'No valid Email address found.');
@@ -331,7 +331,7 @@ export class FaultQualificationComponent implements OnInit {
         if (response) {
           this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_SERVICE_CONTRACT');
         }
-          this.proceeding = false
+        this.proceeding = false
       }
 
       if (serviceCounter === 0) {
@@ -348,7 +348,7 @@ export class FaultQualificationComponent implements OnInit {
     let response = await this.commonService.showConfirm('Fault Qualification', confirmationText, '', 'Yes, I\'m sure', 'No');
     if (response) {
       this.saveQualificationDetails(FAULT_STAGES.LANDLORD_INSTRUCTION);
-    }else{
+    } else {
       this.proceeding = false;
     }
   }
@@ -368,7 +368,7 @@ export class FaultQualificationComponent implements OnInit {
     if (stageAction) {
       faultRequestObj.stageAction = stageAction;
     }
-    
+
     let res = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
 
     if (res) {

@@ -170,8 +170,8 @@ export class ArrangingContractorComponent implements OnInit {
       fullDescription: [this.faultDetails.notes, Validators.required],
       orderedBy: { value: '', disabled: true },
       agentReference: [{ value: '', disabled: true }],
-      defaultCommissionPercentage: [{ value: ''}],
-      defaultCommissionAmount: [{ value: ''}],
+      defaultCommissionPercentage: [{ value: '' }],
+      defaultCommissionAmount: [{ value: '' }],
       isUseRate: '',
       businessTelephone: [{ value: '', disabled: true }]
     });
@@ -278,8 +278,8 @@ export class ArrangingContractorComponent implements OnInit {
 
   private getFaultMaintenance() {
     const promise = new Promise((resolve, reject) => {
-      const params: any = new HttpParams().set('showCancelled', 'false');
-      this.faultsService.getQuoteDetails(this.faultDetails.faultId, params).subscribe((res) => {
+      // const params: any = new HttpParams().set('showCancelled', 'false');
+      this.faultsService.getQuoteDetails(this.faultDetails.faultId).subscribe((res) => {
         this.isMaintenanceDetails = true;
         resolve(res ? res.data[0] : undefined);
       }, error => {
@@ -562,6 +562,7 @@ export class ArrangingContractorComponent implements OnInit {
         this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Quote', 'error');
         return invalid;
       }
+      console.log(this.raiseQuoteForm.get('selectedContractorId').value)
       if (!this.raiseQuoteForm.get('selectedContractorId').value) {
         this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
         return invalid;
@@ -596,10 +597,10 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  private updateFault(isSubmit = false) {
+  private updateFault(isSubmit = false, stageAction = '') {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.updateFault(
-        this.faultDetails.faultId, this.prepareFaultData(isSubmit)).subscribe((res) => {
+        this.faultDetails.faultId, this.prepareFaultData(isSubmit, stageAction)).subscribe((res) => {
           resolve(true);
         }, error => {
           resolve(false);
@@ -639,10 +640,13 @@ export class ArrangingContractorComponent implements OnInit {
     return quoteReqObj;
   }
 
-  private prepareFaultData(isSubmit: boolean) {
+  private prepareFaultData(isSubmit: boolean, stageAction: string = '') {
     const faultReqObj: any = {};
     faultReqObj.isDraft = isSubmit ? false : true;
     faultReqObj.stage = this.faultDetails.stage;
+    if (stageAction) {
+      faultReqObj.stageAction = stageAction;
+    }
     return faultReqObj;
   }
 
@@ -715,7 +719,7 @@ export class ArrangingContractorComponent implements OnInit {
             if (addContractors) {
               const faultContUpdated = await this.updateFaultQuoteContractor();
               if (faultContUpdated) {
-                const faultUpdated = await this.updateFault(true);
+                const faultUpdated = await this.updateFault(true, 'OBTAIN_QUOTE');
                 this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
                 if (faultUpdated) {
                   // this.commonService.showLoader();
@@ -1843,7 +1847,6 @@ export class ArrangingContractorComponent implements OnInit {
       this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
     }
   }
-
   async quoteUploadModal(isQuoteAmount?) {
     const modal = await this.modalController.create({
       component: QuoteModalPage,
