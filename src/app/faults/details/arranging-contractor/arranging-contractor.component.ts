@@ -1,7 +1,7 @@
 import { WorksorderModalPage } from 'src/app/shared/modals/worksorder-modal/worksorder-modal.page';
 import { HttpParams } from '@angular/common/http';
 import { RejectionModalPage } from './../../../shared/modals/rejection-modal/rejection-modal.page';
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ElementRef, ViewChild, SecurityContext } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
@@ -16,6 +16,7 @@ import { DatePipe } from '@angular/common';
 import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-received-modal/payment-received-modal.component';
 import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -76,6 +77,10 @@ export class ArrangingContractorComponent implements OnInit {
   saving: boolean = false;
   proceeding: boolean = false;
   quoteArray: any;
+
+  @ViewChild("outsideElement", { static: true }) outsideElement: ElementRef;
+  @ViewChild('modalView', { static: true }) modalView$: ElementRef;
+  modalData: any;
   fileIds = FILE_IDS;
 
   constructor(
@@ -83,7 +88,8 @@ export class ArrangingContractorComponent implements OnInit {
     private faultsService: FaultsService,
     private commonService: CommonService,
     private modalController: ModalController,
-    public datepipe: DatePipe
+    public datepipe: DatePipe,
+    public sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -1883,4 +1889,20 @@ export class ArrangingContractorComponent implements OnInit {
     });
     await modal.present();
   }
+
+  openModal(url) {
+    console.log("this", url);
+    
+    if (url) {
+      console.log("in if block");
+      
+      this.modalData = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      this.modalView$.nativeElement.classList.add('visible');
+    }
+  }
+
+  closeModal() {
+    this.modalView$.nativeElement.classList.remove('visible');
+  }
+
 }

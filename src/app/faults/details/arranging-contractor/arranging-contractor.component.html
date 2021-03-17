@@ -178,6 +178,13 @@
                         name="close-circle">
                       </ion-icon>
                     </ion-col>
+
+                    <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding" style="display: none;">
+                      <ion-icon (click)="openModal(file?.documentUrl)" title="Delete File" class="delete-icon"
+                        name="eye">
+                      </ion-icon>
+                    </ion-col>
+
                   </ion-row>
                 </ion-grid>
               </div>
@@ -871,3 +878,18 @@
     </div>
   </div>
 </ng-template>
+
+<div #outsideElement>
+  <div class="modal-view-container">
+    <div #modalView class="modal view">
+      <div class="modal-view-details">
+        <p style="text-align: center;margin-top: 0; margin-bottom: 0; height:400px;">
+          <!-- <object data="{{modalData}}" type="application/pdf" width="100%" height="592px"></object> -->
+          <iframe width="100%" height="300" [src]="modalData" *ngIf="modalData"></iframe>
+
+        </p>
+        <button (click)="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
