@@ -21,6 +21,10 @@ export class QuoteService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/quote-amount`, body);
   }
 
+  deleteDocument(documentId): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + `faults/documents/${documentId}`, {});
+  }
+  
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);

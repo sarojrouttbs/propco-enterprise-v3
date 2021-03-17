@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, min, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS, KEYS_LOCATIONS } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS, KEYS_LOCATIONS, FILE_IDS } from './../../../shared/constants';
 import { ModalController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
@@ -65,6 +65,7 @@ export class JobCompletionComponent implements OnInit {
   pendingNotification: any;
   showSkeleton: boolean = true;
   saving: boolean = false;
+  fileIds = FILE_IDS;
 
   constructor(
     private fb: FormBuilder,
@@ -711,7 +712,9 @@ export class JobCompletionComponent implements OnInit {
       let msec = new Date(this.iacNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
       let mins = Math.floor(msec / 60000);
       let hrs = Math.floor(mins / 60);
-      this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
+      if (hrs >= 0) {
+        this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
+      }
     }
   }
 

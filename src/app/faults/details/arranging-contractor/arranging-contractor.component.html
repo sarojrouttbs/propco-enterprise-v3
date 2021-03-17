@@ -40,23 +40,25 @@
               </h6>
             </ng-container>
           </div>
-          <div class="question-answer" *ngIf="iacNotification">
-            <h6>{{iacNotification?.questions[0]?.qtext}}</h6>
-            <ion-grid>
-              <ion-row class="ion-justify-content-center">
-                <ng-container *ngFor="let data of iacNotification?.questions[0]?.options">
-                  <ion-button color="success" class="action-btn option"
+          <div class="question-answer" *ngFor="let question of iacNotification?.questions">
+            <ng-container *ngIf="question?.entityType == fileIds.FIX_A_FAULT">
+              <h6>{{question?.qtext}}</h6>
+              <ion-grid>
+                <ion-row class="ion-justify-content-center">
+                  <ng-container *ngFor="let data of question?.options">
+                    <ion-button color="success" class="action-btn option"
                     fill="{{data?.value ==  iacNotification?.responseReceived?.isAccepted ? 'solid' :'outline'}}"
                     (click)="questionAction(data)">{{data.text}}</ion-button>
-                </ng-container>
-              </ion-row>
-            </ion-grid>
-            <ion-text color="danger" *ngIf="rejectionReason && (iacNotification?.templateCode === 'LAR-L-Q' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
-              {{rejectionReason || 'N/A'}}</ion-text>
-            <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false">
-              <ion-text color="danger">Please select an appropriate action.</ion-text>
-            </h6>
-            <div class="border-bottom"></div>
+                  </ng-container>
+                </ion-row>
+              </ion-grid>
+              <ion-text color="danger" *ngIf="rejectionReason && (iacNotification?.templateCode === 'LAR-L-Q' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
+                {{rejectionReason || 'N/A'}}</ion-text>
+                <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false">
+                  <ion-text color="danger">Please select an appropriate action.</ion-text>
+                </h6>
+                <div class="border-bottom"></div>
+            </ng-container>
           </div>
           <ng-container *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === true && (iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E')">
             <div class="question-answer">
@@ -255,7 +257,8 @@
                      <ion-item>
                        <ion-label position="floating">Start Typing to Search Contractors</ion-label>
                        <ion-input type="text" debounce="300" (ionInput)="onSearch($event)" formControlName='contractor'
-                         placeholder="">
+                         placeholder="" (ionFocus)="onSearch($event)"> 
+                         <!-- (ionBlur)="onBlurContractorSearch($event)"> -->
                        </ion-input>
                      </ion-item>
      
@@ -485,24 +488,44 @@
       </ion-col>
     </ion-row>
     <ion-row class="row-banner">
-      <ion-col size="33.33">
-        <ion-item>
-          <ion-label position="floating">Reference </ion-label>
-          <ion-input formControlName="agentReference"></ion-input>
-        </ion-item>
-      </ion-col>
-      <ion-col size="33.33">
-        <ion-item>
-          <ion-label position="floating">Rate </ion-label>
-          <ion-input formControlName="defaultCommissionPercentage"></ion-input>
-        </ion-item>
-      </ion-col>
-      <ion-col size="33.33">
-        <ion-item>
-          <ion-label position="floating">Amount </ion-label>
-          <ion-input formControlName="defaultCommissionAmount"></ion-input>
-        </ion-item>
-      </ion-col>
+        <ion-col size="50">
+          <ion-item>
+            <ion-label position="floating">Reference </ion-label>
+            <ion-input formControlName="agentReference"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="50">
+          <ion-radio-group formControlName="isUseRate" class="defaultCommission">
+            <ion-item class="ion-item">
+              <ion-radio [value]="false" checked style="margin-right: 5px;" [disabled]="iacNotification"></ion-radio>
+              <ion-label position="fixed" class="ion-label" >Rate </ion-label>
+                <ion-input formControlName="defaultCommissionPercentage" class="ion-input" 
+                [readonly]="!workOrderForm?.value.isUseRate "
+                [disabled]="iacNotification || workOrderForm?.value.isUseRate"
+                ></ion-input>
+            </ion-item>
+            <ion-item class="ion-item defaultCommission" >
+              <ion-radio [value]="true" checked style="margin-right: 5px;" [disabled]="iacNotification"></ion-radio>
+              <ion-label position="fixed" class="ion-label">Amount </ion-label>
+                <ion-input formControlName="defaultCommissionAmount" class="ion-input" 
+                [readonly]="workOrderForm?.value.isUseRate "
+                [disabled]="iacNotification || !workOrderForm?.value.isUseRate"
+                ></ion-input>
+            </ion-item>
+          </ion-radio-group>
+          <!-- <ion-radio-group formControlName="isUseAmount" class="defaultCommission">
+            <ion-item class="ion-item">
+              <ion-radio [value]="false" checked></ion-radio>
+              <ion-label position="floating" >Rate </ion-label>
+              <ion-input formControlName="defaultCommissionPercentage"></ion-input>
+            </ion-item>
+            <ion-item class="ion-item defaultCommission">
+              <ion-radio [value]="true" checked></ion-radio>
+              <ion-label position="floating">Amount </ion-label>
+              <ion-input formControlName="defaultCommissionAmount"></ion-input>
+            </ion-item>
+          </ion-radio-group> -->
+        </ion-col>
     </ion-row>
 
     <ion-row>

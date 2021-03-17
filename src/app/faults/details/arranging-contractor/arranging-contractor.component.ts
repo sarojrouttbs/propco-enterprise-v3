@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -81,6 +81,7 @@ export class ArrangingContractorComponent implements OnInit {
   @ViewChild("outsideElement", { static: true }) outsideElement: ElementRef;
   @ViewChild('modalView', { static: true }) modalView$: ElementRef;
   modalData: any;
+  fileIds = FILE_IDS;
 
   constructor(
     private fb: FormBuilder,
@@ -175,8 +176,9 @@ export class ArrangingContractorComponent implements OnInit {
       fullDescription: [this.faultDetails.notes, Validators.required],
       orderedBy: { value: '', disabled: true },
       agentReference: [{ value: '', disabled: true }],
-      defaultCommissionPercentage: [{ value: '', disabled: true }],
-      defaultCommissionAmount: [{ value: '', disabled: true }],
+      defaultCommissionPercentage: [{ value: ''}],
+      defaultCommissionAmount: [{ value: ''}],
+      isUseRate: '',
       businessTelephone: [{ value: '', disabled: true }]
     });
     if (this.faultDetails.doesBranchHoldKeys) {
@@ -253,11 +255,6 @@ export class ArrangingContractorComponent implements OnInit {
       skillSet: '',
       contractorObj: ''
     });
-
-    this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
-        new Observable())
-    );
   }
 
   private async initApiCalls() {
@@ -338,12 +335,29 @@ export class ArrangingContractorComponent implements OnInit {
     this.isSelected = false;
     this.isContratorSelected = false;
     const searchString = event.target.value;
-    if (searchString.length > 2) {
+    const skillSet = this.addContractorForm.get('skillSet').value;
+    if (skillSet || searchString.length > 2) {
       this.resultsAvailable = true;
     } else {
       this.resultsAvailable = false;
     }
+    if(skillSet && !searchString){
+      this.contractors = this.faultsService.searchContractor(searchString, skillSet);
+    }else{
+      this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
+      switchMap((value: string) => 
+      this.addContractorForm.get('skillSet').value ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) : 
+      (value && value.length > 2) ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
+        new Observable())
+    );
+    }
   }
+
+  onBlurContractorSearch(event:any){
+    this.resultsAvailable = false;
+  }
+
+
 
   selectContractor(selected) {
     this.addContractorForm.patchValue({ contractor: selected ? selected.fullName : undefined, contractorObj: selected ? selected : undefined });
@@ -816,6 +830,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
+
   private getPreferredSuppliers(landlordId) {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
@@ -1246,7 +1261,15 @@ export class ArrangingContractorComponent implements OnInit {
             address: addressString,
             contractorId: data ? data.contractorId : undefined
           });
-
+          if (!this.faultMaintenanceDetails) {
+            this.workOrderForm.patchValue({
+              isUseRate: data ? (data.isUseAmount) : undefined
+            });
+          } else {
+            this.workOrderForm.patchValue({
+              isUseRate: this.faultMaintenanceDetails.isUseRate
+            });
+          }
           if (this.isContractorSearch && typeof contractor === 'object') {
             const currentDate = this.commonService.getFormatedDate(new Date());
 
@@ -1835,7 +1858,9 @@ export class ArrangingContractorComponent implements OnInit {
       let msec = new Date(this.iacNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
       let mins = Math.floor(msec / 60000);
       let hrs = Math.floor(mins / 60);
-      this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
+      if (hrs >= 0) {
+        this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
+      }
     }
   }
 
@@ -1848,7 +1873,8 @@ export class ArrangingContractorComponent implements OnInit {
         faultId: this.faultDetails.faultId,
         maintenanceId: this.faultMaintenanceDetails.maintenanceId,
         confirmedEstimate: this.faultDetails.confirmedEstimate,
-        isQuoteAmount: isQuoteAmount ? isQuoteAmount : ''
+        isQuoteAmount: isQuoteAmount ? isQuoteAmount : '',
+        quoteDocuments: this.quoteDocuments
       },
       backdropDismiss: false
     });

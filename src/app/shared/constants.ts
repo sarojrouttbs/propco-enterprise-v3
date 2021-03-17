@@ -320,3 +320,10 @@ export const KEYS_LOCATIONS = {
 export const MAX_QUOTE_LIMIT = {
   FAULT_LARGE_QUOTE_LIMIT: 'FAULT_LARGE_QUOTE_LIMIT'
 }
+
+export const FILE_IDS = {
+  TENANT: 1,
+  LANDLORD: 8,
+  CONTRACTOR: 11,
+  FIX_A_FAULT: 26
+}

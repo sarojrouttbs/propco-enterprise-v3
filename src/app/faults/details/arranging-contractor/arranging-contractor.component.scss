@@ -139,7 +139,6 @@
   }
 }
 
-
 .modal-button {
   background: #FFF;
   border: none;
@@ -237,3 +236,14 @@
   content: '';
 }
     
+.defaultCommission {
+  display: inline-flex;
+  // flex-wrap: wrap;
+}
+
+.defaultCommission .ion-item ,.defaultCommission .ion-label {
+  margin: 6px;
+}
+.defaultCommission .ion-label{
+  max-width: 80px;
+}
