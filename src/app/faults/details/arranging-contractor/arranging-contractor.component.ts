@@ -1,7 +1,7 @@
 import { WorksorderModalPage } from 'src/app/shared/modals/worksorder-modal/worksorder-modal.page';
 import { HttpParams } from '@angular/common/http';
 import { RejectionModalPage } from './../../../shared/modals/rejection-modal/rejection-modal.page';
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ElementRef, ViewChild, SecurityContext } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
@@ -16,6 +16,7 @@ import { DatePipe } from '@angular/common';
 import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-received-modal/payment-received-modal.component';
 import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -75,14 +76,19 @@ export class ArrangingContractorComponent implements OnInit {
   isContractorSearch = false;
   saving: boolean = false;
   proceeding: boolean = false;
-  quoteArray:any;
+  quoteArray: any;
+
+  @ViewChild("outsideElement", { static: true }) outsideElement: ElementRef;
+  @ViewChild('modalView', { static: true }) modalView$: ElementRef;
+  modalData: any;
 
   constructor(
     private fb: FormBuilder,
     private faultsService: FaultsService,
     private commonService: CommonService,
     private modalController: ModalController,
-    public datepipe: DatePipe
+    public datepipe: DatePipe,
+    public sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -110,7 +116,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
-    if(this.quoteDocuments){
+    if (this.quoteDocuments) {
       this.quoteArray = this.quoteDocuments.filter(s => s.documentType === 'QUOTE');
     }
   }
@@ -1053,7 +1059,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async questionActionQuoteUpload(data) {
     if (data.value) {
-     this.quoteUploadModal();
+      this.quoteUploadModal();
     } else {
       this.commonService.showConfirm(data.text, `You have selected 'No, couldn't carry out the Quote'. The fault will be escalated tor manual intervention. Do you want to proceed?`, '', 'Yes', 'No').then(async res => {
         if (res) {
@@ -1833,7 +1839,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  async quoteUploadModal(isQuoteAmount?){
+  async quoteUploadModal(isQuoteAmount?) {
     const modal = await this.modalController.create({
       component: QuoteModalPage,
       cssClass: 'modal-container upload-container',
@@ -1842,14 +1848,14 @@ export class ArrangingContractorComponent implements OnInit {
         faultId: this.faultDetails.faultId,
         maintenanceId: this.faultMaintenanceDetails.maintenanceId,
         confirmedEstimate: this.faultDetails.confirmedEstimate,
-        isQuoteAmount: isQuoteAmount? isQuoteAmount: ''
+        isQuoteAmount: isQuoteAmount ? isQuoteAmount : ''
       },
       backdropDismiss: false
     });
 
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
-        
+
         this._btnHandler('refresh_docs');
         // this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
         // await this.faultNotification(this.faultDetails.stageAction);
@@ -1857,4 +1863,20 @@ export class ArrangingContractorComponent implements OnInit {
     });
     await modal.present();
   }
+
+  openModal(url) {
+    console.log("this", url);
+    
+    if (url) {
+      console.log("in if block");
+      
+      this.modalData = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      this.modalView$.nativeElement.classList.add('visible');
+    }
+  }
+
+  closeModal() {
+    this.modalView$.nativeElement.classList.remove('visible');
+  }
+
 }
