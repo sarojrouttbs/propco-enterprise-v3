@@ -101,6 +101,9 @@ export class ArrangingContractorComponent implements OnInit {
       this.checkMaintenanceDetail();
     }
     if (changes.faultDetails && !changes.faultDetails.firstChange) {
+      this.restrictAction = false;
+      this.iacNotification = null;
+      this.faultMaintenanceDetails = null;
       this.isUserActionChange = false;
       this.userSelectedActionControl = new FormControl();
       this.showSkeleton = true;
