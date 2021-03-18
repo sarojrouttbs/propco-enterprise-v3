@@ -21,7 +21,7 @@
 
 .offer-row {
     .offer-amount {
-      font-size: 24px;
+      font-size: 16px;
     }
 
     .offer-amount-value {
@@ -29,7 +29,7 @@
         border: 0;
         border-bottom: 1px solid var(--ion-color-step-1050);
         outline: 0;
-        font-size: 24px;
+        font-size: 16px;
       }
     }
   }
@@ -54,8 +54,14 @@ ion-segment {
     }
 }
 
+.error{
+    ion-label {
+        color: var(--ion-color-danger);
+    }
+}
+
 .error-message{
     color: var(--ion-color-danger);
-    padding-top:2px;
+    padding-top:5px;
     font-size: 14px;
 }
