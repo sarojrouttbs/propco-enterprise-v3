@@ -1,3 +1,4 @@
+import { FaultsService } from './../../../faults/faults.service';
 import { QuoteService } from './quote.service';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -7,7 +8,6 @@ import { CommonService } from '../../services/common.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { forkJoin } from 'rxjs';
 import { FOLDER_NAMES, MAX_QUOTE_LIMIT } from './../../../shared/constants';
-import { DOCUMENTS_TYPE } from '../../constants';
 
 @Component({
   selector: 'app-quote-modal',
@@ -17,6 +17,7 @@ import { DOCUMENTS_TYPE } from '../../constants';
 export class QuoteModalPage implements OnInit {
   faultNotificationId;
   faultId;
+  stage;
   maintenanceId;
   quoteAssessmentForm: FormGroup;
   uploadDocumentForm: FormGroup;
@@ -27,8 +28,7 @@ export class QuoteModalPage implements OnInit {
   QUOTE_LIMIT;
   confirmedEstimate;
   isLimitExceed = false;
-  isQuoteAmount;
-  quoteDocuments;
+  preUpload: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,7 +36,8 @@ export class QuoteModalPage implements OnInit {
     private commonService: CommonService,
     private quoteService: QuoteService,
     private router: Router,
-    private sanitizer: DomSanitizer) {
+    private sanitizer: DomSanitizer,
+    private faultService: FaultsService) {
 
     this.router.events.subscribe(async () => {
       const isModalOpened = await this.modalController.getTop();
@@ -49,7 +50,6 @@ export class QuoteModalPage implements OnInit {
     this.initUploadDocForm();
     this.initquoteAssessmentForm();
     this.getMaxQuoteAmount();
-    this.viewUploadedDocuments();
   }
 
   dismiss() {
@@ -66,7 +66,7 @@ export class QuoteModalPage implements OnInit {
 
   private initquoteAssessmentForm(): void {
     this.quoteAssessmentForm = this.formBuilder.group({
-      quoteAmount: ['', this.isQuoteAmount ? [] : Validators.required],
+      quoteAmount: ['', Validators.required],
       isAccepted: true,
       submittedById: '',
       submittedByType: 'SECUR_USER'
@@ -80,20 +80,6 @@ export class QuoteModalPage implements OnInit {
     this.uploadPhotoForm = this.formBuilder.group({
       photos: this.formBuilder.array([])
     });
-  }
-
-  viewUploadedDocuments(): void {
-    if (this.quoteDocuments && this.quoteDocuments.length) {
-      this.quoteDocuments.forEach((e, i) => {
-        this.quoteDocuments[i].isUploaded = true;
-        if (e.name != null && DOCUMENTS_TYPE.indexOf(e.name.split('.')[1]) !== -1) {
-          this.quoteDocuments[i].isImage = false;
-        }
-        else { this.quoteDocuments[i].isImage = true; }
-      });
-      this.uploadedQuote = this.quoteDocuments.filter(data => data.documentType == 'QUOTE');
-      this.uploadedPhoto = this.quoteDocuments.filter(data => data.documentType == null);
-    }
   }
 
   removeFile(i, type: string) {
@@ -114,7 +100,6 @@ export class QuoteModalPage implements OnInit {
     if (response) {
       this.quoteService.deleteDocument(documentId).subscribe(response => {
         this.removeFile(i, type);
-        this.quoteDocuments.splice(i, 1);
       });
     }
   }
@@ -188,13 +173,14 @@ export class QuoteModalPage implements OnInit {
 
   async onProceed() {
     if (this.validateReq()) {
-      if (this.QUOTE_LIMIT && this.QUOTE_LIMIT < this.quoteAssessmentForm.value.quoteAmount && this.uploadedPhoto.length === 0) {
-        this.isLimitExceed = true;
-        return;
-      }
       const docsUploaded = await this.uploadQuotes();
-      if (docsUploaded && !this.isQuoteAmount) {
-        const amountUpdated = await this.submitQuoteAmout();
+      if (docsUploaded) {
+        let amountUpdated: boolean = false;
+        if (this.preUpload) {
+          amountUpdated = await this.updateFaultSummary() as boolean;
+        } else {
+          amountUpdated = await this.submitQuoteAmout() as boolean;
+        }
         if (amountUpdated) {
           this.modalController.dismiss('success');
         }
@@ -286,6 +272,12 @@ export class QuoteModalPage implements OnInit {
   private validateReq() {
     let valid = true;
     if (!this.quoteAssessmentForm.valid) { this.commonService.showMessage('Quote Amount is required', 'Quote Assessment', 'error'); return valid = false; }
+    if (this.QUOTE_LIMIT && this.QUOTE_LIMIT < this.quoteAssessmentForm.value.quoteAmount && this.uploadedPhoto.length === 0) {
+      this.isLimitExceed = true;
+      return valid = false;
+    } else {
+      this.isLimitExceed = false;
+    }
     if (this.uploadedQuote.length == 0) { this.commonService.showMessage('Quote Document is required', 'Quote Assessment', 'error'); return valid = false; }
     return valid;
   }
@@ -298,6 +290,24 @@ export class QuoteModalPage implements OnInit {
       }, error => {
         resolve(false);
       });
+    });
+    return promise;
+  }
+
+  updateFaultSummary() {
+    let faultRequestObj: any = {};
+    faultRequestObj.confirmedEstimate = this.quoteAssessmentForm.value.quoteAmount;
+    faultRequestObj.isDraft = false;
+    faultRequestObj.stage = this.stage;
+    const promise = new Promise((resolve, reject) => {
+      this.faultService.updateFault(this.faultId, faultRequestObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          resolve(false);
+        }
+      );
     });
     return promise;
   }

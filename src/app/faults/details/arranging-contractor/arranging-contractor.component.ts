@@ -17,7 +17,6 @@ import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-rec
 import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MediaPreviewModalPage } from 'src/app/shared/modals/media-preview-modal/media-preview-modal.page';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -83,7 +82,6 @@ export class ArrangingContractorComponent implements OnInit {
   @ViewChild('modalView', { static: true }) modalView$: ElementRef;
   modalData: any;
   fileIds = FILE_IDS;
-  isMediaPreviewModal = false;
 
   constructor(
     private fb: FormBuilder,
@@ -284,8 +282,8 @@ export class ArrangingContractorComponent implements OnInit {
 
   private getFaultMaintenance() {
     const promise = new Promise((resolve, reject) => {
-      const params: any = new HttpParams().set('showCancelled', 'false');
-      this.faultsService.getQuoteDetails(this.faultDetails.faultId, params).subscribe((res) => {
+      // const params: any = new HttpParams().set('showCancelled', 'false');
+      this.faultsService.getQuoteDetails(this.faultDetails.faultId).subscribe((res) => {
         this.isMaintenanceDetails = true;
         resolve(res ? res.data[0] : undefined);
       }, error => {
@@ -620,10 +618,10 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  private updateFault(isSubmit = false) {
+  private updateFault(isSubmit = false, stageAction = '') {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.updateFault(
-        this.faultDetails.faultId, this.prepareFaultData(isSubmit)).subscribe((res) => {
+        this.faultDetails.faultId, this.prepareFaultData(isSubmit, stageAction)).subscribe((res) => {
           resolve(true);
         }, error => {
           resolve(false);
@@ -663,10 +661,13 @@ export class ArrangingContractorComponent implements OnInit {
     return quoteReqObj;
   }
 
-  private prepareFaultData(isSubmit: boolean) {
+  private prepareFaultData(isSubmit: boolean, stageAction: string = '') {
     const faultReqObj: any = {};
     faultReqObj.isDraft = isSubmit ? false : true;
     faultReqObj.stage = this.faultDetails.stage;
+    if (stageAction) {
+      faultReqObj.stageAction = stageAction;
+    }
     return faultReqObj;
   }
 
@@ -739,7 +740,7 @@ export class ArrangingContractorComponent implements OnInit {
             if (addContractors) {
               const faultContUpdated = await this.updateFaultQuoteContractor();
               if (faultContUpdated) {
-                const faultUpdated = await this.updateFault(true);
+                const faultUpdated = await this.updateFault(true, 'OBTAIN_QUOTE');
                 this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
                 if (faultUpdated) {
                   // this.commonService.showLoader();
@@ -1860,7 +1861,7 @@ export class ArrangingContractorComponent implements OnInit {
   getPendingHours() {
     let hours = 0;
     const currentDateTime = this.commonService.getFormatedDateTime(new Date());
-    if (this.iacNotification && this.faultDetails.status !== 18 && this.iacNotification.nextChaseDueAt) {
+    if (this.iacNotification && !this.faultDetails.isEscalated && this.iacNotification.nextChaseDueAt) {
       let msec = new Date(this.iacNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
       let mins = Math.floor(msec / 60000);
       let hrs = Math.floor(mins / 60);
@@ -1869,18 +1870,17 @@ export class ArrangingContractorComponent implements OnInit {
       }
     }
   }
-
-  async quoteUploadModal(isQuoteAmount?) {
+  async quoteUploadModal(preUpload?) {
     const modal = await this.modalController.create({
       component: QuoteModalPage,
       cssClass: 'modal-container upload-container',
       componentProps: {
         faultNotificationId: this.iacNotification.faultNotificationId,
         faultId: this.faultDetails.faultId,
+        stage: this.faultDetails.stage,
         maintenanceId: this.faultMaintenanceDetails.maintenanceId,
         confirmedEstimate: this.faultDetails.confirmedEstimate,
-        isQuoteAmount: isQuoteAmount ? isQuoteAmount : '',
-        quoteDocuments: this.quoteDocuments
+        preUpload: preUpload ? true : false
       },
       backdropDismiss: false
     });
@@ -1895,34 +1895,4 @@ export class ArrangingContractorComponent implements OnInit {
     });
     await modal.present();
   }
-
-  async previewMedia(url) {
-    console.log("this", url);
-
-    if (url && !this.isMediaPreviewModal) {
-      // console.log("in if block");
-
-      // this.modalData = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-      // this.modalView$.nativeElement.classList.add('visible');
-      this.isMediaPreviewModal = true;
-      const modal = await this.modalController.create({
-        component: MediaPreviewModalPage,
-        cssClass: 'modal-container',
-        componentProps: {
-          mediaFile: this.sanitizer.bypassSecurityTrustResourceUrl(url),
-        },
-        backdropDismiss: false
-      });
-      modal.onDidDismiss().then(async res => {
-        this.isMediaPreviewModal = false;
-      });
-
-      await modal.present();
-    }
-  }
-
-  closeModal() {
-    this.modalView$.nativeElement.classList.remove('visible');
-  }
-
 }

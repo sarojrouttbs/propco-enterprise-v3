@@ -162,8 +162,8 @@ export class JobCompletionComponent implements OnInit {
 
   private getFaultMaintenance() {
     const promise = new Promise((resolve, reject) => {
-      const params: any = new HttpParams().set('showCancelled', 'false');
-      this.faultsService.getQuoteDetails(this.faultDetails.faultId, params).subscribe((res) => {
+      // const params: any = new HttpParams().set('showCancelled', 'false');
+      this.faultsService.getQuoteDetails(this.faultDetails.faultId).subscribe((res) => {
         this.isMaintenanceDetails = true;
         resolve(res ? res.data[0] : {});
       }, error => {
@@ -708,7 +708,7 @@ export class JobCompletionComponent implements OnInit {
   getPendingHours() {
     let hours = 0;
     const currentDateTime = this.commonService.getFormatedDateTime(new Date());
-    if (this.iacNotification && this.faultDetails.status !== 18 && this.iacNotification.nextChaseDueAt) {
+    if (this.iacNotification && this.faultDetails.isEscalated && this.iacNotification.nextChaseDueAt) {
       let msec = new Date(this.iacNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
       let mins = Math.floor(msec / 60000);
       let hrs = Math.floor(mins / 60);

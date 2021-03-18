@@ -52,8 +52,12 @@
                   </ng-container>
                 </ion-row>
               </ion-grid>
-              <ion-text color="danger" *ngIf="rejectionReason && (iacNotification?.templateCode === 'LAR-L-Q' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
-                {{rejectionReason || 'N/A'}}</ion-text>
+              <ion-text color="danger" *ngIf="
+              iacNotification?.responseReceived?.isAccepted === false &&
+              rejectionReason && 
+              (iacNotification?.templateCode === 'LAR-L-Q' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
+                {{rejectionReason || 'N/A'}}
+              </ion-text>
                 <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false">
                   <ion-text color="danger">Please select an appropriate action.</ion-text>
                 </h6>
@@ -72,7 +76,7 @@
                 <span>Thank you for carrying out this quote. This is now with the Landlord for review. If we require you to
                   carry out the job, we will be back in touch.</span>
               </h6>
-              <ion-button color="success" class="action-btn" fill="solid" (click)="quoteUploadModal('isAmount'); $event.stopPropagation();" *ngIf="quoteArray.length === 0">Upload Quote & Photos</ion-button>
+              <ion-button color="success" class="action-btn" fill="solid" (click)="quoteUploadModal('preUpload'); $event.stopPropagation();" *ngIf="quoteArray.length === 0">Upload Quote & Photos</ion-button>
               <div class="border-bottom"></div>
             </div>
           </ng-container>
@@ -82,7 +86,7 @@
             || !iacNotification?.responseReceived?.isAccepted 
             || enableMarkCompletedBtn() && iacNotification?.notificationStatus !== 7)"
           >
-          <div class="question-answer" *ngIf="(iacNotification?.responseReceived == null && faultDetails.status !== 18  && faultDetails.status !== 10 && faultDetails.status !== 12 && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone))">
+          <div class="question-answer" *ngIf="(iacNotification?.responseReceived == null && !faultDetails.isEscalated && faultDetails.status !== 10 && faultDetails.status !== 12 && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone))">
             <h4 class="ion-text-center">Next Step:</h4> 
             <h6>  
               <ion-text color="danger">Please note: </ion-text>
@@ -94,7 +98,7 @@
           </div>
 
           <div class="question-answer ion-text-center" 
-            *ngIf="(iacNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18) && iacNotification?.notificationStatus !== 7">
+            *ngIf="(iacNotification?.responseReceived?.isAccepted === false || !faultDetails.isEscalated) && iacNotification?.notificationStatus !== 7">
             <h6>
               <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
             </h6>
@@ -178,13 +182,6 @@
                         name="close-circle">
                       </ion-icon>
                     </ion-col>
-
-                    <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding" style="display: block;">
-                      <ion-icon (click)="previewMedia(file?.documentUrl)" title="Delete File" class="delete-icon"
-                        name="eye">
-                      </ion-icon>
-                    </ion-col>
-
                   </ion-row>
                 </ion-grid>
               </div>

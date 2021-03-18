@@ -2122,7 +2122,7 @@ export class DetailsPage implements OnInit {
   getPendingHours() {
     let hours = 0;
     const currentDateTime = this.commonService.getFormatedDateTime(new Date());
-    if (this.cliNotification && this.faultDetails.status !== 18 && this.cliNotification.nextChaseDueAt) {
+    if (this.cliNotification && !this.faultDetails.isEscalated && this.cliNotification.nextChaseDueAt) {
       let msec = new Date(this.cliNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
       let mins = Math.floor(msec / 60000);
       let hrs = Math.floor(mins / 60);

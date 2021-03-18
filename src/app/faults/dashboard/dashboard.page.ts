@@ -854,8 +854,8 @@ export class DashboardPage implements OnInit {
 
   async getFaultMaintenance(faultId) {
     const promise = new Promise((resolve, reject) => {
-      const params: any = new HttpParams().set('showCancelled', 'false');
-      this.faultsService.getQuoteDetails(faultId, params).subscribe((res) => {
+      // const params: any = new HttpParams().set('showCancelled', 'false');
+      this.faultsService.getQuoteDetails(faultId).subscribe((res) => {
         resolve(res ? res.data[0] : false);
       }, error => {
         resolve(false);

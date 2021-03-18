@@ -69,7 +69,7 @@
           <ng-container 
           *ngIf=" (faultDetails?.status === 8 || iacNotification?.responseReceived == null  || !iacNotification?.responseReceived?.isAccepted 
             || iacNotification?.templateCode === 'CF-T-E') && iacNotification?.notificationStatus !== 7">
-            <div class="question-answer ion-text-center" *ngIf="(iacNotification?.responseReceived == null && faultDetails.status !== 18 && faultDetails.status !== 10 && faultDetails.status !== 12 && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone))">
+            <div class="question-answer ion-text-center" *ngIf="(iacNotification?.responseReceived == null && !faultDetails.isEscalated && faultDetails.status !== 10 && faultDetails.status !== 12 && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone))">
               <h4>Next Step:</h4> 
               <h6>  
                 <ion-text color="danger">Please note: </ion-text>
@@ -80,7 +80,7 @@
               <div class="border-bottom"></div>
             </div>
 
-            <div class="question-answer ion-text-center" *ngIf="(iacNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18)">
+            <div class="question-answer ion-text-center" *ngIf="(iacNotification?.responseReceived?.isAccepted === false || faultDetails.isEscalated)">
               <h6>
                 <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
               </h6>

@@ -363,6 +363,7 @@ export class CommonService {
     document.body.appendChild(a);
     a.href = url;
     a.download = '';
+    a.target = '_blank';
     a.click();
     document.body.removeChild(a);
   }
