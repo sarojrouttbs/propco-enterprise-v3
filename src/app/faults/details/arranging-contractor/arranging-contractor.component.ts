@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -129,7 +129,7 @@ export class ArrangingContractorComponent implements OnInit {
     } else {
       this.initWorkOrderForms();
     }
-    this.isFormsReady = true;
+    this.isFormsReady = true;    
   }
 
   private initQuoteForm(): void {
@@ -179,7 +179,11 @@ export class ArrangingContractorComponent implements OnInit {
       defaultCommissionPercentage: [{ value: '' }],
       defaultCommissionAmount: [{ value: '' }],
       isUseRate: '',
-      businessTelephone: [{ value: '', disabled: true }]
+      businessTelephone: [{ value: '', disabled: true }],
+      contact: this.getAccessDetails(this.faultDetails.isTenantPresenceRequired),
+      jobType: MAINT_JOB_TYPE.index,
+      repairSource: this.faultDetails.sourceType === 'FAULT' ? MAINT_REPAIR_SOURCES.CUSTOMER_REPORT : MAINT_REPAIR_SOURCES.FIXFLO,
+      requestStartDate: this.currentDate
     });
     if (this.faultDetails.doesBranchHoldKeys) {
       this.officeDetails();
@@ -195,7 +199,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private getAccessDetails(tenantPresence): string {
-    return (tenantPresence ? 'Contact Tenant' : 'Tenant approved access via keys');
+    return (tenantPresence ? MAINT_CONTACT.CONTACT_TENANT : MAINT_CONTACT.ACCESS_VIA_KEY);
     // if (tenantPresence != null) {
     //   let data = this.accessInfoList.filter(data => data.value == tenantPresence);
     //   return data && data[0] ? data[0].title : '';
@@ -356,8 +360,6 @@ export class ArrangingContractorComponent implements OnInit {
   onBlurContractorSearch(event: any) {
     this.resultsAvailable = false;
   }
-
-
 
   selectContractor(selected) {
     this.addContractorForm.patchValue({ contractor: selected ? selected.fullName : undefined, contractorObj: selected ? selected : undefined });
@@ -1891,15 +1893,4 @@ export class ArrangingContractorComponent implements OnInit {
     });
     await modal.present();
   }
-
-  openModal(url) {
-    if (url) {this.modalData = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-      this.modalView$.nativeElement.classList.add('visible');
-    }
-  }
-
-  closeModal() {
-    this.modalView$.nativeElement.classList.remove('visible');
-  }
-
 }

@@ -327,3 +327,16 @@ export const FILE_IDS = {
   CONTRACTOR: 11,
   FIX_A_FAULT: 26
 }
+
+export const MAINT_JOB_TYPE = {
+  "index": 4520,
+  "value": "Repair"
+}
+export const MAINT_REPAIR_SOURCES = {
+  CUSTOMER_REPORT: 5118,
+  FIXFLO: 3635
+}
+export const MAINT_CONTACT = {
+  CONTACT_TENANT: 'Contact Tenant',
+  ACCESS_VIA_KEY: 'Tenant approved access via keys'
+}
