@@ -174,7 +174,7 @@ export class ArrangingContractorComponent implements OnInit {
       paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
       keysLocation: this.faultDetails.doesBranchHoldKeys ? KEYS_LOCATIONS.KEY_IN_BRANCH : KEYS_LOCATIONS.DO_NOT_HOLD_KEY,
       returnKeysTo: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
-      accessDetails: [this.getAccessDetails(this.faultDetails.isTenantPresenceRequired), Validators.required],
+      accessDetails: [this.getAccessDetails(this.faultDetails.isTenantPresenceRequired)],
       requiredDate: '',
       fullDescription: [this.faultDetails.notes, Validators.required],
       orderedBy: { value: '', disabled: true },
@@ -321,7 +321,7 @@ export class ArrangingContractorComponent implements OnInit {
           description: this.faultMaintenanceDetails.description,
           orderedBy: this.faultMaintenanceDetails.orderedBy,
           postdate: this.faultMaintenanceDetails.postdate,
-          accessDetails: this.faultMaintenanceDetails.accessDetails,
+          // accessDetails: this.faultMaintenanceDetails.accessDetails,
           contractorId: this.faultMaintenanceDetails.selectedContractorId,
           nominalCode: this.faultMaintenanceDetails.nominalCode,
           fullDescription: this.faultMaintenanceDetails.fullDescription,
@@ -914,7 +914,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.workOrderForm.get('requiredDate').disable();
     this.workOrderForm.get('keysLocation').disable();
     this.workOrderForm.get('returnKeysTo').disable();
-    this.workOrderForm.get('accessDetails').disable();
+    // this.workOrderForm.get('accessDetails').disable();
   }
 
   private disableContractorsList(notification) {
