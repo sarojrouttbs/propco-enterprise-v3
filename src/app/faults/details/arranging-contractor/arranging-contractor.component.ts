@@ -1858,7 +1858,7 @@ export class ArrangingContractorComponent implements OnInit {
   getPendingHours() {
     let hours = 0;
     const currentDateTime = this.commonService.getFormatedDateTime(new Date());
-    if (this.iacNotification && this.faultDetails.status !== 18 && this.iacNotification.nextChaseDueAt) {
+    if (this.iacNotification && !this.faultDetails.isEscalated && this.iacNotification.nextChaseDueAt) {
       let msec = new Date(this.iacNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
       let mins = Math.floor(msec / 60000);
       let hrs = Math.floor(mins / 60);

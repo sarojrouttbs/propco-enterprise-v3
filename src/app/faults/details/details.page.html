@@ -753,7 +753,7 @@
                 </ng-container>
               </div>
               <div class="question-answer" *ngIf="cliNotification && cliNotification?.responseReceived == null && (cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone) 
-              && cliNotification?.notificationStatus !== 7 && faultDetails.status !== 18 && faultDetails.status !== 10 && faultDetails.status !== 12">
+              && cliNotification?.notificationStatus !== 7 && !faultDetails?.isEscalated && faultDetails?.status !== 10 && faultDetails?.status !== 12">
                 <h6>
                   <ion-text color="danger">Please note:</ion-text>
                   The fault will be <i>escalated</i> automatically if the Landlord doesn't respond within {{cliNotification?.hoursLeft}}.
@@ -765,20 +765,20 @@
                 <h4 claas="ion-text-center">Next Step:</h4>
                 <ion-button color="success" class="action-btn" fill="solid" (click)="llContractor(); $event.stopPropagation();">
                   {{faultDetails?.landlordOwnContractor?.landlordOwnContractorId!==null?"View/Edit Contractor details":"Add Contractor Details"}}</ion-button>
-                <h6 *ngIf="faultDetails?.landlordOwnContractor?.landlordOwnContractorId === null && faultDetails.status !== 18">
+                <h6 *ngIf="faultDetails?.landlordOwnContractor?.landlordOwnContractorId === null && !faultDetails?.isEscalated">
                   <ion-text color="danger">Please note: </ion-text>
                   <span>
                     The fault will be <i>escalated</i> if the contractor's details including the scheduled date & time of the repair have not been added in the next 6/24 hours
                   </span>
                 </h6>
-                <h6 *ngIf="faultDetails.status === 18" >
+                <h6 *ngIf="faultDetails?.isEscalated" >
                   <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
                 </h6>
                 <div class="border-bottom"></div>
               </div>
 
               <div class="question-answer ion-text-center" 
-                *ngIf="(cliNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18) && cliNotification?.notificationStatus !== 7 && cliNotification?.responseReceived?.isAccepted != true">
+                *ngIf="(cliNotification?.responseReceived?.isAccepted === false || faultDetails?.isEscalated) && cliNotification?.notificationStatus !== 7 && cliNotification?.responseReceived?.isAccepted != true">
                 <h4 claas="ion-text-center">Next Step:</h4>
                 <h6 *ngIf="faultDetails.urgencyStatus == 3">
                   <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
@@ -812,7 +812,7 @@
                 <div class="border-bottom"></div>
               </div>
               
-              <div class="question-answer" [hidden]="(cliNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18) 
+              <div class="question-answer" [hidden]="(cliNotification?.responseReceived?.isAccepted === false || faultDetails?.isEscalated) 
                     && cliNotification?.notificationStatus !== 7 && faultDetails.urgencyStatus != 3" >
                 <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
                 <ion-grid>
@@ -1146,8 +1146,8 @@
           <h2 class="heading-initial">
             <span *ngIf="!faultId">Initial Issue</span>
             <span *ngIf="faultId">
-              {{getLookupValue(faultDetails?.status, faultStatuses)}} &nbsp;
-              <img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.status == 18" />
+              {{faultDetails?.isEscalated ? 'Escalation' : getLookupValue(faultDetails?.status, faultStatuses)}} &nbsp;
+              <img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.isEscalated" />
             </span>
           </h2>
         </ion-col>
