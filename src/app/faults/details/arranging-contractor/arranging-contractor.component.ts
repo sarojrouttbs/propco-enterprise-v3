@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, WORKORDER_FORM_CONST } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -129,7 +129,7 @@ export class ArrangingContractorComponent implements OnInit {
     } else {
       this.initWorkOrderForms();
     }
-    this.isFormsReady = true;
+    this.isFormsReady = true;    
   }
 
   private initQuoteForm(): void {
@@ -180,9 +180,9 @@ export class ArrangingContractorComponent implements OnInit {
       defaultCommissionAmount: [{ value: '' }],
       isUseRate: '',
       businessTelephone: [{ value: '', disabled: true }],
-      contact: !this.faultDetails.isTenantPresenceRequired ? WORKORDER_FORM_CONST.ACCESS_VIA_KEY : WORKORDER_FORM_CONST.CONTACT_TENANT,
-      jobType: WORKORDER_FORM_CONST.JOB_TYPE,
-      repairSource: this.faultDetails.sourceType === 'FAULT' ? WORKORDER_FORM_CONST.FAULT_SOURCE_TYPE : WORKORDER_FORM_CONST.FIXOFLOW_SOURCE_TYPE,
+      contact: !this.faultDetails.isTenantPresenceRequired ? MAINT_CONTACT.ACCESS_VIA_KEY : MAINT_CONTACT.CONTACT_TENANT,
+      jobType: MAINT_JOB_TYPE.index,
+      repairSource: this.faultDetails.sourceType === 'FAULT' ? MAINT_REPAIR_SOURCES.CUSTOMER_REPORT : MAINT_REPAIR_SOURCES.FIXFLO,
       requestStartDate: this.currentDate
     });
     if (this.faultDetails.doesBranchHoldKeys) {
