@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, min, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS, KEYS_LOCATIONS, FILE_IDS } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT } from './../../../shared/constants';
 import { ModalController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
@@ -139,7 +139,7 @@ export class JobCompletionComponent implements OnInit {
   }
 
   private getAccessDetails(tenantPresence): string {
-    return (tenantPresence ? 'Contact Tenant' : 'Tenant approved access via keys');
+    return (tenantPresence ? MAINT_CONTACT.CONTACT_TENANT  : MAINT_CONTACT.ACCESS_VIA_KEY);
     // if (tenantPresence != null) {
     //   let data = this.accessInfoList.filter(data => data.value == tenantPresence);
     //   return data && data[0] ? data[0].title : '';

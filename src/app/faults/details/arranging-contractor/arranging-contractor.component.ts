@@ -180,7 +180,7 @@ export class ArrangingContractorComponent implements OnInit {
       defaultCommissionAmount: [{ value: '' }],
       isUseRate: '',
       businessTelephone: [{ value: '', disabled: true }],
-      contact: !this.faultDetails.isTenantPresenceRequired ? MAINT_CONTACT.ACCESS_VIA_KEY : MAINT_CONTACT.CONTACT_TENANT,
+      contact: this.getAccessDetails(this.faultDetails.isTenantPresenceRequired),
       jobType: MAINT_JOB_TYPE.index,
       repairSource: this.faultDetails.sourceType === 'FAULT' ? MAINT_REPAIR_SOURCES.CUSTOMER_REPORT : MAINT_REPAIR_SOURCES.FIXFLO,
       requestStartDate: this.currentDate
@@ -199,7 +199,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private getAccessDetails(tenantPresence): string {
-    return (tenantPresence ? 'Contact Tenant' : 'Tenant approved access via keys');
+    return (tenantPresence ? MAINT_CONTACT.CONTACT_TENANT : MAINT_CONTACT.ACCESS_VIA_KEY);
     // if (tenantPresence != null) {
     //   let data = this.accessInfoList.filter(data => data.value == tenantPresence);
     //   return data && data[0] ? data[0].title : '';
