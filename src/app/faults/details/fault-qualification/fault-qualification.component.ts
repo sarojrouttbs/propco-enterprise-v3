@@ -572,7 +572,7 @@ export class FaultQualificationComponent implements OnInit {
   getPendingHours() {
     let hours = 0;
     const currentDateTime = this.commonService.getFormatedDateTime(new Date());
-    if (this.iqfNotification && this.faultDetails.status !== 18 && this.iqfNotification.nextChaseDueAt) {
+    if (this.iqfNotification && !this.faultDetails.isEscalated && this.iqfNotification.nextChaseDueAt) {
       let msec = new Date(this.iqfNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
       let mins = Math.floor(msec / 60000);
       let hrs = Math.floor(mins / 60);
