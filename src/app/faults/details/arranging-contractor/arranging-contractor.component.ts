@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, WORKORDER_FORM_CONST } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -17,6 +17,7 @@ import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-rec
 import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MediaPreviewModalPage } from 'src/app/shared/modals/media-preview-modal/media-preview-modal.page';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -82,6 +83,7 @@ export class ArrangingContractorComponent implements OnInit {
   @ViewChild('modalView', { static: true }) modalView$: ElementRef;
   modalData: any;
   fileIds = FILE_IDS;
+  isMediaPreviewModal = false;
 
   constructor(
     private fb: FormBuilder,
@@ -176,10 +178,13 @@ export class ArrangingContractorComponent implements OnInit {
       fullDescription: [this.faultDetails.notes, Validators.required],
       orderedBy: { value: '', disabled: true },
       agentReference: [{ value: '', disabled: true }],
-      defaultCommissionPercentage: [{ value: ''}],
-      defaultCommissionAmount: [{ value: ''}],
+      defaultCommissionPercentage: [{ value: '' }],
+      defaultCommissionAmount: [{ value: '' }],
       isUseRate: '',
-      businessTelephone: [{ value: '', disabled: true }]
+      businessTelephone: [{ value: '', disabled: true }],
+      contact: !this.faultDetails.isTenantPresenceRequired ? WORKORDER_FORM_CONST.ACCESS_VIA_KEY : WORKORDER_FORM_CONST.CONTACT_TENANT,
+      jobType: WORKORDER_FORM_CONST.JOB_TYPE,
+      repairSource: this.faultDetails.sourceType === 'FAULT' ? WORKORDER_FORM_CONST.FAULT_SOURCE_TYPE : WORKORDER_FORM_CONST.FIXOFLOW_SOURCE_TYPE
     });
     if (this.faultDetails.doesBranchHoldKeys) {
       this.officeDetails();
@@ -307,7 +312,7 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
       this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
-    } else {
+    } else {      
       this.workOrderForm.patchValue(
         {
           worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
@@ -321,7 +326,10 @@ export class ArrangingContractorComponent implements OnInit {
           repairCost: this.faultMaintenanceDetails.amount,
           keysLocation: this.faultMaintenanceDetails.keysLocation,
           requiredDate: this.faultMaintenanceDetails.requiredCompletionDate,
-          returnKeysTo: this.faultMaintenanceDetails.returnKeysTo
+          returnKeysTo: this.faultMaintenanceDetails.returnKeysTo,
+          contact: this.faultMaintenanceDetails.contact,
+          jobType: this.faultMaintenanceDetails.jobType,
+          repairSource: this.faultMaintenanceDetails.repairSource
         }
       );
       this.workOrderForm.get('contractorName').disable();
@@ -341,23 +349,21 @@ export class ArrangingContractorComponent implements OnInit {
     } else {
       this.resultsAvailable = false;
     }
-    if(skillSet && !searchString){
+    if (skillSet && !searchString) {
       this.contractors = this.faultsService.searchContractor(searchString, skillSet);
-    }else{
+    } else {
       this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => 
-      this.addContractorForm.get('skillSet').value ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) : 
-      (value && value.length > 2) ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
-        new Observable())
-    );
+        switchMap((value: string) =>
+          this.addContractorForm.get('skillSet').value ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
+            (value && value.length > 2) ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
+              new Observable())
+      );
     }
   }
 
-  onBlurContractorSearch(event:any){
+  onBlurContractorSearch(event: any) {
     this.resultsAvailable = false;
   }
-
-
 
   selectContractor(selected) {
     this.addContractorForm.patchValue({ contractor: selected ? selected.fullName : undefined, contractorObj: selected ? selected : undefined });
@@ -1890,14 +1896,28 @@ export class ArrangingContractorComponent implements OnInit {
     await modal.present();
   }
 
-  openModal(url) {
+  async previewMedia(url) {
     console.log("this", url);
-    
-    if (url) {
-      console.log("in if block");
-      
-      this.modalData = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-      this.modalView$.nativeElement.classList.add('visible');
+
+    if (url && !this.isMediaPreviewModal) {
+      // console.log("in if block");
+
+      // this.modalData = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      // this.modalView$.nativeElement.classList.add('visible');
+      this.isMediaPreviewModal = true;
+      const modal = await this.modalController.create({
+        component: MediaPreviewModalPage,
+        cssClass: 'modal-container',
+        componentProps: {
+          mediaFile: this.sanitizer.bypassSecurityTrustResourceUrl(url),
+        },
+        backdropDismiss: false
+      });
+      modal.onDidDismiss().then(async res => {
+        this.isMediaPreviewModal = false;
+      });
+
+      await modal.present();
     }
   }
 

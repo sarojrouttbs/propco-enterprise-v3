@@ -327,3 +327,11 @@ export const FILE_IDS = {
   CONTRACTOR: 11,
   FIX_A_FAULT: 26
 }
+
+export const WORKORDER_FORM_CONST = {
+  JOB_TYPE: 4520,
+  FAULT_SOURCE_TYPE: 5118,
+  FIXOFLOW_SOURCE_TYPE: 3635,
+  CONTACT_TENANT: 'Contact Tenant',
+  ACCESS_VIA_KEY: 'Tenant approved access via keys'
+}
