@@ -341,19 +341,19 @@ export class ArrangingContractorComponent implements OnInit {
     } else {
       this.resultsAvailable = false;
     }
-    if(skillSet && !searchString){
+    if (skillSet && !searchString) {
       this.contractors = this.faultsService.searchContractor(searchString, skillSet);
-    }else{
+    } else {
       this.contractors = this.addContractorForm.get('contractor').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => 
-      this.addContractorForm.get('skillSet').value ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) : 
-      (value && value.length > 2) ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
-        new Observable())
-    );
+        switchMap((value: string) =>
+          this.addContractorForm.get('skillSet').value ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
+            (value && value.length > 2) ? this.faultsService.searchContractor(value, this.addContractorForm.get('skillSet').value) :
+              new Observable())
+      );
     }
   }
 
-  onBlurContractorSearch(event:any){
+  onBlurContractorSearch(event: any) {
     this.resultsAvailable = false;
   }
 
@@ -580,7 +580,6 @@ export class ArrangingContractorComponent implements OnInit {
         this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Quote', 'error');
         return invalid;
       }
-      console.log(this.raiseQuoteForm.get('selectedContractorId').value)
       if (!this.raiseQuoteForm.get('selectedContractorId').value) {
         this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
         return invalid;
@@ -1867,17 +1866,17 @@ export class ArrangingContractorComponent implements OnInit {
       }
     }
   }
-  async quoteUploadModal(isQuoteAmount?) {
+  async quoteUploadModal(preUpload?) {
     const modal = await this.modalController.create({
       component: QuoteModalPage,
       cssClass: 'modal-container upload-container',
       componentProps: {
         faultNotificationId: this.iacNotification.faultNotificationId,
         faultId: this.faultDetails.faultId,
+        stage: this.faultDetails.stage,
         maintenanceId: this.faultMaintenanceDetails.maintenanceId,
         confirmedEstimate: this.faultDetails.confirmedEstimate,
-        isQuoteAmount: isQuoteAmount ? isQuoteAmount : '',
-        quoteDocuments: this.quoteDocuments
+        preUpload: preUpload ? true : false
       },
       backdropDismiss: false
     });
@@ -1895,10 +1894,10 @@ export class ArrangingContractorComponent implements OnInit {
 
   openModal(url) {
     console.log("this", url);
-    
+
     if (url) {
       console.log("in if block");
-      
+
       this.modalData = this.sanitizer.bypassSecurityTrustResourceUrl(url);
       this.modalView$.nativeElement.classList.add('visible');
     }
