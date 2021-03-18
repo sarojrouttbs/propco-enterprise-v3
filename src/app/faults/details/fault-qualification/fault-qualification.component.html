@@ -39,7 +39,7 @@
               <span *ngIf="iqfNotification?.recipientType === 148">Block Management/Factors Company</span>
               <span *ngIf="iqfNotification?.recipientType === 1">Tenant</span>
             </h6>
-            <h6 class="banner-title" *ngIf="faultDetails?.status != 18">{{iqfNotification.allowedNumberOfChases === iqfNotification.numberOfChasesDone?'Escalation':'Next chase'}} due:
+            <h6 class="banner-title" *ngIf="!faultDetails?.isEscalated">{{iqfNotification.allowedNumberOfChases === iqfNotification.numberOfChasesDone?'Escalation':'Next chase'}} due:
               {{iqfNotification ? (iqfNotification.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
             </h6>
           </ng-container>
@@ -66,7 +66,7 @@
 
         <div class="question-answer"
           *ngIf="iqfNotification 
-          && (iqfNotification?.responseReceived == null) && (iqfNotification.allowedNumberOfChases === iqfNotification.numberOfChasesDone) && faultDetails.status !== 18 && faultDetails.status !== 10 && faultDetails.status !== 12">
+          && (iqfNotification?.responseReceived == null) && (iqfNotification.allowedNumberOfChases === iqfNotification.numberOfChasesDone) && !faultDetails.isEscalated && faultDetails.status !== 10 && faultDetails.status !== 12">
           <h4 claas="ion-text-center">Next Step:</h4>
           <h6 *ngIf="iqfNotification?.templateCode !== 'FI-T-E-1'">
             <ion-text color="danger">Please note: </ion-text>
@@ -92,7 +92,7 @@
         </div>
 
         <div class="question-answer" *ngIf="iqfNotification 
-          && (iqfNotification?.responseReceived?.isAccepted === false || faultDetails.status === 18)">
+          && (iqfNotification?.responseReceived?.isAccepted === false || faultDetails.isEscalated)">
           <h4 claas="ion-text-center">Next Step:</h4>
 
           <h6 *ngIf="iqfNotification?.templateCode !== 'FI-T-E-1'">

@@ -384,7 +384,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let fault of faultList;" class="table-row" (click)="onClickRow(fault); $event.stopPropagation();"
-                [ngClass]="{'row-selected' : fault.isSelected, 'escalated': fault.status == 18 }" [class.data-selected]="fault.isSelected" >
+                [ngClass]="{'row-selected' : fault.isSelected, 'escalated': fault.isEscalated }" [class.data-selected]="fault.isSelected" >
                 <!-- <td>
                   <ion-icon name="ellipse" [class]="fault.urgencyStatus==1 ? 'emergency' : (fault.urgencyStatus==2? 'urgent' : 'non-urgent')"></ion-icon>
                 </td> -->
@@ -409,7 +409,7 @@
                     (ionChange)="selectFault(fault, $event);" (click)="$event.stopPropagation();" [checked]="fault?.isChecked">
                   </ion-checkbox> 
                 </td>
-                <td>{{getLookupValue(fault.status, faultStatuses) || '-'}}</td>
+                <td>{{fault?.isEscalated ? 'Escalation' : getLookupValue(fault.status, faultStatuses) || '-'}}</td>
                 <!-- <td>{{getLookupValue(fault.urgencyStatus, faultUrgencyStatuses) || '-'}}</td> -->
                 <td class="resp-action-icon">
                   <i (click)="showMenu($event,'divOverlay', fault, 'table-row')"
@@ -425,8 +425,8 @@
             <ion-button *ngIf="selectedData?.isChecked" (click)="mergeFault(selectedData)">Merge</ion-button>
             <ion-button *ngIf="selectedData?.status != 12 && selectedData?.status != 10" (click)="closeFault()">Close</ion-button>
             <ion-button (click)="notesModal()">Add Note</ion-button>
-            <ion-button *ngIf="selectedData?.status != 18" (click)="escalateFault()">Escalate</ion-button>
-            <ion-button *ngIf="selectedData?.status == 18" (click)="deEscalateFault()">De-Escalate</ion-button>
+            <ion-button *ngIf="!selectedData?.isEscalated" (click)="escalateFault()">Escalate</ion-button>
+            <ion-button *ngIf="selectedData?.isEscalated" (click)="deEscalateFault()">De-Escalate</ion-button>
             <ion-button class="" (click)="goToFaultDetails()">View</ion-button>
             <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
           </div>
