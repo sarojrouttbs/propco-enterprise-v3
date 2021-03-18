@@ -1893,12 +1893,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   openModal(url) {
-    console.log("this", url);
-
-    if (url) {
-      console.log("in if block");
-
-      this.modalData = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    if (url) {this.modalData = this.sanitizer.bypassSecurityTrustResourceUrl(url);
       this.modalView$.nativeElement.classList.add('visible');
     }
   }
