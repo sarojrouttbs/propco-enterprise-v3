@@ -182,7 +182,8 @@ export class ArrangingContractorComponent implements OnInit {
       businessTelephone: [{ value: '', disabled: true }],
       contact: !this.faultDetails.isTenantPresenceRequired ? WORKORDER_FORM_CONST.ACCESS_VIA_KEY : WORKORDER_FORM_CONST.CONTACT_TENANT,
       jobType: WORKORDER_FORM_CONST.JOB_TYPE,
-      repairSource: this.faultDetails.sourceType === 'FAULT' ? WORKORDER_FORM_CONST.FAULT_SOURCE_TYPE : WORKORDER_FORM_CONST.FIXOFLOW_SOURCE_TYPE
+      repairSource: this.faultDetails.sourceType === 'FAULT' ? WORKORDER_FORM_CONST.FAULT_SOURCE_TYPE : WORKORDER_FORM_CONST.FIXOFLOW_SOURCE_TYPE,
+      requestStartDate: this.currentDate
     });
     if (this.faultDetails.doesBranchHoldKeys) {
       this.officeDetails();
@@ -310,7 +311,7 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
       this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
-    } else {      
+    } else {
       this.workOrderForm.patchValue(
         {
           worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
@@ -324,10 +325,7 @@ export class ArrangingContractorComponent implements OnInit {
           repairCost: this.faultMaintenanceDetails.amount,
           keysLocation: this.faultMaintenanceDetails.keysLocation,
           requiredDate: this.faultMaintenanceDetails.requiredCompletionDate,
-          returnKeysTo: this.faultMaintenanceDetails.returnKeysTo,
-          contact: this.faultMaintenanceDetails.contact,
-          jobType: this.faultMaintenanceDetails.jobType,
-          repairSource: this.faultMaintenanceDetails.repairSource
+          returnKeysTo: this.faultMaintenanceDetails.returnKeysTo
         }
       );
       this.workOrderForm.get('contractorName').disable();
