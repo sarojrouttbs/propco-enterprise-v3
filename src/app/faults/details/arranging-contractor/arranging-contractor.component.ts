@@ -76,7 +76,7 @@ export class ArrangingContractorComponent implements OnInit {
   isContractorSearch = false;
   saving: boolean = false;
   proceeding: boolean = false;
-  quoteArray: any;
+  quoteArray = [];
 
   @ViewChild("outsideElement", { static: true }) outsideElement: ElementRef;
   @ViewChild('modalView', { static: true }) modalView$: ElementRef;
@@ -119,8 +119,8 @@ export class ArrangingContractorComponent implements OnInit {
     } else this.isWorksOrder = false;
     this.getLookupData();
     this.initForms();
-    this.initApiCalls();
-    if (this.quoteDocuments) {
+    this.initApiCalls();   
+    if (this.quoteDocuments) {      
       this.quoteArray = this.quoteDocuments.filter(s => s.documentType === 'QUOTE');
     }
   }
@@ -132,7 +132,7 @@ export class ArrangingContractorComponent implements OnInit {
     } else {
       this.initWorkOrderForms();
     }
-    this.isFormsReady = true;    
+    this.isFormsReady = true;
   }
 
   private initQuoteForm(): void {
@@ -1055,28 +1055,14 @@ export class ArrangingContractorComponent implements OnInit {
         }
       });
     } else if (data.value) {
-      const modal = await this.modalController.create({
-        component: AppointmentModalPage,
-        cssClass: 'modal-container',
-        componentProps: {
-          faultNotificationId: this.iacNotification.faultNotificationId,
-          title: "Arranging Contractor",
-          headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
-          headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants.",
-          type: "quote"
-        },
-        backdropDismiss: false
-      });
-
-      modal.onDidDismiss().then(async res => {
-        if (res.data && res.data == 'success') {
-          // await this.faultNotification('OBTAIN_QUOTE');
-          this._btnHandler('refresh');
-        }
-      });
-
-      await modal.present();
-
+      let modalData = {
+        faultNotificationId: this.iacNotification.faultNotificationId,
+        title: "Arranging Contractor",
+        headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
+        headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants.",
+        type: "quote"
+      }
+      this.openAppointmentModal(modalData);
     }
   }
 
@@ -1585,27 +1571,14 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async worksOrderActionVisitTime(data) {
     if (data.value) {
-      const modal = await this.modalController.create({
-        component: AppointmentModalPage,
-        cssClass: 'modal-container',
-        componentProps: {
-          faultNotificationId: this.iacNotification.faultNotificationId,
+      let modalData = {
+        faultNotificationId: this.iacNotification.faultNotificationId,
           title: "Appointment Date/Time",
           headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
           headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
           type: "wo"
-        },
-        backdropDismiss: false
-      });
-
-      modal.onDidDismiss().then(async res => {
-        if (res.data && res.data == 'success') {
-          this.commonService.showLoader();
-          this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
-          await this.faultNotification(this.faultDetails.stageAction);
-        }
-      });
-      await modal.present();
+      }
+      this.openAppointmentModal(modalData);
     } else {
       const confirm = await this.commonService.showConfirm(data.text, 'Are you sure?', '', 'Yes', 'No');
       if (confirm) {
@@ -1888,12 +1861,38 @@ export class ArrangingContractorComponent implements OnInit {
 
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
-
         this._btnHandler('refresh_docs');
-        // this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
-        // await this.faultNotification(this.faultDetails.stageAction);
       }
     });
+    await modal.present();
+  }
+
+  async modifyDateTime() {
+    let modalData = {
+      faultNotificationId: this.iacNotification.faultNotificationId,
+        title: "Appointment Date/Time",
+        headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
+        headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
+        type: "modify-quote"
+    }
+
+    this.openAppointmentModal(modalData);
+  }
+
+  async openAppointmentModal(modalData) {
+    const modal = await this.modalController.create({
+      component: AppointmentModalPage,
+      cssClass: 'modal-container',
+      componentProps: modalData,
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this._btnHandler('refresh');
+      }
+    });
+
     await modal.present();
   }
 }

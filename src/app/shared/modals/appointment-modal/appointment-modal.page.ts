@@ -50,6 +50,14 @@ export class AppointmentModalPage implements OnInit {
         if (updateCCVisit) {
           this.modalController.dismiss('success');
         }
+      } else if(this.type === 'modify-quote'){
+        const quoteRequestObj = {
+          contractorQuotePropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss')
+        };
+        const updateCCVisit = await this.modifyContractorVisit(this.faultNotificationId, quoteRequestObj);
+        if (updateCCVisit) {
+          this.modalController.dismiss('success');
+        }
       }
     } else {
       this.appointmentForm.markAllAsTouched();
@@ -75,6 +83,21 @@ export class AppointmentModalPage implements OnInit {
   saveWoContractorVisit(faultNotificationId, requestObj) {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.updateWOContractorVisit(faultNotificationId, requestObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          resolve(false)
+        }
+      );
+    });
+    return promise;
+
+  }
+
+  modifyContractorVisit(faultNotificationId, requestObj) {    
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.modifyContractorVisit(faultNotificationId, requestObj).subscribe(
         res => {
           resolve(true);
         },

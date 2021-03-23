@@ -67,16 +67,16 @@
           <ng-container *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === true && (iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E')">
             <div class="question-answer">
               <h4 class="ion-text-center">Next Step:</h4> 
-              <h6 *ngIf="quoteArray.length === 0">
+              <h6 *ngIf="quoteArray?.length === 0">
                 <ion-text color="danger">Please note: </ion-text>
                 <span>The appointment is due on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}
                 </span>
               </h6>
-              <h6 *ngIf="quoteArray.length > 0">
+              <h6 *ngIf="quoteArray?.length > 0">
                 <span>Thank you for carrying out this quote. This is now with the Landlord for review. If we require you to
                   carry out the job, we will be back in touch.</span>
               </h6>
-              <ion-button color="success" class="action-btn" fill="solid" (click)="quoteUploadModal('preUpload'); $event.stopPropagation();" *ngIf="quoteArray.length === 0">Upload Quote & Photos</ion-button>
+              <ion-button color="success" class="action-btn" fill="solid" (click)="quoteUploadModal('preUpload'); $event.stopPropagation();" *ngIf="quoteArray?.length === 0">Upload Quote & Photos</ion-button>
               <div class="border-bottom"></div>
             </div>
           </ng-container>
@@ -88,12 +88,23 @@
           >
           <div class="question-answer" *ngIf="(iacNotification?.responseReceived == null && !faultDetails.isEscalated && faultDetails.status !== 10 && faultDetails.status !== 12 && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone))">
             <h4 class="ion-text-center">Next Step:</h4> 
-            <h6>  
+            <h6 *ngIf="iacNotification?.templateCode === 'CDT-C-E'">  
               <ion-text color="danger">Please note: </ion-text>
               <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
                 {{iacNotification?.hoursLeft}}.
               </span>
             </h6>
+
+            <h6 *ngIf="iacNotification?.templateCode === 'CQ-C-E'">  
+              <ion-text color="danger">Please note: </ion-text>
+              <span *ngIf="currentDate<faultDetails?.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote was on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}.
+              </span>
+              <span *ngIf="currentDate>faultDetails?.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote was on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}. </span>
+              <span>The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to upload the Quote and photos.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
+                {{iacNotification?.hoursLeft}}.
+              </span>
+            </h6>
+
             <div class="border-bottom"></div>
           </div>
 
@@ -143,6 +154,18 @@
                         *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
                     </ion-button>
                   </div>
+                </ng-container>
+                <ng-container *ngIf="iacNotification && 
+                ((iacNotification?.templateCode === 'CDT-C-E' && 
+                iacNotification?.responseReceived?.isAccepted === true) || 
+                (iacNotification?.templateCode === 'CQ-C-E' &&
+                iacNotification?.responseReceived === null))">
+                  <ion-button color="success" expand="block" class="action-btn"
+                      fill="outline"
+                      (click)="modifyDateTime(); $event.stopPropagation();">
+                      Modify Date/Time
+                    </ion-button>
+
                 </ng-container>
               </ion-row>
             </ion-grid>
