@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -119,8 +119,8 @@ export class ArrangingContractorComponent implements OnInit {
     } else this.isWorksOrder = false;
     this.getLookupData();
     this.initForms();
-    this.initApiCalls();   
-    if (this.quoteDocuments) {      
+    this.initApiCalls();
+    if (this.quoteDocuments) {
       this.quoteArray = this.quoteDocuments.filter(s => s.documentType === 'QUOTE');
     }
   }
@@ -1060,7 +1060,7 @@ export class ArrangingContractorComponent implements OnInit {
         title: "Arranging Contractor",
         headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
         headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants.",
-        type: "quote"
+        type: APPOINTMENT_MODAL_TYPE.QUOTE
       }
       this.openAppointmentModal(modalData);
     }
@@ -1573,10 +1573,10 @@ export class ArrangingContractorComponent implements OnInit {
     if (data.value) {
       let modalData = {
         faultNotificationId: this.iacNotification.faultNotificationId,
-          title: "Appointment Date/Time",
-          headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
-          headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
-          type: "wo"
+        title: "Appointment Date/Time",
+        headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
+        headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
+        type: APPOINTMENT_MODAL_TYPE.WO
       }
       this.openAppointmentModal(modalData);
     } else {
@@ -1870,10 +1870,10 @@ export class ArrangingContractorComponent implements OnInit {
   async modifyDateTime() {
     let modalData = {
       faultNotificationId: this.iacNotification.faultNotificationId,
-        title: "Appointment Date/Time",
-        headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
-        headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
-        type: "modify-quote"
+      title: "Appointment Date/Time",
+      headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
+      headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
+      type: APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE
     }
 
     this.openAppointmentModal(modalData);

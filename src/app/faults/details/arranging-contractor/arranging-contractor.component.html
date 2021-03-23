@@ -97,7 +97,7 @@
 
             <h6 *ngIf="iacNotification?.templateCode === 'CQ-C-E'">  
               <ion-text color="danger">Please note: </ion-text>
-              <span *ngIf="currentDate<faultDetails?.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote was on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}.
+              <span *ngIf="currentDate<=faultDetails?.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote is due on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}.
               </span>
               <span *ngIf="currentDate>faultDetails?.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote was on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}. </span>
               <span>The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to upload the Quote and photos.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
