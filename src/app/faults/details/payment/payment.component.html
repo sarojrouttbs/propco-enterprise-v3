@@ -1,0 +1,72 @@
+
+  <ion-grid >
+    <ion-row *ngIf="!showSkeleton" >
+      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+        <div class="arranging-contractor">        
+          <div class="question-answer ion-text-center" *ngIf="faultDetails && !faultDetails?.isWOConvertedToInvoice">
+            <h4>Next Step:</h4> 
+            <h6><b>Convert Works Order to Invoice</b></h6>
+            <h6>
+              <ion-text color="danger">Please note: </ion-text><ion-text>Invoice has been approved by the Property Manager and passed to Accounts for payment.</ion-text>
+            </h6>
+            <div class="border-bottom"></div>
+          </div>
+          <div class="question-answer ion-text-center" *ngIf="faultDetails && faultDetails?.isWOConvertedToInvoice && !faultDetails?.isContractorPaymentDone">
+            <h4>Next Step:</h4> 
+            <h6><b>Contractor Awaiting Payment</b></h6>
+            <h6>
+              <ion-text color="danger">Please note: </ion-text><ion-text>Works Order  has been converted to Invoice.Contractor  will be paid in the next payment run subject to funds being available.</ion-text>
+            </h6>
+            <div class="border-bottom"></div>
+          </div>
+          <div class="question-answer ion-text-center" *ngIf="faultDetails && faultDetails?.isWOConvertedToInvoice && faultDetails?.isContractorPaymentDone">
+            <h4>Next Step:</h4> 
+            <h6><b>Contractor paid.This repair is now Closed</b></h6>
+            <div class="border-bottom"></div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="showSkeleton">
+      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+      <div><ng-container *ngTemplateOutlet="notificationSkeleton"></ng-container></div>
+    </ion-col>
+    </ion-row>
+  </ion-grid>
+<div class="action-btn-group">
+  <ion-button (click)="_btnHandler('cancel')" class="cancel-button" [disabled]="saving">Cancel</ion-button>
+  <ion-button (click)="_btnHandler('back')" [disabled]="true">Back</ion-button>
+  <ion-button class="save-button" [disabled]="true"  (click)="_btnHandler('save')">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+  <ion-button class="submit-button" [disabled]="true" (click)="_btnHandler('proceed')">Proceed</ion-button>
+</div>
+
+<ng-template #notificationSkeleton>
+  <div class="arranging-contractor">
+    <div class="banner">
+      <div class="ion-text-left">
+        <ion-skeleton-text class="header" animated style="width: 17%;height: 16px;"></ion-skeleton-text>
+      </div>
+      <h2 class="banner-heading">
+        <ion-skeleton-text class="header" animated style="width: 25%;margin: auto;height: 20px;"></ion-skeleton-text></h2>
+      <h6 class="banner-title"><ion-skeleton-text class="header" animated style="width: 20%;margin: auto;"></ion-skeleton-text></h6>
+      <ion-skeleton-text class="header" animated style="width: 29%;margin: auto;height: 31px;border-radius: 5px;"></ion-skeleton-text>
+      <ng-container>
+        <h6 class="banner-title response-recived">
+          <ion-skeleton-text class="header" animated style="width: 31%;height: 12px;margin: auto;"></ion-skeleton-text>
+        </h6>
+      </ng-container>
+
+    </div>
+    <div class="question-answer">
+      <h6>  <ion-skeleton-text class="header" animated style="width: 48%;margin: auto;"></ion-skeleton-text></h6>
+      <ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ng-container>
+            <ion-skeleton-text class="header" animated style="width: 45%;margin: auto;"></ion-skeleton-text>
+            <ion-skeleton-text class="header" animated style="width: 45%;margin: auto;"></ion-skeleton-text>
+          </ng-container>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ng-template>

@@ -90,6 +90,8 @@ declare namespace FaultModels {
         warrantyCertificateId?: number;
         estimatedVisitAt: string;
         fixfloTenantContact: string;
+        isWOConvertedToInvoice: boolean;
+        isContractorPaymentDone: boolean;
     }
 
     export interface AdditionalInfo {

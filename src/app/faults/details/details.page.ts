@@ -1403,6 +1403,8 @@ export class DetailsPage implements OnInit {
       this.stepper.selectedIndex = FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION
     } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.JOB_COMPLETION) {
       this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+    }else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.PAYMENT) {
+      this.stepper.selectedIndex = FAULT_STAGES_INDEX.JOB_COMPLETION;
     }
   }
 
