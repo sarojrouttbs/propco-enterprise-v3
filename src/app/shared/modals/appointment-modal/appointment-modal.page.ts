@@ -17,6 +17,7 @@ export class AppointmentModalPage implements OnInit {
   headingTwo;
   minDate;
   type;
+  futureDate;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -29,7 +30,11 @@ export class AppointmentModalPage implements OnInit {
       dateTime: ['', Validators.required],
     });
     this.minDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
-
+    if (this.type === 'modify-quote') {
+      const currentDate = new Date();
+      currentDate.setDate(currentDate.getDate() + 1);
+      this.futureDate = this.commonService.getFormatedDate(currentDate, 'yyyy-MM-dd');
+    }
   }
 
   async save() {
@@ -50,7 +55,7 @@ export class AppointmentModalPage implements OnInit {
         if (updateCCVisit) {
           this.modalController.dismiss('success');
         }
-      } else if(this.type === 'modify-quote'){
+      } else if (this.type === 'modify-quote') {
         const quoteRequestObj = {
           contractorQuotePropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss')
         };
@@ -95,7 +100,7 @@ export class AppointmentModalPage implements OnInit {
 
   }
 
-  modifyContractorVisit(faultNotificationId, requestObj) {    
+  modifyContractorVisit(faultNotificationId, requestObj) {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.modifyContractorVisit(faultNotificationId, requestObj).subscribe(
         res => {
