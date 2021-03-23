@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
+import { APPOINTMENT_MODAL_TYPE } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -30,7 +31,7 @@ export class AppointmentModalPage implements OnInit {
       dateTime: ['', Validators.required],
     });
     this.minDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
-    if (this.type === 'modify-quote') {
+    if (this.type === APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE) {
       const currentDate = new Date();
       currentDate.setDate(currentDate.getDate() + 1);
       this.futureDate = this.commonService.getFormatedDate(currentDate, 'yyyy-MM-dd');
@@ -45,17 +46,17 @@ export class AppointmentModalPage implements OnInit {
         submittedByType: 'SECUR_USER'
       }
 
-      if (this.type === 'quote') {
+      if (this.type === APPOINTMENT_MODAL_TYPE.QUOTE) {
         const updateCCVisit = await this.saveContractorVisit(this.faultNotificationId, requestObj);
         if (updateCCVisit) {
           this.modalController.dismiss('success');
         }
-      } else if (this.type === 'wo') {
+      } else if (this.type === APPOINTMENT_MODAL_TYPE.WO) {
         const updateCCVisit = await this.saveWoContractorVisit(this.faultNotificationId, requestObj);
         if (updateCCVisit) {
           this.modalController.dismiss('success');
         }
-      } else if (this.type === 'modify-quote') {
+      } else if (this.type === APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE) {
         const quoteRequestObj = {
           contractorQuotePropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss')
         };
