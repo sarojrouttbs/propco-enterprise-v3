@@ -1,3 +1,4 @@
+import { PaymentComponent } from './payment/payment.component';
 import { RejectInvoiceModule } from './../../shared/modals/reject-invoice/reject-invoice.module';
 import { JobCompletionComponent } from './job-completion/job-completion.component';
 import { WorksorderModalPageModule } from './../../shared/modals/worksorder-modal/worksorder-modal.module';
@@ -74,6 +75,7 @@ import { MoreInfoModalPageModule } from 'src/app/shared/modals/more-info-modal/m
     MoreInfoModalPageModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
-    PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent,JobCompletionComponent],
+    PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent,JobCompletionComponent,
+    PaymentComponent],
 })
 export class DetailsPageModule { }
