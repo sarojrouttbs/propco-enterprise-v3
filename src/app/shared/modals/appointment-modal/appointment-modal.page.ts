@@ -31,7 +31,7 @@ export class AppointmentModalPage implements OnInit {
       dateTime: ['', Validators.required],
     });
     this.minDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
-    if (this.type === APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE) {
+    if (this.type === APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE || this.type === APPOINTMENT_MODAL_TYPE.MODIFY_WO) {
       const currentDate = new Date();
       currentDate.setDate(currentDate.getDate() + 1);
       this.futureDate = this.commonService.getFormatedDate(currentDate, 'yyyy-MM-dd');
@@ -61,6 +61,14 @@ export class AppointmentModalPage implements OnInit {
           contractorQuotePropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss')
         };
         const updateCCVisit = await this.modifyContractorVisit(this.faultNotificationId, quoteRequestObj);
+        if (updateCCVisit) {
+          this.modalController.dismiss('success');
+        }
+      } else if (this.type === APPOINTMENT_MODAL_TYPE.MODIFY_WO) {
+        const quoteRequestObj = {
+          contractorWoPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss')
+        };
+        const updateCCVisit = await this.modifyWoContractorVisit(this.faultNotificationId, quoteRequestObj);
         if (updateCCVisit) {
           this.modalController.dismiss('success');
         }
@@ -98,7 +106,6 @@ export class AppointmentModalPage implements OnInit {
       );
     });
     return promise;
-
   }
 
   modifyContractorVisit(faultNotificationId, requestObj) {
@@ -113,9 +120,21 @@ export class AppointmentModalPage implements OnInit {
       );
     });
     return promise;
-
   }
 
+  modifyWoContractorVisit(faultNotificationId, requestObj) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.modifyWoContractorVisit(faultNotificationId, requestObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          resolve(false)
+        }
+      );
+    });
+    return promise;
+  }
 
   dismiss() {
     this.modalController.dismiss();

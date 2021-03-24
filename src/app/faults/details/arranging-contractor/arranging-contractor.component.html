@@ -64,8 +64,8 @@
                 <div class="border-bottom"></div>
             </ng-container>
           </div>
-          <ng-container *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === true && (iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E')">
-            <div class="question-answer">
+          <ng-container *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === true">
+            <div class="question-answer" *ngIf="iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E'">
               <h4 class="ion-text-center">Next Step:</h4> 
               <h6 *ngIf="quoteArray?.length === 0">
                 <ion-text color="danger">Please note: </ion-text>
@@ -77,6 +77,16 @@
                   carry out the job, we will be back in touch.</span>
               </h6>
               <ion-button color="success" class="action-btn" fill="solid" (click)="quoteUploadModal('preUpload'); $event.stopPropagation();" *ngIf="quoteArray?.length === 0">Upload Quote & Photos</ion-button>
+              <div class="border-bottom"></div>
+            </div>
+
+            <div class="question-answer" *ngIf="iacNotification?.templateCode === 'CDT-C-E (WO)'">
+              <h4 class="ion-text-center">Next Step:</h4> 
+              <h6>
+                <ion-text color="danger">Please note: </ion-text>
+                <span>The appointment is due on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorWoPropertyVisitAt | date: 'HH:mm'}}
+                </span>
+              </h6>
               <div class="border-bottom"></div>
             </div>
           </ng-container>
@@ -105,6 +115,12 @@
               </span>
             </h6>
 
+            <h6 *ngIf="iacNotification?.templateCode === 'CWO-C-E' && currentDate>faultDetails?.contractorWoPropertyVisitAt">  
+              <ion-text color="danger">Please note: </ion-text>
+              <span>The appointment for carrying out the work was on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorWoPropertyVisitAt | date: 'HH:mm'}}. The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to confirm the Completion of Job.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
+                {{iacNotification?.hoursLeft}}.
+              </span>
+            </h6>
             <div class="border-bottom"></div>
           </div>
 
@@ -156,13 +172,19 @@
                   </div>
                 </ng-container>
                 <ng-container *ngIf="iacNotification && 
-                ((iacNotification?.templateCode === 'CDT-C-E' && 
-                iacNotification?.responseReceived?.isAccepted === true) || 
-                (iacNotification?.templateCode === 'CQ-C-E' &&
-                iacNotification?.responseReceived === null))">
+                (((
+                  iacNotification?.templateCode === 'CDT-C-E' || 
+                  iacNotification?.templateCode === 'CDT-C-E (WO)') && 
+                  iacNotification?.responseReceived?.isAccepted === true
+                  ) || 
+                  ((
+                    iacNotification?.templateCode === 'CQ-C-E' || 
+                    iacNotification?.templateCode === 'CWO-C-E') && 
+                    iacNotification?.responseReceived === null
+                    ))">
                   <ion-button color="success" expand="block" class="action-btn"
                       fill="outline"
-                      (click)="modifyDateTime(); $event.stopPropagation();">
+                      (click)="modifyDateTime(iacNotification?.templateCode); $event.stopPropagation();">
                       Modify Date/Time
                     </ion-button>
 
