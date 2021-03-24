@@ -45,7 +45,7 @@ export class DashboardPage implements OnInit {
   isStatusFilter = false;
   isAssignToFilter = false;
   filterForm: FormGroup;
-  invoiceArr = [{ key: 8, value: 'Invoice Submitted' }, { key: 9, value: 'Paid' }];
+  // invoiceArr = [{ key: 8, value: 'Invoice Submitted' }, { key: 9, value: 'Paid' }];
   accessibleOffices: any
   faultParams: any = new HttpParams();
   fs: number[] = [];
@@ -540,13 +540,15 @@ export class DashboardPage implements OnInit {
     }
 
     if (this.filterForm.get('invoice').value) {
-      let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancel', this.createInputs());
-      if (response && response.length > 0) {
-        this.fs.push(response);
-      } else {
-        this.filterForm.get('invoice').setValue(false)
-        return;
-      }
+      // let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancel', this.createInputs());
+      // if (response && response.length > 0) {
+      //   this.fs.push(response);
+      // } else {
+      //   this.filterForm.get('invoice').setValue(false)
+      //   return;
+      // }
+      this.fs.push(FAULT_STATUSES.INVOICE_SUBMITTED, FAULT_STATUSES.INVOICE_APPROVED);
+
     }
 
     if (this.filterForm.get('escalation').value) {
@@ -646,20 +648,20 @@ export class DashboardPage implements OnInit {
     this.rerenderFaults();
   }
 
-  createInputs() {
-    const theNewInputs = [];
-    for (let i = 0; i < this.invoiceArr.length; i++) {
-      theNewInputs.push(
-        {
-          type: 'checkbox',
-          label: this.invoiceArr[i].value,
-          value: '' + this.invoiceArr[i].key,
-          checked: false
-        }
-      );
-    }
-    return theNewInputs;
-  }
+  // createInputs() {
+  //   const theNewInputs = [];
+  //   for (let i = 0; i < this.invoiceArr.length; i++) {
+  //     theNewInputs.push(
+  //       {
+  //         type: 'checkbox',
+  //         label: this.invoiceArr[i].value,
+  //         value: '' + this.invoiceArr[i].key,
+  //         checked: false
+  //       }
+  //     );
+  //   }
+  //   return theNewInputs;
+  // }
 
   getMoreUsers(event: {
     component: IonicSelectableComponent,
