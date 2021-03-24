@@ -693,7 +693,7 @@ export class ArrangingContractorComponent implements OnInit {
           }
         }
       }
-      if (this.iacNotification.templateCode === "LAR-L-Q" && this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
+      if ((this.iacNotification.templateCode === "LAR-L-Q" || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') && this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
         if (!this.isUserActionChange) {
           await this.proceedWithQuoteAndWO();
           this.proceeding = false;
