@@ -22,7 +22,7 @@ interface Lookupdata {
 export class CommonService {
   private loader;
   entityType;
-  public alertPresented: any;
+  // public alertPresented: any;
 
   constructor(
     private alertCtrl: AlertController,
@@ -32,7 +32,7 @@ export class CommonService {
     public toastController: ToastController,
     private toastr: ToastrService,
   ) {
-    this.alertPresented = false;
+    // this.alertPresented = false;
   }
 
   private dataChange = new Subject<any>();
@@ -490,54 +490,54 @@ export class CommonService {
     }
   }
 
-  async showCheckBoxConfirm(title: string, okText?: string, cancelText?: string, input?: any) {
-    if (!this.alertPresented) {
-      return new Promise((resolve, reject) => {
-        this.alertPresented = true;
-        let alertPopup: any;
-        this.alertCtrl.create({
-          header: title,
-          cssClass: 'common-alert-box',
-          inputs: input ? input : '',
-          buttons: [
-            {
-              text: cancelText ? cancelText : 'Cancel',
-              cssClass: 'ion-color-danger',
-              role: 'cancel',
-              handler: () => {
-                alertPopup.dismiss().then((res) => {
-                  this.alertPresented = false;
+  // async showCheckBoxConfirm(title: string, okText?: string, cancelText?: string, input?: any) {
+  //   if (!this.alertPresented) {
+  //     return new Promise((resolve, reject) => {
+  //       this.alertPresented = true;
+  //       let alertPopup: any;
+  //       this.alertCtrl.create({
+  //         header: title,
+  //         cssClass: 'common-alert-box',
+  //         inputs: input ? input : '',
+  //         buttons: [
+  //           {
+  //             text: cancelText ? cancelText : 'Cancel',
+  //             cssClass: 'ion-color-danger',
+  //             role: 'cancel',
+  //             handler: () => {
+  //               alertPopup.dismiss().then((res) => {
+  //                 this.alertPresented = false;
 
-                  resolve(false);
-                });
-                return false;
-              }
-            },
-            {
-              text: okText ? okText : 'Ok',
-              cssClass: 'ion-color-success',
-              handler: (data) => {
-                if (data.length > 0) {
-                  alertPopup.dismiss().then((res) => {
-                    this.alertPresented = false;;
+  //                 resolve(false);
+  //               });
+  //               return false;
+  //             }
+  //           },
+  //           {
+  //             text: okText ? okText : 'Ok',
+  //             cssClass: 'ion-color-success',
+  //             handler: (data) => {
+  //               if (data.length > 0) {
+  //                 alertPopup.dismiss().then((res) => {
+  //                   this.alertPresented = false;;
 
-                    resolve(data);
-                  });
-                }
-                return false;
-              }
-            }
-          ],
-          backdropDismiss: false,
-        }).then(res => {
-          alertPopup = res;
-          res.present();
-        });
+  //                   resolve(data);
+  //                 });
+  //               }
+  //               return false;
+  //             }
+  //           }
+  //         ],
+  //         backdropDismiss: false,
+  //       }).then(res => {
+  //         alertPopup = res;
+  //         res.present();
+  //       });
 
-      });
-    }
+  //     });
+  //   }
 
-  }
+  // }
 
   sortBy(field: string, element: []) {
 
