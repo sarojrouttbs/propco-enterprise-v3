@@ -8,6 +8,7 @@ import { CommonService } from '../../services/common.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { forkJoin } from 'rxjs';
 import { FOLDER_NAMES, MAX_QUOTE_LIMIT } from './../../../shared/constants';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-quote-modal',
@@ -177,7 +178,7 @@ export class QuoteModalPage implements OnInit {
       if (docsUploaded) {
         let amountUpdated: boolean = false;
         if (this.preUpload) {
-          amountUpdated = await this.updateFaultSummary() as boolean;
+          amountUpdated = await this.updateQuoteAmount() as boolean;
         } else {
           amountUpdated = await this.submitQuoteAmout() as boolean;
         }
@@ -294,13 +295,10 @@ export class QuoteModalPage implements OnInit {
     return promise;
   }
 
-  updateFaultSummary() {
-    let faultRequestObj: any = {};
-    faultRequestObj.confirmedEstimate = this.quoteAssessmentForm.value.quoteAmount;
-    faultRequestObj.isDraft = false;
-    faultRequestObj.stage = this.stage;
+  updateQuoteAmount() {
+    const params: any = new HttpParams().set('quoteAmount', this.quoteAssessmentForm.value.quoteAmount);
     const promise = new Promise((resolve, reject) => {
-      this.faultService.updateFault(this.faultId, faultRequestObj).subscribe(
+      this.quoteService.saveQuoteAmount(params, this.faultId).subscribe(
         res => {
           resolve(true);
         },
