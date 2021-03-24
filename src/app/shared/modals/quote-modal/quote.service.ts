@@ -24,7 +24,12 @@ export class QuoteService {
   deleteDocument(documentId): Observable<any> {
     return this.httpClient.delete(environment.API_BASE_URL + `faults/documents/${documentId}`, {});
   }
-  
+
+  saveQuoteAmount(params: any, faultId: string): Observable<any> {
+    console.log(params)
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/quote-amount`, {}, { params });
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
