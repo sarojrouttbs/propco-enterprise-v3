@@ -340,3 +340,10 @@ export const MAINT_CONTACT = {
   CONTACT_TENANT: 'Contact Tenant',
   ACCESS_VIA_KEY: 'Tenant approved access via keys'
 }
+
+export const APPOINTMENT_MODAL_TYPE = {
+  QUOTE: 'quote',
+  MODIFY_QUOTE: 'modify-quote',
+  MODIFY_WO: 'modify-wo',
+  WO: 'wo'
+}

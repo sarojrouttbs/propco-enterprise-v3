@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -76,7 +76,7 @@ export class ArrangingContractorComponent implements OnInit {
   isContractorSearch = false;
   saving: boolean = false;
   proceeding: boolean = false;
-  quoteArray: any;
+  quoteArray = [];
 
   @ViewChild("outsideElement", { static: true }) outsideElement: ElementRef;
   @ViewChild('modalView', { static: true }) modalView$: ElementRef;
@@ -132,7 +132,7 @@ export class ArrangingContractorComponent implements OnInit {
     } else {
       this.initWorkOrderForms();
     }
-    this.isFormsReady = true;    
+    this.isFormsReady = true;
   }
 
   private initQuoteForm(): void {
@@ -1055,28 +1055,14 @@ export class ArrangingContractorComponent implements OnInit {
         }
       });
     } else if (data.value) {
-      const modal = await this.modalController.create({
-        component: AppointmentModalPage,
-        cssClass: 'modal-container',
-        componentProps: {
-          faultNotificationId: this.iacNotification.faultNotificationId,
-          title: "Arranging Contractor",
-          headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
-          headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants.",
-          type: "quote"
-        },
-        backdropDismiss: false
-      });
-
-      modal.onDidDismiss().then(async res => {
-        if (res.data && res.data == 'success') {
-          // await this.faultNotification('OBTAIN_QUOTE');
-          this._btnHandler('refresh');
-        }
-      });
-
-      await modal.present();
-
+      let modalData = {
+        faultNotificationId: this.iacNotification.faultNotificationId,
+        title: "Arranging Contractor",
+        headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
+        headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants.",
+        type: APPOINTMENT_MODAL_TYPE.QUOTE
+      }
+      this.openAppointmentModal(modalData);
     }
   }
 
@@ -1585,27 +1571,14 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async worksOrderActionVisitTime(data) {
     if (data.value) {
-      const modal = await this.modalController.create({
-        component: AppointmentModalPage,
-        cssClass: 'modal-container',
-        componentProps: {
-          faultNotificationId: this.iacNotification.faultNotificationId,
-          title: "Appointment Date/Time",
-          headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
-          headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
-          type: "wo"
-        },
-        backdropDismiss: false
-      });
-
-      modal.onDidDismiss().then(async res => {
-        if (res.data && res.data == 'success') {
-          this.commonService.showLoader();
-          this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
-          await this.faultNotification(this.faultDetails.stageAction);
-        }
-      });
-      await modal.present();
+      let modalData = {
+        faultNotificationId: this.iacNotification.faultNotificationId,
+        title: "Appointment Date/Time",
+        headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
+        headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
+        type: APPOINTMENT_MODAL_TYPE.WO
+      }
+      this.openAppointmentModal(modalData);
     } else {
       const confirm = await this.commonService.showConfirm(data.text, 'Are you sure?', '', 'Yes', 'No');
       if (confirm) {
@@ -1888,12 +1861,38 @@ export class ArrangingContractorComponent implements OnInit {
 
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
-
         this._btnHandler('refresh_docs');
-        // this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
-        // await this.faultNotification(this.faultDetails.stageAction);
       }
     });
+    await modal.present();
+  }
+
+  async modifyDateTime() {
+    let modalData = {
+      faultNotificationId: this.iacNotification.faultNotificationId,
+      title: "Appointment Date/Time",
+      headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
+      headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
+      type: APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE
+    }
+
+    this.openAppointmentModal(modalData);
+  }
+
+  async openAppointmentModal(modalData) {
+    const modal = await this.modalController.create({
+      component: AppointmentModalPage,
+      cssClass: 'modal-container',
+      componentProps: modalData,
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this._btnHandler('refresh');
+      }
+    });
+
     await modal.present();
   }
 }
