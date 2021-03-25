@@ -42,13 +42,13 @@ export class PropertyCertificateModalPage implements OnInit {
     //   fixedColumns: true,
     //   select: true
     // };
-    this.propertyCertificateList = this.propertyCertificate?.data;
+    this.propertyCertificateList = this.propertyCertificate;
     this.propertyCertificateList.forEach((item) => {
       item.isRowChecked = false;
       item.expired = this.commonCervice.getFormatedDate(item.expireDate, 'yyyy-MM-dd') > this.commonCervice.getFormatedDate(new Date(), 'yyyy-MM-dd') ? true : false;
     });
     if (this.certificateId) {
-      const certificate = this.propertyCertificate.data.filter(x => x.certificateId === this.certificateId);
+      const certificate = this.propertyCertificate.filter(x => x.certificateId === this.certificateId);
       this.selectCertificate(certificate[0], true);
     }
   }
@@ -56,7 +56,7 @@ export class PropertyCertificateModalPage implements OnInit {
   selectCertificate(certificate, e) {
     certificate.isRowChecked = e;
     if (e) {
-      this.propertyCertificate.data.forEach(
+      this.propertyCertificate.forEach(
         ele => {
           if (ele.certificateId != certificate.certificateId) {
             ele.isRowChecked = false;
