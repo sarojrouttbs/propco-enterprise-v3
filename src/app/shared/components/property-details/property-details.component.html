@@ -78,7 +78,7 @@
                 {{propertyDetails.isOwnerOccupied ? 'Landlord Occupied': propertyDetails.isPropertyCheckedIn ?
                 'Tenanted' : 'Vacant' }}
               </ion-col>
-              <ion-col size-lg="25" size="33.3">
+              <!-- <ion-col size-lg="25" size="33.3">
                 <span class="text">Licence Details</span>
                 <br />
                 Has HMO Licence? {{ hmoDetails[0]?.isPropertyLicensed ? 'Yes' : 'No' }}
@@ -87,7 +87,18 @@
                 <span class="text">Licence Scheme</span>
                 <br />
                 {{getLookupValue(hmoDetails[0]?.licenceSchemeLookup, hmoLicenceSchemes) || 'N/A'}}
+              </ion-col> -->
+              <ion-col size-lg="25" size="33.3">
+                <span class="text">Licence Details</span>
+                <br />
+                {{ hmoDetails[0]?.isPropertyLicensed ? getLookupValue(hmoDetails[0]?.licenceSchemeLookup, hmoLicenceSchemes) : 'N/A' }}
               </ion-col>
+              <ion-col size-lg="25" size="33.3">
+                <span class="text">Communication</span>
+                <br />
+                {{getLookupValue(dppRepairDetails?.lookupId, faultCommunicationPreferences) || 'N/A'}}
+              </ion-col>
+
               <ion-col size-lg="25" size="33.3" *ngIf="faultId">
                 <span class="text">Reported On</span>
                 <br />
