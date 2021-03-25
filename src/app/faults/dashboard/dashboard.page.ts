@@ -63,6 +63,7 @@ export class DashboardPage implements OnInit {
   userList: any;
   assignToSubscription: Subscription;
   selectedFaultList: any = [];
+  showEscalated = '';
 
   constructor(
     private commonService: CommonService,
@@ -484,12 +485,14 @@ export class DashboardPage implements OnInit {
     this.fcfd = '';
     this.fctd = '';
     this.filterForm.get('managementFilter').setValue(this.selectedMgmtType);
+    this.showEscalated = '';
   }
 
   async checkboxClick(controlName?) {
     this.isFilter = true;
     this.fs = [];
     this.fus = [];
+    this.showEscalated = '';
     let checkBoxControls = ['repairCheckbox', 'newRepairs', 'emergency', 'urgent', 'nonUrgent', 'assessment', 'automation', 'invoice', 'escalation']
 
     if (controlName) {
@@ -550,9 +553,8 @@ export class DashboardPage implements OnInit {
       this.fs.push(FAULT_STATUSES.INVOICE_SUBMITTED, FAULT_STATUSES.INVOICE_APPROVED);
 
     }
-
     if (this.filterForm.get('escalation').value) {
-      this.fs.push(FAULT_STATUSES.ESCALATION);
+      this.showEscalated = 'true';
     }
 
     const filteredStatus: any = [];
@@ -622,7 +624,8 @@ export class DashboardPage implements OnInit {
     this.faultParams = this.faultParams.delete('fcfd');
     this.faultParams = this.faultParams.delete('fctd');
     this.faultParams = this.faultParams.delete('fus');
-
+    this.faultParams = this.faultParams.delete('showEscalated');
+    
     if (this.fat.length > 0) {
       this.faultParams = this.faultParams.set('fat', this.fat.toString());
     }
@@ -644,6 +647,9 @@ export class DashboardPage implements OnInit {
     if (this.fs.length > 0) {
       let unique = this.fs.filter((v, i, a) => a.indexOf(v) === i);
       this.faultParams = this.faultParams.set('fs', unique.toString());
+    }
+    if (this.showEscalated.length > 0) {      
+      this.faultParams = this.faultParams.set('showEscalated', this.showEscalated);
     }
     this.rerenderFaults();
   }
@@ -841,7 +847,7 @@ export class DashboardPage implements OnInit {
   }
 
   async mergeFault(data) {
-    const isConfirm =  await this.commonService.showConfirm('Merge Faults', `You have selected ${this.selectedFaultList?.length} faults to merge. Information from all the faults will be copied into the Fault ${data?.reference} and the remaining faults will be marked as Closed. Any communications sent out from the faults being closed will be voided. Are you sure?`)
+    const isConfirm = await this.commonService.showConfirm('Merge Faults', `You have selected ${this.selectedFaultList?.length} faults to merge. Information from all the faults will be copied into the Fault ${data?.reference} and the remaining faults will be marked as Closed. Any communications sent out from the faults being closed will be voided. Are you sure?`)
     if (isConfirm && data) {
       let childFaults = this.selectedFaultList.filter(x => x.faultId != data.faultId);
       let requestObj: any = {};
