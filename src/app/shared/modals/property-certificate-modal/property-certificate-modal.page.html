@@ -132,7 +132,7 @@
         <th>End Date</th>
       </tr>
      <tbody>
-      <tr *ngFor="let certificate of propertyCertificate.data; let i=index;" class="table-row">
+      <tr *ngFor="let certificate of propertyCertificate; let i=index;" class="table-row">
         <td>
           <ion-checkbox (ionChange)="selectCertificate(certificate, $event.target.checked)" color="primary"
             [checked]="certificate?.isRowChecked" [disabled]="!certificate?.expired"></ion-checkbox>
