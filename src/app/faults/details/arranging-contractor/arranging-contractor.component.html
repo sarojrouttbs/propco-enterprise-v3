@@ -693,7 +693,7 @@
       </ion-col> -->
       <ion-col size="33.33">
         <ion-item>
-          <ion-label position="floating">Request Start Date</ion-label>
+          <ion-label position="floating">Required Start Date</ion-label>
           <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
             formControlName="requestStartDate" [min]="currentDate">
           </ion-datetime>
@@ -703,7 +703,7 @@
         <ion-item>
           <ion-label position="floating">Required Completion Date </ion-label>
           <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-            formControlName="requiredDate" [min]="this.workOrderForm.value.requestStartDate">
+            formControlName="requiredDate" [min]="currentDate">
           </ion-datetime>
         </ion-item>
       </ion-col>
