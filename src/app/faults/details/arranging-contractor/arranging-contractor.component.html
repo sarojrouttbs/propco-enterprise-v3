@@ -466,12 +466,12 @@
         </ion-item>
       </ion-col>
   
-      <ion-col size="50">
+      <!-- <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Access Information </ion-label>
           <ion-input formControlName="accessDetails"></ion-input>
         </ion-item>
-      </ion-col>
+      </ion-col> -->
       <ion-col size="100">
         <ion-item>
           <ion-label position="floating">Full Job Description <ion-text class="mandatory">*</ion-text></ion-label>
@@ -693,9 +693,17 @@
       </ion-col> -->
       <ion-col size="33.33">
         <ion-item>
+          <ion-label position="floating">Request Start Date</ion-label>
+          <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
+            formControlName="requestStartDate" [min]="currentDate">
+          </ion-datetime>
+        </ion-item>
+      </ion-col>
+      <ion-col size="33.33">
+        <ion-item>
           <ion-label position="floating">Required Completion Date </ion-label>
           <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-            formControlName="requiredDate" [min]="currentDate">
+            formControlName="requiredDate" [min]="this.workOrderForm.value.requestStartDate">
           </ion-datetime>
         </ion-item>
       </ion-col>
