@@ -175,6 +175,7 @@ declare namespace FaultModels {
         isRejected: boolean;
         rejectionReason?: any;
         contractorId: string;
+        rejectedByType: number;
     }
 
     export interface Address {

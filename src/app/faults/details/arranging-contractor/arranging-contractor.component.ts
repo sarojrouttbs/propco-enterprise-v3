@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, OCCUPIERS_VULNERABLE } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, OCCUPIERS_VULNERABLE} from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -50,6 +50,7 @@ export class ArrangingContractorComponent implements OnInit {
   isContratorSelected = false;
   iacNotification;
   iacStageActions = LL_INSTRUCTION_TYPES;
+  REJECTED_BY_TYPE = REJECTED_BY_TYPE;
   otherStageActions = LL_INSTRUCTION_TYPES.filter(action => { return (action.index == 'OBTAIN_QUOTE' || action.index == 'PROCEED_WITH_WORKSORDER') });
 
   accessInfoList = ACCESS_INFO_TYPES;
@@ -316,7 +317,9 @@ export class ArrangingContractorComponent implements OnInit {
           fullDescription: this.faultMaintenanceDetails.fullDescription
         }
       );
-      this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
+      if(this.faultMaintenanceDetails.quoteContractors){
+        this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
+      }
     } else {
       this.workOrderForm.patchValue(
         {
@@ -1312,7 +1315,8 @@ export class ArrangingContractorComponent implements OnInit {
       isNew: isNew,
       checked: isNew ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value && !data.isRejected ? true : false),
       isRejected: !isNew ? data.isRejected : false,
-      rejectionReason: !isNew ? data.rejectionReason : ''
+      rejectionReason: !isNew ? data.rejectionReason : '',
+      rejectedByType: !isNew ? data.rejectedByType : ''
     });
     contractorList.push(contGrup);
     this.contratctorArr.push(data.contractorId ? data.contractorId : data.contractorObj.entityId);

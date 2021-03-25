@@ -352,3 +352,8 @@ export const OCCUPIERS_VULNERABLE = {
   TRUE: 5120,
   FALSE: 5122
 }
+
+export const REJECTED_BY_TYPE = {
+  CONTRACTOR: 26,
+  LANDLORD: 8
+}
