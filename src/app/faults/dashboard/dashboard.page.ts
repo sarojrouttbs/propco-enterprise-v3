@@ -183,7 +183,7 @@ export class DashboardPage implements OnInit {
 
   private setFaultsLookupData(data) {
     this.faultCategories = data.faultCategories;
-    this.faultStatuses = data.faultStatuses;
+    this.faultStatuses = data.faultStatuses.filter(x => x.index != FAULT_STATUSES.ESCALATION);
     this.faultUrgencyStatuses = data.faultUrgencyStatuses;
   }
 
@@ -507,39 +507,46 @@ export class DashboardPage implements OnInit {
       // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
       let statusArray = Object.values(FAULT_STATUSES);
       this.fs = statusArray.filter(status => status != FAULT_STATUSES.CANCELLED && status != FAULT_STATUSES.CLOSED);
+      this.showEscalated = 'false';
     }
 
     if (this.filterForm.get('newRepairs').value) {
       this.fs.push(1);
+      this.showEscalated = 'false';
     }
 
     if (this.filterForm.get('emergency').value) {
       // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
       this.fs.push(FAULT_STATUSES.REPORTED);
       this.fus.push(URGENCY_TYPES.EMERGENCY);
+      this.showEscalated = 'false';
     }
 
     if (this.filterForm.get('urgent').value) {
       // this.fs.push(1);
       this.fs.push(FAULT_STATUSES.REPORTED);
       this.fus.push(URGENCY_TYPES.URGENT);
+      this.showEscalated = 'false';
     }
 
     if (this.filterForm.get('nonUrgent').value) {
       this.fs.push(FAULT_STATUSES.REPORTED);
       this.fus.push(URGENCY_TYPES.NON_URGENT);
+      this.showEscalated = 'false';
     }
 
     if (this.filterForm.get('assessment').value) {
       // this.fs.push(2, 13);
       this.fs.push(FAULT_STATUSES.IN_ASSESSMENT, FAULT_STATUSES.CHECKING_LANDLORD_INSTRUCTIONS);
+      this.showEscalated = 'false';
     }
 
     if (this.filterForm.get('automation').value) {
       // this.fs.push(3, 4, 5, 6, 7, 14, 15, 16, 17, 18, 19, 20, 21, 22);
       this.fs.push(FAULT_STATUSES.QUOTE_REQUESTED, FAULT_STATUSES.QUOTE_RECEIVED, FAULT_STATUSES.QUOTE_PENDING, FAULT_STATUSES.QUOTE_APPROVED, FAULT_STATUSES.QUOTE_REJECTED,
         FAULT_STATUSES.WORKSORDER_PENDING, FAULT_STATUSES.AWAITING_JOB_COMPLETION,
-        FAULT_STATUSES.WORKSORDER_RAISED, FAULT_STATUSES.AWAITING_RESPONSE_CONTRACTOR, FAULT_STATUSES.WORK_INPROGRESS, FAULT_STATUSES.WORK_COMPLETED, FAULT_STATUSES.AWAITING_RESPONSE_LANDLORD, FAULT_STATUSES.AWAITING_RESPONSE_TENANT, FAULT_STATUSES.AWAITING_RESPONSE_THIRD_PARTY)
+        FAULT_STATUSES.WORKSORDER_RAISED, FAULT_STATUSES.AWAITING_RESPONSE_CONTRACTOR, FAULT_STATUSES.WORK_INPROGRESS, FAULT_STATUSES.WORK_COMPLETED, FAULT_STATUSES.AWAITING_RESPONSE_LANDLORD, FAULT_STATUSES.AWAITING_RESPONSE_TENANT, FAULT_STATUSES.AWAITING_RESPONSE_THIRD_PARTY);
+      this.showEscalated = 'false';
     }
 
     if (this.filterForm.get('invoice').value) {
@@ -551,7 +558,7 @@ export class DashboardPage implements OnInit {
       //   return;
       // }
       this.fs.push(FAULT_STATUSES.INVOICE_SUBMITTED, FAULT_STATUSES.INVOICE_APPROVED);
-
+      this.showEscalated = 'false';
     }
     if (this.filterForm.get('escalation').value) {
       this.showEscalated = 'true';
@@ -625,7 +632,7 @@ export class DashboardPage implements OnInit {
     this.faultParams = this.faultParams.delete('fctd');
     this.faultParams = this.faultParams.delete('fus');
     this.faultParams = this.faultParams.delete('showEscalated');
-    
+
     if (this.fat.length > 0) {
       this.faultParams = this.faultParams.set('fat', this.fat.toString());
     }
@@ -648,7 +655,7 @@ export class DashboardPage implements OnInit {
       let unique = this.fs.filter((v, i, a) => a.indexOf(v) === i);
       this.faultParams = this.faultParams.set('fs', unique.toString());
     }
-    if (this.showEscalated.length > 0) {      
+    if (this.showEscalated.length > 0) {
       this.faultParams = this.faultParams.set('showEscalated', this.showEscalated);
     }
     this.rerenderFaults();

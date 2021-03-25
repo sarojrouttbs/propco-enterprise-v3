@@ -333,8 +333,9 @@ export const MAINT_JOB_TYPE = {
   "value": "Repair"
 }
 export const MAINT_REPAIR_SOURCES = {
-  CUSTOMER_REPORT: 5118,
-  FIXFLO: 3635
+  CUSTOMER_REPORT: 5126,
+  FIXFLO: 3635,
+  THIRD_PARTY: 5128
 }
 export const MAINT_CONTACT = {
   CONTACT_TENANT: 'Contact Tenant',
