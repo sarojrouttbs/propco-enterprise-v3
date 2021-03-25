@@ -347,3 +347,8 @@ export const APPOINTMENT_MODAL_TYPE = {
   MODIFY_WO: 'modify-wo',
   WO: 'wo'
 }
+
+export const REJECTED_BY_TYPE = {
+  CONTRACTOR: 26,
+  LANDLORD: 8
+}

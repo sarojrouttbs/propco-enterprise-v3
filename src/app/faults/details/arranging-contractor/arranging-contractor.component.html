@@ -249,7 +249,7 @@
                        <div class="action-btn-container">
                          <ion-checkbox color="success" class="list-checkbox" formControlName="checked"
                            (click)="updateSelection(item.value,i)" [name]="item"
-                           [disabled]="restrictAction || item.get('isRejected').value"></ion-checkbox>
+                           [disabled]="(restrictAction || item.get('isRejected').value) && item.get('rejectedByType').value === REJECTED_BY_TYPE.LANDLORD"></ion-checkbox>
                          <ion-icon class="list-button" *ngIf="item.get('isPreferred').value"
                            matTooltip="Preferred Contractor" matTooltipPosition="above" name="checkmark-circle-outline">
                          </ion-icon>
