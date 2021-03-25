@@ -73,6 +73,7 @@ export class DetailsPage implements OnInit {
   tenantArrears: any;
   faultDetails: FaultModels.IFaultResponse;
   landlordDetails: any;
+  landlordDppRepairDetails:any;
   isEditable = false;
   landlordInstructionTypes = LL_INSTRUCTION_TYPES;
   suggestedAction; oldUserSelectedAction;
@@ -348,6 +349,7 @@ export class DetailsPage implements OnInit {
           landlordId = this.landlordsOfproperty[0].landlordId;
         }
         await this.getLandlordDetails(landlordId);
+        this.getLandlordDppDetails(landlordId);
         this.checkForLLSuggestedAction();
         this.getPreferredSuppliers(landlordId);
         this.matchCategory();
@@ -700,6 +702,22 @@ export class DetailsPage implements OnInit {
           }
           this.landlordDetails.repairCategoriesText = categoryNames;
           resolve(this.landlordDetails);
+        },
+        error => {
+          reject(null);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private getLandlordDppDetails(landlordId) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.getLandlordDppDetails(landlordId).subscribe(
+        res => {
+          let dppDetails = res ? res.data : [];
+          this.landlordDppRepairDetails = dppDetails.find(dpp=>dpp.dppGroup === 'Repair and Maintenance');
+          resolve(this.landlordDppRepairDetails);
         },
         error => {
           reject(null);

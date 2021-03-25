@@ -1871,13 +1871,13 @@ export class ArrangingContractorComponent implements OnInit {
     await modal.present();
   }
 
-  async modifyDateTime() {
+  async modifyDateTime(templateCode) {
     let modalData = {
       faultNotificationId: this.iacNotification.faultNotificationId,
       title: "Appointment Date/Time",
       headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
       headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
-      type: APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE
+      type: templateCode === 'CDT-C-E' || templateCode === 'CQ-C-E' ? APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE : APPOINTMENT_MODAL_TYPE.MODIFY_WO
     }
 
     this.openAppointmentModal(modalData);

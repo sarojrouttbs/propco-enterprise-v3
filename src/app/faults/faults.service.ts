@@ -128,6 +128,10 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `landlords/${landlordId}`);
   }
 
+  getLandlordDppDetails(landlordId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `landlords/${landlordId}/preference/dpp`);
+  }
+
   getPreferredSuppliers(landlordId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `landlords/${landlordId}/preferred-contractors`);
   }
@@ -312,6 +316,10 @@ export class FaultsService {
   
   modifyContractorVisit(faultNotificationId, notificationObj): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `faults/${faultNotificationId}/quote/contractor-visit`, notificationObj);
+  }
+
+  modifyWoContractorVisit(faultNotificationId, notificationObj): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultNotificationId}/wo/contractor-visit`, notificationObj);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

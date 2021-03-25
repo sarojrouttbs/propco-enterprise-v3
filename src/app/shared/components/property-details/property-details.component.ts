@@ -17,16 +17,17 @@ export class PropertyDetailsComponent implements OnInit {
   @Input() urgencyStatus;
   @Input() faultId;
   @Input() createdAt;
+  @Input() dppRepairDetails;
+  @Input() communicationPreference;
+  @Output() getUploadedFile = new EventEmitter<any>();
+  @Output() getStatus = new EventEmitter<any>();
   lookupdata: any;
-  @Output()
-  getUploadedFile = new EventEmitter<any>();
   advertisementRentFrequencies: any[];
   officeCodes: any[];
   hmoLicenceSchemes: any[];
   faultUrgencyStatuses: any[];
-  @Input() communicationPreference
+  faultCommunicationPreferences: any[];
   showList = false;
-  @Output() getStatus = new EventEmitter<any>();
 
   constructor(public commonService: CommonService, public sanitizer: DomSanitizer) {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -63,6 +64,7 @@ export class PropertyDetailsComponent implements OnInit {
 
   private setFaultsLookupData(data) {
     this.faultUrgencyStatuses = data.faultUrgencyStatuses;
+    this.faultCommunicationPreferences = data.faultCommunicationPreferences;
   }
 
   getLookupValue(index, lookup) {

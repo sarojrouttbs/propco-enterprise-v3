@@ -1186,7 +1186,8 @@
             <app-property-details [propertyDetails]="propertyDetails" [files]="files" [parentForm]="uploadDocForm"
               (getUploadedFile)="getUploadedFile($event)" [hmoDetails]="propertyHMODetails"
               [urgencyStatus]="faultDetailsForm.controls.urgencyStatus.value" [faultId]="faultId? faultId : ''"
-              [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''" [communicationPreference]="faultDetails?.isOverrideCommunicationPreference" (getStatus)="getStatus($event)">
+              [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''" [communicationPreference]="faultDetails?.isOverrideCommunicationPreference"
+              [dppRepairDetails]="landlordDppRepairDetails" (getStatus)="getStatus($event)">
             </app-property-details>
             <!-- <app-property-skeleton *ngIf="!propertyDetails"></app-property-skeleton> -->
           </ion-card>
