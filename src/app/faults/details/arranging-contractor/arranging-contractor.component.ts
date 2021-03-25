@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, OCCUPIERS_VULNERABLE} from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, OCCUPIERS_VULNERABLE } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -180,8 +180,8 @@ export class ArrangingContractorComponent implements OnInit {
       fullDescription: [this.faultDetails.notes, Validators.required],
       orderedBy: { value: '', disabled: true },
       agentReference: [{ value: '', disabled: true }],
-      defaultCommissionPercentage: [{ value: '' }],
-      defaultCommissionAmount: [{ value: '' }],
+      defaultCommissionPercentage: '',
+      defaultCommissionAmount: '',
       isUseRate: '',
       businessTelephone: [{ value: '', disabled: true }],
       contact: this.getAccessDetails(this.faultDetails.isTenantPresenceRequired),
@@ -317,7 +317,7 @@ export class ArrangingContractorComponent implements OnInit {
           fullDescription: this.faultMaintenanceDetails.fullDescription
         }
       );
-      if(this.faultMaintenanceDetails.quoteContractors){
+      if (this.faultMaintenanceDetails.quoteContractors) {
         this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
       }
     } else {
