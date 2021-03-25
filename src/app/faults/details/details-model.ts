@@ -162,6 +162,7 @@ declare namespace FaultModels {
         selectedContractorId: string;
         maintenanceId: string;
         isUseRate: boolean;
+        thirdPartySource?: number;
     }
 
     export interface QuoteContractor {

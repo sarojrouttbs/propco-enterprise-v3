@@ -478,6 +478,34 @@
           <ion-textarea rows="1" formControlName="fullDescription" auto-grow="true"></ion-textarea>
         </ion-item>
       </ion-col>
+
+      <ion-col size="33.33">
+        <ion-item>
+          <ion-label position="floating">Job Type</ion-label>
+          <ion-select interface="popover" formControlName="jobType">
+            <ion-select-option [value]="item.index" *ngFor="let item of maintenanceJobTypes">{{ item.value }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="33.33">
+        <ion-item>
+          <ion-label position="floating">Repair Source</ion-label>
+          <ion-select interface="popover" formControlName="repairSource">
+            <ion-select-option [value]="item.index" *ngFor="let item of maintenanceRepairSources">{{ item.value }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="33.33" *ngIf="raiseQuoteForm.controls.repairSource.value === 5128">
+        <ion-item>
+          <ion-label position="floating">Third Party</ion-label>
+            <ion-select interface="popover" formControlName="thirdPartySource">
+              <ion-select-option [value]="item.index" *ngFor="let item of faultReportedByThirdParty">{{item.value}}
+              </ion-select-option>
+            </ion-select>
+        </ion-item>
+      </ion-col>
     </ion-row>
   </form>
 </ng-template>
@@ -719,6 +747,34 @@
           <ion-textarea rows="1" formControlName="fullDescription" auto-grow="true"></ion-textarea>
         </ion-item>
         <app-validation-message [control]="workOrderForm.controls.fullDescription"></app-validation-message>
+      </ion-col>
+
+      <ion-col size="33.33">
+        <ion-item>
+          <ion-label position="floating">Job Type</ion-label>
+          <ion-select interface="popover" formControlName="jobType">
+            <ion-select-option [value]="item.index" *ngFor="let item of maintenanceJobTypes">{{ item.value }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="33.33">
+        <ion-item>
+          <ion-label position="floating">Repair Source</ion-label>
+          <ion-select interface="popover" formControlName="repairSource">
+            <ion-select-option [value]="item.index" *ngFor="let item of maintenanceRepairSources">{{ item.value }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="33.33" *ngIf="workOrderForm.controls.repairSource.value === 5128">
+        <ion-item>
+          <ion-label position="floating">Third Party</ion-label>
+            <ion-select interface="popover" formControlName="thirdPartySource">
+              <ion-select-option [value]="item.index" *ngFor="let item of faultReportedByThirdParty">{{item.value}}
+              </ion-select-option>
+            </ion-select>
+        </ion-item>
       </ion-col>
     </ion-row>
   </form>
