@@ -92,9 +92,9 @@ export class PaymentComponent implements OnInit {
     if (this.faultDetails.status === 19 || (this.faultMaintenanceDetails && this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER)) {
       /*19: Worksorder Pending*/
       this.isWorksOrder = true;
-      this.showSkeleton = false
     }
-    this.getLookupData();
+    this.showSkeleton = false
+    // this.getLookupData();
     // this.initForms();
     // this.initApiCalls();
   }
