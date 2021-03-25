@@ -347,3 +347,8 @@ export const APPOINTMENT_MODAL_TYPE = {
   MODIFY_WO: 'modify-wo',
   WO: 'wo'
 }
+
+export const OCCUPIERS_VULNERABLE = {
+  TRUE: 5120,
+  FALSE: 5122
+}
