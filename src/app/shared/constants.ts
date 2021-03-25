@@ -358,3 +358,7 @@ export const REJECTED_BY_TYPE = {
   CONTRACTOR: 11,
   LANDLORD: 8
 }
+
+export const DPP_GROUP = {
+  REPAIR_N_MAINTENANCE: 'Repair and Maintenance'
+}

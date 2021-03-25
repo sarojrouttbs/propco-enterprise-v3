@@ -1,6 +1,6 @@
 import { ModalController, PopoverController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS } from './../../shared/constants';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP } from './../../shared/constants';
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -716,7 +716,7 @@ export class DetailsPage implements OnInit {
       this.faultsService.getLandlordDppDetails(landlordId).subscribe(
         res => {
           let dppDetails = res ? res.data : [];
-          this.landlordDppRepairDetails = dppDetails.find(dpp=>dpp.dppGroup === 'Repair and Maintenance');
+          this.landlordDppRepairDetails = dppDetails.find(dpp=>dpp.dppGroup === DPP_GROUP.REPAIR_N_MAINTENANCE);
           resolve(this.landlordDppRepairDetails);
         },
         error => {
