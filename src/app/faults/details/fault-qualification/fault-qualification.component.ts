@@ -115,9 +115,11 @@ export class FaultQualificationComponent implements OnInit {
     forkJoin(apiObservableArray).subscribe((res) => {
       if (res) {
         res.forEach((value) => {
-          Object.keys(value).forEach(async (index) => {
-            this.certificateCategoriesMap.set(index, await this.fetchPropertyCertificates(value[index]));
-          });
+          if (value) {
+            Object.keys(value).forEach(async (index) => {
+              this.certificateCategoriesMap.set(index, await this.fetchPropertyCertificates(value[index]));
+            });
+          }
         });
       }
     });
@@ -474,11 +476,15 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   async viewPropertyCertificate(category) {
+    let mergedServiceContractAndApplicance;
+    if (category === CERTIFICATES_CATEGORY[1]) {
+      mergedServiceContractAndApplicance = [...this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1]), ...this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[2])];
+    }
     const modal = await this.modalController.create({
       component: PropertyCertificateModalPage,
       cssClass: 'modal-container property-certificates-list',
       componentProps: {
-        propertyCertificate: category === CERTIFICATES_CATEGORY[0] ? this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0]) : this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1]),
+        propertyCertificate: category === CERTIFICATES_CATEGORY[0] ? this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0]) : mergedServiceContractAndApplicance,
         certificateId: category === CERTIFICATES_CATEGORY[0] ?
           (this.warrantyCertificateId ? this.warrantyCertificateId : this.faultDetails.warrantyCertificateId) :
           this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId,
@@ -534,10 +540,10 @@ export class FaultQualificationComponent implements OnInit {
               this.faultQualificationForm.patchValue({ isUnderServiceContract: false });
               this.faultQualificationForm.get('isUnderServiceContract').updateValueAndValidity();
             }
-            resolve(res ? res : false);
+            resolve(res ? res.data : []);
           },
           () => {
-            resolve(false);
+            resolve([]);
           }
         );
       });
