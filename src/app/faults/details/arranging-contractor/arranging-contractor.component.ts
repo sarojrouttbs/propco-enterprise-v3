@@ -1,13 +1,12 @@
 import { WorksorderModalPage } from 'src/app/shared/modals/worksorder-modal/worksorder-modal.page';
-import { HttpParams } from '@angular/common/http';
 import { RejectionModalPage } from './../../../shared/modals/rejection-modal/rejection-modal.page';
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ElementRef, ViewChild, SecurityContext } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ARRANING_CONTRACTOR_ACTIONS, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, OCCUPIERS_VULNERABLE } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, OCCUPIERS_VULNERABLE } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -596,6 +595,15 @@ export class ArrangingContractorComponent implements OnInit {
         this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
         return invalid;
       }
+      if (this.iacNotification && this.iacNotification.responseReceived != null && this.iacNotification.responseReceived.isAccepted === false && this.iacNotification.templateCode === 'LAR-L-Q') {
+        if (this.faultMaintenanceDetails.quoteContractors) {
+          const defaulter = this.faultMaintenanceDetails.quoteContractors.find(x => x.isRejected && x.contractorId === this.raiseQuoteForm.get('selectedContractorId').value);
+          if (defaulter) {
+            this.commonService.showMessage('Selected contractor is rejected.Please select another one', 'Quote', 'error');
+            return invalid;
+          }
+        }
+      }
     } else {
       if (!this.workOrderForm.valid) {
         if (this.workOrderForm.controls['contractorName'].invalid) {
@@ -888,8 +896,8 @@ export class ArrangingContractorComponent implements OnInit {
       });
       if (filtereData && filtereData[0]) {
         if (!this.isWorksOrder) {
-          this.disableQuoteDetail();
           this.disableContractorsList(filtereData[0]);
+          this.disableQuoteDetail();
         } else {
           this.disableWorksOrderDetail();
         }
@@ -902,12 +910,14 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private disableQuoteDetail() {
-    this.raiseQuoteForm.get('worksOrderNumber').disable();
-    this.raiseQuoteForm.get('description').disable();
-    this.raiseQuoteForm.get('requiredDate').disable();
-    this.raiseQuoteForm.get('contact').disable();
-    this.raiseQuoteForm.get('nominalCode').disable();
-    this.raiseQuoteForm.get('fullDescription').disable();
+    if (this.restrictAction) {
+      this.raiseQuoteForm.get('worksOrderNumber').disable();
+      this.raiseQuoteForm.get('description').disable();
+      this.raiseQuoteForm.get('requiredDate').disable();
+      this.raiseQuoteForm.get('contact').disable();
+      this.raiseQuoteForm.get('nominalCode').disable();
+      this.raiseQuoteForm.get('fullDescription').disable();
+    }
   }
 
   private disableWorksOrderDetail() {
@@ -927,7 +937,6 @@ export class ArrangingContractorComponent implements OnInit {
   private disableContractorsList(notification) {
     if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && (notification.templateCode === 'LAR-L-Q' || notification.templateCode === 'CQ-NA-C-E' || notification.templateCode === 'CQ-A-C-E')) {
       this.restrictAction = false;
-      this.raiseQuoteForm.get('selectedContractorId').setValue('');
     } else {
       this.restrictAction = true;
     }
@@ -1031,7 +1040,8 @@ export class ArrangingContractorComponent implements OnInit {
           faultMaintRejectionReasons: this.contractorMaintRejectionReasons,
           disableAnotherQuote: this.disableAnotherQuote,
           userType: 'contractor',
-          title: 'No Acceptance'
+          title: 'No Acceptance',
+          rejectedByType: REJECTED_BY_TYPE.CONTRACTOR
         },
         backdropDismiss: false
       });
@@ -1100,7 +1110,8 @@ export class ArrangingContractorComponent implements OnInit {
           faultMaintRejectionReasons: this.landlordMaintRejectionReasons,
           disableAnotherQuote: this.disableAnotherQuote,
           userType: 'landlord',
-          title: 'No Authorisation'
+          title: 'No Authorisation',
+          rejectedByType: REJECTED_BY_TYPE.LANDLORD
         },
         backdropDismiss: false
       });
@@ -1313,7 +1324,7 @@ export class ArrangingContractorComponent implements OnInit {
       select: '',
       isPreferred,
       isNew: isNew,
-      checked: isNew ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value && !data.isRejected ? true : false),
+      checked: isNew ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value ? true : false),
       isRejected: !isNew ? data.isRejected : false,
       rejectionReason: !isNew ? data.rejectionReason : '',
       rejectedByType: !isNew ? data.rejectedByType : ''
