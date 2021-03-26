@@ -33,8 +33,7 @@ export class AppointmentModalPage implements OnInit {
     this.minDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
     if (this.type === APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE || this.type === APPOINTMENT_MODAL_TYPE.MODIFY_WO) {
       const currentDate = new Date();
-      currentDate.setDate(currentDate.getDate() + 1);
-      this.futureDate = this.commonService.getFormatedDate(currentDate, 'yyyy-MM-dd');
+      this.futureDate = this.commonService.getFormatedDate(currentDate, 'yyyy-MM-ddTHH:mm');
     }
   }
 
