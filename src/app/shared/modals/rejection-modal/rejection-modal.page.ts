@@ -15,6 +15,7 @@ export class RejectionModalPage implements OnInit {
   userType;
   faultMaintRejectionReasons;
   title;
+  rejectedByType;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -28,7 +29,8 @@ export class RejectionModalPage implements OnInit {
       submittedById: '',
       submittedByType: 'SECUR_USER',
       other: '',
-      doesWantAnotherQuote: false
+      doesWantAnotherQuote: false,
+      rejectedByType: this.rejectedByType
     });
     this.commonService.sortBy('index', this.faultMaintRejectionReasons)
   }
