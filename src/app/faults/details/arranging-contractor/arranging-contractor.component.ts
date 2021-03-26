@@ -82,6 +82,9 @@ export class ArrangingContractorComponent implements OnInit {
   @ViewChild('modalView', { static: true }) modalView$: ElementRef;
   modalData: any;
   fileIds = FILE_IDS;
+  maintenanceJobTypes;
+  maintenanceRepairSources;
+  faultReportedByThirdParty;
 
   constructor(
     private fb: FormBuilder,
@@ -153,6 +156,9 @@ export class ArrangingContractorComponent implements OnInit {
       quoteStatus: [{ value: 1, disabled: true }],
       nominalCode: ['', Validators.required],
       fullDescription: [this.faultDetails.notes, Validators.required],
+      jobType: MAINT_JOB_TYPE.index,
+      repairSource: this.getRepairSource(this.faultDetails.sourceType),
+      thirdPartySource: this.faultDetails.reportedBy === 'THIRD_PARTY' ? Number(this.faultDetails.reportedById) : ''
     });
     if (!this.faultMaintenanceDetails && this.faultDetails.contractorId) {
       this.getContractorDetails(this.faultDetails.contractorId, 'quote');
@@ -185,10 +191,11 @@ export class ArrangingContractorComponent implements OnInit {
       businessTelephone: [{ value: '', disabled: true }],
       contact: this.getAccessDetails(this.faultDetails.isTenantPresenceRequired),
       jobType: MAINT_JOB_TYPE.index,
-      repairSource: this.faultDetails.sourceType === 'FAULT' ? MAINT_REPAIR_SOURCES.CUSTOMER_REPORT : MAINT_REPAIR_SOURCES.FIXFLO,
+      repairSource: this.getRepairSource(this.faultDetails.sourceType),
       requestStartDate: this.currentDate,
       usefulInstruction: this.faultDetails.tenantNotes,
-      vulnerableOccupier: this.faultDetails.areOccupiersVulnerable ? OCCUPIERS_VULNERABLE.TRUE : OCCUPIERS_VULNERABLE.FALSE
+      vulnerableOccupier: this.faultDetails.areOccupiersVulnerable ? OCCUPIERS_VULNERABLE.TRUE : OCCUPIERS_VULNERABLE.FALSE,
+      thirdPartySource: this.faultDetails.reportedBy === 'THIRD_PARTY' ? Number(this.faultDetails.reportedById) : ''
     });
 
     if (this.faultDetails.doesBranchHoldKeys) {
@@ -313,7 +320,10 @@ export class ArrangingContractorComponent implements OnInit {
           selectedContractorId: this.faultMaintenanceDetails.selectedContractorId,
           contact: this.faultMaintenanceDetails.contact,
           quoteStatus: this.faultMaintenanceDetails.quoteStatus,
-          fullDescription: this.faultMaintenanceDetails.fullDescription
+          fullDescription: this.faultMaintenanceDetails.fullDescription,
+          jobType: this.faultMaintenanceDetails.jobType,
+          repairSource: this.faultMaintenanceDetails.repairSource,
+          thirdPartySource: this.faultMaintenanceDetails.thirdPartySource
         }
       );
       if (this.faultMaintenanceDetails.quoteContractors) {
@@ -334,7 +344,10 @@ export class ArrangingContractorComponent implements OnInit {
           keysLocation: this.faultMaintenanceDetails.keysLocation,
           requiredDate: this.faultMaintenanceDetails.requiredCompletionDate,
           returnKeysTo: this.faultMaintenanceDetails.returnKeysTo,
-          requestStartDate: this.faultMaintenanceDetails.requiredStartDate
+          requestStartDate: this.faultMaintenanceDetails.requiredStartDate,
+          jobType: this.faultMaintenanceDetails.jobType,
+          repairSource: this.faultMaintenanceDetails.repairSource,
+          thirdPartySource: this.faultMaintenanceDetails.thirdPartySource
         }
       );
       this.workOrderForm.get('contractorName').disable();
@@ -429,12 +442,15 @@ export class ArrangingContractorComponent implements OnInit {
   private setLookupData(data) {
     this.contractorSkill = data.contractorSkills;
     this.quoteStatuses = data.maintenanceQuoteStatuses;
+    this.maintenanceJobTypes = data.maintenanceJobTypes;
+    this.maintenanceRepairSources = data.maintenanceRepairSources;
   }
 
   private setFaultsLookupData(data) {
     this.faultCategories = data.faultCategories;
     this.landlordMaintRejectionReasons = data.landlordQuoteRejectionReasons;
     this.contractorMaintRejectionReasons = data.contractorQuoteRejectionReasons;
+    this.faultReportedByThirdParty = data.faultReportedByThirdParty;
     this.setCategoryMap();
   }
 
@@ -917,6 +933,9 @@ export class ArrangingContractorComponent implements OnInit {
       this.raiseQuoteForm.get('contact').disable();
       this.raiseQuoteForm.get('nominalCode').disable();
       this.raiseQuoteForm.get('fullDescription').disable();
+      this.raiseQuoteForm.get('jobType').disable();
+      this.raiseQuoteForm.get('repairSource').disable();
+      this.raiseQuoteForm.get('thirdPartySource').disable();
     }
   }
 
@@ -932,6 +951,9 @@ export class ArrangingContractorComponent implements OnInit {
     this.workOrderForm.get('keysLocation').disable();
     this.workOrderForm.get('returnKeysTo').disable();
     // this.workOrderForm.get('accessDetails').disable();
+    this.workOrderForm.get('jobType').disable();
+    this.workOrderForm.get('repairSource').disable();
+    this.workOrderForm.get('thirdPartySource').disable();
   }
 
   private disableContractorsList(notification) {
@@ -1913,5 +1935,9 @@ export class ArrangingContractorComponent implements OnInit {
     });
 
     await modal.present();
+  }
+
+  getRepairSource(repairSource) {
+    return repairSource === 'FIXFLO' ? MAINT_REPAIR_SOURCES.FIXFLO : (this.faultDetails.reportedBy === 'THIRD_PARTY' ? MAINT_REPAIR_SOURCES.THIRD_PARTY : MAINT_REPAIR_SOURCES.CUSTOMER_REPORT);
   }
 }
