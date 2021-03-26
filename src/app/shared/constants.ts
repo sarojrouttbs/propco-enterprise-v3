@@ -354,6 +354,6 @@ export const OCCUPIERS_VULNERABLE = {
 }
 
 export const REJECTED_BY_TYPE = {
-  CONTRACTOR: 26,
+  CONTRACTOR: 11,
   LANDLORD: 8
 }
