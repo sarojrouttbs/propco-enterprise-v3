@@ -2,7 +2,12 @@
   <ion-grid >
     <ion-row *ngIf="!showSkeleton" >
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
-        <div class="arranging-contractor">        
+        <div class="arranging-contractor">
+          <div class="banner">
+            <h2 class="banner-heading">
+             {{faultDetails && (!faultDetails?.isWOConvertedToInvoice || !faultDetails?.isContractorPaymentDone) ? 'Awaiting Invoice':'Invoice paid'}}
+            </h2>
+          </div>        
           <div class="question-answer ion-text-center" *ngIf="faultDetails && !faultDetails?.isWOConvertedToInvoice">
             <h4>Next Step:</h4> 
             <h6><b>Convert Works Order to Invoice</b></h6>
