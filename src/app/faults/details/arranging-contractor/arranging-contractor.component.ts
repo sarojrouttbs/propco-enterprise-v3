@@ -954,6 +954,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.workOrderForm.get('jobType').disable();
     this.workOrderForm.get('repairSource').disable();
     this.workOrderForm.get('thirdPartySource').disable();
+    this.workOrderForm.get('requestStartDate').disable();
   }
 
   private disableContractorsList(notification) {
