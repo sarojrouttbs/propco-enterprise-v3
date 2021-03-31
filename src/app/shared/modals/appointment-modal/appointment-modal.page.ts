@@ -30,11 +30,8 @@ export class AppointmentModalPage implements OnInit {
     this.appointmentForm = this.formBuilder.group({
       dateTime: ['', Validators.required],
     });
-    this.minDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
-    if (this.type === APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE || this.type === APPOINTMENT_MODAL_TYPE.MODIFY_WO) {
-      const currentDate = new Date();
-      this.futureDate = this.commonService.getFormatedDate(currentDate, 'yyyy-MM-ddTHH:mm');
-    }
+    const currentDate = new Date();
+    this.minDate = this.commonService.getFormatedDate(currentDate, 'yyyy-MM-ddTHH:mm');
   }
 
   async save() {
