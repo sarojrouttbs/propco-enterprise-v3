@@ -242,7 +242,7 @@
                 <ion-col>
                   <ion-item lines="none">
                     <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start"
-                      [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])"></ion-radio>
+                      [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])?.length"></ion-radio>
                     <ion-label>Yes</ion-label>
                   </ion-item>
                 </ion-col>
@@ -250,7 +250,7 @@
                 <ion-col>
                   <ion-item lines="none">
                     <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start"
-                      [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])"></ion-radio>
+                      [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])?.length"></ion-radio>
                     <ion-label>No</ion-label>
                   </ion-item>
                 </ion-col>
@@ -259,11 +259,11 @@
           </ion-col>
           <ion-col size="30">
             <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
-              [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])"
+              [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])?.length"
               (click)="viewPropertyCertificate(CERTIFICATES_CATEGORY[0]); $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
-        <ion-text color="danger" *ngIf="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])">No details available</ion-text>
+        <ion-text color="danger" *ngIf="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])?.length">No details available</ion-text>
       </ion-col>
       <ion-col class="card">
         <h3>Service Contract/ Appliance Cover</h3>
@@ -274,14 +274,14 @@
               <ion-row class="radio-block">
                 <ion-col>
                   <ion-item lines="none">
-                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start" [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1])"></ion-radio>
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start" [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1])?.length && !certificateCategoriesMap.get(CERTIFICATES_CATEGORY[2])?.length"></ion-radio>
                     <ion-label>Yes</ion-label>
                   </ion-item>
                 </ion-col>
 
                 <ion-col>
                   <ion-item lines="none">
-                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start" [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1])"></ion-radio>
+                    <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start" [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1])?.length && !certificateCategoriesMap.get(CERTIFICATES_CATEGORY[2])?.length"></ion-radio>
                     <ion-label>No</ion-label>
                   </ion-item>
                 </ion-col>
@@ -290,11 +290,11 @@
           </ion-col>
           <ion-col size="30">
             <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
-              [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1]) && !certificateCategoriesMap.get(CERTIFICATES_CATEGORY[2])"
+              [disabled]="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1])?.length && !certificateCategoriesMap.get(CERTIFICATES_CATEGORY[2])?.length"
               (click)="viewPropertyCertificate(CERTIFICATES_CATEGORY[1]); $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
-        <ion-text color="danger" *ngIf="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1]) && !certificateCategoriesMap.get(CERTIFICATES_CATEGORY[2])">No details available</ion-text>
+        <ion-text color="danger" *ngIf="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1])?.length && !certificateCategoriesMap.get(CERTIFICATES_CATEGORY[2])?.length">No details available</ion-text>
       </ion-col>
       <ion-col class="card-extra"></ion-col>
     </ion-row>
