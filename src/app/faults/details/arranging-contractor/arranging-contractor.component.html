@@ -91,14 +91,13 @@
             </div>
           </ng-container>
          <ng-container 
-          *ngIf="iacNotification 
-            && (iacNotification?.responseReceived == null 
+          *ngIf="(iacNotification?.responseReceived == null 
             || !iacNotification?.responseReceived?.isAccepted 
             || enableMarkCompletedBtn() && iacNotification?.notificationStatus !== 7)"
           >
-          <div class="question-answer" *ngIf="(iacNotification?.responseReceived == null && !faultDetails.isEscalated && faultDetails.status !== 10 && faultDetails.status !== 12 && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone))">
+          <div class="question-answer" *ngIf="(iacNotification?.responseReceived == null && !faultDetails.isEscalated && faultDetails.status !== 10 && faultDetails.status !== 12)">
             <h4 class="ion-text-center">Next Step:</h4> 
-            <h6 *ngIf="iacNotification?.templateCode === 'CDT-C-E'">  
+            <h6 *ngIf="iacNotification?.templateCode === 'CDT-C-E' && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone)">  
               <ion-text color="danger">Please note: </ion-text>
               <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
                 {{iacNotification?.hoursLeft}}.
