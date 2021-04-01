@@ -517,11 +517,11 @@ export class DetailsPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.addAdditionalInfo(faultId, requestObj).subscribe(
         res => {
-          resolve();
+          resolve(true);
         },
         error => {
           console.log(error);
-          resolve();
+          resolve(true);
         }
       );
     });
@@ -532,11 +532,11 @@ export class DetailsPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.updateAdditionalInfo(id, requestObj).subscribe(
         res => {
-          resolve();
+          resolve(true);
         },
         error => {
           console.log(error);
-          resolve();
+          resolve(true);
         }
       );
     });
@@ -576,7 +576,7 @@ export class DetailsPage implements OnInit {
           if (res && res.data) {
             this.propertyHMODetails = res.data;
           }
-          resolve();
+          resolve(true);
         },
         error => {
           console.log(error);
@@ -594,7 +594,7 @@ export class DetailsPage implements OnInit {
           if (res) {
             this.faultHistory = res;
           }
-          resolve();
+          resolve(true);
         },
         error => {
           console.log(error);
@@ -612,7 +612,7 @@ export class DetailsPage implements OnInit {
           if (res) {
             this.addtionalInfo = res;
           }
-          resolve();
+          resolve(true);
         },
         error => {
           reject();
@@ -1275,17 +1275,17 @@ export class DetailsPage implements OnInit {
         }
       });
       if (!apiObservableArray.length) {
-        resolve();
+        resolve(true);
       }
       forkJoin(apiObservableArray).subscribe(res => {
         if (res) {
           this.commonService.showMessage('Updated successfully.', 'Update Addtional Info', 'success');
-          resolve();
+          resolve(true);
         }
         // this.commonService.hideLoader();
       }, error => {
         // this.commonService.hideLoader();
-        resolve();
+        resolve(true);
       });
     });
     return promise;
