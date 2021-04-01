@@ -3,7 +3,7 @@ import { AlertController, LoadingController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Plugins } from '@capacitor/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { PROPCO } from '../constants';
+import { PAYMENT_WARNINGS, PROPCO } from '../constants';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
@@ -117,7 +117,7 @@ export class CommonService {
   }
 
 
-  getLookupValue(id, listOfArray): string {  
+  getLookupValue(id, listOfArray): string {
     let propertyStatus;
     listOfArray = listOfArray && listOfArray.length ? listOfArray : [];
     listOfArray.find((obj) => {
@@ -563,4 +563,35 @@ export class CommonService {
       return new DatePipe('en-UK').transform(new Date(date), format || 'yyyy-MM-dd HH:mm:ss');
     }
   }
+
+  getPaymentWarnings(paymentRules: FaultModels.IFaultWorksorderRules, RepairEstimateThreshold?): Array<string> {
+    RepairEstimateThreshold = RepairEstimateThreshold ? RepairEstimateThreshold : 250;
+    let paymentWarnings: string[] = [];
+    if (paymentRules && paymentRules.hasOwnProperty('hasOtherInvoicesToBePaid')) {
+      if (paymentRules.hasSufficientReserveBalance === false) {
+        paymentWarnings.push(PAYMENT_WARNINGS.hasSufficientReserveBalance);
+      }
+      if (paymentRules.hasOtherInvoicesToBePaid === true) {
+        paymentWarnings.push(PAYMENT_WARNINGS.hasOtherInvoicesToBePaid);
+      }
+      if (paymentRules.hasRentArrears === true) {
+        paymentWarnings.push(PAYMENT_WARNINGS.hasRentArrears);
+      }
+      if (paymentRules.hasRentPaidUpFront === true) {
+        paymentWarnings.push(PAYMENT_WARNINGS.hasRentPaidUpFront);
+      }
+      if (paymentRules.hasTenantPaidRentOnTime === false) {
+        paymentWarnings.push(PAYMENT_WARNINGS.hasTenantPaidRentOnTime);
+      }
+      if (paymentRules.isFaultEstimateLessThanHalfRentOrThresHoldValue === false) {
+        let thresoldText = PAYMENT_WARNINGS.isFaultEstimateLessThanHalfRentOrThresHoldValue.replace('£250', `£${RepairEstimateThreshold}`);
+        paymentWarnings.push(thresoldText);
+      }
+      if (paymentRules.isTenancyGivenNoticeOrInLastMonth === true) {
+        paymentWarnings.push(PAYMENT_WARNINGS.isTenancyGivenNoticeOrInLastMonth);
+      }
+    }
+    return paymentWarnings;
+  }
+
 }
