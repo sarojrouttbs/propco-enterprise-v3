@@ -96,31 +96,40 @@
             || enableMarkCompletedBtn() && iacNotification?.notificationStatus !== 7)"
           >
           <div class="question-answer" *ngIf="(iacNotification?.responseReceived == null && !faultDetails.isEscalated && faultDetails.status !== 10 && faultDetails.status !== 12)">
-            <h4 class="ion-text-center">Next Step:</h4> 
-            <h6 *ngIf="iacNotification?.templateCode === 'CDT-C-E' && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone)">  
-              <ion-text color="danger">Please note: </ion-text>
-              <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
-                {{iacNotification?.hoursLeft}}.
-              </span>
-            </h6>
-
-            <h6 *ngIf="iacNotification?.templateCode === 'CQ-C-E'">  
-              <ion-text color="danger">Please note: </ion-text>
-              <span *ngIf="currentDate<=faultDetails?.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote is due on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}.
-              </span>
-              <span *ngIf="currentDate>faultDetails?.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote was on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}. </span>
-              <span>The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to upload the Quote and photos.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
-                {{iacNotification?.hoursLeft}}.
-              </span>
-            </h6>
-
-            <h6 *ngIf="iacNotification?.templateCode === 'CWO-C-E' && currentDate>faultDetails?.contractorWoPropertyVisitAt">  
-              <ion-text color="danger">Please note: </ion-text>
-              <span>The appointment for carrying out the work was on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorWoPropertyVisitAt | date: 'HH:mm'}}. The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to confirm the Completion of Job.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
-                {{iacNotification?.hoursLeft}}.
-              </span>
-            </h6>
-            <div class="border-bottom"></div>
+            <ng-container *ngIf="iacNotification?.templateCode === 'CDT-C-E' && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone)">
+              <h4 class="ion-text-center">Next Step:</h4> 
+              <h6>  
+                <ion-text color="danger">Please note: </ion-text>
+                <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
+                  {{iacNotification?.hoursLeft}}.
+                </span>
+              </h6>
+              <div class="border-bottom"></div>
+            </ng-container>
+            
+            <ng-container *ngIf="iacNotification?.templateCode === 'CQ-C-E'">
+              <h4 class="ion-text-center">Next Step:</h4> 
+              <h6>  
+                <ion-text color="danger">Please note: </ion-text>
+                <span *ngIf="currentDate<=faultDetails?.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote is due on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}.
+                </span>
+                <span *ngIf="currentDate>faultDetails?.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote was on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}. </span>
+                <span>The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to upload the Quote and photos.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
+                  {{iacNotification?.hoursLeft}}.
+                </span>
+              </h6>
+              <div class="border-bottom"></div>
+            </ng-container>
+            <ng-container *ngIf="iacNotification?.templateCode === 'CWO-C-E' && currentDate>faultDetails?.contractorWoPropertyVisitAt">
+              <h4 class="ion-text-center">Next Step:</h4> 
+              <h6>  
+                <ion-text color="danger">Please note: </ion-text>
+                <span>The appointment for carrying out the work was on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorWoPropertyVisitAt | date: 'HH:mm'}}. The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to confirm the Completion of Job.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
+                  {{iacNotification?.hoursLeft}}.
+                </span>
+              </h6>
+              <div class="border-bottom"></div>
+            </ng-container>            
           </div>
 
           <div class="question-answer ion-text-center" 
