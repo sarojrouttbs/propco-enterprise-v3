@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { FAULT_STATUSES, PROPCO, REPORTED_BY_TYPES, URGENCY_TYPES } from './../../shared/constants';
+import { ERROR_MESSAGE, FAULT_STAGES, FAULT_STATUSES, PROPCO, REPORTED_BY_TYPES, URGENCY_TYPES } from './../../shared/constants';
 import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
 import { Router } from '@angular/router';
@@ -301,6 +301,18 @@ export class DashboardPage implements OnInit {
     });
 
     await modal.present();
+  }
+
+  async startProgress(){
+    const check = await this.commonService.showConfirm('Start Progress', 'This will change the fault status, Do you want to continue?');
+    if (check) {
+      this.faultsService.startProgress(this.selectedData.faultId).subscribe(data => {
+        this.rerenderFaults(false);
+      }, error => {
+        this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Start Progress', 'Error');
+        
+      });
+    }
   }
 
   showMenu(event, id, data, className, isCard?) {
