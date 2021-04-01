@@ -1216,7 +1216,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  async openWOJobCompletionModal() {
+  async openWOJobCompletionModal() {    
     const modal = await this.modalController.create({
       component: WorksorderModalPage,
       cssClass: 'modal-container upload-container',
@@ -1231,7 +1231,7 @@ export class ArrangingContractorComponent implements OnInit {
 
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
-        this.btnAction.emit('refresh');
+        this.btnAction.emit('refresh_docs');
       }
     });
     await modal.present();
