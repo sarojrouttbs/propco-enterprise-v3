@@ -527,7 +527,7 @@ export class FaultQualificationComponent implements OnInit {
 
   private fetchPropertyCertificates(category) {
     if (this.faultDetails.propertyId) {
-      const params: any = new HttpParams().set('categories', category);
+      const params: any = new HttpParams().set('categories', category).set('isArchived', 'false');
       const promise = new Promise((resolve) => {
         this.faultsService.fetchPropertyCertificates(this.faultDetails.propertyId, params).subscribe(
           res => {
