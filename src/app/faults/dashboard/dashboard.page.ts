@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { ERROR_MESSAGE, FAULT_STAGES, FAULT_STATUSES, PROPCO, REPORTED_BY_TYPES, URGENCY_TYPES } from './../../shared/constants';
+import { ERROR_MESSAGE, FAULT_STATUSES, PROPCO, REPORTED_BY_TYPES, URGENCY_TYPES } from './../../shared/constants';
 import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
 import { Router } from '@angular/router';
