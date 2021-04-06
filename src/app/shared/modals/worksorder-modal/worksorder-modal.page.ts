@@ -70,7 +70,7 @@ export class WorksorderModalPage implements OnInit {
         isAnyFurtherWork: false,
         isAccepted: true,
         additionalWorkDetails: '',
-        jobCompletionDate: ['', Validators.required],
+        jobCompletionAt: ['', Validators.required],
         submittedById: '',
         additionalEstimate: null,
         submittedByType: 'SECUR_USER'
@@ -80,7 +80,7 @@ export class WorksorderModalPage implements OnInit {
         isAnyFurtherWork: { value: this.isAnyFurtherWork, disabled: true },
         isAccepted: true,
         additionalWorkDetails: { value: this.additionalWorkDetails, disabled: true },
-        jobCompletionDate: { value: this.jobCompletionDate, disabled: true },
+        jobCompletionAt: { value: this.commonService.getFormatedDate(this.jobCompletionDate, 'yyyy-MM-ddTHH:mm'), disabled: true },
         submittedById: '',
         additionalEstimate: { value: this.additionalEstimate, disabled: true },
         submittedByType: 'SECUR_USER'
@@ -264,7 +264,7 @@ export class WorksorderModalPage implements OnInit {
     if (reqqObj.additionalEstimate === (null || '')) {
       reqqObj.additionalEstimate = 0;
     }
-    reqqObj.jobCompletionDate = this.commonService.getFormatedDate(this.jobCompletionForm.value.jobCompletionDate, 'yyyy-MM-dd');
+    reqqObj.jobCompletionAt = this.commonService.getFormatedDate(this.jobCompletionForm.value.jobCompletionAt, 'yyyy-MM-dd HH:mm:ss');
     return reqqObj;
   }
 
