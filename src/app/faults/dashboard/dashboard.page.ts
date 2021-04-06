@@ -303,14 +303,15 @@ export class DashboardPage implements OnInit {
     await modal.present();
   }
 
-  async startProgress(){
+  async startProgress() {
     const check = await this.commonService.showConfirm('Start Progress', 'This will change the fault status, Do you want to continue?');
     if (check) {
       this.faultsService.startProgress(this.selectedData.faultId).subscribe(data => {
-        this.rerenderFaults(false);
+        // this.rerenderFaults(false);
+        this.router.navigate([`faults/${this.selectedData.faultId}/details`]);
       }, error => {
         this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Start Progress', 'Error');
-        
+
       });
     }
   }
