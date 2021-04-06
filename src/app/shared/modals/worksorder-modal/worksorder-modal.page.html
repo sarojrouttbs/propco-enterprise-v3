@@ -24,11 +24,11 @@
             <ion-item>
               <ion-label position="floating">Please add the Job Completion Date<ion-text class="mandatory">*</ion-text>
               </ion-label>
-              <ion-datetime formControlName="jobCompletionDate" displayFormat="DD/MM/YYYY" interface="popover"
+              <ion-datetime formControlName="jobCompletionAt" displayFormat="DD/MM/YYYY HH:mm" interface="popover"
                 class="request-start-date">
               </ion-datetime>
             </ion-item>
-            <app-validation-message [control]="jobCompletionForm.controls.jobCompletionDate"></app-validation-message>
+            <app-validation-message [control]="jobCompletionForm.controls.jobCompletionAt"></app-validation-message>
           </ion-col>
           <ion-col size="100">
             <ion-item lines="full" class="marg-top-16">

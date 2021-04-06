@@ -164,8 +164,8 @@
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
               <ion-row class="ion-justify-content-center">
-                <ng-container *ngFor="let instruction of otherStageActions">
-                  <div>
+                <ng-container *ngIf="iacNotification && iacNotification?.templateCode !== 'CWO-C-E'">
+                  <div *ngFor="let instruction of otherStageActions">
                     <ion-button color="success" expand="block" class="action-btn"
                       fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
                       (click)="setUserAction(instruction.index)">
@@ -193,6 +193,9 @@
                     </ion-button>
 
                 </ng-container>
+                <ion-button color="success" *ngIf="iacNotification && iacNotification?.templateCode === 'CWO-C-E'"  
+                expand="block" class="action-btn" fill="outline" (click)="closeFault()">
+                  Close Fault</ion-button>
               </ion-row>
             </ion-grid>
           </div>

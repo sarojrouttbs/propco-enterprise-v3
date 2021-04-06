@@ -1,3 +1,4 @@
+import { CloseFaultModalPage } from './../../../shared/modals/close-fault-modal/close-fault-modal.page';
 import { WorksorderModalPage } from 'src/app/shared/modals/worksorder-modal/worksorder-modal.page';
 import { RejectionModalPage } from './../../../shared/modals/rejection-modal/rejection-modal.page';
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
@@ -1961,5 +1962,26 @@ export class ArrangingContractorComponent implements OnInit {
 
   getRepairSource(repairSource) {
     return repairSource === 'FIXFLO' ? MAINT_REPAIR_SOURCES.FIXFLO : (this.faultDetails.reportedBy === 'THIRD_PARTY' ? MAINT_REPAIR_SOURCES.THIRD_PARTY : MAINT_REPAIR_SOURCES.CUSTOMER_REPORT);
+  }
+
+  async closeFault() {
+    const modal = await this.modalController.create({
+      component: CloseFaultModalPage,
+      cssClass: 'modal-container close-fault-modal',
+      componentProps: {
+        faultId: this.faultDetails.faultId
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this._btnHandler('refresh');
+        this.commonService.showMessage('Fault has been closed successfully.', 'Close a Fault', 'success');
+        return;
+      }
+    });
+
+    await modal.present();
   }
 }
