@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, OCCUPIERS_VULNERABLE } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, OCCUPIERS_VULNERABLE, SYSTEM_OPTIONS } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -1217,7 +1217,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  async openWOJobCompletionModal() {
+  async openWOJobCompletionModal() {    
     const modal = await this.modalController.create({
       component: WorksorderModalPage,
       cssClass: 'modal-container upload-container',
@@ -1232,7 +1232,7 @@ export class ArrangingContractorComponent implements OnInit {
 
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
-        this.btnAction.emit('refresh');
+        this.btnAction.emit('refresh_docs');
       }
     });
     await modal.present();
@@ -1662,10 +1662,20 @@ export class ArrangingContractorComponent implements OnInit {
     const paymentRequired = await this.isPaymentRequired(rules);
     const stageAction = this.isWorksOrder ? 'Proceed with Worksorder' : 'Landlord accepted the quote';
     if (paymentRequired) {
+      let amountThreshold = await this.getSystemOptions(SYSTEM_OPTIONS.REPAIR_ESTIMATE_QUOTE_THRESHOLD);
+      let paymentWarnings = this.commonService.getPaymentWarnings(rules, amountThreshold);
+      let warningsAsHtml = `<ul class="primary">`;
+      for (let warning of paymentWarnings) {
+        warningsAsHtml = warningsAsHtml + `<li>${warning}</li>`;
+      }
+      warningsAsHtml = warningsAsHtml + `</ul>`;
+
       const response = await this.commonService.showConfirm(this.isWorksOrder ? 'Proceed with Worksorder' : 'Arranging Contractor',
         `You have selected "${stageAction}".<br/><br/>
          Since the Landlord account doesn't have sufficient balance to pay for the works, a payment request will be generated and the Landlord will be notified to make an online payment via the portal.<br/>
-         <br/>Do you want to proceed? <br/><br/>
+         <h4>Reason for this payment request:</h4>
+          ${warningsAsHtml}
+         Do you want to proceed? <br/><br/>
          <small>NB:The landlord can also make an offline payment which can be processed manually via landlord accounts.</small>`, '', 'Yes', 'No');
       if (response) {
         return paymentRequired;
@@ -1679,6 +1689,17 @@ export class ArrangingContractorComponent implements OnInit {
         return paymentRequired;
       }
     }
+  }
+
+  private async getSystemOptions(key): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.commonService.getSystemOptions(key).subscribe(res => {
+        resolve(res ? res['key']: '');
+      }, error => {
+        resolve('');
+      });
+    });
+    return promise;
   }
 
   private async raiseWorksOrderAndNotification(paymentRequired: boolean, actionType = 'auto') {

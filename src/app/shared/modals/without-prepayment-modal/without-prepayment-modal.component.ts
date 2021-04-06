@@ -15,7 +15,7 @@ export class WithoutPrepaymentModalComponent implements OnInit {
   faultNotificationId;
   paymentRules;
   paymentWarnings: any[] = [];
-  private REPAIR_ESTIMATE_QUOTE_THRESHOLD = 300;
+  private REPAIR_ESTIMATE_QUOTE_THRESHOLD = 250;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
