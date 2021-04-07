@@ -1055,17 +1055,20 @@ export class ArrangingContractorComponent implements OnInit {
           this._btnHandler('refresh');
         }
       });
-    } else if (!data.value && !this.isWorksOrder) {
-      this.questionActionRejectQuote();
     }
-    else  if (!data.value && this.isWorksOrder) {
-      this.commonService.showConfirm(data.text, `Are you sure the Contractor doesn't want to accept the Works Order?`, '', 'Yes', 'No').then(async res => {
-        if (res) {
-          this.commonService.showLoader();
-          await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
-          this._btnHandler('refresh');
-        }
-      });
+    else if (!data.value) {
+      if (this.isWorksOrder) {
+        this.commonService.showConfirm(data.text, `Are you sure the Contractor doesn't want to accept the Works Order?`, '', 'Yes', 'No').then(async res => {
+          if (res) {
+            this.commonService.showLoader();
+            await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
+            this._btnHandler('refresh');
+          }
+        });
+      }
+     else if (!this.isWorksOrder) {
+        this.questionActionRejectQuote();
+      }
     }
   }
 
@@ -1230,7 +1233,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  async openWOJobCompletionModal() {    
+  async openWOJobCompletionModal() {
     const modal = await this.modalController.create({
       component: WorksorderModalPage,
       cssClass: 'modal-container upload-container',
@@ -1707,7 +1710,7 @@ export class ArrangingContractorComponent implements OnInit {
   private async getSystemOptions(key): Promise<any> {
     const promise = new Promise((resolve, reject) => {
       this.commonService.getSystemOptions(key).subscribe(res => {
-        resolve(res ? res['key']: '');
+        resolve(res ? res['key'] : '');
       }, error => {
         resolve('');
       });
