@@ -1711,6 +1711,7 @@ export class ArrangingContractorComponent implements OnInit {
     let submit: boolean;
     if (actionType === 'auto') {
       submit = await this.saveFaultLLAuth() as boolean;
+      return submit;
     } else {
       if (!this.faultMaintenanceDetails) {
         const isDraft = false;
@@ -1720,8 +1721,6 @@ export class ArrangingContractorComponent implements OnInit {
         if (!updateWO) return false;
         submit = await this.updateFault(true) as boolean;
       }
-
-
     }
     if (!submit) return false;
     if (submit) {
