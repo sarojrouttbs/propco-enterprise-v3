@@ -13,6 +13,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
 import { forkJoin } from 'rxjs';
 import { BlockManagementModalPage } from 'src/app/shared/modals/block-management-modal/block-management-modal.page';
+import { JobCompletionModalPage } from 'src/app/shared/modals/job-completion-modal/job-completion-modal.page';
 
 @Component({
   selector: 'app-fault-qualification',
@@ -611,13 +612,7 @@ export class FaultQualificationComponent implements OnInit {
       }
     }
     if (data.value) {
-      this.commonService.showConfirm('Repair complete', `Are you sure the ${type} Company has completed the repair?`, '', 'Yes I\'m sure', 'Cancel').then(async res => {
-        if (res) {
-          this.commonService.showLoader();
-          await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
-          this._btnHandler('refresh');
-        }
-      });
+      this.openJobCompletionModal(`Are you sure the ${type} Company has completed the repair?`);
     } else if (!data.value) {
       this.commonService.showConfirm('Repair not complete', `Are you sure the ${type} Company has not completed the repair?`, '', 'Yes I\'m sure', 'Cancel').then(async res => {
         if (res) {
@@ -768,5 +763,26 @@ export class FaultQualificationComponent implements OnInit {
       }
 
     }
+  }
+
+  async openJobCompletionModal(title) {
+    const modal = await this.modalController.create({
+      component: JobCompletionModalPage,
+      cssClass: 'modal-container',
+      componentProps: {
+        faultNotificationId: this.iqfNotification.faultNotificationId,
+        heading: 'Mark the Job Complete',
+        title: title
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this.commonService.showLoader();
+        this._btnHandler('refresh');
+      }
+    });
+    await modal.present();
   }
 }
