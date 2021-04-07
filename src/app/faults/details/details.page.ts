@@ -14,6 +14,7 @@ import { SimplePopoverPage } from 'src/app/shared/popover/simple-popover/simple-
 import { ContractorDetailsModalPage } from 'src/app/shared/modals/contractor-details-modal/contractor-details-modal.page';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 import { DOCUMENT } from '@angular/common';
+import { JobCompletionModalPage } from 'src/app/shared/modals/job-completion-modal/job-completion-modal.page';
 
 @Component({
   selector: 'fault-details',
@@ -73,7 +74,7 @@ export class DetailsPage implements OnInit {
   tenantArrears: any;
   faultDetails: FaultModels.IFaultResponse;
   landlordDetails: any;
-  landlordDppRepairDetails:any;
+  landlordDppRepairDetails: any;
   isEditable = false;
   landlordInstructionTypes = LL_INSTRUCTION_TYPES;
   suggestedAction; oldUserSelectedAction;
@@ -356,7 +357,7 @@ export class DetailsPage implements OnInit {
       }
       this.showSkeleton = false;
     });
-   
+
   }
 
   private getMaxRentShareLandlord(landlords) {
@@ -716,7 +717,7 @@ export class DetailsPage implements OnInit {
       this.faultsService.getLandlordDppDetails(landlordId).subscribe(
         res => {
           let dppDetails = res ? res.data : [];
-          this.landlordDppRepairDetails = dppDetails.find(dpp=>dpp.dppGroup === DPP_GROUP.REPAIR_N_MAINTENANCE);
+          this.landlordDppRepairDetails = dppDetails.find(dpp => dpp.dppGroup === DPP_GROUP.REPAIR_N_MAINTENANCE);
           resolve(this.landlordDppRepairDetails);
         },
         error => {
@@ -1421,7 +1422,7 @@ export class DetailsPage implements OnInit {
       this.stepper.selectedIndex = FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION
     } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.JOB_COMPLETION) {
       this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
-    }else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.PAYMENT) {
+    } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.PAYMENT) {
       this.stepper.selectedIndex = FAULT_STAGES_INDEX.JOB_COMPLETION;
     }
   }
@@ -1841,17 +1842,7 @@ export class DetailsPage implements OnInit {
       });
     }
     else if (data.value) {
-      this.commonService.showConfirm(data.text, 'Are you sure the repair is complete?', '', 'Yes', 'No').then(async res => {
-        if (res) {
-          this.commonService.showLoader();
-          await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
-          this.refreshDetailsAndStage();
-          await this.checkFaultNotifications(this.faultId);
-          this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
-          this.getPendingHours();
-          // await this.markJobComplete(this.faultId);
-        }
-      });
+      this.openJobCompletionModal('Are you sure the repair is complete?');
     }
   }
 
@@ -2038,8 +2029,8 @@ export class DetailsPage implements OnInit {
     this.commonService.downloadDocumentByUrl(url);
   }
 
-  async llContractor() {    
-    if (!this.isContractorModal){
+  async llContractor() {
+    if (!this.isContractorModal) {
       this.isContractorModal = true;
       const modal = await this.modalController.create({
         component: ContractorDetailsModalPage,
@@ -2058,9 +2049,9 @@ export class DetailsPage implements OnInit {
           this.refreshDetailsAndStage();
         }
       });
-  
+
       await modal.present();
-    }  
+    }
   }
 
   async markJobComplete(faultId) {
@@ -2150,5 +2141,28 @@ export class DetailsPage implements OnInit {
         this.cliNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
       }
     }
+  }
+
+  async openJobCompletionModal(title) {
+    const modal = await this.modalController.create({
+      component: JobCompletionModalPage,
+      cssClass: 'modal-container',
+      componentProps: {
+        faultNotificationId: this.cliNotification.faultNotificationId,
+        heading: 'Mark the Job Complete',
+        title: title
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this.refreshDetailsAndStage();
+        await this.checkFaultNotifications(this.faultId);
+        this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+        this.getPendingHours();
+      }
+    });
+    await modal.present();
   }
 }
