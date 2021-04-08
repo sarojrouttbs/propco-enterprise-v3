@@ -188,7 +188,7 @@ export class ArrangingContractorComponent implements OnInit {
       agentReference: [{ value: '', disabled: true }],
       defaultCommissionPercentage: '',
       defaultCommissionAmount: '',
-      isUseRate: '',
+      useCommissionRate: '',
       businessTelephone: [{ value: '', disabled: true }],
       contact: this.getAccessDetails(this.faultDetails.isTenantPresenceRequired),
       jobType: MAINT_JOB_TYPE.index,
@@ -1299,11 +1299,11 @@ export class ArrangingContractorComponent implements OnInit {
           });
           if (!this.faultMaintenanceDetails) {
             this.workOrderForm.patchValue({
-              isUseRate: data ? (data.isUseAmount) : undefined
+              useCommissionRate: data ? (data.isUseAmount) : undefined
             });
           } else {
             this.workOrderForm.patchValue({
-              isUseRate: this.faultMaintenanceDetails.isUseRate
+              useCommissionRate: this.faultMaintenanceDetails.useCommissionRate
             });
           }
           if (this.isContractorSearch && typeof contractor === 'object') {

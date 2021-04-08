@@ -572,21 +572,21 @@
           </ion-item>
         </ion-col>
         <ion-col size="50">
-          <ion-radio-group formControlName="isUseRate" class="defaultCommission">
+          <ion-radio-group formControlName="useCommissionRate" class="defaultCommission">
             <ion-item class="ion-item">
               <ion-radio [value]="false" checked style="margin-right: 5px;" [disabled]="iacNotification"></ion-radio>
               <ion-label position="fixed" class="ion-label" >Rate(%) </ion-label>
                 <ion-input formControlName="defaultCommissionPercentage" class="ion-input" 
-                [readonly]="!workOrderForm?.value.isUseRate "
-                [disabled]="iacNotification || workOrderForm?.value.isUseRate"
+                [readonly]="!workOrderForm?.value.useCommissionRate "
+                [disabled]="iacNotification || workOrderForm?.value.useCommissionRate"
                 ></ion-input>
             </ion-item>
             <ion-item class="ion-item defaultCommission" >
               <ion-radio [value]="true" checked style="margin-right: 5px;" [disabled]="iacNotification"></ion-radio>
               <ion-label position="fixed" class="ion-label">Amount(£) </ion-label>
                 <ion-input formControlName="defaultCommissionAmount" class="ion-input" 
-                [readonly]="workOrderForm?.value.isUseRate "
-                [disabled]="iacNotification || !workOrderForm?.value.isUseRate"
+                [readonly]="workOrderForm?.value.useCommissionRate "
+                [disabled]="iacNotification || !workOrderForm?.value.useCommissionRate"
                 ></ion-input>
             </ion-item>
           </ion-radio-group>
