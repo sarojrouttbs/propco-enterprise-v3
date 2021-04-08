@@ -139,7 +139,7 @@ export class JobCompletionComponent implements OnInit {
   }
 
   private getAccessDetails(tenantPresence): string {
-    return (tenantPresence ? MAINT_CONTACT.CONTACT_TENANT  : MAINT_CONTACT.ACCESS_VIA_KEY);
+    return (tenantPresence ? MAINT_CONTACT.CONTACT_TENANT : MAINT_CONTACT.ACCESS_VIA_KEY);
     // if (tenantPresence != null) {
     //   let data = this.accessInfoList.filter(data => data.value == tenantPresence);
     //   return data && data[0] ? data[0].title : '';
@@ -626,10 +626,13 @@ export class JobCompletionComponent implements OnInit {
   }
 
   async approveInvoice() {
-    this.commonService.showLoader();
-    const approved = await this.pmApproveInvoice();
-    if (approved) {
-      this._btnHandler('refresh');
+    const confirmation = await this.commonService.showConfirm('Yes, Approve this Invoice', 'This will sent the Fault to Accounts team for payment. Are you sure ?', '', 'Yes');
+    if (confirmation) {
+      this.commonService.showLoader();
+      const approved = await this.pmApproveInvoice();
+      if (approved) {
+        this._btnHandler('refresh');
+      }
     }
   }
 

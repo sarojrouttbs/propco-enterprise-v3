@@ -1055,28 +1055,44 @@ export class ArrangingContractorComponent implements OnInit {
           this._btnHandler('refresh');
         }
       });
-    } else if (!data.value) {
-      const modal = await this.modalController.create({
-        component: RejectionModalPage,
-        cssClass: 'modal-container',
-        componentProps: {
-          faultNotificationId: this.iacNotification.faultNotificationId,
-          faultMaintRejectionReasons: this.contractorMaintRejectionReasons,
-          disableAnotherQuote: this.disableAnotherQuote,
-          userType: 'contractor',
-          title: 'No Acceptance',
-          rejectedByType: REJECTED_BY_TYPE.CONTRACTOR
-        },
-        backdropDismiss: false
-      });
-
-      modal.onDidDismiss().then(async res => {
-        if (res.data && res.data == 'success') {
-          this._btnHandler('refresh');
-        }
-      });
-      await modal.present();
     }
+    else if (!data.value) {
+      if (this.isWorksOrder) {
+        this.commonService.showConfirm(data.text, `Are you sure the Contractor doesn't want to accept the Works Order?`, '', 'Yes', 'No').then(async res => {
+          if (res) {
+            this.commonService.showLoader();
+            await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
+            this._btnHandler('refresh');
+          }
+        });
+      }
+     else if (!this.isWorksOrder) {
+        this.questionActionRejectQuote();
+      }
+    }
+  }
+
+  private async questionActionRejectQuote() {
+    const modal = await this.modalController.create({
+      component: RejectionModalPage,
+      cssClass: 'modal-container',
+      componentProps: {
+        faultNotificationId: this.iacNotification.faultNotificationId,
+        faultMaintRejectionReasons: this.contractorMaintRejectionReasons,
+        disableAnotherQuote: this.disableAnotherQuote,
+        userType: 'contractor',
+        title: 'No Acceptance',
+        rejectedByType: REJECTED_BY_TYPE.CONTRACTOR
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this._btnHandler('refresh');
+      }
+    });
+    await modal.present();
   }
 
   private async questionActionVisitTime(data) {
@@ -1217,7 +1233,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  async openWOJobCompletionModal() {    
+  async openWOJobCompletionModal() {
     const modal = await this.modalController.create({
       component: WorksorderModalPage,
       cssClass: 'modal-container upload-container',
@@ -1694,7 +1710,7 @@ export class ArrangingContractorComponent implements OnInit {
   private async getSystemOptions(key): Promise<any> {
     const promise = new Promise((resolve, reject) => {
       this.commonService.getSystemOptions(key).subscribe(res => {
-        resolve(res ? res['key']: '');
+        resolve(res ? res['key'] : '');
       }, error => {
         resolve('');
       });
