@@ -675,7 +675,7 @@
           <div class="landlord-instructions">
             <div class="banner" *ngIf="!cliNotification">
               <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
-              <ion-button color="{{(suggestedAction == 'PROCEED_AS_NECESSARY') ? 'danger' : 'success'}}"
+              <ion-button color="{{(suggestedAction == 'AGENT_OF_NECESSITY') ? 'danger' : 'success'}}"
                 class="icon-button" (click)="setUserAction(suggestedAction)"
                 fill="{{(userSelectedActionControl.value == suggestedAction) ? 'solid' :'outline'}}">
                 {{getLookupValue(suggestedAction, landlordInstructionTypes)}}
@@ -690,7 +690,7 @@
                 <ion-row class="ion-justify-content-center">
                   <ng-container *ngFor="let instruction of landlordInstructionTypes">
                     <div *ngIf="suggestedAction!= instruction.index">
-                      <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}"
+                      <ion-button color="{{instruction.index != 'AGENT_OF_NECESSITY' ? 'success' : 'danger'}}"
                         class="action-btn" expand="block"
                         fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
                         (click)="setUserAction(instruction.index)">
@@ -788,9 +788,9 @@
                   <ion-grid>
                     <ion-row class="ion-justify-content-center">                    
                       <ion-button color="danger" expand="block" class="action-btn"
-                        fill="{{userSelectedActionControl.value == 'PROCEED_AS_NECESSARY' ? 'solid' :'outline'}}" (click)="setUserAction('PROCEED_AS_NECESSARY')">
-                        {{getLookupValue('PROCEED_AS_NECESSARY', landlordInstructionTypes)}}
-                        <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(userSelectedActionControl.value == 'PROCEED_AS_NECESSARY')"></ion-icon>
+                        fill="{{userSelectedActionControl.value == 'AGENT_OF_NECESSITY' ? 'solid' :'outline'}}" (click)="setUserAction('AGENT_OF_NECESSITY')">
+                        {{getLookupValue('AGENT_OF_NECESSITY', landlordInstructionTypes)}}
+                        <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(userSelectedActionControl.value == 'AGENT_OF_NECESSITY')"></ion-icon>
                       </ion-button>
                     </ion-row>
                   </ion-grid>
@@ -819,7 +819,7 @@
                   <ion-row class="ion-justify-content-center">
                     <ng-container *ngFor="let instruction of landlordInstructionTypes">
                       <div *ngIf="oldUserSelectedAction != instruction.index">
-                        <ion-button color="{{instruction.index != 'PROCEED_AS_NECESSARY' ? 'success' : 'danger'}}"
+                        <ion-button color="{{instruction.index != 'AGENT_OF_NECESSITY' ? 'success' : 'danger'}}"
                           expand="block" class="action-btn"
                           fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
                           (click)="setUserAction(instruction.index)">
@@ -853,7 +853,7 @@
                           formControlName='contractor'
                           [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' 
                           || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION'
-                          || userSelectedActionControl.value == 'PROCEED_AS_NECESSARY'
+                          || userSelectedActionControl.value == 'AGENT_OF_NECESSITY'
                           || userSelectedActionControl.value == 'PROCEED_WITH_WORKSORDER')"
                          >
                         </ion-input>
@@ -880,7 +880,7 @@
                         <ion-input formControlName="confirmedEstimate"
                           [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' 
                           || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION'
-                          || userSelectedActionControl.value == 'PROCEED_AS_NECESSARY'
+                          || userSelectedActionControl.value == 'AGENT_OF_NECESSITY'
                           || userSelectedActionControl.value == 'PROCEED_WITH_WORKSORDER')"
                           #estimate (ionBlur)="showRefreshPopup(estimate.value)"></ion-input>
                       </ion-item>
@@ -891,7 +891,7 @@
                         <ion-textarea placeholder="Enter more information here..." formControlName="estimationNotes"
                           [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' 
                           || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION'
-                          || userSelectedActionControl.value == 'PROCEED_AS_NECESSARY'
+                          || userSelectedActionControl.value == 'AGENT_OF_NECESSITY'
                           || userSelectedActionControl.value == 'PROCEED_WITH_WORKSORDER')"
                           rows=1 auto-grow="true"></ion-textarea>
                       </ion-item>
