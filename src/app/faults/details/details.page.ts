@@ -1459,7 +1459,7 @@ export class DetailsPage implements OnInit {
     else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
       this.proceeding = true;
       if (this.cliNotification) {
-        if (!this.isUserActionChange) {
+        if (!this.isUserActionChange && this.cliNotification.responseReceived == null) {
           this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
           this.proceeding = false;
           return;
