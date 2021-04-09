@@ -433,9 +433,11 @@
         <ion-text class="content"></ion-text>
       </ion-col> -->
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header ion-text-capitalize">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}
-        </ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.forename.value || 'N/A'}}</ion-text>
+        <ng-container *ngIf="reportedByForm.controls.reportedBy.value =='THIRD_PARTY'" >
+          <ion-text class="header ion-text-capitalize">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}
+          </ion-text><br />
+          <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedById.value, faultReportedByThirdParty) || 'N/A'}}</ion-text>
+        </ng-container>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Title</ion-text><br />
