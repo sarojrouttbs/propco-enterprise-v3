@@ -58,7 +58,7 @@
               (iacNotification?.templateCode === 'LAR-L-Q' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
                 {{rejectionReason || 'N/A'}}
               </ion-text>
-                <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false">
+                <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false && this.iacNotification?.templateCode!='CWO-C-E'">
                   <ion-text color="danger">Please select an appropriate action.</ion-text>
                 </h6>
                 <div class="border-bottom"></div>
