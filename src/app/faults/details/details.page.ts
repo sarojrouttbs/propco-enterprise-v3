@@ -332,7 +332,7 @@ export class DetailsPage implements OnInit {
       this.getPropertyById(),
       this.getPropertyTenancies(),
       this.getHMOLicenceDetails(),
-      this.getMacDocUploadLimit()
+      this.getMaxDocUploadLimit()
     ]).subscribe(async (values) => {
       if (this.faultId) {
         // this.commonService.hideLoader();
@@ -2172,7 +2172,7 @@ export class DetailsPage implements OnInit {
     await modal.present();
   }
 
-  private getMacDocUploadLimit(): Promise<any> {
+  private getMaxDocUploadLimit(): Promise<any> {
     const promise = new Promise((resolve, reject) => {
       this.commonService.getSystemOptions(MAX_DOC_UPLOAD_SIZE.FAULT_DOCUMENT_UPLOAD_SIZE).subscribe(res => {
         this.MAX_DOC_UPLOAD_LIMIT = res ? parseInt(res.FAULT_DOCUMENT_UPLOAD_SIZE, 10) : '';
