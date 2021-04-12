@@ -161,7 +161,7 @@ declare namespace FaultModels {
         modifiedAt: string;
         selectedContractorId: string;
         maintenanceId: string;
-        isUseRate: boolean;
+        useCommissionRate: boolean;
         thirdPartySource?: number;
     }
 

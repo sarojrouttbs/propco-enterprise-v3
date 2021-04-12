@@ -128,7 +128,7 @@ export const LL_INSTRUCTION_TYPES = [
     value: 'Obtain LL authorisation',
   },
   {
-    index: 'PROCEED_AS_NECESSARY',
+    index: 'AGENT_OF_NECESSITY',
     value: 'EMERGENCY/URGENT – Proceed as agent of necessity'
   },
   {

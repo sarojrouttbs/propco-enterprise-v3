@@ -628,10 +628,13 @@ export class JobCompletionComponent implements OnInit {
   }
 
   async approveInvoice() {
-    this.commonService.showLoader();
-    const approved = await this.pmApproveInvoice();
-    if (approved) {
-      this._btnHandler('refresh');
+    const confirmation = await this.commonService.showConfirm('Yes, Approve this Invoice', 'This will send the Fault to Accounts team for payment. Are you sure?', '', 'Yes');
+    if (confirmation) {
+      this.commonService.showLoader();
+      const approved = await this.pmApproveInvoice();
+      if (approved) {
+        this._btnHandler('refresh');
+      }
     }
   }
 
@@ -643,7 +646,7 @@ export class JobCompletionComponent implements OnInit {
         faultId: this.faultDetails.faultId,
         title: "Job Completion",
         headingOne: "You have selected 'No, Reject this Invoice.'",
-        headingTwo: "This will escalate the Fault and a notification to Contractor would be sent. Are you sure ?",
+        headingTwo: "This will escalate the Fault and a notification to Contractor would be sent. Are you sure?",
       },
       backdropDismiss: false
     });

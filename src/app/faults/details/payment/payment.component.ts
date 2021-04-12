@@ -643,7 +643,7 @@ export class PaymentComponent implements OnInit {
         faultId: this.faultDetails.faultId,
         title: "Job Completion",
         headingOne: "You have selected 'No, Reject this Invoice.'",
-        headingTwo: "This will escalate the Fault and a notification to Contractor would be sent. Are you sure ?",
+        headingTwo: "This will escalate the Fault and a notification to Contractor would be sent. Are you sure?",
       },
       backdropDismiss: false
     });
