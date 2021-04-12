@@ -29,6 +29,7 @@ export class JobCompletionComponent implements OnInit {
   @Input() quoteDocuments: any;
   @Input() propertyDetails;
   @Input() categoryName;
+  @Input() MAX_DOC_UPLOAD_LIMIT;
   faultMaintenanceDetails: FaultModels.IMaintenanceQuoteResponse;
   contractors: Observable<FaultModels.IContractorResponse>;
   resultsAvailable = false;
@@ -139,7 +140,7 @@ export class JobCompletionComponent implements OnInit {
   }
 
   private getAccessDetails(tenantPresence): string {
-    return (tenantPresence ? MAINT_CONTACT.CONTACT_TENANT  : MAINT_CONTACT.ACCESS_VIA_KEY);
+    return (tenantPresence ? MAINT_CONTACT.CONTACT_TENANT : MAINT_CONTACT.ACCESS_VIA_KEY);
     // if (tenantPresence != null) {
     //   let data = this.accessInfoList.filter(data => data.value == tenantPresence);
     //   return data && data[0] ? data[0].title : '';
@@ -403,7 +404,8 @@ export class JobCompletionComponent implements OnInit {
         isAnyFurtherWork: this.faultDetails.isAnyFurtherWork,
         additionalEstimate: this.faultDetails.additionalEstimate,
         additionalWorkDetails: this.faultDetails.additionalWorkDetail,
-        actionType: 'view'
+        actionType: 'view',
+        MAX_DOC_UPLOAD_LIMIT: this.MAX_DOC_UPLOAD_LIMIT
       },
       backdropDismiss: false
     });

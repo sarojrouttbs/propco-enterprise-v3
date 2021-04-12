@@ -1,6 +1,6 @@
 import { ModalController, PopoverController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP } from './../../shared/constants';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP, MAX_DOC_UPLOAD_SIZE } from './../../shared/constants';
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -93,6 +93,7 @@ export class DetailsPage implements OnInit {
   mediaType: any;
   isUserActionChange = false;
   showSkeleton = true;
+  MAX_DOC_UPLOAD_LIMIT;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -330,7 +331,8 @@ export class DetailsPage implements OnInit {
       this.getFaultAdditionalInfo(),
       this.getPropertyById(),
       this.getPropertyTenancies(),
-      this.getHMOLicenceDetails()
+      this.getHMOLicenceDetails(),
+      this.getMacDocUploadLimit()
     ]).subscribe(async (values) => {
       if (this.faultId) {
         // this.commonService.hideLoader();
@@ -758,10 +760,11 @@ export class DetailsPage implements OnInit {
     this.submit(files);
   }
 
-  removeFile(i) {
+  removeFile(data, i) {
     if (this.faultDetails.faultId) {
+      let index = this.uploadDocForm.controls.photos.value.findIndex(x => x.uId == data.uId);
       this.files.splice(i, 1);
-      this.photos.removeAt(i - this.files.length);
+      this.photos.removeAt(index);
     }
     else {
       this.files.splice(i, 1);
@@ -778,40 +781,42 @@ export class DetailsPage implements OnInit {
   };
 
   submit(files) {
-    // if (this.files.length + files.length > 5) {
-    //   this.commonService.showMessage("You are only allowed to upload a maximum of 5 files", "Warning", "warning");
-    //   return;
-    // }
     if (files) {
       for (let file of files) {
-        let isImage: boolean = false;
-        if (file.type.split("/")[0] !== 'image') {
-          isImage = false;
-        }
-        else if (file.type.split("/")[0] == 'image') {
-          isImage = true;
-        }
-        this.photos.push(this.createItem({
-          file: file
-        }));
-        let reader = new FileReader();
-        if (isImage) {
-          reader.onload = (e: any) => {
-            this.files.push({
-              documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
-              name: file.name
-            })
+        if (this.validateUploadLimit(file)) {
+          let isImage: boolean = false;
+          let date = Date.now();
+          if (file.type.split("/")[0] !== 'image') {
+            isImage = false;
           }
-        }
-        else {
-          reader.onload = (e: any) => {
-            this.files.push({
-              documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/default.jpg'),
-              name: file.name
-            })
+          else if (file.type.split("/")[0] == 'image') {
+            isImage = true;
           }
+          this.photos.push(this.createItem({
+            file: file,
+            uId: date
+          }));
+          let reader = new FileReader();
+          if (isImage) {
+            reader.onload = (e: any) => {
+              this.files.push({
+                documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
+                name: file.name,
+                uId: date
+              })
+            }
+          }
+          else {
+            reader.onload = (e: any) => {
+              this.files.push({
+                documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/default.jpg'),
+                name: file.name,
+                uId: date
+              })
+            }
+          }
+          reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(file);
       }
     }
   }
@@ -824,7 +829,6 @@ export class DetailsPage implements OnInit {
       const formData = new FormData();
       formData.append('file', data.file);
       formData.append('name', data.file.name);
-      // formData.append('folderName', this.faultDetails.status + '' || '1');
       formData.append('folderName', FOLDER_NAMES[0]['index']);
       formData.append('headCategory', 'Legal');
       formData.append('subCategory', 'Addendum');
@@ -1205,19 +1209,14 @@ export class DetailsPage implements OnInit {
   async saveForLater() {
     this.saving = true;
     if (!this.faultId) {
-      // this.commonService.showLoader();
       let faultRequestObj = this.createFaultFormValues();
       faultRequestObj.isDraft = true;
       this.faultsService.createFault(faultRequestObj).subscribe(
         res => {
-          // this.commonService.hideLoader();
           this.commonService.showMessage('Fault has been logged successfully.', 'Log a Fault', 'success');
           this.uploadFiles(res.faultId);
         },
         error => {
-          // this.commonService.hideLoader();
-          // this.commonService.showMessage('Something went wrong on server, please try again.', 'Log a Fault', 'Error');
-          // console.log(error);
           this.saving = false;
         }
       );
@@ -1231,7 +1230,6 @@ export class DetailsPage implements OnInit {
   }
 
   private updateFaultSummary() {
-    // this.commonService.showLoader();
     let faultRequestObj = this.createFaultFormValues();
     faultRequestObj.stage = this.faultDetails.stage;
     faultRequestObj.isDraft = true;
@@ -1258,8 +1256,6 @@ export class DetailsPage implements OnInit {
       },
       error => {
         this.saving = false;
-        // this.commonService.hideLoader();
-        // console.log(error);
       }
     );
   }
@@ -1662,6 +1658,16 @@ export class DetailsPage implements OnInit {
 
   }
 
+  validateUploadLimit(file) {
+    if (!file) { return; }
+    let fileSize = file.size / 1024 / 1024;
+    if (fileSize > this.MAX_DOC_UPLOAD_LIMIT) {
+      this.commonService.showAlert('Warning', `Some file(s) can't be uploaded, because they exceed the maximum allowed file size(${this.MAX_DOC_UPLOAD_LIMIT}Mb)`);
+      return false;
+    }
+    return true;
+  }
+
   async voidNotification() {
     let notificationObj = {} as FaultModels.IUpdateNotification;
     notificationObj.isVoided = true;
@@ -1980,11 +1986,11 @@ export class DetailsPage implements OnInit {
     this.filteredDocuments == null;
   }
 
-  async deleteDocument(documentId, i: number) {
+  async deleteDocument(file, i: number) {
     const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
     if (response) {
-      this.faultsService.deleteDocument(documentId).subscribe(response => {
-        this.removeFile(i);
+      this.faultsService.deleteDocument(file.documentId).subscribe(response => {
+        this.removeFile(file, i);
         this.filteredDocuments.splice(i, 1);
         if (this.filteredDocuments.length == 0) {
           // this.getDocs();
@@ -2164,5 +2170,18 @@ export class DetailsPage implements OnInit {
       }
     });
     await modal.present();
+  }
+
+  private getMacDocUploadLimit(): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.commonService.getSystemOptions(MAX_DOC_UPLOAD_SIZE.FAULT_DOCUMENT_UPLOAD_SIZE).subscribe(res => {
+        this.MAX_DOC_UPLOAD_LIMIT = res ? parseInt(res.FAULT_DOCUMENT_UPLOAD_SIZE, 10) : '';
+        // this.MAX_DOC_UPLOAD_LIMIT = 1;
+        resolve(true);
+      }, error => {
+        resolve(false);
+      });
+    });
+    return promise;
   }
 }

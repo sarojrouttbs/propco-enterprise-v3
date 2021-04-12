@@ -27,9 +27,11 @@ export class WorksorderModalPage implements OnInit {
   type: string = 'invoice';
   showLoader: boolean = null;
   jobCompletionDate;
+  invoiceAmount;
   isAnyFurtherWork;
   additionalEstimate;
   additionalWorkDetails;
+  MAX_DOC_UPLOAD_LIMIT;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -73,7 +75,8 @@ export class WorksorderModalPage implements OnInit {
         jobCompletionAt: ['', Validators.required],
         submittedById: '',
         additionalEstimate: null,
-        submittedByType: 'SECUR_USER'
+        submittedByType: 'SECUR_USER',
+        invoiceAmount: ''
       });
     } else {
       this.jobCompletionForm = this.formBuilder.group({
@@ -83,7 +86,8 @@ export class WorksorderModalPage implements OnInit {
         jobCompletionAt: { value: this.commonService.getFormatedDate(this.jobCompletionDate, 'yyyy-MM-ddTHH:mm'), disabled: true },
         submittedById: '',
         additionalEstimate: { value: this.additionalEstimate, disabled: true },
-        submittedByType: 'SECUR_USER'
+        submittedByType: 'SECUR_USER',
+        invoiceAmount: this.invoiceAmount
       });
     }
   }
@@ -118,50 +122,63 @@ export class WorksorderModalPage implements OnInit {
     }
     if (uploadedDocument) {
       for (let file of uploadedDocument) {
-        let isImage: boolean = false;
-        if (file.type.split("/")[0] !== 'image') {
-          isImage = false;
-        }
-        else if (file.type.split("/")[0] == 'image') {
-          isImage = true;
-        }
-        if (type === 'photo') {
-          this.photos.push(this.createItem({
-            file: file
-          }));
-        } else {
-          this.invoices.push(this.createItem({
-            file: file
-          }));
-        }
-        let reader = new FileReader();
-        if (isImage && type === 'photo') {
-          reader.onload = (e: any) => {
-            this.uploadedPhoto.push({
-              documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
-              name: file.name
-            })
+        if (this.validateUploadLimit(file)) {
+
+          let isImage: boolean = false;
+          if (file.type.split("/")[0] !== 'image') {
+            isImage = false;
           }
-        }
-        else if (isImage && type === 'invoice') {
-          reader.onload = (e: any) => {
-            this.uploadedInvoice.push({
-              documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
-              name: file.name
-            })
+          else if (file.type.split("/")[0] == 'image') {
+            isImage = true;
           }
-        }
-        else {
-          reader.onload = (e: any) => {
-            this.uploadedInvoice.push({
-              documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/default.jpg'),
-              name: file.name
-            })
+          if (type === 'photo') {
+            this.photos.push(this.createItem({
+              file: file
+            }));
+          } else {
+            this.invoices.push(this.createItem({
+              file: file
+            }));
           }
+          let reader = new FileReader();
+          if (isImage && type === 'photo') {
+            reader.onload = (e: any) => {
+              this.uploadedPhoto.push({
+                documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
+                name: file.name
+              })
+            }
+          }
+          else if (isImage && type === 'invoice') {
+            reader.onload = (e: any) => {
+              this.uploadedInvoice.push({
+                documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
+                name: file.name
+              })
+            }
+          }
+          else {
+            reader.onload = (e: any) => {
+              this.uploadedInvoice.push({
+                documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/default.jpg'),
+                name: file.name
+              })
+            }
+          }
+          reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(file);
       }
     }
+  }
+
+  validateUploadLimit(file) {
+    if (!file) { return; }
+    let fileSize = file.size / 1024 / 1024;
+    if (fileSize > this.MAX_DOC_UPLOAD_LIMIT) {
+      this.commonService.showAlert('Warning', `Some file(s) can't be uploaded, because they exceed the maximum allowed file size(${this.MAX_DOC_UPLOAD_LIMIT}Mb)`);
+      return false;
+    }
+    return true;
   }
 
   onCancel() {
@@ -278,6 +295,10 @@ export class WorksorderModalPage implements OnInit {
       this.commonService.showMessage('Please upload Invoice', 'Mark the Job Completed', 'error');
       return valid = false;
     }
+    // if (this.uploadDocumentForm.controls.invoices.value.length > 0 && !this.jobCompletionForm.value.invoiceAmount) {
+    //   this.commonService.showMessage('Please add invoice amount', 'Mark the Job Completed', 'error');
+    //   return valid = false;
+    // }
     return valid;
   }
 

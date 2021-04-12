@@ -305,7 +305,7 @@
                   <div class="file-name">{{file.name}}</div>
                 </ion-col>
                 <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding">
-                  <ion-icon (click)="removeFile(i)" title="Delete File" class="delete-icon" name="close-circle">
+                  <ion-icon (click)="removeFile(file,i)" title="Delete File" class="delete-icon" name="close-circle">
                   </ion-icon>
                 </ion-col>
               </ion-row>
@@ -345,7 +345,7 @@
                 <div class="file-name">{{file.name}}</div>
               </ion-col>
               <ion-col size-xl="10" size-lg="15" size="10" class="ion-text-end ion-no-padding">
-                <ion-icon (click)="deleteDocument(file?.documentId, i)" title="Delete File" class="delete-icon" name="close-circle">
+                <ion-icon (click)="deleteDocument(file, i)" title="Delete File" class="delete-icon" name="close-circle">
                 </ion-icon>
               </ion-col>
             </ion-row>
@@ -1013,7 +1013,8 @@
       [propertyLandlords]="landlordsOfproperty" 
       [quoteDocuments]="quoteDocuments" 
       [propertyDetails]="propertyDetails"
-      [categoryName]="getCategoryName()"></app-arranging-contractor>
+      [categoryName]="getCategoryName()"
+      [MAX_DOC_UPLOAD_LIMIT]="MAX_DOC_UPLOAD_LIMIT"></app-arranging-contractor>
     </ng-container>
   </ion-card>
 </ng-template>
@@ -1049,7 +1050,8 @@
       (btnAction)="_childComponentHandler($event)"
       [quoteDocuments]="quoteDocuments"
       [propertyDetails]="propertyDetails"
-      [categoryName]="getCategoryName()"></app-job-completion>
+      [categoryName]="getCategoryName()"
+      [MAX_DOC_UPLOAD_LIMIT]="1"></app-job-completion>
     </ng-container>
   </ion-card>
 </ng-template>
