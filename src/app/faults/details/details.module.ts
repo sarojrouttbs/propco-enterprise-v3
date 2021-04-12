@@ -6,7 +6,7 @@ import { RejectionModalPageModule } from './../../shared/modals/rejection-modal/
 import { ArrangingContractorComponent } from './arranging-contractor/arranging-contractor.component';
 import { SearchPropertyPageModule } from './../../shared/modals/search-property/search-property.module';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
@@ -42,6 +42,17 @@ import { TenancyClauseModalPageModule } from 'src/app/shared/modals/tenancy-clau
 import { PropertyCertificateModalPageModule } from 'src/app/shared/modals/property-certificate-modal/property-certificate-modal.module';
 import { MoreInfoModalPageModule } from 'src/app/shared/modals/more-info-modal/more-info-modal.module';
 import { JobCompletionModalPageModule } from 'src/app/shared/modals/job-completion-modal/job-completion-modal.module';
+import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  decimal: ".",
+  precision: 2,
+  prefix: "£ ",
+  suffix: "",
+  thousands: ","
+};
 @NgModule({
   imports: [
     CommonModule,
@@ -74,10 +85,13 @@ import { JobCompletionModalPageModule } from 'src/app/shared/modals/job-completi
     WorksorderModalPageModule,
     RejectInvoiceModule,
     MoreInfoModalPageModule,
-    JobCompletionModalPageModule
+    JobCompletionModalPageModule,
+    CurrencyMaskModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
-    PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent,JobCompletionComponent,
+    PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent, JobCompletionComponent,
     PaymentComponent],
+  providers: [CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
+
 })
 export class DetailsPageModule { }
