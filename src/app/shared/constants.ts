@@ -362,3 +362,7 @@ export const REJECTED_BY_TYPE = {
 export const DPP_GROUP = {
   REPAIR_N_MAINTENANCE: 'Repair and Maintenance'
 }
+
+export const MAX_DOC_UPLOAD_SIZE = {
+  FAULT_DOCUMENT_UPLOAD_SIZE: 'FAULT_DOCUMENT_UPLOAD_SIZE'
+}

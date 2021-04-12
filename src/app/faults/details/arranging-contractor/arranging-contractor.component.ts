@@ -37,6 +37,7 @@ export class ArrangingContractorComponent implements OnInit {
   @Input() propertyDetails;
   @Input() propertyLandlords;
   @Input() categoryName;
+  @Input() MAX_DOC_UPLOAD_LIMIT;
   faultMaintenanceDetails: FaultModels.IMaintenanceQuoteResponse;
   contractors: Observable<FaultModels.IContractorResponse>;
   resultsAvailable = false;
@@ -1066,7 +1067,7 @@ export class ArrangingContractorComponent implements OnInit {
           }
         });
       }
-     else if (!this.isWorksOrder) {
+      else if (!this.isWorksOrder) {
         this.questionActionRejectQuote();
       }
     }
@@ -1241,7 +1242,8 @@ export class ArrangingContractorComponent implements OnInit {
         faultNotificationId: this.iacNotification.faultNotificationId,
         faultId: this.faultDetails.faultId,
         maintenanceId: this.faultMaintenanceDetails.maintenanceId,
-        actionType: this.enableMarkCompletedBtn() ? 'advance' : 'regular'
+        actionType: this.enableMarkCompletedBtn() ? 'advance' : 'regular',
+        MAX_DOC_UPLOAD_LIMIT: this.MAX_DOC_UPLOAD_LIMIT
       },
       backdropDismiss: false
     });
@@ -1933,7 +1935,8 @@ export class ArrangingContractorComponent implements OnInit {
         stage: this.faultDetails.stage,
         maintenanceId: this.faultMaintenanceDetails.maintenanceId,
         confirmedEstimate: this.faultDetails.confirmedEstimate,
-        preUpload: preUpload ? true : false
+        preUpload: preUpload ? true : false,
+        MAX_DOC_UPLOAD_LIMIT: this.MAX_DOC_UPLOAD_LIMIT
       },
       backdropDismiss: false
     });

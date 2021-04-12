@@ -30,6 +30,13 @@
             </ion-item>
             <app-validation-message [control]="jobCompletionForm.controls.jobCompletionAt"></app-validation-message>
           </ion-col>
+          <!-- <ion-col size="100">
+            <ion-item>
+              <ion-label position="floating">Invoice Amount<ion-text class="mandatory" *ngIf="uploadedInvoice && uploadedInvoice?.length > 0" >*</ion-text>
+              </ion-label>
+              <ion-input formControlName="invoiceAmount"></ion-input>
+            </ion-item>
+          </ion-col> -->
           <ion-col size="100">
             <ion-item lines="full" class="marg-top-16">
               <ion-label>Is there any further work to quote for?</ion-label>
@@ -81,7 +88,7 @@
                   <div class="file-name">{{file.name}}</div>
                 </ion-col>
                 <ion-col size-xl="20" size-lg="30" size="30" class="ion-text-end ion-no-padding">
-                  <ion-icon (click)="removeFile(i,'quote')" title="Delete File" class="delete-icon" name="close-circle">
+                  <ion-icon (click)="removeFile(i,'invoice')" title="Delete File" class="delete-icon" name="close-circle">
                   </ion-icon>
                 </ion-col>
               </ion-row>
