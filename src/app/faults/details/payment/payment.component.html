@@ -5,7 +5,7 @@
         <div class="arranging-contractor">
           <div class="banner">
             <h2 class="banner-heading">
-             {{faultDetails && (!faultDetails?.isWOConvertedToInvoice || !faultDetails?.isContractorPaymentDone) ? 'Awaiting Invoice':'Invoice paid'}}
+             {{faultDetails && (!faultDetails?.isWOConvertedToInvoice || !faultDetails?.isContractorPaymentDone) ? 'Awaiting Payment':'Invoice paid'}}
             </h2>
           </div>        
           <div class="question-answer ion-text-center" *ngIf="faultDetails && !faultDetails?.isWOConvertedToInvoice">
