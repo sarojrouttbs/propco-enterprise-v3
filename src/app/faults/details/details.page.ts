@@ -1379,6 +1379,7 @@ export class DetailsPage implements OnInit {
     // } else 
     if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
       if (this.cliNotification && this.cliNotification.responseReceived) {
+        this.isUserActionChange = true;
         if (this.cliNotification.responseReceived.isAccepted) {
           this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
         } else {
@@ -1456,206 +1457,211 @@ export class DetailsPage implements OnInit {
       this.proceeding = true;
       if (this.cliNotification) {
         if (!this.isUserActionChange) {
+          // && !this.userSelectedActionControl.value    
           this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
           this.proceeding = false;
           return;
         }
         if ((this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided) {
           if (this.isUserActionChange) {
-            await this.voidNotification();
+            let voidResponce = await this.voidNotification();
+            if (voidResponce) {
+              this.proceedCliAction();
+            }
           }
         }
       } else {
         this.isUserActionChange = false;
       }
+      this.proceedCliAction();
+    }
+  }
 
-      let faultRequestObj = {} as FaultModels.IFaultResponse;
-      faultRequestObj.isDraft = false;
-      Object.assign(faultRequestObj, this.landlordInstFrom.value);
-      if (this.contractorEntityId) {
-        faultRequestObj.contractorId = this.contractorEntityId;
-      } else {
-        delete faultRequestObj.contractorId;
-      }
-
-      switch (this.userSelectedActionControl.value) {
-        case LL_INSTRUCTION_TYPES[1].index: //cli006b
-          if (!this.landlordInstFrom.value.confirmedEstimate) {
-            this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
-            this.proceeding = false;
-            return;
-          }
-          if (this.landlordInstFrom.controls['contractor'].invalid) {
-            this.proceeding = false;
-            return;
-          }
-          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action.<br/> Are you sure?', '', 'Yes', 'No');
-          if (response) {
-            faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
-            faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
-            faultRequestObj.stageAction = this.userSelectedActionControl.value;
-            const WORKS_ORDER_PENDING = 19;
-            let requestArray = [];
-            requestArray.push(this.updateFaultDetails(faultRequestObj));
-            if (this.faultDetails.status !== WORKS_ORDER_PENDING) {
-              requestArray.push(this.updateFaultStatus(WORKS_ORDER_PENDING));
-            }
-            forkJoin(requestArray).subscribe(data => {
-              this.refreshDetailsAndStage();
-            });
-          } else {
-            this.proceeding = false;
-          }
-          break;
-        case LL_INSTRUCTION_TYPES[2].index: //cli006c
-          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action.<br/>  Are you sure?', '', 'Yes', 'No');
-          if (response) {
-            faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
-            faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
-            faultRequestObj.stageAction = this.userSelectedActionControl.value;
-            const AWAITING_QUOTE = 14;
-            let requestArray = [];
-            requestArray.push(this.updateFaultDetails(faultRequestObj));
-            if (this.faultDetails.status !== AWAITING_QUOTE) {
-              requestArray.push(this.updateFaultStatus(AWAITING_QUOTE));
-            }
-            forkJoin(requestArray).subscribe(data => {
-              this.refreshDetailsAndStage();
-            });
-          } else {
-            this.proceeding = false;
-          }
-          break;
-        case LL_INSTRUCTION_TYPES[4].index: //cli006e
-          if (!this.landlordInstFrom.value.confirmedEstimate) {
-            this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
-            this.proceeding = false;
-            return;
-          }
-          if (this.landlordInstFrom.controls['contractor'].invalid) {
-            this.proceeding = false;
-            return;
-          }
-          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action.<br/> Are you sure?', '', 'Yes', 'No');
-          if (response) {
-            faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
-            faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
-            faultRequestObj.stageAction = this.userSelectedActionControl.value;
-            const WORKS_ORDER_PENDING = 19;
-            let requestArray = [];
-            requestArray.push(this.updateFaultDetails(faultRequestObj));
-            if (this.faultDetails.status !== WORKS_ORDER_PENDING) {
-              requestArray.push(this.updateFaultStatus(WORKS_ORDER_PENDING));
-            }
-            forkJoin(requestArray).subscribe(data => {
-              this.refreshDetailsAndStage();
-            });
-          } else {
-            this.proceeding = false;
-          }
-          break;
-        case LL_INSTRUCTION_TYPES[0].index: //cli006a
-          var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. <br/> Are you sure?', '', 'Yes', 'No');
-          if (response) {
-            faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
-            faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
-            faultRequestObj.stageAction = this.userSelectedActionControl.value;
-            const AWAITING_RESPONSE_LANDLORD = 15;
-            let requestArray = [];
-            requestArray.push(this.updateFaultDetails(faultRequestObj));
-            // if (this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD) {
-            //   requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
-            // }
-            forkJoin(requestArray).subscribe(data => {
-              this.refreshDetailsAndStage();
-              // this.commonService.showLoader();
-              setTimeout(async () => {
-                await this.checkFaultNotifications(this.faultId);
-                this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
-                this.getPendingHours();
-                if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
-                  this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
-                }
-                this.proceeding = false;
-              }, 3000);
-            });
-          } else {
-            this.proceeding = false;
-          }
-          break;
-        case LL_INSTRUCTION_TYPES[3].index: //cli006d
-          if (!this.landlordInstFrom.value.confirmedEstimate) {
-            this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
-            this.proceeding = false;
-            return;
-          }
-          if (this.landlordInstFrom.controls['contractor'].invalid) {
-            this.proceeding = false;
-            return;
-          }
-          var response = await this.commonService.showConfirm('Landlord Instructions', `You have selected the "Obtain Landlord's Authorisation" action. This will send out a notification to Landlord. <br/> Are you sure?`, '', 'Yes', 'No');
-          if (response) {
-            faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
-            faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
-            faultRequestObj.stageAction = this.userSelectedActionControl.value;
-            const AWAITING_RESPONSE_LANDLORD = 15;
-            let requestArray = [];
-            requestArray.push(this.updateFaultDetails(faultRequestObj));
-            // if (this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD) {
-            //   requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
-            // }
-            forkJoin(requestArray).subscribe(data => {
-              this.refreshDetailsAndStage();
-              // this.commonService.showLoader();
-              setTimeout(async () => {
-                await this.checkFaultNotifications(this.faultId);
-                this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
-                this.getPendingHours();
-                if (this.cliNotification && this.cliNotification.responseReceived) {
-                  if (this.cliNotification.responseReceived.isAccepted) {
-                    this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
-                  } else {
-                    this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
-                  }
-                }
-              }, 3000);
-            });
-          } else {
-            this.proceeding = false;
-          }
-          break;
-        case LL_INSTRUCTION_TYPES[5].index: //cli006f
-          if (this.landlordInstFrom.controls['contractor'].invalid) {
-            this.proceeding = false;
-            return;
-          }
-          if (this.landlordInstFrom.get('confirmedEstimate').value > 0) {
-            faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
-            faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
-            faultRequestObj.stageAction = this.userSelectedActionControl.value;
-            let res = await this.updateFaultDetails(faultRequestObj);
-            if (res) {
-              await this.refreshDetailsAndStage();
-              this.checkForLLSuggestedAction();
-            }
-          } else {
-            this.proceeding = false;
-            if (this.landlordInstFrom.get('confirmedEstimate').hasError('pattern')) {
-              this.commonService.showAlert('Get an Estimate?', 'Please fill the valid confirmed estimate.');
-            } else {
-              this.commonService.showAlert('Get an Estimate?', 'Please fill the confirmed estimate.');
-            }
-
-          }
-          break;
-        default:
-          this.proceeding = false;
-          this.commonService.showAlert('Landlord Instructions', 'Please select any action');
-          break;
-      }
-
+  async proceedCliAction() {
+    let faultRequestObj = {} as FaultModels.IFaultResponse;
+    faultRequestObj.isDraft = false;
+    Object.assign(faultRequestObj, this.landlordInstFrom.value);
+    if (this.contractorEntityId) {
+      faultRequestObj.contractorId = this.contractorEntityId;
+    } else {
+      delete faultRequestObj.contractorId;
     }
 
+    switch (this.userSelectedActionControl.value) {
+      case LL_INSTRUCTION_TYPES[1].index: //cli006b
+        if (!this.landlordInstFrom.value.confirmedEstimate) {
+          this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
+          this.proceeding = false;
+          return;
+        }
+        if (this.landlordInstFrom.controls['contractor'].invalid) {
+          this.proceeding = false;
+          return;
+        }
+        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action.<br/> Are you sure?', '', 'Yes', 'No');
+        if (response) {
+          faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
+          faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+          faultRequestObj.stageAction = this.userSelectedActionControl.value;
+          const WORKS_ORDER_PENDING = 19;
+          let requestArray = [];
+          requestArray.push(this.updateFaultDetails(faultRequestObj));
+          if (this.faultDetails.status !== WORKS_ORDER_PENDING) {
+            requestArray.push(this.updateFaultStatus(WORKS_ORDER_PENDING));
+          }
+          forkJoin(requestArray).subscribe(data => {
+            this.refreshDetailsAndStage();
+          });
+        } else {
+          this.proceeding = false;
+        }
+        break;
+      case LL_INSTRUCTION_TYPES[2].index: //cli006c
+        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action.<br/>  Are you sure?', '', 'Yes', 'No');
+        if (response) {
+          faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
+          faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+          faultRequestObj.stageAction = this.userSelectedActionControl.value;
+          const AWAITING_QUOTE = 14;
+          let requestArray = [];
+          requestArray.push(this.updateFaultDetails(faultRequestObj));
+          if (this.faultDetails.status !== AWAITING_QUOTE) {
+            requestArray.push(this.updateFaultStatus(AWAITING_QUOTE));
+          }
+          forkJoin(requestArray).subscribe(data => {
+            this.refreshDetailsAndStage();
+          });
+        } else {
+          this.proceeding = false;
+        }
+        break;
+      case LL_INSTRUCTION_TYPES[4].index: //cli006e
+        if (!this.landlordInstFrom.value.confirmedEstimate) {
+          this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
+          this.proceeding = false;
+          return;
+        }
+        if (this.landlordInstFrom.controls['contractor'].invalid) {
+          this.proceeding = false;
+          return;
+        }
+        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action.<br/> Are you sure?', '', 'Yes', 'No');
+        if (response) {
+          faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
+          faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+          faultRequestObj.stageAction = this.userSelectedActionControl.value;
+          const WORKS_ORDER_PENDING = 19;
+          let requestArray = [];
+          requestArray.push(this.updateFaultDetails(faultRequestObj));
+          if (this.faultDetails.status !== WORKS_ORDER_PENDING) {
+            requestArray.push(this.updateFaultStatus(WORKS_ORDER_PENDING));
+          }
+          forkJoin(requestArray).subscribe(data => {
+            this.refreshDetailsAndStage();
+          });
+        } else {
+          this.proceeding = false;
+        }
+        break;
+      case LL_INSTRUCTION_TYPES[0].index: //cli006a
+        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. <br/> Are you sure?', '', 'Yes', 'No');
+        if (response) {
+          faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+          faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+          faultRequestObj.stageAction = this.userSelectedActionControl.value;
+          const AWAITING_RESPONSE_LANDLORD = 15;
+          let requestArray = [];
+          requestArray.push(this.updateFaultDetails(faultRequestObj));
+          // if (this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD) {
+          //   requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
+          // }
+          forkJoin(requestArray).subscribe(data => {
+            this.refreshDetailsAndStage();
+            // this.commonService.showLoader();
+            setTimeout(async () => {
+              await this.checkFaultNotifications(this.faultId);
+              this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
+              this.getPendingHours();
+              if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
+                this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
+              }
+              this.proceeding = false;
+            }, 3000);
+          });
+        } else {
+          this.proceeding = false;
+        }
+        break;
+      case LL_INSTRUCTION_TYPES[3].index: //cli006d
+        if (!this.landlordInstFrom.value.confirmedEstimate) {
+          this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
+          this.proceeding = false;
+          return;
+        }
+        if (this.landlordInstFrom.controls['contractor'].invalid) {
+          this.proceeding = false;
+          return;
+        }
+        var response = await this.commonService.showConfirm('Landlord Instructions', `You have selected the "Obtain Landlord's Authorisation" action. This will send out a notification to Landlord. <br/> Are you sure?`, '', 'Yes', 'No');
+        if (response) {
+          faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+          faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+          faultRequestObj.stageAction = this.userSelectedActionControl.value;
+          const AWAITING_RESPONSE_LANDLORD = 15;
+          let requestArray = [];
+          requestArray.push(this.updateFaultDetails(faultRequestObj));
+          // if (this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD) {
+          //   requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
+          // }
+          forkJoin(requestArray).subscribe(data => {
+            this.refreshDetailsAndStage();
+            // this.commonService.showLoader();
+            setTimeout(async () => {
+              await this.checkFaultNotifications(this.faultId);
+              this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
+              this.getPendingHours();
+              if (this.cliNotification && this.cliNotification.responseReceived) {
+                if (this.cliNotification.responseReceived.isAccepted) {
+                  this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
+                } else {
+                  this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
+                }
+              }
+            }, 3000);
+          });
+        } else {
+          this.proceeding = false;
+        }
+        break;
+      case LL_INSTRUCTION_TYPES[5].index: //cli006f
+        if (this.landlordInstFrom.controls['contractor'].invalid) {
+          this.proceeding = false;
+          return;
+        }
+        if (this.landlordInstFrom.get('confirmedEstimate').value > 0) {
+          faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
+          faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+          faultRequestObj.stageAction = this.userSelectedActionControl.value;
+          let res = await this.updateFaultDetails(faultRequestObj);
+          if (res) {
+            await this.refreshDetailsAndStage();
+            this.checkForLLSuggestedAction();
+          }
+        } else {
+          this.proceeding = false;
+          if (this.landlordInstFrom.get('confirmedEstimate').hasError('pattern')) {
+            this.commonService.showAlert('Get an Estimate?', 'Please fill the valid confirmed estimate.');
+          } else {
+            this.commonService.showAlert('Get an Estimate?', 'Please fill the confirmed estimate.');
+          }
+
+        }
+        break;
+      default:
+        this.proceeding = false;
+        this.commonService.showAlert('Landlord Instructions', 'Please select any action');
+        break;
+    }
   }
 
   validateUploadLimit(file) {
@@ -1822,6 +1828,7 @@ export class DetailsPage implements OnInit {
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
           this.getPendingHours();
           if (this.cliNotification && this.cliNotification.responseReceived) {
+            this.isUserActionChange = true;
             if (this.cliNotification.responseReceived.isAccepted) {
               this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
             } else {
@@ -2184,4 +2191,15 @@ export class DetailsPage implements OnInit {
     });
     return promise;
   }
+
+  onBlurCurrency(val: any, form: FormGroup) {
+    if (!val) {
+      if (form == this.landlordInstFrom) {
+        this.landlordInstFrom.patchValue({
+          confirmedEstimate: 0
+        });
+      }
+    }
+  }
+
 }

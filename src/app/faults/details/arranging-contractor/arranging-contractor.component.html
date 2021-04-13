@@ -58,7 +58,7 @@
               (iacNotification?.templateCode === 'LAR-L-Q' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
                 {{rejectionReason || 'N/A'}}
               </ion-text>
-                <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false">
+                <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false && this.iacNotification?.templateCode!='CWO-C-E'">
                   <ion-text color="danger">Please select an appropriate action.</ion-text>
                 </h6>
                 <div class="border-bottom"></div>
@@ -608,9 +608,11 @@
     <ion-row>
       <ion-col size="50">
         <ion-item>
-          <ion-label position="floating">Repair Cost <ion-text class="mandatory">*</ion-text>
+          <ion-label position="stacked">Repair Cost <ion-text class="mandatory">*</ion-text>
           </ion-label>
-          <ion-input formControlName="repairCost"></ion-input>
+          <!-- <ion-input currencyMask formControlName="repairCost"></ion-input> -->
+          <input currencyMask formControlName="repairCost" (blur)="onBlurCurrency(workOrderForm.controls.repairCost.value, workOrderForm)"/>
+
         </ion-item>
         <app-validation-message [control]="workOrderForm.controls.repairCost"></app-validation-message>
       </ion-col>

@@ -878,13 +878,13 @@
                     </ion-col>
                     <ion-col size="50">
                       <ion-item>
-                        <ion-label position="floating">Confirmed Estimate</ion-label>
-                        <ion-input formControlName="confirmedEstimate"
+                        <ion-label position="stacked">Confirmed Estimate</ion-label>
+                        <input currencyMask formControlName="confirmedEstimate"
                           [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' 
                           || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION'
                           || userSelectedActionControl.value == 'AGENT_OF_NECESSITY'
                           || userSelectedActionControl.value == 'PROCEED_WITH_WORKSORDER')"
-                          #estimate (ionBlur)="showRefreshPopup(estimate.value)"></ion-input>
+                          #estimate (blur)="showRefreshPopup(estimate.value); onBlurCurrency(landlordInstFrom.controls.confirmedEstimate.value, landlordInstFrom)"/>
                       </ion-item>
                     </ion-col>
                     <ion-col size="100">
