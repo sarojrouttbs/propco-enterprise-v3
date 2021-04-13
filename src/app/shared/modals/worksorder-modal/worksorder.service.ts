@@ -2,7 +2,6 @@ import { environment } from './../../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
 
 @Injectable()
 export class WorksorderService {
@@ -20,6 +19,10 @@ export class WorksorderService {
   saveWorksOrderCompletion(body: any, id, urlType = 'regular'): Observable<any> {
     let url = urlType === 'regular' ? `faults/notifications/${id}/response/wo-completion` : `faults/${id}/mark-job-completed`
     return this.httpClient.post(environment.API_BASE_URL + url, body);
+  }
+
+  updateInvoiceAmount(data, faults): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faults}/invoice-amount`, data);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

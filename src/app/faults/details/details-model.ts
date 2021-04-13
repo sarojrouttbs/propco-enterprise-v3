@@ -92,6 +92,7 @@ declare namespace FaultModels {
         fixfloTenantContact: string;
         isWOConvertedToInvoice: boolean;
         isContractorPaymentDone: boolean;
+        invoiceAmount: number;
     }
 
     export interface AdditionalInfo {
@@ -143,6 +144,7 @@ declare namespace FaultModels {
         requiredStartDate?: any;
         requiredCompletionDate: string;
         actualCompletionDate?: any;
+        jobCompletionAt?: any;
         keysLocation?: any;
         returnKeysTo?: any;
         accessDetails?: any;

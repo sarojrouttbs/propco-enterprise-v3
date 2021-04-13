@@ -400,12 +400,13 @@ export class JobCompletionComponent implements OnInit {
         faultNotificationId: this.iacNotification.faultNotificationId,
         faultId: this.faultDetails.faultId,
         maintenanceId: this.faultMaintenanceDetails.maintenanceId,
-        jobCompletionDate: this.faultMaintenanceDetails.actualCompletionDate,
+        jobCompletionDate: this.faultMaintenanceDetails.jobCompletionAt,
         isAnyFurtherWork: this.faultDetails.isAnyFurtherWork,
         additionalEstimate: this.faultDetails.additionalEstimate,
         additionalWorkDetails: this.faultDetails.additionalWorkDetail,
         actionType: 'view',
-        MAX_DOC_UPLOAD_LIMIT: this.MAX_DOC_UPLOAD_LIMIT
+        MAX_DOC_UPLOAD_LIMIT: this.MAX_DOC_UPLOAD_LIMIT,
+        invoiceAmount: this.faultDetails.invoiceAmount
       },
       backdropDismiss: false
     });
