@@ -799,4 +799,14 @@ export class JobCompletionComponent implements OnInit {
     });
   }
 
+  onBlurCurrency(val: any, form: FormGroup) {    
+    if (!val) {
+      if (form == this.workOrderForm) {
+        this.workOrderForm.patchValue({
+          repairCost: 0
+        });
+      }
+    }
+  }
+
 }
