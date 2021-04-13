@@ -190,7 +190,10 @@ export class WorksorderModalPage implements OnInit {
   async onProceed() {
     if (this.validateReq()) {
       if (this.actionType === 'view') {
-        this.uploadWODocuments();
+        const updateAmount = await this.updateInvoiceAmount();
+        if (updateAmount) {
+          this.uploadWODocuments();
+        }
       } else {
         const completionDateUpdated = await this.submitWorksOrderCompletion();
         if (completionDateUpdated) {
@@ -295,10 +298,10 @@ export class WorksorderModalPage implements OnInit {
       this.commonService.showMessage('Please upload Invoice', 'Mark the Job Completed', 'error');
       return valid = false;
     }
-    // if (this.uploadDocumentForm.controls.invoices.value.length > 0 && !this.jobCompletionForm.value.invoiceAmount) {
-    //   this.commonService.showMessage('Please add invoice amount', 'Mark the Job Completed', 'error');
-    //   return valid = false;
-    // }
+    if (this.uploadDocumentForm.controls.invoices.value.length > 0 && !this.jobCompletionForm.value.invoiceAmount) {
+      this.commonService.showMessage('Please add invoice amount', 'Mark the Job Completed', 'error');
+      return valid = false;
+    }
     return valid;
   }
 
@@ -317,5 +320,25 @@ export class WorksorderModalPage implements OnInit {
       this.jobCompletionForm.controls.additionalEstimate.updateValueAndValidity();
       this.jobCompletionForm.controls.additionalWorkDetails.updateValueAndValidity();
     }
+  }
+
+  private updateInvoiceAmount() {
+    this.showLoader = true;
+    const promise = new Promise((resolve, reject) => {
+      let req: any = {};
+      req.invoiceAmount = this.jobCompletionForm.value.invoiceAmount;
+      this.worksorderService.updateInvoiceAmount(req, this.faultId).subscribe(
+        res => {
+          this.commonService.showMessage('Success', 'Invoice Amount Updated', 'success');
+          this.showLoader = false;
+          resolve(true);
+        },
+        error => {
+          this.showLoader = false;
+          resolve(false);
+        }
+      );
+    });
+    return promise;
   }
 }
