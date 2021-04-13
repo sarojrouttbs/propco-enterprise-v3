@@ -2191,4 +2191,15 @@ export class DetailsPage implements OnInit {
     });
     return promise;
   }
+
+  onBlurCurrency(val: any, form: FormGroup) {
+    if (!val) {
+      if (form == this.landlordInstFrom) {
+        this.landlordInstFrom.patchValue({
+          confirmedEstimate: 0
+        });
+      }
+    }
+  }
+
 }
