@@ -827,7 +827,7 @@ export class DashboardPage implements OnInit {
 
   validateFaults(faultDetail) {
     let valid = true;
-    if (faultDetail.status === 12) {
+    if (faultDetail.status === FAULT_STATUSES.CLOSED) {
       this.commonService.showAlert('Fault Closed', 'Fault status is closed, Please select another fault.', '');
       return valid = false;
     }
