@@ -30,6 +30,7 @@ export class QuoteModalPage implements OnInit {
   confirmedEstimate;
   isLimitExceed = false;
   preUpload: boolean;
+  MAX_DOC_UPLOAD_LIMIT;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -116,54 +117,66 @@ export class QuoteModalPage implements OnInit {
     }
     if (uploadedDocument) {
       for (let file of uploadedDocument) {
-        let isImage: boolean = false;
-        if (file.type.split("/")[0] !== 'image') {
-          isImage = false;
-        }
-        else if (file.type.split("/")[0] == 'image') {
-          isImage = true;
-        }
-        if (type === 'photo') {
-          this.isLimitExceed = false;
-          this.photos.push(this.createItem({
-            file: file
-          }));
-        } else {
-          this.quotes.push(this.createItem({
-            file: file
-          }));
-        }
-        let reader = new FileReader();
-        if (isImage && type === 'photo') {
-          reader.onload = (e: any) => {
-            this.uploadedPhoto.push({
-              documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
-              name: file.name,
-              isImage: true
-            })
+        if (this.validateUploadLimit(file)) {
+          let isImage: boolean = false;
+          if (file.type.split("/")[0] !== 'image') {
+            isImage = false;
           }
-        }
-        else if (isImage && type === 'quote') {
-          reader.onload = (e: any) => {
-            this.uploadedQuote.push({
-              documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
-              name: file.name,
-              isImage: true
-            })
+          else if (file.type.split("/")[0] == 'image') {
+            isImage = true;
           }
-        }
-        else {
-          reader.onload = (e: any) => {
-            this.uploadedQuote.push({
-              documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/default.jpg'),
-              name: file.name,
-              isImage: false
-            })
+          if (type === 'photo') {
+            this.isLimitExceed = false;
+            this.photos.push(this.createItem({
+              file: file
+            }));
+          } else {
+            this.quotes.push(this.createItem({
+              file: file
+            }));
           }
+          let reader = new FileReader();
+          if (isImage && type === 'photo') {
+            reader.onload = (e: any) => {
+              this.uploadedPhoto.push({
+                documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
+                name: file.name,
+                isImage: true
+              })
+            }
+          }
+          else if (isImage && type === 'quote') {
+            reader.onload = (e: any) => {
+              this.uploadedQuote.push({
+                documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl(e.target.result),
+                name: file.name,
+                isImage: true
+              })
+            }
+          }
+          else {
+            reader.onload = (e: any) => {
+              this.uploadedQuote.push({
+                documentUrl: this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/default.jpg'),
+                name: file.name,
+                isImage: false
+              })
+            }
+          }
+          reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(file);
       }
     }
+  }
+
+  validateUploadLimit(file) {
+    if (!file) { return; }
+    let fileSize = file.size / 1024 / 1024;
+    if (fileSize > this.MAX_DOC_UPLOAD_LIMIT) {
+      this.commonService.showAlert('Warning', `Some file(s) can't be uploaded, because they exceed the maximum allowed file size(${this.MAX_DOC_UPLOAD_LIMIT}Mb)`);
+      return false;
+    }
+    return true;
   }
 
   onCancel() {
