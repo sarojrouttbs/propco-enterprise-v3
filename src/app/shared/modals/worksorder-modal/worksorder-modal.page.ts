@@ -327,6 +327,8 @@ export class WorksorderModalPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       let req: any = {};
       req.invoiceAmount = this.jobCompletionForm.value.invoiceAmount;
+      req.submittedByType = this.jobCompletionForm.value.submittedByType;
+      req.submittedById = this.jobCompletionForm.value.submittedById;
       this.worksorderService.updateInvoiceAmount(req, this.faultId).subscribe(
         res => {
           this.commonService.showMessage('Success', 'Invoice Amount Updated', 'success');
