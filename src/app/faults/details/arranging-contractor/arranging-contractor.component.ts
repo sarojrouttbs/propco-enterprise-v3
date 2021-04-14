@@ -1317,7 +1317,7 @@ export class ArrangingContractorComponent implements OnInit {
           });
           if (!this.faultMaintenanceDetails) {
             this.workOrderForm.patchValue({
-              useCommissionRate: data ? (data.isUseAmount) : undefined
+              useCommissionRate: data && data.isUseAmount ? (data.isUseAmount) : false
             });
           } else {
             this.workOrderForm.patchValue({
@@ -1329,7 +1329,7 @@ export class ArrangingContractorComponent implements OnInit {
 
             if (contractor?.employerLiabilityExpiryDate === null || contractor?.employerLiabilityExpiryDate < currentDate) {
               this.commonService.showAlert('Landlord Instructions', 'Does not have valid Employer\'s Liability');
-            }
+            } 
 
             if (contractor?.employerLiabilityExpiryDate !== null && contractor?.employerLiabilityExpiryDate === currentDate) {
               this.commonService.showAlert('Landlord Instructions', 'Employer\'s Liability is expiring today');
