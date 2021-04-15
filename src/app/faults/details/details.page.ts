@@ -2047,7 +2047,7 @@ export class DetailsPage implements OnInit {
       this.isContractorModal = true;
       const modal = await this.modalController.create({
         component: ContractorDetailsModalPage,
-        cssClass: 'modal-container',
+        cssClass: 'modal-container ll-contractor-modal',
         componentProps: {
           faultId: this.faultId,
           landlordId: this.landlordDetails.landlordId,
