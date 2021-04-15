@@ -97,7 +97,9 @@
 
             <div class="question-answer" *ngIf="faultDetails?.status === 8">
               <h4 class="ion-text-center">Next Step:</h4> 
-              <h6 *ngIf="faultDetails?.status === 8">
+                <ng-container *ngIf="faultDetails?.invoiceAmount" >
+                  <h6><b>Invoice Amount: £{{faultDetails?.invoiceAmount}}</b></h6>
+                </ng-container>
                 <ng-container *ngIf="faultDetails?.invoiceAmount > INVOICE_VERIFICATION_THRESHOLD">
                   <ion-text color="danger">Note: </ion-text>
                   <span><b>Please review the Invoice.As the Invoice amount is over the {{INVOICE_VERIFICATION_THRESHOLD || 0 | currency : "£"}}, it needs additional verification before Approval.</b></span>
@@ -115,7 +117,6 @@
                   </ion-button>
                 </ion-row>
               </ion-grid>
-              </h6>
               <div class="border-bottom"></div>
             </div>
 
