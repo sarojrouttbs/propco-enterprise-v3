@@ -8,7 +8,7 @@ import { ScriptService } from '../shared/services/script.service';
 export class FaultsPage implements OnInit {
   
   constructor(scriptService: ScriptService) {
-    scriptService.load('jiraJquery', 'jiraIssueCollector');
+    // scriptService.load('jiraJquery', 'jiraIssueCollector');
   }
 
   ngOnInit() {
