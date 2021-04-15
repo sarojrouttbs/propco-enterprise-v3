@@ -33,17 +33,17 @@
         <ion-col size-xl="50" size="100">
           <ion-grid class="additional-info-container">
             <ion-row>
-              <ion-col size="30">
+              <ion-col size="40">
                 <ion-item>
                   <ion-label position="floating">Type</ion-label>
 
-                  <ion-select interface="popover" formControlName="label">
-                    <ion-select-option [value]="item" *ngFor="let item of addtionalInfo">{{ item }}
+                  <ion-select interface="popover" formControlName="label" [interfaceOptions]="{'cssClass': 'select-options-content-wrap'}" >
+                    <ion-select-option text-wrap [value]="item" *ngFor="let item of addtionalInfo">{{ item }}
                     </ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
-              <ion-col size="60">
+              <ion-col size="50">
                 <ion-item>
                   <ion-label position="floating">Additional Info</ion-label>
                   <ion-input formControlName="value"></ion-input>
@@ -67,16 +67,16 @@
           <ng-container [formGroupName]="i">
             <ion-grid>
               <ion-row>
-                <ion-col size="30">
+                <ion-col size="40">
                   <ion-item>
                     <ion-label position="floating">Type</ion-label>
-                    <ion-select interface="popover" formControlName="label">
+                    <ion-select interface="popover" formControlName="label" [interfaceOptions]="{'cssClass': 'select-options-content-wrap'}">
                       <ion-select-option [value]="item" *ngFor="let item of addtionalInfo">{{ item }}
                       </ion-select-option>
                     </ion-select>
                   </ion-item>
                 </ion-col>
-                <ion-col size="60">
+                <ion-col size="50">
                   <ion-item>
                     <ion-label position="floating">Additional Info</ion-label>
                     <ion-input formControlName="value"></ion-input>

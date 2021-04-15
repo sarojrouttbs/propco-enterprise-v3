@@ -19,7 +19,7 @@
             <ion-label position="floating">Please select a reason for rejecting this quote.<ion-text class="mandatory">*
               </ion-text>
             </ion-label>
-            <ion-select interface="popover" formControlName="rejectionReason" class="ion-select-options">
+            <ion-select interface="popover" formControlName="rejectionReason" class="ion-select-options" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
               <ion-select-option [value]="item.value" *ngFor="let item of faultMaintRejectionReasons">
                 {{ item.index === 'Other'? item.value +' (Please specify in the box)':item.value}}
               </ion-select-option>
