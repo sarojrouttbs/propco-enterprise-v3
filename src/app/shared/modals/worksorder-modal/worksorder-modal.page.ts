@@ -33,6 +33,7 @@ export class WorksorderModalPage implements OnInit {
   additionalEstimate;
   additionalWorkDetails;
   MAX_DOC_UPLOAD_LIMIT;
+  stage;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -329,17 +330,18 @@ export class WorksorderModalPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       let req: any = {};
       req.invoiceAmount = this.jobCompletionForm.value.invoiceAmount;
-      const promise = new Promise((resolve, reject) => {
-        this.faultsService.updateFault(this.faultId, req).subscribe(
-          res => {
-            resolve(true);
-          },
-          error => {
-            this.showLoader = false;
-            resolve(false);
-          }
-        );
-      });
+      req.stage = this.stage;
+      req.isDraft = true;
+      this.faultsService.updateFault(this.faultId, req).subscribe(
+        res => {
+          this.showLoader = false;
+          resolve(true);
+        },
+        error => {
+          this.showLoader = false;
+          resolve(false);
+        }
+      );
     });
     return promise;
   }

@@ -406,7 +406,8 @@ export class JobCompletionComponent implements OnInit {
         additionalWorkDetails: this.faultDetails.additionalWorkDetail,
         actionType: 'view',
         MAX_DOC_UPLOAD_LIMIT: this.MAX_DOC_UPLOAD_LIMIT,
-        invoiceAmount: this.faultDetails.invoiceAmount
+        invoiceAmount: this.faultDetails.invoiceAmount,
+        stage: this.faultDetails.stage
       },
       backdropDismiss: false
     });
@@ -800,7 +801,7 @@ export class JobCompletionComponent implements OnInit {
     });
   }
 
-  onBlurCurrency(val: any, form: FormGroup) {    
+  onBlurCurrency(val: any, form: FormGroup) {
     if (!val) {
       if (form == this.workOrderForm) {
         this.workOrderForm.patchValue({
