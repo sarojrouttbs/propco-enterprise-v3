@@ -32,9 +32,9 @@
           </ion-col>
           <ion-col size="100">
             <ion-item>
-              <ion-label position="floating">Invoice Amount<ion-text class="mandatory" *ngIf="uploadedInvoice && uploadedInvoice?.length > 0" >*</ion-text>
+              <ion-label position="stacked">Invoice Amount<ion-text class="mandatory" *ngIf="uploadedInvoice && uploadedInvoice?.length > 0" >*</ion-text>
               </ion-label>
-              <ion-input formControlName="invoiceAmount"></ion-input>
+              <input currencyMask formControlName="invoiceAmount" style="border: 0"/>
             </ion-item>
           </ion-col>
           <ion-col size="100">
