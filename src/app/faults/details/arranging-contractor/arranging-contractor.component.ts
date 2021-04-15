@@ -160,7 +160,8 @@ export class ArrangingContractorComponent implements OnInit {
       fullDescription: [this.faultDetails.notes, Validators.required],
       jobType: MAINT_JOB_TYPE.index,
       repairSource: this.getRepairSource(this.faultDetails.sourceType),
-      thirdPartySource: this.faultDetails.reportedBy === 'THIRD_PARTY' ? Number(this.faultDetails.reportedById) : ''
+      thirdPartySource: this.faultDetails.reportedBy === 'THIRD_PARTY' ? Number(this.faultDetails.reportedById) : '',
+      doesBranchHoldKeys: [{ value: this.faultDetails.doesBranchHoldKeys ? 'Yes' : 'No', disabled: true }]
     });
     if (!this.faultMaintenanceDetails && this.faultDetails.contractorId) {
       this.getContractorDetails(this.faultDetails.contractorId, 'quote');
@@ -1329,7 +1330,7 @@ export class ArrangingContractorComponent implements OnInit {
 
             if (contractor?.employerLiabilityExpiryDate === null || contractor?.employerLiabilityExpiryDate < currentDate) {
               this.commonService.showAlert('Landlord Instructions', 'Does not have valid Employer\'s Liability');
-            } 
+            }
 
             if (contractor?.employerLiabilityExpiryDate !== null && contractor?.employerLiabilityExpiryDate === currentDate) {
               this.commonService.showAlert('Landlord Instructions', 'Employer\'s Liability is expiring today');
@@ -2003,7 +2004,7 @@ export class ArrangingContractorComponent implements OnInit {
     await modal.present();
   }
 
-  onBlurCurrency(val: any, form: FormGroup) {    
+  onBlurCurrency(val: any, form: FormGroup) {
     if (!val) {
       if (form == this.workOrderForm) {
         this.workOrderForm.patchValue({
