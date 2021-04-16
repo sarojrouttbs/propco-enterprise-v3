@@ -180,10 +180,17 @@ export class QuoteModalPage implements OnInit {
     return true;
   }
 
-  onCancel() {
-    // const cancel = this.commonService.showConfirm('Quote Assessment', 'Are you sure to cancel ?', '', 'Yes', 'No');
-    // if (!cancel) return;
-    this.dismiss();
+  async onCancel() {
+    if ((this.uploadDocumentForm.controls.quotes && this.uploadDocumentForm.controls.quotes.value.length !== 0)
+      || (this.uploadPhotoForm.controls.photos && this.uploadPhotoForm.controls.photos.value.length !== 0)
+      || this.quoteAssessmentForm.value.quoteAmount) {
+      const cancel = await this.commonService.showConfirm('Quote Assessment', 'Are you sure you want to cancel the process of uploading the quote photos?', '', 'Yes', 'No');
+      if (cancel) { 
+        this.dismiss();
+       }
+    } else {
+      this.dismiss();
+    }
   }
 
   async onProceed() {

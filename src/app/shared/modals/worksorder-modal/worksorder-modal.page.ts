@@ -1,3 +1,4 @@
+import { FaultsService } from 'src/app/faults/faults.service';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
@@ -32,6 +33,7 @@ export class WorksorderModalPage implements OnInit {
   additionalEstimate;
   additionalWorkDetails;
   MAX_DOC_UPLOAD_LIMIT;
+  stage;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,7 +42,8 @@ export class WorksorderModalPage implements OnInit {
     private commonService: CommonService,
     private router: Router,
     private sanitizer: DomSanitizer,
-    public route: ActivatedRoute) {
+    public route: ActivatedRoute,
+    private faultsService: FaultsService) {
 
     this.router.events.subscribe(async () => {
       const isModalOpened = await this.modalController.getTop();
@@ -327,11 +330,10 @@ export class WorksorderModalPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       let req: any = {};
       req.invoiceAmount = this.jobCompletionForm.value.invoiceAmount;
-      req.submittedByType = this.jobCompletionForm.value.submittedByType;
-      req.submittedById = this.jobCompletionForm.value.submittedById;
-      this.worksorderService.updateInvoiceAmount(req, this.faultId).subscribe(
+      req.stage = this.stage;
+      req.isDraft = true;
+      this.faultsService.updateFault(this.faultId, req).subscribe(
         res => {
-          this.commonService.showMessage('Success', 'Invoice Amount Updated', 'success');
           this.showLoader = false;
           resolve(true);
         },
