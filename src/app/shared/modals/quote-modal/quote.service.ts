@@ -25,9 +25,8 @@ export class QuoteService {
     return this.httpClient.delete(environment.API_BASE_URL + `faults/documents/${documentId}`, {});
   }
 
-  saveQuoteAmount(params: any, faultId: string): Observable<any> {
-    console.log(params)
-    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/quote-amount`, {}, { params });
+  saveQuoteAmount(requestObject: any, faultId: string): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/quote-amount`, requestObject);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

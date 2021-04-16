@@ -309,11 +309,12 @@ export class QuoteModalPage implements OnInit {
   }
 
   updateQuoteAmount() {
-    const params: any = new HttpParams()
-      .set('quoteAmount', this.quoteAssessmentForm.value.quoteAmount)
-      .set('submittedByType', 'SECUR_USER');
+    let requestObj = {
+      quoteAmount: this.quoteAssessmentForm.value.quoteAmount,
+      submittedByType: 'SECUR_USER'
+    }
     const promise = new Promise((resolve, reject) => {
-      this.quoteService.saveQuoteAmount(params, this.faultId).subscribe(
+      this.quoteService.saveQuoteAmount(requestObj, this.faultId).subscribe(
         res => {
           resolve(true);
         },
