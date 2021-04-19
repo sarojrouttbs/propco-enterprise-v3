@@ -1261,6 +1261,7 @@ export class ArrangingContractorComponent implements OnInit {
     let notificationObj = {} as any;
     notificationObj.isAccepted = false;
     notificationObj.submittedByType = 'SECUR_USER';
+    notificationObj.isDraft = false;
     const promise = new Promise((resolve, reject) => {
       this.faultsService.saveNotificationQuoteAmount(notificationObj, this.iacNotification.faultNotificationId).subscribe(
         res => {
