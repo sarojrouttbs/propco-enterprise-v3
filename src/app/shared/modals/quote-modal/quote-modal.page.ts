@@ -71,7 +71,8 @@ export class QuoteModalPage implements OnInit {
       quoteAmount: ['', Validators.required],
       isAccepted: true,
       submittedById: '',
-      submittedByType: 'SECUR_USER'
+      submittedByType: 'SECUR_USER',
+      isDraft: false
     });
   }
 
