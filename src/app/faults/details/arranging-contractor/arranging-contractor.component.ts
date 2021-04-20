@@ -717,7 +717,13 @@ export class ArrangingContractorComponent implements OnInit {
       }
       if (this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
         if (this.isUserActionChange) {
-          let faultRequestObj: any = {};
+          if ((this.iacNotification.templateCode === 'LAR-L-Q' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E')) {
+            await this.proceedWithQuoteAndWO();
+            this.proceeding = false;
+            return;
+          }
+          else {
+            let faultRequestObj: any = {};
             faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
             faultRequestObj.isDraft = false;
             faultRequestObj.stage = this.faultDetails.stage;
@@ -729,6 +735,7 @@ export class ArrangingContractorComponent implements OnInit {
               this._btnHandler('refresh');
               return;
             }
+          }
         }
       }
       if ((this.iacNotification.templateCode === "LAR-L-Q" || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') && this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {

@@ -258,6 +258,46 @@ export class CommonService {
     });
   }
 
+  async presentToastWithOptions(title: string, displayText: string, subtitle?: string, okText?: string, cancelText?: string) {
+    return new Promise((resolve, reject) => {
+      let alertPopup: any;
+      this.toastController.create({
+        header: title,
+        position: 'top',
+        message: displayText,
+        cssClass: 'common-toast-box',
+        buttons: [
+          {
+            text: cancelText ? cancelText : 'Cancel',
+            cssClass: 'ion-color-danger',
+            role: 'cancel',
+            handler: () => {
+              alertPopup.dismiss().then((res) => {
+                resolve(false);
+              });
+              return false;
+            }
+          },
+          {
+            text: okText ? okText : 'Ok',
+            cssClass: 'ion-color-success',
+            handler: () => {
+              alertPopup.dismiss().then((res) => {
+                resolve(true);
+              });
+              return false;
+            }
+          }
+        ],
+        // backdropDismiss: false,
+      }).then(res => {
+        alertPopup = res;
+        res.present();
+      });
+
+    });
+  }
+
   async presentToast(message: any, color?) {
     const toast = await this.toastController.create({
       message,

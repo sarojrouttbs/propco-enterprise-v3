@@ -8,7 +8,6 @@ import { CommonService } from '../../services/common.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { forkJoin } from 'rxjs';
 import { FOLDER_NAMES, MAX_QUOTE_LIMIT } from './../../../shared/constants';
-import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-quote-modal',
@@ -31,6 +30,7 @@ export class QuoteModalPage implements OnInit {
   isLimitExceed = false;
   preUpload: boolean;
   MAX_DOC_UPLOAD_LIMIT;
+  unSavedData: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -184,10 +184,11 @@ export class QuoteModalPage implements OnInit {
     if ((this.uploadDocumentForm.controls.quotes && this.uploadDocumentForm.controls.quotes.value.length !== 0)
       || (this.uploadPhotoForm.controls.photos && this.uploadPhotoForm.controls.photos.value.length !== 0)
       || this.quoteAssessmentForm.value.quoteAmount) {
-      const cancel = await this.commonService.showConfirm('Quote Assessment', 'Are you sure you want to cancel the process of uploading the quote photos?', '', 'Yes', 'No');
-      if (cancel) { 
-        this.dismiss();
-       }
+      this.unSavedData = true;
+      // const cancel = await this.commonService.presentToastWithOptions('Quote Assessment', 'Are you sure you want to cancel the process of uploading the quote photos?', '', 'Yes', 'No');
+      // if (cancel) {
+      //   this.dismiss();
+      // }
     } else {
       this.dismiss();
     }
@@ -332,5 +333,9 @@ export class QuoteModalPage implements OnInit {
       );
     });
     return promise;
+  }
+
+  continue() {
+    this.unSavedData = false;
   }
 }
