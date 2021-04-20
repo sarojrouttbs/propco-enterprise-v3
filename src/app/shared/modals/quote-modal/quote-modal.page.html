@@ -1,16 +1,19 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Upload Quote</ion-title>
-    <ion-buttons slot="end">
+    <!-- <ion-buttons slot="end">
       <ion-icon name="close" (click)="onCancel()"></ion-icon>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-toolbar>
   <ion-segment [(ngModel)]="type" class="segment-card">
     <ion-segment-button value="quote" checked>
       <ion-label>Amount/Quote</ion-label>
     </ion-segment-button>
-    <ion-segment-button [class.error]="isLimitExceed" value="photos">
+    <!-- <ion-segment-button [class.error]="isLimitExceed" value="photos">
       <ion-label>Photos {{isLimitExceed ? '(Required)' : '(Optional)'}}</ion-label>
+    </ion-segment-button> -->
+    <ion-segment-button value="photos">
+      <ion-label>Photos</ion-label>
     </ion-segment-button>
   </ion-segment>
 </ion-header>
@@ -126,12 +129,30 @@
   </div>
 </ion-content>
 <ion-footer>
-<ion-grid>
+<ion-grid [class.unsaved-data-error]="unSavedData || isLimitExceed">
   <ion-row>
-    <ion-col class="ion-text-right">
+    <ion-col class="ion-text-right" *ngIf="!unSavedData && !isLimitExceed">
       <ion-button color="danger" (click)="onCancel()">Cancel</ion-button>
       <ion-button color="success" (click)="onProceed()">Submit</ion-button>
     </ion-col>
+    <ng-container *ngIf="unSavedData && !isLimitExceed">
+      <ion-col size="80">
+        <div class="ion-padding-top">Are you sure you want to cancel the process of uploading the quote photos?</div>
+      </ion-col>
+      <ion-col size="20" class="ion-text-end">
+        <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
+        <ion-button color="success" (click)="dismiss()">Yes</ion-button>
+      </ion-col>
+    </ng-container>
+    <ng-container  *ngIf="isLimitExceed && !unSavedData">
+      <ion-col size="80">
+        <div class="ion-padding-top">Are you sure you want to submit without photos?</div>
+      </ion-col>
+      <ion-col size="20" class="ion-text-end">
+        <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
+        <ion-button color="success" (click)="onProceed(true)">Yes</ion-button>
+      </ion-col>
+    </ng-container>
   </ion-row>
 </ion-grid>
 </ion-footer>
