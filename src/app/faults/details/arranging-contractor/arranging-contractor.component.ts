@@ -700,6 +700,8 @@ export class ArrangingContractorComponent implements OnInit {
     const faultReqObj: any = {};
     faultReqObj.isDraft = isSubmit ? false : true;
     faultReqObj.stage = this.faultDetails.stage;
+    faultReqObj.submittedByType = 'SECUR_USER';
+    faultReqObj.submittedById = '';
     if (stageAction) {
       faultReqObj.stageAction = stageAction;
     }
@@ -716,15 +718,17 @@ export class ArrangingContractorComponent implements OnInit {
       if (this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
         if (this.isUserActionChange) {
           let faultRequestObj: any = {};
-          faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
-          faultRequestObj.isDraft = false;
-          faultRequestObj.stage = this.faultDetails.stage;
-          const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
-          if (isFaultUpdated) {
-            this.proceeding = false;
-            this._btnHandler('refresh');
-            return;
-          }
+            faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+            faultRequestObj.isDraft = false;
+            faultRequestObj.stage = this.faultDetails.stage;
+            faultRequestObj.submittedById = '';
+            faultRequestObj.submittedByType = 'SECUR_USER';
+            const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
+            if (isFaultUpdated) {
+              this.proceeding = false;
+              this._btnHandler('refresh');
+              return;
+            }
         }
       }
       if ((this.iacNotification.templateCode === "LAR-L-Q" || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') && this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
@@ -1444,6 +1448,8 @@ export class ArrangingContractorComponent implements OnInit {
     if (updated) {
       let faultRequestObj: any = {};
       faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+      faultRequestObj.submittedById = '';
+      faultRequestObj.submittedByType = 'SECUR_USER';
       const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
       if (isFaultUpdated) {
         if (value) {
@@ -1779,7 +1785,10 @@ export class ArrangingContractorComponent implements OnInit {
 
   private issueWorksOrderContractor() {
     const promise = new Promise((resolve, reject) => {
-      this.faultsService.issueWorksOrderoContractor(this.faultDetails.faultId).subscribe(
+      let req: any = {};
+      req.submittedById = '';
+      req.submittedByType = 'SECUR_USER';
+      this.faultsService.issueWorksOrderoContractor(this.faultDetails.faultId, req).subscribe(
         res => {
           resolve(true);
         },

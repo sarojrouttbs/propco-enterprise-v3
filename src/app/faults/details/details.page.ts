@@ -1233,6 +1233,8 @@ export class DetailsPage implements OnInit {
     let faultRequestObj = this.createFaultFormValues();
     faultRequestObj.stage = this.faultDetails.stage;
     faultRequestObj.isDraft = true;
+    faultRequestObj.submittedByType = 'SECUR_USER',
+      faultRequestObj.submittedById = ''
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
       faultRequestObj.stage = this.faultDetails.stage;
       faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -1697,6 +1699,8 @@ export class DetailsPage implements OnInit {
   }
 
   private updateFaultDetails(requestObj): Promise<any> {
+    requestObj.submittedByType = 'SECUR_USER';
+    requestObj.submittedById = '';
     const promise = new Promise((resolve, reject) => {
       this.faultsService.updateFault(this.faultId, requestObj).subscribe(
         res => {

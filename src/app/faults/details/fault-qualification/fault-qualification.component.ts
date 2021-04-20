@@ -399,8 +399,9 @@ export class FaultQualificationComponent implements OnInit {
       stage: this.faultDetails.stage,
       isDraft: true,
       warranrtCertificateId: this.warrantyCertificateId ? this.warrantyCertificateId : this.faultDetails.warrantyCertificateId,
-      serviceContractCertificateId: this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId
-
+      serviceContractCertificateId: this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId,
+      submittedByType: 'SECUR_USER',
+      submittedById: ''
     };
     this.faultsService.updateFault(this.faultDetails.faultId, requestObj).subscribe(
       () => {
@@ -695,7 +696,8 @@ export class FaultQualificationComponent implements OnInit {
     let faultRequestObj: any = {};
     faultRequestObj.isDraft = false;
     faultRequestObj.stage = this.userSelectedActionControl.value;
-
+    faultRequestObj.submittedByType = 'SECUR_USER';
+    faultRequestObj.submittedById = '';
     const isFaultUpdated = await this.updateFaultDetails(this.faultDetails.faultId, faultRequestObj);
     if (isFaultUpdated) {
       const CHECKING_LANDLORD_INSTRUCTIONS = 13;
