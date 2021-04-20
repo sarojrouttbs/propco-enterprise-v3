@@ -99,10 +99,15 @@
             <div class="question-answer" *ngIf="(iacNotification?.responseReceived == null && !faultDetails.isEscalated && faultDetails.status !== 10 && faultDetails.status !== 12)">
               <ng-container *ngIf="iacNotification?.templateCode === 'CDT-C-E' && (iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone)">
                 <h4 class="ion-text-center">Next Step:</h4> 
-                <h6>  
+                <h6 *ngIf="iacNotification?.chaseTemplateCode!='LNP-L-E'">  
                   <ion-text color="danger">Please note: </ion-text>
                   <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
                     {{iacNotification?.hoursLeft}}.
+                  </span>
+                </h6>
+                <h6 *ngIf="iacNotification?.chaseTemplateCode=='LNP-L-E'">  
+                  <ion-text color="danger">Please note: </ion-text>
+                  <span>Fault will be <i>escalated</i> to PM in {{iacNotification?.hoursLeft}}.
                   </span>
                 </h6>
                 <div class="border-bottom"></div>
