@@ -662,7 +662,8 @@ export class DashboardPage implements OnInit {
       this.faultParams = this.faultParams.set('fctd', this.fctd);
     }
     if (this.fus.length > 0) {
-      this.faultParams = this.faultParams.set('fus', this.fus.toString());
+      let unique = this.fus.filter((v, i, a) => a.indexOf(v) === i);
+      this.faultParams = this.faultParams.set('fus', unique.toString());
     }
     if (this.fs.length > 0) {
       let unique = this.fs.filter((v, i, a) => a.indexOf(v) === i);
