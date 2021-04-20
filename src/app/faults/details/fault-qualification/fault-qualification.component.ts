@@ -358,7 +358,7 @@ export class FaultQualificationComponent implements OnInit {
 
   private async saveQualificationDetails(stage: string, stageAction?: string) {
     let qualificationForm = this.faultQualificationForm.value;
-    let faultRequestObj = {} as FaultModels.IFaultResponse;
+    let faultRequestObj = {} as any;
     faultRequestObj.isDraft = false;
     faultRequestObj.doesBranchHoldKeys = qualificationForm.doesBranchHoldKeys;
     faultRequestObj.hasMaintTenancyClause = qualificationForm.hasMaintTenancyClause;
@@ -368,6 +368,8 @@ export class FaultQualificationComponent implements OnInit {
     faultRequestObj.stage = stage;
     faultRequestObj.warrantyCertificateId = qualificationForm.isUnderWarranty && this.warrantyCertificateId ? this.warrantyCertificateId : this.faultDetails.warrantyCertificateId;
     faultRequestObj.serviceContractCertificateId = qualificationForm.isUnderServiceContract && this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId;
+    faultRequestObj.submittedByType = 'SECUR_USER',
+      faultRequestObj.submittedById = ''
     if (stageAction) {
       faultRequestObj.stageAction = stageAction;
     }
