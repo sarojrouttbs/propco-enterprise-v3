@@ -93,7 +93,7 @@ export class QuoteModalPage implements OnInit {
       this.uploadedPhoto.splice(i, 1);
       this.photos.removeAt(i);
       if (this.uploadedPhoto.length == 0) {
-        this.isLimitExceed = true;
+        // this.isLimitExceed = true;
       }
     }
   }
@@ -127,7 +127,7 @@ export class QuoteModalPage implements OnInit {
             isImage = true;
           }
           if (type === 'photo') {
-            this.isLimitExceed = false;
+            // this.isLimitExceed = false;
             this.photos.push(this.createItem({
               file: file
             }));
@@ -194,8 +194,8 @@ export class QuoteModalPage implements OnInit {
     }
   }
 
-  async onProceed() {
-    if (this.validateReq()) {
+  async onProceed(byPassLimitVal = false) {
+    if (this.validateReq(byPassLimitVal)) {
       const docsUploaded = await this.uploadQuotes();
       if (docsUploaded) {
         let amountUpdated: boolean = false;
@@ -292,14 +292,14 @@ export class QuoteModalPage implements OnInit {
     return promise;
   }
 
-  private validateReq() {
+  private validateReq(byPassLimitVal = false) {
     let valid = true;
     if (!this.quoteAssessmentForm.valid) { this.commonService.showMessage('Quote Amount is required', 'Quote Assessment', 'error'); return valid = false; }
     if (this.QUOTE_LIMIT && this.QUOTE_LIMIT < this.quoteAssessmentForm.value.quoteAmount && this.uploadedPhoto.length === 0) {
-      this.isLimitExceed = true;
-      return valid = false;
-    } else {
-      this.isLimitExceed = false;
+      if (!byPassLimitVal) {
+        this.isLimitExceed = true;
+        return valid = false;
+      }
     }
     if (this.uploadedQuote.length == 0) { this.commonService.showMessage('Quote Document is required', 'Quote Assessment', 'error'); return valid = false; }
     return valid;
@@ -337,5 +337,6 @@ export class QuoteModalPage implements OnInit {
 
   continue() {
     this.unSavedData = false;
+    this.isLimitExceed = false;
   }
 }
