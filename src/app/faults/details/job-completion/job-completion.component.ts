@@ -506,6 +506,8 @@ export class JobCompletionComponent implements OnInit {
     if (updated) {
       let faultRequestObj: any = {};
       faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+      faultRequestObj.submittedByType = 'SECUR_USER';
+      faultRequestObj.submittedById = '';
       const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
       if (isFaultUpdated) {
         if (value) {

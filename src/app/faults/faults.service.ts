@@ -242,8 +242,8 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/check-payment-rules`);
   }
 
-  issueWorksOrderoContractor(faultId: string) {
-    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/issue-wo`, {});
+  issueWorksOrderoContractor(faultId: string, requestObj) {
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/issue-wo`, requestObj);
   }
 
   sendLandlordPaymentRequest(faultId: string) {
@@ -313,7 +313,7 @@ export class FaultsService {
   resendFaultNotification(faultNotificationId): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/resend`, {});
   }
-  
+
   modifyContractorVisit(faultNotificationId, notificationObj): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `faults/${faultNotificationId}/quote/contractor-visit`, notificationObj);
   }
