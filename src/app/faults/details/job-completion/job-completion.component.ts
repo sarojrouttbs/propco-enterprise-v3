@@ -125,6 +125,7 @@ export class JobCompletionComponent implements OnInit {
       agentReference: [{ value: '', disabled: true }],
       defaultCommissionPercentage: [{ value: '', disabled: true }],
       defaultCommissionAmount: [{ value: '', disabled: true }],
+      useCommissionRate: '',
       businessTelephone: [{ value: '', disabled: true }],
     });
     if (this.faultDetails.doesBranchHoldKeys) {
@@ -341,6 +342,8 @@ export class JobCompletionComponent implements OnInit {
     this.workOrderForm.get('keysLocation').disable();
     this.workOrderForm.get('returnKeysTo').disable();
     this.workOrderForm.get('accessDetails').disable();
+    this.workOrderForm.get('defaultCommissionPercentage').disable();
+    this.workOrderForm.get('defaultCommissionAmount').disable();
   }
 
   setUserAction(index) {
@@ -449,7 +452,8 @@ export class JobCompletionComponent implements OnInit {
             defaultCommissionAmount: data ? data.defaultCommissionAmount : undefined,
             businessTelephone: data ? data.businessTelephone : undefined,
             contractorName: data ? data.fullName : undefined, address: addressString,
-            contractorId: data ? data.contractorId : undefined
+            contractorId: data ? data.contractorId : undefined,
+            useCommissionRate: this.faultMaintenanceDetails.useCommissionRate
           });
         }
       }, error => {

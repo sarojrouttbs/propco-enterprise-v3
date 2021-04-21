@@ -302,25 +302,31 @@
       </ion-col>
     </ion-row>
     <ion-row class="row-banner">
-      <ion-col size="33.33">
+      <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Reference </ion-label>
           <ion-input formControlName="agentReference"></ion-input>
         </ion-item>
       </ion-col>
-      <ion-col size="33.33">
-        <ion-item>
-          <ion-label position="floating">Rate </ion-label>
-          <ion-input formControlName="defaultCommissionPercentage"></ion-input>
-        </ion-item>
+      <ion-col size="50">
+        <ion-radio-group formControlName="useCommissionRate" class="defaultCommission">
+          <ion-item class="ion-item">
+            <ion-radio [value]="false" checked style="margin-right: 5px;" [disabled]="iacNotification"></ion-radio>
+            <ion-label position="fixed" class="ion-label" >Rate(%) </ion-label>
+              <ion-input formControlName="defaultCommissionPercentage" class="ion-input" 
+              [readonly]="!workOrderForm?.value.useCommissionRate "
+              ></ion-input>
+          </ion-item>
+          <ion-item class="ion-item defaultCommission" >
+            <ion-radio [value]="true" checked style="margin-right: 5px;" [disabled]="iacNotification"></ion-radio>
+            <ion-label position="fixed" class="ion-label">Amount(£) </ion-label>
+              <ion-input formControlName="defaultCommissionAmount" class="ion-input" 
+              [readonly]="workOrderForm?.value.useCommissionRate"
+              ></ion-input>
+          </ion-item>
+        </ion-radio-group>
       </ion-col>
-      <ion-col size="33.33">
-        <ion-item>
-          <ion-label position="floating">Amount </ion-label>
-          <ion-input formControlName="defaultCommissionAmount"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
+  </ion-row>
 
     <ion-row>
       <ion-col size="50">
