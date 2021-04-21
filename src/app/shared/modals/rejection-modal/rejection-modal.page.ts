@@ -16,6 +16,7 @@ export class RejectionModalPage implements OnInit {
   faultMaintRejectionReasons;
   title;
   rejectedByType;
+  showLoader: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -36,6 +37,7 @@ export class RejectionModalPage implements OnInit {
   }
 
   saveFaultLLAuth() {
+    this.showLoader = true;
     let reqObj = JSON.parse(JSON.stringify(this.rejectionForm.value));
     if (reqObj.rejectionReason === 'Other') {
       if (reqObj.other) {
@@ -43,10 +45,16 @@ export class RejectionModalPage implements OnInit {
       }
     }
 
-    if (!this.rejectionForm.valid) { this.rejectionForm.markAllAsTouched(); return; }
+    if (!this.rejectionForm.valid) {
+      this.showLoader = false;
+      this.rejectionForm.markAllAsTouched();
+      return;
+    }
     this.faultsService.saveFaultLLAuth(reqObj, this.faultNotificationId).subscribe(res => {
+      this.showLoader = false;
       this.modalController.dismiss('success');
     }, error => {
+      this.showLoader = false;
       this.commonService.showMessage('Something went wrong on server, please try again.', 'No Authorisation', 'error');
     })
   }
