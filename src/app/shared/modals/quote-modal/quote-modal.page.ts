@@ -31,6 +31,7 @@ export class QuoteModalPage implements OnInit {
   preUpload: boolean;
   MAX_DOC_UPLOAD_LIMIT;
   unSavedData: boolean = false;
+  showLoader:boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -217,6 +218,7 @@ export class QuoteModalPage implements OnInit {
     if ((this.uploadDocumentForm.controls.quotes.value === null || this.uploadDocumentForm.controls.quotes.value.length === 0) && this.uploadedQuote.length !== 0) {
       return true;
     }
+    this.showLoader = true;
     let apiObservableArray = [];
     const maintData = await this.prepareUploadData('maint');
     if (maintData) {
@@ -228,11 +230,14 @@ export class QuoteModalPage implements OnInit {
         apiObservableArray = apiObservableArray.concat(photos);
         const faultPhotoSuccess = await this.upload(apiObservableArray);
         if (faultPhotoSuccess) {
+          this.showLoader = false;
           return true;
         } else {
+          this.showLoader = false;
           return false;
         }
       } else {
+        this.showLoader = false;
         this.commonService.showMessage('Something went wrong', 'Upload Quote', 'error');
         return false;
       }
@@ -278,13 +283,16 @@ export class QuoteModalPage implements OnInit {
   }
 
   async submitQuoteAmout() {
+    this.showLoader = true;
     const promise = new Promise((resolve, reject) => {
       this.quoteService.saveNotificationQuoteAmount(this.quoteAssessmentForm.value, this.faultNotificationId).subscribe(
         res => {
+          this.showLoader = false;
           this.commonService.showMessage('Successfully Added', 'Quote Assessment', 'success');
           resolve(true);
         },
         error => {
+          this.showLoader = false;
           resolve(false);
         }
       );
@@ -318,6 +326,7 @@ export class QuoteModalPage implements OnInit {
   }
 
   updateQuoteAmount() {
+    this.showLoader = true;
     let requestObj = {
       quoteAmount: this.quoteAssessmentForm.value.quoteAmount,
       submittedByType: 'SECUR_USER'
@@ -325,9 +334,11 @@ export class QuoteModalPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.quoteService.saveQuoteAmount(requestObj, this.faultId).subscribe(
         res => {
+          this.showLoader = false;
           resolve(true);
         },
         error => {
+          this.showLoader = false;
           resolve(false);
         }
       );

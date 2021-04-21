@@ -133,7 +133,9 @@
   <ion-row>
     <ion-col class="ion-text-right" *ngIf="!unSavedData && !isLimitExceed">
       <ion-button color="danger" (click)="onCancel()">Cancel</ion-button>
-      <ion-button color="success" (click)="onProceed()">Submit</ion-button>
+      <ion-button color="success" (click)="onProceed()" [disabled]="showLoader">Submit
+        <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+      </ion-button>
     </ion-col>
     <ng-container *ngIf="unSavedData && !isLimitExceed">
       <ion-col size="80">
@@ -150,7 +152,9 @@
       </ion-col>
       <ion-col size="20" class="ion-text-end">
         <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
-        <ion-button color="success" (click)="onProceed(true)">Yes</ion-button>
+        <ion-button color="success" (click)="onProceed(true)" [disabled]="showLoader">Yes
+          <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+        </ion-button>
       </ion-col>
     </ng-container>
   </ion-row>

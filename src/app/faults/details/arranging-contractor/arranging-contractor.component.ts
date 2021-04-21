@@ -1989,7 +1989,7 @@ export class ArrangingContractorComponent implements OnInit {
 
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
-        this._btnHandler('refresh');
+        this._btnHandler('refresh_docs');
       }
     });
 
