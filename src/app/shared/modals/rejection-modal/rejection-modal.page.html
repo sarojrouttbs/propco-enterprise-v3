@@ -48,8 +48,10 @@
       </form>
     </ion-col>
     <ion-col [size]="userType == 'contractor'?100:40" class="ion-text-end">
-      <ion-button (click)="dismiss()">NO</ion-button>
-      <ion-button (click)="saveFaultLLAuth()">YES</ion-button>
+      <ion-button (click)="dismiss()" color="danger">NO</ion-button>
+      <ion-button color="success" (click)="saveFaultLLAuth()" [disabled]="showLoader">YES
+        <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+      </ion-button>
     </ion-col>
   </ion-row>
 </ion-footer>

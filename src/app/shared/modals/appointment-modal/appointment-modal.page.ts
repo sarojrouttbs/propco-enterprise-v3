@@ -19,6 +19,7 @@ export class AppointmentModalPage implements OnInit {
   minDate;
   type;
   futureDate;
+  showLoader: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -76,12 +77,15 @@ export class AppointmentModalPage implements OnInit {
   }
 
   saveContractorVisit(faultNotificationId, requestObj) {
+    this.showLoader = true;
     const promise = new Promise((resolve, reject) => {
       this.faultsService.saveContractorVisit(faultNotificationId, requestObj).subscribe(
         res => {
+          this.showLoader = false;
           resolve(true);
         },
         error => {
+          this.showLoader = false;
           this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Yes, agreed Date/Time with Tenant', 'error');
           resolve(false)
         }
@@ -91,12 +95,15 @@ export class AppointmentModalPage implements OnInit {
   }
 
   saveWoContractorVisit(faultNotificationId, requestObj) {
+    this.showLoader = true;
     const promise = new Promise((resolve, reject) => {
       this.faultsService.updateWOContractorVisit(faultNotificationId, requestObj).subscribe(
         res => {
+          this.showLoader = false;
           resolve(true);
         },
         error => {
+          this.showLoader = false;
           resolve(false)
         }
       );
@@ -105,12 +112,15 @@ export class AppointmentModalPage implements OnInit {
   }
 
   modifyContractorVisit(faultNotificationId, requestObj) {
+    this.showLoader = true;
     const promise = new Promise((resolve, reject) => {
       this.faultsService.modifyContractorVisit(faultNotificationId, requestObj).subscribe(
         res => {
+          this.showLoader = false;
           resolve(true);
         },
         error => {
+          this.showLoader = false;
           resolve(false)
         }
       );
@@ -119,12 +129,15 @@ export class AppointmentModalPage implements OnInit {
   }
 
   modifyWoContractorVisit(faultNotificationId, requestObj) {
+    this.showLoader = true;
     const promise = new Promise((resolve, reject) => {
       this.faultsService.modifyWoContractorVisit(faultNotificationId, requestObj).subscribe(
         res => {
+          this.showLoader = false;
           resolve(true);
         },
         error => {
+          this.showLoader = false;
           resolve(false)
         }
       );
