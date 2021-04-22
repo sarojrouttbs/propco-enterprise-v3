@@ -93,6 +93,7 @@ declare namespace FaultModels {
         isWOConvertedToInvoice: boolean;
         isContractorPaymentDone: boolean;
         invoiceAmount: number;
+        stageIndex: number;
     }
 
     export interface AdditionalInfo {

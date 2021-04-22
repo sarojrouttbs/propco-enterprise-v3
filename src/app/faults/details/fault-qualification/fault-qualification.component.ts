@@ -54,6 +54,7 @@ export class FaultQualificationComponent implements OnInit {
   saving: boolean = false;
   proceeding: boolean = false;
   fileIds = FILE_IDS;
+  FAULT_STAGES = FAULT_STAGES;
 
   constructor(
     private fb: FormBuilder,

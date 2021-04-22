@@ -594,6 +594,7 @@
         <ion-button class="save-button" (click)="saveForLater()" [disabled]="submitting || proceeding">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button" *ngIf="faultId" [disabled]="saving || submitting || progressing || proceeding">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button" *ngIf="!faultId" [disabled]="saving || submitting || progressing || proceeding">Back</ion-button>
+        <ion-button (click)="goToNextStage()" class="next-button" *ngIf="faultId && faultDetails?.stage !== FAULT_STAGES.FAULT_LOGGED" [disabled]="saving || submitting || progressing || proceeding">Next</ion-button>
         <ion-button class="submit-button" (click)="createAFault()" *ngIf="!faultId" [disabled]="saving">Submit<ion-icon *ngIf="submitting" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button class="save-button" (click)="startProgress()"
           *ngIf="faultId && faultDetails?.status == 1 && reportedByForm.value.reportedById" [disabled]="saving">Start
@@ -975,6 +976,7 @@
   <div class="action-btn-group">
     <ion-button (click)="goTolistPage()" class="cancel-button" [disabled]="saving || proceeding">Cancel</ion-button>
     <ion-button (click)="goToLastStage()" [disabled]="saving || proceeding">Back</ion-button>
+    <ion-button (click)="goToNextStage()" *ngIf="faultDetails?.stage !== FAULT_STAGES.LANDLORD_INSTRUCTION" [disabled]="saving || proceeding">Next</ion-button>
     <ion-button class="save-button" (click)="saveForLater()" [disabled]="proceeding">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
     <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId" [disabled]="saving">Proceed<ion-icon *ngIf="proceeding" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
   </div>
@@ -1198,27 +1200,33 @@
         </ion-col>
         <ion-col size="100">
           <mat-horizontal-stepper #stepper labelPosition="bottom" [selectedIndex]="currentStepperIndex">
-            <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 0">
+            <mat-step  [completed]="stepper.selectedIndex > 0">
+              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 0"> -->
               <ng-container *ngTemplateOutlet="caseLogged"></ng-container>
               <ng-template matStepLabel>Fault Logged</ng-template>
             </mat-step>
-            <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 1">
+            <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 1 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 1">
+              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 1"> -->
               <ng-container *ngTemplateOutlet="caseQualification"></ng-container>
               <ng-template matStepLabel>Fault Qualification</ng-template>
             </mat-step>
-            <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 2">
+            <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 2 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 2">
+              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 2"> -->
               <ng-container *ngTemplateOutlet="landlordInstructions"></ng-container>
               <ng-template matStepLabel>Landlord Instructions</ng-template>
             </mat-step>
-            <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 3">
+            <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 3 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 3">
+              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 3"> -->
               <ng-container *ngTemplateOutlet="arrangingContractor"></ng-container>
               <ng-template matStepLabel>Arranging Contractor</ng-template>
             </mat-step>
-            <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 4">
+            <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 4 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 4">
+              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 4"> -->
               <ng-container *ngTemplateOutlet="jobCompletion"></ng-container>
               <ng-template matStepLabel>Job Completion</ng-template>
             </mat-step>
-            <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 5">
+            <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 5 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 5">
+              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 5"> -->
               <ng-container *ngTemplateOutlet="payment"></ng-container>
               <ng-template matStepLabel>Payment</ng-template>
             </mat-step>

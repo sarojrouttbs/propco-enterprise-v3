@@ -44,6 +44,7 @@ export class JobCompletionComponent implements OnInit {
   iacNotification;
   iacStageActions = LL_INSTRUCTION_TYPES;
   otherStageActions = LL_INSTRUCTION_TYPES.filter(action => { return (action.index == 'OBTAIN_QUOTE' || action.index == 'PROCEED_WITH_WORKSORDER') });
+  FAULT_STAGES = FAULT_STAGES;
 
   accessInfoList = ACCESS_INFO_TYPES;
   isMaintenanceDetails = false;
