@@ -365,7 +365,7 @@ export class DetailsPage implements OnInit {
 
   }
 
-  private async getStageIndex(details) {
+  private  getStageIndex(details) {
     if (details) {
       switch (details.stage) {
         case FAULT_STAGES.FAULT_QUALIFICATION: {
@@ -1352,7 +1352,7 @@ export class DetailsPage implements OnInit {
     const details: any = await this.getFaultDetails();
     this.selectStageStepper(details.stage);
     this.faultDetails = details;
-    await this.getStageIndex(this.faultDetails);
+    this.getStageIndex(this.faultDetails);
     this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
     this.oldUserSelectedAction = this.userSelectedActionControl.value;
     this.proceeding = false;
