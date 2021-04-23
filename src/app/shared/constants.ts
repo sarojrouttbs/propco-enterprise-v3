@@ -128,12 +128,12 @@ export const LL_INSTRUCTION_TYPES = [
     value: 'Obtain LL authorisation',
   },
   {
-    index: 'AGENT_OF_NECESSITY',
-    value: 'EMERGENCY/URGENT – Proceed as agent of necessity'
-  },
-  {
     index: 'GET_AN_ESTIMATE',
     value: 'Get an Estimate'
+  },
+  {
+    index: 'AGENT_OF_NECESSITY',
+    value: 'EMERGENCY/URGENT – Proceed as agent of necessity'
   }
 ];
 
