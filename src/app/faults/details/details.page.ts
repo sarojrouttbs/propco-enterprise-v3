@@ -304,7 +304,7 @@ export class DetailsPage implements OnInit {
       if (details) {
         this.selectStageStepper(details.stage);
         this.faultDetails = details;
-        await this.getStageIndex(this.faultDetails);
+        this.getStageIndex(this.faultDetails);
         this.propertyId = details.propertyId;
         this.contractorEntityId = details.contractorId;
         this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
