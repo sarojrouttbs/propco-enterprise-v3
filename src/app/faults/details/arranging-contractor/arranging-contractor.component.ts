@@ -53,6 +53,7 @@ export class ArrangingContractorComponent implements OnInit {
   iacStageActions = LL_INSTRUCTION_TYPES;
   REJECTED_BY_TYPE = REJECTED_BY_TYPE;
   otherStageActions = LL_INSTRUCTION_TYPES.filter(action => { return (action.index == 'OBTAIN_QUOTE' || action.index == 'PROCEED_WITH_WORKSORDER') });
+  FAULT_STAGES = FAULT_STAGES;
 
   accessInfoList = ACCESS_INFO_TYPES;
   isMaintenanceDetails = false;

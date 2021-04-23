@@ -806,6 +806,7 @@
 <div class="action-btn-group">
   <ion-button (click)="_btnHandler('cancel')" class="cancel-button" [disabled]="saving || proceeding">Cancel</ion-button>
   <ion-button (click)="_btnHandler('back')" [disabled]="saving || proceeding">Back</ion-button>
+  <ion-button (click)="_btnHandler('next')" *ngIf="faultDetails?.stage !== FAULT_STAGES.ARRANGING_CONTRACTOR" [disabled]="saving || proceeding">Next</ion-button>
   <ion-button class="save-button" (click)="_btnHandler('save')" [disabled]="proceeding">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
   <ion-button class="submit-button" (click)="_btnHandler('proceed')" [disabled]="saving">Proceed<ion-icon *ngIf="proceeding" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
 </div>

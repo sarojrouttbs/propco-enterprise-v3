@@ -94,6 +94,7 @@ export class DetailsPage implements OnInit {
   isUserActionChange = false;
   showSkeleton = true;
   MAX_DOC_UPLOAD_LIMIT;
+  FAULT_STAGES = FAULT_STAGES;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -303,6 +304,7 @@ export class DetailsPage implements OnInit {
       if (details) {
         this.selectStageStepper(details.stage);
         this.faultDetails = details;
+        this.getStageIndex(this.faultDetails);
         this.propertyId = details.propertyId;
         this.contractorEntityId = details.contractorId;
         this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
@@ -325,6 +327,7 @@ export class DetailsPage implements OnInit {
     } else {
       this.faultDetails = <FaultModels.IFaultResponse>{};
       this.faultDetails.status = 1;
+      this.faultDetails.stageIndex = -1
     }
     // this.commonService.showLoader();
     forkJoin([
@@ -360,6 +363,38 @@ export class DetailsPage implements OnInit {
       this.showSkeleton = false;
     });
 
+  }
+
+  private  getStageIndex(details) {
+    if (details) {
+      switch (details.stage) {
+        case FAULT_STAGES.FAULT_QUALIFICATION: {
+          details.stageIndex = 1;
+          break;
+        }
+        case FAULT_STAGES.LANDLORD_INSTRUCTION: {
+          // this.initLandlordInstructions(this.faultId);
+          details.stageIndex = 2;
+          break;
+        }
+        case FAULT_STAGES.ARRANGING_CONTRACTOR: {
+          details.stageIndex = 3;
+          break;
+        }
+        case FAULT_STAGES.JOB_COMPLETION: {
+          details.stageIndex = 4;
+          break;
+        }
+        case FAULT_STAGES.PAYMENT: {
+          details.stageIndex = 5;
+          break;
+        }
+        default: {
+          details.stageIndex = 0;
+          break;
+        }
+      }
+    }
   }
 
   private getMaxRentShareLandlord(landlords) {
@@ -1317,6 +1352,7 @@ export class DetailsPage implements OnInit {
     const details: any = await this.getFaultDetails();
     this.selectStageStepper(details.stage);
     this.faultDetails = details;
+    this.getStageIndex(this.faultDetails);
     this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
     this.oldUserSelectedAction = this.userSelectedActionControl.value;
     this.proceeding = false;
@@ -1423,6 +1459,22 @@ export class DetailsPage implements OnInit {
       this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
     } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.PAYMENT) {
       this.stepper.selectedIndex = FAULT_STAGES_INDEX.JOB_COMPLETION;
+    }
+  }
+
+  goToNextStage() {
+    document.querySelector('ion-content').scrollToTop(500);
+    if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_LOGGED) {
+      this.stepper.selectedIndex = FAULT_STAGES_INDEX.FAULT_QUALIFICATION;
+    }
+    else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_QUALIFICATION) {
+      this.stepper.selectedIndex = FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION;
+    } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
+      this.stepper.selectedIndex = FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR;
+    } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.ARRANGING_CONTRACTOR) {
+      this.stepper.selectedIndex = FAULT_STAGES_INDEX.JOB_COMPLETION
+    } else if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.JOB_COMPLETION) {
+      this.stepper.selectedIndex = FAULT_STAGES_INDEX.PAYMENT;
     }
   }
 
@@ -1951,6 +2003,10 @@ export class DetailsPage implements OnInit {
       }
       case 'back': {
         this.goToLastStage();
+        break;
+      }
+      case 'next': {
+        this.goToNextStage();
         break;
       }
       case 'refresh': {
