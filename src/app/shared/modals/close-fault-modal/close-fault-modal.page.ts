@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { CommonService } from '../../services/common.service';
-import { CANCEL_REASON } from './../../../shared/constants';
+import { CLOSE_REASON } from './../../../shared/constants';
 
 @Component({
   selector: 'app-close-fault-modal',
@@ -14,7 +14,7 @@ export class CloseFaultModalPage implements OnInit {
 
   closeFaultForm: FormGroup;
   faultId;
-  reasons = CANCEL_REASON;
+  reasons = CLOSE_REASON;
   constructor(private fb: FormBuilder, private modalController: ModalController, private faultsService: FaultsService, private commonService: CommonService) { }
 
   ngOnInit() {
@@ -23,13 +23,13 @@ export class CloseFaultModalPage implements OnInit {
 
   initCloseFaultForm() {
     this.closeFaultForm = this.fb.group({
-      cancelReason: ['', Validators.required],
+      closedReason: ['', Validators.required],
       otherReason: ['']
     });
   }
 
   onReasonChange() {
-    if (this.closeFaultForm.value.cancelReason === 'OTHER') {
+    if (this.closeFaultForm.value.closedReason === 'OTHER') {
       this.closeFaultForm.get('otherReason').setValidators(Validators.required);
       this.closeFaultForm.get('otherReason').updateValueAndValidity();
 
@@ -43,8 +43,10 @@ export class CloseFaultModalPage implements OnInit {
   save() {
     if (this.closeFaultForm.valid) {
       let requestObj = {
-        cancelReason: this.closeFaultForm.value.cancelReason,
-        otherReason: this.closeFaultForm.value.otherReason
+        closedReason: this.closeFaultForm.value.closedReason,
+        otherReason: this.closeFaultForm.value.otherReason,
+        submittedById: '',
+        submittedByType: 'SECUR_USER'
       };
       const promise = new Promise((resolve, reject) => {
         this.faultsService.closeFault(this.faultId, requestObj).subscribe(
