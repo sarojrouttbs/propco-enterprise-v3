@@ -271,7 +271,7 @@ export class FaultsService {
   }
 
   closeFault(faultId, requestObj): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/cancel`, requestObj);
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/close`, requestObj);
   }
 
   fetchAgreementsClauses(agreementId): Observable<any> {

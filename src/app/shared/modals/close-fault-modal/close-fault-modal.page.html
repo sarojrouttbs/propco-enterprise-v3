@@ -13,17 +13,17 @@
           <ion-label position="floating">Please select a reason for closing this fault <ion-text class="mandatory">*
             </ion-text>
           </ion-label>
-          <ion-select interface="popover" formControlName="cancelReason" (ionChange)="onReasonChange()"
+          <ion-select interface="popover" formControlName="closedReason" (ionChange)="onReasonChange()"
             class="reason-dropdown" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
             <ion-select-option [value]="reason.index" *ngFor="let reason of reasons">
               {{ reason.value }}
             </ion-select-option>
           </ion-select>
         </ion-item>
-        <app-validation-message [control]="closeFaultForm.controls.cancelReason"></app-validation-message>
+        <app-validation-message [control]="closeFaultForm.controls.closedReason"></app-validation-message>
       </ion-col>
 
-      <ion-col size="100" *ngIf="closeFaultForm.get('cancelReason').value === 'OTHER'">
+      <ion-col size="100" *ngIf="closeFaultForm.get('closedReason').value === 'OTHER'">
         <ion-item>
           <ion-label position="floating">Other Reason </ion-label>
           <ion-textarea formControlName="otherReason" rows="1"></ion-textarea>
