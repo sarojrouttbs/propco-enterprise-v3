@@ -1182,7 +1182,9 @@
           <h2 class="heading-initial">
             <span *ngIf="!faultId">Initial Issue</span>
             <span *ngIf="faultId">
-              {{faultDetails?.isEscalated ? 'Escalation' : getLookupValue(faultDetails?.status, faultStatuses)}} &nbsp;
+              <!-- {{faultDetails?.isEscalated ? 'Escalation' : getLookupValue(faultDetails?.status, faultStatuses)}} &nbsp; -->
+              {{faultDetails?.isClosed || (faultDetails?.isClosed && faultDetails?.isEscalated) ? 'Closed' : 
+              (faultDetails?.isEscalated ? 'Escalation' : getLookupValue(faultDetails?.status, faultStatuses))  }} &nbsp;
               <img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.isEscalated" />
             </span>
           </h2>

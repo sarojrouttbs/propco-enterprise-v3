@@ -1,3 +1,4 @@
+import { CloseFaultModalPageModule } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,7 +23,8 @@ import { IonicSelectableModule } from 'ionic-selectable';
     EscalateModalPageModule,
     DataTablesModule,
     ReactiveFormsModule,
-    IonicSelectableModule
+    IonicSelectableModule,
+    CloseFaultModalPageModule
     ],
   declarations: [DashboardPage]
 })

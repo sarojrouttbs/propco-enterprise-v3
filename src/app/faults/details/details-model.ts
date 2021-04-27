@@ -53,6 +53,7 @@ declare namespace FaultModels {
         additionalInfo: AdditionalInfo[];
         sourceType: string;
         isEscalated?: any;
+        isClosed: boolean;
         escalatedBy?: any;
         escalationReason?: any;
         escalatedAt?: any;

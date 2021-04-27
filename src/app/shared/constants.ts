@@ -128,12 +128,12 @@ export const LL_INSTRUCTION_TYPES = [
     value: 'Obtain LL authorisation',
   },
   {
-    index: 'GET_AN_ESTIMATE',
-    value: 'Get an Estimate'
-  },
-  {
     index: 'AGENT_OF_NECESSITY',
     value: 'EMERGENCY/URGENT – Proceed as agent of necessity'
+  },
+  {
+    index: 'GET_AN_ESTIMATE',
+    value: 'Get an Estimate'
   }
 ];
 
@@ -260,7 +260,7 @@ export const PAYMENT_WARNINGS = {
   'hasOtherInvoicesToBePaid': 'There are other invoices to be paid from next months rent.'
 };
 
-export const CANCEL_REASON = [
+export const CLOSE_REASON = [
   {
     "index": "FAULT_DOES_NOT_EXIST_ANYMORE",
     "value": "Fault does not exist anymore"
@@ -268,6 +268,13 @@ export const CANCEL_REASON = [
   {
     "index": "TENANTS_RESPONSIBILITY",
     "value": "Tenant's responsibility"
+  },
+  {
+    "index": "APPOINTMENT_NOT_BOOKED",
+    "value": "Appointment not booked"
+  }, {
+    "index": "LANDLORD_WOULD_NOT_FIX",
+    "value": "Landlord would not fix"
   },
   {
     "index": "OTHER",
