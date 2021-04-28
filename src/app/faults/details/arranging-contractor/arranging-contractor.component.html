@@ -59,7 +59,7 @@
               <ion-text color="danger" *ngIf="
               iacNotification?.responseReceived?.isAccepted === false &&
               rejectionReason && 
-              (iacNotification?.templateCode === 'LAR-L-Q' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
+              (iacNotification?.templateCode === 'QC-L-E' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
                 {{rejectionReason || 'N/A'}}
               </ion-text>
                 <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false && this.iacNotification?.templateCode!='CWO-C-E'">
@@ -214,7 +214,7 @@
         </div>
       </ion-col>
     </ion-row>
-    <ion-grid style="margin: 20px 0" *ngIf="(iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'LAR-L-Q') && quoteDocuments?.length && !showSkeleton">
+    <ion-grid style="margin: 20px 0" *ngIf="(iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'QC-L-E') && quoteDocuments?.length && !showSkeleton">
       <ion-row>
         <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
           <h2>Quote Documents</h2>
