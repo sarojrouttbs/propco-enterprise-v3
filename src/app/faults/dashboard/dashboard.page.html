@@ -429,7 +429,7 @@
             <ion-button (click)="notesModal()">Add Note</ion-button>
             <ion-button *ngIf="!selectedData?.isEscalated" (click)="escalateFault()">Escalate</ion-button>
             <ion-button *ngIf="selectedData?.isEscalated" (click)="deEscalateFault()">De-Escalate</ion-button>
-            <ion-button class="" *ngIf="selectedData?.status != 1 || selectedData?.isDraft" (click)="goToFaultDetails()">View</ion-button>
+            <ion-button class="" (click)="goToFaultDetails()">View</ion-button>
             <ion-button *ngIf="selectedData?.status == 1 && !selectedData?.isDraft" (click)="startProgress()">Start Progress</ion-button>
             <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
           </div>
