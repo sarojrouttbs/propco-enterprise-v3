@@ -615,7 +615,7 @@ export class ArrangingContractorComponent implements OnInit {
         this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
         return invalid;
       }
-      if (this.iacNotification && this.iacNotification.responseReceived != null && this.iacNotification.responseReceived.isAccepted === false && this.iacNotification.templateCode === 'LAR-L-Q') {
+      if (this.iacNotification && this.iacNotification.responseReceived != null && this.iacNotification.responseReceived.isAccepted === false && this.iacNotification.templateCode === 'QC-L-E') {
         if (this.faultMaintenanceDetails.quoteContractors) {
           const defaulter = this.faultMaintenanceDetails.quoteContractors.find(x => x.isRejected && x.contractorId === this.raiseQuoteForm.get('selectedContractorId').value);
           if (defaulter) {
@@ -718,7 +718,7 @@ export class ArrangingContractorComponent implements OnInit {
       }
       if (this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
         if (this.isUserActionChange) {
-          if ((this.iacNotification.templateCode === 'LAR-L-Q' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E')) {
+          if ((this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E')) {
             await this.proceedWithQuoteAndWO();
             this.proceeding = false;
             return;
@@ -739,7 +739,7 @@ export class ArrangingContractorComponent implements OnInit {
           }
         }
       }
-      if ((this.iacNotification.templateCode === "LAR-L-Q" || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') && this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
+      if ((this.iacNotification.templateCode === "QC-L-E" || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') && this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
         if (!this.isUserActionChange) {
           await this.proceedWithQuoteAndWO();
           this.proceeding = false;
@@ -973,7 +973,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private disableContractorsList(notification) {
-    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && (notification.templateCode === 'LAR-L-Q' || notification.templateCode === 'CQ-NA-C-E' || notification.templateCode === 'CQ-A-C-E')) {
+    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && (notification.templateCode === 'QC-L-E' || notification.templateCode === 'CQ-NA-C-E' || notification.templateCode === 'CQ-A-C-E')) {
       this.restrictAction = false;
     } else {
       this.restrictAction = true;
@@ -1036,7 +1036,7 @@ export class ArrangingContractorComponent implements OnInit {
         this.questionActionVisitTime(data);
       } else if (this.iacNotification.templateCode === 'CQ-C-E') {
         this.questionActionQuoteUpload(data);
-      } else if (this.iacNotification.templateCode === 'LAR-L-Q') {
+      } else if (this.iacNotification.templateCode === 'QC-L-E') {
         this.questionActionLLAuth(data);
       }
     } else if (this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER) {
