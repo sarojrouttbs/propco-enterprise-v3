@@ -766,7 +766,7 @@
               <div class="question-answer"
                 *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true && (cliNotification?.templateCode === 'LR-L-E' || cliNotification?.templateCode === 'LC-L-E')">
                 <h4 claas="ion-text-center">Next Step:</h4>
-                <ion-button color="success" class="action-btn" fill="{{faultDetails?.landlordOwnContractor?.landlordOwnContractorId!==null ? 'solid' : 'outline'}}" (click)="llContractor(); $event.stopPropagation();">
+                <ion-button color="success" class="action-btn" fill="{{faultDetails.estimatedVisitAt != null ? 'solid' : 'outline'}}" (click)="llContractor(); $event.stopPropagation();">
                   {{faultDetails?.landlordOwnContractor?.landlordOwnContractorId!==null?"View/Edit Contractor details":"Add Contractor Details"}}</ion-button>
                 <h6 *ngIf="faultDetails?.landlordOwnContractor?.landlordOwnContractorId === null && !faultDetails?.isEscalated">
                   <ion-text color="danger">Please note: </ion-text>
