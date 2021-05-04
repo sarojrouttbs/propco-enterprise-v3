@@ -1,7 +1,7 @@
 import { CERTIFICATES_CATEGORY, FILE_IDS, PROPCO } from './../../../shared/constants';
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { FAULT_STAGES, FAULT_QUALIFICATION_ACTIONS } from 'src/app/shared/constants';
