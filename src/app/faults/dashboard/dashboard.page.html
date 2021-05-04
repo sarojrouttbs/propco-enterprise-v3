@@ -147,7 +147,7 @@
         </ion-col>
 
         <ion-col class="ion-text-right">
-          <ion-button color="success reset-filter" class="action-btn" fill="outline" (click)="applyFilter()" [disabled]="searchKey.value?.length < 3">Apply
+          <ion-button color="success reset-filter" class="action-btn" fill="outline" (click)="filterList()" [disabled]="searchKey.value?.length < 3">Apply
             Filters</ion-button>
             <ion-button color="danger reset-filter" class="action-btn" fill="outline" (click)="resetFilter()">Reset
               Filters</ion-button>

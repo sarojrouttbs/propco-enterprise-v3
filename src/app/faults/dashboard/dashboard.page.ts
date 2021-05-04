@@ -483,7 +483,7 @@ export class DashboardPage implements OnInit {
     }
 
     this.filterForm.get('filterType').reset();
-    this.getList();
+    this.filterList();
 
   }
 
@@ -590,7 +590,7 @@ export class DashboardPage implements OnInit {
     );
 
     this.filterForm.get('statusFilter').setValue(filteredStatus);
-    this.getList();
+    this.filterList();
   }
 
   async onStatusChange() {
@@ -601,7 +601,7 @@ export class DashboardPage implements OnInit {
         this.fs.push(val.index);
       }
     }
-    this.getList();
+    this.filterList();
   }
 
   async onUserChange() {
@@ -612,7 +612,7 @@ export class DashboardPage implements OnInit {
         this.fat.push(val.userId);
       }
     }
-    this.getList();
+    this.filterList();
   }
 
   async onBranchChange() {
@@ -624,7 +624,7 @@ export class DashboardPage implements OnInit {
           this.fpo.push(val.officeCode);
         }
       }
-      this.getList();
+      this.filterList();
     }
   }
 
@@ -636,10 +636,10 @@ export class DashboardPage implements OnInit {
         this.fpm.push(val.index);
       }
     }
-    this.getList();
+    this.filterList();
   }
 
-  getList() {
+  filterList() {
     this.faultParams = this.faultParams.delete('fs');
     this.faultParams = this.faultParams.delete('fat');
     this.faultParams = this.faultParams.delete('fpo');
@@ -798,7 +798,7 @@ export class DashboardPage implements OnInit {
       this.fctd = this.filterForm.get('toDate').value ? this.datepipe.transform(this.filterForm.get('toDate').value, 'yyyy-MM-dd') : '';
     }
 
-    this.getList();
+    this.filterList();
   }
 
   clickCheckbox(controlName) {
@@ -883,7 +883,7 @@ export class DashboardPage implements OnInit {
       this.faultsService.mergeFaults(requestObj, data.faultId).subscribe(response => {
         this.hideMenu('', 'divOverlay');
         this.selectedFaultList = [];
-        this.getList();
+        this.filterList();
       });
     }
   }
@@ -898,10 +898,6 @@ export class DashboardPage implements OnInit {
       });
     });
     return promise;
-  }
-
-  applyFilter() {
-    this.getList();
   }
 }
 
