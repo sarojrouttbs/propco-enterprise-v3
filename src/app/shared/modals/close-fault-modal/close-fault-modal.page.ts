@@ -14,10 +14,14 @@ export class CloseFaultModalPage implements OnInit {
 
   closeFaultForm: FormGroup;
   faultId;
+  maintenanceId;
   reasons = CLOSE_REASON;
   constructor(private fb: FormBuilder, private modalController: ModalController, private faultsService: FaultsService, private commonService: CommonService) { }
 
   ngOnInit() {
+    if (!this.maintenanceId) {
+      this.reasons = CLOSE_REASON.filter(reason => reason.index !== 'APPOINTMENT_NOT_BOOKED');
+    }
     this.initCloseFaultForm()
   }
 

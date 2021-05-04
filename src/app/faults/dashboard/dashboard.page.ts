@@ -287,7 +287,8 @@ export class DashboardPage implements OnInit {
       component: CloseFaultModalPage,
       cssClass: 'modal-container close-fault-modal',
       componentProps: {
-        faultId: this.selectedData.faultId
+        faultId: this.selectedData.faultId,
+        maintenanceId: this.selectedData.maintenanceId
       },
       backdropDismiss: false
     });
