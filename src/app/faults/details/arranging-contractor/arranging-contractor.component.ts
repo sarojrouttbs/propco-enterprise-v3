@@ -1122,9 +1122,9 @@ export class ArrangingContractorComponent implements OnInit {
           let notificationObj = {} as FaultModels.IUpdateNotification;
           notificationObj.isAccepted = data.value;
           notificationObj.submittedByType = 'SECUR_USER';
-          if (this.iacNotification.templateCode === 'CDT-T-E') {
+          // if (this.iacNotification.templateCode === 'CDT-T-E') {
             notificationObj.isEscalateFault = true;
-          }
+          // }
           this.commonService.showLoader();
           await this.saveContractorVisitResponse(this.iacNotification.faultNotificationId, notificationObj);
           this._btnHandler('refresh');
