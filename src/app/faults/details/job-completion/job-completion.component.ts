@@ -737,7 +737,8 @@ export class JobCompletionComponent implements OnInit {
       component: CloseFaultModalPage,
       cssClass: 'modal-container close-fault-modal',
       componentProps: {
-        faultId: this.faultDetails.faultId
+        faultId: this.faultDetails.faultId,
+        maitenanceId: this.isMaintenanceDetails ? this.faultMaintenanceDetails.maintenanceId : null
       },
       backdropDismiss: false
     });
