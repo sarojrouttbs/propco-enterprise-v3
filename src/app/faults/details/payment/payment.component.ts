@@ -141,7 +141,7 @@ export class PaymentComponent implements OnInit {
   }
 
   private getAccessDetails(tenantPresence): string {
-    return (tenantPresence ? MAINT_CONTACT.CONTACT_TENANT  : MAINT_CONTACT.ACCESS_VIA_KEY);
+    return (tenantPresence ? MAINT_CONTACT.CONTACT_TENANT : MAINT_CONTACT.ACCESS_VIA_KEY);
     // if (tenantPresence != null) {
     //   let data = this.accessInfoList.filter(data => data.value == tenantPresence);
     //   return data && data[0] ? data[0].title : '';
@@ -725,7 +725,8 @@ export class PaymentComponent implements OnInit {
       component: CloseFaultModalPage,
       cssClass: 'modal-container close-fault-modal',
       componentProps: {
-        faultId: this.faultDetails.faultId
+        faultId: this.faultDetails.faultId,
+        maitenanceId: this.isMaintenanceDetails ? this.faultMaintenanceDetails.maintenanceId : null
       },
       backdropDismiss: false
     });
