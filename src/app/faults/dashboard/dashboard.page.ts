@@ -9,7 +9,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { NotesModalPage } from '../../shared/modals/notes-modal/notes-modal.page';
 import { EscalateModalPage } from '../../shared/modals/escalate-modal/escalate-modal.page';
 import { ModalController } from '@ionic/angular';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { delay } from 'rxjs/operators';
@@ -64,6 +64,7 @@ export class DashboardPage implements OnInit {
   assignToSubscription: Subscription;
   selectedFaultList: any = [];
   showEscalated = '';
+  searchKey = new FormControl('');
 
   constructor(
     private commonService: CommonService,
@@ -140,7 +141,7 @@ export class DashboardPage implements OnInit {
       invoice: [],
       escalation: [],
       selectedPorts: [],
-      assignToFilter: [],
+      assignToFilter: []
     });
   }
 
@@ -500,6 +501,7 @@ export class DashboardPage implements OnInit {
     this.fctd = '';
     this.filterForm.get('managementFilter').setValue(this.selectedMgmtType);
     this.showEscalated = '';
+    this.searchKey.reset();    
   }
 
   async checkboxClick(controlName?) {
@@ -646,6 +648,7 @@ export class DashboardPage implements OnInit {
     this.faultParams = this.faultParams.delete('fctd');
     this.faultParams = this.faultParams.delete('fus');
     this.faultParams = this.faultParams.delete('showEscalated');
+    this.faultParams = this.faultParams.delete('searchKey');
 
     if (this.fat.length > 0) {
       this.faultParams = this.faultParams.set('fat', this.fat.toString());
@@ -672,6 +675,9 @@ export class DashboardPage implements OnInit {
     }
     if (this.showEscalated.length > 0) {
       this.faultParams = this.faultParams.set('showEscalated', this.showEscalated);
+    }
+    if (this.searchKey.value.length >= 3) {
+      this.faultParams = this.faultParams.set('searchKey', this.searchKey.value.toString());
     }
     this.rerenderFaults();
   }
@@ -894,6 +900,9 @@ export class DashboardPage implements OnInit {
     return promise;
   }
 
+  applyFilter() {
+    this.getList();
+  }
 }
 
 
