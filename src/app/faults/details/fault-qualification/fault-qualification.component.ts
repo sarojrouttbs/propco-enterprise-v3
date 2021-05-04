@@ -1,7 +1,7 @@
 import { CERTIFICATES_CATEGORY, FILE_IDS, PROPCO } from './../../../shared/constants';
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { FAULT_STAGES, FAULT_QUALIFICATION_ACTIONS } from 'src/app/shared/constants';
@@ -55,6 +55,7 @@ export class FaultQualificationComponent implements OnInit {
   proceeding: boolean = false;
   fileIds = FILE_IDS;
   FAULT_STAGES = FAULT_STAGES;
+  @Input() describeFaultForm;
 
   constructor(
     private fb: FormBuilder,
@@ -369,8 +370,11 @@ export class FaultQualificationComponent implements OnInit {
     faultRequestObj.stage = stage;
     faultRequestObj.warrantyCertificateId = qualificationForm.isUnderWarranty && this.warrantyCertificateId ? this.warrantyCertificateId : this.faultDetails.warrantyCertificateId;
     faultRequestObj.serviceContractCertificateId = qualificationForm.isUnderServiceContract && this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId;
-    faultRequestObj.submittedByType = 'SECUR_USER',
-      faultRequestObj.submittedById = ''
+    faultRequestObj.submittedByType = 'SECUR_USER';
+    faultRequestObj.submittedById = '';
+    faultRequestObj.category = this.describeFaultForm.value.category;
+    faultRequestObj.title = this.describeFaultForm.value.title;
+
     if (stageAction) {
       faultRequestObj.stageAction = stageAction;
     }
@@ -392,7 +396,6 @@ export class FaultQualificationComponent implements OnInit {
       this._btnHandler('saveLater');
       return;
     }
-    // this.commonService.showLoader();
     let requestObj = {
       doesBranchHoldKeys: this.faultQualificationForm.value.doesBranchHoldKeys,
       hasMaintTenancyClause: this.faultQualificationForm.value.hasMaintTenancyClause,
@@ -404,7 +407,9 @@ export class FaultQualificationComponent implements OnInit {
       warranrtCertificateId: this.warrantyCertificateId ? this.warrantyCertificateId : this.faultDetails.warrantyCertificateId,
       serviceContractCertificateId: this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId,
       submittedByType: 'SECUR_USER',
-      submittedById: ''
+      submittedById: '',
+      category: this.describeFaultForm.value.category,
+      title: this.describeFaultForm.value.title
     };
     this.faultsService.updateFault(this.faultDetails.faultId, requestObj).subscribe(
       () => {

@@ -88,6 +88,7 @@ export class ArrangingContractorComponent implements OnInit {
   maintenanceJobTypes;
   maintenanceRepairSources;
   faultReportedByThirdParty;
+  @Input() describeFaultForm;
 
   constructor(
     private fb: FormBuilder,
@@ -703,6 +704,9 @@ export class ArrangingContractorComponent implements OnInit {
     faultReqObj.stage = this.faultDetails.stage;
     faultReqObj.submittedByType = 'SECUR_USER';
     faultReqObj.submittedById = '';
+    faultReqObj.category = this.describeFaultForm.value.category;
+    faultReqObj.title = this.describeFaultForm.value.title;
+
     if (stageAction) {
       faultReqObj.stageAction = stageAction;
     }
@@ -730,6 +734,8 @@ export class ArrangingContractorComponent implements OnInit {
             faultRequestObj.stage = this.faultDetails.stage;
             faultRequestObj.submittedById = '';
             faultRequestObj.submittedByType = 'SECUR_USER';
+            faultRequestObj.category = this.describeFaultForm.value.category;
+            faultRequestObj.title = this.describeFaultForm.value.title;
             const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
             if (isFaultUpdated) {
               this.proceeding = false;
@@ -2031,4 +2037,5 @@ export class ArrangingContractorComponent implements OnInit {
       }
     }
   }
+
 }

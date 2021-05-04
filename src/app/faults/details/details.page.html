@@ -638,7 +638,7 @@
         <div *ngIf="showSkeleton">
           <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
         </div>
-        <app-fault-qualification [faultDetails]="faultDetails" [faultCategories]="faultCategories" [propertyDetails]="propertyDetails"  (btnAction)="_childComponentHandler($event)"></app-fault-qualification>
+        <app-fault-qualification [faultDetails]="faultDetails" [faultCategories]="faultCategories" [propertyDetails]="propertyDetails"  (btnAction)="_childComponentHandler($event)" [describeFaultForm]="describeFaultForm"></app-fault-qualification>
       </ng-container>
   </ion-card>
 </ng-template>
@@ -766,7 +766,7 @@
               <div class="question-answer"
                 *ngIf="cliNotification && cliNotification?.responseReceived?.isAccepted === true && (cliNotification?.templateCode === 'LR-L-E' || cliNotification?.templateCode === 'LC-L-E')">
                 <h4 claas="ion-text-center">Next Step:</h4>
-                <ion-button color="success" class="action-btn" fill="{{faultDetails.estimatedVisitAt != null ? 'solid' : 'outline'}}" (click)="llContractor(); $event.stopPropagation();">
+                <ion-button color="success" class="action-btn" fill="solid" (click)="llContractor(); $event.stopPropagation();">
                   {{faultDetails?.landlordOwnContractor?.landlordOwnContractorId!==null?"View/Edit Contractor details":"Add Contractor Details"}}</ion-button>
                 <h6 *ngIf="faultDetails?.landlordOwnContractor?.landlordOwnContractorId === null && !faultDetails?.isEscalated">
                   <ion-text color="danger">Please note: </ion-text>
@@ -1018,7 +1018,8 @@
       [quoteDocuments]="quoteDocuments" 
       [propertyDetails]="propertyDetails"
       [categoryName]="getCategoryName()"
-      [MAX_DOC_UPLOAD_LIMIT]="MAX_DOC_UPLOAD_LIMIT"></app-arranging-contractor>
+      [MAX_DOC_UPLOAD_LIMIT]="MAX_DOC_UPLOAD_LIMIT" 
+      [describeFaultForm]="describeFaultForm"></app-arranging-contractor>
     </ng-container>
   </ion-card>
 </ng-template>
