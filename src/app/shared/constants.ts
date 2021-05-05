@@ -110,7 +110,7 @@ export const FAULT_STAGES_INDEX = {
   PAYMENT: 5
 };
 
-export const LL_INSTRUCTION_TYPES = [
+export const LL_INSTRUCTION_TYPES = [//Don't change the Sequence of values it will alter the CLI functionality 
   {
     index: 'DOES_OWN_REPAIRS',
     value: 'Landlord does their own repairs'
