@@ -404,7 +404,7 @@ export class CommonService {
     document.body.appendChild(a);
     a.href = url;
     a.download = '';
-    if (fileExtension !== 'doc' || fileExtension !== 'odt' || fileExtension !== 'docx') {
+    if (fileExtension !== 'doc' && fileExtension !== 'odt' && fileExtension !== 'docx') {
       a.target = '_blank';
     }
     a.click();
