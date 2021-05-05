@@ -88,6 +88,7 @@ export class ArrangingContractorComponent implements OnInit {
   maintenanceJobTypes;
   maintenanceRepairSources;
   faultReportedByThirdParty;
+  @Input() describeFaultForm;
 
   constructor(
     private fb: FormBuilder,
@@ -706,6 +707,9 @@ export class ArrangingContractorComponent implements OnInit {
     faultReqObj.stage = this.faultDetails.stage;
     faultReqObj.submittedByType = 'SECUR_USER';
     faultReqObj.submittedById = '';
+    faultReqObj.category = this.describeFaultForm.value.category;
+    faultReqObj.title = this.describeFaultForm.value.title;
+
     if (stageAction) {
       faultReqObj.stageAction = stageAction;
     }
@@ -733,6 +737,8 @@ export class ArrangingContractorComponent implements OnInit {
             faultRequestObj.stage = this.faultDetails.stage;
             faultRequestObj.submittedById = '';
             faultRequestObj.submittedByType = 'SECUR_USER';
+            faultRequestObj.category = this.describeFaultForm.value.category;
+            faultRequestObj.title = this.describeFaultForm.value.title;
             const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
             if (isFaultUpdated) {
               this.proceeding = false;
@@ -1119,9 +1125,9 @@ export class ArrangingContractorComponent implements OnInit {
           let notificationObj = {} as FaultModels.IUpdateNotification;
           notificationObj.isAccepted = data.value;
           notificationObj.submittedByType = 'SECUR_USER';
-          if (this.iacNotification.templateCode === 'CDT-T-E') {
+          // if (this.iacNotification.templateCode === 'CDT-T-E') {
             notificationObj.isEscalateFault = true;
-          }
+          // }
           this.commonService.showLoader();
           await this.saveContractorVisitResponse(this.iacNotification.faultNotificationId, notificationObj);
           this._btnHandler('refresh');
@@ -1434,8 +1440,8 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  downloadDocumentByURl(url) {
-    this.commonService.downloadDocumentByUrl(url);
+  downloadDocumentByURl(url, name) {
+    this.commonService.downloadDocumentByUrl(url, name);
   }
 
   async deleteDocument(documentId, i: number) {
@@ -2009,7 +2015,8 @@ export class ArrangingContractorComponent implements OnInit {
       component: CloseFaultModalPage,
       cssClass: 'modal-container close-fault-modal',
       componentProps: {
-        faultId: this.faultDetails.faultId
+        faultId: this.faultDetails.faultId,
+        maitenanceId: this.isMaintenanceDetails ? this.faultMaintenanceDetails.maintenanceId : null
       },
       backdropDismiss: false
     });
@@ -2034,4 +2041,5 @@ export class ArrangingContractorComponent implements OnInit {
       }
     }
   }
+
 }

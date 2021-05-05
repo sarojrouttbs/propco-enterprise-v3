@@ -272,7 +272,8 @@ export const CLOSE_REASON = [
   {
     "index": "APPOINTMENT_NOT_BOOKED",
     "value": "Appointment not booked"
-  }, {
+  },
+  {
     "index": "LANDLORD_WOULD_NOT_FIX",
     "value": "Landlord would not fix"
   },

@@ -398,12 +398,15 @@ export class CommonService {
     link.click();
   }
 
-  downloadDocumentByUrl(url) {
+  downloadDocumentByUrl(url, name?) {
+    const fileExtension = name.split('.')[1];
     let a = document.createElement("a");
     document.body.appendChild(a);
     a.href = url;
     a.download = '';
-    a.target = '_blank';
+    if (fileExtension !== 'doc' && fileExtension !== 'odt' && fileExtension !== 'docx') {
+      a.target = '_blank';
+    }
     a.click();
     document.body.removeChild(a);
   }
