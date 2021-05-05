@@ -689,6 +689,9 @@ export class ArrangingContractorComponent implements OnInit {
     const quoteReqObj: any = JSON.parse(JSON.stringify(this.workOrderForm.getRawValue()));
     delete quoteReqObj.postdate;
     quoteReqObj.nominalCode = typeof quoteReqObj.nominalCode === 'object' ? quoteReqObj.nominalCode.nominalCode : quoteReqObj.nominalCode;
+    /*setting true if user selecting rate field : BE requirement*/
+    quoteReqObj.useCommissionRate = !quoteReqObj.useCommissionRate ? true : false;
+    quoteReqObj.thirdPartySource = !quoteReqObj.thirdPartySource ? null : quoteReqObj.thirdPartySource;
     if (!this.faultMaintenanceDetails) {
       quoteReqObj.isDraft = isDraft;
       quoteReqObj.requiredDate = quoteReqObj.requiredDate ? this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate)) : null;
@@ -1341,7 +1344,7 @@ export class ArrangingContractorComponent implements OnInit {
             });
           } else {
             this.workOrderForm.patchValue({
-              useCommissionRate: this.faultMaintenanceDetails.useCommissionRate
+              useCommissionRate: this.faultMaintenanceDetails.useCommissionRate ? false : true
             });
           }
           if (this.isContractorSearch && typeof contractor === 'object') {

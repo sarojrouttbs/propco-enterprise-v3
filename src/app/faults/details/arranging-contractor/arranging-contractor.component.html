@@ -599,7 +599,7 @@
               <ion-radio [value]="false" checked style="margin-right: 5px;" [disabled]="iacNotification"></ion-radio>
               <ion-label position="fixed" class="ion-label" >Rate(%) </ion-label>
                 <ion-input formControlName="defaultCommissionPercentage" class="ion-input" 
-                [readonly]="!workOrderForm?.value.useCommissionRate "
+                [readonly]="workOrderForm?.value.useCommissionRate "
                 [disabled]="iacNotification || workOrderForm?.value.useCommissionRate"
                 ></ion-input>
             </ion-item>
@@ -607,7 +607,7 @@
               <ion-radio [value]="true" checked style="margin-right: 5px;" [disabled]="iacNotification"></ion-radio>
               <ion-label position="fixed" class="ion-label">Amount(£) </ion-label>
                 <ion-input formControlName="defaultCommissionAmount" class="ion-input" 
-                [readonly]="workOrderForm?.value.useCommissionRate "
+                [readonly]="!workOrderForm?.value.useCommissionRate "
                 [disabled]="iacNotification || !workOrderForm?.value.useCommissionRate"
                 ></ion-input>
             </ion-item>
