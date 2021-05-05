@@ -365,7 +365,7 @@ export class DetailsPage implements OnInit {
 
   }
 
-  private  getStageIndex(details) {
+  private getStageIndex(details) {
     if (details) {
       switch (details.stage) {
         case FAULT_STAGES.FAULT_QUALIFICATION: {
@@ -1534,6 +1534,7 @@ export class DetailsPage implements OnInit {
   async proceedCliAction() {
     let faultRequestObj = {} as FaultModels.IFaultResponse;
     faultRequestObj.isDraft = false;
+    faultRequestObj.title = this.describeFaultForm.value.title;
     Object.assign(faultRequestObj, this.landlordInstFrom.value);
     if (this.contractorEntityId) {
       faultRequestObj.contractorId = this.contractorEntityId;
