@@ -1388,13 +1388,13 @@ export class DetailsPage implements OnInit {
     this.suggestedAction = '';
     let confirmedEstimate = this.faultDetails.confirmedEstimate;
     // if (this.faultDetails.urgencyStatus === URGENCY_TYPES.EMERGENCY || this.faultDetails.urgencyStatus === URGENCY_TYPES.URGENT) {
-    //   this.suggestedAction = LL_INSTRUCTION_TYPES[4].index;
+    //   this.suggestedAction = LL_INSTRUCTION_TYPES[5].index;
     // } else
     if (this.landlordDetails.doesOwnRepairs) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[0].index;
     }
     else if (confirmedEstimate == null || confirmedEstimate <= 0) {
-      this.suggestedAction = LL_INSTRUCTION_TYPES[5].index;
+      this.suggestedAction = LL_INSTRUCTION_TYPES[4].index;//
     }
     else if (this.landlordDetails.isAuthorizationRequired || this.propertyDetails.expenditureLimit == 0 || confirmedEstimate > this.propertyDetails.expenditureLimit) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[3].index; //OBTAIN_AUTHORISATION
@@ -1589,7 +1589,7 @@ export class DetailsPage implements OnInit {
           this.proceeding = false;
         }
         break;
-      case LL_INSTRUCTION_TYPES[4].index: //cli006e
+      case LL_INSTRUCTION_TYPES[5].index: //cli006e
         if (!this.landlordInstFrom.value.confirmedEstimate) {
           this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
           this.proceeding = false;
@@ -1687,7 +1687,7 @@ export class DetailsPage implements OnInit {
           this.proceeding = false;
         }
         break;
-      case LL_INSTRUCTION_TYPES[5].index: //cli006f
+      case LL_INSTRUCTION_TYPES[4].index: //cli006f
         if (this.landlordInstFrom.controls['contractor'].invalid) {
           this.proceeding = false;
           return;
