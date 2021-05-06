@@ -1806,7 +1806,7 @@ export class DetailsPage implements OnInit {
   }
 
   questionAction(data) {
-    if (this.cliNotification && this.cliNotification.responseReceived != null) {
+    if ((this.cliNotification && this.cliNotification.responseReceived != null) || this.faultDetails.isClosed) {
       return;
     }
     if (this.cliNotification.faultStageAction === LL_INSTRUCTION_TYPES[0].index) {

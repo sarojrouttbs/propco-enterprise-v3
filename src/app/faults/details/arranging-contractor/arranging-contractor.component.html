@@ -185,32 +185,32 @@
                   </div>
                 </ng-container>
                 <ng-container *ngIf="iacNotification && 
-                (((
-                  iacNotification?.templateCode === 'CDT-C-E' || 
-                  iacNotification?.templateCode === 'CDT-C-E (WO)') && 
-                  iacNotification?.responseReceived?.isAccepted === true
-                  ) || 
-                  ((
-                    iacNotification?.templateCode === 'CQ-C-E' && 
-                    iacNotification?.responseReceived === null
-                    ) || 
+                (
+                  (
                     (
-                      iacNotification?.templateCode === 'CWO-C-E' &&
-                      (
-                        iacNotification?.responseReceived === null ||
-                        iacNotification?.responseReceived?.isAccepted === false
-                      )
-                    )                          
-                    ))">
+                      iacNotification?.templateCode === 'CDT-C-E' || 
+                      iacNotification?.templateCode === 'CDT-C-E (WO)'
+                    ) && 
+                      iacNotification?.responseReceived?.isAccepted === true
+                  ) || 
+                  (
+                    (
+                      iacNotification?.templateCode === 'CQ-C-E' ||  
+                      iacNotification?.templateCode === 'CWO-C-E' 
+                    ) && (
+                      iacNotification?.responseReceived === null || 
+                      iacNotification?.responseReceived?.isAccepted === false
+                    )
+                  )
+                )">
                   <ion-button color="success" expand="block" class="action-btn"
                       fill="outline"
                       (click)="modifyDateTime(iacNotification?.templateCode); $event.stopPropagation();">
                       Modify Date/Time
                     </ion-button>
-
                 </ng-container>
                 <ion-button color="success" *ngIf="iacNotification && iacNotification?.templateCode === 'CWO-C-E'"  
-                expand="block" class="action-btn" fill="outline" (click)="closeFault()">
+                expand="block" class="action-btn" fill="{{faultDetails?.isClosed ? 'solid' : 'outline'}}" (click)="closeFault()">
                   Close Fault</ion-button>
               </ion-row>
             </ion-grid>
@@ -815,7 +815,7 @@
   <ion-button (click)="_btnHandler('back')" [disabled]="saving || proceeding">Back</ion-button>
   <ion-button (click)="_btnHandler('next')" *ngIf="faultDetails?.stage !== FAULT_STAGES.ARRANGING_CONTRACTOR" [disabled]="saving || proceeding">Next</ion-button>
   <ion-button class="save-button" (click)="_btnHandler('save')" [disabled]="proceeding">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
-  <ion-button class="submit-button" (click)="_btnHandler('proceed')" [disabled]="saving">Proceed<ion-icon *ngIf="proceeding" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+  <ion-button class="submit-button" (click)="_btnHandler('proceed')" [disabled]="saving || faultDetails?.isClosed">Proceed<ion-icon *ngIf="proceeding" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
 </div>
 
 <ng-template #raiseQuoteFormSkeleton>

@@ -1033,7 +1033,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   async questionAction(data) {
-    if (this.iacNotification && this.iacNotification.responseReceived != null) {
+    if ((this.iacNotification && this.iacNotification.responseReceived != null) || this.faultDetails.isClosed) {
       return;
     }
 
@@ -1126,7 +1126,7 @@ export class ArrangingContractorComponent implements OnInit {
           notificationObj.isAccepted = data.value;
           notificationObj.submittedByType = 'SECUR_USER';
           // if (this.iacNotification.templateCode === 'CDT-T-E') {
-            notificationObj.isEscalateFault = true;
+          notificationObj.isEscalateFault = true;
           // }
           this.commonService.showLoader();
           await this.saveContractorVisitResponse(this.iacNotification.faultNotificationId, notificationObj);
@@ -1257,6 +1257,9 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   async openWOJobCompletionModal() {
+    if (this.faultDetails.isClosed) {
+      return;
+    }
     const modal = await this.modalController.create({
       component: WorksorderModalPage,
       cssClass: 'modal-container upload-container',
@@ -1978,6 +1981,9 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   async modifyDateTime(templateCode) {
+    if(this.faultDetails.isClosed){
+      return;
+    }
     let modalData = {
       faultNotificationId: this.iacNotification.faultNotificationId,
       title: "Appointment Date/Time",

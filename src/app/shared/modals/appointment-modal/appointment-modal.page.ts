@@ -32,7 +32,7 @@ export class AppointmentModalPage implements OnInit {
       dateTime: ['', Validators.required],
     });
     const currentDate = new Date();
-    this.minDate = this.commonService.getFormatedDate(currentDate, 'yyyy-MM-ddTHH:mm');
+    // this.minDate = this.commonService.getFormatedDate(currentDate, 'yyyy-MM-ddTHH:mm');
   }
 
   async save() {
