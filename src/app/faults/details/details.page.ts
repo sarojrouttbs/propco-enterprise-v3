@@ -1534,7 +1534,6 @@ export class DetailsPage implements OnInit {
   async proceedCliAction() {
     let faultRequestObj = {} as FaultModels.IFaultResponse;
     faultRequestObj.isDraft = false;
-    faultRequestObj.title = this.describeFaultForm.value.title;
     Object.assign(faultRequestObj, this.landlordInstFrom.value);
     if (this.contractorEntityId) {
       faultRequestObj.contractorId = this.contractorEntityId;
