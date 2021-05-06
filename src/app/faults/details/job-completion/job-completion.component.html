@@ -164,7 +164,7 @@
                         *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
                     </ion-button>
                 </ng-container> -->
-                <ion-button color="success" expand="block" class="action-btn" fill="outline" (click)="closeFault()">
+                <ion-button color="success" expand="block" class="action-btn" fill="{{faultDetails?.isClosed ? 'solid' : 'outline'}}" (click)="closeFault()">
                     Close Fault</ion-button>
                 <ion-button color="success" expand="block" class="action-btn" fill="outline" (click)="resendNotification()" 
                 *ngIf="iacNotification 

@@ -600,7 +600,7 @@
           *ngIf="faultId && faultDetails?.status == 1 && reportedByForm.value.reportedById" [disabled]="saving">Start
           Progress<ion-icon *ngIf="submitting" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button class="save-button" (click)="proceedToNextStage()" *ngIf="faultId && faultDetails?.status != 1" 
-         [disabled]="(cliNotification && (cliNotification.responseReceived == null || cliNotification.responseReceived?.isAccepted == null)) || saving || submitting">
+         [disabled]="(cliNotification && (cliNotification.responseReceived == null || cliNotification.responseReceived?.isAccepted == null)) || saving || submitting || faultDetails?.isClosed">
           Proceed<ion-icon *ngIf="proceeding" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button class="save-button" (click)="reOpenFault()" *ngIf="faultId && faultDetails?.status == 12" [disabled]="saving || submitting || proceeding">Re-open
         </ion-button>
@@ -746,6 +746,10 @@
                         <ion-button color="success" class="action-btn option"
                         fill="{{data?.value == cliNotification?.responseReceived?.isAccepted ? 'solid' :'outline'}}"
                         (click)="questionAction(data)">{{data.text}}</ion-button>
+                      </ng-container>
+                      <ng-container *ngIf="cliNotification?.templateCode === 'LR-L-E' && faultDetails?.isClosed">
+                        <ion-button color="success" class="action-btn option"
+                        fill="solid">Close Fault</ion-button>
                       </ng-container>
                     </ion-row>
                   </ion-grid>
@@ -978,7 +982,7 @@
     <ion-button (click)="goToLastStage()" [disabled]="saving || proceeding">Back</ion-button>
     <ion-button (click)="goToNextStage()" *ngIf="faultDetails?.stage !== FAULT_STAGES.LANDLORD_INSTRUCTION" [disabled]="saving || proceeding">Next</ion-button>
     <ion-button class="save-button" (click)="saveForLater()" [disabled]="proceeding">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
-    <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId" [disabled]="saving">Proceed<ion-icon *ngIf="proceeding" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+    <ion-button class="submit-button" (click)="proceedToNextStage()" *ngIf="faultId" [disabled]="saving || faultDetails?.isClosed">Proceed<ion-icon *ngIf="proceeding" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
   </div>
 </ng-template>
 

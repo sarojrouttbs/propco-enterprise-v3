@@ -566,7 +566,7 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   async questionAction(data) {
-    if (this.iqfNotification && this.iqfNotification.responseReceived != null) {
+    if ((this.iqfNotification && this.iqfNotification.responseReceived != null) || this.faultDetails.isClosed) {
       return;
     }
 

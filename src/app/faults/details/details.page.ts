@@ -365,7 +365,7 @@ export class DetailsPage implements OnInit {
 
   }
 
-  private  getStageIndex(details) {
+  private getStageIndex(details) {
     if (details) {
       switch (details.stage) {
         case FAULT_STAGES.FAULT_QUALIFICATION: {
@@ -1805,7 +1805,7 @@ export class DetailsPage implements OnInit {
   }
 
   questionAction(data) {
-    if (this.cliNotification && this.cliNotification.responseReceived != null) {
+    if ((this.cliNotification && this.cliNotification.responseReceived != null) || this.faultDetails.isClosed) {
       return;
     }
     if (this.cliNotification.faultStageAction === LL_INSTRUCTION_TYPES[0].index) {

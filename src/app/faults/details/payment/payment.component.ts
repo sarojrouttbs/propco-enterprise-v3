@@ -350,7 +350,7 @@ export class PaymentComponent implements OnInit {
   }
 
   async questionAction(data) {
-    if (this.iacNotification && this.iacNotification.responseReceived != null) {
+    if ((this.iacNotification && this.iacNotification.responseReceived != null) || this.faultDetails.isClosed) {
       return;
     }
 
