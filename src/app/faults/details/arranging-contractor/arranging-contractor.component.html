@@ -188,14 +188,19 @@
                 (((
                   iacNotification?.templateCode === 'CDT-C-E' || 
                   iacNotification?.templateCode === 'CDT-C-E (WO)') && 
-                  (
-                    iacNotification?.responseReceived?.isAccepted === true || 
-                    iacNotification?.responseReceived?.isAccepted === false)
+                  iacNotification?.responseReceived?.isAccepted === true
                   ) || 
                   ((
-                    iacNotification?.templateCode === 'CQ-C-E' || 
-                    iacNotification?.templateCode === 'CWO-C-E') && 
+                    iacNotification?.templateCode === 'CQ-C-E' && 
                     iacNotification?.responseReceived === null
+                    ) || 
+                    (
+                      iacNotification?.templateCode === 'CWO-C-E' &&
+                      (
+                        iacNotification?.responseReceived === null ||
+                        iacNotification?.responseReceived?.isAccepted === false
+                      )
+                    )                          
                     ))">
                   <ion-button color="success" expand="block" class="action-btn"
                       fill="outline"
