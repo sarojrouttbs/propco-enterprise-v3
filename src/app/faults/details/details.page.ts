@@ -891,10 +891,10 @@ export class DetailsPage implements OnInit {
         this.files = response.data;
         // this.getDocs();
         if (this.faultDetails.stage === FAULT_STAGES.JOB_COMPLETION) {
-          this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[4]['index'] || data.folderName === FOLDER_NAMES[5]['index']);
+          this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[4]['index'] || data.folderName === FOLDER_NAMES[5]['index']).filter(data => !data.isRejected);
         }
         else {
-          this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[1]['index']);
+          this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[1]['index']).filter(data => !data.isRejected);
         }
         this.prepareDocumentsList();
       }
