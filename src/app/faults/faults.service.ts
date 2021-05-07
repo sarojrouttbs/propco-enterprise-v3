@@ -322,6 +322,10 @@ export class FaultsService {
     return this.httpClient.put(environment.API_BASE_URL + `faults/${faultNotificationId}/wo/contractor-visit`, notificationObj);
   }
 
+  saveFaultDetails(faultId, data): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/save`, data);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
