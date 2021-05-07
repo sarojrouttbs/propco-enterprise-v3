@@ -14,6 +14,7 @@ export class PaymentReceivedModalComponent implements OnInit {
   paymentReceivedForm: FormGroup;
   faultNotificationId;
   paymentMethodTypes = PAYMENT_METHOD_TYPES;
+  showLoader: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -30,7 +31,9 @@ export class PaymentReceivedModalComponent implements OnInit {
   }
 
   submit() {
+    this.showLoader = true;
     if (!this.paymentReceivedForm.valid) {
+      this.showLoader = false;
       this.paymentReceivedForm.markAllAsTouched();
       return;
     }
@@ -41,8 +44,10 @@ export class PaymentReceivedModalComponent implements OnInit {
     //   }
     // }
     this.faultsService.savePaymentReceived(this.faultNotificationId, reqObj).subscribe(res => {
+      this.showLoader = false;
       this.modalController.dismiss('success');
     }, error => {
+      this.showLoader = false;
       // this.commonService.showMessage('Something went wrong on server, please try again.', 'Payment Received','error');
       this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Payment Received', 'error');
     })
