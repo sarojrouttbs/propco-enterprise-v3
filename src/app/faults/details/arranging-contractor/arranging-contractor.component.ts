@@ -1675,14 +1675,12 @@ export class ArrangingContractorComponent implements OnInit {
         let requestObj = {} as any;
         requestObj.isAccepted = data.value;
         requestObj.submittedByType = 'SECUR_USER';
-        if (this.iacNotification.templateCode === 'CWO-NA-T-E-2') {
+        if (this.iacNotification.templateCode === 'CWO-NA-T-E-2' || this.iacNotification.templateCode === 'CDT-C-E (WO)') {
           requestObj.isEscalateFault = true;
         }
         const updateNotf = await this.saveWOContractorVisitResponse(this.iacNotification.faultNotificationId, requestObj);
         if (updateNotf) {
-          this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
-          await this.faultNotification('PROCEED_WITH_WORKSORDER');
-          this.commonService.hideLoader();
+          this._btnHandler('refresh');
         }
 
       }
@@ -1981,7 +1979,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   async modifyDateTime(templateCode) {
-    if(this.faultDetails.isClosed){
+    if (this.faultDetails.isClosed) {
       return;
     }
     let modalData = {
