@@ -992,6 +992,15 @@ export class DetailsPage implements OnInit {
 
   changeTitle(title: any) {
     this.describeFaultForm.controls['title'].setValue(title);
+    if (title) {
+      let reqObj: any = {};
+      reqObj.title = title;
+      reqObj.stage = this.faultDetails.stage;
+      reqObj.isDraft = this.faultDetails.isDraft;
+      reqObj.submittedByType = 'SECUR_USER';
+      reqObj.submittedById = ''
+      this.saveFaultDetails(reqObj, this.faultId);
+    }
     this.isEditable = false;
   }
 
@@ -2260,6 +2269,21 @@ export class DetailsPage implements OnInit {
         });
       }
     }
+  }
+
+  private async saveFaultDetails(data, faultId): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.saveFaultDetails(faultId, data).subscribe(
+        res => {
+          this.commonService.showMessage('Title changed successfully.', 'Fault', 'success');
+          resolve(true);
+        },
+        error => {
+          reject(false)
+        }
+      );
+    });
+    return promise;
   }
 
 }
