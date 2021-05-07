@@ -128,7 +128,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.initForms();
     this.initApiCalls();
     if (this.quoteDocuments) {
-      this.quoteArray = this.quoteDocuments.filter(s => s.documentType === 'QUOTE').filter(s => !s.isRejected);
+      this.quoteArray = this.quoteDocuments.filter(s => s.documentType === 'QUOTE');
     }
   }
 
