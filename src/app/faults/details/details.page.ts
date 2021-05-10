@@ -2107,8 +2107,8 @@ export class DetailsPage implements OnInit {
   }
 
 
-  downloadDocumentByURl(url) {
-    this.commonService.downloadDocumentByUrl(url);
+  downloadDocumentByURl(url, name) {
+    this.commonService.downloadDocumentByUrl(url, name);
   }
 
   async llContractor() {

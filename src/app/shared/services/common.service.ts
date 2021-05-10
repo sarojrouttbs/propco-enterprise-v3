@@ -399,7 +399,7 @@ export class CommonService {
   }
 
   downloadDocumentByUrl(url, name?) {
-    const fileExtension = name.split('.')[1];
+    const fileExtension = name ? name.split('.')[1] : null;
     let a = document.createElement("a");
     document.body.appendChild(a);
     a.href = url;
