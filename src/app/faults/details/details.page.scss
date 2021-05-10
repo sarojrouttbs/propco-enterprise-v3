@@ -166,6 +166,7 @@
     ion-input {
       --padding-bottom: 0px;
     }
+    
   }
 
   .view-details {
@@ -341,6 +342,9 @@
 
 .edit-title-icon{
   margin-left: 0px !important;
+  span:hover{
+    cursor: pointer;
+  }
 }
 
 .contractor-error-message{
