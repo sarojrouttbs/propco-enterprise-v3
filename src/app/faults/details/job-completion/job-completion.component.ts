@@ -486,8 +486,8 @@ export class JobCompletionComponent implements OnInit {
     }
   }
 
-  downloadDocumentByURl(url) {
-    this.commonService.downloadDocumentByUrl(url);
+  downloadDocumentByURl(url, name) {
+    this.commonService.downloadDocumentByUrl(url, name);
   }
 
   async deleteDocument(documentId, i: number) {
