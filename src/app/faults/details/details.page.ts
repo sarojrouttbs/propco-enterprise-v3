@@ -2109,13 +2109,13 @@ export class DetailsPage implements OnInit {
 
 
   downloadDocumentByURl(document) {
-    // this.commonService.downloadDocumentByUrl(url, name);
-    this.faultsService.downloadFaultDocument(document.documentId).subscribe(res => {
-      // saveAs(res, document.name);
-      this.commonService.downloadDocument(res, document.name);
-     }, (error) => {
-       console.log(error);
-     });
+    this.commonService.downloadDocumentByUrl(document.documentUrl, document.name);
+    // this.faultsService.downloadFaultDocument(document.documentId).subscribe(res => {
+    //   // saveAs(res, document.name);
+    //   this.commonService.downloadDocument(res, document.name);
+    //  }, (error) => {
+    //    console.log(error);
+    //  });
   }
 
 
