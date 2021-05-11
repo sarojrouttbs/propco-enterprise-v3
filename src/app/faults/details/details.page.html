@@ -337,7 +337,7 @@
                 <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download">
               </ion-col> -->
               <ion-col size="100">
-                <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file?.documentUrl, file?.name)" title="Click To Download">
+                <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file)" title="Click To Download">
               </ion-col>
             </ion-row>
             <ion-row class="ion-justify-content-between">

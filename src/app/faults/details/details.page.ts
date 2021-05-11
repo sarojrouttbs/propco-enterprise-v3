@@ -15,6 +15,7 @@ import { ContractorDetailsModalPage } from 'src/app/shared/modals/contractor-det
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 import { DOCUMENT } from '@angular/common';
 import { JobCompletionModalPage } from 'src/app/shared/modals/job-completion-modal/job-completion-modal.page';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'fault-details',
@@ -901,18 +902,18 @@ export class DetailsPage implements OnInit {
     })
   }
 
-  downloadFaultDocument(documentId, name) {
-    let fileName = name.split('.')[1];
-    this.faultsService.downloadDocument(documentId).subscribe(response => {
-      if (response) {
-        this.commonService.downloadDocument(response, fileName);
-      }
-    })
-  }
+  // downloadFaultDocument(documentId, name) {
+  //   let fileName = name.split('.')[1];
+  //   this.faultsService.downloadDocument(documentId).subscribe(response => {
+  //     if (response) {
+  //       this.commonService.downloadDocument(response, fileName);
+  //     }
+  //   })
+  // }
 
-  downloadFaultDocumentByUrl(url) {
-    this.commonService.downloadDocumentByUrl(url);
-  }
+  // downloadFaultDocumentByUrl(url) {
+  //   this.commonService.downloadDocumentByUrl(url);
+  // }
 
   //MAT METHODS//
   caseDeatil(): void {
@@ -2107,9 +2108,16 @@ export class DetailsPage implements OnInit {
   }
 
 
-  downloadDocumentByURl(url, name) {
-    this.commonService.downloadDocumentByUrl(url, name);
+  downloadDocumentByURl(document) {
+    // this.commonService.downloadDocumentByUrl(url, name);
+    this.faultsService.downloadFaultDocument(document.documentId).subscribe(res => {
+      saveAs(res, document.name);
+     }, (error) => {
+       console.log(error);
+     });
   }
+
+
 
   async llContractor() {
     if (!this.isContractorModal) {
