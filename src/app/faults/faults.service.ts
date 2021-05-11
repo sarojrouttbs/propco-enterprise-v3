@@ -326,6 +326,10 @@ export class FaultsService {
     return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/save`, data);
   }
 
+  downloadFaultDocument(documentId): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `faults/documents/${documentId}/download`,{ responseType: 'blob' as 'json' });
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
