@@ -395,7 +395,7 @@ export class CommonService {
     const downloadURL = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = downloadURL;
-    link.download = "file." + fileName;
+    link.download = fileName;
     link.click();
   }
 
