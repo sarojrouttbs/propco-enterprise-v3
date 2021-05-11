@@ -1278,8 +1278,8 @@ export class DetailsPage implements OnInit {
     let faultRequestObj = this.createFaultFormValues();
     faultRequestObj.stage = this.faultDetails.stage;
     faultRequestObj.isDraft = true;
-    faultRequestObj.submittedByType = 'SECUR_USER',
-      faultRequestObj.submittedById = ''
+    faultRequestObj.submittedByType = 'SECUR_USER';
+    faultRequestObj.submittedById = '';
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
       faultRequestObj.stage = this.faultDetails.stage;
       faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
