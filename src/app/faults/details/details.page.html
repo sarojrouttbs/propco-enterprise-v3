@@ -337,7 +337,7 @@
                 <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download">
               </ion-col> -->
               <ion-col size="100">
-                <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file?.documentUrl)" title="Click To Download">
+                <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file)" title="Click To Download">
               </ion-col>
             </ion-row>
             <ion-row class="ion-justify-content-between">
@@ -506,9 +506,7 @@
       </ion-col>
       <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId">
         <!-- <ion-icon name="create" (click)="editTitle()" style="font-size: 35px;"></ion-icon> -->
-        <span class="material-icons" (click)="editTitle()">
-          edit
-        </span>
+        <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -629,9 +627,7 @@
               <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
             </ion-col>
             <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId">
-              <span class="material-icons" (click)="editTitle()">
-                edit
-              </span>
+              <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -662,9 +658,7 @@
           <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
         </ion-col>
         <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId">
-          <span class="material-icons" (click)="editTitle()">
-            edit
-          </span>
+          <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -1006,9 +1000,7 @@
             <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
           </ion-col>
           <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId">
-            <span class="material-icons" (click)="editTitle()">
-              edit
-            </span>
+            <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -1048,9 +1040,7 @@
             <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
           </ion-col>
           <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId">
-            <span class="material-icons" (click)="editTitle()">
-              edit
-            </span>
+            <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -1085,9 +1075,7 @@
             <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
           </ion-col>
           <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId">
-            <span class="material-icons" (click)="editTitle()">
-              edit
-            </span>
+            <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
           </ion-col>
         </ion-row>
       </ion-grid>

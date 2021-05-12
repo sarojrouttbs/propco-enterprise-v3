@@ -15,6 +15,7 @@ import { ContractorDetailsModalPage } from 'src/app/shared/modals/contractor-det
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 import { DOCUMENT } from '@angular/common';
 import { JobCompletionModalPage } from 'src/app/shared/modals/job-completion-modal/job-completion-modal.page';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'fault-details',
@@ -901,18 +902,18 @@ export class DetailsPage implements OnInit {
     })
   }
 
-  downloadFaultDocument(documentId, name) {
-    let fileName = name.split('.')[1];
-    this.faultsService.downloadDocument(documentId).subscribe(response => {
-      if (response) {
-        this.commonService.downloadDocument(response, fileName);
-      }
-    })
-  }
+  // downloadFaultDocument(documentId, name) {
+  //   let fileName = name.split('.')[1];
+  //   this.faultsService.downloadDocument(documentId).subscribe(response => {
+  //     if (response) {
+  //       this.commonService.downloadDocument(response, fileName);
+  //     }
+  //   })
+  // }
 
-  downloadFaultDocumentByUrl(url) {
-    this.commonService.downloadDocumentByUrl(url);
-  }
+  // downloadFaultDocumentByUrl(url) {
+  //   this.commonService.downloadDocumentByUrl(url);
+  // }
 
   //MAT METHODS//
   caseDeatil(): void {
@@ -1277,8 +1278,8 @@ export class DetailsPage implements OnInit {
     let faultRequestObj = this.createFaultFormValues();
     faultRequestObj.stage = this.faultDetails.stage;
     faultRequestObj.isDraft = true;
-    faultRequestObj.submittedByType = 'SECUR_USER',
-      faultRequestObj.submittedById = ''
+    faultRequestObj.submittedByType = 'SECUR_USER';
+    faultRequestObj.submittedById = '';
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
       faultRequestObj.stage = this.faultDetails.stage;
       faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -2107,9 +2108,17 @@ export class DetailsPage implements OnInit {
   }
 
 
-  downloadDocumentByURl(url) {
-    this.commonService.downloadDocumentByUrl(url);
+  downloadDocumentByURl(document) {
+    this.commonService.downloadDocumentByUrl(document.documentUrl, document.name);
+    // this.faultsService.downloadFaultDocument(document.documentId).subscribe(res => {
+    //   // saveAs(res, document.name);
+    //   this.commonService.downloadDocument(res, document.name);
+    //  }, (error) => {
+    //    console.log(error);
+    //  });
   }
+
+
 
   async llContractor() {
     if (!this.isContractorModal) {

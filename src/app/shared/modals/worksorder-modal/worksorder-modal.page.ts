@@ -332,6 +332,8 @@ export class WorksorderModalPage implements OnInit {
       req.invoiceAmount = this.jobCompletionForm.value.invoiceAmount;
       req.stage = this.stage;
       req.isDraft = true;
+      req.submittedByType = 'SECUR_USER';
+      req.submittedById = '';
       this.faultsService.updateFault(this.faultId, req).subscribe(
         res => {
           this.showLoader = false;
