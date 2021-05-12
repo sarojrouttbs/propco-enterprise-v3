@@ -198,10 +198,8 @@
                       iacNotification?.templateCode === 'CQ-C-E' ||  
                       iacNotification?.templateCode === 'CWO-C-E' 
                     ) && (
-                      (
-                        iacNotification?.responseReceived === null && 
-                        faultDetails?.isEscalated 
-                      ) ||
+                      iacNotification?.responseReceived === null ||
+                      faultDetails?.isEscalated  ||
                       iacNotification?.responseReceived?.isAccepted === false
                     )
                   )
