@@ -10,6 +10,7 @@ import { DatePipe } from '@angular/common';
 const { Network } = Plugins;
 import { ToastController } from '@ionic/angular';
 import { ToastrService } from 'ngx-toastr';
+import { saveAs } from 'file-saver';
 
 interface Lookupdata {
   obj: Object;
@@ -394,21 +395,25 @@ export class CommonService {
     const downloadURL = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = downloadURL;
-    link.download = "file." + fileName;
+    link.download = fileName;
     link.click();
   }
 
   downloadDocumentByUrl(url, name?) {
-    const fileExtension = name.split('.')[1];
-    let a = document.createElement("a");
-    document.body.appendChild(a);
-    a.href = url;
-    a.download = '';
-    if (fileExtension !== 'doc' && fileExtension !== 'odt' && fileExtension !== 'docx') {
+    const fileExtension = name ? name.split('.')[1] : null;
+    // if (fileExtension !== 'doc' && fileExtension !== 'odt' && fileExtension !== 'docx') {
+    // } 
+    if (fileExtension == 'doc' || fileExtension == 'odt' || fileExtension == 'docx') {
+      saveAs(url, name);
+    } else {
+      let a = document.createElement("a");
+      document.body.appendChild(a);
+      a.href = url;
+      a.download = '';
       a.target = '_blank';
+      a.click();
+      document.body.removeChild(a);
     }
-    a.click();
-    document.body.removeChild(a);
   }
 
   getFileNameFromContent(content) {
