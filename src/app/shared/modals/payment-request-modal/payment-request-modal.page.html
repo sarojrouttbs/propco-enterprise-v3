@@ -22,11 +22,10 @@
   <ion-row>
     <ion-col size="100">
       <ion-item>
-        <ion-label position="floating">Reason</ion-label>
+        <ion-label position="floating">Reason <ion-text class="mandatory">*</ion-text></ion-label>
         <ion-textarea [formControl]="paymentSkippedReason" rows="1"></ion-textarea>
       </ion-item>
       <div *ngIf="paymentSkippedReason.hasError('required') && paymentSkippedReason.touched" class="error-message">This field is required</div>
-      <!-- <app-validation-message [control]="paymentSkippedReason"></app-validation-message> -->
     </ion-col>
   </ion-row>
 </ion-content>

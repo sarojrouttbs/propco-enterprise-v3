@@ -2059,7 +2059,7 @@ export class ArrangingContractorComponent implements OnInit {
   private async paymentRequestModal(data) {
     const modal = await this.modalController.create({
       component: PaymentRequestModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container payment-request-modal',
       componentProps: data,
       backdropDismiss: false
     });
