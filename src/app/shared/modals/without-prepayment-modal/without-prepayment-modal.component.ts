@@ -16,6 +16,7 @@ export class WithoutPrepaymentModalComponent implements OnInit {
   paymentRules;
   paymentWarnings: any[] = [];
   private REPAIR_ESTIMATE_QUOTE_THRESHOLD = 250;
+  showLoader: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -78,13 +79,15 @@ export class WithoutPrepaymentModalComponent implements OnInit {
       this.withoutPrePaymentForm.markAllAsTouched();
       return;
     }
+    this.showLoader = true;
     let reqObj = JSON.parse(JSON.stringify(this.withoutPrePaymentForm.value));
     reqObj.proceedWithoutPaymentAt = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd HH:mm:ss');
 
     this.faultsService.saveProceedWithoutPrePayment(this.faultNotificationId, reqObj).subscribe(res => {
+      this.showLoader = false;
       this.modalController.dismiss('success');
     }, error => {
-      // this.commonService.showMessage('Something went wrong on server, please try again.', 'Proceed without pre-payment', 'error');
+      this.showLoader = false;
       this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Proceed without pre-payment', 'error');
 
     })
