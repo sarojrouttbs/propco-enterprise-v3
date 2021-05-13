@@ -725,7 +725,7 @@ export class ArrangingContractorComponent implements OnInit {
       }
       if (this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
         if (this.isUserActionChange) {
-          if ((this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E')) {
+          if ((this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E'  || this.iacNotification.templateCode === 'CDT-C-E' )) {
             await this.proceedWithQuoteAndWO();
             this.proceeding = false;
             return;
@@ -748,7 +748,7 @@ export class ArrangingContractorComponent implements OnInit {
           }
         }
       }
-      if ((this.iacNotification.templateCode === "QC-L-E" || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E') && this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
+      if ((this.iacNotification.templateCode === "QC-L-E" || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E' || this.iacNotification.templateCode === 'CDT-C-E') && this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
         if (!this.isUserActionChange) {
           await this.proceedWithQuoteAndWO();
           this.proceeding = false;
@@ -982,7 +982,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private disableContractorsList(notification) {
-    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && (notification.templateCode === 'QC-L-E' || notification.templateCode === 'CQ-NA-C-E' || notification.templateCode === 'CQ-A-C-E')) {
+    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && (notification.templateCode === 'QC-L-E' || notification.templateCode === 'CQ-NA-C-E' || notification.templateCode === 'CQ-A-C-E' || notification.templateCode === 'CDT-C-E' ) ) {
       this.restrictAction = false;
     } else {
       this.restrictAction = true;
