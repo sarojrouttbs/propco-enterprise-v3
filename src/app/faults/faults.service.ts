@@ -242,7 +242,7 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/check-payment-rules`);
   }
 
-  issueWorksOrderoContractor(faultId: string, requestObj) {
+  issueWorksOrderContractor(faultId: string, requestObj) {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/issue-wo`, requestObj);
   }
 
