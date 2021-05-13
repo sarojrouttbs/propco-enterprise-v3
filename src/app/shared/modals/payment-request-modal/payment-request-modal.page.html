@@ -41,7 +41,7 @@
     </ion-col>
 
     <ion-col class="ion-text-end" *ngIf="isPaymentSkip">
-      <ion-button (click)="cancelSkipPaymnet()" color="danger">CANCEL</ion-button>
+      <ion-button (click)="cancelSkipPaymnet()" color="danger" [disabled]="showLoader">CANCEL</ion-button>
       <ion-button color="success" (click)="saveSkipPayment()" [disabled]="showLoader">SUBMIT
         <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
       </ion-button>
