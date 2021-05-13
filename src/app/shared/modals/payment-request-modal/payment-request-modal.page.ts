@@ -20,6 +20,7 @@ export class PaymentRequestModalPage implements OnInit {
   isDraft;
   stage;
   paymentSkippedReason = new FormControl('', [Validators.required]);
+  showLoader: boolean = false;
 
   constructor(
     private modalController: ModalController,
@@ -44,6 +45,7 @@ export class PaymentRequestModalPage implements OnInit {
   }
 
   async saveSkipPayment() {
+    this.showLoader = true;
     if (this.paymentSkippedReason.invalid) {
       this.paymentSkippedReason.markAllAsTouched();
       return;
@@ -64,10 +66,14 @@ export class PaymentRequestModalPage implements OnInit {
       await this.updateWorksOrder();
     }
     submit = await this.saveFaultDetails(reqObj) as boolean;
-    if (!submit) return false;
+    if (!submit) {
+      this.showLoader = false;
+      return false;
+    }
     if (submit) {
       const success = await this.issueWorksOrderContractor() as boolean;
       if (success) {
+        this.showLoader = false;
         this.modalController.dismiss('skip-payment');
       }
     }
@@ -79,6 +85,7 @@ export class PaymentRequestModalPage implements OnInit {
         resolve(res);
         this.commonService.showMessage('Successfully Raised', 'Works Order', 'success');
       }, error => {
+        this.showLoader = false;
         resolve(false);
         this.commonService.showMessage('Something went wrong', 'Works Order', 'error');
       });
@@ -93,6 +100,7 @@ export class PaymentRequestModalPage implements OnInit {
           resolve(true);
           this.commonService.showMessage('Successfully Updated', 'Works Order', 'success');
         }, error => {
+          this.showLoader = false;
           resolve(false);
           this.commonService.showMessage('Something went wrong', 'Works Order', 'error');
         });
@@ -107,6 +115,7 @@ export class PaymentRequestModalPage implements OnInit {
           resolve(true);
         },
         error => {
+          this.showLoader = false;
           reject(false)
         }
       );
@@ -124,6 +133,7 @@ export class PaymentRequestModalPage implements OnInit {
           resolve(true);
         },
         error => {
+          this.showLoader = false;
           this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
           resolve(false);
         }
