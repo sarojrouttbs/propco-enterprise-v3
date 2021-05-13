@@ -17,6 +17,7 @@ import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-rec
 import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 import { DomSanitizer } from '@angular/platform-browser';
+import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.page';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -1708,19 +1709,22 @@ export class ArrangingContractorComponent implements OnInit {
     if (paymentRequired) {
       let amountThreshold = await this.getSystemOptions(SYSTEM_OPTIONS.REPAIR_ESTIMATE_QUOTE_THRESHOLD);
       let paymentWarnings = this.commonService.getPaymentWarnings(rules, amountThreshold);
-      let warningsAsHtml = `<ul class="primary">`;
-      for (let warning of paymentWarnings) {
-        warningsAsHtml = warningsAsHtml + `<li>${warning}</li>`;
-      }
-      warningsAsHtml = warningsAsHtml + `</ul>`;
 
-      const response = await this.commonService.showConfirm(this.isWorksOrder ? 'Proceed with Worksorder' : 'Arranging Contractor',
-        `You have selected "${stageAction}".<br/><br/>
-         Since the Landlord account doesn't have sufficient balance to pay for the works, a payment request will be generated and the Landlord will be notified to make an online payment via the portal.<br/>
-         <h4>Reason for this payment request:</h4>
-          ${warningsAsHtml}
-         Do you want to proceed? <br/><br/>
-         <small>NB:The landlord can also make an offline payment which can be processed manually via landlord accounts.</small>`, '', 'Yes', 'No');
+      const isDraft: boolean = true
+      let obj = {
+        title: this.isWorksOrder ? 'Proceed with Worksorder' : 'Arranging Contractor',
+        stageAction: this.isWorksOrder ? 'Proceed with Worksorder' : 'Landlord accepted the quote',
+        paymentWarnings: paymentWarnings,
+        isWoRaised: this.faultMaintenanceDetails ? true : false,
+        woData: !this.faultMaintenanceDetails ? this.prepareWorksOrderData(isDraft) : this.prepareWorksOrderData(),
+        faultId: this.faultDetails.faultId,
+        maintenanceId: this.faultMaintenanceDetails ? this.faultMaintenanceDetails.maintenanceId : '',
+        isDraft: this.faultDetails.isDraft,
+        stage: this.faultDetails.stage
+      }
+
+      let response: any = await this.paymentRequestModal(obj);
+
       if (response) {
         return paymentRequired;
       }
@@ -1826,8 +1830,14 @@ export class ArrangingContractorComponent implements OnInit {
           resolve(true);
         },
         error => {
-          this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
-          resolve(false);
+          if (error.error && error.error.hasOwnProperty('errorCode')) {
+            this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
+            resolve(false);
+          }else{
+            resolve(true);
+          }
+
+          
         }
       );
     });
@@ -2044,6 +2054,25 @@ export class ArrangingContractorComponent implements OnInit {
         });
       }
     }
+  }
+
+  private async paymentRequestModal(data) {
+    const modal = await this.modalController.create({
+      component: PaymentRequestModalPage,
+      cssClass: 'modal-container',
+      componentProps: data,
+      backdropDismiss: false
+    });
+    await modal.present();
+
+    return modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        return true;
+      } else {
+        this._btnHandler('refresh');
+      }
+    });
+
   }
 
 }

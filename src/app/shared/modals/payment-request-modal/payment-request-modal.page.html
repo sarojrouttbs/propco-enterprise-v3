@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{stageAction}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="!isPaymentSkip">
+  <p>You have selected "{{stageAction}}".</p>
+  <p>
+    Since the Landlord account doesn't have sufficient balance to pay for the works, a payment request will be generated
+    and the Landlord will be notified to make an online payment via the portal.
+  </p>
+  <h4>Reason for this payment request:</h4>
+  <ul class="primary">
+    <li *ngFor="let warning of paymentWarnings">{{warning}}</li>
+  </ul>
+  <p>Do you want to proceed? </p>
+  <small>NB:The landlord can also make an offline payment which can be processed manually via landlord accounts.</small>
+</ion-content>
+
+<ion-content *ngIf="isPaymentSkip">
+  <ion-row>
+    <ion-col size="100">
+      <ion-item>
+        <ion-label position="floating">Reason</ion-label>
+        <ion-textarea [formControl]="paymentSkippedReason" rows="1"></ion-textarea>
+      </ion-item>
+      <div *ngIf="paymentSkippedReason.hasError('required') && paymentSkippedReason.touched" class="error-message">This field is required</div>
+      <!-- <app-validation-message [control]="paymentSkippedReason"></app-validation-message> -->
+    </ion-col>
+  </ion-row>
+</ion-content>
+
+<ion-footer>
+  <ion-row>
+    <ion-col class="ion-text-end" *ngIf="!isPaymentSkip">
+      <ion-button (click)="skipPayment()" color="secondary">SKIP PAYMENT</ion-button>
+      <ion-button (click)="dismiss()" color="danger">NO</ion-button>
+      <ion-button color="success" (click)="save()" [disabled]="showLoader">YES
+        <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+      </ion-button>
+    </ion-col>
+
+    <ion-col class="ion-text-end" *ngIf="isPaymentSkip">
+      <ion-button (click)="cancelSkipPaymnet()" color="danger">CANCEL</ion-button>
+      <ion-button color="success" (click)="saveSkipPayment()" [disabled]="showLoader">SUBMIT
+        <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+      </ion-button>
+    </ion-col>
+
+  </ion-row>
+</ion-footer>
