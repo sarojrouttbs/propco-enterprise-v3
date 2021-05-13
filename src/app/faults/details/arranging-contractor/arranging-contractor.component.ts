@@ -1810,7 +1810,7 @@ export class ArrangingContractorComponent implements OnInit {
       let req: any = {};
       req.submittedById = '';
       req.submittedByType = 'SECUR_USER';
-      this.faultsService.issueWorksOrderoContractor(this.faultDetails.faultId, req).subscribe(
+      this.faultsService.issueWorksOrderContractor(this.faultDetails.faultId, req).subscribe(
         res => {
           resolve(true);
         },

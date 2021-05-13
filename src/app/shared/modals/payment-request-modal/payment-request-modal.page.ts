@@ -119,7 +119,7 @@ export class PaymentRequestModalPage implements OnInit {
       let req: any = {};
       req.submittedById = '';
       req.submittedByType = 'SECUR_USER';
-      this.faultsService.issueWorksOrderoContractor(this.faultId, req).subscribe(
+      this.faultsService.issueWorksOrderContractor(this.faultId, req).subscribe(
         res => {
           resolve(true);
         },
