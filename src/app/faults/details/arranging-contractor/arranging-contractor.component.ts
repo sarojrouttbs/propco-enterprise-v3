@@ -726,7 +726,7 @@ export class ArrangingContractorComponent implements OnInit {
       }
       if (this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
         if (this.isUserActionChange) {
-          if ((this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E'  || this.iacNotification.templateCode === 'CDT-C-E' )) {
+          if ((this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E' || this.iacNotification.templateCode === 'CDT-C-E')) {
             await this.proceedWithQuoteAndWO();
             this.proceeding = false;
             return;
@@ -983,7 +983,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private disableContractorsList(notification) {
-    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && (notification.templateCode === 'QC-L-E' || notification.templateCode === 'CQ-NA-C-E' || notification.templateCode === 'CQ-A-C-E' || notification.templateCode === 'CDT-C-E' ) ) {
+    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && (notification.templateCode === 'QC-L-E' || notification.templateCode === 'CQ-NA-C-E' || notification.templateCode === 'CQ-A-C-E' || notification.templateCode === 'CDT-C-E')) {
       this.restrictAction = false;
     } else {
       this.restrictAction = true;
@@ -1190,7 +1190,8 @@ export class ArrangingContractorComponent implements OnInit {
       const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
       if (!rules) { return; }
       this.commonService.showLoader();
-      const paymentRequired = await this.checkForPaymentRules(rules);
+      const actionType = 'auto';
+      const paymentRequired = await this.checkForPaymentRules(rules, actionType);
       const submit = await this.raiseWorksOrderAndNotification(paymentRequired);
       if (submit) {
         this._btnHandler('refresh');
@@ -1703,7 +1704,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   /*iac004 iac007.2*/
-  private async checkForPaymentRules(rules) {
+  private async checkForPaymentRules(rules, actionType?) {
     const paymentRequired = await this.isPaymentRequired(rules);
     const stageAction = this.isWorksOrder ? 'Proceed with Worksorder' : 'Landlord accepted the quote';
     if (paymentRequired) {
@@ -1711,16 +1712,21 @@ export class ArrangingContractorComponent implements OnInit {
       let paymentWarnings = this.commonService.getPaymentWarnings(rules, amountThreshold);
 
       const isDraft: boolean = true
-      let obj = {
+      let obj: any = {
         title: this.isWorksOrder ? 'Proceed with Worksorder' : 'Arranging Contractor',
         stageAction: this.isWorksOrder ? 'Proceed with Worksorder' : 'Landlord accepted the quote',
         paymentWarnings: paymentWarnings,
         isWoRaised: this.faultMaintenanceDetails ? true : false,
-        woData: !this.faultMaintenanceDetails ? this.prepareWorksOrderData(isDraft) : this.prepareWorksOrderData(),
+
         faultId: this.faultDetails.faultId,
         maintenanceId: this.faultMaintenanceDetails ? this.faultMaintenanceDetails.maintenanceId : '',
         isDraft: this.faultDetails.isDraft,
-        stage: this.faultDetails.stage
+        stage: this.faultDetails.stage,
+        actionType: actionType,
+        faultNotificationId: this.iacNotification?.faultNotificationId ? this.iacNotification.faultNotificationId : ''
+      }
+      if (!actionType) {
+        obj.woData = !this.faultMaintenanceDetails ? this.prepareWorksOrderData(isDraft) : this.prepareWorksOrderData();
       }
 
       let response: any = await this.paymentRequestModal(obj);
@@ -1833,11 +1839,11 @@ export class ArrangingContractorComponent implements OnInit {
           if (error.error && error.error.hasOwnProperty('errorCode')) {
             this.commonService.showMessage('Something went wrong', 'Arranging Contractor', 'error');
             resolve(false);
-          }else{
+          } else {
             resolve(true);
           }
 
-          
+
         }
       );
     });
