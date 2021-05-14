@@ -24,7 +24,7 @@
       You have selected 'Yes, Upload Quote and Photos'.
     </ion-text>
     <form style="margin: 15px 0 20px 0;" [formGroup]="quoteAssessmentForm">
-      <ion-grid class="ion-no-padding">
+      <!-- <ion-grid class="ion-no-padding">
         <ion-row class="offer-row">
           <ion-col size-xs="100" size-sm="20" class="offer-amount">
             <ion-label class="offer-amount">Quote Amount:
@@ -38,125 +38,171 @@
             </ng-container>
           </ion-col>
         </ion-row>
+      </ion-grid> -->
+
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col size="100">
+            <ion-item>
+              <ion-label position="stacked">Quote Amount <ion-text class="mandatory">*</ion-text>
+              </ion-label>
+              <input currencyMask formControlName="quoteAmount"
+                (blur)="onBlurCurrency(quoteAssessmentForm.controls.quoteAmount.value, quoteAssessmentForm)" />
+            </ion-item>
+            <app-validation-message [control]="quoteAssessmentForm.controls.quoteAmount"></app-validation-message>
+            <ng-container *ngIf="isLimitExceed">
+              <div class="error-message">Its mandatory to supply photos along with Quotes with value more than
+                £{{QUOTE_LIMIT}}.</div>
+            </ng-container>
+          </ion-col>
+        </ion-row>
       </ion-grid>
+
     </form>
     <ion-text>
-      Please upload the formal quote (mandatory) and photos {{isLimitExceed ? '(required)' : '(optional)'}} otherwise the response will not be recorded.
+      Please upload the formal quote (mandatory) and photos {{isLimitExceed ? '(required)' : '(optional)'}} otherwise
+      the response will not be recorded.
     </ion-text>
     <div style="margin-top: 20px; padding-bottom: 20px;">
       NB: Selecting 'No' will not record the response.
     </div>
     <div class="border-bottom"></div>
-    <h4>Upload Document</h4>
+    <!-- <h4>Upload Document</h4> -->
     <form class="drop-zone" style="margin: 20px 0; padding: 10px 10px 0px 10px; text-align: left; border: 0;"
-    [formGroup]="uploadDocumentForm">
-    <!-- <ion-icon class="icon" name="cloud-upload"></ion-icon> -->
-    <input type="file" class="custom-file-input form-control" id="docFiles"
-      accept=".png,.jpeg,.pdf,.jpg,.gif,.bmp,.text,.doc,.csv,.docx,.odt" multiple
-      (change)="uploadDocument($event.target.files,'quote')">
-    <!-- <span class="drag-text">Drag files to upload here</span> <br> -->
-    <label for="docFiles" class="browse-btn">Browse Files</label>
-  </form>
-  <ion-grid class="ion-no-padding">
-    <ion-row class="ion-no-padding">
-      <ion-col size="33" *ngFor="let file of uploadedQuote; let i=index;">
-       <div class="delete-icon-wrapper img-count">
-         <ion-grid>
-           <ion-row>
-             <ion-col size="100">
-              <img
-              [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" style="height: 130px;">
-               <!-- (click)="downloadFaultDocumentByUrl(file.documentUrl)"> -->
-             </ion-col>
-           </ion-row>
-           <ion-row class="ion-justify-content-between">
-             <ion-col size-xl="80" size-lg="70" size="70">
-               <div class="file-name">{{file.name}}</div>
-             </ion-col>
-             <ion-col size-xl="20" size-lg="30" size="30" class="ion-text-end ion-no-padding">
-              <ion-icon *ngIf="!file?.documentId" (click)="removeFile(i,'quote')" title="Delete File"
-              class="delete-icon" name="close-circle"></ion-icon>
-            <ion-icon *ngIf="file?.documentId" (click)="deleteDocument(i,'quote', file?.documentId)"
-              title="Delete File" class="delete-icon" name="close-circle"></ion-icon>
-             </ion-col>
-           </ion-row>
-         </ion-grid>
-       </div>
-      </ion-col>
-     </ion-row>
-  </ion-grid>
+      [formGroup]="uploadDocumentForm">
+      <!-- <ion-icon class="icon" name="cloud-upload"></ion-icon> -->
+      <!-- <input type="file" class="custom-file-input form-control" id="docFiles"
+        accept=".png,.jpeg,.pdf,.jpg,.gif,.bmp,.text,.doc,.csv,.docx,.odt" multiple
+        (change)="uploadDocument($event.target.files,'quote')">
+      <label for="docFiles" class="browse-btn">Browse Files</label> -->
+
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col size="50" class="ion-text-left ion-no-padding">
+            <h5 class="ion-no-margin" style="margin-top: 5px;">Upload Document</h5>
+          </ion-col>
+          <ion-col size="50" class="ion-text-right ion-no-padding">
+            <input type="file" class="custom-file-input form-control" id="docFiles"
+              accept=".png,.jpeg,.pdf,.jpg,.gif,.bmp,.text,.doc,.csv,.docx,.odt" multiple
+              (change)="uploadDocument($event.target.files,'quote')">
+            <label for="docFiles" class="browse-btn">Browse Files</label>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+    <ion-grid class="ion-no-padding">
+      <ion-row class="ion-no-padding">
+        <ion-col size="33" *ngFor="let file of uploadedQuote; let i=index;">
+          <div class="delete-icon-wrapper img-count">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="100">
+                  <img
+                    [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'"
+                    style="height: 130px;">
+                  <!-- (click)="downloadFaultDocumentByUrl(file.documentUrl)"> -->
+                </ion-col>
+              </ion-row>
+              <ion-row class="ion-justify-content-between">
+                <ion-col size-xl="80" size-lg="70" size="70">
+                  <div class="file-name">{{file.name}}</div>
+                </ion-col>
+                <ion-col size-xl="20" size-lg="30" size="30" class="ion-text-end ion-no-padding">
+                  <ion-icon *ngIf="!file?.documentId" (click)="removeFile(i,'quote')" title="Delete File"
+                    class="delete-icon" name="close-circle"></ion-icon>
+                  <ion-icon *ngIf="file?.documentId" (click)="deleteDocument(i,'quote', file?.documentId)"
+                    title="Delete File" class="delete-icon" name="close-circle"></ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
   <div [hidden]="type != 'photos'">
-    <h4 class="ion-no-margin">Upload Photo</h4>
+    <!-- <h4 class="ion-no-margin">Upload Photo</h4> -->
     <form class="drop-zone" style="margin: 20px 0; padding: 10px 10px 0px 10px; text-align: left; border: 0;"
-    [formGroup]="uploadPhotoForm">
-    <!-- <ion-icon class="icon" name="cloud-upload"></ion-icon> -->
-    <input type="file" class="custom-file-input form-control" id="photoFiles"
-      accept=".png,.jpeg,.jpg" multiple
-      (change)="uploadDocument($event.target.files,'photo')">
-    <!-- <span class="drag-text">Drag files to upload here</span> <br> -->
-    <label for="photoFiles" class="browse-btn">Browse Files</label>
-  </form>
-  <ion-grid class="ion-no-padding">
-    <ion-row class="ion-no-padding">
-      <ion-col size="33" *ngFor="let file of uploadedPhoto; let i=index;">
-       <div class="delete-icon-wrapper img-count">
-         <ion-grid>
-           <ion-row>
-             <ion-col size="100">
-              <img
-              [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" style="height: 130px;">
-               <!-- (click)="downloadFaultDocumentByUrl(file.documentUrl)"> -->
-             </ion-col>
-           </ion-row>
-           <ion-row class="ion-justify-content-between">
-             <ion-col size-xl="80" size-lg="70" size="70">
-               <div class="file-name">{{file.name}}</div>
-             </ion-col>
-             <ion-col size-xl="20" size-lg="30" size="30" class="ion-text-end ion-no-padding">
-              <ion-icon *ngIf="!file?.documentId" (click)="removeFile(i,'photo')" title="Delete File"
-              class="delete-icon" name="close-circle"></ion-icon>
-            <ion-icon *ngIf="file?.documentId" (click)="deleteDocument(i,'photo', file?.documentId)"
-              title="Delete File" class="delete-icon" name="close-circle">
-            </ion-icon>
-             </ion-col>
-           </ion-row>
-         </ion-grid>
-       </div>
-      </ion-col>
-     </ion-row>
-  </ion-grid>
+      [formGroup]="uploadPhotoForm">
+      <!-- <ion-icon class="icon" name="cloud-upload"></ion-icon> -->
+      <!-- <input type="file" class="custom-file-input form-control" id="photoFiles" accept=".png,.jpeg,.jpg" multiple
+        (change)="uploadDocument($event.target.files,'photo')">
+      <label for="photoFiles" class="browse-btn">Browse Files</label> -->
+
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col size="50" class="ion-text-left ion-no-padding">
+            <h5 class="ion-no-margin" style="margin-top: 5px;">Upload Photo</h5>
+          </ion-col>
+          <ion-col size="50" class="ion-text-right ion-no-padding">
+            <input type="file" class="custom-file-input form-control" id="photoFiles" accept=".png,.jpeg,.jpg" multiple
+              (change)="uploadDocument($event.target.files,'photo')">
+            <label for="photoFiles" class="browse-btn">Browse Files</label>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+    <ion-grid class="ion-no-padding">
+      <ion-row class="ion-no-padding">
+        <ion-col size="33" *ngFor="let file of uploadedPhoto; let i=index;">
+          <div class="delete-icon-wrapper img-count">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="100">
+                  <img
+                    [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'"
+                    style="height: 130px;">
+                  <!-- (click)="downloadFaultDocumentByUrl(file.documentUrl)"> -->
+                </ion-col>
+              </ion-row>
+              <ion-row class="ion-justify-content-between">
+                <ion-col size-xl="80" size-lg="70" size="70">
+                  <div class="file-name">{{file.name}}</div>
+                </ion-col>
+                <ion-col size-xl="20" size-lg="30" size="30" class="ion-text-end ion-no-padding">
+                  <ion-icon *ngIf="!file?.documentId" (click)="removeFile(i,'photo')" title="Delete File"
+                    class="delete-icon" name="close-circle"></ion-icon>
+                  <ion-icon *ngIf="file?.documentId" (click)="deleteDocument(i,'photo', file?.documentId)"
+                    title="Delete File" class="delete-icon" name="close-circle">
+                  </ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
 </ion-content>
 <ion-footer>
-<ion-grid [class.unsaved-data-error]="unSavedData || isLimitExceed">
-  <ion-row>
-    <ion-col class="ion-text-right" *ngIf="!unSavedData && !isLimitExceed">
-      <ion-button color="danger" (click)="onCancel()">Cancel</ion-button>
-      <ion-button color="success" (click)="onProceed()" [disabled]="showLoader">Submit
-        <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
-      </ion-button>
-    </ion-col>
-    <ng-container *ngIf="unSavedData && !isLimitExceed">
-      <ion-col size="80">
-        <div class="ion-padding-top">Are you sure you want to cancel the process of uploading the quote photos?</div>
-      </ion-col>
-      <ion-col size="20" class="ion-text-end">
-        <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
-        <ion-button color="success" (click)="dismiss()">Yes</ion-button>
-      </ion-col>
-    </ng-container>
-    <ng-container  *ngIf="isLimitExceed && !unSavedData">
-      <ion-col size="80">
-        <div class="ion-padding-top">Are you sure you want to submit without photos?</div>
-      </ion-col>
-      <ion-col size="20" class="ion-text-end">
-        <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
-        <ion-button color="success" (click)="onProceed(true)" [disabled]="showLoader">Yes
+  <ion-grid [class.unsaved-data-error]="unSavedData || isLimitExceed">
+    <ion-row>
+      <ion-col class="ion-text-right" *ngIf="!unSavedData && !isLimitExceed">
+        <ion-button color="danger" (click)="onCancel()">Cancel</ion-button>
+        <ion-button color="success" (click)="onProceed()" [disabled]="showLoader">Submit
           <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
         </ion-button>
       </ion-col>
-    </ng-container>
-  </ion-row>
-</ion-grid>
+      <ng-container *ngIf="unSavedData && !isLimitExceed">
+        <ion-col size="80">
+          <div class="ion-padding-top">Are you sure you want to cancel the process of uploading the quote photos?</div>
+        </ion-col>
+        <ion-col size="20" class="ion-text-end">
+          <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
+          <ion-button color="success" (click)="dismiss()">Yes</ion-button>
+        </ion-col>
+      </ng-container>
+      <ng-container *ngIf="isLimitExceed && !unSavedData">
+        <ion-col size="80">
+          <div class="ion-padding-top">Are you sure you want to submit without photos?</div>
+        </ion-col>
+        <ion-col size="20" class="ion-text-end">
+          <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
+          <ion-button color="success" (click)="onProceed(true)" [disabled]="showLoader">Yes
+            <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+  </ion-grid>
 </ion-footer>

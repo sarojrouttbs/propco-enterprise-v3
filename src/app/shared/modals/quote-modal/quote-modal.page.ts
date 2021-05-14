@@ -350,4 +350,14 @@ export class QuoteModalPage implements OnInit {
     this.unSavedData = false;
     this.isLimitExceed = false;
   }
+
+  onBlurCurrency(val: any, form: FormGroup) {
+    if (!val) {
+      if (form == this.quoteAssessmentForm) {
+        this.quoteAssessmentForm.patchValue({
+          quoteAmount: ''
+        });
+      }
+    }
+  }
 }

@@ -32,9 +32,10 @@
           </ion-col>
           <ion-col size="100">
             <ion-item>
-              <ion-label position="stacked">Invoice Amount<ion-text class="mandatory" *ngIf="uploadedInvoice && uploadedInvoice?.length > 0" >*</ion-text>
+              <ion-label position="stacked">Invoice Amount<ion-text class="mandatory"
+                  *ngIf="uploadedInvoice && uploadedInvoice?.length > 0">*</ion-text>
               </ion-label>
-              <input currencyMask formControlName="invoiceAmount" style="border: 0"/>
+              <input currencyMask formControlName="invoiceAmount" />
             </ion-item>
           </ion-col>
           <ion-col size="100">
@@ -63,14 +64,27 @@
       </ion-grid>
     </form>
     <!-- <div class="border-bottom"></div> -->
-    <h3>Upload Invoice</h3>
+    <!-- <h3>Upload Invoice</h3> -->
     <form class="drop-zone" style="margin: 20px 0 10px; padding: 10px 10px 0px 10px; text-align: left; border: 0;"
       [formGroup]="uploadDocumentForm">
-      <input type="file" class="custom-file-input form-control" id="docFiles"
+      <!-- <input type="file" class="custom-file-input form-control" id="docFiles"
         accept=".png,.jpeg,.pdf,.jpg,.gif,.bmp,.text,.doc,.csv,.docx,.odt" multiple
         (change)="uploadDocument($event.target.files,'invoice')">
-      <!-- <span class="drag-text">Drag files to upload here</span> <br> -->
-      <label for="docFiles" class="browse-btn">Browse Files</label>
+      <label for="docFiles" class="browse-btn">Browse Files</label> -->
+
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col size="50" class="ion-text-left ion-no-padding">
+            <h5 class="ion-no-margin" style="margin-top: 5px;">Upload Invoice</h5>
+          </ion-col>
+          <ion-col size="50" class="ion-text-right ion-no-padding">
+            <input type="file" class="custom-file-input form-control" id="docFiles"
+              accept=".png,.jpeg,.pdf,.jpg,.gif,.bmp,.text,.doc,.csv,.docx,.odt" multiple
+              (change)="uploadDocument($event.target.files,'invoice')">
+            <label for="docFiles" class="browse-btn">Browse Files</label>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </form>
     <ion-grid class="ion-no-padding">
       <ion-row class="ion-no-padding">
@@ -88,7 +102,8 @@
                   <div class="file-name">{{file.name}}</div>
                 </ion-col>
                 <ion-col size-xl="20" size-lg="30" size="30" class="ion-text-end ion-no-padding">
-                  <ion-icon (click)="removeFile(i,'invoice')" title="Delete File" class="delete-icon" name="close-circle">
+                  <ion-icon (click)="removeFile(i,'invoice')" title="Delete File" class="delete-icon"
+                    name="close-circle">
                   </ion-icon>
                 </ion-col>
               </ion-row>
@@ -99,13 +114,25 @@
     </ion-grid>
   </div>
   <div [hidden]="type != 'photos'">
-    <h3>Upload Photo</h3>
+    <!-- <h3>Upload Photo</h3> -->
     <form class="drop-zone" style="margin: 20px 0 10px; padding: 10px 10px 0px 10px; text-align: left; border: 0;"
       [formGroup]="uploadPhotoForm">
-      <input type="file" class="custom-file-input form-control" id="photoFiles" accept=".png,.jpeg,.jpg" multiple
+      <!-- <input type="file" class="custom-file-input form-control" id="photoFiles" accept=".png,.jpeg,.jpg" multiple
         (change)="uploadDocument($event.target.files,'photo')">
-      <!-- <span class="drag-text">Drag files to upload here</span> <br> -->
-      <label for="photoFiles" class="browse-btn">Browse Files</label>
+      <label for="photoFiles" class="browse-btn">Browse Files</label> -->
+
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col size="50" class="ion-text-left ion-no-padding">
+            <h5 class="ion-no-margin" style="margin-top: 5px;">Upload Photo</h5>
+          </ion-col>
+          <ion-col size="50" class="ion-text-right ion-no-padding">
+            <input type="file" class="custom-file-input form-control" id="photoFiles" accept=".png,.jpeg,.jpg" multiple
+            (change)="uploadDocument($event.target.files,'photo')">
+          <label for="photoFiles" class="browse-btn">Browse Files</label>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </form>
     <ion-grid class="ion-no-padding">
       <ion-row class="ion-no-padding">
