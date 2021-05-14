@@ -30,8 +30,7 @@ export class PaymentRequestModalPage implements OnInit {
     private commonService: CommonService
   ) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   save() {
     this.modalController.dismiss('success');
@@ -63,9 +62,9 @@ export class PaymentRequestModalPage implements OnInit {
     let submit: boolean;
 
     if (this.actionType === 'auto') {
-      submit = await this.saveFaultLLAuth() as boolean;
+      submit = await this.saveFaultDetails(reqObj) as boolean;
       if (submit) {
-        await this.saveFaultDetails(reqObj) as boolean;
+        await this.saveFaultLLAuth() as boolean;
         this.modalController.dismiss('skip-payment');
       }
     } else {
@@ -74,7 +73,6 @@ export class PaymentRequestModalPage implements OnInit {
       } else {
         await this.updateWorksOrder();
       }
-
       submit = await this.saveFaultDetails(reqObj) as boolean;
       if (!submit) {
         this.showLoader = false;
