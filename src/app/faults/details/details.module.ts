@@ -43,6 +43,7 @@ import { PropertyCertificateModalPageModule } from 'src/app/shared/modals/proper
 import { MoreInfoModalPageModule } from 'src/app/shared/modals/more-info-modal/more-info-modal.module';
 import { JobCompletionModalPageModule } from 'src/app/shared/modals/job-completion-modal/job-completion-modal.module';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+import { PaymentRequestModalPageModule } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.module';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -86,7 +87,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     RejectInvoiceModule,
     MoreInfoModalPageModule,
     JobCompletionModalPageModule,
-    CurrencyMaskModule
+    CurrencyMaskModule,
+    PaymentRequestModalPageModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
     PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent, JobCompletionComponent,
