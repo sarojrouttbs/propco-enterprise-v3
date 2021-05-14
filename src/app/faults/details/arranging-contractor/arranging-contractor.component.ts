@@ -1190,9 +1190,8 @@ export class ArrangingContractorComponent implements OnInit {
       const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
       if (!rules) { return; }
       this.commonService.showLoader();
-      // const actionType = 'auto';
-      // const paymentRequired = await this.checkForPaymentRules(rules, actionType);
-      const paymentRequired = await this.checkForPaymentRules(rules);
+      const actionType = 'auto';
+      const paymentRequired = await this.checkForPaymentRules(rules, actionType);
       const submit = await this.raiseWorksOrderAndNotification(paymentRequired);
       if (submit) {
         this._btnHandler('refresh');
@@ -1705,25 +1704,33 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   /*iac004 iac007.2*/
-    private async checkForPaymentRules(rules) {
+  private async checkForPaymentRules(rules, actionType?) {
     const paymentRequired = await this.isPaymentRequired(rules);
     const stageAction = this.isWorksOrder ? 'Proceed with Worksorder' : 'Landlord accepted the quote';
     if (paymentRequired) {
       let amountThreshold = await this.getSystemOptions(SYSTEM_OPTIONS.REPAIR_ESTIMATE_QUOTE_THRESHOLD);
       let paymentWarnings = this.commonService.getPaymentWarnings(rules, amountThreshold);
-      let warningsAsHtml = `<ul class="primary">`;
-      for (let warning of paymentWarnings) {
-        warningsAsHtml = warningsAsHtml + `<li>${warning}</li>`;
-      }
-      warningsAsHtml = warningsAsHtml + `</ul>`;
 
-      const response = await this.commonService.showConfirm(this.isWorksOrder ? 'Proceed with Worksorder' : 'Arranging Contractor',
-        `You have selected "${stageAction}".<br/><br/>
-         Since the Landlord account doesn't have sufficient balance to pay for the works, a payment request will be generated and the Landlord will be notified to make an online payment via the portal.<br/>
-         <h4>Reason for this payment request:</h4>
-          ${warningsAsHtml}
-         Do you want to proceed? <br/><br/>
-         <small>NB:The landlord can also make an offline payment which can be processed manually via landlord accounts.</small>`, '', 'Yes', 'No');
+      const isDraft: boolean = true
+      let obj: any = {
+        title: this.isWorksOrder ? 'Proceed with Worksorder' : 'Arranging Contractor',
+        stageAction: this.isWorksOrder ? 'Proceed with Worksorder' : 'Landlord accepted the quote',
+        paymentWarnings: paymentWarnings,
+        isWoRaised: this.faultMaintenanceDetails ? true : false,
+
+        faultId: this.faultDetails.faultId,
+        maintenanceId: this.faultMaintenanceDetails ? this.faultMaintenanceDetails.maintenanceId : '',
+        isDraft: this.faultDetails.isDraft,
+        stage: this.faultDetails.stage,
+        actionType: actionType,
+        faultNotificationId: this.iacNotification?.faultNotificationId ? this.iacNotification.faultNotificationId : ''
+      }
+      if (!actionType) {
+        obj.woData = !this.faultMaintenanceDetails ? this.prepareWorksOrderData(isDraft) : this.prepareWorksOrderData();
+      }
+
+      let response: any = await this.paymentRequestModal(obj);
+
       if (response) {
         return paymentRequired;
       }
@@ -1737,7 +1744,6 @@ export class ArrangingContractorComponent implements OnInit {
       }
     }
   }
-
 
   private async getSystemOptions(key): Promise<any> {
     const promise = new Promise((resolve, reject) => {
@@ -2065,7 +2071,7 @@ export class ArrangingContractorComponent implements OnInit {
     });
     await modal.present();
 
-    return modal.onDidDismiss().then(async res => {      
+    return modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
         return true;
       } else {

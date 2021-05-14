@@ -19,6 +19,8 @@ export class PaymentRequestModalPage implements OnInit {
   maintenanceId;
   isDraft;
   stage;
+  actionType;
+  faultNotificationId;
   paymentSkippedReason = new FormControl('', [Validators.required]);
   showLoader: boolean = false;
 
@@ -60,21 +62,30 @@ export class PaymentRequestModalPage implements OnInit {
     };
     let submit: boolean;
 
-    if (!this.isWoRaised) {
-      await this.raiseWorksOrder();
-    } else {
-      await this.updateWorksOrder();
-    }
-    submit = await this.saveFaultDetails(reqObj) as boolean;
-    if (!submit) {
-      this.showLoader = false;
-      return false;
-    }
-    if (submit) {
-      const success = await this.issueWorksOrderContractor() as boolean;
-      if (success) {
-        this.showLoader = false;
+    if (this.actionType === 'auto') {
+      submit = await this.saveFaultLLAuth() as boolean;
+      if (submit) {
+        await this.saveFaultDetails(reqObj) as boolean;
         this.modalController.dismiss('skip-payment');
+      }
+    } else {
+      if (!this.isWoRaised) {
+        await this.raiseWorksOrder();
+      } else {
+        await this.updateWorksOrder();
+      }
+
+      submit = await this.saveFaultDetails(reqObj) as boolean;
+      if (!submit) {
+        this.showLoader = false;
+        return false;
+      }
+      if (submit) {
+        const success = await this.issueWorksOrderContractor() as boolean;
+        if (success) {
+          this.showLoader = false;
+          this.modalController.dismiss('skip-payment');
+        }
       }
     }
   }
@@ -142,8 +153,23 @@ export class PaymentRequestModalPage implements OnInit {
     return promise;
   }
 
+  saveFaultLLAuth() {
+    const requestObj: any = {};
+    requestObj.rejectionReason = '';
+    requestObj.isAccepted = true;
+    requestObj.submittedByType = 'SECUR_USER';
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.saveFaultLLAuth(requestObj, this.faultNotificationId).subscribe(res => {
+        resolve(true);
+      }, error => {
+        this.commonService.showMessage('No Authorisation', 'Something went wrong', 'error');
+        resolve(false);
+      })
+    });
+    return promise;
+  }
+
   dismiss() {
     this.modalController.dismiss();
   }
-
 }
