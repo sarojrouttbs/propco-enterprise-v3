@@ -501,7 +501,7 @@ export class DashboardPage implements OnInit {
     this.fctd = '';
     this.filterForm.get('managementFilter').setValue(this.selectedMgmtType);
     this.showEscalated = '';
-    this.searchKey.reset();    
+    this.searchKey.reset();
   }
 
   async checkboxClick(controlName?) {
@@ -890,8 +890,8 @@ export class DashboardPage implements OnInit {
 
   async getFaultMaintenance(faultId) {
     const promise = new Promise((resolve, reject) => {
-      // const params: any = new HttpParams().set('showCancelled', 'false');
-      this.faultsService.getQuoteDetails(faultId).subscribe((res) => {
+      const params: any = new HttpParams().set('showCancelled', 'false');
+      this.faultsService.getQuoteDetails(faultId, params).subscribe((res) => {
         resolve(res ? res.data[0] : false);
       }, error => {
         resolve(false);
