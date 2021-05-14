@@ -17,6 +17,7 @@ import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-rec
 import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 import { DomSanitizer } from '@angular/platform-browser';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-arranging-contractor',
@@ -284,8 +285,8 @@ export class ArrangingContractorComponent implements OnInit {
       if (!this.isWorksOrder) {
         await this.getMaxQuoteRejection();
       }
-      this.initPatching();
       await this.faultNotification(this.faultDetails.stageAction);
+      this.initPatching();
     } else {
       if (!this.isWorksOrder) {
         this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
@@ -301,8 +302,8 @@ export class ArrangingContractorComponent implements OnInit {
 
   private getFaultMaintenance() {
     const promise = new Promise((resolve, reject) => {
-      // const params: any = new HttpParams().set('showCancelled', 'false');
-      this.faultsService.getQuoteDetails(this.faultDetails.faultId).subscribe((res) => {
+      const params: any = new HttpParams().set('showCancelled', 'true');
+      this.faultsService.getQuoteDetails(this.faultDetails.faultId, params).subscribe((res) => {
         this.isMaintenanceDetails = true;
         resolve(res ? res.data[0] : undefined);
       }, error => {
@@ -335,29 +336,42 @@ export class ArrangingContractorComponent implements OnInit {
         this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
       }
     } else {
-      this.workOrderForm.patchValue(
-        {
-          worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
-          description: this.faultMaintenanceDetails.description,
-          orderedBy: this.faultMaintenanceDetails.orderedBy,
-          postdate: this.faultMaintenanceDetails.postdate,
-          // accessDetails: this.faultMaintenanceDetails.accessDetails,
-          contractorId: this.faultMaintenanceDetails.selectedContractorId,
-          nominalCode: this.faultMaintenanceDetails.nominalCode,
-          fullDescription: this.faultMaintenanceDetails.fullDescription,
-          repairCost: this.faultMaintenanceDetails.amount,
-          keysLocation: this.faultMaintenanceDetails.keysLocation,
-          requiredDate: this.faultMaintenanceDetails.requiredCompletionDate,
-          returnKeysTo: this.faultMaintenanceDetails.returnKeysTo,
-          requestStartDate: this.faultMaintenanceDetails.requiredStartDate,
-          jobType: this.faultMaintenanceDetails.jobType,
-          repairSource: this.faultMaintenanceDetails.repairSource,
-          thirdPartySource: this.faultMaintenanceDetails.thirdPartySource
-        }
-      );
-      this.workOrderForm.get('contractorName').disable();
-      this.woSelectContractor(this.faultMaintenanceDetails.selectedContractorId);
-      this.isContractorSearch = false;
+      // if (
+      //   (this.iacNotification && (this.iacNotification?.responseReceived && this.faultMaintenanceDetails.isCancelled) ||
+      //     !this.iacNotification?.responseReceived) ||
+      //   !this.iacNotification && !this.faultMaintenanceDetails.isCancelled
+      // ) {
+
+      // }
+      if (!this.iacNotification && this.faultMaintenanceDetails.isCancelled) {
+        //Note : special case : empty fault Maint var if cancelled
+        this.faultMaintenanceDetails = null;
+      } else {
+        //Note : if creating new WO then skip patching old values  
+        this.workOrderForm.patchValue(
+          {
+            worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
+            description: this.faultMaintenanceDetails.description,
+            orderedBy: this.faultMaintenanceDetails.orderedBy,
+            postdate: this.faultMaintenanceDetails.postdate,
+            // accessDetails: this.faultMaintenanceDetails.accessDetails,
+            contractorId: this.faultMaintenanceDetails.selectedContractorId,
+            nominalCode: this.faultMaintenanceDetails.nominalCode,
+            fullDescription: this.faultMaintenanceDetails.fullDescription,
+            repairCost: this.faultMaintenanceDetails.amount,
+            keysLocation: this.faultMaintenanceDetails.keysLocation,
+            requiredDate: this.faultMaintenanceDetails.requiredCompletionDate,
+            returnKeysTo: this.faultMaintenanceDetails.returnKeysTo,
+            requestStartDate: this.faultMaintenanceDetails.requiredStartDate,
+            jobType: this.faultMaintenanceDetails.jobType,
+            repairSource: this.faultMaintenanceDetails.repairSource,
+            thirdPartySource: this.faultMaintenanceDetails.thirdPartySource
+          }
+        );
+        this.workOrderForm.get('contractorName').disable();
+        this.woSelectContractor(this.faultMaintenanceDetails.selectedContractorId);
+        this.isContractorSearch = false;
+      }
     }
   }
 
@@ -440,7 +454,6 @@ export class ArrangingContractorComponent implements OnInit {
     this.faultsService.getNominalCodes().subscribe(data => {
       this.nominalCodes = data ? data : [];
       this.codes = this.getCodes();
-
     });
   }
 
@@ -533,7 +546,7 @@ export class ArrangingContractorComponent implements OnInit {
         // }
         if (!this.faultMaintenanceDetails) {
           /*raise a worksorder*/
-          if (!this.workOrderForm.get('contractorId').value) { this.commonService.showMessage('Please select a contractor.', 'Works Order', 'error'); return; }
+          if (!this.workOrderForm.get('contractorId').value) { this.commonService.showMessage('Please select a contractor.', 'Works Order', 'error'); this.saving = false; return; }
           const woRaised = await this.raiseWorksOrder();
           if (woRaised) { this._btnHandler('cancel'); }
         } else {
@@ -725,7 +738,7 @@ export class ArrangingContractorComponent implements OnInit {
       }
       if (this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
         if (this.isUserActionChange) {
-          if ((this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E'  || this.iacNotification.templateCode === 'CDT-C-E' )) {
+          if ((this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E' || this.iacNotification.templateCode === 'CDT-C-E')) {
             await this.proceedWithQuoteAndWO();
             this.proceeding = false;
             return;
@@ -737,8 +750,6 @@ export class ArrangingContractorComponent implements OnInit {
             faultRequestObj.stage = this.faultDetails.stage;
             faultRequestObj.submittedById = '';
             faultRequestObj.submittedByType = 'SECUR_USER';
-            faultRequestObj.category = this.describeFaultForm.value.category;
-            faultRequestObj.title = this.describeFaultForm.value.title;
             const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
             if (isFaultUpdated) {
               this.proceeding = false;
@@ -982,7 +993,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private disableContractorsList(notification) {
-    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && (notification.templateCode === 'QC-L-E' || notification.templateCode === 'CQ-NA-C-E' || notification.templateCode === 'CQ-A-C-E' || notification.templateCode === 'CDT-C-E' ) ) {
+    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && (notification.templateCode === 'QC-L-E' || notification.templateCode === 'CQ-NA-C-E' || notification.templateCode === 'CQ-A-C-E' || notification.templateCode === 'CDT-C-E')) {
       this.restrictAction = false;
     } else {
       this.restrictAction = true;
@@ -1470,6 +1481,7 @@ export class ArrangingContractorComponent implements OnInit {
       faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
       faultRequestObj.submittedById = '';
       faultRequestObj.submittedByType = 'SECUR_USER';
+      faultRequestObj.isDraft = false;
       const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
       if (isFaultUpdated) {
         if (value) {
@@ -1556,7 +1568,6 @@ export class ArrangingContractorComponent implements OnInit {
       if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 4) {
         this.raiseQuoteForm.get('nominalCode').setValue(code);
       }
-
       if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 6) {
         this.workOrderForm.get('nominalCode').setValue(code);
       }
@@ -1761,9 +1772,10 @@ export class ArrangingContractorComponent implements OnInit {
         const isDraft = false;
         submit = await this.raiseWorksOrder(isDraft) as boolean;
       } else {
-        const updateWO = await this.updateWorksOrder() as boolean;
-        if (!updateWO) return false;
-        submit = await this.updateFault(true) as boolean;
+        //Note : removed update fault as per BE solution to avoid cancellation of active WO
+        // submit = await this.updateFault(true) as boolean;
+         submit = await this.updateWorksOrder() as boolean;
+        if (!submit) return false;
       }
     }
     if (!submit) return false;
