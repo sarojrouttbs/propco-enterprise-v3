@@ -737,36 +737,34 @@ export class ArrangingContractorComponent implements OnInit {
           this.voidNotification(null);
         }
       }
-      if (this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
-        if (this.isUserActionChange) {
-          if ((this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E' || this.iacNotification.templateCode === 'CDT-C-E')) {
-            await this.proceedWithQuoteAndWO();
-            this.proceeding = false;
-            return;
-          }
-          else {
-            let faultRequestObj: any = {};
-            faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
-            faultRequestObj.isDraft = false;
-            faultRequestObj.stage = this.faultDetails.stage;
-            faultRequestObj.submittedById = '';
-            faultRequestObj.submittedByType = 'SECUR_USER';
-            const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
-            if (isFaultUpdated) {
-              this.proceeding = false;
-              this._btnHandler('refresh');
-              return;
-            }
-          }
-        }
-      }
-      if ((this.iacNotification.templateCode === "QC-L-E" || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E' || this.iacNotification.templateCode === 'CDT-C-E') && this.iacNotification.responseReceived != null && !this.iacNotification.responseReceived.isAccepted) {
-        if (!this.isUserActionChange) {
+      if (this.iacNotification.responseReceived != null) {
+        if (!this.iacNotification.responseReceived.isAccepted && (this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E' || this.iacNotification.templateCode === 'CDT-C-E')) {
           await this.proceedWithQuoteAndWO();
           this.proceeding = false;
           return;
         }
+        else {
+          if (this.isUserActionChange) {
+            let title = this.getLookupValue(this.userSelectedActionControl.value, this.iacStageActions);
+            const proceed = await this.commonService.showConfirm(title, `You have selected ${title}. Are you sure?`)
+            if(proceed){
+              let faultRequestObj: any = {};
+              faultRequestObj.stageAction = this.userSelectedActionControl.value;
+              faultRequestObj.isDraft = false;
+              faultRequestObj.stage = this.faultDetails.stage;
+              faultRequestObj.submittedById = '';
+              faultRequestObj.submittedByType = 'SECUR_USER';
+              const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
+              if (isFaultUpdated) {
+                this.proceeding = false;
+                this._btnHandler('refresh');
+                return;
+              }
+            }
+          }
+        }
       }
+
       if (!this.isUserActionChange) {
         this.proceeding = false;
         this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
@@ -1784,7 +1782,7 @@ export class ArrangingContractorComponent implements OnInit {
       } else {
         //Note : removed update fault as per BE solution to avoid cancellation of active WO
         // submit = await this.updateFault(true) as boolean;
-         submit = await this.updateWorksOrder() as boolean;
+        submit = await this.updateWorksOrder() as boolean;
         if (!submit) return false;
       }
     }
