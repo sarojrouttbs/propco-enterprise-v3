@@ -156,8 +156,8 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/maintenance`, data);
   }
 
-  getQuoteDetails(faultId): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/maintenance`);
+  getQuoteDetails(faultId, params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/maintenance`, { params });
   }
 
   updateFaultQuoteContractor(data, faultId, maintenanceId): Observable<any> {
@@ -327,7 +327,7 @@ export class FaultsService {
   }
 
   downloadFaultDocument(documentId): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `faults/documents/${documentId}/download`,{ responseType: 'blob' as 'json' });
+    return this.httpClient.get(environment.API_BASE_URL + `faults/documents/${documentId}/download`, { responseType: 'blob' as 'json' });
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

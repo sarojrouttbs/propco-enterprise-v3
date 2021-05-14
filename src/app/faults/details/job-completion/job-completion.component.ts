@@ -165,8 +165,8 @@ export class JobCompletionComponent implements OnInit {
 
   private getFaultMaintenance() {
     const promise = new Promise((resolve, reject) => {
-      // const params: any = new HttpParams().set('showCancelled', 'false');
-      this.faultsService.getQuoteDetails(this.faultDetails.faultId).subscribe((res) => {
+      const params: any = new HttpParams().set('showCancelled', 'true');
+      this.faultsService.getQuoteDetails(this.faultDetails.faultId, params).subscribe((res) => {
         this.isMaintenanceDetails = true;
         resolve(res ? res.data[0] : {});
       }, error => {
