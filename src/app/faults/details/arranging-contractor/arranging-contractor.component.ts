@@ -937,7 +937,7 @@ export class ArrangingContractorComponent implements OnInit {
         resolve(null);
       }
       // filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
-      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => !x.isVoided));
+      filtereData = data.filter((x => x.faultStage === stage)).filter((x => !x.isVoided));
       if (filtereData.length === 0) {
         resolve(null);
       }

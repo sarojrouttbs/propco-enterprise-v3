@@ -1587,7 +1587,7 @@ export class DetailsPage implements OnInit {
       case LL_INSTRUCTION_TYPES[2].index: //cli006c
         var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action.<br/>  Are you sure?', '', 'Yes', 'No');
         if (response) {
-          if ((this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
+          if ((this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange)) {
             let voidResponce = await this.voidNotification();
             if(!voidResponce) return; 
           }
