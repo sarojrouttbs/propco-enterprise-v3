@@ -2566,7 +2566,7 @@ export class DetailsPage implements OnInit {
         },
         error => {
           if (error.error && error.error.hasOwnProperty('errorCode')) {
-            this.commonService.showMessage(error.error ? error.error.message : 'Something went wrong', 'Arranging Contractor', 'error');
+            this.commonService.showMessage(error.error ? error.error.message : 'Something went wrong', 'Landlord Instructions', 'error');
             if (error.error.errorCode === ERROR_CODE.PAYMENT_RULES_CHECKING_FAILED && actionType !== 'auto') {
               resolve('saveWorksorder');
             } else {
