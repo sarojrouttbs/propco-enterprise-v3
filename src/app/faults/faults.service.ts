@@ -137,7 +137,8 @@ export class FaultsService {
   }
 
   getFaultNotifications(faultId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/notifications`);
+    const params: any = new HttpParams().set('isResponseExpected', 'true');
+    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/notifications`, { params });
   }
 
   getContractorDetails(contractorId): Observable<any> {
