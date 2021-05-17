@@ -747,7 +747,7 @@ export class ArrangingContractorComponent implements OnInit {
           if (this.isUserActionChange) {
             let title = this.getLookupValue(this.userSelectedActionControl.value, this.iacStageActions);
             const proceed = await this.commonService.showConfirm(title, `You have selected ${title}. Are you sure?`)
-            if(proceed){
+            if (proceed) {
               let faultRequestObj: any = {};
               faultRequestObj.stageAction = this.userSelectedActionControl.value;
               faultRequestObj.isDraft = false;
@@ -937,7 +937,7 @@ export class ArrangingContractorComponent implements OnInit {
         resolve(null);
       }
       // filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
-      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.isResponseExpected)).filter((x => !x.isVoided));
+      filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => !x.isVoided));
       if (filtereData.length === 0) {
         resolve(null);
       }
@@ -1482,6 +1482,7 @@ export class ArrangingContractorComponent implements OnInit {
       faultRequestObj.submittedById = '';
       faultRequestObj.submittedByType = 'SECUR_USER';
       faultRequestObj.isDraft = false;
+      faultRequestObj.stage = this.faultDetails.stage;
       const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
       if (isFaultUpdated) {
         if (value) {
