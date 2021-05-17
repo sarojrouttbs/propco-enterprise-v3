@@ -1,21 +1,24 @@
 import { ModalController, PopoverController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP, MAX_DOC_UPLOAD_SIZE } from './../../shared/constants';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP, MAX_DOC_UPLOAD_SIZE, ERROR_CODE } from './../../shared/constants';
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, Subscription } from 'rxjs';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../faults.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatStepper } from '@angular/material/stepper';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { SimplePopoverPage } from 'src/app/shared/popover/simple-popover/simple-popover.page';
 import { ContractorDetailsModalPage } from 'src/app/shared/modals/contractor-details-modal/contractor-details-modal.page';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 import { DOCUMENT } from '@angular/common';
 import { JobCompletionModalPage } from 'src/app/shared/modals/job-completion-modal/job-completion-modal.page';
 import { saveAs } from 'file-saver';
+import { IonicSelectableComponent } from 'ionic-selectable';
+import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-received-modal/payment-received-modal.component';
+import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
 
 @Component({
   selector: 'fault-details',
@@ -96,6 +99,7 @@ export class DetailsPage implements OnInit {
   showSkeleton = true;
   MAX_DOC_UPLOAD_LIMIT;
   FAULT_STAGES = FAULT_STAGES;
+  isAuthorizationfields = false;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -123,6 +127,11 @@ export class DetailsPage implements OnInit {
   progressing: boolean = false;
   isContractorModal = false;
   fileIds = FILE_IDS;
+  nominalCodes;
+  nominalCodeSubscription: Subscription;
+  codes: FaultModels.NominalCode[];
+  page = 2;
+  currentDate = this.commonService.getFormatedDate(new Date());
 
   constructor(
     private faultsService: FaultsService,
@@ -188,6 +197,10 @@ export class DetailsPage implements OnInit {
         this.setFaultsLookupData(data);
       });
     }
+    this.faultsService.getNominalCodes().subscribe(data => {
+      this.nominalCodes = data ? data : [];
+      this.codes = this.getCodes();
+    });
   }
 
   private setLookupData(data) {
@@ -273,7 +286,11 @@ export class DetailsPage implements OnInit {
       contractor: '',
       confirmedEstimate: ['', Validators.pattern(REGEX.DECIMAL_REGEX)],
       userSelectedAction: '',
-      estimationNotes: ''
+      estimationNotes: '',
+      nominalCode: '',
+      requiredStartDate: '',
+      requiredCompletionDate: '',
+      orderedBy: [{ value: '', disabled: true }],
     });
     this.selectedContractor = this.landlordInstFrom.get('contractor').valueChanges.pipe(debounceTime(1000),
       switchMap((value: string) => (value && value.length > 2) ? this.faultsService.searchContractor(value) :
@@ -342,6 +359,10 @@ export class DetailsPage implements OnInit {
         // this.commonService.hideLoader();
         this.initPatching();
         this.setValidatorsForReportedBy();
+        if (this.faultDetails.userSelectedAction === 'OBTAIN_AUTHORISATION') {
+          this.isAuthorizationfields = true;
+          this.getUserDetails();
+        }
         if (this.faultDetails.reportedBy === 'LANDLORD') {
           await this.getReportedByIdList();
         } else {
@@ -470,7 +491,9 @@ export class DetailsPage implements OnInit {
       // contractor: this.faultDetails.contractorId,
       confirmedEstimate: this.faultDetails.confirmedEstimate,
       userSelectedAction: this.faultDetails.userSelectedAction,
-      estimationNotes: this.faultDetails.estimationNotes
+      estimationNotes: this.faultDetails.estimationNotes,
+      requiredStartDate: this.faultDetails.requiredStartDate,
+      requiredCompletionDate: this.faultDetails.requiredCompletionDate
     });
   }
 
@@ -1225,7 +1248,7 @@ export class DetailsPage implements OnInit {
       sourceType: "FAULT",
       additionalInfo: this.faultDetailsForm.get('additionalInfo').value,
       isDraft: false,
-      stage: FAULT_STAGES.FAULT_LOGGED
+      stage: FAULT_STAGES.FAULT_LOGGED,
     }
     return faultDetails;
   }
@@ -1283,7 +1306,12 @@ export class DetailsPage implements OnInit {
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
       faultRequestObj.stage = this.faultDetails.stage;
       faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
-      Object.assign(faultRequestObj, this.landlordInstFrom.value);
+      // Object.assign(faultRequestObj, this.landlordInstFrom.value);
+      faultRequestObj.contractor = this.landlordInstFrom.value.contractor;
+      faultRequestObj.confirmedEstimate = this.landlordInstFrom.value.confirmedEstimate;
+      faultRequestObj.nominalCode = this.landlordInstFrom.value.nominalCode.nominalCode;
+      faultRequestObj.requiredStartDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredStartDate));
+      faultRequestObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredCompletionDate));
       if (this.contractorEntityId) {
         faultRequestObj.contractorId = this.contractorEntityId;
       } else {
@@ -1389,7 +1417,15 @@ export class DetailsPage implements OnInit {
     //   return;
     // }
     this.isUserActionChange = true;
+    this.isAuthorizationfields = false;
     this.userSelectedActionControl.setValue(index);
+    if (index === 'OBTAIN_AUTHORISATION') {
+      this.getUserDetails();
+      this.addValidations();
+    } else {
+      this.removeValidation();
+
+    }
 
   }
 
@@ -1657,12 +1693,8 @@ export class DetailsPage implements OnInit {
         }
         break;
       case LL_INSTRUCTION_TYPES[3].index: //cli006d
-        if (!this.landlordInstFrom.value.confirmedEstimate) {
-          this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
-          this.proceeding = false;
-          return;
-        }
-        if (this.landlordInstFrom.controls['contractor'].invalid) {
+        if (this.landlordInstFrom.invalid) {
+          this.landlordInstFrom.markAllAsTouched();
           this.proceeding = false;
           return;
         }
@@ -1671,6 +1703,9 @@ export class DetailsPage implements OnInit {
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
+          faultRequestObj.nominalCode = this.landlordInstFrom.value.nominalCode.nominalCode;
+          faultRequestObj.requiredStartDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredStartDate));
+          faultRequestObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredCompletionDate));
           const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -1826,7 +1861,11 @@ export class DetailsPage implements OnInit {
       }
     }
     else if (this.cliNotification.faultStageAction === LL_INSTRUCTION_TYPES[3].index) {
-      this.questionActionLandlordAuth(data);
+      if (this.cliNotification.templateCode === 'LNP-L-E') {
+        this.questionActionWOPayment(data);
+      } else {
+        this.questionActionLandlordAuth(data);
+      }
     }
   }
 
@@ -2289,6 +2328,228 @@ export class DetailsPage implements OnInit {
         },
         error => {
           reject(false)
+        }
+      );
+    });
+    return promise;
+  }
+
+  getMoreCodes(event: {
+    component: IonicSelectableComponent,
+    text: string
+  }) {
+    if (event) {
+      let text = (event.text || '').trim().toLowerCase();
+      this.getCodesAsync(this.page, 10).subscribe(codes => {
+        codes = event.component.items.concat(codes);
+
+        if (text) {
+          codes = this.filterCodes(codes, text);
+        }
+
+        event.component.items = codes;
+        event.component.endInfiniteScroll();
+        this.page++;
+      });
+    }
+
+  }
+
+  getCodes(page?: number, size?: number) {
+    let codes = [];
+
+    this.nominalCodes.forEach(code => {
+      let heading = code.heading ? code.heading.toUpperCase() : '';
+      code.concat = heading + ", " + code.nominalCode + ", " + code.description;
+      if (this.faultDetails.nominalCode) {
+        this.landlordInstFrom.get('nominalCode').setValue(code);
+      }
+      codes.push(code);
+    });
+
+    if (page && size) {
+      codes = this.nominalCodes.slice((page - 1) * size, ((page - 1) * size) + size);
+    }
+
+    return codes;
+  }
+
+  getCodesAsync(page?: number, size?: number, timeout = 2000): Observable<FaultModels.NominalCode[]> {
+    return new Observable<FaultModels.NominalCode[]>(observer => {
+      observer.next(this.getCodes(page, size));
+      observer.complete();
+    }).pipe(delay(timeout));
+  }
+
+  filterCodes(codes: FaultModels.NominalCode[], text: string) {
+    return codes.filter(code => {
+      return code.description.toLowerCase().indexOf(text) !== -1
+    });
+  }
+
+
+  searchCodes(event: { component: IonicSelectableComponent; text: string }) {
+    let text = event.text.trim().toLowerCase();
+    event.component.startSearch();
+
+    // Close any running subscription.
+    if (this.nominalCodeSubscription) {
+      this.nominalCodeSubscription.unsubscribe();
+    }
+
+    if (!text) {
+      // Close any running subscription.
+      if (this.nominalCodeSubscription) {
+        this.nominalCodeSubscription.unsubscribe();
+      }
+
+      event.component.items = this.getCodes(1, 15);
+
+      // Enable and start infinite scroll from the beginning.
+      this.page = 2;
+      event.component.endSearch();
+      event.component.enableInfiniteScroll();
+      return;
+    }
+
+    this.nominalCodeSubscription = this
+      .getCodesAsync()
+      .subscribe(ports => {
+        // Subscription will be closed when unsubscribed manually.
+        if (this.nominalCodeSubscription.closed) {
+          return;
+        }
+        event.component.items = this.filterCodes(ports, text);
+        event.component.endSearch();
+      });
+  }
+
+  endLoading() {
+    this.commonService.hideLoader();
+  }
+
+  startLoading() {
+    this.commonService.showLoader();
+  }
+
+  removeValidation() {
+    this.isAuthorizationfields = false;
+    // this.landlordInstFrom.reset();
+    this.landlordInstFrom.clearValidators();
+    this.landlordInstFrom.updateValueAndValidity()
+    this.landlordInstFrom.patchValue({
+      nominalCode: null,
+      requiredStartDate: null,
+      requiredCompletionDate: null
+    })
+  }
+  addValidations() {
+    this.isAuthorizationfields = true;
+    this.landlordInstFrom.get('nominalCode').setValidators(Validators.required);
+    this.landlordInstFrom.get('nominalCode').updateValueAndValidity();
+    this.landlordInstFrom.get('requiredStartDate').setValidators(Validators.required);
+    this.landlordInstFrom.get('requiredStartDate').updateValueAndValidity();
+    this.landlordInstFrom.get('requiredCompletionDate').setValidators(Validators.required);
+    this.landlordInstFrom.get('requiredCompletionDate').updateValueAndValidity();
+    this.landlordInstFrom.get('confirmedEstimate').setValidators(Validators.required);
+    this.landlordInstFrom.get('confirmedEstimate').updateValueAndValidity();
+    this.landlordInstFrom.get('contractor').setValidators(Validators.required);
+    this.landlordInstFrom.get('contractor').updateValueAndValidity();
+  }
+
+  private getUserDetails() {
+    return new Promise((resolve, reject) => {
+      this.faultsService.getUserDetails().subscribe((res) => {
+        let data = res ? res.data[0] : '';
+        this.landlordInstFrom.get('orderedBy').setValue(data.name);
+        resolve(data);
+      }, error => {
+        reject(error)
+      });
+    });
+  }
+
+  private async questionActionWOPayment(data) {
+    if (data.value) {
+      const modal = await this.modalController.create({
+        component: PaymentReceivedModalComponent,
+        cssClass: 'modal-container',
+        componentProps: {
+          faultNotificationId: this.cliNotification.faultNotificationId,
+        },
+        backdropDismiss: false
+      });
+
+      modal.onDidDismiss().then(async res => {
+        if (res.data && res.data == 'success') {
+          this.refreshDetailsAndStage();
+          await this.checkFaultNotifications(this.faultId);
+          this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
+          this.getPendingHours();
+          if (this.cliNotification && this.cliNotification.responseReceived) {
+            this.isUserActionChange = true;
+            if (this.cliNotification.responseReceived.isAccepted) {
+              this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
+            } else {
+              this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
+            }
+          }
+        }
+      });
+      await modal.present();
+    } else if (!data.value) {
+      const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
+      if (!rules) {
+        return null;
+      }
+      const modal = await this.modalController.create({
+        component: WithoutPrepaymentModalComponent,
+        cssClass: 'modal-container',
+        componentProps: {
+          faultNotificationId: this.cliNotification.faultNotificationId,
+          paymentRules: rules
+        },
+        backdropDismiss: false
+      });
+
+      modal.onDidDismiss().then(async res => {
+        if (res.data && res.data == 'success') {
+          this.refreshDetailsAndStage();
+          await this.checkFaultNotifications(this.faultId);
+          this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
+          this.getPendingHours();
+          if (this.cliNotification && this.cliNotification.responseReceived) {
+            this.isUserActionChange = true;
+            if (this.cliNotification.responseReceived.isAccepted) {
+              this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
+            } else {
+              this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
+            }
+
+          }
+        }
+      });
+      await modal.present();
+    }
+  }
+
+  private getWorksOrderPaymentRules(actionType = 'auto') {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
+        res => {
+          resolve(res);
+        },
+        error => {
+          if (error.error && error.error.hasOwnProperty('errorCode')) {
+            this.commonService.showMessage(error.error ? error.error.message : 'Something went wrong', 'Arranging Contractor', 'error');
+            if (error.error.errorCode === ERROR_CODE.PAYMENT_RULES_CHECKING_FAILED && actionType !== 'auto') {
+              resolve('saveWorksorder');
+            } else {
+              resolve(null);
+            }
+          } else {
+            resolve(null);
+          }
         }
       );
     });
