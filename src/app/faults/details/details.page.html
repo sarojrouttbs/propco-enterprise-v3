@@ -872,6 +872,7 @@
                           </label>                        
                         </ion-item>
                       </ion-list>
+                      <app-validation-message [control]="landlordInstFrom.controls.contractor"></app-validation-message>
                       <div *ngIf="landlordInstFrom.get('contractor').hasError('invalidContractor') && landlordInstFrom.get('contractor').touched" class="contractor-error-message">
                         {{landlordInstFrom.get('contractor').errors.message}}</div>
                     </ion-col>
@@ -885,7 +886,80 @@
                           || userSelectedActionControl.value == 'PROCEED_WITH_WORKSORDER')"
                           #estimate (blur)="showRefreshPopup(estimate.value); onBlurCurrency(landlordInstFrom.controls.confirmedEstimate.value, landlordInstFrom)"/>
                       </ion-item>
+                      <app-validation-message [control]="landlordInstFrom.controls.confirmedEstimate"></app-validation-message>
                     </ion-col>
+
+                    <ion-col size="50" *ngIf="isAuthorizationfields">              
+                      <ion-item class="select-block">
+                        <ion-label position="floating">Nominal Code <ion-text class="mandatory">*</ion-text>
+                        </ion-label>
+                        <ionic-selectable item-content itemValueField="nominalCode" itemTextField="concat" [items]="codes"
+                          [canSearch]="true" [canClear]="true" clearButtonText="Clear" closeButtonSlot="end" confirmButtonText="Apply"
+                          searchPlaceholder="Search Nominal Code" #nominalCodeType formControlName="nominalCode"
+                          [shouldStoreItemValue]="false" class="selectable-height" (click)="startLoading()" (onOpen)="endLoading()"
+                          [shouldBackdropClose]="false">
+              
+                          <ng-template ionicSelectableHeaderTemplate>
+                            <ion-toolbar>
+                              <ion-buttons end>
+                              </ion-buttons>
+                              <ion-title>
+                                {{nominalCodeType.label}}
+                              </ion-title>
+                            </ion-toolbar>
+                          </ng-template>
+              
+                          <ng-template ionicSelectableFooterTemplate>
+                            <ion-toolbar>
+                              <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
+                                (click)="nominalCodeType.confirm();nominalCodeType.close();"
+                                [disabled]="!nominalCodeType.itemsToConfirm.length">
+                                Apply
+                              </ion-button>
+              
+                              <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                                (click)="nominalCodeType.clear();nominalCodeType.close();"
+                                [disabled]="!nominalCodeType.itemsToConfirm.length">
+                                Clear
+                              </ion-button>
+                              <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                                (click)="nominalCodeType.close()">
+                                Cancel
+                              </ion-button>
+                            </ion-toolbar>
+                          </ng-template>
+                        </ionic-selectable>
+                      </ion-item>
+                      <app-validation-message [control]="landlordInstFrom.controls.nominalCode"></app-validation-message>
+                    </ion-col>
+
+                    <ion-col size="50" *ngIf="isAuthorizationfields">
+                      <ion-item>
+                        <ion-label position="floating">Required Start Date <ion-text class="mandatory">*</ion-text></ion-label>
+                        <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
+                          formControlName="requiredStartDate" [min]="currentDate">
+                        </ion-datetime>
+                      </ion-item>
+                      <app-validation-message [control]="landlordInstFrom.controls.requiredStartDate"></app-validation-message>
+                    </ion-col>
+
+                    <ion-col size="50" *ngIf="isAuthorizationfields">
+                      <ion-item>
+                        <ion-label position="floating">Required Completion Date <ion-text class="mandatory">*</ion-text></ion-label>
+                        <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
+                          formControlName="requiredCompletionDate" [min]="currentDate">
+                        </ion-datetime>
+                      </ion-item>
+                      <app-validation-message [control]="landlordInstFrom.controls.requiredCompletionDate"></app-validation-message>
+                    </ion-col>
+
+                    <ion-col size="50" *ngIf="isAuthorizationfields">
+                      <ion-item>
+                        <ion-label position="floating">Ordered By </ion-label>
+                        <ion-input formControlName="orderedBy"></ion-input>
+                      </ion-item>
+                    </ion-col>
+
                     <ion-col size="100">
                       <ion-item>
                         <ion-label position="stacked">Notes</ion-label>
