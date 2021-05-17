@@ -1312,6 +1312,7 @@ export class DetailsPage implements OnInit {
       faultRequestObj.nominalCode = this.landlordInstFrom.value.nominalCode.nominalCode;
       faultRequestObj.requiredStartDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredStartDate));
       faultRequestObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredCompletionDate));
+      faultRequestObj.estimationNotes = this.landlordInstFrom.value.estimationNotes;
       if (this.contractorEntityId) {
         faultRequestObj.contractorId = this.contractorEntityId;
       } else {
