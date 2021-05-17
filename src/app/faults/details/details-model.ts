@@ -95,6 +95,9 @@ declare namespace FaultModels {
         isContractorPaymentDone: boolean;
         invoiceAmount: number;
         stageIndex: number;
+        nominalCode?: string;
+        requiredStartDate?: any;
+        requiredCompletionDate?: any;
     }
 
     export interface AdditionalInfo {
