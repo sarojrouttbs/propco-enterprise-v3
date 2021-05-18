@@ -359,9 +359,9 @@ export class DetailsPage implements OnInit {
         // this.commonService.hideLoader();
         this.initPatching();
         this.setValidatorsForReportedBy();
+        this.getUserDetails();
         if (this.faultDetails.userSelectedAction === 'OBTAIN_AUTHORISATION') {
           this.isAuthorizationfields = true;
-          this.getUserDetails();
         }
         if (this.faultDetails.reportedBy === 'LANDLORD') {
           await this.getReportedByIdList();
@@ -1421,7 +1421,6 @@ export class DetailsPage implements OnInit {
     this.isAuthorizationfields = false;
     this.userSelectedActionControl.setValue(index);
     if (index === 'OBTAIN_AUTHORISATION') {
-      this.getUserDetails();
       this.addValidations();
     } else {
       this.removeValidation();
