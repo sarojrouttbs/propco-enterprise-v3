@@ -150,7 +150,7 @@ export class FaultsService {
   }
 
   saveContractorVisit(faultNotificationId, notificationObj): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/contractor-visit`, notificationObj);
+    return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/quote/contractor-visit`, notificationObj);
   }
 
   raiseQuote(data, faultId): Observable<any> {
@@ -236,7 +236,7 @@ export class FaultsService {
   }
 
   updateWOContractorVisit(faultNotificationId, notificationObj): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/wo-contractor-visit`, notificationObj);
+    return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/wo/contractor-visit`, notificationObj);
   }
 
   getWorksOrderPaymentRules(faultId: string) {
