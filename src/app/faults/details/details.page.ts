@@ -196,6 +196,9 @@ export class DetailsPage implements OnInit {
         this.setFaultsLookupData(data);
       });
     }
+  }
+
+  private getNominalCodes(){
     this.faultsService.getNominalCodes().subscribe(data => {
       this.nominalCodes = data ? data : [];
       this.codes = this.getCodes();
@@ -340,6 +343,7 @@ export class DetailsPage implements OnInit {
             this.contractorSelected(contractorDetails);
           }
         }
+        this.getNominalCodes();
       }
     } else {
       this.faultDetails = <FaultModels.IFaultResponse>{};
