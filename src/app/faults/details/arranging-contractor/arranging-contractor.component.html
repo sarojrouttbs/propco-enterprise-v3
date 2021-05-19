@@ -191,7 +191,7 @@
                       iacNotification?.templateCode === 'CDT-C-E' || 
                       iacNotification?.templateCode === 'CDT-C-E (WO)'
                     ) && 
-                      iacNotification?.responseReceived?.isAccepted === true
+                      (iacNotification?.responseReceived?.isAccepted === true || iacNotification?.responseReceived?.isAccepted === false) 
                   ) || 
                   (
                     (
