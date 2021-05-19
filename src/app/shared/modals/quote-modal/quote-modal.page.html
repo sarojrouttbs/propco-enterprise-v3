@@ -193,10 +193,10 @@
         </ion-col>
       </ng-container>
       <ng-container *ngIf="isLimitExceed && !unSavedData">
-        <ion-col size="80">
+        <ion-col size="70">
           <div class="ion-padding-top">Are you sure you want to submit without photos?</div>
         </ion-col>
-        <ion-col size="20" class="ion-text-end">
+        <ion-col size="30" class="ion-text-end">
           <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
           <ion-button color="success" (click)="onProceed(true)" [disabled]="showLoader">Yes
             <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
