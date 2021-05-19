@@ -1561,14 +1561,6 @@ export class DetailsPage implements OnInit {
           this.proceeding = false;
           return;
         }
-        // if ((this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided) {
-        //   if (this.isUserActionChange) {
-        //     let voidResponce = await this.voidNotification();
-        //     if (voidResponce) {
-        //       this.proceedCliAction();
-        //     }
-        //   }
-        // }
       } else {
         this.isUserActionChange = false;
       }
@@ -1601,7 +1593,7 @@ export class DetailsPage implements OnInit {
         if (response) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
-            if(!voidResponce) return; 
+            if (!voidResponce) return;
           }
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -1624,7 +1616,7 @@ export class DetailsPage implements OnInit {
         if (response) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
-            if(!voidResponce) return; 
+            if (!voidResponce) return;
           }
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -1656,7 +1648,7 @@ export class DetailsPage implements OnInit {
         if (response) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
-            if(!voidResponce) return; 
+            if (!voidResponce) return;
           }
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -1679,7 +1671,7 @@ export class DetailsPage implements OnInit {
         if (response) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
-            if(!voidResponce) return; 
+            if (!voidResponce) return;
           }
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -1717,7 +1709,7 @@ export class DetailsPage implements OnInit {
         if (response) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
-            if(!voidResponce) return; 
+            if (!voidResponce) return;
           }
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -1758,7 +1750,7 @@ export class DetailsPage implements OnInit {
         }
         if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
           let voidResponce = await this.voidNotification();
-          if(!voidResponce) return; 
+          if (!voidResponce) return;
         }
         if (this.landlordInstFrom.get('confirmedEstimate').value > 0) {
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
@@ -1884,7 +1876,7 @@ export class DetailsPage implements OnInit {
       }
     }
     else if (this.cliNotification.faultStageAction === LL_INSTRUCTION_TYPES[3].index) {
-        this.questionActionLandlordAuth(data);
+      this.questionActionLandlordAuth(data);
     }
   }
 
@@ -1948,14 +1940,16 @@ export class DetailsPage implements OnInit {
       this.commonService.showLoader();
       const actionType = WORKSORDER_RAISE_TYPE.AUTO_LL_AUTH;
       const paymentRequired = await this.checkForPaymentRules(rules, actionType, data.text);
-      if(paymentRequired){
+      if (paymentRequired) {
         await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
         this.refreshDetailsAndStage();
+        await this.checkFaultNotifications(this.faultId);
+        this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
       }
     }
   }
 
-  
+
 
   private questionActionJobComplete(data) {
     if (!data.value) {
@@ -2508,8 +2502,7 @@ export class DetailsPage implements OnInit {
     } else {
       const response = await this.commonService.showConfirm(stageAction,
         `You have selected "${stageAction}".<br/><br/>
-         This will raise the worksorder.<br/>
-         <br/> Are you sure?`, '', 'Yes', 'No');
+         This will raise the worksorder. Are you sure?`, '', 'Yes', 'No');
       if (response) {
         return paymentRequired;
       }
@@ -2528,7 +2521,7 @@ export class DetailsPage implements OnInit {
             // if (error.error.errorCode === ERROR_CODE.PAYMENT_RULES_CHECKING_FAILED && actionType !== WORKSORDER_RAISE_TYPE.AUTO) {
             //   resolve('saveWorksorder');
             // } else {
-              resolve(null);
+            resolve(null);
             // }
           } else {
             resolve(null);
@@ -2560,8 +2553,14 @@ export class DetailsPage implements OnInit {
     await modal.present();
 
     return modal.onDidDismiss().then(async res => {
-      if (res.data && res.data == 'success') {
-        return true;
+      if (res.data) {
+        if (res.data == 'success') {
+          return true;
+        } else if (res.data == 'skip-payment') {
+          this.refreshDetailsAndStage();
+          await this.checkFaultNotifications(this.faultId);
+          this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
+        }
       }
       //  else {
       //   this.refreshDetailsAndStage();
