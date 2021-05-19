@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
+import { WORKSORDER_RAISE_TYPE } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -61,10 +62,17 @@ export class PaymentRequestModalPage implements OnInit {
     };
     let submit: boolean;
 
-    if (this.actionType === 'auto') {
+    if (this.actionType === WORKSORDER_RAISE_TYPE.AUTO) {
       submit = await this.saveFaultDetails(reqObj) as boolean;
       if (submit) {
         await this.saveFaultLLAuth() as boolean;
+        this.modalController.dismiss('skip-payment');
+      }
+    } else if (this.actionType === WORKSORDER_RAISE_TYPE.AUTO_LL_AUTH) {
+      submit = await this.saveFaultDetails(reqObj) as boolean;
+      if (submit) {
+        const isAccepted = true;
+        await this.updateFaultNotification(isAccepted, this.faultNotificationId) as boolean;
         this.modalController.dismiss('skip-payment');
       }
     } else {
@@ -151,7 +159,7 @@ export class PaymentRequestModalPage implements OnInit {
     return promise;
   }
 
-  saveFaultLLAuth() {
+  private async saveFaultLLAuth() {
     const requestObj: any = {};
     requestObj.rejectionReason = '';
     requestObj.isAccepted = true;
@@ -163,6 +171,23 @@ export class PaymentRequestModalPage implements OnInit {
         this.commonService.showMessage('No Authorisation', 'Something went wrong', 'error');
         resolve(false);
       })
+    });
+    return promise;
+  }
+
+  private async updateFaultNotification(data, faultNotificationId): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      let notificationObj = {} as FaultModels.IUpdateNotification;
+      notificationObj.isAccepted = data;
+      notificationObj.submittedByType = 'SECUR_USER';
+      this.faultsService.updateNotification(faultNotificationId, notificationObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          reject(error)
+        }
+      );
     });
     return promise;
   }

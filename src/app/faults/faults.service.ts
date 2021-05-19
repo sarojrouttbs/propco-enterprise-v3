@@ -331,6 +331,35 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `faults/documents/${documentId}/download`, { responseType: 'blob' as 'json' });
   }
 
+  isWorksOrderPaymentRequired(rules: FaultModels.IFaultWorksorderRules): boolean {
+    let paymentNeeded = false;
+    if (rules && rules.hasOwnProperty('hasSufficientReserveBalance')) {
+      if (rules.hasSufficientReserveBalance === true) {
+        paymentNeeded = false;
+      } else {
+        if (rules.hasOtherInvoicesToBePaid === true) {
+          paymentNeeded = true;
+        }
+        else if (rules.hasRentArrears === true) {
+          paymentNeeded = true;
+        }
+        else if (rules.hasRentPaidUpFront === true) {
+          paymentNeeded = true;
+        }
+        else if (rules.hasTenantPaidRentOnTime === false) {
+          paymentNeeded = true;
+        }
+        else if (rules.isFaultEstimateLessThanHalfRentOrThresHoldValue === false) {
+          paymentNeeded = true;
+        }
+        else if (rules.isTenancyGivenNoticeOrInLastMonth === true) {
+          paymentNeeded = true;
+        }
+      }
+    }
+    return paymentNeeded;
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);

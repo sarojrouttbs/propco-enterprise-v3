@@ -910,21 +910,20 @@
                           </ng-template>
               
                           <ng-template ionicSelectableFooterTemplate>
-                            <ion-toolbar>
-                              <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
-                                (click)="nominalCodeType.confirm();nominalCodeType.close();"
-                                [disabled]="!nominalCodeType.itemsToConfirm.length">
-                                Apply
+                            <ion-toolbar>                             
+                              <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                                (click)="nominalCodeType.close()">
+                                Cancel
                               </ion-button>
-              
                               <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
                                 (click)="nominalCodeType.clear();nominalCodeType.close();"
                                 [disabled]="!nominalCodeType.itemsToConfirm.length">
                                 Clear
                               </ion-button>
-                              <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
-                                (click)="nominalCodeType.close()">
-                                Cancel
+                              <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
+                                (click)="nominalCodeType.confirm();nominalCodeType.close();"
+                                [disabled]="!nominalCodeType.itemsToConfirm.length">
+                                Apply
                               </ion-button>
                             </ion-toolbar>
                           </ng-template>
