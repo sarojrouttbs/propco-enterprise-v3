@@ -670,7 +670,9 @@
         <!-- <ion-col offset-xl="25" size-xl="50" offset ="0" size="100">  -->
         <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
           <div class="landlord-instructions">
-            <div class="banner" *ngIf="!cliNotification">
+            <app-close-fault *ngIf="faultDetails?.isClosed" [notificationData]="cliNotification" [faultDetails]="faultDetails" [action]="getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes)? getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes):'Landlord Instructions'"></app-close-fault>
+
+            <div class="banner" *ngIf="!cliNotification && !faultDetails?.isClosed">
               <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
               <ion-button color="{{(suggestedAction == 'AGENT_OF_NECESSITY') ? 'danger' : 'success'}}"
                 class="icon-button" (click)="setUserAction(suggestedAction)"
@@ -702,12 +704,13 @@
                 </ion-row>
               </ion-grid>
             </div>
-            <div *ngIf="cliNotification">
+
+            <div *ngIf="cliNotification && !faultDetails?.isClosed">
               <div class="banner">
                 <div class="ion-text-left">
                   <b>{{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}</b>
                 </div>
-                <h2 class="banner-heading">
+                <h2 class="banner-heading" >
                   {{cliNotification && cliNotification?.responseReceived ? 'Response Received': 
                   (cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?'No response':'Awaiting response')}}
                 </h2>
@@ -717,7 +720,7 @@
                   <ion-icon name="checkmark-circle-outline"></ion-icon>
                 </ion-button>
                 
-                <ng-container *ngIf="cliNotification && cliNotification?.responseReceived && cliNotification?.recipientType === 8">
+                <ng-container *ngIf="cliNotification && cliNotification?.responseReceived && cliNotification?.recipientType === 8 ">
                   <h6 class="banner-title response-recived"><ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from Landlord {{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }} </h6>
                 </ng-container>
   

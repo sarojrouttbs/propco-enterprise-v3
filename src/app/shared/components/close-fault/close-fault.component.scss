@@ -1,0 +1,204 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -ms-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+}
+
+
+    .action-btn {
+        margin-right: 20px;
+    }
+    .banner {
+        text-align: center;
+        background: var(--ion-background-color);
+        border-radius: 8px;
+        padding: 30px 30px;
+        margin-bottom: 20px;
+        .icon-button {
+            @include set-text-style(16px, 20px);
+            height: 40px;
+            ion-icon {
+                padding-left: 16px;
+                @include set-text-style(30px, 20px);
+            }
+        }
+        ion-button {
+            background-color: white;
+            border-radius: 4px;
+        }
+        .check-icon {
+            padding-left: 16px;
+        }
+    }
+    .ownRepair {
+        color: var(--ion-color-danger);
+        font-size: 14px;
+        margin-top: 1px;
+    }
+    .question-answer {
+        text-align: center;
+        ion-button.option {
+            text-transform: none;
+        }
+        .border-bottom {
+            border: 1px solid var(--ion-color-step-1400);
+            margin: 20px 0px;
+        }
+    }
+    .preferred-supplier {
+        margin-top: 30px;
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid var(--ion-color-step-1600);
+        }
+
+        th {
+            background-color: var(--ion-color-step-1400);
+        }
+        td,
+        th {
+            text-align: left;
+            padding: 15px;
+        }
+        tr:nth-child(even) {
+            background-color: var(--ion-color-step-1800);
+        }
+        tr:nth-child(odd) {
+            background-color: var(--ion-color-step-1600);
+        }
+    }
+
+:host ::ng-deep .mat-form-field-wrapper {
+    position: absolute !important;
+    width: 100%;
+}
+
+.contractor-list {
+    width: 100%;
+    max-height: 200px;
+    overflow-y: scroll;
+    position: absolute !important;
+    z-index: 5 !important;
+    cursor: pointer;
+}
+
+.back-button {
+    cursor: pointer;
+    font-size: 20px;
+    margin-top: 3px;
+}
+
+.display-none {
+    display: none;
+}
+
+.folder-wrapper {
+    text-align: center;
+    height: 180px;
+    padding-top: 45px;
+    cursor: pointer;
+}
+
+.folder-icon {
+    font-size: 100px;
+    color: #939393bf;
+}
+
+.folder-icon:hover {
+    color: #939393;
+}
+
+.fault-description {
+    --padding-bottom: 0px !important;
+}
+
+.response-recived {
+    color: var(--ion-color-primary);
+}
+
+.awaiting-response {
+    color: var(--ion-color-warning);
+}
+.no-response {
+    color: var(--ion-color-danger);
+}
+
+.response-circle {
+    font-size: 13px;
+}
+
+.fault-title {
+    .material-icons {
+        font-size: 21px;
+        margin-top: 10px;
+    }
+    .edit-title {
+        font-size: 25px;
+        margin-top: 10px;
+    }
+    padding: 0px 20px 0px 20px;
+}
+
+.edit-title-icon {
+    margin-left: 0px !important;
+    span:hover {
+        cursor: pointer;
+    }
+}
+
+.contractor-error-message {
+    color: var(--ion-color-danger);
+    padding-top: 2px;
+    font-size: 14px;
+}
+
+.tab-skeleton {
+    padding-left: 5px;
+    padding-right: 10px;
+    ion-col {
+        padding-right: 0px;
+    }
+    ion-skeleton-text {
+        height: 50px;
+    }
+}
+
+.input-skeleton {
+    padding-left: 5px;
+    padding-right: 10px;
+    ion-skeleton-text {
+        height: 25px;
+    }
+    ion-thumbnail > ion-skeleton-text {
+        height: 160px;
+        width: 200px;
+    }
+}
+
+.action-btn-group > ion-skeleton-text {
+    width: 8%;
+    float: right;
+    margin-left: 10px;
+    height: 40px;
+}
+
+input {
+    border: 0;
+    outline: 0;
+    padding: 5px 0;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .landlord-instructions,
+    .arranging-contractor,
+    .fault-qualification {
+        padding: 0px 20px 0px 20px;
+    }
+}

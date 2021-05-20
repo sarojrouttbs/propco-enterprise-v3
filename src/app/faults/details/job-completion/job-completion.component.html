@@ -1,6 +1,12 @@
 
   <ion-grid>
-    <ion-row *ngIf="iacNotification && !showSkeleton">
+    <ion-row *ngIf="faultDetails?.isClosed">
+      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+        <app-close-fault  [notificationData]="iacNotification" [faultDetails]="faultDetails" [action]="getLookupValue(iacNotification?.faultStageAction, iacStageActions) || getLookupValue(faultDetails?.userSelectedAction, iacStageActions) || getLookupValue(iacNotification?.faultStageAction, faultQualificationsAction)?getLookupValue(iacNotification?.faultStageAction, iacStageActions) || getLookupValue(faultDetails?.userSelectedAction, iacStageActions) || getLookupValue(iacNotification?.faultStageAction, faultQualificationsAction): 'Job Completion'"></app-close-fault>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="iacNotification && !showSkeleton && !faultDetails?.isClosed">
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
         <div class="arranging-contractor">
           <div class="banner">
