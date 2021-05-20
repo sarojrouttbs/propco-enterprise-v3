@@ -87,7 +87,7 @@
                 <span>Thank you for carrying out this quote. This is now with the Landlord for review. If we require you to
                   carry out the job, we will be back in touch.</span>
               </h6>
-              <ion-button color="success" class="action-btn" fill="solid" (click)="quoteUploadModal('preUpload'); $event.stopPropagation();" *ngIf="quoteArray?.length === 0">Upload Quote & Photos</ion-button>
+              <ion-button color="success" class="action-btn" fill="outline" (click)="quoteUploadModal('preUpload'); $event.stopPropagation();" *ngIf="quoteArray?.length === 0">Upload Quote & Photos</ion-button>
               <div class="border-bottom"></div>
             </div>
 
@@ -198,7 +198,7 @@
                       iacNotification?.templateCode === 'CDT-C-E' || 
                       iacNotification?.templateCode === 'CDT-C-E (WO)'
                     ) && 
-                      iacNotification?.responseReceived?.isAccepted === true
+                      (iacNotification?.responseReceived?.isAccepted === true || iacNotification?.responseReceived?.isAccepted === false) 
                   ) || 
                   (
                     (

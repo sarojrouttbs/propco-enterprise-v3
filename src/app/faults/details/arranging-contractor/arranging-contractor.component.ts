@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, OCCUPIERS_VULNERABLE, SYSTEM_OPTIONS } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, OCCUPIERS_VULNERABLE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -826,13 +826,13 @@ export class ArrangingContractorComponent implements OnInit {
         return;
       }
       /*raise a worksorder & check paymentRules*/
-      const rules = await this.getWorksOrderPaymentRules('manual') as FaultModels.IFaultWorksorderRules as any;
+      const rules = await this.getWorksOrderPaymentRules(WORKSORDER_RAISE_TYPE.MANUAL) as FaultModels.IFaultWorksorderRules as any;
       if (!rules) { return; }
       if (rules === 'saveWorksorder') {
         this.saveForLater();
       } else {
         const paymentRequired = await this.checkForPaymentRules(rules);
-        const submit = await this.raiseWorksOrderAndNotification(paymentRequired, 'manual');
+        const submit = await this.raiseWorksOrderAndNotification(paymentRequired, WORKSORDER_RAISE_TYPE.MANUAL);
         if (submit) {
           this._btnHandler('refresh');
         }
@@ -1146,6 +1146,7 @@ export class ArrangingContractorComponent implements OnInit {
       });
     } else if (data.value) {
       let modalData = {
+        faultId: this.faultDetails.faultId,
         faultNotificationId: this.iacNotification.faultNotificationId,
         title: "Arranging Contractor",
         headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
@@ -1199,7 +1200,7 @@ export class ArrangingContractorComponent implements OnInit {
       const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
       if (!rules) { return; }
       this.commonService.showLoader();
-      const actionType = 'auto';
+      const actionType = WORKSORDER_RAISE_TYPE.AUTO;
       const paymentRequired = await this.checkForPaymentRules(rules, actionType);
       const submit = await this.raiseWorksOrderAndNotification(paymentRequired);
       if (submit) {
@@ -1673,6 +1674,7 @@ export class ArrangingContractorComponent implements OnInit {
   private async worksOrderActionVisitTime(data) {
     if (data.value) {
       let modalData = {
+        faultId: this.faultDetails.faultId,
         faultNotificationId: this.iacNotification.faultNotificationId,
         title: "Appointment Date/Time",
         headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
@@ -1715,7 +1717,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   /*iac004 iac007.2*/
   private async checkForPaymentRules(rules, actionType?) {
-    const paymentRequired = await this.isPaymentRequired(rules);
+    const paymentRequired = this.faultsService.isWorksOrderPaymentRequired(rules);
     const stageAction = this.isWorksOrder ? 'Proceed with Worksorder' : 'Landlord accepted the quote';
     if (paymentRequired) {
       let amountThreshold = await this.getSystemOptions(SYSTEM_OPTIONS.REPAIR_ESTIMATE_QUOTE_THRESHOLD);
@@ -1724,7 +1726,7 @@ export class ArrangingContractorComponent implements OnInit {
       const isDraft: boolean = true
       let obj: any = {
         title: this.isWorksOrder ? 'Proceed with Worksorder' : 'Arranging Contractor',
-        stageAction: this.isWorksOrder ? 'Proceed with Worksorder' : 'Landlord accepted the quote',
+        stageAction: stageAction,
         paymentWarnings: paymentWarnings,
         isWoRaised: this.faultMaintenanceDetails ? true : false,
 
@@ -1733,7 +1735,7 @@ export class ArrangingContractorComponent implements OnInit {
         isDraft: this.faultDetails.isDraft,
         stage: this.faultDetails.stage,
         actionType: actionType,
-        faultNotificationId: this.iacNotification?.faultNotificationId ? this.iacNotification.faultNotificationId : ''
+        faultNotificationId: this.iacNotification ? this.iacNotification.faultNotificationId : ''
       }
       if (!actionType) {
         obj.woData = !this.faultMaintenanceDetails ? this.prepareWorksOrderData(isDraft) : this.prepareWorksOrderData();
@@ -1766,14 +1768,14 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  private async raiseWorksOrderAndNotification(paymentRequired: boolean, actionType = 'auto') {
+  private async raiseWorksOrderAndNotification(paymentRequired: boolean, actionType = WORKSORDER_RAISE_TYPE.AUTO) {
     if (typeof paymentRequired === 'undefined') {
       /*if user selected "No" from the popup*/
       return false;
     }
 
     let submit: boolean;
-    if (actionType === 'auto') {
+    if (actionType === WORKSORDER_RAISE_TYPE.AUTO) {
       submit = await this.saveFaultLLAuth() as boolean;
       return submit;
     } else {
@@ -1799,7 +1801,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  private getWorksOrderPaymentRules(actionType = 'auto') {
+  private getWorksOrderPaymentRules(actionType = WORKSORDER_RAISE_TYPE.AUTO) {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
         res => {
@@ -1808,7 +1810,7 @@ export class ArrangingContractorComponent implements OnInit {
         error => {
           if (error.error && error.error.hasOwnProperty('errorCode')) {
             this.commonService.showMessage(error.error ? error.error.message : 'Something went wrong', 'Arranging Contractor', 'error');
-            if (error.error.errorCode === ERROR_CODE.PAYMENT_RULES_CHECKING_FAILED && actionType !== 'auto') {
+            if (error.error.errorCode === ERROR_CODE.PAYMENT_RULES_CHECKING_FAILED && actionType !== WORKSORDER_RAISE_TYPE.AUTO) {
               resolve('saveWorksorder');
             } else {
               resolve(null);
@@ -1867,34 +1869,6 @@ export class ArrangingContractorComponent implements OnInit {
     this.getPendingHours();
   }
 
-  private isPaymentRequired(rules: FaultModels.IFaultWorksorderRules): boolean {
-    let paymentNeeded = false;
-    if (rules && rules.hasOwnProperty('hasSufficientReserveBalance')) {
-      if (rules.hasSufficientReserveBalance === true) {
-        paymentNeeded = false;
-      } else {
-        if (rules.hasOtherInvoicesToBePaid === true) {
-          paymentNeeded = true;
-        }
-        else if (rules.hasRentArrears === true) {
-          paymentNeeded = true;
-        }
-        else if (rules.hasRentPaidUpFront === true) {
-          paymentNeeded = true;
-        }
-        else if (rules.hasTenantPaidRentOnTime === false) {
-          paymentNeeded = true;
-        }
-        else if (rules.isFaultEstimateLessThanHalfRentOrThresHoldValue === false) {
-          paymentNeeded = true;
-        }
-        else if (rules.isTenancyGivenNoticeOrInLastMonth === true) {
-          paymentNeeded = true;
-        }
-      }
-    }
-    return paymentNeeded;
-  }
   async viewNotification() {
     await this.fetchPendingNotification(this.faultDetails.faultId);
     await this.notificationModal();
@@ -2010,6 +1984,7 @@ export class ArrangingContractorComponent implements OnInit {
       return;
     }
     let modalData = {
+      faultId: this.faultDetails.faultId,
       faultNotificationId: this.iacNotification.faultNotificationId,
       title: "Appointment Date/Time",
       headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",

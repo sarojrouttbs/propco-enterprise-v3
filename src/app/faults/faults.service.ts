@@ -315,12 +315,12 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/resend`, {});
   }
 
-  modifyContractorVisit(faultNotificationId, notificationObj): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultNotificationId}/quote/contractor-visit`, notificationObj);
+  modifyContractorVisit(faultId, notificationObj): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/quote/contractor-visit`, notificationObj);
   }
 
-  modifyWoContractorVisit(faultNotificationId, notificationObj): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultNotificationId}/wo/contractor-visit`, notificationObj);
+  modifyWoContractorVisit(faultId, notificationObj): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/wo/contractor-visit`, notificationObj);
   }
 
   saveFaultDetails(faultId, data): Observable<any> {
@@ -329,6 +329,35 @@ export class FaultsService {
 
   downloadFaultDocument(documentId): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `faults/documents/${documentId}/download`, { responseType: 'blob' as 'json' });
+  }
+
+  isWorksOrderPaymentRequired(rules: FaultModels.IFaultWorksorderRules): boolean {
+    let paymentNeeded = false;
+    if (rules && rules.hasOwnProperty('hasSufficientReserveBalance')) {
+      if (rules.hasSufficientReserveBalance === true) {
+        paymentNeeded = false;
+      } else {
+        if (rules.hasOtherInvoicesToBePaid === true) {
+          paymentNeeded = true;
+        }
+        else if (rules.hasRentArrears === true) {
+          paymentNeeded = true;
+        }
+        else if (rules.hasRentPaidUpFront === true) {
+          paymentNeeded = true;
+        }
+        else if (rules.hasTenantPaidRentOnTime === false) {
+          paymentNeeded = true;
+        }
+        else if (rules.isFaultEstimateLessThanHalfRentOrThresHoldValue === false) {
+          paymentNeeded = true;
+        }
+        else if (rules.isTenancyGivenNoticeOrInLastMonth === true) {
+          paymentNeeded = true;
+        }
+      }
+    }
+    return paymentNeeded;
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

@@ -374,3 +374,9 @@ export const DPP_GROUP = {
 export const MAX_DOC_UPLOAD_SIZE = {
   FAULT_DOCUMENT_UPLOAD_SIZE: 'FAULT_DOCUMENT_UPLOAD_SIZE'
 }
+
+export const WORKSORDER_RAISE_TYPE = {
+  MANUAL: 'manual',
+  AUTO: 'auto',
+  AUTO_LL_AUTH: 'auto_ll_auth'
+}

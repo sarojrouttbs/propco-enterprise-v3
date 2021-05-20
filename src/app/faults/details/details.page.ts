@@ -1,6 +1,6 @@
 import { ModalController, PopoverController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP, MAX_DOC_UPLOAD_SIZE, ERROR_CODE } from './../../shared/constants';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP, MAX_DOC_UPLOAD_SIZE, ERROR_CODE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE } from './../../shared/constants';
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,8 +17,7 @@ import { DOCUMENT } from '@angular/common';
 import { JobCompletionModalPage } from 'src/app/shared/modals/job-completion-modal/job-completion-modal.page';
 import { saveAs } from 'file-saver';
 import { IonicSelectableComponent } from 'ionic-selectable';
-import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-received-modal/payment-received-modal.component';
-import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
+import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.page';
 
 @Component({
   selector: 'fault-details',
@@ -197,6 +196,9 @@ export class DetailsPage implements OnInit {
         this.setFaultsLookupData(data);
       });
     }
+  }
+
+  private getNominalCodes(){
     this.faultsService.getNominalCodes().subscribe(data => {
       this.nominalCodes = data ? data : [];
       this.codes = this.getCodes();
@@ -341,6 +343,7 @@ export class DetailsPage implements OnInit {
             this.contractorSelected(contractorDetails);
           }
         }
+        this.getNominalCodes();
       }
     } else {
       this.faultDetails = <FaultModels.IFaultResponse>{};
@@ -1463,10 +1466,10 @@ export class DetailsPage implements OnInit {
     // } else 
     if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
       if (this.cliNotification && this.cliNotification.responseReceived) {
-        this.isUserActionChange = true;
         if (this.cliNotification.responseReceived.isAccepted) {
-          this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
+          // this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
         } else {
+          this.isUserActionChange = true;
           this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
         }
       }
@@ -1562,14 +1565,6 @@ export class DetailsPage implements OnInit {
           this.proceeding = false;
           return;
         }
-        // if ((this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided) {
-        //   if (this.isUserActionChange) {
-        //     let voidResponce = await this.voidNotification();
-        //     if (voidResponce) {
-        //       this.proceedCliAction();
-        //     }
-        //   }
-        // }
       } else {
         this.isUserActionChange = false;
       }
@@ -1602,7 +1597,7 @@ export class DetailsPage implements OnInit {
         if (response) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
-            if(!voidResponce) return; 
+            if (!voidResponce) return;
           }
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -1625,7 +1620,7 @@ export class DetailsPage implements OnInit {
         if (response) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
-            if(!voidResponce) return; 
+            if (!voidResponce) return;
           }
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -1657,7 +1652,7 @@ export class DetailsPage implements OnInit {
         if (response) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
-            if(!voidResponce) return; 
+            if (!voidResponce) return;
           }
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -1680,7 +1675,7 @@ export class DetailsPage implements OnInit {
         if (response) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
-            if(!voidResponce) return; 
+            if (!voidResponce) return;
           }
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -1718,7 +1713,7 @@ export class DetailsPage implements OnInit {
         if (response) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
-            if(!voidResponce) return; 
+            if (!voidResponce) return;
           }
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -1759,7 +1754,7 @@ export class DetailsPage implements OnInit {
         }
         if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
           let voidResponce = await this.voidNotification();
-          if(!voidResponce) return; 
+          if (!voidResponce) return;
         }
         if (this.landlordInstFrom.get('confirmedEstimate').value > 0) {
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
@@ -1885,11 +1880,7 @@ export class DetailsPage implements OnInit {
       }
     }
     else if (this.cliNotification.faultStageAction === LL_INSTRUCTION_TYPES[3].index) {
-      if (this.cliNotification.templateCode === 'LNP-L-E') {
-        this.questionActionWOPayment(data);
-      } else {
-        this.questionActionLandlordAuth(data);
-      }
+      this.questionActionLandlordAuth(data);
     }
   }
 
@@ -1928,7 +1919,7 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  private questionActionLandlordAuth(data) {
+  private async questionActionLandlordAuth(data) {
     if (!data.value) {
       this.commonService.showConfirm(data.text, 'Are you sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
@@ -1948,27 +1939,21 @@ export class DetailsPage implements OnInit {
       });
     }
     else if (data.value) {
-      this.commonService.showConfirm(data.text, 'Are you sure?', '', 'Yes', 'No').then(async res => {
-        if (res) {
-          this.commonService.showLoader();
-          await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
-          this.refreshDetailsAndStage();
-          await this.checkFaultNotifications(this.faultId);
-          this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
-          this.getPendingHours();
-          if (this.cliNotification && this.cliNotification.responseReceived) {
-            this.isUserActionChange = true;
-            if (this.cliNotification.responseReceived.isAccepted) {
-              this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
-            } else {
-              this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
-            }
-
-          }
-        }
-      });
+      const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
+      if (!rules) { return; }
+      this.commonService.showLoader();
+      const actionType = WORKSORDER_RAISE_TYPE.AUTO_LL_AUTH;
+      const paymentRequired = await this.checkForPaymentRules(rules, actionType, data.text);
+      if (paymentRequired) {
+        await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
+        this.refreshDetailsAndStage();
+        await this.checkFaultNotifications(this.faultId);
+        this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
+      }
     }
   }
+
+
 
   private questionActionJobComplete(data) {
     if (!data.value) {
@@ -2493,71 +2478,42 @@ export class DetailsPage implements OnInit {
     });
   }
 
-  private async questionActionWOPayment(data) {
-    if (data.value) {
-      const modal = await this.modalController.create({
-        component: PaymentReceivedModalComponent,
-        cssClass: 'modal-container',
-        componentProps: {
-          faultNotificationId: this.cliNotification.faultNotificationId,
-        },
-        backdropDismiss: false
-      });
+  private async checkForPaymentRules(rules, actionType, title) {
+    const paymentRequired = this.faultsService.isWorksOrderPaymentRequired(rules);
+    const stageAction = title;
+    if (paymentRequired) {
+      let amountThreshold = await this.getSystemOptions(SYSTEM_OPTIONS.REPAIR_ESTIMATE_QUOTE_THRESHOLD);
+      let paymentWarnings = this.commonService.getPaymentWarnings(rules, amountThreshold);
 
-      modal.onDidDismiss().then(async res => {
-        if (res.data && res.data == 'success') {
-          this.refreshDetailsAndStage();
-          await this.checkFaultNotifications(this.faultId);
-          this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
-          this.getPendingHours();
-          if (this.cliNotification && this.cliNotification.responseReceived) {
-            this.isUserActionChange = true;
-            if (this.cliNotification.responseReceived.isAccepted) {
-              this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
-            } else {
-              this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
-            }
-          }
-        }
-      });
-      await modal.present();
-    } else if (!data.value) {
-      const rules = await this.getWorksOrderPaymentRules() as FaultModels.IFaultWorksorderRules;
-      if (!rules) {
-        return null;
+      let obj: any = {
+        title: title,
+        stageAction: stageAction,
+        paymentWarnings: paymentWarnings,
+        isWoRaised: false,
+        faultId: this.faultDetails.faultId,
+        maintenanceId: '',
+        isDraft: this.faultDetails.isDraft,
+        stage: this.faultDetails.stage,
+        actionType: actionType,
+        faultNotificationId: this.cliNotification ? this.cliNotification.faultNotificationId : ''
       }
-      const modal = await this.modalController.create({
-        component: WithoutPrepaymentModalComponent,
-        cssClass: 'modal-container',
-        componentProps: {
-          faultNotificationId: this.cliNotification.faultNotificationId,
-          paymentRules: rules
-        },
-        backdropDismiss: false
-      });
 
-      modal.onDidDismiss().then(async res => {
-        if (res.data && res.data == 'success') {
-          this.refreshDetailsAndStage();
-          await this.checkFaultNotifications(this.faultId);
-          this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
-          this.getPendingHours();
-          if (this.cliNotification && this.cliNotification.responseReceived) {
-            this.isUserActionChange = true;
-            if (this.cliNotification.responseReceived.isAccepted) {
-              this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
-            } else {
-              this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
-            }
+      let response: any = await this.paymentRequestModal(obj);
 
-          }
-        }
-      });
-      await modal.present();
+      if (response) {
+        return paymentRequired;
+      }
+    } else {
+      const response = await this.commonService.showConfirm(stageAction,
+        `You have selected "${stageAction}".<br/><br/>
+         This will raise the worksorder. Are you sure?`, '', 'Yes', 'No');
+      if (response) {
+        return paymentRequired;
+      }
     }
   }
 
-  private getWorksOrderPaymentRules(actionType = 'auto') {
+  private getWorksOrderPaymentRules(actionType = WORKSORDER_RAISE_TYPE.AUTO) {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
         res => {
@@ -2565,12 +2521,12 @@ export class DetailsPage implements OnInit {
         },
         error => {
           if (error.error && error.error.hasOwnProperty('errorCode')) {
-            this.commonService.showMessage(error.error ? error.error.message : 'Something went wrong', 'Landlord Instructions', 'error');
-            if (error.error.errorCode === ERROR_CODE.PAYMENT_RULES_CHECKING_FAILED && actionType !== 'auto') {
-              resolve('saveWorksorder');
-            } else {
-              resolve(null);
-            }
+            // this.commonService.showMessage(error.error ? error.error.message : 'Something went wrong', 'Landlord Instructions', 'error');
+            // if (error.error.errorCode === ERROR_CODE.PAYMENT_RULES_CHECKING_FAILED && actionType !== WORKSORDER_RAISE_TYPE.AUTO) {
+            //   resolve('saveWorksorder');
+            // } else {
+            resolve(null);
+            // }
           } else {
             resolve(null);
           }
@@ -2579,5 +2535,43 @@ export class DetailsPage implements OnInit {
     });
     return promise;
   }
+
+  private async getSystemOptions(key): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.commonService.getSystemOptions(key).subscribe(res => {
+        resolve(res ? res['key'] : '');
+      }, error => {
+        resolve('');
+      });
+    });
+    return promise;
+  }
+
+  private async paymentRequestModal(data) {
+    const modal = await this.modalController.create({
+      component: PaymentRequestModalPage,
+      cssClass: 'modal-container payment-request-modal',
+      componentProps: data,
+      backdropDismiss: false
+    });
+    await modal.present();
+
+    return modal.onDidDismiss().then(async res => {
+      if (res.data) {
+        if (res.data == 'success') {
+          return true;
+        } else if (res.data == 'skip-payment') {
+          this.refreshDetailsAndStage();
+          await this.checkFaultNotifications(this.faultId);
+          this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
+        }
+      }
+      //  else {
+      //   this.refreshDetailsAndStage();
+      // }
+    });
+
+  }
+
 
 }
