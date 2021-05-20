@@ -1146,6 +1146,7 @@ export class ArrangingContractorComponent implements OnInit {
       });
     } else if (data.value) {
       let modalData = {
+        faultId: this.faultDetails.faultId,
         faultNotificationId: this.iacNotification.faultNotificationId,
         title: "Arranging Contractor",
         headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
@@ -1673,6 +1674,7 @@ export class ArrangingContractorComponent implements OnInit {
   private async worksOrderActionVisitTime(data) {
     if (data.value) {
       let modalData = {
+        faultId: this.faultDetails.faultId,
         faultNotificationId: this.iacNotification.faultNotificationId,
         title: "Appointment Date/Time",
         headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
@@ -1982,6 +1984,7 @@ export class ArrangingContractorComponent implements OnInit {
       return;
     }
     let modalData = {
+      faultId: this.faultDetails.faultId,
       faultNotificationId: this.iacNotification.faultNotificationId,
       title: "Appointment Date/Time",
       headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
