@@ -131,6 +131,7 @@ export class DetailsPage implements OnInit {
   codes: FaultModels.NominalCode[];
   page = 2;
   currentDate = this.commonService.getFormatedDate(new Date());
+  loggedInUserData: any;
 
   constructor(
     private faultsService: FaultsService,
@@ -198,7 +199,7 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  private getNominalCodes(){
+  private getNominalCodes() {
     this.faultsService.getNominalCodes().subscribe(data => {
       this.nominalCodes = data ? data : [];
       this.codes = this.getCodes();
@@ -1721,6 +1722,7 @@ export class DetailsPage implements OnInit {
           faultRequestObj.nominalCode = this.landlordInstFrom.value.nominalCode.nominalCode;
           faultRequestObj.requiredStartDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredStartDate));
           faultRequestObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredCompletionDate));
+          faultRequestObj.orderedById = this.loggedInUserData.userId;
           const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -2470,6 +2472,7 @@ export class DetailsPage implements OnInit {
     return new Promise((resolve, reject) => {
       this.faultsService.getUserDetails().subscribe((res) => {
         let data = res ? res.data[0] : '';
+        this.loggedInUserData = data;        
         this.landlordInstFrom.get('orderedBy').setValue(data.name);
         resolve(data);
       }, error => {
