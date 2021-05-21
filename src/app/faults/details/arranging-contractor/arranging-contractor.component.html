@@ -75,9 +75,8 @@
                 <div class="border-bottom"></div>
             </ng-container>
           </div>
-          <ng-container *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === true || 
-            (iacNotification?.responseReceived?.isAccepted === false && (faultDetails?.contractorQuotePropertyVisitAt || faultDetails?.contractorWoPropertyVisitAt))">
-            <div class="question-answer" *ngIf="iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E'">
+          <ng-container *ngIf="iacNotification && (iacNotification?.responseReceived?.isAccepted === true || iacNotification?.responseReceived?.isAccepted === false)">
+            <div class="question-answer" *ngIf="iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E' && faultDetails?.contractorQuotePropertyVisitAt">
               <h4 class="ion-text-center">Next Step:</h4> 
               <h6 *ngIf="quoteArray?.length === 0">
                 <ion-text color="danger">Please note: </ion-text>
@@ -92,7 +91,7 @@
               <div class="border-bottom"></div>
             </div>
 
-            <div class="question-answer" *ngIf="iacNotification?.templateCode === 'CDT-C-E (WO)'">
+            <div class="question-answer" *ngIf="iacNotification?.templateCode === 'CDT-C-E (WO)' && faultDetails?.contractorWoPropertyVisitAt">
               <h4 class="ion-text-center">Next Step:</h4> 
               <h6>
                 <ion-text color="danger">Please note: </ion-text>
