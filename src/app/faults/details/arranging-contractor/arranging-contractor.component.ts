@@ -8,7 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, OCCUPIERS_VULNERABLE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, OCCUPIERS_VULNERABLE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -123,7 +123,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async initiateArrangingContractors() {
     this.faultMaintenanceDetails = await this.getFaultMaintenance() as FaultModels.IMaintenanceQuoteResponse;
-    if (this.faultDetails.status === 19
+    if (this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING
       || (this.faultMaintenanceDetails && this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER)
       || (this.faultDetails.stageAction === 'PROCEED_WITH_WORKSORDER')) {
       /*19: Worksorder Pending*/
@@ -212,6 +212,10 @@ export class ArrangingContractorComponent implements OnInit {
       this.officeDetails();
     }
     if (!this.faultMaintenanceDetails && this.faultDetails.contractorId) {
+      this.woSelectContractor(this.faultDetails.contractorId);
+      this.isContractorSearch = false;
+    }
+    if (this.faultDetails.contractorId) {
       this.woSelectContractor(this.faultDetails.contractorId);
       this.isContractorSearch = false;
     }
@@ -344,9 +348,6 @@ export class ArrangingContractorComponent implements OnInit {
       if (!this.iacNotification && this.faultMaintenanceDetails.isCancelled) {
         //Note : special case : empty fault Maint var if cancelled
         this.faultMaintenanceDetails = null;
-        if (this.faultDetails.contractorId) {
-          this.woSelectContractor(this.faultDetails.contractorId);
-        }
       } else {
         //Note : if creating new WO then skip patching old values  
         this.workOrderForm.patchValue(
@@ -1039,7 +1040,8 @@ export class ArrangingContractorComponent implements OnInit {
         faultId: this.faultDetails.faultId,
         faultDetails: this.faultDetails,
         title: this.getLookupValue(this.userSelectedActionControl.value, this.iacStageActions),
-        stageAction: this.userSelectedActionControl.value
+        stageAction: this.userSelectedActionControl.value,
+        nominalCode: this.faultMaintenanceDetails.nominalCode
       },
 
       backdropDismiss: false
@@ -1612,6 +1614,10 @@ export class ArrangingContractorComponent implements OnInit {
       }
       //wo
       if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 6) {
+        this.workOrderForm.get('nominalCode').setValue(code);
+      }
+      //canceled quote
+      if (this.faultDetails?.nominalCode && this.faultDetails.nominalCode === code.nominalCode && this.faultDetails?.stageAction === 'PROCEED_WITH_WORKSORDER') {
         this.workOrderForm.get('nominalCode').setValue(code);
       }
       codes.push(code);

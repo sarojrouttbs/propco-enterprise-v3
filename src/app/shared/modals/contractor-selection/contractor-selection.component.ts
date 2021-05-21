@@ -1,3 +1,4 @@
+import { FAULT_STATUSES } from './../../constants';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
@@ -19,6 +20,7 @@ export class ContractorSelectionComponent implements OnInit {
   title;
   faultDetails;
   stageAction;
+  nominalCode;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -50,10 +52,12 @@ export class ContractorSelectionComponent implements OnInit {
     faultRequestObj.stageAction = this.stageAction;
     faultRequestObj.isDraft = false;
     faultRequestObj.stage = this.faultDetails.stage;
+    faultRequestObj.nominalCode = this.nominalCode;
     faultRequestObj.submittedById = '';
     faultRequestObj.submittedByType = 'SECUR_USER';
     const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
-    if (isFaultUpdated) {
+    const isStatusUpdated = await this.updateFaultStatus(FAULT_STATUSES.WORKSORDER_PENDING);
+    if (isFaultUpdated && isStatusUpdated) {
       this.modalController.dismiss('success');
     }
   }
@@ -102,5 +106,14 @@ export class ContractorSelectionComponent implements OnInit {
       );
     });
     return promise;
+  }
+
+  private async updateFaultStatus(status) {
+    return this.faultsService.updateFaultStatus(this.faultId, status).subscribe((res) => {
+      return true;
+    }, err => {
+      this.commonService.showMessage('Something went wrong', this.title, 'error');
+      return false;
+    });
   }
 }
