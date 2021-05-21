@@ -75,7 +75,7 @@
                 <div class="border-bottom"></div>
             </ng-container>
           </div>
-          <ng-container *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === true || iacNotification?.responseReceived?.isAccepted === false">
+          <ng-container *ngIf="iacNotification && (iacNotification?.responseReceived?.isAccepted === true || iacNotification?.responseReceived?.isAccepted === false)">
             <div class="question-answer" *ngIf="iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E' && faultDetails?.contractorQuotePropertyVisitAt">
               <h4 class="ion-text-center">Next Step:</h4> 
               <h6 *ngIf="quoteArray?.length === 0">
