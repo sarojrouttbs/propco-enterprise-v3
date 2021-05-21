@@ -918,7 +918,7 @@ export class DetailsPage implements OnInit {
       if (response) {
         this.files = response.data;
         // this.getDocs();
-        if (this.faultDetails.stage === FAULT_STAGES.JOB_COMPLETION) {
+        if (this.faultDetails.stage === FAULT_STAGES.JOB_COMPLETION || this.faultDetails.stage === FAULT_STAGES.PAYMENT) {
           this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[4]['index'] || data.folderName === FOLDER_NAMES[5]['index']).filter(data => !data.isRejected);
         }
         else {

@@ -1,3 +1,4 @@
+import { ContractorSelectionComponent } from './../../../shared/modals/contractor-selection/contractor-selection.component';
 import { CloseFaultModalPage } from './../../../shared/modals/close-fault-modal/close-fault-modal.page';
 import { WorksorderModalPage } from 'src/app/shared/modals/worksorder-modal/worksorder-modal.page';
 import { RejectionModalPage } from './../../../shared/modals/rejection-modal/rejection-modal.page';
@@ -7,7 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, OCCUPIERS_VULNERABLE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, OCCUPIERS_VULNERABLE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -122,7 +123,9 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async initiateArrangingContractors() {
     this.faultMaintenanceDetails = await this.getFaultMaintenance() as FaultModels.IMaintenanceQuoteResponse;
-    if (this.faultDetails.status === 19 || (this.faultMaintenanceDetails && this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER)) {
+    if (this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING
+      || (this.faultMaintenanceDetails && this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER)
+      || (this.faultDetails.stageAction === 'PROCEED_WITH_WORKSORDER')) {
       /*19: Worksorder Pending*/
       this.isWorksOrder = true;
     } else this.isWorksOrder = false;
@@ -209,6 +212,10 @@ export class ArrangingContractorComponent implements OnInit {
       this.officeDetails();
     }
     if (!this.faultMaintenanceDetails && this.faultDetails.contractorId) {
+      this.woSelectContractor(this.faultDetails.contractorId);
+      this.isContractorSearch = false;
+    }
+    if (this.faultDetails.contractorId) {
       this.woSelectContractor(this.faultDetails.contractorId);
       this.isContractorSearch = false;
     }
@@ -338,13 +345,6 @@ export class ArrangingContractorComponent implements OnInit {
         this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
       }
     } else {
-      // if (
-      //   (this.iacNotification && (this.iacNotification?.responseReceived && this.faultMaintenanceDetails.isCancelled) ||
-      //     !this.iacNotification?.responseReceived) ||
-      //   !this.iacNotification && !this.faultMaintenanceDetails.isCancelled
-      // ) {
-
-      // }
       if (!this.iacNotification && this.faultMaintenanceDetails.isCancelled) {
         //Note : special case : empty fault Maint var if cancelled
         this.faultMaintenanceDetails = null;
@@ -743,9 +743,18 @@ export class ArrangingContractorComponent implements OnInit {
       }
       if (this.iacNotification.responseReceived != null) {
         if (!this.iacNotification.responseReceived.isAccepted && (this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E' || this.iacNotification.templateCode === 'CDT-C-E')) {
-          await this.proceedWithQuoteAndWO();
-          this.proceeding = false;
-          return;
+
+          //show modal to select user to select contractor and proceed with WO
+          if (this.iacNotification.templateCode === 'QC-L-E'
+            && this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER') {
+            const contractorList: any = JSON.parse(JSON.stringify(this.raiseQuoteForm.getRawValue())).contractorList;
+            this.openContractorSelection(contractorList);
+            return;
+          } else {
+            await this.proceedWithQuoteAndWO();
+            this.proceeding = false;
+            return;
+          }
         }
         else {
           if (this.isUserActionChange) {
@@ -1020,6 +1029,34 @@ export class ArrangingContractorComponent implements OnInit {
     //   return;
     // }
     this.userSelectedActionControl.setValue(index);
+  }
+
+  async openContractorSelection(contractorList) {
+    const modal = await this.modalController.create({
+      component: ContractorSelectionComponent,
+      cssClass: 'modal-container property-certificates-list',
+      componentProps: {
+        contractorList: contractorList,
+        faultId: this.faultDetails.faultId,
+        faultDetails: this.faultDetails,
+        title: this.getLookupValue(this.userSelectedActionControl.value, this.iacStageActions),
+        stageAction: this.userSelectedActionControl.value,
+        nominalCode: this.faultMaintenanceDetails.nominalCode
+      },
+
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this.proceeding = false;
+        this._btnHandler('refresh');
+      } else {
+        this.proceeding = false;
+      }
+    });
+
+    await modal.present();
   }
 
   private getTenantDetail(tenantId) {
@@ -1577,6 +1614,10 @@ export class ArrangingContractorComponent implements OnInit {
       }
       //wo
       if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 6) {
+        this.workOrderForm.get('nominalCode').setValue(code);
+      }
+      //canceled quote
+      if (this.faultDetails?.nominalCode && this.faultDetails.nominalCode === code.nominalCode && this.faultDetails?.stageAction === 'PROCEED_WITH_WORKSORDER') {
         this.workOrderForm.get('nominalCode').setValue(code);
       }
       codes.push(code);
