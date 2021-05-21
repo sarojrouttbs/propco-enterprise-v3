@@ -1,0 +1,78 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -ms-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+}
+
+table {
+    // margin-bottom: 20px;
+}
+
+td:focus {
+    outline: none;
+}
+
+.warranty-details-banner {
+    background: var(--ion-color-step-2000);
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.action-btn-block {
+    margin-bottom: 20px;
+}
+
+.details-section {
+    margin-top: 10px;
+}
+
+.table-container {
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        border: 1px solid var(--ion-color-step-1600);
+    }
+
+    th {
+        background-color: var(--ion-color-step-1400);
+        text-align: left;
+        padding: 12px 5px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    td {
+        text-align: left;
+        padding: 12px 5px;
+        font-size: 14px;
+    }
+    tbody {
+        tr:hover {
+            background-color: var(--ion-color-step-2000);
+        }
+    }
+    tr:nth-child(even) {
+        background-color: var(--ion-color-step-1800);
+    }
+    tr:nth-child(odd) {
+        background-color: var(--ion-color-step-1600);
+    }
+}
+
+ion-row.fault-data-row {
+    ion-col {
+        @include set-text-style(16px, 20px);
+        margin: 0;
+
+        .text {
+            @include set-text-style(14px, 17px);
+            color: grey;
+            display: inline-block;
+        }
+    }
+}

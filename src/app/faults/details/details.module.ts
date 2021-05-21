@@ -1,3 +1,4 @@
+import { ContractorSelectionModule } from './../../shared/modals/contractor-selection/contractor-selection.module';
 import { PaymentComponent } from './payment/payment.component';
 import { RejectInvoiceModule } from './../../shared/modals/reject-invoice/reject-invoice.module';
 import { JobCompletionComponent } from './job-completion/job-completion.component';
@@ -88,7 +89,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     MoreInfoModalPageModule,
     JobCompletionModalPageModule,
     CurrencyMaskModule,
-    PaymentRequestModalPageModule
+    PaymentRequestModalPageModule,
+    ContractorSelectionModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
     PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent, JobCompletionComponent,
