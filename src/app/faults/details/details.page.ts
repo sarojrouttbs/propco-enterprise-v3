@@ -1946,7 +1946,7 @@ export class DetailsPage implements OnInit {
       this.commonService.showLoader();
       const actionType = WORKSORDER_RAISE_TYPE.AUTO_LL_AUTH;
       const paymentRequired = await this.checkForPaymentRules(rules, actionType, data.text);
-      if (paymentRequired) {
+      if (paymentRequired !== undefined) {
         await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
         this.refreshDetailsAndStage();
         await this.checkFaultNotifications(this.faultId);
@@ -2472,7 +2472,7 @@ export class DetailsPage implements OnInit {
     return new Promise((resolve, reject) => {
       this.faultsService.getUserDetails().subscribe((res) => {
         let data = res ? res.data[0] : '';
-        this.loggedInUserData = data;        
+        this.loggedInUserData = data;
         this.landlordInstFrom.get('orderedBy').setValue(data.name);
         resolve(data);
       }, error => {
