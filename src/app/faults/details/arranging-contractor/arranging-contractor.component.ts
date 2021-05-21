@@ -1978,11 +1978,10 @@ export class ArrangingContractorComponent implements OnInit {
   enableMarkCompletedBtn(): boolean {
     let enable = false;
     if (this.iacNotification &&
-      (this.iacNotification.responseReceived != null) &&
-      this.iacNotification.templateCode === 'CDT-C-E (WO)' &&
-      this.iacNotification.responseReceived.isAccepted) {
-      const woAgreedDateTime = this.commonService.getFormatedDate(this.faultDetails.contractorWoPropertyVisitAt, 'yyyy-MM-dd HH:mm:ss');
-      const today = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd HH:mm:ss');
+      (this.iacNotification.responseReceived != null) && //this.iacNotification.responseReceived.isAccepted &&
+      this.iacNotification.templateCode === 'CDT-C-E (WO)') {
+      const woAgreedDateTime = this.commonService.getFormatedDate(this.faultDetails.contractorWoPropertyVisitAt, 'yyyy-MM-dd');
+      const today = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
       if (today >= woAgreedDateTime) {
         enable = true;
       }
