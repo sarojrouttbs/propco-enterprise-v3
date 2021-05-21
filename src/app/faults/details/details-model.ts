@@ -98,6 +98,7 @@ declare namespace FaultModels {
         nominalCode?: string;
         requiredStartDate?: any;
         requiredCompletionDate?: any;
+        orderedById?:string;
     }
 
     export interface AdditionalInfo {

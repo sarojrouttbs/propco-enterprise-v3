@@ -12,6 +12,7 @@ import { CommonService } from '../../services/common.service';
 })
 export class AppointmentModalPage implements OnInit {
   appointmentForm: FormGroup;
+  faultId;
   faultNotificationId;
   title;
   headingOne;
@@ -57,7 +58,7 @@ export class AppointmentModalPage implements OnInit {
         const quoteRequestObj = {
           contractorQuotePropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss')
         };
-        const updateCCVisit = await this.modifyContractorVisit(this.faultNotificationId, quoteRequestObj);
+        const updateCCVisit = await this.modifyContractorVisit(this.faultId, quoteRequestObj);
         if (updateCCVisit) {
           this.modalController.dismiss('success');
         }
@@ -65,7 +66,7 @@ export class AppointmentModalPage implements OnInit {
         const quoteRequestObj = {
           contractorWoPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss')
         };
-        const updateCCVisit = await this.modifyWoContractorVisit(this.faultNotificationId, quoteRequestObj);
+        const updateCCVisit = await this.modifyWoContractorVisit(this.faultId, quoteRequestObj);
         if (updateCCVisit) {
           this.modalController.dismiss('success');
         }
@@ -111,10 +112,10 @@ export class AppointmentModalPage implements OnInit {
     return promise;
   }
 
-  modifyContractorVisit(faultNotificationId, requestObj) {
+  modifyContractorVisit(faultId, requestObj) {
     this.showLoader = true;
     const promise = new Promise((resolve, reject) => {
-      this.faultsService.modifyContractorVisit(faultNotificationId, requestObj).subscribe(
+      this.faultsService.modifyContractorVisit(faultId, requestObj).subscribe(
         res => {
           this.showLoader = false;
           resolve(true);
@@ -128,10 +129,10 @@ export class AppointmentModalPage implements OnInit {
     return promise;
   }
 
-  modifyWoContractorVisit(faultNotificationId, requestObj) {
+  modifyWoContractorVisit(faultId, requestObj) {
     this.showLoader = true;
     const promise = new Promise((resolve, reject) => {
-      this.faultsService.modifyWoContractorVisit(faultNotificationId, requestObj).subscribe(
+      this.faultsService.modifyWoContractorVisit(faultId, requestObj).subscribe(
         res => {
           this.showLoader = false;
           resolve(true);

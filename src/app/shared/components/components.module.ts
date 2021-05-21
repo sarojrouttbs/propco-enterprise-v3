@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ValidationMessageComponent } from './validation-message/validation-message.component';
 import { PropertyDetailsComponent } from './property-details/property-details.component';
 import { AccordionListComponent } from './accordion-list/accordion-list.component';
-
+import { CloseFaultComponent } from './close-fault/close-fault.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -15,8 +15,8 @@ import { AccordionListComponent } from './accordion-list/accordion-list.componen
         IonicModule,
         MaterialModule,
     ],
-    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent],
-    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent]
+    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent],
+    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent]
 })
 
 export class ComponentsModule {

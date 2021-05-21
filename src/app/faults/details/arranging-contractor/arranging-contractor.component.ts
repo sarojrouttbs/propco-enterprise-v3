@@ -302,6 +302,7 @@ export class ArrangingContractorComponent implements OnInit {
       }
     }
     this.showSkeleton = false;
+    this.getNominalCodes();
   }
 
   private getFaultMaintenance() {
@@ -451,6 +452,9 @@ export class ArrangingContractorComponent implements OnInit {
         this.setFaultsLookupData(data);
       });
     }
+  }
+
+  private getNominalCodes() {
     this.faultsService.getNominalCodes().subscribe(data => {
       this.nominalCodes = data ? data : [];
       this.codes = this.getCodes();
@@ -1181,6 +1185,7 @@ export class ArrangingContractorComponent implements OnInit {
       });
     } else if (data.value) {
       let modalData = {
+        faultId: this.faultDetails.faultId,
         faultNotificationId: this.iacNotification.faultNotificationId,
         title: "Arranging Contractor",
         headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
@@ -1601,9 +1606,11 @@ export class ArrangingContractorComponent implements OnInit {
     this.nominalCodes.forEach(code => {
       let heading = code.heading ? code.heading.toUpperCase() : '';
       code.concat = heading + ", " + code.nominalCode + ", " + code.description;
+      //quote
       if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 4) {
         this.raiseQuoteForm.get('nominalCode').setValue(code);
       }
+      //wo
       if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 6) {
         this.workOrderForm.get('nominalCode').setValue(code);
       }
@@ -1708,6 +1715,7 @@ export class ArrangingContractorComponent implements OnInit {
   private async worksOrderActionVisitTime(data) {
     if (data.value) {
       let modalData = {
+        faultId: this.faultDetails.faultId,
         faultNotificationId: this.iacNotification.faultNotificationId,
         title: "Appointment Date/Time",
         headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
@@ -2017,6 +2025,7 @@ export class ArrangingContractorComponent implements OnInit {
       return;
     }
     let modalData = {
+      faultId: this.faultDetails.faultId,
       faultNotificationId: this.iacNotification.faultNotificationId,
       title: "Appointment Date/Time",
       headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
