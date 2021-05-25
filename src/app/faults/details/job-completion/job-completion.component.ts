@@ -650,10 +650,10 @@ export class JobCompletionComponent implements OnInit {
   async rejectInvoice() {
     const modal = await this.modalController.create({
       component: RejectInvoiceComponent,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container reject-invoice-modal',
       componentProps: {
         faultId: this.faultDetails.faultId,
-        title: "Job Completion",
+        title: "Reject the Invoice",
         headingOne: "You have selected 'No, Reject this Invoice.'",
         headingTwo: "This will escalate the Fault and a notification to Contractor would be sent. Are you sure?",
       },

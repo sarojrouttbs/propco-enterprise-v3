@@ -676,7 +676,7 @@ export class DashboardPage implements OnInit {
     if (this.showEscalated.length > 0) {
       this.faultParams = this.faultParams.set('showEscalated', this.showEscalated);
     }
-    if (this.searchKey.value.length >= 3) {
+    if (this.searchKey.value && this.searchKey.value.length >= 3) {
       this.faultParams = this.faultParams.set('searchKey', this.searchKey.value.toString());
     }
     this.rerenderFaults();
