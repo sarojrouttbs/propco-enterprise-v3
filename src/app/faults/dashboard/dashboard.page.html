@@ -435,7 +435,7 @@
           </table>
           <div id="divOverlay">
             <ion-button *ngIf="selectedData?.isChecked" (click)="mergeFault(selectedData)">Merge</ion-button>
-            <ion-button *ngIf="selectedData?.status != 12 && selectedData?.status != 10" (click)="closeFault()">Close</ion-button>
+            <ion-button *ngIf="selectedData?.status != 12 && selectedData?.status != 10 && !selectedData?.isClosed" (click)="closeFault()">Close</ion-button>
             <ion-button (click)="notesModal()">Add Note</ion-button>
             <ion-button *ngIf="!selectedData?.isEscalated" (click)="escalateFault()">Escalate</ion-button>
             <ion-button *ngIf="selectedData?.isEscalated" (click)="deEscalateFault()">De-Escalate</ion-button>
