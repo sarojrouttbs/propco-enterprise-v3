@@ -425,3 +425,9 @@ mat-form-field {
     white-space: normal !important;
   }
 }
+
+.reject-invoice-modal{
+  .reason > div > textarea{
+    overflow: hidden !important;
+}
+}

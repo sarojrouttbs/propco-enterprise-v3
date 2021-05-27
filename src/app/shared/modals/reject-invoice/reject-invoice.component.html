@@ -29,7 +29,7 @@
           <ion-item>
             <ion-label position="floating">Reason<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-textarea  auto-grow="true" formControlName="rejectionReason"></ion-textarea>
+            <ion-textarea rows="1" formControlName="rejectionReason" auto-grow="true"  class="reason"></ion-textarea>
           </ion-item>
           <app-validation-message [control]="rejectInvoiceForm.controls.rejectionReason"></app-validation-message>
         </ion-col>
@@ -40,8 +40,8 @@
 <ion-footer>
   <ion-row>
     <ion-col class="ion-text-end">
-      <ion-button (click)="dismiss()">NO</ion-button>
-      <ion-button (click)="pmRejectInvoice()">YES
+      <ion-button (click)="dismiss()" color="danger">NO</ion-button>
+      <ion-button (click)="pmRejectInvoice()" color="success">YES
         <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
       </ion-button>
     </ion-col>
