@@ -35,7 +35,7 @@
               <ion-label position="stacked">Invoice Amount<ion-text class="mandatory"
                   *ngIf="uploadedInvoice && uploadedInvoice?.length > 0">*</ion-text>
               </ion-label>
-              <input currencyMask formControlName="invoiceAmount" />
+              <input currencyMask (blur)="onBlurCurrency(jobCompletionForm.controls.invoiceAmount.value, jobCompletionForm)" formControlName="invoiceAmount" />
             </ion-item>
           </ion-col>
           <ion-col size="100">
@@ -47,14 +47,16 @@
           </ion-col>
           <ion-col size="100">
             <ion-item class="marg-top-16" [disabled]="!jobCompletionForm.controls.isAnyFurtherWork.value">
-              <ion-label position="floating">Estimate</ion-label>
-              <ion-input formControlName="additionalEstimate"></ion-input>
-            </ion-item>
+              <!-- <ion-label position="floating">Estimate</ion-label>
+              <ion-input formControlName="additionalEstimate"></ion-input> -->
+            <ion-label position="stacked">Additional Estimate <ion-text *ngIf="jobCompletionForm.controls.isAnyFurtherWork.value" class="mandatory">*</ion-text></ion-label>
+            <input currencyMask formControlName="additionalEstimate" (blur)="onBlurAdditionalEstimate(jobCompletionForm.controls.additionalEstimate.value, jobCompletionForm)" />
+          </ion-item>
             <app-validation-message [control]="jobCompletionForm.controls.additionalEstimate"></app-validation-message>
           </ion-col>
           <ion-col size="100">
             <ion-item class="marg-top-16" [disabled]="!jobCompletionForm.controls.isAnyFurtherWork.value">
-              <ion-label position="floating">Additional Details</ion-label>
+              <ion-label position="floating">Additional Details <ion-text *ngIf="jobCompletionForm.controls.isAnyFurtherWork.value" class="mandatory">*</ion-text></ion-label>
               <ion-textarea formControlName="additionalWorkDetails"></ion-textarea>
             </ion-item>
             <app-validation-message [control]="jobCompletionForm.controls.additionalWorkDetails">
