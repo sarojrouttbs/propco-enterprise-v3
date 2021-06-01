@@ -497,6 +497,8 @@ export class DashboardPage implements OnInit {
     this.faultParams = new HttpParams().set('limit', '5').set('page', '1').set('fpm', '17,18,20,24,27,32,35,36');
     this.rerenderFaults();
     this.fs = [];
+    this.fpo = [];
+    this.fat = [];
     this.fcfd = '';
     this.fctd = '';
     this.filterForm.get('managementFilter').setValue(this.selectedMgmtType);
