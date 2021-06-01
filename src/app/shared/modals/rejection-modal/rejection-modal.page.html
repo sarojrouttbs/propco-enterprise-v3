@@ -19,7 +19,8 @@
             <ion-label position="floating">Please select a reason for rejecting this quote.<ion-text class="mandatory">*
               </ion-text>
             </ion-label>
-            <ion-select interface="popover" formControlName="rejectionReason" class="ion-select-options" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
+            <ion-select interface="popover" formControlName="rejectionReason" class="ion-select-options"
+              [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
               <ion-select-option [value]="item.value" *ngFor="let item of faultMaintRejectionReasons">
                 {{ item.index === 'Other'? item.value +' (Please specify in the box)':item.value}}
               </ion-select-option>
@@ -37,21 +38,34 @@
   </form>
 </ion-content>
 <ion-footer>
-  <ion-row>
-    <ion-col size="60" class="checkbox-wrapper" *ngIf="userType =='landlord'" >
-      <form [formGroup]="rejectionForm" *ngIf="!disableAnotherQuote">
-        <div>
-          <ion-checkbox slot="start" color="success" class="check-box" formControlName="doesWantAnotherQuote">
-          </ion-checkbox>
-          <span>Landlord wants another Quote</span>
-        </div>
-      </form>
-    </ion-col>
-    <ion-col [size]="userType == 'contractor'?100:40" class="ion-text-end">
-      <ion-button (click)="dismiss()" color="danger">NO</ion-button>
-      <ion-button color="success" (click)="saveFaultLLAuth()" [disabled]="showLoader">YES
-        <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
-      </ion-button>
-    </ion-col>
-  </ion-row>
+  <ion-grid [class.unsaved-data-error]="unSavedData">
+    <ion-row>
+      <ng-container *ngIf="unSavedData">
+        <ion-col size="70">
+          <div class="ion-padding-top">Are you sure you want to cancel the process</div>
+        </ion-col>
+        <ion-col size="30" class="ion-text-end">
+          <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
+          <ion-button color="success" (click)="dismiss()">Yes</ion-button>
+        </ion-col>
+      </ng-container>
+      <ng-container *ngIf="!unSavedData">
+        <ion-col size="60" class="checkbox-wrapper" *ngIf="userType =='landlord'">
+          <form [formGroup]="rejectionForm" *ngIf="!disableAnotherQuote">
+            <div>
+              <ion-checkbox slot="start" color="success" class="check-box" formControlName="doesWantAnotherQuote">
+              </ion-checkbox>
+              <span>Landlord wants another Quote</span>
+            </div>
+          </form>
+        </ion-col>
+        <ion-col [size]="userType == 'contractor'?100:40" class="ion-text-end">
+          <ion-button (click)="onCancel()" color="danger">NO</ion-button>
+          <ion-button color="success" (click)="saveFaultLLAuth()" [disabled]="showLoader">YES
+            <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+  </ion-grid>
 </ion-footer>

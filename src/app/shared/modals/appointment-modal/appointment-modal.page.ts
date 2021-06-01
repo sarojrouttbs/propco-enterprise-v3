@@ -21,6 +21,7 @@ export class AppointmentModalPage implements OnInit {
   type;
   futureDate;
   showLoader: boolean = false;
+  unSavedData = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -144,6 +145,18 @@ export class AppointmentModalPage implements OnInit {
       );
     });
     return promise;
+  }
+
+  async onCancel() {  
+    if (!this.appointmentForm.value.dateTime) {
+      this.dismiss();
+    } else {
+      this.unSavedData = true;
+    }
+  }
+
+  continue() {
+    this.unSavedData = false;
   }
 
   dismiss() {

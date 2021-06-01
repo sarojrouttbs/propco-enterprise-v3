@@ -24,6 +24,7 @@ export class PaymentRequestModalPage implements OnInit {
   faultNotificationId;
   paymentSkippedReason = new FormControl('', [Validators.required]);
   showLoader: boolean = false;
+  unSavedData = false;
 
   constructor(
     private modalController: ModalController,
@@ -41,14 +42,10 @@ export class PaymentRequestModalPage implements OnInit {
     this.isPaymentSkip = true;
   }
 
-  cancelSkipPaymnet() {
-    this.paymentSkippedReason.reset();
-    this.isPaymentSkip = false;
-  }
-
   async saveSkipPayment() {
     this.showLoader = true;
     if (this.paymentSkippedReason.invalid) {
+      this.showLoader = false;
       this.paymentSkippedReason.markAllAsTouched();
       return;
     }
@@ -190,6 +187,19 @@ export class PaymentRequestModalPage implements OnInit {
       );
     });
     return promise;
+  }
+
+  async onCancel() {
+    if(this.paymentSkippedReason.value){
+      this.unSavedData = true;
+    }else{
+      this.paymentSkippedReason.reset();
+      this.isPaymentSkip = false;
+    }
+  }
+
+  continue(){
+    this.unSavedData = false;
   }
 
   dismiss() {
