@@ -710,6 +710,8 @@ export class ArrangingContractorComponent implements OnInit {
     /*setting true if user selecting rate field : BE requirement*/
     quoteReqObj.useCommissionRate = !quoteReqObj.useCommissionRate ? true : false;
     quoteReqObj.thirdPartySource = !quoteReqObj.thirdPartySource ? null : quoteReqObj.thirdPartySource;
+    quoteReqObj.commissionAmount = quoteReqObj.defaultCommissionAmount;
+    quoteReqObj.commissionRate = quoteReqObj.defaultCommissionPercentage;
     if (!this.faultMaintenanceDetails) {
       quoteReqObj.isDraft = isDraft;
       quoteReqObj.requiredDate = quoteReqObj.requiredDate ? this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate)) : null;
@@ -1387,8 +1389,6 @@ export class ArrangingContractorComponent implements OnInit {
           const addressString = addressArray.length ? addressArray.join(', ') : '';
           this.workOrderForm.patchValue({
             company: data ? data.companyName : undefined, agentReference: data ? data.agentReference : undefined,
-            defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined,
-            defaultCommissionAmount: data ? data.defaultCommissionAmount : undefined,
             businessTelephone: data ? data.businessTelephone : undefined,
             contractorName: data ? (data.fullName ? data.fullName : data.name) : undefined,
             address: addressString,
@@ -1396,11 +1396,15 @@ export class ArrangingContractorComponent implements OnInit {
           });
           if (!this.faultMaintenanceDetails) {
             this.workOrderForm.patchValue({
-              useCommissionRate: data && data.isUseAmount ? (data.isUseAmount) : false
+              useCommissionRate: data && data.isUseAmount ? (data.isUseAmount) : false,
+              defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined,
+              defaultCommissionAmount: data ? data.defaultCommissionAmount : undefined,
             });
           } else {
             this.workOrderForm.patchValue({
-              useCommissionRate: this.faultMaintenanceDetails.useCommissionRate ? false : true
+              useCommissionRate: this.faultMaintenanceDetails.useCommissionRate ? false : true,
+              defaultCommissionPercentage: this.faultMaintenanceDetails.commissionRate ? this.faultMaintenanceDetails.commissionRate : data.defaultCommissionPercentage,
+              defaultCommissionAmount: this.faultMaintenanceDetails.commissionAmount ? this.faultMaintenanceDetails.commissionAmount : data.defaultCommissionAmount
             });
           }
           if (this.isContractorSearch && typeof contractor === 'object') {
