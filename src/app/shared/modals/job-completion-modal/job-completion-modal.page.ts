@@ -16,6 +16,7 @@ export class JobCompletionModalPage implements OnInit {
   heading;
   title;
   showLoader: boolean = null;
+  unSavedData = false;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -61,6 +62,18 @@ export class JobCompletionModalPage implements OnInit {
       );
     });
     return promise;
+  }
+
+  async onCancel() {
+    if(this.jobCompletionForm.value.dateTime){
+      this.unSavedData = true;
+    }else{
+      this.dismiss();
+    }
+  }
+
+  continue(){
+    this.unSavedData = false;
   }
 
   dismiss() {

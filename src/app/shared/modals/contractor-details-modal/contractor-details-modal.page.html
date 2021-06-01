@@ -77,13 +77,24 @@
   </form>
 </ion-content>
 <ion-footer>
-  <ion-grid>
+  <ion-grid [class.unsaved-data-error]="unSavedData">
     <ion-row>
-      <ion-col size="100" class="ion-text-right">
-        <ion-button class="cancel-button" (click)="dismiss()">CANCEL</ion-button>
+      <ng-container *ngIf="unSavedData">
+        <ion-col size="70">
+          <div class="ion-padding-top">Are you sure you want to cancel the process?</div>
+        </ion-col>
+        <ion-col size="30" class="ion-text-end">
+          <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
+          <ion-button color="success" (click)="dismiss()">Yes</ion-button>
+        </ion-col>
+      </ng-container>
+      <ng-container *ngIf="!unSavedData">
+        <ion-col size="100" class="ion-text-end">
+          <ion-button class="cancel-button" (click)="onCancel()">CANCEL</ion-button>
         <ion-button class="save-button" (click)="save()" [disabled]="estimatedVisitAt != null">SAVE
         </ion-button>
-      </ion-col>
+        </ion-col>
+      </ng-container>
     </ion-row>
   </ion-grid>
 </ion-footer>

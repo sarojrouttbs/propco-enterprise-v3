@@ -12,7 +12,8 @@
     <ion-row>
       <ion-col class="ion-margin-bottom">
         <div>
-          In case you want to proceed with a works order with any of the below contractors, please choose one from the list.
+          In case you want to proceed with a works order with any of the below contractors, please choose one from the
+          list.
         </div>
       </ion-col>
     </ion-row>
@@ -25,29 +26,42 @@
           <th>Contact Tel.</th>
           <th>Trade</th>
         </tr>
-      <tbody formArrayName="contractorList" >
-        <tr  *ngFor="let item of selectionForm.get('contractorList')['controls']; let i = index;" class="table-row" [formGroupName]="i">
-          <td>
-            <ion-checkbox (click)="updateSelection(item.value, i)" color="primary"
-            formControlName="checked"
-            [name]="item"></ion-checkbox>
-          </td>
-          <td>{{item.get('company').value || '-'}}</td>
-          <td>{{item.get('mobile').value || '-'}}</td>
-          <td>{{item.get('reference').value || '-'}}</td>
-        </tr></tbody>
+        <tbody formArrayName="contractorList">
+          <tr *ngFor="let item of selectionForm.get('contractorList')['controls']; let i = index;" class="table-row"
+            [formGroupName]="i">
+            <td>
+              <ion-checkbox (click)="updateSelection(item.value, i)" color="primary" formControlName="checked"
+                [name]="item"></ion-checkbox>
+            </td>
+            <td>{{item.get('company').value || '-'}}</td>
+            <td>{{item.get('mobile').value || '-'}}</td>
+            <td>{{item.get('reference').value || '-'}}</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </ion-grid>
 </ion-content>
 <ion-footer>
-  <ion-row>
-    <ion-col class="ion-text-end">
-      <ion-button (click)="dismiss()" color="danger">NO</ion-button>
-      <ion-button color="success" (click)="proceed()" [disabled]="showLoader">YES
-        <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
-      </ion-button>
-    </ion-col>
-
-  </ion-row>
+  <ion-grid [class.unsaved-data-error]="unSavedData">
+    <ion-row>
+      <ng-container *ngIf="unSavedData">
+        <ion-col size="70">
+          <div class="ion-padding-top">Are you sure you want to cancel the process?</div>
+        </ion-col>
+        <ion-col size="30" class="ion-text-end">
+          <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
+          <ion-button color="success" (click)="dismiss()">Yes</ion-button>
+        </ion-col>
+      </ng-container>
+      <ng-container *ngIf="!unSavedData">
+        <ion-col size="100" class="ion-text-end">
+          <ion-button (click)="onCancel()" color="danger">NO</ion-button>
+          <ion-button color="success" (click)="proceed()" [disabled]="showLoader">YES
+            <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+  </ion-grid>
 </ion-footer>

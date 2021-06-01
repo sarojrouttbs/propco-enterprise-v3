@@ -22,30 +22,46 @@
   <ion-row>
     <ion-col size="100">
       <ion-item>
-        <ion-label position="floating">Reason <ion-text class="mandatory">*</ion-text></ion-label>
+        <ion-label position="floating">Reason <ion-text class="mandatory">*</ion-text>
+        </ion-label>
         <ion-textarea [formControl]="paymentSkippedReason" rows="1" auto-grow="true"></ion-textarea>
       </ion-item>
-      <div *ngIf="paymentSkippedReason.hasError('required') && paymentSkippedReason.touched" class="error-message">This field is required</div>
+      <div *ngIf="paymentSkippedReason.hasError('required') && paymentSkippedReason.touched" class="error-message">This
+        field is required</div>
     </ion-col>
   </ion-row>
 </ion-content>
 
 <ion-footer>
-  <ion-row>
-    <ion-col class="ion-text-end" *ngIf="!isPaymentSkip">
-      <ion-button (click)="skipPayment()" color="secondary">SKIP PAYMENT</ion-button>
-      <ion-button (click)="dismiss()" color="danger">NO</ion-button>
-      <ion-button color="success" (click)="save()" [disabled]="showLoader">YES
-        <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
-      </ion-button>
-    </ion-col>
+  <ion-grid [class.unsaved-data-error]="unSavedData">
+    <ion-row>
+      <ng-container *ngIf="unSavedData">
+        <ion-col size="70">
+          <div class="ion-padding-top">Are you sure you want to cancel the process?</div>
+        </ion-col>
+        <ion-col size="30" class="ion-text-end">
+          <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
+          <ion-button color="success" (click)="dismiss()">Yes</ion-button>
+        </ion-col>
+      </ng-container>
+      <ng-container *ngIf="!unSavedData">
+        <ion-col class="ion-text-end" *ngIf="!isPaymentSkip">
+          <ion-button (click)="skipPayment()" color="secondary">SKIP PAYMENT</ion-button>
+          <ion-button (click)="dismiss()" color="danger">NO</ion-button>
+          <ion-button color="success" (click)="save()" [disabled]="showLoader">YES
+            <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+          </ion-button>
+        </ion-col>
 
-    <ion-col class="ion-text-end" *ngIf="isPaymentSkip">
-      <ion-button (click)="cancelSkipPaymnet()" color="danger" [disabled]="showLoader">CANCEL</ion-button>
-      <ion-button color="success" (click)="saveSkipPayment()" [disabled]="showLoader">SUBMIT
-        <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
-      </ion-button>
-    </ion-col>
+        <ion-col class="ion-text-end" *ngIf="isPaymentSkip">
+          <ion-button (click)="onCancel()" color="danger" [disabled]="showLoader">CANCEL</ion-button>
+          <ion-button color="success" (click)="saveSkipPayment()" [disabled]="showLoader">SUBMIT
+            <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+  </ion-grid>
 
-  </ion-row>
+
 </ion-footer>

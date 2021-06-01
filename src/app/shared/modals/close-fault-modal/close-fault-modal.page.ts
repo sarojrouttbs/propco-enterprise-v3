@@ -16,6 +16,8 @@ export class CloseFaultModalPage implements OnInit {
   faultId;
   maintenanceId;
   reasons = CLOSE_REASON;
+  unSavedData = false;
+
   constructor(private fb: FormBuilder, private modalController: ModalController, private faultsService: FaultsService, private commonService: CommonService) { }
 
   ngOnInit() {
@@ -70,6 +72,14 @@ export class CloseFaultModalPage implements OnInit {
     }
   }
 
+  async onCancel() {
+    this.unSavedData = true;
+  }
+
+  continue(){
+    this.unSavedData = false;
+  }
+  
   dismiss() {
     this.modalController.dismiss();
   }

@@ -34,6 +34,7 @@ export class WorksorderModalPage implements OnInit {
   additionalWorkDetails;
   MAX_DOC_UPLOAD_LIMIT;
   stage;
+  unSavedData = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -182,12 +183,6 @@ export class WorksorderModalPage implements OnInit {
       return false;
     }
     return true;
-  }
-
-  onCancel() {
-    // const cancel = this.commonService.showConfirm('Quote Assessment', 'Are you sure to cancel ?', '', 'Yes', 'No');
-    // if (!cancel) return;
-    this.dismiss();
   }
 
   async onProceed() {
@@ -347,4 +342,23 @@ export class WorksorderModalPage implements OnInit {
     });
     return promise;
   }
+
+  async onCancel() {
+    if ((this.uploadDocumentForm.controls.quotes && this.uploadDocumentForm.controls.quotes.value.length !== 0)
+      || (this.uploadPhotoForm.controls.photos && this.uploadPhotoForm.controls.photos.value.length !== 0)
+      || this.jobCompletionForm.value.isAnyFurtherWork
+      || this.jobCompletionForm.value.additionalWorkDetails
+      || this.jobCompletionForm.value.jobCompletionAt
+      || this.jobCompletionForm.value.additionalEstimate
+      || this.jobCompletionForm.value.invoiceAmount) {
+      this.unSavedData = true;
+    } else {
+      this.dismiss();
+    }
+  }
+
+  continue() {
+    this.unSavedData = false;
+  }
+
 }
