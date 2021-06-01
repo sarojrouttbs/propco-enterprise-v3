@@ -708,7 +708,7 @@ export class ArrangingContractorComponent implements OnInit {
     delete quoteReqObj.postdate;
     quoteReqObj.nominalCode = typeof quoteReqObj.nominalCode === 'object' ? quoteReqObj.nominalCode.nominalCode : quoteReqObj.nominalCode;
     /*setting true if user selecting rate field : BE requirement*/
-    quoteReqObj.useCommissionRate = !quoteReqObj.useCommissionRate ? true : false;
+    quoteReqObj.useCommissionRate = quoteReqObj.useCommissionRate;
     quoteReqObj.thirdPartySource = !quoteReqObj.thirdPartySource ? null : quoteReqObj.thirdPartySource;
     quoteReqObj.commissionAmount = quoteReqObj.defaultCommissionAmount;
     quoteReqObj.commissionRate = quoteReqObj.defaultCommissionPercentage;
@@ -1396,13 +1396,13 @@ export class ArrangingContractorComponent implements OnInit {
           });
           if (!this.faultMaintenanceDetails) {
             this.workOrderForm.patchValue({
-              useCommissionRate: data && data.isUseAmount ? (data.isUseAmount) : false,
+              useCommissionRate: data && data.isUseAmount ? false : true,
               defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined,
               defaultCommissionAmount: data ? data.defaultCommissionAmount : undefined,
             });
           } else {
             this.workOrderForm.patchValue({
-              useCommissionRate: this.faultMaintenanceDetails.useCommissionRate ? false : true,
+              useCommissionRate: this.faultMaintenanceDetails.useCommissionRate,
               defaultCommissionPercentage: this.faultMaintenanceDetails.commissionRate ? this.faultMaintenanceDetails.commissionRate : data.defaultCommissionPercentage,
               defaultCommissionAmount: this.faultMaintenanceDetails.commissionAmount ? this.faultMaintenanceDetails.commissionAmount : data.defaultCommissionAmount
             });
