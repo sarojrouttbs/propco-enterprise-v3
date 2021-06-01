@@ -17,6 +17,7 @@ export class CloseFaultModalPage implements OnInit {
   maintenanceId;
   reasons = CLOSE_REASON;
   unSavedData = false;
+  showLoader = false;
 
   constructor(private fb: FormBuilder, private modalController: ModalController, private faultsService: FaultsService, private commonService: CommonService) { }
 
@@ -47,6 +48,7 @@ export class CloseFaultModalPage implements OnInit {
   }
 
   save() {
+    this.showLoader = true;
     if (this.closeFaultForm.valid) {
       let requestObj = {
         closedReason: this.closeFaultForm.value.closedReason,
@@ -57,10 +59,12 @@ export class CloseFaultModalPage implements OnInit {
       const promise = new Promise((resolve, reject) => {
         this.faultsService.closeFault(this.faultId, requestObj).subscribe(
           res => {
+            this.showLoader = false;
             this.modalController.dismiss('success');
             resolve(true);
           },
           error => {
+            this.showLoader = false;
             this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Fault close error', 'error');
             resolve(false)
           }
@@ -68,12 +72,17 @@ export class CloseFaultModalPage implements OnInit {
       });
       return promise;
     } else {
+      this.showLoader = false;
       this.closeFaultForm.markAllAsTouched();
     }
   }
 
   async onCancel() {
-    this.unSavedData = true;
+    if(this.closeFaultForm.value.closedReason || this.closeFaultForm.value.otherReason){
+      this.unSavedData = true;
+    }else{
+      this.dismiss();
+    }
   }
 
   continue(){
