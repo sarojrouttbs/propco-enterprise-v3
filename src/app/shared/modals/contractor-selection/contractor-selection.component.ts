@@ -21,6 +21,7 @@ export class ContractorSelectionComponent implements OnInit {
   faultDetails;
   stageAction;
   nominalCode;
+  unSavedData = false;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -115,5 +116,17 @@ export class ContractorSelectionComponent implements OnInit {
       this.commonService.showMessage('Something went wrong', this.title, 'error');
       return false;
     });
+  }
+
+  async onCancel() {
+    if(this.selectedContractorId){
+      this.unSavedData = true;
+    }else{
+      this.dismiss();
+    }
+  }
+
+  continue(){
+    this.unSavedData = false;
   }
 }

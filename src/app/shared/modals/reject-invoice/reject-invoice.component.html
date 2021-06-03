@@ -29,7 +29,7 @@
           <ion-item>
             <ion-label position="floating">Reason<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-textarea rows="1" formControlName="rejectionReason" auto-grow="true"  class="reason"></ion-textarea>
+            <ion-textarea rows="1" formControlName="rejectionReason" auto-grow="true" class="reason"></ion-textarea>
           </ion-item>
           <app-validation-message [control]="rejectInvoiceForm.controls.rejectionReason"></app-validation-message>
         </ion-col>
@@ -38,13 +38,25 @@
   </form>
 </ion-content>
 <ion-footer>
-  <ion-row>
-    <ion-col class="ion-text-end">
-      <ion-button (click)="dismiss()" color="danger">NO</ion-button>
-      <ion-button (click)="pmRejectInvoice()" color="success">YES
-        <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
-      </ion-button>
-    </ion-col>
-
-  </ion-row>
+  <ion-grid [class.unsaved-data-error]="unSavedData">
+    <ion-row>
+      <ng-container *ngIf="unSavedData">
+        <ion-col size="70">
+          <div class="ion-padding-top">Are you sure you want to cancel the process?</div>
+        </ion-col>
+        <ion-col size="30" class="ion-text-end">
+          <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
+          <ion-button color="success" (click)="dismiss()">Yes</ion-button>
+        </ion-col>
+      </ng-container>
+      <ng-container *ngIf="!unSavedData">
+        <ion-col size="100" class="ion-text-end">
+          <ion-button (click)="onCancel()" color="danger">NO</ion-button>
+          <ion-button (click)="pmRejectInvoice()" color="success">YES
+            <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+  </ion-grid>
 </ion-footer>

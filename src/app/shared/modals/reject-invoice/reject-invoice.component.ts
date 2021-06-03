@@ -16,6 +16,8 @@ export class RejectInvoiceComponent implements OnInit {
   headingTwo;
   rejectInvoiceForm: FormGroup;
   showLoader: boolean = null;
+  unSavedData = false;
+
   constructor(
     private fb: FormBuilder,
     private faultsService: FaultsService,
@@ -27,6 +29,7 @@ export class RejectInvoiceComponent implements OnInit {
   dismiss() {
     this.modalController.dismiss();
   }
+
   pmRejectInvoice() {
     if (!this.rejectInvoiceForm.valid) { this.rejectInvoiceForm.markAllAsTouched(); return; }
     this.showLoader = true;
@@ -48,6 +51,18 @@ export class RejectInvoiceComponent implements OnInit {
       );
     });
     return promise;
+  }
+
+  async onCancel() {
+    if (this.rejectInvoiceForm.value.rejectionReason) {
+      this.unSavedData = true;
+    } else {
+      this.dismiss();
+    }
+  }
+
+  continue() {
+    this.unSavedData = false;
   }
 
 }

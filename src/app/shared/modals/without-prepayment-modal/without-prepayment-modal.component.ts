@@ -17,6 +17,7 @@ export class WithoutPrepaymentModalComponent implements OnInit {
   paymentWarnings: any[] = [];
   private REPAIR_ESTIMATE_QUOTE_THRESHOLD = 250;
   showLoader: boolean = false;
+  unSavedData = false;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -91,6 +92,18 @@ export class WithoutPrepaymentModalComponent implements OnInit {
       this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Proceed without pre-payment', 'error');
 
     })
+  }
+
+  async onCancel() {
+    if(this.withoutPrePaymentForm.value.overrideReason || this.withoutPrePaymentForm.value.proceedWithoutPaymentAt){
+      this.unSavedData = true;
+    }else{
+      this.dismiss();
+    }
+  }
+
+  continue(){
+    this.unSavedData = false;
   }
 
   dismiss() {

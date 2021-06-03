@@ -17,6 +17,7 @@ export class RejectionModalPage implements OnInit {
   title;
   rejectedByType;
   showLoader: boolean = false;
+  unSavedData = false;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -57,6 +58,18 @@ export class RejectionModalPage implements OnInit {
       this.showLoader = false;
       this.commonService.showMessage('Something went wrong on server, please try again.', 'No Authorisation', 'error');
     })
+  }
+
+  async onCancel() {
+    if (this.rejectionForm.value.doesWantAnotherQuote || this.rejectionForm.value.other || this.rejectionForm.value.rejectionReason) {
+      this.unSavedData = true;
+    } else {
+      this.dismiss();
+    }
+  }
+
+  continue() {
+    this.unSavedData = false;
   }
 
   dismiss() {

@@ -16,6 +16,7 @@ export class ContractorDetailsModalPage implements OnInit {
   llContractorDetails;
   estimatedVisitAt;
   currentDate = this.commonService.getFormatedDate(new Date());
+  unSavedData = false;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -55,7 +56,7 @@ export class ContractorDetailsModalPage implements OnInit {
       this.contractorDetailForm.disable();
   }
 
-  save() {      
+  save() {
     if (this.contractorDetailForm.valid) {
       let requestObj: any = {
         company: this.contractorDetailForm.value.company,
@@ -85,6 +86,24 @@ export class ContractorDetailsModalPage implements OnInit {
       this.contractorDetailForm.markAllAsTouched();
     }
 
+  }
+
+  async onCancel() {
+    if (this.contractorDetailForm.value.company
+      || this.contractorDetailForm.value.name
+      || this.contractorDetailForm.value.telephone
+      || this.contractorDetailForm.value.email
+      || this.contractorDetailForm.value.estimatedVisitAt
+      || this.contractorDetailForm.value.notes
+      || this.contractorDetailForm.value.hasContractorConsent) {
+      this.unSavedData = true;
+    } else {
+      this.dismiss();
+    }
+  }
+
+  continue() {
+    this.unSavedData = false;
   }
 
   dismiss() {
