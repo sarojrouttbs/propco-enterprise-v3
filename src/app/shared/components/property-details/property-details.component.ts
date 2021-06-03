@@ -1,5 +1,5 @@
 import { ERROR_MESSAGE, DOCUMENTS_TYPE, PROPCO } from './../../constants';
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -50,6 +50,12 @@ export class PropertyDetailsComponent implements OnInit {
       });
     }
 
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.propertyDetails && changes.propertyDetails.currentValue) {
+      this.propertyDetails = changes.propertyDetails.currentValue;
+    }
   }
 
   ngOnInit() {
