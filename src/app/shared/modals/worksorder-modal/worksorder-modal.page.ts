@@ -89,9 +89,9 @@ export class WorksorderModalPage implements OnInit {
         additionalWorkDetails: { value: this.additionalWorkDetails, disabled: true },
         jobCompletionAt: { value: this.commonService.getFormatedDate(this.jobCompletionDate, 'yyyy-MM-ddTHH:mm'), disabled: true },
         submittedById: '',
-        additionalEstimate: { value: this.additionalEstimate, disabled: true },
+        additionalEstimate: { value: this.additionalEstimate ? this.additionalEstimate : '', disabled: true },
         submittedByType: 'SECUR_USER',
-        invoiceAmount: this.invoiceAmount
+        invoiceAmount: this.invoiceAmount ? this.invoiceAmount : ''
       });
     }
   }
@@ -361,4 +361,23 @@ export class WorksorderModalPage implements OnInit {
     this.unSavedData = false;
   }
 
+  onBlurCurrency(val: any, form: FormGroup) {
+    if (!val) {
+      if (form == this.jobCompletionForm) {
+        this.jobCompletionForm.patchValue({
+          invoiceAmount: '',
+        });
+      }
+    }
+  }
+
+  onBlurAdditionalEstimate(val: any, form: FormGroup) {
+    if (!val) {
+      if (form == this.jobCompletionForm) {
+        this.jobCompletionForm.patchValue({
+          additionalEstimate: '',
+        });
+      }
+    }
+  }
 }

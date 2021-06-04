@@ -171,6 +171,8 @@ declare namespace FaultModels {
         maintenanceId: string;
         useCommissionRate: boolean;
         thirdPartySource?: number;
+        commissionAmount: number;
+        commissionRate: number;
     }
 
     export interface QuoteContractor {
