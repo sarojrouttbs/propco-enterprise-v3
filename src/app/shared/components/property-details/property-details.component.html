@@ -75,7 +75,7 @@
               <ion-col size-lg="25" size="33.3">
                 <span class="text">Occupancy Status</span>
                 <br />
-                {{propertyDetails.isOwnerOccupied ? 'Landlord Occupied': propertyDetails.isPropertyCheckedIn ?
+                {{propertyDetails?.landlordOccupancy === 1 ? 'Landlord Occupied': propertyDetails?.isPropertyCheckedIn ?
                 'Tenanted' : 'Vacant' }}
               </ion-col>
               <!-- <ion-col size-lg="25" size="33.3">

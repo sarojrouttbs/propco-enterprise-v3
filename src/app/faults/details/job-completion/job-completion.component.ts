@@ -449,12 +449,14 @@ export class JobCompletionComponent implements OnInit {
           const addressString = addressArray.length ? addressArray.join(', ') : '';
           this.workOrderForm.patchValue({
             company: data ? data.companyName : undefined, agentReference: data ? data.agentReference : undefined,
-            defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined,
-            defaultCommissionAmount: data ? data.defaultCommissionAmount : undefined,
+            // defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined,
+            // defaultCommissionAmount: data ? data.defaultCommissionAmount : undefined,
             businessTelephone: data ? data.businessTelephone : undefined,
             contractorName: data ? data.fullName : undefined, address: addressString,
             contractorId: data ? data.contractorId : undefined,
-            useCommissionRate: this.faultMaintenanceDetails.useCommissionRate
+            useCommissionRate: this.faultMaintenanceDetails.useCommissionRate,
+            defaultCommissionPercentage: this.faultMaintenanceDetails.commissionRate ? this.faultMaintenanceDetails.commissionRate : data.defaultCommissionPercentage,
+            defaultCommissionAmount: this.faultMaintenanceDetails.commissionAmount ? this.faultMaintenanceDetails.commissionAmount : data.defaultCommissionAmount
           });
         }
       }, error => {
