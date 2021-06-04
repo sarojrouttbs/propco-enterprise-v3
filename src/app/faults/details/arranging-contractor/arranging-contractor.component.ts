@@ -516,13 +516,15 @@ export class ArrangingContractorComponent implements OnInit {
     }
     else {
       if (!this.isWorksOrder) {
-        if (this.validateReq()) {
+        const skipReqValidation = true;
+        if (this.validateReq(skipReqValidation)) {
           this.saving = false;
           return;
         }
         if (!this.faultMaintenanceDetails) {
           /*raise a quote*/
-          const quoteRaised = await this.raiseQuote();
+          const isDraft = true;
+          const quoteRaised = await this.raiseQuote(isDraft);
           if (quoteRaised) {
             const faultUpdated = await this.updateFault();
             if (faultUpdated) {
@@ -564,9 +566,9 @@ export class ArrangingContractorComponent implements OnInit {
     this.saving = false;
   }
 
-  private raiseQuote() {
+  private raiseQuote(isDraft: boolean = false) {
     const promise = new Promise((resolve, reject) => {
-      this.faultsService.raiseQuote(this.prepareQuoteData(), this.faultDetails.faultId).subscribe((res) => {
+      this.faultsService.raiseQuote(this.prepareQuoteData(isDraft), this.faultDetails.faultId).subscribe((res) => {
         resolve(res);
         this.commonService.showMessage('Successfully Raised', 'Quote', 'success');
       }, error => {
@@ -618,21 +620,23 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  private validateReq() {
+  private validateReq(skipReqValidation: boolean = false) {
     let invalid = true;
     if (!this.isWorksOrder) {
-      if (!this.raiseQuoteForm.valid) {
-        this.commonService.showMessage('Please fill all required fields.', 'Quote', 'error');
-        this.raiseQuoteForm.markAllAsTouched();
-        return invalid;
-      }
-      if (this.raiseQuoteForm.value.contractorList.length == 0) {
-        this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Quote', 'error');
-        return invalid;
-      }
-      if (!this.raiseQuoteForm.get('selectedContractorId').value) {
-        this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
-        return invalid;
+      if (!skipReqValidation) {
+        if (!this.raiseQuoteForm.valid) {
+          this.commonService.showMessage('Please fill all required fields.', 'Quote', 'error');
+          this.raiseQuoteForm.markAllAsTouched();
+          return invalid;
+        }
+        if (this.raiseQuoteForm.value.contractorList.length == 0) {
+          this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Quote', 'error');
+          return invalid;
+        }
+        if (!this.raiseQuoteForm.get('selectedContractorId').value) {
+          this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
+          return invalid;
+        }
       }
       if (this.iacNotification && this.iacNotification.responseReceived != null && this.iacNotification.responseReceived.isAccepted === false && this.iacNotification.templateCode === 'QC-L-E') {
         if (this.faultMaintenanceDetails.quoteContractors) {
@@ -658,6 +662,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private updateFaultQuoteContractor() {
+    if (!this.raiseQuoteForm.value.selectedContractorId) { return true; }
     const promise = new Promise((resolve, reject) => {
       this.faultsService.updateFaultQuoteContractor(
         { selectedContractorId: this.raiseQuoteForm.value.selectedContractorId },
@@ -686,20 +691,29 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  private prepareQuoteData() {
+  private prepareQuoteData(isDraft: boolean = false) {
     const quoteReqObj: any = JSON.parse(JSON.stringify(this.raiseQuoteForm.getRawValue()));
+    if (isDraft) {
+      quoteReqObj.isDraft = isDraft;
+    }
     quoteReqObj.descption = quoteReqObj.description;
     quoteReqObj.nominalCode = typeof quoteReqObj.nominalCode === 'object' ? quoteReqObj.nominalCode.nominalCode : quoteReqObj.nominalCode;
     delete quoteReqObj.contractorForm;
     if (!this.faultMaintenanceDetails) {
-      quoteReqObj.contractorIds = quoteReqObj.contractorList.map(x => x.contractorId).filter(x => x);
-      quoteReqObj.requiredDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate));
+      if (!quoteReqObj.selectedContractorId) {
+        delete quoteReqObj.selectedContractorId;
+      }
+      if (Array.isArray(quoteReqObj.contractorIds) && quoteReqObj.contractorIds.length !== 0) {
+        quoteReqObj.contractorIds = quoteReqObj.contractorList.map(x => x.contractorId).filter(x => x);
+      } else {
+        delete quoteReqObj.contractorIds;
+      }
+      if (quoteReqObj.requiredDate) { quoteReqObj.requiredDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate)); } else { delete quoteReqObj.requiredDate; }
     } else {
-      quoteReqObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate));
+      if (quoteReqObj.requiredDate) { quoteReqObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(quoteReqObj.requiredDate)); }
       delete quoteReqObj.contractorIds;
     }
     delete quoteReqObj.contractorList;
-
     return quoteReqObj;
   }
 
