@@ -784,10 +784,10 @@
               <div class="question-answer ion-text-center" 
                 *ngIf="(cliNotification?.responseReceived?.isAccepted === false || faultDetails?.isEscalated) && cliNotification?.notificationStatus !== 7 && cliNotification?.responseReceived?.isAccepted != true">
                 <h4 claas="ion-text-center">Next Step:</h4>
-                <h6 *ngIf="faultDetails.urgencyStatus == 3">
+                <h6 *ngIf="faultDetails.urgencyStatus == 3 || cliNotification?.responseReceived">
                   <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
                 </h6>
-                <h6 *ngIf="faultDetails.urgencyStatus != 3" >
+                <h6 *ngIf="faultDetails.urgencyStatus != 3 && cliNotification?.responseReceived == null">
                   <ion-text color="danger">Please note: </ion-text>Fault Escalated - Please proceed with the following action:
                   <ion-grid>
                     <ion-row class="ion-justify-content-center">                    
@@ -821,17 +821,20 @@
                 <ion-grid>
                   <ion-row class="ion-justify-content-center">
                     <ng-container *ngFor="let instruction of landlordInstructionTypes">
-                      <div *ngIf="oldUserSelectedAction != instruction.index">
-                        <ion-button color="{{instruction.index != 'AGENT_OF_NECESSITY' ? 'success' : 'danger'}}"
+                      <div [hidden]="faultDetails?.isEscalated && cliNotification?.notificationStatus !== 7 && !cliNotification?.responseReceived &&
+                        faultDetails.urgencyStatus != 3 && instruction.index == 'AGENT_OF_NECESSITY'">
+                        <div *ngIf="oldUserSelectedAction != instruction.index">
+                          <ion-button color="{{instruction.index != 'AGENT_OF_NECESSITY' ? 'success' : 'danger'}}"
                           expand="block" class="action-btn"
                           fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
                           (click)="setUserAction(instruction.index)">
                           {{instruction.value}}
                           <ion-icon name="checkmark-circle-outline" class="check-icon"
-                            *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
+                          *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
                         </ion-button>
                         <h6 class="ownRepair" *ngIf="(isMatch === false && instruction.index == 'DOES_OWN_REPAIRS')">
                           Landlord owned Repair Category does not match the Fault Category</h6>
+                        </div>
                       </div>
                     </ng-container>
                   </ion-row>
