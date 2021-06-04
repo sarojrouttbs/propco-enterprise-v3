@@ -384,7 +384,12 @@
 </ng-template>
 
 <ng-template #finalView>
-  <ion-grid class="view-details">   
+  <ion-row *ngIf="faultDetails?.isClosed">
+    <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+      <app-close-fault  [notificationData]="iacNotification" [faultDetails]="faultDetails"></app-close-fault>
+    </ion-col>
+  </ion-row>
+  <ion-grid class="view-details" *ngIf="!faultDetails?.isClosed">   
     <ion-row class="ion-justify-content-between">
       <ion-col size="100">
         <div class="title">Please review case details and Start Progress when you’re ready</div>
