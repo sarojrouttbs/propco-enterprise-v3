@@ -165,22 +165,24 @@
 </ion-content>
 <ion-footer>
   <ion-grid [class.unsaved-data-error]="unSavedData">
-    <ng-container *ngIf="unSavedData">
-      <ion-col size="70">
-        <div class="ion-padding-top">Are you sure you want to cancel the process?</div>
-      </ion-col>
-      <ion-col size="30" class="ion-text-end">
-        <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
-        <ion-button color="success" (click)="dismiss()">Yes</ion-button>
-      </ion-col>
-    </ng-container>
-    <ng-container *ngIf="!unSavedData">
-      <ion-col size="100" class="ion-text-end">
-        <ion-button color="danger" fill="outline" (click)="onCancel()">Cancel</ion-button>&nbsp;&nbsp;
-        <ion-button color="success" [disabled]="showLoader" color="success" (click)="onProceed()">Submit
-          <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ng-container>
+    <ion-row>
+      <ng-container *ngIf="unSavedData">
+        <ion-col size="70">
+          <div class="ion-padding-top">Are you sure you want to cancel the process?</div>
+        </ion-col>
+        <ion-col size="30" class="ion-text-end">
+          <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
+          <ion-button color="success" (click)="dismiss()">Yes</ion-button>
+        </ion-col>
+      </ng-container>
+      <ng-container *ngIf="!unSavedData">
+        <ion-col size="100" class="ion-text-end">
+          <ion-button color="danger" fill="outline" (click)="onCancel()">Cancel</ion-button>&nbsp;&nbsp;
+          <ion-button color="success" [disabled]="showLoader" color="success" (click)="onProceed()">Submit
+            <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ng-container>
+    </ion-row>
   </ion-grid>
 </ion-footer>
