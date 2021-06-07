@@ -429,5 +429,20 @@ mat-form-field {
 .reject-invoice-modal{
   .reason > div > textarea{
     overflow: hidden !important;
+  }
 }
+
+.contact-details-modal{
+  .mat-tab-group{
+      margin-top: 10px;
+      align-items: center;
+  }
+  .mat-tab-label{
+      min-width: 248px !important;
+  }
+
+  .mat-tab-label-container{
+    height: 40px;
+    align-items: center;
+  }
 }

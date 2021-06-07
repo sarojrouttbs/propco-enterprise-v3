@@ -795,4 +795,13 @@ export class FaultQualificationComponent implements OnInit {
     });
     await modal.present();
   }
+
+  getCahse(totalChase, completedChase) {
+    const chase = completedChase + 1;
+    if (chase === totalChase) {
+      return 'Last chase due (' + chase + ')';
+    } else {
+      return 'Next chase due (' + chase + ')';
+    }
+  }
 }
