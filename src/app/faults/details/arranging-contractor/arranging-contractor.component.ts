@@ -8,7 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, MAINT_JOB_TYPE, MAINT_REPAIR_SOURCES, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, OCCUPIERS_VULNERABLE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -27,11 +27,14 @@ import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-m
   styleUrls: ['./arranging-contractor.component.scss', '../details.page.scss'],
 })
 export class ArrangingContractorComponent implements OnInit {
+  @ViewChild("outsideElement", { static: true }) outsideElement: ElementRef;
+  @ViewChild('modalView', { static: true }) modalView$: ElementRef;
   raiseQuoteForm: FormGroup;
   workOrderForm: FormGroup;
   addContractorForm: FormGroup;
   contractorListForm: FormGroup;
   userSelectedActionControl = new FormControl();
+  @Input() describeFaultForm;
   @Input() quoteId;
   @Input() faultDetails: FaultModels.IFaultResponse;
   @Output() public btnAction: EventEmitter<any> = new EventEmitter();
@@ -83,15 +86,14 @@ export class ArrangingContractorComponent implements OnInit {
   saving: boolean = false;
   proceeding: boolean = false;
   quoteArray = [];
-
-  @ViewChild("outsideElement", { static: true }) outsideElement: ElementRef;
-  @ViewChild('modalView', { static: true }) modalView$: ElementRef;
   modalData: any;
   fileIds = FILE_IDS;
+  maintenanceJobTypesMap = new Map();
+  maintenanceRepairSourcesMap = new Map();
+  faultReportedByThirdParty;
+  occupiersVulnerableMap = new Map();
   maintenanceJobTypes;
   maintenanceRepairSources;
-  faultReportedByThirdParty;
-  @Input() describeFaultForm;
 
   constructor(
     private fb: FormBuilder,
@@ -165,7 +167,7 @@ export class ArrangingContractorComponent implements OnInit {
       quoteStatus: [{ value: 1, disabled: true }],
       nominalCode: ['', Validators.required],
       fullDescription: [this.faultDetails.notes, Validators.required],
-      jobType: MAINT_JOB_TYPE.index,
+      jobType: this.maintenanceJobTypesMap.get('repair'),
       repairSource: this.getRepairSource(this.faultDetails.sourceType),
       thirdPartySource: this.faultDetails.reportedBy === 'THIRD_PARTY' ? Number(this.faultDetails.reportedById) : '',
       doesBranchHoldKeys: [{ value: this.faultDetails.doesBranchHoldKeys ? 'Yes' : 'No', disabled: true }]
@@ -200,11 +202,11 @@ export class ArrangingContractorComponent implements OnInit {
       useCommissionRate: '',
       businessTelephone: [{ value: '', disabled: true }],
       contact: this.getAccessDetails(this.faultDetails.isTenantPresenceRequired),
-      jobType: MAINT_JOB_TYPE.index,
+      jobType: this.maintenanceJobTypesMap.get('repair'),
       repairSource: this.getRepairSource(this.faultDetails.sourceType),
       requestStartDate: this.currentDate,
       usefulInstruction: this.faultDetails.tenantNotes,
-      vulnerableOccupier: this.faultDetails.areOccupiersVulnerable ? OCCUPIERS_VULNERABLE.TRUE : OCCUPIERS_VULNERABLE.FALSE,
+      vulnerableOccupier: this.faultDetails.areOccupiersVulnerable ? this.occupiersVulnerableMap.get('yes') : this.occupiersVulnerableMap.get('no'),
       thirdPartySource: this.faultDetails.reportedBy === 'THIRD_PARTY' ? Number(this.faultDetails.reportedById) : ''
     });
 
@@ -465,8 +467,9 @@ export class ArrangingContractorComponent implements OnInit {
   private setLookupData(data) {
     this.contractorSkill = data.contractorSkills;
     this.quoteStatuses = data.maintenanceQuoteStatuses;
-    this.maintenanceJobTypes = data.maintenanceJobTypes;
-    this.maintenanceRepairSources = data.maintenanceRepairSources;
+    this.setMaintJobTypeMap(data.maintenanceJobTypes);
+    this.setRepairResMap(data.maintenanceRepairSources);
+    this.setMaintVulMap(data.maintenanceVulOccupiers);
   }
 
   private setFaultsLookupData(data) {
@@ -481,6 +484,32 @@ export class ArrangingContractorComponent implements OnInit {
     this.faultCategories.map((cat, index) => {
       this.categoryMap.set(cat.index, cat.value);
     });
+  }
+
+  private setMaintVulMap(data) {
+    if (data) {
+      data.map((occ, index) => {
+        this.occupiersVulnerableMap.set(occ.value.toLowerCase(), occ.index);
+      });
+    }
+  }
+
+  private setRepairResMap(data) {
+    if (data) {
+      this.maintenanceRepairSources = data;
+      data.map((occ, index) => {
+        this.maintenanceRepairSourcesMap.set(occ.value.toLowerCase(), occ.index);
+      });
+    }
+  }
+
+  private setMaintJobTypeMap(data) {
+    if (data) {
+      this.maintenanceJobTypes = data;
+      data.map((occ, index) => {
+        this.maintenanceJobTypesMap.set(occ.value.toLowerCase(), occ.index);
+      });
+    }
   }
 
   getLookupValue(index, lookup) {
@@ -2077,7 +2106,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   getRepairSource(repairSource) {
-    return repairSource === 'FIXFLO' ? MAINT_REPAIR_SOURCES.FIXFLO : (this.faultDetails.reportedBy === 'THIRD_PARTY' ? MAINT_REPAIR_SOURCES.THIRD_PARTY : MAINT_REPAIR_SOURCES.CUSTOMER_REPORT);
+    return repairSource === 'FIXFLO' ? this.maintenanceRepairSourcesMap.get('fixflo') : (this.faultDetails.reportedBy === 'THIRD_PARTY' ? this.maintenanceRepairSourcesMap.get('third party') : this.maintenanceRepairSourcesMap.get('customer report'));
   }
 
   async closeFault() {

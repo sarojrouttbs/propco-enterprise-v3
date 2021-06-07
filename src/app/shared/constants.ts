@@ -9,6 +9,7 @@ export const PROPCO = {
   REFERENCING_LOOKUP_DATA: 'referencing_lookup_data',
   REFERENCING_PRODUCT_LIST: 'referencing_product_list',
   FAULTS_LOOKUP_DATA: 'faults_lookup_data',
+  LET_CATEGORY: 'let_category',
   SSO_KEY: 'sso_key'
 };
 
@@ -229,7 +230,9 @@ export const REFERENCING_TENANT_TYPE = {
 };
 
 export const SYSTEM_CONFIG = {
-  MAXIMUM_FAULT_QUOTE_REJECTION: 'MAXIMUM_FAULT_QUOTE_REJECTION'
+  MAXIMUM_FAULT_QUOTE_REJECTION: 'MAXIMUM_FAULT_QUOTE_REJECTION',
+  FAULT_MANAGEMENT_LETCAT: 'FAULT_MANAGEMENT_LETCAT'
+
 };
 
 export const SYSTEM_OPTIONS = {
