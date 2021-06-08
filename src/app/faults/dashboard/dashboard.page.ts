@@ -547,88 +547,90 @@ export class DashboardPage implements OnInit {
     this.fs = [];
     this.fus = [];
     this.showEscalated = '';
+    const filterForm = this.filterForm as FormGroup;
     let checkBoxControls = ['repairCheckbox', 'newRepairs', 'emergency', 'urgent', 'nonUrgent', 'assessment', 'automation', 'invoice', 'escalation']
 
     if (controlName) {
       checkBoxControls.forEach(key => {
-        if (this.filterForm.get(controlName).value && controlName !== key) {
-          this.filterForm.get(key).setValue(false);
+        if (controlName !== key) {
+          filterForm.get(key).setValue(false);
         }
       });
     }
-
-    if (this.filterForm.get('repairCheckbox').value) {
-      // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
-      let statusArray = Object.values(FAULT_STATUSES);
-      this.fs = statusArray.filter(status => status != FAULT_STATUSES.CANCELLED && status != FAULT_STATUSES.CLOSED);
-      this.showEscalated = 'false';
-    }
-
-    if (this.filterForm.get('newRepairs').value) {
-      this.fs.push(1);
-      this.showEscalated = 'false';
-    }
-
-    if (this.filterForm.get('emergency').value) {
-      // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
-      this.fs.push(FAULT_STATUSES.REPORTED);
-      this.fus.push(URGENCY_TYPES.EMERGENCY);
-      this.showEscalated = 'false';
-    }
-
-    if (this.filterForm.get('urgent').value) {
-      // this.fs.push(1);
-      this.fs.push(FAULT_STATUSES.REPORTED);
-      this.fus.push(URGENCY_TYPES.URGENT);
-      this.showEscalated = 'false';
-    }
-
-    if (this.filterForm.get('nonUrgent').value) {
-      this.fs.push(FAULT_STATUSES.REPORTED);
-      this.fus.push(URGENCY_TYPES.NON_URGENT);
-      this.showEscalated = 'false';
-    }
-
-    if (this.filterForm.get('assessment').value) {
-      // this.fs.push(2, 13);
-      this.fs.push(FAULT_STATUSES.IN_ASSESSMENT, FAULT_STATUSES.CHECKING_LANDLORD_INSTRUCTIONS);
-      this.showEscalated = 'false';
-    }
-
-    if (this.filterForm.get('automation').value) {
-      // this.fs.push(3, 4, 5, 6, 7, 14, 15, 16, 17, 18, 19, 20, 21, 22);
-      this.fs.push(FAULT_STATUSES.QUOTE_REQUESTED, FAULT_STATUSES.QUOTE_RECEIVED, FAULT_STATUSES.QUOTE_PENDING, FAULT_STATUSES.QUOTE_APPROVED, FAULT_STATUSES.QUOTE_REJECTED,
-        FAULT_STATUSES.WORKSORDER_PENDING, FAULT_STATUSES.AWAITING_JOB_COMPLETION,
-        FAULT_STATUSES.WORKSORDER_RAISED, FAULT_STATUSES.AWAITING_RESPONSE_CONTRACTOR, FAULT_STATUSES.WORK_INPROGRESS, FAULT_STATUSES.WORK_COMPLETED, FAULT_STATUSES.AWAITING_RESPONSE_LANDLORD, FAULT_STATUSES.AWAITING_RESPONSE_TENANT, FAULT_STATUSES.AWAITING_RESPONSE_THIRD_PARTY);
-      this.showEscalated = 'false';
-    }
-
-    if (this.filterForm.get('invoice').value) {
-      // let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancel', this.createInputs());
-      // if (response && response.length > 0) {
-      //   this.fs.push(response);
-      // } else {
-      //   this.filterForm.get('invoice').setValue(false)
-      //   return;
-      // }
-      this.fs.push(FAULT_STATUSES.INVOICE_SUBMITTED, FAULT_STATUSES.INVOICE_APPROVED);
-      this.showEscalated = 'false';
-    }
-    if (this.filterForm.get('escalation').value) {
-      this.showEscalated = 'true';
-    }
-
-    const filteredStatus: any = [];
-    this.fs.filter((elem) =>
-      this.faultStatuses.find((e) => {
-        if (elem === e.index) {
-          filteredStatus.push(e);
-        }
-      })
-    );
-
-    this.filterForm.get('statusFilter').setValue(filteredStatus);
-    this.filterList();
+    setTimeout(()=>{
+      if (this.filterForm.get('repairCheckbox').value) {
+        // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+        let statusArray = Object.values(FAULT_STATUSES);
+        this.fs = statusArray.filter(status => status != FAULT_STATUSES.CANCELLED && status != FAULT_STATUSES.CLOSED);
+        this.showEscalated = 'false';
+      }
+  
+      if (this.filterForm.get('newRepairs').value) {
+        this.fs.push(1);
+        this.showEscalated = 'false';
+      }
+  
+      if (this.filterForm.get('emergency').value) {
+        // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+        this.fs.push(FAULT_STATUSES.REPORTED);
+        this.fus.push(URGENCY_TYPES.EMERGENCY);
+        this.showEscalated = 'false';
+      }
+  
+      if (this.filterForm.get('urgent').value) {
+        // this.fs.push(1);
+        this.fs.push(FAULT_STATUSES.REPORTED);
+        this.fus.push(URGENCY_TYPES.URGENT);
+        this.showEscalated = 'false';
+      }
+  
+      if (this.filterForm.get('nonUrgent').value) {
+        this.fs.push(FAULT_STATUSES.REPORTED);
+        this.fus.push(URGENCY_TYPES.NON_URGENT);
+        this.showEscalated = 'false';
+      }
+  
+      if (this.filterForm.get('assessment').value) {
+        // this.fs.push(2, 13);
+        this.fs.push(FAULT_STATUSES.IN_ASSESSMENT, FAULT_STATUSES.CHECKING_LANDLORD_INSTRUCTIONS);
+        this.showEscalated = 'false';
+      }
+  
+      if (this.filterForm.get('automation').value) {
+        // this.fs.push(3, 4, 5, 6, 7, 14, 15, 16, 17, 18, 19, 20, 21, 22);
+        this.fs.push(FAULT_STATUSES.QUOTE_REQUESTED, FAULT_STATUSES.QUOTE_RECEIVED, FAULT_STATUSES.QUOTE_PENDING, FAULT_STATUSES.QUOTE_APPROVED, FAULT_STATUSES.QUOTE_REJECTED,
+          FAULT_STATUSES.WORKSORDER_PENDING, FAULT_STATUSES.AWAITING_JOB_COMPLETION,
+          FAULT_STATUSES.WORKSORDER_RAISED, FAULT_STATUSES.AWAITING_RESPONSE_CONTRACTOR, FAULT_STATUSES.WORK_INPROGRESS, FAULT_STATUSES.WORK_COMPLETED, FAULT_STATUSES.AWAITING_RESPONSE_LANDLORD, FAULT_STATUSES.AWAITING_RESPONSE_TENANT, FAULT_STATUSES.AWAITING_RESPONSE_THIRD_PARTY);
+        this.showEscalated = 'false';
+      }
+  
+      if (this.filterForm.get('invoice').value) {
+        // let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancel', this.createInputs());
+        // if (response && response.length > 0) {
+        //   this.fs.push(response);
+        // } else {
+        //   this.filterForm.get('invoice').setValue(false)
+        //   return;
+        // }
+        this.fs.push(FAULT_STATUSES.INVOICE_SUBMITTED, FAULT_STATUSES.INVOICE_APPROVED);
+        this.showEscalated = 'false';
+      }
+      if (this.filterForm.get('escalation').value) {
+        this.showEscalated = 'true';
+      }
+  
+      const filteredStatus: any = [];
+      this.fs.filter((elem) =>
+        this.faultStatuses.find((e) => {
+          if (elem === e.index) {
+            filteredStatus.push(e);
+          }
+        })
+      );
+  
+      this.filterForm.get('statusFilter').setValue(filteredStatus);
+      this.filterList();
+    },200)
   }
 
   async onStatusChange() {
@@ -840,6 +842,7 @@ export class DashboardPage implements OnInit {
   }
 
   clickCheckbox(controlName) {
+    this.checkboxClick(controlName);
     if (this.filterForm.get(controlName).value) {
       this.filterForm.get(controlName).setValue(!this.filterForm.get(controlName).value);
       return;
