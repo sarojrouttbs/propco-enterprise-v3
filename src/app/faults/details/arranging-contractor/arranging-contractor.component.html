@@ -530,7 +530,7 @@
           </ion-select>
         </ion-item>
       </ion-col>
-      <ion-col size="33.33" *ngIf="raiseQuoteForm.controls.repairSource.value === 5128">
+      <ion-col size="33.33" *ngIf="raiseQuoteForm.controls.repairSource.value === maintenanceRepairSourcesMap.get('third party')">
         <ion-item>
           <ion-label position="floating">Third Party</ion-label>
             <ion-select interface="popover" formControlName="thirdPartySource">
@@ -802,7 +802,7 @@
           </ion-select>
         </ion-item>
       </ion-col>
-      <ion-col size="33.33" *ngIf="workOrderForm.controls.repairSource.value === 5128">
+      <ion-col size="33.33" *ngIf="workOrderForm.controls.repairSource.value === maintenanceRepairSourcesMap.get('third party')">
         <ion-item>
           <ion-label position="floating">Third Party</ion-label>
             <ion-select interface="popover" formControlName="thirdPartySource">

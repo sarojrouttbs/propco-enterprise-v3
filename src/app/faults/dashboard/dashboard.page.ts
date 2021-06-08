@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { ERROR_MESSAGE, FAULT_STATUSES, PROPCO, REPORTED_BY_TYPES, URGENCY_TYPES } from './../../shared/constants';
+import { ERROR_MESSAGE, FAULT_STATUSES, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES } from './../../shared/constants';
 import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
 import { Router } from '@angular/router';
@@ -23,7 +23,8 @@ export class DashboardPage implements OnInit {
 
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
 
-  dtOptions: DataTables.Settings[] = [];
+  notesDtOption: DataTables.Settings;
+  faultsDtOption: Promise<DataTables.Settings>;
   dtTrigger: Subject<any> = new Subject();
   notesDtTrigger: Subject<any> = new Subject();
   faultList: any[];
@@ -65,6 +66,8 @@ export class DashboardPage implements OnInit {
   selectedFaultList: any = [];
   showEscalated = '';
   searchKey = new FormControl('');
+  LET_CATEGORY;
+  FULLY_MANAGED_PROPERTY_TYPES = [];
 
   constructor(
     private commonService: CommonService,
@@ -77,10 +80,19 @@ export class DashboardPage implements OnInit {
     this.getLookupData();
   }
 
-  ngOnInit(): void {
-    this.dtOptions[1] = this.buildDtOptions();
+  async ngOnInit() {
+    this.initFilterForm();
+    this.notesDtOption = this.buildDtOptions();
+    this.faultsDtOption = this.getFaultTableDtOption();
+    setTimeout(() => {
+      this.notesDtTrigger.next();
+    }, 1000);
+
+  }
+
+  async getFaultTableDtOption(): Promise<DataTables.Settings> {
     const that = this;
-    this.dtOptions[0] = {
+    let dtOption = {
       paging: true,
       pagingType: 'full_numbers',
       serverSide: true,
@@ -94,9 +106,9 @@ export class DashboardPage implements OnInit {
         this.faultParams = this.faultParams
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1');
-        // if (this.fpm.length > 0) {
-        // this.faultParams = this.faultParams.set('fpm', '17,18,20,24,27,32,35,36');
-        // }
+        if (this.fpm.length > 0) {
+          this.faultParams = this.faultParams.set('fpm', this.fpm.toString());
+        }
         that.faultsService.getAllFaults(this.faultParams).subscribe(res => {
           that.faultList = res && res.data ? res.data : [];
           this.faultList.forEach((item) => {
@@ -114,13 +126,19 @@ export class DashboardPage implements OnInit {
         this.hideMenu('', 'divOverlay');
       }
     };
-
-    setTimeout(() => {
-      this.notesDtTrigger.next();
-    }, 1000);
-
-    this.initFilterForm();
-    this.getMgntServiceType();
+    const promise = new Promise(async (resolve, reject) => {
+      this.LET_CATEGORY = this.commonService.getItem(PROPCO.LET_CATEGORY, true);
+      if(!this.LET_CATEGORY){
+        let category = await this.getSystemConfigs(SYSTEM_CONFIG.FAULT_MANAGEMENT_LETCAT);
+        if (category && parseInt(category)) {
+          this.LET_CATEGORY = parseInt(category);
+          this.commonService.setItem(PROPCO.LET_CATEGORY, this.LET_CATEGORY);
+        }
+      }
+      await this.getMgntServiceType();
+      resolve(dtOption)
+    });
+    return promise;
   }
 
   initFilterForm() {
@@ -146,9 +164,20 @@ export class DashboardPage implements OnInit {
   }
 
   ionViewDidEnter() {
-    this.faultParams = this.faultParams.set('fpm', '17,18,20,24,27,32,35,36');
+    // this.faultParams = this.faultParams.set('fpm', this.FULLY_MANAGED_PROPERTY_TYPES.toString());
     this.rerenderFaults(true);
     this.hideMenu('', 'divOverlay');
+  }
+
+  private async getSystemConfigs(key): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.commonService.getSystemConfig(key).subscribe(res => {
+        resolve(res[key]);
+      }, error => {
+        resolve(true);
+      });
+    });
+    return promise;
   }
 
   private getLookupData() {
@@ -416,18 +445,23 @@ export class DashboardPage implements OnInit {
   }
 
   getMgntServiceType() {
-    this.faultsService.getManagementTypes().subscribe(res => {
-      this.managementTypeList = res ? res : [];
-      if (this.managementTypeList) {
-        for (var val of this.managementTypeList) {
-          if (val.letCategory === 3346) {
-            this.fpm.push(val.index);
-            this.selectedMgmtType.push(val)
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.getManagementTypes().subscribe(res => {
+        this.managementTypeList = res ? res : [];
+        if (this.managementTypeList) {
+          for (var val of this.managementTypeList) {
+            if (val.letCategory === this.LET_CATEGORY) {
+              this.FULLY_MANAGED_PROPERTY_TYPES.push(val.index);
+              this.fpm.push(val.index);
+              this.selectedMgmtType.push(val)
+            }
           }
+          this.filterForm.get('managementFilter').setValue(this.selectedMgmtType);
         }
-        this.filterForm.get('managementFilter').setValue(this.selectedMgmtType);
-      }
+        resolve(true);
+      });
     });
+    return promise;
   }
 
   getAssignedUsers() {
@@ -494,7 +528,8 @@ export class DashboardPage implements OnInit {
     this.isManagementFilter = false;
     this.isStatusFilter = false;
     this.isAssignToFilter = false;
-    this.fpm = [17,18,20,24,27,32,35,36];
+    // this.fpm = [17,18,20,24,27,32,35,36];
+    this.fpm = this.FULLY_MANAGED_PROPERTY_TYPES;
     this.faultParams = new HttpParams().set('limit', '5').set('page', '1').set('fpm', this.fpm.toString());
     this.rerenderFaults();
     this.fs = [];
