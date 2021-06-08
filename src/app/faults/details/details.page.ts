@@ -2576,9 +2576,7 @@ export class DetailsPage implements OnInit {
 
   }
 
-  getCahse(totalChase, completedChase) {
-    console.log("ddddd");
-    
+  getCahse(totalChase, completedChase) {    
     const chase = completedChase + 1;
     if (chase === totalChase) {
       return 'Last chase due (' + chase + ')';
