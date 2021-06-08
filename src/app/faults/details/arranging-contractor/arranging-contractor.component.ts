@@ -2160,7 +2160,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   }
 
-  getCahse(totalChase, completedChase) {
+  getChase(totalChase, completedChase) {
     const chase = completedChase + 1;    
     if (chase === totalChase) {
       return 'Last chase due (' + chase + ')';

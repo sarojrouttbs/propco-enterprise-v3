@@ -45,7 +45,7 @@
               <span *ngIf="iqfNotification?.recipientType === 148">Block Management/Factors Company</span>
               <span *ngIf="iqfNotification?.recipientType === 1">Tenant</span>
             </h6>
-            <h6 class="banner-title" *ngIf="!faultDetails?.isEscalated">{{iqfNotification.allowedNumberOfChases === iqfNotification.numberOfChasesDone?'Escalation due': getCahse(iqfNotification.allowedNumberOfChases,iqfNotification.numberOfChasesDone)}}:
+            <h6 class="banner-title" *ngIf="!faultDetails?.isEscalated">{{iqfNotification.allowedNumberOfChases === iqfNotification.numberOfChasesDone?'Escalation due': getChase(iqfNotification.allowedNumberOfChases,iqfNotification.numberOfChasesDone)}}:
               {{iqfNotification ? (iqfNotification.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
             </h6>
           </ng-container>
