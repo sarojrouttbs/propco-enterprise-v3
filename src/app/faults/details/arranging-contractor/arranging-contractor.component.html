@@ -45,7 +45,7 @@
               <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt && iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone && !faultDetails?.isEscalated">Escalation due:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
               </h6>
-              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt && iacNotification.allowedNumberOfChases != iacNotification.numberOfChasesDone && iacNotification?.chaseTemplateCode !='LNP-L-E'">{{getChase(iacNotification.allowedNumberOfChases,iacNotification.numberOfChasesDone)}}:
+              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt && iacNotification.allowedNumberOfChases != iacNotification.numberOfChasesDone && iacNotification?.chaseTemplateCode !='LNP-L-E'"> {{ (iacNotification.numberOfChasesDone+1) === iacNotification.allowedNumberOfChases ? 'Last chase due('+(iacNotification.numberOfChasesDone+1)+')' : 'Next chase due('+(iacNotification.numberOfChasesDone+1)+')' }}:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
               </h6>
 

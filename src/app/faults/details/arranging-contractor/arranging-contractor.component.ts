@@ -1008,7 +1008,7 @@ export class ArrangingContractorComponent implements OnInit {
           this.disableQuoteDetail();
         } else {
           this.disableWorksOrderDetail();
-        }
+        }        
         resolve(filtereData[0]);
       } else {
         resolve(null);
@@ -2158,14 +2158,5 @@ export class ArrangingContractorComponent implements OnInit {
       }
     });
 
-  }
-
-  getChase(totalChase, completedChase) {
-    const chase = completedChase + 1;    
-    if (chase === totalChase) {
-      return 'Last chase due (' + chase + ')';
-    } else {
-      return 'Next chase due (' + chase + ')';
-    }
   }
 }

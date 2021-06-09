@@ -41,7 +41,7 @@
                   <span *ngIf="iacNotification?.recipientType == 11">Contractor</span>
                   <span *ngIf="iacNotification?.recipientType == 1">Tenant</span>
               </h6>
-              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt" >{{iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone?'Escalation due': getChase(iacNotification.allowedNumberOfChases,iacNotification.numberOfChasesDone)}}:
+              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt" >{{iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone?'Escalation due': (iacNotification.numberOfChasesDone+1) === iacNotification.allowedNumberOfChases ? 'Last chase due('+(iacNotification.numberOfChasesDone+1)+')' : 'Next chase due('+(iacNotification.numberOfChasesDone+1)+')'}}:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
               </h6>
             </ng-container>

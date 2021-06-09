@@ -820,13 +820,4 @@ export class JobCompletionComponent implements OnInit {
       }
     }
   }
-
-  getChase(totalChase, completedChase) {
-    const chase = completedChase + 1;
-    if (chase === totalChase) {
-      return 'Last chase due (' + chase + ')';
-    } else {
-      return 'Next chase due (' + chase + ')';
-    }
-  }
 }
