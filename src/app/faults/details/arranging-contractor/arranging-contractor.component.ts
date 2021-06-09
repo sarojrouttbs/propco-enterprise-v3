@@ -1003,12 +1003,13 @@ export class ArrangingContractorComponent implements OnInit {
         return <any>new Date(b.createdAt) - <any>new Date(a.createdAt);
       });
       if (filtereData && filtereData[0]) {
+        filtereData[0].chase = filtereData[0].numberOfChasesDone + 1;
         if (!this.isWorksOrder) {
           this.disableContractorsList(filtereData[0]);
           this.disableQuoteDetail();
         } else {
           this.disableWorksOrderDetail();
-        }
+        }        
         resolve(filtereData[0]);
       } else {
         resolve(null);
@@ -2159,5 +2160,4 @@ export class ArrangingContractorComponent implements OnInit {
     });
 
   }
-
 }
