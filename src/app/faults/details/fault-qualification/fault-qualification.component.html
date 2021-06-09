@@ -137,7 +137,7 @@
     </ion-col>
   </ion-row>
 </ion-grid>
-<ion-grid *ngIf="!showSkeleton">
+<ion-grid *ngIf="(!iqfNotification || iqfNotification?.templateCode === 'FI-T-E-1') && !showSkeleton">
   <form [formGroup]="faultQualificationForm">
     <ion-row>
       <ion-col class="card">
