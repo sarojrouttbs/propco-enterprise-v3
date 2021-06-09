@@ -1858,6 +1858,7 @@ export class DetailsPage implements OnInit {
       filtereData = filtereData.sort((a, b) => {
         return <any>new Date(b.createdAt) - <any>new Date(a.createdAt);
       });
+      filtereData[0].chase = filtereData[0].numberOfChasesDone + 1;
       resolve(filtereData[0]);
       // } else {
       //   resolve(filtereData[0]);
