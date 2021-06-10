@@ -68,6 +68,7 @@ export class DashboardPage implements OnInit {
   searchKey = new FormControl('');
   LET_CATEGORY;
   FULLY_MANAGED_PROPERTY_TYPES = [];
+  private loadTable = true;
 
   constructor(
     private commonService: CommonService,
@@ -81,6 +82,7 @@ export class DashboardPage implements OnInit {
   }
 
   async ngOnInit() {
+    this.loadTable = false;
     this.initFilterForm();
     this.notesDtOption = this.buildDtOptions();
     this.faultsDtOption = this.getFaultTableDtOption();
@@ -165,7 +167,10 @@ export class DashboardPage implements OnInit {
 
   ionViewDidEnter() {
     // this.faultParams = this.faultParams.set('fpm', this.FULLY_MANAGED_PROPERTY_TYPES.toString());
-    this.rerenderFaults(true);
+    if(this.loadTable){
+      this.rerenderFaults(true);
+    }
+    this.loadTable = true;
     this.hideMenu('', 'divOverlay');
   }
 

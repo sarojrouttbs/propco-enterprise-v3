@@ -734,7 +734,7 @@
                     [ngClass]="cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?'no-response':'awaiting-response'"
                   >
                     <ion-icon name="ellipse" class="response-circle"></ion-icon> {{cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?'No response':'Awaiting response'}} received from Landlord</h6>
-                  <h6 class="banner-title" *ngIf="!faultDetails?.isEscalated" >{{cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone?'Escalation':'Next chase'}} due:
+                  <h6 class="banner-title" *ngIf="!faultDetails?.isEscalated" >{{cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone?'Escalation due': cliNotification.chase === cliNotification.allowedNumberOfChases ? 'Last chase due('+cliNotification.chase+')' : 'Next chase due('+cliNotification.chase+')'}}:
                     {{cliNotification ? (cliNotification.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
                   </h6>
                 </ng-container>
