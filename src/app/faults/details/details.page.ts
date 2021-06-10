@@ -353,11 +353,11 @@ export class DetailsPage implements OnInit {
     }
     // this.commonService.showLoader();
     forkJoin([
-      this.getFaultAdditionalInfo(),
       this.getPropertyById(),
-      this.getPropertyTenancies(),
+      this.getFaultAdditionalInfo(),
       this.getHMOLicenceDetails(),
-      this.getMaxDocUploadLimit()
+      this.getMaxDocUploadLimit(),
+      this.getPropertyTenancies()
     ]).subscribe(async (values) => {
       if (this.faultId) {
         // this.commonService.hideLoader();
@@ -537,9 +537,13 @@ export class DetailsPage implements OnInit {
       this.faultsService.getPropertyTenancies(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
-            this.propertyTenancyList = res.data.filter(x => x.hasCheckedIn);
+            this.propertyTenancyList = res.data.filter(x => {
+              if (x.hasCheckedIn) {
+                this.propertyDetails.isPropertyCheckedIn = true;
+                return x;
+              }
+            });
             if (this.propertyTenancyList && this.propertyTenancyList.length) {
-              this.propertyDetails.isPropertyCheckedIn = true;
               for (let i = 0; i < this.propertyTenancyList.length; i++) {
                 const tenants = this.propertyTenancyList[i].tenants;
                 let tenantIdList = tenants.filter(data => data.tenantId).map(d => d.tenantId);
