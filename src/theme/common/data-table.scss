@@ -19,6 +19,11 @@
     color: var(--ion-color-step-200);
   }
 
+  .dataTables_processing{
+    margin-top: 20px;
+    font-size: 14px;
+  }
+
   .dataTables_length {
     margin-bottom: 10px;
     select {

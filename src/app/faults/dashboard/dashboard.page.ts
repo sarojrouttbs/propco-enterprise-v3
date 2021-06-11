@@ -126,6 +126,9 @@ export class DashboardPage implements OnInit {
           this.rerenderNotes();
         })
         this.hideMenu('', 'divOverlay');
+      },
+      language:{
+        processing: 'Loading...'
       }
     };
     const promise = new Promise(async (resolve, reject) => {
