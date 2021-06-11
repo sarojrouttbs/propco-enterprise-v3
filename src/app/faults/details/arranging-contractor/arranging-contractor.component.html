@@ -145,7 +145,8 @@
               </ng-container>
             </div>
 
-            <div class="question-answer ion-text-center" *ngIf="faultDetails.isEscalated && iacNotification?.notificationStatus !== 7">
+            <div class="question-answer ion-text-center" *ngIf="faultDetails.isEscalated && iacNotification?.notificationStatus !== 7 
+            && !faultMaintenanceDetails?.doesWantAnotherQuote">
               <h6>
                 <ion-text color="danger">Please note: </ion-text>
                 <span *ngIf="faultDetails.isEscalated">Fault Escalated - PM to decide the next steps</span>
@@ -177,6 +178,24 @@
             <div class="border-bottom"></div>
           </div>
 
+          <div class="question-answer"
+            *ngIf="iacNotification && faultMaintenanceDetails?.doesWantAnotherQuote">
+            <h4 class="ion-text-center">Next Step:</h4>
+            <h6>Based on Landlord's response, the next action is:</h6>
+            <ion-grid>
+              <ion-row class="ion-justify-content-center">
+                <ion-button color="success" expand="block" class="action-btn"
+                fill="{{userSelectedActionControl.value == otherStageActions[1].index ? 'solid' :'outline'}}"
+                (click)="setUserAction(otherStageActions[1].index)" >
+                Obtain Quote
+                <ion-icon name="checkmark-circle-outline" class="check-icon"
+                  *ngIf="(userSelectedActionControl.value == otherStageActions[1].index)"></ion-icon>
+              </ion-button>
+              </ion-row>
+            </ion-grid>            
+            <div class="border-bottom"></div>
+          </div>
+
           <div class="question-answer">
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
@@ -185,7 +204,7 @@
                   <div *ngFor="let instruction of otherStageActions">
                     <ion-button color="success" expand="block" class="action-btn"
                       fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
-                      (click)="setUserAction(instruction.index)">
+                      (click)="setUserAction(instruction.index)" [hidden]="faultMaintenanceDetails?.doesWantAnotherQuote && instruction.index=='OBTAIN_QUOTE'">
                       {{instruction.value}}
                       <ion-icon name="checkmark-circle-outline" class="check-icon"
                         *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
