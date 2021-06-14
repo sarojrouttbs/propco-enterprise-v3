@@ -58,7 +58,7 @@ export class EscalateModalPage implements OnInit {
   }
 
   async onCancel() {
-    if(this.escalateForm.value.escalationReason || this.escalateForm.value.escalationReason){
+    if(this.escalateForm.value.escalationReason){
       this.unSavedData = true;
     }else{
       this.dismiss();
