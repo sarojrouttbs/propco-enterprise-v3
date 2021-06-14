@@ -89,13 +89,13 @@ export class ContractorDetailsModalPage implements OnInit {
   }
 
   async onCancel() {
-    if (this.contractorDetailForm.value.company
+    if ((this.contractorDetailForm.value.company
       || this.contractorDetailForm.value.name
       || this.contractorDetailForm.value.telephone
       || this.contractorDetailForm.value.email
       || this.contractorDetailForm.value.estimatedVisitAt
       || this.contractorDetailForm.value.notes
-      || this.contractorDetailForm.value.hasContractorConsent) {
+      || this.contractorDetailForm.value.hasContractorConsent) && this.estimatedVisitAt ==null) {
       this.unSavedData = true;
     } else {
       this.dismiss();
