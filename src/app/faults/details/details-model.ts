@@ -98,7 +98,7 @@ declare namespace FaultModels {
         nominalCode?: string;
         requiredStartDate?: any;
         requiredCompletionDate?: any;
-        orderedById?:string;
+        orderedById?: string;
     }
 
     export interface AdditionalInfo {
@@ -173,6 +173,7 @@ declare namespace FaultModels {
         thirdPartySource?: number;
         commissionAmount: number;
         commissionRate: number;
+        doesWantAnotherQuote?: boolean;
     }
 
     export interface QuoteContractor {
