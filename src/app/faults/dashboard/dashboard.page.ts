@@ -164,7 +164,8 @@ export class DashboardPage implements OnInit {
       invoice: [],
       escalation: [],
       selectedPorts: [],
-      assignToFilter: []
+      assignToFilter: [],
+      showMyRepairs:[]
     });
   }
 
@@ -697,6 +698,7 @@ export class DashboardPage implements OnInit {
     this.faultParams = this.faultParams.delete('fus');
     this.faultParams = this.faultParams.delete('showEscalated');
     this.faultParams = this.faultParams.delete('searchKey');
+    this.faultParams = this.faultParams.delete('showMyRepairs');
 
     if (this.fat.length > 0) {
       this.faultParams = this.faultParams.set('fat', this.fat.toString());
@@ -726,6 +728,11 @@ export class DashboardPage implements OnInit {
     }
     if (this.searchKey.value && this.searchKey.value.length >= 3) {
       this.faultParams = this.faultParams.set('searchKey', this.searchKey.value.toString());
+    }
+
+    if(this.filterForm.value.showMyRepairs){
+      this.faultParams = this.faultParams.set('showMyRepairs', true);
+
     }
     this.rerenderFaults();
   }
