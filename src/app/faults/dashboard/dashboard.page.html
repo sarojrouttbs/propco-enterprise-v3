@@ -368,6 +368,22 @@
           </ion-col>
   
         </ion-row>
+        
+        <ion-row>
+          <!-- <ion-col size="25" size-md class="pointer ">
+            <ion-item lines="none">
+              <ion-label>Show my repairs</ion-label>
+              <ion-checkbox color="primary" checked slot="start" class="repair-block"></ion-checkbox>
+            </ion-item>
+          </ion-col> -->
+
+          <ion-col size="25" size-md>
+            <ion-item lines="none">
+              <ion-label>Show my repairs</ion-label>
+              <ion-toggle slot="start" formControlName="showMyRepairs" (ionChange)="filterList();" class="pointer "></ion-toggle>
+            </ion-item>
+          </ion-col>
+        </ion-row>
       </form>
   
   
