@@ -45,6 +45,7 @@ import { MoreInfoModalPageModule } from 'src/app/shared/modals/more-info-modal/m
 import { JobCompletionModalPageModule } from 'src/app/shared/modals/job-completion-modal/job-completion-modal.module';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
 import { PaymentRequestModalPageModule } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.module';
+import { LandlordInstructionComponent } from './landlord-instruction/landlord-instruction.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -94,7 +95,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
     PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent, JobCompletionComponent,
-    PaymentComponent],
+    PaymentComponent, LandlordInstructionComponent],
   providers: [CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
 
 })
