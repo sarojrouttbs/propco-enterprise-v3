@@ -537,7 +537,6 @@ export class DetailsPage implements OnInit {
       this.faultsService.getPropertyTenancies(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
-            // this.propertyTenancyList = res.data;
             const currentTenancyStatuses = [1, 2, 5, 6];
             this.propertyTenancyList = res.data.filter(x => x.hasCheckedIn || currentTenancyStatuses.indexOf(x.status)!= -1);
             if (this.propertyTenancyList && this.propertyTenancyList.length) {
