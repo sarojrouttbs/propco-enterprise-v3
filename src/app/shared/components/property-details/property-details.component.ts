@@ -34,6 +34,7 @@ export class PropertyDetailsComponent implements OnInit {
   @Input() leadTenantId;
   @Input() sourceType;
   @Input() fixfloTenantContact;
+  @Input() isPropertyCardReady;
 
   constructor(public commonService: CommonService, public sanitizer: DomSanitizer, public modalController: ModalController) {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -59,16 +60,14 @@ export class PropertyDetailsComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.propertyDetails && changes.propertyDetails.currentValue) {
-      this.propertyDetails = changes.propertyDetails.currentValue;
-    }
+    // if (changes.propertyDetails && changes.propertyDetails.currentValue) {
+    //   this.propertyDetails = changes.propertyDetails.currentValue;
+    // }
     if(changes.landlordDetails && changes.landlordDetails.currentValue){
       this.landlordDetails = changes.landlordDetails.currentValue;     
     }
     if(changes.leadTenantId && changes.leadTenantId.currentValue){
-      this.leadTenantId = changes.leadTenantId.currentValue;   
-      console.log("this.leadTenantId",this.leadTenantId);
-        
+      this.leadTenantId = changes.leadTenantId.currentValue;           
     }
   }
 

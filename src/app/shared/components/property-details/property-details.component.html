@@ -1,4 +1,4 @@
-<ng-container *ngIf="propertyDetails?.reference; then propDetails else propDetailsSkeleton"></ng-container>
+<ng-container *ngIf="isPropertyCardReady; then propDetails else propDetailsSkeleton"></ng-container>
 
 <ng-template #propDetails>
   <ion-card-content id="property-details">

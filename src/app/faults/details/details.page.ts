@@ -132,6 +132,7 @@ export class DetailsPage implements OnInit {
   page = 2;
   currentDate = this.commonService.getFormatedDate(new Date());
   loggedInUserData: any;
+  isPropertyCardReady: boolean = false;
 
   constructor(
     private faultsService: FaultsService,
@@ -359,6 +360,7 @@ export class DetailsPage implements OnInit {
       this.getMaxDocUploadLimit(),
       this.getPropertyTenancies()
     ]).subscribe(async (values) => {
+      this.checkIfPropertyCheckedIn();
       if (this.faultId) {
         // this.commonService.hideLoader();
         this.initPatching();
@@ -389,6 +391,23 @@ export class DetailsPage implements OnInit {
       this.showSkeleton = false;
     });
 
+  }
+
+  private checkIfPropertyCheckedIn() {
+    if (this.propertyTenancyList) {
+      let keepgoing: boolean = true;
+      this.propertyTenancyList.map((res) => {
+        if (keepgoing) {
+          if (res.hasCheckedIn) {
+            this.propertyDetails.isPropertyCheckedIn = true;
+            keepgoing = false;
+            this.isPropertyCardReady = true;
+          }
+        }
+      });
+    } else {
+      this.isPropertyCardReady = true;
+    }
   }
 
   private getStageIndex(details) {
@@ -537,12 +556,7 @@ export class DetailsPage implements OnInit {
       this.faultsService.getPropertyTenancies(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
-            this.propertyTenancyList = res.data.filter(x => {
-              if (x.hasCheckedIn) {
-                this.propertyDetails.isPropertyCheckedIn = true;
-                return x;
-              }
-            });
+            this.propertyTenancyList = res.data.filter(x => x.hasCheckedIn);
             if (this.propertyTenancyList && this.propertyTenancyList.length) {
               for (let i = 0; i < this.propertyTenancyList.length; i++) {
                 const tenants = this.propertyTenancyList[i].tenants;
