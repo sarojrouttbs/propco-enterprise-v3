@@ -3,6 +3,8 @@ import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@
 import { CommonService } from '../../services/common.service';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ModalController } from '@ionic/angular';
+import { ContactDetailsModalPage } from '../../modals/contact-details-modal/contact-details-modal.page';
 
 @Component({
   selector: 'app-property-details',
@@ -28,8 +30,12 @@ export class PropertyDetailsComponent implements OnInit {
   faultUrgencyStatuses: any[];
   faultCommunicationPreferences: any[];
   showList = false;
+  @Input() landlordDetails;
+  @Input() leadTenantId;
+  @Input() sourceType;
+  @Input() fixfloTenantContact;
 
-  constructor(public commonService: CommonService, public sanitizer: DomSanitizer) {
+  constructor(public commonService: CommonService, public sanitizer: DomSanitizer, public modalController: ModalController) {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
     if (this.lookupdata) {
       this.setLookupData();
@@ -56,9 +62,18 @@ export class PropertyDetailsComponent implements OnInit {
     if (changes.propertyDetails && changes.propertyDetails.currentValue) {
       this.propertyDetails = changes.propertyDetails.currentValue;
     }
+    if(changes.landlordDetails && changes.landlordDetails.currentValue){
+      this.landlordDetails = changes.landlordDetails.currentValue;     
+    }
+    if(changes.leadTenantId && changes.leadTenantId.currentValue){
+      this.leadTenantId = changes.leadTenantId.currentValue;   
+      console.log("this.leadTenantId",this.leadTenantId);
+        
+    }
   }
 
-  ngOnInit() {
+  ngOnInit() {    
+    
   }
 
   private setLookupData() {
@@ -108,6 +123,21 @@ export class PropertyDetailsComponent implements OnInit {
     } else {
       this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Change Urgency Status', 'Error');
     }
+  }
 
+  async contactDeatilModal() {
+    const modal = await this.modalController.create({
+      component: ContactDetailsModalPage,
+      cssClass: 'modal-container contact-details-modal',
+      componentProps: {
+        landlordDetails: this.landlordDetails,
+        tenantId: this.leadTenantId
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+    });
+    await modal.present();
   }
 }
