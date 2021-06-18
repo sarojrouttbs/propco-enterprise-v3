@@ -1308,7 +1308,11 @@
               (getUploadedFile)="getUploadedFile($event)" [hmoDetails]="propertyHMODetails"
               [urgencyStatus]="faultDetailsForm.controls.urgencyStatus.value" [faultId]="faultId? faultId : ''"
               [createdAt]="faultDetails?.createdAt? faultDetails?.createdAt : ''" [communicationPreference]="faultDetails?.isOverrideCommunicationPreference"
-              [dppRepairDetails]="landlordDppRepairDetails" (getStatus)="getStatus($event)">
+              [dppRepairDetails]="landlordDppRepairDetails" 
+              [landlordDetails]="landlordDetails"
+              [leadTenantId]="leadTenantId"
+              [isPropertyCardReady]="isPropertyCardReady"
+              (getStatus)="getStatus($event)">
             </app-property-details>
             <!-- <app-property-skeleton *ngIf="!propertyDetails"></app-property-skeleton> -->
           </ion-card>

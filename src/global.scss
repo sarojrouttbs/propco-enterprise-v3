@@ -431,3 +431,27 @@ mat-form-field {
     overflow: hidden !important;
   }
 }
+
+.contact-details-modal{
+  .mat-tab-body-wrapper{
+    width: 100%;
+  }
+  .mat-tab-group{
+      margin-top: 10px;
+      align-items: center;
+  }
+  .mat-tab-label{
+      min-width: 248px !important;
+  }
+
+  .mat-tab-label-container{
+    height: 40px;
+    align-items: center;
+  }
+}
+
+.repair-block {
+  margin-right: 15px;
+  margin-bottom: auto !important;
+  --ion-color-contrast: var(--ion-color-success-contrast, #fff) !important;
+}

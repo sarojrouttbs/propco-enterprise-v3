@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Contact Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <mat-tab-group>
+    <mat-tab label="Landlord">
+      <ng-container>
+        <ion-row class="ion-justify-content-start fault-title">
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Name</ion-text><br />
+            <ion-text class="content">{{landlordDetails?.title +' '+ landlordDetails?.foreName+' '+
+              landlordDetails?.surName}}</ion-text>
+          </ion-col>
+
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Email</ion-text><br />
+            <ion-text class="content">{{landlordDetails?.email || '-'}}</ion-text>
+          </ion-col>
+
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Alternate Email</ion-text><br />
+            <ion-text class="content">{{landlordDetails?.alternativeEmail || '-'}}</ion-text>
+          </ion-col>
+
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Emergency No</ion-text><br />
+            <ion-text class="content">{{landlordDetails?.emergencyNo || '-'}}</ion-text>
+          </ion-col>
+
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Daytime</ion-text><br />
+            <ion-text class="content">{{landlordDetails?.businessTelephone || '-'}}</ion-text>
+          </ion-col>
+
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Mobile</ion-text><br />
+            <ion-text class="content">{{landlordDetails?.mobile || '-'}}</ion-text>
+          </ion-col>
+
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Evening</ion-text><br />
+            <ion-text class="content">{{landlordDetails?.homeTelephone || '-'}}</ion-text>
+          </ion-col>
+
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Telephone</ion-text><br />
+            <ion-text class="content">{{landlordDetails?.alternativeNo || '-'}}</ion-text>
+          </ion-col>
+
+        </ion-row>
+      </ng-container>
+    </mat-tab>
+    <mat-tab label="Tenant">
+      <ng-container>
+        <ion-row class="ion-justify-content-start fault-title" *ngIf="!tenantDetails">
+          <ion-col size="100" class="header-content">
+            <ion-text class="content">Tenant details are not available.</ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-start fault-title" *ngIf="tenantDetails">
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Name</ion-text><br />
+            <ion-text class="content">{{tenantDetails?.fullName || '-'}}</ion-text>
+          </ion-col>
+
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Email</ion-text><br />
+            <ion-text class="content">{{tenantDetails?.email || '-'}}</ion-text>
+          </ion-col>
+
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Alternate Email</ion-text><br />
+            <ion-text class="content">{{tenantDetails?.alternativeEmail || '-'}}</ion-text>
+          </ion-col>
+
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Emergency No</ion-text><br />
+            <ion-text class="content">{{tenantDetails?.emergencyNo || '-'}}</ion-text>
+          </ion-col>
+
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Daytime</ion-text><br />
+            <ion-text class="content">{{tenantDetails?.businessTelephone || '-'}}</ion-text>
+          </ion-col>
+
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Mobile</ion-text><br />
+            <ion-text class="content">{{tenantDetails?.mobile || '-'}}</ion-text>
+          </ion-col>
+
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Evening</ion-text><br />
+            <ion-text class="content">{{tenantDetails?.homeTelephone || '-'}}</ion-text>
+          </ion-col>
+
+          <ion-col size="50" class="header-content">
+            <ion-text class="header">Telephone</ion-text><br />
+            <ion-text class="content">{{tenantDetails?.alternativeNo || '-'}}</ion-text>
+          </ion-col>
+
+        </ion-row>
+      </ng-container>
+    </mat-tab>
+  </mat-tab-group>
+</ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-end">
+        <ion-button (click)="dismiss()" color="danger">close</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

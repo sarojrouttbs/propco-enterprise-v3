@@ -1,0 +1,22 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -ms-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+}
+
+.header-content {
+    .header {
+        color: var(--ion-color-step-800);
+        @include set-text-style(14px, 19px);
+    }
+
+    .content {
+        @include set-text-style(16px, 20px);
+    }
+}
