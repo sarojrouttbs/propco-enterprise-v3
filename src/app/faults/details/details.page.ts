@@ -353,11 +353,11 @@ export class DetailsPage implements OnInit {
     }
     // this.commonService.showLoader();
     forkJoin([
-      this.getFaultAdditionalInfo(),
       this.getPropertyById(),
-      this.getPropertyTenancies(),
+      this.getFaultAdditionalInfo(),
       this.getHMOLicenceDetails(),
-      this.getMaxDocUploadLimit()
+      this.getMaxDocUploadLimit(),
+      this.getPropertyTenancies()
     ]).subscribe(async (values) => {
       if (this.faultId) {
         // this.commonService.hideLoader();
@@ -537,21 +537,24 @@ export class DetailsPage implements OnInit {
       this.faultsService.getPropertyTenancies(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
-            this.propertyTenancyList = res.data.filter(x => x.hasCheckedIn);
+            const currentTenancyStatuses = [1, 2, 5, 6];
+            this.propertyTenancyList = res.data.filter(x => x.hasCheckedIn || currentTenancyStatuses.indexOf(x.status)!= -1);
             if (this.propertyTenancyList && this.propertyTenancyList.length) {
-              this.propertyDetails.isPropertyCheckedIn = true;
               for (let i = 0; i < this.propertyTenancyList.length; i++) {
                 const tenants = this.propertyTenancyList[i].tenants;
-                let tenantIdList = tenants.filter(data => data.tenantId).map(d => d.tenantId);
+                if(this.propertyTenancyList[i].hasCheckedIn){
+                  let tenantIdList = tenants.filter(data => data.tenantId).map(d => d.tenantId);
+                  this.tenantIds = this.tenantIds.concat(tenantIdList);
+                }
                 let tenantData = tenants.find(data => data.isLead === true);
                 if (tenantData) {
                   this.leadTenantId = tenantData.tenantId;
                 }
-                this.tenantIds = this.tenantIds.concat(tenantIdList);
               }
             }
           }
           if (this.tenantIds && this.tenantIds.length) {
+            this.propertyDetails.isPropertyCheckedIn = true;
             this.getTenantArrears(this.tenantIds);
           }
           resolve(true);
