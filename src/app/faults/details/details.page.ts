@@ -537,15 +537,14 @@ export class DetailsPage implements OnInit {
       this.faultsService.getPropertyTenancies(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
-            const currentTenancyStatuses = [1, 2, 5, 6];
-            this.propertyTenancyList = res.data.filter(x => x.hasCheckedIn || currentTenancyStatuses.indexOf(x.status)!= -1);
+            const currentTenancyStatuses = [2, 5, 6];
+            this.propertyTenancyList = res.data.filter(x => currentTenancyStatuses.indexOf(x.status) != -1);
             if (this.propertyTenancyList && this.propertyTenancyList.length) {
+              this.propertyDetails.isPropertyCheckedIn = true;
               for (let i = 0; i < this.propertyTenancyList.length; i++) {
                 const tenants = this.propertyTenancyList[i].tenants;
-                if(this.propertyTenancyList[i].hasCheckedIn){
-                  let tenantIdList = tenants.filter(data => data.tenantId).map(d => d.tenantId);
-                  this.tenantIds = this.tenantIds.concat(tenantIdList);
-                }
+                let tenantIdList = tenants.filter(data => data.tenantId).map(d => d.tenantId);
+                this.tenantIds = this.tenantIds.concat(tenantIdList);
                 let tenantData = tenants.find(data => data.isLead === true);
                 if (tenantData) {
                   this.leadTenantId = tenantData.tenantId;
@@ -554,7 +553,6 @@ export class DetailsPage implements OnInit {
             }
           }
           if (this.tenantIds && this.tenantIds.length) {
-            this.propertyDetails.isPropertyCheckedIn = true;
             this.getTenantArrears(this.tenantIds);
           }
           resolve(true);
