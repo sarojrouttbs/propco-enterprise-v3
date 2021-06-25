@@ -84,12 +84,12 @@ export class WorksorderModalPage implements OnInit {
       });
     } else {
       this.jobCompletionForm = this.formBuilder.group({
-        isAnyFurtherWork: { value: this.isAnyFurtherWork, disabled: true },
+        isAnyFurtherWork: this.isAnyFurtherWork,
         isAccepted: true,
-        additionalWorkDetails: { value: this.additionalWorkDetails, disabled: true },
+        additionalWorkDetails: this.additionalWorkDetails,
         jobCompletionAt: { value: this.commonService.getFormatedDate(this.jobCompletionDate, 'yyyy-MM-ddTHH:mm'), disabled: true },
         submittedById: '',
-        additionalEstimate: { value: this.additionalEstimate ? this.additionalEstimate : '', disabled: true },
+        additionalEstimate: this.additionalEstimate ? this.additionalEstimate : '',
         submittedByType: 'SECUR_USER',
         invoiceAmount: this.invoiceAmount ? this.invoiceAmount : ''
       });
@@ -189,7 +189,8 @@ export class WorksorderModalPage implements OnInit {
     if (this.validateReq()) {
       if (this.actionType === 'view') {
         const updateAmount = await this.updateInvoiceAmount();
-        if (updateAmount) {
+        const updateFurtherWorkDetails = await this.updateFurtherWorkDetails();
+        if (updateAmount && updateFurtherWorkDetails) {
           this.uploadWODocuments();
         }
       } else {
@@ -288,8 +289,8 @@ export class WorksorderModalPage implements OnInit {
 
   private validateReq() {
     let valid = true;
-    if (this.actionType !== 'view' && !this.jobCompletionForm.valid) {
-      this.commonService.showMessage('Job completion date is required', 'Mark the Job Completed', 'error');
+    if (!this.jobCompletionForm.valid) {
+      this.commonService.showMessage('Job completion details is required', 'Mark the Job Completed', 'error');
       this.jobCompletionForm.markAllAsTouched(); return valid = false;
     }
     if (this.actionType === 'view' && this.uploadDocumentForm.controls.invoices.value.length === 0) {
@@ -342,6 +343,32 @@ export class WorksorderModalPage implements OnInit {
     });
     return promise;
   }
+
+  private updateFurtherWorkDetails() {
+    this.showLoader = true;
+    const promise = new Promise((resolve, reject) => {
+      let reqObj: any = {};
+      reqObj.stage = this.stage;
+      reqObj.isDraft = false;
+      reqObj.submittedByType = 'SECUR_USER';
+      reqObj.submittedById = ''
+      reqObj.isAnyFurtherWork = this.jobCompletionForm.value.isAnyFurtherWork;
+      reqObj.additionalWorkDetail = this.jobCompletionForm.value.additionalWorkDetails;
+      reqObj.additionalEstimate = this.jobCompletionForm.value.additionalEstimate ? this.jobCompletionForm.value.additionalEstimate : 0;
+      this.faultsService.saveFaultDetails(this.faultId, reqObj).subscribe(
+        res => {
+          this.showLoader = false;
+          resolve(true);
+        },
+        error => {
+          this.showLoader = false;
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
 
   async onCancel() {
     if ((this.uploadDocumentForm.controls.quotes && this.uploadDocumentForm.controls.quotes.value.length !== 0)
