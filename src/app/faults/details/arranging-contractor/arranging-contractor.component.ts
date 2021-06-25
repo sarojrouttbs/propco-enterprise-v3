@@ -200,14 +200,15 @@ export class ArrangingContractorComponent implements OnInit {
       defaultCommissionPercentage: '',
       defaultCommissionAmount: '',
       useCommissionRate: '',
-      businessTelephone: [{ value: '', disabled: true }],
+      daytime: [{ value: '', disabled: true }],
       contact: this.getAccessDetails(this.faultDetails.isTenantPresenceRequired),
       jobType: this.maintenanceJobTypesMap.get('repair'),
       repairSource: this.getRepairSource(this.faultDetails.sourceType),
       requestStartDate: this.currentDate,
       usefulInstruction: this.faultDetails.tenantNotes,
       vulnerableOccupier: this.faultDetails.areOccupiersVulnerable ? this.occupiersVulnerableMap.get('yes') : this.occupiersVulnerableMap.get('no'),
-      thirdPartySource: this.faultDetails.reportedBy === 'THIRD_PARTY' ? Number(this.faultDetails.reportedById) : ''
+      thirdPartySource: this.faultDetails.reportedBy === 'THIRD_PARTY' ? Number(this.faultDetails.reportedById) : '',
+      mobile: [{ value: '', disabled: true }]
     });
 
     if (this.faultDetails.doesBranchHoldKeys) {
@@ -1418,7 +1419,7 @@ export class ArrangingContractorComponent implements OnInit {
     const contractId = typeof contractor === 'object' ? contractor.entityId : contractor;
     return new Promise((resolve, reject) => {
       this.faultsService.getContractorDetails(contractId).subscribe((res) => {
-        let data = res ? res : '';
+        let data = res ? res : '';        
         if (type === 'quote') {
           this.patchContartorList(data, true, false);
         } else if (type === 'wo') {
@@ -1432,11 +1433,13 @@ export class ArrangingContractorComponent implements OnInit {
           }
           const addressString = addressArray.length ? addressArray.join(', ') : '';
           this.workOrderForm.patchValue({
-            company: data ? data.companyName : undefined, agentReference: data ? data.agentReference : undefined,
-            businessTelephone: data ? data.businessTelephone : undefined,
+            company: data ? data.companyName : undefined, 
+            agentReference: data ? data.agentReference : undefined,
+            daytime: data ? data.businessTelephone : undefined,
             contractorName: data ? (data.fullName ? data.fullName : data.name) : undefined,
             address: addressString,
-            contractorId: data ? data.contractorId : undefined
+            contractorId: data ? data.contractorId : undefined,
+            mobile: data ? data.mobile : undefined
           });
           if (!this.faultMaintenanceDetails) {
             this.workOrderForm.patchValue({
