@@ -2,23 +2,17 @@
   <div class="ion-text-left">
     <b>{{notificationData?.chaseTemplateCode}} {{notificationData?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}</b>
   </div>
-
   <h2 class="banner-heading">
     Fault Closed
   </h2>
-
-
-  <h6 class="banner-title">Here’s the action you chose:</h6>
-  <ion-button color="success" class="icon-button">
+  <h6 class="banner-title" *ngIf="action">Here’s the action you chose:</h6>
+  <ion-button color="success" class="icon-button" *ngIf="action">
     {{action}}
     <ion-icon name="checkmark-circle-outline"></ion-icon>
   </ion-button>
-
 </div>
-
 <div class="question-answer">
-  <h5>
-    This fault has been closed with the reason <b>{{faultDetails.closedReason}}</b>.
-  </h5>
+  <h3> This Fault is closed.</h3>
+  <h5><b>Reason - </b>{{faultDetails.closedReason}}.</h5>
   <div class="border-bottom"></div>
 </div>
