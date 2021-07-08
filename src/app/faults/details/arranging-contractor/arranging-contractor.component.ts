@@ -8,7 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES, LL_PAYMENT_CONFIG } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -2023,14 +2023,19 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   getPendingHours() {
-    let hours = 0;
-    const currentDateTime = this.commonService.getFormatedDateTime(new Date());
-    if (this.iacNotification && !this.faultDetails.isEscalated && this.iacNotification.nextChaseDueAt) {
-      let msec = new Date(this.iacNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
-      let mins = Math.floor(msec / 60000);
-      let hrs = Math.floor(mins / 60);
-      if (hrs >= 0) {
-        this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
+    if (this.iacNotification?.templateCode === 'LNP-L-E') {
+      this.getLLPaymentEsclationDue();
+    }
+    else {
+      let hours = 0;
+      const currentDateTime = this.commonService.getFormatedDateTime(new Date());
+      if (this.iacNotification && !this.faultDetails.isEscalated && this.iacNotification.nextChaseDueAt) {
+        let msec = new Date(this.iacNotification.nextChaseDueAt).getTime() - new Date(currentDateTime).getTime();
+        let mins = Math.floor(msec / 60000);
+        let hrs = Math.floor(mins / 60);
+        if (hrs >= 0) {
+          this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
+        }
       }
     }
   }
@@ -2146,4 +2151,25 @@ export class ArrangingContractorComponent implements OnInit {
 
   }
 
+  private getLLPaymentEsclationDue(): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      let urgencyStatus = this.faultDetails.urgencyStatus == 2 ? LL_PAYMENT_CONFIG.URGENT : LL_PAYMENT_CONFIG.NON_URGENT;
+      this.commonService.getSystemConfig(urgencyStatus).subscribe(res => {
+        let minutes = res && this.faultDetails.urgencyStatus == 2 ? parseInt(res.FAULT_URGENT_LL_PAYMENT_UNSUCCESSFUL_EMAIL_NUDGE_MINUTES, 10) : parseInt(res.FAULT_NON_URGENT_LL_PAYMENT_UNSUCCESSFUL_EMAIL_NUDGE_MINUTES, 10);
+        const currentDateTime = this.commonService.getFormatedDateTime(new Date());
+        let firstEmailSentAt = new Date(this.iacNotification?.firstEmailSentAt);
+        firstEmailSentAt.setMinutes(firstEmailSentAt.getMinutes() + minutes);
+        let msec = new Date(firstEmailSentAt).getTime() - new Date(currentDateTime).getTime();
+        let mins = Math.floor(msec / 60000);
+        let hrs = Math.floor(mins / 60);
+        if (hrs >= 0) {
+          this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
+        }
+        resolve(true);
+      }, error => {
+        resolve(false);
+      });
+    });
+    return promise;
+  }
 }
