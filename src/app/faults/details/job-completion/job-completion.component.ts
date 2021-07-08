@@ -7,12 +7,17 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, min, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, CERTIFICATES_CATEGORY } from './../../../shared/constants';
 import { ModalController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
 import { CloseFaultModalPage } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.page';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
+import { forkJoin } from 'rxjs';
+import { BlockManagementModalPage } from 'src/app/shared/modals/block-management-modal/block-management-modal.page';
+import { PropertyCertificateModalPage } from 'src/app/shared/modals/property-certificate-modal/property-certificate-modal.page';
+
+
 @Component({
   selector: 'app-job-completion',
   templateUrl: './job-completion.component.html',
@@ -69,6 +74,12 @@ export class JobCompletionComponent implements OnInit {
   saving: boolean = false;
   fileIds = FILE_IDS;
 
+  faultQualificationForm: FormGroup;
+  certificateCategoriesMap: any = new Map();
+  CERTIFICATES_CATEGORY = CERTIFICATES_CATEGORY;
+  blockManagement: any;
+  certificateTypes: any;
+
   constructor(
     private fb: FormBuilder,
     private faultsService: FaultsService,
@@ -101,6 +112,7 @@ export class JobCompletionComponent implements OnInit {
 
   private initForms(): void {
     this.initWorkOrderForms();
+    this.initFaultQualificationForm();
     this.isFormsReady = true;
   }
 
@@ -160,6 +172,8 @@ export class JobCompletionComponent implements OnInit {
       this.initPatching();
     }
     await this.faultNotification(this.faultDetails.stageAction);
+    await this.getCertificateCategories();
+    await this.getPropertyHeadLease();
     this.showSkeleton = false;
   }
 
@@ -820,5 +834,121 @@ export class JobCompletionComponent implements OnInit {
         });
       }
     }
+  }
+
+  private initFaultQualificationForm(): void {
+    this.faultQualificationForm = this.fb.group({
+      isUnderBlockManagement: this.faultDetails.isUnderBlockManagement,
+      isUnderWarranty: this.faultDetails.isUnderWarranty,
+      isUnderServiceContract: this.faultDetails.isUnderServiceContract
+    });
+  }
+
+  private async getCertificateCategories() {
+    let categories = CERTIFICATES_CATEGORY;
+    let apiObservableArray = [];
+    if (!categories) return;
+    categories.forEach(category => {
+      apiObservableArray.push(this.commonService.getSystemConfig(category));
+    });
+    forkJoin(apiObservableArray).subscribe((res) => {
+      if (res) {
+        res.forEach((value) => {
+          if (value) {
+            Object.keys(value).forEach(async (index) => {
+              this.certificateCategoriesMap.set(index, await this.fetchPropertyCertificates(value[index]));
+            });
+          }
+        });
+      }
+    });
+  }
+
+  private fetchPropertyCertificates(category) {
+    if (this.faultDetails.propertyId) {
+      const params: any = new HttpParams().set('categories', category).set('isArchived', 'false');
+      const promise = new Promise((resolve) => {
+        this.faultsService.fetchPropertyCertificates(this.faultDetails.propertyId, params).subscribe(
+          res => {
+            if (category === "4938" && res === null) {
+              this.faultQualificationForm.patchValue({ isUnderWarranty: false });
+              this.faultQualificationForm.get('isUnderWarranty').updateValueAndValidity();
+            }
+
+            if (category === "4940" && res === null) {
+              this.faultQualificationForm.patchValue({ isUnderServiceContract: false });
+              this.faultQualificationForm.get('isUnderServiceContract').updateValueAndValidity();
+            }
+            resolve(res ? res.data : []);
+          },
+          () => {
+            resolve([]);
+          }
+        );
+      });
+      return promise;
+    }
+  }
+
+  private getPropertyHeadLease() {
+    if (this.faultDetails.propertyId) {
+      const promise = new Promise((resolve) => {
+        this.faultsService.getPropertyHeadLease(this.faultDetails.propertyId).subscribe(
+          res => {
+            if (res) {
+              this.blockManagement = (res && res.managementCompany && res.managementCompany.name && res.managementCompany.email) ? res : '';
+              if (!this.blockManagement) {
+                this.faultQualificationForm.patchValue({ isUnderBlockManagement: false });
+                this.faultQualificationForm.get('isUnderBlockManagement').updateValueAndValidity();
+              }
+            }
+            resolve(true);
+          },
+          () => {
+            resolve(false);
+          }
+        );
+      });
+      return promise;
+    }
+  }
+
+  async viewBlockManagement() {
+    const modal = await this.modalController.create({
+      component: BlockManagementModalPage,
+      cssClass: 'modal-container upload-container',
+      componentProps: {
+        blockManagement: this.blockManagement,
+        faultCategories: this.faultCategories
+      },
+      backdropDismiss: false
+    });
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        return;
+      }
+    });
+
+    await modal.present();
+  }
+
+  async viewPropertyCertificate(category) {
+    let mergedServiceContractAndApplicance;
+    if (category === CERTIFICATES_CATEGORY[1]) {
+      mergedServiceContractAndApplicance = [...this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1]), ...this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[2])];
+    }
+    const modal = await this.modalController.create({
+      component: PropertyCertificateModalPage,
+      cssClass: 'modal-container property-certificates-list',
+      componentProps: {
+        propertyCertificate: category === CERTIFICATES_CATEGORY[0] ? this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0]) : mergedServiceContractAndApplicance,
+        certificateId: category === CERTIFICATES_CATEGORY[0] ? this.faultDetails.warrantyCertificateId : this.faultDetails.serviceContractCertificateId,
+        category: category,
+        certificateTypes: this.certificateTypes
+      },
+      backdropDismiss: false
+    });
+    modal.onDidDismiss().then(async res => {});
+    await modal.present();
   }
 }

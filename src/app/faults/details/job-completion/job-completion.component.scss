@@ -148,3 +148,38 @@
   .defaultCommission .ion-label{
     max-width: 80px;
   }
+
+  .card {
+    background: var(--ion-background-color);
+    border-radius: 5px;
+    padding: 15px 15px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+}
+
+.card-extra {
+    // background: var(--ion-background-color);
+    border-radius: 5px;
+    padding: 15px 15px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+}
+
+.fault-radio-btn {
+    margin-inline-end: 10px !important;
+    --color: var(--ion-color-primary);
+    height: 25px;
+    width: 25px;
+}
+
+.popup-view-btn {
+    margin-top: 10px;
+}
+
+.btn-left {
+    float: left;
+}
+
+.card h3 {
+    margin-top: 5px;
+}
