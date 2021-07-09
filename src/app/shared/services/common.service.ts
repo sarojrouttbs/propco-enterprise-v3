@@ -312,12 +312,16 @@ export class CommonService {
   searchPropertyByText(text: string, isFAF?: boolean, officeList?: any, agreementStatus?: any): Observable<any> {
     let params: any;
     if (isFAF) {
+      let letCategory = this.getItem(PROPCO.LET_CATEGORY, true);
       params = new HttpParams()
         .set('limit', '10')
         .set('page', '1')
-        .set('prop.mantypeLetCat', '3346')
         .set('text', text)
         .set('types', 'PROPERTY');
+        
+        if(letCategory){
+          params = params.set('prop.mantypeLetCat', letCategory)
+        }
     }
     else {
       params = new HttpParams()
