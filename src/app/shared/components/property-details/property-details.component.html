@@ -33,6 +33,7 @@
                 <h2 class="heading" *ngIf="propertyDetails?.publishedAddress">
                   {{propertyDetails?.reference ? propertyDetails?.reference + ',' : ''}}
                   {{propertyDetails.publishedAddress}}
+                  <ion-button color="dark" fill="outline" (click)="contactDetailModal()" ><img src="assets/images/contact.png" style="height: 30px;" alt=""> Contact</ion-button>
                 </h2>
                 <h2 class="heading" *ngIf="!propertyDetails?.publishedAddress">
                   {{propertyDetails?.reference ? propertyDetails?.reference + ',' : ''}}
@@ -40,7 +41,8 @@
                   {{ propertyDetails?.address?.addressLine2 ? propertyDetails?.address?.addressLine2 + ',' : ''}}
                   {{ propertyDetails?.address?.locality ? propertyDetails?.address?.locality + ',' : ''}}
                   {{ propertyDetails?.address?.postcode }}
-                  <ion-icon name="information-circle" (click)="contactDeatilModal()"></ion-icon>
+                  <!-- <ion-icon name="information-circle" (click)="contactDeatilModal()"></ion-icon> -->
+                  <ion-button color="dark" fill="outline" (click)="contactDetailModal()" ><img src="assets/images/contact.png" style="height: 30px;" alt=""> Contact</ion-button>
                 </h2>
               </ion-col>
               <ion-col class="no-padding-top col2 ion-text-end" size="30">

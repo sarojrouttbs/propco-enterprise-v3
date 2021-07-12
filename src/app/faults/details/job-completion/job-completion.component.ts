@@ -939,12 +939,13 @@ export class JobCompletionComponent implements OnInit {
     }
     const modal = await this.modalController.create({
       component: PropertyCertificateModalPage,
-      cssClass: 'modal-container property-certificates-list',
+      cssClass: 'modal-container property-certificates-view',
       componentProps: {
         propertyCertificate: category === CERTIFICATES_CATEGORY[0] ? this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0]) : mergedServiceContractAndApplicance,
         certificateId: category === CERTIFICATES_CATEGORY[0] ? this.faultDetails.warrantyCertificateId : this.faultDetails.serviceContractCertificateId,
         category: category,
-        certificateTypes: this.certificateTypes
+        certificateTypes: this.certificateTypes,
+        isEditable: false
       },
       backdropDismiss: false
     });

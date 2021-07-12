@@ -18,7 +18,7 @@
 </ion-content>
 <ng-template #warrantyDetailsTemplate>
   <ion-grid>
-    <ion-row>
+    <ion-row *ngIf="isEditable">
       <ion-col class="ion-margin-bottom">
         <div>
           Choose an appliance to view more details
@@ -26,7 +26,7 @@
       </ion-col>
     </ion-row>
 
-    <div class="table-container">
+    <div class="table-container" *ngIf="isEditable">
       <table>
         <tr>
           <th>Select</th>
@@ -121,7 +121,7 @@
   </ion-grid>
 </ng-template>
 <ng-template #contractDetailsTemplate>
-  <div class="table-container" style="margin-top: 20px;">
+  <div class="table-container" style="margin-top: 20px;" *ngIf="isEditable">
     <table>
       <tr>
         <th>Select</th>
@@ -194,12 +194,8 @@
   </ion-grid>
 </ng-template>
 
-<ion-footer>
-  <ion-grid>
-    <ion-row>
-      <ion-col class="ion-text-right">
-        <ion-button class="cancel-button" (click)="dismiss()" color="success">Close</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+<ion-footer class="ion-text-right">
+  <ion-col>
+    <ion-button class="cancel-button" (click)="dismiss()" color="success">Close</ion-button>
+  </ion-col>
 </ion-footer>

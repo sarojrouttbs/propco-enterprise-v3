@@ -500,7 +500,8 @@ export class FaultQualificationComponent implements OnInit {
           (this.warrantyCertificateId ? this.warrantyCertificateId : this.faultDetails.warrantyCertificateId) :
           this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId,
         category: category,
-        certificateTypes: this.certificateTypes
+        certificateTypes: this.certificateTypes,
+        isEditable: true
       },
       backdropDismiss: false
     });
