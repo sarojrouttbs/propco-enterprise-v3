@@ -172,8 +172,12 @@ export class JobCompletionComponent implements OnInit {
       this.initPatching();
     }
     await this.faultNotification(this.faultDetails.stageAction);
-    await this.getCertificateCategories();
-    await this.getPropertyHeadLease();
+    if (this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'SMF-T-E') {
+      await this.getCertificateCategories();
+    }
+    if (this.iacNotification.templateCode === 'BMF-T-E') {
+      await this.getPropertyHeadLease();
+    }
     this.showSkeleton = false;
   }
 
@@ -949,7 +953,7 @@ export class JobCompletionComponent implements OnInit {
       },
       backdropDismiss: false
     });
-    modal.onDidDismiss().then(async res => {});
+    modal.onDidDismiss().then(async res => { });
     await modal.present();
   }
 }
