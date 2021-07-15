@@ -15,6 +15,7 @@ export class PropertyCertificateModalPage implements OnInit {
   category;
   certificateId;
   certificateTypes;
+  isEditable;
   // dtOptions: any = {};
   // dtTrigger: Subject<any> = new Subject();
   // @ViewChild(DataTableDirective, { static: false })

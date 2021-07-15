@@ -124,7 +124,7 @@ export class PropertyDetailsComponent implements OnInit {
     }
   }
 
-  async contactDeatilModal() {
+  async contactDetailModal() {
     const modal = await this.modalController.create({
       component: ContactDetailsModalPage,
       cssClass: 'modal-container contact-details-modal',

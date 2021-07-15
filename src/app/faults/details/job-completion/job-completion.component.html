@@ -259,6 +259,15 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <ion-row>
+    <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+        <ng-container *ngIf="isFormsReady && faultDetails && !showSkeleton">
+          <ng-template *ngTemplateOutlet="iqfCards"></ng-template>
+          </ng-container>
+      </ion-col>
+  </ion-row>
+
   </ion-grid>
 <ng-template #worksOrderDetails>
   <form [formGroup]="workOrderForm">
@@ -450,6 +459,98 @@
     </ion-row>
   </form>
 </ng-template>
+<ng-template #iqfCards>
+  <ion-grid>
+    <form [formGroup]="faultQualificationForm">
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="40" class="card" *ngIf="iacNotification?.templateCode === 'BMF-T-E'">
+          <h3>Block Management</h3>
+          <h5>Is the fault Block Management Company's responsibility? </h5>
+          <ion-row>
+            <ion-col size="70">
+              <ion-radio-group formControlName="isUnderBlockManagement">
+                <ion-row class="radio-block">
+                  <ion-col>
+                    <ion-item lines="none">
+                      <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start" disabled></ion-radio>
+                      <ion-label>Yes</ion-label>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col>
+                    <ion-item lines="none">
+                      <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start" disabled></ion-radio>
+                      <ion-label>No</ion-label>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-radio-group>
+            </ion-col>
+            <ion-col size="30">
+              <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
+                (click)="viewBlockManagement();  $event.stopPropagation();">View</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <ion-col size="40" class="card" *ngIf="iacNotification?.templateCode === 'GNR-T-E'">
+          <h3>Guarantee / Warranty</h3>
+          <h5>Is the fault covered by a Guarantee / Warranty? </h5>
+          <ion-row>
+            <ion-col size="70">
+              <ion-radio-group formControlName="isUnderWarranty">
+                <ion-row class="radio-block">
+                  <ion-col>
+                    <ion-item lines="none">
+                      <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start" disabled></ion-radio>
+                      <ion-label>Yes</ion-label>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col>
+                    <ion-item lines="none">
+                      <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start" disabled></ion-radio>
+                      <ion-label>No</ion-label>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-radio-group>
+            </ion-col>
+            <ion-col size="30">
+              <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
+                (click)="viewPropertyCertificate(CERTIFICATES_CATEGORY[0]); $event.stopPropagation();">View</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <ion-col size="40" class="card" *ngIf="iacNotification?.templateCode === 'SMF-T-E'">
+          <h3>Service Contract/ Appliance Cover</h3>
+          <h5>Is the fault covered by a Service Contract/ Appliance Cover?</h5>
+          <ion-row>
+            <ion-col size="70">
+              <ion-radio-group formControlName="isUnderServiceContract">
+                <ion-row class="radio-block">
+                  <ion-col>
+                    <ion-item lines="none">
+                      <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start" disabled></ion-radio>
+                      <ion-label>Yes</ion-label>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col>
+                    <ion-item lines="none">
+                      <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start" disabled></ion-radio>
+                      <ion-label>No</ion-label>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-radio-group>
+            </ion-col>
+            <ion-col size="30">
+              <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
+                (click)="viewPropertyCertificate(CERTIFICATES_CATEGORY[1]); $event.stopPropagation();">View</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </form>
+ </ion-grid>
+</ng-template>
 <div class="action-btn-group">
   <ion-button (click)="_btnHandler('cancel')" class="cancel-button" [disabled]="saving">Cancel</ion-button>
   <ion-button (click)="_btnHandler('back')" [disabled]="saving">Back</ion-button>
@@ -457,6 +558,7 @@
   <ion-button class="save-button" (click)="_btnHandler('save')" [disabled]="faultDetails?.isClosed">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
   <ion-button class="submit-button" [disabled]="true" (click)="_btnHandler('proceed')">Proceed</ion-button>
 </div>
+
 
 
 <ng-template #worksOrderFormSkeleton>
