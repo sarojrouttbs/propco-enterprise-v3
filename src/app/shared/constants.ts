@@ -259,7 +259,7 @@ export const PAYMENT_WARNINGS = {
   'hasRentArrears': 'The Tenant has rent arrears.',
   'hasRentPaidUpFront': 'The rent has been paid upfront.',
   'hasTenantPaidRentOnTime': 'The tenant does not always pay rent on time.',
-  'isTenancyGivenNoticeOrInLastMonth': 'The tenancy is in Given Notice stage.',
+  'isTenancyGivenNoticeOrInLastMonth': 'The tenancy is either in the given notice stage or in the last month of tenancy or both.',
   'hasOtherInvoicesToBePaid': 'There are other invoices to be paid from next months rent.'
 };
 
@@ -374,4 +374,9 @@ export const WORKSORDER_RAISE_TYPE = {
   MANUAL: 'manual',
   AUTO: 'auto',
   AUTO_LL_AUTH: 'auto_ll_auth'
+}
+
+export const LL_PAYMENT_CONFIG = {
+  URGENT: 'FAULT_URGENT_LL_PAYMENT_UNSUCCESSFUL_EMAIL_NUDGE_MINUTES',
+  NON_URGENT: 'FAULT_NON_URGENT_LL_PAYMENT_UNSUCCESSFUL_EMAIL_NUDGE_MINUTES'
 }

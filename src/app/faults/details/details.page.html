@@ -509,7 +509,7 @@
         </ion-item>
         <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
       </ion-col>
-      <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1">
+      <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1 && !faultDetails?.isClosed">
         <!-- <ion-icon name="create" (click)="editTitle()" style="font-size: 35px;"></ion-icon> -->
         <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
       </ion-col>
@@ -631,7 +631,7 @@
               </ion-item>
               <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
             </ion-col>
-            <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1">
+            <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1 && !faultDetails?.isClosed">
               <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
             </ion-col>
           </ion-row>
@@ -699,7 +699,7 @@
           </ion-item>
           <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
         </ion-col>
-        <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1">
+        <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1 && !faultDetails?.isClosed">
           <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
         </ion-col>
       </ion-row>
@@ -1117,9 +1117,9 @@
               <ion-input #title [value]="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"
                 (ionBlur)="changeTitle(title.value)"></ion-input>
             </ion-item>
-            <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
+            <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}}</h2>
           </ion-col>
-          <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1">
+          <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1 && !faultDetails?.isClosed">
             <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
           </ion-col>
         </ion-row>
@@ -1157,9 +1157,9 @@
               <ion-input #title [value]="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"
                 (ionBlur)="changeTitle(title.value)"></ion-input>
             </ion-item>
-            <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
+            <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}}</h2>
           </ion-col>
-          <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1">
+          <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1 && !faultDetails?.isClosed">
             <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
           </ion-col>
         </ion-row>
@@ -1194,7 +1194,7 @@
             </ion-item>
             <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
           </ion-col>
-          <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1">
+          <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1 && !faultDetails?.isClosed">
             <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
           </ion-col>
         </ion-row>
