@@ -64,9 +64,9 @@
                   <ion-text color="danger">Please select an appropriate action.</ion-text>
                 </h6>
                 <h6 *ngIf="iacNotification?.templateCode === 'CF-T-E'
-                && (quoteDocuments?.length !== 0 || faultDetails?.isAnyFurtherWork)" >
+                && (quoteDocuments?.length > 0 || faultDetails?.isAnyFurtherWork)" >
                 <ion-text color="danger">Note: </ion-text>
-                <span *ngIf="quoteDocuments?.length !== 0" >Contractor has submitted Invoice and Completion photos. You can see them in Invoice/Documents section.</span>
+                <span *ngIf="quoteDocuments?.length > 0" >Contractor has submitted Invoice and Completion photos. You can see them in Invoice/Documents section.</span>
                 <span *ngIf="faultDetails?.isAnyFurtherWork"><br/>Please note Contractor would like to quote for another job (See details below)</span>
               </h6>
               <div class="border-bottom"></div>
@@ -101,7 +101,7 @@
               <div class="border-bottom"></div>
             </div>
 
-            <div class="question-answer" *ngIf="faultDetails?.status === 8">
+            <div class="question-answer" *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted && faultDetails?.status === 8">
               <h4 class="ion-text-center">Next Step:</h4> 
                 <ng-container *ngIf="faultDetails?.invoiceAmount" >
                   <h6><b>Invoice Amount: £{{faultDetails?.invoiceAmount}}</b></h6>
