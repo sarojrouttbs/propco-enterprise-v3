@@ -29,22 +29,24 @@
         <ion-col class="" size-xl="83" size="77">
           <ion-grid style="height:100%;" class="no-padding-top">
             <ion-row class="property-details-row">
-              <ion-col class="no-padding-top col1" size="70">
-                <h2 class="heading" *ngIf="propertyDetails?.publishedAddress">
-                  <ion-button color="dark" fill="outline" (click)="contactDetailModal()" ><img src="assets/images/contact.png" style="height: 30px;" alt=""> Contact</ion-button>
-                  {{propertyDetails?.reference ? propertyDetails?.reference + ',' : ''}}
-                  {{propertyDetails.publishedAddress}}
-                </h2>
-                <h2 class="heading" *ngIf="!propertyDetails?.publishedAddress">
-                  <ion-button color="dark" fill="outline" (click)="contactDetailModal()" ><img src="assets/images/contact.png" style="height: 30px;" alt=""> Contact</ion-button>
-                  {{propertyDetails?.reference ? propertyDetails?.reference + ',' : ''}}
-                  {{ propertyDetails?.address?.addressLine1 ? propertyDetails?.address?.addressLine1 + ',' : ''}}
-                  {{ propertyDetails?.address?.addressLine2 ? propertyDetails?.address?.addressLine2 + ',' : ''}}
-                  {{ propertyDetails?.address?.locality ? propertyDetails?.address?.locality + ',' : ''}}
-                  {{ propertyDetails?.address?.postcode }}
-                </h2>
+
+              <ion-col class="no-padding-top col1" size="75" style="display: flex;">
+                <div style="display:inline-block;">
+                  <h2 class="heading" *ngIf="propertyDetails?.publishedAddress">
+                    {{propertyDetails?.reference ? propertyDetails?.reference + ',' : ''}}
+                    {{propertyDetails.publishedAddress}}
+                  </h2>
+                  <h2 class="heading" *ngIf="!propertyDetails?.publishedAddress">
+                    {{propertyDetails?.reference ? propertyDetails?.reference + ',' : ''}}
+                    {{ propertyDetails?.address?.addressLine1 ? propertyDetails?.address?.addressLine1 + ',' : ''}}
+                    {{ propertyDetails?.address?.addressLine2 ? propertyDetails?.address?.addressLine2 + ',' : ''}}
+                    {{ propertyDetails?.address?.locality ? propertyDetails?.address?.locality + ',' : ''}}
+                    {{ propertyDetails?.address?.postcode }}
+                  </h2>
+                </div>
+                <!-- <ion-button color="dark" fill="outline" (click)="contactDetailModal()" size="small"><img src="assets/images/contact.png" style="height: 25px; margin-top: 0px;" alt="">Contact &nbsp;</ion-button> -->
               </ion-col>
-              <ion-col class="no-padding-top col2 ion-text-end" size="30">
+              <ion-col class="no-padding-top col2 ion-text-end" size="25">
                 <h2 [class]="urgencyStatus==1 ? 'emergency' : (urgencyStatus==2? 'urgent' : 'non-urgent')"
                   (click)="toggleStatusList()" [class.status-pointer]="faultId">
                   {{(getLookupValue(urgencyStatus, faultUrgencyStatuses)) | uppercase}}</h2>
@@ -59,79 +61,84 @@
               </ion-col>
             </ion-row>
             <ion-row class="fault-data-row">
-              <ion-col size-lg="25" size="33.3">
+              <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Office</span>
                 <br />
                 {{getLookupValue(propertyDetails.office, officeCodes) || 'N/A'}}
               </ion-col>
-              <ion-col size-lg="25" size="33.3">
+              <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Management Service</span>
                 <br />
                 {{propertyDetails.managementTypeDescription || 'N/A'}}
               </ion-col>
-              <ion-col size-lg="25" size="33.3">
+              <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Property Manager</span>
                 <br />
                 {{propertyDetails.propertyManager || 'N/A'}}
               </ion-col>
-              <ion-col size-lg="25" size="33.3">
+              <ion-col size-xl="25" size-lg="34" size-md="34">
                 <span class="text">Occupancy Status</span>
                 <br />
                 {{propertyDetails?.landlordOccupancy === 1 ? 'Landlord Occupied': propertyDetails?.isPropertyCheckedIn ?
                 'Tenanted' : 'Vacant' }}
               </ion-col>
-              <!-- <ion-col size-lg="25" size="33.3">
+              <!-- <ion-col size-lg="22" size="33.3">
                 <span class="text">Licence Details</span>
                 <br />
                 Has HMO Licence? {{ hmoDetails[0]?.isPropertyLicensed ? 'Yes' : 'No' }}
               </ion-col>
-              <ion-col size-lg="25" size="33.3">
+              <ion-col size-lg="22" size="33.3">
                 <span class="text">Licence Scheme</span>
                 <br />
                 {{getLookupValue(hmoDetails[0]?.licenceSchemeLookup, hmoLicenceSchemes) || 'N/A'}}
               </ion-col> -->
-              <ion-col size-lg="25" size="33.3">
+              <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Licence Details</span>
                 <br />
                 {{ hmoDetails[0]?.isPropertyLicenced ? getLookupValue(hmoDetails[0]?.licenceSchemeLookup, hmoLicenceSchemes) : 'N/A' }}
               </ion-col>
-              <ion-col size-lg="25" size="33.3">
+              <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Communication</span>
                 <br />
                 {{getLookupValue(dppRepairDetails?.lookupId, faultCommunicationPreferences) || 'N/A'}}
               </ion-col>
 
-              <ion-col size-lg="25" size="33.3" *ngIf="faultId">
+              <ion-col size-xl="25" size-lg="22" size-md="22" *ngIf="faultId">
                 <span class="text">Reported On</span>
                 <br />
                 {{createdAt | date: 'dd/MM/yyyy HH:mm' || '-'}}
               </ion-col>
-              <ion-col size-lg="25" size="33.3">
+              <ion-col size-xl="25" size-lg="34" size-md="34">
                 <span class="text">Rent Arrears</span>
                 <br />
                 {{propertyDetails?.tenantArrears || 0 | currency : "£" }}
               </ion-col>
             </ion-row>
             <ion-row class="fault-meter-row">
-              <ion-col size="25">
+              <ion-col size-xl="25" size-lg="22" size-md="22">
                 <img src="assets/images/fault-categories/info.png"
                   matTooltip="{{propertyDetails.electricMeterLocation || 'N/A'}}" matTooltipPosition="above" />&nbsp;
                 Electric Meter
               </ion-col>
-              <ion-col size="25">
+              <ion-col size-xl="25" size-lg="22" size-md="22">
                 <img src="assets/images/fault-categories/info.png"
                   matTooltip="{{propertyDetails.waterMeterLocation || 'N/A'}}" matTooltipPosition="above" />&nbsp; Water
                 Meter
               </ion-col>
-              <ion-col size="25">
+              <ion-col size-xl="25" size-lg="22" size-md="22">
                 <img src="assets/images/fault-categories/info.png"
                   matTooltip="{{propertyDetails.gasMeterLocation || 'N/A'}}" matTooltipPosition="above" />&nbsp; Gas
                 Meter
               </ion-col>
-              <ion-col size="25">
+              <ion-col size-xl="25" size-lg="34" size-md="34">
                 <img src="assets/images/fault-categories/info.png"
-                  matTooltip="{{propertyDetails.stopTapLocation || 'N/A'}}" matTooltipPosition="above" />&nbsp; Stop Tap
-              </ion-col>
+                  matTooltip="{{propertyDetails.stopTapLocation || 'N/A'}}" matTooltipPosition="above" style="float: left;"/>&nbsp; Stop Tap
+                <ion-button color="dark" fill="outline" (click)="contactDetailModal()" size="small" style=" margin-top: 0px; float: right;"><img src="assets/images/contact.png" style="height: 25px; margin-top: 0px;" alt="">Contact &nbsp;</ion-button>
+
+                </ion-col>
+
+              <!-- <ion-col size="24">
+              </ion-col> -->
             </ion-row>
             <ion-text class="ion-float-right override-communication"
               *ngIf="communicationPreference && communicationPreference === true" color="danger">
