@@ -23,6 +23,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
       const accessToken = window.localStorage.getItem(PROPCO.ACCESS_TOKEN);
       const webKey = window.localStorage.getItem(PROPCO.WEB_KEY);
 
+
       let requestHeader = req.headers;
       requestHeader = requestHeader.set('X-XSRF-TOKEN', this._commonService.getCookie('XSRF-TOKEN'));
       /* add web key */
@@ -36,7 +37,11 @@ export class AppHttpInterceptor implements HttpInterceptor {
       const authReq = req.clone({ headers: requestHeader });
       this.totalRequests++;
       // if (this.totalRequests === 1) {
-      this._commonService.showLoader();
+      let hideLoader = req.params.get('hideLoader');
+      if (!hideLoader) {
+        this._commonService.showLoader();
+      }
+
       // }
       return next.handle(authReq).pipe(catchError((error: HttpErrorResponse) => {
         this._commonService.hideLoader();
