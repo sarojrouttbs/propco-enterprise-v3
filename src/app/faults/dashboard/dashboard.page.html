@@ -20,7 +20,7 @@
               </ion-checkbox>
             </div>
             <ion-spinner name="bubbles" *ngIf="activeRepairLoader"></ion-spinner>
-            <div class="filter-grid-count">{{activeRepairCount}}</div>
+            <div class="filter-grid-count" *ngIf="!activeRepairLoader">{{activeRepairCount}}</div>
             <div class="filter-grid-text">Active Repairs</div>
           </ion-col>
           <!-- <ion-col size="12" size-md [ngClass]="filterForm.get('newRepairs').value?'filter-grid-active':'filter-grid'"
@@ -41,7 +41,7 @@
               </ion-checkbox>
             </div>
             <ion-spinner name="bubbles" *ngIf="emergencyLoader"></ion-spinner>
-            <div class="filter-grid-count">{{emergencyCount}}</div>
+            <div class="filter-grid-count" *ngIf="!emergencyLoader">{{emergencyCount}}</div>
             <div class="filter-grid-text">Emergency</div>
           </ion-col>
           <ion-col size="12" size-md [ngClass]="filterForm.get('urgent').value?'filter-grid-active':'filter-grid'"
@@ -52,7 +52,7 @@
               </ion-checkbox>
             </div>
             <ion-spinner name="circles" *ngIf="urgentLoader"></ion-spinner>
-            <div class="filter-grid-count">{{urgentCount}}</div>
+            <div class="filter-grid-count"*ngIf="!urgentLoader">{{urgentCount}}</div>
             <div class="filter-grid-text">Urgent</div>
           </ion-col>
           <ion-col size="12" size-md [ngClass]="filterForm.get('nonUrgent').value?'filter-grid-active':'filter-grid'"
@@ -63,7 +63,7 @@
               </ion-checkbox>
             </div>
             <ion-spinner name="bubbles" *ngIf="nonUrgentLoader"></ion-spinner>
-            <div class="filter-grid-count">{{nonUrgentCount}}</div>
+            <div class="filter-grid-count" *ngIf="!nonUrgentLoader">{{nonUrgentCount}}</div>
             <div class="filter-grid-text">Non urgent</div>
           </ion-col>
           <ion-col size="12" size-md [ngClass]="filterForm.get('assessment').value?'filter-grid-active':'filter-grid'"
@@ -74,7 +74,7 @@
               </ion-checkbox>
             </div>
             <ion-spinner name="bubbles" *ngIf="assismentLoader"></ion-spinner>
-            <div class="filter-grid-count">{{assismentCount}}</div>
+            <div class="filter-grid-count" *ngIf="!assismentLoader">{{assismentCount}}</div>
             <div class="filter-grid-text">In Assessment</div>
           </ion-col>
           <ion-col size="12" size-md [ngClass]="filterForm.get('automation').value?'filter-grid-active':'filter-grid'"
@@ -85,7 +85,7 @@
               </ion-checkbox>
             </div>
             <ion-spinner name="bubbles" *ngIf="automationLoader"></ion-spinner>
-            <div class="filter-grid-count">{{automationCount}}</div>
+            <div class="filter-grid-count" *ngIf="!automationLoader">{{automationCount}}</div>
             <div class="filter-grid-text">In Automation</div>
           </ion-col>
           <ion-col size="12" size-md [ngClass]="filterForm.get('invoice').value?'filter-grid-active':'filter-grid'"
@@ -96,7 +96,7 @@
               </ion-checkbox>
             </div>
             <ion-spinner name="bubbles" *ngIf="invoiceLoader"></ion-spinner>
-            <div class="filter-grid-count">{{invoiceCount}}</div>
+            <div class="filter-grid-count" *ngIf="!invoiceLoader">{{invoiceCount}}</div>
             <div class="filter-grid-text">Invoice</div>
           </ion-col>
           <ion-col size="12" size-md [ngClass]="filterForm.get('escalation').value?'filter-grid-active':'filter-grid'"
@@ -107,7 +107,7 @@
               </ion-checkbox>
             </div>
             <ion-spinner name="bubbles" *ngIf="escalationLoader"></ion-spinner>
-            <div class="filter-grid-count">{{escalationCount}}</div>
+            <div class="filter-grid-count" *ngIf="!escalationLoader">{{escalationCount}}</div>
             <div class="filter-grid-text">Escalation</div>
           </ion-col>
         </ion-row>
