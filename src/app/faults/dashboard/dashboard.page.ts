@@ -69,6 +69,22 @@ export class DashboardPage implements OnInit {
   LET_CATEGORY;
   FULLY_MANAGED_PROPERTY_TYPES = [];
   private loadTable = true;
+  activeRepairCount;
+  activeRepairLoader = false;
+  emergencyCount;
+  emergencyLoader = false;
+  urgentCount;
+  urgentLoader = false;
+  nonUrgentCount;
+  nonUrgentLoader = false;
+  assismentCount;
+  assismentLoader = false;
+  automationCount;
+  automationLoader = false;
+  invoiceCount;
+  invoiceLoader = false;
+  escalationCount
+  escalationLoader = false;
 
   constructor(
     private commonService: CommonService,
@@ -89,7 +105,7 @@ export class DashboardPage implements OnInit {
     setTimeout(() => {
       this.notesDtTrigger.next();
     }, 1000);
-
+    this.bucketCount();
   }
 
   async getFaultTableDtOption(): Promise<DataTables.Settings> {
@@ -127,13 +143,13 @@ export class DashboardPage implements OnInit {
         })
         this.hideMenu('', 'divOverlay');
       },
-      language:{
+      language: {
         processing: 'Loading...'
       }
     };
     const promise = new Promise(async (resolve, reject) => {
       this.LET_CATEGORY = this.commonService.getItem(PROPCO.LET_CATEGORY, true);
-      if(!this.LET_CATEGORY){
+      if (!this.LET_CATEGORY) {
         let category = await this.getSystemConfigs(SYSTEM_CONFIG.FAULT_MANAGEMENT_LETCAT);
         if (category && parseInt(category)) {
           this.LET_CATEGORY = parseInt(category);
@@ -165,13 +181,13 @@ export class DashboardPage implements OnInit {
       escalation: [],
       selectedPorts: [],
       assignToFilter: [],
-      showMyRepairs:[]
+      showMyRepairs: []
     });
   }
 
   ionViewDidEnter() {
     // this.faultParams = this.faultParams.set('fpm', this.FULLY_MANAGED_PROPERTY_TYPES.toString());
-    if(this.loadTable){
+    if (this.loadTable) {
       this.rerenderFaults(true);
     }
     this.loadTable = true;
@@ -566,45 +582,45 @@ export class DashboardPage implements OnInit {
         }
       });
     }
-    setTimeout(()=>{
+    setTimeout(() => {
       if (this.filterForm.get('repairCheckbox').value) {
         // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
         let statusArray = Object.values(FAULT_STATUSES);
         this.fs = statusArray.filter(status => status != FAULT_STATUSES.CANCELLED && status != FAULT_STATUSES.CLOSED);
         this.showEscalated = 'false';
       }
-  
+
       if (this.filterForm.get('newRepairs').value) {
         this.fs.push(1);
         this.showEscalated = 'false';
       }
-  
+
       if (this.filterForm.get('emergency').value) {
         // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
         this.fs.push(FAULT_STATUSES.REPORTED);
         this.fus.push(URGENCY_TYPES.EMERGENCY);
         this.showEscalated = 'false';
       }
-  
+
       if (this.filterForm.get('urgent').value) {
         // this.fs.push(1);
         this.fs.push(FAULT_STATUSES.REPORTED);
         this.fus.push(URGENCY_TYPES.URGENT);
         this.showEscalated = 'false';
       }
-  
+
       if (this.filterForm.get('nonUrgent').value) {
         this.fs.push(FAULT_STATUSES.REPORTED);
         this.fus.push(URGENCY_TYPES.NON_URGENT);
         this.showEscalated = 'false';
       }
-  
+
       if (this.filterForm.get('assessment').value) {
         // this.fs.push(2, 13);
         this.fs.push(FAULT_STATUSES.IN_ASSESSMENT, FAULT_STATUSES.CHECKING_LANDLORD_INSTRUCTIONS);
         this.showEscalated = 'false';
       }
-  
+
       if (this.filterForm.get('automation').value) {
         // this.fs.push(3, 4, 5, 6, 7, 14, 15, 16, 17, 18, 19, 20, 21, 22);
         this.fs.push(FAULT_STATUSES.QUOTE_REQUESTED, FAULT_STATUSES.QUOTE_RECEIVED, FAULT_STATUSES.QUOTE_PENDING, FAULT_STATUSES.QUOTE_APPROVED, FAULT_STATUSES.QUOTE_REJECTED,
@@ -612,7 +628,7 @@ export class DashboardPage implements OnInit {
           FAULT_STATUSES.WORKSORDER_RAISED, FAULT_STATUSES.AWAITING_RESPONSE_CONTRACTOR, FAULT_STATUSES.WORK_INPROGRESS, FAULT_STATUSES.WORK_COMPLETED, FAULT_STATUSES.AWAITING_RESPONSE_LANDLORD, FAULT_STATUSES.AWAITING_RESPONSE_TENANT, FAULT_STATUSES.AWAITING_RESPONSE_THIRD_PARTY);
         this.showEscalated = 'false';
       }
-  
+
       if (this.filterForm.get('invoice').value) {
         // let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancel', this.createInputs());
         // if (response && response.length > 0) {
@@ -627,7 +643,7 @@ export class DashboardPage implements OnInit {
       if (this.filterForm.get('escalation').value) {
         this.showEscalated = 'true';
       }
-  
+
       const filteredStatus: any = [];
       this.fs.filter((elem) =>
         this.faultStatuses.find((e) => {
@@ -636,10 +652,10 @@ export class DashboardPage implements OnInit {
           }
         })
       );
-  
+
       this.filterForm.get('statusFilter').setValue(filteredStatus);
       this.filterList();
-    },200)
+    }, 200)
   }
 
   async onStatusChange() {
@@ -730,7 +746,7 @@ export class DashboardPage implements OnInit {
       this.faultParams = this.faultParams.set('searchKey', this.searchKey.value.toString());
     }
 
-    if(this.filterForm.value.showMyRepairs){
+    if (this.filterForm.value.showMyRepairs) {
       this.faultParams = this.faultParams.set('showMyRepairs', true);
 
     }
@@ -955,6 +971,175 @@ export class DashboardPage implements OnInit {
     });
     return promise;
   }
+
+  bucketCount() {
+
+    this.getActiveRepairCount();
+    this.getEmergencyCount();
+    this.getUrgentCount();
+    this.getNonUrgentCount();
+    this.getAssismentCount();
+    this.getAutomationCount();
+    this.getInvoiceCount();
+    this.getEscalationCount();
+
+  }
+
+  getActiveRepairCount() {
+    let statusArray = Object.values(FAULT_STATUSES);
+    let fs = statusArray.filter(status => status != FAULT_STATUSES.CANCELLED && status != FAULT_STATUSES.CLOSED);
+
+    let faultCountParams: any = new HttpParams()
+      .set('fs', fs.toString())
+      .set('showEscalated', 'false')
+      .set('hideLoader', 'true');
+    this.activeRepairLoader = true;
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+        this.activeRepairLoader = false;       
+        this.activeRepairCount = res ? res.count : 0;
+        resolve(true);
+      }, error => {
+        this.activeRepairLoader = false;
+        resolve(false);
+      });
+    });
+    return promise;
+  }
+
+  getEmergencyCount() {
+    let faultCountParams: any = new HttpParams()
+      .set('fs', FAULT_STATUSES.REPORTED.toString())
+      .set('fus', URGENCY_TYPES.EMERGENCY.toString())
+      .set('showEscalated', 'false')
+      .set('hideLoader', 'true');
+    this.emergencyLoader = true;
+    new Promise((resolve, reject) => {
+      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+        this.emergencyLoader = false;
+        this.emergencyCount = res ? res.count : 0;
+        resolve(true);
+      }, error => {
+        this.emergencyLoader = false;
+        resolve(false);
+      });
+    });
+  }
+
+  getUrgentCount() {
+    let faultCountParams: any = new HttpParams()
+      .set('fs', FAULT_STATUSES.REPORTED.toString())
+      .set('fus', URGENCY_TYPES.URGENT.toString())
+      .set('showEscalated', 'false')
+      .set('hideLoader', 'true');
+    this.urgentLoader = true;
+    new Promise((resolve, reject) => {
+      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+        this.urgentLoader = false;
+        this.urgentCount = res ? res.count : 0;
+        resolve(true);
+      }, error => {
+        this.urgentLoader = false;
+        resolve(false);
+      });
+    });
+  }
+
+  getNonUrgentCount() {
+    let faultCountParams: any = new HttpParams()
+      .set('fs', FAULT_STATUSES.REPORTED.toString())
+      .set('fus', URGENCY_TYPES.NON_URGENT.toString())
+      .set('showEscalated', 'false')
+      .set('hideLoader', 'true');
+    this.nonUrgentLoader = true;
+    new Promise((resolve, reject) => {
+      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+        this.nonUrgentLoader = false;
+        this.nonUrgentCount = res ? res.count : 0;
+        resolve(true);
+      }, error => {
+        this.nonUrgentLoader = false;
+        resolve(false);
+      });
+    });
+  }
+
+  getAssismentCount() {
+    let fs = [FAULT_STATUSES.IN_ASSESSMENT, FAULT_STATUSES.CHECKING_LANDLORD_INSTRUCTIONS]
+    let faultCountParams: any = new HttpParams()
+      .set('fs', fs.toString())
+      .set('showEscalated', 'false')
+      .set('hideLoader', 'true');
+    this.assismentLoader = true;
+    new Promise((resolve, reject) => {
+      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+        this.assismentLoader = false;
+        this.assismentCount = res ? res.count : 0;
+        resolve(true);
+      }, error => {
+        this.assismentLoader = false;
+        resolve(false);
+      });
+    });
+  }
+
+  getAutomationCount() {
+    let fs = [FAULT_STATUSES.QUOTE_REQUESTED, FAULT_STATUSES.QUOTE_RECEIVED, FAULT_STATUSES.QUOTE_PENDING, FAULT_STATUSES.QUOTE_APPROVED, FAULT_STATUSES.QUOTE_REJECTED,
+    FAULT_STATUSES.WORKSORDER_PENDING, FAULT_STATUSES.AWAITING_JOB_COMPLETION,
+    FAULT_STATUSES.WORKSORDER_RAISED, FAULT_STATUSES.AWAITING_RESPONSE_CONTRACTOR, FAULT_STATUSES.WORK_INPROGRESS, FAULT_STATUSES.WORK_COMPLETED, FAULT_STATUSES.AWAITING_RESPONSE_LANDLORD, FAULT_STATUSES.AWAITING_RESPONSE_TENANT, FAULT_STATUSES.AWAITING_RESPONSE_THIRD_PARTY]
+    let faultCountParams: any = new HttpParams()
+      .set('fs', fs.toString())
+      .set('showEscalated', 'false')
+      .set('hideLoader', 'true');
+    this.automationLoader = true;
+    new Promise((resolve, reject) => {
+      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+        this.automationLoader = false;
+        this.automationCount = res ? res.count : 0;
+        resolve(true);
+      }, error => {
+        this.automationLoader = false;
+        resolve(false);
+      });
+    });
+  }
+
+  getInvoiceCount() {
+    let fs = [FAULT_STATUSES.INVOICE_SUBMITTED, FAULT_STATUSES.INVOICE_APPROVED]
+    let faultCountParams: any = new HttpParams()
+      .set('fs', fs.toString())
+      .set('showEscalated', 'false')
+      .set('hideLoader', 'true');
+    this.invoiceLoader = true;
+    new Promise((resolve, reject) => {
+      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+        this.invoiceLoader = false;
+        this.invoiceCount = res ? res.count : 0;
+        resolve(true);
+      }, error => {
+        this.invoiceLoader = false;
+        resolve(false);
+      });
+    });
+  }
+
+  getEscalationCount() {
+    let faultCountParams: any = new HttpParams()
+      .set('showEscalated', 'false')
+      .set('hideLoader', 'true');
+    this.escalationLoader = true;
+    new Promise((resolve, reject) => {
+      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+        this.escalationLoader = false;
+        this.escalationCount = res ? res.count : 0;
+        resolve(true);
+      }, error => {
+        this.escalationLoader = false;
+        resolve(false);
+      });
+    });
+  }
+
 }
 
 
