@@ -331,7 +331,6 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `faults/documents/${documentId}/download`, { responseType: 'blob' as 'json' });
   }
 
-
   getFaultCounts(params: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + 'faults/count/bucket', { params });
   }
