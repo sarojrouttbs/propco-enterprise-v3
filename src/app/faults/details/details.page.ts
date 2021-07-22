@@ -556,16 +556,17 @@ export class DetailsPage implements OnInit {
       this.faultsService.getPropertyTenancies(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
-            this.propertyTenancyList = res.data.filter(x => x.hasCheckedIn);
+            const currentTenancyStatuses = [2, 5, 6];
+            this.propertyTenancyList = res.data.filter(x => currentTenancyStatuses.indexOf(x.status) != -1);
             if (this.propertyTenancyList && this.propertyTenancyList.length) {
               for (let i = 0; i < this.propertyTenancyList.length; i++) {
                 const tenants = this.propertyTenancyList[i].tenants;
                 let tenantIdList = tenants.filter(data => data.tenantId).map(d => d.tenantId);
+                this.tenantIds = this.tenantIds.concat(tenantIdList);
                 let tenantData = tenants.find(data => data.isLead === true);
                 if (tenantData) {
                   this.leadTenantId = tenantData.tenantId;
                 }
-                this.tenantIds = this.tenantIds.concat(tenantIdList);
               }
             }
           }
@@ -1869,7 +1870,7 @@ export class DetailsPage implements OnInit {
       let currentAction = action;
       if (data.length == 0)
         resolve(null);
-      filtereData = data.filter((x => x.faultStage === currentStage)).filter((x => x.faultStageAction === currentAction)).filter((x => x.isResponseExpected));
+      filtereData = data.filter((x => x.faultStage === currentStage)).filter((x => x.faultStageAction === currentAction)).filter((x => !x.isVoided));
       if (filtereData.length == 0)
         resolve(null);
       // if (filtereData[0].firstEmailSentAt) {
