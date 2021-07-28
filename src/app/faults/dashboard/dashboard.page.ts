@@ -1125,7 +1125,7 @@ export class DashboardPage implements OnInit {
 
   getEscalationCount() {
     let faultCountParams: any = new HttpParams()
-      .set('showEscalated', 'false')
+      .set('showEscalated', 'true')
       .set('hideLoader', 'true');
     this.escalationLoader = true;
     new Promise((resolve, reject) => {
