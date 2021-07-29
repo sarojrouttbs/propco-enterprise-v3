@@ -2102,6 +2102,10 @@ export class DetailsPage implements OnInit {
         this.saveLaterChild();
         break;
       }
+      case 'changeStepToJobCompl': {
+        this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
+        break;
+      }
     }
   }
 
