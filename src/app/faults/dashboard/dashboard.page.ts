@@ -353,9 +353,9 @@ export class DashboardPage implements OnInit {
 
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
-        this.bucketCount();
         this.commonService.showMessage('Fault has been closed successfully.', 'Close Fault', 'success');
         this.rerenderFaults(false);
+        this.bucketCount();
         return;
       }
     });
