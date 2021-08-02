@@ -189,6 +189,7 @@ export class DashboardPage implements OnInit {
     // this.faultParams = this.faultParams.set('fpm', this.FULLY_MANAGED_PROPERTY_TYPES.toString());
     if (this.loadTable) {
       this.rerenderFaults(true);
+      this.bucketCount();
     }
     this.loadTable = true;
     this.hideMenu('', 'divOverlay');
@@ -318,6 +319,7 @@ export class DashboardPage implements OnInit {
         this.rerenderFaults(false);
         this.getFaultNotes(this.selectedData.faultId);
         this.hideMenu('', 'divOverlay');
+        this.bucketCount();
       }
     });
     await modal.present();
@@ -330,6 +332,7 @@ export class DashboardPage implements OnInit {
           this.commonService.showAlert('De-Escalate Fault', 'Fault has been de-escalated to the property manager.');
           this.rerenderFaults(false);
           this.hideMenu('', 'divOverlay');
+          this.bucketCount();
         }, error => {
           // this.commonService.showMessage();
         });
@@ -352,6 +355,7 @@ export class DashboardPage implements OnInit {
       if (res.data && res.data == 'success') {
         this.commonService.showMessage('Fault has been closed successfully.', 'Close Fault', 'success');
         this.rerenderFaults(false);
+        this.bucketCount();
         return;
       }
     });
