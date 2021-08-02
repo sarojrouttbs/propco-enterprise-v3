@@ -369,4 +369,87 @@
       </div>
     </ion-col>
   </ion-row>
+  
+  <div *ngIf="showSkeleton">
+    <ng-container *ngTemplateOutlet="landlordInstructionsSkeleton"></ng-container>
+  </div> 
 </ion-grid>
+<div class="action-btn-group">
+  <ion-button (click)="_btnHandler('cancel')" class="cancel-button" [disabled]="saving || proceeding">Cancel</ion-button>
+  <ion-button (click)="_btnHandler('back')" [disabled]="saving || proceeding">Back</ion-button>
+  <ion-button (click)="_btnHandler('next')" *ngIf="faultDetails?.stage !== FAULT_STAGES.LANDLORD_INSTRUCTION" [disabled]="saving || proceeding">Next</ion-button>
+  <ion-button class="save-button" (click)="_btnHandler('save')" [disabled]="proceeding || faultDetails?.isClosed">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+  <ion-button class="submit-button" (click)="_btnHandler('proceed')" *ngIf="faultDetails?.faultId" [disabled]="saving || faultDetails?.isClosed">Proceed<ion-icon *ngIf="proceeding" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+</div>
+<ng-template #landlordInstructionsSkeleton>
+  <ion-grid class="landlord-instructions">
+    <ion-row class="ll-skeleton input-skeleton">
+      <ion-col>
+        <div class="contractor-selection">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="50">
+                  <ion-skeleton-text animated></ion-skeleton-text>
+                </ion-col>
+                <ion-col size="50">
+                  <ion-skeleton-text animated></ion-skeleton-text>
+                </ion-col>
+                <ion-col size="100">
+                  <ion-skeleton-text animated></ion-skeleton-text>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+        </div>
+        <div class="landlord-preferences">
+          <ion-grid class="view-details" style="width: 100%;">
+            <ion-row>
+              <ion-col size="70">
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-col>
+              <ion-col size-xs="100" class="header-content">
+                <ion-skeleton-text animated></ion-skeleton-text><br />
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-col>
+              <ion-col size-xs="100" size-sm="50" class="header-content">
+                <ion-skeleton-text animated></ion-skeleton-text><br />
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-col>
+              <ion-col size-xs="100" size-sm="50" class="header-content">
+                <ion-skeleton-text animated></ion-skeleton-text><br />
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-col>
+              <ion-col size-xs="100" size-sm="50" class="header-content">
+                <ion-skeleton-text animated></ion-skeleton-text><br />
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-col>
+              <ion-col size-xs="100" size-sm="50" class="header-content">
+                <ion-skeleton-text animated></ion-skeleton-text><br />
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-col>
+              <ion-col size="100" class="border-bottom"></ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+        <div class="preferred-supplier">
+          <ion-row>
+            <ion-col size="70">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-col>
+          </ion-row>
+          <table>
+            <tr>
+              <th><ion-skeleton-text animated></ion-skeleton-text></th>
+              <th><ion-skeleton-text animated></ion-skeleton-text></th>
+              <th><ion-skeleton-text animated></ion-skeleton-text></th>
+            </tr>
+            <tr>
+              <td><ion-skeleton-text animated></ion-skeleton-text></td>
+              <td><ion-skeleton-text animated></ion-skeleton-text></td>
+              <td><ion-skeleton-text animated></ion-skeleton-text></td>
+            </tr>
+          </table>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ng-template>
