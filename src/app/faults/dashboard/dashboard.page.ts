@@ -319,6 +319,7 @@ export class DashboardPage implements OnInit {
         this.rerenderFaults(false);
         this.getFaultNotes(this.selectedData.faultId);
         this.hideMenu('', 'divOverlay');
+        this.bucketCount();
       }
     });
     await modal.present();
@@ -331,6 +332,7 @@ export class DashboardPage implements OnInit {
           this.commonService.showAlert('De-Escalate Fault', 'Fault has been de-escalated to the property manager.');
           this.rerenderFaults(false);
           this.hideMenu('', 'divOverlay');
+          this.bucketCount();
         }, error => {
           // this.commonService.showMessage();
         });
