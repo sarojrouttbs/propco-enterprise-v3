@@ -189,6 +189,7 @@ export class DashboardPage implements OnInit {
     // this.faultParams = this.faultParams.set('fpm', this.FULLY_MANAGED_PROPERTY_TYPES.toString());
     if (this.loadTable) {
       this.rerenderFaults(true);
+      this.bucketCount();
     }
     this.loadTable = true;
     this.hideMenu('', 'divOverlay');
