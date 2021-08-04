@@ -45,7 +45,7 @@ export class FaultTitleComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.saveFaultDetails(faultId, data).subscribe(
         res => {
-          this.commonService.showMessage('Title changed successfully.', 'Fault', 'success');
+          this.commonService.showMessage('Title has been updated successfully.', 'Fault', 'success');
           resolve(true);
         },
         error => {

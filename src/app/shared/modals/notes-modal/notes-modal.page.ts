@@ -4,7 +4,7 @@ import { ModalController, NavParams } from '@ionic/angular';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { CommonService } from '../../services/common.service';
 import { INoteItem } from './notes-modal.model'
-import { NOTES_DEFAULT_CONFIG, PROPCO } from '../../constants';
+import { PROPCO, SYSTEM_CONFIG } from '../../constants';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -53,8 +53,8 @@ export class NotesModalPage implements OnInit {
       let todayDate = this.commonService.getFormatedDate(new Date());
 
       this.notesForm.patchValue({ date: todayDate });
-      this.getDefaultCategory(NOTES_DEFAULT_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY);
-      this.getDefaultType(NOTES_DEFAULT_CONFIG.FAULT_DEFAULT_NOTE_TYPE);
+      this.getDefaultCategory(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY);
+      this.getDefaultType(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE);
     }
   }
 
