@@ -7,6 +7,7 @@ import { ValidationMessageComponent } from './validation-message/validation-mess
 import { PropertyDetailsComponent } from './property-details/property-details.component';
 import { AccordionListComponent } from './accordion-list/accordion-list.component';
 import { CloseFaultComponent } from './close-fault/close-fault.component';
+import { FaultTitleComponent } from './fault-title/fault-title.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -15,8 +16,8 @@ import { CloseFaultComponent } from './close-fault/close-fault.component';
         IonicModule,
         MaterialModule,
     ],
-    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent],
-    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent]
+    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent],
+    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent]
 })
 
 export class ComponentsModule {
