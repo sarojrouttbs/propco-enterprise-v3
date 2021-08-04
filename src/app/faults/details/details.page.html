@@ -670,9 +670,8 @@
 <ng-template #payment>
   <ion-card class="ion-no-margin">
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'PAYMENT' || stepper?.selectedIndex == 5)">
-      <div *ngIf="showSkeleton">
-        <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
-      </div>
+      <app-fault-title *ngIf="!showSkeleton" [describeFaultForm]="describeFaultForm" [faultDetails]="faultDetails"
+        [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"></app-fault-title>
       <div *ngIf="showSkeleton">
         <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
       </div>

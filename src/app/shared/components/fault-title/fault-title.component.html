@@ -5,8 +5,8 @@
         <ion-col size="auto">
           <h2>
             <ion-text *ngIf="faultDetails?.faultId">{{faultDetails?.reference || ''}} </ion-text>
-            <ion-text *ngIf="faultDetails?.faultId">{{title}} </ion-text>
-            <ion-text color="success">&gt;</ion-text>
+            {{title}} <ion-text
+            color="success">&gt;</ion-text>
           </h2>
         </ion-col>
         <ion-col size="auto">
