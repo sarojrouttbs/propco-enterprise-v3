@@ -578,9 +578,9 @@
         <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button" *ngIf="faultId" [disabled]="saving || submitting || progressing || proceeding">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button" *ngIf="!faultId" [disabled]="saving || submitting || progressing || proceeding">Back</ion-button>
         <ion-button (click)="goToNextStage()" class="next-button" *ngIf="faultId && faultDetails?.stage !== FAULT_STAGES.FAULT_LOGGED" [disabled]="saving || submitting || progressing || proceeding">Next</ion-button>
-        <ion-button class="submit-button" (click)="createAFault()" *ngIf="!faultId" [disabled]="saving">Submit<ion-icon *ngIf="submitting" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+        <ion-button class="submit-button" (click)="createAFault()" *ngIf="!faultId || faultDetails?.isDraft" [disabled]="saving">Submit<ion-icon *ngIf="submitting" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button class="save-button" (click)="startProgress()"
-          *ngIf="faultId && faultDetails?.status == 1 && reportedByForm.value.reportedById" [disabled]="saving || faultDetails?.isClosed">Start
+          *ngIf="faultId && faultDetails?.status == 1 && !faultDetails?.isDraft" [disabled]="saving || faultDetails?.isClosed">Start
           Progress<ion-icon *ngIf="submitting" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button class="save-button" (click)="proceedToNextStage()" *ngIf="faultId && faultDetails?.status != 1" 
          [disabled]="(cliNotification && (cliNotification.responseReceived == null || cliNotification.responseReceived?.isAccepted == null)) || saving || submitting || faultDetails?.isClosed">
