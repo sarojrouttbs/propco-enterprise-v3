@@ -430,3 +430,18 @@ ion-alert.common-alert-box {
     min-height: 450px;
   }
 }
+
+.chronological-history {
+  .modal-wrapper {
+    height: auto;
+    min-width: 400px;
+    width: 800px;
+    min-height: 62%;
+    .dataTables_wrapper table.dataTable {
+      line-height: 22px;
+    }
+    .dataTables_wrapper table.dataTable thead tr th{
+      padding: 10px 8px;
+    }
+  }
+}
