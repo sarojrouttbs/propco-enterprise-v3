@@ -396,12 +396,14 @@ export class DetailsPage implements OnInit {
   private checkIfPropertyCheckedIn() {
     if (this.propertyTenancyList) {
       let keepgoing: boolean = true;
-      this.propertyTenancyList.map((res) => {
+      this.propertyTenancyList.forEach((res, index, array) => {
+        if (index === (array.length - 1)) {
+          this.isPropertyCardReady = true;
+        }
         if (keepgoing) {
           if (res.hasCheckedIn) {
             this.propertyDetails.isPropertyCheckedIn = true;
             keepgoing = false;
-            this.isPropertyCardReady = true;
           }
         }
       });
