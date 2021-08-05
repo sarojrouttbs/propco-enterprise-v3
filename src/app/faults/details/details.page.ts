@@ -1242,7 +1242,7 @@ export class DetailsPage implements OnInit {
     faultRequestObj.submittedById = '';
     this.faultsService.updateFault(this.faultId, faultRequestObj).subscribe(
       res => {
-        this.commonService.showMessage('Fault details have been logged successfully.', 'Fault Summary', 'success');
+        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
         this.uploadFiles(this.faultId);
       },
       error => {
