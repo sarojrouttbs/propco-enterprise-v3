@@ -53,7 +53,19 @@ export class NotesModalPage implements OnInit {
       let todayDate = this.commonService.getFormatedDate(new Date());
 
       this.notesForm.patchValue({ date: todayDate });
+    }
+
+    if (this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY)) {
+      let category = this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY);
+      this.notesForm.patchValue({ category: + category });
+    } else {
       this.getDefaultCategory(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY);
+    }
+
+    if (this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE)) {
+      let type = this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE);
+      this.notesForm.patchValue({ type: + type });
+    } else {
       this.getDefaultType(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE);
     }
   }
@@ -63,6 +75,7 @@ export class NotesModalPage implements OnInit {
       this.commonService.getSystemConfig(key).subscribe(res => {
         let category = this.notesCategories.filter(x => { return x.value.toLowerCase() == res[key] });
         this.notesForm.patchValue({ category: category[0].index });
+        this.commonService.setItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY, category[0].index);
         resolve(true);
       }, error => {
         resolve(true);
@@ -76,6 +89,7 @@ export class NotesModalPage implements OnInit {
       this.commonService.getSystemConfig(key).subscribe(res => {
         let type = this.notesTypes.filter(x => { return x.value == res[key] });
         this.notesForm.patchValue({ type: type[0].index });
+        this.commonService.setItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE, type[0].index);
         resolve(true);
       }, error => {
         resolve(true);
