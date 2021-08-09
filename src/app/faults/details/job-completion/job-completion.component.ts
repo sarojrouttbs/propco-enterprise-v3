@@ -139,7 +139,8 @@ export class JobCompletionComponent implements OnInit {
       defaultCommissionPercentage: [{ value: '', disabled: true }],
       defaultCommissionAmount: [{ value: '', disabled: true }],
       useCommissionRate: '',
-      businessTelephone: [{ value: '', disabled: true }],
+      daytime: [{ value: '', disabled: true }],
+      mobile: [{ value: '', disabled: true }]
     });
     if (this.faultDetails.doesBranchHoldKeys) {
       this.officeDetails();
@@ -470,12 +471,14 @@ export class JobCompletionComponent implements OnInit {
             company: data ? data.companyName : undefined, agentReference: data ? data.agentReference : undefined,
             // defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined,
             // defaultCommissionAmount: data ? data.defaultCommissionAmount : undefined,
-            businessTelephone: data ? data.businessTelephone : undefined,
+            // businessTelephone: data ? data.businessTelephone : undefined,
+            daytime: data ? data.businessTelephone : undefined,
             contractorName: data ? data.fullName : undefined, address: addressString,
             contractorId: data ? data.contractorId : undefined,
             useCommissionRate: this.faultMaintenanceDetails.useCommissionRate,
             defaultCommissionPercentage: this.faultMaintenanceDetails.commissionRate ? this.faultMaintenanceDetails.commissionRate : data.defaultCommissionPercentage,
-            defaultCommissionAmount: this.faultMaintenanceDetails.commissionAmount ? this.faultMaintenanceDetails.commissionAmount : data.defaultCommissionAmount
+            defaultCommissionAmount: this.faultMaintenanceDetails.commissionAmount ? this.faultMaintenanceDetails.commissionAmount : data.defaultCommissionAmount,
+            mobile: data ? data.mobile : undefined
           });
         }
       }, error => {
