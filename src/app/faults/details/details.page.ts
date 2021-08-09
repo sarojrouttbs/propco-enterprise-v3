@@ -1216,18 +1216,37 @@ export class DetailsPage implements OnInit {
     // this.commonService.showLoader();
     this.submitting = true;
     let faultRequestObj = this.createFaultFormValues();
+    if (this.faultId) {
+      this.submitFault();
+    } else {
+      this.faultsService.createFault(faultRequestObj).subscribe(
+        res => {
+          // this.commonService.hideLoader();
+          this.commonService.showMessage('Fault has been logged successfully.', 'Log a Fault', 'success');
+          this.uploadFiles(res.faultId);
+        },
+        error => {
+          this.submitting = false;
+          // this.commonService.hideLoader();
+          // this.commonService.showMessage('Something went wrong on server, please try again.', 'Log a Fault', 'Error');
+          // console.log(error);
+        }
+      );
+    }
+  }
 
-    this.faultsService.createFault(faultRequestObj).subscribe(
+  private submitFault() {
+    let faultRequestObj = this.createFaultFormValues();
+    faultRequestObj.isDraft = false;
+    faultRequestObj.submittedByType = 'SECUR_USER';
+    faultRequestObj.submittedById = '';
+    this.faultsService.updateFault(this.faultId, faultRequestObj).subscribe(
       res => {
-        // this.commonService.hideLoader();
-        this.commonService.showMessage('Fault has been logged successfully.', 'Log a Fault', 'success');
-        this.uploadFiles(res.faultId);
+        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
+        this.uploadFiles(this.faultId);
       },
       error => {
         this.submitting = false;
-        // this.commonService.hideLoader();
-        // this.commonService.showMessage('Something went wrong on server, please try again.', 'Log a Fault', 'Error');
-        // console.log(error);
       }
     );
   }

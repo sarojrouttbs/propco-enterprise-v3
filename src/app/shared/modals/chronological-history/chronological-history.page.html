@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Chronological History</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div>
+          <label>Email <input type="checkbox" [(ngModel)]="isEmailRequire"/></label>
+        </div>
+        <table #dataT datatable [dtOptions]="dtOptions" class="row-border hover" style="border-spacing: 0 2px; "></table>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -455,3 +455,13 @@ mat-form-field {
   margin-bottom: auto !important;
   --ion-color-contrast: var(--ion-color-success-contrast, #fff) !important;
 }
+
+.pdfBtn{
+  color: #4d4d4d;
+  background: white;
+  padding: 6px 15px;
+  margin-bottom: 10px;
+  border: 1px solid;
+  border-radius: 5px;
+  float: right;
+}

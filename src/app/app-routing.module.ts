@@ -18,6 +18,10 @@ const routes: Routes = [
   {
     path: 'let-alliance',
     loadChildren: () => import('./referencing/let-alliance/let-alliance.module').then( m => m.LetAlliancePageModule)
+  },
+  {
+    path: 'chronological-history',
+    loadChildren: () => import('./shared/modals/chronological-history/chronological-history.module').then( m => m.ChronologicalHistoryPageModule)
   }
 ];
 

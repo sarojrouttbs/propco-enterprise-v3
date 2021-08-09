@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
+import { ChronologicalHistoryPage } from '../../modals/chronological-history/chronological-history.page';
 import { NotesModalPage } from '../../modals/notes-modal/notes-modal.page';
 import { CommonService } from '../../services/common.service';
 
@@ -74,8 +75,20 @@ export class FaultTitleComponent implements OnInit {
     await modal.present();
   }
 
-  async cronologicalHistoryModal(){
-   
+  async cronologicalHistoryModal() {
+    const modal = await this.modalController.create({
+      component: ChronologicalHistoryPage,
+      cssClass: 'modal-container chronological-history',
+      componentProps: {
+        faultDetails: this.faultDetails
+      },
+      backdropDismiss: false
+    });
+
+    const data = modal.onDidDismiss().then(res => {
+    });
+
+    await modal.present();
   }
 
 }
