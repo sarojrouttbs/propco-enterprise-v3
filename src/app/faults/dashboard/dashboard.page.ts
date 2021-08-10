@@ -85,6 +85,7 @@ export class DashboardPage implements OnInit {
   invoiceLoader = false;
   escalationCount
   escalationLoader = false;
+  bucketFpm: number[] = [];
 
   constructor(
     private commonService: CommonService,
@@ -482,6 +483,7 @@ export class DashboardPage implements OnInit {
             if (val.letCategory === this.LET_CATEGORY) {
               this.FULLY_MANAGED_PROPERTY_TYPES.push(val.index);
               this.fpm.push(val.index);
+              this.bucketFpm = this.fpm;
               this.selectedMgmtType.push(val)
             }
           }
@@ -587,6 +589,8 @@ export class DashboardPage implements OnInit {
       });
     }
     setTimeout(() => {
+      this.faultParams = this.faultParams.delete('fpm');
+      this.fpm = this.bucketFpm;
       if (this.filterForm.get('repairCheckbox').value) {
         // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
         let statusArray = Object.values(FAULT_STATUSES);
