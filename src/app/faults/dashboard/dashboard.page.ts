@@ -105,7 +105,6 @@ export class DashboardPage implements OnInit {
     setTimeout(() => {
       this.notesDtTrigger.next();
     }, 1000);
-    this.bucketCount();
   }
 
   async getFaultTableDtOption(): Promise<DataTables.Settings> {
@@ -157,6 +156,7 @@ export class DashboardPage implements OnInit {
         }
       }
       await this.getMgntServiceType();
+      this.bucketCount();
       resolve(dtOption)
     });
     return promise;
@@ -996,7 +996,7 @@ export class DashboardPage implements OnInit {
     let faultCountParams: any = new HttpParams()
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
-      .set('fpm', this.fpm.toString())
+      .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
     this.activeRepairLoader = true;
     const promise = new Promise((resolve, reject) => {
@@ -1017,7 +1017,7 @@ export class DashboardPage implements OnInit {
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.EMERGENCY.toString())
       .set('showEscalated', 'false')
-      .set('fpm', this.fpm.toString())
+      .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
     this.emergencyLoader = true;
     new Promise((resolve, reject) => {
@@ -1037,7 +1037,7 @@ export class DashboardPage implements OnInit {
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.URGENT.toString())
       .set('showEscalated', 'false')
-      .set('fpm', this.fpm.toString())
+      .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
     this.urgentLoader = true;
     new Promise((resolve, reject) => {
@@ -1057,7 +1057,7 @@ export class DashboardPage implements OnInit {
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.NON_URGENT.toString())
       .set('showEscalated', 'false')
-      .set('fpm', this.fpm.toString())
+      .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
     this.nonUrgentLoader = true;
     new Promise((resolve, reject) => {
@@ -1077,7 +1077,7 @@ export class DashboardPage implements OnInit {
     let faultCountParams: any = new HttpParams()
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
-      .set('fpm', this.fpm.toString())
+      .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
     this.assismentLoader = true;
     new Promise((resolve, reject) => {
@@ -1099,7 +1099,7 @@ export class DashboardPage implements OnInit {
     let faultCountParams: any = new HttpParams()
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
-      .set('fpm', this.fpm.toString())
+      .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
     this.automationLoader = true;
     new Promise((resolve, reject) => {
@@ -1119,7 +1119,7 @@ export class DashboardPage implements OnInit {
     let faultCountParams: any = new HttpParams()
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
-      .set('fpm', this.fpm.toString())
+      .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
     this.invoiceLoader = true;
     new Promise((resolve, reject) => {
@@ -1134,10 +1134,10 @@ export class DashboardPage implements OnInit {
     });
   }
 
-  getEscalationCount() {
+  getEscalationCount() {    
     let faultCountParams: any = new HttpParams()
       .set('showEscalated', 'true')
-      .set('fpm', this.fpm.toString())
+      .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
     this.escalationLoader = true;
     new Promise((resolve, reject) => {
@@ -1151,9 +1151,7 @@ export class DashboardPage implements OnInit {
       });
     });
   }
-
 }
-
 
 export class AssignedUsers {
   email: string
