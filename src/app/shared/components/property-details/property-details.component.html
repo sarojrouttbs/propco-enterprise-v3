@@ -133,7 +133,7 @@
               <ion-col size-xl="25" size-lg="34" size-md="34">
                 <img src="assets/images/fault-categories/info.png"
                   matTooltip="{{propertyDetails?.stopTapLocation || 'N/A'}}" matTooltipPosition="above" style="float: left;"/>&nbsp; Stop Tap
-                <ion-button color="dark" fill="outline" (click)="contactDetailModal()" size="small" style=" margin-top: 0px; float: right;">
+                <ion-button color="dark" fill="outline" (click)="contactDetailModal()" size="small" style=" margin-top: 0px; float: right;" *ngIf="faultId">
                   <img src="assets/images/contact.png" style="height: 25px; margin-top: 0px;" alt="">Contact &nbsp;</ion-button>
               </ion-col>
             </ion-row>

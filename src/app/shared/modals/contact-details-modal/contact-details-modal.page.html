@@ -55,12 +55,12 @@
     </mat-tab>
     <mat-tab label="Tenant">
       <ng-container>
-        <ion-row class="ion-justify-content-start fault-title" *ngIf="!tenantDetails">
+        <ion-row class="ion-justify-content-start fault-title" *ngIf="!hasPropertyCheckedIn">
           <ion-col size="100" class="header-content">
             <ion-text class="content">Tenant details are not available.</ion-text>
           </ion-col>
         </ion-row>
-        <ion-row class="ion-justify-content-start fault-title" *ngIf="tenantDetails">
+        <ion-row class="ion-justify-content-start fault-title" *ngIf="hasPropertyCheckedIn">
           <ion-col size="50" class="header-content">
             <ion-text class="header">Name</ion-text><br />
             <ion-text class="content">{{tenantDetails?.fullName || '-'}}</ion-text>

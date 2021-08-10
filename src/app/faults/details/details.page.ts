@@ -133,6 +133,7 @@ export class DetailsPage implements OnInit {
   currentDate = this.commonService.getFormatedDate(new Date());
   loggedInUserData: any;
   isPropertyCardReady: boolean = false;
+  hasPropertyCheckedIn: any;
 
   constructor(
     private faultsService: FaultsService,
@@ -360,7 +361,7 @@ export class DetailsPage implements OnInit {
       this.getMaxDocUploadLimit(),
       this.getPropertyTenancies()
     ]).subscribe(async (values) => {
-      this.checkIfPropertyCheckedIn();
+      this.checkIfPropertyCheckedIn();      
       if (this.faultId) {
         // this.commonService.hideLoader();
         this.initPatching();
@@ -554,10 +555,10 @@ export class DetailsPage implements OnInit {
   }
 
   private getPropertyTenancies() {
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {      
       this.faultsService.getPropertyTenancies(this.propertyId).subscribe(
         res => {
-          if (res && res.data) {
+          if (res && res.data) {                        
             const currentTenancyStatuses = [2, 5, 6];
             this.propertyTenancyList = res.data.filter(x => currentTenancyStatuses.indexOf(x.status) != -1);
             if (this.propertyTenancyList && this.propertyTenancyList.length) {
@@ -568,9 +569,10 @@ export class DetailsPage implements OnInit {
                 let tenantData = tenants.find(data => data.isLead === true);
                 if (tenantData) {
                   this.leadTenantId = tenantData.tenantId;
+                  this.hasPropertyCheckedIn = this.propertyTenancyList[i].hasCheckedIn;
                 }
               }
-            }
+            }          
           }
           if (this.tenantIds && this.tenantIds.length) {
             this.getTenantArrears(this.tenantIds);
@@ -787,7 +789,7 @@ export class DetailsPage implements OnInit {
               categoryNames.push(this.commonService.getLookupValue(category, this.faultCategories));
             }
           }
-          this.landlordDetails.repairCategoriesText = categoryNames;
+          this.landlordDetails.repairCategoriesText = categoryNames;          
           resolve(this.landlordDetails);
         },
         error => {
