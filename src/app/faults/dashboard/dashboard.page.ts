@@ -85,7 +85,7 @@ export class DashboardPage implements OnInit {
   invoiceLoader = false;
   escalationCount
   escalationLoader = false;
-  bucketFpm: number[] = [];
+  private bucketFpm: number[] = [];
 
   constructor(
     private commonService: CommonService,
