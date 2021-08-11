@@ -115,7 +115,7 @@
           <div class="border-bottom"></div>
         </div>
         <div class="question-answer">
-          <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
+          <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead: {{iqfNotification}}</h6>
           <ion-grid>
             <ion-row class="ion-justify-content-center">
               <ng-container *ngFor="let instruction of otherStageActions">
@@ -132,6 +132,46 @@
             </ion-row>
           </ion-grid>
           <div class="border-bottom" *ngIf="iqfNotification?.templateCode === 'FI-T-E-1'"></div>
+        </div>
+
+        <div class="question-answer">
+          <div class="border-bottom"></div>
+          <ion-grid>
+            <form >
+              <ion-row class="ion-justify-content-center">
+                <ion-col size="40" class="card" *ngIf="iqfNotification?.templateCode === 'BM-E'">
+                  <h3>Block Management</h3>
+                  <h5>The fault is Block Management Company's responsibility. </h5>
+                  <ion-row>
+                    <ion-col size="100">
+                      <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
+                        (click)="viewBlockManagement();  $event.stopPropagation();">View</ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+                <ion-col size="40" class="card" *ngIf="iqfNotification?.templateCode === 'GA-E'">
+                  <h3>Guarantee / Warranty</h3>
+                  <h5>The fault is covered by a Guarantee / Warranty. </h5>
+                  <ion-row>
+                    <ion-col size="100">
+                      <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
+                        (click)="viewPropertyCertificate(CERTIFICATES_CATEGORY[0], false); $event.stopPropagation();">View</ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+                <ion-col size="40" class="card" *ngIf="iqfNotification?.templateCode === 'SM-E'">
+                  <h3>Service Contract/ Appliance Cover</h3>
+                  <h5>The fault is covered by a Service Contract/ Appliance Cover.</h5>
+                  <ion-row>
+                    <ion-col size="100">
+                      <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
+                        (click)="viewPropertyCertificate(CERTIFICATES_CATEGORY[1], false); $event.stopPropagation();">View</ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+              </ion-row>
+            </form>
+         </ion-grid>
         </div>
       </div>
     </ion-col>

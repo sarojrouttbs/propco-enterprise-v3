@@ -486,7 +486,7 @@ export class FaultQualificationComponent implements OnInit {
     }
   }
 
-  async viewPropertyCertificate(category) {
+  async viewPropertyCertificate(category, isEditable?) {
     let mergedServiceContractAndApplicance;
     if (category === CERTIFICATES_CATEGORY[1]) {
       mergedServiceContractAndApplicance = [...this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1]), ...this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[2])];
@@ -501,7 +501,7 @@ export class FaultQualificationComponent implements OnInit {
           this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId,
         category: category,
         certificateTypes: this.certificateTypes,
-        isEditable: true
+        isEditable: isEditable? false: true
       },
       backdropDismiss: false
     });
