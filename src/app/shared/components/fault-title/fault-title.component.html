@@ -25,7 +25,7 @@
     <ion-col size="3" class="note-block" title="Cronological History" (click)="cronologicalHistoryModal()">
       <ion-icon name="timer" class="ion-align-self-center edit-title-icon edit-title"></ion-icon>
     </ion-col>
-    <ion-col size="4" class="note-block" (click)="notesModal()" title="Add Note" >
+    <ion-col size="4" class="note-block" (click)="notesModal()" title="Add Note" *ngIf="faultDetails?.faultId">
       <img src="assets/images/fault-categories/add_notes.png" matTooltip="Add Note" matTooltipPosition="above" />&nbsp;
     </ion-col>
 
