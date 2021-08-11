@@ -364,6 +364,10 @@ export class FaultsService {
     return paymentNeeded;
   }
 
+  getFaultEvents(faultId): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/events`);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);

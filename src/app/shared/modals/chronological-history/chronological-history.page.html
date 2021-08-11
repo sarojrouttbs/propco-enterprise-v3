@@ -12,9 +12,35 @@
     <ion-row>
       <ion-col>
         <div>
-          <label>Email <input type="checkbox" [(ngModel)]="isEmailRequire"/></label>
+          <label><input type="checkbox" [(ngModel)]="isEmailRequire"/> Email</label>
         </div>
-        <table #dataT datatable [dtOptions]="dtOptions" class="row-border hover" style="border-spacing: 0 2px; "></table>
+        <table datatable [dtOptions]="dtOptions"  [dtTrigger]="dtTrigger" class="row-border hover" style="border-spacing: 0 2px; ">
+          <thead>
+            <tr>
+              <th>Date/Time</th>
+              <th>Action</th>
+              <th>Category</th>
+              <th class="none">By</th>
+              <th class="none">Notification TemplateCode</th>
+              <th class="none">Question</th>
+              <th class="none">Response Option</th>
+              <th class="none">How</th>
+              <th class="none">Email</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let elem of eventList">
+                <td>{{ elem.eventAt | date : 'MMM d, y, h:mm' }}</td>
+                <td>{{ elem.eventType || 'N/A' }}</td>
+                <td>{{ elem.category || 'N/A' }}</td>
+                <td>{{ elem.data.by || 'N/A' }}</td>
+                <td>{{ elem.data.notificationTemplateCode || 'N/A' }}</td>
+                <td>{{ elem.data.question || 'N/A' }}</td>
+                <td>{{ elem.data.responseOption || 'N/A' }}</td>
+                <td>{{ elem.data.how || 'N/A' }}</td>
+                <td [innerHtml]="elem.data.body "></td>
+              </tr>
+            </tbody> 
+        </table>
       </ion-col>
     </ion-row>
   </ion-grid>

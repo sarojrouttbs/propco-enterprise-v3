@@ -1,6 +1,6 @@
 <ion-grid style="margin-bottom:10px">
   <ion-row class="ion-justify-content-start fault-title">
-    <ion-col size="95" style="display: inline-flex; padding-left: 0px; ">
+    <ion-col size="93" style="display: inline-flex; padding-left: 0px; ">
       <ion-row>
         <ion-col size="auto">
           <h2>
@@ -22,10 +22,10 @@
         </ion-col>
       </ion-row>
     </ion-col>
-    <!-- <ion-col size="2.5" class="note-block" title="Cronological History" (click)="cronologicalHistoryModal()">
+    <ion-col size="3" class="note-block" title="Cronological History" (click)="cronologicalHistoryModal()">
       <ion-icon name="timer" class="ion-align-self-center edit-title-icon edit-title"></ion-icon>
-    </ion-col> -->
-    <ion-col size="5" class="note-block" (click)="notesModal()" title="Add Note" *ngIf="faultDetails?.faultId && faultDetails?.stageIndex <= 1">
+    </ion-col>
+    <ion-col size="4" class="note-block" (click)="notesModal()" title="Add Note" >
       <img src="assets/images/fault-categories/add_notes.png" matTooltip="Add Note" matTooltipPosition="above" />&nbsp;
     </ion-col>
 
