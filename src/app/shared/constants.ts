@@ -381,3 +381,23 @@ export const LL_PAYMENT_CONFIG = {
   URGENT: 'FAULT_URGENT_LL_PAYMENT_UNSUCCESSFUL_EMAIL_NUDGE_MINUTES',
   NON_URGENT: 'FAULT_NON_URGENT_LL_PAYMENT_UNSUCCESSFUL_EMAIL_NUDGE_MINUTES'
 }
+
+export const FAULT_EVENT_TYPES = [
+  {
+    "Major Events": [
+      "Fault Logged",
+      "Start Progress",
+      "CLI action selected",
+      "Obtain Quote",
+      "Convert to W/O",
+      "Raise W/O",
+      "Fault Closed"
+    ]
+  },
+  {
+    "Escalations": [
+      "Escalation",
+      "De-Escalation"
+    ]
+  }
+]

@@ -3,7 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { PROPCO } from '../../constants';
+import { FAULT_EVENT_TYPES, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -83,25 +83,7 @@ export class ChronologicalHistoryPage implements OnInit {
    dtTrigger: Subject<any> = new Subject();
    @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
    faultEventsLookup: any;
-   eventTypes = [
-      {
-         "Major Events": [
-            "Fault Logged",
-            "Start Progress",
-            "CLI action selected",
-            "Obtain Quote",
-            "Convert to W/O",
-            "Raise W/O",
-            "Fault Closed"
-         ]
-      },
-      {
-         "Escalations": [
-            "Escalation",
-            "De-Escalation"
-         ]
-      }
-   ];
+   eventTypes = FAULT_EVENT_TYPES;
 
    constructor(private modalController: ModalController, private commonService: CommonService, private faultsService: FaultsService) {
       this.getLookupData();
