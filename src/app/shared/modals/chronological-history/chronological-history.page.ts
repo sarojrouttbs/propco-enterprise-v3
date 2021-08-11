@@ -197,7 +197,7 @@ export class ChronologicalHistoryPage implements OnInit {
 
    private getEventList() {
       this.faultsService.getFaultEvents(this.faultDetails.faultId).subscribe(async response => {
-         this.eventList = response ? response.data : [];
+         this.eventList = response ? response : [];
          await this.updateEventList(this.eventList);
          this.rerender();
       })
