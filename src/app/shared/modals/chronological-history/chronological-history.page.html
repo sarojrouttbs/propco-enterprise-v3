@@ -30,13 +30,13 @@
             <tbody>
               <tr *ngFor="let elem of eventList">
                 <td>{{ elem.eventAt | date : 'MMM d, y, h:mm' }}</td>
-                <td>{{ elem.eventType || 'N/A' }}</td>
-                <td>{{ elem.category || 'N/A' }}</td>
-                <td>{{ elem.data.by || 'N/A' }}</td>
-                <td>{{ elem.data.notificationTemplateCode || 'N/A' }}</td>
-                <td>{{ elem.data.question || 'N/A' }}</td>
-                <td>{{ elem.data.responseOption || 'N/A' }}</td>
-                <td>{{ elem.data.how || 'N/A' }}</td>
+                <td>{{ elem.eventType || '-' }}</td>
+                <td>{{ elem.category || '-' }}</td>
+                <td>{{ elem.data.by || '-' }}</td>
+                <td>{{ elem.data.notificationTemplateCode || '-' }}</td>
+                <td>{{ elem.data.question || '-' }}</td>
+                <td>{{ elem.data.responseOption || '-' }}</td>
+                <td>{{ elem.data.how || '-' }}</td>
                 <td [innerHtml]="elem.data.body "></td>
               </tr>
             </tbody> 
