@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { ChronologicalHistoryPage } from '../../modals/chronological-history/chronological-history.page';
@@ -14,14 +14,22 @@ export class FaultTitleComponent implements OnInit {
   @Input() faultDetails;
   @Input() describeFaultForm;
   @Input() title;
+  @Input() faultNotificationId;
   isEditable = false;
+
   constructor(
     private faultsService: FaultsService,
     private commonService: CommonService,
     private modalController: ModalController
   ) { }
 
-  ngOnInit() {
+  ngOnInit() {    
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes.faultNotificationId && changes.faultNotificationId.currentValue){
+      this.faultNotificationId = changes.faultNotificationId.currentValue;           
+    }
   }
 
   editTitle() {
@@ -64,7 +72,9 @@ export class FaultTitleComponent implements OnInit {
       componentProps: {
         notesType: 'fault',
         notesTypeId: this.faultDetails?.faultId,
-        isAddNote: true
+        isAddNote: true,
+        type: 'from-fault-stage',
+        faultNotificationId: this.faultNotificationId
       },
       backdropDismiss: false
     });

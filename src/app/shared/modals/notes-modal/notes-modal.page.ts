@@ -26,6 +26,8 @@ export class NotesModalPage implements OnInit {
   isAddNote: boolean;
   notesType: String;
   notesTypeId: String;
+  type;
+  faultNotificationId;
 
   constructor(
     private navParams: NavParams,
@@ -53,6 +55,13 @@ export class NotesModalPage implements OnInit {
       let todayDate = this.commonService.getFormatedDate(new Date());
 
       this.notesForm.patchValue({ date: todayDate });
+    }
+    if (this.type && this.type == 'from-fault-stage') {
+      if (this.faultNotificationId) {
+        this.notesForm.patchValue({ notes: 'Fault ID:' + this.notesTypeId + '\nNotification ID: ' + this.faultNotificationId })
+      } else {
+        this.notesForm.patchValue({ notes: 'Fault ID:' + this.notesTypeId})
+      }
     }
 
     if (this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY)) {
