@@ -493,9 +493,11 @@
 </ng-template>
 
 <ng-template #caseLogged>
-  <app-fault-title *ngIf="!showSkeleton" [describeFaultForm]="describeFaultForm" [faultDetails]="faultDetails"
-  [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"></app-fault-title>
-  
+  <app-fault-title *ngIf="!showSkeleton" 
+  [describeFaultForm]="describeFaultForm" 
+  [faultDetails]="faultDetails"
+  [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
+  [faultNotificationId]="faultNotificationId"></app-fault-title>
   <div *ngIf="showSkeleton">
     <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
     <ng-container *ngTemplateOutlet="faultLoggedSkeleton"></ng-container>
@@ -595,8 +597,11 @@
 <ng-template #caseQualification>
     <ion-card class="ion-no-margin">
       <ng-container *ngIf="faultDetails && (faultDetails?.stage === 'FAULT_QUALIFICATION' || stepper?.selectedIndex == 1)">
-        <app-fault-title *ngIf="!showSkeleton" [describeFaultForm]="describeFaultForm" [faultDetails]="faultDetails"
-        [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"></app-fault-title>
+        <app-fault-title *ngIf="!showSkeleton" 
+        [describeFaultForm]="describeFaultForm" 
+        [faultDetails]="faultDetails"
+        [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
+        [faultNotificationId]="faultNotificationId"></app-fault-title>
         <div *ngIf="showSkeleton">
           <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
         </div>
@@ -608,8 +613,11 @@
 <ng-template #landlordInstructions>
 <ion-card class="ion-no-margin">
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'LANDLORD_INSTRUCTION' || stepper?.selectedIndex == 2) && landlordsOfproperty">
-      <app-fault-title *ngIf="!showSkeleton" [describeFaultForm]="describeFaultForm" [faultDetails]="faultDetails"
-        [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"></app-fault-title>
+      <app-fault-title *ngIf="!showSkeleton" 
+      [describeFaultForm]="describeFaultForm" 
+      [faultDetails]="faultDetails"
+      [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
+      [faultNotificationId]="faultNotificationId"></app-fault-title>
       <div *ngIf="showSkeleton">
         <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
       </div>
@@ -630,8 +638,11 @@
 <ng-template #arrangingContractor>
   <ion-card class="ion-no-margin">
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'ARRANGING_CONTRACTOR' || stepper?.selectedIndex == 3) && landlordsOfproperty">
-      <app-fault-title *ngIf="!showSkeleton" [describeFaultForm]="describeFaultForm" [faultDetails]="faultDetails"
-        [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"></app-fault-title>
+      <app-fault-title *ngIf="!showSkeleton" 
+      [describeFaultForm]="describeFaultForm" 
+      [faultDetails]="faultDetails"
+      [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
+      [faultNotificationId]="faultNotificationId"></app-fault-title>
       <div *ngIf="showSkeleton">
         <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
       </div>
@@ -651,8 +662,11 @@
 <ng-template #jobCompletion>
   <ion-card class="ion-no-margin">
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'JOB_COMPLETION' || stepper?.selectedIndex == 4)">
-      <app-fault-title *ngIf="!showSkeleton" [describeFaultForm]="describeFaultForm" [faultDetails]="faultDetails"
-        [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"></app-fault-title>
+      <app-fault-title *ngIf="!showSkeleton" 
+      [describeFaultForm]="describeFaultForm" 
+      [faultDetails]="faultDetails"
+      [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
+      [faultNotificationId]="faultNotificationId"></app-fault-title>
       <div *ngIf="showSkeleton">
         <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
       </div>
@@ -670,8 +684,11 @@
 <ng-template #payment>
   <ion-card class="ion-no-margin">
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'PAYMENT' || stepper?.selectedIndex == 5)">
-      <app-fault-title *ngIf="!showSkeleton" [describeFaultForm]="describeFaultForm" [faultDetails]="faultDetails"
-        [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"></app-fault-title>
+      <app-fault-title *ngIf="!showSkeleton" 
+      [describeFaultForm]="describeFaultForm" 
+      [faultDetails]="faultDetails"
+      [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
+      [faultNotificationId]="faultNotificationId"></app-fault-title>
       <div *ngIf="showSkeleton">
         <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
       </div>
