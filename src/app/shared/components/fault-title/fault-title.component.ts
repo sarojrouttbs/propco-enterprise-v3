@@ -14,7 +14,7 @@ export class FaultTitleComponent implements OnInit {
   @Input() faultDetails;
   @Input() describeFaultForm;
   @Input() title;
-  @Input() faultNotificationId;
+  @Input() faultNotificationDetails;
   isEditable = false;
 
   constructor(
@@ -27,8 +27,8 @@ export class FaultTitleComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if(changes.faultNotificationId && changes.faultNotificationId.currentValue){
-      this.faultNotificationId = changes.faultNotificationId.currentValue;           
+    if(changes.faultNotificationDetails && changes.faultNotificationDetails.currentValue){
+      this.faultNotificationDetails = changes.faultNotificationDetails.currentValue;           
     }
   }
 
@@ -74,7 +74,7 @@ export class FaultTitleComponent implements OnInit {
         notesTypeId: this.faultDetails?.faultId,
         isAddNote: true,
         type: 'from-fault-stage',
-        faultNotificationId: this.faultNotificationId,
+        faultNotificationDetails: this.faultNotificationDetails,
         reference: this.faultDetails?.reference
       },
       backdropDismiss: false

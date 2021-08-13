@@ -27,7 +27,7 @@ export class NotesModalPage implements OnInit {
   notesType: String;
   notesTypeId: String;
   type;
-  faultNotificationId;
+  faultNotificationDetails;
   reference; 
 
   constructor(
@@ -40,7 +40,7 @@ export class NotesModalPage implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  ngOnInit() {    
     this.getLookupData();
     this.userDetails = this.commonService.getItem(PROPCO.LOGIN_DETAILS, true);
     this.notesForm = this.formBuilder.group({
@@ -57,14 +57,8 @@ export class NotesModalPage implements OnInit {
 
       this.notesForm.patchValue({ date: todayDate });
     }
-    if (this.type && this.type == 'from-fault-stage') {
-      if (this.faultNotificationId) {
-        this.notesForm.patchValue({ notes: 'Fault ID: ' + this.reference + '\nNotification ID: ' + this.faultNotificationId })
-      } else {
-        this.notesForm.patchValue({ notes: 'Fault ID: ' + this.reference})
-      }
-    }
 
+    
     if (this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY)) {
       let category = this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY);
       this.notesForm.patchValue({ category: + category });
@@ -129,10 +123,24 @@ export class NotesModalPage implements OnInit {
   }
 
   createNote() {
+    
+
     if (this.notesForm.valid) {
       const requestObj = this.notesForm.value;
       requestObj.complaint = requestObj.complaint ? this.notesComplaints[1].index : this.notesComplaints[0].index;
       delete requestObj.date;
+      if (this.type && this.type == 'from-fault-stage') {
+        let notesDesc = this.notesForm.value.notes;
+        let updatedNotesDesc = '';
+        requestObj.notes = '';
+        if (this.faultNotificationDetails && this.faultNotificationDetails.length) {
+          updatedNotesDesc = 'Fault ID: ' + this.reference + '<br>Notification ID: ' + this.faultNotificationDetails[0] +' - '+this.faultNotificationDetails[1]  +' <br>Notes: <br>'+ notesDesc;
+        } else {
+          updatedNotesDesc = 'Fault ID: ' + this.reference +' <br>Notes: <br>'+ notesDesc;
+        }
+        requestObj.notes = updatedNotesDesc;
+      }
+  
       this.notesService.createFaultNotes(this.notesTypeId, requestObj).subscribe(res => {
         this.modalController.dismiss(res);
 
