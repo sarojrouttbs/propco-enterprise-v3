@@ -65,7 +65,7 @@ export class FaultTitleComponent implements OnInit {
     return promise;
   }
 
-  async notesModal() {
+  async notesModal() {    
     const modal = await this.modalController.create({
       component: NotesModalPage,
       cssClass: 'modal-container',
@@ -74,7 +74,8 @@ export class FaultTitleComponent implements OnInit {
         notesTypeId: this.faultDetails?.faultId,
         isAddNote: true,
         type: 'from-fault-stage',
-        faultNotificationId: this.faultNotificationId
+        faultNotificationId: this.faultNotificationId,
+        reference: this.faultDetails?.reference
       },
       backdropDismiss: false
     });

@@ -28,6 +28,7 @@ export class NotesModalPage implements OnInit {
   notesTypeId: String;
   type;
   faultNotificationId;
+  reference; 
 
   constructor(
     private navParams: NavParams,
@@ -58,9 +59,9 @@ export class NotesModalPage implements OnInit {
     }
     if (this.type && this.type == 'from-fault-stage') {
       if (this.faultNotificationId) {
-        this.notesForm.patchValue({ notes: 'Fault ID:' + this.notesTypeId + '\nNotification ID: ' + this.faultNotificationId })
+        this.notesForm.patchValue({ notes: 'Fault ID: ' + this.reference + '\nNotification ID: ' + this.faultNotificationId })
       } else {
-        this.notesForm.patchValue({ notes: 'Fault ID:' + this.notesTypeId})
+        this.notesForm.patchValue({ notes: 'Fault ID: ' + this.reference})
       }
     }
 
