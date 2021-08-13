@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
+import { NOTES_ORIGIN } from '../../constants';
 import { ChronologicalHistoryPage } from '../../modals/chronological-history/chronological-history.page';
 import { NotesModalPage } from '../../modals/notes-modal/notes-modal.page';
 import { CommonService } from '../../services/common.service';
@@ -73,7 +74,7 @@ export class FaultTitleComponent implements OnInit {
         notesType: 'fault',
         notesTypeId: this.faultDetails?.faultId,
         isAddNote: true,
-        type: 'from-fault-stage',
+        notesOrigin: NOTES_ORIGIN.FAULT_STAGE,
         faultNotificationDetails: this.faultNotificationDetails,
         reference: this.faultDetails?.reference
       },

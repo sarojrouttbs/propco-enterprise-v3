@@ -4,7 +4,7 @@ import { ModalController, NavParams } from '@ionic/angular';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { CommonService } from '../../services/common.service';
 import { INoteItem } from './notes-modal.model'
-import { PROPCO, SYSTEM_CONFIG } from '../../constants';
+import { NOTES_ORIGIN, PROPCO, SYSTEM_CONFIG } from '../../constants';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -26,7 +26,7 @@ export class NotesModalPage implements OnInit {
   isAddNote: boolean;
   notesType: String;
   notesTypeId: String;
-  type;
+  notesOrigin;
   faultNotificationDetails;
   reference; 
 
@@ -129,7 +129,7 @@ export class NotesModalPage implements OnInit {
       const requestObj = this.notesForm.value;
       requestObj.complaint = requestObj.complaint ? this.notesComplaints[1].index : this.notesComplaints[0].index;
       delete requestObj.date;
-      if (this.type && this.type == 'from-fault-stage') {
+      if (this.notesOrigin && this.notesOrigin == NOTES_ORIGIN.FAULT_STAGE) {
         let notesDesc = this.notesForm.value.notes;
         let updatedNotesDesc = '';
         requestObj.notes = '';
