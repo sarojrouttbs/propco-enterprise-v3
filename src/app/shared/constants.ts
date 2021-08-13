@@ -402,6 +402,6 @@ export const FAULT_EVENT_TYPES = [
   }
 ]
 
-export const NOTES_ORIGIN = {
+export const NOTES_CONFIG = {
   FAULT_STAGE: 'FAULT_STAGE'
 }
