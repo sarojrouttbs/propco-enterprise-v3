@@ -386,18 +386,44 @@ export const FAULT_EVENT_TYPES = [
   {
     "Major Events": [
       "Fault Logged",
-      "Start Progress",
+      "Progress Started",
       "CLI action selected",
-      "Obtain Quote",
-      "Convert to W/O",
-      "Raise W/O",
+      "Quote Obtained",
+      "Converted To WO",
+      "WO Raised",
       "Fault Closed"
     ]
   },
   {
     "Escalations": [
-      "Escalation",
-      "De-Escalation"
+      "Escalated",
+      "De Escalated"
+    ]
+  },
+  {
+    "Stage Changed": [
+      "Stage Changed"
+    ]
+  },
+  {
+    "Status Changed": [
+      "Status Changed"
+    ]
+  },
+  {
+    "Notifications": [
+      "Response Received",
+      "Notification Sent"
+    ]
+  },
+  {
+    "Notes": [
+      "Notes Added"
+    ]
+  },
+  {
+    "Documents": [
+      "Document Added"
     ]
   }
 ]
