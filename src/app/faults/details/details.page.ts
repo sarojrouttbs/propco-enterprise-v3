@@ -746,7 +746,7 @@ export class DetailsPage implements OnInit {
     return promise;
   }
 
-  private async getTenantsGuarantors(tenantId) {
+  private getTenantsGuarantors(tenantId) {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getTenantGuarantors(tenantId).subscribe(
         res => {
