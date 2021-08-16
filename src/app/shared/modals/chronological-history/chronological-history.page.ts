@@ -122,6 +122,7 @@ export class ChronologicalHistoryPage implements OnInit {
                pageSize: 'A4',
                className: "pdfBtn",
                text: "Export",
+               download: 'open',
                customize: (doc) => {
                   let tableBody: any = [];
                   tableBody.push([{ text: `Fault : ${this.faultDetails.reference}`, border: [false, false, false, false] },
