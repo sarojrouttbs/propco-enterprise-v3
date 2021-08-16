@@ -134,7 +134,7 @@ export class DetailsPage implements OnInit {
   loggedInUserData: any;
   isPropertyCardReady: boolean = false;
   hasPropertyCheckedIn: any;
-  faultNotificationId: any;
+  faultNotificationDetails: any[];
 
   constructor(
     private faultsService: FaultsService,
@@ -1904,8 +1904,11 @@ export class DetailsPage implements OnInit {
       filtereData = filtereData.sort((a, b) => {
         return <any>new Date(b.createdAt) - <any>new Date(a.createdAt);
       });
-      filtereData[0].chase = filtereData[0].numberOfChasesDone + 1; 
-      this.faultNotificationId = filtereData[0].faultNotificationId;     
+      filtereData[0].chase = filtereData[0].numberOfChasesDone + 1;    
+      this.faultNotificationDetails = [
+         filtereData[0].templateCode,
+         filtereData[0].chase
+      ];
       resolve(filtereData[0]);
       // } else {
       //   resolve(filtereData[0]);
