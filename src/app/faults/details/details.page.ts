@@ -1153,9 +1153,9 @@ export class DetailsPage implements OnInit {
         });
         this.allGuarantors = [];
         if (agreement && agreement.tenants) {
-          agreement.tenants.forEach(tenant => {
-            this.getTenantsGuarantors(tenant.tenantId);
-          });
+          // agreement.tenants.forEach(tenant => {
+          //   this.getTenantsGuarantors(tenant.tenantId);
+          // });
 
           let apiObservableArray = [];
           agreement.tenants.forEach(tenant => {
@@ -1164,7 +1164,7 @@ export class DetailsPage implements OnInit {
           forkJoin(apiObservableArray).subscribe((res: any[]) => {
             if (res) {
               if (this.faultId && this.allGuarantors && this.allGuarantors.length) {
-                let entityData = res.find(x => x.guarantorId === this.reportedByForm.get('reportedById').value);
+                let entityData = this.allGuarantors.find(x => x.guarantorId === this.reportedByForm.get('reportedById').value);
                 this.reportedByForm.get('selectedEntity').setValue(entityData);
                 this.setEntityData(entityData);
               }
