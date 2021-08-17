@@ -14,6 +14,7 @@ export class ContactDetailsModalPage implements OnInit {
   landlordDetForm: FormGroup;
   tenantDetForm: FormGroup;
   tenantDetails;
+  hasPropertyCheckedIn;
 
   constructor(
     public modalController: ModalController,
@@ -21,7 +22,7 @@ export class ContactDetailsModalPage implements OnInit {
     private faultsService: FaultsService
   ) { }
 
-  ngOnInit() {
+  ngOnInit() {    
     this.getTenantDetail()
     this.initLandlordForm();
     this.initTenantForm();
@@ -56,7 +57,7 @@ export class ContactDetailsModalPage implements OnInit {
   private getTenantDetail() {
     if (this.tenantId) {
       this.faultsService.getTenantDetails(this.tenantId).subscribe((res) => {
-        this.tenantDetails = res ? res : '';
+        this.tenantDetails = res ? res : '';        
       }, error => {
       });
     }

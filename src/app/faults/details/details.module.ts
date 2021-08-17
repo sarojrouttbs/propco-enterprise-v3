@@ -47,6 +47,7 @@ import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng
 import { PaymentRequestModalPageModule } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.module';
 import { LandlordInstructionComponent } from './landlord-instruction/landlord-instruction.component';
 import { ContactDetailsModalPageModule } from 'src/app/shared/modals/contact-details-modal/contact-details-modal.module';
+import { ChronologicalHistoryPageModule } from 'src/app/shared/modals/chronological-history/chronological-history.module';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -93,7 +94,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     CurrencyMaskModule,
     PaymentRequestModalPageModule,
     ContractorSelectionModule,
-    ContactDetailsModalPageModule
+    ContactDetailsModalPageModule,
+    ChronologicalHistoryPageModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
     PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent, JobCompletionComponent,

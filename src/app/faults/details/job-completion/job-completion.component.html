@@ -471,27 +471,9 @@
       <ion-row class="ion-justify-content-center">
         <ion-col size="40" class="card" *ngIf="iacNotification?.templateCode === 'BMF-T-E'">
           <h3>Block Management</h3>
-          <h5>Is the fault Block Management Company's responsibility? </h5>
+          <h5>The fault is Block Management Company's responsibility. </h5>
           <ion-row>
-            <ion-col size="70">
-              <ion-radio-group formControlName="isUnderBlockManagement">
-                <ion-row class="radio-block">
-                  <ion-col>
-                    <ion-item lines="none">
-                      <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start" disabled></ion-radio>
-                      <ion-label>Yes</ion-label>
-                    </ion-item>
-                  </ion-col>
-                  <ion-col>
-                    <ion-item lines="none">
-                      <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start" disabled></ion-radio>
-                      <ion-label>No</ion-label>
-                    </ion-item>
-                  </ion-col>
-                </ion-row>
-              </ion-radio-group>
-            </ion-col>
-            <ion-col size="30">
+            <ion-col size="100">
               <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
                 (click)="viewBlockManagement();  $event.stopPropagation();">View</ion-button>
             </ion-col>
@@ -499,27 +481,9 @@
         </ion-col>
         <ion-col size="40" class="card" *ngIf="iacNotification?.templateCode === 'GNR-T-E'">
           <h3>Guarantee / Warranty</h3>
-          <h5>Is the fault covered by a Guarantee / Warranty? </h5>
+          <h5>The fault is covered by a Guarantee / Warranty. </h5>
           <ion-row>
-            <ion-col size="70">
-              <ion-radio-group formControlName="isUnderWarranty">
-                <ion-row class="radio-block">
-                  <ion-col>
-                    <ion-item lines="none">
-                      <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start" disabled></ion-radio>
-                      <ion-label>Yes</ion-label>
-                    </ion-item>
-                  </ion-col>
-                  <ion-col>
-                    <ion-item lines="none">
-                      <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start" disabled></ion-radio>
-                      <ion-label>No</ion-label>
-                    </ion-item>
-                  </ion-col>
-                </ion-row>
-              </ion-radio-group>
-            </ion-col>
-            <ion-col size="30">
+            <ion-col size="100">
               <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
                 (click)="viewPropertyCertificate(CERTIFICATES_CATEGORY[0]); $event.stopPropagation();">View</ion-button>
             </ion-col>
@@ -527,27 +491,9 @@
         </ion-col>
         <ion-col size="40" class="card" *ngIf="iacNotification?.templateCode === 'SMF-T-E'">
           <h3>Service Contract/ Appliance Cover</h3>
-          <h5>Is the fault covered by a Service Contract/ Appliance Cover?</h5>
+          <h5>The fault is covered by a Service Contract/ Appliance Cover.</h5>
           <ion-row>
-            <ion-col size="70">
-              <ion-radio-group formControlName="isUnderServiceContract">
-                <ion-row class="radio-block">
-                  <ion-col>
-                    <ion-item lines="none">
-                      <ion-radio mode="md" class="fault-radio-btn" item-left [value]="true" slot="start" disabled></ion-radio>
-                      <ion-label>Yes</ion-label>
-                    </ion-item>
-                  </ion-col>
-                  <ion-col>
-                    <ion-item lines="none">
-                      <ion-radio mode="md" class="fault-radio-btn" item-left [value]="false" slot="start" disabled></ion-radio>
-                      <ion-label>No</ion-label>
-                    </ion-item>
-                  </ion-col>
-                </ion-row>
-              </ion-radio-group>
-            </ion-col>
-            <ion-col size="30">
+            <ion-col size="100">
               <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
                 (click)="viewPropertyCertificate(CERTIFICATES_CATEGORY[1]); $event.stopPropagation();">View</ion-button>
             </ion-col>

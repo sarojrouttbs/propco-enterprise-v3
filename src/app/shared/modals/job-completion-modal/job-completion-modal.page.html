@@ -39,8 +39,8 @@
       </ng-container>
       <ng-container *ngIf="!unSavedData">
         <ion-col size="100" class="ion-text-end">
-          <ion-button (click)="onCancel()">NO</ion-button>
-          <ion-button (click)="save()" [disabled]="showLoader">YES 
+          <ion-button (click)="onCancel()" color="danger">NO</ion-button>
+          <ion-button (click)="save()" [disabled]="showLoader" color="success">YES 
             <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
           </ion-button>
         </ion-col>

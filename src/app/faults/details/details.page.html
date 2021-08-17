@@ -493,29 +493,12 @@
 </ng-template>
 
 <ng-template #caseLogged>
-  <ion-grid style="margin-bottom:10px" *ngIf="!showSkeleton">
-    <ion-row class="ion-justify-content-start fault-title">
-      <ion-col size="auto">
-        <h2>
-          <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
-          {{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text
-            color="success">&gt;</ion-text>
-        </h2>
-      </ion-col>
-      <ion-col size="auto">
-        <ion-item class="edit-title" *ngIf="isEditable">
-          <ion-input #title [value]="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"
-            (ionBlur)="changeTitle(title.value)"></ion-input>
-        </ion-item>
-        <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
-      </ion-col>
-      <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1 && !faultDetails?.isClosed">
-        <!-- <ion-icon name="create" (click)="editTitle()" style="font-size: 35px;"></ion-icon> -->
-        <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  
+  <app-fault-title *ngIf="!showSkeleton" 
+  [describeFaultForm]="describeFaultForm" 
+  [propertyDetails]="propertyDetails"
+  [faultDetails]="faultDetails"
+  [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
+  [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
   <div *ngIf="showSkeleton">
     <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
     <ng-container *ngTemplateOutlet="faultLoggedSkeleton"></ng-container>
@@ -598,9 +581,9 @@
         <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button" *ngIf="faultId" [disabled]="saving || submitting || progressing || proceeding">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button" *ngIf="!faultId" [disabled]="saving || submitting || progressing || proceeding">Back</ion-button>
         <ion-button (click)="goToNextStage()" class="next-button" *ngIf="faultId && faultDetails?.stage !== FAULT_STAGES.FAULT_LOGGED" [disabled]="saving || submitting || progressing || proceeding">Next</ion-button>
-        <ion-button class="submit-button" (click)="createAFault()" *ngIf="!faultId" [disabled]="saving">Submit<ion-icon *ngIf="submitting" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+        <ion-button class="submit-button" (click)="createAFault()" *ngIf="!faultId || faultDetails?.isDraft" [disabled]="saving">Submit<ion-icon *ngIf="submitting" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button class="save-button" (click)="startProgress()"
-          *ngIf="faultId && faultDetails?.status == 1 && reportedByForm.value.reportedById" [disabled]="saving || faultDetails?.isClosed">Start
+          *ngIf="faultId && faultDetails?.status == 1 && !faultDetails?.isDraft" [disabled]="saving || faultDetails?.isClosed">Start
           Progress<ion-icon *ngIf="submitting" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button class="save-button" (click)="proceedToNextStage()" *ngIf="faultId && faultDetails?.status != 1" 
          [disabled]="(cliNotification && (cliNotification.responseReceived == null || cliNotification.responseReceived?.isAccepted == null)) || saving || submitting || faultDetails?.isClosed">
@@ -615,27 +598,12 @@
 <ng-template #caseQualification>
     <ion-card class="ion-no-margin">
       <ng-container *ngIf="faultDetails && (faultDetails?.stage === 'FAULT_QUALIFICATION' || stepper?.selectedIndex == 1)">
-        <ion-grid style="margin-bottom:10px" *ngIf="!showSkeleton">
-          <ion-row class="ion-justify-content-start fault-title">
-            <ion-col size="auto">
-              <h2>
-                <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
-                {{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text
-                  color="success">&gt;</ion-text>
-              </h2>
-            </ion-col>
-             <ion-col size="auto">
-              <ion-item class="edit-title" *ngIf="isEditable">
-                <ion-input #title [value]="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"
-                  (ionBlur)="changeTitle(title.value)"></ion-input>
-              </ion-item>
-              <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
-            </ion-col>
-            <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1 && !faultDetails?.isClosed">
-              <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+        <app-fault-title *ngIf="!showSkeleton" 
+        [describeFaultForm]="describeFaultForm" 
+        [propertyDetails]="propertyDetails"
+        [faultDetails]="faultDetails"
+        [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
+        [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
         <div *ngIf="showSkeleton">
           <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
         </div>
@@ -647,27 +615,12 @@
 <ng-template #landlordInstructions>
 <ion-card class="ion-no-margin">
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'LANDLORD_INSTRUCTION' || stepper?.selectedIndex == 2) && landlordsOfproperty">
-      <ion-grid style="margin-bottom:10px" *ngIf="!showSkeleton">
-        <ion-row class="ion-justify-content-start fault-title">
-          <ion-col size="auto">
-            <h2>
-              <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
-              {{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text
-                color="success">&gt;</ion-text>
-            </h2>
-          </ion-col>
-          <ion-col size="auto">
-            <ion-item class="edit-title" *ngIf="isEditable">
-              <ion-input #title [value]="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"
-                (ionBlur)="changeTitle(title.value)"></ion-input>
-            </ion-item>
-            <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
-          </ion-col>
-          <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1">
-            <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <app-fault-title *ngIf="!showSkeleton" 
+      [describeFaultForm]="describeFaultForm" 
+      [propertyDetails]="propertyDetails"
+      [faultDetails]="faultDetails"
+      [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
+      [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
       <div *ngIf="showSkeleton">
         <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
       </div>
@@ -688,27 +641,12 @@
 <ng-template #arrangingContractor>
   <ion-card class="ion-no-margin">
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'ARRANGING_CONTRACTOR' || stepper?.selectedIndex == 3) && landlordsOfproperty">
-      <ion-grid style="margin-bottom:10px" *ngIf="!showSkeleton">
-        <ion-row class="ion-justify-content-start fault-title">
-          <ion-col size="auto">
-            <h2>
-              <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
-              {{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text
-                color="success">&gt;</ion-text>
-            </h2>
-          </ion-col>
-          <ion-col size="auto">
-            <ion-item class="edit-title" *ngIf="isEditable">
-              <ion-input #title [value]="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"
-                (ionBlur)="changeTitle(title.value)"></ion-input>
-            </ion-item>
-            <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}}</h2>
-          </ion-col>
-          <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1 && !faultDetails?.isClosed">
-            <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <app-fault-title *ngIf="!showSkeleton" 
+      [describeFaultForm]="describeFaultForm"
+      [propertyDetails]="propertyDetails" 
+      [faultDetails]="faultDetails"
+      [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
+      [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
       <div *ngIf="showSkeleton">
         <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
       </div>
@@ -728,27 +666,15 @@
 <ng-template #jobCompletion>
   <ion-card class="ion-no-margin">
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'JOB_COMPLETION' || stepper?.selectedIndex == 4)">
-      <ion-grid style="margin-bottom:10px">
-        <ion-row class="ion-justify-content-start fault-title">
-          <ion-col size="auto">
-            <h2>
-              <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
-              {{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text
-                color="success">&gt;</ion-text>
-            </h2>
-          </ion-col>
-          <ion-col size="auto">
-            <ion-item class="edit-title" *ngIf="isEditable">
-              <ion-input #title [value]="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"
-                (ionBlur)="changeTitle(title.value)"></ion-input>
-            </ion-item>
-            <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}}</h2>
-          </ion-col>
-          <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1 && !faultDetails?.isClosed">
-            <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <app-fault-title *ngIf="!showSkeleton" 
+      [describeFaultForm]="describeFaultForm" 
+      [faultDetails]="faultDetails"
+      [propertyDetails]="propertyDetails"
+      [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
+      [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
+      <div *ngIf="showSkeleton">
+        <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
+      </div>
       <app-job-completion 
       [faultDetails]="faultDetails" 
       (btnAction)="_childComponentHandler($event)"
@@ -763,27 +689,15 @@
 <ng-template #payment>
   <ion-card class="ion-no-margin">
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'PAYMENT' || stepper?.selectedIndex == 5)">
-      <ion-grid style="margin-bottom:10px">
-        <ion-row class="ion-justify-content-start fault-title">
-          <ion-col size="auto">
-            <h2>
-              <ion-text *ngIf="faultId">{{faultDetails?.reference || ''}} </ion-text>
-              {{categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory}} <ion-text
-                color="success">&gt;</ion-text>
-            </h2>
-          </ion-col>
-          <ion-col size="auto">
-            <ion-item class="edit-title" *ngIf="isEditable">
-              <ion-input #title [value]="describeFaultForm.controls['title'].value" style="font-size:24px;padding-bottom:0"
-                (ionBlur)="changeTitle(title.value)"></ion-input>
-            </ion-item>
-            <h2 *ngIf="!isEditable">{{describeFaultForm.controls['title'].value}} </h2>
-          </ion-col>
-          <ion-col size="auto" class="ion-align-self-center edit-title-icon" offset="2" *ngIf="faultId && faultDetails?.stageIndex <= 1 && !faultDetails?.isClosed">
-            <ion-icon class="edit-title" name="create-outline" (click)="editTitle()"></ion-icon>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <app-fault-title *ngIf="!showSkeleton" 
+      [describeFaultForm]="describeFaultForm" 
+      [propertyDetails]="propertyDetails"
+      [faultDetails]="faultDetails"
+      [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
+      [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
+      <div *ngIf="showSkeleton">
+        <ng-container *ngTemplateOutlet="faultTitleSkeleton"></ng-container>
+      </div>
       <app-payment
       [faultDetails]="faultDetails" 
       (btnAction)="_childComponentHandler($event)"
@@ -897,6 +811,7 @@
               [landlordDetails]="landlordDetails"
               [leadTenantId]="leadTenantId"
               [isPropertyCardReady]="isPropertyCardReady"
+              [hasPropertyCheckedIn]="hasPropertyCheckedIn"
               (getStatus)="getStatus($event)">
             </app-property-details>
             <!-- <app-property-skeleton *ngIf="!propertyDetails"></app-property-skeleton> -->
