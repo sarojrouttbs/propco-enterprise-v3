@@ -35,7 +35,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let elem of eventList">
-              <td>{{ elem.eventAt | date : 'MMM d, y, h:mm' }}</td>
+              <td>{{ elem.eventAt | date : 'dd/MM/yyyy HH:mm' }}</td>
               <td>{{ elem.eventType || '-' }}</td>
               <td>{{ elem.category || '-' }}</td>
               <td>{{ elem.data.by || '-' }}</td>

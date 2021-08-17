@@ -16,6 +16,7 @@ export class FaultTitleComponent implements OnInit {
   @Input() describeFaultForm;
   @Input() title;
   @Input() faultNotificationDetails;
+  @Input() propertyDetails;
   isEditable = false;
 
   constructor(
@@ -92,7 +93,8 @@ export class FaultTitleComponent implements OnInit {
       component: ChronologicalHistoryPage,
       cssClass: 'modal-container chronological-history',
       componentProps: {
-        faultDetails: this.faultDetails
+        faultDetails: this.faultDetails,
+        propertyDetails: this.propertyDetails
       },
       backdropDismiss: false
     });

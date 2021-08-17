@@ -84,6 +84,7 @@ export class ChronologicalHistoryPage implements OnInit {
    @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
    faultEventsLookup: any;
    eventTypes = FAULT_EVENT_TYPES;
+   propertyDetails;
 
    constructor(private modalController: ModalController, private commonService: CommonService, private faultsService: FaultsService) {
       this.getLookupData();
@@ -127,14 +128,14 @@ export class ChronologicalHistoryPage implements OnInit {
                   let tableBody: any = [];
                   tableBody.push([{ text: `Fault : ${this.faultDetails.reference}`, border: [false, false, false, false] },
                   { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }]);
-                  tableBody.push([{ colSpan: 3, text: `Property Address : 000002063, Cobourg House, Mayflower Street, PL1 1DJ`, border: [false, false, false, false] }]);
+                  tableBody.push([{ colSpan: 3, text: `Property Address : ${(this.propertyDetails?.reference ? this.propertyDetails?.reference + ',' : '') + (this.propertyDetails.publishedAddress ? this.propertyDetails.publishedAddress : this.getAddressString(this.propertyDetails.address)) }`, border: [false, false, false, false] }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
 
                   this.eventList.forEach((element) => {
                      tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Action', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Event Category', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'MMM d, y, h:mm'), style: 'subheader', border: [false, false, false, false] }, { text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.category || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                     tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.category || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                      tableBody.push([{ text: 'Notification id', style: 'tableHeader', border: [false, false, false, false] }, { text: 'By', style: 'tableHeader', border: [false, false, false, false] }, { text: 'How', style: 'tableHeader', border: [false, false, false, false] }]);
                      tableBody.push([{ text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.how || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                      tableBody.push([{ colSpan: 3, text: 'Question', style: 'tableHeader', border: [false, false, false, false] }]);
@@ -196,6 +197,20 @@ export class ChronologicalHistoryPage implements OnInit {
       this.dtTrigger.unsubscribe();
    }
 
+   getAddressString(addressObject): string {
+      let propertyAddress = null;
+      if (addressObject && addressObject != null) {
+        propertyAddress = (
+          (addressObject.addressLine1 ? addressObject.addressLine1 + ', ' : '') +
+          (addressObject.addressLine2 ? addressObject.addressLine2 + ', ' : '') +
+          (addressObject.addressLine3 ? addressObject.addressLine3 + ', ' : '') +
+          (addressObject.town ? addressObject.town + ', ' : '') +
+          (addressObject.postcode ? addressObject.postcode + '' : '')
+        );
+        return propertyAddress;
+      }
+    } 
+    
    private getEventList() {
       this.faultsService.getFaultEvents(this.faultDetails.faultId).subscribe(async response => {
          this.eventList = response ? response : [];
