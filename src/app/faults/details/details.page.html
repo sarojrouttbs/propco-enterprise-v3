@@ -495,6 +495,7 @@
 <ng-template #caseLogged>
   <app-fault-title *ngIf="!showSkeleton" 
   [describeFaultForm]="describeFaultForm" 
+  [propertyDetails]="propertyDetails"
   [faultDetails]="faultDetails"
   [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
   [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
@@ -599,6 +600,7 @@
       <ng-container *ngIf="faultDetails && (faultDetails?.stage === 'FAULT_QUALIFICATION' || stepper?.selectedIndex == 1)">
         <app-fault-title *ngIf="!showSkeleton" 
         [describeFaultForm]="describeFaultForm" 
+        [propertyDetails]="propertyDetails"
         [faultDetails]="faultDetails"
         [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
         [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
@@ -615,6 +617,7 @@
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'LANDLORD_INSTRUCTION' || stepper?.selectedIndex == 2) && landlordsOfproperty">
       <app-fault-title *ngIf="!showSkeleton" 
       [describeFaultForm]="describeFaultForm" 
+      [propertyDetails]="propertyDetails"
       [faultDetails]="faultDetails"
       [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
       [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
@@ -639,7 +642,8 @@
   <ion-card class="ion-no-margin">
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'ARRANGING_CONTRACTOR' || stepper?.selectedIndex == 3) && landlordsOfproperty">
       <app-fault-title *ngIf="!showSkeleton" 
-      [describeFaultForm]="describeFaultForm" 
+      [describeFaultForm]="describeFaultForm"
+      [propertyDetails]="propertyDetails" 
       [faultDetails]="faultDetails"
       [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
       [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
@@ -665,6 +669,7 @@
       <app-fault-title *ngIf="!showSkeleton" 
       [describeFaultForm]="describeFaultForm" 
       [faultDetails]="faultDetails"
+      [propertyDetails]="propertyDetails"
       [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
       [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
       <div *ngIf="showSkeleton">
@@ -686,6 +691,7 @@
     <ng-container *ngIf="faultDetails && (faultDetails.stage === 'PAYMENT' || stepper?.selectedIndex == 5)">
       <app-fault-title *ngIf="!showSkeleton" 
       [describeFaultForm]="describeFaultForm" 
+      [propertyDetails]="propertyDetails"
       [faultDetails]="faultDetails"
       [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
       [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
