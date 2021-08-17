@@ -231,8 +231,9 @@ export const REFERENCING_TENANT_TYPE = {
 
 export const SYSTEM_CONFIG = {
   MAXIMUM_FAULT_QUOTE_REJECTION: 'MAXIMUM_FAULT_QUOTE_REJECTION',
-  FAULT_MANAGEMENT_LETCAT: 'FAULT_MANAGEMENT_LETCAT'
-
+  FAULT_MANAGEMENT_LETCAT: 'FAULT_MANAGEMENT_LETCAT',
+  FAULT_DEFAULT_NOTE_CATEGORY: 'FAULT_DEFAULT_NOTE_CATEGORY',
+  FAULT_DEFAULT_NOTE_TYPE: 'FAULT_DEFAULT_NOTE_TYPE'
 };
 
 export const SYSTEM_OPTIONS = {
@@ -379,4 +380,55 @@ export const WORKSORDER_RAISE_TYPE = {
 export const LL_PAYMENT_CONFIG = {
   URGENT: 'FAULT_URGENT_LL_PAYMENT_UNSUCCESSFUL_EMAIL_NUDGE_MINUTES',
   NON_URGENT: 'FAULT_NON_URGENT_LL_PAYMENT_UNSUCCESSFUL_EMAIL_NUDGE_MINUTES'
+}
+
+export const FAULT_EVENT_TYPES = [
+  {
+    "Major Events": [
+      "Fault Logged",
+      "Progress Started",
+      "CLI action selected",
+      "Quote Obtained",
+      "Converted To WO",
+      "WO Raised",
+      "Fault Closed"
+    ]
+  },
+  {
+    "Escalations": [
+      "Escalated",
+      "De Escalated"
+    ]
+  },
+  {
+    "Stage Changed": [
+      "Stage Changed"
+    ]
+  },
+  {
+    "Status Changed": [
+      "Status Changed"
+    ]
+  },
+  {
+    "Notifications": [
+      "Response Received",
+      "Notification Sent"
+    ]
+  },
+  {
+    "Notes": [
+      "Notes Added"
+    ]
+  },
+  {
+    "Documents": [
+      "Document Added"
+    ]
+  }
+]
+
+export const NOTES_ORIGIN = {
+  FAULT_STAGE: 'FAULT_STAGE',
+  DASHBOARD: 'DASHBOARD'
 }

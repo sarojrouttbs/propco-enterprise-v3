@@ -35,6 +35,7 @@ export class PropertyDetailsComponent implements OnInit {
   @Input() sourceType;
   @Input() fixfloTenantContact;
   @Input() isPropertyCardReady;
+  @Input() hasPropertyCheckedIn;
 
   constructor(public commonService: CommonService, public sanitizer: DomSanitizer, public modalController: ModalController) {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -64,7 +65,7 @@ export class PropertyDetailsComponent implements OnInit {
     //   this.propertyDetails = changes.propertyDetails.currentValue;
     // }
     if(changes.landlordDetails && changes.landlordDetails.currentValue){
-      this.landlordDetails = changes.landlordDetails.currentValue;     
+      this.landlordDetails = changes.landlordDetails.currentValue;           
     }
     if(changes.leadTenantId && changes.leadTenantId.currentValue){
       this.leadTenantId = changes.leadTenantId.currentValue;           
@@ -130,7 +131,8 @@ export class PropertyDetailsComponent implements OnInit {
       cssClass: 'modal-container contact-details-modal',
       componentProps: {
         landlordDetails: this.landlordDetails,
-        tenantId: this.leadTenantId
+        tenantId: this.leadTenantId,
+        hasPropertyCheckedIn: this.hasPropertyCheckedIn
       },
       backdropDismiss: false
     });
