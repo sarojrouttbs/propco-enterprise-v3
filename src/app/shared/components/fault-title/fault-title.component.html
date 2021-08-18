@@ -22,7 +22,7 @@
         </ion-col>
       </ion-row>
     </ion-col>
-    <ion-col size="3" class="note-block" title="Cronological History" (click)="cronologicalHistoryModal()">
+    <ion-col size="3" class="note-block" title="Cronological History" (click)="cronologicalHistoryModal()" *ngIf="faultDetails?.faultId && !faultDetails?.isDraft">
       <ion-icon name="timer" class="ion-align-self-center edit-title-icon edit-title"></ion-icon>
     </ion-col>
     <ion-col size="4" class="note-block" (click)="notesModal()" title="Add Note" *ngIf="faultDetails?.faultId">
