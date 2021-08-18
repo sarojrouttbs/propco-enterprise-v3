@@ -22,12 +22,9 @@
         </ion-col>
       </ion-row>
     </ion-col>
-    <ion-col size="5" class="note-block" (click)="cronologicalHistoryModal()" *ngIf="faultDetails?.faultId">
-      <ion-icon name="timer" matTooltip="Cronological History" title="Cronological History" class="ion-align-self-center edit-title-icon edit-title"></ion-icon>
+    <ion-col size="10" class="note-block" *ngIf="faultDetails?.faultId">
+      <ion-icon name="timer" matTooltip="Cronological History" title="Cronological History" class="ion-align-self-center edit-title-icon edit-title" (click)="cronologicalHistoryModal()"></ion-icon>
+      <img src="assets/images/fault-categories/add_notes.png" matTooltip="Add Note" matTooltipPosition="above" (click)="notesModal()"/>&nbsp;
     </ion-col>
-    <ion-col size="5" class="note-block" (click)="notesModal()"  *ngIf="faultDetails?.faultId">
-      <img src="assets/images/fault-categories/add_notes.png" matTooltip="Add Note" matTooltipPosition="above" />&nbsp;
-    </ion-col>
-
   </ion-row>
 </ion-grid>
