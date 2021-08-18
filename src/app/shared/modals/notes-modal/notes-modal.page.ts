@@ -91,7 +91,7 @@ export class NotesModalPage implements OnInit {
   private async getDefaultType(key): Promise<any> {
     const promise = new Promise((resolve, reject) => {
       this.commonService.getSystemConfig(key).subscribe(res => {
-        let type = this.notesTypes.filter(x => { return x.value == res[key] });
+        let type = this.notesTypes.filter(x => { return x.value.replace(/ /g,'').toLowerCase() == 'PMC - TP3/4 - LL Notify and Discuss'.replace(/ /g,'').toLowerCase() });
         this.notesForm.patchValue({ type: type[0].index });
         this.commonService.setItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE, type[0].index);
         resolve(true);
