@@ -110,11 +110,12 @@ export class ChronologicalHistoryPage implements OnInit {
 
    ngOnInit(): void {
       this.dtOptions = {
+         lengthMenu: [10, 15, 20],
          order: [[0, "desc"]],
          searching: false,
          pageLength: 10,
          pagingType: 'full_numbers',
-         dom: 'Bfrtip',
+         dom: 'Blfrtip',
          // ajax: 'assets/data/data.json',
          buttons: [
             {
@@ -122,13 +123,13 @@ export class ChronologicalHistoryPage implements OnInit {
                orientation: 'portrait',
                pageSize: 'A4',
                className: "pdfBtn",
-               text: "Export",
+               text: "Print",
                download: 'open',
                customize: (doc) => {
                   let tableBody: any = [];
                   tableBody.push([{ text: `Fault : ${this.faultDetails.reference}`, border: [false, false, false, false] },
                   { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }]);
-                  tableBody.push([{ colSpan: 3, text: `Property Address : ${(this.propertyDetails?.reference ? this.propertyDetails?.reference + ',' : '') + (this.propertyDetails.publishedAddress ? this.propertyDetails.publishedAddress : this.getAddressString(this.propertyDetails.address)) }`, border: [false, false, false, false] }]);
+                  tableBody.push([{ colSpan: 3, text: `Property Address : ${(this.propertyDetails?.reference ? this.propertyDetails?.reference + ',' : '') + (this.propertyDetails.publishedAddress ? this.propertyDetails.publishedAddress : this.getAddressString(this.propertyDetails.address))}`, border: [false, false, false, false] }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
@@ -136,7 +137,7 @@ export class ChronologicalHistoryPage implements OnInit {
                   this.eventList.forEach((element) => {
                      tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Action', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Event Category', style: 'tableHeader', border: [false, false, false, false] }]);
                      tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.category || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-                     tableBody.push([{ text: 'Notification id', style: 'tableHeader', border: [false, false, false, false] }, { text: 'By', style: 'tableHeader', border: [false, false, false, false] }, { text: 'How', style: 'tableHeader', border: [false, false, false, false] }]);
+                     tableBody.push([{ text: 'Notification Id', style: 'tableHeader', border: [false, false, false, false] }, { text: 'By', style: 'tableHeader', border: [false, false, false, false] }, { text: 'How', style: 'tableHeader', border: [false, false, false, false] }]);
                      tableBody.push([{ text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.how || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                      tableBody.push([{ colSpan: 3, text: 'Question', style: 'tableHeader', border: [false, false, false, false] }]);
                      tableBody.push([{ colSpan: 3, text: `${element.data.question || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
@@ -200,17 +201,17 @@ export class ChronologicalHistoryPage implements OnInit {
    getAddressString(addressObject): string {
       let propertyAddress = null;
       if (addressObject && addressObject != null) {
-        propertyAddress = (
-          (addressObject.addressLine1 ? addressObject.addressLine1 + ', ' : '') +
-          (addressObject.addressLine2 ? addressObject.addressLine2 + ', ' : '') +
-          (addressObject.addressLine3 ? addressObject.addressLine3 + ', ' : '') +
-          (addressObject.town ? addressObject.town + ', ' : '') +
-          (addressObject.postcode ? addressObject.postcode + '' : '')
-        );
-        return propertyAddress;
+         propertyAddress = (
+            (addressObject.addressLine1 ? addressObject.addressLine1 + ', ' : '') +
+            (addressObject.addressLine2 ? addressObject.addressLine2 + ', ' : '') +
+            (addressObject.addressLine3 ? addressObject.addressLine3 + ', ' : '') +
+            (addressObject.town ? addressObject.town + ', ' : '') +
+            (addressObject.postcode ? addressObject.postcode + '' : '')
+         );
+         return propertyAddress;
       }
-    } 
-    
+   }
+
    private getEventList() {
       this.faultsService.getFaultEvents(this.faultDetails.faultId).subscribe(async response => {
          this.eventList = response ? response : [];
