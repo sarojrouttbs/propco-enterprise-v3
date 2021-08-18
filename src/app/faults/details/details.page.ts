@@ -2200,6 +2200,9 @@ export class DetailsPage implements OnInit {
   private prepareDocumentsList() {
     if (this.files.length > 0) {
       this.files.forEach((e, i) => {
+        if (this.files[i].folderName == null) {
+          this.files[i].folderName = FOLDER_NAMES[0].index;
+        }
         this.files[i].folderName = e.folderName.replace(/_/g, " ");
         this.files[i].isUploaded = true;
         if (e.name != null && DOCUMENTS_TYPE.indexOf(e.name.split('.')[1]) !== -1) {
