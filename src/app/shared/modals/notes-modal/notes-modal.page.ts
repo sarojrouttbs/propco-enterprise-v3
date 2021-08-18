@@ -28,7 +28,7 @@ export class NotesModalPage implements OnInit {
   notesTypeId: String;
   notesOrigin;
   faultNotificationDetails;
-  reference; 
+  reference;
 
   constructor(
     private navParams: NavParams,
@@ -40,7 +40,7 @@ export class NotesModalPage implements OnInit {
   ) {
   }
 
-  ngOnInit() {    
+  ngOnInit() {
     this.getLookupData();
     this.userDetails = this.commonService.getItem(PROPCO.LOGIN_DETAILS, true);
     this.notesForm = this.formBuilder.group({
@@ -58,7 +58,7 @@ export class NotesModalPage implements OnInit {
       this.notesForm.patchValue({ date: todayDate });
     }
 
-    
+
     if (this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY)) {
       let category = this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY);
       this.notesForm.patchValue({ category: + category });
@@ -91,9 +91,11 @@ export class NotesModalPage implements OnInit {
   private async getDefaultType(key): Promise<any> {
     const promise = new Promise((resolve, reject) => {
       this.commonService.getSystemConfig(key).subscribe(res => {
-        let type = this.notesTypes.filter(x => { return x.value.replace(/ /g,'').toLowerCase() == 'PMC - TP3/4 - LL Notify and Discuss'.replace(/ /g,'').toLowerCase() });
-        this.notesForm.patchValue({ type: type[0].index });
-        this.commonService.setItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE, type[0].index);
+        if (res && res[key] != null) {
+          let type = this.notesTypes.filter(x => { return x.value.replace(/ /g, '').toLowerCase() == res[key].replace(/ /g, '').toLowerCase() });
+          this.notesForm.patchValue({ type: type[0].index });
+          this.commonService.setItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE, type[0].index);
+        }
         resolve(true);
       }, error => {
         resolve(true);
@@ -123,7 +125,7 @@ export class NotesModalPage implements OnInit {
   }
 
   createNote() {
-    
+
 
     if (this.notesForm.valid) {
       const requestObj = this.notesForm.value;
@@ -134,13 +136,13 @@ export class NotesModalPage implements OnInit {
         let updatedNotesDesc = '';
         requestObj.notes = '';
         if (this.faultNotificationDetails && this.faultNotificationDetails.length) {
-          updatedNotesDesc = 'Fault ID: ' + this.reference + '<br>Notification ID: ' + this.faultNotificationDetails[0] +' - '+this.faultNotificationDetails[1]  +' <br>Notes: <br>'+ notesDesc;
+          updatedNotesDesc = 'Fault ID: ' + this.reference + '<br>Notification ID: ' + this.faultNotificationDetails[0] + ' - ' + this.faultNotificationDetails[1] + ' <br>Notes: <br>' + notesDesc;
         } else {
-          updatedNotesDesc = 'Fault ID: ' + this.reference +' <br>Notes: <br>'+ notesDesc;
+          updatedNotesDesc = 'Fault ID: ' + this.reference + ' <br>Notes: <br>' + notesDesc;
         }
         requestObj.notes = updatedNotesDesc;
       }
-  
+
       this.notesService.createFaultNotes(this.notesTypeId, requestObj).subscribe(res => {
         this.modalController.dismiss(res);
 
