@@ -45,7 +45,7 @@
             <ion-checkbox (ionChange)="selectCertificate(certificate, $event.target.checked)" color="primary"
               [checked]="certificate?.isRowChecked" [disabled]="!certificate?.expired"></ion-checkbox>
           </td>
-          <td>{{certificate?.certificateId || '-'}}</td>
+          <td>{{certificate?.certificateNumber || '-'}}</td>
           <td>{{certificate?.appliance || '-'}}</td>
           <td>{{certificate?.contact || '-'}} </td>
           <td>{{certificate?.certificateNumber || '-'}}</td>
