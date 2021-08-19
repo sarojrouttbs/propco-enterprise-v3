@@ -268,6 +268,7 @@ export class JobCompletionComponent implements OnInit {
   private setLookupData(data) {
     this.contractorSkill = data.contractorSkills;
     this.quoteStatuses = data.maintenanceQuoteStatuses;
+    this.certificateTypes = data.certificateTypes;
   }
 
   private setFaultsLookupData(data) {
