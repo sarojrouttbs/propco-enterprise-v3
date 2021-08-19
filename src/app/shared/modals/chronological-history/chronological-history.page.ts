@@ -227,6 +227,9 @@ export class ChronologicalHistoryPage implements OnInit {
          list.forEach(element => {
             element.eventType = this.faultEventMap.get(element.eventType);
             element.category = this.getCategoryByEventType(element.eventType);
+            if(element.data.body){
+               element.data.body = element.data.body.replace(/<img[^>]*>/g,"");
+            }
          });
       }
    }
