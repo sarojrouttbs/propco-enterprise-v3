@@ -450,5 +450,11 @@ ion-alert.common-alert-box {
       pointer-events: none;
        cursor: default;
     }
+    span.dtr-title {
+      width: 30%;
+    }
+    ul {
+      width: 100%;
+  }
   }
 }
