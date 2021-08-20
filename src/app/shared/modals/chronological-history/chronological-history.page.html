@@ -41,7 +41,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let elem of eventList">
-              <td>{{ elem.eventAt | date : 'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ elem.eventAt | date : 'dd/MM/yyyy HH:mm:s' }}</td>
               <td>{{ elem.eventType || '-' }}</td>
               <td>{{ elem.category || '-' }}</td>
               <td>{{ elem.data.by}}</td>
@@ -49,7 +49,7 @@
               <td>{{ elem.data.escalationReason}}</td>
               <td>{{ elem.data.document}}</td>
               <td>{{ elem.data.category}}</td>
-              <td>{{ elem.data.noteDescription }}</td>
+              <td [innerHtml]="elem.data.noteDescription"></td>
               <td>{{ elem.data.type}}</td>
               <td>{{ elem.data.question}}</td>
               <td>{{ elem.data.responseOption}}</td>

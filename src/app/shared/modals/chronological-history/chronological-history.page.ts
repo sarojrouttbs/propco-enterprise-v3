@@ -116,77 +116,82 @@ export class ChronologicalHistoryPage implements OnInit {
          pageLength: 10,
          pagingType: 'full_numbers',
          dom: 'Blfrtip',
+         buttons: [{
+            extend: 'pdf', 
+            download: 'open'
+         },'excel','print'],
+            //    {
          // ajax: 'assets/data/data.json',
-         buttons: [
-            {
-               extend: 'pdf',
-               orientation: 'portrait',
-               pageSize: 'A4',
-               className: "pdfBtn",
-               text: "Print",
-               download: 'open',
-               customize: (doc) => {
-                  let tableBody: any = [];
-                  tableBody.push([{ text: `Fault : ${this.faultDetails.reference}`, border: [false, false, false, false] },
-                  { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }]);
-                  tableBody.push([{ colSpan: 3, text: `Property Address : ${(this.propertyDetails?.reference ? this.propertyDetails?.reference + ',' : '') + (this.propertyDetails.publishedAddress ? this.propertyDetails.publishedAddress : this.getAddressString(this.propertyDetails.address))}`, border: [false, false, false, false] }]);
-                  tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
-                  tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
-                  tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
+         // buttons: [
+         //    {
+         //       extend: 'pdf',
+         //       orientation: 'portrait',
+         //       pageSize: 'A4',
+         //       className: "pdfBtn",
+         //       text: "Print",
+         //       download: 'open',
+         //       customize: (doc) => {
+         //          let tableBody: any = [];
+         //          tableBody.push([{ text: `Fault : ${this.faultDetails.reference}`, border: [false, false, false, false] },
+         //          { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }]);
+         //          tableBody.push([{ colSpan: 3, text: `Property Address : ${(this.propertyDetails?.reference ? this.propertyDetails?.reference + ',' : '') + (this.propertyDetails.publishedAddress ? this.propertyDetails.publishedAddress : this.getAddressString(this.propertyDetails.address))}`, border: [false, false, false, false] }]);
+         //          tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
+         //          tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
+         //          tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
 
-                  this.eventList.forEach((element) => {
-                     // tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Action', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Event Category', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { colSpan: 2, text: 'Action', style: 'tableHeader', border: [false, false, false, false] }]);
-                     // tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.category || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-                     tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { colSpan: 2, text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-                     tableBody.push([{ text: 'Notification Id', style: 'tableHeader', border: [false, false, false, false] }, { text: 'By', style: 'tableHeader', border: [false, false, false, false] }, { text: 'How', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.how || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-                     tableBody.push([{ colSpan: 3, text: 'Question', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ colSpan: 3, text: `${element.data.question || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-                     tableBody.push([{ colSpan: 3, text: 'Answer', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ colSpan: 3, text: `${element.data.responseOption || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-                     if (this.isEmailRequire) {
-                        tableBody.push([{ colSpan: 3, text: 'Email', style: 'tableHeader', border: [false, false, false, false] }])
-                        tableBody.push([{ colSpan: 3, style: 'emailHeader', text: `${element.data.plainBody || '-'}`, border: [false, false, false, false] }])
-                     }
-                     tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, true], }]);
-                     tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
-                  });
-                  doc.content[1] = [
-                     {
-                        table: {
-                           widths: ['*', '*', '*'],
-                           body: tableBody
-                        },
-                        layout: {
-                           hLineColor: function (i, node) {
-                              return '#CECECE';
-                           },
-                        }
-                     },
-                  ]
-                  doc.styles = {
-                     emailHeader: {
-                        fontSize: 12,
-                        color: '#333333',
-                        lineHeight: 1.1,
-                     },
-                     tableHeader: {
-                        bold: true,
-                        fontSize: 10,
-                        color: '#333333',
-                        lineHeight: 0.5
-                     },
-                     subheader: {
-                        fontSize: 12,
-                        color: '#333333',
-                     }, pdfBtn: {
-                        color: 'red'
-                     }
-                  };
-               }
-            }
-         ],
+         //          this.eventList.forEach((element) => {
+         //             // tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Action', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Event Category', style: 'tableHeader', border: [false, false, false, false] }]);
+         //             tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { colSpan: 2, text: 'Action', style: 'tableHeader', border: [false, false, false, false] }]);
+         //             // tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.category || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+         //             tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { colSpan: 2, text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+         //             tableBody.push([{ text: 'Notification Id', style: 'tableHeader', border: [false, false, false, false] }, { text: 'By', style: 'tableHeader', border: [false, false, false, false] }, { text: 'How', style: 'tableHeader', border: [false, false, false, false] }]);
+         //             tableBody.push([{ text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.how || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+         //             tableBody.push([{ colSpan: 3, text: 'Question', style: 'tableHeader', border: [false, false, false, false] }]);
+         //             tableBody.push([{ colSpan: 3, text: `${element.data.question || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+         //             tableBody.push([{ colSpan: 3, text: 'Answer', style: 'tableHeader', border: [false, false, false, false] }]);
+         //             tableBody.push([{ colSpan: 3, text: `${element.data.responseOption || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+         //             if (this.isEmailRequire) {
+         //                tableBody.push([{ colSpan: 3, text: 'Email', style: 'tableHeader', border: [false, false, false, false] }])
+         //                tableBody.push([{ colSpan: 3, style: 'emailHeader', text: `${element.data.plainBody || '-'}`, border: [false, false, false, false] }])
+         //             }
+         //             tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, true], }]);
+         //             tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
+         //          });
+         //          doc.content[1] = [
+         //             {
+         //                table: {
+         //                   widths: ['*', '*', '*'],
+         //                   body: tableBody
+         //                },
+         //                layout: {
+         //                   hLineColor: function (i, node) {
+         //                      return '#CECECE';
+         //                   },
+         //                }
+         //             },
+         //          ]
+         //          doc.styles = {
+         //             emailHeader: {
+         //                fontSize: 12,
+         //                color: '#333333',
+         //                lineHeight: 1.1,
+         //             },
+         //             tableHeader: {
+         //                bold: true,
+         //                fontSize: 10,
+         //                color: '#333333',
+         //                lineHeight: 0.5
+         //             },
+         //             subheader: {
+         //                fontSize: 12,
+         //                color: '#333333',
+         //             }, pdfBtn: {
+         //                color: 'red'
+         //             }
+         //          };
+         //       }
+         //    }
+         // ],
          responsive: {
             details: {
                renderer: function (api, rowIdx, columns) {
