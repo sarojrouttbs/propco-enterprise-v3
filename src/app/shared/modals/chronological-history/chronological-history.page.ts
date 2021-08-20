@@ -115,11 +115,11 @@ export class ChronologicalHistoryPage implements OnInit {
          searching: false,
          pageLength: 10,
          pagingType: 'full_numbers',
-         dom: 'Bfrtip',
+         dom: 'Blfrtip',
          // ajax: 'assets/data/data.json',
          buttons: [
             {
-               extend: 'pdfHtml5',
+               extend: 'pdf',
                orientation: 'portrait',
                pageSize: 'A4',
                className: "pdfBtn",

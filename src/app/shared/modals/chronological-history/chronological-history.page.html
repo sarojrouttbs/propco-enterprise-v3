@@ -34,6 +34,7 @@
               <th class="none">How</th>
               <th class="none">Recipient</th>
               <th class="none">Stage</th>
+              <th class="none">From</th>
               <th class="none">To</th>
               <th class="none">Subject</th>
               <th class="none">Email</th>
@@ -55,6 +56,7 @@
               <td>{{ elem.data.how || '-' }}</td>
               <td>{{ elem.data.recipient || '-' }}</td>
               <td>{{ elem.data.stage || '-' }}</td>
+              <td>{{ elem.data.from || '-' }}</td>
               <td>{{ elem.data.to || '-' }}</td>
               <td>{{ elem.data.subject || '-' }}</td>
               <td [innerHtml]="elem.data.body ? elem.data.body : '-' "></td>
