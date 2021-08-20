@@ -115,7 +115,7 @@ export class ChronologicalHistoryPage implements OnInit {
          searching: false,
          pageLength: 10,
          pagingType: 'full_numbers',
-         dom: 'Blfrtip',
+         dom: 'Bfrtip',
          // ajax: 'assets/data/data.json',
          buttons: [
             {
