@@ -23,6 +23,7 @@
               <th>Action</th>
               <th>Category</th>
               <th class="none">By</th>
+              <th class="none">Status</th>
               <th class="none">Notification Id</th>
               <th class="none">Escalation Reason</th>
               <th class="none">Documents</th>
@@ -45,6 +46,7 @@
               <td>{{ elem.eventType || '-' }}</td>
               <td>{{ elem.category || '-' }}</td>
               <td>{{ elem.data.by}}</td>
+              <td>{{ elem.data.status}}</td>
               <td>{{ elem.data.notificationTemplateCode}}</td>
               <td>{{ elem.data.escalationReason}}</td>
               <td>{{ elem.data.document}}</td>
