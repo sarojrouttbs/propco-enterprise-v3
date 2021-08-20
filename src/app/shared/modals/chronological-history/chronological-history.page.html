@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content id="chronological-history">
   <ion-grid>
     <ion-row>
       <ion-col>
@@ -43,21 +43,21 @@
               <td>{{ elem.eventAt | date : 'dd/MM/yyyy HH:mm' }}</td>
               <td>{{ elem.eventType || '-' }}</td>
               <td>{{ elem.category || '-' }}</td>
-              <td>{{ elem.data.by || '-' }}</td>
-              <td>{{ elem.data.notificationTemplateCode || '-' }}</td>
-              <td>{{ elem.data.escalationReason || '-' }}</td>
-              <td>{{ elem.data.document || '-' }}</td>
-              <td>{{ elem.data.category || '-' }}</td>
-              <td>{{ elem.data.noteDescription || '-' }}</td>
-              <td>{{ elem.data.type || '-' }}</td>
-              <td>{{ elem.data.question || '-' }}</td>
-              <td>{{ elem.data.responseOption || '-' }}</td>
-              <td>{{ elem.data.how || '-' }}</td>
-              <td>{{ elem.data.recipient || '-' }}</td>
-              <td>{{ elem.data.stage || '-' }}</td>
-              <td>{{ elem.data.to || '-' }}</td>
-              <td>{{ elem.data.subject || '-' }}</td>
-              <td [innerHtml]="elem.data.body ? elem.data.body : '-' "></td>
+              <td>{{ elem.data.by}}</td>
+              <td>{{ elem.data.notificationTemplateCode}}</td>
+              <td>{{ elem.data.escalationReason}}</td>
+              <td>{{ elem.data.document}}</td>
+              <td>{{ elem.data.category}}</td>
+              <td>{{ elem.data.noteDescription }}</td>
+              <td>{{ elem.data.type}}</td>
+              <td>{{ elem.data.question}}</td>
+              <td>{{ elem.data.responseOption}}</td>
+              <td>{{ elem.data.how}}</td>
+              <td>{{ elem.data.recipient}}</td>
+              <td>{{ elem.data.stage}}</td>
+              <td>{{ elem.data.to}}</td>
+              <td>{{ elem.data.subject}}</td>
+              <td [innerHtml]="elem.data.body"></td>
             </tr>
           </tbody>
         </table>

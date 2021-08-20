@@ -187,7 +187,23 @@ export class ChronologicalHistoryPage implements OnInit {
                }
             }
          ],
-         responsive: true
+         responsive: {
+            details: {
+               renderer: function (api, rowIdx, columns) {
+                  var data = $.map(columns, function (col, i) {
+                     if (col.hidden && col.data != '') {
+                        return '<tr class="res-child" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                           '<td>' + col.title + ':' + '</td> ' +
+                           '<td>' + col.data + '</td>' +
+                           '</tr>';
+                     } else {
+                        return '';
+                     }
+                  }).join('');
+                  return data ? $('<table/>').append(data) : false;
+               }
+            }
+         }
       };
       this.getEventList();
    }
