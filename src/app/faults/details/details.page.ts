@@ -134,6 +134,7 @@ export class DetailsPage implements OnInit {
   loggedInUserData: any;
   isPropertyCardReady: boolean = false;
   hasPropertyCheckedIn: any;
+  faultNotificationDetails: any[];
 
   constructor(
     private faultsService: FaultsService,
@@ -385,9 +386,10 @@ export class DetailsPage implements OnInit {
         }
         await this.getLandlordDetails(landlordId);
         this.getLandlordDppDetails(landlordId);
-        this.checkForLLSuggestedAction();
+        await this.checkForLLSuggestedAction();
         this.getPreferredSuppliers(landlordId);
         this.matchCategory();
+        this.getFaultNotificationId();
       }
       this.showSkeleton = false;
     });
@@ -1151,9 +1153,9 @@ export class DetailsPage implements OnInit {
         });
         this.allGuarantors = [];
         if (agreement && agreement.tenants) {
-          agreement.tenants.forEach(tenant => {
-            this.getTenantsGuarantors(tenant.tenantId);
-          });
+          // agreement.tenants.forEach(tenant => {
+          //   this.getTenantsGuarantors(tenant.tenantId);
+          // });
 
           let apiObservableArray = [];
           agreement.tenants.forEach(tenant => {
@@ -1162,7 +1164,7 @@ export class DetailsPage implements OnInit {
           forkJoin(apiObservableArray).subscribe((res: any[]) => {
             if (res) {
               if (this.faultId && this.allGuarantors && this.allGuarantors.length) {
-                let entityData = res.find(x => x.guarantorId === this.reportedByForm.get('reportedById').value);
+                let entityData = this.allGuarantors.find(x => x.guarantorId === this.reportedByForm.get('reportedById').value);
                 this.reportedByForm.get('selectedEntity').setValue(entityData);
                 this.setEntityData(entityData);
               }
@@ -1501,6 +1503,7 @@ export class DetailsPage implements OnInit {
     // }
     await this.checkFaultNotifications(this.faultId);
     this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, this.faultDetails.userSelectedAction);
+    
     this.getPendingHours();
     // if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index) {
     //   if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
@@ -1878,7 +1881,7 @@ export class DetailsPage implements OnInit {
   async checkFaultNotifications(faultId) {
     return new Promise((resolve, reject) => {
       this.faultsService.getFaultNotifications(faultId).subscribe(async (response) => {
-        this.faultNotifications = response && response.data ? response.data : [];
+        this.faultNotifications = response && response.data ? response.data : [];        
         resolve(this.faultNotifications);
       }, error => {
         reject(error)
@@ -1886,21 +1889,26 @@ export class DetailsPage implements OnInit {
     });
   }
 
-  private filterNotifications(data, stage, action) {
+  private filterNotifications(data, stage, action?) {        
     const promise = new Promise((resolve, reject) => {
       let filtereData = null;
       let currentStage = stage;
-      let currentAction = action;
+      let currentAction = action;      
+      
       if (data.length == 0)
         resolve(null);
-      filtereData = data.filter((x => x.faultStage === currentStage)).filter((x => x.faultStageAction === currentAction)).filter((x => !x.isVoided));
+      filtereData = data.filter((x => x.faultStage === currentStage)).filter((x => !x.isVoided));
       if (filtereData.length == 0)
         resolve(null);
       // if (filtereData[0].firstEmailSentAt) {
       filtereData = filtereData.sort((a, b) => {
         return <any>new Date(b.createdAt) - <any>new Date(a.createdAt);
       });
-      filtereData[0].chase = filtereData[0].numberOfChasesDone + 1;
+      filtereData[0].chase = filtereData[0].numberOfChasesDone + 1;    
+      this.faultNotificationDetails = [
+         filtereData[0].templateCode,
+         filtereData[0].chase
+      ];
       resolve(filtereData[0]);
       // } else {
       //   resolve(filtereData[0]);
@@ -2621,6 +2629,10 @@ export class DetailsPage implements OnInit {
       // }
     });
 
+  }
+
+  getFaultNotificationId(){    
+    this.filterNotifications(this.faultNotifications, this.faultDetails.stage);
   }
 
 }

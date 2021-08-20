@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
+import { FaultsService } from 'src/app/faults/faults.service';
+import { FAULT_EVENT_TYPES, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -75,8 +79,32 @@ export class ChronologicalHistoryPage implements OnInit {
    ];
    faultDetails;
    isEmailRequire: boolean = false;
+   eventList: any;
+   dtTrigger: Subject<any> = new Subject();
+   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
+   faultEventsLookup: any;
+   eventTypes = FAULT_EVENT_TYPES;
+   propertyDetails;
 
-   constructor(private modalController: ModalController, private commonService: CommonService) {
+   constructor(private modalController: ModalController, private commonService: CommonService, private faultsService: FaultsService) {
+      this.getLookupData();
+   }
+
+   private getLookupData() {
+      let faultsLookupData = this.commonService.getItem(PROPCO.FAULTS_LOOKUP_DATA, true);
+      if (faultsLookupData) {
+         this.setFaultsLookupData(faultsLookupData);
+      }
+      else {
+         this.commonService.getFaultsLookup().subscribe(data => {
+            this.commonService.setItem(PROPCO.FAULTS_LOOKUP_DATA, data);
+            this.setFaultsLookupData(data);
+         });
+      }
+   }
+
+   private setFaultsLookupData(data) {
+      this.faultEventsLookup = data.faultEvents;
       this.setFaultEventMap();
    }
 
@@ -84,56 +112,10 @@ export class ChronologicalHistoryPage implements OnInit {
       this.dtOptions = {
          order: [[0, "desc"]],
          searching: false,
+         pageLength: 10,
+         pagingType: 'full_numbers',
          dom: 'Bfrtip',
-         ajax: 'assets/data/data.json',
-         columns: [{
-            title: 'Date/Time',
-            data: 'eventAt',
-            render: (eventAt) => { return this.commonService.getFormatedDate(eventAt, 'MMM d, y, h:mm') }
-         }, {
-            title: 'Action',
-            data: 'faultEventType',
-            render: (faultEventType) => { return this.faultEventMap.get(faultEventType) }
-         }, {
-            title: 'Event Category',
-            data: 'category'
-         }, {
-            title: 'By',
-            data: 'data.By',
-            defaultContent: '-',
-            class: 'none'
-         },
-         {
-            title: 'Notification TemplateCode',
-            data: 'data.notificationTemplateCode',
-            defaultContent: '-',
-            class: 'none'
-         },
-         {
-            title: 'Question',
-            data: 'data.question',
-            defaultContent: '-',
-            class: 'none'
-         },
-         {
-            title: 'Response Option',
-            data: 'data.responseOption',
-            defaultContent: '-',
-            class: 'none'
-         },
-         {
-            title: 'How',
-            data: 'data.how',
-            defaultContent: '-',
-            class: 'none'
-         },
-            // {
-            //    title: 'Email',
-            //    data: 'data.body',
-            //    defaultContent: '-',
-            //    class: 'none'
-            // }
-         ],
+         // ajax: 'assets/data/data.json',
          buttons: [
             {
                extend: 'pdfHtml5',
@@ -141,27 +123,28 @@ export class ChronologicalHistoryPage implements OnInit {
                pageSize: 'A4',
                className: "pdfBtn",
                text: "Export",
+               download: 'open',
                customize: (doc) => {
                   let tableBody: any = [];
                   tableBody.push([{ text: `Fault : ${this.faultDetails.reference}`, border: [false, false, false, false] },
                   { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }]);
-                  tableBody.push([{ colSpan: 3, text: `Property Address : 000002063, Cobourg House, Mayflower Street, PL1 1DJ`, border: [false, false, false, false] }]);
+                  tableBody.push([{ colSpan: 3, text: `Property Address : ${(this.propertyDetails?.reference ? this.propertyDetails?.reference + ',' : '') + (this.propertyDetails.publishedAddress ? this.propertyDetails.publishedAddress : this.getAddressString(this.propertyDetails.address)) }`, border: [false, false, false, false] }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
 
-                  doc.content[1].table.body.forEach((line, i) => {
+                  this.eventList.forEach((element) => {
                      tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Action', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Event Category', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ text: 'Aug 2, 2021, 5:20', style: 'subheader', border: [false, false, false, false] }, { text: 'Fault Closed', style: 'subheader', border: [false, false, false, false] }, { text: 'Major Event', style: 'subheader', border: [false, false, false, false] }]);
+                     tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.category || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                      tableBody.push([{ text: 'Notification id', style: 'tableHeader', border: [false, false, false, false] }, { text: 'By', style: 'tableHeader', border: [false, false, false, false] }, { text: 'How', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ text: 'CQ-NA-CE', style: 'subheader', border: [false, false, false, false] }, { text: 'Aman', style: 'subheader', border: [false, false, false, false] }, { text: 'Email', style: 'subheader', border: [false, false, false, false] }]);
+                     tableBody.push([{ text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.how || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                      tableBody.push([{ colSpan: 3, text: 'Question', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ colSpan: 3, text: 'Do you want to proceed with the quote?', style: 'subheader', border: [false, false, false, false] }]);
+                     tableBody.push([{ colSpan: 3, text: `${element.data.question || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                      tableBody.push([{ colSpan: 3, text: 'Answer', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ colSpan: 3, text: 'Yes, accepted', style: 'subheader', border: [false, false, false, false] }]);
+                     tableBody.push([{ colSpan: 3, text: `${element.data.responseOption || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                      if (this.isEmailRequire) {
                         tableBody.push([{ colSpan: 3, text: 'Email', style: 'tableHeader', border: [false, false, false, false] }])
-                        tableBody.push([{ colSpan: 3, style: 'emailHeader', text: `N/A`, border: [false, false, false, false] }])
+                        tableBody.push([{ colSpan: 3, style: 'emailHeader', text: `${element.data.plainBody || '-'}`, border: [false, false, false, false] }])
                      }
                      tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, true], }]);
                      tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
@@ -203,10 +186,72 @@ export class ChronologicalHistoryPage implements OnInit {
          ],
          responsive: true
       };
+      this.getEventList();
    }
 
+   ngAfterViewInit(): void {
+      this.dtTrigger.next();
+   }
+
+   ngOnDestroy(): void {
+      this.dtTrigger.unsubscribe();
+   }
+
+   getAddressString(addressObject): string {
+      let propertyAddress = null;
+      if (addressObject && addressObject != null) {
+        propertyAddress = (
+          (addressObject.addressLine1 ? addressObject.addressLine1 + ', ' : '') +
+          (addressObject.addressLine2 ? addressObject.addressLine2 + ', ' : '') +
+          (addressObject.addressLine3 ? addressObject.addressLine3 + ', ' : '') +
+          (addressObject.town ? addressObject.town + ', ' : '') +
+          (addressObject.postcode ? addressObject.postcode + '' : '')
+        );
+        return propertyAddress;
+      }
+    } 
+    
+   private getEventList() {
+      this.faultsService.getFaultEvents(this.faultDetails.faultId).subscribe(async response => {
+         this.eventList = response ? response : [];
+         await this.updateEventList(this.eventList);
+         this.rerender();
+      })
+   }
+
+   private async updateEventList(list) {
+      if (Array.isArray(list)) {
+         list.forEach(element => {
+            element.eventType = this.faultEventMap.get(element.eventType);
+            element.category = this.getCategoryByEventType(element.eventType);
+         });
+      }
+   }
+
+   private getCategoryByEventType(type) {
+      if (type) {
+         let category: any;
+         this.eventTypes.forEach((element, index) => {
+            if (new RegExp(Object.values(element)[0].join("|").toLowerCase()).test(type.toLowerCase())) {
+               category = Object.keys(element)[0];
+            }
+         });
+         return category;
+      }
+   }
+
+   rerender(): void {
+      this.dtElements.last.dtInstance.then((dtInstance: DataTables.Api) => {
+         // Destroy the table first
+         dtInstance.destroy();
+         // Call the dtTrigger to rerender again
+         this.dtTrigger.next();
+      });
+   }
+
+
    private setFaultEventMap() {
-      this.faultEvents.map((event, index) => {
+      this.faultEventsLookup.map((event, index) => {
          this.faultEventMap.set(event.index, event.value);
       });
    }

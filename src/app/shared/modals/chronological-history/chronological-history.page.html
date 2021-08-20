@@ -11,10 +11,46 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <div>
-          <label>Email <input type="checkbox" [(ngModel)]="isEmailRequire"/></label>
+        <div class="email-body-checkbox">
+          <label><input type="checkbox" class="email-body" [(ngModel)]="isEmailRequire" /> Include email body in
+            export</label>
         </div>
-        <table #dataT datatable [dtOptions]="dtOptions" class="row-border hover" style="border-spacing: 0 2px; "></table>
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
+          style="border-spacing: 0 2px; ">
+          <thead>
+            <tr>
+              <th>Date/Time</th>
+              <th>Action</th>
+              <th>Category</th>
+              <th class="none">By</th>
+              <th class="none">Notification TemplateCode</th>
+              <th class="none">Question</th>
+              <th class="none">Response Option</th>
+              <th class="none">How</th>
+              <th class="none">Recipient</th>
+              <th class="none">Stage</th>
+              <th class="none">To</th>
+              <th class="none">Subject</th>
+              <th class="none">Email</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let elem of eventList">
+              <td>{{ elem.eventAt | date : 'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ elem.eventType || '-' }}</td>
+              <td>{{ elem.category || '-' }}</td>
+              <td>{{ elem.data.by || '-' }}</td>
+              <td>{{ elem.data.notificationTemplateCode || '-' }}</td>
+              <td>{{ elem.data.question || '-' }}</td>
+              <td>{{ elem.data.responseOption || '-' }}</td>
+              <td>{{ elem.data.how || '-' }}</td>
+              <td>{{ elem.data.recipient || '-' }}</td>
+              <td>{{ elem.data.stage || '-' }}</td>
+              <td>{{ elem.data.to || '-' }}</td>
+              <td>{{ elem.data.subject || '-' }}</td>
+              <td [innerHtml]="elem.data.body ? elem.data.body : '-' "></td>
+            </tr>
+          </tbody>
+        </table>
       </ion-col>
     </ion-row>
   </ion-grid>
