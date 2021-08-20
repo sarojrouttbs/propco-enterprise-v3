@@ -465,3 +465,14 @@ mat-form-field {
   border-radius: 5px;
   float: right;
 }
+
+#chronological-history {
+  table {
+    width: 100% !important;
+    .res-child>td:first-child{
+      word-break: initial;
+      width: 100px;
+      vertical-align: unset;
+    }
+  }
+}
