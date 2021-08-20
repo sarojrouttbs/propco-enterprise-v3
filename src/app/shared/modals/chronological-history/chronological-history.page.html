@@ -15,7 +15,7 @@
           <label><input type="checkbox" class="email-body" [(ngModel)]="isEmailRequire" /> Include email body in
             export</label>
         </div>
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
+        <table datatable [dtOptions]="dtOptions" *ngIf="isTableReady" class="row-border hover"
           style="border-spacing: 0 2px; ">
           <thead>
             <tr>

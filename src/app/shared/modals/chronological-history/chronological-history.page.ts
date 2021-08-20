@@ -85,6 +85,7 @@ export class ChronologicalHistoryPage implements OnInit {
    faultEventsLookup: any;
    eventTypes = FAULT_EVENT_TYPES;
    propertyDetails;
+   isTableReady = false;
 
    constructor(private modalController: ModalController, private commonService: CommonService, private faultsService: FaultsService) {
       this.getLookupData();
@@ -109,107 +110,6 @@ export class ChronologicalHistoryPage implements OnInit {
    }
 
    ngOnInit(): void {
-      this.dtOptions = {
-         lengthMenu: [10, 15, 20],
-         order: [[0, "desc"]],
-         searching: false,
-         pageLength: 10,
-         pagingType: 'full_numbers',
-         dom: 'Blfrtip',
-         buttons: [{
-            extend: 'pdf', 
-            download: 'open'
-         },'excel','print'],
-            //    {
-         // ajax: 'assets/data/data.json',
-         // buttons: [
-         //    {
-         //       extend: 'pdf',
-         //       orientation: 'portrait',
-         //       pageSize: 'A4',
-         //       className: "pdfBtn",
-         //       text: "Print",
-         //       download: 'open',
-         //       customize: (doc) => {
-         //          let tableBody: any = [];
-         //          tableBody.push([{ text: `Fault : ${this.faultDetails.reference}`, border: [false, false, false, false] },
-         //          { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }]);
-         //          tableBody.push([{ colSpan: 3, text: `Property Address : ${(this.propertyDetails?.reference ? this.propertyDetails?.reference + ',' : '') + (this.propertyDetails.publishedAddress ? this.propertyDetails.publishedAddress : this.getAddressString(this.propertyDetails.address))}`, border: [false, false, false, false] }]);
-         //          tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
-         //          tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
-         //          tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
-
-         //          this.eventList.forEach((element) => {
-         //             // tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Action', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Event Category', style: 'tableHeader', border: [false, false, false, false] }]);
-         //             tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { colSpan: 2, text: 'Action', style: 'tableHeader', border: [false, false, false, false] }]);
-         //             // tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.category || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-         //             tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { colSpan: 2, text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-         //             tableBody.push([{ text: 'Notification Id', style: 'tableHeader', border: [false, false, false, false] }, { text: 'By', style: 'tableHeader', border: [false, false, false, false] }, { text: 'How', style: 'tableHeader', border: [false, false, false, false] }]);
-         //             tableBody.push([{ text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.how || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-         //             tableBody.push([{ colSpan: 3, text: 'Question', style: 'tableHeader', border: [false, false, false, false] }]);
-         //             tableBody.push([{ colSpan: 3, text: `${element.data.question || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-         //             tableBody.push([{ colSpan: 3, text: 'Answer', style: 'tableHeader', border: [false, false, false, false] }]);
-         //             tableBody.push([{ colSpan: 3, text: `${element.data.responseOption || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-         //             if (this.isEmailRequire) {
-         //                tableBody.push([{ colSpan: 3, text: 'Email', style: 'tableHeader', border: [false, false, false, false] }])
-         //                tableBody.push([{ colSpan: 3, style: 'emailHeader', text: `${element.data.plainBody || '-'}`, border: [false, false, false, false] }])
-         //             }
-         //             tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, true], }]);
-         //             tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
-         //          });
-         //          doc.content[1] = [
-         //             {
-         //                table: {
-         //                   widths: ['*', '*', '*'],
-         //                   body: tableBody
-         //                },
-         //                layout: {
-         //                   hLineColor: function (i, node) {
-         //                      return '#CECECE';
-         //                   },
-         //                }
-         //             },
-         //          ]
-         //          doc.styles = {
-         //             emailHeader: {
-         //                fontSize: 12,
-         //                color: '#333333',
-         //                lineHeight: 1.1,
-         //             },
-         //             tableHeader: {
-         //                bold: true,
-         //                fontSize: 10,
-         //                color: '#333333',
-         //                lineHeight: 0.5
-         //             },
-         //             subheader: {
-         //                fontSize: 12,
-         //                color: '#333333',
-         //             }, pdfBtn: {
-         //                color: 'red'
-         //             }
-         //          };
-         //       }
-         //    }
-         // ],
-         responsive: {
-            details: {
-               renderer: function (api, rowIdx, columns) {
-                  var data = $.map(columns, function (col, i) {
-                     if (col.hidden && col.data != '') {
-                        return '<tr class="res-child" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
-                           '<td>' + col.title + ':' + '</td> ' +
-                           '<td>' + col.data + '</td>' +
-                           '</tr>';
-                     } else {
-                        return '';
-                     }
-                  }).join('');
-                  return data ? $('<table/>').append(data) : false;
-               }
-            }
-         }
-      };
       this.getEventList();
    }
 
@@ -239,8 +139,110 @@ export class ChronologicalHistoryPage implements OnInit {
       this.faultsService.getFaultEvents(this.faultDetails.faultId).subscribe(async response => {
          this.eventList = response ? response : [];
          await this.updateEventList(this.eventList);
-         this.rerender();
+         this.initiateDtOptons();
+         this.isTableReady = true;
+         // this.rerender();
       })
+   }
+
+   initiateDtOptons() {
+      this.dtOptions = {
+         lengthMenu: [10, 15, 20],
+         order: [[0, "desc"]],
+         searching: false,
+         pageLength: 10,
+         pagingType: 'full_numbers',
+         dom: 'Blfrtip',
+            //    {
+         // ajax: 'assets/data/data.json',
+         buttons: [
+            {
+               extend: 'pdf',
+               orientation: 'portrait',
+               pageSize: 'A4',
+               className: "pdfBtn",
+               text: "Print",
+               download: 'open',
+               customize: (doc) => {
+                  let tableBody: any = [];
+                  tableBody.push([{ text: `Fault : ${this.faultDetails.reference}`, border: [false, false, false, false] },
+                  { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }]);
+                  tableBody.push([{ colSpan: 3, text: `Property Address : ${(this.propertyDetails?.reference ? this.propertyDetails?.reference + ',' : '') + (this.propertyDetails.publishedAddress ? this.propertyDetails.publishedAddress : this.getAddressString(this.propertyDetails.address))}`, border: [false, false, false, false] }]);
+                  tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
+                  tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
+                  tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
+
+                  this.eventList.forEach((element) => {
+                     // tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Action', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Event Category', style: 'tableHeader', border: [false, false, false, false] }]);
+                     tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { colSpan: 2, text: 'Action', style: 'tableHeader', border: [false, false, false, false] }]);
+                     // tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.category || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                     tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { colSpan: 2, text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                     tableBody.push([{ text: 'Notification Id', style: 'tableHeader', border: [false, false, false, false] }, { text: 'By', style: 'tableHeader', border: [false, false, false, false] }, { text: 'How', style: 'tableHeader', border: [false, false, false, false] }]);
+                     tableBody.push([{ text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.how || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                     tableBody.push([{ colSpan: 3, text: 'Question', style: 'tableHeader', border: [false, false, false, false] }]);
+                     tableBody.push([{ colSpan: 3, text: `${element.data.question || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                     tableBody.push([{ colSpan: 3, text: 'Answer', style: 'tableHeader', border: [false, false, false, false] }]);
+                     tableBody.push([{ colSpan: 3, text: `${element.data.responseOption || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                     if (this.isEmailRequire) {
+                        tableBody.push([{ colSpan: 3, text: 'Email', style: 'tableHeader', border: [false, false, false, false] }])
+                        tableBody.push([{ colSpan: 3, style: 'emailHeader', text: `${element.data.plainBody || '-'}`, border: [false, false, false, false] }])
+                     }
+                     tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, true], }]);
+                     tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
+                  });
+                  doc.content[1] = [
+                     {
+                        table: {
+                           widths: ['*', '*', '*'],
+                           body: tableBody
+                        },
+                        layout: {
+                           hLineColor: function (i, node) {
+                              return '#CECECE';
+                           },
+                        }
+                     },
+                  ]
+                  doc.styles = {
+                     emailHeader: {
+                        fontSize: 12,
+                        color: '#333333',
+                        lineHeight: 1.1,
+                     },
+                     tableHeader: {
+                        bold: true,
+                        fontSize: 10,
+                        color: '#333333',
+                        lineHeight: 0.5
+                     },
+                     subheader: {
+                        fontSize: 12,
+                        color: '#333333',
+                     }, pdfBtn: {
+                        color: 'red'
+                     }
+                  };
+               }
+            }
+         ],
+         responsive: {
+            details: {
+               renderer: function (api, rowIdx, columns) {
+                  var data = $.map(columns, function (col, i) {
+                     if (col.hidden && col.data != '') {
+                        return '<tr class="res-child" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                           '<td>' + col.title + ':' + '</td> ' +
+                           '<td>' + col.data + '</td>' +
+                           '</tr>';
+                     } else {
+                        return '';
+                     }
+                  }).join('');
+                  return data ? $('<table/>').append(data) : false;
+               }
+            }
+         }
+      };
    }
 
    private async updateEventList(list) {
