@@ -43,7 +43,8 @@ export class FaultsService {
   }
 
   uploadDocument(formData: FormData, faultId): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/documents/upload`, formData);
+    let params = new HttpParams().set('submittedByType', 'SECUR_USER');
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/documents/upload`, formData, { params });
   }
 
   escalateFault(faultId, requestObj): Observable<any> {
