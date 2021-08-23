@@ -165,8 +165,8 @@ export class ChronologicalHistoryPage implements OnInit {
                download: 'open',
                customize: (doc) => {
                   let tableBody: any = [];
-                  tableBody.push([{ text: `Fault : saroj`, border: [false, false, false, false] },
-                     { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }
+                  tableBody.push([{ text: `Fault : ${this.faultDetails.reference}`, border: [false, false, false, false] },
+                  { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }
                   ]
                   );
                   tableBody.push([{ colSpan: 3, text: `Property Address : ${(this.propertyDetails?.reference ? this.propertyDetails?.reference + ',' : '') + (this.propertyDetails.publishedAddress ? this.propertyDetails.publishedAddress : this.getAddressString(this.propertyDetails.address))}`, border: [false, false, false, false] }]);
@@ -175,19 +175,88 @@ export class ChronologicalHistoryPage implements OnInit {
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
 
                   this.eventList.forEach((element) => {
-                     // tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Action', style: 'tableHeader', border: [false, false, false, false] }, { text: 'Event Category', style: 'tableHeader', border: [false, false, false, false] }]);
                      tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { colSpan: 2, text: 'Action', style: 'tableHeader', border: [false, false, false, false] }]);
-                     // tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.category || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                      tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { colSpan: 2, text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-                     tableBody.push([{ text: 'Notification Id', style: 'tableHeader', border: [false, false, false, false] }, { text: 'By', style: 'tableHeader', border: [false, false, false, false] }, { text: 'How', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] }, { text: `${element.data.how || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-                     tableBody.push([{ colSpan: 3, text: 'Question', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ colSpan: 3, text: `${element.data.question || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-                     tableBody.push([{ colSpan: 3, text: 'Answer', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ colSpan: 3, text: `${element.data.responseOption || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-                     if (this.isEmailRequire) {
-                        tableBody.push([{ colSpan: 3, text: 'Email', style: 'tableHeader', border: [false, false, false, false] }])
-                        tableBody.push([{ colSpan: 3, style: 'emailHeader', text: `${element.data.plainBody || '-'}`, border: [false, false, false, false] }])
+
+                     if (element.eventTypeId === 12) {
+                        tableBody.push([{ text: 'Notification Id', style: 'tableHeader', border: [false, false, false, false] },
+                        { text: 'By', style: 'tableHeader', border: [false, false, false, false] },
+                        { text: 'How', style: 'tableHeader', border: [false, false, false, false] }]);
+                        tableBody.push([{ text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] },
+                        { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] },
+                        { text: `${element.data.how || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+
+                        tableBody.push([{ colSpan: 3, text: 'Question', style: 'tableHeader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.question || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: 'Answer', style: 'tableHeader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.responseOption || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+
+                        tableBody.push([{ colSpan: 3, text: 'Subject', style: 'tableHeader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.subject || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+
+                        if (this.isEmailRequire) {
+                           tableBody.push([{ colSpan: 3, text: 'Email', style: 'tableHeader', border: [false, false, false, false] }])
+                           tableBody.push([{ colSpan: 3, style: 'emailHeader', text: `${element.data.plainBody || '-'}`, border: [false, false, false, false] }])
+                        }
+
+                     }
+                     else if (element.eventTypeId === 15) {
+                        tableBody.push([{ text: 'Notification Id', style: 'tableHeader', border: [false, false, false, false] },
+                        { text: 'By', style: 'tableHeader', border: [false, false, false, false] },
+                        { text: 'Recipient', style: 'tableHeader', border: [false, false, false, false] }]);
+                        tableBody.push([{ text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] },
+                        { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] },
+                        { text: `${element.data.recipient || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+
+                        tableBody.push([
+                           { text: 'From', style: 'tableHeader', border: [false, false, false, false] },
+                           { colSpan: 2, text: 'To', style: 'tableHeader', border: [false, false, false, false] },
+                        ]);
+                        tableBody.push([
+                           { text: `${element.data.from || '-'}`, style: 'subheader', border: [false, false, false, false] },
+                           { colSpan: 2, text: `${element.data.to || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+
+                        tableBody.push([{ colSpan: 3, text: 'Subject', style: 'tableHeader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.subject || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        if (this.isEmailRequire) {
+                           tableBody.push([{ colSpan: 3, text: 'Email', style: 'tableHeader', border: [false, false, false, false] }])
+                           tableBody.push([{ colSpan: 3, style: 'emailHeader', text: `${element.data.plainBody || '-'}`, border: [false, false, false, false] }])
+                        }
+                     }
+                     else if (element.eventTypeId === 13) {
+                        tableBody.push([{ text: 'Category', style: 'tableHeader', border: [false, false, false, false] },
+                        { text: 'By', style: 'tableHeader', border: [false, false, false, false] },
+                        { text: 'Type', style: 'tableHeader', border: [false, false, false, false] }]);
+                        tableBody.push([{ text: `${element.data.category || '-'}`, style: 'subheader', border: [false, false, false, false] },
+                        { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] },
+                        { text: `${element.data.type || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+
+                        tableBody.push([{ colSpan: 3, text: 'Note Description', style: 'tableHeader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.noteDescription.replace(/<br[^>]*>/g, "") || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                     }
+                     else {
+                        tableBody.push([{ colSpan: 3, text: 'By', style: 'tableHeader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        if (element.eventTypeId === 10) {
+                           tableBody.push([{ colSpan: 3, text: 'Stage', style: 'tableHeader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.stage || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        }
+                        if (element.eventTypeId === 3) {
+                           tableBody.push([{ colSpan: 3, text: 'Cli Selected Action', style: 'tableHeader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.cliSelectedAction || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        }
+                        if (element.eventTypeId === 11) {
+                           tableBody.push([{ colSpan: 3, text: 'Status', style: 'tableHeader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.status || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        }
+                        if (element.eventTypeId === 14) {
+                           tableBody.push([{ colSpan: 3, text: 'Document', style: 'tableHeader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.document || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        }
+                        if (element.eventTypeId === 8) {
+                           tableBody.push([{ colSpan: 3, text: 'Escalation Reason', style: 'tableHeader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.escalationReason || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        }
                      }
                      tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, true], }]);
                      tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
@@ -250,6 +319,7 @@ export class ChronologicalHistoryPage implements OnInit {
    private async updateEventList(list) {
       if (Array.isArray(list)) {
          list.forEach(element => {
+            element.eventTypeId = element.eventType;
             element.eventType = this.faultEventMap.get(element.eventType);
             element.category = this.getCategoryByEventType(element.eventType);
             if (element.data.body) {
