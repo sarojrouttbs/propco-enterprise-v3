@@ -396,7 +396,7 @@ ion-alert.common-alert-box {
 
 .property-certificates-list {
   .modal-wrapper {
-    height: 600px;
+    height: 500px;
     min-width: 400px;
     width: 800px;
     ion-footer {
@@ -443,12 +443,18 @@ ion-alert.common-alert-box {
     .dataTables_wrapper table.dataTable thead tr th{
       padding: 10px 8px;
     }
-    .dtr-data a img {
-      display: none;
-    }
+    // .dtr-data a img {
+    //   display: none;
+    // }
     p a {
       pointer-events: none;
        cursor: default;
     }
+    span.dtr-title {
+      width: 30%;
+    }
+    ul {
+      width: 100%;
+  }
   }
 }
