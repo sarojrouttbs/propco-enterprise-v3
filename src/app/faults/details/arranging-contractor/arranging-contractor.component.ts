@@ -1499,7 +1499,8 @@ export class ArrangingContractorComponent implements OnInit {
       checked: isNew ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value ? true : false),
       isRejected: !isNew ? data.isRejected : false,
       rejectionReason: !isNew ? data.rejectionReason : '',
-      rejectedByType: !isNew ? data.rejectedByType : ''
+      rejectedByType: !isNew ? data.rejectedByType : '',
+      status: [{value : 'New', disabled: true}]
     });
     contractorList.push(contGrup);
     this.contratctorArr.push(data.contractorId ? data.contractorId : data.contractorObj.entityId);

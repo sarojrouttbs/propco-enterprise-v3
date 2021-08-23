@@ -284,106 +284,134 @@
       </ion-row>
     </ion-grid>
     <ion-row *ngIf="isFormsReady && !showSkeleton">
-      
+
         <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
           <ng-container *ngIf="!isWorksOrder">
+            <div class="quote-request-banner" *ngIf="iacNotification">
+              <ion-text>You have requested multiple quotes.</ion-text>
+              <ion-text>Please select a contractor from the list below to see the status.</ion-text>
+            </div>
             <form [formGroup]="raiseQuoteForm">
               <ion-grid>
+                <div class="contractor-block">
+                  <div formArrayName="contractorList"
+                    *ngFor="let item of raiseQuoteForm.get('contractorList')['controls']; let i = index;">
+                    <ion-row id="row_1" [ngClass]="{'isCCSelected': ''}" class="row-banner" [formGroupName]="i"
+                      [ngClass]="{'isRejected': item.get('isRejected').value }">
+                      <ion-col size="30">
+                        <ion-item>
+                          <ion-label position="floating">Company </ion-label>
+                          <ion-input formControlName='company'></ion-input>
+                        </ion-item>
+                      </ion-col>
+      
+                      <ion-col size="20">
+                        <ion-item>
+                          <ion-label position="floating">Contact Tel.</ion-label>
+                          <ion-input formControlName='mobile'></ion-input>
+                        </ion-item>
+                      </ion-col>
+             
+                      <ion-col size="20">
+                        <ion-item>
+                          <ion-label position="floating">Trade</ion-label>
+                          <ion-input formControlName="reference"></ion-input>
+                        </ion-item>
+                      </ion-col>
+                      <ion-col size="20">
+                       <ion-item>
+                         <ion-label position="floating">Status</ion-label>
+                         <ion-input formControlName='status'></ion-input>
+                       </ion-item>
+                      </ion-col>
+                      <ion-col size="10">
+                        <div class="action-btn-container">
+                          <ion-checkbox color="success" class="list-checkbox" formControlName="checked" mode="ios"
+                            (click)="updateSelection(item.value,i)" [name]="item"
+                            [disabled]="(restrictAction || item.get('isRejected').value) && item.get('rejectedByType').value === REJECTED_BY_TYPE.LANDLORD">
+                           </ion-checkbox>
+                            <ion-fab class="cc-list-button" vertical="center" horizontal="end">
+                             <ion-fab-button class="expand-btn">      
+                               <i class="propcoicon propcoicon-actions-on"></i>
+                             </ion-fab-button>
+                             <ion-fab-list side="start">
+                               <ion-fab-button class="check-button" *ngIf="item.get('isPreferred').value">
+                                 <span matTooltip="Preferred Contractor" matTooltipPosition="above">
+                                   <ion-icon class="list-button" name="checkmark-circle-outline"> </ion-icon>
+                                 </span>
+                               </ion-fab-button>
+                               <ion-fab-button class="close-button">
+                                 <span  (click)="removeContractor(i,item.get('isRejected').value)" matTooltip="Delete" matTooltipPosition="above">
+                                   <ion-icon class="list-button" name="close-circle-outline"></ion-icon>
+                                 </span>
+                               </ion-fab-button>
+                             </ion-fab-list>
+                           </ion-fab>
+                          <!-- <ion-icon class="list-button" *ngIf="item.get('isPreferred').value"
+                            matTooltip="Preferred Contractor" matTooltipPosition="above" name="checkmark-circle-outline">
+                          </ion-icon>
+                          <ion-icon class="list-button" color="danger"
+                            (click)="removeContractor(i,item.get('isRejected').value)" name="close-circle-outline"></ion-icon> -->
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+      
+                  <ion-row id="row_1" class="row-banner" [formGroup]="addContractorForm" *ngIf="!restrictAction">
+                    <ion-col size="45">
+                      <ion-item>
+                        <ion-label position="floating">Skill Set</ion-label>
+                        <ion-select interface="popover" formControlName="skillSet" class="ion-select-options">
+                          <ion-select-option value="">Please Select</ion-select-option>
+                          <ion-select-option [value]="item.value" *ngFor="let item of contractorSkill">
+                            {{ item.value }}
+                          </ion-select-option>
+                        </ion-select>
+      
+                      </ion-item>
+                    </ion-col>
+                    <ion-col size="45">
+                      <ion-item>
+                        <ion-label position="floating">Start Typing to Search Contractors</ion-label>
+                        <ion-input type="text" debounce="300" (ionInput)="onSearch($event)" formControlName='contractor'
+                          placeholder="" (ionFocus)="onSearch($event)"> 
+                          <!-- (ionBlur)="onBlurContractorSearch($event)"> -->
+                        </ion-input>
+                      </ion-item>
+      
+                      <ion-list class="contractor-list" *ngIf="resultsAvailable">
+                        <ion-item *ngFor="let result of (contractors| async)?.data" (click)="selectContractor(result)" button
+                          style="font-size: 13px !important;">
+                          <span>
+                            <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
+                          </span>&nbsp;
+                          <label style="color: var(--ion-color-step-200); padding-right: 5px;">{{result.fullName}}&nbsp;
+                            <span
+                              style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
+                            <span class="text-color-lightgreen"
+                              style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
+                          </label>
+      
+                        </ion-item>
+                      </ion-list>
+                      <ion-text *ngIf="isContratorSelected" class="error-message">This contractor is already selected
+                      </ion-text>
+                      <div *ngIf="addContractorForm.get('contractor').hasError('invalidContractor') && addContractorForm.get('contractor').touched" class="contractor-error-message">{{addContractorForm.get('contractor').errors.message}}</div>
+ 
+                    </ion-col>
+      
+                    <ion-col size="10">
+                      <ion-fab-button class="button-container" (click)="addContractor(addContractorForm?.value)"
+                        [disabled]="!addContractorForm?.get('contractor').value || !isSelected || addContractorForm.controls['contractor'].invalid">
+                        <ion-icon name="add-sharp" class="add-contractor list-button"></ion-icon>
+                      </ion-fab-button>
+                    </ion-col>
+                  </ion-row>
+                  <ion-col size="100" *ngIf="!restrictAction">
+                    <ion-text color="dark"> Note: Please click Add to add another contractor to the list.</ion-text>
+                  </ion-col>
+                </div>
                <ng-container *ngTemplateOutlet="quoteDetails"></ng-container>
-               <div class="contractor-block">
-                 <div formArrayName="contractorList"
-                   *ngFor="let item of raiseQuoteForm.get('contractorList')['controls']; let i = index;">
-                   <ion-row id="row_1" class="row-banner" [formGroupName]="i"
-                     [ngClass]="{'isRejected': item.get('isRejected').value }">
-                     <ion-col size="30">
-                       <ion-item>
-                         <ion-label position="floating">Company </ion-label>
-                         <ion-input formControlName='company'></ion-input>
-                       </ion-item>
-                     </ion-col>
-     
-                     <ion-col size="30 ">
-                       <ion-item>
-                         <ion-label position="floating">Contact Tel.</ion-label>
-                         <ion-input formControlName='mobile'></ion-input>
-                       </ion-item>
-                     </ion-col>
-                     <ion-col size="25">
-                       <ion-item>
-                         <ion-label position="floating">Trade</ion-label>
-                         <ion-input formControlName="reference"></ion-input>
-                       </ion-item>
-                     </ion-col>
-                     <ion-col size="15">
-     
-                       <div class="action-btn-container">
-                         <ion-checkbox color="success" class="list-checkbox" formControlName="checked"
-                           (click)="updateSelection(item.value,i)" [name]="item"
-                           [disabled]="(restrictAction || item.get('isRejected').value) && item.get('rejectedByType').value === REJECTED_BY_TYPE.LANDLORD"></ion-checkbox>
-                         <ion-icon class="list-button" *ngIf="item.get('isPreferred').value"
-                           matTooltip="Preferred Contractor" matTooltipPosition="above" name="checkmark-circle-outline">
-                         </ion-icon>
-                         <ion-icon class="list-button" color="danger"
-                           (click)="removeContractor(i,item.get('isRejected').value)" name="close-circle-outline"></ion-icon>
-                       </div>
-                     </ion-col>
-                   </ion-row>
-                 </div>
-     
-                 <ion-row id="row_1" class="row-banner" [formGroup]="addContractorForm" *ngIf="!restrictAction">
-                   <ion-col size="45">
-                     <ion-item>
-                       <ion-label position="floating">Skill Set</ion-label>
-                       <ion-select interface="popover" formControlName="skillSet" class="ion-select-options">
-                         <ion-select-option value="">Please Select</ion-select-option>
-                         <ion-select-option [value]="item.value" *ngFor="let item of contractorSkill">
-                           {{ item.value }}
-                         </ion-select-option>
-                       </ion-select>
-     
-                     </ion-item>
-                   </ion-col>
-                   <ion-col size="45">
-                     <ion-item>
-                       <ion-label position="floating">Start Typing to Search Contractors</ion-label>
-                       <ion-input type="text" debounce="300" (ionInput)="onSearch($event)" formControlName='contractor'
-                         placeholder="" (ionFocus)="onSearch($event)"> 
-                         <!-- (ionBlur)="onBlurContractorSearch($event)"> -->
-                       </ion-input>
-                     </ion-item>
-     
-                     <ion-list class="contractor-list" *ngIf="resultsAvailable">
-                       <ion-item *ngFor="let result of (contractors| async)?.data" (click)="selectContractor(result)" button
-                         style="font-size: 13px !important;">
-                         <span>
-                           <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
-                         </span>&nbsp;
-                         <label style="color: var(--ion-color-step-200); padding-right: 5px;">{{result.fullName}}&nbsp;
-                           <span
-                             style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-                           <span class="text-color-lightgreen"
-                             style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
-                         </label>
-     
-                       </ion-item>
-                     </ion-list>
-                     <ion-text *ngIf="isContratorSelected" class="error-message">This contractor is already selected
-                     </ion-text>
-                     <div *ngIf="addContractorForm.get('contractor').hasError('invalidContractor') && addContractorForm.get('contractor').touched" class="contractor-error-message">{{addContractorForm.get('contractor').errors.message}}</div>
-
-                   </ion-col>
-     
-                   <ion-col size="10">
-                     <ion-fab-button class="button-container" (click)="addContractor(addContractorForm?.value)"
-                       [disabled]="!addContractorForm?.get('contractor').value || !isSelected || addContractorForm.controls['contractor'].invalid">
-                       <ion-icon name="add-sharp" class="add-contractor list-button"></ion-icon>
-                     </ion-fab-button>
-                   </ion-col>
-                 </ion-row>
-                 <ion-col size="100" *ngIf="!restrictAction">
-                   <ion-text color="dark"> Note: Please click Add to add another contractor to the list.</ion-text>
-                 </ion-col>
-               </div>
              </ion-grid>
              </form>
           </ng-container>
@@ -593,7 +621,7 @@
       </ion-col>
       <ion-col size="50">
         <ion-item>
-          <ion-label position="floating">Comapny </ion-label>
+          <ion-label position="floating">Company </ion-label>
           <ion-input formControlName="company"></ion-input>
         </ion-item>
       </ion-col>

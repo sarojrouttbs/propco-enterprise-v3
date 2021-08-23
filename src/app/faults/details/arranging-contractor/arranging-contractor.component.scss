@@ -36,20 +36,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 13px;
+  margin-top: 10px;
   .list-checkbox {
-    height: 25px;
-    width: 25px;
+    height: 36px;
+    width: 36px;
   }
   .list-button {
-    font-size: 32px;
+    font-size: 36px;
   }
 }
 
 .button-container {
-  height: 30px;
-  width: 30px;
-  margin-top: 13px;
+  height: 36px;
+  width: 36px;
+  margin-top: 10px;
   .add-contractor {
     --background: var(--ion-color-success);
     color: var(--ion-color-step-2000);
@@ -61,6 +61,41 @@
   --background: var(--ion-color-danger-tint);
 }
 
+.cc-list-button {
+  .expand-btn {
+    height: 36px;
+    width: 36px;
+    margin-top: 10px;
+    --color: var(--ion-color-step-2000);
+    --background: var(--ion-color-warning);
+    .propcoicon {
+      line-height: 1.7;
+      font-size: 22px;
+      background: var(--ion-color-warning);
+    }
+  }
+  ion-fab-list{
+    margin-inline: 40px;
+    ion-fab-button{
+      height: 36px;
+      width: 36px;
+      span{
+        padding-top: 5px;
+        ion-icon{
+          pointer-events: none;
+        }
+      }
+    }
+    .close-button{
+      --background: var(--ion-color-danger);
+      --color: var(--ion-color-step-2000);
+    }
+    .check-button{
+      --background: var(--ion-color-success);
+      --color: var(--ion-color-step-2000);
+    }
+  }
+}
 .mark-contractor {
   --background: var(
     --ion-color-success.error-message{color: var(--ion-color-danger) ; padding-top: 2px; font-size: 14px; line-height:
@@ -84,6 +119,11 @@
 
 .isRejected {
   background-color: rgba(var(--ion-color-danger-rgb), 0.5) !important;
+  cursor: pointer;
+}
+
+.isCCSelected {
+  border: 2px solid (--ion-color-success);
   cursor: pointer;
 }
 
@@ -140,7 +180,7 @@
 }
 
 .modal-button {
-  background: #FFF;
+  background: #fff;
   border: none;
   color: #333;
   font-size: 13px;
@@ -192,7 +232,7 @@
 }
 
 .modal-view-details {
-  background: #FFF;
+  background: #fff;
   z-index: 2;
   position: fixed;
   left: 50%;
@@ -217,7 +257,7 @@
   bottom: 10px;
   right: 10px;
   background: none;
-  color: #3C78D8;;
+  color: #3c78d8;
   border-radius: 2px;
   border: none;
   font-size: 16px;
@@ -252,4 +292,16 @@ input {
   border: 0;
   outline: 0;
   padding: 5px 0;
+}
+
+.quote-request-banner{
+  text-align: center;
+  background: rgba(226, 18, 18, 0.1);
+  padding: 30px 15px;
+  color: var(--ion-color-danger);
+  border-radius: 5px;
+  ion-text{
+    display: inherit;
+    @include set-text-style(20px, 32px);
+  }
 }
