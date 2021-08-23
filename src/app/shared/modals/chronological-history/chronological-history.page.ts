@@ -3,7 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { FAULT_EVENT_TYPES, PROPCO } from '../../constants';
+import { FAULT_EVENT_TYPES, FAULT_EVENT_TYPES_ID, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -178,7 +178,7 @@ export class ChronologicalHistoryPage implements OnInit {
                      tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { colSpan: 2, text: 'Action', style: 'tableHeader', border: [false, false, false, false] }]);
                      tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { colSpan: 2, text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
 
-                     if (element.eventTypeId === 12) {
+                     if (FAULT_EVENT_TYPES_ID.RESPONSE_RECEIVED === element.eventTypeId) {
                         tableBody.push([{ text: 'Notification Id', style: 'tableHeader', border: [false, false, false, false] },
                         { text: 'By', style: 'tableHeader', border: [false, false, false, false] },
                         { text: 'How', style: 'tableHeader', border: [false, false, false, false] }]);
@@ -200,7 +200,7 @@ export class ChronologicalHistoryPage implements OnInit {
                         }
 
                      }
-                     else if (element.eventTypeId === 15) {
+                     else if (FAULT_EVENT_TYPES_ID.NOTIFICATION_SENT === element.eventTypeId) {
                         tableBody.push([{ text: 'Notification Id', style: 'tableHeader', border: [false, false, false, false] },
                         { text: 'By', style: 'tableHeader', border: [false, false, false, false] },
                         { text: 'Recipient', style: 'tableHeader', border: [false, false, false, false] }]);
@@ -223,7 +223,7 @@ export class ChronologicalHistoryPage implements OnInit {
                            tableBody.push([{ colSpan: 3, style: 'emailHeader', text: `${element.data.plainBody || '-'}`, border: [false, false, false, false] }])
                         }
                      }
-                     else if (element.eventTypeId === 13) {
+                     else if (FAULT_EVENT_TYPES_ID.NOTES_ADDED === element.eventTypeId) {
                         tableBody.push([{ text: 'Category', style: 'tableHeader', border: [false, false, false, false] },
                         { text: 'By', style: 'tableHeader', border: [false, false, false, false] },
                         { text: 'Type', style: 'tableHeader', border: [false, false, false, false] }]);
@@ -237,23 +237,23 @@ export class ChronologicalHistoryPage implements OnInit {
                      else {
                         tableBody.push([{ colSpan: 3, text: 'By', style: 'tableHeader', border: [false, false, false, false] }]);
                         tableBody.push([{ colSpan: 3, text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-                        if (element.eventTypeId === 10) {
+                        if (FAULT_EVENT_TYPES_ID.STAGE_CHANGED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Stage', style: 'tableHeader', border: [false, false, false, false] }]);
                            tableBody.push([{ colSpan: 3, text: `${element.data.stage || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
-                        if (element.eventTypeId === 3) {
+                        if (FAULT_EVENT_TYPES_ID.CLI_ACTION_SELECTED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Cli Selected Action', style: 'tableHeader', border: [false, false, false, false] }]);
                            tableBody.push([{ colSpan: 3, text: `${element.data.cliSelectedAction || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
-                        if (element.eventTypeId === 11) {
+                        if (FAULT_EVENT_TYPES_ID.STATUS_CHANGED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Status', style: 'tableHeader', border: [false, false, false, false] }]);
                            tableBody.push([{ colSpan: 3, text: `${element.data.status || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
-                        if (element.eventTypeId === 14) {
+                        if (FAULT_EVENT_TYPES_ID.DOCUMENT_ADDED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Document', style: 'tableHeader', border: [false, false, false, false] }]);
                            tableBody.push([{ colSpan: 3, text: `${element.data.document || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
-                        if (element.eventTypeId === 8) {
+                        if (FAULT_EVENT_TYPES_ID.ESCALATED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Escalation Reason', style: 'tableHeader', border: [false, false, false, false] }]);
                            tableBody.push([{ colSpan: 3, text: `${element.data.escalationReason || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
