@@ -166,20 +166,29 @@ export class ChronologicalHistoryPage implements OnInit {
                className: "pdfBtn",
                text: "Print",
                download: 'open',
+               title: ' ',
                customize: (doc) => {
                   let tableBody: any = [];
-                  tableBody.push([{ text: `Fault : ${this.faultDetails.reference}`, border: [false, false, false, false] },
-                  { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }
-                  ]
-                  );
-                  tableBody.push([{ colSpan: 3, text: `Property Address : ${(this.propertyDetails?.reference ? this.propertyDetails?.reference + ',' : '') + (this.propertyDetails.publishedAddress ? this.propertyDetails.publishedAddress : this.getAddressString(this.propertyDetails.address))}`, border: [false, false, false, false] }]);
+                  tableBody.push([
+                     { colSpan: 3, text: `Fault Chronological History`, border: [false, false, false, false], style: 'pageTitle' },
+                     { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }
+                  ]);
+                  tableBody.push([
+                     { colSpan: 3, text: `Fault : ${this.faultDetails.reference}`, border: [false, false, false, false], style: 'pageHeader' },
+                     { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }
+                  ]);
+                  tableBody.push([{
+                     colSpan: 3, text: `Address : ${(this.propertyDetails?.reference ? this.propertyDetails?.reference + ',' : '')
+                        + (this.propertyDetails.publishedAddress ? this.propertyDetails.publishedAddress : this.getAddressString(this.propertyDetails.address))}`,
+                     border: [false, false, false, false], style: 'pageHeader'
+                  }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
 
                   this.eventList.forEach((element) => {
                      tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { colSpan: 2, text: 'Action', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { colSpan: 2, text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                     tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm:ss'), style: 'subheader', border: [false, false, false, false] }, { colSpan: 2, text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
 
                      if (FAULT_EVENT_TYPES_ID.RESPONSE_RECEIVED === element.eventTypeId) {
                         tableBody.push([
@@ -221,7 +230,7 @@ export class ChronologicalHistoryPage implements OnInit {
                         tableBody.push([{ colSpan: 3, text: `${element.data.from || '-'}`, style: 'subheader', border: [false, false, false, false] }])
                         tableBody.push([
                            { colSpan: 3, text: 'To', style: 'tableHeader', border: [false, false, false, false] },
-                           ]);
+                        ]);
                         tableBody.push([{ colSpan: 3, text: `${element.data.to || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
 
                         tableBody.push([{ colSpan: 3, text: 'Subject', style: 'tableHeader', border: [false, false, false, false] }]);
@@ -247,15 +256,15 @@ export class ChronologicalHistoryPage implements OnInit {
                         tableBody.push([{ colSpan: 3, text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         if (FAULT_EVENT_TYPES_ID.STAGE_CHANGED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Stage', style: 'tableHeader', border: [false, false, false, false] }]);
-                           tableBody.push([{ colSpan: 3, text: `${element.data.stage || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.stage.replaceAll('_',' ') || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                         if (FAULT_EVENT_TYPES_ID.CLI_ACTION_SELECTED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Cli Selected Action', style: 'tableHeader', border: [false, false, false, false] }]);
-                           tableBody.push([{ colSpan: 3, text: `${element.data.cliSelectedAction || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.cliSelectedAction.replaceAll('_',' ') || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                         if (FAULT_EVENT_TYPES_ID.STATUS_CHANGED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Status', style: 'tableHeader', border: [false, false, false, false] }]);
-                           tableBody.push([{ colSpan: 3, text: `${element.data.status || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.status.replaceAll('_',' ') || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                         if (FAULT_EVENT_TYPES_ID.DOCUMENT_ADDED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Document', style: 'tableHeader', border: [false, false, false, false] }]);
@@ -299,6 +308,16 @@ export class ChronologicalHistoryPage implements OnInit {
                         color: '#333333',
                      }, pdfBtn: {
                         color: 'red'
+                     },
+                     pageHeader: {
+                        fontSize: 13,
+                        bold: true,
+                        alignment: "center"
+                     },
+                     pageTitle: {
+                        fontSize: 14,
+                        bold: true,
+                        alignment: "center"
                      }
                   };
                }
