@@ -256,15 +256,15 @@ export class ChronologicalHistoryPage implements OnInit {
                         tableBody.push([{ colSpan: 3, text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         if (FAULT_EVENT_TYPES_ID.STAGE_CHANGED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Stage', style: 'tableHeader', border: [false, false, false, false] }]);
-                           tableBody.push([{ colSpan: 3, text: `${element.data.stage.replaceAll('_',' ') || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.stage || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                         if (FAULT_EVENT_TYPES_ID.CLI_ACTION_SELECTED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Cli Selected Action', style: 'tableHeader', border: [false, false, false, false] }]);
-                           tableBody.push([{ colSpan: 3, text: `${element.data.cliSelectedAction.replaceAll('_',' ') || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.cliSelectedAction || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                         if (FAULT_EVENT_TYPES_ID.STATUS_CHANGED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Status', style: 'tableHeader', border: [false, false, false, false] }]);
-                           tableBody.push([{ colSpan: 3, text: `${element.data.status.replaceAll('_',' ') || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.status || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                         if (FAULT_EVENT_TYPES_ID.DOCUMENT_ADDED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Document', style: 'tableHeader', border: [false, false, false, false] }]);
