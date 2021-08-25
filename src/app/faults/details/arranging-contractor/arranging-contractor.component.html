@@ -326,8 +326,7 @@
                       </ion-col>
                       <ion-col size="10">
                         <div class="action-btn-container">
-                          <ion-checkbox color="success" class="list-checkbox" formControlName="checked" mode="ios"
-                            (click)="updateSelection(item.value,i)" [name]="item"
+                          <ion-checkbox color="success" class="list-checkbox" formControlName="isActive" mode="ios"
                             [disabled]="(restrictAction || item.get('isRejected').value) && item.get('rejectedByType').value === REJECTED_BY_TYPE.LANDLORD">
                            </ion-checkbox>
                             <ion-fab class="cc-list-button" vertical="center" horizontal="end">

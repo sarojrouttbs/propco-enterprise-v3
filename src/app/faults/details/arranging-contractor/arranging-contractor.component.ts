@@ -666,10 +666,12 @@ export class ArrangingContractorComponent implements OnInit {
           this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Quote', 'error');
           return invalid;
         }
-        //TODO
-        if (!this.raiseQuoteForm.get('selectedContractorId').value) {
-          this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
-          return invalid;
+        if (this.raiseQuoteForm.get('contractorList').value) {
+          const anyActiveContractor = this.raiseQuoteForm.get('contractorList').value.find(x => x.isActive);
+          if (!anyActiveContractor) {
+            this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
+            return invalid;
+          }
         }
       }
       if (this.iacNotification && this.iacNotification.responseReceived != null && this.iacNotification.responseReceived.isAccepted === false && this.iacNotification.templateCode === 'QC-L-E') {
@@ -734,7 +736,11 @@ export class ArrangingContractorComponent implements OnInit {
     quoteReqObj.nominalCode = typeof quoteReqObj.nominalCode === 'object' ? quoteReqObj.nominalCode.nominalCode : quoteReqObj.nominalCode;
     delete quoteReqObj.contractorForm;
     if (!this.faultMaintenanceDetails) {
-      quoteReqObj.quoteContractors = [{ contractorId: quoteReqObj.selectedContractorId, isActive: true }];
+      quoteReqObj.quoteContractors = quoteReqObj.contractorList.map((list) => {
+        if (list.isActive) {
+          return { contractorId: list.contractorId, isActive: list.isActive };
+        }
+      });
       if (!quoteReqObj.selectedContractorId) {
         delete quoteReqObj.selectedContractorId;
       }
@@ -955,20 +961,6 @@ export class ArrangingContractorComponent implements OnInit {
       });
     });
   }
-
-  updateSelection(item, i) {
-    this.raiseQuoteForm.get('selectedContractorId').setValue('');
-    const contlistArray = this.raiseQuoteForm.get('contractorList') as FormArray;
-    if (!item.checked) {
-      this.raiseQuoteForm.get('selectedContractorId').setValue(item.contractorId);
-      contlistArray.controls.forEach((element, index) => {
-        if (i != index) {
-          element.get('checked').setValue(false);
-        }
-      });
-    }
-  }
-
 
   private getPreferredSuppliers(landlordId) {
     const promise = new Promise((resolve, reject) => {
@@ -1503,7 +1495,8 @@ export class ArrangingContractorComponent implements OnInit {
       select: '',
       isPreferred,
       isNew: isNew,
-      checked: isNew ? false : (data.isActive  ? true : false),
+      // checked: isNew ? false : (data.isActive  ? true : false),
+      isActive: isNew ? false : (data.isActive ? true : false),
       isRejected: !isNew ? data.isRejected : false,
       rejectionReason: !isNew ? data.rejectionReason : '',
       rejectedByType: !isNew ? data.rejectedByType : '',
