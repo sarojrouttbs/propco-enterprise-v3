@@ -122,8 +122,22 @@
   cursor: pointer;
 }
 
-.isCCSelected {
-  border: 2px solid (--ion-color-success);
+.isSelected {
+  opacity: 0.8;
+}
+
+.isQuoteSent{
+  background-color: rgba(var(--ion-color-warning-rgb), 0.5) !important;
+  cursor: pointer;
+}
+
+.isQuoteNotApproved{
+  background-color:  rgba(var(--ion-color-danger-rgb), 0.3) !important;
+  cursor: pointer;
+}
+
+.isQuoteAccepted{
+  background-color:  rgba(var(--ion-color-success-rgb), 0.5) !important;
   cursor: pointer;
 }
 

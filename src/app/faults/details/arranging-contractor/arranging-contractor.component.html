@@ -6,7 +6,7 @@
     </ion-row>
    
 
-    <ion-row *ngIf="iacNotification && !showSkeleton && !faultDetails?.isClosed">
+    <ion-row *ngIf="iacNotification && !showSkeleton && !faultDetails?.isClosed && selectedContractorDetail">
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
         <div class="arranging-contractor">
           <div class="banner">
@@ -287,7 +287,7 @@
 
         <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
           <ng-container *ngIf="!isWorksOrder">
-            <div class="quote-request-banner" *ngIf="iacNotification">
+            <div class="quote-request-banner" *ngIf="!selectedContractorDetail">
               <ion-text>You have requested multiple quotes.</ion-text>
               <ion-text>Please select a contractor from the list below to see the status.</ion-text>
             </div>
@@ -296,8 +296,14 @@
                 <div class="contractor-block">
                   <div formArrayName="contractorList"
                     *ngFor="let item of raiseQuoteForm.get('contractorList')['controls']; let i = index;">
-                    <ion-row id="row_1" [ngClass]="{'isCCSelected': ''}" class="row-banner" [formGroupName]="i"
-                      [ngClass]="{'isRejected': item.get('isRejected').value }">
+                    <ion-row id="row_1" class="row-banner" [formGroupName]="i"
+                      [ngClass]="{
+                        'isRejected': item.get('isRejected').value ,
+                        'isQuoteAccepted': item.get('quoteContractorStatus').value == 2,
+                        'isQuoteSent': item.get('quoteContractorStatus').value == 5, 
+                        'isQuoteNotApproved': item.get('quoteContractorStatus').value == 9,
+                        'isSelected': item.get('contractorId').value == isCCSelected
+                      }">
                       <ion-col size="30">
                         <ion-item>
                           <ion-label position="floating">Company </ion-label>
@@ -334,7 +340,9 @@
                                <i class="propcoicon propcoicon-actions-on"></i>
                              </ion-fab-button>
                              <ion-fab-list side="start">
-                               <ion-fab-button class="check-button" *ngIf="item.get('isPreferred').value">
+                               <ion-button *ngIf="item.get('quoteContractorStatus').value" (click)="selectedCCDetails(item.get('contractorId').value)">View </ion-button>
+                               <ion-button  (click)="removeContractor(i,item.get('isRejected').value)">Delete</ion-button>
+                               <!-- <ion-fab-button class="check-button" *ngIf="item.get('isPreferred').value">
                                  <span matTooltip="Preferred Contractor" matTooltipPosition="above">
                                    <ion-icon class="list-button" name="checkmark-circle-outline"> </ion-icon>
                                  </span>
@@ -343,7 +351,7 @@
                                  <span  (click)="removeContractor(i,item.get('isRejected').value)" matTooltip="Delete" matTooltipPosition="above">
                                    <ion-icon class="list-button" name="close-circle-outline"></ion-icon>
                                  </span>
-                               </ion-fab-button>
+                               </ion-fab-button> -->
                              </ion-fab-list>
                            </ion-fab>
                           <!-- <ion-icon class="list-button" *ngIf="item.get('isPreferred').value"

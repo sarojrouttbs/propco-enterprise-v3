@@ -94,6 +94,10 @@ export class ArrangingContractorComponent implements OnInit {
   occupiersVulnerableMap = new Map();
   maintenanceJobTypes;
   maintenanceRepairSources;
+  quoteContractorStatuses;
+  isCCSelected;
+  selectedContractorDetail: boolean = false;
+  faultNotifications: any;
 
   constructor(
     private fb: FormBuilder,
@@ -480,6 +484,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.landlordMaintRejectionReasons = data.landlordQuoteRejectionReasons;
     this.contractorMaintRejectionReasons = data.contractorQuoteRejectionReasons;
     this.faultReportedByThirdParty = data.faultReportedByThirdParty;
+    this.quoteContractorStatuses = data.quoteContractorStatuses;
     this.setCategoryMap();
   }
 
@@ -988,7 +993,7 @@ export class ArrangingContractorComponent implements OnInit {
     });
   }
 
-  private filterNotifications(data, stage, action) {
+  private filterNotifications(data, stage, action, contractId) {
     const promise = new Promise((resolve, reject) => {
       let filtereData = null;
       if (data.length === 0) {
@@ -998,6 +1003,9 @@ export class ArrangingContractorComponent implements OnInit {
       filtereData = data.filter((x => x.faultStage === stage)).filter((x => !x.isVoided));
       if (filtereData.length === 0) {
         resolve(null);
+      }
+      if(contractId){
+        filtereData = filtereData.filter(data => data.recipientId == contractId);
       }
       filtereData = filtereData.sort((a, b) => {
         return <any>new Date(b.createdAt) - <any>new Date(a.createdAt);
@@ -1500,7 +1508,8 @@ export class ArrangingContractorComponent implements OnInit {
       isRejected: !isNew ? data.isRejected : false,
       rejectionReason: !isNew ? data.rejectionReason : '',
       rejectedByType: !isNew ? data.rejectedByType : '',
-      status: [{ value: 'New', disabled: true }]
+      quoteContractorStatus: data.quoteContractorStatus,
+      status: [{ value: this.getLookupValue(data.quoteContractorStatus, this.quoteContractorStatuses), disabled: true }],
     });
     contractorList.push(contGrup);
     this.contratctorArr.push(data.contractorId ? data.contractorId : data.contractorObj.entityId);
@@ -1963,8 +1972,8 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   async faultNotification(action) {
-    let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-    this.iacNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, action);
+    this.faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
+    this.iacNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, action, undefined);
     this.getPendingHours();
   }
 
@@ -2190,6 +2199,14 @@ export class ArrangingContractorComponent implements OnInit {
       });
     });
     return promise;
+  }
+
+  selectedCCDetails(id) {
+    this.isCCSelected = id;
+    this.filterNotifications(this.faultNotifications, this.faultDetails.stage,this.faultDetails.stageAction, id).then(data => {
+      this.iacNotification = data;
+      this.selectedContractorDetail = true;
+    });
   }
 
 }
