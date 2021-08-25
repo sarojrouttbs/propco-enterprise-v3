@@ -170,7 +170,8 @@ export class ArrangingContractorComponent implements OnInit {
       jobType: this.maintenanceJobTypesMap.get('repair'),
       repairSource: this.getRepairSource(this.faultDetails.sourceType),
       thirdPartySource: this.faultDetails.reportedBy === 'THIRD_PARTY' ? Number(this.faultDetails.reportedById) : '',
-      doesBranchHoldKeys: [{ value: this.faultDetails.doesBranchHoldKeys ? 'Yes' : 'No', disabled: true }]
+      doesBranchHoldKeys: [{ value: this.faultDetails.doesBranchHoldKeys ? 'Yes' : 'No', disabled: true }],
+      quoteContractors: []
     });
     if (!this.faultMaintenanceDetails && this.faultDetails.contractorId) {
       this.getContractorDetails(this.faultDetails.contractorId, 'quote');
@@ -328,6 +329,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   initPatching(): void {
     if (!this.isWorksOrder) {
+      /*patching Quote Form*/
       this.raiseQuoteForm.patchValue(
         {
           worksOrderNumber: this.faultMaintenanceDetails.worksOrderNumber,
@@ -653,6 +655,7 @@ export class ArrangingContractorComponent implements OnInit {
   private validateReq(skipReqValidation: boolean = false) {
     let invalid = true;
     if (!this.isWorksOrder) {
+      /*Quote form validations*/
       if (!skipReqValidation) {
         if (!this.raiseQuoteForm.valid) {
           this.commonService.showMessage('Please fill all required fields.', 'Quote', 'error');
@@ -663,6 +666,7 @@ export class ArrangingContractorComponent implements OnInit {
           this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Quote', 'error');
           return invalid;
         }
+        //TODO
         if (!this.raiseQuoteForm.get('selectedContractorId').value) {
           this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
           return invalid;
@@ -730,6 +734,7 @@ export class ArrangingContractorComponent implements OnInit {
     quoteReqObj.nominalCode = typeof quoteReqObj.nominalCode === 'object' ? quoteReqObj.nominalCode.nominalCode : quoteReqObj.nominalCode;
     delete quoteReqObj.contractorForm;
     if (!this.faultMaintenanceDetails) {
+      quoteReqObj.quoteContractors = [{ contractorId: quoteReqObj.selectedContractorId, isActive: true }];
       if (!quoteReqObj.selectedContractorId) {
         delete quoteReqObj.selectedContractorId;
       }
@@ -838,7 +843,9 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async proceedWithQuoteAndWO() {
     if (!this.isWorksOrder) {
+      /*Create a Quote and Update Quote*/
       if (this.validateReq()) {
+        /*Validate REQ before submitting*/
         this.proceeding = false;
         return;
       }
@@ -1010,7 +1017,7 @@ export class ArrangingContractorComponent implements OnInit {
           this.disableQuoteDetail();
         } else {
           this.disableWorksOrderDetail();
-        }        
+        }
         resolve(filtereData[0]);
       } else {
         resolve(null);
@@ -1419,7 +1426,7 @@ export class ArrangingContractorComponent implements OnInit {
     const contractId = typeof contractor === 'object' ? contractor.entityId : contractor;
     return new Promise((resolve, reject) => {
       this.faultsService.getContractorDetails(contractId).subscribe((res) => {
-        let data = res ? res : '';        
+        let data = res ? res : '';
         if (type === 'quote') {
           this.patchContartorList(data, true, false);
         } else if (type === 'wo') {
@@ -1433,7 +1440,7 @@ export class ArrangingContractorComponent implements OnInit {
           }
           const addressString = addressArray.length ? addressArray.join(', ') : '';
           this.workOrderForm.patchValue({
-            company: data ? data.companyName : undefined, 
+            company: data ? data.companyName : undefined,
             agentReference: data ? data.agentReference : undefined,
             daytime: data ? data.businessTelephone : undefined,
             contractorName: data ? (data.fullName ? data.fullName : data.name) : undefined,
@@ -1496,11 +1503,11 @@ export class ArrangingContractorComponent implements OnInit {
       select: '',
       isPreferred,
       isNew: isNew,
-      checked: isNew ? false : (data.contractorId == this.raiseQuoteForm.get('selectedContractorId').value ? true : false),
+      checked: isNew ? false : (data.isActive  ? true : false),
       isRejected: !isNew ? data.isRejected : false,
       rejectionReason: !isNew ? data.rejectionReason : '',
       rejectedByType: !isNew ? data.rejectedByType : '',
-      status: [{value : 'New', disabled: true}]
+      status: [{ value: 'New', disabled: true }]
     });
     contractorList.push(contGrup);
     this.contratctorArr.push(data.contractorId ? data.contractorId : data.contractorObj.entityId);
@@ -2191,5 +2198,5 @@ export class ArrangingContractorComponent implements OnInit {
     });
     return promise;
   }
-  
+
 }
