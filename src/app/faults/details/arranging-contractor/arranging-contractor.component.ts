@@ -328,8 +328,8 @@ export class ArrangingContractorComponent implements OnInit {
   private async initApiCalls() {
     if (this.faultMaintenanceDetails) {
       if (!this.isWorksOrder) {
-        await this.getMaxQuoteRejection();
-        await this.getMaxActiveQuoteContractor();
+        this.MAX_QUOTE_REJECTION = await this.getSystemConfigs(SYSTEM_CONFIG.MAXIMUM_FAULT_QUOTE_REJECTION);
+        this.MAX_ACTIVE_QUOTE_CONTRACTOR = await this.getSystemConfigs(SYSTEM_CONFIG.MAX_ACTIVE_QUOTE_CONTRACTOR);
       }
       await this.faultNotification(this.faultDetails.stageAction);
       this.initPatching();
@@ -1651,25 +1651,12 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  private async getMaxQuoteRejection(): Promise<any> {
+  private async getSystemConfigs(key): Promise<any> {
     const promise = new Promise((resolve, reject) => {
-      this.commonService.getSystemConfig(SYSTEM_CONFIG.MAXIMUM_FAULT_QUOTE_REJECTION).subscribe(res => {
-        this.MAX_QUOTE_REJECTION = res ? parseInt(res.MAXIMUM_FAULT_QUOTE_REJECTION, 10) : this.MAX_QUOTE_REJECTION;
-        resolve(true);
+      this.commonService.getSystemConfig(key).subscribe(res => {
+        resolve(parseInt(res[key], 10));
       }, error => {
-        resolve(false);
-      });
-    });
-    return promise;
-  }
-
-  private async getMaxActiveQuoteContractor(): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
-      this.commonService.getSystemConfig(SYSTEM_CONFIG.MAX_ACTIVE_QUOTE_CONTRACTOR).subscribe(res => {
-        this.MAX_ACTIVE_QUOTE_CONTRACTOR = res ? parseInt(res.MAX_ACTIVE_QUOTE_CONTRACTOR, 10) : this.MAX_ACTIVE_QUOTE_CONTRACTOR;
         resolve(true);
-      }, error => {
-        resolve(false);
       });
     });
     return promise;
