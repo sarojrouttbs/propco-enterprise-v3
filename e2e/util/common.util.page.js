@@ -1,6 +1,7 @@
 var path = require('path');
 
 var CommonFunction = function() {
+    
     var EC = protractor.ExpectedConditions;   
         
     this.waitForElement = function (loc){        
