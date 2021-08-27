@@ -187,6 +187,7 @@ declare namespace FaultModels {
         skills: string[];
         address: Address;
         isRejected: boolean;
+        isActive: boolean;
         rejectionReason?: any;
         contractorId: string;
         rejectedByType: number;

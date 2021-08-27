@@ -338,6 +338,7 @@ export class ArrangingContractorComponent implements OnInit {
       const ccId = this.commonService.getItem('contractorId');
       await this.faultNotification(this.faultDetails.stageAction, ccId);
       this.initPatching();
+      this.setQuoteCCDetail();
     } else {
       if (!this.isWorksOrder) {
         this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
@@ -2237,11 +2238,24 @@ export class ArrangingContractorComponent implements OnInit {
     this.commonService.setItem('contractorId', id);
     this.contractorQuotePropertyVisitAt = this.faultMaintenanceDetails.quoteContractors.filter(data => data.contractorId == id)[0]['contractorPropertyVisitAt'];
     this.isLandlordWantAnotherQuote = this.faultMaintenanceDetails.quoteContractors.filter(data => data.contractorId == id)[0]['isLandlordWantAnotherQuote'];
-    this.ccQuoteDocuments = this.quoteDocuments.filter(data => data.contractorId == id);
+    if (this.quoteDocuments && this.quoteDocuments.length > 0) {
+      this.ccQuoteDocuments = this.quoteDocuments.filter(data => data.contractorId == id);
+    }
     this.filterNotifications(this.faultNotifications, this.faultDetails.stage, undefined, id).then(data => {
       this.iacNotification = data;
       this.selectedContractorDetail = true;
     });
+  }
+ 
+  // Auto select CC details if there is one one active cc
+  private setQuoteCCDetail() {
+    let quoteCC = this.faultMaintenanceDetails.quoteContractors.length;
+    if (quoteCC) {
+      let ccId = this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive)[0].contractorId;
+      if (ccId) {
+        this.selectedCCDetails(ccId);
+      }
+    }
   }
 
 }
