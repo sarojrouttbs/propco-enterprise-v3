@@ -20,7 +20,18 @@
 
 .contractor-block {
   margin-top: 20px;
+  .cc-list {
+    padding: 10px 5px;
+    ion-col {
+      display: flex;
+      align-items: center;
+      ion-text {
+        font-size: 16px;
+      }
+    }
+  }
 }
+
 .row-banner {
   background: lightgray;
   padding: 10px;
@@ -36,7 +47,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 10px;
+  // margin-top: 10px;
   .list-checkbox {
     height: 36px;
     width: 36px;
@@ -74,23 +85,23 @@
       background: var(--ion-color-warning);
     }
   }
-  ion-fab-list{
+  ion-fab-list {
     margin-inline: 40px;
-    ion-fab-button{
+    ion-fab-button {
       height: 36px;
       width: 36px;
-      span{
+      span {
         padding-top: 5px;
-        ion-icon{
+        ion-icon {
           pointer-events: none;
         }
       }
     }
-    .close-button{
+    .close-button {
       --background: var(--ion-color-danger);
       --color: var(--ion-color-step-2000);
     }
-    .check-button{
+    .check-button {
       --background: var(--ion-color-success);
       --color: var(--ion-color-step-2000);
     }
@@ -118,7 +129,7 @@
 }
 
 .rejected {
-  background-color: rgba(var(--ion-color-danger-rgb), 0.5) !important;
+  background-color: rgba(var(--ion-color-danger-rgb), 0.4) !important;
   cursor: pointer;
 }
 
@@ -127,18 +138,18 @@
   border: 2px solid var(--ion-color-success);
 }
 
-.quote-sent{
+.quote-sent {
   background-color: rgba(var(--ion-color-warning-rgb), 0.4) !important;
   cursor: pointer;
 }
 
-.quote-not-approved{
-  background-color:  rgba(var(--ion-color-danger-rgb), 0.7) !important;
+.quote-not-approved {
+  background-color: rgba(var(--ion-color-danger-rgb), 0.2) !important;
   cursor: pointer;
 }
 
-.quote-accepted{
-  background-color:  rgba(var(--ion-color-success-rgb), 0.7) !important;
+.quote-accepted {
+  background-color: rgba(var(--ion-color-success-rgb), 0.4) !important;
   cursor: pointer;
 }
 
@@ -177,18 +188,18 @@
   max-height: 30px !important;
 }
 
-.datetime-padding{
+.datetime-padding {
   padding-bottom: 7px;
 }
-.row-banner{
+.row-banner {
   background: var(--ion-background-color);
-    border-radius: 8px;
-    padding: 15px 0px;
-    margin-bottom: 15px;
+  border-radius: 8px;
+  padding: 15px 0px;
+  margin-bottom: 15px;
 }
 
-.custom-skeleton{
-  p{
+.custom-skeleton {
+  p {
     height: 30px;
     margin-bottom: 0;
   }
@@ -235,7 +246,6 @@
   pointer-events: none;
   opacity: 0;
   will-change: transform, opacity;
-
 }
 
 .view.modal.visible {
@@ -257,7 +267,7 @@
   max-width: 100%;
   transform: translate(-50%, -50%);
   border-radius: 2px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
 }
 
 .modal-view-details h1 {
@@ -282,24 +292,25 @@
 
 .modal:after {
   position: fixed;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   width: 100%;
   height: 100%;
   left: 0;
   top: 0;
   display: block;
-  content: '';
+  content: "";
 }
-    
+
 .defaultCommission {
   display: inline-flex;
   // flex-wrap: wrap;
 }
 
-.defaultCommission .ion-item ,.defaultCommission .ion-label {
+.defaultCommission .ion-item,
+.defaultCommission .ion-label {
   margin: 6px;
 }
-.defaultCommission .ion-label{
+.defaultCommission .ion-label {
   max-width: 80px;
 }
 
@@ -309,13 +320,13 @@ input {
   padding: 5px 0;
 }
 
-.quote-request-banner{
+.quote-request-banner {
   text-align: center;
   background: rgba(226, 18, 18, 0.1);
   padding: 30px 15px;
   color: var(--ion-color-danger);
   border-radius: 5px;
-  ion-text{
+  ion-text {
     display: inherit;
     @include set-text-style(20px, 32px);
   }
