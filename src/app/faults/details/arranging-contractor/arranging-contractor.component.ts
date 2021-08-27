@@ -310,7 +310,6 @@ export class ArrangingContractorComponent implements OnInit {
   async getActiveContractorCount() {
     const contractorList = this.raiseQuoteForm.get('contractorList').value;
     let count = contractorList.filter(x => x.isActive);
-    console.log(count)
     return count ? count.length : 0
   }
 
@@ -329,10 +328,10 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async initApiCalls() {
+    this.MAX_ACTIVE_QUOTE_CONTRACTOR = await this.getSystemConfigs(SYSTEM_CONFIG.MAX_ACTIVE_QUOTE_CONTRACTOR);
     if (this.faultMaintenanceDetails) {
       if (!this.isWorksOrder) {
         this.MAX_QUOTE_REJECTION = await this.getSystemConfigs(SYSTEM_CONFIG.MAXIMUM_FAULT_QUOTE_REJECTION);
-        this.MAX_ACTIVE_QUOTE_CONTRACTOR = await this.getSystemConfigs(SYSTEM_CONFIG.MAX_ACTIVE_QUOTE_CONTRACTOR);
       }
       this.selectedContractorDetail = false;
       const ccId = this.commonService.getItem('contractorId');
@@ -1092,9 +1091,6 @@ export class ArrangingContractorComponent implements OnInit {
     }
     if (this.faultMaintenanceDetails && this.faultMaintenanceDetails.quoteContractors) {
       const data = this.faultMaintenanceDetails.quoteContractors.filter(x => x.isRejected);
-      if (data && data[0]) {
-        this.rejectionReason = data[0].rejectionReason;
-      }
       this.disableAnotherQuote = false;
       if ((data.length + 1) >= this.MAX_QUOTE_REJECTION) {
         this.disableAnotherQuote = true;
@@ -2237,7 +2233,8 @@ export class ArrangingContractorComponent implements OnInit {
     this.commonService.setItem('contractorId', id);
     this.contractorQuotePropertyVisitAt = this.faultMaintenanceDetails.quoteContractors.filter(data => data.contractorId == id)[0]['contractorPropertyVisitAt'];
     this.isLandlordWantAnotherQuote = this.faultMaintenanceDetails.quoteContractors.filter(data => data.contractorId == id)[0]['isLandlordWantAnotherQuote'];
-    this.ccQuoteDocuments = this.quoteDocuments.filter(data => data.contractorId == id);
+    this.ccQuoteDocuments = this.quoteDocuments ? this.quoteDocuments.filter(data => data.contractorId == id) : [];
+    this.rejectionReason = this.faultMaintenanceDetails.quoteContractors.filter(data => data.contractorId == id)[0]['rejectionReason'];
     this.filterNotifications(this.faultNotifications, this.faultDetails.stage, undefined, id).then(data => {
       this.iacNotification = data;
       this.selectedContractorDetail = true;
