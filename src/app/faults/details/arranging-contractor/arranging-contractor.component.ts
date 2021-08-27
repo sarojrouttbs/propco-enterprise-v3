@@ -98,6 +98,9 @@ export class ArrangingContractorComponent implements OnInit {
   isCCSelected;
   selectedContractorDetail: boolean = false;
   faultNotifications: any;
+  contractorQuotePropertyVisitAt: any;
+  ccQuoteDocuments: any;
+  isLandlordWantAnotherQuote;
 
   constructor(
     private fb: FormBuilder,
@@ -301,7 +304,9 @@ export class ArrangingContractorComponent implements OnInit {
       if (!this.isWorksOrder) {
         await this.getMaxQuoteRejection();
       }
-      await this.faultNotification(this.faultDetails.stageAction);
+      this.selectedContractorDetail = false;
+      const ccId = this.commonService.getItem('contractorId');
+      await this.faultNotification(this.faultDetails.stageAction, ccId);
       this.initPatching();
     } else {
       if (!this.isWorksOrder) {
@@ -993,32 +998,32 @@ export class ArrangingContractorComponent implements OnInit {
     });
   }
 
-  private filterNotifications(data, stage, action, contractId) {
+  private filterNotifications(data, stage, action, contractorId) {
     const promise = new Promise((resolve, reject) => {
-      let filtereData = null;
+      let filteredData = null;
       if (data.length === 0) {
         resolve(null);
       }
       // filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
-      filtereData = data.filter((x => x.faultStage === stage)).filter((x => !x.isVoided));
-      if (filtereData.length === 0) {
+      filteredData = data.filter((x => x.faultStage === stage)).filter((x => !x.isVoided));
+      if (filteredData.length === 0) {
         resolve(null);
       }
-      if(contractId){
-        filtereData = filtereData.filter(data => data.recipientId == contractId);
+      if (contractorId) {
+        filteredData = filteredData.filter(data => data.recipientId == contractorId);
       }
-      filtereData = filtereData.sort((a, b) => {
+      filteredData = filteredData.sort((a, b) => {
         return <any>new Date(b.createdAt) - <any>new Date(a.createdAt);
       });
-      if (filtereData && filtereData[0]) {
-        filtereData[0].chase = filtereData[0].numberOfChasesDone + 1;
+      if (filteredData && filteredData[0]) {
+        filteredData[0].chase = filteredData[0].numberOfChasesDone + 1;
         if (!this.isWorksOrder) {
-          this.disableContractorsList(filtereData[0]);
+          this.disableContractorsList(filteredData[0]);
           this.disableQuoteDetail();
         } else {
           this.disableWorksOrderDetail();
         }
-        resolve(filtereData[0]);
+        resolve(filteredData[0]);
       } else {
         resolve(null);
       }
@@ -1210,7 +1215,8 @@ export class ArrangingContractorComponent implements OnInit {
         disableAnotherQuote: this.disableAnotherQuote,
         userType: 'contractor',
         title: 'No Acceptance',
-        rejectedByType: REJECTED_BY_TYPE.CONTRACTOR
+        rejectedByType: REJECTED_BY_TYPE.CONTRACTOR,
+        contractorId: this.iacNotification.recipientId
       },
       backdropDismiss: false
     });
@@ -1231,7 +1237,8 @@ export class ArrangingContractorComponent implements OnInit {
           notificationObj.isAccepted = data.value;
           notificationObj.submittedByType = 'SECUR_USER';
           // if (this.iacNotification.templateCode === 'CDT-T-E') {
-          notificationObj.isEscalateFault = true;
+          notificationObj.isEscalateContractor = true;
+          notificationObj.contractorId = this.iacNotification.recipientId
           // }
           this.commonService.showLoader();
           await this.saveContractorVisitResponse(this.iacNotification.faultNotificationId, notificationObj);
@@ -1246,7 +1253,8 @@ export class ArrangingContractorComponent implements OnInit {
         title: "Arranging Contractor",
         headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
         headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants.",
-        type: APPOINTMENT_MODAL_TYPE.QUOTE
+        type: APPOINTMENT_MODAL_TYPE.QUOTE,
+        contractorId: this.iacNotification.recipientId
       }
       this.openAppointmentModal(modalData);
     }
@@ -1393,6 +1401,7 @@ export class ArrangingContractorComponent implements OnInit {
     notificationObj.isAccepted = false;
     notificationObj.submittedByType = 'SECUR_USER';
     notificationObj.isDraft = false;
+    notificationObj.contractorId = this.iacNotification.recipientId;
     const promise = new Promise((resolve, reject) => {
       this.faultsService.saveNotificationQuoteAmount(notificationObj, this.iacNotification.faultNotificationId).subscribe(
         res => {
@@ -1971,9 +1980,9 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
-  async faultNotification(action) {
+  async faultNotification(action, ccId) {
     this.faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
-    this.iacNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, action, undefined);
+    this.iacNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, action, (ccId ? ccId : undefined));
     this.getPendingHours();
   }
 
@@ -2078,7 +2087,8 @@ export class ArrangingContractorComponent implements OnInit {
         maintenanceId: this.faultMaintenanceDetails.maintenanceId,
         confirmedEstimate: this.faultDetails.confirmedEstimate,
         preUpload: preUpload ? true : false,
-        MAX_DOC_UPLOAD_LIMIT: this.MAX_DOC_UPLOAD_LIMIT
+        MAX_DOC_UPLOAD_LIMIT: this.MAX_DOC_UPLOAD_LIMIT,
+        contractorId: this.iacNotification.recipientId
       },
       backdropDismiss: false
     });
@@ -2101,7 +2111,8 @@ export class ArrangingContractorComponent implements OnInit {
       title: "Appointment Date/Time",
       headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
       headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
-      type: templateCode === 'CDT-C-E' || templateCode === 'CQ-C-E' ? APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE : APPOINTMENT_MODAL_TYPE.MODIFY_WO
+      type: templateCode === 'CDT-C-E' || templateCode === 'CQ-C-E' ? APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE : APPOINTMENT_MODAL_TYPE.MODIFY_WO,
+      contractorId: this.iacNotification.recipientId
     }
 
     this.openAppointmentModal(modalData);
@@ -2203,7 +2214,11 @@ export class ArrangingContractorComponent implements OnInit {
 
   selectedCCDetails(id) {
     this.isCCSelected = id;
-    this.filterNotifications(this.faultNotifications, this.faultDetails.stage,this.faultDetails.stageAction, id).then(data => {
+    this.commonService.setItem('contractorId', id);
+    this.contractorQuotePropertyVisitAt = this.faultMaintenanceDetails.quoteContractors.filter(data => data.contractorId == id)[0]['contractorPropertyVisitAt'];
+    this.isLandlordWantAnotherQuote = this.faultMaintenanceDetails.quoteContractors.filter(data => data.contractorId == id)[0]['isLandlordWantAnotherQuote'];
+    this.ccQuoteDocuments = this.quoteDocuments.filter(data => data.contractorId == id);
+    this.filterNotifications(this.faultNotifications, this.faultDetails.stage, undefined, id).then(data => {
       this.iacNotification = data;
       this.selectedContractorDetail = true;
     });
