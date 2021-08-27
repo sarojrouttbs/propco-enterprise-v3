@@ -1,0 +1,89 @@
+{
+    "fault_details": {
+        "faultReported": {
+            "childFault": "0",
+            "propertyId": "000002063",
+            "category": "Gas",
+            "urgency": "",
+            "title": "Gas Leakage problem",
+            "description": "There is a gas leak in the kitchen",
+            "typeAddition1": "",
+            "additionalInfo1": "",
+            "typeAddition2": "",
+            "additionalInfo2": "",
+            "reporter": "Tenant",
+            "tenancyAgreement": "Confirmed 08/06/2021",
+            "reporterList": "Select Tenant",
+            "reporterName": "Mr D O",
+            "accessInfo": "Tenant",
+            "isOccupierVulnerable": "",
+            "usefulInstruction": "",
+            "faultImage": "../resources/upload/GasLeak1.png",
+            "tableUrgency": "success",
+            "tableCategory": "Gas",
+            "tablePropertyId": "000002063",
+            "tablePropertyAddress": "Cobourg House",
+            "tableOffice": "Westerly",
+            "tableManager": "Tbl Support",
+            "tableJobTitle": "Gas Leakage problem",
+            "tableReporter": "Tenant",
+            "tableFaultStatus": "Reported", 
+            "reviewCategory": "Gas",
+            "reviewUrgency": "Non Urgent",
+            "reviewTitle": "Gas Leakage problem",
+            "reviewDescription": "There is a gas leak in the kitchen",
+            "reviewType": "",
+            "reviewAdditionalInfo": "",
+            "reviewReporter": "Tenant",
+            "reviewReporterTitle": "Mr",
+            "reviewForename": "Daniel",
+            "reviewSurname": "O'BRIAN",
+            "reviewEmail": "swapnil.joshi@techblue.co.uk",
+            "reviewMobile": "7010254225",
+            "reviewTelephone": "2102522545",
+            "reviewAccessInfo": "Tenant Presence Required",
+            "reviewVulnerableOccupier": "NO",
+            "reviewUsefulInstructions": ""           
+        },        
+        "escalateFault": {
+            "escalateWindowTitle": "Escalate Fault",
+            "confirmationMessage1": "This fault will be escalated to the Property Manager and a notification will be sent.",
+            "confirmationMessage2": "Are you sure?",
+            "escalationReason": "Landlord has not updated maintenance preferences",
+            "escalateAction": "Y",
+            "popupCancelConfirmMessage": "Are you sure you want to cancel the process?",            
+            "messageTitle": "Escalate Fault",
+            "message": "Fault has been escalated to the property manager",
+            "faultUpdate": "escalated",
+            "tableFaultStatus": "Escalation"                                    
+        },
+        "deEscalateFault": {
+            "deEscalateWindowTitle": "De-Escalate Fault",
+            "confirmationMessage": "Are you sure, you want to de-escalate the fault?",
+            "deEscalateAction": "Y", 
+            "messageTitle": "De-Escalate Fault",
+            "message": "Fault has been de-escalated to the property manager",
+            "faultUpdate": "escalated",
+            "tableFaultStatus": "Reported"                                    
+        },
+        "cancelEscalateFault": {
+            "escalateWindowTitle": "Escalate Fault",
+            "confirmationMessage1": "This fault will be escalated to the Property Manager and a notification will be sent.",
+            "confirmationMessage2": "Are you sure?",
+            "escalationReason": "Landlord has not updated maintenance preferences",
+            "escalateAction": "",            
+            "faultUpdate": "escalated",
+            "tableFaultStatus": "Reported"                                    
+        },
+        "cancelDeEscalateFault": {
+            "deEscalateWindowTitle": "De-Escalate Fault",
+            "confirmationMessage": "Are you sure, you want to de-escalate the fault?",
+            "deEscalateAction": "",            
+            "faultUpdate": "escalated",
+            "tableFaultStatus": "Escalation"                                    
+        },        
+        "validationEscalate": {
+            "escalationReasonError": "This field is required"                                              
+        }
+    }
+}

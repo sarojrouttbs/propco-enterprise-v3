@@ -1,0 +1,81 @@
+{
+    "fault_details": {
+        "faultReported": {
+            "childFault": "0",
+            "propertyId": "000002063",
+            "category": "Gas",
+            "urgency": "",
+            "title": "Gas Leakage problem",
+            "description": "There is a gas leak in the kitchen",
+            "typeAddition1": "",
+            "additionalInfo1": "",
+            "typeAddition2": "",
+            "additionalInfo2": "",
+            "reporter": "Tenant",
+            "tenancyAgreement": "Confirmed 08/06/2021",
+            "reporterList": "Select Tenant",
+            "reporterName": "Mr D O",
+            "accessInfo": "Tenant",
+            "isOccupierVulnerable": "",
+            "usefulInstruction": "",
+            "faultImage": "../resources/upload/GasLeak1.png",
+            "tableUrgency": "success",
+            "tableCategory": "Gas",
+            "tablePropertyId": "000002063",
+            "tablePropertyAddress": "Cobourg House",
+            "tableOffice": "Westerly",
+            "tableManager": "Tbl Support",
+            "tableJobTitle": "Gas Leakage problem",
+            "tableReporter": "Tenant",
+            "tableFaultStatus": "Reported", 
+            "reviewCategory": "Gas",
+            "reviewUrgency": "Non Urgent",
+            "reviewTitle": "Gas Leakage problem",
+            "reviewDescription": "There is a gas leak in the kitchen",
+            "reviewType": "",
+            "reviewAdditionalInfo": "",
+            "reviewReporter": "Tenant",
+            "reviewReporterTitle": "Mr",
+            "reviewForename": "Daniel",
+            "reviewSurname": "O'BRIAN",
+            "reviewEmail": "swapnil.joshi@techblue.co.uk",
+            "reviewMobile": "7010254225",
+            "reviewTelephone": "2102522545",
+            "reviewAccessInfo": "Tenant Presence Required",
+            "reviewVulnerableOccupier": "NO",
+            "reviewUsefulInstructions": ""           
+        },        
+        "nonComplaintNote": {
+            "complaint": "No",
+            "noteCategory": "Property Visit",
+            "noteType": "Fault",
+            "notes": "Reporter is yet to confirm visit time",
+            "submitNotes": "Y",
+            "noteWindowTitle": "Add Note",
+            "user": "Demo User",
+            "messageTitle": "Notes"                                    
+        },
+        "complaintNote": {
+            "complaint": "Yes",
+            "noteCategory": "Tenant Call",
+            "noteType": "Property Visits",
+            "notes": "Property visit is not scheduled",
+            "submitNotes": "Y",
+            "noteWindowTitle": "Add Note",
+            "user": "Demo User",
+            "messageTitle": "Notes"                                    
+        },
+        "cancelNote": {
+            "complaint": "Yes",
+            "noteCategory": "Tenant Call",
+            "noteType": "Property Visits",
+            "notes": "Property visit is not scheduled",
+            "submitNotes": "",
+            "noteWindowTitle": "Add Note",
+            "tblNoteInfo": "No data available in table"                                    
+        },
+        "validationNote": {
+            "notesError": "This field is required"                                              
+        }
+    }
+}
