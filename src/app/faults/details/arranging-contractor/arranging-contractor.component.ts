@@ -68,6 +68,7 @@ export class ArrangingContractorComponent implements OnInit {
   rejectionReason: string = null;
   restrictAction: boolean = false;
   private MAX_QUOTE_REJECTION = 2;
+  private MAX_ACTIVE_QUOTE_CONTRACTOR = 3;
   private disableAnotherQuote: boolean = false;
   isUserActionChange: boolean = false;
   landlordMaintRejectionReasons: any;
@@ -285,6 +286,34 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
+  async updateContractorState(e, item) {
+    if (this.restrictAction) { return; }
+    if (e.target.checked) {
+      const activeContractorCount = await this.getActiveContractorCount() as number;
+      if (activeContractorCount > this.MAX_ACTIVE_QUOTE_CONTRACTOR) {
+        this.commonService.showAlert('Active Contractor', 'Maximum Active Quote Contractor limit exceeded.');
+        e.target.checked = false;
+      } else {
+        if (this.faultMaintenanceDetails && !item.isNew) {
+          /*update only the old contractors*/
+          await this.updateFaultQuoteContractor(item);
+        }
+      }
+    } else {
+      if (this.faultMaintenanceDetails && !item.isNew) {
+        /*update only the old contractors*/
+        await this.updateFaultQuoteContractor(item);
+      }
+    }
+  }
+
+  async getActiveContractorCount() {
+    const contractorList = this.raiseQuoteForm.get('contractorList').value;
+    let count = contractorList.filter(x => x.isActive);
+    console.log(count)
+    return count ? count.length : 0
+  }
+
   private resetSelectedContractor(deleteConId): void {
     if (deleteConId === this.raiseQuoteForm.get('selectedContractorId').value) {
       this.raiseQuoteForm.get('selectedContractorId').setValue('');
@@ -302,7 +331,8 @@ export class ArrangingContractorComponent implements OnInit {
   private async initApiCalls() {
     if (this.faultMaintenanceDetails) {
       if (!this.isWorksOrder) {
-        await this.getMaxQuoteRejection();
+        this.MAX_QUOTE_REJECTION = await this.getSystemConfigs(SYSTEM_CONFIG.MAXIMUM_FAULT_QUOTE_REJECTION);
+        this.MAX_ACTIVE_QUOTE_CONTRACTOR = await this.getSystemConfigs(SYSTEM_CONFIG.MAX_ACTIVE_QUOTE_CONTRACTOR);
       }
       this.selectedContractorDetail = false;
       const ccId = this.commonService.getItem('contractorId');
@@ -579,12 +609,9 @@ export class ArrangingContractorComponent implements OnInit {
           if (quoteUpdated) {
             const addContractors = await this.addContractors();
             if (addContractors) {
-              const faultContUpdated = await this.updateFaultQuoteContractor();
-              if (faultContUpdated) {
-                const faultUpdated = await this.updateFault();
-                if (faultUpdated) {
-                  this._btnHandler('cancel');
-                }
+              const faultUpdated = await this.updateFault();
+              if (faultUpdated) {
+                this._btnHandler('cancel');
               }
             }
           }
@@ -707,11 +734,10 @@ export class ArrangingContractorComponent implements OnInit {
     return invalid = false;
   }
 
-  private updateFaultQuoteContractor() {
-    if (!this.raiseQuoteForm.value.selectedContractorId) { return true; }
+  private updateFaultQuoteContractor(item) {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.updateFaultQuoteContractor(
-        { selectedContractorId: this.raiseQuoteForm.value.selectedContractorId },
+        item,
         this.faultDetails.faultId,
         this.faultMaintenanceDetails.maintenanceId).subscribe((res) => {
           resolve(true);
@@ -747,9 +773,7 @@ export class ArrangingContractorComponent implements OnInit {
     delete quoteReqObj.contractorForm;
     if (!this.faultMaintenanceDetails) {
       quoteReqObj.quoteContractors = quoteReqObj.contractorList.map((list) => {
-        if (list.isActive) {
-          return { contractorId: list.contractorId, isActive: list.isActive };
-        }
+        return { contractorId: list.contractorId, isActive: list.isActive };
       });
       if (!quoteReqObj.selectedContractorId) {
         delete quoteReqObj.selectedContractorId;
@@ -886,17 +910,14 @@ export class ArrangingContractorComponent implements OnInit {
           if (quoteUpdated) {
             const addContractors = await this.addContractors();
             if (addContractors) {
-              const faultContUpdated = await this.updateFaultQuoteContractor();
-              if (faultContUpdated) {
-                const faultUpdated = await this.updateFault(true, 'OBTAIN_QUOTE');
-                this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
-                if (faultUpdated) {
-                  // this.commonService.showLoader();
-                  setTimeout(async () => {
-                    // await this.faultNotification('OBTAIN_QUOTE');
-                    this._btnHandler('refresh');
-                  }, 1000);
-                }
+              const faultUpdated = await this.updateFault(true, 'OBTAIN_QUOTE');
+              this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
+              if (faultUpdated) {
+                // this.commonService.showLoader();
+                setTimeout(async () => {
+                  // await this.faultNotification('OBTAIN_QUOTE');
+                  this._btnHandler('refresh');
+                }, 1000);
               }
             }
           }
@@ -928,11 +949,11 @@ export class ArrangingContractorComponent implements OnInit {
       let contractIds = [];
       this.raiseQuoteForm.get('contractorList').value.forEach(info => {
         if (info.isNew === true) {
-          contractIds.push(info.contractorId);
+          contractIds.push(info);
         }
       });
       if (contractIds.length) {
-        this.faultsService.addContractors(this.faultMaintenanceDetails.maintenanceId, { contractorIds: contractIds }).subscribe(
+        this.faultsService.addContractors(this.faultMaintenanceDetails.maintenanceId, contractIds).subscribe(
           res => {
             resolve(true);
           },
@@ -1639,13 +1660,12 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  private async getMaxQuoteRejection(): Promise<any> {
+  private async getSystemConfigs(key): Promise<any> {
     const promise = new Promise((resolve, reject) => {
-      this.commonService.getSystemConfig(SYSTEM_CONFIG.MAXIMUM_FAULT_QUOTE_REJECTION).subscribe(res => {
-        this.MAX_QUOTE_REJECTION = res ? parseInt(res.MAXIMUM_FAULT_QUOTE_REJECTION, 10) : this.MAX_QUOTE_REJECTION;
-        resolve(true);
+      this.commonService.getSystemConfig(key).subscribe(res => {
+        resolve(parseInt(res[key], 10));
       }, error => {
-        resolve(false);
+        resolve(true);
       });
     });
     return promise;
