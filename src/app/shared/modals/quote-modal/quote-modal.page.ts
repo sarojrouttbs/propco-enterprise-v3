@@ -32,6 +32,7 @@ export class QuoteModalPage implements OnInit {
   MAX_DOC_UPLOAD_LIMIT;
   unSavedData: boolean = false;
   showLoader:boolean = false;
+  contractorId;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -73,7 +74,8 @@ export class QuoteModalPage implements OnInit {
       isAccepted: true,
       submittedById: '',
       submittedByType: 'SECUR_USER',
-      isDraft: false
+      isDraft: false,
+      contractorId: this.contractorId
     });
   }
 
@@ -270,7 +272,7 @@ export class QuoteModalPage implements OnInit {
           if (type === 'fault') {
             formData.append('documentType', 'QUOTE');
           }
-          apiObservableArray.push(this.quoteService.uploadFaultDocument(formData, this.faultId));
+          apiObservableArray.push(this.quoteService.uploadFaultDocument(formData, this.faultId, this.contractorId));
         } else {
           formData.append('headCategory', 'Accounts');
           formData.append('subCategory', 'Invoices');
@@ -329,7 +331,8 @@ export class QuoteModalPage implements OnInit {
     this.showLoader = true;
     let requestObj = {
       quoteAmount: this.quoteAssessmentForm.value.quoteAmount,
-      submittedByType: 'SECUR_USER'
+      submittedByType: 'SECUR_USER',
+      contractorId: this.contractorId
     }
     const promise = new Promise((resolve, reject) => {
       this.quoteService.saveQuoteAmount(requestObj, this.faultId).subscribe(

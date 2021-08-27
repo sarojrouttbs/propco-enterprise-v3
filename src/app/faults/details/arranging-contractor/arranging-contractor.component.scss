@@ -117,27 +117,28 @@
   line-height: 18px;
 }
 
-.isRejected {
+.rejected {
   background-color: rgba(var(--ion-color-danger-rgb), 0.5) !important;
   cursor: pointer;
 }
 
-.isSelected {
+.selected {
   opacity: 0.8;
+  border: 2px solid var(--ion-color-success);
 }
 
-.isQuoteSent{
-  background-color: rgba(var(--ion-color-warning-rgb), 0.5) !important;
+.quote-sent{
+  background-color: rgba(var(--ion-color-warning-rgb), 0.4) !important;
   cursor: pointer;
 }
 
-.isQuoteNotApproved{
-  background-color:  rgba(var(--ion-color-danger-rgb), 0.3) !important;
+.quote-not-approved{
+  background-color:  rgba(var(--ion-color-danger-rgb), 0.7) !important;
   cursor: pointer;
 }
 
-.isQuoteAccepted{
-  background-color:  rgba(var(--ion-color-success-rgb), 0.5) !important;
+.quote-accepted{
+  background-color:  rgba(var(--ion-color-success-rgb), 0.7) !important;
   cursor: pointer;
 }
 

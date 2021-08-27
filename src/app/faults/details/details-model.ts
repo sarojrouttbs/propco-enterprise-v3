@@ -131,6 +131,8 @@ declare namespace FaultModels {
         submittedByType: string;
         isEscalateFault: boolean;
         isVoided: boolean;
+        contractorId: string;
+        isEscalateContractor: boolean
     }
 
     export interface IMaintenanceQuoteResponse {
@@ -173,7 +175,7 @@ declare namespace FaultModels {
         thirdPartySource?: number;
         commissionAmount: number;
         commissionRate: number;
-        doesWantAnotherQuote?: boolean;
+        isLandlordWantAnotherQuote?: boolean;
     }
 
     export interface QuoteContractor {

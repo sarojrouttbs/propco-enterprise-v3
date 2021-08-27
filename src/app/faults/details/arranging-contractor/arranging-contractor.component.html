@@ -78,11 +78,11 @@
             </ng-container>
           </div>
           <ng-container *ngIf="iacNotification && (iacNotification?.responseReceived?.isAccepted === true || iacNotification?.responseReceived?.isAccepted === false)">
-            <div class="question-answer" *ngIf="(iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E') && faultDetails?.contractorQuotePropertyVisitAt">
+            <div class="question-answer" *ngIf="(iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E') && contractorQuotePropertyVisitAt">
               <h4 class="ion-text-center">Next Step:</h4> 
               <h6 *ngIf="quoteArray?.length === 0">
                 <ion-text color="danger">Please note: </ion-text>
-                <span>The appointment is due on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}
+                <span>The appointment is due on {{contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{contractorQuotePropertyVisitAt | date: 'HH:mm'}}
                 </span>
               </h6>
               <h6 *ngIf="quoteArray?.length > 0">
@@ -125,9 +125,9 @@
                 <h4 class="ion-text-center">Next Step:</h4> 
                 <h6>  
                   <ion-text color="danger">Please note: </ion-text>
-                  <span *ngIf="currentDate<=faultDetails?.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote is due on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}.
+                  <span *ngIf="currentDate<=contractorQuotePropertyVisitAt">The appointment for carrying out the Quote is due on {{contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{contractorQuotePropertyVisitAt | date: 'HH:mm'}}.
                   </span>
-                  <span *ngIf="currentDate>faultDetails?.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote was on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}. </span>
+                  <span *ngIf="currentDate>contractorQuotePropertyVisitAt">The appointment for carrying out the Quote was on {{contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{contractorQuotePropertyVisitAt | date: 'HH:mm'}}. </span>
                   <span>The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to upload the Quote and photos.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
                     {{iacNotification?.hoursLeft}}.
                   </span>
@@ -148,7 +148,7 @@
             </div>
 
             <div class="question-answer ion-text-center" *ngIf="faultDetails.isEscalated && iacNotification?.notificationStatus !== 7 
-            && !faultMaintenanceDetails?.doesWantAnotherQuote">
+            && !isLandlordWantAnotherQuote">
               <h6>
                 <ion-text color="danger">Please note: </ion-text>
                 <span *ngIf="faultDetails.isEscalated">Fault Escalated - PM to decide the next steps</span>
@@ -181,7 +181,7 @@
           </div>
 
           <div class="question-answer"
-            *ngIf="iacNotification && faultMaintenanceDetails?.doesWantAnotherQuote">
+            *ngIf="iacNotification && isLandlordWantAnotherQuote">
             <h4 class="ion-text-center">Next Step:</h4>
             <h6>Based on Landlord's response, the next action is:</h6>
             <ion-grid>
@@ -206,7 +206,7 @@
                   <div *ngFor="let instruction of otherStageActions">
                     <ion-button color="success" expand="block" class="action-btn"
                       fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
-                      (click)="setUserAction(instruction.index)" [hidden]="faultMaintenanceDetails?.doesWantAnotherQuote && instruction.index=='OBTAIN_QUOTE'">
+                      (click)="setUserAction(instruction.index)" [hidden]="isLandlordWantAnotherQuote && instruction.index=='OBTAIN_QUOTE'">
                       {{instruction.value}}
                       <ion-icon name="checkmark-circle-outline" class="check-icon"
                         *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
@@ -227,7 +227,7 @@
                   <ion-button color="success" expand="block" class="action-btn" fill="outline"
                       (click)="modifyDateTime(iacNotification?.templateCode); $event.stopPropagation();">
                       <ng-container *ngIf="iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CQ-C-E'" >
-                        {{faultDetails?.contractorQuotePropertyVisitAt ? 'Modify': 'Add'}} Date/Time
+                        {{contractorQuotePropertyVisitAt ? 'Modify': 'Add'}} Date/Time
                       </ng-container>
                       <ng-container *ngIf="iacNotification?.templateCode === 'CDT-C-E (WO)' || iacNotification?.templateCode === 'CWO-C-E'" >
                         {{faultDetails?.contractorWoPropertyVisitAt ? 'Modify': 'Add'}} Date/Time
@@ -244,13 +244,13 @@
         </div>
       </ion-col>
     </ion-row>
-    <ion-grid style="margin: 20px 0" *ngIf="(iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'QC-L-E') && quoteDocuments?.length && !showSkeleton">
+    <ion-grid *ngIf="(iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'QC-L-E') && ccQuoteDocuments?.length && !showSkeleton && selectedContractorDetail">
       <ion-row>
         <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
           <h2>Quote Documents</h2>
           <div class="border-bottom"></div>
           <ion-row>
-            <ion-col size-xl="25" size="25" *ngFor="let file of quoteDocuments; let i=index;">
+            <ion-col size-xl="25" size="25" *ngFor="let file of ccQuoteDocuments; let i=index;">
               <div class="delete-icon-wrapper">
                 <ion-grid>
                   <ion-row>
@@ -287,7 +287,7 @@
 
         <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
           <ng-container *ngIf="!isWorksOrder">
-            <div class="quote-request-banner" *ngIf="!selectedContractorDetail">
+            <div class="quote-request-banner" *ngIf="iacNotification && !selectedContractorDetail">
               <ion-text>You have requested multiple quotes.</ion-text>
               <ion-text>Please select a contractor from the list below to see the status.</ion-text>
             </div>
@@ -298,11 +298,11 @@
                     *ngFor="let item of raiseQuoteForm.get('contractorList')['controls']; let i = index;">
                     <ion-row id="row_1" class="row-banner" [formGroupName]="i"
                       [ngClass]="{
-                        'isRejected': item.get('isRejected').value ,
-                        'isQuoteAccepted': item.get('quoteContractorStatus').value == 2,
-                        'isQuoteSent': item.get('quoteContractorStatus').value == 5, 
-                        'isQuoteNotApproved': item.get('quoteContractorStatus').value == 9,
-                        'isSelected': item.get('contractorId').value == isCCSelected
+                        'rejected': item.get('isRejected').value ,
+                        'quote-accepted': item.get('quoteContractorStatus').value == 2,
+                        'quote-sent': item.get('quoteContractorStatus').value == 5, 
+                        'quote-not-approved': item.get('quoteContractorStatus').value == 9,
+                        'selected': item.get('contractorId').value == isCCSelected
                       }">
                       <ion-col size="30">
                         <ion-item>
