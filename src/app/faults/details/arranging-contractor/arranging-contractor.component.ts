@@ -1444,6 +1444,7 @@ export class ArrangingContractorComponent implements OnInit {
     requestObj.rejectionReason = '';
     requestObj.isAccepted = true;
     requestObj.submittedByType = 'SECUR_USER';
+    requestObj.contractorId = this.filteredCCDetails.contractorId
     const promise = new Promise((resolve, reject) => {
       this.faultsService.saveFaultLLAuth(requestObj, this.iacNotification.faultNotificationId).subscribe(res => {
         resolve(true);
@@ -1875,7 +1876,8 @@ export class ArrangingContractorComponent implements OnInit {
         isDraft: this.faultDetails.isDraft,
         stage: this.faultDetails.stage,
         actionType: actionType,
-        faultNotificationId: this.iacNotification ? this.iacNotification.faultNotificationId : ''
+        faultNotificationId: this.iacNotification ? this.iacNotification.faultNotificationId : '',
+        contractorId: this.filteredCCDetails.contractorId
       }
       if (!actionType) {
         obj.woData = !this.faultMaintenanceDetails ? this.prepareWorksOrderData(isDraft) : this.prepareWorksOrderData();
@@ -1943,7 +1945,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private getWorksOrderPaymentRules(actionType = WORKSORDER_RAISE_TYPE.AUTO) {
     const promise = new Promise((resolve, reject) => {
-      this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
+      this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId, this.filteredCCDetails.contractorId).subscribe(
         res => {
           resolve(res);
         },
@@ -2252,8 +2254,7 @@ export class ArrangingContractorComponent implements OnInit {
   
   // Auto select CC details if there is one one active cc
   private setQuoteCCDetail() {
-    let quoteCC = this.faultMaintenanceDetails.quoteContractors.length;
-    if (quoteCC) {
+    if (this.faultMaintenanceDetails.quoteContractors && this.faultMaintenanceDetails.quoteContractors.length) {
       let ccId = this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive)[0].contractorId;
       if (ccId) {
         this.selectedCCDetails(ccId);
