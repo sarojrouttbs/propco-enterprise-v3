@@ -335,6 +335,10 @@ export class ArrangingContractorComponent implements OnInit {
         this.selectedContractorDetail = ccId ? true : false;
         this.filteredCCDetails.contractorId = ccId ? ccId : null;
       }
+      else{
+        this.selectedContractorDetail = true;
+        this.filteredCCDetails = {};
+      }
       await this.faultNotification(this.faultDetails.stageAction, this.filteredCCDetails.contractorId);
       this.initPatching();
       this.setQuoteCCDetail();
@@ -1333,8 +1337,6 @@ export class ArrangingContractorComponent implements OnInit {
       const submit = await this.raiseWorksOrderAndNotification(paymentRequired);
       if (submit) {
         this.commonService.removeItem('contractorId');
-        this.selectedContractorDetail = true;
-        this.filteredCCDetails = {};
         this._btnHandler('refresh');
       }
     }
