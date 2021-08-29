@@ -67,6 +67,7 @@ export class ArrangingContractorComponent implements OnInit {
   quoteStatuses;
   // rejectionReason: string = null;
   restrictAction: boolean = false;
+  addMoreCCrestrictAction: boolean = false;
   private MAX_QUOTE_REJECTION = 2;
   private MAX_ACTIVE_QUOTE_CONTRACTOR = 3;
   private disableAnotherQuote: boolean = false;
@@ -141,9 +142,9 @@ export class ArrangingContractorComponent implements OnInit {
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
-    // if (this.quoteDocuments) {
-    //   this.quoteArray = this.quoteDocuments.filter(s => s.documentType === 'QUOTE');
-    // }
+    if (this.quoteDocuments) {
+      this.quoteArray = this.quoteDocuments.filter(s => s.documentType === 'QUOTE');
+    }
   }
 
   private initForms(): void {
@@ -170,7 +171,6 @@ export class ArrangingContractorComponent implements OnInit {
       accessDetails: [this.faultDetails.isTenantPresenceRequired ? 'Tenant Presence Required' : 'Access with management keys'],
       contractorList: this.fb.array([]),
       contractorIds: [],
-      selectedContractorId: '',
       quoteStatus: [{ value: 1, disabled: true }],
       nominalCode: ['', Validators.required],
       fullDescription: [this.faultDetails.notes, Validators.required],
@@ -286,22 +286,11 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   async updateContractorState(e, item) {
-    if (this.restrictAction) { return; }
     if (e.target.checked) {
       const activeContractorCount = await this.getActiveContractorCount() as number;
       if (activeContractorCount > this.MAX_ACTIVE_QUOTE_CONTRACTOR) {
         this.commonService.showAlert('Active Contractor', 'Maximum Active Quote Contractor limit exceeded.');
         e.target.checked = false;
-      } else {
-        if (this.faultMaintenanceDetails && !item.isNew) {
-          /*update only the old contractors*/
-          await this.updateFaultQuoteContractor(item);
-        }
-      }
-    } else {
-      if (this.faultMaintenanceDetails && !item.isNew) {
-        /*update only the old contractors*/
-        await this.updateFaultQuoteContractor(item);
       }
     }
   }
@@ -331,15 +320,10 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.faultMaintenanceDetails) {
       if (!this.isWorksOrder) {
         this.MAX_QUOTE_REJECTION = await this.getSystemConfigs(SYSTEM_CONFIG.MAXIMUM_FAULT_QUOTE_REJECTION);
-        const ccId = this.commonService.getItem('contractorId');
-        this.selectedContractorDetail = ccId ? true : false;
-        this.filteredCCDetails.contractorId = ccId ? ccId : null;
       }
-      else{
-        this.selectedContractorDetail = true;
-        this.filteredCCDetails = {};
-      }
-      await this.faultNotification(this.faultDetails.stageAction, this.filteredCCDetails.contractorId);
+      this.selectedContractorDetail = false;
+      const ccId = this.commonService.getItem('contractorId');
+      await this.faultNotification(this.faultDetails.stageAction, ccId);
       this.initPatching();
       this.setQuoteCCDetail();
     } else {
@@ -354,6 +338,14 @@ export class ArrangingContractorComponent implements OnInit {
     }
     this.showSkeleton = false;
     this.getNominalCodes();
+    this.enableCCAddform();
+  }
+
+  private async enableCCAddform() {
+    const activeContractorCount = await this.getActiveContractorCount() as number;
+    if (activeContractorCount > this.MAX_ACTIVE_QUOTE_CONTRACTOR) {
+      this.addMoreCCrestrictAction = true;
+    }
   }
 
   private getFaultMaintenance() {
@@ -380,7 +372,6 @@ export class ArrangingContractorComponent implements OnInit {
           orderedBy: this.faultMaintenanceDetails.orderedBy,
           requiredDate: this.faultMaintenanceDetails.requiredCompletionDate,
           accessDetails: this.faultMaintenanceDetails.accessDetails,
-          selectedContractorId: this.faultMaintenanceDetails.selectedContractorId,
           contact: this.faultMaintenanceDetails.contact,
           quoteStatus: this.faultMaintenanceDetails.quoteStatus,
           fullDescription: this.faultMaintenanceDetails.fullDescription,
@@ -405,7 +396,7 @@ export class ArrangingContractorComponent implements OnInit {
             orderedBy: this.faultMaintenanceDetails.orderedBy,
             postdate: this.faultMaintenanceDetails.postdate,
             // accessDetails: this.faultMaintenanceDetails.accessDetails,
-            contractorId: this.faultMaintenanceDetails.selectedContractorId,
+            contractorId: this.faultMaintenanceDetails.contractorId,
             nominalCode: this.faultMaintenanceDetails.nominalCode,
             fullDescription: this.faultMaintenanceDetails.fullDescription,
             repairCost: this.faultMaintenanceDetails.amount,
@@ -419,7 +410,7 @@ export class ArrangingContractorComponent implements OnInit {
           }
         );
         this.workOrderForm.get('contractorName').disable();
-        this.woSelectContractor(this.faultMaintenanceDetails.selectedContractorId);
+        this.woSelectContractor(this.faultMaintenanceDetails.contractorId);
         this.isContractorSearch = false;
       }
     }
@@ -611,11 +602,14 @@ export class ArrangingContractorComponent implements OnInit {
           /*update a quote*/
           const quoteUpdated = await this.updateQuote();
           if (quoteUpdated) {
-            const addContractors = await this.addContractors();
-            if (addContractors) {
-              const faultUpdated = await this.updateFault();
-              if (faultUpdated) {
-                this._btnHandler('cancel');
+            const updateQuoteCC = await this.updateFaultQuoteContractor();
+            if (updateQuoteCC) {
+              const addContractors = await this.addContractors();
+              if (addContractors) {
+                const faultUpdated = await this.updateFault();
+                if (faultUpdated) {
+                  this._btnHandler('cancel');
+                }
               }
             }
           }
@@ -738,11 +732,11 @@ export class ArrangingContractorComponent implements OnInit {
     return invalid = false;
   }
 
-  private updateFaultQuoteContractor(item) {
+  private updateFaultQuoteContractor() {
+    let items = this.raiseQuoteForm.get('contractorList').value.filter(x => !x.isNew);
     const promise = new Promise((resolve, reject) => {
       this.faultsService.updateFaultQuoteContractor(
-        item,
-        this.faultDetails.faultId,
+        items,
         this.faultMaintenanceDetails.maintenanceId).subscribe((res) => {
           resolve(true);
           this.commonService.showMessage('Successfully Updated', 'Update Quote Contractor', 'success');
@@ -912,16 +906,19 @@ export class ArrangingContractorComponent implements OnInit {
           /*update a quote*/
           const quoteUpdated = await this.updateQuote();
           if (quoteUpdated) {
-            const addContractors = await this.addContractors();
-            if (addContractors) {
-              const faultUpdated = await this.updateFault(true, 'OBTAIN_QUOTE');
-              this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
-              if (faultUpdated) {
-                // this.commonService.showLoader();
-                setTimeout(async () => {
-                  // await this.faultNotification('OBTAIN_QUOTE');
-                  this._btnHandler('refresh');
-                }, 1000);
+            const updateQuoteCC = await this.updateFaultQuoteContractor();
+            if (updateQuoteCC) {
+              const addContractors = await this.addContractors();
+              if (addContractors) {
+                const faultUpdated = await this.updateFault(true, 'OBTAIN_QUOTE');
+                this.faultDetails = await this.getFaultDetails(this.faultDetails.faultId);
+                if (faultUpdated) {
+                  // this.commonService.showLoader();
+                  setTimeout(async () => {
+                    // await this.faultNotification('OBTAIN_QUOTE');
+                    this._btnHandler('refresh');
+                  }, 1000);
+                }
               }
             }
           }
@@ -1039,7 +1036,7 @@ export class ArrangingContractorComponent implements OnInit {
           if (data.parameters.hasOwnProperty('contractorId') && data.parameters.contractorId == contractorId) {
             return data;
           }
-          else if (data.recipientId == contractorId){
+          else if (data.recipientId == contractorId) {
             return data;
           }
         });
@@ -1336,7 +1333,6 @@ export class ArrangingContractorComponent implements OnInit {
       const paymentRequired = await this.checkForPaymentRules(rules, actionType);
       const submit = await this.raiseWorksOrderAndNotification(paymentRequired);
       if (submit) {
-        this.commonService.removeItem('contractorId');
         this._btnHandler('refresh');
       }
     }
@@ -1450,7 +1446,6 @@ export class ArrangingContractorComponent implements OnInit {
     requestObj.rejectionReason = '';
     requestObj.isAccepted = true;
     requestObj.submittedByType = 'SECUR_USER';
-    requestObj.contractorId = this.filteredCCDetails.contractorId
     const promise = new Promise((resolve, reject) => {
       this.faultsService.saveFaultLLAuth(requestObj, this.iacNotification.faultNotificationId).subscribe(res => {
         resolve(true);
@@ -1882,8 +1877,7 @@ export class ArrangingContractorComponent implements OnInit {
         isDraft: this.faultDetails.isDraft,
         stage: this.faultDetails.stage,
         actionType: actionType,
-        faultNotificationId: this.iacNotification ? this.iacNotification.faultNotificationId : '',
-        contractorId: this.filteredCCDetails.contractorId
+        faultNotificationId: this.iacNotification ? this.iacNotification.faultNotificationId : ''
       }
       if (!actionType) {
         obj.woData = !this.faultMaintenanceDetails ? this.prepareWorksOrderData(isDraft) : this.prepareWorksOrderData();
@@ -1951,7 +1945,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private getWorksOrderPaymentRules(actionType = WORKSORDER_RAISE_TYPE.AUTO) {
     const promise = new Promise((resolve, reject) => {
-      this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId, this.filteredCCDetails.contractorId).subscribe(
+      this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
         res => {
           resolve(res);
         },
@@ -2251,7 +2245,6 @@ export class ArrangingContractorComponent implements OnInit {
     this.filteredCCDetails.rejectionReason = this.faultMaintenanceDetails.quoteContractors.filter(data => data.contractorId == id)[0]['rejectionReason'];
     if (this.quoteDocuments && this.quoteDocuments.length > 0) {
       this.ccQuoteDocuments = this.quoteDocuments.filter(data => data.contractorId == id);
-      this.quoteArray = this.ccQuoteDocuments.filter(s => s.documentType === 'QUOTE');
     }
     this.filterNotifications(this.faultNotifications, this.faultDetails.stage, undefined, id).then(data => {
       this.iacNotification = data;
@@ -2261,12 +2254,11 @@ export class ArrangingContractorComponent implements OnInit {
 
   // Auto select CC details if there is one one active cc
   private setQuoteCCDetail() {
-    if (this.faultMaintenanceDetails.quoteContractors && this.faultMaintenanceDetails.quoteContractors.length) {
-      if (this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive).length == 1 || this.filteredCCDetails.contractorId) {
-        let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive)[0].contractorId;
-        if (ccId) {
-          this.selectedCCDetails(ccId);
-        }
+    let quoteCC = this.faultMaintenanceDetails.quoteContractors.length;
+    if (quoteCC) {
+      let ccId = this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive)[0].contractorId;
+      if (ccId) {
+        this.selectedCCDetails(ccId);
       }
     }
   }
