@@ -321,7 +321,7 @@
                       <ion-col size="10">
                         <div class="action-btn-container">
                           <ion-checkbox color="success" class="list-checkbox" formControlName="isActive" mode="ios"
-                          (ionChange)="updateContractorState($event,item.value)" [disabled]="(restrictAction || item.get('isRejected').value) && item.get('rejectedByType').value === REJECTED_BY_TYPE.LANDLORD">
+                          (ionChange)="updateContractorState($event,item.value)" [disabled]="item.get('quoteContractorStatus').value || (restrictAction  || item.get('isRejected').value) && item.get('rejectedByType').value === REJECTED_BY_TYPE.LANDLORD">
                            </ion-checkbox>
                             <ion-fab class="cc-list-button" vertical="center" horizontal="end">
                              <ion-fab-button class="expand-btn">      
@@ -357,7 +357,7 @@
                     </ion-row>
                   </div>
       
-                  <ion-row id="row_1" class="row-banner" [formGroup]="addContractorForm" *ngIf="!restrictAction">
+                  <ion-row id="row_1" class="row-banner" [formGroup]="addContractorForm" *ngIf="!restrictAction || !addMoreCCrestrictAction">
                     <ion-col size="45">
                       <ion-item>
                         <ion-label position="floating">Skill Set</ion-label>

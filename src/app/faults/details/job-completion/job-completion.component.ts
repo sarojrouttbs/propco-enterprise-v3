@@ -205,7 +205,7 @@ export class JobCompletionComponent implements OnInit {
           orderedBy: this.faultMaintenanceDetails.orderedBy,
           postdate: this.faultMaintenanceDetails.postdate,
           accessDetails: this.faultMaintenanceDetails.accessDetails,
-          contractorId: this.faultMaintenanceDetails.selectedContractorId,
+          contractorId: this.faultMaintenanceDetails.contractorId,
           nominalCode: this.faultMaintenanceDetails.nominalCode,
           fullDescription: this.faultMaintenanceDetails.fullDescription,
           repairCost: this.faultMaintenanceDetails.amount,
@@ -215,7 +215,7 @@ export class JobCompletionComponent implements OnInit {
         }
       );
       this.workOrderForm.get('contractorName').disable();
-      this.woSelectContractor(this.faultMaintenanceDetails.selectedContractorId);
+      this.woSelectContractor(this.faultMaintenanceDetails.contractorId);
     }
   }
 
