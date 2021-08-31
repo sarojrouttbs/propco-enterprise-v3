@@ -142,6 +142,9 @@ export class ArrangingContractorComponent implements OnInit {
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
+    if (this.quoteDocuments) {
+      this.quoteArray = this.quoteDocuments.filter(s => s.documentType === 'QUOTE');
+    }
   }
 
   private initForms(): void {
@@ -317,15 +320,10 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.faultMaintenanceDetails) {
       if (!this.isWorksOrder) {
         this.MAX_QUOTE_REJECTION = await this.getSystemConfigs(SYSTEM_CONFIG.MAXIMUM_FAULT_QUOTE_REJECTION);
-        const ccId = this.commonService.getItem('contractorId');
-        this.selectedContractorDetail = ccId ? true : false;
-        this.filteredCCDetails.contractorId = ccId ? ccId : null;
       }
-      else {
-        this.selectedContractorDetail = true;
-        this.filteredCCDetails = {};
-      }
-      await this.faultNotification(this.faultDetails.stageAction, this.filteredCCDetails.contractorId);
+      this.selectedContractorDetail = false;
+      const ccId = this.commonService.getItem('contractorId');
+      await this.faultNotification(this.faultDetails.stageAction, ccId);
       this.initPatching();
       this.setQuoteCCDetail();
     } else {
@@ -1351,7 +1349,6 @@ export class ArrangingContractorComponent implements OnInit {
       const paymentRequired = await this.checkForPaymentRules(rules, actionType);
       const submit = await this.raiseWorksOrderAndNotification(paymentRequired);
       if (submit) {
-        this.commonService.removeItem('contractorId');
         this._btnHandler('refresh');
       }
     }
@@ -2265,7 +2262,6 @@ export class ArrangingContractorComponent implements OnInit {
     this.filteredCCDetails.rejectionReason = this.faultMaintenanceDetails.quoteContractors.filter(data => data.contractorId == id)[0]['rejectionReason'];
     if (this.quoteDocuments && this.quoteDocuments.length > 0) {
       this.ccQuoteDocuments = this.quoteDocuments.filter(data => data.contractorId == id);
-      this.quoteArray = this.ccQuoteDocuments.filter(s => s.documentType === 'QUOTE');
     }
     this.filterNotifications(this.faultNotifications, this.faultDetails.stage, undefined, id).then(data => {
       this.iacNotification = data;
@@ -2276,9 +2272,11 @@ export class ArrangingContractorComponent implements OnInit {
 
   // Auto select CC details if there is one one active cc
   private setQuoteCCDetail() {
-    if (this.faultMaintenanceDetails.quoteContractors && this.faultMaintenanceDetails.quoteContractors.length) {
-      if (this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive).length == 1 || this.filteredCCDetails.contractorId) {
-        let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive)[0].contractorId;
+    let quoteCC = this.faultMaintenanceDetails.quoteContractors.length;
+    if (quoteCC) {
+      let CC = this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive);
+      if (CC.length) {
+        let ccId = this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive)[0].contractorId;
         if (ccId) {
           this.selectedCCDetails(ccId);
         }
