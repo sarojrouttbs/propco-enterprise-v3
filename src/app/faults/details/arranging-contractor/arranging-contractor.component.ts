@@ -733,7 +733,16 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private updateFaultQuoteContractor() {
-    let items = this.raiseQuoteForm.get('contractorList').value.filter(x => !x.isNew);
+    let preQuoteCCvalues = this.faultMaintenanceDetails.quoteContractors;
+    let items = this.raiseQuoteForm.get('contractorList').value.filter((x) => {
+      if (!x.isNew) {
+        let isChanged = preQuoteCCvalues.find(xy => (xy.isActive !== x.isActive && xy.contractorId === x.contractorId));
+        if (isChanged) {
+          return true;
+        }
+      }
+    });
+    if (!items) return;
     const promise = new Promise((resolve, reject) => {
       this.faultsService.updateFaultQuoteContractor(
         items,
@@ -824,54 +833,11 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async proceed() {
-    if (this.iacNotification) {
-      if (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived.isAccepted == null && !this.iacNotification.isVoided) {
-        if (this.isUserActionChange) {
-          this.voidNotification(null);
-        }
-      }
-      if (this.iacNotification.responseReceived != null) {
-        if (!this.iacNotification.responseReceived.isAccepted && (this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E' || this.iacNotification.templateCode === 'CDT-C-E')) {
-
-          //show modal to select user to select contractor and proceed with WO
-          if (this.iacNotification.templateCode === 'QC-L-E'
-            && this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER') {
-            const contractorList: any = JSON.parse(JSON.stringify(this.raiseQuoteForm.getRawValue())).contractorList;
-            this.openContractorSelection(contractorList);
-            return;
-          } else {
-            await this.proceedWithQuoteAndWO();
-            this.proceeding = false;
-            return;
-          }
-        }
-        else {
-          if (this.isUserActionChange) {
-            let title = this.getLookupValue(this.userSelectedActionControl.value, this.iacStageActions);
-            const proceed = await this.commonService.showConfirm(title, `You have selected ${title}. Are you sure?`)
-            if (proceed) {
-              let faultRequestObj: any = {};
-              faultRequestObj.stageAction = this.userSelectedActionControl.value;
-              faultRequestObj.isDraft = false;
-              faultRequestObj.stage = this.faultDetails.stage;
-              faultRequestObj.submittedById = '';
-              faultRequestObj.submittedByType = 'SECUR_USER';
-              const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
-              if (isFaultUpdated) {
-                this.proceeding = false;
-                this._btnHandler('refresh');
-                return;
-              }
-            }
-          }
-        }
-      }
-
-      if (!this.isUserActionChange) {
-        this.proceeding = false;
-        this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
-        return;
-      }
+    if (this.iacNotification && !this.isWorksOrder) {
+      this.handleNotificationAndSelectedAction();
+    }
+    if (this.iacNotification && this.isWorksOrder) {
+      this.handleNotificationAndSelectedAction();
     }
     else {
       await this.proceedWithQuoteAndWO();
@@ -941,6 +907,56 @@ export class ArrangingContractorComponent implements OnInit {
           this._btnHandler('refresh');
         }
       }
+    }
+  }
+
+  private async handleNotificationAndSelectedAction() {
+    if (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived.isAccepted == null && !this.iacNotification.isVoided) {
+      if (this.isUserActionChange) {
+        this.voidNotification(null);
+      }
+    }
+    if (this.iacNotification.responseReceived != null) {
+      if (!this.iacNotification.responseReceived.isAccepted && (this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E' || this.iacNotification.templateCode === 'CDT-C-E')) {
+
+        //show modal to select user to select contractor and proceed with WO
+        if (this.iacNotification.templateCode === 'QC-L-E'
+          && this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER') {
+          const contractorList: any = JSON.parse(JSON.stringify(this.raiseQuoteForm.getRawValue())).contractorList;
+          this.openContractorSelection(contractorList);
+          return;
+        } else {
+          await this.proceedWithQuoteAndWO();
+          this.proceeding = false;
+          return;
+        }
+      }
+      else {
+        if (this.isUserActionChange) {
+          let title = this.getLookupValue(this.userSelectedActionControl.value, this.iacStageActions);
+          const proceed = await this.commonService.showConfirm(title, `You have selected ${title}. Are you sure?`)
+          if (proceed) {
+            let faultRequestObj: any = {};
+            faultRequestObj.stageAction = this.userSelectedActionControl.value;
+            faultRequestObj.isDraft = false;
+            faultRequestObj.stage = this.faultDetails.stage;
+            faultRequestObj.submittedById = '';
+            faultRequestObj.submittedByType = 'SECUR_USER';
+            const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
+            if (isFaultUpdated) {
+              this.proceeding = false;
+              this._btnHandler('refresh');
+              return;
+            }
+          }
+        }
+      }
+    }
+
+    if (!this.isUserActionChange) {
+      this.proceeding = false;
+      this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
+      return;
     }
   }
 
@@ -2256,9 +2272,12 @@ export class ArrangingContractorComponent implements OnInit {
   private setQuoteCCDetail() {
     let quoteCC = this.faultMaintenanceDetails.quoteContractors.length;
     if (quoteCC) {
-      let ccId = this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive)[0].contractorId;
-      if (ccId) {
-        this.selectedCCDetails(ccId);
+      let CC = this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive);
+      if (CC.length) {
+        let ccId = this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive)[0].contractorId;
+        if (ccId) {
+          this.selectedCCDetails(ccId);
+        }
       }
     }
   }
