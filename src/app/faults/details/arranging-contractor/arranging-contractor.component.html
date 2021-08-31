@@ -205,6 +205,7 @@
                 <ng-container *ngIf="iacNotification && iacNotification?.templateCode !== 'CWO-C-E'">
                   <div *ngFor="let instruction of otherStageActions">
                     <ion-button color="success" expand="block" class="action-btn"
+                      [disabled]="instruction.index === 'OBTAIN_QUOTE' && !isWorksOrder"
                       fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
                       (click)="setUserAction(instruction.index)" [hidden]="filteredCCDetails.isLandlordWantAnotherQuote && instruction.index=='OBTAIN_QUOTE'">
                       {{instruction.value}}
