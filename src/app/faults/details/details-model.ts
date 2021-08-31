@@ -169,7 +169,7 @@ declare namespace FaultModels {
         quoteContractors: QuoteContractor[];
         createdAt: string;
         modifiedAt: string;
-        selectedContractorId: string;
+        contractorId: string;
         maintenanceId: string;
         useCommissionRate: boolean;
         thirdPartySource?: number;
