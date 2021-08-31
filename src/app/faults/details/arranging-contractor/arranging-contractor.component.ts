@@ -283,6 +283,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   async updateContractorState(e, item) {
+    if (this.isWorksOrder) return;
     if (e.target.checked) {
       const activeContractorCount = await this.getActiveContractorCount() as number;
       if (activeContractorCount > this.MAX_ACTIVE_QUOTE_CONTRACTOR) {
@@ -320,6 +321,7 @@ export class ArrangingContractorComponent implements OnInit {
         const ccId = this.commonService.getItem('contractorId');
         this.selectedContractorDetail = ccId ? true : false;
         this.filteredCCDetails.contractorId = ccId ? ccId : null;
+        this.enableCCAddform();
       }
       else {
         this.selectedContractorDetail = true;
@@ -340,7 +342,6 @@ export class ArrangingContractorComponent implements OnInit {
     }
     this.showSkeleton = false;
     this.getNominalCodes();
-    this.enableCCAddform();
   }
 
   private async enableCCAddform() {
@@ -1965,7 +1966,8 @@ export class ArrangingContractorComponent implements OnInit {
 
   private getWorksOrderPaymentRules(actionType = WORKSORDER_RAISE_TYPE.AUTO) {
     const promise = new Promise((resolve, reject) => {
-      this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId, this.filteredCCDetails.contractorId).subscribe(
+      const ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : null;
+      this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId, ccId).subscribe(
         res => {
           resolve(res);
         },
