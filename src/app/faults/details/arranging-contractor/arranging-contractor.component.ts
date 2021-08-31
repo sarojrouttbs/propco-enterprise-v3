@@ -98,8 +98,8 @@ export class ArrangingContractorComponent implements OnInit {
   maintenanceRepairSources;
   quoteContractorStatuses;
   isCCSelected;
-  selectedContractorDetail: boolean = false;
-  faultNotifications: any;
+  isContractorSelected: boolean = false;
+  faultNotifications: any = [];
   ccQuoteDocuments: any;
   filteredCCDetails: any = {};
 
@@ -128,7 +128,13 @@ export class ArrangingContractorComponent implements OnInit {
       this.userSelectedActionControl = new FormControl();
       this.showSkeleton = true;
       this.initiateArrangingContractors();
+    } else {
+      this.commonService.removeItem('contractorId');
     }
+  }
+
+  ngOnDestroy() {
+    this.commonService.removeItem('contractorId');
   }
 
   private async initiateArrangingContractors() {
@@ -255,7 +261,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   async removeContractor(i: any, isRejected: boolean) {
-    if (this.restrictAction) { return; }
+    // if (this.restrictAction) { return; }
     if (isRejected) {
       this.commonService.showAlert('Delete Contractor', 'Deleting the rejected contractor is restricted.');
       return;
@@ -266,8 +272,7 @@ export class ArrangingContractorComponent implements OnInit {
       const deleteConId = contractorList.at(i).get('contractorId').value;
       const index = this.contratctorArr.indexOf(deleteConId);
 
-      if (!this.faultMaintenanceDetails) {
-        this.resetSelectedContractor(deleteConId);
+      if (contractorList.at(i).get('isNew').value) {
         contractorList.removeAt(i);
         this.contratctorArr.splice(index, 1);
         return;
@@ -275,7 +280,6 @@ export class ArrangingContractorComponent implements OnInit {
       const isDeleted = await this.deleteContrator(this.faultMaintenanceDetails.maintenanceId,
         deleteConId);
       if (isDeleted) {
-        this.resetSelectedContractor(deleteConId);
         contractorList.removeAt(i);
         this.contratctorArr.splice(index, 1);
       }
@@ -299,12 +303,6 @@ export class ArrangingContractorComponent implements OnInit {
     return count ? count.length : 0
   }
 
-  private resetSelectedContractor(deleteConId): void {
-    if (deleteConId === this.raiseQuoteForm.get('selectedContractorId').value) {
-      this.raiseQuoteForm.get('selectedContractorId').setValue('');
-    }
-  }
-
   private initAddContractorForm(): void {
     this.addContractorForm = this.fb.group({
       contractor: '',
@@ -319,16 +317,16 @@ export class ArrangingContractorComponent implements OnInit {
       if (!this.isWorksOrder) {
         this.MAX_QUOTE_REJECTION = await this.getSystemConfigs(SYSTEM_CONFIG.MAXIMUM_FAULT_QUOTE_REJECTION);
         const ccId = this.commonService.getItem('contractorId');
-        this.selectedContractorDetail = ccId ? true : false;
+        this.isContractorSelected = ccId ? true : false;
         this.filteredCCDetails.contractorId = ccId ? ccId : null;
-        this.enableCCAddform();
       }
       else {
-        this.selectedContractorDetail = true;
+        this.isContractorSelected = true;
         this.filteredCCDetails = {};
       }
       await this.faultNotification(this.faultDetails.stageAction, this.filteredCCDetails.contractorId);
       this.initPatching();
+      this.enableCCAddform();
       this.setQuoteCCDetail();
     } else {
       if (!this.isWorksOrder) {
@@ -346,8 +344,8 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async enableCCAddform() {
     const activeContractorCount = await this.getActiveContractorCount() as number;
-    if (activeContractorCount > this.MAX_ACTIVE_QUOTE_CONTRACTOR) {
-      this.addMoreCCrestrictAction = true;
+    if (activeContractorCount < this.MAX_ACTIVE_QUOTE_CONTRACTOR) {
+      this.addMoreCCrestrictAction = false;
     }
   }
 
@@ -836,10 +834,11 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async proceed() {
+    console.log(this.iacNotification)
     if (this.iacNotification && !this.isWorksOrder) {
       this.handleNotificationAndSelectedAction();
     }
-    if (this.iacNotification && this.isWorksOrder) {
+    else if (this.iacNotification && this.isWorksOrder) {
       this.handleNotificationAndSelectedAction();
     }
     else {
@@ -914,52 +913,54 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async handleNotificationAndSelectedAction() {
-    if (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived.isAccepted == null && !this.iacNotification.isVoided) {
-      if (this.isUserActionChange) {
-        this.voidNotification(null);
-      }
-    }
-    if (this.iacNotification.responseReceived != null) {
-      if (!this.iacNotification.responseReceived.isAccepted && (this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E' || this.iacNotification.templateCode === 'CDT-C-E')) {
-
-        //show modal to select user to select contractor and proceed with WO
-        if (this.iacNotification.templateCode === 'QC-L-E'
-          && this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER') {
-          const contractorList: any = JSON.parse(JSON.stringify(this.raiseQuoteForm.getRawValue())).contractorList;
-          this.openContractorSelection(contractorList);
-          return;
-        } else {
-          await this.proceedWithQuoteAndWO();
-          this.proceeding = false;
-          return;
+    if (this.iacNotification) {
+      if (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived.isAccepted == null && !this.iacNotification.isVoided) {
+        if (this.isUserActionChange) {
+          this.voidNotification(null);
         }
       }
-      else {
-        if (this.isUserActionChange) {
-          let title = this.getLookupValue(this.userSelectedActionControl.value, this.iacStageActions);
-          const proceed = await this.commonService.showConfirm(title, `You have selected ${title}. Are you sure?`)
-          if (proceed) {
-            let faultRequestObj: any = {};
-            faultRequestObj.stageAction = this.userSelectedActionControl.value;
-            faultRequestObj.isDraft = false;
-            faultRequestObj.stage = this.faultDetails.stage;
-            faultRequestObj.submittedById = '';
-            faultRequestObj.submittedByType = 'SECUR_USER';
-            const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
-            if (isFaultUpdated) {
-              this.proceeding = false;
-              this._btnHandler('refresh');
-              return;
+      if (this.iacNotification.responseReceived != null) {
+        if (!this.iacNotification.responseReceived.isAccepted && (this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E' || this.iacNotification.templateCode === 'CDT-C-E')) {
+
+          //show modal to select user to select contractor and proceed with WO
+          if (this.iacNotification.templateCode === 'QC-L-E'
+            && this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER') {
+            const contractorList: any = JSON.parse(JSON.stringify(this.raiseQuoteForm.getRawValue())).contractorList;
+            this.openContractorSelection(contractorList);
+            return;
+          } else {
+            await this.proceedWithQuoteAndWO();
+            this.proceeding = false;
+            return;
+          }
+        }
+        else {
+          if (this.isUserActionChange) {
+            let title = this.getLookupValue(this.userSelectedActionControl.value, this.iacStageActions);
+            const proceed = await this.commonService.showConfirm(title, `You have selected ${title}. Are you sure?`)
+            if (proceed) {
+              let faultRequestObj: any = {};
+              faultRequestObj.stageAction = this.userSelectedActionControl.value;
+              faultRequestObj.isDraft = false;
+              faultRequestObj.stage = this.faultDetails.stage;
+              faultRequestObj.submittedById = '';
+              faultRequestObj.submittedByType = 'SECUR_USER';
+              const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
+              if (isFaultUpdated) {
+                this.proceeding = false;
+                this._btnHandler('refresh');
+                return;
+              }
             }
           }
         }
       }
-    }
 
-    if (!this.isUserActionChange) {
-      this.proceeding = false;
-      this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
-      return;
+      if (!this.isUserActionChange) {
+        this.proceeding = false;
+        this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
+        return;
+      }
     }
   }
 
@@ -1050,7 +1051,7 @@ export class ArrangingContractorComponent implements OnInit {
       if (filteredData.length === 0) {
         resolve(null);
       }
-      if (contractorId) {
+      if (contractorId && !this.isWorksOrder) {
         filteredData = filteredData.filter((data) => {
           if (data.parameters.hasOwnProperty('contractorId') && data.parameters.contractorId == contractorId) {
             return data;
@@ -1059,6 +1060,9 @@ export class ArrangingContractorComponent implements OnInit {
             return data;
           }
         });
+      }
+      if (!contractorId && !this.isWorksOrder) {
+        resolve(null);
       }
       filteredData = filteredData.sort((a, b) => {
         return <any>new Date(b.createdAt) - <any>new Date(a.createdAt);
@@ -2271,7 +2275,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
     this.filterNotifications(this.faultNotifications, this.faultDetails.stage, undefined, id).then(data => {
       this.iacNotification = data;
-      this.selectedContractorDetail = true;
+      this.isContractorSelected = true;
     });
   }
 
