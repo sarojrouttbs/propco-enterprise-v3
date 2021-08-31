@@ -331,3 +331,19 @@ input {
     @include set-text-style(20px, 32px);
   }
 }
+
+.checkbox-disabled{
+  opacity: 0.8 !important;
+}
+
+.prefered-cc{
+  font-size: 20px;
+  padding-top: 5px;
+  padding-right: 2px;
+  color: #008000;
+  cursor: pointer;
+  ion-icon{
+    pointer-events: none;
+  }
+}
+

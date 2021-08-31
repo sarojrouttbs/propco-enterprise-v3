@@ -6,7 +6,7 @@
     </ion-row>
    
 
-    <ion-row *ngIf="iacNotification && !showSkeleton && !faultDetails?.isClosed && selectedContractorDetail">
+    <ion-row *ngIf="iacNotification && !showSkeleton && !faultDetails?.isClosed && isContractorSelected">
       <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
         <div class="arranging-contractor">
           <div class="banner">
@@ -245,7 +245,7 @@
         </div>
       </ion-col>
     </ion-row>
-    <ion-grid *ngIf="(iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'QC-L-E') && ccQuoteDocuments?.length && !showSkeleton && selectedContractorDetail">
+    <ion-grid *ngIf="(iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'QC-L-E') && ccQuoteDocuments?.length && !showSkeleton && isContractorSelected">
       <ion-row>
         <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
           <h2>Quote Documents</h2>
@@ -288,7 +288,7 @@
 
         <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
           <ng-container *ngIf="!isWorksOrder">
-            <div class="quote-request-banner" *ngIf="iacNotification && !selectedContractorDetail">
+            <div class="quote-request-banner" *ngIf="!isContractorSelected && faultNotifications.length">
               <ion-text>You have requested multiple quotes.</ion-text>
               <ion-text>Please select a contractor from the list below to see the status.</ion-text>
             </div>
@@ -306,6 +306,9 @@
                         'selected': item.get('contractorId').value == filteredCCDetails.contractorId
                       }">
                       <ion-col size="30">
+                        <span *ngIf="item.get('isPreferred').value" class="prefered-cc" matTooltip="Preferred Contractor" matTooltipPosition="above">
+                          <ion-icon name="checkmark-circle-outline"> </ion-icon>
+                        </span>
                         <ion-text>{{item.get('company').value ? item.get('company').value : 'N/A'}}</ion-text>
                       </ion-col>
       
