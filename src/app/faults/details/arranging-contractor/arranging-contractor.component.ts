@@ -834,7 +834,6 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async proceed() {
-    console.log(this.iacNotification)
     if (this.iacNotification && !this.isWorksOrder) {
       this.handleNotificationAndSelectedAction();
     }
