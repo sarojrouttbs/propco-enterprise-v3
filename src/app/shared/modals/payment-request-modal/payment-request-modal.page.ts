@@ -25,6 +25,7 @@ export class PaymentRequestModalPage implements OnInit {
   paymentSkippedReason = new FormControl('', [Validators.required]);
   showLoader: boolean = false;
   unSavedData = false;
+  contractorId;
 
   constructor(
     private modalController: ModalController,
@@ -161,6 +162,9 @@ export class PaymentRequestModalPage implements OnInit {
     requestObj.rejectionReason = '';
     requestObj.isAccepted = true;
     requestObj.submittedByType = 'SECUR_USER';
+    if (this.contractorId) {
+      requestObj.contractorId = this.contractorId;
+    }
     const promise = new Promise((resolve, reject) => {
       this.faultsService.saveFaultLLAuth(requestObj, this.faultNotificationId).subscribe(res => {
         resolve(true);
@@ -190,15 +194,15 @@ export class PaymentRequestModalPage implements OnInit {
   }
 
   async onCancel() {
-    if(this.paymentSkippedReason.value){
+    if (this.paymentSkippedReason.value) {
       this.unSavedData = true;
-    }else{
+    } else {
       this.paymentSkippedReason.reset();
       this.isPaymentSkip = false;
     }
   }
 
-  continue(){
+  continue() {
     this.unSavedData = false;
   }
 

@@ -340,7 +340,7 @@ input {
   font-size: 20px;
   padding-top: 5px;
   padding-right: 2px;
-  color: #008000;
+  color: var(--ion-color-success-shade);
   cursor: pointer;
   ion-icon{
     pointer-events: none;

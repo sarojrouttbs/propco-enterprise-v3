@@ -187,6 +187,7 @@
             <ion-grid>
               <ion-row class="ion-justify-content-center">
                 <ion-button color="success" expand="block" class="action-btn"
+                [disabled]="true"
                 fill="{{userSelectedActionControl.value == otherStageActions[1].index ? 'solid' :'outline'}}"
                 (click)="setUserAction(otherStageActions[1].index)" >
                 Obtain Quote

@@ -440,6 +440,10 @@ export const FAULT_EVENT_TYPES_ID = {
   ESCALATED: 8
 }
 
+export const QUOTE_CC_STATUS_ID = {
+  NOT_APPROVED: 9
+}
+
 export const NOTES_ORIGIN = {
   FAULT_STAGE: 'FAULT_STAGE',
   DASHBOARD: 'DASHBOARD'
