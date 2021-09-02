@@ -297,7 +297,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   async getActiveContractorCount() {
     const contractorList = this.raiseQuoteForm.get('contractorList').value;
-    let count = contractorList.filter(x => x.isActive  && x.quoteContractorStatus !== QUOTE_CC_STATUS_ID.REJECTED);
+    let count = contractorList.filter(x => x.isActive && x.quoteContractorStatus !== QUOTE_CC_STATUS_ID.REJECTED);
     return count ? count.length : 0
   }
 
@@ -1676,13 +1676,20 @@ export class ArrangingContractorComponent implements OnInit {
     const updated = await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
     if (updated) {
       let faultRequestObj: any = {};
-      faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+      faultRequestObj.stageAction = this.userSelectedActionControl.value;
       faultRequestObj.submittedById = '';
       faultRequestObj.submittedByType = 'SECUR_USER';
       faultRequestObj.isDraft = false;
       faultRequestObj.stage = this.faultDetails.stage;
       const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
-      if (isFaultUpdated) {
+      let isStatusUpdated = false;
+      if (this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER' && this.faultDetails.status !== FAULT_STATUSES.WORKSORDER_PENDING) {
+        isStatusUpdated = await this.updateFaultStatus(FAULT_STATUSES.WORKSORDER_PENDING);
+      } else {
+        isStatusUpdated = true;
+      }
+
+      if (isFaultUpdated && isStatusUpdated) {
         if (value) {
           this._btnHandler('cancel');
         }
@@ -1691,6 +1698,20 @@ export class ArrangingContractorComponent implements OnInit {
         }
       }
     }
+  }
+
+  private updateFaultStatus(status): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.updateFaultStatus(this.faultDetails.faultId, status).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
   }
 
   updateFaultSummary(faultRequestObj) {
@@ -2316,6 +2337,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   // Auto select CC details if there is one one active cc
   private setQuoteCCDetail() {
+    if (this.isWorksOrder) return;
     if (this.faultMaintenanceDetails.quoteContractors && this.faultMaintenanceDetails.quoteContractors.length) {
       if (this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive).length == 1 || this.filteredCCDetails.contractorId) {
         let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive)[0].contractorId;
