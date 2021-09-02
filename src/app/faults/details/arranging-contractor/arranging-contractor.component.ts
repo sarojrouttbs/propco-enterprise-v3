@@ -299,7 +299,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   async getActiveContractorCount() {
     const contractorList = this.raiseQuoteForm.get('contractorList').value;
-    let count = contractorList.filter(x => x.isActive  && x.quoteContractorStatus !== QUOTE_CC_STATUS_ID.NOT_APPROVED);
+    let count = contractorList.filter(x => x.isActive  && x.quoteContractorStatus !== QUOTE_CC_STATUS_ID.REJECTED);
     return count ? count.length : 0
   }
 
@@ -575,7 +575,8 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async saveForLater() {
-    await this.sendQuoteTonewCC();
+    const isCompleted = await this.sendQuoteTonewCC();
+    if (isCompleted) { this.saving = false; return; }
     if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null) && !this.isUserActionChange) {
       this._btnHandler('saveLater');
       return;
