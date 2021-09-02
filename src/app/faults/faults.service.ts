@@ -103,11 +103,15 @@ export class FaultsService {
   }
 
   updateFaultStatus(faultId: string, status: number): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/status/${status}`, {});
+    let reqBody = {} as any;
+    reqBody.submittedByType = 'SECUR_USER';
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/status/${status}`, reqBody);
   }
 
   startProgress(faultId: string): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/start-progress`, {});
+    let reqBody = {} as any;
+    reqBody.submittedByType = 'SECUR_USER';
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/start-progress`, reqBody);
   }
 
   getFaultDocuments(faultId: string): Observable<any> {
