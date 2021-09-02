@@ -441,7 +441,7 @@ export const FAULT_EVENT_TYPES_ID = {
 }
 
 export const QUOTE_CC_STATUS_ID = {
-  NOT_APPROVED: 9
+  REJECTED: 3
 }
 
 export const NOTES_ORIGIN = {
