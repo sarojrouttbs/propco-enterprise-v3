@@ -457,6 +457,7 @@ export class LandlordInstructionComponent implements OnInit {
         break;
       }
       default: {
+        this.proceeding = false;
         this.btnAction.emit(type);
         break;
       }
