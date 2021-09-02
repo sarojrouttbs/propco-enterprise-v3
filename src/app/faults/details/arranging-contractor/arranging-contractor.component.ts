@@ -128,8 +128,6 @@ export class ArrangingContractorComponent implements OnInit {
       this.userSelectedActionControl = new FormControl();
       this.showSkeleton = true;
       this.initiateArrangingContractors();
-    } else {
-      this.commonService.removeItem('contractorId');
     }
   }
 
@@ -1607,8 +1605,9 @@ export class ArrangingContractorComponent implements OnInit {
       status: [{ value: this.getLookupValue(data.quoteContractorStatus, this.quoteContractorStatuses), disabled: true }],
     });
     contractorList.push(contGrup);
-    this.contratctorArr.push(data.contractorId ? data.contractorId : data.contractorObj.entityId);
-
+    if (this.contratctorArr.indexOf(data.contractorId ? data.contractorId : data.contractorObj.entityId) === -1) {
+      this.contratctorArr.push(data.contractorId ? data.contractorId : data.contractorObj.entityId);
+    }
     if (isNew) {
       this.addContractorForm.reset();
       this.isSelected = false;
