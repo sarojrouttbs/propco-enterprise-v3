@@ -18,3 +18,16 @@
     *overflow: hidden;
   }
 }
+
+.show-hide-section{
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 5px;
+  button{
+    color: #4d4d4d;
+    background: white;
+    padding: 6px 15px;
+    border: 1px solid;
+    border-radius: 5px;
+  }
+}

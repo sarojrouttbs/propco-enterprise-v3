@@ -383,7 +383,18 @@ export class ChronologicalHistoryPage implements OnInit {
          this.faultEventMap.set(event.index, event.value);
       });
    }
+
    dismiss() {
       this.modalController.dismiss();
+   }
+
+   showHideAll(type) {
+      var table = $('#chronological').DataTable();
+      if (type == 'show') {
+         table.rows(':not(.parent)').nodes().to$().find('td:first-child').trigger('click');
+      }
+      else {
+         table.rows('.parent').nodes().to$().find('td:first-child').trigger('click');
+      }
    }
 }
