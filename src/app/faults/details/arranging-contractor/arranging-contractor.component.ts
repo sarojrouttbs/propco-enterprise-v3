@@ -1012,7 +1012,7 @@ export class ArrangingContractorComponent implements OnInit {
           this.disableQuoteDetail();
         } else {
           this.disableWorksOrderDetail();
-        }        
+        }
         resolve(filtereData[0]);
       } else {
         resolve(null);
@@ -1421,7 +1421,7 @@ export class ArrangingContractorComponent implements OnInit {
     const contractId = typeof contractor === 'object' ? contractor.entityId : contractor;
     return new Promise((resolve, reject) => {
       this.faultsService.getContractorDetails(contractId).subscribe((res) => {
-        let data = res ? res : '';        
+        let data = res ? res : '';
         if (type === 'quote') {
           this.patchContartorList(data, true, false);
         } else if (type === 'wo') {
@@ -1435,7 +1435,7 @@ export class ArrangingContractorComponent implements OnInit {
           }
           const addressString = addressArray.length ? addressArray.join(', ') : '';
           this.workOrderForm.patchValue({
-            company: data ? data.companyName : undefined, 
+            company: data ? data.companyName : undefined,
             agentReference: data ? data.agentReference : undefined,
             daytime: data ? data.businessTelephone : undefined,
             contractorName: data ? (data.fullName ? data.fullName : data.name) : undefined,
@@ -1573,13 +1573,20 @@ export class ArrangingContractorComponent implements OnInit {
     const updated = await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
     if (updated) {
       let faultRequestObj: any = {};
-      faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+      faultRequestObj.stageAction = this.userSelectedActionControl.value;
       faultRequestObj.submittedById = '';
       faultRequestObj.submittedByType = 'SECUR_USER';
       faultRequestObj.isDraft = false;
       faultRequestObj.stage = this.faultDetails.stage;
       const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
-      if (isFaultUpdated) {
+      let isStatusUpdated = false;
+      if (this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER' && this.faultDetails.status !== FAULT_STATUSES.WORKSORDER_PENDING) {
+        isStatusUpdated = await this.updateFaultStatus(FAULT_STATUSES.WORKSORDER_PENDING);
+      } else {
+        isStatusUpdated = true;
+      }
+
+      if (isFaultUpdated && isStatusUpdated) {
         if (value) {
           this._btnHandler('cancel');
         }
@@ -1593,6 +1600,20 @@ export class ArrangingContractorComponent implements OnInit {
   updateFaultSummary(faultRequestObj) {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.updateFault(this.faultDetails.faultId, faultRequestObj).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private updateFaultStatus(status): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.updateFaultStatus(this.faultDetails.faultId, status).subscribe(
         res => {
           resolve(true);
         },
@@ -2192,5 +2213,5 @@ export class ArrangingContractorComponent implements OnInit {
     });
     return promise;
   }
-  
+
 }
