@@ -187,12 +187,9 @@
             <ion-grid>
               <ion-row class="ion-justify-content-center">
                 <ion-button color="success" expand="block" class="action-btn"
-                [disabled]="true"
-                fill="{{userSelectedActionControl.value == otherStageActions[1].index ? 'solid' :'outline'}}"
-                (click)="setUserAction(otherStageActions[1].index)" >
+                (click)="scrollToAddCC()" 
+                fill="outline">
                 Obtain Quote
-                <ion-icon name="checkmark-circle-outline" class="check-icon"
-                  *ngIf="(userSelectedActionControl.value == otherStageActions[1].index)"></ion-icon>
               </ion-button>
               </ion-row>
             </ion-grid>            
@@ -362,7 +359,7 @@
                     </ion-row>
                   </div>
       
-                  <ion-row id="row_1" class="row-banner" [formGroup]="addContractorForm" *ngIf="!restrictAction || !addMoreCCrestrictAction">
+                  <ion-row id="addCCform" class="row-banner" [formGroup]="addContractorForm" *ngIf="!restrictAction || !addMoreCCrestrictAction">
                     <ion-col size="45">
                       <ion-item>
                         <ion-label position="floating">Skill Set</ion-label>

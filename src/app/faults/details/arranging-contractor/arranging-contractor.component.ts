@@ -2347,4 +2347,8 @@ export class ArrangingContractorComponent implements OnInit {
       }
     }
   }
+
+  scrollToAddCC(): void {
+    document.getElementById("addCCform").scrollIntoView({behavior: "smooth"});
+  }
 }
