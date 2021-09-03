@@ -457,7 +457,6 @@ export class LandlordInstructionComponent implements OnInit {
         break;
       }
       default: {
-        this.proceeding = false;
         this.btnAction.emit(type);
         break;
       }
@@ -678,6 +677,7 @@ export class LandlordInstructionComponent implements OnInit {
             await this._btnHandler('refresh');
             this.checkForLLSuggestedAction();
           }
+          this.proceeding = false;
         } else {
           this.proceeding = false;
           if (this.landlordInstFrom.get('confirmedEstimate').hasError('pattern')) {
