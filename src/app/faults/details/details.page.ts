@@ -2203,6 +2203,9 @@ export class DetailsPage implements OnInit {
         if (this.files[i].folderName == null) {
           this.files[i].folderName = FOLDER_NAMES[0].index;
         }
+        if(this.files[i].folderName === FOLDER_NAMES[1].index && this.files[i].contractorReference){
+          this.files[i].folderName = e.folderName + ' - '+ e.contractorReference;
+        }
         this.files[i].folderName = e.folderName.replace(/_/g, " ");
         this.files[i].isUploaded = true;
         if (e.name != null && DOCUMENTS_TYPE.indexOf(e.name.split('.')[1]) !== -1) {
