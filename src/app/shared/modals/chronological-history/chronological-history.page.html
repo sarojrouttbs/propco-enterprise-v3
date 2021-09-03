@@ -13,8 +13,7 @@
       <ion-col>
         <ng-container *ngIf="isTableReady">
           <div class="show-hide-section">
-            <button (click)="showHideAll('show')">Show All</button>
-            <button (click)="showHideAll('hide')">Hide All</button>
+            <ion-button size="small" (click)="showHideAll(showAll)"> {{ showAll ? 'Expand All' : 'Collapse All' }} </ion-button>
           </div>
           <div class="email-body-checkbox">
             <label><input type="checkbox" class="email-body" [(ngModel)]="isEmailRequire" /> Include email body in

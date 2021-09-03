@@ -19,7 +19,7 @@
                 (click)="checkboxClick('repairCheckbox');$event.stopPropagation();" name="repairCheckbox">
               </ion-checkbox>
             </div>
-            <ion-spinner name="bubbles" *ngIf="activeRepairLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="activeRepairLoader"></ion-spinner>
             <div class="filter-grid-count" *ngIf="!activeRepairLoader">{{activeRepairCount}}</div>
             <div class="filter-grid-text">Active Repairs</div>
           </ion-col>
@@ -40,7 +40,7 @@
                 (click)="checkboxClick('emergency');$event.stopPropagation();" name="emergency">
               </ion-checkbox>
             </div>
-            <ion-spinner name="bubbles" *ngIf="emergencyLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="emergencyLoader"></ion-spinner>
             <div class="filter-grid-count" *ngIf="!emergencyLoader">{{emergencyCount}}</div>
             <div class="filter-grid-text">Emergency</div>
           </ion-col>
@@ -51,7 +51,7 @@
                 (click)="checkboxClick('urgent');$event.stopPropagation();" name="urgent">
               </ion-checkbox>
             </div>
-            <ion-spinner name="circles" *ngIf="urgentLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="urgentLoader"></ion-spinner>
             <div class="filter-grid-count"*ngIf="!urgentLoader">{{urgentCount}}</div>
             <div class="filter-grid-text">Urgent</div>
           </ion-col>
@@ -62,7 +62,7 @@
                 (click)="checkboxClick('nonUrgent');$event.stopPropagation();" name="nonUrgent">
               </ion-checkbox>
             </div>
-            <ion-spinner name="bubbles" *ngIf="nonUrgentLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="nonUrgentLoader"></ion-spinner>
             <div class="filter-grid-count" *ngIf="!nonUrgentLoader">{{nonUrgentCount}}</div>
             <div class="filter-grid-text">Non urgent</div>
           </ion-col>
@@ -73,7 +73,7 @@
                 (click)="checkboxClick('assessment');$event.stopPropagation();" name="assessment">
               </ion-checkbox>
             </div>
-            <ion-spinner name="bubbles" *ngIf="assismentLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="assismentLoader"></ion-spinner>
             <div class="filter-grid-count" *ngIf="!assismentLoader">{{assismentCount}}</div>
             <div class="filter-grid-text">In Assessment</div>
           </ion-col>
@@ -84,7 +84,7 @@
                 (click)="checkboxClick('automation');$event.stopPropagation();" name="automation">
               </ion-checkbox>
             </div>
-            <ion-spinner name="bubbles" *ngIf="automationLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="automationLoader"></ion-spinner>
             <div class="filter-grid-count" *ngIf="!automationLoader">{{automationCount}}</div>
             <div class="filter-grid-text">In Automation</div>
           </ion-col>
@@ -95,7 +95,7 @@
                 (click)="checkboxClick('invoice');$event.stopPropagation();" name="invoice">
               </ion-checkbox>
             </div>
-            <ion-spinner name="bubbles" *ngIf="invoiceLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="invoiceLoader"></ion-spinner>
             <div class="filter-grid-count" *ngIf="!invoiceLoader">{{invoiceCount}}</div>
             <div class="filter-grid-text">Invoice</div>
           </ion-col>
@@ -106,7 +106,7 @@
                 (click)="checkboxClick('escalation');$event.stopPropagation();" name="escalation">
               </ion-checkbox>
             </div>
-            <ion-spinner name="bubbles" *ngIf="escalationLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="escalationLoader"></ion-spinner>
             <div class="filter-grid-count" *ngIf="!escalationLoader">{{escalationCount}}</div>
             <div class="filter-grid-text">Escalation</div>
           </ion-col>
