@@ -1,4 +1,4 @@
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren, ElementRef } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
@@ -86,8 +86,9 @@ export class ChronologicalHistoryPage implements OnInit {
    eventTypes = FAULT_EVENT_TYPES;
    propertyDetails;
    isTableReady = false;
+   showAll: boolean = true;
 
-   constructor(private modalController: ModalController, private commonService: CommonService, private faultsService: FaultsService) {
+   constructor(private modalController: ModalController, private commonService: CommonService, private faultsService: FaultsService, private elementRef: ElementRef) {
       this.getLookupData();
    }
 
@@ -339,6 +340,9 @@ export class ChronologicalHistoryPage implements OnInit {
                   return data ? $('<table/>').append(data) : false;
                }
             }
+         },
+         drawCallback: () => {
+            this.elementRef.nativeElement.querySelector('.paginate_button').addEventListener('click', this.collapseAll());
          }
       };
    }
@@ -390,11 +394,19 @@ export class ChronologicalHistoryPage implements OnInit {
 
    showHideAll(type) {
       var table = $('#chronological').DataTable();
-      if (type == 'show') {
+      if (type) {
+         this.showAll = false;
          table.rows(':not(.parent)').nodes().to$().find('td:first-child').trigger('click');
       }
       else {
+         this.showAll = true;
          table.rows('.parent').nodes().to$().find('td:first-child').trigger('click');
       }
+   }
+
+   collapseAll(){
+      this.showAll = true;
+      var table = $('#chronological').DataTable(); 
+      table.rows('.parent').nodes().to$().find('td:first-child').trigger('click');
    }
 }
