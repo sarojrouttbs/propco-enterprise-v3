@@ -3,7 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { FAULT_EVENT_TYPES, FAULT_EVENT_TYPES_ID, PROPCO } from '../../constants';
+import { FAULT_EVENT_TYPES, FAULT_EVENT_TYPES_ID, LL_INSTRUCTION_TYPES, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -15,6 +15,8 @@ export class ChronologicalHistoryPage implements OnInit {
    dtOptions: any = {};
    data: any[] = [];
    faultEventMap = new Map();
+   cliActionMap = new Map();
+   LL_INSTRUCTION_TYPES = LL_INSTRUCTION_TYPES;
    faultEvents = [
       {
          "index": "FAULT_LOGGED",
@@ -352,6 +354,7 @@ export class ChronologicalHistoryPage implements OnInit {
          list.forEach(element => {
             element.eventTypeId = element.eventType;
             element.eventType = this.faultEventMap.get(element.eventType);
+            element.data.cliSelectedAction = this.cliActionMap.get(element.data.cliSelectedAction);
             element.category = this.getCategoryByEventType(element.eventType);
             if (element.data.body) {
                element.data.body = element.data.body.replace(/<img[^>]*>/g, "");
@@ -385,6 +388,9 @@ export class ChronologicalHistoryPage implements OnInit {
    private setFaultEventMap() {
       this.faultEventsLookup.map((event, index) => {
          this.faultEventMap.set(event.index, event.value);
+      });
+      this.LL_INSTRUCTION_TYPES.map((event, index) => {
+         this.cliActionMap.set(event.index, event.value);
       });
    }
 
