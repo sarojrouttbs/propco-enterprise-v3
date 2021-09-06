@@ -5,7 +5,7 @@
         <ion-col size="auto">
           <h2>
             <ion-text *ngIf="faultDetails?.faultId">{{faultDetails?.reference || ''}} </ion-text>
-            {{title}} <ion-text
+            {{title}}  <ion-text
             color="success">&gt;</ion-text>
           </h2>
         </ion-col>
@@ -23,7 +23,7 @@
       </ion-row>
     </ion-col>
     <ion-col size="10" class="note-block" *ngIf="faultDetails?.faultId">
-      <ion-icon name="timer" matTooltip="Chronological History" title="Chronological History" class="ion-align-self-center edit-title-icon edit-title" (click)="cronologicalHistoryModal()"></ion-icon>
+      <ion-icon name="timer" matTooltip="Chronological History" title="Chronological History" class="history-icon" (click)="cronologicalHistoryModal()"></ion-icon>
       <img src="assets/images/fault-categories/add_notes.png" matTooltip="Add Note" matTooltipPosition="above" (click)="notesModal()"/>&nbsp;
     </ion-col>
   </ion-row>

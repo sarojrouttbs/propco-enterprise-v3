@@ -1,9 +1,9 @@
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren, ElementRef } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { FAULT_EVENT_TYPES, FAULT_EVENT_TYPES_ID, PROPCO } from '../../constants';
+import { FAULT_EVENT_TYPES, FAULT_EVENT_TYPES_ID, LL_INSTRUCTION_TYPES, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -15,6 +15,8 @@ export class ChronologicalHistoryPage implements OnInit {
    dtOptions: any = {};
    data: any[] = [];
    faultEventMap = new Map();
+   cliActionMap = new Map();
+   LL_INSTRUCTION_TYPES = LL_INSTRUCTION_TYPES;
    faultEvents = [
       {
          "index": "FAULT_LOGGED",
@@ -86,8 +88,9 @@ export class ChronologicalHistoryPage implements OnInit {
    eventTypes = FAULT_EVENT_TYPES;
    propertyDetails;
    isTableReady = false;
+   showAll: boolean = true;
 
-   constructor(private modalController: ModalController, private commonService: CommonService, private faultsService: FaultsService) {
+   constructor(private modalController: ModalController, private commonService: CommonService, private faultsService: FaultsService, private elementRef: ElementRef) {
       this.getLookupData();
    }
 
@@ -138,6 +141,9 @@ export class ChronologicalHistoryPage implements OnInit {
    private getEventList() {
       this.faultsService.getFaultEvents(this.faultDetails.faultId).subscribe(async response => {
          this.eventList = response ? response : [];
+         this.eventList = this.eventList.sort((a, b) => {
+            return <any>new Date(b.eventAt) - <any>new Date(a.eventAt);
+         });
          await this.updateEventList(this.eventList);
          this.initiateDtOptons();
          this.isTableReady = true;
@@ -163,28 +169,39 @@ export class ChronologicalHistoryPage implements OnInit {
                className: "pdfBtn",
                text: "Print",
                download: 'open',
+               title: ' ',
                customize: (doc) => {
                   let tableBody: any = [];
-                  tableBody.push([{ text: `Fault : ${this.faultDetails.reference}`, border: [false, false, false, false] },
-                  { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }
-                  ]
-                  );
-                  tableBody.push([{ colSpan: 3, text: `Property Address : ${(this.propertyDetails?.reference ? this.propertyDetails?.reference + ',' : '') + (this.propertyDetails.publishedAddress ? this.propertyDetails.publishedAddress : this.getAddressString(this.propertyDetails.address))}`, border: [false, false, false, false] }]);
+                  tableBody.push([
+                     { colSpan: 3, text: `Fault Chronological History`, border: [false, false, false, false], style: 'pageTitle' },
+                     { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }
+                  ]);
+                  tableBody.push([
+                     { colSpan: 3, text: `Fault : ${this.faultDetails.reference}`, border: [false, false, false, false], style: 'pageHeader' },
+                     { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }
+                  ]);
+                  tableBody.push([{
+                     colSpan: 3, text: `Address : ${(this.propertyDetails?.reference ? this.propertyDetails?.reference + ',' : '')
+                        + (this.propertyDetails.publishedAddress ? this.propertyDetails.publishedAddress : this.getAddressString(this.propertyDetails.address))}`,
+                     border: [false, false, false, false], style: 'pageHeader'
+                  }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
                   tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, false], }]);
 
                   this.eventList.forEach((element) => {
                      tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { colSpan: 2, text: 'Action', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm'), style: 'subheader', border: [false, false, false, false] }, { colSpan: 2, text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                     tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm:ss'), style: 'subheader', border: [false, false, false, false] }, { colSpan: 2, text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
 
                      if (FAULT_EVENT_TYPES_ID.RESPONSE_RECEIVED === element.eventTypeId) {
-                        tableBody.push([{ text: 'Notification Id', style: 'tableHeader', border: [false, false, false, false] },
-                        { text: 'By', style: 'tableHeader', border: [false, false, false, false] },
-                        { text: 'How', style: 'tableHeader', border: [false, false, false, false] }]);
-                        tableBody.push([{ text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] },
-                        { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] },
-                        { text: `${element.data.how || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        tableBody.push([
+                           { text: 'Notification Id', style: 'tableHeader', border: [false, false, false, false] },
+                           { text: 'By', style: 'tableHeader', border: [false, false, false, false] },
+                           { text: 'How', style: 'tableHeader', border: [false, false, false, false] }]);
+                        tableBody.push([
+                           { text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] },
+                           { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] },
+                           { text: `${element.data.how || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
 
                         tableBody.push([{ colSpan: 3, text: 'Question', style: 'tableHeader', border: [false, false, false, false] }]);
                         tableBody.push([{ colSpan: 3, text: `${element.data.question || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
@@ -201,20 +218,23 @@ export class ChronologicalHistoryPage implements OnInit {
 
                      }
                      else if (FAULT_EVENT_TYPES_ID.NOTIFICATION_SENT === element.eventTypeId) {
-                        tableBody.push([{ text: 'Notification Id', style: 'tableHeader', border: [false, false, false, false] },
-                        { text: 'By', style: 'tableHeader', border: [false, false, false, false] },
-                        { text: 'Recipient', style: 'tableHeader', border: [false, false, false, false] }]);
-                        tableBody.push([{ text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] },
-                        { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] },
-                        { text: `${element.data.recipient || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        tableBody.push([
+                           { text: 'Notification Id', style: 'tableHeader', border: [false, false, false, false] },
+                           { text: 'By', style: 'tableHeader', border: [false, false, false, false] },
+                           { text: 'Recipient', style: 'tableHeader', border: [false, false, false, false] }]);
+                        tableBody.push([
+                           { text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] },
+                           { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] },
+                           { text: `${element.data.recipient || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
 
                         tableBody.push([
-                           { text: 'From', style: 'tableHeader', border: [false, false, false, false] },
-                           { colSpan: 2, text: 'To', style: 'tableHeader', border: [false, false, false, false] },
+                           { colSpan: 3, text: 'From', style: 'tableHeader', border: [false, false, false, false] }
                         ]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.from || '-'}`, style: 'subheader', border: [false, false, false, false] }])
                         tableBody.push([
-                           { text: `${element.data.from || '-'}`, style: 'subheader', border: [false, false, false, false] },
-                           { colSpan: 2, text: `${element.data.to || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           { colSpan: 3, text: 'To', style: 'tableHeader', border: [false, false, false, false] },
+                        ]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.to || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
 
                         tableBody.push([{ colSpan: 3, text: 'Subject', style: 'tableHeader', border: [false, false, false, false] }]);
                         tableBody.push([{ colSpan: 3, text: `${element.data.subject || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
@@ -291,6 +311,16 @@ export class ChronologicalHistoryPage implements OnInit {
                         color: '#333333',
                      }, pdfBtn: {
                         color: 'red'
+                     },
+                     pageHeader: {
+                        fontSize: 13,
+                        bold: true,
+                        alignment: "center"
+                     },
+                     pageTitle: {
+                        fontSize: 14,
+                        bold: true,
+                        alignment: "center"
                      }
                   };
                }
@@ -312,6 +342,9 @@ export class ChronologicalHistoryPage implements OnInit {
                   return data ? $('<table/>').append(data) : false;
                }
             }
+         },
+         drawCallback: () => {
+            this.elementRef.nativeElement.querySelector('.paginate_button').addEventListener('click', this.collapseAll());
          }
       };
    }
@@ -321,6 +354,7 @@ export class ChronologicalHistoryPage implements OnInit {
          list.forEach(element => {
             element.eventTypeId = element.eventType;
             element.eventType = this.faultEventMap.get(element.eventType);
+            element.data.cliSelectedAction = this.cliActionMap.get(element.data.cliSelectedAction);
             element.category = this.getCategoryByEventType(element.eventType);
             if (element.data.body) {
                element.data.body = element.data.body.replace(/<img[^>]*>/g, "");
@@ -355,8 +389,30 @@ export class ChronologicalHistoryPage implements OnInit {
       this.faultEventsLookup.map((event, index) => {
          this.faultEventMap.set(event.index, event.value);
       });
+      this.LL_INSTRUCTION_TYPES.map((event, index) => {
+         this.cliActionMap.set(event.index, event.value);
+      });
    }
+
    dismiss() {
       this.modalController.dismiss();
+   }
+
+   showHideAll(type) {
+      var table = $('#chronological').DataTable();
+      if (type) {
+         this.showAll = false;
+         table.rows(':not(.parent)').nodes().to$().find('td:first-child').trigger('click');
+      }
+      else {
+         this.showAll = true;
+         table.rows('.parent').nodes().to$().find('td:first-child').trigger('click');
+      }
+   }
+
+   collapseAll(){
+      this.showAll = true;
+      var table = $('#chronological').DataTable(); 
+      table.rows('.parent').nodes().to$().find('td:first-child').trigger('click');
    }
 }
