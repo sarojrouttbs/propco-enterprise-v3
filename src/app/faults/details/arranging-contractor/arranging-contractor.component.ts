@@ -289,7 +289,7 @@ export class ArrangingContractorComponent implements OnInit {
     if (e.target.checked) {
       const activeContractorCount = await this.getActiveContractorCount() as number;
       if (activeContractorCount > this.MAX_ACTIVE_QUOTE_CONTRACTOR) {
-        this.commonService.showAlert('Active Contractor', 'Maximum Active Quote Contractor limit exceeded.');
+        this.commonService.showAlert('Active Contractor', `Please note you can request only ${this.MAX_ACTIVE_QUOTE_CONTRACTOR} quotes at a time`);
         e.target.checked = false;
       }
     }
@@ -2351,6 +2351,6 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   scrollToAddCC(): void {
-    document.getElementById("addCCform").scrollIntoView({behavior: "smooth"});
+    document.getElementById("addCCform").scrollIntoView({ behavior: "smooth" });
   }
 }
