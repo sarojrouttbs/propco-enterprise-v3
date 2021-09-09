@@ -157,7 +157,7 @@
             <div class="border-bottom"></div>
           </div>
 
-          <div class="question-answer" *ngIf="faultDetails?.status !== 8" >
+          <div class="question-answer">
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
               <ion-row class="ion-justify-content-center">
@@ -179,7 +179,8 @@
                 iacNotification?.templateCode === 'SMF-T-E' ||
                 iacNotification?.templateCode === 'CF-T-E' ||
                 iacNotification?.templateCode === 'LF-T-E')
-                && iacNotification?.responseReceived?.isAccepted === false" >
+                && iacNotification?.responseReceived?.isAccepted === false
+                && !faultDetails?.isClosed" >
                       Resend Notification</ion-button>
               </ion-row>
             </ion-grid>
