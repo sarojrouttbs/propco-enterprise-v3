@@ -2158,7 +2158,7 @@ export class DetailsPage implements OnInit {
   // }
 
   filterByGroupName(folderName) {
-    this.filteredDocuments = this.files.filter(data => data.folderName === folderName);
+    this.filteredDocuments = this.files.filter(data => data.folderName === folderName).filter(data => !data.isDraft);
     this.mediaType = 'documents';
     this.folderName = folderName;
   }

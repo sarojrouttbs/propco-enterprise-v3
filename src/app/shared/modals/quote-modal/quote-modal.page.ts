@@ -332,7 +332,8 @@ export class QuoteModalPage implements OnInit {
     let requestObj = {
       quoteAmount: this.quoteAssessmentForm.value.quoteAmount,
       submittedByType: 'SECUR_USER',
-      contractorId: this.contractorId
+      contractorId: this.contractorId,
+      isDraft: false
     }
     const promise = new Promise((resolve, reject) => {
       this.quoteService.saveQuoteAmount(requestObj, this.faultId).subscribe(

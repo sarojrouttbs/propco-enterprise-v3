@@ -79,18 +79,18 @@
             </ng-container>
           </div>
           <ng-container *ngIf="iacNotification && (iacNotification?.responseReceived?.isAccepted === true || iacNotification?.responseReceived?.isAccepted === false)">
-            <div class="question-answer" *ngIf="(iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E') && filteredCCDetails.contractorQuotePropertyVisitAt">
+            <div class="question-answer" *ngIf="(iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E') && filteredCCDetails?.contractorPropertyVisitAt">
               <h4 class="ion-text-center">Next Step:</h4> 
               <h6 *ngIf="quoteArray?.length === 0">
                 <ion-text color="danger">Please note: </ion-text>
-                <span>The appointment is due on {{filteredCCDetails.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails.contractorQuotePropertyVisitAt | date: 'HH:mm'}}
+                <span>The appointment is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}
                 </span>
               </h6>
               <h6 *ngIf="quoteArray?.length > 0">
                 <span>Thank you for carrying out this quote. This is now with the Landlord for review. If we require you to
                   carry out the job, we will be back in touch.</span>
               </h6>
-              <ion-button color="success" class="action-btn" fill="outline" (click)="quoteUploadModal('preUpload'); $event.stopPropagation();" *ngIf="quoteArray?.length === 0">Upload Quote & Photos</ion-button>
+              <ion-button color="success" class="action-btn" fill="outline" (click)="filteredCCDetails.isDraft ? overrideQuote() : quoteUploadModal('preUpload'); $event.stopPropagation();" *ngIf="quoteArray?.length === 0">Upload Quote & Photos</ion-button>
               <div class="border-bottom"></div>
             </div>
 
@@ -126,9 +126,9 @@
                 <h4 class="ion-text-center">Next Step:</h4> 
                 <h6>  
                   <ion-text color="danger">Please note: </ion-text>
-                  <span *ngIf="currentDate<=filteredCCDetails.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote is due on {{filteredCCDetails.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails.contractorQuotePropertyVisitAt | date: 'HH:mm'}}.
+                  <span *ngIf="currentDate<=filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}.
                   </span>
-                  <span *ngIf="currentDate>filteredCCDetails.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote was on {{filteredCCDetails.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails.contractorQuotePropertyVisitAt | date: 'HH:mm'}}. </span>
+                  <span *ngIf="currentDate>filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote was on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}. </span>
                   <span>The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to upload the Quote and photos.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
                     {{iacNotification?.hoursLeft}}.
                   </span>
@@ -149,7 +149,7 @@
             </div>
 
             <div class="question-answer ion-text-center" *ngIf="faultDetails.isEscalated && iacNotification?.notificationStatus !== 7 
-            && !filteredCCDetails.isLandlordWantAnotherQuote">
+            && !filteredCCDetails?.isLandlordWantAnotherQuote">
               <h6>
                 <ion-text color="danger">Please note: </ion-text>
                 <span *ngIf="faultDetails.isEscalated">Fault Escalated - PM to decide the next steps</span>
@@ -182,7 +182,7 @@
           </div>
 
           <div class="question-answer"
-            *ngIf="iacNotification && filteredCCDetails.isLandlordWantAnotherQuote">
+            *ngIf="iacNotification && filteredCCDetails?.isLandlordWantAnotherQuote">
             <h4 class="ion-text-center">Next Step:</h4>
             <h6>Based on Landlord's response, the next action is:</h6>
             <ion-grid>
@@ -206,7 +206,7 @@
                     <ion-button color="success" expand="block" class="action-btn"
                       [disabled]="instruction.index === 'OBTAIN_QUOTE' && !isWorksOrder"
                       fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
-                      (click)="setUserAction(instruction.index)" [hidden]="filteredCCDetails.isLandlordWantAnotherQuote && instruction.index=='OBTAIN_QUOTE'">
+                      (click)="setUserAction(instruction.index)" [hidden]="filteredCCDetails?.isLandlordWantAnotherQuote && instruction.index=='OBTAIN_QUOTE'">
                       {{instruction.value}}
                       <ion-icon name="checkmark-circle-outline" class="check-icon"
                         *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
@@ -227,7 +227,7 @@
                   <ion-button color="success" expand="block" class="action-btn" fill="outline"
                       (click)="modifyDateTime(iacNotification?.templateCode); $event.stopPropagation();">
                       <ng-container *ngIf="iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CQ-C-E'" >
-                        {{filteredCCDetails.contractorQuotePropertyVisitAt ? 'Modify': 'Add'}} Date/Time
+                        {{filteredCCDetails?.contractorPropertyVisitAt ? 'Modify': 'Add'}} Date/Time
                       </ng-container>
                       <ng-container *ngIf="iacNotification?.templateCode === 'CDT-C-E (WO)' || iacNotification?.templateCode === 'CWO-C-E'" >
                         {{faultDetails?.contractorWoPropertyVisitAt ? 'Modify': 'Add'}} Date/Time
