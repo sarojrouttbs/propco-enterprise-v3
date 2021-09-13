@@ -2325,6 +2325,9 @@ export class ArrangingContractorComponent implements OnInit {
       if (res.data && res.data == 'skip-payment') {
         this._btnHandler('refresh');
       }
+      if (res.data && res.data == 'success') {
+        return true;
+      }
     });
   }
 
@@ -2351,13 +2354,10 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   selectedCCDetails(id) {
-    this.filteredCCDetails.contractorId = id;
     this.commonService.setItem('contractorId', id);
-    this.filteredCCDetails.contractorQuotePropertyVisitAt = this.faultMaintenanceDetails.quoteContractors.filter(data => data.contractorId == id)[0]['contractorPropertyVisitAt'];
-    this.filteredCCDetails.isLandlordWantAnotherQuote = this.faultMaintenanceDetails.quoteContractors.filter(data => data.contractorId == id)[0]['isLandlordWantAnotherQuote'];
-    this.filteredCCDetails.rejectionReason = this.faultMaintenanceDetails.quoteContractors.filter(data => data.contractorId == id)[0]['rejectionReason'];
+    this.filteredCCDetails = this.faultMaintenanceDetails.quoteContractors.filter(data => data.contractorId == id)[0];
     if (this.quoteDocuments && this.quoteDocuments.length > 0) {
-      this.ccQuoteDocuments = this.quoteDocuments.filter(data => data.contractorId == id);
+      this.ccQuoteDocuments = this.quoteDocuments.filter((data => data.contractorId == id)).filter((s => !s.isDraft));
       this.quoteArray = this.ccQuoteDocuments.filter(s => s.documentType === 'QUOTE');
     }
     this.filterNotifications(this.faultNotifications, this.faultDetails.stage, undefined, id).then(data => {
@@ -2365,8 +2365,6 @@ export class ArrangingContractorComponent implements OnInit {
       this.isContractorSelected = true;
     });
   }
-
-
 
   // Auto select CC details if there is one one active cc
   private setQuoteCCDetail() {
@@ -2383,5 +2381,12 @@ export class ArrangingContractorComponent implements OnInit {
 
   scrollToAddCC(): void {
     document.getElementById("addCCform").scrollIntoView({ behavior: "smooth" });
+  }
+
+  async overrideQuote() {
+    const proceed = await this.commonService.showConfirm('', `The Contractor ${this.filteredCCDetails.company}  is in process of submitting a response. This action will override the information they have saved from the Contractor Portal.`, 'Are you sure you want to proceed?', 'Yes', 'No');
+    if (proceed) {
+      this.quoteUploadModal('preUpload');
+    }
   }
 }
