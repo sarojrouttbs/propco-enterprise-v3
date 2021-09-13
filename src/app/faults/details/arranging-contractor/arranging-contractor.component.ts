@@ -1376,9 +1376,13 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async questionActionQuoteUpload(data) {
-    if (data.value) {
+    if (data.value && this.filteredCCDetails.isDraft) {
+      this.overrideQuote();
+    }
+    else if (data.value) {
       this.quoteUploadModal();
-    } else {
+    }
+    else {
       this.commonService.showConfirm(data.text, `You have selected 'No, couldn't carry out the Quote'. The fault will be escalated tor manual intervention. Do you want to proceed?`, '', 'Yes', 'No').then(async res => {
         if (res) {
           const submit = await this.submitQuoteAmout();
@@ -2383,10 +2387,10 @@ export class ArrangingContractorComponent implements OnInit {
     document.getElementById("addCCform").scrollIntoView({ behavior: "smooth" });
   }
 
-  async overrideQuote() {
-    const proceed = await this.commonService.showConfirm('', `The Contractor ${this.filteredCCDetails.company}  is in process of submitting a response. This action will override the information they have saved from the Contractor Portal.`, 'Are you sure you want to proceed?', 'Yes', 'No');
+  async overrideQuote(preUpload?) {
+    const proceed = await this.commonService.showConfirm('Override Quote', `The Contractor ${this.filteredCCDetails.company}  is in process of submitting a response. This action will override the information they have saved from the Contractor Portal.<br/> Are you sure you want to proceed?`, '', 'Yes', 'No');
     if (proceed) {
-      this.quoteUploadModal('preUpload');
+      this.quoteUploadModal(preUpload ? preUpload : null);
     }
   }
 }
