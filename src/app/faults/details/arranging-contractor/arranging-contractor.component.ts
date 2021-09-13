@@ -2325,6 +2325,9 @@ export class ArrangingContractorComponent implements OnInit {
       if (res.data && res.data == 'skip-payment') {
         this._btnHandler('refresh');
       }
+      if (res.data && res.data == 'success') {
+        return true;
+      }
     });
   }
 
