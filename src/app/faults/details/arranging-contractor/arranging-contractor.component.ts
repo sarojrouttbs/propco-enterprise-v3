@@ -102,6 +102,7 @@ export class ArrangingContractorComponent implements OnInit {
   faultNotifications: any = [];
   ccQuoteDocuments: any;
   filteredCCDetails: any = {};
+  activeContractorCount: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -125,6 +126,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.iacNotification = null;
       this.faultMaintenanceDetails = null;
       this.isUserActionChange = false;
+      this.addMoreCCrestrictAction = false;
       this.userSelectedActionControl = new FormControl();
       this.showSkeleton = true;
       this.initiateArrangingContractors();
@@ -287,8 +289,8 @@ export class ArrangingContractorComponent implements OnInit {
   async updateContractorState(e, item) {
     if (this.isWorksOrder) return;
     if (e.target.checked) {
-      const activeContractorCount = await this.getActiveContractorCount() as number;
-      if (activeContractorCount > this.MAX_ACTIVE_QUOTE_CONTRACTOR) {
+      this.activeContractorCount = await this.getActiveContractorCount() as number;
+      if (this.activeContractorCount > this.MAX_ACTIVE_QUOTE_CONTRACTOR) {
         this.commonService.showAlert('Active Contractor', `Please note you can request only ${this.MAX_ACTIVE_QUOTE_CONTRACTOR} quotes at a time`);
         e.target.checked = false;
       }
@@ -317,7 +319,6 @@ export class ArrangingContractorComponent implements OnInit {
         const ccId = this.commonService.getItem('contractorId');
         this.isContractorSelected = ccId ? true : false;
         this.filteredCCDetails.contractorId = ccId ? ccId : null;
-        this.enableCCAddform();
       }
       else {
         this.isContractorSelected = true;
@@ -341,10 +342,8 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async enableCCAddform() {
-    const activeContractorCount = await this.getActiveContractorCount() as number;
-    if (activeContractorCount < this.MAX_ACTIVE_QUOTE_CONTRACTOR) {
-      this.addMoreCCrestrictAction = false;
-    }
+    this.activeContractorCount  = await this.getActiveContractorCount() as number;
+    this.activeContractorCount < this.MAX_ACTIVE_QUOTE_CONTRACTOR ? this.addMoreCCrestrictAction = false : this.addMoreCCrestrictAction = true;
   }
 
   private getFaultMaintenance() {
@@ -382,6 +381,7 @@ export class ArrangingContractorComponent implements OnInit {
       if (this.faultMaintenanceDetails.quoteContractors) {
         this.faultMaintenanceDetails.quoteContractors.map((x) => { this.addContractor(x, false, false) });
       }
+      this.enableCCAddform();
     } else {
       if (!this.iacNotification && this.faultMaintenanceDetails.isCancelled) {
         //Note : special case : empty fault Maint var if cancelled
@@ -868,10 +868,37 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async sendQuoteTonewCC(saveForLater: boolean = false) {
     if (this.faultMaintenanceDetails && !this.isWorksOrder && !this.isUserActionChange && this.faultNotification.length) {
+      if(!saveForLater && !this.addMoreCCrestrictAction) {
+        const checkForNewActiveandChangedActiveCC = this.raiseQuoteForm.get('contractorList').value.filter((x) => {
+      if (!x.isNew) {
+        let preQuoteCCvalues = this.faultMaintenanceDetails.quoteContractors;
+        let isChanged = preQuoteCCvalues.filter(xy => {
+          if((!xy.isActive && x.isActive ) && (xy.contractorId === x.contractorId)){
+            return x;
+          }
+          
+        });
+        if (isChanged.length != 0) {
+          return true;
+        }
+      } else {
+        if(x.isActive){
+          return true
+        }
+      }
+    });
+        if(checkForNewActiveandChangedActiveCC.length === 0) {
+          this.commonService.showMessage('Please select a Contractor for raising a Quote.', 'Quote', 'error');
+          return true;
+        }
+      }
       const newList = this.getNewCCList();
       const changedList = this.getChangedCCList();
       if (newList.length === 0 && changedList.length === 0) return false;
-
+      if(!saveForLater) {
+        const proceed = await this.commonService.showConfirm('Raise a quote', 'Are you sure you want to send a quote request to the selected contractor(s) ?');
+        if (!proceed) return true;
+      }
       if (newList.length) {
         await this.addContractors();
       }
@@ -956,7 +983,11 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.iacNotification) {
       if (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived.isAccepted == null && !this.iacNotification.isVoided) {
         if (this.isUserActionChange) {
-          this.voidNotification(null);
+          let title = this.getLookupValue(this.userSelectedActionControl.value, this.iacStageActions);
+          const proceed = await this.commonService.showConfirm(title, `You have selected ${title}. Are you sure?`)
+            if (proceed) {
+              this.voidNotification(null);
+            }
         }
       }
       if (this.iacNotification.responseReceived != null) {
