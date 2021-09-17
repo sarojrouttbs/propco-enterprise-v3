@@ -36,14 +36,12 @@ export class CloseFaultModalPage implements OnInit {
   }
 
   onReasonChange() {
-    if (this.closeFaultForm.value.closedReason === 'OTHER') {
+    this.closeFaultForm.get('otherReason').clearValidators();
+    this.closeFaultForm.get('otherReason').updateValueAndValidity();
+    this.closeFaultForm.get('otherReason').reset();
+    if (this.closeFaultForm.value.closedReason === 'OTHER' || this.closeFaultForm.value.closedReason === 'CLOSE_INTERNAL_USE_ONLY') {
       this.closeFaultForm.get('otherReason').setValidators(Validators.required);
       this.closeFaultForm.get('otherReason').updateValueAndValidity();
-
-    } else {
-      this.closeFaultForm.get('otherReason').clearValidators();
-      this.closeFaultForm.get('otherReason').updateValueAndValidity();
-      this.closeFaultForm.get('otherReason').reset();
     }
   }
 
@@ -52,7 +50,7 @@ export class CloseFaultModalPage implements OnInit {
     if (this.closeFaultForm.valid) {
       let requestObj = {
         closedReason: this.closeFaultForm.value.closedReason,
-        otherReason: this.closeFaultForm.value.otherReason,
+        reasonText: this.closeFaultForm.value.otherReason,
         submittedById: '',
         submittedByType: 'SECUR_USER'
       };

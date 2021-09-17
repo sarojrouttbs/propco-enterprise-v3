@@ -282,6 +282,10 @@ export const CLOSE_REASON = [
     "value": "Landlord would not fix"
   },
   {
+    "index": "CLOSE_INTERNAL_USE_ONLY",
+    "value": "Close - Internal use only"
+  },
+  {
     "index": "OTHER",
     "value": "Other"
   }
@@ -436,7 +440,8 @@ export const FAULT_EVENT_TYPES_ID = {
   CLI_ACTION_SELECTED: 3,
   STATUS_CHANGED: 11,
   DOCUMENT_ADDED: 14,
-  ESCALATED: 8
+  ESCALATED: 8,
+  FAULT_CLOSED: 7
 }
 
 export const NOTES_ORIGIN = {
