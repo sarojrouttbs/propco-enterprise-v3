@@ -252,7 +252,7 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.contratctorArr.includes(data?.contractorObj?.entityId)) {
       this.isContratorSelected = true;
       return;
-    }
+    } 
     if (isNew) {
       this.getContractorDetails(data?.contractorObj?.entityId, 'quote');
     } else {
@@ -275,6 +275,7 @@ export class ArrangingContractorComponent implements OnInit {
       if (contractorList.at(i).get('isNew').value) {
         contractorList.removeAt(i);
         this.contratctorArr.splice(index, 1);
+        this.enableCCAddform();
         return;
       }
       const isDeleted = await this.deleteContrator(this.faultMaintenanceDetails.maintenanceId,
@@ -282,6 +283,7 @@ export class ArrangingContractorComponent implements OnInit {
       if (isDeleted) {
         contractorList.removeAt(i);
         this.contratctorArr.splice(index, 1);
+        this.enableCCAddform();
       }
     }
   }
@@ -573,8 +575,8 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async saveForLater() {
-    const isCompleted = await this.sendQuoteTonewCC();
-    if (isCompleted) { this.saving = false; return; }
+    // const isCompleted = await this.sendQuoteTonewCC();
+    // if (isCompleted) { this.saving = false; return; }
     if (this.iacNotification && (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived?.isAccepted == null) && !this.isUserActionChange) {
       this._btnHandler('saveLater');
       return;
@@ -603,8 +605,8 @@ export class ArrangingContractorComponent implements OnInit {
           /*update a quote*/
           const quoteUpdated = await this.updateQuote();
           if (quoteUpdated) {
-            const updateQuoteCC = await this.updateFaultQuoteContractor();
-            if (updateQuoteCC) {
+            // const updateQuoteCC = await this.updateFaultQuoteContractor();
+            // if (updateQuoteCC) {
               const addContractors = await this.addContractors();
               if (addContractors) {
                 const faultUpdated = await this.updateFault();
@@ -612,7 +614,7 @@ export class ArrangingContractorComponent implements OnInit {
                   this._btnHandler('cancel');
                 }
               }
-            }
+            // }
           }
         }
       } else {
@@ -710,6 +712,15 @@ export class ArrangingContractorComponent implements OnInit {
           }
         }
       }
+      if(skipReqValidation) {
+        if (this.raiseQuoteForm.get('contractorList').value) {
+          const anyActiveContractor = this.raiseQuoteForm.get('contractorList').value.find(x => x.isActive);
+          if (!anyActiveContractor) {
+            this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
+            return invalid;
+          }
+        }
+      }
       if (this.iacNotification && this.iacNotification.responseReceived != null && this.iacNotification.responseReceived.isAccepted === false && this.iacNotification.templateCode === 'QC-L-E') {
         if (this.faultMaintenanceDetails.quoteContractors) {
           const defaulter = this.faultMaintenanceDetails.quoteContractors.find(x => x.isRejected && x.contractorId === this.filteredCCDetails.contractorId);
@@ -753,7 +764,7 @@ export class ArrangingContractorComponent implements OnInit {
   private getNewCCList() {
     let contractors = [];
     this.raiseQuoteForm.get('contractorList').value.forEach(info => {
-      if (info.isNew === true) {
+      if ((info.isNew || info.isPreferred) && info.isActive) {
         contractors.push(info);
       }
     });
@@ -796,8 +807,9 @@ export class ArrangingContractorComponent implements OnInit {
     quoteReqObj.nominalCode = typeof quoteReqObj.nominalCode === 'object' ? quoteReqObj.nominalCode.nominalCode : quoteReqObj.nominalCode;
     delete quoteReqObj.contractorForm;
     if (!this.faultMaintenanceDetails) {
-      quoteReqObj.quoteContractors = quoteReqObj.contractorList.map((list) => {
-        return { contractorId: list.contractorId, isActive: list.isActive };
+      quoteReqObj.quoteContractors = this.getNewCCList().map((list) => {
+        // return { contractorId: list.contractorId, isActive: list.isActive };
+        return { contractorId: list.contractorId };
       });
       if (!quoteReqObj.selectedContractorId) {
         delete quoteReqObj.selectedContractorId;
@@ -866,49 +878,29 @@ export class ArrangingContractorComponent implements OnInit {
     this.proceeding = false;
   }
 
-  private async sendQuoteTonewCC(saveForLater: boolean = false) {
-    if (this.faultMaintenanceDetails && !this.isWorksOrder && !this.isUserActionChange && this.faultNotification.length) {
-      if(!saveForLater && !this.addMoreCCrestrictAction) {
-        const checkForNewActiveandChangedActiveCC = this.raiseQuoteForm.get('contractorList').value.filter((x) => {
-      if (!x.isNew) {
-        let preQuoteCCvalues = this.faultMaintenanceDetails.quoteContractors;
-        let isChanged = preQuoteCCvalues.filter(xy => {
-          if((!xy.isActive && x.isActive ) && (xy.contractorId === x.contractorId)){
-            return x;
-          }
-          
-        });
-        if (isChanged.length != 0) {
-          return true;
-        }
-      } else {
-        if(x.isActive){
-          return true
-        }
-      }
-    });
+  private async sendQuoteTonewCC() {
+      if (this.faultMaintenanceDetails && !this.isWorksOrder && !this.isUserActionChange && this.faultNotifications.length) {
+        if(!this.addMoreCCrestrictAction) {
+          const checkForNewActiveandChangedActiveCC = this.raiseQuoteForm.get('contractorList').value.filter((x) => {
+            if(x.isNew && x.isActive){
+              return true
+            }
+      });
         if(checkForNewActiveandChangedActiveCC.length === 0) {
           this.commonService.showMessage('Please select a Contractor for raising a Quote.', 'Quote', 'error');
           return true;
         }
       }
       const newList = this.getNewCCList();
-      const changedList = this.getChangedCCList();
-      if (newList.length === 0 && changedList.length === 0) return false;
-      if(!saveForLater) {
-        const proceed = await this.commonService.showConfirm('Raise a quote', 'Are you sure you want to send a quote request to the selected contractor(s) ?');
-        if (!proceed) return true;
-      }
+      if (newList.length === 0) return false;
+      const proceed = await this.commonService.showConfirm('Raise a quote', 'Are you sure you want to send a quote request to the selected contractor(s) ?');
+      if (!proceed) return true;
       if (newList.length) {
         await this.addContractors();
       }
-
-      if (changedList.length) {
-        await this.updateFaultQuoteContractor();
-      }
       const faultUpdated = await this.updateFault(true, 'OBTAIN_QUOTE');
       if (faultUpdated) {
-        saveForLater ? this._btnHandler('cancel') : this._btnHandler('refresh');
+        this._btnHandler('refresh');
         return true;
       }
     }
@@ -941,8 +933,8 @@ export class ArrangingContractorComponent implements OnInit {
           /*update a quote*/
           const quoteUpdated = await this.updateQuote();
           if (quoteUpdated) {
-            const updateQuoteCC = await this.updateFaultQuoteContractor();
-            if (updateQuoteCC) {
+            // const updateQuoteCC = await this.updateFaultQuoteContractor();
+            // if (updateQuoteCC) {
               const addContractors = await this.addContractors();
               if (addContractors) {
                 const faultUpdated = await this.updateFault(true, 'OBTAIN_QUOTE');
@@ -955,7 +947,7 @@ export class ArrangingContractorComponent implements OnInit {
                   }, 1000);
                 }
               }
-            }
+            // }
           }
         }
       }
@@ -1635,7 +1627,8 @@ export class ArrangingContractorComponent implements OnInit {
       isPreferred,
       isNew: isNew,
       // checked: isNew ? false : (data.isActive  ? true : false),
-      isActive: isNew ? false : (data.isActive ? true : false),
+      // isActive: isNew ? false : (data.isActive ? true : false),
+      isActive: isNew || isPreferred ? false : true,
       isRejected: !isNew ? data.isRejected : false,
       rejectionReason: !isNew ? data.rejectionReason : '',
       rejectedByType: !isNew ? data.rejectedByType : '',
@@ -2374,8 +2367,10 @@ export class ArrangingContractorComponent implements OnInit {
   private setQuoteCCDetail() {
     if (this.isWorksOrder) return;
     if (this.faultMaintenanceDetails.quoteContractors && this.faultMaintenanceDetails.quoteContractors.length) {
-      if (this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive).length == 1 || this.filteredCCDetails.contractorId) {
-        let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive)[0].contractorId;
+      // if (this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive).length == 1 || this.filteredCCDetails.contractorId) {
+        if (this.faultMaintenanceDetails.quoteContractors.length == 1 || this.filteredCCDetails.contractorId) {
+        // let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive)[0].contractorId;
+        let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : this.faultMaintenanceDetails.quoteContractors[0].contractorId;
         if (ccId) {
           this.selectedCCDetails(ccId);
         }
