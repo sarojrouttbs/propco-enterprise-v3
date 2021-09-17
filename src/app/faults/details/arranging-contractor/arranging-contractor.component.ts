@@ -764,7 +764,7 @@ export class ArrangingContractorComponent implements OnInit {
   private getNewCCList() {
     let contractors = [];
     this.raiseQuoteForm.get('contractorList').value.forEach(info => {
-      if (info.isNew === true && info.isActive) {
+      if ((info.isNew || info.isPreferred) && info.isActive) {
         contractors.push(info);
       }
     });
@@ -807,7 +807,7 @@ export class ArrangingContractorComponent implements OnInit {
     quoteReqObj.nominalCode = typeof quoteReqObj.nominalCode === 'object' ? quoteReqObj.nominalCode.nominalCode : quoteReqObj.nominalCode;
     delete quoteReqObj.contractorForm;
     if (!this.faultMaintenanceDetails) {
-      quoteReqObj.quoteContractors = quoteReqObj.contractorList.map((list) => {
+      quoteReqObj.quoteContractors = this.getNewCCList().map((list) => {
         // return { contractorId: list.contractorId, isActive: list.isActive };
         return { contractorId: list.contractorId };
       });
