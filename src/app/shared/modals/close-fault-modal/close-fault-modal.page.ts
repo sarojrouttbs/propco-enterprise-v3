@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { CommonService } from '../../services/common.service';
-import { CLOSE_REASON } from './../../../shared/constants';
+import { CLOSE_REASON, CLOSE_REASON_KEYS } from './../../../shared/constants';
 
 @Component({
   selector: 'app-close-fault-modal',
@@ -16,6 +16,7 @@ export class CloseFaultModalPage implements OnInit {
   faultId;
   maintenanceId;
   reasons = CLOSE_REASON;
+  reasonKeys = CLOSE_REASON_KEYS;
   unSavedData = false;
   showLoader = false;
 
@@ -23,7 +24,7 @@ export class CloseFaultModalPage implements OnInit {
 
   ngOnInit() {
     if (!this.maintenanceId) {
-      this.reasons = CLOSE_REASON.filter(reason => reason.index !== 'APPOINTMENT_NOT_BOOKED');
+      this.reasons = CLOSE_REASON.filter(reason => reason.index !== CLOSE_REASON_KEYS.APPOINTMENT_NOT_BOOKED);
     }
     this.initCloseFaultForm()
   }
@@ -39,7 +40,7 @@ export class CloseFaultModalPage implements OnInit {
     this.closeFaultForm.get('otherReason').clearValidators();
     this.closeFaultForm.get('otherReason').updateValueAndValidity();
     this.closeFaultForm.get('otherReason').reset();
-    if (this.closeFaultForm.value.closedReason === 'OTHER' || this.closeFaultForm.value.closedReason === 'CLOSE_INTERNAL_USE_ONLY') {
+    if (this.closeFaultForm.get('closedReason').value === CLOSE_REASON_KEYS.OTHER || this.closeFaultForm.get('closedReason').value === CLOSE_REASON_KEYS.CLOSE_INTERNAL_USE_ONLY) {
       this.closeFaultForm.get('otherReason').setValidators(Validators.required);
       this.closeFaultForm.get('otherReason').updateValueAndValidity();
     }
