@@ -290,7 +290,7 @@ export class WorksorderModalPage implements OnInit {
   private validateReq() {
     let valid = true;
     if (!this.jobCompletionForm.valid) {
-      this.commonService.showMessage('Job completion details is required', 'Mark the Job Completed', 'error');
+      this.commonService.showMessage('Job completion details are required', 'Mark the Job Completed', 'error');
       this.jobCompletionForm.markAllAsTouched(); return valid = false;
     }
     if (this.actionType === 'view' && this.uploadDocumentForm.controls.invoices.value.length === 0) {
