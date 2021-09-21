@@ -412,7 +412,11 @@ export const FAULT_EVENT_TYPES = [
   },
   {
     "Notifications": [
-      "Response Received",
+      "Response Received"
+    ]
+  },
+  {
+    "Notification Sent": [
       "Notification Sent"
     ]
   },
