@@ -142,6 +142,7 @@
                 <ion-select-option value="1">Branch(es) </ion-select-option>
                 <ion-select-option value="2" [disabled]="isBucketActive">Management Service Type</ion-select-option>
                 <ion-select-option value="3" [disabled]="isBucketActive">Status</ion-select-option>
+                <ion-select-option value="5" [disabled]="isBucketActive">Snoozed Faults</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-col>
@@ -375,6 +376,16 @@
   
             </ion-item>
             <ion-icon name="close-circle" class="close-btn" (click)="closeFilter(4)"> </ion-icon>
+          </ion-col>
+
+          <ion-col size=20 *ngIf="isSnoozeFilter">
+            <ion-item class="select-block">
+              <ion-label position="floating">Snoozed Till</ion-label>
+              <ion-datetime formControlName="snoozeUntil" displayFormat="DD/MM/YYYY" interface="popover"
+              class="request-start-date" [min]="minDate" [max]="futureDate" (ionChange)="snoozeFault(2)">
+            </ion-datetime>
+            </ion-item>
+            <ion-icon name="close-circle" class="close-btn" (click)="closeFilter(5)"> </ion-icon>
           </ion-col>
   
         </ion-row>

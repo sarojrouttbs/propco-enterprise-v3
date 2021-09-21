@@ -87,6 +87,10 @@ export class DashboardPage implements OnInit {
   escalationLoader = false;
   private bucketFpm: number[] = [];
   isBucketActive: boolean = false;
+  isSnoozeFilter: boolean = false;
+  minDate;
+  futureDate;
+  snoozeFilterType: any;
 
   constructor(
     private commonService: CommonService,
@@ -101,6 +105,7 @@ export class DashboardPage implements OnInit {
 
   async ngOnInit() {
     this.loadTable = false;
+    this.setSnoozeMinMaxDate();
     this.initFilterForm();
     this.notesDtOption = this.buildDtOptions();
     this.faultsDtOption = this.getFaultTableDtOption();
@@ -183,7 +188,8 @@ export class DashboardPage implements OnInit {
       escalation: [],
       selectedPorts: [],
       assignToFilter: [],
-      showMyRepairs: []
+      showMyRepairs: [],
+      snoozeUntil: [this.futureDate]
     });
   }
 
@@ -527,6 +533,11 @@ export class DashboardPage implements OnInit {
       this.getAssignedUsers();
       this.isAssignToFilter = true;
     }
+
+    if (this.filterValue == 5) {
+      this.snoozeFault(1);
+      this.isSnoozeFilter = true;
+    }
   }
 
   closeFilter(val) {
@@ -550,6 +561,11 @@ export class DashboardPage implements OnInit {
       this.fat = [];
     }
 
+    if (val == 5) {
+      this.isSnoozeFilter = false;
+      this.snoozeFilterType = null;
+    }
+
     this.filterForm.get('filterType').reset();
     this.filterList();
 
@@ -563,6 +579,7 @@ export class DashboardPage implements OnInit {
     this.isManagementFilter = false;
     this.isStatusFilter = false;
     this.isAssignToFilter = false;
+    this.isSnoozeFilter = false;
     // this.fpm = [17,18,20,24,27,32,35,36];
     this.fpm = this.FULLY_MANAGED_PROPERTY_TYPES;
     this.faultParams = new HttpParams().set('limit', '5').set('page', '1').set('fpm', this.fpm.toString());
@@ -729,6 +746,7 @@ export class DashboardPage implements OnInit {
     this.faultParams = this.faultParams.delete('showEscalated');
     this.faultParams = this.faultParams.delete('searchKey');
     this.faultParams = this.faultParams.delete('showMyRepairs');
+    this.faultParams = this.faultParams.delete('snoozeUntil');
 
     if (this.fat.length > 0) {
       this.faultParams = this.faultParams.set('fat', this.fat.toString());
@@ -763,6 +781,15 @@ export class DashboardPage implements OnInit {
     if (this.filterForm.value.showMyRepairs) {
       this.faultParams = this.faultParams.set('showMyRepairs', true);
 
+    }
+    if (this.filterForm.value.snoozeUntil && this.snoozeFilterType == 2) {
+      let date = this.datepipe.transform(this.filterForm.value.snoozeUntil, 'yyyy-MM-dd');
+      this.faultParams = this.faultParams.set('snoozeUntil', date);
+    }
+
+    if (this.filterForm.value.snoozeUntil && this.snoozeFilterType == 1) {
+      let date = this.datepipe.transform(this.futureDate, 'yyyy-MM-dd');
+      this.faultParams = this.faultParams.set('snoozeUntil', date);
     }
     this.rerenderFaults();
     this.bucketCount();
@@ -1183,6 +1210,20 @@ export class DashboardPage implements OnInit {
         resolve(false);
       });
     });
+  }
+
+  setSnoozeMinMaxDate(){
+    const currentDate = new Date();
+    this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 1), 'yyyy-MM-dd');
+    this.futureDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 29), 'yyyy-MM-dd');
+  }
+
+   snoozeFault(type) {
+    this.snoozeFilterType = type;
+    if (this.snoozeFilterType == 1) {
+      this.filterForm.get('snoozeUntil').setValue(this.futureDate);
+    }
+    this.filterList();
   }
 }
 
