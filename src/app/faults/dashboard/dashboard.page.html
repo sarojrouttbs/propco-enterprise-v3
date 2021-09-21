@@ -140,8 +140,8 @@
                 class="more-filters">
                 <ion-select-option value="4">Assigned To </ion-select-option>
                 <ion-select-option value="1">Branch(es) </ion-select-option>
-                <ion-select-option value="2">Management Service Type</ion-select-option>
-                <ion-select-option value="3">Status</ion-select-option>
+                <ion-select-option value="2" [disabled]="isBucketActive">Management Service Type</ion-select-option>
+                <ion-select-option value="3" [disabled]="isBucketActive">Status</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-col>
@@ -217,6 +217,7 @@
             <ion-item class="select-block">
               <ion-label position="floating">Management Service Type</ion-label>
               <ionic-selectable item-content itemValueField="index" itemTextField="description"
+                [isEnabled]="!isBucketActive"
                 [items]="managementTypeList" [canSearch]="true" [isMultiple]="true" class="selectable-height"
                 [canClear]="true" clearButtonText="Clear" closeButtonSlot="end" confirmButtonText="Apply"
                 searchPlaceholder="Search Management Type Service" #managementType formControlName="managementFilter"
@@ -275,6 +276,7 @@
               </ion-select> -->
   
               <ionic-selectable item-content itemValueField="index" itemTextField="value" [items]="faultStatuses"
+                [isEnabled]="!isBucketActive"
                 [canSearch]="true" [isMultiple]="true" class="selectable-height" [canClear]="true" clearButtonText="Clear"
                 closeButtonSlot="end" confirmButtonText="Apply" searchPlaceholder="Search Status" #statusType
                 formControlName="statusFilter" [shouldStoreItemValue]="false" (click)="startLoading()"
@@ -435,7 +437,7 @@
                   <!-- <td></td> -->
                   <td>{{fault.propertyReference || '-'}} <br>{{fault.propertyAddress.addressLine1}}</td>
                   <td>{{getLookupValue(fault.propertyOfficeCode, officeCodes) || '-'}}</td>
-                  <td style="">{{fault.propertyManagerName}}</td>
+                  <td>{{fault.propertyManagerName || '-'}}</td>
                   <td>{{fault.title || '-'}}</td>
                   <td>{{getLookupValue(fault.reportedBy, reportedByTypes) || '-'}}</td>
                   <td>
