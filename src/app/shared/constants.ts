@@ -282,10 +282,23 @@ export const CLOSE_REASON = [
     "value": "Landlord would not fix"
   },
   {
+    "index": "CLOSE_INTERNAL_USE_ONLY",
+    "value": "Close - Internal use only"
+  },
+  {
     "index": "OTHER",
     "value": "Other"
   }
 ];
+
+export const CLOSE_REASON_KEYS = {
+  "FAULT_DOES_NOT_EXIST_ANYMORE": "FAULT_DOES_NOT_EXIST_ANYMORE",
+  "TENANTS_RESPONSIBILITY": "TENANTS_RESPONSIBILITY",
+  "APPOINTMENT_NOT_BOOKED": "APPOINTMENT_NOT_BOOKED",
+  "LANDLORD_WOULD_NOT_FIX": "LANDLORD_WOULD_NOT_FIX",
+  "CLOSE_INTERNAL_USE_ONLY": "CLOSE_INTERNAL_USE_ONLY",
+  "OTHER": "OTHER"
+};
 
 export const ScriptStore = [
 ];
@@ -440,7 +453,8 @@ export const FAULT_EVENT_TYPES_ID = {
   CLI_ACTION_SELECTED: 3,
   STATUS_CHANGED: 11,
   DOCUMENT_ADDED: 14,
-  ESCALATED: 8
+  ESCALATED: 8,
+  FAULT_CLOSED: 7
 }
 
 export const NOTES_ORIGIN = {

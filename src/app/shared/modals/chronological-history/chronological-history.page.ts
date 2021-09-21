@@ -257,6 +257,11 @@ export class ChronologicalHistoryPage implements OnInit {
                      else {
                         tableBody.push([{ colSpan: 3, text: 'By', style: 'tableHeader', border: [false, false, false, false] }]);
                         tableBody.push([{ colSpan: 3, text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        
+                        if (FAULT_EVENT_TYPES_ID.FAULT_CLOSED === element.eventTypeId) {
+                           tableBody.push([{ colSpan: 3, text: 'Closing Reason', style: 'tableHeader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.closingReason || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        }
                         if (FAULT_EVENT_TYPES_ID.STAGE_CHANGED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Stage', style: 'tableHeader', border: [false, false, false, false] }]);
                            tableBody.push([{ colSpan: 3, text: `${element.data.stage || '-'}`, style: 'subheader', border: [false, false, false, false] }]);

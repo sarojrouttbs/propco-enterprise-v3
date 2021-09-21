@@ -1,58 +1,58 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Close Fault</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>Close Fault</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="closeFaultForm">
-    <ion-row class="">
+    <form [formGroup]="closeFaultForm">
+        <ion-row class="">
 
-      <ion-col size="100">
-        <ion-item>
-          <ion-label position="floating">Please select a reason for closing this fault <ion-text class="mandatory">*
-            </ion-text>
-          </ion-label>
-          <ion-select interface="popover" formControlName="closedReason" (ionChange)="onReasonChange()"
-            class="reason-dropdown" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
-            <ion-select-option [value]="reason.index" *ngFor="let reason of reasons">
-              {{ reason.value }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <app-validation-message [control]="closeFaultForm.controls.closedReason"></app-validation-message>
-      </ion-col>
+            <ion-col size="100">
+                <ion-item>
+                    <ion-label position="floating">Please select a reason for closing this fault
+                        <ion-text class="mandatory">*
+                        </ion-text>
+                    </ion-label>
+                    <ion-select interface="popover" formControlName="closedReason" (ionChange)="onReasonChange()" class="reason-dropdown" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
+                        <ion-select-option [value]="reason.index" *ngFor="let reason of reasons">
+                            {{ reason.value }}
+                        </ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <app-validation-message [control]="closeFaultForm.controls.closedReason"></app-validation-message>
+            </ion-col>
 
-      <ion-col size="100" *ngIf="closeFaultForm.get('closedReason').value === 'OTHER'">
-        <ion-item>
-          <ion-label position="floating">Other Reason </ion-label>
-          <ion-textarea formControlName="otherReason" rows="1"></ion-textarea>
-        </ion-item>
-        <app-validation-message [control]="closeFaultForm.controls.otherReason"></app-validation-message>
-      </ion-col>
-    </ion-row>
-  </form>
+            <ion-col size="100" *ngIf="closeFaultForm.get('closedReason').value === reasonKeys.OTHER || closeFaultForm.get('closedReason').value === reasonKeys.CLOSE_INTERNAL_USE_ONLY">
+                <ion-item>
+                    <ion-label position="floating"> {{ closeFaultForm.get('closedReason').value === reasonKeys.OTHER ? 'Other Reason' : 'Reason' }} </ion-label>
+                    <ion-textarea formControlName="otherReason" rows="1"></ion-textarea>
+                </ion-item>
+                <app-validation-message [control]="closeFaultForm.controls.otherReason"></app-validation-message>
+            </ion-col>
+        </ion-row>
+    </form>
 </ion-content>
 <ion-footer>
-  <ion-grid [class.unsaved-data-error]="unSavedData">
-    <ion-row>
-      <ng-container *ngIf="unSavedData">
-        <ion-col size="70">
-          <div class="ion-padding-top">Are you sure you want to cancel the process?</div>
-        </ion-col>
-        <ion-col size="30" class="ion-text-end">
-          <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
-          <ion-button color="success" (click)="dismiss()">Yes</ion-button>
-        </ion-col>
-      </ng-container>
-      <ng-container *ngIf="!unSavedData">
-        <ion-col size="100" class="ion-text-end">
-          <ion-button class="cancel-button" (click)="onCancel()">CANCEL </ion-button>
-          <ion-button class="save-button" (click)="save()" [disabled]="showLoader">SUBMIT 
-            <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
-          </ion-button>
-        </ion-col>
-      </ng-container>
-    </ion-row>
-  </ion-grid>
+    <ion-grid [class.unsaved-data-error]="unSavedData">
+        <ion-row>
+            <ng-container *ngIf="unSavedData">
+                <ion-col size="70">
+                    <div class="ion-padding-top">Are you sure you want to cancel the process?</div>
+                </ion-col>
+                <ion-col size="30" class="ion-text-end">
+                    <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
+                    <ion-button color="success" (click)="dismiss()">Yes</ion-button>
+                </ion-col>
+            </ng-container>
+            <ng-container *ngIf="!unSavedData">
+                <ion-col size="100" class="ion-text-end">
+                    <ion-button class="cancel-button" (click)="onCancel()">CANCEL </ion-button>
+                    <ion-button class="save-button" (click)="save()" [disabled]="showLoader">SUBMIT
+                        <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+                    </ion-button>
+                </ion-col>
+            </ng-container>
+        </ion-row>
+    </ion-grid>
 </ion-footer>
