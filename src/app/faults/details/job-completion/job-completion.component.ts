@@ -960,4 +960,8 @@ export class JobCompletionComponent implements OnInit {
     modal.onDidDismiss().then(async res => { });
     await modal.present();
   }
+
+  snoozeFault(){
+    this._btnHandler('snooze');
+  }
 }
