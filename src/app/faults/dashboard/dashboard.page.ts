@@ -86,6 +86,7 @@ export class DashboardPage implements OnInit {
   escalationCount
   escalationLoader = false;
   private bucketFpm: number[] = [];
+  isBucketActive: boolean = false;
 
   constructor(
     private commonService: CommonService,
@@ -513,10 +514,12 @@ export class DashboardPage implements OnInit {
     }
 
     if (this.filterValue == 2) {
+      if(this.isBucketActive) return;
       this.isManagementFilter = true;
     }
 
     if (this.filterValue == 3) {
+      if(this.isBucketActive) return;
       this.isStatusFilter = true;
     }
 
@@ -553,6 +556,7 @@ export class DashboardPage implements OnInit {
   }
 
   resetFilter() {
+    this.isBucketActive = false;
     this.isFilter = false;
     this.filterForm.reset();
     this.isBranchFilter = false;
@@ -563,6 +567,7 @@ export class DashboardPage implements OnInit {
     this.fpm = this.FULLY_MANAGED_PROPERTY_TYPES;
     this.faultParams = new HttpParams().set('limit', '5').set('page', '1').set('fpm', this.fpm.toString());
     this.rerenderFaults();
+    this.bucketCount();
     this.fs = [];
     this.fpo = [];
     this.fat = [];
@@ -589,6 +594,7 @@ export class DashboardPage implements OnInit {
       });
     }
     setTimeout(() => {
+      this.filterForm.get(controlName).value ? this.isBucketActive = true : this.isBucketActive = false;
       this.faultParams = this.faultParams.delete('fpm');
       this.fpm = this.bucketFpm;
       if (this.filterForm.get('repairCheckbox').value) {
@@ -759,6 +765,7 @@ export class DashboardPage implements OnInit {
 
     }
     this.rerenderFaults();
+    this.bucketCount();
   }
 
   // createInputs() {
@@ -997,11 +1004,14 @@ export class DashboardPage implements OnInit {
     let statusArray = Object.values(FAULT_STATUSES);
     let fs = statusArray.filter(status => status != FAULT_STATUSES.CANCELLED && status != FAULT_STATUSES.CLOSED);
 
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
+      faultCountParams = faultCountParams.delete('fus');
     this.activeRepairLoader = true;
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1017,12 +1027,14 @@ export class DashboardPage implements OnInit {
   }
 
   getEmergencyCount() {
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.EMERGENCY.toString())
       .set('showEscalated', 'false')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
     this.emergencyLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1037,12 +1049,14 @@ export class DashboardPage implements OnInit {
   }
 
   getUrgentCount() {
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.URGENT.toString())
       .set('showEscalated', 'false')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
     this.urgentLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1057,12 +1071,14 @@ export class DashboardPage implements OnInit {
   }
 
   getNonUrgentCount() {
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.NON_URGENT.toString())
       .set('showEscalated', 'false')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
     this.nonUrgentLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1078,11 +1094,14 @@ export class DashboardPage implements OnInit {
 
   getAssismentCount() {
     let fs = [FAULT_STATUSES.IN_ASSESSMENT, FAULT_STATUSES.CHECKING_LANDLORD_INSTRUCTIONS]
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
+      faultCountParams = faultCountParams.delete('fus');
     this.assismentLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1100,11 +1119,14 @@ export class DashboardPage implements OnInit {
     let fs = [FAULT_STATUSES.QUOTE_REQUESTED, FAULT_STATUSES.QUOTE_RECEIVED, FAULT_STATUSES.QUOTE_PENDING, FAULT_STATUSES.QUOTE_APPROVED, FAULT_STATUSES.QUOTE_REJECTED,
     FAULT_STATUSES.WORKSORDER_PENDING, FAULT_STATUSES.AWAITING_JOB_COMPLETION,
     FAULT_STATUSES.WORKSORDER_RAISED, FAULT_STATUSES.AWAITING_RESPONSE_CONTRACTOR, FAULT_STATUSES.WORK_INPROGRESS, FAULT_STATUSES.WORK_COMPLETED, FAULT_STATUSES.AWAITING_RESPONSE_LANDLORD, FAULT_STATUSES.AWAITING_RESPONSE_TENANT, FAULT_STATUSES.AWAITING_RESPONSE_THIRD_PARTY]
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
+      faultCountParams = faultCountParams.delete('fus');
     this.automationLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1120,11 +1142,14 @@ export class DashboardPage implements OnInit {
 
   getInvoiceCount() {
     let fs = [FAULT_STATUSES.INVOICE_SUBMITTED, FAULT_STATUSES.INVOICE_APPROVED]
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
+      faultCountParams = faultCountParams.delete('fus');
     this.invoiceLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1139,10 +1164,14 @@ export class DashboardPage implements OnInit {
   }
 
   getEscalationCount() {    
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('showEscalated', 'true')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('fs');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
+      faultCountParams = faultCountParams.delete('fus');
     this.escalationLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
