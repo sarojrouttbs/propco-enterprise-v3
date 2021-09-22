@@ -18,6 +18,7 @@ import { JobCompletionModalPage } from 'src/app/shared/modals/job-completion-mod
 import { saveAs } from 'file-saver';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.page';
+import { SnoozeFaultModalPage } from 'src/app/shared/modals/snooze-fault-modal/snooze-fault-modal.page';
 
 @Component({
   selector: 'fault-details',
@@ -2137,7 +2138,32 @@ export class DetailsPage implements OnInit {
         this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
         break;
       }
+      case 'snooze': {
+        this.snoozeFault();
+        break;
+      }
     }
+  }
+
+  async snoozeFault() {
+    const modal = await this.modalController.create({
+      component: SnoozeFaultModalPage,
+      cssClass: 'modal-container',
+      componentProps: {
+        faultId: this.faultDetails.faultId,
+        snoozeUntil: this.faultDetails.snoozeUntil,
+        snoozeReason: this.faultDetails.snoozeReason
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if(res && res.data && res.data == 'success'){
+        this.commonService.showMessage('Fault has been snooze successfully.', 'Snooze Fault', 'success');
+        this.refreshDetailsAndStage();
+      }
+    });
+    await modal.present();
   }
 
   private async saveLaterChild() {

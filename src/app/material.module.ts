@@ -13,7 +13,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatOptionModule } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [],
@@ -33,7 +34,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatSortModule,
     MatTooltipModule,
     MatTabsModule,
-    MatAutocompleteModule
-  ]
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+  ],
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'en-uk' }],
 })
-export class MaterialModule { }
+export class MaterialModule {}

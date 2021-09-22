@@ -2214,4 +2214,7 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
+  snoozeFault(){
+    this._btnHandler('snooze');
+  }
 }
