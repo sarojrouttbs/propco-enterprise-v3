@@ -304,24 +304,24 @@
                         'quote-accepted': item.get('quoteContractorStatus').value == 2,
                         'quote-sent': item.get('quoteContractorStatus').value == 5, 
                         'quote-not-approved': item.get('quoteContractorStatus').value == 9,
-                        'selected': item.get('contractorId').value == filteredCCDetails.contractorId
+                        'selected': item.get('contractorId').value == filteredCCDetails?.contractorId
                       }">
                       <ion-col size="30">
                         <span *ngIf="item.get('isPreferred').value" class="prefered-cc" matTooltip="Preferred Contractor" matTooltipPosition="above">
                           <ion-icon name="checkmark-circle-outline"> </ion-icon>
                         </span>
-                        <ion-text>{{item.get('company').value ? item.get('company').value : 'N/A'}}</ion-text>
+                        <ion-text matTooltip="Company Name">{{item.get('company').value ? item.get('company').value : 'N/A'}}</ion-text>
                       </ion-col>
       
                       <ion-col size="20">
-                        <ion-text>{{item.get('mobile').value ? item.get('mobile').value : 'N/A'}}</ion-text>
+                        <ion-text matTooltip="Contractor Mobile">{{item.get('mobile').value ? item.get('mobile').value : 'N/A'}}</ion-text>
                       </ion-col>
              
-                      <ion-col size="20">
-                        <ion-text>{{item.get('reference').value ? item.get('reference').value : 'N/A'}}</ion-text>
+                      <ion-col size="20" class="skills">
+                        <ion-text matTooltip="Skills">{{item.get('reference').value ? item.get('reference').value : 'N/A'}}</ion-text>
                       </ion-col>
                       <ion-col size="20">
-                        <ion-text><strong>{{ item.get('status').value ? item.get('status').value : 'N/A'}}</strong></ion-text>
+                        <ion-text matTooltip="Contractor Status"><strong>{{ item.get('status').value ? item.get('status').value : 'N/A'}}</strong></ion-text>
                       </ion-col>
                       <ion-col size="10">
                         <div class="action-btn-container">
