@@ -2388,4 +2388,8 @@ export class ArrangingContractorComponent implements OnInit {
       this.quoteUploadModal(preUpload ? preUpload : null);
     }
   }
+  
+  snoozeFault(){
+    this._btnHandler('snooze');
+  }
 }

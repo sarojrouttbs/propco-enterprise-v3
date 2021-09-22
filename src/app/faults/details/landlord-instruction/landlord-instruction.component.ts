@@ -1490,4 +1490,8 @@ export class LandlordInstructionComponent implements OnInit {
       await modal.present();
     }
   }
+
+  snoozeFault(){
+    this._btnHandler('snooze');
+  }
 }

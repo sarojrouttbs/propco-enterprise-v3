@@ -377,6 +377,10 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/events`);
   }
 
+  saveSnoozeFaultData(body: any, faultId): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/snooze`, body);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
