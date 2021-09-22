@@ -30,7 +30,7 @@
             <ion-label position="floating">Visit Date/Time<ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-datetime formControlName="dateTime" displayFormat="DD/MM/YYYY HH:mm" interface="popover"
-              class="request-start-date" [min]="minDate">
+              class="request-start-date" >
             </ion-datetime>
           </ion-item>
           <app-validation-message [control]="appointmentForm.controls.dateTime"></app-validation-message>
