@@ -514,54 +514,54 @@ export class DashboardPage implements OnInit {
     this.filterValue = e.detail.value;
     this.isFilter = true;
 
-    if (this.filterValue == 1) {
+    if (this.filterValue === 1) {
       this.getaccessibleOffices();
       this.isBranchFilter = true;
     }
 
-    if (this.filterValue == 2) {
+    if (this.filterValue === 2) {
       if(this.isBucketActive) return;
       this.isManagementFilter = true;
     }
 
-    if (this.filterValue == 3) {
+    if (this.filterValue === 3) {
       if(this.isBucketActive) return;
       this.isStatusFilter = true;
     }
 
-    if (this.filterValue == 4) {
+    if (this.filterValue === 4) {
       this.getAssignedUsers();
       this.isAssignToFilter = true;
     }
 
-    if (this.filterValue == 5) {
+    if (this.filterValue === 5) {
       this.snoozeFault(1);
       this.isSnoozeFilter = true;
     }
   }
 
   closeFilter(val) {
-    if (val == 1) {
+    if (val === 1) {
       this.isBranchFilter = false;
       this.fpo = [];
     }
 
-    if (val == 2) {
+    if (val === 2) {
       this.isManagementFilter = false;
       this.fpm = [];
     }
 
-    if (val == 3) {
+    if (val === 3) {
       this.isStatusFilter = false;
       this.fs = [];
     }
 
-    if (val == 4) {
+    if (val === 4) {
       this.isAssignToFilter = false;
       this.fat = [];
     }
 
-    if (val == 5) {
+    if (val === 5) {
       this.isSnoozeFilter = false;
       this.snoozeFilterType = null;
     }
@@ -782,12 +782,12 @@ export class DashboardPage implements OnInit {
       this.faultParams = this.faultParams.set('showMyRepairs', true);
 
     }
-    if (this.filterForm.value.snoozeUntil && this.snoozeFilterType == 2) {
+    if (this.filterForm.value.snoozeUntil && this.snoozeFilterType === 2) {
       let date = this.datepipe.transform(this.filterForm.value.snoozeUntil, 'yyyy-MM-dd');
       this.faultParams = this.faultParams.set('snoozeUntil', date);
     }
 
-    if (this.filterForm.value.snoozeUntil && this.snoozeFilterType == 1) {
+    if (this.filterForm.value.snoozeUntil && this.snoozeFilterType === 1) {
       let date = this.datepipe.transform(this.futureDate, 'yyyy-MM-dd');
       this.faultParams = this.faultParams.set('snoozeUntil', date);
     }
@@ -1220,7 +1220,7 @@ export class DashboardPage implements OnInit {
 
    snoozeFault(type) {
     this.snoozeFilterType = type;
-    if (this.snoozeFilterType == 1) {
+    if (this.snoozeFilterType === 1) {
       this.filterForm.get('snoozeUntil').setValue(this.futureDate);
     }
     this.filterList();
