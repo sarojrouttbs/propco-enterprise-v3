@@ -154,7 +154,7 @@ export class ChronologicalHistoryPage implements OnInit {
    initiateDtOptons() {
       this.dtOptions = {
          lengthMenu: [10, 15, 20],
-         order: [[0, "desc"]],
+         order: [[1, "desc"]],
          searching: false,
          pageLength: 10,
          pagingType: 'full_numbers',
@@ -331,8 +331,14 @@ export class ChronologicalHistoryPage implements OnInit {
                }
             }
          ],
+         columnDefs: [{
+            className: 'dtr-control',
+            targets: 0
+         }],
          responsive: {
             details: {
+               target: 'tr',
+               type: 'column',
                renderer: function (api, rowIdx, columns) {
                   var data = $.map(columns, function (col, i) {
                      if (col.hidden && col.data != '') {
@@ -352,6 +358,10 @@ export class ChronologicalHistoryPage implements OnInit {
             this.elementRef.nativeElement.querySelector('.paginate_button').addEventListener('click', this.collapseAll());
          }
       };
+
+      if(this.eventList.length === 0) {
+         this.dtOptions['buttons'] = [];
+      }
    }
 
    private async updateEventList(list) {
