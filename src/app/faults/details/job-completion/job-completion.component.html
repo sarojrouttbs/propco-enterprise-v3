@@ -182,6 +182,8 @@
                 && iacNotification?.responseReceived?.isAccepted === false
                 && !faultDetails?.isClosed" >
                       Resend Notification</ion-button>
+                <ion-button *ngIf="faultDetails?.isEscalated"  color="success" expand="block" class="action-btn" fill="outline" (click)="snoozeFault()">
+                   Snooze Fault</ion-button>
               </ion-row>
             </ion-grid>
           </div>

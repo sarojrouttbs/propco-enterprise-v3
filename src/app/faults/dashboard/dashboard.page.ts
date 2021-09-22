@@ -86,6 +86,11 @@ export class DashboardPage implements OnInit {
   escalationCount
   escalationLoader = false;
   private bucketFpm: number[] = [];
+  isBucketActive: boolean = false;
+  isSnoozeFilter: boolean = false;
+  minDate;
+  futureDate;
+  snoozeFilterType: any;
 
   constructor(
     private commonService: CommonService,
@@ -100,6 +105,7 @@ export class DashboardPage implements OnInit {
 
   async ngOnInit() {
     this.loadTable = false;
+    this.setSnoozeMinMaxDate();
     this.initFilterForm();
     this.notesDtOption = this.buildDtOptions();
     this.faultsDtOption = this.getFaultTableDtOption();
@@ -182,7 +188,8 @@ export class DashboardPage implements OnInit {
       escalation: [],
       selectedPorts: [],
       assignToFilter: [],
-      showMyRepairs: []
+      showMyRepairs: [],
+      snoozeUntil: [this.futureDate]
     });
   }
 
@@ -513,16 +520,23 @@ export class DashboardPage implements OnInit {
     }
 
     if (this.filterValue == 2) {
+      if(this.isBucketActive) return;
       this.isManagementFilter = true;
     }
 
     if (this.filterValue == 3) {
+      if(this.isBucketActive) return;
       this.isStatusFilter = true;
     }
 
     if (this.filterValue == 4) {
       this.getAssignedUsers();
       this.isAssignToFilter = true;
+    }
+
+    if (this.filterValue == 5) {
+      this.snoozeFault(1);
+      this.isSnoozeFilter = true;
     }
   }
 
@@ -547,22 +561,30 @@ export class DashboardPage implements OnInit {
       this.fat = [];
     }
 
+    if (val == 5) {
+      this.isSnoozeFilter = false;
+      this.snoozeFilterType = null;
+    }
+
     this.filterForm.get('filterType').reset();
     this.filterList();
 
   }
 
   resetFilter() {
+    this.isBucketActive = false;
     this.isFilter = false;
     this.filterForm.reset();
     this.isBranchFilter = false;
     this.isManagementFilter = false;
     this.isStatusFilter = false;
     this.isAssignToFilter = false;
+    this.isSnoozeFilter = false;
     // this.fpm = [17,18,20,24,27,32,35,36];
     this.fpm = this.FULLY_MANAGED_PROPERTY_TYPES;
     this.faultParams = new HttpParams().set('limit', '5').set('page', '1').set('fpm', this.fpm.toString());
     this.rerenderFaults();
+    this.bucketCount();
     this.fs = [];
     this.fpo = [];
     this.fat = [];
@@ -589,6 +611,7 @@ export class DashboardPage implements OnInit {
       });
     }
     setTimeout(() => {
+      this.filterForm.get(controlName).value ? this.isBucketActive = true : this.isBucketActive = false;
       this.faultParams = this.faultParams.delete('fpm');
       this.fpm = this.bucketFpm;
       if (this.filterForm.get('repairCheckbox').value) {
@@ -723,6 +746,7 @@ export class DashboardPage implements OnInit {
     this.faultParams = this.faultParams.delete('showEscalated');
     this.faultParams = this.faultParams.delete('searchKey');
     this.faultParams = this.faultParams.delete('showMyRepairs');
+    this.faultParams = this.faultParams.delete('snoozeUntil');
 
     if (this.fat.length > 0) {
       this.faultParams = this.faultParams.set('fat', this.fat.toString());
@@ -758,7 +782,17 @@ export class DashboardPage implements OnInit {
       this.faultParams = this.faultParams.set('showMyRepairs', true);
 
     }
+    if (this.filterForm.value.snoozeUntil && this.snoozeFilterType == 2) {
+      let date = this.datepipe.transform(this.filterForm.value.snoozeUntil, 'yyyy-MM-dd');
+      this.faultParams = this.faultParams.set('snoozeUntil', date);
+    }
+
+    if (this.filterForm.value.snoozeUntil && this.snoozeFilterType == 1) {
+      let date = this.datepipe.transform(this.futureDate, 'yyyy-MM-dd');
+      this.faultParams = this.faultParams.set('snoozeUntil', date);
+    }
     this.rerenderFaults();
+    this.bucketCount();
   }
 
   // createInputs() {
@@ -997,11 +1031,14 @@ export class DashboardPage implements OnInit {
     let statusArray = Object.values(FAULT_STATUSES);
     let fs = statusArray.filter(status => status != FAULT_STATUSES.CANCELLED && status != FAULT_STATUSES.CLOSED);
 
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
+      faultCountParams = faultCountParams.delete('fus');
     this.activeRepairLoader = true;
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1017,12 +1054,14 @@ export class DashboardPage implements OnInit {
   }
 
   getEmergencyCount() {
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.EMERGENCY.toString())
       .set('showEscalated', 'false')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
     this.emergencyLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1037,12 +1076,14 @@ export class DashboardPage implements OnInit {
   }
 
   getUrgentCount() {
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.URGENT.toString())
       .set('showEscalated', 'false')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
     this.urgentLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1057,12 +1098,14 @@ export class DashboardPage implements OnInit {
   }
 
   getNonUrgentCount() {
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.NON_URGENT.toString())
       .set('showEscalated', 'false')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
     this.nonUrgentLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1078,11 +1121,14 @@ export class DashboardPage implements OnInit {
 
   getAssismentCount() {
     let fs = [FAULT_STATUSES.IN_ASSESSMENT, FAULT_STATUSES.CHECKING_LANDLORD_INSTRUCTIONS]
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
+      faultCountParams = faultCountParams.delete('fus');
     this.assismentLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1100,11 +1146,14 @@ export class DashboardPage implements OnInit {
     let fs = [FAULT_STATUSES.QUOTE_REQUESTED, FAULT_STATUSES.QUOTE_RECEIVED, FAULT_STATUSES.QUOTE_PENDING, FAULT_STATUSES.QUOTE_APPROVED, FAULT_STATUSES.QUOTE_REJECTED,
     FAULT_STATUSES.WORKSORDER_PENDING, FAULT_STATUSES.AWAITING_JOB_COMPLETION,
     FAULT_STATUSES.WORKSORDER_RAISED, FAULT_STATUSES.AWAITING_RESPONSE_CONTRACTOR, FAULT_STATUSES.WORK_INPROGRESS, FAULT_STATUSES.WORK_COMPLETED, FAULT_STATUSES.AWAITING_RESPONSE_LANDLORD, FAULT_STATUSES.AWAITING_RESPONSE_TENANT, FAULT_STATUSES.AWAITING_RESPONSE_THIRD_PARTY]
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
+      faultCountParams = faultCountParams.delete('fus');
     this.automationLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1120,11 +1169,14 @@ export class DashboardPage implements OnInit {
 
   getInvoiceCount() {
     let fs = [FAULT_STATUSES.INVOICE_SUBMITTED, FAULT_STATUSES.INVOICE_APPROVED]
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
+      faultCountParams = faultCountParams.delete('fus');
     this.invoiceLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1139,10 +1191,14 @@ export class DashboardPage implements OnInit {
   }
 
   getEscalationCount() {    
-    let faultCountParams: any = new HttpParams()
+    let faultCountParams: any = this.faultParams
       .set('showEscalated', 'true')
       .set('fpm',  this.fpm.toString())
       .set('hideLoader', 'true');
+      faultCountParams = faultCountParams.delete('fs');
+      faultCountParams = faultCountParams.delete('page');
+      faultCountParams = faultCountParams.delete('limit');
+      faultCountParams = faultCountParams.delete('fus');
     this.escalationLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1154,6 +1210,20 @@ export class DashboardPage implements OnInit {
         resolve(false);
       });
     });
+  }
+
+  setSnoozeMinMaxDate(){
+    const currentDate = new Date();
+    this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 1), 'yyyy-MM-dd');
+    this.futureDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 29), 'yyyy-MM-dd');
+  }
+
+   snoozeFault(type) {
+    this.snoozeFilterType = type;
+    if (this.snoozeFilterType == 1) {
+      this.filterForm.get('snoozeUntil').setValue(this.futureDate);
+    }
+    this.filterList();
   }
 }
 

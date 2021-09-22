@@ -129,6 +129,8 @@
                   </ion-button>
                 </div>
               </ng-container>
+              <ion-button *ngIf="faultDetails?.isEscalated"  color="success" expand="block" class="action-btn" fill="outline" (click)="snoozeFault()">
+                Snooze Fault</ion-button>
             </ion-row>
           </ion-grid>
           <div class="border-bottom" *ngIf="iqfNotification?.templateCode === 'FI-T-E-1'"></div>

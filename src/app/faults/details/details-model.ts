@@ -99,6 +99,8 @@ declare namespace FaultModels {
         requiredStartDate?: any;
         requiredCompletionDate?: any;
         orderedById?: string;
+        snoozeUntil: string;
+        snoozeReason: string;
     }
 
     export interface AdditionalInfo {

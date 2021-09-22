@@ -360,7 +360,7 @@ export class ChronologicalHistoryPage implements OnInit {
             element.eventTypeId = element.eventType;
             element.eventType = this.faultEventMap.get(element.eventType);
             element.data.cliSelectedAction = this.cliActionMap.get(element.data.cliSelectedAction);
-            element.category = this.getCategoryByEventType(element.eventType);
+               element.category = this.getCategoryByEventType(element);
             if (element.data.body) {
                element.data.body = element.data.body.replace(/<img[^>]*>/g, "");
             }
@@ -368,12 +368,13 @@ export class ChronologicalHistoryPage implements OnInit {
       }
    }
 
-   private getCategoryByEventType(type) {
-      if (type) {
+   private getCategoryByEventType(elem) {
+      if (elem.eventType) {
          let category: any;
          this.eventTypes.forEach((element, index) => {
-            if (new RegExp(Object.values(element)[0].join("|").toLowerCase()).test(type.toLowerCase())) {
+            if (new RegExp(Object.values(element)[0].join("|").toLowerCase()).test(elem.eventType.toLowerCase())) {
                category = Object.keys(element)[0];
+               elem.eventTypeId === FAULT_EVENT_TYPES_ID.NOTIFICATION_SENT && elem.data.recipient ? category = `${category}(${elem.data.recipient})`: ''; 
             }
          });
          return category;
