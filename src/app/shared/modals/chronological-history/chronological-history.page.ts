@@ -333,6 +333,7 @@ export class ChronologicalHistoryPage implements OnInit {
          ],
          columnDefs: [{
             className: 'dtr-control',
+            orderable: false,
             targets: 0
          }],
          responsive: {
