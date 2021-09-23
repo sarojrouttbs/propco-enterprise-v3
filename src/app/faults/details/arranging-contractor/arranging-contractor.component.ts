@@ -1403,7 +1403,6 @@ export class ArrangingContractorComponent implements OnInit {
 
   saveFaultLLAuth() {
     const requestObj: any = {};
-    requestObj.rejectionReason = '';
     requestObj.isAccepted = true;
     requestObj.submittedByType = 'SECUR_USER';
     const promise = new Promise((resolve, reject) => {
