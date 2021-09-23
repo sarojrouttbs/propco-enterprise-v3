@@ -1112,7 +1112,7 @@ export class ArrangingContractorComponent implements OnInit {
       }
       if (contractorId && !this.isWorksOrder) {
         filteredData = filteredData.filter((data) => {
-          if (data.parameters.hasOwnProperty('contractorId') && data.parameters.contractorId == contractorId) {
+          if (data.parameters && data.parameters.hasOwnProperty('contractorId') && data.parameters.contractorId == contractorId) {
             return data;
           }
           else if (data.recipientId == contractorId) {
@@ -1531,7 +1531,6 @@ export class ArrangingContractorComponent implements OnInit {
 
   saveFaultLLAuth() {
     const requestObj: any = {};
-    requestObj.rejectionReason = '';
     requestObj.isAccepted = true;
     requestObj.submittedByType = 'SECUR_USER';
     requestObj.contractorId = this.filteredCCDetails.contractorId;
