@@ -159,7 +159,6 @@ export class PaymentRequestModalPage implements OnInit {
 
   private async saveFaultLLAuth() {
     const requestObj: any = {};
-    requestObj.rejectionReason = '';
     requestObj.isAccepted = true;
     requestObj.submittedByType = 'SECUR_USER';
     if (this.contractorId) {
