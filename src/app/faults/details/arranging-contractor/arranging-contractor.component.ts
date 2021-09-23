@@ -129,6 +129,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.addMoreCCrestrictAction = false;
       this.userSelectedActionControl = new FormControl();
       this.showSkeleton = true;
+      this.contratctorArr = [];
       this.initiateArrangingContractors();
     }
   }
