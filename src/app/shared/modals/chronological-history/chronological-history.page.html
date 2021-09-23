@@ -12,16 +12,17 @@
         <ion-row>
             <ion-col>
                 <ng-container *ngIf="isTableReady">
-                    <div class="show-hide-section">
+                    <div class="show-hide-section" *ngIf="eventList?.length > 0">
                         <ion-button size="small" (click)="showHideAll(showAll)"> {{ showAll ? 'Expand All' : 'Collapse All' }} </ion-button>
                     </div>
-                    <div class="email-body-checkbox">
+                    <div class="email-body-checkbox" *ngIf="eventList?.length > 0">
                         <label><input type="checkbox" class="email-body" [(ngModel)]="isEmailRequire" /> Include email body in
               export</label>
                     </div>
                     <table id="chronological" datatable [dtOptions]="dtOptions" class="row-border hover" style="border-spacing: 0 2px; ">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Date/Time</th>
                                 <th>Action</th>
                                 <th>Category</th>
@@ -47,6 +48,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let elem of eventList">
+                                <td></td>
                                 <td>{{ elem.eventAt | date : 'dd/MM/yyyy HH:mm:ss' }}</td>
                                 <td>{{ elem.eventType || '-' }}</td>
                                 <td>{{ elem.category || '-' }}</td>
