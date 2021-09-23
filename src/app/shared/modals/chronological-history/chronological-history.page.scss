@@ -14,8 +14,8 @@
     margin: 0;
     vertical-align: bottom;
     position: relative;
-    top: -4px;
-    *overflow: hidden;
+    top: -2px;
+    overflow: hidden;
   }
 }
 
@@ -24,4 +24,8 @@
   ion-button{
     min-width: 100px;
   }
+}
+
+table.dataTable tbody tr {
+    cursor: pointer;
 }
