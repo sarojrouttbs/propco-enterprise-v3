@@ -12,10 +12,10 @@
         <ion-row>
             <ion-col>
                 <ng-container *ngIf="isTableReady">
-                    <div class="show-hide-section" *ngIf="eventList.length > 0">
+                    <div class="show-hide-section" *ngIf="eventList?.length > 0">
                         <ion-button size="small" (click)="showHideAll(showAll)"> {{ showAll ? 'Expand All' : 'Collapse All' }} </ion-button>
                     </div>
-                    <div class="email-body-checkbox" *ngIf="eventList.length > 0">
+                    <div class="email-body-checkbox" *ngIf="eventList?.length > 0">
                         <label><input type="checkbox" class="email-body" [(ngModel)]="isEmailRequire" /> Include email body in
               export</label>
                     </div>

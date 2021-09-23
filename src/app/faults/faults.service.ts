@@ -68,13 +68,16 @@ export class FaultsService {
   }
 
   searchContractor(text: string, skillSet = ''): Observable<any> {
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('limit', '10')
       .set('page', '1')
       .set('text', text)
       .set('types', 'CONTRACTOR')
-      .set('con.ocp', skillSet)
-      .set('con.status', 'Active')
+      .set('con.status', 'Active');
+
+    if(skillSet){
+      params.set('con.ocp', skillSet)
+    }
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 

@@ -359,7 +359,7 @@ export class ChronologicalHistoryPage implements OnInit {
          }
       };
 
-      if(this.eventList.length === 0) {
+      if(this.eventList && this.eventList.length === 0) {
          this.dtOptions['buttons'] = [];
       }
    }
