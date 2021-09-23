@@ -166,7 +166,7 @@ export class ChronologicalHistoryPage implements OnInit {
                extend: 'pdfHtml5',
                orientation: 'portrait',
                pageSize: 'A4',
-               className: "pdfBtn",
+               className: "pdf-button",
                text: "Print",
                download: 'open',
                title: ' ',
