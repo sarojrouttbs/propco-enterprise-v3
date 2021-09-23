@@ -39,6 +39,11 @@ export class RejectionModalPage implements OnInit {
 
   saveFaultLLAuth() {
     this.showLoader = true;
+    if(!this.rejectionForm.valid) {
+      this.showLoader = false;
+      this.rejectionForm.markAllAsTouched();
+      return;
+    }
     let reqObj = JSON.parse(JSON.stringify(this.rejectionForm.value));
     if (reqObj.rejectionReason === 'Other') {
       if (reqObj.other) {
@@ -58,6 +63,16 @@ export class RejectionModalPage implements OnInit {
       this.showLoader = false;
       this.commonService.showMessage('Something went wrong on server, please try again.', 'No Authorisation', 'error');
     })
+  }
+
+  onReasonChange() {
+    this.rejectionForm.get('other').clearValidators();
+    this.rejectionForm.get('other').updateValueAndValidity();
+    this.rejectionForm.get('other').reset();
+    if (this.rejectionForm.get('rejectionReason').value === 'Other' ) {
+      this.rejectionForm.get('other').setValidators(Validators.required);
+      this.rejectionForm.get('other').updateValueAndValidity();
+    }
   }
 
   async onCancel() {
