@@ -1627,6 +1627,7 @@ export class ArrangingContractorComponent implements OnInit {
       isNew: isNew,
       // checked: isNew ? false : (data.isActive  ? true : false),
       // isActive: isNew ? false : (data.isActive ? true : false),
+      isNonSq: data.isNonSq ? data.isNonSq : false, 
       isActive: isNew || isPreferred ? false : true,
       isRejected: !isNew ? data.isRejected : false,
       rejectionReason: !isNew ? data.rejectionReason : '',
@@ -2367,9 +2368,13 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.isWorksOrder) return;
     if (this.faultMaintenanceDetails.quoteContractors && this.faultMaintenanceDetails.quoteContractors.length) {
       // if (this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive).length == 1 || this.filteredCCDetails.contractorId) {
-        if (this.faultMaintenanceDetails.quoteContractors.length == 1 || this.filteredCCDetails.contractorId) {
-        // let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive)[0].contractorId;
-        let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : this.faultMaintenanceDetails.quoteContractors[0].contractorId;
+        let nonSQContractors = this.faultMaintenanceDetails.quoteContractors.filter(data => !data.isNonSq)
+        if (this.faultMaintenanceDetails.quoteContractors.length === 1 || this.filteredCCDetails.contractorId || nonSQContractors.length === 1) {
+          // let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive)[0].contractorId;
+          let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : this.faultMaintenanceDetails.quoteContractors[0].contractorId;
+          if(nonSQContractors.length === 1){
+            ccId = nonSQContractors[0].contractorId;
+          }
         if (ccId) {
           this.selectedCCDetails(ccId);
         }

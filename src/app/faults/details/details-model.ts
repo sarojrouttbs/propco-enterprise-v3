@@ -193,6 +193,7 @@ declare namespace FaultModels {
         rejectionReason?: any;
         contractorId: string;
         rejectedByType: number;
+        isNonSq: boolean;
     }
 
     export interface Address {
