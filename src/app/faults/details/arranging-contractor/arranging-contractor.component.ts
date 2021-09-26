@@ -122,13 +122,14 @@ export class ArrangingContractorComponent implements OnInit {
       this.checkMaintenanceDetail();
     }
     if (changes.faultDetails && !changes.faultDetails.firstChange) {
-      this.restrictAction = false;
+      // this.restrictAction = false;
       this.iacNotification = null;
       this.faultMaintenanceDetails = null;
       this.isUserActionChange = false;
       this.addMoreCCrestrictAction = false;
       this.userSelectedActionControl = new FormControl();
       this.showSkeleton = true;
+      this.contratctorArr = [];
       this.initiateArrangingContractors();
     }
   }
@@ -1142,7 +1143,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private disableQuoteDetail() {
-    if (this.restrictAction) {
+    // if (this.restrictAction) {
       this.raiseQuoteForm.get('worksOrderNumber').disable();
       this.raiseQuoteForm.get('description').disable();
       this.raiseQuoteForm.get('requiredDate').disable();
@@ -1152,7 +1153,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.raiseQuoteForm.get('jobType').disable();
       this.raiseQuoteForm.get('repairSource').disable();
       this.raiseQuoteForm.get('thirdPartySource').disable();
-    }
+    // }
   }
 
   private disableWorksOrderDetail() {
@@ -1174,11 +1175,11 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private disableContractorsList(notification) {
-    if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && (notification.templateCode === 'QC-L-E' || notification.templateCode === 'CQ-NA-C-E' || notification.templateCode === 'CQ-A-C-E' || notification.templateCode === 'CDT-C-E')) {
-      this.restrictAction = false;
-    } else {
-      this.restrictAction = true;
-    }
+    // if (notification.responseReceived != null && notification.responseReceived.isAccepted === false && (notification.templateCode === 'QC-L-E' || notification.templateCode === 'CQ-NA-C-E' || notification.templateCode === 'CQ-A-C-E' || notification.templateCode === 'CDT-C-E')) {
+    //   this.restrictAction = false;
+    // } else {
+    //   this.restrictAction = true;
+    // }
     if (this.faultMaintenanceDetails && this.faultMaintenanceDetails.quoteContractors) {
       const data = this.faultMaintenanceDetails.quoteContractors.filter(x => x.isRejected);
       this.disableAnotherQuote = false;

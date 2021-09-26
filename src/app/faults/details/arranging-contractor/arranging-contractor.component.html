@@ -327,7 +327,7 @@
                         <div class="action-btn-container">
                           <ion-checkbox color="success" class="list-checkbox" formControlName="isActive" mode="ios"
                           (ionChange)="updateContractorState($event,item.value)" [disabled]="(!item.get('isNew').value && !item.get('isPreferred').value) || item.get('quoteContractorStatus').value || 
-                          (restrictAction  || item.get('isRejected').value) && item.get('rejectedByType').value === REJECTED_BY_TYPE.LANDLORD" *ngIf="!item.get('isNonSq').value">
+                          (item.get('isRejected').value) && item.get('rejectedByType').value === REJECTED_BY_TYPE.LANDLORD" *ngIf="!item.get('isNonSq').value">
                            </ion-checkbox>
                           <ion-fab class="cc-list-button" vertical="center" horizontal="end" *ngIf="!item.get('isNonSq').value" >
                             <ion-fab-button class="expand-btn">      
