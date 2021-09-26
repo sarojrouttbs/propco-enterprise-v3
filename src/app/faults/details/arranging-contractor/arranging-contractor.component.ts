@@ -2372,10 +2372,8 @@ export class ArrangingContractorComponent implements OnInit {
         let nonSQContractors = this.faultMaintenanceDetails.quoteContractors.filter(data => !data.isNonSq)
         if (this.faultMaintenanceDetails.quoteContractors.length === 1 || this.filteredCCDetails.contractorId || nonSQContractors.length === 1) {
           // let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : this.faultMaintenanceDetails.quoteContractors.filter(data => data.isActive)[0].contractorId;
-          let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : this.faultMaintenanceDetails.quoteContractors[0].contractorId;
-          if(nonSQContractors.length === 1){
-            ccId = nonSQContractors[0].contractorId;
-          }
+          let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : 
+            (this.faultMaintenanceDetails.quoteContractors.length === 1) ? this.faultMaintenanceDetails.quoteContractors[0].contractorId : nonSQContractors[0].contractorId;
         if (ccId) {
           this.selectedCCDetails(ccId);
         }
