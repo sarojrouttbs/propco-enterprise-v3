@@ -334,7 +334,7 @@ export class DashboardPage implements OnInit {
   }
 
   async deEscalateFault() {
-    this.commonService.showConfirm('De-Escalate Fault', 'Are you sure, you want to de-escalate the fault?', '', 'Yes', 'No').then(res => {
+    this.commonService.showConfirm('De-Escalate Fault', 'Are you sure you want to de-escalate the fault?', '', 'Yes', 'No').then(res => {
       if (res) {
         this.faultsService.deEscalateFault(this.selectedData.faultId, {}).subscribe(res => {
           this.commonService.showAlert('De-Escalate Fault', 'Fault has been de-escalated to the property manager.');

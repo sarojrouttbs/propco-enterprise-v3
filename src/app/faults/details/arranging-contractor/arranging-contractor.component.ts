@@ -1288,7 +1288,7 @@ export class ArrangingContractorComponent implements OnInit {
     notificationObj.submittedByType = 'SECUR_USER';
     const titleText = this.isWorksOrder ? 'works order' : 'quote request';
     if (data.value) {
-      this.commonService.showConfirm(data.text, `Are you sure, you want to accept the ${titleText}?`, '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, `Are you sure you want to accept the ${titleText}?`, '', 'Yes', 'No').then(async res => {
         if (res) {
           this.commonService.showLoader();
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);

@@ -335,7 +335,7 @@
                             </ion-fab-button>
                             <ion-fab-list side="start">
                               <ion-button *ngIf="item.get('quoteContractorStatus').value" (click)="selectedCCDetails(item.get('contractorId').value)">View </ion-button>
-                              <ion-button  (click)="removeContractor(i,item.get('isRejected').value)">Delete</ion-button>
+                              <ion-button  (click)="removeContractor(i,item.get('isRejected').value)" *ngIf="!item.get('quoteContractorStatus').value">Remove</ion-button>
                                <!-- <ion-fab-button class="check-button" *ngIf="item.get('isPreferred').value">
                                 <span matTooltip="Preferred Contractor" matTooltipPosition="above">
                                   <ion-icon class="list-button" name="checkmark-circle-outline"> </ion-icon>
