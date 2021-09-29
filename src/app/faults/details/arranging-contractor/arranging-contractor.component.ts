@@ -103,6 +103,7 @@ export class ArrangingContractorComponent implements OnInit {
   ccQuoteDocuments: any;
   filteredCCDetails: any = {};
   activeContractorCount: number = 0;
+  preferredSuppliersList : any = [];
 
   constructor(
     private fb: FormBuilder,
@@ -316,6 +317,9 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async initApiCalls() {
     this.MAX_ACTIVE_QUOTE_CONTRACTOR = await this.getSystemConfigs(SYSTEM_CONFIG.MAX_ACTIVE_QUOTE_CONTRACTOR);
+    if(!this.isWorksOrder) {
+      this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
+    }
     if (this.faultMaintenanceDetails) {
       if (!this.isWorksOrder) {
         this.MAX_QUOTE_REJECTION = await this.getSystemConfigs(SYSTEM_CONFIG.MAXIMUM_FAULT_QUOTE_REJECTION);
@@ -332,7 +336,6 @@ export class ArrangingContractorComponent implements OnInit {
       this.setQuoteCCDetail();
     } else {
       if (!this.isWorksOrder) {
-        this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
         this.checkMaintenanceDetail();
       }
       let userDetails: any = await this.getUserDetails();
@@ -765,7 +768,7 @@ export class ArrangingContractorComponent implements OnInit {
   private getNewCCList() {
     let contractors = [];
     this.raiseQuoteForm.get('contractorList').value.forEach(info => {
-      if ((info.isNew || info.isPreferred) && info.isActive) {
+      if (info.isNew && info.isActive) {
         contractors.push(info);
       }
     });
@@ -1077,7 +1080,9 @@ export class ArrangingContractorComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         res => {
-          res && res.data ? res.data.map((x) => { this.addContractor(x, false, true) }) : [];
+          res && res.data ? res.data.map((x) => { 
+            !this.faultMaintenanceDetails ? this.addContractor(x, false, true) : this.preferredSuppliersList.push(x);
+          }) : [];
           resolve(true);
         },
         error => {
@@ -1624,7 +1629,7 @@ export class ArrangingContractorComponent implements OnInit {
       address: '',
       contractorId: data.contractorId ? data.contractorId : data.contractorObj.entityId,
       select: '',
-      isPreferred,
+      isPreferred: isPreferred ? isPreferred : this.checkIfPrefferedContractor(data.contractorId ? data.contractorId : data.contractorObj.entityId),
       isNew: isNew,
       // checked: isNew ? false : (data.isActive  ? true : false),
       // isActive: isNew ? false : (data.isActive ? true : false),
@@ -1643,6 +1648,13 @@ export class ArrangingContractorComponent implements OnInit {
     if (isNew) {
       this.addContractorForm.reset();
       this.isSelected = false;
+    }
+  }
+
+  private checkIfPrefferedContractor(contractorId : string) {
+    if(this.preferredSuppliersList.length && contractorId) {
+      const preferred = this.preferredSuppliersList.find(x => x.contractorId === contractorId);
+      return preferred ? true : false;
     }
   }
 
