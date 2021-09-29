@@ -255,7 +255,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.isContratorSelected = true;
       return;
     } 
-    if (isNew) {
+    if (isNew && !isPreferred) {
       this.getContractorDetails(data?.contractorObj?.entityId, 'quote');
     } else {
       this.patchContartorList(data, isNew, isPreferred);
@@ -1081,7 +1081,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         res => {
           res && res.data ? res.data.map((x) => { 
-            !this.faultMaintenanceDetails ? this.addContractor(x, false, true) : this.preferredSuppliersList.push(x);
+            !this.faultMaintenanceDetails ? this.addContractor(x, true, true) : this.preferredSuppliersList.push(x);
           }) : [];
           resolve(true);
         },
