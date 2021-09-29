@@ -4,7 +4,7 @@ import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
 import { Router } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { Component, OnInit, ViewChildren, QueryList, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { NotesModalPage } from '../../shared/modals/notes-modal/notes-modal.page';
 import { EscalateModalPage } from '../../shared/modals/escalate-modal/escalate-modal.page';
@@ -90,7 +90,6 @@ export class DashboardPage implements OnInit {
   isSnoozeFilter: boolean = false;
   minDate;
   futureDate;
-  snoozeFilterType: any;
 
   constructor(
     private commonService: CommonService,
@@ -113,6 +112,7 @@ export class DashboardPage implements OnInit {
       this.notesDtTrigger.next();
     }, 1000);
   }
+
 
   async getFaultTableDtOption(): Promise<DataTables.Settings> {
     const that = this;
@@ -190,6 +190,24 @@ export class DashboardPage implements OnInit {
       assignToFilter: [],
       showMyRepairs: [],
       snoozeUntil: [this.futureDate]
+    });
+
+    this.filterForm.get('fromDate').valueChanges.subscribe(value => {
+      if(value){
+        this.onDateChange();
+      }
+    });
+    this.filterForm.get('toDate').valueChanges.subscribe(value => {
+      if(value){
+        this.onDateChange();
+      }
+    });
+    this.filterForm.get('snoozeUntil').valueChanges.subscribe(value => {
+      if(value){
+        setTimeout(()=>{
+          this.filterList();
+        },300)
+      }
     });
   }
 
@@ -535,7 +553,7 @@ export class DashboardPage implements OnInit {
     }
 
     if (this.filterValue == 5) {
-      this.snoozeFault(1);
+      this.filterForm.get('snoozeUntil').setValue(this.futureDate);
       this.isSnoozeFilter = true;
     }
   }
@@ -563,7 +581,7 @@ export class DashboardPage implements OnInit {
 
     if (val == 5) {
       this.isSnoozeFilter = false;
-      this.snoozeFilterType = null;
+      this.filterForm.get('snoozeUntil').setValue(null);
     }
 
     this.filterForm.get('filterType').reset();
@@ -782,13 +800,8 @@ export class DashboardPage implements OnInit {
       this.faultParams = this.faultParams.set('showMyRepairs', true);
 
     }
-    if (this.filterForm.value.snoozeUntil && this.snoozeFilterType == 2) {
+    if (this.filterForm.value.snoozeUntil) {
       let date = this.datepipe.transform(this.filterForm.value.snoozeUntil, 'yyyy-MM-dd');
-      this.faultParams = this.faultParams.set('snoozeUntil', date);
-    }
-
-    if (this.filterForm.value.snoozeUntil && this.snoozeFilterType == 1) {
-      let date = this.datepipe.transform(this.futureDate, 'yyyy-MM-dd');
       this.faultParams = this.faultParams.set('snoozeUntil', date);
     }
     this.rerenderFaults();
@@ -1216,14 +1229,6 @@ export class DashboardPage implements OnInit {
     const currentDate = new Date();
     this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 1), 'yyyy-MM-dd');
     this.futureDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 29), 'yyyy-MM-dd');
-  }
-
-   snoozeFault(type) {
-    this.snoozeFilterType = type;
-    if (this.snoozeFilterType == 1) {
-      this.filterForm.get('snoozeUntil').setValue(this.futureDate);
-    }
-    this.filterList();
   }
 }
 
