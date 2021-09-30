@@ -14,8 +14,6 @@ export class SnoozeFaultModalPage implements OnInit {
   faultId;
   minDate;
   futureDate;
-  snoozeUntil;
-  snoozeReason;
   showLoader: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
@@ -35,12 +33,6 @@ export class SnoozeFaultModalPage implements OnInit {
       snoozeUntil: ['', Validators.required],
       snoozeReason: ['', Validators.required],
     });
-    if (this.snoozeUntil) {
-      this.snoozeFaultForm.patchValue({
-        snoozeUntil: this.snoozeUntil,
-        snoozeReason: this.snoozeReason
-      })
-    }
   }
 
   async submit() {
