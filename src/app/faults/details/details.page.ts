@@ -2227,8 +2227,8 @@ export class DetailsPage implements OnInit {
         if (this.files[i].folderName == null) {
           this.files[i].folderName = FOLDER_NAMES[0].index;
         }
-        if(this.files[i].folderName === FOLDER_NAMES[1].index && this.files[i].contractorReference){
-          this.files[i].folderName = e.folderName + ' - '+ e.contractorReference;
+        if(this.files[i].folderName === FOLDER_NAMES[1].index && this.files[i].contractorCompanyName ){
+          this.files[i].folderName = e.folderName + ' - '+ e.contractorCompanyName;
         }
         this.files[i].folderName = e.folderName.replace(/_/g, " ");
         this.files[i].isUploaded = true;
