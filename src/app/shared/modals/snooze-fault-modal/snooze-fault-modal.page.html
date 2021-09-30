@@ -29,7 +29,7 @@
           <ion-item>
             <ion-label position="floating">Notes <ion-text class="mandatory"> * </ion-text>
             </ion-label>
-            <ion-input formControlName="snoozeReason"></ion-input>
+            <ion-textarea formControlName="snoozeReason" rows="1" auto-grow="true" class="snooze-reason"></ion-textarea>
           </ion-item>
           <app-validation-message [control]="snoozeFaultForm.controls.snoozeReason"></app-validation-message>
         </ion-col>
