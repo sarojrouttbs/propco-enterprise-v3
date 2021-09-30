@@ -2151,8 +2151,6 @@ export class DetailsPage implements OnInit {
       cssClass: 'modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId,
-        snoozeUntil: this.faultDetails.snoozeUntil,
-        snoozeReason: this.faultDetails.snoozeReason
       },
       backdropDismiss: false
     });
@@ -2160,7 +2158,7 @@ export class DetailsPage implements OnInit {
     modal.onDidDismiss().then(async res => {
       if(res && res.data && res.data == 'success'){
         this.commonService.showMessage('Fault has been snooze successfully.', 'Snooze Fault', 'success');
-        this.refreshDetailsAndStage();
+        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
       }
     });
     await modal.present();
@@ -2229,8 +2227,8 @@ export class DetailsPage implements OnInit {
         if (this.files[i].folderName == null) {
           this.files[i].folderName = FOLDER_NAMES[0].index;
         }
-        if(this.files[i].folderName === FOLDER_NAMES[1].index && this.files[i].contractorReference){
-          this.files[i].folderName = e.folderName + ' - '+ e.contractorReference;
+        if(this.files[i].folderName === FOLDER_NAMES[1].index && this.files[i].contractorCompanyName ){
+          this.files[i].folderName = e.folderName + ' - '+ e.contractorCompanyName;
         }
         this.files[i].folderName = e.folderName.replace(/_/g, " ");
         this.files[i].isUploaded = true;
