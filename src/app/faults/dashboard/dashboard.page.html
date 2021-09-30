@@ -116,8 +116,7 @@
           <ion-col size=15>
             <ion-item>
               <ion-label position="floating">From</ion-label>
-              <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" formControlName="fromDate"
-                (ionChange)="onDateChange()" class="datetime-padding" #fromDatePicker>
+              <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" formControlName="fromDate" class="datetime-padding" #fromDatePicker>
               </ion-datetime>
               <ion-icon ion-datetime-picker name="calendar" slot="start" class="datetime-icon" (click)="fromDatePicker.open()"></ion-icon>
             </ion-item>
@@ -127,7 +126,7 @@
             <ion-item>
               <ion-label position="floating">To</ion-label>
               <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-                formControlName="toDate" (ionChange)="onDateChange()" #toDatePicker>
+                formControlName="toDate" #toDatePicker>
               </ion-datetime>
               <ion-icon name="calendar" slot="start" class="datetime-icon" (click)="toDatePicker.open()"></ion-icon>
             </ion-item>
@@ -377,12 +376,11 @@
             </ion-item>
             <ion-icon name="close-circle" class="close-btn" (click)="closeFilter(4)"> </ion-icon>
           </ion-col>
-
           <ion-col size=20 *ngIf="isSnoozeFilter">
             <ion-item class="select-block">
               <ion-label position="floating">Snoozed Till</ion-label>
               <ion-datetime formControlName="snoozeUntil" displayFormat="DD/MM/YYYY" interface="popover"
-              class="request-start-date" [min]="minDate" [max]="futureDate" (ionChange)="snoozeFault(2)">
+              class="request-start-date" [min]="minDate" [max]="futureDate">
             </ion-datetime>
             </ion-item>
             <ion-icon name="close-circle" class="close-btn" (click)="closeFilter(5)"> </ion-icon>
