@@ -247,10 +247,14 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/wo/contractor-visit`, notificationObj);
   }
 
-  getWorksOrderPaymentRules(faultId: string, contractorId?: string) {
-    let params = new HttpParams().set('contractorId', contractorId);
+  getWorksOrderPaymentRules(faultId: string, contractorId?: string, repairCost?: any) {
+    let params = new HttpParams().set('contractorId', contractorId)
+    .set('repairCost', repairCost);
     if (contractorId == null && contractorId == undefined) {
       params = params.delete('contractorId')
+    }
+    if (repairCost == null && repairCost == undefined) {
+      params = params.delete('repairCost')
     }
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/check-payment-rules`, { params });
   }
