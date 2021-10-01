@@ -961,17 +961,16 @@ export class ArrangingContractorComponent implements OnInit {
         return;
       }
       /*raise a worksorder & check paymentRules*/
-      const rules = await this.getWorksOrderPaymentRules(WORKSORDER_RAISE_TYPE.MANUAL) as FaultModels.IFaultWorksorderRules as any;
+      let sendRepairCost = true;
+      const rules = await this.getWorksOrderPaymentRules(WORKSORDER_RAISE_TYPE.MANUAL, sendRepairCost) as FaultModels.IFaultWorksorderRules as any;
       if (!rules) { return; }
-      if (rules === 'saveWorksorder') {
-        this.saveForLater();
-      } else {
-        const paymentRequired = await this.checkForPaymentRules(rules);
+      const saveConfirmEst = await this.saveFaultDetails({confirmedEstimate : this.workOrderForm.get('repairCost').value}, this.faultDetails.faultId);
+      if(!saveConfirmEst) { return; }
+      const paymentRequired = await this.checkForPaymentRules(rules);
         const submit = await this.raiseWorksOrderAndNotification(paymentRequired, WORKSORDER_RAISE_TYPE.MANUAL);
         if (submit) {
           this._btnHandler('refresh');
         }
-      }
     }
   }
 
@@ -1771,6 +1770,26 @@ export class ArrangingContractorComponent implements OnInit {
     return promise;
   }
 
+  private async saveFaultDetails(data, faultId): Promise<any> {
+    let reqObj: any = data;
+      reqObj.stage = this.faultDetails.stage;
+      reqObj.isDraft = this.faultDetails.isDraft;
+      reqObj.submittedByType = 'SECUR_USER';
+      reqObj.submittedById = ''
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.saveFaultDetails(faultId, data).subscribe(
+        res => {
+          resolve(true);
+        },
+        error => {
+          this.commonService.showMessage('Something went wrong', 'Worksorder', 'error');
+          reject(false)
+        }
+      );
+    });
+    return promise;
+  }
+
   onSearchContractor(event: any) {
     this.isContractorSearch = true
     const searchString = event.target.value;
@@ -2068,10 +2087,11 @@ export class ArrangingContractorComponent implements OnInit {
     }
   }
 
-  private getWorksOrderPaymentRules(actionType = WORKSORDER_RAISE_TYPE.AUTO) {
+  private getWorksOrderPaymentRules(actionType = WORKSORDER_RAISE_TYPE.AUTO, sendRepairCost= false) {
     const promise = new Promise((resolve, reject) => {
       const ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : null;
-      this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId, ccId).subscribe(
+      const repairCost = sendRepairCost ? this.workOrderForm.get('repairCost').value : null;
+      this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId, ccId ,repairCost).subscribe(
         res => {
           resolve(res);
         },
@@ -2079,7 +2099,8 @@ export class ArrangingContractorComponent implements OnInit {
           if (error.error && error.error.hasOwnProperty('errorCode')) {
             this.commonService.showMessage(error.error ? error.error.message : 'Something went wrong', 'Arranging Contractor', 'error');
             if (error.error.errorCode === ERROR_CODE.PAYMENT_RULES_CHECKING_FAILED && actionType !== WORKSORDER_RAISE_TYPE.AUTO) {
-              resolve('saveWorksorder');
+              // resolve('saveWorksorder');
+              resolve(null);
             } else {
               resolve(null);
             }
