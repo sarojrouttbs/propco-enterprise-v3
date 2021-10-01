@@ -318,7 +318,14 @@
                       </ion-col>
              
                       <ion-col size="20" class="skills">
-                        <ion-text matTooltip="Skills">{{item.get('reference').value ? item.get('reference').value : 'N/A'}}</ion-text>
+                        <ion-text matTooltip="Skills">
+                          <span *ngIf="item.get('reference').value.length > 15" (click)="showSkillsDetailsPopup(item.get('reference').value)" class="pointer">
+                            {{ item.get('reference').value.substring(0,15)+"..." }}
+                          </span>
+                          <span *ngIf="item.get('reference').value.length <= 15">
+                            {{ item.get('reference').value || 'N/A' }}
+                          </span>
+                        </ion-text>
                       </ion-col>
                       <ion-col size="20">
                         <ion-text matTooltip="Contractor Status"><strong>{{ item.get('status').value ? item.get('status').value : 'N/A'}}</strong></ion-text>

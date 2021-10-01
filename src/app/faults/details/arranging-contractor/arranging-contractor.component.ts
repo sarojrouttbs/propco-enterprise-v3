@@ -2428,4 +2428,8 @@ export class ArrangingContractorComponent implements OnInit {
   snoozeFault(){
     this._btnHandler('snooze');
   }
+
+  showSkillsDetailsPopup(value) {
+    this.commonService.showAlert('Contractor Skills', value);
+  }
 }
