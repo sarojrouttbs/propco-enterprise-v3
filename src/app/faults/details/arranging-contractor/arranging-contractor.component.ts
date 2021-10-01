@@ -265,11 +265,11 @@ export class ArrangingContractorComponent implements OnInit {
   async removeContractor(i: any, isRejected: boolean) {
     // if (this.restrictAction) { return; }
     if (isRejected) {
-      this.commonService.showAlert('Delete Contractor', 'Deleting the rejected contractor is restricted.');
+      this.commonService.showAlert('Remove Contractor', 'Removing the rejected contractor is restricted.');
       return;
     }
     const contractorList = this.raiseQuoteForm.get('contractorList') as FormArray;
-    const deleteContractor = await this.commonService.showConfirm('Delete Contrator', 'Do you want to delete contractor from the list?');
+    const deleteContractor = await this.commonService.showConfirm('Remove Contractor', 'Are you sure you want to remove this contractor from the list?');
     if (deleteContractor) {
       const deleteConId = contractorList.at(i).get('contractorId').value;
       const index = this.contratctorArr.indexOf(deleteConId);

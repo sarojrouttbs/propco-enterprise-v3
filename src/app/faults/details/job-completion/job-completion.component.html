@@ -1,13 +1,13 @@
 
   <ion-grid>
     <ion-row *ngIf="faultDetails?.isClosed">
-      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
         <app-close-fault  [notificationData]="iacNotification" [faultDetails]="faultDetails" [action]="getLookupValue(iacNotification?.faultStageAction, iacStageActions) || getLookupValue(faultDetails?.userSelectedAction, iacStageActions) || getLookupValue(iacNotification?.faultStageAction, faultQualificationsAction)?getLookupValue(iacNotification?.faultStageAction, iacStageActions) || getLookupValue(faultDetails?.userSelectedAction, iacStageActions) || getLookupValue(iacNotification?.faultStageAction, faultQualificationsAction): 'Job Completion'"></app-close-fault>
       </ion-col>
     </ion-row>
 
     <ion-row *ngIf="iacNotification && !showSkeleton && !faultDetails?.isClosed">
-      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
@@ -193,7 +193,7 @@
     <ion-grid style="margin: 20px 0" *ngIf="quoteDocuments?.length && !showSkeleton">
       <!-- <ion-grid style="margin: 20px 0" *ngIf="quoteDocuments?.length != 0 && (iacNotification?.templateCode === 'CF-T-E' || faultDetails?.status === 8)"> -->
       <ion-row>
-        <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+        <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
           <h2>Invoice / Documents</h2>
           <!-- <div class="border-bottom"></div> -->
           <ion-row>
@@ -233,7 +233,7 @@
     </ion-grid>
     <ion-row *ngIf="isFormsReady && !showSkeleton">
       
-        <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+        <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
           <ng-container *ngIf="isWorksOrder">
             <form [formGroup]="workOrderForm">
               <ion-grid>
@@ -245,7 +245,7 @@
       
     </ion-row>
     <ion-row *ngIf="showSkeleton">
-      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
       <div><ng-container *ngTemplateOutlet="notificationSkeleton"></ng-container></div>
       <div *ngIf="isWorksOrder" ><ng-container *ngTemplateOutlet="worksOrderFormSkeleton"></ng-container></div>
     </ion-col>
@@ -253,7 +253,7 @@
     <ion-grid style="margin: 20px 0"
     *ngIf="isFormsReady && faultDetails?.isAnyFurtherWork && !showSkeleton">
     <ion-row>
-      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
         <h2>Further Job(s) Required</h2>
         <div class="border-bottom"></div>
         <div>Is there any further work to Quote for ? : <b>Yes</b></div>
@@ -264,7 +264,7 @@
   </ion-grid>
 
   <ion-row>
-    <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+    <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
         <ng-container *ngIf="isFormsReady && faultDetails && !showSkeleton">
           <ng-template *ngTemplateOutlet="iqfCards"></ng-template>
           </ng-container>
