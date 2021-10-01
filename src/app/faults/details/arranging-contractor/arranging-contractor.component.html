@@ -1,13 +1,13 @@
   <ion-grid>
     <ion-row *ngIf="faultDetails?.isClosed">
-      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
         <app-close-fault  [notificationData]="iacNotification" [faultDetails]="faultDetails" [action]="getLookupValue(iacNotification?.faultStageAction, iacStageActions) ? getLookupValue(iacNotification?.faultStageAction, iacStageActions) : 'Arranging Contractor'"></app-close-fault>
       </ion-col>
     </ion-row>
    
 
     <ion-row *ngIf="iacNotification && !showSkeleton && !faultDetails?.isClosed && isContractorSelected">
-      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
@@ -248,7 +248,7 @@
     </ion-row>
     <ion-grid *ngIf="(iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'QC-L-E') && ccQuoteDocuments?.length && !showSkeleton && isContractorSelected">
       <ion-row>
-        <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+        <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
           <h2>Quote Documents</h2>
           <div class="border-bottom"></div>
           <ion-row>
@@ -287,7 +287,7 @@
     </ion-grid>
     <ion-row *ngIf="isFormsReady && !showSkeleton">
 
-        <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+        <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
           <ng-container *ngIf="!isWorksOrder">
             <div class="quote-request-banner" *ngIf="!isContractorSelected && faultNotifications.length">
               <ion-text>You have requested multiple quotes.</ion-text>
@@ -432,7 +432,7 @@
       
     </ion-row>
     <ion-row *ngIf="showSkeleton">
-      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
       <div><ng-container *ngTemplateOutlet="notificationSkeleton"></ng-container></div>
       <div *ngIf="isWorksOrder" ><ng-container *ngTemplateOutlet="worksOrderFormSkeleton"></ng-container></div>
       <div *ngIf="!isWorksOrder"><ng-container *ngTemplateOutlet="raiseQuoteFormSkeleton"></ng-container></div>
