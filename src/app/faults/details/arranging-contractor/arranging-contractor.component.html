@@ -307,18 +307,18 @@
                         'selected': item.get('contractorId').value == filteredCCDetails?.contractorId
                       }">
                       <ion-col size="30">
-                        <span *ngIf="item.get('isPreferred').value" class="prefered-cc" matTooltip="Preferred Contractor" matTooltipPosition="above">
-                          <ion-icon name="checkmark-circle-outline"> </ion-icon>
-                        </span>
-                        <ion-text matTooltip="Company Name">{{item.get('company').value ? item.get('company').value : 'N/A'}}</ion-text>
+                        <ion-text  style="padding-bottom: 3px;" class="sq-label">Company Name </ion-text>
+                        <span *ngIf="item.get('isPreferred').value" class="prefered-cc" matTooltip="Preferred Contractor"><ion-icon name="checkmark-circle-outline"> </ion-icon></span>
+                        <ion-text>{{item.get('company').value ? item.get('company').value : 'N/A'}}</ion-text>
                       </ion-col>
-      
                       <ion-col size="20" size-xl="17">
-                        <ion-text matTooltip="Contractor Mobile">{{item.get('mobile').value ? item.get('mobile').value : 'N/A'}}</ion-text>
+                        <ion-text  class="sq-label">Mobile</ion-text>
+                        <ion-text >{{item.get('mobile').value ? item.get('mobile').value : 'N/A'}}</ion-text>
                       </ion-col>
-             
+            
                       <ion-col size="20" class="skills">
-                        <ion-text matTooltip="Skills">
+                        <ion-text class="sq-label">Skills</ion-text>
+                        <ion-text>
                           <span *ngIf="item.get('reference').value?.length > 15" (click)="showSkillsDetailsPopup(item.get('reference').value)" class="pointer">
                             {{ item.get('reference').value?.substring(0,15)+"..." }}
                           </span>
@@ -328,7 +328,8 @@
                         </ion-text>
                       </ion-col>
                       <ion-col size="20">
-                        <ion-text matTooltip="Contractor Status"><strong>{{ item.get('status').value ? item.get('status').value : 'N/A'}}</strong></ion-text>
+                        <ion-text  class="sq-label">Quote Status</ion-text>
+                        <ion-text><strong>{{ item.get('status').value ? item.get('status').value : 'N/A'}}</strong></ion-text>
                       </ion-col>
                       <ion-col size="10" size-xl="13">
                         <div class="action-btn-container">
@@ -336,7 +337,7 @@
                           (ionChange)="updateContractorState($event,item.value)" [disabled]="(!item.get('isNew').value && !item.get('isPreferred').value) || item.get('quoteContractorStatus').value || 
                           (item.get('isRejected').value) && item.get('rejectedByType').value === REJECTED_BY_TYPE.LANDLORD" *ngIf="!item.get('isNonSq').value">
                            </ion-checkbox>
-                          <ion-fab class="cc-list-button" vertical="center" horizontal="end" *ngIf="!item.get('isNonSq').value" >
+                          <ion-fab class="cc-list-button" horizontal="end" *ngIf="!item.get('isNonSq').value" >
                             <ion-fab-button class="expand-btn">      
                                <i class="propcoicon propcoicon-actions-on"></i>
                             </ion-fab-button>

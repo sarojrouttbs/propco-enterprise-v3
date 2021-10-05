@@ -23,13 +23,13 @@
   .cc-list {
     padding: 10px 5px;
     ion-col {
-      display: flex;
-      align-items: center;
+      // display: flex;
+      // align-items: center;
       ion-text {
         font-size: 16px;
       }
     }
-    .skills{
+    .skills {
       word-break: break-word;
     }
   }
@@ -79,7 +79,7 @@
   .expand-btn {
     height: 36px;
     width: 36px;
-    margin-top: 10px;
+    // margin-top: 10px;
     --color: var(--ion-color-step-2000);
     --background: var(--ion-color-warning);
     .propcoicon {
@@ -90,6 +90,7 @@
   }
   ion-fab-list {
     margin-inline: 40px;
+    margin-top: -9px;
     ion-fab-button {
       height: 36px;
       width: 36px;
@@ -335,18 +336,25 @@ input {
   }
 }
 
-.checkbox-disabled{
+.checkbox-disabled {
   opacity: 0.8 !important;
 }
 
-.prefered-cc{
-  font-size: 20px;
-  padding-top: 5px;
-  padding-right: 2px;
+.prefered-cc {
+  font-size: 24px;
+  // padding-top: 5px;
+  padding-right: 5px;
   color: var(--ion-color-success-shade);
   cursor: pointer;
-  ion-icon{
+  ion-icon {
     pointer-events: none;
+    margin-bottom: -7px;
   }
 }
 
+.sq-label {
+  color: var(--ion-color-step-1300);
+  display: block;
+  font-size: 12px !important;
+  padding-bottom: 8px;
+}
