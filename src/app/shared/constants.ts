@@ -411,7 +411,8 @@ export const FAULT_EVENT_TYPES = [
   {
     "Escalations": [
       "Escalated",
-      "De Escalated"
+      "De Escalated",
+      "Fault Snoozed"
     ]
   },
   {
