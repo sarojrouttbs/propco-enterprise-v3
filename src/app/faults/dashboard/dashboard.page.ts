@@ -189,7 +189,7 @@ export class DashboardPage implements OnInit {
       selectedPorts: [],
       assignToFilter: [],
       showMyRepairs: [],
-      snoozeUntil: [this.futureDate]
+      snoozeUntil: []
     });
 
     this.filterForm.get('fromDate').valueChanges.subscribe(value => {
