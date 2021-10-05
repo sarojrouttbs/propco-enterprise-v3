@@ -45,6 +45,7 @@
                                 <th class="none">To</th>
                                 <th class="none">Subject</th>
                                 <th class="none">Email</th>
+                                <th class="none">Snoozed Till</th>
                         </thead>
                         <tbody>
                             <tr *ngFor="let elem of eventList">
@@ -71,6 +72,7 @@
                                 <td>{{ elem.data.to}}</td>
                                 <td>{{ elem.data.subject}}</td>
                                 <td [innerHtml]="elem.data.body"></td>
+                                <td>{{ elem.data.snoozeUntilDate | date : 'dd/MM/yyyy'}}</td>
                             </tr>
                         </tbody>
                     </table>
