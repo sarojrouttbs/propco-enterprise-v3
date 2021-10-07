@@ -457,7 +457,7 @@
                   <!-- <td>{{fault?.isEscalated ? 'Escalation' : getLookupValue(fault.status, faultStatuses) || '-'}}</td> -->
                   <td>
                     <span>
-                      <ion-icon name="alarm" *ngIf="fault?.snoozeUntil && (fault?.snoozeUntil > currentDateForSnooze)" title="snooze" style="font-size: 15px;vertical-align: text-bottom;"></ion-icon>
+                      <ion-icon name="alarm" *ngIf="fault?.snoozeUntil && (fault?.snoozeUntil >= currentDate)" title="snooze" style="font-size: 15px;vertical-align: text-bottom;"></ion-icon>
                       {{fault?.isClosed || (fault?.isClosed && fault?.isEscalated) ? 'Closed' : 
                       (fault?.isEscalated ? 'Escalation' : getLookupValue(fault?.status, faultStatuses)) || '-' }}
                     </span>
