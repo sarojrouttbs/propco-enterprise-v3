@@ -90,6 +90,7 @@ export class DashboardPage implements OnInit {
   isSnoozeFilter: boolean = false;
   minDate;
   futureDate;
+  currentDateForSnooze;
 
   constructor(
     private commonService: CommonService,
@@ -105,6 +106,7 @@ export class DashboardPage implements OnInit {
   async ngOnInit() {
     this.loadTable = false;
     this.setSnoozeMinMaxDate();
+    this.initCurrentDateForSnooze();
     this.initFilterForm();
     this.notesDtOption = this.buildDtOptions();
     this.faultsDtOption = this.getFaultTableDtOption();
@@ -1229,6 +1231,11 @@ export class DashboardPage implements OnInit {
     const currentDate = new Date();
     this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 1), 'yyyy-MM-dd');
     this.futureDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 29), 'yyyy-MM-dd');
+  }
+
+  initCurrentDateForSnooze() {
+    const currentDate = new Date();
+    this.currentDateForSnooze = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate()), 'yyyy-MM-dd');
   }
 }
 
