@@ -220,6 +220,7 @@ export class DashboardPage implements OnInit {
     }
     this.loadTable = true;
     this.hideMenu('', 'divOverlay');
+    this.commonService.removeItem('contractorId');
   }
 
   private async getSystemConfigs(key): Promise<any> {
