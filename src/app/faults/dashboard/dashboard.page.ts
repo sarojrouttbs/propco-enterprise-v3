@@ -90,6 +90,7 @@ export class DashboardPage implements OnInit {
   isSnoozeFilter: boolean = false;
   minDate;
   futureDate;
+  currentDate;
 
   constructor(
     private commonService: CommonService,
@@ -1229,6 +1230,7 @@ export class DashboardPage implements OnInit {
     const currentDate = new Date();
     this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 1), 'yyyy-MM-dd');
     this.futureDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 29), 'yyyy-MM-dd');
+    this.currentDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
   }
 }
 
