@@ -205,6 +205,7 @@ export class LandlordInstructionComponent implements OnInit {
     }
     await this.getLandlordDetails(landlordId);
     this.checkForLLSuggestedAction();
+    this.matchCategory();
     this.showSkeleton = false;
   }
 
@@ -1454,6 +1455,10 @@ export class LandlordInstructionComponent implements OnInit {
   }
 
   async presentRepairCategories(ev: any) {
+    if(this.landlordDetails.repairCategoriesText && !this.landlordDetails.repairCategoriesText.length){
+      this.commonService.showAlert('Repair Categories', 'No data found');
+      return;
+    }
     const popover = await this.popoverController.create({
       component: SimplePopoverPage,
       cssClass: 'my-custom-class',
