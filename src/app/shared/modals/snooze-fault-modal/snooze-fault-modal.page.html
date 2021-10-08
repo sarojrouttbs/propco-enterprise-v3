@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Snooze Fault</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="snoozeFaultForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="100">
+          <h6>Please select the date you want to hide this Fault from the dashboard till</h6>
+          <h6>You can search the snoozed faults via the search filters available on the dashboard.</h6>
+        </ion-col>
+        <ion-col size="100">
+          <mat-form-field appearance="fill">
+            <mat-label>Select Date <ion-text class="mandatory"> * </ion-text>
+            </mat-label>
+            <input matInput [matDatepicker]="picker" [min]="minDate" [max]="futureDate"
+              readonly formControlName="snoozeUntil">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <div style="margin-top: -20px !important;">
+            <app-validation-message [control]="snoozeFaultForm.controls.snoozeUntil"></app-validation-message>
+          </div>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Notes <ion-text class="mandatory"> * </ion-text>
+            </ion-label>
+            <ion-textarea formControlName="snoozeReason" rows="1" auto-grow="true" class="snooze-reason"></ion-textarea>
+          </ion-item>
+          <app-validation-message [control]="snoozeFaultForm.controls.snoozeReason"></app-validation-message>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+
+</ion-content>
+<ion-footer class="ion-text-right">
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-right">
+        <ion-button color="danger" (click)="dismiss()">Cancel</ion-button>
+        <ion-button color="success" (click)="submit()" [disabled]="showLoader || snoozeFaultForm.invalid">Submit
+          <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

@@ -20,7 +20,21 @@
 
 .contractor-block {
   margin-top: 20px;
+  .cc-list {
+    padding: 10px 5px;
+    ion-col {
+      // display: flex;
+      // align-items: center;
+      ion-text {
+        font-size: 16px;
+      }
+    }
+    .skills {
+      word-break: break-word;
+    }
+  }
 }
+
 .row-banner {
   background: lightgray;
   padding: 10px;
@@ -36,20 +50,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 13px;
+  // margin-top: 10px;
   .list-checkbox {
-    height: 25px;
-    width: 25px;
+    height: 36px;
+    width: 36px;
   }
   .list-button {
-    font-size: 32px;
+    font-size: 36px;
   }
 }
 
 .button-container {
-  height: 30px;
-  width: 30px;
-  margin-top: 13px;
+  height: 36px;
+  width: 36px;
+  margin-top: 10px;
   .add-contractor {
     --background: var(--ion-color-success);
     color: var(--ion-color-step-2000);
@@ -61,6 +75,42 @@
   --background: var(--ion-color-danger-tint);
 }
 
+.cc-list-button {
+  .expand-btn {
+    height: 36px;
+    width: 36px;
+    // margin-top: 10px;
+    --color: var(--ion-color-step-2000);
+    --background: var(--ion-color-warning);
+    .propcoicon {
+      line-height: 1.7;
+      font-size: 22px;
+      background: var(--ion-color-warning);
+    }
+  }
+  ion-fab-list {
+    margin-inline: 40px;
+    margin-top: -9px;
+    ion-fab-button {
+      height: 36px;
+      width: 36px;
+      span {
+        padding-top: 5px;
+        ion-icon {
+          pointer-events: none;
+        }
+      }
+    }
+    .close-button {
+      --background: var(--ion-color-danger);
+      --color: var(--ion-color-step-2000);
+    }
+    .check-button {
+      --background: var(--ion-color-success);
+      --color: var(--ion-color-step-2000);
+    }
+  }
+}
 .mark-contractor {
   --background: var(
     --ion-color-success.error-message{color: var(--ion-color-danger) ; padding-top: 2px; font-size: 14px; line-height:
@@ -82,8 +132,28 @@
   line-height: 18px;
 }
 
-.isRejected {
-  background-color: rgba(var(--ion-color-danger-rgb), 0.5) !important;
+.rejected {
+  background-color: rgba(var(--ion-color-danger-rgb), 0.4) !important;
+  cursor: pointer;
+}
+
+.selected {
+  opacity: 0.8;
+  border: 2px solid var(--ion-color-success);
+}
+
+.quote-sent {
+  background-color: rgba(var(--ion-color-warning-rgb), 0.4) !important;
+  cursor: pointer;
+}
+
+.quote-not-approved {
+  background-color: rgba(var(--ion-color-danger-rgb), 0.2) !important;
+  cursor: pointer;
+}
+
+.quote-accepted {
+  background-color: rgba(var(--ion-color-success-rgb), 0.4) !important;
   cursor: pointer;
 }
 
@@ -122,25 +192,25 @@
   max-height: 30px !important;
 }
 
-.datetime-padding{
+.datetime-padding {
   padding-bottom: 7px;
 }
-.row-banner{
+.row-banner {
   background: var(--ion-background-color);
-    border-radius: 8px;
-    padding: 15px 0px;
-    margin-bottom: 15px;
+  border-radius: 8px;
+  padding: 15px 0px;
+  margin-bottom: 15px;
 }
 
-.custom-skeleton{
-  p{
+.custom-skeleton {
+  p {
     height: 30px;
     margin-bottom: 0;
   }
 }
 
 .modal-button {
-  background: #FFF;
+  background: #fff;
   border: none;
   color: #333;
   font-size: 13px;
@@ -180,7 +250,6 @@
   pointer-events: none;
   opacity: 0;
   will-change: transform, opacity;
-
 }
 
 .view.modal.visible {
@@ -192,7 +261,7 @@
 }
 
 .modal-view-details {
-  background: #FFF;
+  background: #fff;
   z-index: 2;
   position: fixed;
   left: 50%;
@@ -202,7 +271,7 @@
   max-width: 100%;
   transform: translate(-50%, -50%);
   border-radius: 2px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
 }
 
 .modal-view-details h1 {
@@ -217,7 +286,7 @@
   bottom: 10px;
   right: 10px;
   background: none;
-  color: #3C78D8;;
+  color: #3c78d8;
   border-radius: 2px;
   border: none;
   font-size: 16px;
@@ -227,24 +296,25 @@
 
 .modal:after {
   position: fixed;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   width: 100%;
   height: 100%;
   left: 0;
   top: 0;
   display: block;
-  content: '';
+  content: "";
 }
-    
+
 .defaultCommission {
   display: inline-flex;
   // flex-wrap: wrap;
 }
 
-.defaultCommission .ion-item ,.defaultCommission .ion-label {
+.defaultCommission .ion-item,
+.defaultCommission .ion-label {
   margin: 6px;
 }
-.defaultCommission .ion-label{
+.defaultCommission .ion-label {
   max-width: 80px;
 }
 
@@ -252,4 +322,39 @@ input {
   border: 0;
   outline: 0;
   padding: 5px 0;
+}
+
+.quote-request-banner {
+  text-align: center;
+  background: rgba(226, 18, 18, 0.1);
+  padding: 30px 15px;
+  color: var(--ion-color-danger);
+  border-radius: 5px;
+  ion-text {
+    display: inherit;
+    @include set-text-style(20px, 32px);
+  }
+}
+
+.checkbox-disabled {
+  opacity: 0.8 !important;
+}
+
+.prefered-cc {
+  font-size: 24px;
+  // padding-top: 5px;
+  padding-right: 5px;
+  color: var(--ion-color-success-shade);
+  cursor: pointer;
+  ion-icon {
+    pointer-events: none;
+    margin-bottom: -7px;
+  }
+}
+
+.sq-label {
+  color: var(--ion-color-step-1300);
+  display: block;
+  font-size: 12px !important;
+  padding-bottom: 8px;
 }

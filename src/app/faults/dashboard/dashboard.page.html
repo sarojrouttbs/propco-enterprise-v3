@@ -19,7 +19,7 @@
                 (click)="checkboxClick('repairCheckbox');$event.stopPropagation();" name="repairCheckbox">
               </ion-checkbox>
             </div>
-            <ion-spinner name="bubbles" *ngIf="activeRepairLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="activeRepairLoader"></ion-spinner>
             <div class="filter-grid-count" *ngIf="!activeRepairLoader">{{activeRepairCount}}</div>
             <div class="filter-grid-text">Active Repairs</div>
           </ion-col>
@@ -40,7 +40,7 @@
                 (click)="checkboxClick('emergency');$event.stopPropagation();" name="emergency">
               </ion-checkbox>
             </div>
-            <ion-spinner name="bubbles" *ngIf="emergencyLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="emergencyLoader"></ion-spinner>
             <div class="filter-grid-count" *ngIf="!emergencyLoader">{{emergencyCount}}</div>
             <div class="filter-grid-text">Emergency</div>
           </ion-col>
@@ -51,7 +51,7 @@
                 (click)="checkboxClick('urgent');$event.stopPropagation();" name="urgent">
               </ion-checkbox>
             </div>
-            <ion-spinner name="circles" *ngIf="urgentLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="urgentLoader"></ion-spinner>
             <div class="filter-grid-count"*ngIf="!urgentLoader">{{urgentCount}}</div>
             <div class="filter-grid-text">Urgent</div>
           </ion-col>
@@ -62,7 +62,7 @@
                 (click)="checkboxClick('nonUrgent');$event.stopPropagation();" name="nonUrgent">
               </ion-checkbox>
             </div>
-            <ion-spinner name="bubbles" *ngIf="nonUrgentLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="nonUrgentLoader"></ion-spinner>
             <div class="filter-grid-count" *ngIf="!nonUrgentLoader">{{nonUrgentCount}}</div>
             <div class="filter-grid-text">Non urgent</div>
           </ion-col>
@@ -73,7 +73,7 @@
                 (click)="checkboxClick('assessment');$event.stopPropagation();" name="assessment">
               </ion-checkbox>
             </div>
-            <ion-spinner name="bubbles" *ngIf="assismentLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="assismentLoader"></ion-spinner>
             <div class="filter-grid-count" *ngIf="!assismentLoader">{{assismentCount}}</div>
             <div class="filter-grid-text">In Assessment</div>
           </ion-col>
@@ -84,7 +84,7 @@
                 (click)="checkboxClick('automation');$event.stopPropagation();" name="automation">
               </ion-checkbox>
             </div>
-            <ion-spinner name="bubbles" *ngIf="automationLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="automationLoader"></ion-spinner>
             <div class="filter-grid-count" *ngIf="!automationLoader">{{automationCount}}</div>
             <div class="filter-grid-text">In Automation</div>
           </ion-col>
@@ -95,7 +95,7 @@
                 (click)="checkboxClick('invoice');$event.stopPropagation();" name="invoice">
               </ion-checkbox>
             </div>
-            <ion-spinner name="bubbles" *ngIf="invoiceLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="invoiceLoader"></ion-spinner>
             <div class="filter-grid-count" *ngIf="!invoiceLoader">{{invoiceCount}}</div>
             <div class="filter-grid-text">Invoice</div>
           </ion-col>
@@ -106,7 +106,7 @@
                 (click)="checkboxClick('escalation');$event.stopPropagation();" name="escalation">
               </ion-checkbox>
             </div>
-            <ion-spinner name="bubbles" *ngIf="escalationLoader"></ion-spinner>
+            <ion-spinner name="dots" *ngIf="escalationLoader"></ion-spinner>
             <div class="filter-grid-count" *ngIf="!escalationLoader">{{escalationCount}}</div>
             <div class="filter-grid-text">Escalation</div>
           </ion-col>
@@ -116,8 +116,7 @@
           <ion-col size=15>
             <ion-item>
               <ion-label position="floating">From</ion-label>
-              <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" formControlName="fromDate"
-                (ionChange)="onDateChange()" class="datetime-padding" #fromDatePicker>
+              <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" formControlName="fromDate" class="datetime-padding" #fromDatePicker>
               </ion-datetime>
               <ion-icon ion-datetime-picker name="calendar" slot="start" class="datetime-icon" (click)="fromDatePicker.open()"></ion-icon>
             </ion-item>
@@ -127,7 +126,7 @@
             <ion-item>
               <ion-label position="floating">To</ion-label>
               <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-                formControlName="toDate" (ionChange)="onDateChange()" #toDatePicker>
+                formControlName="toDate" #toDatePicker>
               </ion-datetime>
               <ion-icon name="calendar" slot="start" class="datetime-icon" (click)="toDatePicker.open()"></ion-icon>
             </ion-item>
@@ -140,8 +139,9 @@
                 class="more-filters">
                 <ion-select-option value="4">Assigned To </ion-select-option>
                 <ion-select-option value="1">Branch(es) </ion-select-option>
-                <ion-select-option value="2">Management Service Type</ion-select-option>
-                <ion-select-option value="3">Status</ion-select-option>
+                <ion-select-option value="2" [disabled]="isBucketActive">Management Service Type</ion-select-option>
+                <ion-select-option value="3" [disabled]="isBucketActive">Status</ion-select-option>
+                <ion-select-option value="5" >Snoozed Faults</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-col>
@@ -217,6 +217,7 @@
             <ion-item class="select-block">
               <ion-label position="floating">Management Service Type</ion-label>
               <ionic-selectable item-content itemValueField="index" itemTextField="description"
+                [isEnabled]="!isBucketActive"
                 [items]="managementTypeList" [canSearch]="true" [isMultiple]="true" class="selectable-height"
                 [canClear]="true" clearButtonText="Clear" closeButtonSlot="end" confirmButtonText="Apply"
                 searchPlaceholder="Search Management Type Service" #managementType formControlName="managementFilter"
@@ -275,6 +276,7 @@
               </ion-select> -->
   
               <ionic-selectable item-content itemValueField="index" itemTextField="value" [items]="faultStatuses"
+                [isEnabled]="!isBucketActive"
                 [canSearch]="true" [isMultiple]="true" class="selectable-height" [canClear]="true" clearButtonText="Clear"
                 closeButtonSlot="end" confirmButtonText="Apply" searchPlaceholder="Search Status" #statusType
                 formControlName="statusFilter" [shouldStoreItemValue]="false" (click)="startLoading()"
@@ -374,6 +376,15 @@
             </ion-item>
             <ion-icon name="close-circle" class="close-btn" (click)="closeFilter(4)"> </ion-icon>
           </ion-col>
+          <ion-col size=20 *ngIf="isSnoozeFilter">
+            <ion-item class="select-block">
+              <ion-label position="floating">Snoozed Till</ion-label>
+              <ion-datetime formControlName="snoozeUntil" displayFormat="DD/MM/YYYY" interface="popover"
+              class="request-start-date" [min]="minDate" [max]="futureDate">
+            </ion-datetime>
+            </ion-item>
+            <ion-icon name="close-circle" class="close-btn" (click)="closeFilter(5)"> </ion-icon>
+          </ion-col>
   
         </ion-row>
         
@@ -435,7 +446,7 @@
                   <!-- <td></td> -->
                   <td>{{fault.propertyReference || '-'}} <br>{{fault.propertyAddress.addressLine1}}</td>
                   <td>{{getLookupValue(fault.propertyOfficeCode, officeCodes) || '-'}}</td>
-                  <td style="">{{fault.propertyManagerName}}</td>
+                  <td>{{fault.propertyManagerName || '-'}}</td>
                   <td>{{fault.title || '-'}}</td>
                   <td>{{getLookupValue(fault.reportedBy, reportedByTypes) || '-'}}</td>
                   <td>
@@ -444,8 +455,13 @@
                     </ion-checkbox> 
                   </td>
                   <!-- <td>{{fault?.isEscalated ? 'Escalation' : getLookupValue(fault.status, faultStatuses) || '-'}}</td> -->
-                  <td>{{fault?.isClosed || (fault?.isClosed && fault?.isEscalated) ? 'Closed' : 
-                    (fault?.isEscalated ? 'Escalation' : getLookupValue(fault?.status, faultStatuses)) || '-' }}</td>
+                  <td>
+                    <span>
+                      <ion-icon name="alarm" *ngIf="fault?.snoozeUntil && (fault?.snoozeUntil > currentDate)" title="snooze" style="font-size: 15px;vertical-align: text-bottom;"></ion-icon>
+                      {{fault?.isClosed || (fault?.isClosed && fault?.isEscalated) ? 'Closed' : 
+                      (fault?.isEscalated ? 'Escalation' : getLookupValue(fault?.status, faultStatuses)) || '-' }}
+                    </span>
+                  </td>
                   <!-- <td>{{getLookupValue(fault.urgencyStatus, faultUrgencyStatuses) || '-'}}</td> -->
                   <td class="resp-action-icon">
                     <i (click)="showMenu($event,'divOverlay', fault, 'table-row')"

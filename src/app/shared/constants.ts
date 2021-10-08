@@ -233,7 +233,8 @@ export const SYSTEM_CONFIG = {
   MAXIMUM_FAULT_QUOTE_REJECTION: 'MAXIMUM_FAULT_QUOTE_REJECTION',
   FAULT_MANAGEMENT_LETCAT: 'FAULT_MANAGEMENT_LETCAT',
   FAULT_DEFAULT_NOTE_CATEGORY: 'FAULT_DEFAULT_NOTE_CATEGORY',
-  FAULT_DEFAULT_NOTE_TYPE: 'FAULT_DEFAULT_NOTE_TYPE'
+  FAULT_DEFAULT_NOTE_TYPE: 'FAULT_DEFAULT_NOTE_TYPE',
+  MAX_ACTIVE_QUOTE_CONTRACTOR: 'MAX_ACTIVE_QUOTE_CONTRACTOR'
 };
 
 export const SYSTEM_OPTIONS = {
@@ -282,10 +283,23 @@ export const CLOSE_REASON = [
     "value": "Landlord would not fix"
   },
   {
+    "index": "CLOSE_INTERNAL_USE_ONLY",
+    "value": "Close - Internal use only"
+  },
+  {
     "index": "OTHER",
     "value": "Other"
   }
 ];
+
+export const CLOSE_REASON_KEYS = {
+  "FAULT_DOES_NOT_EXIST_ANYMORE": "FAULT_DOES_NOT_EXIST_ANYMORE",
+  "TENANTS_RESPONSIBILITY": "TENANTS_RESPONSIBILITY",
+  "APPOINTMENT_NOT_BOOKED": "APPOINTMENT_NOT_BOOKED",
+  "LANDLORD_WOULD_NOT_FIX": "LANDLORD_WOULD_NOT_FIX",
+  "CLOSE_INTERNAL_USE_ONLY": "CLOSE_INTERNAL_USE_ONLY",
+  "OTHER": "OTHER"
+};
 
 export const ScriptStore = [
 ];
@@ -397,7 +411,8 @@ export const FAULT_EVENT_TYPES = [
   {
     "Escalations": [
       "Escalated",
-      "De Escalated"
+      "De Escalated",
+      "Fault Snoozed"
     ]
   },
   {
@@ -412,7 +427,11 @@ export const FAULT_EVENT_TYPES = [
   },
   {
     "Notifications": [
-      "Response Received",
+      "Response Received"
+    ]
+  },
+  {
+    "Notification Sent": [
       "Notification Sent"
     ]
   },
@@ -427,6 +446,23 @@ export const FAULT_EVENT_TYPES = [
     ]
   }
 ]
+
+export const FAULT_EVENT_TYPES_ID = {
+  RESPONSE_RECEIVED: 12,
+  NOTIFICATION_SENT: 15,
+  NOTES_ADDED: 13,
+  STAGE_CHANGED: 10,
+  CLI_ACTION_SELECTED: 3,
+  STATUS_CHANGED: 11,
+  DOCUMENT_ADDED: 14,
+  ESCALATED: 8,
+  FAULT_CLOSED: 7,
+  FAULT_SNOOZED: 16
+}
+
+export const QUOTE_CC_STATUS_ID = {
+  REJECTED: 3
+}
 
 export const NOTES_ORIGIN = {
   FAULT_STAGE: 'FAULT_STAGE',

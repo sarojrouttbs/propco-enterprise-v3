@@ -22,6 +22,7 @@ export class AppointmentModalPage implements OnInit {
   futureDate;
   showLoader: boolean = false;
   unSavedData = false;
+  contractorId;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,7 +43,8 @@ export class AppointmentModalPage implements OnInit {
       const requestObj = {
         contractorPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss'),
         isAccepted: true,
-        submittedByType: 'SECUR_USER'
+        submittedByType: 'SECUR_USER',
+        contractorId: this.contractorId
       }
 
       if (this.type === APPOINTMENT_MODAL_TYPE.QUOTE) {
@@ -57,7 +59,8 @@ export class AppointmentModalPage implements OnInit {
         }
       } else if (this.type === APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE) {
         const quoteRequestObj = {
-          contractorQuotePropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss')
+          contractorPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss'),
+          contractorId: this.contractorId
         };
         const updateCCVisit = await this.modifyContractorVisit(this.faultId, quoteRequestObj);
         if (updateCCVisit) {
