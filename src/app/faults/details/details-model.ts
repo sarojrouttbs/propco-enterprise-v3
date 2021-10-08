@@ -99,6 +99,8 @@ declare namespace FaultModels {
         requiredStartDate?: any;
         requiredCompletionDate?: any;
         orderedById?: string;
+        snoozeUntil: string;
+        snoozeReason: string;
     }
 
     export interface AdditionalInfo {
@@ -131,6 +133,8 @@ declare namespace FaultModels {
         submittedByType: string;
         isEscalateFault: boolean;
         isVoided: boolean;
+        contractorId: string;
+        isEscalateContractor: boolean
     }
 
     export interface IMaintenanceQuoteResponse {
@@ -167,13 +171,13 @@ declare namespace FaultModels {
         quoteContractors: QuoteContractor[];
         createdAt: string;
         modifiedAt: string;
-        selectedContractorId: string;
+        contractorId: string;
         maintenanceId: string;
         useCommissionRate: boolean;
         thirdPartySource?: number;
         commissionAmount: number;
         commissionRate: number;
-        doesWantAnotherQuote?: boolean;
+        isLandlordWantAnotherQuote?: boolean;
     }
 
     export interface QuoteContractor {
@@ -185,9 +189,11 @@ declare namespace FaultModels {
         skills: string[];
         address: Address;
         isRejected: boolean;
+        isActive: boolean;
         rejectionReason?: any;
         contractorId: string;
         rejectedByType: number;
+        isNonSq: boolean;
     }
 
     export interface Address {

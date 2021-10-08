@@ -1,7 +1,7 @@
 .email-body-checkbox {
   label {
     display: block;
-    padding-left: 15px;
+    right: 88px;
     text-indent: -15px;
     position: absolute;
     margin-top: 6px;
@@ -14,7 +14,18 @@
     margin: 0;
     vertical-align: bottom;
     position: relative;
-    top: -4px;
-    *overflow: hidden;
+    top: -2px;
+    overflow: hidden;
   }
+}
+
+.show-hide-section{
+  margin-bottom: 5px;
+  ion-button{
+    min-width: 100px;
+  }
+}
+
+table.dataTable tbody tr {
+    cursor: pointer;
 }

@@ -797,4 +797,8 @@ export class FaultQualificationComponent implements OnInit {
     });
     await modal.present();
   }
+
+  snoozeFault(){
+    this._btnHandler('snooze');
+  }
 }

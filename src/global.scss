@@ -222,7 +222,7 @@ body {
 
   
 .mat-form-field-ripple {
-  background-color: #2dd36f !important;
+  background-color: var(--ion-color-success) !important
  }
 
   .toast-error::before {
@@ -456,12 +456,60 @@ mat-form-field {
   --ion-color-contrast: var(--ion-color-success-contrast, #fff) !important;
 }
 
-.pdfBtn{
-  color: #4d4d4d;
-  background: white;
+.pdf-button{
+  color: #ffffff;
+  background: #737373;
   padding: 6px 15px;
   margin-bottom: 10px;
   border: 1px solid;
   border-radius: 5px;
   float: right;
+}
+
+#chronological-history {
+  table {
+    width: 100% !important;
+    .res-child>td:first-child{
+      word-break: initial;
+      width: 125px;
+      vertical-align: unset;
+    }
+  }
+}
+
+.mat-calendar-body-selected {
+  background-color: var(--ion-color-primary);
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: inherit;
+}
+
+.mat-datepicker-toggle .mat-icon-button {
+  color: var(--ion-color-medium);
+}
+
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .cdk-keyboard-focused .mat-calendar-body-active>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .cdk-program-focused .mat-calendar-body-active>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+  background-color: rgb(51 204 0 / 25%);
+};
+
+.mat-form-field.mat-form-field-invalid .mat-form-field-label {
+  color: var(--ion-color-step-800);
+}
+
+.mat-focused .mat-form-field-label{
+  color: var(--ion-color-step-800) !important;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-infix {
+  padding: .25em 0 .25em 0;
+}
+
+.mat-form-field.mat-form-field-invalid .mat-form-field-ripple, .mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {
+  background-color: var(--ion-color-danger) !important; 
 }

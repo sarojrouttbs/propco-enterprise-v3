@@ -1,13 +1,13 @@
   <ion-grid>
     <ion-row *ngIf="faultDetails?.isClosed">
-      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
         <app-close-fault  [notificationData]="iacNotification" [faultDetails]="faultDetails" [action]="getLookupValue(iacNotification?.faultStageAction, iacStageActions) ? getLookupValue(iacNotification?.faultStageAction, iacStageActions) : 'Arranging Contractor'"></app-close-fault>
       </ion-col>
     </ion-row>
    
 
-    <ion-row *ngIf="iacNotification && !showSkeleton && !faultDetails?.isClosed">
-      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+    <ion-row *ngIf="iacNotification && !showSkeleton && !faultDetails?.isClosed && isContractorSelected">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
@@ -67,9 +67,10 @@
               </ion-grid>
               <ion-text color="danger" *ngIf="
               iacNotification?.responseReceived?.isAccepted === false &&
-              rejectionReason && 
+              filteredCCDetails.rejectionReason && 
               (iacNotification?.templateCode === 'QC-L-E' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
-                {{rejectionReason || 'N/A'}}
+                {{filteredCCDetails.rejectionReason || 'N/A'}}
+                <div *ngIf="filteredCCDetails?.isLandlordWantAnotherQuote">Landlord wants another Quote</div>
               </ion-text>
                 <!-- <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false && this.iacNotification?.templateCode!='CWO-C-E'">
                   <ion-text color="danger">Please select an appropriate action.</ion-text>
@@ -78,18 +79,18 @@
             </ng-container>
           </div>
           <ng-container *ngIf="iacNotification && (iacNotification?.responseReceived?.isAccepted === true || iacNotification?.responseReceived?.isAccepted === false)">
-            <div class="question-answer" *ngIf="(iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E') && faultDetails?.contractorQuotePropertyVisitAt">
+            <div class="question-answer" *ngIf="(iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CDT-T-E') && filteredCCDetails?.contractorPropertyVisitAt">
               <h4 class="ion-text-center">Next Step:</h4> 
               <h6 *ngIf="quoteArray?.length === 0">
                 <ion-text color="danger">Please note: </ion-text>
-                <span>The appointment is due on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}
+                <span>The appointment is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}
                 </span>
               </h6>
               <h6 *ngIf="quoteArray?.length > 0">
                 <span>Thank you for carrying out this quote. This is now with the Landlord for review. If we require you to
                   carry out the job, we will be back in touch.</span>
               </h6>
-              <ion-button color="success" class="action-btn" fill="outline" (click)="quoteUploadModal('preUpload'); $event.stopPropagation();" *ngIf="quoteArray?.length === 0">Upload Quote & Photos</ion-button>
+              <ion-button color="success" class="action-btn" fill="outline" (click)="filteredCCDetails.isDraft ? overrideQuote('preUpload') : quoteUploadModal('preUpload'); $event.stopPropagation();" *ngIf="quoteArray?.length === 0">Upload Quote & Photos</ion-button>
               <div class="border-bottom"></div>
             </div>
 
@@ -125,9 +126,9 @@
                 <h4 class="ion-text-center">Next Step:</h4> 
                 <h6>  
                   <ion-text color="danger">Please note: </ion-text>
-                  <span *ngIf="currentDate<=faultDetails?.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote is due on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}.
+                  <span *ngIf="currentDate<=filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}.
                   </span>
-                  <span *ngIf="currentDate>faultDetails?.contractorQuotePropertyVisitAt">The appointment for carrying out the Quote was on {{faultDetails?.contractorQuotePropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorQuotePropertyVisitAt | date: 'HH:mm'}}. </span>
+                  <span *ngIf="currentDate>filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote was on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}. </span>
                   <span>The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to upload the Quote and photos.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
                     {{iacNotification?.hoursLeft}}.
                   </span>
@@ -148,7 +149,7 @@
             </div>
 
             <div class="question-answer ion-text-center" *ngIf="faultDetails.isEscalated && iacNotification?.notificationStatus !== 7 
-            && !faultMaintenanceDetails?.doesWantAnotherQuote">
+            && !filteredCCDetails?.isLandlordWantAnotherQuote">
               <h6>
                 <ion-text color="danger">Please note: </ion-text>
                 <span *ngIf="faultDetails.isEscalated">Fault Escalated - PM to decide the next steps</span>
@@ -181,17 +182,15 @@
           </div>
 
           <div class="question-answer"
-            *ngIf="iacNotification && faultMaintenanceDetails?.doesWantAnotherQuote">
+            *ngIf="iacNotification && filteredCCDetails?.isLandlordWantAnotherQuote">
             <h4 class="ion-text-center">Next Step:</h4>
             <h6>Based on Landlord's response, the next action is:</h6>
             <ion-grid>
               <ion-row class="ion-justify-content-center">
                 <ion-button color="success" expand="block" class="action-btn"
-                fill="{{userSelectedActionControl.value == otherStageActions[1].index ? 'solid' :'outline'}}"
-                (click)="setUserAction(otherStageActions[1].index)" >
+                (click)="scrollToAddCC()" 
+                fill="outline">
                 Obtain Quote
-                <ion-icon name="checkmark-circle-outline" class="check-icon"
-                  *ngIf="(userSelectedActionControl.value == otherStageActions[1].index)"></ion-icon>
               </ion-button>
               </ion-row>
             </ion-grid>            
@@ -205,8 +204,9 @@
                 <ng-container *ngIf="iacNotification && iacNotification?.templateCode !== 'CWO-C-E'">
                   <div *ngFor="let instruction of otherStageActions">
                     <ion-button color="success" expand="block" class="action-btn"
+                      [disabled]="instruction.index === 'OBTAIN_QUOTE' && !isWorksOrder"
                       fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
-                      (click)="setUserAction(instruction.index)" [hidden]="faultMaintenanceDetails?.doesWantAnotherQuote && instruction.index=='OBTAIN_QUOTE'">
+                      (click)="setUserAction(instruction.index)" [hidden]="filteredCCDetails?.isLandlordWantAnotherQuote && instruction.index=='OBTAIN_QUOTE'">
                       {{instruction.value}}
                       <ion-icon name="checkmark-circle-outline" class="check-icon"
                         *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
@@ -227,7 +227,7 @@
                   <ion-button color="success" expand="block" class="action-btn" fill="outline"
                       (click)="modifyDateTime(iacNotification?.templateCode); $event.stopPropagation();">
                       <ng-container *ngIf="iacNotification?.templateCode === 'CDT-C-E' || iacNotification?.templateCode === 'CQ-C-E'" >
-                        {{faultDetails?.contractorQuotePropertyVisitAt ? 'Modify': 'Add'}} Date/Time
+                        {{filteredCCDetails?.contractorPropertyVisitAt ? 'Modify': 'Add'}} Date/Time
                       </ng-container>
                       <ng-container *ngIf="iacNotification?.templateCode === 'CDT-C-E (WO)' || iacNotification?.templateCode === 'CWO-C-E'" >
                         {{faultDetails?.contractorWoPropertyVisitAt ? 'Modify': 'Add'}} Date/Time
@@ -237,6 +237,8 @@
                 <ion-button color="success" *ngIf="iacNotification && iacNotification?.templateCode === 'CWO-C-E'"  
                 expand="block" class="action-btn" fill="{{faultDetails?.isClosed ? 'solid' : 'outline'}}" (click)="closeFault()">
                   Close Fault</ion-button>
+                  <ion-button *ngIf="faultDetails?.isEscalated"  color="success" expand="block" class="action-btn" fill="outline" (click)="snoozeFault()">
+                  Snooze Fault</ion-button>
               </ion-row>
             </ion-grid>
           </div>
@@ -244,13 +246,13 @@
         </div>
       </ion-col>
     </ion-row>
-    <ion-grid style="margin: 20px 0" *ngIf="(iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'QC-L-E') && quoteDocuments?.length && !showSkeleton">
+    <ion-grid *ngIf="(iacNotification?.templateCode === 'CQ-C-E' || iacNotification?.templateCode === 'QC-L-E') && ccQuoteDocuments?.length && !showSkeleton && isContractorSelected">
       <ion-row>
-        <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+        <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
           <h2>Quote Documents</h2>
           <div class="border-bottom"></div>
           <ion-row>
-            <ion-col size-xl="25" size="25" *ngFor="let file of quoteDocuments; let i=index;">
+            <ion-col size-xl="25" size="25" *ngFor="let file of ccQuoteDocuments; let i=index;">
               <div class="delete-icon-wrapper">
                 <ion-grid>
                   <ion-row>
@@ -284,106 +286,146 @@
       </ion-row>
     </ion-grid>
     <ion-row *ngIf="isFormsReady && !showSkeleton">
-      
-        <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+
+        <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
           <ng-container *ngIf="!isWorksOrder">
+            <div class="quote-request-banner" *ngIf="!isContractorSelected && faultNotifications.length">
+              <ion-text>You have requested multiple quotes.</ion-text>
+              <ion-text>Please select a contractor from the list below to see the status.</ion-text>
+            </div>
             <form [formGroup]="raiseQuoteForm">
               <ion-grid>
+                <div class="contractor-block">
+                  <div formArrayName="contractorList"
+                    *ngFor="let item of raiseQuoteForm.get('contractorList')['controls']; let i = index;">
+                    <ion-row id="row_1" class="row-banner cc-list" [formGroupName]="i"
+                      [ngClass]="{
+                        'rejected': item.get('isRejected').value ,
+                        'quote-accepted': item.get('quoteContractorStatus').value == 2,
+                        'quote-sent': item.get('quoteContractorStatus').value == 5, 
+                        'quote-not-approved': item.get('quoteContractorStatus').value == 9,
+                        'selected': item.get('contractorId').value == filteredCCDetails?.contractorId
+                      }">
+                      <ion-col size="30">
+                        <ion-text  style="padding-bottom: 3px;" class="sq-label">Company Name </ion-text>
+                        <span *ngIf="item.get('isPreferred').value" class="prefered-cc" matTooltip="Preferred Contractor"><ion-icon name="checkmark-circle-outline"> </ion-icon></span>
+                        <ion-text>{{item.get('company').value ? item.get('company').value : 'N/A'}}</ion-text>
+                      </ion-col>
+                      <ion-col size="20" size-xl="17">
+                        <ion-text  class="sq-label">Mobile</ion-text>
+                        <ion-text >{{item.get('mobile').value ? item.get('mobile').value : 'N/A'}}</ion-text>
+                      </ion-col>
+            
+                      <ion-col size="20" class="skills">
+                        <ion-text class="sq-label">Skills</ion-text>
+                        <ion-text>
+                          <span *ngIf="item.get('reference').value?.length > 15" (click)="showSkillsDetailsPopup(item.get('reference').value)" class="pointer">
+                            {{ item.get('reference').value?.substring(0,15)+"..." }}
+                          </span>
+                          <span *ngIf="item.get('reference').value?.length <= 15">
+                            {{ item.get('reference').value || 'N/A' }}
+                          </span>
+                        </ion-text>
+                      </ion-col>
+                      <ion-col size="20">
+                        <ion-text  class="sq-label">Quote Status</ion-text>
+                        <ion-text><strong>{{ item.get('status').value ? item.get('status').value : 'N/A'}}</strong></ion-text>
+                      </ion-col>
+                      <ion-col size="10" size-xl="13">
+                        <div class="action-btn-container">
+                          <ion-checkbox color="success" class="list-checkbox" formControlName="isActive" mode="ios"
+                          (ionChange)="updateContractorState($event,item.value)" [disabled]="(!item.get('isNew').value && !item.get('isPreferred').value) || item.get('quoteContractorStatus').value || 
+                          (item.get('isRejected').value) && item.get('rejectedByType').value === REJECTED_BY_TYPE.LANDLORD" *ngIf="!item.get('isNonSq').value">
+                           </ion-checkbox>
+                          <ion-fab class="cc-list-button" horizontal="end" *ngIf="!item.get('isNonSq').value" >
+                            <ion-fab-button class="expand-btn">      
+                               <i class="propcoicon propcoicon-actions-on"></i>
+                            </ion-fab-button>
+                            <ion-fab-list side="start">
+                              <ion-button *ngIf="item.get('quoteContractorStatus').value" (click)="selectedCCDetails(item.get('contractorId').value)">View </ion-button>
+                              <ion-button  (click)="removeContractor(i,item.get('isRejected').value)" *ngIf="!item.get('quoteContractorStatus').value">Remove</ion-button>
+                               <!-- <ion-fab-button class="check-button" *ngIf="item.get('isPreferred').value">
+                                <span matTooltip="Preferred Contractor" matTooltipPosition="above">
+                                  <ion-icon class="list-button" name="checkmark-circle-outline"> </ion-icon>
+                                </span>
+                              </ion-fab-button> -->
+                               <!-- <ion-fab-button class="check-button" *ngIf="item.get('isPreferred').value">
+                                 <span matTooltip="Preferred Contractor" matTooltipPosition="above">
+                                   <ion-icon class="list-button" name="checkmark-circle-outline"> </ion-icon>
+                                 </span>
+                               </ion-fab-button>
+                               <ion-fab-button class="close-button">
+                                 <span  (click)="removeContractor(i,item.get('isRejected').value)" matTooltip="Delete" matTooltipPosition="above">
+                                   <ion-icon class="list-button" name="close-circle-outline"></ion-icon>
+                                 </span>
+                               </ion-fab-button> -->
+                            </ion-fab-list>
+                          </ion-fab>
+                          <!-- <ion-icon class="list-button" *ngIf="item.get('isPreferred').value"
+                            matTooltip="Preferred Contractor" matTooltipPosition="above" name="checkmark-circle-outline">
+                          </ion-icon>
+                          <ion-icon class="list-button" color="danger"
+                            (click)="removeContractor(i,item.get('isRejected').value)" name="close-circle-outline"></ion-icon> -->
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+      
+                  <ion-row id="addCCform" class="row-banner" [formGroup]="addContractorForm" *ngIf="!addMoreCCrestrictAction">
+                    <ion-col size="45">
+                      <ion-item>
+                        <ion-label position="floating">Skill Set</ion-label>
+                        <ion-select interface="popover" formControlName="skillSet" class="ion-select-options">
+                          <ion-select-option value="">Please Select</ion-select-option>
+                          <ion-select-option [value]="item.value" *ngFor="let item of contractorSkill">
+                            {{ item.value }}
+                          </ion-select-option>
+                        </ion-select>
+      
+                      </ion-item>
+                    </ion-col>
+                    <ion-col size="45">
+                      <ion-item>
+                        <ion-label position="floating">Start Typing to Search Contractors</ion-label>
+                        <ion-input type="text" debounce="300" (ionInput)="onSearch($event)" formControlName='contractor'
+                          placeholder="" (ionFocus)="onSearch($event)"> 
+                          <!-- (ionBlur)="onBlurContractorSearch($event)"> -->
+                        </ion-input>
+                      </ion-item>
+      
+                      <ion-list class="contractor-list" *ngIf="resultsAvailable">
+                        <ion-item *ngFor="let result of (contractors| async)?.data" (click)="selectContractor(result)" button
+                          style="font-size: 13px !important;">
+                          <span>
+                            <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
+                          </span>&nbsp;
+                          <label style="color: var(--ion-color-step-200); padding-right: 5px;">{{result.fullName}}&nbsp;
+                            <span
+                              style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
+                            <span class="text-color-lightgreen"
+                              style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
+                          </label>
+      
+                        </ion-item>
+                      </ion-list>
+                      <ion-text *ngIf="isContratorSelected" class="error-message">This contractor is already selected
+                      </ion-text>
+                      <div *ngIf="addContractorForm.get('contractor').hasError('invalidContractor') && addContractorForm.get('contractor').touched" class="contractor-error-message">{{addContractorForm.get('contractor').errors.message}}</div>
+ 
+                    </ion-col>
+      
+                    <ion-col size="10">
+                      <ion-fab-button class="button-container" (click)="addContractor(addContractorForm?.value)"
+                        [disabled]="!addContractorForm?.get('contractor').value || !isSelected || addContractorForm.controls['contractor'].invalid">
+                        <ion-icon name="add-sharp" class="add-contractor list-button"></ion-icon>
+                      </ion-fab-button>
+                    </ion-col>
+                  </ion-row>
+                  <ion-col size="100" *ngIf="!addMoreCCrestrictAction">
+                    <ion-text color="dark"> Note: Please click Add to add another contractor to the list.</ion-text>
+                  </ion-col>
+                </div>
                <ng-container *ngTemplateOutlet="quoteDetails"></ng-container>
-               <div class="contractor-block">
-                 <div formArrayName="contractorList"
-                   *ngFor="let item of raiseQuoteForm.get('contractorList')['controls']; let i = index;">
-                   <ion-row id="row_1" class="row-banner" [formGroupName]="i"
-                     [ngClass]="{'isRejected': item.get('isRejected').value }">
-                     <ion-col size="30">
-                       <ion-item>
-                         <ion-label position="floating">Company </ion-label>
-                         <ion-input formControlName='company'></ion-input>
-                       </ion-item>
-                     </ion-col>
-     
-                     <ion-col size="30 ">
-                       <ion-item>
-                         <ion-label position="floating">Contact Tel.</ion-label>
-                         <ion-input formControlName='mobile'></ion-input>
-                       </ion-item>
-                     </ion-col>
-                     <ion-col size="25">
-                       <ion-item>
-                         <ion-label position="floating">Trade</ion-label>
-                         <ion-input formControlName="reference"></ion-input>
-                       </ion-item>
-                     </ion-col>
-                     <ion-col size="15">
-     
-                       <div class="action-btn-container">
-                         <ion-checkbox color="success" class="list-checkbox" formControlName="checked"
-                           (click)="updateSelection(item.value,i)" [name]="item"
-                           [disabled]="(restrictAction || item.get('isRejected').value) && item.get('rejectedByType').value === REJECTED_BY_TYPE.LANDLORD"></ion-checkbox>
-                         <ion-icon class="list-button" *ngIf="item.get('isPreferred').value"
-                           matTooltip="Preferred Contractor" matTooltipPosition="above" name="checkmark-circle-outline">
-                         </ion-icon>
-                         <ion-icon class="list-button" color="danger"
-                           (click)="removeContractor(i,item.get('isRejected').value)" name="close-circle-outline"></ion-icon>
-                       </div>
-                     </ion-col>
-                   </ion-row>
-                 </div>
-     
-                 <ion-row id="row_1" class="row-banner" [formGroup]="addContractorForm" *ngIf="!restrictAction">
-                   <ion-col size="45">
-                     <ion-item>
-                       <ion-label position="floating">Skill Set</ion-label>
-                       <ion-select interface="popover" formControlName="skillSet" class="ion-select-options">
-                         <ion-select-option value="">Please Select</ion-select-option>
-                         <ion-select-option [value]="item.value" *ngFor="let item of contractorSkill">
-                           {{ item.value }}
-                         </ion-select-option>
-                       </ion-select>
-     
-                     </ion-item>
-                   </ion-col>
-                   <ion-col size="45">
-                     <ion-item>
-                       <ion-label position="floating">Start Typing to Search Contractors</ion-label>
-                       <ion-input type="text" debounce="300" (ionInput)="onSearch($event)" formControlName='contractor'
-                         placeholder="" (ionFocus)="onSearch($event)"> 
-                         <!-- (ionBlur)="onBlurContractorSearch($event)"> -->
-                       </ion-input>
-                     </ion-item>
-     
-                     <ion-list class="contractor-list" *ngIf="resultsAvailable">
-                       <ion-item *ngFor="let result of (contractors| async)?.data" (click)="selectContractor(result)" button
-                         style="font-size: 13px !important;">
-                         <span>
-                           <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
-                         </span>&nbsp;
-                         <label style="color: var(--ion-color-step-200); padding-right: 5px;">{{result.fullName}}&nbsp;
-                           <span
-                             style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-                           <span class="text-color-lightgreen"
-                             style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
-                         </label>
-     
-                       </ion-item>
-                     </ion-list>
-                     <ion-text *ngIf="isContratorSelected" class="error-message">This contractor is already selected
-                     </ion-text>
-                     <div *ngIf="addContractorForm.get('contractor').hasError('invalidContractor') && addContractorForm.get('contractor').touched" class="contractor-error-message">{{addContractorForm.get('contractor').errors.message}}</div>
-
-                   </ion-col>
-     
-                   <ion-col size="10">
-                     <ion-fab-button class="button-container" (click)="addContractor(addContractorForm?.value)"
-                       [disabled]="!addContractorForm?.get('contractor').value || !isSelected || addContractorForm.controls['contractor'].invalid">
-                       <ion-icon name="add-sharp" class="add-contractor list-button"></ion-icon>
-                     </ion-fab-button>
-                   </ion-col>
-                 </ion-row>
-                 <ion-col size="100" *ngIf="!restrictAction">
-                   <ion-text color="dark"> Note: Please click Add to add another contractor to the list.</ion-text>
-                 </ion-col>
-               </div>
              </ion-grid>
              </form>
           </ng-container>
@@ -398,7 +440,7 @@
       
     </ion-row>
     <ion-row *ngIf="showSkeleton">
-      <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
       <div><ng-container *ngTemplateOutlet="notificationSkeleton"></ng-container></div>
       <div *ngIf="isWorksOrder" ><ng-container *ngTemplateOutlet="worksOrderFormSkeleton"></ng-container></div>
       <div *ngIf="!isWorksOrder"><ng-container *ngTemplateOutlet="raiseQuoteFormSkeleton"></ng-container></div>
@@ -593,7 +635,7 @@
       </ion-col>
       <ion-col size="50">
         <ion-item>
-          <ion-label position="floating">Comapny </ion-label>
+          <ion-label position="floating">Company </ion-label>
           <ion-input formControlName="company"></ion-input>
         </ion-item>
       </ion-col>
@@ -833,8 +875,8 @@
   <ion-button (click)="_btnHandler('cancel')" class="cancel-button" [disabled]="saving || proceeding">Cancel</ion-button>
   <ion-button (click)="_btnHandler('back')" [disabled]="saving || proceeding">Back</ion-button>
   <ion-button (click)="_btnHandler('next')" *ngIf="faultDetails?.stage !== FAULT_STAGES.ARRANGING_CONTRACTOR" [disabled]="saving || proceeding">Next</ion-button>
-  <ion-button class="save-button" (click)="_btnHandler('save')" [disabled]="proceeding || faultDetails?.isClosed">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
-  <ion-button class="submit-button" (click)="_btnHandler('proceed')" [disabled]="saving || faultDetails?.isClosed">Proceed<ion-icon *ngIf="proceeding" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+  <ion-button class="save-button" (click)="_btnHandler('save')" [disabled]="proceeding || faultDetails?.isClosed || (!isWorksOrder && faultNotifications.length)">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+  <ion-button class="submit-button" (click)="_btnHandler('proceed')" [disabled]="saving || faultDetails?.isClosed || (faultNotifications.length && addMoreCCrestrictAction && !isUserActionChange)">Proceed<ion-icon *ngIf="proceeding" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
 </div>
 
 <ng-template #raiseQuoteFormSkeleton>
