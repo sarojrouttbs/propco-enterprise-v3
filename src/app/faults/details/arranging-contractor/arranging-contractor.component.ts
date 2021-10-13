@@ -1722,7 +1722,8 @@ export class ArrangingContractorComponent implements OnInit {
       faultRequestObj.submittedById = '';
       faultRequestObj.submittedByType = 'SECUR_USER';
       faultRequestObj.isDraft = false;
-      faultRequestObj.stage = this.faultDetails.stage;
+      faultRequestObj.stage = this.userSelectedActionControl.value === 'DOES_OWN_REPAIRS' ? FAULT_STAGES.LANDLORD_INSTRUCTION : this.faultDetails.stage;
+      faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
       const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
       let isStatusUpdated = false;
       if (this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER' && this.faultDetails.status !== FAULT_STATUSES.WORKSORDER_PENDING) {
