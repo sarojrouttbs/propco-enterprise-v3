@@ -24,6 +24,7 @@ export class AppointmentModalPage implements OnInit {
   unSavedData = false;
   contractorDetails;
   contractorWoPropertyVisitAt;
+  pastDateError: boolean = false;
 
 
   constructor(
@@ -171,6 +172,15 @@ export class AppointmentModalPage implements OnInit {
 
   dismiss() {
     this.modalController.dismiss();
+  }
+
+  checkPastDate() {
+    if (this.appointmentForm.value.dateTime <= this.commonService.getFormatedDate(new Date(), 'yyyy-MM-ddTHH:mm')) {
+      this.pastDateError = true;
+    }
+    else {
+      this.pastDateError = false;
+    }
   }
 
 }
