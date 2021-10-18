@@ -1366,7 +1366,8 @@ export class ArrangingContractorComponent implements OnInit {
         headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
         headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants.",
         type: APPOINTMENT_MODAL_TYPE.QUOTE,
-        contractorId: this.filteredCCDetails.contractorId
+        contractorDetails: this.filteredCCDetails,
+        contractorWoPropertyVisitAt: this.faultDetails.contractorWoPropertyVisitAt
       }
       this.openAppointmentModal(modalData);
     }
@@ -2285,7 +2286,8 @@ export class ArrangingContractorComponent implements OnInit {
       headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
       headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
       type: templateCode === 'CDT-C-E' || templateCode === 'CQ-C-E' ? APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE : APPOINTMENT_MODAL_TYPE.MODIFY_WO,
-      contractorId: this.filteredCCDetails.contractorId
+      contractorDetails: this.filteredCCDetails,
+      contractorWoPropertyVisitAt: this.faultDetails.contractorWoPropertyVisitAt
     }
 
     this.openAppointmentModal(modalData);
