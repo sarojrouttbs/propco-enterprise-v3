@@ -8,7 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES, LL_PAYMENT_CONFIG, QUOTE_CC_STATUS_ID } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES, LL_PAYMENT_CONFIG, QUOTE_CC_STATUS_ID, REGEX } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -58,7 +58,7 @@ export class ArrangingContractorComponent implements OnInit {
   iacNotification;
   iacStageActions = LL_INSTRUCTION_TYPES;
   REJECTED_BY_TYPE = REJECTED_BY_TYPE;
-  otherStageActions = LL_INSTRUCTION_TYPES.filter(action => { return (action.index == 'OBTAIN_QUOTE' || action.index == 'PROCEED_WITH_WORKSORDER') });
+  otherStageActions;
   FAULT_STAGES = FAULT_STAGES;
 
   accessInfoList = ACCESS_INFO_TYPES;
@@ -104,6 +104,12 @@ export class ArrangingContractorComponent implements OnInit {
   filteredCCDetails: any = {};
   activeContractorCount: number = 0;
   preferredSuppliersList : any = [];
+  @Input() isMatch;
+  @Input() landlordDetails: any;
+  userActionForms : FormGroup;
+  hideWOform: boolean = false;
+  isAuthorizationfields: boolean = false;
+  loggedInUserData: any;
 
   constructor(
     private fb: FormBuilder,
@@ -153,6 +159,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private initForms(): void {
+    this.initActionForms();
     if (!this.isWorksOrder) {
       this.initQuoteForm();
       this.initAddContractorForm();
@@ -160,6 +167,20 @@ export class ArrangingContractorComponent implements OnInit {
       this.initWorkOrderForms();
     }
     this.isFormsReady = true;
+  }
+
+  private initActionForms(): void {
+    this.userActionForms = this.fb.group({
+      confirmedEstimate: ['', [Validators.required, Validators.pattern(REGEX.DECIMAL_REGEX)]], 
+      estimationNotes:'', 
+      contractor:['', Validators.required],
+      contractorId: ['', Validators.required],
+      nominalCode: '',
+      requiredStartDate: '',
+      requiredCompletionDate: '',
+      orderedBy: [{ value: '', disabled: true }],
+      userSelectedAction: ''
+    });
   }
 
   private initQuoteForm(): void {
@@ -338,13 +359,15 @@ export class ArrangingContractorComponent implements OnInit {
       if (!this.isWorksOrder) {
         this.checkMaintenanceDetail();
       }
-      let userDetails: any = await this.getUserDetails();
+    }
+    let userDetails: any = await this.getUserDetails();
       if (userDetails) {
         this.isWorksOrder ? this.workOrderForm.get('orderedBy').setValue(userDetails.name) : this.raiseQuoteForm.get('orderedBy').setValue(userDetails.name);
       }
-    }
     this.showSkeleton = false;
     this.getNominalCodes();
+    this.getStageOtherActions();
+    this.userActionForms.controls['orderedBy'].setValue(this.isWorksOrder ? this.workOrderForm.get('orderedBy').value : this.raiseQuoteForm.get('orderedBy').value)
   }
 
   private async enableCCAddform() {
@@ -1002,21 +1025,11 @@ export class ArrangingContractorComponent implements OnInit {
         }
         else {
           if (this.isUserActionChange) {
-            let title = this.getLookupValue(this.userSelectedActionControl.value, this.iacStageActions);
-            const proceed = await this.commonService.showConfirm(title, `You have selected ${title}. Are you sure?`)
-            if (proceed) {
-              let faultRequestObj: any = {};
-              faultRequestObj.stageAction = this.userSelectedActionControl.value;
-              faultRequestObj.isDraft = false;
-              faultRequestObj.stage = this.faultDetails.stage;
-              faultRequestObj.submittedById = '';
-              faultRequestObj.submittedByType = 'SECUR_USER';
-              const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
-              if (isFaultUpdated) {
-                this.proceeding = false;
-                this._btnHandler('refresh');
-                return;
-              }
+            if(!this.iacNotification.responseReceived.isAccepted && this.iacNotification.templateCode === 'CWO-C-E' && (this.userSelectedActionControl.value === 'OBTAIN_AUTHORISATION' || this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER')) {
+              if(!this.userActionForms.valid) { this.commonService.showAlert('Arranging Contractor', 'Please fill the required field(s).'); this.proceeding = false; this.userActionForms.markAllAsTouched(); return;}
+              this.proceedWithSelectedAction();
+            } else {
+              this.proceedWithSelectedAction();
             }
           }
         }
@@ -1028,6 +1041,37 @@ export class ArrangingContractorComponent implements OnInit {
         return;
       }
     }
+  }
+
+  private async proceedWithSelectedAction () {
+    let title = this.getLookupValue(this.userSelectedActionControl.value, this.iacStageActions);
+            const proceed = await this.commonService.showConfirm(title, `You have selected ${title}. Are you sure?`)
+            if (proceed) {
+              let faultRequestObj: any = {};
+              faultRequestObj.stageAction = this.userSelectedActionControl.value;
+              faultRequestObj.isDraft = false;
+              faultRequestObj.stage = this.faultDetails.stage;
+              faultRequestObj.submittedById = '';
+              faultRequestObj.submittedByType = 'SECUR_USER';
+              faultRequestObj.stage = this.userSelectedActionControl.value === 'DOES_OWN_REPAIRS' || this.userSelectedActionControl.value === 'OBTAIN_AUTHORISATION' ? FAULT_STAGES.LANDLORD_INSTRUCTION : this.faultDetails.stage;
+              faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+              if(this.userSelectedActionControl.value === 'OBTAIN_AUTHORISATION') {
+                faultRequestObj.nominalCode = this.userActionForms.value.nominalCode.nominalCode;
+                faultRequestObj.requiredStartDate = this.commonService.getFormatedDate(new Date(this.userActionForms.value.requiredStartDate));
+                faultRequestObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(this.userActionForms.value.requiredCompletionDate));
+                faultRequestObj.orderedById = this.loggedInUserData.userId;
+              }
+              if(this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER' || this.userSelectedActionControl.value === 'OBTAIN_AUTHORISATION') {
+                faultRequestObj.confirmedEstimate = this.userActionForms.value.confirmedEstimate;
+                faultRequestObj.contractorId = this.userActionForms.value.contractorId;
+              }
+              const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
+              if (isFaultUpdated) {
+                this.proceeding = false;
+                this._btnHandler('refresh');
+                return;
+              }
+            }
   }
 
 
@@ -1067,8 +1111,8 @@ export class ArrangingContractorComponent implements OnInit {
   private getUserDetails() {
     return new Promise((resolve, reject) => {
       this.faultsService.getUserDetails().subscribe((res) => {
-        let data = res ? res.data[0] : '';
-        resolve(data);
+        this.loggedInUserData = res ? res.data[0] : '';
+        resolve(this.loggedInUserData);
       }, error => {
         reject(error)
       });
@@ -1194,12 +1238,48 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   setUserAction(index) {
-    this.isUserActionChange = true;
     // if (this.iacNotification && !this.iacNotification.responseReceived) {
     //   this.commonService.showAlert('Arrangig Contractor', 'Please select response before proceeding with other action.');
     //   return;
     // }
+    if(this.userSelectedActionControl.value && this.userSelectedActionControl.value === index ){this.userSelectedActionControl = new FormControl(); this.isUserActionChange = false; this.hideWOform = false; return;}
+    if(this.iacNotification && this.iacNotification.responseReceived && !this.iacNotification.responseReceived.isAccepted && this.iacNotification.templateCode === 'CWO-C-E'){
+      this.userActionForms.markAsUntouched();
+      if (index === 'OBTAIN_AUTHORISATION') {
+        this.addValidations();
+      } else {
+        this.removeValidation();
+      }
+      if(index === 'PROCEED_WITH_WORKSORDER' || index === 'OBTAIN_AUTHORISATION'){this.hideWOform = true;} else {this.hideWOform = false;}
+    }
+    this.isUserActionChange = true;
     this.userSelectedActionControl.setValue(index);
+  }
+
+  private addValidations() {
+    this.isAuthorizationfields = true;
+    this.userActionForms.get('nominalCode').setValidators(Validators.required);
+    this.userActionForms.get('nominalCode').updateValueAndValidity();
+    this.userActionForms.get('requiredStartDate').setValidators(Validators.required);
+    this.userActionForms.get('requiredStartDate').updateValueAndValidity();
+    this.userActionForms.get('requiredCompletionDate').setValidators(Validators.required);
+    this.userActionForms.get('requiredCompletionDate').updateValueAndValidity();
+    this.userActionForms.get('confirmedEstimate').setValidators(Validators.required);
+    this.userActionForms.get('confirmedEstimate').updateValueAndValidity();
+    this.userActionForms.get('contractor').setValidators(Validators.required);
+    this.userActionForms.get('contractor').updateValueAndValidity();
+  }
+
+  private removeValidation() {
+    this.isAuthorizationfields = false;
+    this.userActionForms.clearValidators();
+    this.userActionForms.updateValueAndValidity()
+    this.userActionForms.get('nominalCode').clearValidators();
+    this.userActionForms.get('nominalCode').updateValueAndValidity();
+    this.userActionForms.get('requiredStartDate').clearValidators();
+    this.userActionForms.get('requiredStartDate').updateValueAndValidity();
+    this.userActionForms.get('requiredCompletionDate').clearValidators();
+    this.userActionForms.get('requiredCompletionDate').updateValueAndValidity();
   }
 
   async openContractorSelection(contractorList) {
@@ -1722,7 +1802,8 @@ export class ArrangingContractorComponent implements OnInit {
       faultRequestObj.submittedById = '';
       faultRequestObj.submittedByType = 'SECUR_USER';
       faultRequestObj.isDraft = false;
-      faultRequestObj.stage = this.faultDetails.stage;
+      faultRequestObj.stage = this.userSelectedActionControl.value === 'DOES_OWN_REPAIRS' ? FAULT_STAGES.LANDLORD_INSTRUCTION : this.faultDetails.stage;
+      faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
       const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
       let isStatusUpdated = false;
       if (this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER' && this.faultDetails.status !== FAULT_STATUSES.WORKSORDER_PENDING) {
@@ -2431,5 +2512,42 @@ export class ArrangingContractorComponent implements OnInit {
 
   showSkillsDetailsPopup(value) {
     this.commonService.showAlert('Contractor Skills', value);
+  }
+
+  private getStageOtherActions() {
+    if(this.iacNotification) {
+      let otherStageActions = [];
+       LL_INSTRUCTION_TYPES.map(action => { 
+         if(action.index === 'OBTAIN_QUOTE' || action.index === 'PROCEED_WITH_WORKSORDER') {
+          otherStageActions.push(action);
+          return;
+         }
+        if(this.iacNotification.responseReceived === null) {
+          /*awaiting response*/
+          if(this.iacNotification.templateCode === 'LNP-L-E' && action.index === 'DOES_OWN_REPAIRS'){
+            otherStageActions.push(action);
+            return;
+          }
+        }
+        else if(this.iacNotification.responseReceived) {
+          /*response recieved*/
+          if(this.iacNotification.responseReceived.isAccepted === false) {
+            /*negative response*/
+            if(this.iacNotification.templateCode === 'CWO-C-E' && (action.index === 'DOES_OWN_REPAIRS' || action.index === 'OBTAIN_AUTHORISATION')){
+              otherStageActions.push(action);
+              return;
+            }
+            if(this.iacNotification.templateCode === 'CQ-C-E' && action.index === 'DOES_OWN_REPAIRS'){
+              otherStageActions.push(action);
+              return;
+            }
+
+          } else {
+            /*positive response*/
+          } 
+        }
+      });
+      this.otherStageActions = otherStageActions;
+    }
   }
 }
