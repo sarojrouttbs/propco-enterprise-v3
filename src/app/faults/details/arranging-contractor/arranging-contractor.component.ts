@@ -1009,7 +1009,12 @@ export class ArrangingContractorComponent implements OnInit {
         }
       }
       if (this.iacNotification.responseReceived != null) {
-        if (!this.iacNotification.responseReceived.isAccepted && (this.iacNotification.templateCode === 'QC-L-E' || this.iacNotification.templateCode === 'CQ-NA-C-E' || this.iacNotification.templateCode === 'CQ-A-C-E' || this.iacNotification.templateCode === 'CDT-C-E')) {
+        /*response recieved*/
+        if (!this.iacNotification.responseReceived.isAccepted && 
+          (this.iacNotification.templateCode === 'QC-L-E' || 
+          this.iacNotification.templateCode === 'CQ-NA-C-E' || 
+          this.iacNotification.templateCode === 'CQ-A-C-E' || 
+          this.iacNotification.templateCode === 'CDT-C-E')) {
 
           //show modal to select user to select contractor and proceed with WO
           if (this.iacNotification.templateCode === 'QC-L-E'
@@ -1018,9 +1023,13 @@ export class ArrangingContractorComponent implements OnInit {
             this.openContractorSelection(contractorList);
             return;
           } else {
-            await this.proceedWithQuoteAndWO();
-            this.proceeding = false;
-            return;
+            if (this.isUserActionChange) {
+              this.proceedWithSelectedAction();
+            } else {
+              await this.proceedWithQuoteAndWO();
+              this.proceeding = false;
+              return;
+            }
           }
         }
         else {
@@ -1242,7 +1251,9 @@ export class ArrangingContractorComponent implements OnInit {
     //   this.commonService.showAlert('Arrangig Contractor', 'Please select response before proceeding with other action.');
     //   return;
     // }
-    if(this.userSelectedActionControl.value && this.userSelectedActionControl.value === index ){this.userSelectedActionControl = new FormControl(); this.isUserActionChange = false; this.hideWOform = false; return;}
+    if(this.userSelectedActionControl.value && this.userSelectedActionControl.value === index ) {
+      this.userSelectedActionControl = new FormControl(); this.isUserActionChange = false; this.hideWOform = false; return;
+    }
     if(this.iacNotification && this.iacNotification.responseReceived && !this.iacNotification.responseReceived.isAccepted && this.iacNotification.templateCode === 'CWO-C-E'){
       this.userActionForms.markAsUntouched();
       if (index === 'OBTAIN_AUTHORISATION') {
