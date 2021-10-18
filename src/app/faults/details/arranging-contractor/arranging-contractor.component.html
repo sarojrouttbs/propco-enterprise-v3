@@ -201,17 +201,21 @@
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
               <ion-row class="ion-justify-content-center">
-                <ng-container *ngIf="iacNotification && iacNotification?.templateCode !== 'CWO-C-E'">
-                  <div *ngFor="let instruction of otherStageActions">
-                    <ion-button color="success" expand="block" class="action-btn"
-                      [disabled]="instruction.index === 'OBTAIN_QUOTE' && !isWorksOrder"
-                      fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
-                      (click)="setUserAction(instruction.index)" [hidden]="filteredCCDetails?.isLandlordWantAnotherQuote && instruction.index=='OBTAIN_QUOTE'">
-                      {{instruction.value}}
-                      <ion-icon name="checkmark-circle-outline" class="check-icon"
-                        *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
-                    </ion-button>
-                  </div>
+                <ng-container *ngIf="iacNotification">
+                  <ng-container *ngFor="let instruction of otherStageActions">
+                    <div>
+                      <ion-button color="success" expand="block" class="action-btn"
+                        [disabled]="instruction.index === 'OBTAIN_QUOTE' && !isWorksOrder"
+                        fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
+                        (click)="setUserAction(instruction.index)" [hidden]="filteredCCDetails?.isLandlordWantAnotherQuote && instruction.index=='OBTAIN_QUOTE'">
+                        {{instruction.value}}
+                        <ion-icon name="checkmark-circle-outline" class="check-icon"
+                          *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
+                      </ion-button>
+                    <h6 class="ownRepair" *ngIf="(instruction.index == 'DOES_OWN_REPAIRS' && isMatch === false )">
+                      Landlord owned Repair Category does not match the Fault Category</h6>
+                    </div>
+                  </ng-container>
                 </ng-container>
                 <ng-container *ngIf="iacNotification && 
                   (
@@ -242,6 +246,7 @@
               </ion-row>
             </ion-grid>
           </div>
+          <app-useractionforms [codes]="codes"  [isAuthorizationfields] = "isAuthorizationfields" [hideWOform]="hideWOform" [userActionForms]="userActionForms" [actionSelected]="userSelectedActionControl.value" [faultDetails]="faultDetails"></app-useractionforms>
           <!-- <ion-button (click)="questionActionQuoteUpload(true)">Upload</ion-button> -->
         </div>
       </ion-col>
@@ -429,7 +434,7 @@
              </ion-grid>
              </form>
           </ng-container>
-          <ng-container *ngIf="isWorksOrder">
+          <ng-container *ngIf="isWorksOrder && !hideWOform ">
             <form [formGroup]="workOrderForm">
               <ion-grid>
                <ng-template *ngTemplateOutlet="worksOrderDetails"></ng-template>
@@ -875,7 +880,7 @@
   <ion-button (click)="_btnHandler('cancel')" class="cancel-button" [disabled]="saving || proceeding">Cancel</ion-button>
   <ion-button (click)="_btnHandler('back')" [disabled]="saving || proceeding">Back</ion-button>
   <ion-button (click)="_btnHandler('next')" *ngIf="faultDetails?.stage !== FAULT_STAGES.ARRANGING_CONTRACTOR" [disabled]="saving || proceeding">Next</ion-button>
-  <ion-button class="save-button" (click)="_btnHandler('save')" [disabled]="proceeding || faultDetails?.isClosed || (!isWorksOrder && faultNotifications.length)">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+  <ion-button class="save-button" (click)="_btnHandler('save')" [disabled]="proceeding || faultDetails?.isClosed || (!isWorksOrder && faultNotifications.length) || (iacNotification && iacNotification.responseReceived && !iacNotification.responseReceived.isAccepted && iacNotification.templateCode === 'CWO-C-E')">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
   <ion-button class="submit-button" (click)="_btnHandler('proceed')" [disabled]="saving || faultDetails?.isClosed || (faultNotifications.length && addMoreCCrestrictAction && !isUserActionChange)">Proceed<ion-icon *ngIf="proceeding" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
 </div>
 

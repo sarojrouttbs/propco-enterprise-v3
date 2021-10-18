@@ -202,7 +202,8 @@ export class ChronologicalHistoryPage implements OnInit {
                            { text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] },
                            { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] },
                            { text: `${element.data.how || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-
+                        tableBody.push([{ colSpan: 3, text: 'Rejection Reason', style: 'tableHeader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.rejectionReason || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         tableBody.push([{ colSpan: 3, text: 'Question', style: 'tableHeader', border: [false, false, false, false] }]);
                         tableBody.push([{ colSpan: 3, text: `${element.data.question || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         tableBody.push([{ colSpan: 3, text: 'Answer', style: 'tableHeader', border: [false, false, false, false] }]);
