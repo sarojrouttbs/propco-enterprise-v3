@@ -118,6 +118,7 @@ export class LandlordInstructionComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.faultDetails && !changes.faultDetails.firstChange) {
+      this.proceeding = false;
       this.restrictAction = false;
       this.cliNotification = null;
       this.faultMaintenanceDetails = null;
