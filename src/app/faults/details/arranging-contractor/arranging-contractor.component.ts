@@ -366,7 +366,6 @@ export class ArrangingContractorComponent implements OnInit {
       }
     this.showSkeleton = false;
     this.getNominalCodes();
-    this.getStageOtherActions();
     this.userActionForms.controls['orderedBy'].setValue(this.isWorksOrder ? this.workOrderForm.get('orderedBy').value : this.raiseQuoteForm.get('orderedBy').value)
   }
 
@@ -2487,6 +2486,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
     this.filterNotifications(this.faultNotifications, this.faultDetails.stage, undefined, id).then(data => {
       this.iacNotification = data;
+      this.getStageOtherActions();
       this.isContractorSelected = true;
     });
   }
@@ -2550,7 +2550,7 @@ export class ArrangingContractorComponent implements OnInit {
               otherStageActions.push(action);
               return;
             }
-            if(this.iacNotification.templateCode === 'CQ-C-E' && action.index === 'DOES_OWN_REPAIRS'){
+            if(this.iacNotification.templateCode === 'CQ-C-E' && action.index === 'DOES_OWN_REPAIRS') {
               otherStageActions.push(action);
               return;
             }
@@ -2560,6 +2560,7 @@ export class ArrangingContractorComponent implements OnInit {
           } 
         }
       });
+      // console.log(otherStageActions)
       this.otherStageActions = otherStageActions;
     }
   }
