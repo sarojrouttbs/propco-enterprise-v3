@@ -748,7 +748,7 @@ export class LandlordInstructionComponent implements OnInit {
     // Object.assign(faultRequestObj, this.landlordInstFrom.value);
     faultRequestObj.contractor = this.landlordInstFrom.value.contractor;
     faultRequestObj.confirmedEstimate = this.landlordInstFrom.value.confirmedEstimate;
-    faultRequestObj.nominalCode = this.landlordInstFrom.value.nominalCode;
+    faultRequestObj.nominalCode = this.landlordInstFrom.value.nominalCode ? this.landlordInstFrom.value.nominalCode.nominalCode : null;
     faultRequestObj.requiredStartDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredStartDate));
     faultRequestObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredCompletionDate));
     faultRequestObj.estimationNotes = this.landlordInstFrom.value.estimationNotes;
