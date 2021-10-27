@@ -129,6 +129,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.checkMaintenanceDetail();
     }
     if (changes.faultDetails && !changes.faultDetails.firstChange) {
+      this.hideWOform = false;
       // this.restrictAction = false;
       this.iacNotification = null;
       this.faultMaintenanceDetails = null;
@@ -367,6 +368,7 @@ export class ArrangingContractorComponent implements OnInit {
     this.showSkeleton = false;
     this.getNominalCodes();
     this.userActionForms.controls['orderedBy'].setValue(this.isWorksOrder ? this.workOrderForm.get('orderedBy').value : this.raiseQuoteForm.get('orderedBy').value)
+    if(this.isWorksOrder) {this.getStageOtherActions();}
   }
 
   private async enableCCAddform() {
