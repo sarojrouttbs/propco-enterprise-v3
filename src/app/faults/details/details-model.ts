@@ -101,6 +101,7 @@ declare namespace FaultModels {
         orderedById?: string;
         snoozeUntil: string;
         snoozeReason: string;
+        proceedInDifferentWay: boolean
     }
 
     export interface AdditionalInfo {
