@@ -1075,7 +1075,9 @@ export class ArrangingContractorComponent implements OnInit {
                 faultRequestObj.confirmedEstimate = this.userActionForms.value.confirmedEstimate;
                 faultRequestObj.contractorId = this.userActionForms.value.contractorId;
               }
-              if(this.isUserActionChange){faultRequestObj.proceedInDifferentWay = true;}
+              if(this.isUserActionChange) {
+                faultRequestObj.proceedInDifferentWay = true;
+              }
               const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
               if (isFaultUpdated) {
                 this.proceeding = false;
@@ -1818,7 +1820,9 @@ export class ArrangingContractorComponent implements OnInit {
       faultRequestObj.isDraft = false;
       faultRequestObj.stage = this.userSelectedActionControl.value === 'DOES_OWN_REPAIRS' ? FAULT_STAGES.LANDLORD_INSTRUCTION : this.faultDetails.stage;
       faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
-      if(this.isUserActionChange){faultRequestObj.proceedInDifferentWay = true;}
+      if(this.isUserActionChange) {
+        faultRequestObj.proceedInDifferentWay = true;
+      }
       const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
       let isStatusUpdated = false;
       if (this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER' && this.faultDetails.status !== FAULT_STATUSES.WORKSORDER_PENDING) {

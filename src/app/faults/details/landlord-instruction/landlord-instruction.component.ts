@@ -763,7 +763,9 @@ export class LandlordInstructionComponent implements OnInit {
     } else {
       delete faultRequestObj.contractorId;
     }
-    if(this.isUserActionChange){faultRequestObj.proceedInDifferentWay = true;}
+    if(this.isUserActionChange) { 
+      faultRequestObj.proceedInDifferentWay = true;
+    }
 
     this.faultsService.updateFault(this.faultDetails.faultId, faultRequestObj).subscribe(
       res => {
