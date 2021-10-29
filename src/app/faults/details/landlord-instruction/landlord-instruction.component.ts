@@ -182,6 +182,9 @@ export class LandlordInstructionComponent implements OnInit {
     this.getNominalCodes();
     this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
     this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
+    if(this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
+      this.addValidations();
+    }
     // if (this.faultMaintenanceDetails) {
       await this.faultNotification(this.faultDetails.stageAction);
       this.initPatching();
@@ -755,8 +758,8 @@ export class LandlordInstructionComponent implements OnInit {
     faultRequestObj.contractor = this.landlordInstFrom.value.contractor;
     faultRequestObj.confirmedEstimate = this.landlordInstFrom.value.confirmedEstimate;
     faultRequestObj.nominalCode = this.landlordInstFrom.value.nominalCode ? this.landlordInstFrom.value.nominalCode.nominalCode : null;
-    faultRequestObj.requiredStartDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredStartDate));
-    faultRequestObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredCompletionDate));
+    faultRequestObj.requiredStartDate = this.landlordInstFrom.value.requiredStartDate ? this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredStartDate)) : null;
+    faultRequestObj.requiredCompletionDate = this.landlordInstFrom.value.requiredCompletionDate ? this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredCompletionDate)) : null;
     faultRequestObj.estimationNotes = this.landlordInstFrom.value.estimationNotes;
     if (this.contractorEntityId) {
       faultRequestObj.contractorId = this.contractorEntityId;
@@ -766,7 +769,6 @@ export class LandlordInstructionComponent implements OnInit {
     if(this.isUserActionChange) { 
       faultRequestObj.proceedInDifferentWay = true;
     }
-
     this.faultsService.updateFault(this.faultDetails.faultId, faultRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
