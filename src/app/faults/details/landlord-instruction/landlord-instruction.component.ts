@@ -1147,7 +1147,7 @@ export class LandlordInstructionComponent implements OnInit {
     this.nominalCodes.forEach(code => {
       let heading = code.heading ? code.heading.toUpperCase() : '';
       code.concat = heading + ", " + code.nominalCode + ", " + code.description;
-      if (this.faultDetails.nominalCode) {
+      if (this.faultDetails.nominalCode && code.nominalCode === this.faultDetails.nominalCode) {
         this.landlordInstFrom.get('nominalCode').setValue(code);
       }
       codes.push(code);
