@@ -153,7 +153,12 @@ export class ArrangingContractorComponent implements OnInit {
       (this.faultDetails.stageAction === 'PROCEED_WITH_WORKSORDER')) {
       this.isWorksOrder = true;
     } else this.isWorksOrder = false;
-    if(!this.isWorksOrder && this.faultDetails.stageAction === 'OBTAIN_QUOTE' && this.faultMaintenanceDetails.isCancelled) { this.faultMaintenanceDetails = null};
+
+    if(!this.isWorksOrder && this.faultDetails.stageAction === 'OBTAIN_QUOTE' 
+      && this.faultMaintenanceDetails && this.faultMaintenanceDetails.isCancelled) 
+        {
+          this.faultMaintenanceDetails = null
+        };
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
