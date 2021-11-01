@@ -1,3 +1,5 @@
+import { Toolbar } from "ngx-editor";
+
 export const PROPCO = {
   isMobile: true,
   ACCESS_TOKEN: 'access_token',
@@ -467,4 +469,29 @@ export const QUOTE_CC_STATUS_ID = {
 export const NOTES_ORIGIN = {
   FAULT_STAGE: 'FAULT_STAGE',
   DASHBOARD: 'DASHBOARD'
+}
+
+export const RECIPIENT = [
+  'Landlord',
+  'Tenant',
+  'Contractor'
+];
+
+export const RECIPIENTS = {
+  'LANDLORD': 'Landlord',
+  'TENANT': 'Tenant',
+  'CONTRACTOR': 'Contractor'
+};
+
+export const NGX_EDITOR_TOOLBAR_SETTINGS: Toolbar = [
+  ['bold', 'italic'],
+  ['underline', 'strike'],
+  ['ordered_list', 'bullet_list'],
+  [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+  ['text_color', 'background_color'],
+  ['align_left', 'align_center', 'align_right', 'align_justify'],
+];
+
+export const PROPERTY_LINK_STATUS = {
+  'CURRENT': 'Current'
 }
