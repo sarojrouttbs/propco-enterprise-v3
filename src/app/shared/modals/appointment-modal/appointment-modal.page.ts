@@ -39,7 +39,7 @@ export class AppointmentModalPage implements OnInit {
     });
     const currentDate = new Date();
     if ((this.contractorDetails && this.contractorDetails.contractorPropertyVisitAt) || this.contractorWoPropertyVisitAt) {
-      this.minDate = this.commonService.getFormatedDate(currentDate, 'yyyy-MM-ddTHH:mm');
+      this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() - 30), 'yyyy-MM-ddTHH:mm');
     }
     else {
       this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() - 30), 'yyyy-MM-ddTHH:mm');
