@@ -9,7 +9,7 @@ export class SendEmailService {
 
   constructor(private httpClient: HttpClient) { }
 
-  sendEmail(faultId: any, requestObj: any): Observable<any> {
+  sendEmail(faultId: string, requestObj: any): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/notifications/send`, requestObj);
   }
 }

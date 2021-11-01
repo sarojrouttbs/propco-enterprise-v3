@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { Editor, Toolbar } from 'ngx-editor';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { FAULT_STATUSES, MAINTENANCE_TYPES, RECIPIENT, RECIPIENT_KEYS } from '../../constants';
+import { EDITOR_TOOLBAR, FAULT_STATUSES, LL_INSTRUCTION_TYPES, MAINTENANCE_TYPES, PROPERTY_LINK_STATUS, RECIPIENT, RECIPIENTS, USER_TYPES } from '../../constants';
 import { CommonService } from '../../services/common.service';
 import { SendEmailService } from './send-email-modal.service';
 
@@ -14,16 +14,8 @@ import { SendEmailService } from './send-email-modal.service';
   styleUrls: ['./send-email-modal.component.scss'],
 })
 export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
-
   editor: Editor;
-  toolbar: Toolbar = [
-    ['bold', 'italic'],
-    ['underline', 'strike'],
-    ['ordered_list', 'bullet_list'],
-    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
-    ['text_color', 'background_color'],
-    ['align_left', 'align_center', 'align_right', 'align_justify'],
-  ];
+  editorToolbar = EDITOR_TOOLBAR;
 
   faultDetails;
   propertyDetails;
@@ -57,11 +49,11 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
   ) { }
 
   recipient = RECIPIENT;
-
+  
   ngOnInit() {
     this.editor = new Editor();
     this.selectedRecipient = '';
-    if (this.faultDetails.stageAction === 'PROCEED_WITH_WORKSORDER' || this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING) {
+    if (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[1].index || this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING) {
       this.isWorksOrder = true;
     }
     this.initForm();
@@ -85,13 +77,13 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     this.isLandlord = false;
     this.isTenant = false;
     this.isContractor = false;
-    if (recipient === RECIPIENT_KEYS.LANDLORD) {
+    if (recipient === RECIPIENTS.LANDLORD) {
       this.initLLData();
     };
-    if (recipient === RECIPIENT_KEYS.TENANT) {
+    if (recipient === RECIPIENTS.TENANT) {
       this.initTTData();
     };
-    if (recipient === RECIPIENT_KEYS.CONTRACTOR) {
+    if (recipient === RECIPIENTS.CONTRACTOR) {
       this.initCCData();
     };
   }
@@ -128,18 +120,18 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getLandlordsOfProperty(this.propertyDetails.propertyId).subscribe(
         res => {
-          this.landLordList = res && res.data ? res.data.filter((llDetail => (llDetail.propertyLinkStatus === 'Current') && (llDetail.status === 1 || llDetail.status === 3) && (llDetail.rentPercentage > 0))) : [];
+          this.landLordList = res && res.data ? res.data.filter((llDetail => (llDetail.propertyLinkStatus === PROPERTY_LINK_STATUS.CURRENT) && (llDetail.status === 1 || llDetail.status === 3) && (llDetail.rentPercentage > 0))) : [];
           this.landLordList.forEach((item) => {
             item.isChecked = false;
           });
           this.isLandlord = true;
-          if (this.selectedRecipient === RECIPIENT_KEYS.CONTRACTOR) {
+          if (this.selectedRecipient === RECIPIENTS.CONTRACTOR) {
             this.isLandlord = false;
             if (this.landLordList.length > 0) {
               this.getLandlordId();
             }
 
-            if (this.faultDetails.stageAction === 'PROCEED_WITH_WORKSORDER' || this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING) {
+            if (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[1].index || this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING) {
               this.getQuoteContractorList();
             } else {
               setTimeout(() => {
@@ -255,7 +247,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
             });
           });
 
-          if (this.faultDetails.stageAction === 'PROCEED_WITH_WORKSORDER' || this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING) {
+          if (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[1].index || this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING) {
             (this.contractorsListQuote || this.contractorsListWorksOrder) ? this.getQuoteContractorList() : this.isContractor = true;
           } else {
             setTimeout(() => {
@@ -460,21 +452,16 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
         submittedById: '',
         submittedByType: 'SECUR_USER'
       };
-      const promise = new Promise((resolve, reject) => {
-        this.sendEmailService.sendEmail(this.faultDetails.faultId, requestObj).subscribe(
-          res => {
-            this.showLoader = false;
-            this.modalController.dismiss('success');
-            resolve(true);
-          },
-          error => {
-            this.showLoader = false;
-            this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Send email error', 'error');
-            resolve(false)
-          }
-        );
-      });
-      return promise;
+      this.sendEmailService.sendEmail(this.faultDetails.faultId, requestObj).subscribe(
+        res => {
+          this.showLoader = false;
+          this.modalController.dismiss('success');
+        },
+        error => {
+          this.showLoader = false;
+          this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Send email error', 'error');
+        }
+      );
     } else {
       this.showLoader = false;
       this.sendEmailForm.markAllAsTouched();
