@@ -15,8 +15,9 @@ export class ContractorDetailsModalPage implements OnInit {
   landlordId;
   llContractorDetails;
   estimatedVisitAt;
-  currentDate = this.commonService.getFormatedDate(new Date());
   unSavedData = false;
+  minDate;
+  pastDateError: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -24,6 +25,8 @@ export class ContractorDetailsModalPage implements OnInit {
     private faultsService: FaultsService) { }
 
   ngOnInit() {
+    const currentDate = new Date();
+    this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() - 30), 'yyyy-MM-ddTHH:mm');
     this.initContractorDetailForm();
     if (this.llContractorDetails.landlordOwnContractorId !== null) {
       this.patchValue();
@@ -108,5 +111,14 @@ export class ContractorDetailsModalPage implements OnInit {
 
   dismiss() {
     this.modalController.dismiss();
+  }
+
+  checkPastDate() {
+    if (this.contractorDetailForm.value.estimatedVisitAt <= this.commonService.getFormatedDate(new Date(), 'yyyy-MM-ddTHH:mm')) {
+      this.pastDateError = true;
+    }
+    else {
+      this.pastDateError = false;
+    }
   }
 }
