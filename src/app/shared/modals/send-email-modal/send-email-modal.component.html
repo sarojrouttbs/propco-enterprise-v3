@@ -1,0 +1,225 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title> Email </ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="sendEmailForm">
+    <ion-grid>
+      <ion-row class="body-header">
+        <ion-label>Add Recipient</ion-label>
+      </ion-row>
+
+      <ion-row class="recipient-btn-row">
+        <ion-col size="100">
+          <ion-button *ngFor="let obj of recipient; let i = index;" class="recipient-btn"
+            [ngClass]="{'btn-recipient-clicked' : obj == selectedRecipient}" (click)="onRecipientClick(obj)"> {{ obj }}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+      <div *ngIf="isLandlord" class="recipient-backgroud">
+        <ion-row>
+          <ng-container *ngIf="landLordList?.length === 0">
+            <ion-label class="not-found">
+              No data found!
+            </ion-label>
+          </ng-container>
+          <ng-container *ngIf="landLordList?.length > 0">
+            <ion-col size="50" *ngFor="let obj of landLordList; let i = index;">
+              <ion-row class="recipient">
+                <ion-col size="80">
+                  <span class="label"> {{ obj?.fullName }} </span>
+                </ion-col>
+                <ion-col size="20">
+                  <ion-checkbox color="success" (ionChange)="onCheckboxClick($event, obj, 'landlord', 'LANDLORD')" (click)="onCheckbox($event)"
+                    [checked]="obj?.isChecked" [disabled]="!obj?.email || obj?.email === ''" class="list-checkbox"
+                    mode="ios">
+                  </ion-checkbox>
+                </ion-col>
+              </ion-row>
+              <span *ngIf="!obj?.email || obj?.email === ''" class="error-msg">Email Id is not found</span>
+              <span *ngIf="faultDetails?.isOverrideCommunicationPreference" class="error-msg email-err">This Landlord
+                has opted not to receive any notification</span>
+            </ion-col>
+          </ng-container>
+        </ion-row>
+      </div>
+
+      <div *ngIf="isTenant" class="recipient-backgroud">
+        <ng-container *ngIf="tenantList?.length === 0">
+          <span class="error-msg">The property is vacant at the moment.</span>
+        </ng-container>
+
+        <ng-container *ngIf="tenantList?.length > 0">
+          <span class="header">Lead Tenant</span>
+          <span *ngIf="leadTenantList?.length === 0" class="error-msg none-err-msg"> None </span>
+          <ion-row>
+            <ion-col size="50" *ngFor="let obj of leadTenantList; let i = index;">
+              <ion-row class="recipient">
+                <ion-col size="80">
+                  <span class="label"> {{ obj?.tenant?.fullName }} </span>
+                </ion-col>
+                <ion-col size="20">
+                  <ion-checkbox color="success" (ionChange)="onCheckboxClick($event, obj, 'leadTenant', 'TENANT')" (click)="onCheckbox($event)"
+                    [checked]="obj?.isChecked" [disabled]="!obj?.tenant?.email || obj?.tenant?.email === ''"
+                    class="list-checkbox" mode="ios">
+                  </ion-checkbox>
+                </ion-col>
+              </ion-row>
+              <span *ngIf="!obj?.tenant?.email || obj?.tenant?.email === ''" class="error-msg">Email Id is not
+                found</span>
+            </ion-col>
+          </ion-row>
+        </ng-container>
+
+        <ng-container *ngIf="tenantList?.length > 0">
+          <span class="header">Co Tenant</span>
+          <span *ngIf="coTenantList?.length === 0" class="error-msg none-err-msg"> None </span>
+          <ion-row>
+            <ion-col size="50" *ngFor="let obj of coTenantList; let i = index;">
+              <ion-row class="recipient">
+                <ion-col size="80">
+                  <span class="label"> {{ obj?.tenant?.fullName }} </span>
+                </ion-col>
+                <ion-col size="20">
+                  <ion-checkbox color="success" (ionChange)="onCheckboxClick($event, obj, 'coTenant','TENANT')" (click)="onCheckbox($event)"
+                    [checked]="obj?.isChecked" [disabled]="!obj?.tenant?.email || obj?.tenant?.email === ''"
+                    class="list-checkbox" mode="ios">
+                  </ion-checkbox>
+                </ion-col>
+              </ion-row>
+              <span *ngIf="!obj?.tenant?.email || obj?.tenant?.email === ''" class="error-msg">Email Id is not
+                found</span>
+            </ion-col>
+          </ion-row>
+        </ng-container>
+      </div>
+
+      <div *ngIf="isContractor" class="recipient-backgroud">
+        <div>
+          <span class="header">Preferred Supplier</span>
+          <span *ngIf="contractorListPrefSupplier?.length === 0" class="error-msg none-err-msg"> None </span>
+          <ion-row>
+            <ion-col size="50" *ngFor="let obj of contractorListPrefSupplier; let i = index;">
+              <ion-row class="recipient">
+                <ion-col size="80">
+                  <span class="label"> {{ obj?.company }} </span>
+                </ion-col>
+                <ion-col size="20">
+                  <ion-checkbox (ionChange)="onCheckboxClick($event, obj, 'preferred_supplier', 'CONTRACTOR');" (click)="onCheckbox($event)"
+                  [checked]="obj?.isChecked" [disabled]="!obj?.email || obj?.email === ''" color="success"
+                    class="list-checkbox" mode="ios">
+                  </ion-checkbox>
+                </ion-col>
+              </ion-row>
+              <span *ngIf="!obj?.email || obj?.email === ''" class="error-msg">Email Id is not found</span>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <ng-container *ngIf="isWorksOrder">
+
+          <div class="bottom-space">
+            <span class="header">Quote in progress</span>
+            <span *ngIf="contractorsListQuote?.length === 0" class="error-msg none-err-msg"> None </span>
+            <ion-row>
+              <ion-col size="50" *ngFor="let obj of contractorsListQuote; let i = index;">
+                <ion-row class="recipient">
+                  <ion-col size="80">
+                    <span class="label"> {{ obj?.company }} </span>
+                  </ion-col>
+                  <ion-col size="20">
+                    <ion-checkbox (ionChange)="onCheckboxClick($event, obj, 'quote_contractor', 'CONTRACTOR')" (click)="onCheckbox($event)"
+                      [checked]="obj?.isChecked" [disabled]="!obj?.email || obj?.email === ''" color="success"
+                      class="list-checkbox" mode="ios">
+                    </ion-checkbox>
+                  </ion-col>
+                </ion-row>
+                <span *ngIf="!obj?.email || obj?.email === ''" class="error-msg">Email Id is not found</span>
+              </ion-col>
+            </ion-row>
+          </div>
+
+          <div>
+            <span class="header">Estimate/Works Order in progress</span>
+            <span *ngIf="contractorsListWorksOrder?.length === 0" class="error-msg none-err-msg"> None </span>
+            <ion-row>
+              <ion-col size="50" *ngFor="let obj of contractorsListWorksOrder; let i = index;">
+                <ion-row class="recipient">
+                  <ion-col size="80">
+                    <span class="label"> {{ obj?.companyName }} </span>
+                  </ion-col>
+                  <ion-col size="20">
+                    <ion-checkbox (ionChange)="onCheckboxClick($event, obj, 'wo_contractor', 'CONTRACTOR')" (click)="onCheckbox($event)"
+                      [checked]="obj?.isChecked" [disabled]="!obj?.email || obj?.email === ''" color="success"
+                      class="list-checkbox" mode="ios">
+                    </ion-checkbox>
+                  </ion-col>
+                </ion-row>
+                <span *ngIf="!obj?.email || obj?.email === ''" class="error-msg">Email Id is not found</span>
+              </ion-col>
+            </ion-row>
+          </div>
+        </ng-container>
+
+      </div>
+
+      <ion-row class="mail-to-section" *ngIf="sendEmailForm.get('entityId')?.value[0]?.recipientEmail">
+        <ion-col size="100">
+          <ion-label>To: <span class="selected-recipient"> {{ sendEmailForm.get('entityId')?.value[0]?.recipientEmail }}
+            </span>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="sendEmailForm.get('entityId').hasError('requiredError')">
+        <span class="error-msg"> Please select a recipient </span>
+      </ion-row>
+
+      <ion-col size="100">
+        <ion-item>
+          <ion-label position="floating">Subject
+            <ion-text class="mandatory" placeholder="First line of address">*</ion-text>
+          </ion-label>
+          <ion-input type="text" formControlName="emailSubject">
+          </ion-input>
+        </ion-item>
+        <app-validation-message [control]="sendEmailForm?.controls?.emailSubject"></app-validation-message>
+      </ion-col>
+
+      <ion-col size="100">
+        <div class="email-body-label">
+          <ion-label>Message
+            <ion-text class="mandatory" placeholder="Type message here">*</ion-text>
+          </ion-label>
+        </div>
+        <ion-item>
+          <div class="editor">
+            <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+            <ngx-editor [editor]="editor" formControlName="emailBody"></ngx-editor>
+          </div>
+        </ion-item>
+        <span *ngIf="!sendEmailForm.get('emailBody')?.value && sendEmailForm.get('emailBody')?.touched"
+          class="error-msg"> Please write a message </span>
+      </ion-col>
+
+    </ion-grid>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-end">
+        <ion-button class="submit-button send-button" (click)="sendMail()" [disabled]="showLoader">Send
+          <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

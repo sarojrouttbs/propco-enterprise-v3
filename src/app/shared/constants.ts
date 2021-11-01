@@ -468,3 +468,15 @@ export const NOTES_ORIGIN = {
   FAULT_STAGE: 'FAULT_STAGE',
   DASHBOARD: 'DASHBOARD'
 }
+
+export const RECIPIENT = [
+  'Landlord',
+  'Tenant',
+  'Contractor'
+];
+
+export const RECIPIENT_KEYS = {
+  'LANDLORD': 'Landlord',
+  'TENANT': 'Tenant',
+  'CONTRACTOR': 'Contractor'
+};

@@ -497,6 +497,7 @@
   [describeFaultForm]="describeFaultForm" 
   [propertyDetails]="propertyDetails"
   [faultDetails]="faultDetails"
+  [categoryName]="getCategoryName()"
   [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
   [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
   <div *ngIf="showSkeleton">
@@ -602,6 +603,7 @@
         [describeFaultForm]="describeFaultForm" 
         [propertyDetails]="propertyDetails"
         [faultDetails]="faultDetails"
+        [categoryName]="getCategoryName()"
         [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
         [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
         <div *ngIf="showSkeleton">
@@ -619,6 +621,7 @@
       [describeFaultForm]="describeFaultForm" 
       [propertyDetails]="propertyDetails"
       [faultDetails]="faultDetails"
+      [categoryName]="getCategoryName()"
       [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
       [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
       <div *ngIf="showSkeleton">
@@ -645,6 +648,7 @@
       [describeFaultForm]="describeFaultForm"
       [propertyDetails]="propertyDetails" 
       [faultDetails]="faultDetails"
+      [categoryName]="getCategoryName()"
       [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
       [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
       <div *ngIf="showSkeleton">
@@ -672,6 +676,7 @@
       [describeFaultForm]="describeFaultForm" 
       [faultDetails]="faultDetails"
       [propertyDetails]="propertyDetails"
+      [categoryName]="getCategoryName()"
       [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
       [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
       <div *ngIf="showSkeleton">
@@ -695,6 +700,7 @@
       [describeFaultForm]="describeFaultForm" 
       [propertyDetails]="propertyDetails"
       [faultDetails]="faultDetails"
+      [categoryName]="getCategoryName()"
       [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
       [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
       <div *ngIf="showSkeleton">
