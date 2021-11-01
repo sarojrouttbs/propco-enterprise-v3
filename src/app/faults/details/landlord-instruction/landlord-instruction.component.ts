@@ -182,6 +182,9 @@ export class LandlordInstructionComponent implements OnInit {
     this.getNominalCodes();
     this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
     this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
+    if(this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
+      this.addValidations();
+    }
     // if (this.faultMaintenanceDetails) {
       await this.faultNotification(this.faultDetails.stageAction);
       this.initPatching();
@@ -514,6 +517,7 @@ export class LandlordInstructionComponent implements OnInit {
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
+          faultRequestObj.proceedInDifferentWay = true;
           const WORKS_ORDER_PENDING = 19;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -537,6 +541,7 @@ export class LandlordInstructionComponent implements OnInit {
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
+          faultRequestObj.proceedInDifferentWay = true;
           const AWAITING_QUOTE = 14;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -569,6 +574,7 @@ export class LandlordInstructionComponent implements OnInit {
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
+          faultRequestObj.proceedInDifferentWay = true;
           const WORKS_ORDER_PENDING = 19;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -592,6 +598,7 @@ export class LandlordInstructionComponent implements OnInit {
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
+          faultRequestObj.proceedInDifferentWay = true;
           const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -635,6 +642,7 @@ export class LandlordInstructionComponent implements OnInit {
           faultRequestObj.requiredStartDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredStartDate));
           faultRequestObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredCompletionDate));
           faultRequestObj.orderedById = this.loggedInUserData.userId;
+          faultRequestObj.proceedInDifferentWay = true;
           const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
@@ -674,6 +682,7 @@ export class LandlordInstructionComponent implements OnInit {
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
+          faultRequestObj.proceedInDifferentWay = true;
           let res = await this.updateFaultDetails(faultRequestObj);
           if (res) {
             await this._btnHandler('refresh');
@@ -748,16 +757,18 @@ export class LandlordInstructionComponent implements OnInit {
     // Object.assign(faultRequestObj, this.landlordInstFrom.value);
     faultRequestObj.contractor = this.landlordInstFrom.value.contractor;
     faultRequestObj.confirmedEstimate = this.landlordInstFrom.value.confirmedEstimate;
-    faultRequestObj.nominalCode = this.landlordInstFrom.value.nominalCode;
-    faultRequestObj.requiredStartDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredStartDate));
-    faultRequestObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredCompletionDate));
+    faultRequestObj.nominalCode = this.landlordInstFrom.value.nominalCode ? this.landlordInstFrom.value.nominalCode.nominalCode : null;
+    faultRequestObj.requiredStartDate = this.landlordInstFrom.value.requiredStartDate ? this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredStartDate)) : null;
+    faultRequestObj.requiredCompletionDate = this.landlordInstFrom.value.requiredCompletionDate ? this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredCompletionDate)) : null;
     faultRequestObj.estimationNotes = this.landlordInstFrom.value.estimationNotes;
     if (this.contractorEntityId) {
       faultRequestObj.contractorId = this.contractorEntityId;
     } else {
       delete faultRequestObj.contractorId;
     }
-
+    if(this.isUserActionChange) { 
+      faultRequestObj.proceedInDifferentWay = true;
+    }
     this.faultsService.updateFault(this.faultDetails.faultId, faultRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
@@ -1136,7 +1147,7 @@ export class LandlordInstructionComponent implements OnInit {
     this.nominalCodes.forEach(code => {
       let heading = code.heading ? code.heading.toUpperCase() : '';
       code.concat = heading + ", " + code.nominalCode + ", " + code.description;
-      if (this.faultDetails.nominalCode) {
+      if (this.faultDetails.nominalCode && code.nominalCode === this.faultDetails.nominalCode) {
         this.landlordInstFrom.get('nominalCode').setValue(code);
       }
       codes.push(code);

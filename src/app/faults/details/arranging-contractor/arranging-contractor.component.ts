@@ -129,6 +129,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.checkMaintenanceDetail();
     }
     if (changes.faultDetails && !changes.faultDetails.firstChange) {
+      this.hideWOform = false;
       // this.restrictAction = false;
       this.iacNotification = null;
       this.faultMaintenanceDetails = null;
@@ -147,12 +148,17 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async initiateArrangingContractors() {
     this.faultMaintenanceDetails = await this.getFaultMaintenance() as FaultModels.IMaintenanceQuoteResponse;
-    if (this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING
-      || (this.faultMaintenanceDetails && this.faultMaintenanceDetails.itemType === MAINTENANCE_TYPES.WORKS_ORDER)
-      || (this.faultDetails.stageAction === 'PROCEED_WITH_WORKSORDER')) {
-      /*19: Worksorder Pending*/
+    if (
+      this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING ||
+      (this.faultDetails.stageAction === 'PROCEED_WITH_WORKSORDER')) {
       this.isWorksOrder = true;
     } else this.isWorksOrder = false;
+
+    if(!this.isWorksOrder && this.faultDetails.stageAction === 'OBTAIN_QUOTE' 
+      && this.faultMaintenanceDetails && this.faultMaintenanceDetails.isCancelled) 
+        {
+          this.faultMaintenanceDetails = null
+        };
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
@@ -366,8 +372,8 @@ export class ArrangingContractorComponent implements OnInit {
       }
     this.showSkeleton = false;
     this.getNominalCodes();
-    this.getStageOtherActions();
     this.userActionForms.controls['orderedBy'].setValue(this.isWorksOrder ? this.workOrderForm.get('orderedBy').value : this.raiseQuoteForm.get('orderedBy').value)
+    if(this.isWorksOrder) {this.getStageOtherActions();}
   }
 
   private async enableCCAddform() {
@@ -1073,6 +1079,9 @@ export class ArrangingContractorComponent implements OnInit {
               if(this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER' || this.userSelectedActionControl.value === 'OBTAIN_AUTHORISATION') {
                 faultRequestObj.confirmedEstimate = this.userActionForms.value.confirmedEstimate;
                 faultRequestObj.contractorId = this.userActionForms.value.contractorId;
+              }
+              if(this.isUserActionChange) {
+                faultRequestObj.proceedInDifferentWay = true;
               }
               const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
               if (isFaultUpdated) {
@@ -1816,6 +1825,9 @@ export class ArrangingContractorComponent implements OnInit {
       faultRequestObj.isDraft = false;
       faultRequestObj.stage = this.userSelectedActionControl.value === 'DOES_OWN_REPAIRS' ? FAULT_STAGES.LANDLORD_INSTRUCTION : this.faultDetails.stage;
       faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
+      if(this.isUserActionChange) {
+        faultRequestObj.proceedInDifferentWay = true;
+      }
       const isFaultUpdated = await this.updateFaultSummary(faultRequestObj);
       let isStatusUpdated = false;
       if (this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER' && this.faultDetails.status !== FAULT_STATUSES.WORKSORDER_PENDING) {
@@ -2487,6 +2499,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
     this.filterNotifications(this.faultNotifications, this.faultDetails.stage, undefined, id).then(data => {
       this.iacNotification = data;
+      this.getStageOtherActions();
       this.isContractorSelected = true;
     });
   }
@@ -2550,7 +2563,7 @@ export class ArrangingContractorComponent implements OnInit {
               otherStageActions.push(action);
               return;
             }
-            if(this.iacNotification.templateCode === 'CQ-C-E' && action.index === 'DOES_OWN_REPAIRS'){
+            if(this.iacNotification.templateCode === 'CQ-C-E' && action.index === 'DOES_OWN_REPAIRS') {
               otherStageActions.push(action);
               return;
             }
@@ -2560,6 +2573,7 @@ export class ArrangingContractorComponent implements OnInit {
           } 
         }
       });
+      // console.log(otherStageActions)
       this.otherStageActions = otherStageActions;
     }
   }

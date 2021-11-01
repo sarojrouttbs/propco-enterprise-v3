@@ -398,7 +398,7 @@ export class DetailsPage implements OnInit {
   }
 
   private checkIfPropertyCheckedIn() {
-    if (this.propertyTenancyList) {
+    if (this.propertyTenancyList && this.propertyTenancyList.length) {
       let keepgoing: boolean = true;
       this.propertyTenancyList.forEach((res, index, array) => {
         if (index === (array.length - 1)) {

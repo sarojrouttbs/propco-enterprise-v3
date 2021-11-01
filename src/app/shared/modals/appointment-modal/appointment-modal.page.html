@@ -34,7 +34,7 @@
             </ion-datetime>
           </ion-item>
           <app-validation-message [control]="appointmentForm.controls.dateTime"></app-validation-message>
-          <ion-text class="error-message" color="danger" *ngIf="pastDateError">The date/time you have chosen is in the past. This indicates the Contractor has already visited the property and carried out the repair. Are you sure?</ion-text>
+          <ion-text class="error-message" color="danger" *ngIf="pastDateError">The date/time you have chosen is in past, indicating the Contractor has already visited the property.</ion-text>
         </ion-col>
       </ion-row>
     </ion-grid>
