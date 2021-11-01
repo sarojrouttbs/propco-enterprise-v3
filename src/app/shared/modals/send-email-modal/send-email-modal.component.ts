@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { Editor, Toolbar } from 'ngx-editor';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { EDITOR_TOOLBAR, FAULT_STATUSES, LL_INSTRUCTION_TYPES, MAINTENANCE_TYPES, PROPERTY_LINK_STATUS, RECIPIENT, RECIPIENTS, USER_TYPES } from '../../constants';
+import { NGX_EDITOR_TOOLBAR_SETTINGS, FAULT_STATUSES, LL_INSTRUCTION_TYPES, MAINTENANCE_TYPES, PROPERTY_LINK_STATUS, RECIPIENT, RECIPIENTS, USER_TYPES } from '../../constants';
 import { CommonService } from '../../services/common.service';
 import { SendEmailService } from './send-email-modal.service';
 
@@ -15,7 +15,7 @@ import { SendEmailService } from './send-email-modal.service';
 })
 export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
   editor: Editor;
-  editorToolbar = EDITOR_TOOLBAR;
+  editorToolbar = NGX_EDITOR_TOOLBAR_SETTINGS;
 
   faultDetails;
   propertyDetails;

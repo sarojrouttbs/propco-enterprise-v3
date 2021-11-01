@@ -483,7 +483,7 @@ export const RECIPIENTS = {
   'CONTRACTOR': 'Contractor'
 };
 
-export const EDITOR_TOOLBAR: Toolbar = [
+export const NGX_EDITOR_TOOLBAR_SETTINGS: Toolbar = [
   ['bold', 'italic'],
   ['underline', 'strike'],
   ['ordered_list', 'bullet_list'],
