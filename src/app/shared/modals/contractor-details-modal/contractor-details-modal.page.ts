@@ -114,7 +114,7 @@ export class ContractorDetailsModalPage implements OnInit {
   }
 
   checkPastDate() {
-    if (this.contractorDetailForm.value.estimatedVisitAt <= this.commonService.getFormatedDate(new Date(), 'yyyy-MM-ddTHH:mm')) {
+    if (new Date(this.contractorDetailForm.value.estimatedVisitAt) < new Date(this.commonService.getFormatedDate(new Date(), 'yyyy-MM-ddTHH:mm'))) {
       this.pastDateError = true;
     }
     else {
