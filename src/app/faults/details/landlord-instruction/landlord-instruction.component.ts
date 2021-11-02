@@ -510,10 +510,10 @@ export class LandlordInstructionComponent implements OnInit {
         }
         var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action.<br/> Are you sure?', '', 'Yes', 'No');
         if (response) {
-          if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
-            let voidResponce = await this.voidNotification();
-            if (!voidResponce) return;
-          }
+          // if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
+          //   let voidResponce = await this.voidNotification();
+          //   if (!voidResponce) return;
+          // }
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
@@ -534,10 +534,10 @@ export class LandlordInstructionComponent implements OnInit {
       case LL_INSTRUCTION_TYPES[2].index: //cli006c
         var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action.<br/>  Are you sure?', '', 'Yes', 'No');
         if (response) {
-          if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
-            let voidResponce = await this.voidNotification();
-            if (!voidResponce) return;
-          }
+          // if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
+          //   let voidResponce = await this.voidNotification();
+          //   if (!voidResponce) return;
+          // }
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
@@ -567,10 +567,10 @@ export class LandlordInstructionComponent implements OnInit {
         }
         var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action.<br/> Are you sure?', '', 'Yes', 'No');
         if (response) {
-          if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
-            let voidResponce = await this.voidNotification();
-            if (!voidResponce) return;
-          }
+          // if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
+          //   let voidResponce = await this.voidNotification();
+          //   if (!voidResponce) return;
+          // }
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
@@ -591,10 +591,10 @@ export class LandlordInstructionComponent implements OnInit {
       case LL_INSTRUCTION_TYPES[0].index: //cli006a
         var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. <br/> Are you sure?', '', 'Yes', 'No');
         if (response) {
-          if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
-            let voidResponce = await this.voidNotification();
-            if (!voidResponce) return;
-          }
+          // if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
+          //   let voidResponce = await this.voidNotification();
+          //   if (!voidResponce) return;
+          // }
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
@@ -631,10 +631,10 @@ export class LandlordInstructionComponent implements OnInit {
         }
         var response = await this.commonService.showConfirm('Landlord Instructions', `You have selected the "Obtain Landlord's Authorisation" action. This will send out a notification to Landlord. <br/> Are you sure?`, '', 'Yes', 'No');
         if (response) {
-          if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
-            let voidResponce = await this.voidNotification();
-            if (!voidResponce) return;
-          }
+          // if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
+          //   let voidResponce = await this.voidNotification();
+          //   if (!voidResponce) return;
+          // }
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
@@ -674,10 +674,10 @@ export class LandlordInstructionComponent implements OnInit {
           this.proceeding = false;
           return;
         }
-        if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
-          let voidResponce = await this.voidNotification();
-          if (!voidResponce) return;
-        }
+        // if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
+        //   let voidResponce = await this.voidNotification();
+        //   if (!voidResponce) return;
+        // }
         if (this.landlordInstFrom.get('confirmedEstimate').value > 0) {
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;

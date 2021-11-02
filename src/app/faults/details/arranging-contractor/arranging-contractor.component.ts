@@ -1007,11 +1007,7 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.iacNotification) {
       if (this.iacNotification.responseReceived == null || this.iacNotification.responseReceived.isAccepted == null && !this.iacNotification.isVoided) {
         if (this.isUserActionChange) {
-          let title = this.getLookupValue(this.userSelectedActionControl.value, this.iacStageActions);
-          const proceed = await this.commonService.showConfirm(title, `You have selected ${title}. Are you sure?`)
-            if (proceed) {
-              this.voidNotification(null);
-            }
+              this.proceedWithSelectedAction();
         }
       }
       if (this.iacNotification.responseReceived != null) {
@@ -1040,12 +1036,8 @@ export class ArrangingContractorComponent implements OnInit {
         }
         else {
           if (this.isUserActionChange) {
-            if(!this.iacNotification.responseReceived.isAccepted && this.iacNotification.templateCode === 'CWO-C-E' && (this.userSelectedActionControl.value === 'OBTAIN_AUTHORISATION' || this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER')) {
-              if(!this.userActionForms.valid) { this.commonService.showAlert('Arranging Contractor', 'Please fill the required field(s).'); this.proceeding = false; this.userActionForms.markAllAsTouched(); return;}
+            // if(!this.iacNotification.responseReceived.isAccepted && this.iacNotification.templateCode === 'CWO-C-E' && (this.userSelectedActionControl.value === 'OBTAIN_AUTHORISATION' || this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER')) {
               this.proceedWithSelectedAction();
-            } else {
-              this.proceedWithSelectedAction();
-            }
           }
         }
       }
@@ -1059,6 +1051,15 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async proceedWithSelectedAction () {
+    if(this.iacNotification && this.isWorksOrder
+    && (this.userSelectedActionControl.value === 'OBTAIN_AUTHORISATION' 
+    || this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER')) {
+    if(!this.userActionForms.valid) { 
+        this.commonService.showAlert('Arranging Contractor', 'Please fill the required field(s).'); 
+        this.proceeding = false; this.userActionForms.markAllAsTouched(); 
+        return;
+      }
+    }
     let title = this.getLookupValue(this.userSelectedActionControl.value, this.iacStageActions);
             const proceed = await this.commonService.showConfirm(title, `You have selected ${title}. Are you sure?`)
             if (proceed) {
@@ -1263,7 +1264,7 @@ export class ArrangingContractorComponent implements OnInit {
     if(this.userSelectedActionControl.value && this.userSelectedActionControl.value === index ) {
       this.userSelectedActionControl = new FormControl(); this.isUserActionChange = false; this.hideWOform = false; return;
     }
-    if(this.iacNotification && this.iacNotification.responseReceived && !this.iacNotification.responseReceived.isAccepted && this.iacNotification.templateCode === 'CWO-C-E'){
+    if(this.isWorksOrder && this.iacNotification) {
       this.userActionForms.markAsUntouched();
       if (index === 'OBTAIN_AUTHORISATION') {
         this.addValidations();
@@ -1813,11 +1814,11 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   async voidNotification(value) {
-    let notificationObj = {} as FaultModels.IUpdateNotification;
-    notificationObj.isVoided = true;
-    notificationObj.submittedByType = 'SECUR_USER';
-    const updated = await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
-    if (updated) {
+    // let notificationObj = {} as FaultModels.IUpdateNotification;
+    // notificationObj.isVoided = true;
+    // notificationObj.submittedByType = 'SECUR_USER';
+    // const updated = await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);
+    // if (updated) {
       let faultRequestObj: any = {};
       faultRequestObj.stageAction = this.userSelectedActionControl.value;
       faultRequestObj.submittedById = '';
@@ -1844,7 +1845,7 @@ export class ArrangingContractorComponent implements OnInit {
           this._btnHandler('refresh');
         }
       }
-    }
+    // }
   }
 
   private updateFaultStatus(status): Promise<any> {
@@ -2548,21 +2549,17 @@ export class ArrangingContractorComponent implements OnInit {
           otherStageActions.push(action);
           return;
          }
+        if(this.isWorksOrder  && (action.index === 'DOES_OWN_REPAIRS' || action.index === 'OBTAIN_AUTHORISATION')) {
+          otherStageActions.push(action);
+          return;
+        }
         if(this.iacNotification.responseReceived === null) {
           /*awaiting response*/
-          if(this.iacNotification.templateCode === 'LNP-L-E' && action.index === 'DOES_OWN_REPAIRS'){
-            otherStageActions.push(action);
-            return;
-          }
         }
         else if(this.iacNotification.responseReceived) {
           /*response recieved*/
           if(this.iacNotification.responseReceived.isAccepted === false) {
             /*negative response*/
-            if(this.iacNotification.templateCode === 'CWO-C-E' && (action.index === 'DOES_OWN_REPAIRS' || action.index === 'OBTAIN_AUTHORISATION')){
-              otherStageActions.push(action);
-              return;
-            }
             if(this.iacNotification.templateCode === 'CQ-C-E' && action.index === 'DOES_OWN_REPAIRS') {
               otherStageActions.push(action);
               return;
@@ -2573,7 +2570,6 @@ export class ArrangingContractorComponent implements OnInit {
           } 
         }
       });
-      // console.log(otherStageActions)
       this.otherStageActions = otherStageActions;
     }
   }
