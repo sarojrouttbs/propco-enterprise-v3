@@ -169,8 +169,8 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/maintenance`, { params });
   }
 
-  updateFaultQuoteContractor(data, faultId, maintenanceId): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/maintenance/${maintenanceId}`, data);
+  updateFaultQuoteContractor(data, maintenanceId): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `maintenance/quote/${maintenanceId}/contractors`, data);
   }
 
   updateQuoteDetails(data, maintenanceId): Observable<any> {
@@ -247,8 +247,16 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/wo/contractor-visit`, notificationObj);
   }
 
-  getWorksOrderPaymentRules(faultId: string) {
-    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/check-payment-rules`);
+  getWorksOrderPaymentRules(faultId: string, contractorId?: string, repairCost?: any) {
+    let params = new HttpParams().set('contractorId', contractorId)
+    .set('repairCost', repairCost);
+    if (contractorId == null && contractorId == undefined) {
+      params = params.delete('contractorId')
+    }
+    if (repairCost == null && repairCost == undefined) {
+      params = params.delete('repairCost')
+    }
+    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/check-payment-rules`, { params });
   }
 
   issueWorksOrderContractor(faultId: string, requestObj) {

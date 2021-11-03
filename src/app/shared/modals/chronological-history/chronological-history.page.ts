@@ -202,7 +202,8 @@ export class ChronologicalHistoryPage implements OnInit {
                            { text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] },
                            { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] },
                            { text: `${element.data.how || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
-
+                        tableBody.push([{ colSpan: 3, text: 'Rejection Reason', style: 'tableHeader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.rejectionReason || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         tableBody.push([{ colSpan: 3, text: 'Question', style: 'tableHeader', border: [false, false, false, false] }]);
                         tableBody.push([{ colSpan: 3, text: `${element.data.question || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         tableBody.push([{ colSpan: 3, text: 'Answer', style: 'tableHeader', border: [false, false, false, false] }]);
@@ -273,6 +274,10 @@ export class ChronologicalHistoryPage implements OnInit {
                         if (FAULT_EVENT_TYPES_ID.STATUS_CHANGED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Status', style: 'tableHeader', border: [false, false, false, false] }]);
                            tableBody.push([{ colSpan: 3, text: `${element.data.status || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        }
+                        if (FAULT_EVENT_TYPES_ID.FAULT_SNOOZED === element.eventTypeId) {
+                           tableBody.push([{ colSpan: 3, text: 'Snoozed Till', style: 'tableHeader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${this.commonService.getFormatedDate(element.data.snoozeUntilDate, 'dd/MM/yyyy') || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                         if (FAULT_EVENT_TYPES_ID.DOCUMENT_ADDED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Document', style: 'tableHeader', border: [false, false, false, false] }]);

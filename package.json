@@ -46,6 +46,7 @@
     "jszip": "^3.7.0",
     "moment": "^2.29.1",
     "ng2-currency-mask": "^11.0.0",
+    "ngx-editor": "^9.0.2",
     "ngx-toastr": "^13.2.1",
     "pdfmake": "^0.2.0",
     "rxjs": "~6.6.7",

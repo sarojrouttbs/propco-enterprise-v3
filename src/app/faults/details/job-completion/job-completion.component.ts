@@ -205,7 +205,7 @@ export class JobCompletionComponent implements OnInit {
           orderedBy: this.faultMaintenanceDetails.orderedBy,
           postdate: this.faultMaintenanceDetails.postdate,
           accessDetails: this.faultMaintenanceDetails.accessDetails,
-          contractorId: this.faultMaintenanceDetails.selectedContractorId,
+          contractorId: this.faultMaintenanceDetails.contractorId,
           nominalCode: this.faultMaintenanceDetails.nominalCode,
           fullDescription: this.faultMaintenanceDetails.fullDescription,
           repairCost: this.faultMaintenanceDetails.amount,
@@ -215,7 +215,7 @@ export class JobCompletionComponent implements OnInit {
         }
       );
       this.workOrderForm.get('contractorName').disable();
-      this.woSelectContractor(this.faultMaintenanceDetails.selectedContractorId);
+      this.woSelectContractor(this.faultMaintenanceDetails.contractorId);
     }
   }
 
@@ -392,7 +392,7 @@ export class JobCompletionComponent implements OnInit {
     notificationObj.submittedByType = 'SECUR_USER';
     if (data.value) {
       let title = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? 'Close Fault' : data.text;
-      let message = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? `This will close the Fault. Are you sure?` : `Are you sure, Tenant is satisfied with the Job?`;
+      let message = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? `This will close the Fault. Are you sure?` : `Are you sure the Tenant is satisfied with the Job?`;
       this.commonService.showConfirm(title, message, '', 'Yes I\'m sure', 'No').then(async res => {
         if (res) {
           this.commonService.showLoader();
@@ -401,7 +401,7 @@ export class JobCompletionComponent implements OnInit {
         }
       });
     } else if (!data.value) {
-      this.commonService.showConfirm(data.text, `Are you sure, Tenant is not satisfied with the Job?`, '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, `Are you sure the Tenant is not satisfied with the Job?`, '', 'Yes', 'No').then(async res => {
         if (res) {
           this.commonService.showLoader();
           await this.updateFaultNotification(notificationObj, this.iacNotification.faultNotificationId);

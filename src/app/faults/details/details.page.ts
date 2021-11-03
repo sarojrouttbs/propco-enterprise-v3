@@ -398,7 +398,7 @@ export class DetailsPage implements OnInit {
   }
 
   private checkIfPropertyCheckedIn() {
-    if (this.propertyTenancyList) {
+    if (this.propertyTenancyList && this.propertyTenancyList.length) {
       let keepgoing: boolean = true;
       this.propertyTenancyList.forEach((res, index, array) => {
         if (index === (array.length - 1)) {
@@ -2182,7 +2182,7 @@ export class DetailsPage implements OnInit {
   // }
 
   filterByGroupName(folderName) {
-    this.filteredDocuments = this.files.filter(data => data.folderName === folderName);
+    this.filteredDocuments = this.files.filter(data => data.folderName === folderName).filter(data => !data.isDraft);
     this.mediaType = 'documents';
     this.folderName = folderName;
   }
@@ -2226,6 +2226,9 @@ export class DetailsPage implements OnInit {
       this.files.forEach((e, i) => {
         if (this.files[i].folderName == null) {
           this.files[i].folderName = FOLDER_NAMES[0].index;
+        }
+        if(this.files[i].folderName === FOLDER_NAMES[1].index && this.files[i].contractorCompanyName ){
+          this.files[i].folderName = e.folderName + ' - '+ e.contractorCompanyName;
         }
         this.files[i].folderName = e.folderName.replace(/_/g, " ");
         this.files[i].isUploaded = true;

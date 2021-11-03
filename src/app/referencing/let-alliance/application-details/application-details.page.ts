@@ -285,7 +285,7 @@ export class ApplicationDetailsPage implements OnInit {
       forename: [''],
       middlename: [''],
       surname: [''],
-      dateOfBirth: ['', Validators.required],
+      dateOfBirth: [''],
       email: ['', [Validators.required, ValidationService.emailValidator]],
       maritalStatus: [''],
       nationality: [''],
@@ -476,7 +476,6 @@ export class ApplicationDetailsPage implements OnInit {
     if (this.tenantDetailsForm.get('tenantTypeId').value == REFERENCING_TENANT_TYPE.INDIVIDUAL) {
       this.tenantDetailsForm.get('forename').setValidators(Validators.required);
       this.tenantDetailsForm.get('surname').setValidators(Validators.required);
-      this.tenantDetailsForm.get('maritalStatus').setValidators(Validators.required);
       this.tenantDetailsForm.get('companyName').clearValidators();
       this.tenantDetailsForm.get('registrationNumber').clearValidators();
 
@@ -496,7 +495,6 @@ export class ApplicationDetailsPage implements OnInit {
       this.tenantDetailsForm.get('registrationNumber').setValidators(Validators.required);
       this.tenantDetailsForm.get('forename').clearValidators();
       this.tenantDetailsForm.get('surname').clearValidators();
-      this.tenantDetailsForm.get('maritalStatus').clearValidators();
       this.tenantDetailsForm.get('otherNames').get('title').clearValidators();
 
       if(this.tenantDetailsForm.get('hasTenantOtherName').value){
@@ -515,7 +513,6 @@ export class ApplicationDetailsPage implements OnInit {
     this.tenantDetailsForm.get('surname').updateValueAndValidity();
     this.tenantDetailsForm.get('companyName').updateValueAndValidity();
     this.tenantDetailsForm.get('registrationNumber').updateValueAndValidity();
-    this.tenantDetailsForm.get('maritalStatus').updateValueAndValidity();
     this.tenantDetailsForm.get('otherNames').get('forename').updateValueAndValidity();
     this.tenantDetailsForm.get('otherNames').get('surname').updateValueAndValidity();
   }

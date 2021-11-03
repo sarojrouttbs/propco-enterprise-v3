@@ -9,8 +9,11 @@ export class QuoteService {
 
   constructor(private httpClient: HttpClient) { }
 
-  uploadFaultDocument(formData: FormData, faultId): Observable<any> {
-    let params = new HttpParams().set('submittedByType', 'SECUR_USER');
+  uploadFaultDocument(formData: FormData, faultId, contractorId): Observable<any> {
+    let params = new HttpParams()
+      .set('submittedByType', 'SECUR_USER')
+      .set('contractorId', contractorId)
+      .set('isDraft', 'false')
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/documents/upload`, formData, { params });
   }
 

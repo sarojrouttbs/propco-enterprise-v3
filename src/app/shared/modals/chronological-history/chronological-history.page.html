@@ -32,6 +32,7 @@
                                 <th class="none">Status</th>
                                 <th class="none">Notification Id</th>
                                 <th class="none">Escalation Reason</th>
+                                <th class="none">Rejection Reason</th>
                                 <th class="none">Documents</th>
                                 <th class="none">Category</th>
                                 <th class="none">Note Description</th>
@@ -45,6 +46,7 @@
                                 <th class="none">To</th>
                                 <th class="none">Subject</th>
                                 <th class="none">Email</th>
+                                <th class="none">Snoozed Till</th>
                         </thead>
                         <tbody>
                             <tr *ngFor="let elem of eventList">
@@ -58,6 +60,7 @@
                                 <td>{{ elem.data.status}}</td>
                                 <td>{{ elem.data.notificationTemplateCode}}</td>
                                 <td>{{ elem.data.escalationReason}}</td>
+                                <td>{{ elem.data.rejectionReason}}</td>
                                 <td>{{ elem.data.document}}</td>
                                 <td>{{ elem.data.category}}</td>
                                 <td [innerHtml]="elem.data.noteDescription"></td>
@@ -71,6 +74,7 @@
                                 <td>{{ elem.data.to}}</td>
                                 <td>{{ elem.data.subject}}</td>
                                 <td [innerHtml]="elem.data.body"></td>
+                                <td>{{ elem.data.snoozeUntilDate | date : 'dd/MM/yyyy'}}</td>
                             </tr>
                         </tbody>
                     </table>

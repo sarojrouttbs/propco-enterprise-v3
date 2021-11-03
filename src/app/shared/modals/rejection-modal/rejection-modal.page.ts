@@ -18,6 +18,7 @@ export class RejectionModalPage implements OnInit {
   rejectedByType;
   showLoader: boolean = false;
   unSavedData = false;
+  contractorId;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -31,8 +32,9 @@ export class RejectionModalPage implements OnInit {
       submittedById: '',
       submittedByType: 'SECUR_USER',
       other: '',
-      doesWantAnotherQuote: false,
-      rejectedByType: this.rejectedByType
+      isLandlordWantAnotherQuote: false,
+      rejectedByType: this.rejectedByType,
+      contractorId: this.contractorId
     });
     this.commonService.sortBy('index', this.faultMaintRejectionReasons)
   }
@@ -76,7 +78,7 @@ export class RejectionModalPage implements OnInit {
   }
 
   async onCancel() {
-    if (this.rejectionForm.value.doesWantAnotherQuote || this.rejectionForm.value.other || this.rejectionForm.value.rejectionReason) {
+    if (this.rejectionForm.value.isLandlordWantAnotherQuote || this.rejectionForm.value.other || this.rejectionForm.value.rejectionReason) {
       this.unSavedData = true;
     } else {
       this.dismiss();

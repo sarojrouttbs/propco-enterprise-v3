@@ -1,3 +1,5 @@
+import { Toolbar } from "ngx-editor";
+
 export const PROPCO = {
   isMobile: true,
   ACCESS_TOKEN: 'access_token',
@@ -233,7 +235,8 @@ export const SYSTEM_CONFIG = {
   MAXIMUM_FAULT_QUOTE_REJECTION: 'MAXIMUM_FAULT_QUOTE_REJECTION',
   FAULT_MANAGEMENT_LETCAT: 'FAULT_MANAGEMENT_LETCAT',
   FAULT_DEFAULT_NOTE_CATEGORY: 'FAULT_DEFAULT_NOTE_CATEGORY',
-  FAULT_DEFAULT_NOTE_TYPE: 'FAULT_DEFAULT_NOTE_TYPE'
+  FAULT_DEFAULT_NOTE_TYPE: 'FAULT_DEFAULT_NOTE_TYPE',
+  MAX_ACTIVE_QUOTE_CONTRACTOR: 'MAX_ACTIVE_QUOTE_CONTRACTOR'
 };
 
 export const SYSTEM_OPTIONS = {
@@ -410,7 +413,8 @@ export const FAULT_EVENT_TYPES = [
   {
     "Escalations": [
       "Escalated",
-      "De Escalated"
+      "De Escalated",
+      "Fault Snoozed"
     ]
   },
   {
@@ -454,10 +458,40 @@ export const FAULT_EVENT_TYPES_ID = {
   STATUS_CHANGED: 11,
   DOCUMENT_ADDED: 14,
   ESCALATED: 8,
-  FAULT_CLOSED: 7
+  FAULT_CLOSED: 7,
+  FAULT_SNOOZED: 16
+}
+
+export const QUOTE_CC_STATUS_ID = {
+  REJECTED: 3
 }
 
 export const NOTES_ORIGIN = {
   FAULT_STAGE: 'FAULT_STAGE',
   DASHBOARD: 'DASHBOARD'
+}
+
+export const RECIPIENT = [
+  'Landlord',
+  'Tenant',
+  'Contractor'
+];
+
+export const RECIPIENTS = {
+  'LANDLORD': 'Landlord',
+  'TENANT': 'Tenant',
+  'CONTRACTOR': 'Contractor'
+};
+
+export const NGX_EDITOR_TOOLBAR_SETTINGS: Toolbar = [
+  ['bold', 'italic'],
+  ['underline', 'strike'],
+  ['ordered_list', 'bullet_list'],
+  [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+  ['text_color', 'background_color'],
+  ['align_left', 'align_center', 'align_right', 'align_justify'],
+];
+
+export const PROPERTY_LINK_STATUS = {
+  'CURRENT': 'Current'
 }

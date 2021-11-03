@@ -455,8 +455,13 @@
                     </ion-checkbox> 
                   </td>
                   <!-- <td>{{fault?.isEscalated ? 'Escalation' : getLookupValue(fault.status, faultStatuses) || '-'}}</td> -->
-                  <td>{{fault?.isClosed || (fault?.isClosed && fault?.isEscalated) ? 'Closed' : 
-                    (fault?.isEscalated ? 'Escalation' : getLookupValue(fault?.status, faultStatuses)) || '-' }}</td>
+                  <td>
+                    <span>
+                      <ion-icon name="alarm" *ngIf="fault?.snoozeUntil && (fault?.snoozeUntil > currentDate)" title="snooze" style="font-size: 15px;vertical-align: text-bottom;"></ion-icon>
+                      {{fault?.isClosed || (fault?.isClosed && fault?.isEscalated) ? 'Closed' : 
+                      (fault?.isEscalated ? 'Escalation' : getLookupValue(fault?.status, faultStatuses)) || '-' }}
+                    </span>
+                  </td>
                   <!-- <td>{{getLookupValue(fault.urgencyStatus, faultUrgencyStatuses) || '-'}}</td> -->
                   <td class="resp-action-icon">
                     <i (click)="showMenu($event,'divOverlay', fault, 'table-row')"

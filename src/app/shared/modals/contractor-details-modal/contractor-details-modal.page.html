@@ -49,12 +49,13 @@
         <ion-item>
           <ion-label position="floating">Scheduled on
           </ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY HH:mm" displayFormat="DD MMM YYYY HH:mm" class="scheduled-on"
-            formControlName="estimatedVisitAt" [min]="currentDate">
+          <ion-datetime dateFormat="MM/DD/YYYY HH:mm" displayFormat="DD MMM YYYY HH:mm" class="scheduled-on" (ionChange)="checkPastDate()"
+            formControlName="estimatedVisitAt" [min]="minDate">
           </ion-datetime>
         </ion-item>
         <!-- <app-validation-message [control]="contractorDetailForm.controls.estimatedVisitAt"></app-validation-message> -->
       </ion-col>
+      <ion-text class="error-message" color="danger" *ngIf="pastDateError">The date/time you have chosen is in past, indicating your Contractor has already visited the property.</ion-text>
 
       <ion-col size="100">
         <ion-item>

@@ -22,6 +22,10 @@ export class AppointmentModalPage implements OnInit {
   futureDate;
   showLoader: boolean = false;
   unSavedData = false;
+  contractorDetails;
+  contractorWoPropertyVisitAt;
+  pastDateError: boolean = false;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,7 +38,12 @@ export class AppointmentModalPage implements OnInit {
       dateTime: ['', Validators.required],
     });
     const currentDate = new Date();
-    this.minDate = this.commonService.getFormatedDate(currentDate, 'yyyy-MM-ddTHH:mm');
+    if ((this.contractorDetails && this.contractorDetails.contractorPropertyVisitAt) || this.contractorWoPropertyVisitAt) {
+      this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() - 30), 'yyyy-MM-ddTHH:mm');
+    }
+    else {
+      this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() - 30), 'yyyy-MM-ddTHH:mm');
+    }
   }
 
   async save() {
@@ -42,7 +51,8 @@ export class AppointmentModalPage implements OnInit {
       const requestObj = {
         contractorPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss'),
         isAccepted: true,
-        submittedByType: 'SECUR_USER'
+        submittedByType: 'SECUR_USER',
+        contractorId: this.contractorDetails ? this.contractorDetails.contractorId : ''
       }
 
       if (this.type === APPOINTMENT_MODAL_TYPE.QUOTE) {
@@ -57,7 +67,8 @@ export class AppointmentModalPage implements OnInit {
         }
       } else if (this.type === APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE) {
         const quoteRequestObj = {
-          contractorQuotePropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss')
+          contractorPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss'),
+          contractorId: this.contractorDetails.contractorId
         };
         const updateCCVisit = await this.modifyContractorVisit(this.faultId, quoteRequestObj);
         if (updateCCVisit) {
@@ -147,7 +158,7 @@ export class AppointmentModalPage implements OnInit {
     return promise;
   }
 
-  async onCancel() {  
+  async onCancel() {
     if (!this.appointmentForm.value.dateTime) {
       this.dismiss();
     } else {
@@ -161,6 +172,15 @@ export class AppointmentModalPage implements OnInit {
 
   dismiss() {
     this.modalController.dismiss();
+  }
+
+  checkPastDate() {
+    if (this.appointmentForm.value.dateTime <= this.commonService.getFormatedDate(new Date(), 'yyyy-MM-ddTHH:mm')) {
+      this.pastDateError = true;
+    }
+    else {
+      this.pastDateError = false;
+    }
   }
 
 }

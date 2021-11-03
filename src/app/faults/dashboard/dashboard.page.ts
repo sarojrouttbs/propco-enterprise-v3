@@ -90,6 +90,7 @@ export class DashboardPage implements OnInit {
   isSnoozeFilter: boolean = false;
   minDate;
   futureDate;
+  currentDate;
 
   constructor(
     private commonService: CommonService,
@@ -189,7 +190,7 @@ export class DashboardPage implements OnInit {
       selectedPorts: [],
       assignToFilter: [],
       showMyRepairs: [],
-      snoozeUntil: [this.futureDate]
+      snoozeUntil: []
     });
 
     this.filterForm.get('fromDate').valueChanges.subscribe(value => {
@@ -219,6 +220,7 @@ export class DashboardPage implements OnInit {
     }
     this.loadTable = true;
     this.hideMenu('', 'divOverlay');
+    this.commonService.removeItem('contractorId');
   }
 
   private async getSystemConfigs(key): Promise<any> {
@@ -352,7 +354,7 @@ export class DashboardPage implements OnInit {
   }
 
   async deEscalateFault() {
-    this.commonService.showConfirm('De-Escalate Fault', 'Are you sure, you want to de-escalate the fault?', '', 'Yes', 'No').then(res => {
+    this.commonService.showConfirm('De-Escalate Fault', 'Are you sure you want to de-escalate the fault?', '', 'Yes', 'No').then(res => {
       if (res) {
         this.faultsService.deEscalateFault(this.selectedData.faultId, {}).subscribe(res => {
           this.commonService.showAlert('De-Escalate Fault', 'Fault has been de-escalated to the property manager.');
@@ -1229,6 +1231,7 @@ export class DashboardPage implements OnInit {
     const currentDate = new Date();
     this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 1), 'yyyy-MM-dd');
     this.futureDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 29), 'yyyy-MM-dd');
+    this.currentDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
   }
 }
 

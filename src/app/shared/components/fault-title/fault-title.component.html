@@ -23,7 +23,8 @@
       </ion-row>
     </ion-col>
     <ion-col size="10" class="note-block" *ngIf="faultDetails?.faultId">
-      <ion-icon name="timer" matTooltip="Chronological History" title="Chronological History" class="history-icon" (click)="cronologicalHistoryModal()"></ion-icon>
+      <img src="assets/images/fault-categories/send_email.svg" class="send_mail_icon" matTooltip="Send Email" matTooltipPosition="above" (click)="sendEmailModal()"/>&nbsp;
+      <ion-icon name="timer" matTooltip="Chronological History" title="Chronological History" matTooltipPosition="above" class="history-icon" (click)="cronologicalHistoryModal()"></ion-icon>
       <img src="assets/images/fault-categories/add_notes.png" matTooltip="Add Note" matTooltipPosition="above" (click)="notesModal()"/>&nbsp;
     </ion-col>
   </ion-row>

@@ -385,7 +385,7 @@
 
 <ng-template #finalView>
   <ion-row *ngIf="faultDetails?.isClosed">
-    <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+    <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
       <app-close-fault  [notificationData]="cliNotification" [faultDetails]="faultDetails"></app-close-fault>
     </ion-col>
   </ion-row>
@@ -497,6 +497,7 @@
   [describeFaultForm]="describeFaultForm" 
   [propertyDetails]="propertyDetails"
   [faultDetails]="faultDetails"
+  [categoryName]="getCategoryName()"
   [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
   [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
   <div *ngIf="showSkeleton">
@@ -602,6 +603,7 @@
         [describeFaultForm]="describeFaultForm" 
         [propertyDetails]="propertyDetails"
         [faultDetails]="faultDetails"
+        [categoryName]="getCategoryName()"
         [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
         [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
         <div *ngIf="showSkeleton">
@@ -619,6 +621,7 @@
       [describeFaultForm]="describeFaultForm" 
       [propertyDetails]="propertyDetails"
       [faultDetails]="faultDetails"
+      [categoryName]="getCategoryName()"
       [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
       [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
       <div *ngIf="showSkeleton">
@@ -645,6 +648,7 @@
       [describeFaultForm]="describeFaultForm"
       [propertyDetails]="propertyDetails" 
       [faultDetails]="faultDetails"
+      [categoryName]="getCategoryName()"
       [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
       [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
       <div *ngIf="showSkeleton">
@@ -658,6 +662,8 @@
       [propertyDetails]="propertyDetails"
       [categoryName]="getCategoryName()"
       [MAX_DOC_UPLOAD_LIMIT]="MAX_DOC_UPLOAD_LIMIT" 
+      [landlordDetails]="landlordDetails"
+      [isMatch] = "isMatch"
       [describeFaultForm]="describeFaultForm"></app-arranging-contractor>
     </ng-container>
   </ion-card>
@@ -670,6 +676,7 @@
       [describeFaultForm]="describeFaultForm" 
       [faultDetails]="faultDetails"
       [propertyDetails]="propertyDetails"
+      [categoryName]="getCategoryName()"
       [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
       [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
       <div *ngIf="showSkeleton">
@@ -693,6 +700,7 @@
       [describeFaultForm]="describeFaultForm" 
       [propertyDetails]="propertyDetails"
       [faultDetails]="faultDetails"
+      [categoryName]="getCategoryName()"
       [title]="categoryMap.get(describeFaultForm.controls['category'].value) || faultDetails?.fixfloCategory"
       [faultNotificationDetails]="faultNotificationDetails"></app-fault-title>
       <div *ngIf="showSkeleton">
