@@ -2553,6 +2553,10 @@ export class ArrangingContractorComponent implements OnInit {
           otherStageActions.push(action);
           return;
         }
+        if(!this.isWorksOrder && action.index === 'DOES_OWN_REPAIRS') {
+          otherStageActions.push(action);
+          return;
+        }
         if(this.iacNotification.responseReceived === null) {
           /*awaiting response*/
         }
@@ -2560,11 +2564,6 @@ export class ArrangingContractorComponent implements OnInit {
           /*response recieved*/
           if(this.iacNotification.responseReceived.isAccepted === false) {
             /*negative response*/
-            if(this.iacNotification.templateCode === 'CQ-C-E' && action.index === 'DOES_OWN_REPAIRS') {
-              otherStageActions.push(action);
-              return;
-            }
-
           } else {
             /*positive response*/
           } 
