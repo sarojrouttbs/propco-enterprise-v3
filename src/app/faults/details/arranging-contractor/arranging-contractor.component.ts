@@ -1145,8 +1145,8 @@ export class ArrangingContractorComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         res => {
-          res && res.data ? res.data.map((x) => { 
-            !this.faultMaintenanceDetails ? this.addContractor(x, true, true) : this.preferredSuppliersList.push(x);
+          res && res.data ? res.data.map((x) => {
+            !this.faultMaintenanceDetails && x.contractorId !== this.faultDetails.contractorId ? this.addContractor(x, true, true) : this.preferredSuppliersList.push(x);
           }) : [];
           resolve(true);
         },
