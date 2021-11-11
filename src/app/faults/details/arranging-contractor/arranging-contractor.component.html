@@ -16,7 +16,7 @@
             </div>
             <h2 class="banner-heading">
               {{iacNotification && iacNotification?.responseReceived ? 'Response Received': 
-              (iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response')}}
+              (iacNotification?.responseReceived === null && (iacNotification?.allowedNumberOfChases !== 0 && iacNotification?.numberOfChasesDone !== 0) && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response')}}
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
@@ -37,7 +37,7 @@
               <h6 class="banner-title"
               [ngClass]="iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'no-response':'awaiting-response'"
               >
-                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response'}} from the 
+                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{iacNotification?.responseReceived === null && (iacNotification?.allowedNumberOfChases !== 0 && iacNotification?.numberOfChasesDone !== 0) && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response'}} from the 
                   <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
                   <span *ngIf="iacNotification?.recipientType === 11">Contractor</span>
                   <span *ngIf="iacNotification?.recipientType === 1">Tenant</span>
