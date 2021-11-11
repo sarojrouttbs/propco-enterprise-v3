@@ -13,3 +13,14 @@
 .unsaved-data-error{
     background: #ea828247;
 }
+
+.session-block {
+    // display: flex;
+    // flex-wrap: wrap;
+    div {
+        margin-bottom: -16px;
+    }
+    .ion-radio {
+        margin: 0px 20px -5px 0px;
+    }
+}

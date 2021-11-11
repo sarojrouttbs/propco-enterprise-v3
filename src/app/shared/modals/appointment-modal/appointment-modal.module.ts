@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { AppointmentModalPage } from './appointment-modal.page';
 import { ComponentsModule } from '../../components/components.module';
 import { FaultsService } from 'src/app/faults/faults.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const routes: Routes = [
   {
@@ -23,7 +24,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ComponentsModule
+    ComponentsModule,
+    MatTooltipModule
   ],
   declarations: [AppointmentModalPage],
   providers: [DatePipe, FaultsService],

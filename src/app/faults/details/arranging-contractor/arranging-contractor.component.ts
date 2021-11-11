@@ -110,6 +110,7 @@ export class ArrangingContractorComponent implements OnInit {
   hideWOform: boolean = false;
   isAuthorizationfields: boolean = false;
   loggedInUserData: any;
+  ccAppointmentSlots;
 
   constructor(
     private fb: FormBuilder,
@@ -549,7 +550,9 @@ export class ArrangingContractorComponent implements OnInit {
     this.contractorMaintRejectionReasons = data.contractorQuoteRejectionReasons;
     this.faultReportedByThirdParty = data.faultReportedByThirdParty;
     this.quoteContractorStatuses = data.quoteContractorStatuses;
+    this.ccAppointmentSlots = data.faultContractorPropertyVisitSlots;
     this.setCategoryMap();
+    this.setAppointmentSlotsInFaultDetails();
   }
 
   private setCategoryMap() {
@@ -1468,7 +1471,8 @@ export class ArrangingContractorComponent implements OnInit {
         headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants.",
         type: APPOINTMENT_MODAL_TYPE.QUOTE,
         contractorDetails: this.filteredCCDetails,
-        contractorWoPropertyVisitAt: this.faultDetails.contractorWoPropertyVisitAt
+        contractorWoPropertyVisitAt: this.faultDetails.contractorWoPropertyVisitAt,
+        contractorWoPropertyVisitSlot: this.faultDetails.contractorWoPropertyVisitSlot
       }
       this.openAppointmentModal(modalData);
     }
@@ -2391,7 +2395,8 @@ export class ArrangingContractorComponent implements OnInit {
       headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
       type: templateCode === 'CDT-C-E' || templateCode === 'CQ-C-E' ? APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE : APPOINTMENT_MODAL_TYPE.MODIFY_WO,
       contractorDetails: this.filteredCCDetails,
-      contractorWoPropertyVisitAt: this.faultDetails.contractorWoPropertyVisitAt
+      contractorWoPropertyVisitAt: this.faultDetails.contractorWoPropertyVisitAt,
+      contractorWoPropertyVisitSlot: this.faultDetails.contractorWoPropertyVisitSlot
     }
 
     this.openAppointmentModal(modalData);
@@ -2503,6 +2508,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.getStageOtherActions();
       this.isContractorSelected = true;
     });
+    this.filteredCCDetails.contractorPropertyVisitSlotLabel = this.filteredCCDetails.contractorPropertyVisitSlot ? this.getAppointmentLabel(this.filteredCCDetails.contractorPropertyVisitSlot) : '';
   }
 
   // Auto select CC details if there is one one active cc
@@ -2571,5 +2577,13 @@ export class ArrangingContractorComponent implements OnInit {
       });
       this.otherStageActions = otherStageActions;
     }
+  }
+
+  setAppointmentSlotsInFaultDetails() {
+    this.faultDetails.contractorWoPropertyVisitSlotLabel = this.faultDetails.contractorWoPropertyVisitSlot ? this.getAppointmentLabel(this.faultDetails.contractorWoPropertyVisitSlot) : '';
+  }
+
+  getAppointmentLabel(value) {
+    return (this.ccAppointmentSlots.filter( item => value === item.index).map(item => item.value)[0])?.split(',')[0];
   }
 }
