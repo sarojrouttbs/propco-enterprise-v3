@@ -2508,7 +2508,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.getStageOtherActions();
       this.isContractorSelected = true;
     });
-    this.filteredCCDetails['contractorPropertyVisitSlotLabel'] = this.filteredCCDetails.contractorPropertyVisitSlot ? this.getAppointmentLabel(this.filteredCCDetails.contractorPropertyVisitSlot) : '';
+    this.filteredCCDetails.contractorPropertyVisitSlotLabel = this.filteredCCDetails.contractorPropertyVisitSlot ? this.getAppointmentLabel(this.filteredCCDetails.contractorPropertyVisitSlot) : '';
   }
 
   // Auto select CC details if there is one one active cc
@@ -2580,7 +2580,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   setAppointmentSlotsInFaultDetails() {
-    this.faultDetails['contractorWoPropertyVisitSlotLabel'] = this.faultDetails.contractorWoPropertyVisitSlot ? this.getAppointmentLabel(this.faultDetails.contractorWoPropertyVisitSlot) : '';
+    this.faultDetails.contractorWoPropertyVisitSlotLabel = this.faultDetails.contractorWoPropertyVisitSlot ? this.getAppointmentLabel(this.faultDetails.contractorWoPropertyVisitSlot) : '';
   }
 
   getAppointmentLabel(value) {

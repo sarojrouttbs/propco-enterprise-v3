@@ -104,6 +104,7 @@ declare namespace FaultModels {
         proceedInDifferentWay: boolean
         contractorWoPropertyVisitSlot: number;
         estimatedVisitSlot: number;
+        contractorWoPropertyVisitSlotLabel: string;
     }
 
     export interface AdditionalInfo {
