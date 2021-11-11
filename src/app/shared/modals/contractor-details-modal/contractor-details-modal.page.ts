@@ -5,7 +5,6 @@ import { FaultsService } from 'src/app/faults/faults.service';
 import { CommonService } from '../../services/common.service';
 import { ValidationService } from 'src/app/shared/services/validation.service';
 import { DATE_TIME_TYPES, DATE_TIME_TYPES_KEYS, PROPCO } from '../../constants';
-import { formatDate } from '@angular/common';
 @Component({
   selector: 'app-contractor-details-modal',
   templateUrl: './contractor-details-modal.page.html',
@@ -154,7 +153,7 @@ export class ContractorDetailsModalPage implements OnInit {
       const estimatedVisitSlotTime = this.contractorDetailForm.value.estimatedVisitSlot.value.split(',')[1];
       const estimatedVisitSlotEndTime = (estimatedVisitSlotTime.split('-')[1]).split(':')
       const finalDateTime = new Date(this.contractorDetailForm.value.estimatedVisitAt).setHours(estimatedVisitSlotEndTime[0], estimatedVisitSlotEndTime[1]);
-      if(finalDateTime) this.contractorDetailForm.get('estimatedVisitAt').setValue(formatDate(finalDateTime,'yyyy-MM-ddTHH:mm','en-UK'));
+      if(finalDateTime) this.contractorDetailForm.get('estimatedVisitAt').setValue(this.commonService.getFormatedDate(finalDateTime,'yyyy-MM-ddTHH:mm'));
       if (new Date(this.contractorDetailForm.value.estimatedVisitAt) <= new Date(this.commonService.getFormatedDate(new Date(), 'yyyy-MM-ddTHH:mm'))) {
         this.pastDateErrorWithSession = true;
       } else {

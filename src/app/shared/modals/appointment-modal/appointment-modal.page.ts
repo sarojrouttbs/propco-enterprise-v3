@@ -1,4 +1,3 @@
-import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
@@ -210,7 +209,7 @@ export class AppointmentModalPage implements OnInit {
       const appointmentSlotTime = this.appointmentForm.value.appointmentSlot.value.split(',')[1];
       const appointmentSlotEndTime = (appointmentSlotTime.split('-')[1]).split(':')
       const finalDateTime = new Date(this.appointmentForm.value.dateTime).setHours(appointmentSlotEndTime[0], appointmentSlotEndTime[1]);
-      if(finalDateTime) this.appointmentForm.get('dateTime').setValue(formatDate(finalDateTime,'yyyy-MM-ddTHH:mm','en-UK'));
+      if(finalDateTime) this.appointmentForm.get('dateTime').setValue(this.commonService.getFormatedDate(finalDateTime,'yyyy-MM-ddTHH:mm'));
       if (new Date(this.appointmentForm.value.dateTime) <= new Date(this.commonService.getFormatedDate(new Date(), 'yyyy-MM-ddTHH:mm'))) {
         this.pastDateErrorWithSession = true;
       } else {
