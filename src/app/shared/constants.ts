@@ -494,4 +494,20 @@ export const NGX_EDITOR_TOOLBAR_SETTINGS: Toolbar = [
 
 export const PROPERTY_LINK_STATUS = {
   'CURRENT': 'Current'
+};
+
+export const DATE_TIME_TYPES = [
+  {
+    "index": "DATE_WITH_TIME",
+    "value": "Date with time"
+  },
+  {
+    "index": "DATE_WITH_SESSION",
+    "value": "Date with session"
+  }
+];
+
+export const DATE_TIME_TYPES_KEYS = {
+  "DATE_WITH_TIME": "DATE_WITH_TIME",
+  "DATE_WITH_SESSION": "DATE_WITH_SESSION",
 }
