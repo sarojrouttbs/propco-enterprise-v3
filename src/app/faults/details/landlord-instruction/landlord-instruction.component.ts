@@ -1493,7 +1493,8 @@ export class LandlordInstructionComponent implements OnInit {
           faultId: this.faultDetails.faultId,
           landlordId: this.landlordDetails.landlordId,
           llContractorDetails: this.faultDetails.landlordOwnContractor,
-          estimatedVisitAt: this.faultDetails.estimatedVisitAt
+          estimatedVisitAt: this.faultDetails.estimatedVisitAt,
+          estimatedVisitSlot: this.faultDetails.estimatedVisitSlot
         },
         backdropDismiss: false
       });
