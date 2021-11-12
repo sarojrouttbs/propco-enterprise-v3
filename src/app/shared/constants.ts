@@ -517,3 +517,7 @@ export const MAINTENANCE_TYPES_FOR_SEND_EMAIL = {
   WO: 'wo',
   ESTIMATE: 'estimate'
 }
+
+export const FAULT_STAGES_ACTIONS = {
+  FAULT_LOGGED : 'LOGGED'
+}
