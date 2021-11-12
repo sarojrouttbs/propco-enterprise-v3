@@ -511,3 +511,9 @@ export const DATE_TIME_TYPES_KEYS = {
   "DATE_WITH_TIME": "DATE_WITH_TIME",
   "DATE_WITH_SESSION": "DATE_WITH_SESSION",
 }
+
+export const MAINTENANCE_TYPES_FOR_SEND_EMAIL = {
+  QUOTE: 'quote',
+  WO: 'wo',
+  ESTIMATE: 'estimate'
+}

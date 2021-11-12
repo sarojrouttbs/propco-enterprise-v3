@@ -2,9 +2,9 @@ import { HttpParams } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, AfterViewChecked, OnDestroy } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { Editor, Toolbar } from 'ngx-editor';
+import { Editor } from 'ngx-editor';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { NGX_EDITOR_TOOLBAR_SETTINGS, FAULT_STATUSES, LL_INSTRUCTION_TYPES, MAINTENANCE_TYPES, PROPERTY_LINK_STATUS, RECIPIENT, RECIPIENTS, USER_TYPES } from '../../constants';
+import { NGX_EDITOR_TOOLBAR_SETTINGS, FAULT_STATUSES, LL_INSTRUCTION_TYPES, MAINTENANCE_TYPES, PROPERTY_LINK_STATUS, RECIPIENT, RECIPIENTS, MAINTENANCE_TYPES_FOR_SEND_EMAIL } from '../../constants';
 import { CommonService } from '../../services/common.service';
 import { SendEmailService } from './send-email-modal.service';
 
@@ -35,9 +35,12 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
   contractorListPrefSupplier: any = [];
   contractorsListQuote: any = [];
   contractorsListWorksOrder: any = [];
+  contractorsListEstimated: any = [];
 
   showLoader: boolean = false;
-  isWorksOrder: boolean = false;
+  currentMaintainanceType: string;
+  maintainanceTypes = MAINTENANCE_TYPES_FOR_SEND_EMAIL;
+  recipient = RECIPIENT;
 
   constructor(
     private modalController: ModalController,
@@ -48,15 +51,22 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     private commonService: CommonService
   ) { }
 
-  recipient = RECIPIENT;
-  
   ngOnInit() {
     this.editor = new Editor();
     this.selectedRecipient = '';
-    if (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[1].index || this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING) {
-      this.isWorksOrder = true;
-    }
+    console.log(this.faultDetails)
     this.initForm();
+    this.setMaintainanceType();
+  }
+
+  private setMaintainanceType() {
+    if (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[1].index || this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING) {
+      this.currentMaintainanceType = MAINTENANCE_TYPES_FOR_SEND_EMAIL.WO;
+    } else if (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[4].index || this.faultDetails.status === FAULT_STATUSES.CHECKING_LANDLORD_INSTRUCTIONS) {
+      this.currentMaintainanceType = MAINTENANCE_TYPES_FOR_SEND_EMAIL.ESTIMATE;
+    } else if (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[2].index || this.faultDetails.status === FAULT_STATUSES.QUOTE_PENDING) {
+      this.currentMaintainanceType = MAINTENANCE_TYPES_FOR_SEND_EMAIL.QUOTE;
+    }
   }
 
   ngAfterViewChecked(): void {
@@ -120,7 +130,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getLandlordsOfProperty(this.propertyDetails.propertyId).subscribe(
         res => {
-          this.landLordList = res && res.data ? res.data.filter((llDetail => (llDetail.propertyLinkStatus === PROPERTY_LINK_STATUS.CURRENT) && (llDetail.status === 1 || llDetail.status === 3) && (llDetail.rentPercentage > 0))) : [];
+          this.landLordList = res && res.data ? res.data.filter((llDetail => (llDetail.propertyLinkStatus === PROPERTY_LINK_STATUS.CURRENT) && (llDetail.status === 1 || llDetail.status === 3))) : [];
           this.landLordList.forEach((item) => {
             item.isChecked = false;
           });
@@ -130,15 +140,16 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
             if (this.landLordList.length > 0) {
               this.getLandlordId();
             }
-
-            if (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[1].index || this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING) {
+            if (this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.ESTIMATE) {
+              this.contractorsListEstimated ? this.setEstimatedContractor() : this.isContractor = true;
+            }
+            if (this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.WO || this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.QUOTE) {
               this.getQuoteContractorList();
             } else {
               setTimeout(() => {
                 this.isContractor = true;
-              }, 1000);
+              }, 2000);
             }
-
           }
           resolve(this.landLordList);
         },
@@ -246,10 +257,12 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
               item.email = data['email'];
             });
           });
-
-          if (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[1].index || this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING) {
+          if (this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.ESTIMATE) {
+            this.contractorsListEstimated ? this.setEstimatedContractor() : this.isContractor = true;
+          } else if (this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.WO || this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.QUOTE) {
             (this.contractorsListQuote || this.contractorsListWorksOrder) ? this.getQuoteContractorList() : this.isContractor = true;
-          } else {
+          } 
+          else {
             setTimeout(() => {
               this.isContractor = true;
             }, 1000);
@@ -368,6 +381,17 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
         this.recipientArray.push(this.formBuilder.control({ id: obj?.contractorId, recipientName: obj?.company, recipientEmail: obj?.email }, Validators.required));
         this.resetAllCheck(type);
       }
+      
+      if (type == 'estimate_contractor') {
+        this.contractorsListEstimated.forEach(ele => {
+          if (ele.contractorId != obj?.contractorId) {
+            ele.isChecked = false;
+          }
+        });
+        this.recipientArray.clear();
+        this.recipientArray.push(this.formBuilder.control({ id: obj?.contractorId, recipientName: obj?.companyName, recipientEmail: obj?.email }, Validators.required));
+        this.resetAllCheck(type);
+      }
 
       if (type == 'quote_contractor') {
         this.contractorsListQuote.forEach(ele => {
@@ -412,6 +436,11 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     }
     if (type !== 'preferred_supplier') {
       this.contractorListPrefSupplier.forEach(element => {
+        element.isChecked = false;
+      });
+    }
+    if (type !== 'estimate_contractor') {
+      this.contractorsListEstimated.forEach(element => {
         element.isChecked = false;
       });
     }
@@ -471,5 +500,23 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
 
   ngOnDestroy(): void {
     this.editor.destroy();
+  }
+
+  private async setEstimatedContractor() {
+    const estimateContractorsList = [];
+    await this.getSingleContractorDetails(this.faultDetails.contractorId).then(data => {
+      data['isChecked'] = false;
+      estimateContractorsList.push(data);
+    });
+    estimateContractorsList.forEach(element => {
+      this.contractorListPrefSupplier.forEach((item, index) => {
+        if (item.contractorId === element.contractorId) this.contractorListPrefSupplier.splice(index, 1);
+      });
+    });
+    this.contractorsListEstimated = [...estimateContractorsList];
+
+    setTimeout(() => {
+      this.isContractor = true;
+    }, 2000);
   }
 }

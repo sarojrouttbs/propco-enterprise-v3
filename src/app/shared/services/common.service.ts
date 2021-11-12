@@ -646,4 +646,9 @@ export class CommonService {
     return paymentWarnings;
   }
 
+  scrollToStepperTop() {
+    const matStepperElement = document.getElementById('matStepperTop');
+    matStepperElement.scrollIntoView({behavior: "smooth"});  
+  }
+
 }
