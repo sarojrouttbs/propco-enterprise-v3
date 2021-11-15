@@ -1445,9 +1445,8 @@ export class DetailsPage implements OnInit {
     this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
     this.oldUserSelectedAction = this.userSelectedActionControl.value;
     this.proceeding = false;
-    this.commonService.scrollToStepperTop();
+    this.commonService.scrollToTopById('matStepperTop');
   }
-
 
   reOpenFault() {
     this.commonService.showConfirm('Re-open Fault', 'This will reopen the fault and notify the property manager.<br/> Are you sure?').then(res => {
