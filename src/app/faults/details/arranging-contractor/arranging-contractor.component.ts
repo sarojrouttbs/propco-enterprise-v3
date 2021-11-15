@@ -2508,8 +2508,9 @@ export class ArrangingContractorComponent implements OnInit {
       this.getStageOtherActions();
       this.isContractorSelected = true;
     });
-    if(this.filteredCCDetails)
+    if(this.filteredCCDetails) {
       this.filteredCCDetails.contractorPropertyVisitSlotLabel = this.filteredCCDetails?.contractorPropertyVisitSlot ? this.getAppointmentLabel(this.filteredCCDetails?.contractorPropertyVisitSlot) : '';
+    }      
   }
 
   // Auto select CC details if there is one one active cc
@@ -2581,11 +2582,14 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   setAppointmentSlotsInFaultDetails() {
-    this.faultDetails.contractorWoPropertyVisitSlotLabel = this.faultDetails?.contractorWoPropertyVisitSlot ? this.getAppointmentLabel(this.faultDetails?.contractorWoPropertyVisitSlot) : '';
+    if(this.faultDetails) {
+      this.faultDetails.contractorWoPropertyVisitSlotLabel = this.faultDetails?.contractorWoPropertyVisitSlot ? this.getAppointmentLabel(this.faultDetails?.contractorWoPropertyVisitSlot) : '';
+    }
   }
 
-  getAppointmentLabel(value) {
-    if(this.ccAppointmentSlots)
-      return (this.ccAppointmentSlots.filter( item => value === item.index).map(item => item.value)[0])?.split(',')[0];
+  getAppointmentLabel(slotId: number) {
+    if(this.ccAppointmentSlots) {
+      return (this.ccAppointmentSlots.filter( item => slotId === item.index).map(item => item.value)[0]).split(',')[0];
+    }
   }
 }

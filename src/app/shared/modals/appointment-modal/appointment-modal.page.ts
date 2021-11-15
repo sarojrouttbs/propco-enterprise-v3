@@ -73,13 +73,13 @@ export class AppointmentModalPage implements OnInit {
       }
 
       if (this.type === APPOINTMENT_MODAL_TYPE.QUOTE) {
-        requestObj.contractorPropertyVisitSlot = this.appointmentForm.value.appointmentSlot.index ? this.appointmentForm.value.appointmentSlot.index : '';
+        requestObj.contractorPropertyVisitSlot = this.appointmentForm.value?.appointmentSlot ? this.appointmentForm.value.appointmentSlot.index : '';
         const updateCCVisit = await this.saveContractorVisit(this.faultNotificationId, requestObj);
         if (updateCCVisit) {
           this.modalController.dismiss('success');
         }
       } else if (this.type === APPOINTMENT_MODAL_TYPE.WO) {
-        requestObj.contractorWoPropertyVisitSlot = this.appointmentForm.value.appointmentSlot.index ? this.appointmentForm.value.appointmentSlot.index : '';
+        requestObj.contractorWoPropertyVisitSlot = this.appointmentForm.value?.appointmentSlot ? this.appointmentForm.value.appointmentSlot.index : '';
         const updateCCVisit = await this.saveWoContractorVisit(this.faultNotificationId, requestObj);
         if (updateCCVisit) {
           this.modalController.dismiss('success');
@@ -88,7 +88,7 @@ export class AppointmentModalPage implements OnInit {
         const quoteRequestObj = {
           contractorPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss'),
           contractorId: this.contractorDetails.contractorId,
-          contractorPropertyVisitSlot: this.appointmentForm.value.appointmentSlot.index ? this.appointmentForm.value.appointmentSlot.index : ''
+          contractorPropertyVisitSlot: this.appointmentForm.value?.appointmentSlot ? this.appointmentForm.value.appointmentSlot.index : ''
         };
         const updateCCVisit = await this.modifyContractorVisit(this.faultId, quoteRequestObj);
         if (updateCCVisit) {
@@ -97,7 +97,7 @@ export class AppointmentModalPage implements OnInit {
       } else if (this.type === APPOINTMENT_MODAL_TYPE.MODIFY_WO) {
         const quoteRequestObj = {
           contractorWoPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss'),
-          contractorWoPropertyVisitSlot: this.appointmentForm.value.appointmentSlot.index ? this.appointmentForm.value.appointmentSlot.index : ''
+          contractorWoPropertyVisitSlot: this.appointmentForm.value?.appointmentSlot ? this.appointmentForm.value.appointmentSlot.index : ''
         };
         const updateCCVisit = await this.modifyWoContractorVisit(this.faultId, quoteRequestObj);
         if (updateCCVisit) {
@@ -205,7 +205,7 @@ export class AppointmentModalPage implements OnInit {
   }
  
   checkPastDateWithSession() {
-    if(this.appointmentForm.value.appointmentSlot && this.appointmentForm.value.dateTime) {
+    if(this.appointmentForm.value?.appointmentSlot && this.appointmentForm.value?.dateTime) {
       const appointmentSlotTime = this.appointmentForm.value.appointmentSlot.value.split(',')[1];
       const appointmentSlotEndTime = (appointmentSlotTime.split('-')[1]).split(':')
       const finalDateTime = new Date(this.appointmentForm.value.dateTime).setHours(appointmentSlotEndTime[0], appointmentSlotEndTime[1]);
