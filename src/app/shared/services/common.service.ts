@@ -646,4 +646,9 @@ export class CommonService {
     return paymentWarnings;
   }
 
+  scrollToTopById(elementId) {
+    const element = document.getElementById(elementId);
+    element.scrollIntoView({behavior: "smooth"});
+  }
+
 }
