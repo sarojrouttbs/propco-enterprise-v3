@@ -35,7 +35,7 @@
 
             <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
               <h6 class="banner-title"
-              [ngClass]="iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'no-response':'awaiting-response'"
+              [ngClass]="iacNotification?.responseReceived === null && (iacNotification?.allowedNumberOfChases !== 0 && iacNotification?.numberOfChasesDone !== 0) && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'no-response':'awaiting-response'"
               >
                 <ion-icon name="ellipse" class="response-circle"></ion-icon> {{iacNotification?.responseReceived === null && (iacNotification?.allowedNumberOfChases !== 0 && iacNotification?.numberOfChasesDone !== 0) && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response'}} from the 
                   <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
@@ -43,11 +43,17 @@
                   <span *ngIf="iacNotification?.recipientType === 1">Tenant</span>
               </h6>
 
-              <h6 *ngIf="iacNotification?.templateCode === 'LNP-L-E' && !faultDetails?.isEscalated">Escalation due: {{iacNotification?.hoursLeft}}</h6>
-              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt && iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone && !faultDetails?.isEscalated">Escalation due:
+              <h6 *ngIf="iacNotification?.templateCode === 'LNP-L-E' 
+              && !faultDetails?.isEscalated">Escalation due: {{iacNotification?.hoursLeft}}</h6>
+              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt 
+              && iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone 
+              && !faultDetails?.isEscalated 
+              && iacNotification?.chaseTemplateCode !='LNP-L-E'">Escalation due:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
               </h6>
-              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt && iacNotification.allowedNumberOfChases != iacNotification.numberOfChasesDone && iacNotification?.chaseTemplateCode !='LNP-L-E'"> {{ iacNotification.chase === iacNotification.allowedNumberOfChases ? 'Last chase due('+iacNotification.chase+')' : 'Next chase due('+iacNotification.chase+')' }}:
+              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt 
+              && iacNotification.allowedNumberOfChases != iacNotification.numberOfChasesDone 
+              && iacNotification?.chaseTemplateCode !='LNP-L-E'"> {{ iacNotification.chase === iacNotification.allowedNumberOfChases ? 'Last chase due('+iacNotification.chase+')' : 'Next chase due('+iacNotification.chase+')' }}:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
               </h6>
 
