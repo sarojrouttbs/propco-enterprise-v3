@@ -91,9 +91,9 @@ export class ContractorDetailsModalPage implements OnInit {
         this.contractorDetailForm.value.estimatedVisitAt ? requestObj.estimatedVisitAt = this.commonService.getFormatedDate(this.contractorDetailForm.value.estimatedVisitAt, 'yyyy-MM-dd HH:mm:ss') : '';  
       }
       if(this.contractorDetailForm.get('dateTimeType').value === DATE_TIME_TYPES_KEYS.DATE_WITH_SESSION) {
-        if(this.contractorDetailForm.value.estimatedVisitAt && this.contractorDetailForm.value.estimatedVisitSlot?.index) {
+        if(this.contractorDetailForm.value?.estimatedVisitAt && this.contractorDetailForm.value?.estimatedVisitSlot) {
           this.contractorDetailForm.value.estimatedVisitAt ? requestObj.estimatedVisitAt = this.commonService.getFormatedDate(this.contractorDetailForm.value.estimatedVisitAt, 'yyyy-MM-dd HH:mm:ss') : '';
-          (this.contractorDetailForm.value.estimatedVisitSlot?.index) ? requestObj.estimatedVisitSlot = this.contractorDetailForm.value.estimatedVisitSlot?.index : '';
+          (this.contractorDetailForm.value?.estimatedVisitSlot) ? requestObj.estimatedVisitSlot = this.contractorDetailForm.value.estimatedVisitSlot.index : '';
         }
       }
       
@@ -149,7 +149,7 @@ export class ContractorDetailsModalPage implements OnInit {
   }
 
   checkPastDateWithSession() {
-    if(this.contractorDetailForm.value.estimatedVisitSlot && this.contractorDetailForm.value.estimatedVisitAt) {
+    if(this.contractorDetailForm.value?.estimatedVisitSlot && this.contractorDetailForm.value?.estimatedVisitAt) {
       const estimatedVisitSlotTime = this.contractorDetailForm.value.estimatedVisitSlot.value.split(',')[1];
       const estimatedVisitSlotEndTime = (estimatedVisitSlotTime.split('-')[1]).split(':')
       const finalDateTime = new Date(this.contractorDetailForm.value.estimatedVisitAt).setHours(estimatedVisitSlotEndTime[0], estimatedVisitSlotEndTime[1]);
