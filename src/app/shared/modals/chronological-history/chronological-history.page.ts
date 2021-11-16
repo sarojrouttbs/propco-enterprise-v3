@@ -154,7 +154,6 @@ export class ChronologicalHistoryPage implements OnInit {
    initiateDtOptons() {
       this.dtOptions = {
          lengthMenu: [10, 15, 20],
-         order: [[1, "desc"]],
          searching: false,
          pageLength: 10,
          pagingType: 'full_numbers',
