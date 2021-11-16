@@ -54,7 +54,6 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
   ngOnInit() {
     this.editor = new Editor();
     this.selectedRecipient = '';
-    console.log(this.faultDetails)
     this.initForm();
     this.setMaintainanceType();
   }
@@ -98,26 +97,27 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     };
   }
 
-  private initLLData() {
+  private async initLLData() {
     if (!this.landLordList || this.landLordList.length <= 0 || this.landLordList === []) {
-      this.getLandlordList();
+      await this.getLandlordList();
     } else {
       this.isLandlord = true;
     }
   }
 
-  private initTTData() {
+  private async initTTData() {
     if (!this.tenantList || this.tenantList.length <= 0 || this.tenantList === []) {
-      this.getTenantList();
+      await this.getTenantList();
     } else {
       this.isTenant = true;
     }
   }
 
-  private initCCData() {
-    if (!this.contractorListPrefSupplier || this.contractorListPrefSupplier.length <= 0 || this.contractorListPrefSupplier === []) {
-      this.getLandlordList();
+  private async initCCData() {
+    if (this.contractorListPrefSupplier.length == 0) {
+      await this.getLandlordList();
     } else {
+      await this.checkContractorMaintainanceType();
       this.isContractor = true;
     }
   }
@@ -126,42 +126,29 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     return this.sendEmailForm.controls.entityId as FormArray;
   }
 
-  private getLandlordList() {
-    const promise = new Promise((resolve, reject) => {
-      this.faultsService.getLandlordsOfProperty(this.propertyDetails.propertyId).subscribe(
-        res => {
-          this.landLordList = res && res.data ? res.data.filter((llDetail => (llDetail.propertyLinkStatus === PROPERTY_LINK_STATUS.CURRENT) && (llDetail.status === 1 || llDetail.status === 3))) : [];
-          this.landLordList.forEach((item) => {
-            item.isChecked = false;
-          });
-          this.isLandlord = true;
-          if (this.selectedRecipient === RECIPIENTS.CONTRACTOR) {
-            this.isLandlord = false;
-            if (this.landLordList.length > 0) {
-              this.getLandlordId();
-            }
-            if (this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.ESTIMATE) {
-              this.contractorsListEstimated ? this.setEstimatedContractor() : this.isContractor = true;
-            }
-            if (this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.WO || this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.QUOTE) {
-              this.getQuoteContractorList();
-            } else {
-              setTimeout(() => {
-                this.isContractor = true;
-              }, 2000);
-            }
+  private async getLandlordList() {
+    this.faultsService.getLandlordsOfProperty(this.propertyDetails.propertyId).subscribe(
+      async (res) => {
+        this.landLordList = res && res.data ? res.data.filter((llDetail => (llDetail.propertyLinkStatus === PROPERTY_LINK_STATUS.CURRENT) && (llDetail.status === 1 || llDetail.status === 3))) : [];
+        this.landLordList.forEach((item) => {
+          item.isChecked = false;
+        });
+        this.isLandlord = true;
+        if (this.selectedRecipient === RECIPIENTS.CONTRACTOR) {
+          this.isLandlord = false;
+          if (this.landLordList.length > 0) {
+            const landlordId = await this.getLandlordId();
+            this.contractorListPrefSupplier = await this.getPreferredContractorList(landlordId);
+            await this.setPrefferedContractors();
           }
-          resolve(this.landLordList);
-        },
-        (error) => {
-          resolve(this.landLordList);
+          await this.checkContractorMaintainanceType();
+          this.isContractor = true;
         }
-      );
-    });
-    return promise;
+      }
+    );
   }
 
-  private getMaxRentShareLandlord(landlords) {
+  private async getMaxRentShareLandlord(landlords) {
     let maxRent = 0;
     let mLandlord;
     landlords.forEach(landlord => {
@@ -173,60 +160,52 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     return mLandlord;
   }
 
-  private getLandlordId() {
+  private async getLandlordId() {
     let landlordId;
     if (this.landLordList.length > 1) {
-      let landlord = this.getMaxRentShareLandlord(this.landLordList);
+      let landlord = await this.getMaxRentShareLandlord(this.landLordList);
       landlordId = landlord.landlordId
     } else {
       landlordId = this.landLordList[0]?.landlordId;
     }
-    this.getPreferredContractorList(landlordId)
+    return landlordId;
   }
 
-  private getTenantList() {
-    const promise = new Promise((resolve, reject) => {
-      this.faultsService.getPropertyTenancies(this.propertyDetails.propertyId).subscribe(
-        res => {
-          // this.tenantList = res ? res.data : [];
-          this.tenantList = res && res.data ? res.data.filter((ttDetail => (ttDetail.hasCheckedIn === true))) : [];
-          this.getTenantDetails();
-          resolve(this.tenantList);
-        },
-        (error) => {
-          resolve(this.tenantList);
+  private async getTenantList() {
+    this.faultsService.getPropertyTenancies(this.propertyDetails.propertyId).subscribe(
+      async (res) => {
+        this.tenantList = res && res.data ? res.data.filter((ttDetail => (ttDetail.hasCheckedIn === true))) : [];
+
+        if (this.tenantList.length > 0) {
+          this.tenantList = await this.getTenantDetails(this.tenantList);
+          await this.setLeadCoLeadTenants();
         }
-      );
-    });
-    return promise;
+        this.isTenant = true;
+      }
+    );
   }
 
-  private getTenantDetails() {
-    const tenantList = this.tenantList;
+  private async getTenantDetails(tenantDetails) {
+    const tenantList = tenantDetails;
     tenantList.forEach(element => {
-      element.tenants.forEach(item => {
-        this.getSingleTenantDetails(item.tenantId).then(data => {
-          item.fullName = data['fullName']
-          item.email = data['email']
-        })
+      element.tenants.forEach(async (item) => {
+        const tenant: any = await this.getSingleTenantDetails(item.tenantId);
+        item.fullName = tenant.fullName;
+        item.email = tenant.email;
       });
     });
-    this.tenantList = tenantList;
-    this.setLeadCoLeadTenants();
+    return tenantList;
   }
 
-  private getSingleTenantDetails(tenantId) {
+  private async getSingleTenantDetails(tenantId) {
     return new Promise((resolve, reject) => {
       this.faultsService.getTenantDetails(tenantId).subscribe((res) => {
-        const tenantDetails = res ? res : {};
-        resolve(tenantDetails);
-      }, error => {
-        reject(error)
+        return resolve(res ? res : {});
       });
     });
   }
 
-  private setLeadCoLeadTenants() {
+  private async setLeadCoLeadTenants() {
     const tenantList = this.tenantList;
     this.leadTenantList = [];
     this.coTenantList = [];
@@ -240,41 +219,41 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
         (item.isLead) ? this.leadTenantList.push(obj) : this.coTenantList.push(obj);
       });
     });
-    setTimeout(() => {
-      this.isTenant = true;
-    }, 1000);
   }
 
-  private getPreferredContractorList(landlordId) {
-    const promise = new Promise((resolve, reject) => {
+  private async getPreferredContractorList(landlordId) {
+    return new Promise((resolve, reject) => {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
-        res => {
-          this.contractorListPrefSupplier = res ? res.data : [];
-          this.contractorListPrefSupplier.forEach((item) => {
-            item.isChecked = false;
-            this.getSingleContractorDetails(item.contractorId).then(data => {
-              item.fullName = data['fullName'];
-              item.email = data['email'];
-            });
-          });
-          if (this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.ESTIMATE) {
-            this.contractorsListEstimated ? this.setEstimatedContractor() : this.isContractor = true;
-          } else if (this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.WO || this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.QUOTE) {
-            (this.contractorsListQuote || this.contractorsListWorksOrder) ? this.getQuoteContractorList() : this.isContractor = true;
-          } 
-          else {
-            setTimeout(() => {
-              this.isContractor = true;
-            }, 1000);
-          }
-          resolve(this.contractorListPrefSupplier);
-        },
-        (error) => {
-          resolve(this.contractorListPrefSupplier);
+        async (res) => {
+          return resolve(res ? res.data : []);
         }
       );
     });
-    return promise;
+  }
+
+  private async setPrefferedContractors() {
+    this.contractorListPrefSupplier.forEach(async (item) => {
+      item.isChecked = false;
+      const ccDetails: any = await this.getSingleContractorDetails(item.contractorId);
+      item.fullName = ccDetails.fullName;
+      item.email = ccDetails.email;
+    });
+  }
+
+  private async checkContractorMaintainanceType() {
+    if (this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.ESTIMATE) {
+      if (this.contractorsListEstimated.length === 0) {
+        await this.setEstimatedContractor();
+      }
+    } else if (this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.QUOTE) {
+      if (this.contractorsListQuote.length === 0) {
+        await this.getQuoteContractorList();
+      }
+    } else if (this.currentMaintainanceType === MAINTENANCE_TYPES_FOR_SEND_EMAIL.WO) {
+      if (this.contractorsListWorksOrder.length === 0) {
+        await this.getQuoteContractorList();
+      }
+    }
   }
 
   private getFaultMaintenance(): Promise<any> {
@@ -292,46 +271,23 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
   private async getQuoteContractorList() {
     const faultMaintenance = await this.getFaultMaintenance() as FaultModels.IMaintenanceQuoteResponse;
     if (faultMaintenance.itemType === MAINTENANCE_TYPES.QUOTE) {
-      const quoteContractorsList = faultMaintenance?.quoteContractors;
-      quoteContractorsList.forEach(element => {
-        element['isChecked'] = false;
-        this.contractorListPrefSupplier.forEach((item, index) => {
-          if (item.contractorId === element.contractorId) this.contractorListPrefSupplier.splice(index, 1);
-        });
-      });
-      this.contractorsListQuote = [...quoteContractorsList];
+      await this.setQuoteContractors(faultMaintenance);
     }
     if (faultMaintenance.itemType === MAINTENANCE_TYPES.WORKS_ORDER) {
-      const woContractorsList = [];
-      await this.getSingleContractorDetails(faultMaintenance.contractorId).then(data => {
-        data['isChecked'] = false;
-        woContractorsList.push(data);
-      })
-      woContractorsList.forEach(element => {
-        this.contractorListPrefSupplier.forEach((item, index) => {
-          if (item.contractorId === element.contractorId) this.contractorListPrefSupplier.splice(index, 1);
-        });
-      });
-      this.contractorsListWorksOrder = [...woContractorsList];
+      await this.setWOContractors(faultMaintenance);
     }
-    setTimeout(() => {
-      this.isContractor = true;
-    }, 2000);
   }
 
   private getSingleContractorDetails(contractorId): Promise<any> {
     return new Promise((resolve, reject) => {
       this.faultsService.getContractorDetails(contractorId).subscribe((res) => {
-        const contractorDetails = res ? res : {};
-        resolve(contractorDetails);
-      }, error => {
-        reject(error)
+        return resolve(res ? res : {});
       });
     });
   }
 
   onCheckbox(event: any) {
-    if(event.target.checked) this.recipientArray.clear();
+    if (event.target.checked) this.recipientArray.clear();
   }
 
   onCheckboxClick(event: any, obj, type, entityType) {
@@ -381,7 +337,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
         this.recipientArray.push(this.formBuilder.control({ id: obj?.contractorId, recipientName: obj?.company, recipientEmail: obj?.email }, Validators.required));
         this.resetAllCheck(type);
       }
-      
+
       if (type == 'estimate_contractor') {
         this.contractorsListEstimated.forEach(ele => {
           if (ele.contractorId != obj?.contractorId) {
@@ -504,19 +460,38 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
 
   private async setEstimatedContractor() {
     const estimateContractorsList = [];
-    await this.getSingleContractorDetails(this.faultDetails.contractorId).then(data => {
-      data['isChecked'] = false;
-      estimateContractorsList.push(data);
-    });
+    const ccDetails: any = await this.getSingleContractorDetails(this.faultDetails.contractorId);
+    ccDetails.isChecked = false;
+    estimateContractorsList.push(ccDetails);
     estimateContractorsList.forEach(element => {
       this.contractorListPrefSupplier.forEach((item, index) => {
         if (item.contractorId === element.contractorId) this.contractorListPrefSupplier.splice(index, 1);
       });
     });
     this.contractorsListEstimated = [...estimateContractorsList];
+  }
 
-    setTimeout(() => {
-      this.isContractor = true;
-    }, 2000);
+  private async setQuoteContractors(faultMaintenance) {
+    const quoteContractorsList = faultMaintenance?.quoteContractors;
+    quoteContractorsList.forEach(element => {
+      element.isChecked = false;
+      this.contractorListPrefSupplier.forEach((item, index) => {
+        if (item.contractorId === element.contractorId) this.contractorListPrefSupplier.splice(index, 1);
+      });
+    });
+    this.contractorsListQuote = [...quoteContractorsList];
+  }
+
+  private async setWOContractors(faultMaintenance) {
+    const woContractorsList = [];
+    const ccDetails: any = await this.getSingleContractorDetails(faultMaintenance.contractorId);
+    ccDetails.isChecked = false;
+    woContractorsList.push(ccDetails);
+    woContractorsList.forEach(element => {
+      this.contractorListPrefSupplier.forEach((item, index) => {
+        if (item.contractorId === element.contractorId) this.contractorListPrefSupplier.splice(index, 1);
+      });
+    });
+    this.contractorsListWorksOrder = [...woContractorsList];
   }
 }
