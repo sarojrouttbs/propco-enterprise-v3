@@ -43,7 +43,7 @@
                 </ion-col>
               </ion-row>
               <span *ngIf="!obj?.email || obj?.email === ''" class="error-msg">Email Id is not found</span>
-              <span *ngIf="faultDetails?.isOverrideCommunicationPreference" class="error-msg email-err">This Landlord
+              <span *ngIf="obj?.isOverrideCommsPreference" class="error-msg email-err">This Landlord
                 has opted not to receive any notification</span>
             </ion-col>
           </ng-container>
@@ -165,7 +165,8 @@
         </div>
 
         <div *ngIf="currentMaintainanceType === maintainanceTypes.WO">
-          <span class="header">Works Order in progress</span>
+          <span class="header" *ngIf="this.faultDetails.stage === faultStages.ARRANGING_CONTRACTOR">Works Order in progress</span>
+          <span class="header" *ngIf="this.faultDetails.stage === faultStages.JOB_COMPLETION || this.faultDetails.stage === faultStages.PAYMENT">Works Order</span>          
           <span *ngIf="contractorsListWorksOrder?.length === 0" class="error-msg none-err-msg"> None </span>
           <ion-row>
             <ion-col size="50" *ngFor="let obj of contractorsListWorksOrder; let i = index;">
