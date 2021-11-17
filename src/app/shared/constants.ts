@@ -522,3 +522,16 @@ export const MAINTENANCE_TYPES_FOR_SEND_EMAIL = {
 export const FAULT_STAGES_ACTIONS = {
   FAULT_LOGGED : 'LOGGED'
 }
+
+
+export const NGX_QUILL_EDITOR_TOOLBAR_SETTINGS = {
+  toolbar: {
+    container: [
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'align': [] }]
+    ]
+  },
+};
