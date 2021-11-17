@@ -102,6 +102,9 @@ declare namespace FaultModels {
         snoozeUntil: string;
         snoozeReason: string;
         proceedInDifferentWay: boolean
+        contractorWoPropertyVisitSlot: number;
+        estimatedVisitSlot: number;
+        contractorWoPropertyVisitSlotLabel: string;
     }
 
     export interface AdditionalInfo {
