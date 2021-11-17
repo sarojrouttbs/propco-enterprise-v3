@@ -16,7 +16,7 @@
             </div>
             <h2 class="banner-heading">
               {{iacNotification && iacNotification?.responseReceived ? 'Response Received': 
-              (iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response')}}
+              (iacNotification?.responseReceived === null && (iacNotification?.allowedNumberOfChases !== 0 && iacNotification?.numberOfChasesDone !== 0) && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response')}}
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
@@ -35,19 +35,25 @@
 
             <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
               <h6 class="banner-title"
-              [ngClass]="iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'no-response':'awaiting-response'"
+              [ngClass]="iacNotification?.responseReceived === null && (iacNotification?.allowedNumberOfChases !== 0 && iacNotification?.numberOfChasesDone !== 0) && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'no-response':'awaiting-response'"
               >
-                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response'}} from the 
+                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{iacNotification?.responseReceived === null && (iacNotification?.allowedNumberOfChases !== 0 && iacNotification?.numberOfChasesDone !== 0) && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response'}} from the 
                   <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
                   <span *ngIf="iacNotification?.recipientType === 11">Contractor</span>
                   <span *ngIf="iacNotification?.recipientType === 1">Tenant</span>
               </h6>
 
-              <h6 *ngIf="iacNotification?.templateCode === 'LNP-L-E' && !faultDetails?.isEscalated">Escalation due: {{iacNotification?.hoursLeft}}</h6>
-              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt && iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone && !faultDetails?.isEscalated">Escalation due:
+              <h6 *ngIf="iacNotification?.templateCode === 'LNP-L-E' 
+              && !faultDetails?.isEscalated">Escalation due: {{iacNotification?.hoursLeft}}</h6>
+              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt 
+              && iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone 
+              && !faultDetails?.isEscalated 
+              && iacNotification?.chaseTemplateCode !='LNP-L-E'">Escalation due:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
               </h6>
-              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt && iacNotification.allowedNumberOfChases != iacNotification.numberOfChasesDone && iacNotification?.chaseTemplateCode !='LNP-L-E'"> {{ iacNotification.chase === iacNotification.allowedNumberOfChases ? 'Last chase due('+iacNotification.chase+')' : 'Next chase due('+iacNotification.chase+')' }}:
+              <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt 
+              && iacNotification.allowedNumberOfChases != iacNotification.numberOfChasesDone 
+              && iacNotification?.chaseTemplateCode !='LNP-L-E'"> {{ iacNotification.chase === iacNotification.allowedNumberOfChases ? 'Last chase due('+iacNotification.chase+')' : 'Next chase due('+iacNotification.chase+')' }}:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
               </h6>
 
@@ -83,8 +89,8 @@
               <h4 class="ion-text-center">Next Step:</h4> 
               <h6 *ngIf="quoteArray?.length === 0">
                 <ion-text color="danger">Please note: </ion-text>
-                <span>The appointment is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}
-                </span>
+                <span *ngIf="!filteredCCDetails?.contractorPropertyVisitSlot || filteredCCDetails?.contractorPropertyVisitSlot == null">The appointment is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}</span>
+                <span *ngIf="filteredCCDetails?.contractorPropertyVisitSlot">The appointment is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}</span>
               </h6>
               <h6 *ngIf="quoteArray?.length > 0">
                 <span>Thank you for carrying out this quote. This is now with the Landlord for review. If we require you to
@@ -98,8 +104,8 @@
               <h4 class="ion-text-center">Next Step:</h4> 
               <h6>
                 <ion-text color="danger">Please note: </ion-text>
-                <span>The appointment is due on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorWoPropertyVisitAt | date: 'HH:mm'}}
-                </span>
+                <span *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">The appointment is due on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} at {{ faultDetails?.contractorWoPropertyVisitAt | date: 'HH:mm' }}</span>
+                <span *ngIf="faultDetails?.contractorWoPropertyVisitSlot">The appointment is due on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }}</span>
               </h6>
               <div class="border-bottom"></div>
             </div>
@@ -126,10 +132,18 @@
                 <h4 class="ion-text-center">Next Step:</h4> 
                 <h6>  
                   <ion-text color="danger">Please note: </ion-text>
-                  <span *ngIf="currentDate<=filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}.
+                  <span *ngIf="!filteredCCDetails?.contractorPropertyVisitSlot || filteredCCDetails?.contractorPropertyVisitSlot == null">
+                    <span *ngIf="currentDate<=filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}.</span>
+                    <span *ngIf="currentDate>filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote was on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}. </span>
                   </span>
-                  <span *ngIf="currentDate>filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote was on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}. </span>
-                  <span>The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to upload the Quote and photos.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
+
+                  <span *ngIf="filteredCCDetails?.contractorPropertyVisitSlot">
+                    <span *ngIf="currentDate<=filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}.</span>
+                    <span *ngIf="currentDate>filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote was on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}. </span>
+                  </span>
+
+                  <span>
+                    The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to upload the Quote and photos.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
                     {{iacNotification?.hoursLeft}}.
                   </span>
                 </h6>
@@ -139,8 +153,11 @@
                 <h4 class="ion-text-center">Next Step:</h4>
                 <h6>  
                   <ion-text color="danger">Please note: </ion-text>
-                  <span>The appointment for carrying out the work was on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{faultDetails?.contractorWoPropertyVisitAt | date: 'HH:mm'}}.
-                     The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to confirm the Completion of Job.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
+                  <span *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">The appointment for carrying out the work was on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} at {{ faultDetails?.contractorWoPropertyVisitAt | date: 'HH:mm' }}.</span>
+                  <span *ngIf="faultDetails?.contractorWoPropertyVisitSlot">The appointment for carrying out the work was on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }}.</span>
+                  
+                  <span>
+                    The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to confirm the Completion of Job.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
                     {{iacNotification?.hoursLeft}}.
                   </span>
                 </h6>
@@ -158,7 +175,8 @@
             </div>
             
             <h6 *ngIf="enableMarkCompletedBtn()" class="ion-text-center">
-              <ion-text>Contractor to visit property on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy HH:mm'}}</ion-text>
+              <ion-text *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">Contractor to visit property on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy HH:mm' }}</ion-text>
+              <ion-text *ngIf="faultDetails?.contractorWoPropertyVisitSlot">Contractor to visit property on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }} </ion-text>
               <ion-grid>
                 <ion-row class="ion-justify-content-center"><ion-button color="success" fill="outline" class="action-btn option" (click)="openWOJobCompletionModal()">Mark the Job Completed</ion-button></ion-row>
               </ion-grid>

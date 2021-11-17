@@ -6,6 +6,7 @@ import { ContractorDetailsModalPage } from './contractor-details-modal.page';
 import { Routes, RouterModule } from '@angular/router';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { ComponentsModule } from '../../components/components.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const routes: Routes = [
   {
@@ -21,7 +22,8 @@ const routes: Routes = [
     IonicModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
-    ComponentsModule
+    ComponentsModule,
+    MatTooltipModule
   ],
   declarations: [ContractorDetailsModalPage],
   providers: [DatePipe, FaultsService],

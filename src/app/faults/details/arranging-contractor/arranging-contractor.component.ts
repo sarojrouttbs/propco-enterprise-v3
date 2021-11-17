@@ -110,6 +110,7 @@ export class ArrangingContractorComponent implements OnInit {
   hideWOform: boolean = false;
   isAuthorizationfields: boolean = false;
   loggedInUserData: any;
+  ccAppointmentSlots;
 
   constructor(
     private fb: FormBuilder,
@@ -549,7 +550,9 @@ export class ArrangingContractorComponent implements OnInit {
     this.contractorMaintRejectionReasons = data.contractorQuoteRejectionReasons;
     this.faultReportedByThirdParty = data.faultReportedByThirdParty;
     this.quoteContractorStatuses = data.quoteContractorStatuses;
+    this.ccAppointmentSlots = data.faultContractorPropertyVisitSlots;
     this.setCategoryMap();
+    this.setAppointmentSlotsInFaultDetails();
   }
 
   private setCategoryMap() {
@@ -1142,8 +1145,8 @@ export class ArrangingContractorComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         res => {
-          res && res.data ? res.data.map((x) => { 
-            !this.faultMaintenanceDetails ? this.addContractor(x, true, true) : this.preferredSuppliersList.push(x);
+          res && res.data ? res.data.map((x) => {
+            !this.faultMaintenanceDetails && x.contractorId !== this.faultDetails.contractorId ? this.addContractor(x, true, true) : this.preferredSuppliersList.push(x);
           }) : [];
           resolve(true);
         },
@@ -1468,7 +1471,8 @@ export class ArrangingContractorComponent implements OnInit {
         headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants.",
         type: APPOINTMENT_MODAL_TYPE.QUOTE,
         contractorDetails: this.filteredCCDetails,
-        contractorWoPropertyVisitAt: this.faultDetails.contractorWoPropertyVisitAt
+        contractorWoPropertyVisitAt: this.faultDetails.contractorWoPropertyVisitAt,
+        contractorWoPropertyVisitSlot: this.faultDetails.contractorWoPropertyVisitSlot
       }
       this.openAppointmentModal(modalData);
     }
@@ -1482,7 +1486,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.quoteUploadModal();
     }
     else {
-      this.commonService.showConfirm(data.text, `You have selected 'No, couldn't carry out the Quote'. The fault will be escalated tor manual intervention. Do you want to proceed?`, '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, `You have selected 'No, couldn't carry out the Quote'. The fault will be escalated for manual intervention. Do you want to proceed?`, '', 'Yes', 'No').then(async res => {
         if (res) {
           const submit = await this.submitQuoteAmout();
           if (submit) {
@@ -2391,7 +2395,8 @@ export class ArrangingContractorComponent implements OnInit {
       headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
       type: templateCode === 'CDT-C-E' || templateCode === 'CQ-C-E' ? APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE : APPOINTMENT_MODAL_TYPE.MODIFY_WO,
       contractorDetails: this.filteredCCDetails,
-      contractorWoPropertyVisitAt: this.faultDetails.contractorWoPropertyVisitAt
+      contractorWoPropertyVisitAt: this.faultDetails.contractorWoPropertyVisitAt,
+      contractorWoPropertyVisitSlot: this.faultDetails.contractorWoPropertyVisitSlot
     }
 
     this.openAppointmentModal(modalData);
@@ -2481,7 +2486,7 @@ export class ArrangingContractorComponent implements OnInit {
         let mins = Math.floor(msec / 60000);
         let hrs = Math.floor(mins / 60);
         if (hrs >= 0) {
-          this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
+          this.iacNotification.hoursLeft = (hrs != 0 ? `${hrs} hours` : `${mins} minutes`);
         }
         resolve(true);
       }, error => {
@@ -2503,6 +2508,9 @@ export class ArrangingContractorComponent implements OnInit {
       this.getStageOtherActions();
       this.isContractorSelected = true;
     });
+    if(this.filteredCCDetails) {
+      this.filteredCCDetails.contractorPropertyVisitSlotLabel = this.filteredCCDetails?.contractorPropertyVisitSlot ? this.getAppointmentLabel(this.filteredCCDetails?.contractorPropertyVisitSlot) : '';
+    }      
   }
 
   // Auto select CC details if there is one one active cc
@@ -2553,6 +2561,10 @@ export class ArrangingContractorComponent implements OnInit {
           otherStageActions.push(action);
           return;
         }
+        if(!this.isWorksOrder && action.index === 'DOES_OWN_REPAIRS') {
+          otherStageActions.push(action);
+          return;
+        }
         if(this.iacNotification.responseReceived === null) {
           /*awaiting response*/
         }
@@ -2560,17 +2572,24 @@ export class ArrangingContractorComponent implements OnInit {
           /*response recieved*/
           if(this.iacNotification.responseReceived.isAccepted === false) {
             /*negative response*/
-            if(this.iacNotification.templateCode === 'CQ-C-E' && action.index === 'DOES_OWN_REPAIRS') {
-              otherStageActions.push(action);
-              return;
-            }
-
           } else {
             /*positive response*/
           } 
         }
       });
       this.otherStageActions = otherStageActions;
+    }
+  }
+
+  setAppointmentSlotsInFaultDetails() {
+    if(this.faultDetails) {
+      this.faultDetails.contractorWoPropertyVisitSlotLabel = this.faultDetails?.contractorWoPropertyVisitSlot ? this.getAppointmentLabel(this.faultDetails?.contractorWoPropertyVisitSlot) : '';
+    }
+  }
+
+  getAppointmentLabel(slotId: number) {
+    if(this.ccAppointmentSlots) {
+      return (this.ccAppointmentSlots.filter( item => slotId === item.index).map(item => item.value)[0]).split(',')[0];
     }
   }
 }
