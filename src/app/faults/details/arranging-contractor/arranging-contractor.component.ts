@@ -2486,7 +2486,7 @@ export class ArrangingContractorComponent implements OnInit {
         let mins = Math.floor(msec / 60000);
         let hrs = Math.floor(mins / 60);
         if (hrs >= 0) {
-          this.iacNotification.hoursLeft = hrs != 0 ? `${hrs} hours` : `${mins} minutes`;
+          this.iacNotification.hoursLeft = (hrs != 0 ? `${hrs} hours` : `${mins} minutes`);
         }
         resolve(true);
       }, error => {
