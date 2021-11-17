@@ -60,9 +60,9 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
   private async initData() {
     this.editor = new Editor();
     this.selectedRecipient = '';
-    this.getSystemConfigs(SYSTEM_CONFIG.FAULT_OVERRIDE_COMMUNICATION_CONSENT);
     this.initForm();
     this.setMaintainanceType();
+    this.initAPI();
   }
 
   private setMaintainanceType() {
@@ -73,6 +73,11 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     } else if (this.faultDetails.stage === FAULT_STAGES.ARRANGING_CONTRACTOR && (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[2].index || this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[3].index || this.faultDetails.status === FAULT_STATUSES.QUOTE_PENDING)) {
       this.currentMaintainanceType = MAINTENANCE_TYPES_FOR_SEND_EMAIL.QUOTE;
     }
+  }
+
+  async initAPI() {
+    const faultOverrideCommsConsent = await this.getSystemConfigs(SYSTEM_CONFIG.FAULT_OVERRIDE_COMMUNICATION_CONSENT);
+    this.faultOverrideCommConsent = faultOverrideCommsConsent.FAULT_OVERRIDE_COMMUNICATION_CONSENT;
   }
 
   ngAfterViewChecked(): void {
@@ -512,10 +517,15 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     this.contractorsListWorksOrder = [...woContractorsList];
   }
 
-  private async getSystemConfigs(key) {
-    this.commonService.getSystemConfig(key).subscribe(res => {
-      this.faultOverrideCommConsent = res.FAULT_OVERRIDE_COMMUNICATION_CONSENT;
+  private async getSystemConfigs(key): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.commonService.getSystemConfig(key).subscribe(res => {
+        resolve(res);
+      }, error => {
+        resolve(true);
+      });
     });
+    return promise;
   }
 
   private getLandlordDppDetails(landlordId): Promise<any> {
