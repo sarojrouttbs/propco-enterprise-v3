@@ -34,7 +34,7 @@
 }
 
 .recipient {
-    background: #ffffff;
+    background: var(--ion-color-step-2000);
     border-radius: 6px;
     .label {
         font-size: 16px;
@@ -67,7 +67,7 @@
     border: 1px solid #c1c1c1;
     padding: 2px 10px;
     border-radius: 10px;
-    background: #ffffff;
+    background: var(--ion-color-step-2000);
 }
 
 .bottom-space {
@@ -85,7 +85,7 @@
 
 .editor {
     width: 100% !important;
-    background: #ffffff;
+    background: var(--ion-color-step-2000);
 }
 
 .recipient-err-label {

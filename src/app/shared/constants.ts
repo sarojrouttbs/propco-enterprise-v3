@@ -1,5 +1,3 @@
-import { Toolbar } from "ngx-editor";
-
 export const PROPCO = {
   isMobile: true,
   ACCESS_TOKEN: 'access_token',
@@ -483,15 +481,6 @@ export const RECIPIENTS = {
   'TENANT': 'Tenant',
   'CONTRACTOR': 'Contractor'
 };
-
-export const NGX_EDITOR_TOOLBAR_SETTINGS: Toolbar = [
-  ['bold', 'italic'],
-  ['underline', 'strike'],
-  ['ordered_list', 'bullet_list'],
-  [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
-  ['text_color', 'background_color'],
-  ['align_left', 'align_center', 'align_right', 'align_justify'],
-];
 
 export const PROPERTY_LINK_STATUS = {
   'CURRENT': 'Current'

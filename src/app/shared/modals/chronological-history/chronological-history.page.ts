@@ -378,6 +378,7 @@ export class ChronologicalHistoryPage implements OnInit {
                element.category = this.getCategoryByEventType(element);
             if (element.data.body) {
                element.data.body = element.data.body.replace(/<img[^>]*>/g, "");
+               element.data.body = this.transform(element.data.body);
             }
          });
       }
@@ -435,5 +436,9 @@ export class ChronologicalHistoryPage implements OnInit {
       this.showAll = true;
       var table = $('#chronological').DataTable(); 
       table.rows('.parent').nodes().to$().find('td:first-child').trigger('click');
+   }
+
+   transform(html) {
+      return this.commonService.sanitizeHtml(html);
    }
 }

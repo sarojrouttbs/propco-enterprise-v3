@@ -11,6 +11,7 @@ const { Network } = Plugins;
 import { ToastController } from '@ionic/angular';
 import { ToastrService } from 'ngx-toastr';
 import { saveAs } from 'file-saver';
+import { DomSanitizer } from '@angular/platform-browser';
 
 interface Lookupdata {
   obj: Object;
@@ -32,6 +33,7 @@ export class CommonService {
     private router: Router,
     public toastController: ToastController,
     private toastr: ToastrService,
+    private sanitizer: DomSanitizer
   ) {
     // this.alertPresented = false;
   }
@@ -650,5 +652,9 @@ export class CommonService {
     const element = document.getElementById(elementId);
     element.scrollIntoView({behavior: "smooth"});
   }
+
+  sanitizeHtml(html) {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
+ }
 
 }
