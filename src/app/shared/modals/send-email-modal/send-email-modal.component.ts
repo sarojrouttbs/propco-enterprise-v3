@@ -72,7 +72,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked {
     }
   }
 
-  async initAPI() {
+  private async initAPI() {
     const faultOverrideCommsConsent = await this.getSystemConfigs(SYSTEM_CONFIG.FAULT_OVERRIDE_COMMUNICATION_CONSENT);
     this.faultOverrideCommConsent = faultOverrideCommsConsent.FAULT_OVERRIDE_COMMUNICATION_CONSENT;
   }
@@ -529,7 +529,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked {
     });
   }
 
-  replaceAllWithAlign(emailBody) {
+  private replaceAllWithAlign(emailBody) {
     const mapObj = {
       'class="ql-align-justify"': 'style="text-align:justify;"',
       'class="ql-align-left"': 'style="text-align:left;"',
