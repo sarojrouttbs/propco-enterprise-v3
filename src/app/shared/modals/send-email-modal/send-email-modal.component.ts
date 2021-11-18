@@ -2,9 +2,8 @@ import { HttpParams } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, AfterViewChecked, OnDestroy } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { Editor } from 'ngx-editor';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { NGX_EDITOR_TOOLBAR_SETTINGS, FAULT_STATUSES, LL_INSTRUCTION_TYPES, MAINTENANCE_TYPES, PROPERTY_LINK_STATUS, RECIPIENT, RECIPIENTS, MAINTENANCE_TYPES_FOR_SEND_EMAIL, FAULT_STAGES, SYSTEM_CONFIG, NGX_QUILL_EDITOR_TOOLBAR_SETTINGS } from '../../constants';
+import { FAULT_STATUSES, LL_INSTRUCTION_TYPES, MAINTENANCE_TYPES, PROPERTY_LINK_STATUS, RECIPIENT, RECIPIENTS, MAINTENANCE_TYPES_FOR_SEND_EMAIL, FAULT_STAGES, SYSTEM_CONFIG, NGX_QUILL_EDITOR_TOOLBAR_SETTINGS } from '../../constants';
 import { CommonService } from '../../services/common.service';
 import { SendEmailService } from './send-email-modal.service';
 
@@ -13,9 +12,7 @@ import { SendEmailService } from './send-email-modal.service';
   templateUrl: './send-email-modal.component.html',
   styleUrls: ['./send-email-modal.component.scss'],
 })
-export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
-  editor: Editor;
-  editorToolbar = NGX_EDITOR_TOOLBAR_SETTINGS;      // ngx-editor toolbar config
+export class SendEmailModalPage implements OnInit, AfterViewChecked {
   quillEditorToolbar = NGX_QUILL_EDITOR_TOOLBAR_SETTINGS;  // ngx-quill editor toolbar config
 
   faultDetails;
@@ -59,7 +56,6 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   private async initData() {
-    this.editor = new Editor();
     this.selectedRecipient = '';
     this.initForm();
     this.setMaintainanceType();
@@ -76,7 +72,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 
-  async initAPI() {
+  private async initAPI() {
     const faultOverrideCommsConsent = await this.getSystemConfigs(SYSTEM_CONFIG.FAULT_OVERRIDE_COMMUNICATION_CONSENT);
     this.faultOverrideCommConsent = faultOverrideCommsConsent.FAULT_OVERRIDE_COMMUNICATION_CONSENT;
   }
@@ -453,7 +449,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     this.showLoader = true;
     if (this.sendEmailForm.valid) {
       let requestObj = {
-        emailBody: this.sendEmailForm.controls['emailBody'].value,
+        emailBody: this.replaceAllWithAlign(this.sendEmailForm.controls['emailBody'].value),
         emailSubject: this.sendEmailForm.controls['emailSubject'].value,
         entityId: this.sendEmailForm.controls['entityId'].value[0].id,
         entityType: this.sendEmailForm.controls['entityType'].value,
@@ -475,10 +471,6 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
       this.sendEmailForm.markAllAsTouched();
       this.checkRecipientError();
     }
-  }
-
-  ngOnDestroy(): void {
-    this.editor.destroy();
   }
 
   private async setEstimatedContractor() {
@@ -535,5 +527,15 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
         return resolve(res ? res : {});
       });
     });
+  }
+
+  private replaceAllWithAlign(emailBody) {
+    const mapObj = {
+      'class="ql-align-justify"': 'style="text-align:justify;"',
+      'class="ql-align-left"': 'style="text-align:left;"',
+      'class="ql-align-right"': 'style="text-align:right;"',
+      'class="ql-align-center"': 'style="text-align:center;"',
+    };
+    return emailBody.replace(/class="ql-align-justify"|class="ql-align-left"|class="ql-align-right"|class="ql-align-center"/gi, matched => mapObj[matched]);
   }
 }

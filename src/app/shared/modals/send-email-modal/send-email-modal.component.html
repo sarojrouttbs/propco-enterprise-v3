@@ -218,13 +218,8 @@
         </div>
         <ion-item>
           <div class="editor">
-            <!-- ngx-editor -->
-            <!-- <ngx-editor-menu [editor]="editor" [toolbar]="editorToolbar"></ngx-editor-menu>
-            <ngx-editor [editor]="editor" formControlName="emailBody"></ngx-editor> -->
-
             <!-- ngx-quill-editor -->
             <quill-editor placeholder="Type here" formControlName="emailBody" [modules]="quillEditorToolbar"></quill-editor>
-
           </div>
         </ion-item>
         <span *ngIf="!sendEmailForm.get('emailBody')?.value && sendEmailForm.get('emailBody')?.touched"
