@@ -37,6 +37,10 @@
               "node_modules/datatables.net-responsive-dt/css/responsive.dataTables.css",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/datatables.net-colreorder-dt/css/colReorder.dataTables.css",
+
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.bubble.css",
+              "node_modules/quill/dist/quill.snow.css",
               {
                 "input": "src/theme/variables.scss"
               },

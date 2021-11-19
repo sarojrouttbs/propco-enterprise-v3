@@ -378,6 +378,7 @@ export class ChronologicalHistoryPage implements OnInit {
                element.category = this.getCategoryByEventType(element);
             if (element.data.body) {
                element.data.body = element.data.body.replace(/<img[^>]*>/g, "");
+               element.data.body = this.commonService.sanitizeHtml(element.data.body);
             }
          });
       }
