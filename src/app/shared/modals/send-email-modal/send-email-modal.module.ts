@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatTabsModule } from "@angular/material/tabs";
 import { RouterModule, Routes } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
-import { NgxEditorModule } from "ngx-editor";
+import { QuillModule } from "ngx-quill";
 import { FaultsService } from "src/app/faults/faults.service";
 import { ComponentsModule } from "../../components/components.module";
 import { SendEmailModalPage } from "./send-email-modal.component";
@@ -26,7 +26,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ComponentsModule,
     MatTabsModule,
-    NgxEditorModule
+    QuillModule.forRoot()
   ],
   providers: [FaultsService, SendEmailService],
   declarations: [SendEmailModalPage],
