@@ -20,18 +20,16 @@
           </ion-item>
           <app-validation-message [control]="tenancyDetailsForm.controls.noOfTenantToBeReferenced"></app-validation-message>
         </ion-col>
-        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
-          <ion-item>
-            <ion-label position="floating">Tenancy Start Date </ion-label>
-            <ion-datetime
-            [min]="currentDate"
-            [max]="futureDate"
-              formControlName="tenancyStartDate"
-              displayFormat="DD/MM/YYYY"
-              interface="popover"
-            ></ion-datetime>
-          </ion-item>
-          <app-validation-message [control]="tenancyDetailsForm.controls.tenancyStartDate"></app-validation-message>
+        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" style="padding-top:13px">
+          <mat-form-field appearance="fill">
+            <mat-label>Tenancy Start Date</mat-label>
+            <input matInput [matDatepicker]="picker" [min]="currentDate" [max]="futureDate" formControlName="tenancyStartDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <div style="margin-top: -20px !important;">
+            <app-validation-message [control]="tenancyDetailsForm.controls.tenancyStartDate"></app-validation-message>
+          </div>
         </ion-col>
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
@@ -195,11 +193,13 @@
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.email"></app-validation-message>
         </ion-col>
-        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
-          <ion-item>
-            <ion-label position="floating">Date of Birth</ion-label>
-            <ion-datetime formControlName="dateOfBirth" displayFormat="DD/MM/YYYY" interface="popover" [max]="adultDate"></ion-datetime>
-          </ion-item>
+        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" style="padding-top:13px">
+          <mat-form-field appearance="fill">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput [matDatepicker]="picker1" [max]="adultDate" formControlName="dateOfBirth">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
         </ion-col>
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
