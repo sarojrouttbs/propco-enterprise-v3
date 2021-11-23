@@ -1162,7 +1162,6 @@ export class ArrangingContractorComponent implements OnInit {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         res => {
           res && res.data ? this.preferredSuppliersList = res.data : [];
-          console.log(this.preferredSuppliersList)
           resolve(true);
         },
         error => {
