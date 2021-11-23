@@ -1161,33 +1161,6 @@ export class ArrangingContractorComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         res => {
-          res = {
-            "count": 2,
-            "pages": 1,
-            "data": [
-              {
-                "reference": "000000015",
-                "occupation": "General repair/investigation",
-                "company": "DRA Domestic Repair Agency",
-                "mobile": "7020454558",
-                "contractorId": "7d6ed5d5-7ad0-4feb-a6ad-16d2eb330851"
-              },
-              {
-                "reference": "000000004",
-                "occupation": "General",
-                "company": "K F BARTLETT LIMITED",
-                "mobile": "7050410850",
-                "contractorId": "510c7c2b-a53f-40fe-8cc1-df4dc98ee01e"
-              },
-              {
-                "reference": "1111111",
-                "occupation": "General",
-                "company": "demo user",
-                "mobile": "2222222",
-                "contractorId": "510c7c2b-a53f-40fe-8cc1-df4dc98ee01e11"
-              }
-            ]
-          }
           res && res.data ? this.preferredSuppliersList = res.data : [];
           console.log(this.preferredSuppliersList)
           resolve(true);
