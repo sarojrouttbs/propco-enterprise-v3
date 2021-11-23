@@ -2,9 +2,8 @@ import { HttpParams } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, AfterViewChecked, OnDestroy } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { Editor } from 'ngx-editor';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { NGX_EDITOR_TOOLBAR_SETTINGS, FAULT_STATUSES, LL_INSTRUCTION_TYPES, MAINTENANCE_TYPES, PROPERTY_LINK_STATUS, RECIPIENT, RECIPIENTS, MAINTENANCE_TYPES_FOR_SEND_EMAIL } from '../../constants';
+import { FAULT_STATUSES, LL_INSTRUCTION_TYPES, MAINTENANCE_TYPES, PROPERTY_LINK_STATUS, RECIPIENT, RECIPIENTS, MAINTENANCE_TYPES_FOR_SEND_EMAIL, FAULT_STAGES, SYSTEM_CONFIG, NGX_QUILL_EDITOR_TOOLBAR_SETTINGS } from '../../constants';
 import { CommonService } from '../../services/common.service';
 import { SendEmailService } from './send-email-modal.service';
 
@@ -13,9 +12,8 @@ import { SendEmailService } from './send-email-modal.service';
   templateUrl: './send-email-modal.component.html',
   styleUrls: ['./send-email-modal.component.scss'],
 })
-export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
-  editor: Editor;
-  editorToolbar = NGX_EDITOR_TOOLBAR_SETTINGS;
+export class SendEmailModalPage implements OnInit, AfterViewChecked {
+  quillEditorToolbar = NGX_QUILL_EDITOR_TOOLBAR_SETTINGS;  // ngx-quill editor toolbar config
 
   faultDetails;
   propertyDetails;
@@ -41,6 +39,8 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
   currentMaintainanceType: string;
   maintainanceTypes = MAINTENANCE_TYPES_FOR_SEND_EMAIL;
   recipient = RECIPIENT;
+  faultStages = FAULT_STAGES;
+  faultOverrideCommConsent;
 
   constructor(
     private modalController: ModalController,
@@ -52,20 +52,29 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.editor = new Editor();
+    this.initData();
+  }
+
+  private async initData() {
     this.selectedRecipient = '';
     this.initForm();
     this.setMaintainanceType();
+    this.initAPI();
   }
 
   private setMaintainanceType() {
-    if (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[1].index || this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING) {
+    if (this.faultDetails.stage === FAULT_STAGES.JOB_COMPLETION || this.faultDetails.stage === FAULT_STAGES.PAYMENT || (this.faultDetails.stage === FAULT_STAGES.ARRANGING_CONTRACTOR && (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[1].index || this.faultDetails.status === FAULT_STATUSES.WORKSORDER_PENDING))) {
       this.currentMaintainanceType = MAINTENANCE_TYPES_FOR_SEND_EMAIL.WO;
-    } else if (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[4].index || this.faultDetails.status === FAULT_STATUSES.CHECKING_LANDLORD_INSTRUCTIONS) {
+    } else if (this.faultDetails.stage === FAULT_STAGES.LANDLORD_INSTRUCTION && (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[3].index || this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[4].index)) {
       this.currentMaintainanceType = MAINTENANCE_TYPES_FOR_SEND_EMAIL.ESTIMATE;
-    } else if (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[2].index || this.faultDetails.status === FAULT_STATUSES.QUOTE_PENDING) {
+    } else if (this.faultDetails.stage === FAULT_STAGES.ARRANGING_CONTRACTOR && (this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[2].index || this.faultDetails.stageAction === LL_INSTRUCTION_TYPES[3].index || this.faultDetails.status === FAULT_STATUSES.QUOTE_PENDING)) {
       this.currentMaintainanceType = MAINTENANCE_TYPES_FOR_SEND_EMAIL.QUOTE;
     }
+  }
+
+  private async initAPI() {
+    const faultOverrideCommsConsent = await this.getSystemConfigs(SYSTEM_CONFIG.FAULT_OVERRIDE_COMMUNICATION_CONSENT);
+    this.faultOverrideCommConsent = faultOverrideCommsConsent.FAULT_OVERRIDE_COMMUNICATION_CONSENT;
   }
 
   ngAfterViewChecked(): void {
@@ -99,7 +108,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
 
   private async initLLData() {
     if (!this.landLordList || this.landLordList.length <= 0 || this.landLordList === []) {
-      await this.getLandlordList();
+      await this.getLandlordDetails();
     } else {
       this.isLandlord = true;
     }
@@ -115,7 +124,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
 
   private async initCCData() {
     if (this.contractorListPrefSupplier.length == 0) {
-      await this.getLandlordList();
+      await this.getLandlordDetails();
     } else {
       await this.checkContractorMaintainanceType();
       this.isContractor = true;
@@ -126,26 +135,36 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     return this.sendEmailForm.controls.entityId as FormArray;
   }
 
-  private async getLandlordList() {
-    this.faultsService.getLandlordsOfProperty(this.propertyDetails.propertyId).subscribe(
-      async (res) => {
-        this.landLordList = res && res.data ? res.data.filter((llDetail => (llDetail.propertyLinkStatus === PROPERTY_LINK_STATUS.CURRENT) && (llDetail.status === 1 || llDetail.status === 3))) : [];
-        this.landLordList.forEach((item) => {
-          item.isChecked = false;
-        });
-        this.isLandlord = true;
-        if (this.selectedRecipient === RECIPIENTS.CONTRACTOR) {
-          this.isLandlord = false;
-          if (this.landLordList.length > 0) {
-            const landlordId = await this.getLandlordId();
-            this.contractorListPrefSupplier = await this.getPreferredContractorList(landlordId);
-            await this.setPrefferedContractors();
-          }
-          await this.checkContractorMaintainanceType();
-          this.isContractor = true;
-        }
+  private async getLandlordDetails() {
+    this.landLordList = await this.getLandlordList();
+    this.landLordList.forEach(async (item) => {
+      const llDppDetails = await this.getLandlordDppDetails(item.landlordId);
+      const llDppDetailsWithConsentMatch = llDppDetails.data.find(dppDetails => (dppDetails.dppId === this.faultOverrideCommConsent));
+      item.isOverrideCommsPreference = llDppDetailsWithConsentMatch.isOptIn;
+      item.isChecked = false;
+    });
+    this.isLandlord = true;
+    if (this.selectedRecipient === RECIPIENTS.CONTRACTOR) {
+      this.isLandlord = false;
+      if (this.landLordList.length > 0) {
+        const landlordId = await this.getLandlordId();
+        this.contractorListPrefSupplier = await this.getPreferredContractorList(landlordId);
+        await this.setPrefferedContractors();
       }
-    );
+      await this.checkContractorMaintainanceType();
+      this.isContractor = true;
+    }
+  }
+
+  private async getLandlordList() {
+    return new Promise((resolve, reject) => {
+      this.faultsService.getLandlordsOfProperty(this.propertyDetails.propertyId).subscribe(
+        async (res) => {
+          const llList = res && res.data ? res.data.filter((llDetail => (llDetail.propertyLinkStatus === PROPERTY_LINK_STATUS.CURRENT) && (llDetail.status === 1 || llDetail.status === 3))) : [];
+          return resolve(llList);
+        }
+      )
+    });
   }
 
   private async getMaxRentShareLandlord(landlords) {
@@ -430,7 +449,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     this.showLoader = true;
     if (this.sendEmailForm.valid) {
       let requestObj = {
-        emailBody: this.sendEmailForm.controls['emailBody'].value,
+        emailBody: this.replaceAllWithAlign(this.sendEmailForm.controls['emailBody'].value),
         emailSubject: this.sendEmailForm.controls['emailSubject'].value,
         entityId: this.sendEmailForm.controls['entityId'].value[0].id,
         entityType: this.sendEmailForm.controls['entityType'].value,
@@ -454,10 +473,6 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    this.editor.destroy();
-  }
-
   private async setEstimatedContractor() {
     const estimateContractorsList = [];
     const ccDetails: any = await this.getSingleContractorDetails(this.faultDetails.contractorId);
@@ -472,7 +487,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   private async setQuoteContractors(faultMaintenance) {
-    const quoteContractorsList = faultMaintenance?.quoteContractors;
+    const quoteContractorsList = faultMaintenance?.quoteContractors ? faultMaintenance?.quoteContractors.filter(ccDetail => (ccDetail.isRejected === false)) : [];
     quoteContractorsList.forEach(element => {
       element.isChecked = false;
       this.contractorListPrefSupplier.forEach((item, index) => {
@@ -493,5 +508,34 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked, OnDestroy {
       });
     });
     this.contractorsListWorksOrder = [...woContractorsList];
+  }
+
+  private async getSystemConfigs(key): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this.commonService.getSystemConfig(key).subscribe(res => {
+        resolve(res);
+      }, error => {
+        resolve(true);
+      });
+    });
+    return promise;
+  }
+
+  private getLandlordDppDetails(landlordId): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.faultsService.getLandlordDppDetails(landlordId).subscribe((res) => {
+        return resolve(res ? res : {});
+      });
+    });
+  }
+
+  private replaceAllWithAlign(emailBody) {
+    const mapObj = {
+      'class="ql-align-justify"': 'style="text-align:justify;"',
+      'class="ql-align-left"': 'style="text-align:left;"',
+      'class="ql-align-right"': 'style="text-align:right;"',
+      'class="ql-align-center"': 'style="text-align:center;"',
+    };
+    return emailBody.replace(/class="ql-align-justify"|class="ql-align-left"|class="ql-align-right"|class="ql-align-center"/gi, matched => mapObj[matched]);
   }
 }

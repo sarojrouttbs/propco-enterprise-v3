@@ -1,5 +1,3 @@
-import { Toolbar } from "ngx-editor";
-
 export const PROPCO = {
   isMobile: true,
   ACCESS_TOKEN: 'access_token',
@@ -236,7 +234,8 @@ export const SYSTEM_CONFIG = {
   FAULT_MANAGEMENT_LETCAT: 'FAULT_MANAGEMENT_LETCAT',
   FAULT_DEFAULT_NOTE_CATEGORY: 'FAULT_DEFAULT_NOTE_CATEGORY',
   FAULT_DEFAULT_NOTE_TYPE: 'FAULT_DEFAULT_NOTE_TYPE',
-  MAX_ACTIVE_QUOTE_CONTRACTOR: 'MAX_ACTIVE_QUOTE_CONTRACTOR'
+  MAX_ACTIVE_QUOTE_CONTRACTOR: 'MAX_ACTIVE_QUOTE_CONTRACTOR',
+  FAULT_OVERRIDE_COMMUNICATION_CONSENT: 'FAULT_OVERRIDE_COMMUNICATION_CONSENT'
 };
 
 export const SYSTEM_OPTIONS = {
@@ -483,15 +482,6 @@ export const RECIPIENTS = {
   'CONTRACTOR': 'Contractor'
 };
 
-export const NGX_EDITOR_TOOLBAR_SETTINGS: Toolbar = [
-  ['bold', 'italic'],
-  ['underline', 'strike'],
-  ['ordered_list', 'bullet_list'],
-  [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
-  ['text_color', 'background_color'],
-  ['align_left', 'align_center', 'align_right', 'align_justify'],
-];
-
 export const PROPERTY_LINK_STATUS = {
   'CURRENT': 'Current'
 };
@@ -521,3 +511,16 @@ export const MAINTENANCE_TYPES_FOR_SEND_EMAIL = {
 export const FAULT_STAGES_ACTIONS = {
   FAULT_LOGGED : 'LOGGED'
 }
+
+
+export const NGX_QUILL_EDITOR_TOOLBAR_SETTINGS = {
+  toolbar: {
+    container: [
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'align': [] }]
+    ]
+  },
+};
