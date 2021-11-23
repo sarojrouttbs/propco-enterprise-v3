@@ -129,6 +129,7 @@ export class ArrangingContractorComponent implements OnInit {
     if (changes.leadTenantId && changes.leadTenantId.currentValue) {
       this.checkMaintenanceDetail();
     }
+    
     if (changes.faultDetails && !changes.faultDetails.firstChange) {
       this.hideWOform = false;
       // this.restrictAction = false;
@@ -140,6 +141,9 @@ export class ArrangingContractorComponent implements OnInit {
       this.showSkeleton = true;
       this.contratctorArr = [];
       this.initiateArrangingContractors();
+    }
+    if(changes.landlordDetails && changes.landlordDetails.currentValue  && !this.isWorksOrder) {
+      this.getPreferredSuppliers(this.landlordDetails.landlordId);
     }
   }
 
@@ -213,8 +217,21 @@ export class ArrangingContractorComponent implements OnInit {
       doesBranchHoldKeys: [{ value: this.faultDetails.doesBranchHoldKeys ? 'Yes' : 'No', disabled: true }],
       quoteContractors: []
     });
-    if (!this.faultMaintenanceDetails && this.faultDetails.contractorId) {
-      this.getContractorDetails(this.faultDetails.contractorId, 'quote');
+  }
+
+  private addCCToQuoteForm(): void {
+    if (!this.faultMaintenanceDetails && !this.isWorksOrder) {
+      if(this.preferredSuppliersList.length > 0) {
+        this.preferredSuppliersList.map((CC)=>{
+          const isNew = true;
+          const isPreferred = true;
+          this.addContractor(CC, isNew, isPreferred);
+        });
+      }
+      if(this.faultDetails.contractorId && !this.checkIfPrefferedContractor(this.faultDetails.contractorId)) {
+        /*If the CC present in the Pref CC list then not require to add this again*/
+        this.getContractorDetails(this.faultDetails.contractorId, 'quote');
+      }
     }
   }
 
@@ -268,6 +285,39 @@ export class ArrangingContractorComponent implements OnInit {
         new Observable())
     );
   }
+
+  private async initApiCalls() {
+    this.MAX_ACTIVE_QUOTE_CONTRACTOR = await this.getSystemConfigs(SYSTEM_CONFIG.MAX_ACTIVE_QUOTE_CONTRACTOR);
+    if (this.faultMaintenanceDetails) {
+      if (!this.isWorksOrder) {
+        this.MAX_QUOTE_REJECTION = await this.getSystemConfigs(SYSTEM_CONFIG.MAXIMUM_FAULT_QUOTE_REJECTION);
+        const ccId = this.commonService.getItem('contractorId');
+        this.isContractorSelected = ccId ? true : false;
+        this.filteredCCDetails.contractorId = ccId ? ccId : null;
+      }
+      else {
+        this.isContractorSelected = true;
+        this.filteredCCDetails = {};
+      }
+      await this.faultNotification(this.faultDetails.stageAction, this.filteredCCDetails.contractorId);
+      this.initPatching();
+      this.setQuoteCCDetail();
+    } else {
+      if (!this.isWorksOrder) {
+        this.checkMaintenanceDetail();
+      }
+    }
+    let userDetails: any = await this.getUserDetails();
+      if (userDetails) {
+        this.isWorksOrder ? this.workOrderForm.get('orderedBy').setValue(userDetails.name) : this.raiseQuoteForm.get('orderedBy').setValue(userDetails.name);
+      }
+    this.showSkeleton = false;
+    this.getNominalCodes();
+    this.userActionForms.controls['orderedBy'].setValue(this.isWorksOrder ? this.workOrderForm.get('orderedBy').value : this.raiseQuoteForm.get('orderedBy').value)
+    if(this.isWorksOrder) {this.getStageOtherActions();}
+    this.addCCToQuoteForm();
+  }
+
 
   private getAccessDetails(tenantPresence): string {
     return (tenantPresence ? MAINT_CONTACT.CONTACT_TENANT : MAINT_CONTACT.ACCESS_VIA_KEY);
@@ -341,40 +391,6 @@ export class ArrangingContractorComponent implements OnInit {
       skillSet: '',
       contractorObj: ''
     });
-  }
-
-  private async initApiCalls() {
-    this.MAX_ACTIVE_QUOTE_CONTRACTOR = await this.getSystemConfigs(SYSTEM_CONFIG.MAX_ACTIVE_QUOTE_CONTRACTOR);
-    if(!this.isWorksOrder) {
-      this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
-    }
-    if (this.faultMaintenanceDetails) {
-      if (!this.isWorksOrder) {
-        this.MAX_QUOTE_REJECTION = await this.getSystemConfigs(SYSTEM_CONFIG.MAXIMUM_FAULT_QUOTE_REJECTION);
-        const ccId = this.commonService.getItem('contractorId');
-        this.isContractorSelected = ccId ? true : false;
-        this.filteredCCDetails.contractorId = ccId ? ccId : null;
-      }
-      else {
-        this.isContractorSelected = true;
-        this.filteredCCDetails = {};
-      }
-      await this.faultNotification(this.faultDetails.stageAction, this.filteredCCDetails.contractorId);
-      this.initPatching();
-      this.setQuoteCCDetail();
-    } else {
-      if (!this.isWorksOrder) {
-        this.checkMaintenanceDetail();
-      }
-    }
-    let userDetails: any = await this.getUserDetails();
-      if (userDetails) {
-        this.isWorksOrder ? this.workOrderForm.get('orderedBy').setValue(userDetails.name) : this.raiseQuoteForm.get('orderedBy').setValue(userDetails.name);
-      }
-    this.showSkeleton = false;
-    this.getNominalCodes();
-    this.userActionForms.controls['orderedBy'].setValue(this.isWorksOrder ? this.workOrderForm.get('orderedBy').value : this.raiseQuoteForm.get('orderedBy').value)
-    if(this.isWorksOrder) {this.getStageOtherActions();}
   }
 
   private async enableCCAddform() {
@@ -1145,9 +1161,7 @@ export class ArrangingContractorComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         res => {
-          res && res.data ? res.data.map((x) => {
-            !this.faultMaintenanceDetails && x.contractorId !== this.faultDetails.contractorId ? this.addContractor(x, true, true) : this.preferredSuppliersList.push(x);
-          }) : [];
+          res && res.data ? this.preferredSuppliersList = res.data : [];
           resolve(true);
         },
         error => {
