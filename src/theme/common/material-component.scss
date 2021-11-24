@@ -14,7 +14,7 @@
   @include set-text-style(15px, 19px);
 }
 
-.mat-form-field-label span {
+.mat-form-field-label mat-label{
   font-family: "Lato", san-serif, verdana;
 }
 

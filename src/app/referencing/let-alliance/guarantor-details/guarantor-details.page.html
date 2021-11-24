@@ -110,12 +110,16 @@
           </ion-item>
           <app-validation-message [control]="guarantorDetailsForm.controls.email"></app-validation-message>
         </ion-col>
-        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
-          <ion-item>
-            <ion-label position="floating">Date of Birth <ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-datetime formControlName="dateOfBirth" displayFormat="DD/MM/YYYY" interface="popover" [max]="adultDate"></ion-datetime>
-          </ion-item>
-          <app-validation-message [control]="guarantorDetailsForm.controls.dateOfBirth"></app-validation-message>
+        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" style="padding-top:13px">
+          <mat-form-field appearance="fill">
+            <mat-label>Date of Birth <ion-text class="mandatory">*</ion-text></mat-label>
+            <input matInput [matDatepicker]="picker" [max]="adultDate" formControlName="dateOfBirth">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <div style="margin-top: -20px !important;">
+            <app-validation-message [control]="guarantorDetailsForm.controls.dateOfBirth"></app-validation-message>
+          </div>
         </ion-col>
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
