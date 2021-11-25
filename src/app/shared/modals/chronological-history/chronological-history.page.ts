@@ -89,6 +89,7 @@ export class ChronologicalHistoryPage implements OnInit {
    propertyDetails;
    isTableReady = false;
    showAll: boolean = true;
+   isNotConfigured:boolean = false;
 
    constructor(private modalController: ModalController, private commonService: CommonService, private faultsService: FaultsService, private elementRef: ElementRef) {
       this.getLookupData();
@@ -148,7 +149,11 @@ export class ChronologicalHistoryPage implements OnInit {
          this.initiateDtOptons();
          this.isTableReady = true;
          // this.rerender();
-      })
+      }, error => {
+         if(error && error.status === 451){
+            this.isNotConfigured = true;
+         }
+      });
    }
 
    initiateDtOptons() {
