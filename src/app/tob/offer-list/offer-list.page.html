@@ -7,16 +7,16 @@
     <div class="property-details">
       <ion-grid>
         <ion-row class="property-details-row">
-          <ion-col class="no-padding" size="80">
-            <h1 class="no-margin">
+          <ion-col class="ion-no-padding" size="80">
+            <h1 class="ion-no-margin">
               {{ propertyDetails?.addressLine1 ? propertyDetails?.addressLine1 + ',' : ''}}
               {{ propertyDetails.addressLine2 ? propertyDetails?.addressLine2 + ',' : ''}}
               {{ propertyDetails.addressLine5 ? propertyDetails?.addressLine5 + ',' : ''}}
               {{ propertyDetails.postcode ? propertyDetails?.postcode : ''}}
             </h1>
           </ion-col>
-          <ion-col class="no-padding ion-text-end" size="20">
-            <ion-button class="no-padding no-margin">Make an Offer</ion-button>
+          <ion-col class="ion-no-padding ion-text-end" size="20">
+            <ion-button class="ion-no-margin">Make an Offer</ion-button>
           </ion-col>
         </ion-row>
 
@@ -34,7 +34,7 @@
             </ion-item>
           </ion-col>
 
-          <ion-col class="no-padding" size="19">
+          <ion-col class="ion-no-padding" size="19">
             <ion-item lines="none">
               <ion-label class="ion-text-end">Offers made between</ion-label>
             </ion-item>
@@ -66,7 +66,7 @@
             <ion-button class="btn-filter" color="danger" (click)="resetFilters()" expand="block">Reset</ion-button>
           </ion-col>
 
-          <ion-col class="no-padding ion-text-end" size="20">
+          <ion-col class="ion-no-padding ion-text-end" size="20">
             <ion-button (click)="hideRecords()"> {{ isHideRejected ? "Show Rejected Offers" : "Hide Rejected Offers"}}
             </ion-button>
           </ion-col>
@@ -103,7 +103,7 @@
                   </ion-row>
                   <ion-row class="offer-details-row">
                     <ion-col class="no-padding-top col1" size="75">
-                      <ion-grid class="no-padding">
+                      <ion-grid class="no-padding-left">
                         <ion-row>
                           <ion-col class="no-padding-left col1" size="33">
                             <ion-text class="text-header">Offer Date and Time</ion-text><br />
