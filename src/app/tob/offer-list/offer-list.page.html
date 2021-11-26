@@ -1,9 +1,167 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>offer-list</ion-title>
-  </ion-toolbar>
+  <ion-title></ion-title>
 </ion-header>
 
 <ion-content>
+  <ng-container>
+    <div class="property-details">
+      <ion-grid>
+        <ion-row class="property-details-row">
+          <ion-col class="no-padding" size="80">
+            <h1 class="no-margin">
+              {{ propertyDetails?.addressLine1 ? propertyDetails?.addressLine1 + ',' : ''}}
+              {{ propertyDetails.addressLine2 ? propertyDetails?.addressLine2 + ',' : ''}}
+              {{ propertyDetails.addressLine5 ? propertyDetails?.addressLine5 + ',' : ''}}
+              {{ propertyDetails.postcode ? propertyDetails?.postcode : ''}}
+            </h1>
+          </ion-col>
+          <ion-col class="no-padding ion-text-end" size="20">
+            <ion-button class="no-padding no-margin">Make an Offer</ion-button>
+          </ion-col>
+        </ion-row>
 
+        <ion-row class="filters-row">
+          <ion-col size="20">
+            <ion-item class="sort-offer">
+              <ion-label position="floating">Sort Offers By
+              </ion-label>
+              <ion-select [(ngModel)]="sortKey" (ionChange)="sortResult()" interface="popover" class="reason-dropdown"
+                [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
+                <ion-select-option [value]="item?.key" *ngFor="let item of sortingFields">
+                  {{ item?.value }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col class="no-padding" size="19">
+            <ion-item lines="none">
+              <ion-label class="ion-text-end">Offers made between</ion-label>
+            </ion-item>
+          </ion-col>
+
+          <ion-col class="ion-text-end" size="13">
+            <mat-form-field appearance="fill">
+              <mat-label>Date From
+              </mat-label>
+              <input matInput [matDatepicker]="picker1" [(ngModel)]="fromDate" [max]="maxDate">
+              <mat-datepicker-toggle matPrefix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+          </ion-col>
+
+          <ion-col class="ion-text-end" size="13">
+            <mat-form-field appearance="fill">
+              <mat-label>Date To
+              </mat-label>
+              <input matInput [matDatepicker]="picker2" [(ngModel)]="toDate" [min]="fromDate" [max]="maxDate">
+              <mat-datepicker-toggle matPrefix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </ion-col>
+
+          <ion-col class="ion-text-end" size="15">
+            <ion-button class="btn-filter" color="success" [disabled]="fromDate && toDate ? false : true"
+              (click)="filterByDate()" expand="block">Filter</ion-button>
+            <ion-button class="btn-filter" color="danger" (click)="resetFilters()" expand="block">Reset</ion-button>
+          </ion-col>
+
+          <ion-col class="no-padding ion-text-end" size="20">
+            <ion-button (click)="hideRecords()"> {{ isHideRejected ? "Show Rejected Offers" : "Hide Rejected Offers"}}
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ng-container>
+
+  <ng-container>
+    <div style="position: relative;">
+      <ion-card *ngFor="let item of filteredOfferList.data; let i = index;">
+        <ion-card-content>
+          <ion-grid>
+            <ion-row class="main-row">
+              <ion-col class="" size-xl="17" size="23">
+                <div>
+                  <img [src]="'assets/images/default.jpg'">
+                </div>
+              </ion-col>
+              <ion-col class="" size-xl="83" size="77">
+                <ion-grid style="height:100%;" class="no-padding-top">
+                  <ion-row class="offer-title-row fs-18">
+                    <ion-col class="no-padding-top col1" size="75">
+                      <ion-text class="fs-20">Applicant made an offer of <strong> {{item?.amount || 0 | currency : "£"
+                          }}
+                        </strong>
+                      </ion-text> <br />
+                      <ion-text> Same as the asking price </ion-text>
+                    </ion-col>
+                    <ion-col class="no-padding-top col2 ion-text-end" size="25">
+                      <ion-text>{{item?.amount || 0 | currency : "£" }} PCM </ion-text><br />
+                      <ion-text> Status {{ item?.status }} </ion-text>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="offer-details-row">
+                    <ion-col class="no-padding-top col1" size="75">
+                      <ion-grid class="no-padding">
+                        <ion-row>
+                          <ion-col class="no-padding-left col1" size="33">
+                            <ion-text class="text-header">Offer Date and Time</ion-text><br />
+                            <ion-text>{{ item?.offerAt | date: 'dd/MM/yyyy HH:mm' }}</ion-text><br />
+                          </ion-col>
+                          <ion-col class="no-padding-left col2" size="33">
+                            <ion-text class="text-header">Applicant Name</ion-text><br />
+                            <ion-text>{{ item?.forename || ''}} {{ item?.surname || '' }}</ion-text><br />
+                          </ion-col>
+                          <ion-col class="no-padding-left col3" size="33">
+                            <ion-text class="text-header">No. of Co-applicant(s)</ion-text><br />
+                            <ion-text>{{ item?.numberOfCoApplicants || 0 }}</ion-text><br />
+                          </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col class="no-padding-left col1" size="33">
+                            <ion-text class="text-header">Confirmed by Applicant</ion-text><br />
+                            <ion-text>{{ item?.isApplicantConfirmed ? 'Yes' : 'No' }}</ion-text><br />
+                          </ion-col>
+                          <ion-col class="no-padding-left col2" size="33">
+                            <ion-text class="text-header">Confirmed by Landlord</ion-text><br />
+                            <ion-text>{{ item?.isLandlordConfirmed ? 'Yes' : 'No' }}</ion-text><br />
+                          </ion-col>
+                          <ion-col class="no-padding-left col3" size="33">
+                            <ion-text class="text-header">Negotiator</ion-text><br />
+                            <ion-text>{{ item?.offerAt | date: 'dd/MM/yyyy HH:mm' }}</ion-text><br />
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-col>
+                    <ion-col class="no-padding-top col2 ion-text-end action-icon" size="25">
+                      <div>
+                        <i (click)="showMenu($event, 'divOverlay', item, 'offer-details-row', true)"
+                          class="propcoicon propcoicon-actions-on action-btn"></i>
+                      </div>
+                    </ion-col>
+
+                  </ion-row>
+                </ion-grid>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+      <div id="divOverlay">
+        <ion-button>Add Note</ion-button>
+        <ion-button>View Details</ion-button>
+        <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+      </div>
+    </div>
+    <ion-card *ngIf="filteredOfferList && !filteredOfferList.data.length">
+      <ion-card-content>
+        <div class="ion-padding ion-text-center">
+          <h1>No offers found!</h1>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </ng-container>
 </ion-content>
