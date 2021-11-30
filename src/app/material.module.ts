@@ -10,12 +10,25 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatOptionModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatOptionModule, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
+
 
 @NgModule({
   declarations: [],
@@ -41,7 +54,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
     MatMomentDateModule
   ],
   providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
   ],
 })
 export class MaterialModule {}
