@@ -1,16 +1,12 @@
 ion-card {
     --background: var(--ion-color-step-1750);
-    box-shadow: unset !important;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 2px 1px -1px rgb(0 0 0 / 12%) !important;
   
     ion-card-content {
       background-color: var(--ion-color-step-1750);
       padding: 0px;
       cursor: pointer;
     }
-}
-
-.text-header {
-    color: grey;
 }
 
 .action-icon {
@@ -38,6 +34,11 @@ ion-card {
     }
 }
 
+.row-details {
+    padding-top: 10px;
+    margin-bottom: -10px;
+}
+
 .btn-filter {
     display: inline-block;
     width: 80px;
@@ -48,5 +49,37 @@ ion-card {
 }
 
 :host ::ng-deep .mat-datepicker-toggle .mat-icon-button {
-    color: #3fa4f0;
+    color: var(--ion-color-tertiary-tint);
+}
+
+.text-color-line-height {
+    line-height: 40px;
+}
+
+.margin-left {
+    margin-left: 10px;
+}
+
+table {
+    width: 100%;
+    border: 1px solid var(--ion-color-step-1750);
+    margin: 15px 0px;
+    th {
+        background: var(--ion-color-step-800);
+        color: var(--ion-color-step-2000);
+    }
+    th {
+        text-align: left;
+        padding: 15px 5px;
+    }
+    tr {
+        border: 1px solid var(--ion-color-step-1750);
+        td {
+            padding: 5px 5px;
+        }
+    }
+}
+
+.offer-notes {
+    color: var(--ion-color-step-800);
 }
