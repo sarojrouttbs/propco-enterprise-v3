@@ -93,6 +93,10 @@ export class CommonService {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup', { responseType: 'json' });
   }
 
+  getTobLookup(): Observable<Lookupdata> {
+    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup/tob', { responseType: 'json' });
+  }
+
   getFaultsLookup(): Observable<Lookupdata> {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'lookup/faults', { responseType: 'json' });
   }

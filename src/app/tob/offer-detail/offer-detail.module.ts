@@ -1,20 +1,26 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
 import { OfferDetailPageRoutingModule } from './offer-detail-routing.module';
 
 import { OfferDetailPage } from './offer-detail.page';
+import { ComponentsModule } from 'src/app/shared/components/components.module';
+import { MaterialModule } from 'src/app/material.module';
+import { LookupPipe } from 'src/app/shared/pipes/lookup-pipe';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    OfferDetailPageRoutingModule
+    OfferDetailPageRoutingModule,  
+    MaterialModule,
+    ComponentsModule,
+    ReactiveFormsModule
   ],
-  declarations: [OfferDetailPage]
+  declarations: [OfferDetailPage, LookupPipe]
 })
 export class OfferDetailPageModule {}
