@@ -11,6 +11,7 @@ import { FaultTitleComponent } from './fault-title/fault-title.component';
 import { UseractionformsComponent } from './useractionforms/useractionforms.component';
 import { IonicSelectableModule } from 'ionic-selectable';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+import { TobPropertyDetailsComponent } from './tob-property-details/tob-property-details.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "left",
@@ -31,8 +32,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         IonicSelectableModule,
         CurrencyMaskModule
     ],
-    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent],
-    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent],
+    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent],
+    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent],
     providers: [CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
 })
 

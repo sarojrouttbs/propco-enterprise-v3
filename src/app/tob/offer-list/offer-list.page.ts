@@ -1,96 +1,122 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
+import { ActivatedRoute } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { OFFER_STATUSES } from 'src/app/shared/constants';
+import { NotesModalPage } from 'src/app/shared/modals/notes-modal/notes-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
-import * as data from './offer-api.json';
-import { offerData } from './offer-list.model';
+import { offerData, offerNotesData } from './offer-list.model';
+import { OfferListService } from './offer-list.service';
 @Component({
   selector: 'app-offer-list',
   templateUrl: './offer-list.page.html',
-  styleUrls: ['./offer-list.page.scss'],
+  styleUrls: ['./offer-list.page.scss']
 })
 
 export class OfferListPage implements OnInit {
   maxDate = new Date();
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  offerList = [];
+  @ViewChild('paginator', { static: true }) paginator: MatPaginator;
+  @ViewChild('notesPaginator', { static: true }) notesPaginator: MatPaginator;
+  obsOfferList: Observable<any>;
+  obsOfferNotesList: Observable<any>;
   filteredOfferList: MatTableDataSource<offerData> = new MatTableDataSource<offerData>();
+  filteredNotesList: MatTableDataSource<offerNotesData> = new MatTableDataSource<offerNotesData>();
+
+  isOfferSelected: boolean = false;
   selectedRow: any;
   isHideRejected: boolean = false;
   sortKey = null;
-  fromDate = null;
-  toDate = null;
+  fromDate = new FormControl('', []);
+  toDate = new FormControl('', []);
   sortingFields = [
     { key: '1', value: 'Date' },
     { key: '2', value: 'Offer Price (Desc)' },
     { key: '3', value: 'Offer Price (Asc)' },
     { key: '4', value: 'Status' }];
-  propertyDetails = data.offerDetails;
-  tobLookupData: any;
-  offerStatuses: any;
-  offerNotes: any = [];
 
-  constructor(private commonService: CommonService) {
-    // this.tobLookupData = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
-    // if (this.tobLookupData) {
-    //   this.setLookupData();
-    // } else {
-    //   this.commonService.getTOBLookup().subscribe(data => {
-    //     this.commonService.setItem(PROPCO.TOB_LOOKUP_DATA, data);
-    //     this.setLookupData();
-    //   }, error => {
-    //   });
-    // }
+  paginatorConfig = {
+    pageIndex: 0,
+    pageSize: 5,
+    pageSizeOptions: [5, 10, 25, 100],
+    showFirstLastButtons: true
   }
 
+  propertyDetails: any;
+  offerNotes: any = [];
+  propertyId: string;
+  offerList: offerData[];
+  accessRight: any;
+
+  constructor(private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private offerListService: OfferListService) { }
+
   ngOnInit() {
-    console.log('offer', this.propertyDetails)
+    this.initData();
+  }
+
+  private initData() {
+    this.propertyId = this.route.snapshot.paramMap.get('propertyId');
+    this.initPaginators();
+    this.initApiCalls();
+  }
+
+  private initPaginators() {
     this.filteredOfferList.paginator = this.paginator;
-    this.offerList = this.propertyDetails.offers as offerData[];
-    this.filteredOfferList.data = this.offerList;
+    this.filteredNotesList.paginator = this.notesPaginator;
+    this.obsOfferList = this.filteredOfferList.connect();
+    this.obsOfferNotesList = this.filteredNotesList.connect();
+  }
+
+  private async initApiCalls() {
+    this.accessRight = await this.getUserAccessRight();
+    this.offerList = await this.getOfferList() as offerData[];
+    this.propertyDetails = await this.getPropertyById();
+    this.initOfferList();
+  }
+
+  private initOfferList() {
+    this.filteredOfferList.data = this.offerList as offerData[];
     this.sortKey = '1';
     this.sortResult();
-    console.log(this.offerList)
   }
 
   sortResult() {
+    const dataToSort = this.filteredOfferList.data;
     let key = this.sortKey;
     switch (key) {
       case '1': {
-        this.filteredOfferList.data.sort((val1, val2) => {
+        dataToSort.sort((val1, val2) => {
           return +new Date(val2.offerAt) - +new
             Date(val1.offerAt)
         })
         break;
       }
       case '2': {
-        this.filteredOfferList.data.sort((val1, val2) => { return val2.amount - val1.amount })
+        dataToSort.sort((val1, val2) => { return val2.amount - val1.amount })
         break;
       }
       case '3': {
-        this.filteredOfferList.data.sort((val1, val2) => { return val1.amount - val2.amount })
+        dataToSort.sort((val1, val2) => { return val1.amount - val2.amount })
         break;
       }
       case '4': {
-        this.filteredOfferList.data.sort((val1, val2) => { return val1.status - val2.status });
+        dataToSort.sort((val1, val2) => { return val1.status - val2.status });
         break;
       }
     }
+    this.filteredOfferList.data = dataToSort;
   }
 
-  // private setLookupData(){
-  //   this.tobLookupData = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
-  //   this.offerStatuses = this.tobLookupData.offerStatuses;
-  // }
-
   filterByDate() {
-    this.filteredOfferList.data = this.filteredOfferList.data.filter(e => new Date(e.offerAt) >= new Date(this.fromDate) && new Date(e.offerAt) <= new Date(this.toDate));
+    this.filteredOfferList.data = this.offerList;
+    this.filteredOfferList.data = this.filteredOfferList.data.filter(e => new Date(this.commonService.getFormatedDate(e.offerAt, 'yyyy-MM-dd')) >= new Date(this.commonService.getFormatedDate(this.fromDate.value, 'yyyy-MM-dd')) && new Date(this.commonService.getFormatedDate(e.offerAt, 'yyyy-MM-dd')) <= new Date(this.commonService.getFormatedDate(this.toDate.value, 'yyyy-MM-dd')));
   }
 
   resetFilters() {
-    this.fromDate = null;
-    this.toDate = null;
+    this.fromDate.reset();
+    this.toDate.reset();
     this.filteredOfferList.data = this.offerList;
   }
 
@@ -111,7 +137,6 @@ export class OfferListPage implements OnInit {
 
   showMenu(event, id, data, className, isCard?) {
     this.selectedRow = data;
-    console.log('event', event);
     const baseContainer = $(event.target).parents('.' + className);
     const divOverlay = $('#' + id);
     const baseContainerWidth = baseContainer.outerWidth(true);
@@ -169,4 +194,85 @@ export class OfferListPage implements OnInit {
     }
   }
 
+  getLookupValue(index, lookup) {
+    return this.commonService.getLookupValue(index, lookup);
+  }
+
+  onOfferClick(offerData) {
+    // get offer notes API call
+    this.initOfferNotesListData()
+  }
+
+  private initOfferNotesListData() {
+    this.isOfferSelected = true;
+    this.offerNotes = this.offerNotes as offerNotesData[];
+    this.filteredNotesList.data = this.offerNotes;
+  }
+
+  private getPropertyById() {
+    const promise = new Promise((resolve, reject) => {
+      this.offerListService.getPropertyById(this.propertyId).subscribe(
+        res => {
+          if (res && res.data) {
+            resolve(res.data);
+          } else {
+            resolve({});
+          }
+        },
+        error => {
+          console.log(error);
+          resolve(0);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private getOfferList() {
+    return new Promise((resolve, reject) => {
+      this.offerListService.getOfferList(this.propertyId).subscribe(
+        (res) => {
+          if (res && res.data) {
+            resolve(res.data);
+          } else {
+            resolve([]);
+          }
+        }
+      )
+    });
+  }
+
+  private getUserAccessRight() {
+    return new Promise((resolve, reject) => {
+      this.offerListService.getUserAccessRight().subscribe(
+        async (res) => {
+          if (res) {
+            resolve(res);
+          } else {
+            resolve({});
+          }
+        }
+      )
+    });
+  }
+
+  async notesModal() {
+    const modal = await this.modalController.create({
+      component: NotesModalPage,
+      cssClass: 'modal-container',
+      componentProps: {
+        notesType: 'fault',
+        // notesTypeId: this.selectedData.faultId,
+        isAddNote: true
+      },
+      backdropDismiss: false
+    });
+
+    const data = modal.onDidDismiss().then(res => {
+      if (res.data && res.data.noteId) {
+        // this.getFaultNotes(this.selectedData.faultId);
+      }
+    });
+    await modal.present();
+  }
 }

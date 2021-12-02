@@ -1,0 +1,53 @@
+<ion-card>
+  <ion-card-content class="ion-no-padding">
+    <ion-grid class="ion-no-padding">
+      <ion-row class="main-row">
+        <ion-col class="" size-xl="23" size="23">
+          <div>
+            <img *ngIf="propertyDetails?.mediaUrl" [src]="propertyDetails?.mediaUrl">
+            <img *ngIf="!propertyDetails?.mediaUrl" [src]="'assets/images/default.jpg'">
+          </div>
+        </ion-col>
+        <ion-col class="property-details" size-xl="77" size="77">
+          <ion-grid style="height:100%;" class="no-padding-top">
+            <ion-row class="property-details-row">
+              <ion-text *ngIf="propertyDetails?.publishedAddress" class="property-address ion-no-margin">
+                {{propertyDetails?.publishedAddress}}</ion-text>
+              <ion-text *ngIf="!propertyDetails?.publishedAddress" class="property-address ion-no-margin">
+                {{ propertyDetails?.address?.addressLine1 ? propertyDetails?.address?.addressLine1 + ',' : ''}}
+                {{ propertyDetails?.address?.addressLine2 ? propertyDetails?.address?.addressLine2 + ',' : ''}}
+                {{ propertyDetails?.address?.addressLine5 ? propertyDetails?.address?.addressLine5 + ',' : ''}}
+                {{ propertyDetails?.address?.postcode ? propertyDetails?.address?.postcode : ''}}
+              </ion-text>
+            </ion-row>
+            <ion-row class="property-desc-row">
+              <ion-text class="fs-16">
+                {{ propertyDetails?.fullDescription?.length > 500 ? ((propertyDetails?.fullDescription | slice : 0:500) +
+                '...') : propertyDetails?.fullDescription }} <br>
+              </ion-text>
+            </ion-row>
+
+            <ion-row>
+              <ion-col class="ion-text-start property-deposite">
+                <h4 class="ion-text-start fs-18 bottom-align">{{ propertyDetails?.advertisementRent | currency: 'GBP'}}
+                  {{ getLookupValue(propertyDetails?.advertisedRentType, rentFrequencyTypes) }}
+                </h4>
+              </ion-col>
+              <ion-col class="ion-text-end property-deposite">
+                <h4 *ngIf="depositSchemeValue" class="fs-18 bottom-align right-align">
+                  <span *ngIf="propertyDetails?.depositScheme == depositSchemeValue && propertyDetails?.deposit">
+                    No Deposit Option (or {{ propertyDetails.deposit | currency: 'GBP' }} Standard Deposit)</span>
+                  <span *ngIf="propertyDetails?.depositScheme != depositSchemeValue && propertyDetails?.deposit">
+                    Standard Deposit: {{ propertyDetails?.deposit | currency: 'GBP' }}</span>
+                  <span *ngIf="propertyDetails?.depositScheme == depositSchemeValue && !propertyDetails?.deposit">No
+                    Deposit
+                    Option</span>
+                </h4>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+</ion-card>
