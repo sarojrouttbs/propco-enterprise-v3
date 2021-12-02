@@ -6,7 +6,7 @@
   <ng-container>
     <div class="property-details">
       <ion-grid>
-        <ion-row class="property-details-row">
+        <ion-row class="address">
           <ion-col class="ion-no-padding" size="80">
             <h1 *ngIf="propertyDetails?.publishedAddress" class="ion-no-margin">{{ propertyDetails?.publishedAddress }}
             </h1>
@@ -24,7 +24,7 @@
           </ion-col>
         </ion-row>
 
-        <ion-row class="filters-row">
+        <ion-row class="filters">
           <ion-col size="20">
             <ion-item class="sort-offer">
               <ion-label position="floating">Sort Offers By
@@ -123,7 +123,7 @@
                       <ion-text>{{ propertyDetails?.advertisementRent || 0 | currency : "GBP" }}
                         <!-- {{getLookupValue(propertyDetails.frequencyType, rentFrequencyTypes)}}  -->
                       </ion-text><br />
-                      <ion-text> Status {{ item?.status }}
+                      <ion-text class="offer-status" [color]="getStatusColor(item?.status)"> Status {{ item?.status }}
                         <!-- {{getLookupValue(offer.status, offerStatuses) | uppercase}} -->
                       </ion-text>
                     </ion-col>
@@ -232,11 +232,11 @@
                 </tr>
               </tbody>
             </table>
-            <!-- <div id="divOverlay_1">
-              <ion-button> Edit </ion-button>
-              <ion-button> Remove </ion-button>
+            <div id="divOverlay_1">
+              <ion-button (click)="editNote()"> Edit </ion-button>
+              <ion-button (click)="removeNote()"> Remove </ion-button>
               <i (click)="hideMenu($event,'divOverlay_1')" class="propcoicon propcoicon-actions-on"></i>
-            </div> -->
+            </div>
 
             <div *ngIf="filteredNotesList && !filteredNotesList.data.length">
               <div class="ion-no-padding ion-text-center">

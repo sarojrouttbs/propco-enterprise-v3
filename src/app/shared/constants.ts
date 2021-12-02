@@ -10,7 +10,8 @@ export const PROPCO = {
   REFERENCING_PRODUCT_LIST: 'referencing_product_list',
   FAULTS_LOOKUP_DATA: 'faults_lookup_data',
   LET_CATEGORY: 'let_category',
-  SSO_KEY: 'sso_key'
+  SSO_KEY: 'sso_key',
+  TOB_LOOKUP_DATA: 'tob_lookup_data',
 };
 
 export const USER_TYPES = {

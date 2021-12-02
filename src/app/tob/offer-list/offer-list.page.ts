@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { OFFER_STATUSES } from 'src/app/shared/constants';
+import { OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
 import { NotesModalPage } from 'src/app/shared/modals/notes-modal/notes-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { offerData, offerNotesData } from './offer-list.model';
@@ -50,7 +50,24 @@ export class OfferListPage implements OnInit {
   offerList: offerData[];
   accessRight: any;
 
-  constructor(private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private offerListService: OfferListService) { }
+  constructor(private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private offerListService: OfferListService) {
+    // let tobLookupData = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
+    // if (tobLookupData) {
+    //   this.setTobLookupData(tobLookupData);
+    // }
+    // else {
+    //   this.offerListService.getTOBLookup().subscribe(data => {
+    //     this.commonService.setItem(PROPCO.TOB_LOOKUP_DATA, data);
+    //     this.setTobLookupData(data);
+    //   });
+    // }
+  }
+
+  private setTobLookupData(data) {
+    console.log('data', data);
+    // this.faultEventsLookup = data.faultEvents;
+    // this.setFaultEventMap();
+  }
 
   ngOnInit() {
     this.initData();
@@ -274,5 +291,40 @@ export class OfferListPage implements OnInit {
       }
     });
     await modal.present();
+  }
+
+  getStatusColor(status) {
+    var colorName = "";
+    switch (status) {
+      case 0: //New
+      case 6: //Counter Offer By LL/Agent
+      case 7: //Counter Offer By Applicant
+        colorName = 'tertiary';
+        break;
+      case 1: //Accepted
+      case 5: //Agreed in Principle
+        colorName = 'success';
+        break;
+      case 2: //Rejected
+      case 3: //Withdrawn by Applicant
+      case 4: //Withdrawn by Landlord
+        colorName = 'danger';
+        break;
+    }
+    return colorName;
+  }
+
+  async removeNote() {
+    const response = await this.commonService.showConfirm('Offer', 'Are you sure, you want to remove this note ?', '', 'YES', 'NO');
+    if (response) {
+      console.log('response', response)
+      // this.offerListService.deleteNote(documentId).subscribe(response => {
+      //   call get note list API
+      // });
+    }
+  }
+
+  editNote() {
+
   }
 }
