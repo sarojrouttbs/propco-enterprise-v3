@@ -1,0 +1,136 @@
+@mixin set-text-style($size, $lheight) {
+  font-size: $size;
+  line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
+.action-btn-section{
+  display: flex;
+  justify-content: end;
+}
+
+.restriction-section,
+.clause-section {
+  ion-card-content {
+    padding: 5px;
+    background: var(--ion-color-step-1900);
+  }
+  .no-data {
+    color: var(--ion-color-dark);
+    text-align: center;
+    background: var( --ion-color-step-1850);
+    padding: 15px;
+    font-weight: 600;
+    margin: 0 20px 15px;
+    @include border-radius(5px);
+    @include set-text-style(16px, 26px);
+  }
+}
+
+#final-view {
+
+  .title {
+    color: var(--ion-color-dark);
+    text-align: center;
+    margin-bottom: 15px;
+    margin-top: 40px;
+    @include set-text-style(28px, 37px);
+  }
+
+  .offer {
+    color: var(--ion-color-dark);
+    margin-bottom: 10px;
+    @include set-text-style(28px, 37px);
+
+    ion-text {
+      @include set-text-style(28px, 37px);
+    }
+  }
+  .sub-heading {
+    color: rgba(var(--ion-color-medium), 0.85);
+    margin-top: 15px;
+    margin-bottom: 5px;
+    @include set-text-style(20px, 26px);
+  }
+
+  .header-content {
+    .header {
+      color: var(--ion-color-medium);
+      @include set-text-style(14px, 19px);
+    }
+
+    .content {
+      color: var(--ion-color-dark);
+      @include set-text-style(20px, 26px);
+    }
+  }
+
+  .border-radius {
+    border: 1px solid var(--ion-color-secondary);
+    @include border-radius(5px);
+  }
+
+  .border-bottom {
+    border-bottom: 1px solid var(--ion-color-primary-contrast);
+    padding-left: 0;
+    // outline-offset: -6px;
+  }
+
+  .restriction,
+  .clause {
+    ion-card {
+      box-shadow: unset;
+      ion-card-content {
+        background-color: rgba(var(--ion-color-medium-rgb), 0.1);
+        padding: 0;
+        min-height: 64px;
+
+        .res-clause-title {
+          @include set-text-style(16px, 24px);
+        }
+      }
+    }
+  }
+
+  .res-clause-view {
+    display: flex;
+    color: var(--ion-color-dark);
+    padding: 4px 0;
+    @include set-text-style(20px, 26px);
+  }
+
+  .res-clause-view.clause-view {
+    display: block;
+    @include set-text-style(16px, 22px);
+
+    .clause-text {
+      @include set-text-style(16px, 22px);
+    }
+  }
+}
+
+.mt-7 {
+  margin-top: 7px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid var( --ion-color-step-1700);
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color:var( --ion-color-step-1700);
+}
