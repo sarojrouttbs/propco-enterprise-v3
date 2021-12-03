@@ -58,6 +58,14 @@ export class TobService {
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 
+  getApplicantDetails(applicantId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `applicants/${applicantId}`);
+  }
+
+  updateApplicantDetails(applicantId: string, body: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `applicants/${applicantId}`, body);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);

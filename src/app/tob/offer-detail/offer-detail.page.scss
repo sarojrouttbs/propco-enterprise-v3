@@ -10,6 +10,20 @@
   border-radius: $radius;
 }
 
+.readonly-input{
+  pointer-events: none;
+}
+
+.input-close{
+  position: absolute;
+  top: 20px;
+  right: 5px;
+  cursor: pointer;
+  font-size: 26px;
+  z-index: 2;
+
+}
+
 .action-btn-section{
   display: flex;
   justify-content: end;

@@ -41,6 +41,10 @@ export class OfferDetailPage implements OnInit {
   negotiatableRestrictions;
   searchApplicantForm: FormGroup;
   applicantList: Observable<OfferModels.IApplicantResponse>;
+  applicantDetail: any;
+  disableSearchApplicant: boolean = false;
+  applicantId: string;
+  resultsAvailable: boolean = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -63,27 +67,54 @@ export class OfferDetailPage implements OnInit {
     // }
     this.initForms();
     this.initApiCalls();
-    this.applicantList = this.searchApplicantForm.get('searchApplicant').valueChanges.pipe(debounceTime(300),
-    switchMap((value: string) => (value && value.length > 2) ? this.searchApplicant(value) : new Observable()));
-
   }
 
   onSearch(event: any) {
-    // this.applicantList = this.searchApplicantForm.get('searchApplicant').valueChanges.pipe(debounceTime(300),
-      // switchMap((value: string) => (value && value.length) ? this.searchApplicant(value) : new Observable()));
+    const searchString = event.target.value;
+    if (searchString.length > 2) {
+      this.resultsAvailable = true;
+    } else {
+      this.resultsAvailable = false;
+    }
+    this.applicantList = this.searchApplicantForm.get('searchApplicant').valueChanges.pipe(debounceTime(300),
+      switchMap((value: string) => (value && value.length > 2) ? this.searchApplicant(value) : new Observable()));
   }
 
-  onSelectionChange(applicantId){
-    console.log(applicantId)
+  onSelectionChange(applicantId) {
+    this.applicantId = applicantId;
+  }
+
+  getApplicantDetails(id) {
+    this.applicantId = id;
+    this._tobService.getApplicantDetails(id).subscribe(res => {
+      if (res) {
+        this.applicantDetail = res;
+        this.disableSearchApplicant = true;
+        this.resultsAvailable = false;
+        this.searchApplicantForm.get('searchApplicant').setValue('');
+      }
+    },
+      error => {
+        console.log(error);
+      })
+  }
+
+  async deleteApplicant() {
+    const isAgree = await this.commonService.showConfirm('Delete Applicant', 'Are you sure, you want to remove this applicant ?', '', 'Yes', 'No');
+    if (isAgree) {
+      this.applicantDetail = null;
+      this.searchApplicantForm.get('searchApplicant').setValue('');
+      this.disableSearchApplicant = false;
+    }
+  }
+
+  resetSearch() {
+    this.searchApplicantForm.get('searchApplicant').setValue('');
+    this.resultsAvailable = false;
   }
 
   private searchApplicant(value: any): Observable<any> {
     let response = this._tobService.searchApplicant(value);
-    response.subscribe(res => { },
-      error => {
-        console.log(error);
-      }
-    );
     return response;
   }
 
@@ -150,6 +181,25 @@ export class OfferDetailPage implements OnInit {
     });
   }
 
+ async onSubmit() {
+    if (!this.applicantDetail) {
+      this.commonService.showAlert('Applicant Not Added', 'Please search an applicant from the search box.');
+      return;
+    }
+    if (this.makeAnOfferForm.invalid || this.confirmationForm.invalid) {
+      this.commonService.showAlert('Offer Details', 'Please fill all required fields');
+      this.makeAnOfferForm.markAllAsTouched();
+      this.confirmationForm.markAllAsTouched();
+      return;
+    }
+    if (this.makeAnOfferForm.valid && this.confirmationForm.valid && this.applicantDetail) {
+      const isConfirm = await this.commonService.showConfirm('Submit Offer', 'Are you sure, you want to submit this offer?', '', 'Yes', 'No');
+      if (isConfirm) {
+        this.submitOffer();
+      }
+    }
+  }
+
   private submitOffer() {
     if (this.makeAnOfferForm.valid) {
       // this.showLoader = true;
@@ -157,20 +207,19 @@ export class OfferDetailPage implements OnInit {
       const confirmationForm = this.confirmationForm.value;
       const requestObj: any = {};
       requestObj.entityType = 'AGENT';
+      requestObj.applicantId = this.applicantId;
       requestObj.status = 0; //create default status is 0 = unknown
       requestObj.propertyId = this.propertyId;
       requestObj.amount = offerFormValues.amount;
-      requestObj.comments = offerFormValues.comments;
       requestObj.moveInDate = this.commonService.getFormatedDate(offerFormValues.moveInDate);
       requestObj.rentingTime = offerFormValues.rentingTime;
       requestObj.numberOfAdults = offerFormValues.numberOfAdults;
       requestObj.numberOfChildren = offerFormValues.numberOfChildren;
-      requestObj.isApplicantConfirmed = confirmationForm.isApplicantConfirmed,
-        requestObj.applicantConfirmedDate = confirmationForm.applicantConfirmedDate,
-        requestObj.isLandlordConfirmed = confirmationForm.isLandlordConfirmed,
-        requestObj.landlordConfirmedDate = confirmationForm.landlordConfirmedDate,
-        requestObj.sendEmailToApplicant = confirmationForm.sendEmailToApplicant,
-        requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord,
+      requestObj.isApplicantConfirmed = confirmationForm.isApplicantConfirmed;
+        requestObj.applicantConfirmedDate = this.commonService.getFormatedDate(confirmationForm.applicantConfirmedDate);
+        requestObj.isLandlordConfirmed = confirmationForm.isLandlordConfirmed;
+        requestObj.landlordConfirmedDate = this.commonService.getFormatedDate(confirmationForm.landlordConfirmedDate);
+        requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord;
         requestObj.comments = confirmationForm.comments
 
       requestObj.offerClauses = this.propertyClauses;
@@ -191,7 +240,7 @@ export class OfferDetailPage implements OnInit {
         }
       });
 
-      // this.updateApplicantDetails();
+      this.updateApplicantDetails();
       this._tobService.createOffer(requestObj).subscribe(res => {
         this.commonService.showMessage('Your offer has been created successfully.', 'Offer', 'success');
         // this.router.navigate(['applicant/my-offers']);
@@ -210,6 +259,20 @@ export class OfferDetailPage implements OnInit {
       }
     }
   }
+
+  private updateApplicantDetails() {
+    const requestObj = this.makeAnOfferForm.value;
+    requestObj.moveInDate = this.commonService.getFormatedDate(requestObj.moveInDate);
+    delete requestObj.amount;
+    delete requestObj.status;
+    delete requestObj.comments;
+    this._tobService.updateApplicantDetails(this.applicantId, requestObj).subscribe(res => {
+    }, error => {
+      console.log(error);
+      // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Error', 'error');
+    });
+  }
+
 
   private getLookUpData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -257,11 +320,11 @@ export class OfferDetailPage implements OnInit {
   private initMakeAnOfferForm(): void {
     this.makeAnOfferForm = this._formBuilder.group({
       amount: ['', Validators.required],
-      status: ['', Validators.required],
-      moveInDate: [''],
-      rentingTime: [''],
-      numberOfAdults: ['1'],
-      numberOfChildren: [''],
+      status: [0],
+      moveInDate: ['', Validators.required],
+      rentingTime: ['', Validators.required],
+      numberOfAdults: [1],
+      numberOfChildren: [0, Validators.required],
       currentPosition: [''],
       occupation: [''],
       hasGuarantor: false,

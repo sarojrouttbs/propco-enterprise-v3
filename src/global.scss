@@ -27,6 +27,15 @@
   border-radius: $radius;
 }
 
+#tob-applicant-search{
+  .mat-form-field-appearance-legacy .mat-form-field-infix {
+    padding-left: 0 !important;
+  }
+  .mat-form-field-appearance-legacy .mat-form-field-infix {
+    padding-bottom: 8px !important;
+  }
+}
+
 body {
   font-size: 16px;
   //background-color: var(--ion-color-step-2000);
