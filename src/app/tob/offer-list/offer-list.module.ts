@@ -5,7 +5,8 @@ import { IonicModule } from '@ionic/angular';
 import { OfferListPageRoutingModule } from './offer-list-routing.module';
 import { OfferListPage } from './offer-list.page';
 import { MaterialModule } from 'src/app/material.module';
-import { OfferListService } from './offer-list.service';
+import { LookupPipe } from 'src/app/shared/pipes/lookup-pipe';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -14,9 +15,9 @@ import { OfferListService } from './offer-list.service';
     IonicModule,
     OfferListPageRoutingModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PipesModule
   ],
-  declarations: [OfferListPage],
-  providers: [OfferListService],
+  declarations: [OfferListPage]
 })
 export class OfferListPageModule { }

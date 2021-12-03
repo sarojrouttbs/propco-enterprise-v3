@@ -120,11 +120,10 @@
                       </span>
                     </ion-col>
                     <ion-col class="no-padding-top col2 ion-text-end" size="25">
-                      <ion-text>{{ propertyDetails?.advertisementRent || 0 | currency : "GBP" }}
-                        <!-- {{getLookupValue(propertyDetails.frequencyType, rentFrequencyTypes)}}  -->
+                      <ion-text>{{ propertyDetails?.advertisementRent || 0 | currency : "GBP" }} {{ (propertyDetails?.advertisementRentFrequency | lookup: rentFrequencyTypes) || '' }}
                       </ion-text><br />
-                      <ion-text class="offer-status" [color]="getStatusColor(item?.status)"> Status {{ item?.status }}
-                        <!-- {{getLookupValue(offer.status, offerStatuses) | uppercase}} -->
+                      <ion-text class="offer-status" [color]="getStatusColor(item?.status)">
+                        {{ (item?.status | lookup: offerStatuses) || '-' }}
                       </ion-text>
                     </ion-col>
                   </ion-row>
@@ -176,7 +175,7 @@
         </ion-card-content>
       </ion-card>
       <div id="divOverlay">
-        <ion-button (click)="notesModal()">Add Note</ion-button>
+        <ion-button (click)="addNote()">Add Note</ion-button>
         <ion-button>View Details</ion-button>
         <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>
@@ -216,13 +215,13 @@
               </thead>
               <tbody>
                 <tr *ngFor="let notes of obsOfferNotesList | async" class="table-row">
-                  <td>{{notes.dateTime | date: 'dd/MM/yyyy' || '-'}}</td>
-                  <td>{{notes.dateTime | date: 'HH:mm:ss' || '-'}}</td>
-                  <td>{{getLookupValue(notes.type, notesTypes) || '-'}}</td>
-                  <td>{{getLookupValue(notes.complaint, notesComplaints) || '-'}}</td>
-                  <td>{{getLookupValue(notes.category, notesCategories) || '-'}}</td>
-                  <td>{{notes.userName || '-'}}</td>
-                  <td>{{notes.notes || '-'}}</td>
+                  <td>{{ notes.dateTime | date: 'dd/MM/yyyy' || '-' }}</td>
+                  <td>{{ notes.dateTime | date: 'HH:mm:ss' || '-' }}</td>
+                  <td>{{ (notes.type | lookup: notesTypes) || '-' }}</td>
+                  <td>{{ (notes.complaint | lookup: notesComplaints) || '-' }}</td>
+                  <td>{{ (notes.category | lookup: notesCategories) || '-' }}</td>
+                  <td>{{ notes.userName || '-' }}</td>
+                  <td>{{ notes.notes || '-' }}</td>
                   <td>
                     <div>
                       <i (click)="showMenu($event, 'divOverlay_1', item, 'table-row', true)"

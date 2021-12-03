@@ -8,8 +8,8 @@ import { Observable } from 'rxjs';
 import { OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
 import { NotesModalPage } from 'src/app/shared/modals/notes-modal/notes-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { TobService } from '../tob.service';
 import { offerData, offerNotesData } from './offer-list.model';
-import { OfferListService } from './offer-list.service';
 @Component({
   selector: 'app-offer-list',
   templateUrl: './offer-list.page.html',
@@ -24,7 +24,6 @@ export class OfferListPage implements OnInit {
   obsOfferNotesList: Observable<any>;
   filteredOfferList: MatTableDataSource<offerData> = new MatTableDataSource<offerData>();
   filteredNotesList: MatTableDataSource<offerNotesData> = new MatTableDataSource<offerNotesData>();
-
   isOfferSelected: boolean = false;
   selectedRow: any;
   isHideRejected: boolean = false;
@@ -35,38 +34,31 @@ export class OfferListPage implements OnInit {
     { key: '1', value: 'Date' },
     { key: '2', value: 'Offer Price (Desc)' },
     { key: '3', value: 'Offer Price (Asc)' },
-    { key: '4', value: 'Status' }];
-
+    { key: '4', value: 'Status' }
+  ];
   paginatorConfig = {
     pageIndex: 0,
     pageSize: 5,
     pageSizeOptions: [5, 10, 25, 100],
     showFirstLastButtons: true
-  }
-
+  };
   propertyDetails: any;
   offerNotes: any = [];
   propertyId: string;
   offerList: offerData[];
   accessRight: any;
+  toblookupdata: any;
+  lookupdata: any;
+  offerStatuses: any;
+  rentFrequencyTypes: any;  
+  notesCategories: any;
+  notesComplaints: any;
+  notesTypes: any;
+  isEditNote: boolean = false;
 
-  constructor(private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private offerListService: OfferListService) {
-    // let tobLookupData = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
-    // if (tobLookupData) {
-    //   this.setTobLookupData(tobLookupData);
-    // }
-    // else {
-    //   this.offerListService.getTOBLookup().subscribe(data => {
-    //     this.commonService.setItem(PROPCO.TOB_LOOKUP_DATA, data);
-    //     this.setTobLookupData(data);
-    //   });
-    // }
-  }
-
-  private setTobLookupData(data) {
-    console.log('data', data);
-    // this.faultEventsLookup = data.faultEvents;
-    // this.setFaultEventMap();
+  constructor(private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private tobService: TobService) {
+    this.getTobLookupData();
+    this.getLookUpData();
   }
 
   ngOnInit() {
@@ -228,7 +220,7 @@ export class OfferListPage implements OnInit {
 
   private getPropertyById() {
     const promise = new Promise((resolve, reject) => {
-      this.offerListService.getPropertyById(this.propertyId).subscribe(
+      this.tobService.getPropertyDetails(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
             resolve(res.data);
@@ -247,7 +239,7 @@ export class OfferListPage implements OnInit {
 
   private getOfferList() {
     return new Promise((resolve, reject) => {
-      this.offerListService.getOfferList(this.propertyId).subscribe(
+      this.tobService.getOfferList(this.propertyId).subscribe(
         (res) => {
           if (res && res.data) {
             resolve(res.data);
@@ -261,7 +253,7 @@ export class OfferListPage implements OnInit {
 
   private getUserAccessRight() {
     return new Promise((resolve, reject) => {
-      this.offerListService.getUserAccessRight().subscribe(
+      this.tobService.getUserAccessRight().subscribe(
         async (res) => {
           if (res) {
             resolve(res);
@@ -274,20 +266,37 @@ export class OfferListPage implements OnInit {
   }
 
   async notesModal() {
+    const offerId = "08c5d41c-710b-4a64-ba09-6abbe9a51288";
+    const noteData = {
+      category: 3267,
+      complaint: 4066,
+      dateTime: "2021-12-02 16:57:52",
+      noteId: 1640,
+      notes: "test Test",
+      propertyAddress: null,
+      propertyId: null,
+      propertyReference: null,
+      type: 1441,
+      userEmail: null,
+      userId: "b4a64efa-f323-11ea-b5cf-02420aff001e",
+      userName: null
+    }
+    // remove above offerId & noteData constant after integration is done.
     const modal = await this.modalController.create({
       component: NotesModalPage,
       cssClass: 'modal-container',
       componentProps: {
-        notesType: 'fault',
-        // notesTypeId: this.selectedData.faultId,
-        isAddNote: true
+        noteData: noteData,
+        notesType: 'offer',
+        notesTypeId: offerId,
+        isAddNote: this.isEditNote ? false : true
       },
       backdropDismiss: false
     });
 
     const data = modal.onDidDismiss().then(res => {
       if (res.data && res.data.noteId) {
-        // this.getFaultNotes(this.selectedData.faultId);
+        // call get note list API
       }
     });
     await modal.present();
@@ -315,16 +324,61 @@ export class OfferListPage implements OnInit {
   }
 
   async removeNote() {
+    let noteId = 1648;  // remove this constant after integration is done.
     const response = await this.commonService.showConfirm('Offer', 'Are you sure, you want to remove this note ?', '', 'YES', 'NO');
     if (response) {
-      console.log('response', response)
-      // this.offerListService.deleteNote(documentId).subscribe(response => {
-      //   call get note list API
-      // });
+      this.tobService.deleteNote(noteId).subscribe(response => {
+        // call get note list API
+      });
     }
   }
 
-  editNote() {
+  addNote() {
+    this.isEditNote = false;
+    this.notesModal();
+  }
 
+  editNote() {
+    this.isEditNote = true;
+    this.notesModal();
+  }
+
+  private getTobLookupData() {
+    this.toblookupdata = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
+    if (this.toblookupdata) {
+      this.setTobLookupData();
+    }
+    else {
+      this.commonService.getTobLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.TOB_LOOKUP_DATA, data);
+        this.setTobLookupData();
+      });
+    }
+  }
+
+  private setTobLookupData(): void {
+    this.toblookupdata = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
+    this.offerStatuses = this.toblookupdata.offerStatuses;
+  }
+
+  private getLookUpData() {
+    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
+    if (this.lookupdata) {
+      this.setLookupData();
+    } else {
+      this.commonService.getLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
+        this.setLookupData();
+      }, error => {
+      });
+    }
+  }
+
+  private setLookupData(): void {
+    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
+    this.rentFrequencyTypes = this.lookupdata.advertisementRentFrequencies;
+    this.notesCategories = this.lookupdata.notesCategories;
+    this.notesComplaints = this.lookupdata.notesComplaint;
+    this.notesTypes = this.lookupdata.notesType;
   }
 }
