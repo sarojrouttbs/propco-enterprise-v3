@@ -45,6 +45,7 @@ export class OfferDetailPage implements OnInit {
   disableSearchApplicant: boolean = false;
   applicantId: string;
   resultsAvailable: boolean = null;
+  rentFrequencyTypes: any[];
 
   constructor(
     private route: ActivatedRoute,
@@ -304,6 +305,7 @@ export class OfferDetailPage implements OnInit {
     this.letDurations = this.lookupdata.letDurations;
     this.tenantCurrentPositionTypes = this.lookupdata.tenantCurrentPositionTypes;
     this.applicantGuarantorTypes = this.lookupdata.applicantGuarantorTypes;
+    this.rentFrequencyTypes = this.lookupdata.advertisementRentFrequencies;
   }
 
   private setTobLookupData(): void {

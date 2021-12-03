@@ -72,4 +72,17 @@ export class TobService {
       return throwError(error);
     };
   }
+
+  getOfferList(propertyId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/offers`);
+  }
+
+  getUserAccessRight(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `offers/access-rights`);
+  }
+
+  deleteNote(noteId: number): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + `notes/${noteId}`, {});
+  }
+
 }

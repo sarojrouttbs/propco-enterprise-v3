@@ -10,6 +10,7 @@ import { OfferDetailPage } from './offer-detail.page';
 import { ComponentsModule } from 'src/app/shared/components/components.module';
 import { MaterialModule } from 'src/app/material.module';
 import { LookupPipe } from 'src/app/shared/pipes/lookup-pipe';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -19,8 +20,9 @@ import { LookupPipe } from 'src/app/shared/pipes/lookup-pipe';
     OfferDetailPageRoutingModule,  
     MaterialModule,
     ComponentsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PipesModule
   ],
-  declarations: [OfferDetailPage, LookupPipe]
+  declarations: [OfferDetailPage]
 })
 export class OfferDetailPageModule {}
