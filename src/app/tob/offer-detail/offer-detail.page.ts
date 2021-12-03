@@ -41,6 +41,7 @@ export class OfferDetailPage implements OnInit {
   negotiatableRestrictions;
   searchApplicantForm: FormGroup;
   applicantList: Observable<OfferModels.IApplicantResponse>;
+  rentFrequencyTypes: any[];
 
   constructor(
     private route: ActivatedRoute,
@@ -241,6 +242,7 @@ export class OfferDetailPage implements OnInit {
     this.letDurations = this.lookupdata.letDurations;
     this.tenantCurrentPositionTypes = this.lookupdata.tenantCurrentPositionTypes;
     this.applicantGuarantorTypes = this.lookupdata.applicantGuarantorTypes;
+    this.rentFrequencyTypes = this.lookupdata.advertisementRentFrequencies;
   }
 
   private setTobLookupData(): void {

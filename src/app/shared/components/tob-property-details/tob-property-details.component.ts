@@ -9,16 +9,10 @@ import { CommonService } from '../../services/common.service';
 
 export class TobPropertyDetailsComponent implements OnInit {
   @Input() propertyDetails;
-  depositSchemeValue;
-  noDepositScheme = "3507";
-  constructor(private commonService: CommonService) { }
+  @Input() rentFrequencyTypes;
+  
+  constructor() { }
 
   ngOnInit() {
-    this.depositSchemeValue = this.noDepositScheme;
   }
-
-  getLookupValue(index, lookup) {
-    return this.commonService.getLookupValue(index, lookup);
-  }
-
 }
