@@ -661,4 +661,8 @@ export class CommonService {
     return this.sanitizer.bypassSecurityTrustHtml(html);
  }
 
+ deleteNote(noteId: number): Observable<any> {
+  return this.httpClient.delete(environment.API_BASE_URL + `notes/${noteId}`, {});
+}
+
 }

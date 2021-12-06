@@ -305,7 +305,7 @@
                 </ion-col>
                 <ion-col class="ion-text-end" size="45">
                   <ion-button class="negotiate" [disabled]="!res.isNegotiable"
-                    [fill]="res.isNegotiable? 'solid': 'outline'" [color]="res.isNegotiable ? 'success': 'dark'">
+                    [fill]="res.isNegotiable? 'solid': 'outline'" [color]="res.isNegotiable ? 'success': 'dark'" (click)="presentModal(res, 'RESTRICTION')">
                     Negotiate
                   </ion-button>
                 </ion-col>

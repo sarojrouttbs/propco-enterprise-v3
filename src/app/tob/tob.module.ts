@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { TobPageRoutingModule } from './tob-routing.module';
 
 import { TobPage } from './tob.page';
+import { NegotiateModalPageModule } from '../shared/modals/negotiate-modal/negotiate-modal.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    TobPageRoutingModule
+    TobPageRoutingModule,
+    NegotiateModalPageModule
   ],
   declarations: [TobPage]
 })
