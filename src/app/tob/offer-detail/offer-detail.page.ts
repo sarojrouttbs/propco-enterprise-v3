@@ -24,13 +24,13 @@ import { NegotiateModalPage } from 'src/app/shared/modals/negotiate-modal/negoti
 export class OfferDetailPage implements OnInit {
   lookupdata: any;
   toblookupdata: any;
-  letDurations: any[];
+  letDurations: OfferModels.ILookupResponse[];
   howLong = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
   occupants = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   childrens = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  tenantCurrentPositionTypes: any[];
-  applicantGuarantorTypes: any[];
-  offerStatuses: any[];
+  tenantCurrentPositionTypes: OfferModels.ILookupResponse[];
+  applicantGuarantorTypes: OfferModels.ILookupResponse[];
+  offerStatuses: OfferModels.ILookupResponse[];
   currentStepperIndex = 0;
   makeAnOfferForm: FormGroup;
   confirmationForm: FormGroup;
@@ -42,8 +42,12 @@ export class OfferDetailPage implements OnInit {
   negotiatableClauses;
   negotiatableRestrictions;
   searchApplicantForm: FormGroup;
-  applicantList: Observable<OfferModels.IApplicantResponse>;
-  rentFrequencyTypes: any[];
+  applicantList: Observable<OfferModels.IApplicantLisResponse>;
+  applicantDetail: OfferModels.IApplicantDetails;
+  disableSearchApplicant: boolean = false;
+  applicantId: string;
+  resultsAvailable: boolean = null;
+  rentFrequencyTypes: OfferModels.ILookupResponse[];
 
   constructor(
     private route: ActivatedRoute,
@@ -67,27 +71,49 @@ export class OfferDetailPage implements OnInit {
     // }
     this.initForms();
     this.initApiCalls();
-    this.applicantList = this.searchApplicantForm.get('searchApplicant').valueChanges.pipe(debounceTime(300),
-    switchMap((value: string) => (value && value.length > 2) ? this.searchApplicant(value) : new Observable()));
-
   }
 
   onSearch(event: any) {
-    // this.applicantList = this.searchApplicantForm.get('searchApplicant').valueChanges.pipe(debounceTime(300),
-      // switchMap((value: string) => (value && value.length) ? this.searchApplicant(value) : new Observable()));
+    const searchString = event.target.value;
+    if (searchString.length > 2) {
+      this.resultsAvailable = true;
+    } else {
+      this.resultsAvailable = false;
+    }
+    this.applicantList = this.searchApplicantForm.get('searchApplicant').valueChanges.pipe(debounceTime(300),
+      switchMap((value: string) => (value && value.length > 2) ? this.searchApplicant(value) : new Observable()));
   }
 
-  onSelectionChange(applicantId){
-    console.log(applicantId)
-  }
-
-  private searchApplicant(value: any): Observable<any> {
-    let response = this._tobService.searchApplicant(value);
-    response.subscribe(res => { },
-      error => {
-        console.log(error);
+  getApplicantDetails(applicantId: string) {
+    this.applicantId = applicantId;
+    this._tobService.getApplicantDetails(applicantId).subscribe(res => {
+      if (res) {
+        this.applicantDetail = res;
+        this.disableSearchApplicant = true;
+        this.resultsAvailable = false;
+        this.searchApplicantForm.get('searchApplicant').setValue('');
       }
-    );
+    },
+      error => {
+      })
+  }
+
+  async deleteApplicant() {
+    const isAgree: boolean = await this.commonService.showConfirm('Delete Applicant', 'Are you sure, you want to remove this applicant ?', '', 'Yes', 'No') as boolean;
+    if (isAgree) {
+      this.applicantDetail = null;
+      this.searchApplicantForm.get('searchApplicant').setValue('');
+      this.disableSearchApplicant = false;
+    }
+  }
+
+  resetSearch() {
+    this.searchApplicantForm.get('searchApplicant').setValue('');
+    this.resultsAvailable = false;
+  }
+
+  private searchApplicant(applicantId: string): Observable<any> {
+    let response = this._tobService.searchApplicant(applicantId);
     return response;
   }
 
@@ -154,54 +180,32 @@ export class OfferDetailPage implements OnInit {
     });
   }
 
+ async onSubmit() {
+    if (!this.applicantDetail) {
+      this.commonService.showAlert('Applicant Not Added', 'Please search an applicant from the search box.');
+      return;
+    }
+    if (this.makeAnOfferForm.invalid || this.confirmationForm.invalid) {
+      this.commonService.showAlert('Offer Details', 'Please fill all required fields');
+      this.makeAnOfferForm.markAllAsTouched();
+      this.confirmationForm.markAllAsTouched();
+      return;
+    }
+    if (this.makeAnOfferForm.valid && this.confirmationForm.valid && this.applicantDetail) {
+      const isConfirm: boolean = await this.commonService.showConfirm('Submit Offer', 'Are you sure, you want to submit this offer?', '', 'Yes', 'No') as boolean;
+      if (isConfirm) {
+        this.submitOffer();
+      }
+    }
+  }
+
   private submitOffer() {
     if (this.makeAnOfferForm.valid) {
-      // this.showLoader = true;
-      const offerFormValues = this.makeAnOfferForm.value;
-      const confirmationForm = this.confirmationForm.value;
-      const requestObj: any = {};
-      requestObj.entityType = 'AGENT';
-      requestObj.status = 0; //create default status is 0 = unknown
-      requestObj.propertyId = this.propertyId;
-      requestObj.amount = offerFormValues.amount;
-      requestObj.comments = offerFormValues.comments;
-      requestObj.moveInDate = this.commonService.getFormatedDate(offerFormValues.moveInDate);
-      requestObj.rentingTime = offerFormValues.rentingTime;
-      requestObj.numberOfAdults = offerFormValues.numberOfAdults;
-      requestObj.numberOfChildren = offerFormValues.numberOfChildren;
-      requestObj.isApplicantConfirmed = confirmationForm.isApplicantConfirmed,
-        requestObj.applicantConfirmedDate = confirmationForm.applicantConfirmedDate,
-        requestObj.isLandlordConfirmed = confirmationForm.isLandlordConfirmed,
-        requestObj.landlordConfirmedDate = confirmationForm.landlordConfirmedDate,
-        requestObj.sendEmailToApplicant = confirmationForm.sendEmailToApplicant,
-        requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord,
-        requestObj.comments = confirmationForm.comments
-
-      requestObj.offerClauses = this.propertyClauses;
-      requestObj.offerClauses.forEach(element => {
-        if (element.negotiations && element.negotiations.length > 0) {
-          element.negotiations.map(negotiation => {
-            delete negotiation.createdAt;
-          });
-        }
-      });
-      requestObj.offerRestrictions = this.propertyRestrictions;
-      requestObj.offerRestrictions.forEach(element => {
-        if (element.negotiations && element.negotiations.length > 0) {
-          element.negotiations.map(negotiation => {
-            delete negotiation.createdAt;
-            delete negotiation.restrictionName;
-          });
-        }
-      });
-
-      // this.updateApplicantDetails();
-      this._tobService.createOffer(requestObj).subscribe(res => {
+      this.updateApplicantDetails();
+      this._tobService.createOffer(this.prepareCreateOffer()).subscribe(res => {
         this.commonService.showMessage('Your offer has been created successfully.', 'Offer', 'success');
         // this.router.navigate(['applicant/my-offers']);
-        // this.showLoader = false;
       }, error => {
-        // this.showLoader = false;
         this.commonService.showMessage(error.error ? error.error.message : error.message, 'Offer', 'error');
       });
     }
@@ -214,6 +218,54 @@ export class OfferDetailPage implements OnInit {
       }
     }
   }
+
+  prepareCreateOffer(): object{
+    const offerFormValues = this.makeAnOfferForm.value;
+    const confirmationForm = this.confirmationForm.value;
+    const requestObj: any = {};
+    requestObj.entityType = 'AGENT';
+    requestObj.applicantId = this.applicantId;
+    requestObj.status = 0; //create default status is 0 = unknown
+    requestObj.propertyId = this.propertyId;
+    requestObj.amount = offerFormValues.amount;
+    requestObj.moveInDate = this.commonService.getFormatedDate(offerFormValues.moveInDate);
+    requestObj.rentingTime = offerFormValues.rentingTime;
+    requestObj.numberOfAdults = offerFormValues.numberOfAdults;
+    requestObj.numberOfChildren = offerFormValues.numberOfChildren;
+    requestObj.isApplicantConfirmed = confirmationForm.isApplicantConfirmed;
+    requestObj.applicantConfirmedDate = this.commonService.getFormatedDate(confirmationForm.applicantConfirmedDate);
+    requestObj.isLandlordConfirmed = confirmationForm.isLandlordConfirmed;
+    requestObj.landlordConfirmedDate = this.commonService.getFormatedDate(confirmationForm.landlordConfirmedDate);
+    requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord;
+    requestObj.comments = confirmationForm.comments
+    requestObj.offerClauses = this.propertyClauses;
+    requestObj.offerClauses.forEach(element => {
+      if (element.negotiations && element.negotiations.length > 0) {
+        element.negotiations.map(negotiation => {
+          delete negotiation.createdAt;
+        });
+      }
+    });
+    requestObj.offerRestrictions = this.propertyRestrictions;
+    requestObj.offerRestrictions.forEach(element => {
+      if (element.negotiations && element.negotiations.length > 0) {
+        element.negotiations.map(negotiation => {
+          delete negotiation.createdAt;
+          delete negotiation.restrictionName;
+        });
+      }
+    });
+    return requestObj;
+  }
+
+  private updateApplicantDetails() {
+    const requestObj = this.makeAnOfferForm.value;
+    requestObj.moveInDate = this.commonService.getFormatedDate(requestObj.moveInDate);
+    this._tobService.updateApplicantDetails(this.applicantId, requestObj).subscribe(res => {
+    }, error => {
+    });
+  }
+
 
   private getLookUpData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -262,11 +314,11 @@ export class OfferDetailPage implements OnInit {
   private initMakeAnOfferForm(): void {
     this.makeAnOfferForm = this._formBuilder.group({
       amount: ['', Validators.required],
-      status: ['', Validators.required],
-      moveInDate: [''],
-      rentingTime: [''],
-      numberOfAdults: ['1'],
-      numberOfChildren: [''],
+      status: [0],
+      moveInDate: ['', Validators.required],
+      rentingTime: ['', Validators.required],
+      numberOfAdults: [1],
+      numberOfChildren: [0, Validators.required],
       currentPosition: [''],
       occupation: [''],
       hasGuarantor: false,
