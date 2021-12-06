@@ -1,67 +1,46 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>offer-detail</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <app-tob-property-details [propertyDetails]="propertyDetails" [rentFrequencyTypes]="rentFrequencyTypes"></app-tob-property-details>
-  <ion-grid>
+  <app-tob-property-details [propertyDetails]="propertyDetails" [rentFrequencyTypes]="rentFrequencyTypes">
+  </app-tob-property-details>
+  <ion-grid class="applicant-detail">
+    <ion-row>
+      <ion-col>
+        <h5>Applicant(s) Details</h5>
+      </ion-col>
+    </ion-row>
     <ion-row>
       <ion-col>
         <table>
-          <tr>
-            <th>Ref</th>
-            <th>Name</th>
-            <th>Mobile</th>
-            <th>Email</th>
-            <th>lead</th>
-            <th></th>
-          </tr>
-          <tr *ngIf="applicantDetail">
-            <td>{{applicantDetail?.reference || '-'}}</td>
-            <td>{{applicantDetail?.fullName || '-'}}</td>
-            <td>{{applicantDetail?.mobile || '-'}}</td>
-            <td>{{applicantDetail?.email || '-'}}</td>
-            <td>
-              <ion-checkbox color="medium" checked></ion-checkbox>
-            </td>
-            <td>
-              <ion-icon style="font-size: 24px;" (click)="deleteApplicant()" color="danger" name="close-circle">
-              </ion-icon>
-            </td>
-          </tr>
+          <thead>
+            <tr>
+              <th>Ref</th>
+              <th>Name</th>
+              <th>Mobile</th>
+              <th>Email</th>
+              <th>lead</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="applicantDetail">
+              <td>{{applicantDetail?.reference || '-'}}</td>
+              <td>{{applicantDetail?.fullName || '-'}}</td>
+              <td>{{applicantDetail?.mobile || '-'}}</td>
+              <td>{{applicantDetail?.email || '-'}}</td>
+              <td>
+                <ion-checkbox color="medium" checked disabled></ion-checkbox>
+              </td>
+              <td>
+                <ion-icon (click)="deleteApplicant()" color="danger" name="close-circle">
+                </ion-icon>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </ion-col>
     </ion-row>
-  </ion-grid>
-  <ion-grid>
     <form [formGroup]="searchApplicantForm">
-      <ion-row class="">
+      <ion-row class="ion-justify-content-end">
         <ion-col size="30" id="tob-applicant-search">
-          <!-- <mat-form-field [class.readonly-input]="disableSearchApplicant" floatLabel="never">
-              <mat-label>First name</mat-label>
-              <input matInput placeholder="Start typing to search applicant" [matAutocomplete]="auto" formControlName='searchApplicant'>
-              <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let result of (applicantList | async)?.data" [value]="result.fullName" (click)="onSelectionChange(result?.entityId)"
-                  style="border-bottom: 1px solid rgb(155, 155, 155); line-height: 16px; font-size: 14px;">
-                  <span>
-                    <i class="propcoicon no-background propcoicon-applicant-let"
-                      style="background: transparent;vertical-align:middle"></i>
-                  </span>
-                  <div style="display: inline-block;">
-                    <ion-text color="dark">{{result.fullName}}&nbsp;</ion-text> 
-                    <ion-text color="medium">{{result.reference}}</ion-text>&nbsp;<br>
-                    <ion-text>{{result.address}}</ion-text>&nbsp;
-                    <ion-text color="success">{{result.status}}</ion-text>&nbsp;
-                  </div>
-                </mat-option>
-              </mat-autocomplete>
-              
-            </mat-form-field>
-            <ion-icon class="input-close" (click)="resetSearch()" *ngIf="searchApplicantForm.controls.searchApplicant.value.length > 2 && !applicantDetail" color="medium" name="close-circle"></ion-icon> -->
-
-          <!-- <ion-col size="100"> -->
           <ion-item>
             <ion-label position="floating">Start Typing to Search Applicants</ion-label>
             <ion-input type="text" debounce="300" (ionInput)="onSearch($event)" [disabled]="disableSearchApplicant"
@@ -72,26 +51,22 @@
               name="close-circle"></ion-icon>
           </ion-item>
 
-          <ion-list class="contractor-list" *ngIf="resultsAvailable">
+          <ion-list class="applicant-list" *ngIf="resultsAvailable">
             <ion-item *ngFor="let result of (applicantList | async)?.data" button
-              (click)="getApplicantDetails(result?.entityId)" button style="font-size: 13px !important;">
+              (click)="getApplicantDetails(result?.entityId)" button>
               <span>
-                <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
+                <i class="propcoicon no-background propcoicon-contractor"></i>
               </span>&nbsp;
-              <label style="color: var(--ion-color-step-200); padding-right: 5px;">{{result.fullName}}&nbsp;
-                <span style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-                <span class="text-color-lightgreen"
-                  style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
+              <label color="dark">{{result.fullName}}&nbsp;
+                <ion-text color="medium">{{result.address}}</ion-text>&nbsp;
+                <ion-text color="medium">{{result.reference}}</ion-text>&nbsp;
+                <ion-text color="success">{{result.status}}</ion-text>&nbsp;
               </label>
             </ion-item>
           </ion-list>
-          <!-- <ion-text *ngIf="resultsAvailable">No data available!</ion-text> -->
-          <!-- <ion-button color="medium" [disabled]="!applicantId" (click)="getApplicantDetails()">Add</ion-button> -->
-          <!-- </ion-col> -->
         </ion-col>
       </ion-row>
     </form>
-
   </ion-grid>
   <ion-grid>
     <ion-row>
@@ -163,16 +138,14 @@
           <div>
             <ion-text color="danger" *ngIf="propertyDetails?.advertisementRent > makeAnOfferForm.controls.amount.value">
               {{ (propertyDetails?.advertisementRent - makeAnOfferForm.controls.amount.value) | currency: '£' }} or
-              {{ ((propertyDetails?.advertisementRent -
-              makeAnOfferForm.controls.amount.value)/propertyDetails?.advertisementRent)*100 |number:'1.1-1'}}
+              {{ ((propertyDetails?.advertisementRent - makeAnOfferForm.controls.amount.value)/propertyDetails?.advertisementRent)*100 |number:'1.1-1'}}
               % less than asking price
             </ion-text>
-            <ion-text color="success" *ngIf="propertyDetails?.advertisementRent < makeAnOfferForm.controls.amount.value">
+            <ion-text color="success"
+              *ngIf="propertyDetails?.advertisementRent < makeAnOfferForm.controls.amount.value">
               {{ (makeAnOfferForm.controls.amount.value - propertyDetails?.advertisementRent) | currency: '£' }} or
-              {{ ((makeAnOfferForm.controls.amount.value -
-              propertyDetails?.advertisementRent)/propertyDetails?.advertisementRent)*100 |
-              number:'1.1-1'
-              }}% more than asking price
+              {{ ((makeAnOfferForm.controls.amount.value - propertyDetails?.advertisementRent)/propertyDetails?.advertisementRent)*100 | number:'1.1-1' }}
+              % more than asking price
             </ion-text>
             <ion-text color="tertiary" *ngIf="propertyDetails?.advertisementRent == makeAnOfferForm.controls.amount.value">
               Same as the asking price </ion-text>

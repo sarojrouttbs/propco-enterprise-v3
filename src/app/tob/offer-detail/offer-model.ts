@@ -1,28 +1,72 @@
 declare namespace OfferModels {
-    export interface IApplicantResponse {
-        addressLine1: string;
-        addressLine2: string;
-        addressLine3: string;
-        addressLine4: string;
-        addressLine5: string
-        buildingName: string
-        buildingNumber: string;
-        country: string;
-        county: string;
-        daytime: string;
-        displayAs: string;
-        email: string;
-        entityId: string;
+    export interface IApplicantLisResponse {
         entityType: string;
-        evening: string;
-        mobile: string;
-        officeCode: string;
-        officeName: string;
-        postcode: string;
-        purpose: string;
+        propcoId: string;
+        legacyReference?: any;
+        address: string;
+        status: string;
+        email: string;
+        fullName: string;
+        dateOfBirth?: any;
+        postcode?: any;
+        officeCode: string[];
+        company?: any;
+        entitySuggestion: string;
+        entityId: string;
         reference: string;
+    }
+
+    export interface IApplicantDetails {
+        address: string;
+        addressee: string;
+        alternativeEmail: string;
+        alternativeFax: string;
+        alternativeNo: string;
+        annualIncome: number;
+        booker: string;
+        businessTelephoneNo: string;
+        company: string;
+        companyContactNo: string;
+        companySignatory: string;
+        currentPosition: number;
+        dateOfBirth: string;
+        email: string;
+        emergencyNo: string;
+        enrolmentNo: string;
+        esignatureEmail: string;
+        ethnicOrigin: number;
+        fax: string;
+        forename: string;
+        fullName: string;
+        gender: boolean;
+        guarantorType: number;
+        hasPets: boolean;
+        homeTelephoneNo: string;
+        isEmailVerified: boolean;
+        maritalStatus: number;
+        mobile: string;
+        moveInDate: string;
+        name: string;
+        nationality: number;
+        numberOfAdults: number;
+        numberOfChildren: number;
+        occupation: string;
+        organisationName: string;
+        pafref: string;
+        petsInfo: string;
+        reference: string;
+        rentAmount: number;
+        rentGuaranteed: number;
+        rentingTime: number;
+        salutation: string;
         status: number;
-        telephone: string;
-        town: string;
+        surname: string;
+        title: string;
+        username: string;
+    }
+
+    export interface ILookupResponse {
+        index: number;
+        value: string;
     }
 }

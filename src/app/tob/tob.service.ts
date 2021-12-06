@@ -62,7 +62,7 @@ export class TobService {
     return this.httpClient.get(environment.API_BASE_URL + `applicants/${applicantId}`);
   }
 
-  updateApplicantDetails(applicantId: string, body: any): Observable<any> {
+  updateApplicantDetails(applicantId: string, body: OfferModels.IApplicantDetails): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `applicants/${applicantId}`, body);
   }
 
