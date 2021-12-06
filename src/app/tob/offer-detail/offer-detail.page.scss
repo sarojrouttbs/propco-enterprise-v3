@@ -10,7 +10,20 @@
   border-radius: $radius;
 }
 
-.action-btn-section{
+.readonly-input {
+  pointer-events: none;
+}
+
+.input-close {
+  position: absolute;
+  top: 20px;
+  right: 5px;
+  cursor: pointer;
+  font-size: 26px;
+  z-index: 2;
+}
+
+.action-btn-section {
   display: flex;
   justify-content: end;
 }
@@ -24,7 +37,7 @@
   .no-data {
     color: var(--ion-color-dark);
     text-align: center;
-    background: var( --ion-color-step-1850);
+    background: var(--ion-color-step-1850);
     padding: 15px;
     font-weight: 600;
     margin: 0 20px 15px;
@@ -34,7 +47,6 @@
 }
 
 #final-view {
-
   .title {
     color: var(--ion-color-dark);
     text-align: center;
@@ -119,18 +131,44 @@
   margin-top: 7px;
 }
 
-table {
-  border-collapse: collapse;
+.applicant-detail {
+  margin: 10px;
+  background-color: var(--ion-color-step-1750);
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th {
+    background-color: var(--ion-color-step-800);
+    text-align: left;
+    color: var(--ion-color-step-2000);
+    padding: 20px 10px;
+    font-weight: 100;
+  }
+
+  td {
+    background-color: var(--ion-color-step-1950);
+    padding: 5px 10px;
+  }
+
+  ion-checkbox {
+    opacity: inherit !important;
+  }
+
+  ion-icon {
+    font-size: 28px;
+    cursor: pointer;
+  }
+}
+
+.applicant-list {
+  ion-item {
+    font-size: 13px;
+  }
   width: 100%;
-}
-
-td,
-th {
-  border: 1px solid var( --ion-color-step-1700);
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color:var( --ion-color-step-1700);
+  max-height: 200px;
+  overflow-y: scroll;
+  position: absolute !important;
+  z-index: 5 !important;
+  cursor: pointer;
 }
