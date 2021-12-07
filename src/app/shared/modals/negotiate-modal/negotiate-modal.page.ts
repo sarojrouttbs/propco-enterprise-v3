@@ -18,7 +18,6 @@ export class NegotiateModalPage implements OnInit {
   negotiateForm: FormGroup;
   commentObj: CommentItem;
   userDetails: any;
-  date: any;
   clauseObj: any;
   offerStatus: any;
 
@@ -54,7 +53,6 @@ export class NegotiateModalPage implements OnInit {
   }
 
   private async getComments() {
-    console.log('this.clauseObj', this.clauseObj)
     let commentsArray;
     if (this.clauseObj.offerClauseId) {
       commentsArray = await this.getClauseNegotiationComments(this.clauseObj.offerClauseId);
@@ -67,11 +65,10 @@ export class NegotiateModalPage implements OnInit {
   }
 
   createNote() {
-    console.log('this.userDetails', this.userDetails)
     this.commentObj = {};
     this.commentObj.comment = this.negotiateForm.controls['comment']?.value;
-    this.commentObj.negotiatedByName = this.userDetails?.name;
-    this.commentObj.negotiatedBy = 'APPLICANT';
+    this.commentObj.negotiatedByName = 'Tbl Support';
+    this.commentObj.negotiatedBy = 'AGENT';
     this.negotiateForm.reset();
     if (this.clauseObj.offerClauseId) {
       this.saveCommentsAgainstClause(this.clauseObj.offerClauseId, [this.commentObj]);
