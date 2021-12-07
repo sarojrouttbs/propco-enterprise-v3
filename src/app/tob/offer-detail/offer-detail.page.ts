@@ -129,13 +129,13 @@ export class OfferDetailPage implements OnInit {
     return response;
   }
 
-  initForms() {
+  private initForms() {
     this.initSearchForm();
     this.initMakeAnOfferForm();
     this.initConfirmationForm();
   }
 
-  initCreateApiCalls() {
+  private initCreateApiCalls() {
     this.getLookUpData();
     this.getTobLookupData();
     this.getPropertyDetails(this.propertyId);
@@ -151,7 +151,7 @@ export class OfferDetailPage implements OnInit {
     await this.getApplicantDetails(this.offerDetails.applicantId);
   }
 
-  async getOfferDetails(offerId): Promise<any> {
+  private async getOfferDetails(offerId): Promise<any> {
     const promise = new Promise((resolve, reject) => {
       this._tobService.getOfferDetails(offerId).subscribe(
         res => {
@@ -167,7 +167,7 @@ export class OfferDetailPage implements OnInit {
     return promise;
   }
 
-  async patchOfferDetails() {
+  private async patchOfferDetails() {
     this.makeAnOfferForm.patchValue({
       amount: this.offerDetails.amount,
       comments: this.offerDetails.comments,
@@ -272,7 +272,7 @@ export class OfferDetailPage implements OnInit {
     }
   }
 
-  prepareCreateOffer(): object{
+  private prepareCreateOffer(): object {
     const offerFormValues = this.makeAnOfferForm.value;
     const confirmationForm = this.confirmationForm.value;
     const requestObj: any = {};
@@ -290,7 +290,7 @@ export class OfferDetailPage implements OnInit {
     requestObj.isLandlordConfirmed = confirmationForm.isLandlordConfirmed;
     requestObj.landlordConfirmedDate = this.commonService.getFormatedDate(confirmationForm.landlordConfirmedDate);
     requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord;
-    requestObj.comments = confirmationForm.comments
+    requestObj.comments = offerFormValues.comments
     requestObj.offerClauses = this.propertyClauses;
     requestObj.offerClauses.forEach(element => {
       if (element.negotiations && element.negotiations.length > 0) {
@@ -333,7 +333,7 @@ export class OfferDetailPage implements OnInit {
     }
   }
 
-  getTobLookupData() {
+  private getTobLookupData() {
     this.toblookupdata = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
     if (this.toblookupdata) {
       this.setTobLookupData();
@@ -390,12 +390,11 @@ export class OfferDetailPage implements OnInit {
       landlordConfirmedDate: [{ value: '', disabled: true }],
       sendEmailToApplicant: false,
       sendEmailToLandlord: false,
-      comments: ''
     });
   }
 
 
-  setRequired() {
+  private setRequired() {
     return [Validators.required];
   }
 

@@ -328,14 +328,16 @@
         </ion-card>
       </ion-col>
     </ion-row>
-    <ion-row>
-      <ion-col size="100">
-        <ion-item>
-          <ion-label position="floating" class="ion-text-wrap">Any special requirements?</ion-label>
-          <ion-input></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
+    <form [formGroup]="makeAnOfferForm">
+      <ion-row>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating" class="ion-text-wrap">Addition Comments?</ion-label>
+            <ion-input formControlName="comments"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </form>
   </ion-grid>
 </ng-template>
 
@@ -476,7 +478,7 @@
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
-              <ion-text class="header ion-text-wrap">Any special requirements?</ion-text><br />
+              <ion-text class="header ion-text-wrap">Addition Comments</ion-text><br />
               <ion-text class="content">{{makeAnOfferForm.controls.comments.value || '-'}}</ion-text>
             </ion-col>
             <ion-col size="100" class="border-bottom"></ion-col>
@@ -497,7 +499,7 @@
             </ng-container>
             <ion-col size="100" class="border-bottom"></ion-col>
             <ion-col size="100">
-              <div class="sub-heading">Special Conditions & Clauses</div>
+              <div class="sub-heading">Conditions & Clauses</div>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" *ngIf="!propertyClauses?.length">
               <div class="fs-16">No special conditions & clauses found!</div>
