@@ -390,7 +390,6 @@ export class OfferDetailPage implements OnInit {
   }
 
   async presentModal(obj, type) {
-    console.log('obj', obj)
     let headingText = (type === 'CLAUSE') ? 'Clause - ' + obj.clauseName : 'Restriction - ' + obj.restrictionName;
     obj.negotiations = obj.negotiations ? obj.negotiations : [];
     // let offerStatus = this.offerDetails ? this.offerDetails.status : '';
