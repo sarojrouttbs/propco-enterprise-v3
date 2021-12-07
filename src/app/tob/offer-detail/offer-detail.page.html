@@ -1,126 +1,128 @@
 <ion-content>
   <app-tob-property-details [propertyDetails]="propertyDetails" [rentFrequencyTypes]="rentFrequencyTypes">
   </app-tob-property-details>
-  <ion-grid class="applicant-detail">
-    <ion-row>
-      <ion-col>
-        <h5>Applicant(s) Details</h5>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <table>
-          <thead>
-            <tr>
-              <th>Ref</th>
-              <th>Name</th>
-              <th>Mobile</th>
-              <th>Email</th>
-              <th>lead</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="applicantDetail">
-              <td>{{applicantDetail?.reference || '-'}}</td>
-              <td>{{applicantDetail?.fullName || '-'}}</td>
-              <td>{{applicantDetail?.mobile || '-'}}</td>
-              <td>{{applicantDetail?.email || '-'}}</td>
-              <td>
-                <ion-checkbox color="medium" checked disabled></ion-checkbox>
-              </td>
-              <td>
-                <ion-icon (click)="deleteApplicant()" color="danger" name="close-circle">
-                </ion-icon>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </ion-col>
-    </ion-row>
-    <form [formGroup]="searchApplicantForm">
-      <ion-row class="ion-justify-content-end">
-        <ion-col size="30" id="tob-applicant-search">
-          <ion-item>
-            <ion-label position="floating">Start Typing to Search Applicants</ion-label>
-            <ion-input type="text" debounce="300" (ionInput)="onSearch($event)" [disabled]="disableSearchApplicant"
-              formControlName='searchApplicant'>
-            </ion-input>
-            <ion-icon class="input-close" (click)="resetSearch()"
-              *ngIf="searchApplicantForm.controls.searchApplicant.value.length > 2 && !applicantDetail" color="medium"
-              name="close-circle"></ion-icon>
-          </ion-item>
-
-          <ion-list class="applicant-list" *ngIf="resultsAvailable">
-            <ion-item *ngFor="let result of (applicantList | async)?.data" button
-              (click)="getApplicantDetails(result?.entityId)" button>
-              <span>
-                <i class="propcoicon no-background propcoicon-contractor"></i>
-              </span>&nbsp;
-              <label color="dark">{{result.fullName}}&nbsp;
-                <ion-text color="medium">{{result.address}}</ion-text>&nbsp;
-                <ion-text color="medium">{{result.reference}}</ion-text>&nbsp;
-                <ion-text color="success">{{result.status}}</ion-text>&nbsp;
-              </label>
-            </ion-item>
-          </ion-list>
+  <ion-grid class="offer-details">
+    <ion-grid class="applicant-detail">
+      <ion-row>
+        <ion-col>
+          <h5>Applicant(s) Details</h5>
         </ion-col>
       </ion-row>
-    </form>
-  </ion-grid>
-  <ion-grid>
-    <ion-row>
-      <ion-col size="100">
-        <mat-horizontal-stepper id="offer-stepper" #stepper labelPosition="bottom"
-          [selectedIndex]="currentStepperIndex">
-          <mat-step [stepControl]="makeAnOfferForm">
-            <ng-container *ngTemplateOutlet="offerDetails"></ng-container>
-            <ng-template matStepLabel>Offer Details</ng-template>
-            <div class="action-btn-section ion-padding">
-              <ion-button color="danger">Cancel</ion-button>&nbsp;
-              <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
-              <button mat-button matStepperNext class="stepper-next">Next</button>
-            </div>
-          </mat-step>
-          <mat-step>
-            <ng-container *ngTemplateOutlet="restriction"></ng-container>
-            <ng-template matStepLabel>Restrictions</ng-template>
-            <div class="action-btn-section ion-padding">
-              <ion-button color="danger">Cancel</ion-button>&nbsp;
-              <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
-              <button mat-button matStepperNext class="stepper-next">Next</button>
-            </div>
-          </mat-step>
-          <mat-step>
-            <ng-container *ngTemplateOutlet="clauses"></ng-container>
-            <ng-template matStepLabel>Special Conditions & Clauses </ng-template>
-            <div class="action-btn-section ion-padding">
-              <ion-button color="danger">Cancel</ion-button>&nbsp;
-              <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
-              <button mat-button matStepperNext class="stepper-next">Next</button>
-            </div>
-          </mat-step>
-          <mat-step [stepControl]="confirmationForm">
-            <ng-container *ngTemplateOutlet="confirmation"></ng-container>
-            <ng-template matStepLabel>Confirmation</ng-template>
-            <div class="action-btn-section ion-padding">
-              <ion-button color="danger">Cancel</ion-button>&nbsp;
-              <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
-              <button mat-button matStepperNext class="stepper-next">Next</button>
-            </div>
-          </mat-step>
-          <mat-step>
-            <ng-container *ngTemplateOutlet="FinalView"></ng-container>
-            <ng-template matStepLabel>Review</ng-template>
-            <div class="action-btn-section ion-padding">
-              <button class="next-back-button" mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
-              <ion-button color="danger">Cancel</ion-button>&nbsp;
-              <ion-button color="success" (click)="onSubmit()"> Submit</ion-button>
-            </div>
-          </mat-step>
-        </mat-horizontal-stepper>
-      </ion-col>
-    </ion-row>
+      <ion-row>
+        <ion-col>
+          <table>
+            <thead>
+              <tr>
+                <th>Ref</th>
+                <th>Name</th>
+                <th>Mobile</th>
+                <th>Email</th>
+                <th>lead</th>
+                <th *ngIf="!offerId"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="applicantDetail">
+                <td>{{applicantDetail?.reference || '-'}}</td>
+                <td>{{applicantDetail?.fullName || '-'}}</td>
+                <td>{{applicantDetail?.mobile || '-'}}</td>
+                <td>{{applicantDetail?.email || '-'}}</td>
+                <td>
+                  <ion-checkbox color="medium" checked disabled></ion-checkbox>
+                </td>
+                <td *ngIf="!offerId">
+                  <ion-icon (click)="deleteApplicant()" color="danger" name="close-circle">
+                  </ion-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ion-col>
+      </ion-row>
+      <form [formGroup]="searchApplicantForm">
+        <ion-row class="ion-justify-content-end">
+          <ion-col size="33" id="tob-applicant-search">
+            <ion-item>
+              <ion-label position="floating">Start Typing to Search Applicants</ion-label>
+              <ion-input type="text" debounce="300" (ionInput)="onSearch($event)" [disabled]="disableSearchApplicant"
+                formControlName='searchApplicant'>
+              </ion-input>
+              <ion-icon class="input-close" (click)="resetSearch()"
+                *ngIf="searchApplicantForm.controls.searchApplicant.value.length > 2 && !applicantDetail" color="medium"
+                name="close-circle"></ion-icon>
+            </ion-item>
+  
+            <ion-list class="applicant-list" *ngIf="resultsAvailable">
+              <ion-item *ngFor="let result of (applicantList | async)?.data" button
+                (click)="getApplicantDetails(result?.entityId)" button>
+                <span>
+                  <i class="propcoicon no-background propcoicon-contractor"></i>
+                </span>&nbsp;
+                <label color="dark">{{result.fullName}}&nbsp;
+                  <ion-text color="medium">{{result.address}}</ion-text>&nbsp;
+                  <ion-text color="medium">{{result.reference}}</ion-text>&nbsp;
+                  <ion-text color="success">{{result.status}}</ion-text>&nbsp;
+                </label>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </form>
+    </ion-grid>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="100">
+          <mat-horizontal-stepper class="stepper-section" id="offer-stepper" #stepper labelPosition="bottom"
+            [selectedIndex]="currentStepperIndex">
+            <mat-step [stepControl]="makeAnOfferForm">
+              <ng-container *ngTemplateOutlet="offerDetails"></ng-container>
+              <ng-template matStepLabel>Offer Details</ng-template>
+              <div class="action-btn-section ion-padding">
+                <ion-button color="danger">Cancel</ion-button>&nbsp;
+                <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
+                <button mat-button matStepperNext class="stepper-next">Next</button>
+              </div>
+            </mat-step>
+            <mat-step>
+              <ng-container *ngTemplateOutlet="restriction"></ng-container>
+              <ng-template matStepLabel>Restrictions</ng-template>
+              <div class="action-btn-section ion-padding">
+                <ion-button color="danger">Cancel</ion-button>&nbsp;
+                <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
+                <button mat-button matStepperNext class="stepper-next">Next</button>
+              </div>
+            </mat-step>
+            <mat-step>
+              <ng-container *ngTemplateOutlet="clauses"></ng-container>
+              <ng-template matStepLabel>Special Conditions & Clauses </ng-template>
+              <div class="action-btn-section ion-padding">
+                <ion-button color="danger">Cancel</ion-button>&nbsp;
+                <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
+                <button mat-button matStepperNext class="stepper-next">Next</button>
+              </div>
+            </mat-step>
+            <mat-step [stepControl]="confirmationForm">
+              <ng-container *ngTemplateOutlet="confirmation"></ng-container>
+              <ng-template matStepLabel>Confirmation</ng-template>
+              <div class="action-btn-section ion-padding">
+                <ion-button color="danger">Cancel</ion-button>&nbsp;
+                <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
+                <button mat-button matStepperNext class="stepper-next">Next</button>
+              </div>
+            </mat-step>
+            <mat-step>
+              <ng-container *ngTemplateOutlet="FinalView"></ng-container>
+              <ng-template matStepLabel>Review</ng-template>
+              <div class="action-btn-section ion-padding">
+                <button class="next-back-button" mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
+                <ion-button color="danger">Cancel</ion-button>&nbsp;
+                <ion-button color="success" (click)="onSubmit()"> Submit</ion-button>
+              </div>
+            </mat-step>
+          </mat-horizontal-stepper>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-grid>
 </ion-content>
 
@@ -131,9 +133,9 @@
       <ion-row class=" ion-justify-content-center">
         <ion-col size-xs="100" size-sm="33">
           <ion-item>
-            <ion-label position="floating">Offer Amount<ion-text class="mandatory">*</ion-text>
+            <ion-label position="stacked">Offer Amount<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-input formControlName="amount" type="number"></ion-input>
+            <input class="currency-input" currencyMask formControlName="amount" />
           </ion-item>
           <div>
             <ion-text color="danger" *ngIf="propertyDetails?.advertisementRent > makeAnOfferForm.controls.amount.value">
@@ -341,56 +343,54 @@
   <form [formGroup]="confirmationForm">
     <ion-grid>
       <ion-row>
-        <ion-col size-xs="100" size-sm="33">
-          <ion-item lines="full" class="mt-7">
-            <ion-label>Confirmed By Applicant</ion-label>
+        <ion-col size-sm="50" size-md="30" size-xl="16.5">
+          <ion-item lines="none" class="mt-7">
             <ion-toggle (ionChange)="isEnable('applicant')" formControlName="isApplicantConfirmed" color="tertiary">
             </ion-toggle>
+            <ion-label>Confirmed By Applicant</ion-label>
           </ion-item>
         </ion-col>
 
-        <ion-col size-xs="100" size-sm="33" style="padding-top: 21px;">
+        <ion-col size-sm="50" size-md="20" size-xl="16.5" class="ion-text-end" style="padding-top: 15px;">
           <mat-form-field appearance="fill">
             <mat-label>Confirmed On <ion-text class="mandatory">*</ion-text>
             </mat-label>
             <input matInput [matDatepicker]="applicantConfirmedDate" formControlName="applicantConfirmedDate" readonly>
-            <mat-datepicker-toggle matSuffix [for]="applicantConfirmedDate"></mat-datepicker-toggle>
+            <mat-datepicker-toggle matPrefix [for]="applicantConfirmedDate"></mat-datepicker-toggle>
             <mat-datepicker #applicantConfirmedDate></mat-datepicker>
           </mat-form-field>
-          <div style="margin-top: -20px !important;">
-            <!-- <app-validation-message [control]="makeAnOfferForm.controls.applicantConfirmedDate"></app-validation-message> -->
-          </div>
+          <div style="margin-top: -20px !important;" class="ion-text-left">
+            <app-validation-message [control]="confirmationForm.controls.applicantConfirmedDate"></app-validation-message></div>
         </ion-col>
-        <ion-col size-xs="100" size-sm="33">
-          <ion-item lines="full" class="mt-7">
-            <ion-label>Email Applicant</ion-label>
-            <ion-toggle formControlName="sendEmailToApplicant" color="tertiary"></ion-toggle>
-          </ion-item>
-        </ion-col>
-
-        <ion-col size-xs="100" size-sm="33">
-          <ion-item lines="full" class="mt-7">
-            <ion-label>Confirmed By Landlord</ion-label>
+        
+        <ion-col  size-sm="50" size-md="30" size-xl="16.5">
+          <ion-item lines="none" class="mt-7">
             <ion-toggle (ionChange)="isEnable('landlord')" formControlName="isLandlordConfirmed" color="tertiary">
             </ion-toggle>
+            <ion-label>Confirmed By Landlord</ion-label>
           </ion-item>
         </ion-col>
-        <ion-col size-xs="100" size-sm="33" style="padding-top: 21px;">
+        <ion-col size-sm="50"  size-md="20" size-xl="16.5" class="ion-text-end" style="padding-top: 15px;">
           <mat-form-field appearance="fill">
             <mat-label>Confirmed On <ion-text class="mandatory">*</ion-text>
             </mat-label>
             <input matInput [matDatepicker]="landlordConfirmedDate" formControlName="landlordConfirmedDate" readonly>
-            <mat-datepicker-toggle matSuffix [for]="landlordConfirmedDate"></mat-datepicker-toggle>
+            <mat-datepicker-toggle matPrefix [for]="landlordConfirmedDate"></mat-datepicker-toggle>
             <mat-datepicker #landlordConfirmedDate></mat-datepicker>
           </mat-form-field>
-          <div style="margin-top: -20px !important;">
-            <!-- <app-validation-message [control]="makeAnOfferForm.controls.applicantConfirmedDate"></app-validation-message> -->
-          </div>
+          <div style="margin-top: -20px !important;" class="ion-text-left">
+            <app-validation-message [control]="confirmationForm.controls.landlordConfirmedDate"></app-validation-message></div>
         </ion-col>
-        <ion-col size-xs="100" size-sm="33">
-          <ion-item lines="full" class="mt-7">
-            <ion-label>Email Landlord</ion-label>
+        <ion-col size-sm="25" size-md="25" size-xl="16.5">
+          <ion-item lines="none" class="mt-7">
+            <ion-toggle formControlName="sendEmailToApplicant" color="tertiary"></ion-toggle>
+            <ion-label>Email Applicant</ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size-sm="25" size-md="25" size-xl="16.5" >
+          <ion-item lines="none" class="mt-7">
             <ion-toggle formControlName="sendEmailToLandlord" color="tertiary"></ion-toggle>
+            <ion-label>Email Landlord</ion-label>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -419,8 +419,7 @@
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Offer Status</ion-text><br />
-              <ion-text class="content">{{ makeAnOfferForm.controls.status.value ?
-                (makeAnOfferForm.controls.status.value | lookup: offerStatuses) : '-'}}
+              <ion-text class="content">{{makeAnOfferForm.controls.status.value | lookup: offerStatuses || '-'}}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -510,6 +509,35 @@
               </ion-col>
             </ng-container>
             <ion-col size="100" class="border-bottom"></ion-col>
+            <ion-col size="100">
+              <div class="sub-heading">Confirmation</div>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="50" class="header-content">
+              <ion-text class="header">Confirmed by Applicant</ion-text><br />
+              <ion-text class="content">{{confirmationForm.controls.isApplicantConfirmed.value ? 'Yes' : 'No'}}</ion-text>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="50" class="header-content">
+              <ion-text class="header">Confirmed On</ion-text><br />
+              <ion-text class="content">{{confirmationForm.controls.applicantConfirmedDate.value ? (confirmationForm.controls.applicantConfirmedDate.value | date : 'dd/MM/yyyy') : '-'}}</ion-text>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="50" class="header-content">
+              <ion-text class="header">Confirmed by Landlord</ion-text><br />
+              <ion-text class="content">{{confirmationForm.controls.isLandlordConfirmed.value ? 'Yes' : 'No'}}</ion-text>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="50" class="header-content">
+              <ion-text class="header">Confirmed On</ion-text><br />
+              <ion-text class="content">{{confirmationForm.controls.landlordConfirmedDate.value ? (confirmationForm.controls.landlordConfirmedDate.value | date : 'dd/MM/yyyy') : '-'}}</ion-text>
+
+            </ion-col>
+            <ion-col size-xs="100" size-sm="50" class="header-content">
+              <ion-text class="header">Email Applicant</ion-text><br />
+              <ion-text class="content">{{confirmationForm.controls.sendEmailToApplicant.value ? 'Yes' : 'No'}}</ion-text>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="50" class="header-content">
+              <ion-text class="header">Email Landlord</ion-text><br />
+              <ion-text class="content">{{confirmationForm.controls.sendEmailToLandlord.value ? 'Yes' : 'No'}}</ion-text>
+            </ion-col>
+
           </ion-row>
         </ion-grid>
       </ion-col>

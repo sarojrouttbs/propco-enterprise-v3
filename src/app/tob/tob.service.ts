@@ -85,4 +85,10 @@ export class TobService {
     return this.httpClient.delete(environment.API_BASE_URL + `notes/${noteId}`, {});
   }
 
+  getOfferDetails(offerId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `offers/${offerId}`).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
 }
