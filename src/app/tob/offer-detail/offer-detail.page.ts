@@ -168,6 +168,14 @@ export class OfferDetailPage implements OnInit {
   }
 
   private async patchOfferDetails() {
+    this.confirmationForm.patchValue({
+      isApplicantConfirmed: this.offerDetails.applicantConfirmedDate ? true : false,
+      applicantConfirmedDate: this.offerDetails.applicantConfirmedDate,
+      isLandlordConfirmed: this.offerDetails.landlordConfirmedDate ? true : false,
+      landlordConfirmedDate: this.offerDetails.landlordConfirmedDate,
+    })
+    this.isEnable('applicant');
+    this.isEnable('landlord');
     this.makeAnOfferForm.patchValue({
       amount: this.offerDetails.amount,
       comments: this.offerDetails.comments,
