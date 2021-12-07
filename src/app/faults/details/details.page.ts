@@ -36,7 +36,7 @@ export class DetailsPage implements OnInit {
   propertyHMODetails: any[] = [];
   faultHistory;
   addtionalInfo;
-  files = [];
+  files : any = [];
   describeFaultForm: FormGroup;
   faultDetailsForm: FormGroup;
   addAdditionalDetForm: FormGroup;
@@ -334,7 +334,8 @@ export class DetailsPage implements OnInit {
         this.contractorEntityId = details.contractorId;
         this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
         this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
-        this.getFaultDocuments(this.faultId);
+        this.files = await this.getFaultDocuments(this.faultId);
+        this.filterDocsByStage(this.faultDetails);
         this.getFaultHistory();
         if (this.contractorEntityId) {
           this.isContractorSearch = false;
@@ -939,20 +940,29 @@ export class DetailsPage implements OnInit {
     }, 1000);
   }
 
-  getFaultDocuments(faultId) {
-    this.faultsService.getFaultDocuments(faultId).subscribe(response => {
-      if (response) {
-        this.files = response.data;
-        // this.getDocs();
-        if (this.faultDetails.stage === FAULT_STAGES.JOB_COMPLETION || this.faultDetails.stage === FAULT_STAGES.PAYMENT) {
-          this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[4]['index'] || data.folderName === FOLDER_NAMES[5]['index']).filter(data => !data.isRejected);
+  getFaultDocuments(faultId: string) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.getFaultDocuments(faultId).subscribe(response => {
+        if (response) {
+          resolve(response.data);
+        } else {
+          resolve([]);  
         }
-        else {
-          this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[1]['index']).filter(data => !data.isRejected);
-        }
-        this.prepareDocumentsList();
-      }
-    })
+      },err =>{
+        resolve([]);
+      });
+    });
+    return promise;
+  }
+
+  private  filterDocsByStage(details : FaultModels.IFaultResponse) {
+    if (details.stage === FAULT_STAGES.JOB_COMPLETION || details.stage === FAULT_STAGES.PAYMENT) {
+      this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[4]['index'] || data.folderName === FOLDER_NAMES[5]['index']).filter(data => !data.isRejected);
+    }
+    else {
+      this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[1]['index']).filter(data => !data.isRejected);
+    }
+    this.prepareDocumentsList();
   }
 
   // downloadFaultDocument(documentId, name) {
@@ -1434,11 +1444,12 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  private async refreshDetailsAndStage(reloadFaultDocs = false) {    
-    if (reloadFaultDocs) {
-      this.getFaultDocuments(this.faultDetails.faultId);
-    }
+  private async refreshDetailsAndStage(reloadFaultDocs = false) {
     const details: any = await this.getFaultDetails();
+    if (reloadFaultDocs) {
+      this.files = await this.getFaultDocuments(this.faultDetails.faultId);
+      this.filterDocsByStage(details);
+    }
     this.selectStageStepper(details.stage);
     this.faultDetails = details;
     this.getStageIndex(this.faultDetails);
