@@ -7,6 +7,8 @@ import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { switchMap, debounceTime } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { ModalController } from '@ionic/angular';
+import { NegotiateModalPage } from 'src/app/shared/modals/negotiate-modal/negotiate-modal.page';
 
 @Component({
   selector: 'app-offer-detail',
@@ -52,7 +54,8 @@ export class OfferDetailPage implements OnInit {
     private route: ActivatedRoute,
     private commonService: CommonService,
     private _formBuilder: FormBuilder,
-    private _tobService: TobService
+    private _tobService: TobService,
+    private modalController: ModalController
   ) {
   }
 
@@ -439,22 +442,24 @@ export class OfferDetailPage implements OnInit {
     }
   }
 
-  async presentModal(clauseObj, type) {
-    let headingText = (type === 'CLAUSE') ? 'Clause - ' + clauseObj.clauseName : 'Restriction - ' + clauseObj.restrictionName;
-    clauseObj.negotiations = clauseObj.negotiations ? clauseObj.negotiations : [];
+  async presentModal(obj, type) {
+    let headingText = (type === 'CLAUSE') ? 'Clause - ' + obj.clauseName : 'Restriction - ' + obj.restrictionName;
+    obj.negotiations = obj.negotiations ? obj.negotiations : [];
     // let offerStatus = this.offerDetails ? this.offerDetails.status : '';
-    // const modal = await this.modalController.create({
-    //   component: NotesModalPage,
-    //   componentProps: {
-    //     data: clauseObj,
-    //     heading: headingText,
-    //     offerStatus: offerStatus,
-    //   }
-    // });
+    const modal = await this.modalController.create({
+      component: NegotiateModalPage,
+      cssClass: 'modal-container',
+      componentProps: {
+        data: obj,
+        heading: headingText,
+        // offerStatus: offerStatus,
+      },
+      backdropDismiss: false
+    });
 
-    // const data = modal.onDidDismiss().then(res => {
-    // });
-    // await modal.present();
+    const data = modal.onDidDismiss().then(res => {
+    });
+    await modal.present();
   }
 
 }
