@@ -327,7 +327,7 @@ export class OfferListPage implements OnInit {
     let noteId = 1648;  // remove this constant after integration is done.
     const response = await this.commonService.showConfirm('Offer', 'Are you sure, you want to remove this note ?', '', 'YES', 'NO');
     if (response) {
-      this.tobService.deleteNote(noteId).subscribe(response => {
+      this.commonService.deleteNote(noteId).subscribe(response => {
         // call get note list API
       });
     }

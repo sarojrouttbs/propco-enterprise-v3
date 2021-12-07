@@ -1,0 +1,23 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+  }
+  
+  #negotiate-modal {
+    ion-card-content {
+      padding: 5px 10px;
+      background: var(--ion-color-step-1700) !important;
+    }
+    .name {
+      margin-bottom: 2px;
+      @include set-text-style(12px, 16px);
+    }
+  
+    .comment {
+      @include set-text-style(14px, 20px);
+    }
+  
+    .date {
+      @include set-text-style(11px, 15px);
+    }
+  }
