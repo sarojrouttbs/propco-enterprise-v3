@@ -1,7 +1,7 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
@@ -55,22 +55,21 @@ export class OfferDetailPage implements OnInit {
     private commonService: CommonService,
     private _formBuilder: FormBuilder,
     private _tobService: TobService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private router: Router
   ) {
   }
 
   ngOnInit() {
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
     this.offerId = this.route.snapshot.paramMap.get('offerId');
-
     if (typeof this.offerId !== 'undefined' && this.offerId != null) {
-      this.initViewApiCalls()
+      this.initViewApiCalls();
     }
     else if (typeof this.propertyId !== 'undefined' && this.propertyId != null) {
       this.initCreateApiCalls();
     }
     this.initForms();
-
   }
 
   onSearch(event: any) {
@@ -102,8 +101,8 @@ export class OfferDetailPage implements OnInit {
           petsInfo: this.applicantDetail.petsInfo,
           currentPosition: this.applicantDetail.currentPosition
         });
-       this.isEnable('guarantor');
-       this.isEnable('pets');
+        this.isEnable('guarantor');
+        this.isEnable('pets');
       }
     },
       error => {
@@ -169,14 +168,15 @@ export class OfferDetailPage implements OnInit {
 
   private async patchOfferDetails() {
     this.confirmationForm.patchValue({
-      isApplicantConfirmed: this.offerDetails.applicantConfirmedDate ? true : false,
+      isApplicantConfirmed: this.offerDetails.isApplicantConfirmed,
       applicantConfirmedDate: this.offerDetails.applicantConfirmedDate,
-      isLandlordConfirmed: this.offerDetails.landlordConfirmedDate ? true : false,
+      isLandlordConfirmed: this.offerDetails.isLandlordConfirmed,
       landlordConfirmedDate: this.offerDetails.landlordConfirmedDate,
     })
     this.isEnable('applicant');
     this.isEnable('landlord');
     this.makeAnOfferForm.patchValue({
+      status: this.offerDetails.status,
       amount: this.offerDetails.amount,
       comments: this.offerDetails.comments,
       moveInDate: this.offerDetails.moveInDate,
@@ -241,7 +241,7 @@ export class OfferDetailPage implements OnInit {
     });
   }
 
- async onSubmit() {
+  async onSubmit() {
     if (!this.applicantDetail) {
       this.commonService.showAlert('Applicant Not Added', 'Please search an applicant from the search box.');
       return;
@@ -255,8 +255,68 @@ export class OfferDetailPage implements OnInit {
     if (this.makeAnOfferForm.valid && this.confirmationForm.valid && this.applicantDetail) {
       const isConfirm: boolean = await this.commonService.showConfirm('Submit Offer', 'Are you sure, you want to submit this offer?', '', 'Yes', 'No') as boolean;
       if (isConfirm) {
-        this.submitOffer();
+        this.offerId ? this.updateOffer() : this.submitOffer();
       }
+    }
+  }
+
+  private updateOffer() {
+    if (!this.checkForOfferAgreedCondition()) {
+      return;
+    };
+    this.updateApplicantDetails();
+    this.updateOfferDetails();
+  }
+
+  private updateOfferDetails() {
+    this._tobService.updateOffer(this.prepareUpdateOffer(), this.offerId).subscribe(response => {
+      if (this.offerDetails.status !== this.makeAnOfferForm.controls.status.value) {
+        this.updateOfferStatus();;
+      }
+      else {
+        this.commonService.showMessage('Your offer has been update successfully.', 'Update Offer', 'success');
+        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`]);
+      }
+    })
+  }
+
+  private async updateOfferStatus() {
+    const status = this.makeAnOfferForm.controls.status.value;
+    const requestObj: any = {};
+    requestObj.entityType = 'AGENT',
+      this._tobService.updateOfferStatus(this.offerId, status, requestObj).subscribe(response => {
+        this.commonService.showMessage('Your offer has been update successfully.', 'Update Offer', 'success');
+        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`]);
+      })
+  }
+
+  private prepareUpdateOffer(): object {
+    const offerFormValues = this.makeAnOfferForm.value;
+    const confirmationForm = this.confirmationForm.value;
+    const requestObj: any = {};
+    requestObj.entityType = 'AGENT';
+    requestObj.amount = offerFormValues.amount;
+    requestObj.moveInDate = this.commonService.getFormatedDate(offerFormValues.moveInDate);
+    requestObj.rentingTime = offerFormValues.rentingTime;
+    requestObj.numberOfAdults = offerFormValues.numberOfAdults;
+    requestObj.numberOfChildren = offerFormValues.numberOfChildren;
+    requestObj.comments = offerFormValues.comments
+    requestObj.isApplicantConfirmed = confirmationForm.isApplicantConfirmed;
+    requestObj.applicantConfirmedDate = requestObj.isApplicantConfirmed ? this.commonService.getFormatedDate(confirmationForm.applicantConfirmedDate) : null;
+    requestObj.isLandlordConfirmed = confirmationForm.isLandlordConfirmed;
+    requestObj.landlordConfirmedDate = confirmationForm.isLandlordConfirmed ? this.commonService.getFormatedDate(confirmationForm.landlordConfirmedDate) : null;
+    requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord;
+    requestObj.sendEmailToApplicant = confirmationForm.sendEmailToApplicant;
+    return requestObj;
+  }
+
+  private checkForOfferAgreedCondition() {
+    const STATUS_ACCEPTED = 1;
+    if (this.offerDetails.status == STATUS_ACCEPTED && (!this.offerDetails.isApplicantConfirmed || !this.offerDetails.isLandlordConfirmed)) {
+      this.commonService.showAlert('Offer', 'This offer is not confirmed by Landlord or Applicant. Please confirm the offer before marking it as Accepted.');
+      return false;
+    } else {
+      return true;
     }
   }
 
@@ -264,8 +324,12 @@ export class OfferDetailPage implements OnInit {
     if (this.makeAnOfferForm.valid) {
       this.updateApplicantDetails();
       this._tobService.createOffer(this.prepareCreateOffer()).subscribe(res => {
-        this.commonService.showMessage('Your offer has been created successfully.', 'Offer', 'success');
-        // this.router.navigate(['applicant/my-offers']);
+        let applicantName = this.applicantDetail.fullName || (this.applicantDetail.title + ' ' + this.applicantDetail.forename + ' ' + this.applicantDetail.surname)
+        this.commonService.showAlert('Offer Created', 'Congratulations! You have successfully created an offer on behalf of Applicant ' + applicantName).then(res => {
+          if (res) {
+            this.router.navigate([`tob/${this.propertyId}/offers`]);
+          }
+        })
       }, error => {
         this.commonService.showMessage(error.error ? error.error.message : error.message, 'Offer', 'error');
       });
