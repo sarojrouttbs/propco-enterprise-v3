@@ -48,6 +48,7 @@ export class OfferDetailPage implements OnInit {
   applicantId: string;
   resultsAvailable: boolean = null;
   rentFrequencyTypes: OfferModels.ILookupResponse[];
+  offerDetails: OfferModels.IOfferResponse;
 
   constructor(
     private route: ActivatedRoute,
@@ -62,15 +63,14 @@ export class OfferDetailPage implements OnInit {
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
     this.offerId = this.route.snapshot.paramMap.get('offerId');
 
-    // if (typeof this.offerId !== 'undefined' && this.offerId != null) {
-    //   // this.getOfferDetails(this.offerId);
-    // }
-    // else if (typeof this.propertyId !== 'undefined' && this.propertyId != null) {
-    //   // this.isUpdateoffer = false;
-
-    // }
+    if (typeof this.offerId !== 'undefined' && this.offerId != null) {
+      this.initViewApiCalls()
+    }
+    else if (typeof this.propertyId !== 'undefined' && this.propertyId != null) {
+      this.initCreateApiCalls();
+    }
     this.initForms();
-    this.initApiCalls();
+
   }
 
   onSearch(event: any) {
@@ -84,7 +84,7 @@ export class OfferDetailPage implements OnInit {
       switchMap((value: string) => (value && value.length > 2) ? this.searchApplicant(value) : new Observable()));
   }
 
-  getApplicantDetails(applicantId: string) {
+  async getApplicantDetails(applicantId: string) {
     this.applicantId = applicantId;
     this._tobService.getApplicantDetails(applicantId).subscribe(res => {
       if (res) {
@@ -92,6 +92,18 @@ export class OfferDetailPage implements OnInit {
         this.disableSearchApplicant = true;
         this.resultsAvailable = false;
         this.searchApplicantForm.get('searchApplicant').setValue('');
+      }
+      if (this.offerId && res) {
+        this.makeAnOfferForm.patchValue({
+          occupation: this.applicantDetail.occupation,
+          hasGuarantor: this.applicantDetail.guarantorType ? true : false,
+          guarantorType: this.applicantDetail.guarantorType,
+          hasPets: this.applicantDetail.hasPets,
+          petsInfo: this.applicantDetail.petsInfo,
+          currentPosition: this.applicantDetail.currentPosition
+        });
+       this.isEnable('guarantor');
+       this.isEnable('pets');
       }
     },
       error => {
@@ -117,13 +129,13 @@ export class OfferDetailPage implements OnInit {
     return response;
   }
 
-  initForms() {
+  private initForms() {
     this.initSearchForm();
     this.initMakeAnOfferForm();
     this.initConfirmationForm();
   }
 
-  initApiCalls() {
+  private initCreateApiCalls() {
     this.getLookUpData();
     this.getTobLookupData();
     this.getPropertyDetails(this.propertyId);
@@ -131,12 +143,61 @@ export class OfferDetailPage implements OnInit {
     this.getPropertyRestrictions(this.propertyId);
   }
 
+  async initViewApiCalls() {
+    this.getLookUpData();
+    this.getTobLookupData();
+    await this.getOfferDetails(this.offerId);
+    await this.getPropertyDetails(this.offerDetails.propertyId);
+    await this.getApplicantDetails(this.offerDetails.applicantId);
+  }
+
+  private async getOfferDetails(offerId): Promise<any> {
+    const promise = new Promise((resolve, reject) => {
+      this._tobService.getOfferDetails(offerId).subscribe(
+        res => {
+          this.offerDetails = res;
+          this.patchOfferDetails();
+          resolve(true);
+        },
+        error => {
+          reject(error)
+        }
+      );
+    });
+    return promise;
+  }
+
+  private async patchOfferDetails() {
+    this.confirmationForm.patchValue({
+      isApplicantConfirmed: this.offerDetails.applicantConfirmedDate ? true : false,
+      applicantConfirmedDate: this.offerDetails.applicantConfirmedDate,
+      isLandlordConfirmed: this.offerDetails.landlordConfirmedDate ? true : false,
+      landlordConfirmedDate: this.offerDetails.landlordConfirmedDate,
+    })
+    this.isEnable('applicant');
+    this.isEnable('landlord');
+    this.makeAnOfferForm.patchValue({
+      amount: this.offerDetails.amount,
+      comments: this.offerDetails.comments,
+      moveInDate: this.offerDetails.moveInDate,
+      rentingTime: this.offerDetails.rentingTime,
+      numberOfAdults: this.offerDetails.numberOfAdults,
+      numberOfChildren: this.offerDetails.numberOfChildren,
+    });
+    this.propertyClauses = this.offerDetails.offerClauses ? this.offerDetails.offerClauses : [];
+    this.propertyRestrictions = this.offerDetails.offerRestrictions ? this.offerDetails.offerRestrictions : [];
+    try {
+      this.propertyRestrictions.map(restrict => {
+        restrict.restrictionName = this.commonService.camelize(restrict.key.replace(/_/g, ' '));
+      });
+    } catch (e) {
+    }
+  }
+
   private getPropertyDetails(propertyId) {
     this._tobService.getPropertyDetails(propertyId).subscribe(res => {
       this.propertyDetails = res.data;
       this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
-      // this.propertyDetails.minRent = this.propertyDetails.advertisementRent * 90 / 100;
-      // this.propertyDetails.maxRent = this.propertyDetails.advertisementRent * 110 / 100;
       this.getNoDeposit();
       if (!this.offerId) {
         this.makeAnOfferForm.patchValue({
@@ -219,7 +280,7 @@ export class OfferDetailPage implements OnInit {
     }
   }
 
-  prepareCreateOffer(): object{
+  private prepareCreateOffer(): object {
     const offerFormValues = this.makeAnOfferForm.value;
     const confirmationForm = this.confirmationForm.value;
     const requestObj: any = {};
@@ -237,7 +298,7 @@ export class OfferDetailPage implements OnInit {
     requestObj.isLandlordConfirmed = confirmationForm.isLandlordConfirmed;
     requestObj.landlordConfirmedDate = this.commonService.getFormatedDate(confirmationForm.landlordConfirmedDate);
     requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord;
-    requestObj.comments = confirmationForm.comments
+    requestObj.comments = offerFormValues.comments
     requestObj.offerClauses = this.propertyClauses;
     requestObj.offerClauses.forEach(element => {
       if (element.negotiations && element.negotiations.length > 0) {
@@ -280,7 +341,7 @@ export class OfferDetailPage implements OnInit {
     }
   }
 
-  getTobLookupData() {
+  private getTobLookupData() {
     this.toblookupdata = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
     if (this.toblookupdata) {
       this.setTobLookupData();
@@ -337,12 +398,11 @@ export class OfferDetailPage implements OnInit {
       landlordConfirmedDate: [{ value: '', disabled: true }],
       sendEmailToApplicant: false,
       sendEmailToLandlord: false,
-      comments: ''
     });
   }
 
 
-  setRequired() {
+  private setRequired() {
     return [Validators.required];
   }
 

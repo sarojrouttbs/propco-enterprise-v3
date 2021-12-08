@@ -131,33 +131,39 @@
   margin-top: 7px;
 }
 
-.applicant-detail {
+.offer-details {
   margin: 10px;
   background-color: var(--ion-color-step-1750);
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-  th {
-    background-color: var(--ion-color-step-800);
-    text-align: left;
-    color: var(--ion-color-step-2000);
-    padding: 20px 10px;
-    font-weight: 100;
-  }
+  .applicant-detail {
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th {
+      background-color: var(--ion-color-step-800);
+      text-align: left;
+      color: var(--ion-color-step-2000);
+      padding: 20px 10px;
+      font-weight: 100;
+    }
 
-  td {
+    td {
+      background-color: var(--ion-color-step-1950);
+      padding: 12px 10px;
+    }
+
+    ion-checkbox {
+      opacity: inherit !important;
+    }
+
+    ion-icon {
+      font-size: 28px;
+      cursor: pointer;
+    }
+  }
+  .stepper-section{
     background-color: var(--ion-color-step-1950);
-    padding: 5px 10px;
-  }
-
-  ion-checkbox {
-    opacity: inherit !important;
-  }
-
-  ion-icon {
-    font-size: 28px;
-    cursor: pointer;
+    padding: 10px 20px;
   }
 }
 
@@ -171,4 +177,11 @@
   position: absolute !important;
   z-index: 5 !important;
   cursor: pointer;
+}
+
+.currency-input {
+  border: 0;
+  outline: 0;
+  padding: 5px 0;
+  background: transparent;
 }
