@@ -29,6 +29,7 @@ export const MY_FORMATS = {
   },
 };
 
+
 @NgModule({
   declarations: [],
   imports: [
@@ -54,6 +55,6 @@ export const MY_FORMATS = {
   ],
   providers: [
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+  ],
 })
 export class MaterialModule {}
