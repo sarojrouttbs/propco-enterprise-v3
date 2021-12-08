@@ -51,6 +51,13 @@ export class TobService {
     );
   }
 
+  updateOfferStatus(offerId: string, status: number, body: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `offers/${offerId}/status/${status}`, body).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
   searchApplicant(text: string): Observable<any> {
     let params = new HttpParams()
       .set('text', text)
