@@ -9,7 +9,7 @@ import { OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
 import { NotesModalPage } from 'src/app/shared/modals/notes-modal/notes-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
-import { offerData, offerNotesData } from './offer-list.model';
+import { OfferData, OfferNotesData } from './offer-list.model';
 @Component({
   selector: 'app-offer-list',
   templateUrl: './offer-list.page.html',
@@ -18,12 +18,12 @@ import { offerData, offerNotesData } from './offer-list.model';
 
 export class OfferListPage implements OnInit {
   maxDate = new Date();
-  @ViewChild('paginator', { static: true }) paginator: MatPaginator;
-  @ViewChild('notesPaginator', { static: true }) notesPaginator: MatPaginator;
+  @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild('notesPaginator') notesPaginator: MatPaginator;
   obsOfferList: Observable<any>;
   obsOfferNotesList: Observable<any>;
-  filteredOfferList: MatTableDataSource<offerData> = new MatTableDataSource<offerData>();
-  filteredNotesList: MatTableDataSource<offerNotesData> = new MatTableDataSource<offerNotesData>();
+  filteredOfferList: MatTableDataSource<OfferData> = new MatTableDataSource<OfferData>([]);
+  filteredNotesList: MatTableDataSource<OfferNotesData> = new MatTableDataSource<OfferNotesData>([]);
   isOfferSelected: boolean = false;
   selectedOfferRow: any;
   selectedNotesRow: any;
@@ -46,7 +46,7 @@ export class OfferListPage implements OnInit {
   propertyDetails: any;
   offerNotes: any = [];
   propertyId: string;
-  offerList: offerData[];
+  offerList: OfferData[];
   accessRight: any;
   toblookupdata: any;
   lookupdata: any;
@@ -63,31 +63,26 @@ export class OfferListPage implements OnInit {
   }
 
   ngOnInit() {
+    this.obsOfferList = this.filteredOfferList.connect();
+    this.obsOfferNotesList = this.filteredNotesList.connect();
     this.initData();
   }
 
   private initData() {
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
-    this.initPaginators();
     this.initApiCalls();
-  }
-
-  private initPaginators() {
-    this.filteredOfferList.paginator = this.paginator;
-    this.filteredNotesList.paginator = this.notesPaginator;
-    this.obsOfferList = this.filteredOfferList.connect();
-    this.obsOfferNotesList = this.filteredNotesList.connect();
   }
 
   private async initApiCalls() {
     this.accessRight = await this.getUserAccessRight();
-    this.offerList = await this.getOfferList() as offerData[];
+    this.offerList = await this.getOfferList() as OfferData[];
     this.propertyDetails = await this.getPropertyById();
     this.initOfferList();
   }
 
   private initOfferList() {
-    this.filteredOfferList.data = this.offerList as offerData[];
+    this.filteredOfferList.data = this.offerList as OfferData[];
+    this.filteredOfferList.paginator = this.paginator;
     this.sortKey = '1';
     this.sortResult();
   }
@@ -210,14 +205,15 @@ export class OfferListPage implements OnInit {
   }
 
   private async getOfferNotes(offerId) {
-    this.offerNotes = await this.getNotesList(offerId) as offerNotesData[];
+    this.offerNotes = await this.getNotesList(offerId) as OfferNotesData[];
     this.initOfferNotesListData()
   }
 
   private initOfferNotesListData() {
     this.isOfferSelected = true;
-    this.offerNotes = this.offerNotes as offerNotesData[];
+    this.offerNotes = this.offerNotes as OfferNotesData[];
     this.filteredNotesList.data = this.offerNotes;
+    this.filteredNotesList.paginator = this.notesPaginator;
   }
 
   private getPropertyById() {

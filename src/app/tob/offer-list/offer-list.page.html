@@ -25,7 +25,7 @@
         </ion-row>
 
         <ion-row class="filters">
-          <ion-col size="20">
+          <ion-col size-xl="20">
             <ion-item class="sort-offer">
               <ion-label position="floating">Sort Offers By
               </ion-label>
@@ -38,13 +38,13 @@
             </ion-item>
           </ion-col>
 
-          <ion-col class="ion-no-padding" size="19">
+          <ion-col class="ion-no-padding" size-xl="19" size-sm="25">
             <ion-item lines="none">
               <ion-label class="ion-text-end">Offers made between</ion-label>
             </ion-item>
           </ion-col>
 
-          <ion-col class="ion-text-end" size="13">
+          <ion-col class="ion-text-end" size-xl="13" size-sm="15">
             <mat-form-field appearance="fill">
               <mat-label>Date From
               </mat-label>
@@ -54,7 +54,7 @@
             </mat-form-field>
           </ion-col>
 
-          <ion-col class="ion-text-end" size="13">
+          <ion-col class="ion-text-end" size-xl="13" size-sm="15">
             <mat-form-field appearance="fill">
               <mat-label>Date To
               </mat-label>
@@ -64,13 +64,13 @@
             </mat-form-field>
           </ion-col>
 
-          <ion-col class="ion-text-end" size="15">
+          <ion-col class="ion-text-end" size-xl="15" size-sm="25">
             <ion-button class="btn-filter" color="success" [disabled]="fromDate.value && toDate.value ? false : true"
               (click)="filterByDate()" expand="block">Filter</ion-button>
             <ion-button class="btn-filter" color="danger" (click)="resetFilters()" expand="block">Reset</ion-button>
           </ion-col>
 
-          <ion-col class="ion-no-padding ion-text-end" size="20">
+          <ion-col class="ion-no-padding ion-text-end" size-xl="20">
             <ion-button (click)="hideRecords()"> {{ isHideRejected ? "Show Rejected Offers" : "Hide Rejected Offers"}}
             </ion-button>
           </ion-col>
@@ -94,7 +94,7 @@
               <ion-col class="" size-xl="85" size="80">
                 <ion-grid style="height:100%;" class="no-padding-top">
                   <ion-row class="offer-title-row fs-18">
-                    <ion-col class="no-padding-top col1" size="75">
+                    <ion-col class="no-padding-top col1" size="60">
                       <ion-text class="fs-20">Applicant made an offer of <strong> {{item?.amount || 0 | currency : "GBP"
                           }}
                         </strong>
@@ -119,7 +119,7 @@
                           the asking price </ion-text>
                       </span>
                     </ion-col>
-                    <ion-col class="no-padding-top col2 ion-text-end" size="25">
+                    <ion-col class="no-padding-top col2 ion-text-end" size="40">
                       <ion-text>{{ propertyDetails?.advertisementRent || 0 | currency : "GBP" }} {{ (propertyDetails?.advertisementRentFrequency | lookup: rentFrequencyTypes) || '' }}
                       </ion-text><br />
                       <ion-text class="offer-status" [color]="getStatusColor(item?.status)">
