@@ -88,6 +88,10 @@ export class TobService {
     return this.httpClient.get(environment.API_BASE_URL + `offers/access-rights`);
   }
 
+  getNotesList(offerId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `offers/${offerId}/notes`);
+  }
+
   deleteNote(noteId: number): Observable<any> {
     return this.httpClient.delete(environment.API_BASE_URL + `notes/${noteId}`, {});
   }

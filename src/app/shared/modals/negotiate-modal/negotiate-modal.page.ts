@@ -1,10 +1,9 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ModalController, NavParams } from '@ionic/angular';
-import { OFFER_STATUSES, PROPCO } from '../../constants';
+import { FaultsService } from 'src/app/faults/faults.service';
 import { CommonService } from '../../services/common.service';
-import { CommentItem } from './negotiate-modal.model';
+import { CommentItem, UserDetails } from './negotiate-modal.model';
 import { NegotiateService } from './negotiate.service';
 
 @Component({
@@ -17,17 +16,16 @@ export class NegotiateModalPage implements OnInit {
   heading: string;
   negotiateForm: FormGroup;
   commentObj: CommentItem;
-  userDetails: any;
+  userDetails: UserDetails;
   clauseObj: any;
-  offerStatus: any;
 
   constructor(
+    private faultsService: FaultsService,
     private navParams: NavParams,
     private modalController: ModalController,
     private formBuilder: FormBuilder,
-    private commonService: CommonService,
-    public datepipe: DatePipe,
-    private negotiateService: NegotiateService
+    private negotiateService: NegotiateService,
+    private commonService: CommonService
   ) {
   }
 
@@ -35,20 +33,13 @@ export class NegotiateModalPage implements OnInit {
     this.initData();
   }
 
-  private initData() {
-    this.userDetails = this.commonService.getItem(PROPCO.LOGIN_DETAILS, true);
+  private async initData() {
     this.clauseObj = this.navParams.get('data');
     this.heading = this.navParams.get('heading');
-    this.offerStatus = this.navParams.get('offerStatus');
     this.negotiateForm = this.formBuilder.group({
       comment: ['']
     });
-    if (this.offerStatus == OFFER_STATUSES.ACCEPTED || this.offerStatus == OFFER_STATUSES.WITHDRAWN_BY_APPLICANT) {
-      this.negotiateForm.controls['comment'].disable();
-    }
-    else {
-      this.negotiateForm.controls['comment'].enable();
-    }
+    this.userDetails = await this.getUserDetails();
     this.getComments();
   }
 
@@ -67,7 +58,7 @@ export class NegotiateModalPage implements OnInit {
   createNote() {
     this.commentObj = {};
     this.commentObj.comment = this.negotiateForm.controls['comment']?.value;
-    this.commentObj.negotiatedByName = 'Tbl Support';
+    this.commentObj.negotiatedByName = this.userDetails?.name;
     this.commentObj.negotiatedBy = 'AGENT';
     this.negotiateForm.reset();
     if (this.clauseObj.offerClauseId) {
@@ -75,7 +66,7 @@ export class NegotiateModalPage implements OnInit {
     } else if (this.clauseObj.offerRestrictionId) {
       this.saveCommentsAgainstRestriction(this.clauseObj.offerRestrictionId, [this.commentObj]);
     } else {
-      this.commentObj.createdAt = this.datepipe.transform(new Date(), 'yyyy/MM/dd hh:mm');
+      this.commentObj.createdAt = this.commonService.getFormatedDate(new Date(), 'yyyy/MM/dd hh:mm');
       this.commentsArray.push(this.commentObj);
     }
   }
@@ -129,4 +120,17 @@ export class NegotiateModalPage implements OnInit {
     return promise;
   }
 
+  private getUserDetails() {
+    return new Promise((resolve, reject) => {
+      this.faultsService.getUserDetails().subscribe((res) => {
+        if(res) {
+          resolve(res.data[0]);
+        } else {
+          resolve('');
+        }
+      }, error => {
+        reject(error)
+      });
+    });
+  }
 }
