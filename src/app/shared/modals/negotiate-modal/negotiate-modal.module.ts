@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { NegotiateModalPage } from './negotiate-modal.page';
 import { RouterModule, Routes } from '@angular/router';
 import { ComponentsModule } from '../../components/components.module';
+import { FaultsService } from 'src/app/faults/faults.service';
 
 const routes: Routes = [
   {
@@ -23,7 +24,7 @@ const routes: Routes = [
     ComponentsModule
   ],
   declarations: [NegotiateModalPage],
-  providers: [DatePipe],
+  providers: [FaultsService, DatePipe],
   exports: [NegotiateModalPage]
 })
 

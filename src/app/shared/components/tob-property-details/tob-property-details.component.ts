@@ -11,7 +11,7 @@ export class TobPropertyDetailsComponent implements OnInit {
   @Input() propertyDetails;
   @Input() rentFrequencyTypes;
   
-  constructor() { }
+  constructor(public commonService: CommonService) { }
 
   ngOnInit() {
   }
