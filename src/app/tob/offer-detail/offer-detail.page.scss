@@ -9,6 +9,9 @@
   -moz-border-radius: $radius;
   border-radius: $radius;
 }
+ion-content {
+  --background: var(--ion-color-step-1650);
+}
 
 .readonly-input {
   pointer-events: none;
@@ -26,21 +29,26 @@
 .action-btn-section {
   display: flex;
   justify-content: end;
+  padding: 20px 5px;
 }
 
 .restriction-section,
 .clause-section {
   ion-card-content {
+    .res-clause-title {
+      font-weight: 500;
+      @include set-text-style(16px, 24px);
+    }
     padding: 5px;
-    background: var(--ion-color-step-1900);
+    background: var(--ion-color-step-1650);
   }
   .no-data {
     color: var(--ion-color-dark);
     text-align: center;
-    background: var(--ion-color-step-1850);
+    background: var(--ion-color-step-1650);
     padding: 15px;
     font-weight: 600;
-    margin: 0 20px 15px;
+    // margin: 0 20px 15px;
     @include border-radius(5px);
     @include set-text-style(16px, 26px);
   }
@@ -132,8 +140,8 @@
 }
 
 .offer-details {
-  margin: 10px;
-  background-color: var(--ion-color-step-1750);
+  margin: 15px;
+  background-color: var(--ion-color-step-1850);
   .applicant-detail {
     table {
       border-collapse: collapse;
@@ -145,10 +153,15 @@
       color: var(--ion-color-step-2000);
       padding: 20px 10px;
       font-weight: 100;
+      border: 1px solid var(--ion-color-step-800);
+    }
+
+    tbody {
+      border: 1px solid var(--ion-color-step-1650);
     }
 
     td {
-      background-color: var(--ion-color-step-1950);
+      background-color: var(--ion-color-step-1850);
       padding: 12px 10px;
     }
 
@@ -160,9 +173,16 @@
       font-size: 28px;
       cursor: pointer;
     }
+
+    .search-row {
+      background: var(--ion-color-step-1650);
+      margin: 5px;
+      margin-top: 0;
+      padding: 0px 20px 20px 0;
+    }
   }
-  .stepper-section{
-    background-color: var(--ion-color-step-1950);
+  .stepper-section {
+    background-color: var(--ion-color-step-1850);
     padding: 10px 20px;
   }
 }
