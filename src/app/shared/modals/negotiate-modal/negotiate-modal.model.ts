@@ -4,3 +4,10 @@ export interface CommentItem {
     negotiatedByName?: string;
     createdAt?: string;
 }
+
+export interface UserDetails {
+    name?: string;
+    forename?: string;
+    surname?: string;
+    username?: string;
+}

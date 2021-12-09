@@ -1,9 +1,9 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ModalController, NavParams } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { CommentItem } from './negotiate-modal.model';
+import { CommonService } from '../../services/common.service';
+import { CommentItem, UserDetails } from './negotiate-modal.model';
 import { NegotiateService } from './negotiate.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class NegotiateModalPage implements OnInit {
   heading: string;
   negotiateForm: FormGroup;
   commentObj: CommentItem;
-  userDetails: any;
+  userDetails: UserDetails;
   clauseObj: any;
 
   constructor(
@@ -24,8 +24,8 @@ export class NegotiateModalPage implements OnInit {
     private navParams: NavParams,
     private modalController: ModalController,
     private formBuilder: FormBuilder,
-    public datepipe: DatePipe,
-    private negotiateService: NegotiateService
+    private negotiateService: NegotiateService,
+    private commonService: CommonService
   ) {
   }
 
@@ -66,7 +66,7 @@ export class NegotiateModalPage implements OnInit {
     } else if (this.clauseObj.offerRestrictionId) {
       this.saveCommentsAgainstRestriction(this.clauseObj.offerRestrictionId, [this.commentObj]);
     } else {
-      this.commentObj.createdAt = this.datepipe.transform(new Date(), 'yyyy/MM/dd hh:mm');
+      this.commentObj.createdAt = this.commonService.getFormatedDate(new Date(), 'yyyy/MM/dd hh:mm');
       this.commentsArray.push(this.commentObj);
     }
   }
