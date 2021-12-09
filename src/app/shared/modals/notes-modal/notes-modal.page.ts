@@ -104,30 +104,21 @@ export class NotesModalPage implements OnInit {
       const requestObj = this.notesForm.value;
       requestObj.complaint = requestObj.complaint ? this.notesComplaints[1].index : this.notesComplaints[0].index;
       delete requestObj.date;
-      if (this.notesOrigin && this.notesOrigin == NOTES_ORIGIN.FAULT_STAGE) {
-        let notesDesc = this.notesForm.value.notes;
-        let updatedNotesDesc = '';
-        requestObj.notes = '';
-        if (this.faultNotificationDetails && this.faultNotificationDetails.length) {
-          updatedNotesDesc = 'Fault ID: ' + this.reference + '<br>Notification ID: ' + this.faultNotificationDetails[0] + ' - ' + this.faultNotificationDetails[1] + ' <br>Notes: <br>' + notesDesc;
+      if(this.notesType === 'offer') {
+        if(this.isAddNote) {
+          this.createOfferNotes(requestObj);
         } else {
-          updatedNotesDesc = 'Fault ID: ' + this.reference + ' <br>Notes: <br>' + notesDesc;
+          this.updateOfferNotes(requestObj);
         }
-        requestObj.notes = updatedNotesDesc;
+      } else {
+        this.createFaultNotes(requestObj);
       }
-
-      this.notesService.createFaultNotes(this.notesTypeId, requestObj).subscribe(res => {
-        this.modalController.dismiss(res);
-
-      }, err => {
-        this.commonService.showMessage(err.message, 'Add Note', 'error');
-      });
     } else {
       // this.commonService.showMessage('Please fill all the required fields.', 'Add Note', 'error');
       this.notesForm.markAllAsTouched();
     }
   }
-
+  
   dismiss() {
     this.modalController.dismiss({
       dismissed: true
@@ -173,4 +164,40 @@ export class NotesModalPage implements OnInit {
       this.getDefaultType(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE);
     }
   }
+
+  private createFaultNotes(requestObj) {
+    if (this.notesOrigin && this.notesOrigin == NOTES_ORIGIN.FAULT_STAGE) {
+      let notesDesc = this.notesForm.value.notes;
+      let updatedNotesDesc = '';
+      requestObj.notes = '';
+      if (this.faultNotificationDetails && this.faultNotificationDetails.length) {
+        updatedNotesDesc = 'Fault ID: ' + this.reference + '<br>Notification ID: ' + this.faultNotificationDetails[0] + ' - ' + this.faultNotificationDetails[1] + ' <br>Notes: <br>' + notesDesc;
+      } else {
+        updatedNotesDesc = 'Fault ID: ' + this.reference + ' <br>Notes: <br>' + notesDesc;
+      }
+      requestObj.notes = updatedNotesDesc;
+    }
+
+    this.notesService.createFaultNotes(this.notesTypeId, requestObj).subscribe(res => {
+      this.modalController.dismiss(res);
+    }, err => {
+      this.commonService.showMessage(err.message, 'Add Note', 'error');
+    });
+  }
+
+  private createOfferNotes(requestObj) {
+    this.notesService.createOfferNotes(this.notesTypeId, requestObj).subscribe(res => {
+      this.modalController.dismiss(res);
+    }, err => {
+      this.commonService.showMessage(err.message, 'Add Note', 'error');
+    });
+  }
+
+  private updateOfferNotes(requestObj) {
+    this.notesService.updateOfferNotes(this.notesData.noteId, requestObj).subscribe(res => {
+      this.modalController.dismiss({noteId: this.notesData.noteId});
+    }, err => {
+      this.commonService.showMessage(err.message, 'Add Note', 'error');
+    });
+  }  
 }

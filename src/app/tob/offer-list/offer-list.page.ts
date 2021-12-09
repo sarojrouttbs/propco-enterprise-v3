@@ -25,7 +25,8 @@ export class OfferListPage implements OnInit {
   filteredOfferList: MatTableDataSource<offerData> = new MatTableDataSource<offerData>();
   filteredNotesList: MatTableDataSource<offerNotesData> = new MatTableDataSource<offerNotesData>();
   isOfferSelected: boolean = false;
-  selectedRow: any;
+  selectedOfferRow: any;
+  selectedNotesRow: any;
   isHideRejected: boolean = false;
   sortKey = null;
   fromDate = new FormControl('', []);
@@ -54,7 +55,7 @@ export class OfferListPage implements OnInit {
   notesCategories: any;
   notesComplaints: any;
   notesTypes: any;
-  isEditNote: boolean = false;
+  isAddNote: boolean = false;
 
   constructor(private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private tobService: TobService) {
     this.getTobLookupData();
@@ -144,8 +145,8 @@ export class OfferListPage implements OnInit {
     }
   }
 
-  showMenu(event, id, data, className, isCard?) {
-    this.selectedRow = data;
+  showMenu(event, id, data, className, isCard?, isOffer?) {
+    isOffer ? (this.selectedOfferRow = data) : (this.selectedNotesRow = data);
     const baseContainer = $(event.target).parents('.' + className);
     const divOverlay = $('#' + id);
     const baseContainerWidth = baseContainer.outerWidth(true);
@@ -175,8 +176,8 @@ export class OfferListPage implements OnInit {
 
     divOverlay.css({
       position: 'absolute',
-      top: origDivOverlayTop+6,
-      right: '25px',
+      top: origDivOverlayTop,
+      right: '5px',
       width: baseContainerWidth,
       height: origDivOverlayHeight,
       left: divOverlayLeft,
@@ -203,8 +204,13 @@ export class OfferListPage implements OnInit {
     }
   }
 
-  async onOfferClick(offerData) {
-    this.offerNotes = await this.getNotesList(offerData.offerId) as offerNotesData[];
+  onOfferClick(offerData) {
+    this.selectedOfferRow = offerData;
+    this.getOfferNotes(offerData.offerId);
+  }
+
+  private async getOfferNotes(offerId) {
+    this.offerNotes = await this.getNotesList(offerId) as offerNotesData[];
     this.initOfferNotesListData()
   }
 
@@ -262,37 +268,23 @@ export class OfferListPage implements OnInit {
   }
 
   async notesModal() {
-    const offerId = "08c5d41c-710b-4a64-ba09-6abbe9a51288";
-    const noteData = {
-      category: 3267,
-      complaint: 4066,
-      dateTime: "2021-12-02 16:57:52",
-      noteId: 1640,
-      notes: "test Test",
-      propertyAddress: null,
-      propertyId: null,
-      propertyReference: null,
-      type: 1441,
-      userEmail: null,
-      userId: "b4a64efa-f323-11ea-b5cf-02420aff001e",
-      userName: null
-    }
-    // remove above offerId & noteData constant after integration is done.
+    const offerId = this.selectedOfferRow?.offerId;
+    const noteData = this.selectedNotesRow;
     const modal = await this.modalController.create({
       component: NotesModalPage,
       cssClass: 'modal-container',
       componentProps: {
-        noteData: noteData,
+        noteData: this.isAddNote ? {} : noteData,
         notesType: 'offer',
-        notesTypeId: offerId,
-        isAddNote: this.isEditNote ? false : true
+        notesTypeId: this.isAddNote ? offerId : '',
+        isAddNote: this.isAddNote ? true : false
       },
       backdropDismiss: false
     });
 
     const data = modal.onDidDismiss().then(res => {
       if (res.data && res.data.noteId) {
-        // call get note list API
+        this.getOfferNotes(offerId);
       }
     });
     await modal.present();
@@ -320,22 +312,23 @@ export class OfferListPage implements OnInit {
   }
 
   async removeNote() {
-    let noteId = 1648;  // remove this constant after integration is done.
+    const offerId = this.selectedOfferRow?.offerId;
+    const noteId = this.selectedNotesRow?.noteId;
     const response = await this.commonService.showConfirm('Offer', 'Are you sure, you want to remove this note ?', '', 'YES', 'NO');
     if (response) {
       this.commonService.deleteNote(noteId).subscribe(response => {
-        // call get note list API
+        this.getOfferNotes(offerId);
       });
     }
   }
 
   addNote() {
-    this.isEditNote = false;
+    this.isAddNote = true;
     this.notesModal();
   }
 
   editNote() {
-    this.isEditNote = true;
+    this.isAddNote = false;
     this.notesModal();
   }
 
