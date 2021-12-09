@@ -69,4 +69,50 @@ declare namespace OfferModels {
         index: number;
         value: string;
     }
+
+    export interface IOfferResponse {
+        amount: number;
+        applicantConfirmedDate: string;
+        applicantId: string;
+        archivedAt: Date;
+        archivedBy: string;
+        comments: string;
+        createdBy: string;
+        entityType: string;
+        isApplicantConfirmed: boolean;
+        isArchived: boolean;
+        isLandlordConfirmed: boolean;
+        isTermsAndConditionsAccepted: boolean;
+        landlordConfirmedDate: string;
+        moveInDate: string;
+        negotiatorForename: string;
+        negotiatorId: string;
+        negotiatorSurname: string;
+        numberOfAdults: number;
+        numberOfChildren: number;
+        offerAt: Date;
+        offerClauses: OfferClauses[];
+        offerId: string;
+        offerRestrictions: OfferRestrictions[];
+        propertyId: string;
+        rentingTime: number;
+        status: number;
+    }
+
+    export interface OfferClauses {
+        clauseId: number;
+        clauseName: string;
+        clauseText: string;
+        isNegotiable: boolean;
+        modifiedBy: string;
+        offerClauseId: string;
+    }
+
+    export interface OfferRestrictions {
+        isNegotiable: boolean;
+        key: string;
+        modifiedBy: string;
+        offerRestrictionId: string;
+        value: boolean;
+    }
 }
