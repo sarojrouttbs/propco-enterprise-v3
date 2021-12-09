@@ -531,4 +531,12 @@ export class OfferDetailPage implements OnInit {
     await modal.present();
   }
 
+  async onCancel() {
+    const isCancel: boolean = await this.commonService.showConfirm('Cancel', 'Are you sure, you want to cancel this operation?', '', 'Yes', 'No') as boolean;
+    if(isCancel){
+      const propertyId = this.offerId ? this.offerDetails.propertyId : this.propertyId;
+      this.router.navigate([`tob/${propertyId}/offers`]);
+    }
+  }
+
 }
