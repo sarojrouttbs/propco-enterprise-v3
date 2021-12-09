@@ -80,4 +80,8 @@ export class TobService {
   getUserAccessRight(): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `offers/access-rights`);
   }
+
+  getNotesList(offerId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `offers/${offerId}/notes`);
+  }
 }

@@ -31,9 +31,8 @@
           </ion-item>
         </ion-col>
         <ion-col class="ion-text-end">
-          <ion-button fill="outline" color="danger" (click)="dismiss()">Close</ion-button>&nbsp;&nbsp;
-          
-          <ion-button fill="outline" color="success" (click)="createNote()" [disabled]="!negotiateForm.controls['comment'].value" style="margin-right:0">Send</ion-button>
+          <ion-button color="danger" (click)="dismiss()">Cancel</ion-button>&nbsp;&nbsp;
+          <ion-button color="success" (click)="createNote()" [disabled]="!negotiateForm.controls['comment'].value" style="margin-right:0">Send</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

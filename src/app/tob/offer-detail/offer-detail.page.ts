@@ -392,14 +392,12 @@ export class OfferDetailPage implements OnInit {
   async presentModal(obj, type) {
     let headingText = (type === 'CLAUSE') ? 'Clause - ' + obj.clauseName : 'Restriction - ' + obj.restrictionName;
     obj.negotiations = obj.negotiations ? obj.negotiations : [];
-    // let offerStatus = this.offerDetails ? this.offerDetails.status : '';
     const modal = await this.modalController.create({
       component: NegotiateModalPage,
       cssClass: 'modal-container',
       componentProps: {
         data: obj,
-        heading: headingText,
-        // offerStatus: offerStatus,
+        heading: headingText
       },
       backdropDismiss: false
     });

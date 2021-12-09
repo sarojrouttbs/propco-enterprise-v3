@@ -4,7 +4,7 @@
       <ion-row class="main-row">
         <ion-col class="" size-xl="23" size="23">
           <div>
-            <img *ngIf="propertyDetails?.propertyImageUrl" [src]="propertyDetails?.propertyImageUrl">
+            <img *ngIf="propertyDetails?.propertyImageUrl" [src]="commonService.getResizedImageUrl(propertyDetails?.propertyImageUrl)" onerror="this.src='assets/images/default.jpg'">
             <img *ngIf="!propertyDetails?.propertyImageUrl" [src]="'assets/images/default.jpg'">
           </div>
         </ion-col>

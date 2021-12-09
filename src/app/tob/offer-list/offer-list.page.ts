@@ -166,17 +166,17 @@ export class OfferListPage implements OnInit {
 
     if (baseContainerHeight > divOverlayHeight) {
       origDivOverlayHeight = baseContainerHeight;
-      origDivOverlayTop = baseContainerTop + $('.dataTables_length').outerHeight(true);
+      origDivOverlayTop = baseContainerTop;
     } else {
       origDivOverlayHeight = divOverlayHeight + (divOverlayTopBottomPadding * 2);
       const extraHeight = divOverlayHeight - baseContainerHeight;
-      origDivOverlayTop = baseContainerTop - extraHeight - (divOverlayTopBottomPadding * 2) + $('.dataTables_length').outerHeight(true);
+      origDivOverlayTop = baseContainerTop - extraHeight - (divOverlayTopBottomPadding * 2);
     }
 
     divOverlay.css({
       position: 'absolute',
-      top: origDivOverlayTop,
-      right: '0px',
+      top: origDivOverlayTop+6,
+      right: '25px',
       width: baseContainerWidth,
       height: origDivOverlayHeight,
       left: divOverlayLeft,
@@ -203,12 +203,8 @@ export class OfferListPage implements OnInit {
     }
   }
 
-  getLookupValue(index, lookup) {
-    return this.commonService.getLookupValue(index, lookup);
-  }
-
-  onOfferClick(offerData) {
-    // get offer notes API call
+  async onOfferClick(offerData) {
+    this.offerNotes = await this.getNotesList(offerData.offerId) as offerNotesData[];
     this.initOfferNotesListData()
   }
 
@@ -380,5 +376,19 @@ export class OfferListPage implements OnInit {
     this.notesCategories = this.lookupdata.notesCategories;
     this.notesComplaints = this.lookupdata.notesComplaint;
     this.notesTypes = this.lookupdata.notesType;
+  }
+
+  private getNotesList(offerId) {
+    return new Promise((resolve, reject) => {
+      this.tobService.getNotesList(offerId).subscribe(
+        (res) => {
+          if (res && res.data) {
+            resolve(res.data);
+          } else {
+            resolve([]);
+          }
+        }
+      )
+    });
   }
 }
