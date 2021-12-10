@@ -1,4 +1,4 @@
-export interface offerData {
+export interface OfferData {
     amount: number;
     applicantConfirmedDate: string;
     applicantId: string;
@@ -21,17 +21,14 @@ export interface offerData {
     title: string;
 }
 
-export interface offerNotesData {
-    noteId: number,
-    type: number;
-    complaint: number;
+export interface OfferNotesData {
     category: number;
-    userName: string;
-    userEmail: string;
+    noteId: number;
+    complaint: number;
     notes: string;
-    dateTime: string;
-    propertyReference;
+    postedAt: string;
+    type: number
+    userEmail: string;
     userId: string;
-    propertyAddress: string;
-    propertyId: string;
+    userName: string;
 }
