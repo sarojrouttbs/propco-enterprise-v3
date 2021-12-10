@@ -44,7 +44,7 @@ export class NotesModalPage implements OnInit {
     this.getLookupData();
     this.initNotesForm();
     this.initData();
-    if(this.notesType !== NOTES_TYPE.OFFER) {
+    if(this.notesType === NOTES_TYPE.FAULT) {
       this.setCategoryAndType();
     }
   }
