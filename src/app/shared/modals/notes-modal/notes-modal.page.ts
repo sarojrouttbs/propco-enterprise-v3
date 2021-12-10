@@ -108,7 +108,7 @@ export class NotesModalPage implements OnInit {
         if(this.isAddNote) {
           this.createOfferNotes(requestObj);
         } else {
-          this.updateOfferNotes(requestObj);
+          this.updateNotes(requestObj);
         }
       } else {
         this.createFaultNotes(requestObj);
@@ -193,8 +193,8 @@ export class NotesModalPage implements OnInit {
     });
   }
 
-  private updateOfferNotes(requestObj) {
-    this.notesService.updateOfferNotes(this.notesData.noteId, requestObj).subscribe(res => {
+  private updateNotes(requestObj) {
+    this.notesService.updateNotes(this.notesData.noteId, requestObj).subscribe(res => {
       this.modalController.dismiss({noteId: this.notesData.noteId});
     }, err => {
       this.commonService.showMessage(err.message, 'Add Note', 'error');

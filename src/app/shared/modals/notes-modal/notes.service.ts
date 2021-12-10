@@ -16,7 +16,7 @@ export class NotesService {
     return this.httpClient.post(environment.API_BASE_URL + `offers/${offerId}/notes`, requestObj);
   }
 
-  updateOfferNotes(noteId: String, requestObj: any): Observable<any> {
+  updateNotes(noteId: String, requestObj: any): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `notes/${noteId}`, requestObj);
   }
 
