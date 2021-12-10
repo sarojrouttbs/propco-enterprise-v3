@@ -4,7 +4,7 @@ import { ModalController, NavParams } from '@ionic/angular';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { CommonService } from '../../services/common.service';
 import { INoteItem } from './notes-modal.model'
-import { NOTES_ORIGIN, PROPCO, SYSTEM_CONFIG } from '../../constants';
+import { NOTES_ORIGIN, NOTES_TYPE, PROPCO, SYSTEM_CONFIG } from '../../constants';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -44,7 +44,7 @@ export class NotesModalPage implements OnInit {
     this.getLookupData();
     this.initNotesForm();
     this.initData();
-    if(this.notesType !== 'offer') {
+    if(this.notesType !== NOTES_TYPE.OFFER) {
       this.setCategoryAndType();
     }
   }
@@ -104,7 +104,7 @@ export class NotesModalPage implements OnInit {
       const requestObj = this.notesForm.value;
       requestObj.complaint = requestObj.complaint ? this.notesComplaints[1].index : this.notesComplaints[0].index;
       delete requestObj.date;
-      if(this.notesType === 'offer') {
+      if(this.notesType === NOTES_TYPE.OFFER) {
         if(this.isAddNote) {
           this.createOfferNotes(requestObj);
         } else {

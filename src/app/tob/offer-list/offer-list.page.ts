@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
+import { NOTES_TYPE, OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
 import { NotesModalPage } from 'src/app/shared/modals/notes-modal/notes-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
@@ -271,7 +271,7 @@ export class OfferListPage implements OnInit {
       cssClass: 'modal-container',
       componentProps: {
         noteData: this.isAddNote ? {} : noteData,
-        notesType: 'offer',
+        notesType: NOTES_TYPE.OFFER,
         notesTypeId: this.isAddNote ? offerId : '',
         isAddNote: this.isAddNote ? true : false
       },
