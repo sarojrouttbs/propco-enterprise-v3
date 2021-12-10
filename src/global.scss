@@ -561,15 +561,31 @@ mat-form-field {
   display: flex !important;
   flex-direction: row;
   justify-content: flex-start;
-  width: 40%;
+  width: 70%;
   color: var(--ion-color-step-2000);
   border-radius: 5px;
   font-size: 14px;
 }
 
+@media screen and (min-width: 768px) and (max-width: 850px) {
+  .mat-paginator {
+    width: 70% !important;
+  }
+}
 
-.table-pagination {
-  
+@media screen and (min-width: 850px) and (max-width: 1250px) {
+  .mat-paginator {
+    width: 55% !important;
+  }
+}
+
+@media screen and (min-width: 1251px) and (max-width: 1400px) {
+  .mat-paginator {
+    width: 40% !important;
+  }
+}
+
+.table-pagination {  
   .mat-paginator-page-size {
       display: flex;
       align-items: center;

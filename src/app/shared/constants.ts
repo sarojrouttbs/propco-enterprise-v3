@@ -536,3 +536,8 @@ export const OFFER_STATUSES = {
   COUNTER_OFFER_BY_LL_AGENT: 6,
   COUNTER_OFFER_BY_APPLICANT: 7
 };
+
+export const NOTES_TYPE = {
+  OFFER: 'OFFER',
+  FAULT: 'FAULT'
+}
