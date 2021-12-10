@@ -13,7 +13,7 @@
               <ion-text *ngIf="!propertyDetails?.publishedAddress" class="address ion-no-margin">
                 {{ propertyDetails?.address?.addressLine1 ? propertyDetails?.address?.addressLine1 + ',' : ''}}
                 {{ propertyDetails?.address?.addressLine2 ? propertyDetails?.address?.addressLine2 + ',' : ''}}
-                {{ propertyDetails?.address?.addressLine5 ? propertyDetails?.address?.addressLine5 + ',' : ''}}
+                {{ propertyDetails?.address?.town ? propertyDetails?.address?.town + ',' : ''}}
                 {{ propertyDetails?.address?.postcode ? propertyDetails?.address?.postcode : ''}}
               </ion-text>
             </ion-row>
@@ -27,7 +27,7 @@
             <ion-row>
               <ion-col class="ion-text-start amount">
                 <h4 class="ion-text-start fs-18 bottom-align">{{ propertyDetails?.advertisementRent | currency: 'GBP'}}
-                  {{ (propertyDetails?.advertisedRentType | lookup: rentFrequencyTypes) }}
+                  {{ (propertyDetails?.advertisementRentFrequency | lookup: rentFrequencyTypes) }}
                 </h4>
               </ion-col>
               <ion-col class="ion-text-end amount">
