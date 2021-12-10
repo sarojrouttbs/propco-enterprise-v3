@@ -2,7 +2,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PROPCO } from 'src/app/shared/constants';
+import { OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { switchMap, debounceTime } from 'rxjs/operators';
@@ -155,7 +155,10 @@ export class OfferDetailPage implements OnInit {
       this._tobService.getOfferDetails(offerId).subscribe(
         res => {
           this.offerDetails = res;
-          this.patchOfferDetails();
+          if(this.offerDetails){
+            this.patchOfferDetails();
+          this.getOfferStatusList(this.offerDetails.status);
+          }
           resolve(true);
         },
         error => {
@@ -275,7 +278,7 @@ export class OfferDetailPage implements OnInit {
       }
       else {
         this.commonService.showMessage('Your offer has been update successfully.', 'Update Offer', 'success');
-        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`]);
+        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], {replaceUrl: true});
       }
     })
   }
@@ -286,7 +289,7 @@ export class OfferDetailPage implements OnInit {
     requestObj.entityType = 'AGENT',
       this._tobService.updateOfferStatus(this.offerId, status, requestObj).subscribe(response => {
         this.commonService.showMessage('Your offer has been update successfully.', 'Update Offer', 'success');
-        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`]);
+        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], {replaceUrl: true});
       })
   }
 
@@ -327,7 +330,7 @@ export class OfferDetailPage implements OnInit {
         let applicantName = this.applicantDetail.fullName || (this.applicantDetail.title + ' ' + this.applicantDetail.forename + ' ' + this.applicantDetail.surname)
         this.commonService.showAlert('Offer Created', 'Congratulations! You have successfully created an offer on behalf of Applicant ' + applicantName).then(res => {
           if (res) {
-            this.router.navigate([`tob/${this.propertyId}/offers`]);
+            this.router.navigate([`tob/${this.propertyId}/offers`], {replaceUrl: true});
           }
         })
       }, error => {
@@ -533,9 +536,52 @@ export class OfferDetailPage implements OnInit {
 
   async onCancel() {
     const isCancel: boolean = await this.commonService.showConfirm('Cancel', 'Are you sure, you want to cancel this operation?', '', 'Yes', 'No') as boolean;
-    if(isCancel){
+    if (isCancel) {
       const propertyId = this.offerId ? this.offerDetails.propertyId : this.propertyId;
-      this.router.navigate([`tob/${propertyId}/offers`]);
+      this.router.navigate([`tob/${propertyId}/offers`], {replaceUrl: true});
+    }
+  }
+
+private  getOfferStatusList(offerStatus) {
+    if (typeof offerStatus != undefined && offerStatus !== '') {
+      let statusArray = [];
+      let offerStatusesLookup: OfferModels.ILookupResponse[] = this.offerStatuses;
+      this.offerStatuses = [];
+      switch (offerStatus) {
+        case OFFER_STATUSES.NEW:
+          statusArray = [
+            OFFER_STATUSES.AGREED_IN_PRINCIPLE, OFFER_STATUSES.ACCEPTED,
+            OFFER_STATUSES.REJECTED, OFFER_STATUSES.WITHDRAWN_BY_APPLICANT];
+          break;
+        case OFFER_STATUSES.ACCEPTED:
+          statusArray = [
+            OFFER_STATUSES.AGREED_IN_PRINCIPLE, OFFER_STATUSES.WITHDRAWN_BY_APPLICANT,
+            OFFER_STATUSES.WITHDRAWN_BY_LANDLORD];
+          break;
+        case OFFER_STATUSES.REJECTED:
+        case OFFER_STATUSES.WITHDRAWN_BY_APPLICANT:
+        case OFFER_STATUSES.WITHDRAWN_BY_LANDLORD:
+          statusArray = [OFFER_STATUSES.ACCEPTED, OFFER_STATUSES.AGREED_IN_PRINCIPLE];
+          break;
+        case OFFER_STATUSES.AGREED_IN_PRINCIPLE:
+          statusArray = [
+            OFFER_STATUSES.ACCEPTED, OFFER_STATUSES.REJECTED,
+            OFFER_STATUSES.WITHDRAWN_BY_APPLICANT, OFFER_STATUSES.WITHDRAWN_BY_LANDLORD];
+          break;
+        case OFFER_STATUSES.COUNTER_OFFER_BY_LL_AGENT:
+        case OFFER_STATUSES.COUNTER_OFFER_BY_APPLICANT:
+          statusArray = [
+            OFFER_STATUSES.AGREED_IN_PRINCIPLE, OFFER_STATUSES.ACCEPTED,
+            OFFER_STATUSES.REJECTED, OFFER_STATUSES.WITHDRAWN_BY_APPLICANT,
+            OFFER_STATUSES.WITHDRAWN_BY_LANDLORD];
+          break;
+      }
+      statusArray.push(offerStatus);
+      offerStatusesLookup.forEach((lookupObj) => {
+        if (statusArray.indexOf(lookupObj.index) != -1) {
+          this.offerStatuses.push(lookupObj);
+        }
+      });
     }
   }
 
