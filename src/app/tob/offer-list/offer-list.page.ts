@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { NOTES_TYPE, OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
@@ -57,7 +57,7 @@ export class OfferListPage implements OnInit {
   notesTypes: any;
   isAddNote: boolean = false;
 
-  constructor(private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private tobService: TobService) {
+  constructor(private router: Router, private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private tobService: TobService) {
     this.getTobLookupData();
     this.getLookUpData();
   }
@@ -205,7 +205,9 @@ export class OfferListPage implements OnInit {
   }
 
   private async getOfferNotes(offerId) {
-    this.offerNotes = await this.getNotesList(offerId) as OfferNotesData[];
+    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'divOverlayChild');
+    this.offerNotes = await this.getNotesList(offerId) as OfferNotesData[];    
     this.initOfferNotesListData()
   }
 
@@ -279,7 +281,7 @@ export class OfferListPage implements OnInit {
     });
 
     const data = modal.onDidDismiss().then(res => {
-      if (res.data && res.data.noteId) {
+      if (res.data && res.data.noteId) {        
         this.getOfferNotes(offerId);
       }
     });
@@ -379,5 +381,17 @@ export class OfferListPage implements OnInit {
         }
       )
     });
+  }
+
+  viewDetails(offerId?) {
+    if (offerId != undefined && offerId != null) {
+      this.router.navigate([`tob/${offerId}/view`], { replaceUrl: true });
+    } else if(this.selectedOfferRow?.offerId != undefined && this.selectedOfferRow?.offerId != null) {
+      this.router.navigate([`tob/${this.selectedOfferRow.offerId}/view`], { replaceUrl: true });
+    }
+  }
+
+  makeAnOffer() {
+    this.router.navigate([`tob/${this.propertyId}/create-offer`], { replaceUrl: true });
   }
 }

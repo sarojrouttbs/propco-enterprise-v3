@@ -13,13 +13,12 @@
             <h1 *ngIf="!propertyDetails?.publishedAddress" class="ion-no-margin">
               {{ propertyDetails?.address?.addressLine1 ? propertyDetails?.address?.addressLine1 + ',' : ''}}
               {{ propertyDetails?.address?.addressLine2 ? propertyDetails?.address?.addressLine2 + ',' : ''}}
-              {{ propertyDetails?.address?.addressLine5 ? propertyDetails?.address?.addressLine5 + ',' : ''}}
+              {{ propertyDetails?.address?.town ? propertyDetails?.address?.town + ',' : ''}}
               {{ propertyDetails?.address?.postcode ? propertyDetails?.address?.postcode : ''}}
             </h1>
           </ion-col>
           <ion-col class="ion-no-padding ion-text-end" size="20">
-            <ion-button class="ion-no-margin"
-              [disabled]="!accessRight?.hasAccessToAddOffer || !propertyDetails?.isPropertyAvailable">Make an Offer
+            <ion-button class="ion-no-margin" (click)="makeAnOffer()" [disabled]="!accessRight?.hasAccessToAddOffer || !propertyDetails?.isAvailable">Make an Offer
             </ion-button>
           </ion-col>
         </ion-row>
@@ -86,9 +85,8 @@
           <ion-grid>
             <ion-row class="main-row">
               <ion-col class="" size-xl="15" size="20">
-                <div>
-                  <img *ngIf="item.numberOfCoApplicants > 0" [src]="'assets/images/offers/multi-user.svg'">
-                  <img *ngIf="item.numberOfCoApplicants <= 0" [src]="'assets/images/offers/single-user.svg'">
+                <div (click)="viewDetails(item.offerId)">
+                  <img [src]=" item.numberOfCoApplicants > 0 ? 'assets/images/offers/multi-user.svg' : 'assets/images/offers/single-user.svg' ">
                 </div>
               </ion-col>
               <ion-col class="" size-xl="85" size="80">
@@ -182,7 +180,7 @@
       </ion-card>
       <div id="divOverlay">
         <ion-button (click)="addNote()">Add Note</ion-button>
-        <ion-button>View Details</ion-button>
+        <ion-button (click)="viewDetails()">View Details</ion-button>
         <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>
     </div>
@@ -232,7 +230,7 @@
             </table>
             <div id="divOverlayChild">
               <ion-button (click)="editNote()"> Edit </ion-button>
-              <ion-button (click)="removeNote()"> Remove </ion-button>
+              <ion-button color="danger" (click)="removeNote()"> Remove </ion-button>
               <i (click)="hideMenu($event,'divOverlayChild')" class="propcoicon propcoicon-actions-on"></i>
             </div>
 
