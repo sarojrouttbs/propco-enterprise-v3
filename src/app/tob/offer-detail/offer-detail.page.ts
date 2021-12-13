@@ -344,7 +344,7 @@ export class OfferDetailPage implements OnInit {
           }
         })
       }, error => {
-        this.commonService.showMessage(error.error ? error.error.message : error.message, 'Offer', 'error');
+        // this.commonService.showMessage(error.error ? error.error.message : error.message, 'Offer', 'error');
       });
     }
     else {
