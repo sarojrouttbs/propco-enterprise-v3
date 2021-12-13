@@ -91,22 +91,28 @@ export class OfferDetailPage implements OnInit {
         this.disableSearchApplicant = true;
         this.resultsAvailable = false;
         this.searchApplicantForm.get('searchApplicant').setValue('');
-      }
-      if (this.offerId && res) {
-        this.makeAnOfferForm.patchValue({
-          occupation: this.applicantDetail.occupation,
-          hasGuarantor: this.applicantDetail.guarantorType ? true : false,
-          guarantorType: this.applicantDetail.guarantorType,
-          hasPets: this.applicantDetail.hasPets,
-          petsInfo: this.applicantDetail.petsInfo,
-          currentPosition: this.applicantDetail.currentPosition
-        });
+        this.patchApplicantDetail();
         this.isEnable('guarantor');
         this.isEnable('pets');
       }
     },
       error => {
       })
+  }
+
+  private patchApplicantDetail(){
+    this.makeAnOfferForm.patchValue({
+      moveInDate: this.applicantDetail.moveInDate,
+      rentingTime: this.applicantDetail.rentingTime,
+      numberOfAdults: this.applicantDetail.numberOfAdults,
+      numberOfChildren: this.applicantDetail.numberOfChildren,
+      occupation: this.applicantDetail.occupation,
+      hasGuarantor: this.applicantDetail.guarantorType ? true : false,
+      guarantorType: this.applicantDetail.guarantorType,
+      hasPets: this.applicantDetail.petsInfo ? true : false,
+      petsInfo: this.applicantDetail.petsInfo,
+      currentPosition: this.applicantDetail.currentPosition
+    });
   }
 
   async deleteApplicant() {
