@@ -104,8 +104,8 @@ export class OfferDetailPage implements OnInit {
     this.makeAnOfferForm.patchValue({
       moveInDate: this.applicantDetail.moveInDate,
       rentingTime: this.applicantDetail.rentingTime,
-      numberOfAdults: this.applicantDetail.numberOfAdults,
-      numberOfChildren: this.applicantDetail.numberOfChildren,
+      numberOfAdults: this.applicantDetail.numberOfAdults ? this.applicantDetail.numberOfAdults : 1,
+      numberOfChildren: this.applicantDetail.numberOfChildren ? this.applicantDetail.numberOfChildren : 0,
       occupation: this.applicantDetail.occupation,
       hasGuarantor: this.applicantDetail.guarantorType ? true : false,
       guarantorType: this.applicantDetail.guarantorType,
