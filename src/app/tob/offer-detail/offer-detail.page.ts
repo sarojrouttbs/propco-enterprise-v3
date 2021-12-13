@@ -155,9 +155,9 @@ export class OfferDetailPage implements OnInit {
       this._tobService.getOfferDetails(offerId).subscribe(
         res => {
           this.offerDetails = res;
-          if(this.offerDetails){
+          if (this.offerDetails) {
             this.patchOfferDetails();
-          this.getOfferStatusList(this.offerDetails.status);
+            this.getOfferStatusList(this.offerDetails.status);
           }
           resolve(true);
         },
@@ -273,23 +273,33 @@ export class OfferDetailPage implements OnInit {
 
   private updateOfferDetails() {
     this._tobService.updateOffer(this.prepareUpdateOffer(), this.offerId).subscribe(response => {
+      // if (this.offerDetails.status !== this.makeAnOfferForm.controls.status.value) {
+      //   this.updateOfferStatus();;
+      // }
+      let counterOfferStatus = this.makeAnOfferForm.controls.status.value;
+      if (this.offerDetails.amount !== Number(this.makeAnOfferForm.controls.amount.value)) {
+        counterOfferStatus = OFFER_STATUSES.COUNTER_OFFER_BY_LL_AGENT;
+      }
       if (this.offerDetails.status !== this.makeAnOfferForm.controls.status.value) {
-        this.updateOfferStatus();;
+        counterOfferStatus = this.makeAnOfferForm.controls.status.value;
+      }
+      if (this.offerDetails.status !== counterOfferStatus) {
+        this.updateOfferStatus(counterOfferStatus);
       }
       else {
-        this.commonService.showMessage('Your offer has been update successfully.', 'Update Offer', 'success');
-        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], {replaceUrl: true});
+        this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
+        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
       }
     })
   }
 
-  private async updateOfferStatus() {
-    const status = this.makeAnOfferForm.controls.status.value;
+  private async updateOfferStatus(counterOfferStatus) {
+    const status = counterOfferStatus ? counterOfferStatus : this.makeAnOfferForm.controls.status.value;
     const requestObj: any = {};
     requestObj.entityType = 'AGENT',
       this._tobService.updateOfferStatus(this.offerId, status, requestObj).subscribe(response => {
-        this.commonService.showMessage('Your offer has been update successfully.', 'Update Offer', 'success');
-        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], {replaceUrl: true});
+        this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
+        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
       })
   }
 
@@ -315,7 +325,7 @@ export class OfferDetailPage implements OnInit {
 
   private checkForOfferAgreedCondition() {
     const STATUS_ACCEPTED = 1;
-    if (this.offerDetails.status == STATUS_ACCEPTED && (!this.offerDetails.isApplicantConfirmed || !this.offerDetails.isLandlordConfirmed)) {
+    if (this.offerDetails.status == STATUS_ACCEPTED && (!this.confirmationForm.controls.isApplicantConfirmed.value || !this.confirmationForm.controls.isLandlordConfirmed.value)) {
       this.commonService.showAlert('Offer', 'This offer is not confirmed by Landlord or Applicant. Please confirm the offer before marking it as Accepted.');
       return false;
     } else {
@@ -330,7 +340,7 @@ export class OfferDetailPage implements OnInit {
         let applicantName = this.applicantDetail.fullName || (this.applicantDetail.title + ' ' + this.applicantDetail.forename + ' ' + this.applicantDetail.surname)
         this.commonService.showAlert('Offer Created', 'Congratulations! You have successfully created an offer on behalf of Applicant ' + applicantName).then(res => {
           if (res) {
-            this.router.navigate([`tob/${this.propertyId}/offers`], {replaceUrl: true});
+            this.router.navigate([`tob/${this.propertyId}/offers`], { replaceUrl: true });
           }
         })
       }, error => {
@@ -489,20 +499,25 @@ export class OfferDetailPage implements OnInit {
         if (this.confirmationForm.value.isApplicantConfirmed) {
           this.confirmationForm.controls.applicantConfirmedDate.setValidators(this.setRequired());
           this.confirmationForm.controls.applicantConfirmedDate.enable();
+          this.confirmationForm.get('applicantConfirmedDate').setValue(new Date());
         } else {
           this.confirmationForm.controls.applicantConfirmedDate.clearValidators();
           this.confirmationForm.get('applicantConfirmedDate').updateValueAndValidity();
           this.confirmationForm.controls.applicantConfirmedDate.disable();
+          this.confirmationForm.get('applicantConfirmedDate').setValue('');
         }
         break;
       case 'landlord':
         if (this.confirmationForm.value.isLandlordConfirmed) {
           this.confirmationForm.controls.landlordConfirmedDate.setValidators(this.setRequired());
           this.confirmationForm.controls.landlordConfirmedDate.enable();
+          this.confirmationForm.get('landlordConfirmedDate').setValue(new Date());
         } else {
           this.confirmationForm.controls.landlordConfirmedDate.clearValidators();
           this.confirmationForm.get('landlordConfirmedDate').updateValueAndValidity();
           this.confirmationForm.controls.landlordConfirmedDate.disable();
+          this.confirmationForm.get('landlordConfirmedDate').setValue('');
+
         }
         break;
       case 'pets':
@@ -538,11 +553,11 @@ export class OfferDetailPage implements OnInit {
     const isCancel: boolean = await this.commonService.showConfirm('Cancel', 'Are you sure, you want to cancel this operation?', '', 'Yes', 'No') as boolean;
     if (isCancel) {
       const propertyId = this.offerId ? this.offerDetails.propertyId : this.propertyId;
-      this.router.navigate([`tob/${propertyId}/offers`], {replaceUrl: true});
+      this.router.navigate([`tob/${propertyId}/offers`], { replaceUrl: true });
     }
   }
 
-private  getOfferStatusList(offerStatus) {
+  private getOfferStatusList(offerStatus) {
     if (typeof offerStatus != undefined && offerStatus !== '') {
       let statusArray = [];
       let offerStatusesLookup: OfferModels.ILookupResponse[] = this.offerStatuses;
