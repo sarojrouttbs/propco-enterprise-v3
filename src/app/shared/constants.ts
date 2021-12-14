@@ -10,7 +10,8 @@ export const PROPCO = {
   REFERENCING_PRODUCT_LIST: 'referencing_product_list',
   FAULTS_LOOKUP_DATA: 'faults_lookup_data',
   LET_CATEGORY: 'let_category',
-  SSO_KEY: 'sso_key'
+  SSO_KEY: 'sso_key',
+  TOB_LOOKUP_DATA: 'tob_lookup_data'
 };
 
 export const USER_TYPES = {
@@ -524,3 +525,19 @@ export const NGX_QUILL_EDITOR_TOOLBAR_SETTINGS = {
     ]
   },
 };
+
+export const OFFER_STATUSES = {
+  NEW: 0,
+  ACCEPTED: 1,
+  REJECTED: 2,
+  WITHDRAWN_BY_APPLICANT: 3,
+  WITHDRAWN_BY_LANDLORD: 4,
+  AGREED_IN_PRINCIPLE: 5,
+  COUNTER_OFFER_BY_LL_AGENT: 6,
+  COUNTER_OFFER_BY_APPLICANT: 7
+};
+
+export const NOTES_TYPE = {
+  OFFER: 'OFFER',
+  FAULT: 'FAULT'
+}

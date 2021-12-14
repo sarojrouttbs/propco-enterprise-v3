@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="25px" height="26px" viewBox="0 0 25 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Create-Application-3" transform="translate(-628.000000, -633.000000)" stroke="#D0021B" stroke-width="2">
+            <g id="Group" transform="translate(640.500000, 645.500000) rotate(-270.000000) translate(-640.500000, -645.500000) translate(628.000000, 634.000000)">
+                <g id="Group-7" transform="translate(-0.000000, 0.000000)">
+                    <g id="Group-5-Copy" transform="translate(12.787500, 11.500000) scale(-1, 1) translate(-12.787500, -11.500000) translate(0.787500, 0.000000)">
+                        <ellipse id="Oval" cx="12" cy="11.5" rx="11.7073171" ry="11.5"/>
+                    </g>
+                    <path d="M17.4933824,7.29411765 L8.08161765,16.7058824" id="Line-6" stroke-linecap="round"/>
+                    <path d="M17.675,6.6125 L7.9,16.3875" id="Line-6" stroke-linecap="round" transform="translate(12.787500, 11.500000) rotate(-90.000000) translate(-12.787500, -11.500000) "/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
