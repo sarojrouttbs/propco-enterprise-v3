@@ -1,10 +1,10 @@
 import { NotesService } from './notes.service';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { CommonService } from '../../services/common.service';
 import { INoteItem } from './notes-modal.model'
-import { NOTES_ORIGIN, PROPCO, SYSTEM_CONFIG } from '../../constants';
+import { NOTES_ORIGIN, NOTES_TYPE, PROPCO, SYSTEM_CONFIG } from '../../constants';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -18,7 +18,6 @@ export class NotesModalPage implements OnInit {
   lookupdata: any;
   notesForm: FormGroup;
   noteObj: INoteItem;
-  userDetails: any;
   notesCategories: any[];
   userLookupDetails: any[];
   notesComplaints: any[];
@@ -29,6 +28,7 @@ export class NotesModalPage implements OnInit {
   notesOrigin;
   faultNotificationDetails;
   reference;
+  notesData;
 
   constructor(
     private navParams: NavParams,
@@ -42,38 +42,13 @@ export class NotesModalPage implements OnInit {
 
   ngOnInit() {
     this.getLookupData();
-    this.userDetails = this.commonService.getItem(PROPCO.LOGIN_DETAILS, true);
-    this.notesForm = this.formBuilder.group({
-      date: [''],
-      category: ['', Validators.required],
-      complaint: [false, Validators.required],
-      type: ['', Validators.required],
-      notes: ['', Validators.required]
-    });
-    if (this.isAddNote) {
-      this.notesTypeId = this.navParams.get('notesTypeId');
-      this.notesType = this.navParams.get('notesType');
-      let todayDate = this.commonService.getFormatedDate(new Date());
-
-      this.notesForm.patchValue({ date: todayDate });
-    }
-
-
-    if (this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY)) {
-      let category = this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY);
-      this.notesForm.patchValue({ category: + category });
-    } else {
-      this.getDefaultCategory(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY);
-    }
-
-    if (this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE)) {
-      let type = this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE);
-      this.notesForm.patchValue({ type: + type });
-    } else {
-      this.getDefaultType(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE);
+    this.initNotesForm();
+    this.initData();
+    if(this.notesType === NOTES_TYPE.FAULT) {
+      this.setCategoryAndType();
     }
   }
-
+  
   private async getDefaultCategory(key): Promise<any> {
     const promise = new Promise((resolve, reject) => {
       this.commonService.getSystemConfig(key).subscribe(res => {
@@ -125,39 +100,104 @@ export class NotesModalPage implements OnInit {
   }
 
   createNote() {
-
-
     if (this.notesForm.valid) {
       const requestObj = this.notesForm.value;
       requestObj.complaint = requestObj.complaint ? this.notesComplaints[1].index : this.notesComplaints[0].index;
       delete requestObj.date;
-      if (this.notesOrigin && this.notesOrigin == NOTES_ORIGIN.FAULT_STAGE) {
-        let notesDesc = this.notesForm.value.notes;
-        let updatedNotesDesc = '';
-        requestObj.notes = '';
-        if (this.faultNotificationDetails && this.faultNotificationDetails.length) {
-          updatedNotesDesc = 'Fault ID: ' + this.reference + '<br>Notification ID: ' + this.faultNotificationDetails[0] + ' - ' + this.faultNotificationDetails[1] + ' <br>Notes: <br>' + notesDesc;
+      if(this.notesType === NOTES_TYPE.OFFER) {
+        if(this.isAddNote) {
+          this.createOfferNotes(requestObj);
         } else {
-          updatedNotesDesc = 'Fault ID: ' + this.reference + ' <br>Notes: <br>' + notesDesc;
+          this.updateNotes(requestObj);
         }
-        requestObj.notes = updatedNotesDesc;
+      } else {
+        this.createFaultNotes(requestObj);
       }
-
-      this.notesService.createFaultNotes(this.notesTypeId, requestObj).subscribe(res => {
-        this.modalController.dismiss(res);
-
-      }, err => {
-        this.commonService.showMessage(err.message, 'Add Note', 'error');
-      });
     } else {
       // this.commonService.showMessage('Please fill all the required fields.', 'Add Note', 'error');
       this.notesForm.markAllAsTouched();
     }
   }
-
+  
   dismiss() {
     this.modalController.dismiss({
       dismissed: true
     });
   }
+
+  private initNotesForm() {
+    this.notesForm = this.formBuilder.group({
+      date: [''],
+      category: ['', Validators.required],
+      complaint: [false, Validators.required],
+      type: ['', Validators.required],
+      notes: ['', Validators.required]
+    });
+  }
+
+  private initData() {
+    let todayDate = this.commonService.getFormatedDate(new Date());
+    this.notesForm.patchValue({ date: todayDate });
+    this.notesTypeId = this.navParams.get('notesTypeId');
+    this.notesType = this.navParams.get('notesType');
+    if (!this.isAddNote) {
+      this.notesData = this.navParams.get('noteData');
+      this.notesTypeId = this.navParams.get('notesTypeId');
+      this.notesType = this.navParams.get('notesType');
+      this.notesForm.patchValue(this.notesData);
+      this.notesForm.patchValue({complaint: (this.notesData.complaint === this.notesComplaints[1].index) ? true : false });
+    }
+  }
+
+  private setCategoryAndType() {
+    if (this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY)) {
+      let category = this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY);
+      this.notesForm.patchValue({ category: + category });
+    } else {
+      this.getDefaultCategory(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_CATEGORY);
+    }
+
+    if (this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE)) {
+      let type = this.commonService.getItem(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE);
+      this.notesForm.patchValue({ type: + type });
+    } else {
+      this.getDefaultType(SYSTEM_CONFIG.FAULT_DEFAULT_NOTE_TYPE);
+    }
+  }
+
+  private createFaultNotes(requestObj) {
+    if (this.notesOrigin && this.notesOrigin == NOTES_ORIGIN.FAULT_STAGE) {
+      let notesDesc = this.notesForm.value.notes;
+      let updatedNotesDesc = '';
+      requestObj.notes = '';
+      if (this.faultNotificationDetails && this.faultNotificationDetails.length) {
+        updatedNotesDesc = 'Fault ID: ' + this.reference + '<br>Notification ID: ' + this.faultNotificationDetails[0] + ' - ' + this.faultNotificationDetails[1] + ' <br>Notes: <br>' + notesDesc;
+      } else {
+        updatedNotesDesc = 'Fault ID: ' + this.reference + ' <br>Notes: <br>' + notesDesc;
+      }
+      requestObj.notes = updatedNotesDesc;
+    }
+
+    this.notesService.createFaultNotes(this.notesTypeId, requestObj).subscribe(res => {
+      this.modalController.dismiss(res);
+    }, err => {
+      this.commonService.showMessage(err.message, 'Add Note', 'error');
+    });
+  }
+
+  private createOfferNotes(requestObj) {
+    this.notesService.createOfferNotes(this.notesTypeId, requestObj).subscribe(res => {
+      this.modalController.dismiss(res);
+    }, err => {
+      this.commonService.showMessage(err.message, 'Add Note', 'error');
+    });
+  }
+
+  private updateNotes(requestObj) {
+    this.notesService.updateNotes(this.notesData.noteId, requestObj).subscribe(res => {
+      this.modalController.dismiss({noteId: this.notesData.noteId});
+    }, err => {
+      this.commonService.showMessage(err.message, 'Add Note', 'error');
+    });
+  }  
 }

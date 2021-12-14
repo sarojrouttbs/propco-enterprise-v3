@@ -93,6 +93,10 @@ export class CommonService {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup', { responseType: 'json' });
   }
 
+  getTobLookup(): Observable<Lookupdata> {
+    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup/tob', { responseType: 'json' });
+  }
+
   getFaultsLookup(): Observable<Lookupdata> {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'lookup/faults', { responseType: 'json' });
   }
@@ -357,24 +361,24 @@ export class CommonService {
     }, 500);
   }
 
-  getResizedImageUrl(url, size?) {
-    let srcUrl = '';
-    if (url) {
-      const splitUrl = url.split('images/');
-      const mediaHost = (splitUrl.length > 0) ? splitUrl[0] : '';
-      const fileName = (splitUrl.length > 0) ? splitUrl[1] : '';
-      size = size ? size : 400;
-      srcUrl = mediaHost + 'images/resize.php/' + fileName + '?resize(' + size + ')';
-    }
-    return srcUrl;
+  getResizedImageUrl(imageName, size?) {
     // let srcUrl = '';
-    // if (imageName) {
-    //   let mediaHost = environment.MEDIA_HOST_URL;
-    //   let fileName = imageName ? imageName : '';
+    // if (url) {
+    //   const splitUrl = url.split('images/');
+    //   const mediaHost = (splitUrl.length > 0) ? splitUrl[0] : '';
+    //   const fileName = (splitUrl.length > 0) ? splitUrl[1] : '';
     //   size = size ? size : 400;
     //   srcUrl = mediaHost + 'images/resize.php/' + fileName + '?resize(' + size + ')';
     // }
     // return srcUrl;
+    let srcUrl = '';
+    if (imageName) {
+      let mediaHost = environment.MEDIA_HOST_URL;
+      let fileName = imageName ? imageName : '';
+      size = size ? size : 400;
+      srcUrl = mediaHost + 'images/resize.php/' + fileName + '?resize(' + size + ')';
+    }
+    return srcUrl;
   }
 
   getHeadMediaUrl(mediaList) {
@@ -656,5 +660,9 @@ export class CommonService {
   sanitizeHtml(html) {
     return this.sanitizer.bypassSecurityTrustHtml(html);
  }
+
+ deleteNote(noteId: number): Observable<any> {
+  return this.httpClient.delete(environment.API_BASE_URL + `notes/${noteId}`, {});
+}
 
 }
