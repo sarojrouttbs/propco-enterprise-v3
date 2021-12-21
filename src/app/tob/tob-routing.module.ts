@@ -26,6 +26,10 @@ const routes: Routes = [
         path: ':offerId/view',
         loadChildren: () => import('./offer-detail/offer-detail.module').then(m => m.OfferDetailPageModule)
       },
+      {
+        path: ':propertyId/applications',
+        loadChildren: () => import('./application-list/application-list.module').then(m => m.ApplicationListPageModule)
+      },
     ]
   }
 ];

@@ -541,3 +541,11 @@ export const NOTES_TYPE = {
   OFFER: 'OFFER',
   FAULT: 'FAULT'
 }
+
+export const APPLICATION_STATUSES = {
+  NEW: 0,
+  DRAFT: 1,
+  ACCEPTED: 2,
+  REJECTED: 3,
+  ON_HOLD: 4
+};

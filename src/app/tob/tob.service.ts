@@ -101,4 +101,8 @@ export class TobService {
       catchError(this.handleError<any>(''))
     );
   }
+
+  getApplicationList(propertyId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/applications`);
+  }
 }
