@@ -13,7 +13,7 @@ import { NegotiateModalPage } from 'src/app/shared/modals/negotiate-modal/negoti
 @Component({
   selector: 'app-offer-detail',
   templateUrl: './offer-detail.page.html',
-  styleUrls: ['./offer-detail.page.scss'],
+  styleUrls: ['./offer-detail.page.scss', '../common-css/offer-application-detail.scss'],
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
