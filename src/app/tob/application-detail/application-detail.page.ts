@@ -14,7 +14,7 @@ import { ValidationService } from 'src/app/shared/services/validation.service';
 @Component({
   selector: 'app-application-detail',
   templateUrl: './application-detail.page.html',
-  styleUrls: ['./application-detail.page.scss' ,'../common-css/offer-application-detail.scss'],
+  styleUrls: ['./application-detail.page.scss', '../common-css/offer-application-detail.scss'],
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
@@ -50,6 +50,14 @@ export class ApplicationDetailPage implements OnInit {
   offerDetails: OfferModels.IOfferResponse;
   occupantForm: FormGroup;
   isCoApplicantDeleted: any;
+  addressDetailsForm: FormGroup;
+  bankDetailsForm: FormGroup;
+  propertyType = null; /*0: private , 1:student*/
+  showPostcodeLoader: Boolean = null;
+  showAddressLoader: Boolean = null;
+  addressList: any[];
+  guarantorAddressList: any[];
+  correspondenceAddressList: any[];
 
   constructor(
     private route: ActivatedRoute,
@@ -137,6 +145,8 @@ export class ApplicationDetailPage implements OnInit {
     this.initSearchForm();
     this.initApplicantDetailsForm();
     this.initOccupantForm();
+    this.initAddressDetailsForm();
+    this.initBankDetailsForm();
   }
 
   private initCreateApiCalls() {
@@ -155,6 +165,7 @@ export class ApplicationDetailPage implements OnInit {
   private getPropertyDetails(propertyId) {
     this._tobService.getPropertyDetails(propertyId).subscribe(res => {
       this.propertyDetails = res.data;
+      this.propertyType = this.commonService.getLookupValue(this.lookupdata.rentCategories, this.propertyDetails?.rentCategory);
       this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
       this.getNoDeposit();
     }, (error) => {
@@ -290,11 +301,11 @@ export class ApplicationDetailPage implements OnInit {
     const isCancel: boolean = await this.commonService.showConfirm('Cancel', 'Are you sure, you want to cancel this operation?', '', 'Yes', 'No') as boolean;
     if (isCancel) {
       const propertyId = this.propertyId;
-      this.router.navigate([`tob/${propertyId}/offers`], { replaceUrl: true });
+      this.router.navigate([`tob/${propertyId}/applications`], { replaceUrl: true });
     }
   }
 
-    /** Occupants Functionality **/
+  /** Occupants Functionality **/
 
   addNewAddressGroup() {
     const add = this.occupantForm.get('coApplicants') as FormArray;
@@ -494,7 +505,134 @@ export class ApplicationDetailPage implements OnInit {
       // }
     }
 
-    /** Occupants Functionality **/
+  /** Occupants Functionality **/
 
+  initAddressDetailsForm(): void {
+    this.addressDetailsForm = this._formBuilder.group({
+      address: this._formBuilder.group({
+        postcode: ['', Validators.required],
+        addressdetails: [''],
+        addressLine1: ['', Validators.required],
+        addressLine2: '',
+        locality: '',
+        town: ['', Validators.required],
+        county: '',
+        country: ''
+      }),
+      correspondenceAddress: this._formBuilder.group({
+        postcode: '',
+        addressdetails: [''],
+        addressLine1: '',
+        addressLine2: '',
+        locality: '',
+        town: '',
+        county: '',
+        country: ''
+      })
+    });
+  }
+
+  getAddressList(addressType) {
+    let postcode;
+    switch(addressType) {
+      case 'personal':
+        postcode = this.addressDetailsForm.controls.address['controls'].postcode;
+        postcode.value ? (this.showPostcodeLoader = true) : '';
+        break;
+      case 'correspondence-address':
+        postcode = this.addressDetailsForm.controls.correspondenceAddress['controls'].postcode;
+        postcode.value ? (this.showAddressLoader = true) : '';
+        break;
+      // case 'guarantor':
+      //   postcode = this.guarantorForm.controls.address['controls'].postcode;
+      //   postcode.value ? (this.showPostcodeLoader = true) : '';
+      //   break;
+    }
+    if (postcode.valid && postcode.value) {
+      this.commonService.getPostcodeAddressList(postcode.value).subscribe(
+        res => {
+          this.addressList = [];
+          this.guarantorAddressList = [];
+          this.correspondenceAddressList = [];
+          if (res && res.data && res.data.length) {
+            switch (addressType) {
+              case 'personal':
+                this.addressList = res.data;
+                this.showPostcodeLoader = false;
+                break;
+              case 'guarantor':
+                this.guarantorAddressList = res.data;
+                this.showPostcodeLoader = false;
+                break;
+              case 'correspondence-address':
+                this.correspondenceAddressList = res.data;
+                this.showAddressLoader = false;
+                break;
+            }
+          }
+        },
+        error => {
+          this.showPostcodeLoader = false;
+          this.showAddressLoader = false;
+          this.addressList = [];
+          this.correspondenceAddressList = [];
+          const data: any = {};
+          data.title = 'Postcode Lookup';
+          data.message = error.error ? error.error.message : error.message;
+          this.commonService.showMessage(data.message, data.title, 'error');
+        }
+      );
+    }
+  }
+
+  getAddressDetails(addressId, addressType) {
+    this.commonService.getPostcodeAddressDetails(addressId).subscribe(
+      res => {
+        if (res && res.line1) {
+          switch (addressType) {
+            case 'personal':
+              this.addressDetailsForm.controls.address['controls'].addressLine1.setValue(res.line1);
+              this.addressDetailsForm.controls.address['controls'].addressLine2.setValue(res.line2);
+              this.addressDetailsForm.controls.address['controls'].locality.setValue(res.line4);
+              this.addressDetailsForm.controls.address['controls'].town.setValue(res.line5);
+              this.addressDetailsForm.controls.address['controls'].county.setValue(res.provinceName);
+              this.addressDetailsForm.controls.address['controls'].country.setValue(res.countryName);
+              break;
+            case 'correspondence-address':
+              this.addressDetailsForm.controls.correspondenceAddress['controls'].addressLine1.setValue(res.line1);
+              this.addressDetailsForm.controls.correspondenceAddress['controls'].addressLine2.setValue(res.line2);
+              this.addressDetailsForm.controls.correspondenceAddress['controls'].locality.setValue(res.line2);
+              this.addressDetailsForm.controls.correspondenceAddress['controls'].town.setValue(res.line5);
+              this.addressDetailsForm.controls.correspondenceAddress['controls'].county.setValue(res.provinceName);
+              this.addressDetailsForm.controls.correspondenceAddress['controls'].country.setValue(res.countryName);
+              break;
+            case 'guarantor':
+              // this.guarantorForm.controls.address['controls'].addressLine1.setValue(res.line1);
+              // this.guarantorForm.controls.address['controls'].addressLine2.setValue(res.line2);
+              // // this.guarantorForm['controls'].town.setValue(res.line5);
+              // this.guarantorForm.controls.address['controls'].county.setValue(res.provinceName);
+              // this.guarantorForm.controls.address['controls'].country.setValue(res.countryName);
+              // break;
+          }
+        }
+      },
+      error => {
+        const data: any = {};
+        data.title = 'Postcode Address';
+        data.message = error.error ? error.error.message : error.message;
+        this.commonService.showMessage(data.message, data.title, 'error');
+      }
+    );
+  }
+
+  initBankDetailsForm(): void {
+    this.bankDetailsForm = this._formBuilder.group({
+      bankDetails: this._formBuilder.group({
+        bankName: '',
+        sortcode: ['', [ValidationService.bankCodeValidator, Validators.maxLength(8)]],
+        accountNumber: ['', [Validators.maxLength(8)]],
+        accountName: ''
+      })
+    });
+  }
 }
-

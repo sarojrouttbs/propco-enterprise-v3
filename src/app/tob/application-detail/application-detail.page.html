@@ -25,7 +25,7 @@
               </div>
             </mat-step>
             <mat-step>
-              <ng-container *ngTemplateOutlet="address"></ng-container>
+              <ng-container *ngTemplateOutlet="applicantAddress"></ng-container>
               <ng-template matStepLabel>Address</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
@@ -113,12 +113,198 @@
   </ion-grid>
 </ion-content>
 
-<ng-template #occupants>
-</ng-template>
+<ng-template #occupants></ng-template>
 
 <ng-template #applicantDetails></ng-template>
-<ng-template #address></ng-template>
-<ng-template #bankDetails></ng-template>
+
+<ng-template #applicantAddress>
+  <form [formGroup]="addressDetailsForm" id="addressDetailsForm">
+    <ion-grid>
+      <ion-row class="ion-justify-content-center" formGroupName="address">
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating"> Postcode <ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-input type="text" formControlName="postcode"></ion-input>
+            <ion-button color="success" [disabled]="showPostcodeLoader" class="postcode-search"
+              (click)="getAddressList('personal')">Lookup
+              <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+            </ion-button>
+          </ion-item>
+          <app-validation-message [control]="addressDetailsForm.controls.address['controls'].postcode">
+          </app-validation-message>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating"> Address 1 <ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-input type="text" formControlName="addressLine1"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="addressDetailsForm.controls.address['controls'].addressLine1">
+          </app-validation-message>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="16.5">
+          <ion-item>
+            <ion-label position="floating">Locality</ion-label>
+            <ion-input type="text" formControlName="locality"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="16.5">
+          <ion-item>
+            <ion-label position="floating">Town <ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-input type="email" formControlName="town"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="addressDetailsForm.controls.address['controls'].town">
+          </app-validation-message>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">Select address</ion-label>
+            <ion-select interface="popover" formControlName="addressdetails"
+              (ionChange)="getAddressDetails(selectedGuarantorAddress.value, 'personal')" [disabled]="!addressList"
+              #selectedGuarantorAddress>
+              <ion-select-option [value]="address?.id" *ngFor="let address of addressList">{{ address?.text }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">Address 2</ion-label>
+            <ion-input type="text" formControlName="addressLine2"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="16.5">
+          <ion-item>
+            <ion-label position="floating">County</ion-label>
+            <ion-input type="text" formControlName="county"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="16.5">
+          <ion-item>
+            <ion-label position="floating">Country</ion-label>
+            <ion-input type="text" formControlName="country"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ng-container *ngIf="propertyType == 'Student'">
+        <ion-row formGroupName="correspondenceAddress">
+          <ion-col size="100">
+            <div class="page-heading" [ngClass]="{'term-time':(propertyType == 'Student')}">Term Time Address</div>
+          </ion-col>
+          <ion-col size-xs="100" size-sm="33.3">
+            <ion-item>
+              <ion-label position="floating">Postcode <ion-text class="mandatory">*</ion-text>
+              </ion-label>
+              <ion-input type="text" formControlName="postcode"></ion-input>
+              <ion-button class="postcode-search" [disabled]="showAddressLoader" color="success"
+                (click)="getAddressList('correspondence-address')"> Lookup
+                <ion-icon *ngIf="showAddressLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+              </ion-button>
+            </ion-item>
+            <app-validation-message [control]="addressDetailsForm.controls.correspondenceAddress['controls'].postcode">
+            </app-validation-message>
+          </ion-col>
+          <ion-col size-xs="100" size-sm="33.3">
+            <ion-item>
+              <ion-label position="floating">Address 1 <ion-text class="mandatory">*</ion-text>
+              </ion-label>
+              <ion-input type="text" formControlName="addressLine1"></ion-input>
+            </ion-item>
+            <app-validation-message
+              [control]="addressDetailsForm.controls.correspondenceAddress['controls'].addressLine1">
+            </app-validation-message>
+          </ion-col>          
+          <ion-col size-xs="100" size-sm="16.5">
+            <ion-item>
+              <ion-label position="floating">Locality</ion-label>
+              <ion-input type="text" formControlName="locality"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size-xs="100" size-sm="16.5">
+            <ion-item>
+              <ion-label position="floating">Town <ion-text class="mandatory">*</ion-text>
+              </ion-label>
+              <ion-input type="email" formControlName="town"></ion-input>
+            </ion-item>
+            <app-validation-message [control]="addressDetailsForm.controls.correspondenceAddress['controls'].town">
+            </app-validation-message>
+          </ion-col>
+          <ion-col size-xs="100" size-sm="33.3">
+            <ion-item>
+              <ion-label position="floating">Select address</ion-label>
+              <ion-select interface="popover" formControlName="addressdetails"
+                (ionChange)="getAddressDetails(correspondenceAddress.value, 'correspondence-address')"
+                [disabled]="!correspondenceAddressList" #correspondenceAddress>
+                <ion-select-option [value]="address?.id" *ngFor="let address of correspondenceAddressList">
+                  {{ address?.text }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size-xs="100" size-sm="33.3">
+            <ion-item>
+              <ion-label position="floating">Address 2</ion-label>
+              <ion-input type="text" formControlName="addressLine2"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size-xs="100" size-sm="16.5">
+            <ion-item>
+              <ion-label position="floating">County</ion-label>
+              <ion-input type="text" formControlName="county"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size-xs="100" size-sm="16.5">
+            <ion-item>
+              <ion-label position="floating">Country</ion-label>
+              <ion-input type="text" formControlName="country"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+    </ion-grid>
+  </form>
+</ng-template>
+
+<ng-template #bankDetails>
+  <form id="bank-details" [formGroup]="bankDetailsForm">
+    <ion-grid>
+      <ion-row formGroupName="bankDetails">
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">Bank Name</ion-label>
+            <ion-input type="text" formControlName="bankName"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">Sort code</ion-label>
+            <ion-input type="text" formControlName="sortcode" maxlength="8"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="bankDetailsForm.controls.bankDetails['controls'].sortcode">
+          </app-validation-message>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">Account number</ion-label>
+            <ion-input type="text" maxlength="8" formControlName="accountNumber"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="bankDetailsForm.controls.bankDetails['controls'].accountNumber">
+          </app-validation-message>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">Account name</ion-label>
+            <ion-input type="email" formControlName="accountName"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ng-template>
+
 <ng-template #questions></ng-template>
 <ng-template #tenancyDetails></ng-template>
 
