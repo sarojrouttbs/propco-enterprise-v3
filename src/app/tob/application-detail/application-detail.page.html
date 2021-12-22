@@ -114,6 +114,150 @@
 </ion-content>
 
 <ng-template #occupants>
+  <ion-grid id="occupant-details">
+    <ion-row>
+      <ion-col size="100">
+        <ion-grid class="header">
+          <ion-row class="">
+            <ion-col size="15">
+              <ion-text>Forename</ion-text>
+            </ion-col>
+            <ion-col size="15">
+              <ion-text>Surname</ion-text>
+            </ion-col>
+            <ion-col size="30">
+             <ion-text>Email Address</ion-text>
+            </ion-col>
+            <ion-col size="20">
+              <ion-text>Mobile</ion-text>
+            </ion-col>
+            <ion-col size="10">
+              <ion-text>Lead</ion-text>
+            </ion-col>
+            <ion-col size="10">
+              <ion-text>Remove</ion-text>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <form [formGroup]="occupantForm">
+          <ion-grid class="content">
+            <ng-container formArrayName="coApplicants">
+              <ion-row *ngFor="let item of occupantForm.get('coApplicants')['controls']; let i=index">
+                <ng-container [formGroupName]="i">
+                  <ng-container *ngIf="item.controls['isAdded'].value && !item.controls['isDeleted'].value">
+                    <ion-grid class="">
+                      <ion-row>
+                        <ion-col size="15">
+                          <ion-text>
+                            {{item.controls['forename'].value}}
+                          </ion-text>
+                        </ion-col>
+                        <ion-col size="15">
+                          <ion-text>
+                            {{ item.controls['surname'].value}}
+                          </ion-text>
+                        </ion-col>
+                        <ion-col size="30">
+                          <ion-text>
+                            {{item.controls['email'].value}}
+                          </ion-text>
+                        </ion-col>
+                        <ion-col size="20">
+                          <ion-text>
+                            {{item.controls['mobile'].value || 'N/A'}}
+                          </ion-text>
+                        </ion-col>
+                        <ion-col size="10">
+                          <ion-checkbox class="ml-15" formControlName="isLead" [checked]="item.controls['isLead'].value"
+                            color="success"></ion-checkbox>
+                        </ion-col>
+                        <ion-col size="10">
+                          <ion-icon (click)="removeCoApplicant(item)" color="danger" class="remove-btn"
+                            name="close-circle">
+                          </ion-icon>
+                        </ion-col>
+
+                      </ion-row>
+                    </ion-grid>
+                  </ng-container>
+                  <ng-container *ngIf="!item.controls['isAdded'].value">
+                    <ion-col size="15">
+                      <ion-item>
+                        <ion-label position="floating">Forename <ion-text class="mandatory">*</ion-text>
+                        </ion-label>
+                        <ion-input type="text" formControlName="forename"></ion-input>
+                      </ion-item>
+                      <app-validation-message [control]="item.controls.forename"></app-validation-message>
+                    </ion-col>
+                    <ion-col size="15">
+                      <ion-item>
+                        <ion-label position="floating">Surname <ion-text class="mandatory">*</ion-text>
+                        </ion-label>
+                        <ion-input type="text" formControlName="surname"></ion-input>
+                      </ion-item>
+                      <app-validation-message [control]="item.controls.surname"></app-validation-message>
+                    </ion-col>
+                    <ion-col size="30">
+                      <ion-item>
+                        <ion-label position="floating">Email address <ion-text class="mandatory">*</ion-text>
+                        </ion-label>
+                        <ion-input type="email" formControlName="email"></ion-input>
+                      </ion-item>
+                      <app-validation-message [control]="item.controls.email"></app-validation-message>
+                    </ion-col>
+                    <ion-col size="20">
+                      <ion-item>
+                        <ion-label position="floating">Phone <ion-text class="mandatory">*</ion-text>
+                        </ion-label>
+                        <ion-input type="text" formControlName="mobile"></ion-input>
+                      </ion-item>
+                      <app-validation-message [control]="item.controls.mobile"></app-validation-message>
+                    </ion-col>
+                    <ion-col style="padding-top: 5px" size="20">
+                      <ion-button color="success" [disabled]="!occupantForm.valid" (click)="addApplicant(item,i)">Add
+                        New</ion-button>
+                    </ion-col>
+                  </ng-container>
+                  <ng-container *ngIf="!item.controls['isAdded'].value">
+                    <ion-grid>
+                      <ion-row class="ion-justify-content-end search-row" [formGroup]="searchApplicantForm">
+                        <ion-col size-sm="50" size-xl="35" id="tob-applicant-search">
+                          <ion-item>
+                            <ion-label position="floating">Start Typing to Search Applicants</ion-label>
+                            <ion-input type="text" debounce="300" (ionInput)="onSearch($event)"
+                              formControlName='searchApplicant'>
+                            </ion-input>
+                            <ion-icon class="input-close" (click)="resetSearch()"
+                              *ngIf="searchApplicantForm.controls.searchApplicant.value.length > 2 && !applicantDetail"
+                              color="medium" name="close-circle"></ion-icon>
+                          </ion-item>
+  
+                          <ion-list class="applicant-list" *ngIf="resultsAvailable">
+                            <ion-item *ngFor="let result of (applicantList | async)?.data" button
+                              (click)="getApplicantDetails(result?.entityId, i)" button>
+                              <span>
+                                <i class="propcoicon no-background propcoicon-contractor"></i>
+                              </span>&nbsp;
+                              <label color="dark">{{result.fullName}}&nbsp;
+                                <ion-text color="medium">{{result.address}}</ion-text>&nbsp;
+                                <ion-text color="medium">{{result.reference}}</ion-text>&nbsp;
+                                <ion-text color="success">{{result.status}}</ion-text>&nbsp;
+                              </label>
+                            </ion-item>
+                          </ion-list>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ng-container>
+                </ng-container>
+              </ion-row>
+            </ng-container>
+          </ion-grid>
+        </form>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ng-template>
 
 <ng-template #applicantDetails></ng-template>

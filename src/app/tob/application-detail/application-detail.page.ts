@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -14,7 +14,7 @@ import { ValidationService } from 'src/app/shared/services/validation.service';
 @Component({
   selector: 'app-application-detail',
   templateUrl: './application-detail.page.html',
-  styleUrls: ['./application-detail.page.scss' ,'../common-css/offer-application-detail.scss'],
+  styleUrls: ['./application-detail.page.scss', '../common-css/offer-application-detail.scss'],
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
@@ -84,15 +84,15 @@ export class ApplicationDetailPage implements OnInit {
       switchMap((value: string) => (value && value.length > 2) ? this.searchApplicant(value) : new Observable()));
   }
 
-  async getApplicantDetails(applicantId: string) {
+  async getApplicantDetails(applicantId: string, index: number) {
     this.applicantId = applicantId;
     this._tobService.getApplicantDetails(applicantId).subscribe(res => {
       if (res) {
         this.applicantDetail = res;
-        this.disableSearchApplicant = true;
         this.resultsAvailable = false;
         this.searchApplicantForm.get('searchApplicant').setValue('');
         this.patchApplicantDetail();
+        this.addSearchApplicant(res, index);
       }
     },
       error => {
@@ -294,207 +294,121 @@ export class ApplicationDetailPage implements OnInit {
     }
   }
 
-    /** Occupants Functionality **/
+  /** Occupants Functionality **/
 
-  addNewAddressGroup() {
-    const add = this.occupantForm.get('coApplicants') as FormArray;
-    add.push(this._formBuilder.group({
-      street: [],
-      city: []
-    }))
+  initOccupantForm(): void {
+    this.occupantForm = this._formBuilder.group({
+      coApplicants: this._formBuilder.array([])
+    });
+    this.createItem();
   }
 
-    initOccupantForm(): void {
-      this.occupantForm = this._formBuilder.group({
-        coApplicants: this._formBuilder.array([])
-      });
+  createItem() {
+    this.occupantFormArray.push(this._formBuilder.group({
+      surname: ['', [Validators.required, ValidationService.alphabetValidator]],
+      forename: ['', [Validators.required, ValidationService.alphabetValidator]],
+      email: ['', [Validators.required, ValidationService.emailValidator]],
+      mobile: ['', [Validators.required, ValidationService.numberValidator]],
+      applicationApplicantId: null,
+      isLead: false,
+      createdById: null,
+      createdBy: 'AGENT',
+      isAdded: false,
+      isDeleted: false,
+      title: '',
+      applicantId: ''
     }
-  
-    getApplicantionApplicantList() {
-      (this.occupantForm.get("coApplicants") as FormArray)['controls'].splice(0);
-      // this._tobService.getApplicantList(this.applicationId).subscribe(res => {
-      //   if (res && res.data) {
-      //     this.updateOccupantForm(res.data);
-      //   } else {
-      //     this.updateOccupantForm([]);
-      //   }
-      // }, error => {
-      // });
-    }
-  
-    addCoApplicant(result) {
-      let data = Object.assign({}, result);
-      return new Promise((resolve, reject) => {
-        // this.applicantService.addOccupantData(data, this.applicationId, this.modifiedById).subscribe((res) => {
-        //   return resolve(res.applicantId);
-        // }, error => {
-        //   return reject(false);
-        // });
-      });
-    }
-  
-    async setLead(comp: FormGroup) {
-      let isLead = comp.controls['isLead'].value;
-      let leadApplicatId = comp.controls['applicantId'].value;
-  
-      let formArray: FormArray = this.formArr;
-      if (isLead && comp.controls['aplicationApplicantId'].value) {
-        formArray.controls.forEach((currentGroup: FormGroup) => {
-          if (leadApplicatId !== currentGroup.controls['applicantId'].value) {
-            currentGroup.controls['isLead'].setValue(false);
-          }
-        });
-        this.updateLeadService(this.applicationId, comp.controls['aplicationApplicantId'].value, false);
-      } else {
-        /*add applicant first */
-        let newApplicantId = await this.addCoApplicant(comp.value);
-        this.updateLeadService(this.applicationId, newApplicantId, true);
-      }
-    }
-  
-    updateLeadService(applicationId, aplicationApplicantId, getApp) {
-      // this.showRadio = false;
-      // let updateLeadData = {
-      //   modifiedById: this.modifiedById,
-      //   modifiedBy: "APPLICANT"
-      // };
-      // this._tobService.updateLead(updateLeadData, applicationId, aplicationApplicantId).subscribe((res) => {
-      //   this.commonService.showMessage('Lead occupant has been changed successfully.', 'Lead Occupant', 'success');
-      //   if (getApp) {
-      //     this.getApplicantionApplicantList();
-      //   }
-      // }, error => {
-      //   this.commonService.showMessage('Something went wrong on server, please try again.', 'Lead Occupant', 'error');
-      // });
-    }
-  
-    saveOccupants() {
-      let leadApplicantId = '';
-      let apiObservableArray = [];
-      if (this.checkFormDirty(this.occupantForm) || this.isCoApplicantDeleted) {
-        // if (this.selectionType == 'saveForLater') {
-        //   this.saveDataLoader = true;
-        // }
-        let newOccupantData = this.occupantForm.controls['coApplicants'].value.map((result) => {
-          if (result.isLead) {
-            // leadApplicantId = result.aplicationApplicantId;
-            leadApplicantId = result.applicantId;
-          }
-          if (!result.aplicationApplicantId && result.isAdded && !result.isDeleted) {
-            // apiObservableArray.push(this.applicantService.addOccupantData(result, this.applicationId, leadApplicantId));
-          }
-          if (result.aplicationApplicantId && result.isDeleted) {
-            // apiObservableArray.push(this._tobService.removeApplicant({
-            //   "deletedById": "",
-            //   "deletedBy": "APPLICANT"
-            // }, this.applicationId, result.aplicationApplicantId));
-          }
-        });
-      }
-  
-      setTimeout(() => {
-        forkJoin(apiObservableArray).subscribe(() => {
-          this.occupantForm.reset(this.occupantForm.value);
-          this.getApplicantionApplicantList();
-          // if (this.selectionType == 'saveForLater') {
-          //   this.onSave();
-          // }
-        }, error => {
-        });
-      }, 1000);
-    }
-  
-    createItem() {
-      this.formArr.push(this._formBuilder.group({
-        surname: ['', [Validators.required, ValidationService.alphabetValidator]],
-        forename: ['', [Validators.required, ValidationService.alphabetValidator]],
-        email: ['', [Validators.required, ValidationService.emailValidator]],
-        mobile: ['', [Validators.required, ValidationService.numberValidator]],
-        aplicationApplicantId: null,
-        isLead: false,
-        createdById: null,
-        createdBy: 'APPLICANT',
-        isAdded: false,
-        isDeleted: false,
-        title: '',
-        applicantId: ''
-      }
-      ));
-    }
-  
-    get formArr() {
-      return this.occupantForm.get('coApplicants') as FormArray;
-    }
-  
-    removeCoApplicant(group: FormGroup) {
-      group.controls['isDeleted'].setValue(true);
-      // this.isCoApplicantDeleted = group.controls['isDeleted'].value;
-      this.commonService.showMessage('Occupant has been deleted successfully.', 'Delete Occupant', 'error');
-    }
-  
-    addApplicant(control, index) {
-      this.formArr.push(this._formBuilder.group({
-        surname: control.value.surname,
-        forename: control.value.forename,
-        email: control.value.email,
-        mobile: control.value.mobile,
-        aplicationApplicantId: null,
-        isLead: false,
-        createdById: null,
-        createdBy: 'APPLICANT',
-        isAdded: true,
-        isDeleted: false,
-        title: '',
-        applicantId: ''
-      }
-      ));
-      this.formArr.removeAt(index);
-      this.createItem();
-    }
-  
-    updateOccupantForm(occupantsList) {
-      if (Array.isArray(occupantsList) && occupantsList.length > 0) {
-        let occupantsArray = this.formArr;
-        occupantsList.forEach(element => {
-          // if (element.isLead) {
-          //   this.modifiedById = element.aplicationApplicantId;
-          // }
-          // if (this.loggedInUserId === element.applicantId) {
-          //   if (element.isLead) {
-          //     this.showRadio = true;
-          //   }
-          //   this.modifiedById = element.applicationApplicantId
-          // }
-          occupantsArray.push(this._formBuilder.group({
-            surname: element.surname,
-            forename: element.forename,
-            email: element.email,
-            mobile: element.mobile,
-            aplicationApplicantId: element.applicationApplicantId,
-            isLead: element.isLead,
-            createdById: null,
-            createdBy: 'APPLICANT',
-            isAdded: true,
-            isDeleted: false,
-            title: '',
-            applicantId: element.applicantId
-          }));
-        });
-      }
-      this.createItem();
-    }
-  
-    checkFormDirty(form: any) {
-      let dirtyForm = this.commonService.getDirtyValues(form);
-      if (Object.keys(dirtyForm).length) {
-        return true;
-      }
-      // else if (this.selectionType == 'saveForLater') {
-      //   this.onSave();
-      // }
-    }
+    ));
+  }
 
-    /** Occupants Functionality **/
+  get occupantFormArray() {
+    return this.occupantForm.get('coApplicants') as FormArray;
+  }
+
+  addApplicant(control: FormControl, index: number) {
+    console.log(index)
+    this.occupantFormArray.push(this._formBuilder.group({
+      surname: control.value.surname,
+      forename: control.value.forename,
+      email: control.value.email,
+      mobile: control.value.mobile,
+      applicationApplicantId: null,
+      isLead: index === 0 ? true : false,
+      createdById: null,
+      createdBy: 'AGENT',
+      isAdded: true,
+      isDeleted: false,
+      title: '',
+      applicantId: ''
+    }
+    ))
+    this.occupantFormArray.removeAt(index);
+    this.createItem();
+  }
+
+  addSearchApplicant(response: any, index: number) {
+    this.occupantFormArray.push(this._formBuilder.group({
+      surname: response.surname,
+      forename: response.forename,
+      email: response.email,
+      mobile: response.mobile,
+      applicationApplicantId: null,
+      isLead: false,
+      createdById: null,
+      createdBy: 'AGENT',
+      isAdded: true,
+      isDeleted: false,
+      title: '',
+      applicantId: response.applicantId
+    }
+    ))
+    this.occupantFormArray.removeAt(index);
+    this.createItem();
+  }
+
+  removeCoApplicant(group: FormGroup) {
+    this.commonService.showConfirm('Remove Applicant', 'Are you sure, you want to remove this applicant ?', '', 'YES', 'NO').then(response => {
+      if (response) {
+        group.controls['isDeleted'].setValue(true);
+        this.isCoApplicantDeleted = group.controls['isDeleted'].value;
+      }
+    })
+  }
+
+  updateOccupantForm(occupantsList) {
+    if (Array.isArray(occupantsList) && occupantsList.length > 0) {
+      let occupantsArray = this.occupantFormArray;
+      occupantsList.forEach(element => {
+        occupantsArray.push(this._formBuilder.group({
+          surname: element.surname,
+          forename: element.forename,
+          email: element.email,
+          mobile: element.mobile,
+          applicationApplicantId: element.applicationApplicantId,
+          isLead: element.isLead,
+          createdById: null,
+          createdBy: 'AGENT',
+          isAdded: true,
+          isDeleted: false,
+          title: '',
+          applicantId: element.applicantId
+        }));
+      });
+    }
+    this.createItem();
+  }
+
+  checkFormDirty(form: any) {
+    let dirtyForm = this.commonService.getDirtyValues(form);
+    if (Object.keys(dirtyForm).length) {
+      return true;
+    }
+    // else if (this.selectionType == 'saveForLater') {
+    //   this.onSave();
+    // }
+  }
+
+  /** Occupants Functionality **/
 
 }
 

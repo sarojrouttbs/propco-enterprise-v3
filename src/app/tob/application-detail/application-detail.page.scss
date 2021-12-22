@@ -1,0 +1,18 @@
+#occupant-details {
+    ion-text{
+        font-size: 14px;
+    }
+    .header {
+        background-color: var(--ion-color-step-800);
+        text-align: left;
+        color: var(--ion-color-step-2000);
+        padding: 15px 10px;
+    }
+    .content {
+        background: var(--ion-color-step-1650);
+        padding: 15px 10px 15px 10px;
+    }
+    .remove-btn{
+        font-size: 24px;
+    }
+}
