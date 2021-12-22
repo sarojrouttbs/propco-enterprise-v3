@@ -116,7 +116,7 @@
 <ng-template #occupants>
   <ion-grid id="occupant-details">
     <ion-row>
-      <ion-col size="100">
+      <ion-col size="100" class="list-section">
         <ion-grid class="header">
           <ion-row class="">
             <ion-col size="15">
@@ -145,7 +145,7 @@
               <ion-row *ngFor="let item of occupantForm.get('coApplicants')['controls']; let i=index">
                 <ng-container [formGroupName]="i">
                   <ng-container *ngIf="item.controls['isAdded'].value && !item.controls['isDeleted'].value">
-                    <ion-grid class="">
+                    <ion-grid class="list-content">
                       <ion-row>
                         <ion-col size="15">
                           <ion-text>
@@ -176,7 +176,6 @@
                             name="close-circle">
                           </ion-icon>
                         </ion-col>
-
                       </ion-row>
                     </ion-grid>
                   </ng-container>

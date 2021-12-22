@@ -1,4 +1,8 @@
 #occupant-details {
+    padding: 0;
+    .list-section {
+        padding: 0;
+    }
     ion-text {
         font-size: 14px;
     }
@@ -14,6 +18,9 @@
     }
     .remove-btn {
         font-size: 24px;
+    }
+    .list-content {
+        padding: 0;
     }
 }
 .postcode-search {
