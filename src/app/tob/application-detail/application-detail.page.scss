@@ -1,5 +1,5 @@
 #occupant-details {
-    ion-text{
+    ion-text {
         font-size: 14px;
     }
     .header {
@@ -12,7 +12,22 @@
         background: var(--ion-color-step-1650);
         padding: 15px 10px 15px 10px;
     }
-    .remove-btn{
+    .remove-btn {
         font-size: 24px;
     }
+}
+.postcode-search {
+    position: absolute;
+    top: 15px;
+    font-size: 14px;
+    color: var(--ion-color-tertiary);
+    cursor: pointer;
+    z-index: 2;
+    height: 35px;
+    right: 0;
+}
+
+.page-heading {
+    text-align: center;
+    font-size: 22px;
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { APPLICATION_STATUSES, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -39,7 +39,7 @@ export class ApplicationListPage implements OnInit {
   fromDate = new FormControl('', []);
   toDate = new FormControl('', []);
   
-  constructor(private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
+  constructor(private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
     this.getTobLookupData();
     this.getLookUpData();
   }
@@ -242,7 +242,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   createApplication() {
-
+    this.router.navigate([`tob/${this.propertyId}/create-application`], { replaceUrl: true });
   }
 
   acceptApplication() {
