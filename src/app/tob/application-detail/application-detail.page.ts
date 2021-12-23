@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PROPCO } from 'src/app/shared/constants';
+import { PROPCO, APPLICATION_STATUSES } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { switchMap, debounceTime } from 'rxjs/operators';
@@ -38,8 +38,6 @@ export class ApplicationDetailPage implements OnInit {
   propertyDetails: any;
   propertyClauses;
   propertyRestrictions;
-  negotiatableClauses;
-  negotiatableRestrictions;
   searchApplicantForm: FormGroup;
   applicantList: Observable<OfferModels.IApplicantLisResponse>;
   applicantDetail: OfferModels.IApplicantDetails;
@@ -58,6 +56,7 @@ export class ApplicationDetailPage implements OnInit {
   addressList: any[];
   guarantorAddressList: any[];
   correspondenceAddressList: any[];
+  applicationsDetails: ApplicationModels.IApplicationResponse;
 
   constructor(
     private route: ActivatedRoute,
@@ -149,26 +148,70 @@ export class ApplicationDetailPage implements OnInit {
     this.initBankDetailsForm();
   }
 
-  private initCreateApiCalls() {
+  private async initCreateApiCalls() {
     this.getLookUpData();
     this.getTobLookupData();
+    await this.getPropertyDetails(this.propertyId);
+    await this.getPropertyClauses(this.propertyId);
+    await this.getPropertyRestrictions(this.propertyId);
+    await this.createApplication();
+  }
+
+  private async initViewApiCalls() {
+    this.getLookUpData();
+    this.getTobLookupData();
+    this.getApplicationDetails(this.applicationId);
     this.getPropertyDetails(this.propertyId);
     this.getPropertyClauses(this.propertyId);
     this.getPropertyRestrictions(this.propertyId);
   }
-
-  async initViewApiCalls() {
-    this.getLookUpData();
-    this.getTobLookupData();
+  private getApplicationDetails(applicationId) {
+    return new Promise((resolve, reject) => {
+      this._tobService.getApplicationDetails(applicationId).subscribe(
+        res => {
+          this.applicationsDetails = (res && res.data) ? res.data : [];
+          resolve(true);
+        },
+        error => {
+          reject(undefined);
+        }
+      );
+    });
+  }
+  async createApplication() {
+    let requestObj: any = {};
+    requestObj.createdBy = 'AGENT';
+    requestObj.propertyId = this.propertyId;
+    requestObj.status = APPLICATION_STATUSES.NEW;
+    requestObj.rent = this.propertyDetails.advertisementRent;
+    requestObj.applicationRestrictions = this.propertyRestrictions;
+    requestObj.applicationClauses = this.propertyClauses;
+    this._tobService.createApplication(requestObj).subscribe(
+      res => {
+        this.router.navigate([`tob/${this.propertyId}/application/${res.applicationId}`], { replaceUrl: true });
+      },
+      error => {
+      }
+    );
   }
 
   private getPropertyDetails(propertyId) {
-    this._tobService.getPropertyDetails(propertyId).subscribe(res => {
-      this.propertyDetails = res.data;
-      this.propertyType = this.commonService.getLookupValue(this.lookupdata.rentCategories, this.propertyDetails?.rentCategory);
-      this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
-      this.getNoDeposit();
-    }, (error) => {
+    return new Promise((resolve, reject) => {
+      this._tobService.getPropertyDetails(propertyId).subscribe(
+        res => {
+          if (res) {
+            this.getNoDeposit();
+            this.propertyDetails = res.data;
+            this.propertyType = this.commonService.getLookupValue(this.lookupdata.rentCategories, this.propertyDetails.rentCategory);
+            this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
+            resolve(true);
+          }
+        },
+        error => {
+          reject(undefined);
+          console.log(error);
+        }
+      );
     });
   }
 
@@ -181,21 +224,31 @@ export class ApplicationDetailPage implements OnInit {
     });
   }
 
-
   private getPropertyClauses(propertyId) {
-    this._tobService.getPropertyClauses(propertyId).subscribe(res => {
-      this.propertyClauses = (res && res.data) ? res.data : [];
-      this.negotiatableClauses = this.propertyClauses.filter(result => result.isNegotiable);
-    }, (error) => {
+    return new Promise((resolve, reject) => {
+      this._tobService.getPropertyClauses(propertyId).subscribe(
+        res => {
+          this.propertyClauses = (res && res.data) ? res.data : [];
+          resolve(true);
+        },
+        error => {
+          reject(undefined);
+        }
+      );
     });
   }
 
   private getPropertyRestrictions(propertyId) {
-    this._tobService.getPropertyRestrictions(propertyId).subscribe(res => {
-      this.propertyRestrictions = res && res.data ? res.data.filter(result => result.value) : [];
-      this.negotiatableRestrictions = this.propertyRestrictions.filter(result => result.isNegotiable);
-      this.propertyRestrictions.map(restrict => restrict.restrictionName = this.commonService.camelize(restrict.key.replace(/_/g, ' ')));
-    }, (error) => {
+    return new Promise((resolve, reject) => {
+      this._tobService.getPropertyRestrictions(propertyId).subscribe(
+        res => {
+          this.propertyRestrictions = res && res.data ? res.data.filter(result => result.value) : [];
+          resolve(true);
+        },
+        error => {
+          reject(undefined);
+        }
+      );
     });
   }
 

@@ -10,6 +10,17 @@ import { environment } from './../../environments/environment';
 export class TobService {
 
   constructor(private httpClient: HttpClient) { }
+
+  createApplication(body: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `applications/create-application`, body).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  getApplicationDetails(applicationId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `applications/${applicationId}`);
+  }
+
   getPropertyDetails(propertyId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tob`).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
