@@ -158,24 +158,21 @@ export class ApplicationDetailPage implements OnInit {
   private async initCreateApiCalls() {
     this.getLookUpData();
     this.getTobLookupData();
-    this.getPropertyDetails(this.propertyId);
-    this.getPropertyClauses(this.propertyId);
-    this.getPropertyRestrictions(this.propertyId);
-    await this.getApplicantQuestions();
     await this.getPropertyDetails(this.propertyId);
     await this.getPropertyClauses(this.propertyId);
     await this.getPropertyRestrictions(this.propertyId);
     await this.createApplication();
+    await this.getApplicantQuestions();
   }
 
   private async initViewApiCalls() {
     this.getLookUpData();
     this.getTobLookupData();
-    this.getApplicantQuestions();
-    this.getApplicationDetails(this.applicationId);
     this.getPropertyDetails(this.propertyId);
     this.getPropertyClauses(this.propertyId);
     this.getPropertyRestrictions(this.propertyId);
+    this.getApplicationDetails(this.applicationId);
+    this.getApplicantQuestions();
   }
 
   private getApplicationDetails(applicationId) {
@@ -660,7 +657,9 @@ export class ApplicationDetailPage implements OnInit {
     this._tobService.getApplicantQuestions().subscribe(async (res)  => {
       if (res && res.data) {
         await this.createQuestionItems(res.data);
-        await this.getApplicationQuestionsAnswer(this.applicationId);
+        if(this.applicationId) {
+          await this.getApplicationQuestionsAnswer(this.applicationId);
+        }
       }
     }, error => {
       console.log(error);
