@@ -52,12 +52,17 @@ export class ApplicationDetailPage implements OnInit {
   isCoApplicantDeleted: any;
   addressDetailsForm: FormGroup;
   bankDetailsForm: FormGroup;
+  applicantQuestionForm: FormGroup;
+  tenancyDetailForm: FormGroup;
   propertyType = null; /*0: private , 1:student*/
   showPostcodeLoader: Boolean = null;
   showAddressLoader: Boolean = null;
   addressList: any[];
   guarantorAddressList: any[];
   correspondenceAddressList: any[];
+  currentDate = this.commonService.getFormatedDate(new Date());
+  maxMoveInDate = this.commonService.getFormatedDate(new Date().setFullYear(new Date().getFullYear() + 5));
+  itemList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   constructor(
     private route: ActivatedRoute,
@@ -147,19 +152,23 @@ export class ApplicationDetailPage implements OnInit {
     this.initOccupantForm();
     this.initAddressDetailsForm();
     this.initBankDetailsForm();
+    this.initApplicantQuestionForm();
+    this.initTenancyDetailsForm();
   }
 
-  private initCreateApiCalls() {
+  private async initCreateApiCalls() {
     this.getLookUpData();
     this.getTobLookupData();
     this.getPropertyDetails(this.propertyId);
     this.getPropertyClauses(this.propertyId);
     this.getPropertyRestrictions(this.propertyId);
+    await this.getApplicantQuestions();
   }
 
   async initViewApiCalls() {
     this.getLookUpData();
     this.getTobLookupData();
+    this.getApplicantQuestions();
   }
 
   private getPropertyDetails(propertyId) {
@@ -635,4 +644,119 @@ export class ApplicationDetailPage implements OnInit {
       })
     });
   }
+
+  initTenancyDetailsForm(): void {
+    this.tenancyDetailForm = this._formBuilder.group({
+      moveInDate: ['', Validators.required],
+      preferredTenancyEndDate: ['', Validators.required],
+      rentDueDay: ['', [Validators.required, Validators.max(31), Validators.min(1)]],
+      numberOfAdults: ['', Validators.required],
+      numberOfChildren: ['', Validators.required],
+      hasSameHouseholdApplicants: [false, Validators.required],
+      numberOfHouseHolds: [{ value: '', disabled: false }, Validators.required]
+    }, {
+      validator: Validators.compose([
+        ValidationService.dateLessThan('moveInDate', 'preferredTenancyEndDate')
+      ])
+    }
+    );
+  }
+
+  setHouseHoldValue(value) {
+    if (value === 1) {
+      this.tenancyDetailForm.get('hasSameHouseholdApplicants').disable();
+      this.tenancyDetailForm.get('numberOfHouseHolds').disable();
+    } else {
+      this.tenancyDetailForm.get('hasSameHouseholdApplicants').enable();
+      this.tenancyDetailForm.get('numberOfHouseHolds').enable();
+    }
+  }
+
+  /** Application Question Functionality **/
+
+  initApplicantQuestionForm() {
+    this.applicantQuestionForm = this._formBuilder.group({
+      questions: this._formBuilder.array([])
+    });
+  }
+
+  get questionFormArray() {
+    return this.applicantQuestionForm.get('questions') as FormArray;
+  }
+
+  private async getApplicantQuestions() {
+    this._tobService.getApplicantQuestions().subscribe(async (res)  => {
+      if (res && res.data) {
+        await this.createQuestionItems(res.data);
+        await this.getApplicationQuestionsAnswer(this.applicationId);
+      }
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  private async getApplicationQuestionsAnswer(applicationId) {
+    this._tobService.getApplicationQuestionsAnswer(applicationId).subscribe(res => {
+      if (res && res.count) {
+        this.questionFormArray.controls.forEach(element => {
+          let item = res.data.find(answer => answer.questionId === element.value.applicantQuestionId);
+          element.patchValue({
+            toggle: item ? item.toggle : null,
+            answer: item ? item.answer : null,
+            answerById: item ? item.answerById : null,
+            applicationQuestionId: item ? item.applicationQuestionId : null,
+          });
+        });
+      }
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  private createQuestionItems(questionArray) {
+    const questionFormArray = this.questionFormArray;
+    questionArray.forEach(element => {
+      let questionForm = this._formBuilder.group({
+        applicantQuestionId: element.applicantQuestionId,
+        question: element.text,
+        applicationQuestionId: [null],
+        toggle: false,
+        type: element.answerType,
+        answer: [undefined, element.isMandatory ? Validators.required : null],
+        answerById: [null]
+      });
+      questionFormArray.push(questionForm);
+    });
+  }
+
+  private saveApplicationQuestions() {
+    let apiObservableArray = [];
+    let applicantQuestions = this.applicantQuestionForm.controls.questions.value;
+    if (this.checkFormDirty(this.applicantQuestionForm)) {
+      // if (this.selectionType == 'saveForLater') {
+      //   this.saveDataLoader = true;
+      // }
+      applicantQuestions.forEach(question => {
+        let questionDetails: any = {};
+        questionDetails.toggle = question.toggle;
+        questionDetails.answer = question.type === 'BOOLEAN' ? question.toggle : question.answer;
+        questionDetails.answerById = question.answerById;
+        apiObservableArray.push(this._tobService.updateApplicationQuestionAnswer(this.applicationId, question.applicationQuestionId, questionDetails));
+      });
+    }
+
+    // setTimeout(() => {
+    //   forkJoin(apiObservableArray).subscribe(() => {
+    //     this.saveDataLoader = false;
+    //     this.applicantQuestionForm.reset(this.applicantQuestionForm.value);
+    //     if (this.selectionType == 'saveForLater') {
+    //       this.onSave();
+    //     }
+    //   }, error => {
+    //     // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Application Question Answers', 'error');
+    //   });
+    // }, 1000);
+  }
+
+  /** Application Question Functionality **/
 }
