@@ -33,6 +33,14 @@ const routes: Routes = [
       {
         path: ':propertyId/create-application',
         loadChildren: () => import('./application-detail/application-detail.module').then( m => m.ApplicationDetailPageModule)
+      },
+      {
+        path: 'application/:applicationId',
+        loadChildren: () => import('./application-detail/application-detail.module').then( m => m.ApplicationDetailPageModule)
+      },
+      {
+        path: ':propertyId/application/:applicationId',
+        loadChildren: () => import('./application-detail/application-detail.module').then( m => m.ApplicationDetailPageModule)
       }
     ]
   }
