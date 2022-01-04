@@ -21,6 +21,28 @@ export class TobService {
     return this.httpClient.get(environment.API_BASE_URL + `applications/${applicationId}`);
   }
 
+  addApplicantToApplication(applicationId: string, body: any) {
+    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants`, body).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  getApplicationApplicants(applicationId: any) {
+    return this.httpClient.get(environment.API_BASE_URL + `applications/${applicationId}/applicants`).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  deleteApplicationApplicant(applicationId: string, applicantId: string, body) {
+    return this.httpClient.delete(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body);
+  }
+
+  linkApplicantToApplication(applicationId: string, body: any, applicantId) {
+    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
   getPropertyDetails(propertyId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tob`).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
