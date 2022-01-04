@@ -57,6 +57,7 @@ export class ApplicationDetailPage implements OnInit {
   guarantorAddressList: any[];
   correspondenceAddressList: any[];
   applicationsDetails: ApplicationModels.IApplicationResponse;
+  applicationApplicantDetails: any[];
 
   constructor(
     private route: ActivatedRoute,
@@ -164,8 +165,41 @@ export class ApplicationDetailPage implements OnInit {
     this.getPropertyDetails(this.propertyId);
     this.getPropertyClauses(this.propertyId);
     this.getPropertyRestrictions(this.propertyId);
+    this.getApplicationApplicants(this.applicationId);
   }
-  private getApplicationDetails(applicationId) {
+
+  saveApplicantsToApplication() {
+    let apiObservableArray = [];
+    if (this.checkFormDirty(this.occupantForm) || this.isCoApplicantDeleted) {
+      this.occupantForm.controls['coApplicants'].value.map((element) => {
+        if (!element.applicantId && !element.applicationApplicantId && element.isAdded && !element.isDeleted) {
+          apiObservableArray.push(this._tobService.addApplicantToApplication(this.applicationId, element));
+        }
+
+        if (element.applicantId && !element.applicationApplicantId && element.isAdded && !element.isDeleted) {
+          apiObservableArray.push(this._tobService.linkApplicantToApplication(this.applicationId, element, element.applicantId));
+        }
+
+        if (element.applicationApplicantId && element.isDeleted) {
+          apiObservableArray.push(this._tobService.deleteApplicationApplicant(
+            this.applicationId, element.applicationApplicantId,
+            { "deletedById": element.applicantId, "deletedBy": "APPLICANT" },
+          ));
+        }
+      });
+    }
+
+    setTimeout(() => {
+      forkJoin(apiObservableArray).subscribe(() => {
+        this.isCoApplicantDeleted = null;
+        this.occupantForm.reset(this.occupantForm.value);
+        this.getApplicationApplicants(this.applicationId);
+      }, error => {
+      });
+    }, 1000);
+  }
+
+  getApplicationApplicants(applicationId) {
     return new Promise((resolve, reject) => {
       this._tobService.getApplicationDetails(applicationId).subscribe(
         res => {
@@ -178,7 +212,23 @@ export class ApplicationDetailPage implements OnInit {
       );
     });
   }
-  async createApplication() {
+
+  private getApplicationDetails(applicationId) {
+    return new Promise((resolve, reject) => {
+      this._tobService.getApplicationApplicants(applicationId).subscribe(
+        res => {
+          this.applicationApplicantDetails = (res && res.data) ? res.data : [];
+          this.updateOccupantForm(this.applicationApplicantDetails);
+          resolve(true);
+        },
+        error => {
+          reject(undefined);
+        }
+      );
+    });
+  }
+
+  private async createApplication() {
     let requestObj: any = {};
     requestObj.createdBy = 'AGENT';
     requestObj.propertyId = this.propertyId;
@@ -364,7 +414,6 @@ export class ApplicationDetailPage implements OnInit {
     this.occupantForm = this._formBuilder.group({
       coApplicants: this._formBuilder.array([])
     });
-    this.createItem();
   }
 
   createItem() {
@@ -390,7 +439,6 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   addApplicant(control: FormControl, index: number) {
-    console.log(index)
     this.occupantFormArray.push(this._formBuilder.group({
       surname: control.value.surname,
       forename: control.value.forename,
