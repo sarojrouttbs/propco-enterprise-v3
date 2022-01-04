@@ -116,4 +116,25 @@ export class TobService {
   getApplicationList(propertyId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/applications`);
   }
+
+  getApplicantQuestions(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'applications/applicant-questions').pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  getApplicationQuestionsAnswer(applicationId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `applications/${applicationId}/questions`).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  updateApplicationQuestionAnswer(applicationId, questionId, questionDetails): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `applications/${applicationId}/questions/${questionId}`, questionDetails).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
 }

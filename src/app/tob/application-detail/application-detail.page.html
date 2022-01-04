@@ -43,7 +43,7 @@
               </div>
             </mat-step>
             <mat-step>
-              <ng-container *ngTemplateOutlet="questions"></ng-container>
+              <ng-container *ngTemplateOutlet="applicationQuestion"></ng-container>
               <ng-template matStepLabel>Application Questions</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
@@ -448,8 +448,151 @@
   </form>
 </ng-template>
 
-<ng-template #questions></ng-template>
-<ng-template #tenancyDetails></ng-template>
+<ng-template #applicationQuestion>
+  <form [formGroup]="applicantQuestionForm" id="question-details">
+    <ng-container formArrayName="questions">
+      <ion-grid class="ion-no-padding">
+        <ion-row *ngFor="let question of applicantQuestionForm.get('questions')['controls']; let in=index"
+          class="ion-justify-content-between ion-align-items-center">
+          <ng-container [formGroupName]="in">
+            <ion-col size="100" class="ion-align-self-end no-padd-top-bottom">
+              <ion-item lines="none" class="marg-top-16">
+                <ion-label style="color:var(--ion-color-dark) !important" class="ion-text-wrap">
+                  {{question.controls['question'].value}}
+                </ion-label>
+                <ion-toggle [checked]="" formControlName="toggle" color="tertiary"></ion-toggle>
+              </ion-item>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="33.3">
+              <mat-form-field appearance="fill" *ngIf="question.controls['type'].value === 'DATE'">
+                <mat-label> Date and time </mat-label>
+                <input matInput [matDatepicker]="picker2" formControlName="answer" [disabled]="!question.controls['toggle'].value" readonly>
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+
+              <ion-item *ngIf="question.controls['type'].value === 'TEXT'">
+                <ion-label position="floating">Answer</ion-label>
+                <ion-input formControlName="answer"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ng-container>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+  </form>
+</ng-template>
+
+<ng-template #tenancyDetails>
+  <form id="tenancy-details" [formGroup]="tenancyDetailForm">
+    <ion-grid>
+      <ion-row class="ion-justify-content-start">
+        
+        <ion-col size-xs="100" size-sm="33.3" class="header-content">
+          <ion-text class="header">Rent</ion-text><br />
+          <ion-text class="content">
+            1750
+            <!-- {{applicationdetails?.rent ? (applicationdetails?.rent  | currency: "GBP" ):  (propertyDetail?.advertisementRent | currency: "GBP") }}
+            PCM <span [hidden]="!applicationdetails?.offerId">(Offer Agreed)</span> -->
+          </ion-text>
+        </ion-col>
+
+        <ion-col size-xs="100" size-sm="33.3" class="header-content">
+          <ion-text class="header">Deposit</ion-text><br />
+          <ion-text class="content">
+            500
+            <!-- {{applicationdetails?.depositAmount ? (applicationdetails?.depositAmount  | currency: "GBP") : (propertyDetail?.holdingDeposit | currency: "GBP") }} -->
+          </ion-text>
+        </ion-col>
+
+        <ion-col size-xs="100" size-sm="33.3" style="padding-top: 21px;">
+          <mat-form-field appearance="fill">
+            <mat-label>When would you like to move in? *</mat-label>
+            <input matInput [matDatepicker]="picker" [max]="maxMoveInDate" [min]="currentDate" formControlName="moveInDate" readonly>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <div style="margin-top: -20px !important;">
+            <app-validation-message [control]="tenancyDetailForm.controls.moveInDate"></app-validation-message>
+          </div>
+        </ion-col>
+
+        <ion-col size-xs="100" size-sm="33.3" style="padding-top: 21px;">
+          <mat-form-field appearance="fill">
+            <mat-label>Tenancy end *</mat-label>
+            <input matInput [matDatepicker]="picker1" [min]="tenancyDetailForm.controls.moveInDate.value" formControlName="preferredTenancyEndDate" readonly>
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+          <div *ngIf="tenancyDetailForm.hasError('invalidEndDate')" class="error-block">End Date can't before start date</div>
+          <div style="margin-top: -20px !important;">
+            <app-validation-message [control]="tenancyDetailForm.controls.preferredTenancyEndDate"></app-validation-message>
+          </div>
+        </ion-col>
+
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">No. of adult occupants <ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-select interface="popover" formControlName="numberOfAdults"
+              (ionChange)="setHouseHoldValue(numberOfAdults.value)" #numberOfAdults>
+              <ion-select-option [value]="item" *ngFor="let item of itemList">{{item}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="tenancyDetailForm.controls.numberOfAdults">
+          </app-validation-message>
+        </ion-col>
+
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">No. of children <ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-select interface="popover" formControlName="numberOfChildren">
+              <ion-select-option [value]="item" *ngFor="let item of itemList">{{item}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="tenancyDetailForm.controls.numberOfChildren">
+          </app-validation-message>
+        </ion-col>
+
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">Preferred rent due day <ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-input formControlName="rentDueDay" type="text"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="tenancyDetailForm.controls.rentDueDay"></app-validation-message>
+        </ion-col>
+
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item lines="full" class="margin-top-7">
+            <ion-label>Are all occupants from the same household?</ion-label>
+            <ion-toggle formControlName="hasSameHouseholdApplicants" color="tertiary"></ion-toggle>
+          </ion-item>
+          <app-validation-message [control]="tenancyDetailForm.controls.hasSameHouseholdApplicants">
+          </app-validation-message>
+        </ion-col>
+
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">No. of households <ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-select #mySelect interface="popover"
+              [disabled]="tenancyDetailForm.controls.hasSameHouseholdApplicants.value"
+              formControlName="numberOfHouseHolds">
+              <ion-select-option [value]="item"
+                *ngFor="let item of itemList  | slice:1:(tenancyDetailForm.controls.numberOfAdults.value+1)">
+                {{item}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="tenancyDetailForm.controls.numberOfHouseHolds">
+          </app-validation-message>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ng-template>
 
 <ng-template #restriction>
   <!-- <ion-grid class="ion-no-padding restriction-section">
