@@ -159,4 +159,18 @@ export class TobService {
       catchError(this.handleError<any>(''))
     );
   }
+
+  getBankDetails(applicationId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `applicants/${applicationId}/banking-details`).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  updateBankDetails(applicationId: string, bankDetails: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `applicants/${applicationId}/banking-details`, bankDetails).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
 }
