@@ -26,6 +26,10 @@ const routes: Routes = [
   {
     path: 'tob',
     loadChildren: () => import('./tob/tob.module').then( m => m.TobPageModule)
+  },
+  {
+    path: 'solr',
+    loadChildren: () => import('./solr/solr.module').then( m => m.SolrPageModule)
   }
 ];
 

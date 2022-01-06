@@ -1,0 +1,83 @@
+#solr-dashboard {
+  --padding-top: var(--ion-padding-top);
+  --padding-end: var(--ion-padding-end);
+  --padding-bottom: var(--ion-padding-bottom);
+  --padding-start: var(--ion-padding-start);
+  --ion-background-color: #ffffff !important;
+
+  .block {
+    background-color: #F0F0F0;
+    padding: 10px;
+    text-align: center;
+    border-radius: 4px;
+    min-height: 150px;
+    height: 150px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    i.propcoicon {
+      margin-bottom: 5px;
+      padding: 15px;
+      font-size: 80px;
+      background-color: transparent;
+      display: inline-table;
+      padding-bottom: 5px;
+    }
+
+    p {
+      text-align: center;
+      margin-top: auto;
+      font-size: 14px;
+    }
+
+  }
+
+  .block:hover {
+    background-color: #FFF !important;
+    transform: scale(1.04);
+  }
+
+  .solrSuggestionList {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    margin: 0;
+    list-style: none;
+    padding: 0;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 25%);
+
+    .solrSuggestionListItem {
+      cursor: pointer;
+      font-size: 14px;
+      overflow: hidden;
+      padding: 0 15px;
+      line-height: 48px;
+      height: 48px;
+      margin: 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      background-color: #f7f7f7;
+      border-bottom: 1px solid #666;
+
+      i.propcoicon {
+        display: inline-table;
+        vertical-align: sub;
+      }
+
+      .text-color-lightblue {
+        color: #3fa4f0 !important;
+      }
+
+      .text-color-gray-six {
+        color: #B0B0B0 !important;
+      }
+
+      .text-color-lightgreen {
+        color: #737373 !important;
+      }
+    }
+  }
+
+  
+}
