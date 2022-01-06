@@ -168,11 +168,13 @@
                           </ion-text>
                         </ion-col>
                         <ion-col size="10">
-                          <ion-checkbox class="ml-15" formControlName="isLead" [checked]="item.controls['isLead'].value"
+                          <ion-checkbox class="ml-15" style="opacity: unset;" formControlName="isLead" (ionChange)="onLeadSelection(item)" [checked]="item.controls['isLead'].value"
+                          [disabled]="item.controls['isLead'].value"
                             color="success"></ion-checkbox>
                         </ion-col>
                         <ion-col size="10">
                           <ion-icon (click)="removeCoApplicant(item)" color="danger" class="remove-btn"
+                          *ngIf="!item.controls['isLead'].value"
                             name="close-circle">
                           </ion-icon>
                         </ion-col>

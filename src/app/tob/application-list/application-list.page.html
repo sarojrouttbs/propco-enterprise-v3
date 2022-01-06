@@ -63,7 +63,7 @@
   </ng-container>
 
   <ng-container>
-    <div style="position: relative;">
+    <div style="position: relative;" class="overlay-container">
       <ion-card *ngFor="let item of obsApplicationList | async;">
         <ion-card-content>
           <ion-grid>
@@ -73,7 +73,7 @@
                   <img [src]="item.numberOfCoApplicants > 0 ? 'assets/images/tob/multi-user.svg' : 'assets/images/tob/single-user.svg'">
                 </div>
               </ion-col>
-              <ion-col size-xl="85" size="80">
+              <ion-col size-xl="85" size="80" style="position: static;">
                 <ion-grid style="height:100%;" class="no-padding-top">
                   <ion-row class="application-title fs-18">
                     <ion-col class="no-padding-top col1" size="60">
@@ -145,7 +145,7 @@
         <ion-button *ngIf="selectedApplicationRow?.status == 2" (click)="holdApplication()">Hold</ion-button>
         <ion-button *ngIf="selectedApplicationRow?.status == 2 && !selectedApplicationRow?.isHoldingDepositPaid" (click)="markHoldingDepositPaid()">Holding Deposit Paid</ion-button>
         <ion-button *ngIf="selectedApplicationRow?.status == 2 && selectedApplicationRow?.isHoldingDepositPaid" (click)="startReferencing()">Start Referencing</ion-button>
-        <ion-button (click)="viewDetails()">View Details</ion-button>
+        <ion-button (click)="viewDetails(selectedApplicationRow?.applicationId)">View Details</ion-button>
         <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>
     </div>

@@ -164,7 +164,7 @@ export class ApplicationListPage implements OnInit {
     const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    const divOverlayLeft = isCard ? baseContainerPosition.left : overlayContainerLeftPadding;
+    const divOverlayLeft = (divOverlay.parent('.overlay-container').innerWidth() -  baseContainerWidth - 25);
 
     let origDivOverlayHeight;
     let origDivOverlayTop;
@@ -265,7 +265,7 @@ export class ApplicationListPage implements OnInit {
 
   }
 
-  viewDetails() {
-
+  viewDetails(applicantId: string) {
+    this.router.navigate([`tob/${this.propertyId}/application/${applicantId}`], { replaceUrl: true });
   }
 }
