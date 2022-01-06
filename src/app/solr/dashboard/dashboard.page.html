@@ -1,0 +1,142 @@
+<ion-content id="solr-dashboard">
+  <ion-grid style="margin: 5% 2% 0% 2%;">
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <img src="assets/images/solr/propcoLogo.svg" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <h4>Welcome {{loggedInUserData?.name}}</h4>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="60" style="padding-right: 0;">
+          <div>
+            <ion-searchbar [(ngModel)]="searchTerm" placeholder="Start typing to search" class="searchbarCustom" debounce="500" (ionChange)="getItems($event)">
+            </ion-searchbar>
+            <ion-list *ngIf="isItemAvailable" class="solrSuggestionList">
+              <ion-item *ngFor="let item of items" class="solrSuggestionListItem">
+                <div>
+                  <span>
+                    <i class="propcoicon no-background propcoicon-property"></i>
+                  </span>
+                  <span class="text-color-lightblue ng-binding">Westerly Ridge</span>&nbsp;
+                  <span class="ng-binding">834 Liloc Grove Loeds Sauth Gr, UR64 4AS</span>&nbsp;
+                  <span class="text-color-gray-six ng-binding">000000003</span>&nbsp;
+                  <span class="ng-binding ng-scope">£695</span>&nbsp;
+                  <span class="text-color-lightgreen ng-binding">Reserved</span>
+                </div>
+              </ion-item>
+          </ion-list>
+          </div>
+      </ion-col>
+      <ion-col size="3" class="solrMutiSelect" style="padding: 0;">
+          <!-- <ion-select interface="popover" multiple>
+            <ion-select-option>
+              Property
+            </ion-select-option>
+            <ion-select-option>
+              Landlord
+            </ion-select-option>
+            <ion-select-option>
+              Tenant
+            </ion-select-option>
+            <ion-select-option>
+              Applicant
+            </ion-select-option>
+            <ion-select-option>
+              Agent
+            </ion-select-option>
+            <ion-select-option>
+              Contractor
+            </ion-select-option>
+          </ion-select>  -->
+          <mat-form-field appearance="fill">
+            <mat-select [formControl]="entityControl" multiple>
+              <mat-option *ngFor="let topping of entityList" [value]="topping">{{topping}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+      </ion-col>
+      <ion-col size="7">
+          <ion-buttons end>
+            <i class="propcoicon propcoicon-search no-background red-icon" style="font-size: 26px;line-height: 46px;height: 46px;width: 46px;"></i>
+          </ion-buttons>     
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center">
+      <ion-col size-xl="20" size="33">
+        <div class="block" (click)="OpenHomeCategory('OpenApplicantCard')">
+          <i class="propcoicon red-icon propcoicon-applicant-card"></i>
+          <p>Applicant Card</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="33">
+        <div class="block">
+          <i class="propcoicon red-icon propcoicon-available-property-list"></i>
+          <p>Available Property List</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="33">
+        <div class="block">
+          <i class="propcoicon red-icon propcoicon-market-apprasial"></i>
+          <p>Market Appraisal Form</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="33">
+        <div class="block">
+          <i class="propcoicon propcoicon-applicant-management red-icon"></i>
+          <p>Applicant Management</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="33">
+        <div class="block">
+          <i class="propcoicon propcoicon-email-open red-icon"></i>
+          <p>Red Email</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="33">
+        <div class="block">
+          <i class="propcoicon propcoicon-email red-icon"></i>
+          <p>White Email</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="33">
+        <div class="block">
+          <i class="propcoicon propcoicon-task-manager red-icon"></i>
+          <p>Task Management</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="33">
+        <div class="block">
+          <i class="propcoicon propcoicon-reports red-icon"></i>
+          <p>Reporting Suite</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="33">
+        <div class="block">
+          <i class="propcoicon propcoicon-workflow red-icon"></i>
+          <p>Workflow suite</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="33">
+        <div class="block">
+          <i class="propcoicon propcoicon-cash-register red-icon"></i>
+          <p>Cash Register</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="33">
+        <div class="block">
+          <i class="propcoicon propcoicon-balance-sheet red-icon"></i>
+          <p>Balance Sheet</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="33">
+        <div class="block">
+          <i class="propcoicon propcoicon-misc-cr-db red-icon"></i>
+          <p>Misc Cr/Db</p>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
