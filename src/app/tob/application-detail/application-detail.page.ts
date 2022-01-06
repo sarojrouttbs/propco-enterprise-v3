@@ -103,10 +103,16 @@ export class ApplicationDetailPage implements OnInit {
       switchMap((value: string) => (value && value.length > 2) ? this.searchApplicant(value) : new Observable()));
   }
 
-  private getApplicantDetails() {
-    this._tobService.getApplicantDetails(this.applicantId).subscribe(res => {
+  async getApplicantDetails(applicantId: string, index?: number) {
+    this.applicantId = applicantId;
+    this._tobService.getApplicantDetails(applicantId).subscribe(res => {
       if (res) {
         this.applicantDetail = res;
+        this.resultsAvailable = false;
+        this.searchApplicantForm.get('searchApplicant').setValue('');
+        if(index) {
+          this.addSearchApplicant(res, index);
+        }
         this.patchApplicantDetail();
         this.patchApplicantAddressDetail();
       }
@@ -237,7 +243,7 @@ export class ApplicationDetailPage implements OnInit {
             return occupant.isLead;
           });
           this.applicantId = leadApplicantDetails[0].applicantId;
-          this.getApplicantDetails();
+          this.getApplicantDetails(this.applicantId);
           this.getBankDetails();
           this.updateOccupantForm(this.applicationApplicantDetails);
           resolve(true);

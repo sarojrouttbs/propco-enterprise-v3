@@ -599,14 +599,14 @@
         <ion-col size-xs="100" size-sm="33.3" class="header-content">
           <ion-text class="header">Rent</ion-text><br />
           <ion-text class="content">
-            {{ applicationDetails?.rent ? (applicationDetails?.rent  | currency: "GBP" ) : (propertyDetail?.advertisementRent | currency: "GBP") }}            
+            {{ applicationDetails?.rent ? (applicationDetails?.rent  | currency: "GBP" ) : (propertyDetails?.advertisementRent | currency: "GBP") }}            
           </ion-text>
         </ion-col>
 
         <ion-col size-xs="100" size-sm="33.3" class="header-content">
           <ion-text class="header">Deposit</ion-text><br />
           <ion-text class="content">
-            {{ applicationDetails?.depositAmount ? (applicationDetails?.depositAmount  | currency: "GBP") : (propertyDetail?.holdingDeposit | currency: "GBP") }}
+            {{ applicationDetails?.depositAmount ? (applicationDetails?.depositAmount  | currency: "GBP") : (propertyDetails?.holdingDeposit | currency: "GBP") }}
           </ion-text>
         </ion-col>
 
