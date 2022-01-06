@@ -61,7 +61,7 @@
               "node_modules/pdfmake/build/pdfmake.min.js",
               "node_modules/pdfmake/build/vfs_fonts.js",
               "node_modules/datatables.net-colreorder/js/dataTables.colReorder.js",
-              "assets/solr/js/javaNg.js"
+              "src/assets/solr/js/javaNg.js"
             ]
           },
           "configurations": {
