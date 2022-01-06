@@ -261,7 +261,114 @@
   <!-- <ion-button (click)="saveApplicantsToApplication()">Submit</ion-button> -->
 </ng-template>
 
-<ng-template #applicantDetails></ng-template>
+<ng-template #applicantDetails>
+  <form id="applicantDetailsForm" [formGroup]="applicantDetailsForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating"> Title </ion-label>
+            <ion-select interface="popover" formControlName="title">
+              <ion-select-option class="wider-popover" [value]="item?.value" *ngFor="let item of titleList">
+                {{ item?.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="applicantDetailsForm.controls.title"></app-validation-message>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating"> Forename </ion-label>
+            <ion-input type="text" formControlName="forename"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="applicantDetailsForm.controls.forename"></app-validation-message>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating"> Surname </ion-label>
+            <ion-input type="text" formControlName="surname"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="applicantDetailsForm.controls.surname"></app-validation-message>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating"> Mobile </ion-label>
+            <ion-input type="text" formControlName="mobile"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="applicantDetailsForm.controls.mobile"></app-validation-message>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating"> Email </ion-label>
+            <ion-input type="text" formControlName="email"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="applicantDetailsForm.controls.email"></app-validation-message>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3" style="padding-top: 21px;">
+          <mat-form-field appearance="fill">
+            <mat-label> Date of birth *</mat-label>
+            <input matInput [matDatepicker]="picker3" [max]="currentDate" formControlName="dateOfBirth" readonly>
+            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+            <mat-datepicker #picker3></mat-datepicker>
+          </mat-form-field>
+          <div style="margin-top: -20px !important;">
+            <app-validation-message [control]="applicantDetailsForm.controls.dateOfBirth"></app-validation-message>
+          </div>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating"> Current Position </ion-label>
+            <ion-select interface="popover" formControlName="currentPosition">
+              <ion-select-option [value]="item?.index" *ngFor="let item of tenantCurrentPositionTypes">
+                {{ item?.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating"> Occupation </ion-label>
+            <ion-input type="text" formControlName="occupation"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="applicantDetailsForm.controls.occupation"></app-validation-message>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item lines="full" class="margin-top-7">
+            <ion-label>Do you have a guarantor?</ion-label>
+            <ion-toggle (ionChange)="isGurantorEnable()" formControlName="guarantor" color="tertiary">
+            </ion-toggle>
+          </ion-item>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating"> Guarantor Type <ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-select interface="popover" formControlName="guarantorType"  [disabled]="!applicantDetailsForm.controls['guarantor'].value">
+              <ion-select-option [value]="item?.index" *ngFor="let item of applicantGuarantorTypes">
+                {{ item?.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="applicantDetailsForm.controls.guarantorType">
+          </app-validation-message>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item lines="full" class="margin-top-7">
+            <ion-label>Any Pets?</ion-label>
+            <ion-toggle formControlName="hasPets" color="tertiary"></ion-toggle>
+          </ion-item>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">Pets description</ion-label>
+            <ion-input type="text" formControlName="petsInfo"
+              [disabled]="!applicantDetailsForm.controls['hasPets'].value"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ng-template>
 
 <ng-template #applicantAddress>
   <form [formGroup]="addressDetailsForm" id="addressDetailsForm">
@@ -431,6 +538,12 @@
           </ion-item>
           <app-validation-message [control]="bankDetailsForm.controls.bankDetails['controls'].sortcode">
           </app-validation-message>
+        </ion-col>        
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">Account name</ion-label>
+            <ion-input type="email" formControlName="accountName"></ion-input>
+          </ion-item>
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
@@ -439,12 +552,6 @@
           </ion-item>
           <app-validation-message [control]="bankDetailsForm.controls.bankDetails['controls'].accountNumber">
           </app-validation-message>
-        </ion-col>
-        <ion-col size-xs="100" size-sm="33.3">
-          <ion-item>
-            <ion-label position="floating">Account name</ion-label>
-            <ion-input type="email" formControlName="accountName"></ion-input>
-          </ion-item>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -494,17 +601,14 @@
         <ion-col size-xs="100" size-sm="33.3" class="header-content">
           <ion-text class="header">Rent</ion-text><br />
           <ion-text class="content">
-            1750
-            <!-- {{applicationdetails?.rent ? (applicationdetails?.rent  | currency: "GBP" ):  (propertyDetail?.advertisementRent | currency: "GBP") }}
-            PCM <span [hidden]="!applicationdetails?.offerId">(Offer Agreed)</span> -->
+            {{ applicationDetails?.rent ? (applicationDetails?.rent  | currency: "GBP" ) : (propertyDetails?.advertisementRent | currency: "GBP") }}            
           </ion-text>
         </ion-col>
 
         <ion-col size-xs="100" size-sm="33.3" class="header-content">
           <ion-text class="header">Deposit</ion-text><br />
           <ion-text class="content">
-            500
-            <!-- {{applicationdetails?.depositAmount ? (applicationdetails?.depositAmount  | currency: "GBP") : (propertyDetail?.holdingDeposit | currency: "GBP") }} -->
+            {{ applicationDetails?.depositAmount ? (applicationDetails?.depositAmount  | currency: "GBP") : (propertyDetails?.holdingDeposit | currency: "GBP") }}
           </ion-text>
         </ion-col>
 
