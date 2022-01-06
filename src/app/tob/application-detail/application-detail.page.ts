@@ -61,8 +61,14 @@ export class ApplicationDetailPage implements OnInit {
   currentDate = this.commonService.getFormatedDate(new Date());
   maxMoveInDate = this.commonService.getFormatedDate(new Date().setFullYear(new Date().getFullYear() + 5));
   itemList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  applicationsDetails: ApplicationModels.IApplicationResponse;
+  applicationDetails: ApplicationModels.IApplicationResponse;
   applicationApplicantDetails: any[];
+  titleList = [
+    { index: 0, value: 'Mr' },
+    { index: 1, value: 'Mrs' },
+    { index: 2, value: 'Ms' }
+  ];
+  leadApplicantId: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -97,15 +103,12 @@ export class ApplicationDetailPage implements OnInit {
       switchMap((value: string) => (value && value.length > 2) ? this.searchApplicant(value) : new Observable()));
   }
 
-  async getApplicantDetails(applicantId: string, index: number) {
-    this.applicantId = applicantId;
-    this._tobService.getApplicantDetails(applicantId).subscribe(res => {
+  private getApplicantDetails() {
+    this._tobService.getApplicantDetails(this.applicantId).subscribe(res => {
       if (res) {
         this.applicantDetail = res;
-        this.resultsAvailable = false;
-        this.searchApplicantForm.get('searchApplicant').setValue('');
         this.patchApplicantDetail();
-        this.addSearchApplicant(res, index);
+        this.patchApplicantAddressDetail();
       }
     },
       error => {
@@ -114,15 +117,17 @@ export class ApplicationDetailPage implements OnInit {
 
   private patchApplicantDetail() {
     this.applicantDetailsForm.patchValue({
-      moveInDate: this.applicantDetail.moveInDate,
-      rentingTime: this.applicantDetail.rentingTime,
-      numberOfAdults: this.applicantDetail.numberOfAdults ? this.applicantDetail.numberOfAdults : 1,
-      numberOfChildren: this.applicantDetail.numberOfChildren ? this.applicantDetail.numberOfChildren : 0,
+      title: this.applicantDetail.title,
+      forename: this.applicantDetail.forename,
+      surname: this.applicantDetail.surname,
+      email: this.applicantDetail.email,
+      mobile: this.applicantDetail.mobile,
+      dateOfBirth: this.applicantDetail.dateOfBirth,
       occupation: this.applicantDetail.occupation,
-      hasGuarantor: this.applicantDetail.guarantorType ? true : false,
-      guarantorType: this.applicantDetail.guarantorType,
-      hasPets: this.applicantDetail.petsInfo ? true : false,
+      hasPets: this.applicantDetail.hasPets,
       petsInfo: this.applicantDetail.petsInfo,
+      guarantor: this.applicantDetail.guarantorType ? true : false,
+      guarantorType: this.applicantDetail.guarantorType,
       currentPosition: this.applicantDetail.currentPosition
     });
   }
@@ -212,7 +217,8 @@ export class ApplicationDetailPage implements OnInit {
     return new Promise((resolve, reject) => {
       this._tobService.getApplicationDetails(applicationId).subscribe(
         res => {
-          this.applicationsDetails = (res && res.data) ? res.data : [];
+          this.applicationDetails = res ? res : [];
+          this.setTenancyDetails(this.applicationDetails);
           resolve(true);
         },
         error => {
@@ -227,6 +233,12 @@ export class ApplicationDetailPage implements OnInit {
       this._tobService.getApplicationApplicants(applicationId).subscribe(
         res => {
           this.applicationApplicantDetails = (res && res.data) ? res.data : [];
+          var leadApplicantDetails = this.applicationApplicantDetails.filter(function (occupant) {
+            return occupant.isLead;
+          });
+          this.applicantId = leadApplicantDetails[0].applicantId;
+          this.getApplicantDetails();
+          this.getBankDetails();
           this.updateOccupantForm(this.applicationApplicantDetails);
           resolve(true);
         },
@@ -366,19 +378,18 @@ export class ApplicationDetailPage implements OnInit {
 
   private initApplicantDetailsForm(): void {
     this.applicantDetailsForm = this._formBuilder.group({
-      amount: ['', Validators.required],
-      status: [0],
-      moveInDate: ['', Validators.required],
-      rentingTime: ['', Validators.required],
-      numberOfAdults: [1],
-      numberOfChildren: [0, Validators.required],
-      currentPosition: [''],
+      title: [''],
+      forename: [''],
+      surname: [''],
+      email: [''],
+      mobile: [''],
+      dateOfBirth: ['', Validators.required],
       occupation: [''],
-      hasGuarantor: false,
-      guarantorType: [{ value: '', disabled: true }],
-      hasPets: [false],
-      petsInfo: [{ value: '', disabled: true }],
-      comments: [''],
+      hasPets: false,
+      petsInfo: { value: '', disabled: true },
+      guarantor: false,
+      guarantorType: [{ value: '', disabled: false }],
+      currentPosition: '1'
     });
   }
 
@@ -668,7 +679,8 @@ export class ApplicationDetailPage implements OnInit {
       numberOfAdults: ['', Validators.required],
       numberOfChildren: ['', Validators.required],
       hasSameHouseholdApplicants: [false, Validators.required],
-      numberOfHouseHolds: [{ value: '', disabled: false }, Validators.required]
+      numberOfHouseHolds: [{ value: '', disabled: false }, Validators.required],
+      isNoDepositScheme: ['']
     }, {
       validator: Validators.compose([
         ValidationService.dateLessThan('moveInDate', 'preferredTenancyEndDate')
@@ -776,4 +788,129 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   /** Application Question Functionality **/
+
+  isGurantorEnable() {
+    if (this.applicantDetailsForm.value.guarantor) {
+      this.applicantDetailsForm.controls.guarantorType.setValidators([Validators.required]);
+    } else {
+      this.applicantDetailsForm.controls.guarantorType.clearValidators();
+    }
+    this.applicantDetailsForm.get('guarantorType').updateValueAndValidity();
+  }
+
+  private patchApplicantAddressDetail() {
+    this.addressDetailsForm.patchValue({
+      address: {
+        postcode: this.applicantDetail.address.postcode,
+        addressLine1: this.applicantDetail.address.addressLine1,
+        addressLine2: this.applicantDetail.address.addressLine2,
+        town: this.applicantDetail.address.town,
+        county: this.applicantDetail.address.county,
+        country: this.applicantDetail.address.country,
+        locality: this.applicantDetail.address.locality,
+        addressdetails: ''
+      }
+    });
+    if (this.propertyType == 'Student') {
+      this.addressDetailsForm.setValue({
+        correspondenceAddress: {
+          postcode: this.applicantDetail.correspondenceAddress.postcode,
+          addressLine1: this.applicantDetail.correspondenceAddress.addressLine1,
+          addressLine2: this.applicantDetail.correspondenceAddress.addressLine2,
+          town: this.applicantDetail.correspondenceAddress.town,
+          county: this.applicantDetail.correspondenceAddress.county,
+          country: this.applicantDetail.correspondenceAddress.country,
+          locality: this.applicantDetail.address.locality,
+          addressdetails: ''
+        }
+      });
+    }
+  }
+
+  private savePersonalDetails() {
+    let applicantDetails = this.applicantDetailsForm.value;
+    applicantDetails.dateOfBirth = this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
+    if (this.checkFormDirty(this.applicantDetailsForm)) {
+      this.updateApplicantDetails();
+    }
+  }
+
+  private saveAddressDetails() {
+    let applicantDetails = this.applicantDetailsForm.value;
+    applicantDetails.address = this.addressDetailsForm.value.address;
+    applicantDetails.dateOfBirth = this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
+    applicantDetails.correspondenceAddress = this.addressDetailsForm.value.correspondenceAddress;
+    if (this.checkFormDirty(this.applicantDetailsForm)) {
+      this.updateApplicantDetails();
+    }
+  }
+
+  private getBankDetails() {
+    return new Promise((resolve, reject) => {
+      this._tobService.getBankDetails(this.applicantId).subscribe(
+        res => {
+          if (res) {
+            this.patchBankDetails(res);
+          }
+          resolve(true);
+        },
+        error => {
+          // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Bank Details', 'error');
+          reject(undefined);
+          console.log(error);
+        }
+      );
+    });
+  }
+
+  private patchBankDetails(bankDetails) {
+    this.bankDetailsForm.patchValue({
+      bankDetails: {
+        bankName: bankDetails.bankName ? bankDetails.bankName : "",
+        sortcode: bankDetails.sortcode ? bankDetails.sortcode : "",
+        accountNumber: bankDetails.accountNumber ? bankDetails.accountNumber : "",
+        accountName: bankDetails.accountName ? bankDetails.accountName : "",
+      }
+    });
+  }
+
+  private saveBankDtails() {
+    let bankDetails = this.bankDetailsForm.value.bankDetails;
+    if (this.checkFormDirty(this.bankDetailsForm)) {
+      this.updateBankDetails(bankDetails);
+    }
+  }
+
+  private updateBankDetails(bankDetails): void {
+    // if (this.selectionType == 'saveForLater') {
+    //   this.saveDataLoader = true;
+    // }
+    this._tobService.updateBankDetails(this.applicantId, bankDetails).subscribe(
+      res => {
+        // this.saveDataLoader = false;
+        // if (this.selectionType == 'saveForLater') {
+        //   this.onSave();
+        // }
+        this.bankDetailsForm.reset(this.bankDetailsForm.value);
+      },
+      error => {
+        // this.saveDataLoader = false;
+        // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Update Bank Details', 'error');
+        console.log(error);
+      }
+    );
+  }
+
+  setTenancyDetails(details): void {
+    this.tenancyDetailForm.patchValue({
+      moveInDate: details.moveInDate,
+      preferredTenancyEndDate: details.preferredTenancyEndDate,
+      rentDueDay: details.rentDueDay,
+      numberOfAdults: details.numberOfAdults,
+      numberOfChildren: details.numberOfChildren,
+      hasSameHouseholdApplicants: details.hasSameHouseholdApplicants,
+      numberOfHouseHolds: details.numberOfHouseHolds,
+      isNoDepositScheme: details.isNoDepositScheme      
+    });
+  }
 }
