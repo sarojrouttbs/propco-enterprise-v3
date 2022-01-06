@@ -379,10 +379,10 @@ export class ApplicationDetailPage implements OnInit {
   private initApplicantDetailsForm(): void {
     this.applicantDetailsForm = this._formBuilder.group({
       title: [''],
-      forename: [''],
-      surname: [''],
-      email: [''],
-      mobile: [''],
+      forename: ['', [ValidationService.alphabetValidator]],
+      surname: ['', [ValidationService.alphabetValidator]],
+      email: ['', [ValidationService.emailValidator]],
+      mobile: ['', [ValidationService.numberValidator]],
       dateOfBirth: ['', Validators.required],
       occupation: [''],
       hasPets: false,
