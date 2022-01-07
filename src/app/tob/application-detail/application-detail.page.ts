@@ -62,7 +62,7 @@ export class ApplicationDetailPage implements OnInit {
   maxMoveInDate = this.commonService.getFormatedDate(new Date().setFullYear(new Date().getFullYear() + 5));
   itemList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   applicationDetails: ApplicationModels.IApplicationResponse;
-  applicationApplicantDetails: any[];
+  applicationApplicantDetails: ApplicationModels.ICoApplicants[];
   leadApplicationApplicantId: any;
   titleList = [
     { index: 0, value: 'Mr' },
@@ -104,14 +104,14 @@ export class ApplicationDetailPage implements OnInit {
       switchMap((value: string) => (value && value.length > 2) ? this.searchApplicant(value) : new Observable()));
   }
 
-  async getApplicantDetails(applicantId: string, index?: number) {
+  async getApplicantDetails(applicantId: string, index?: number, isSearch?: boolean) {
     this.applicantId = applicantId;
     this._tobService.getApplicantDetails(applicantId).subscribe(res => {
       if (res) {
         this.applicantDetail = res;
         this.resultsAvailable = false;
         this.searchApplicantForm.get('searchApplicant').setValue('');
-        if(index) {
+        if (isSearch) {
           this.addSearchApplicant(res, index);
           this.getApplicantCoApplicants(applicantId);
         }
@@ -212,28 +212,12 @@ export class ApplicationDetailPage implements OnInit {
       }
     });
 
-    setTimeout(() => {
-      forkJoin(apiObservableArray).subscribe((response: any[]) => {
-        if (response && response[0] !== null) {
-          let result = response.map(a => a.applicationApplicantId);
-          if (result.indexOf(this.leadApplicationApplicantId !== -1)) {
-            let updateLeadData = {
-              modifiedById: '',
-              modifiedBy: "AGENT"
-            };
-            this._tobService.updateLead(updateLeadData, this.applicationId, this.leadApplicationApplicantId).subscribe(res => {
-              this.occupantForm.reset(this.occupantForm.value);
-              this.getApplicationApplicants(this.applicationId);
-            })
-          }
-        }
-        else {
-          this.occupantForm.reset(this.occupantForm.value);
-          this.getApplicationApplicants(this.applicationId);
-        }
-      }, error => {
-      });
-    }, 1000);
+
+    forkJoin(apiObservableArray).subscribe((response: any[]) => {
+      this.occupantForm.reset(this.occupantForm.value);
+      this.getApplicationApplicants(this.applicationId);
+    }, error => {
+    });
   }
 
 
@@ -301,9 +285,11 @@ export class ApplicationDetailPage implements OnInit {
           var leadApplicantDetails = this.applicationApplicantDetails.filter(function (occupant) {
             return occupant.isLead;
           });
-          this.applicantId = leadApplicantDetails[0].applicantId;
-          this.getApplicantDetails(this.applicantId);
-          this.getBankDetails();
+          if (leadApplicantDetails && leadApplicantDetails.length > 0) {
+            this.applicantId = leadApplicantDetails[0].applicantId;
+            this.getApplicantDetails(this.applicantId);
+            this.getBankDetails();
+          }
           this.updateOccupantForm(this.applicationApplicantDetails);
           resolve(true);
         },
@@ -550,7 +536,7 @@ export class ApplicationDetailPage implements OnInit {
       email: response.email,
       mobile: response.mobile,
       applicationApplicantId: null,
-      isLead: false,
+      isLead: index === 0 ? true : false,
       createdById: null,
       createdBy: 'AGENT',
       isAdded: true,
@@ -983,7 +969,7 @@ export class ApplicationDetailPage implements OnInit {
       numberOfChildren: details.numberOfChildren,
       hasSameHouseholdApplicants: details.hasSameHouseholdApplicants,
       numberOfHouseHolds: details.numberOfHouseHolds,
-      isNoDepositScheme: details.isNoDepositScheme      
+      isNoDepositScheme: details.isNoDepositScheme
     });
   }
 }

@@ -32,8 +32,9 @@ export class TobService {
     return this.httpClient.get(environment.API_BASE_URL + `applications/${applicationId}`);
   }
 
-  addApplicantToApplication(applicationId: string, body: any, isLeadApplicant: boolean) {
-    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants?isLeadApplicant=${isLeadApplicant}`, body).pipe(tap((res: any) => { }),
+  addApplicantToApplication(applicationId: string, body: any, isLeadApplicant: any) {
+    let params = new HttpParams().set('isLeadApplicant', isLeadApplicant);
+    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants`, body,  {params}).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
   }
@@ -48,8 +49,9 @@ export class TobService {
     return this.httpClient.delete(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body);
   }
 
-  linkApplicantToApplication(applicationId: string, body: any, applicantId, isLeadApplicant: boolean) {
-    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}?isLeadApplicant=${isLeadApplicant}`, body).pipe(tap((res: any) => { }),
+  linkApplicantToApplication(applicationId: string, body: any, applicantId, isLeadApplicant: any) {
+    let params = new HttpParams().set('isLeadApplicant', isLeadApplicant);
+    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body , {params}).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
   }
