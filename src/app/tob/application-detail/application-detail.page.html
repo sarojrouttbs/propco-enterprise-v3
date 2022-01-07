@@ -119,19 +119,22 @@
       <ion-col size="100" class="list-section">
         <ion-grid class="header">
           <ion-row class="">
+            <ion-col size="10">
+              <ion-text>Title</ion-text>
+            </ion-col>
             <ion-col size="15">
               <ion-text>Forename</ion-text>
             </ion-col>
             <ion-col size="15">
               <ion-text>Surname</ion-text>
             </ion-col>
-            <ion-col size="30">
-             <ion-text>Email Address</ion-text>
-            </ion-col>
             <ion-col size="20">
               <ion-text>Mobile</ion-text>
             </ion-col>
-            <ion-col size="10">
+            <ion-col size="25">
+             <ion-text>Email Address</ion-text>
+            </ion-col>
+            <ion-col size="5">
               <ion-text>Lead</ion-text>
             </ion-col>
             <ion-col size="10">
@@ -147,6 +150,11 @@
                   <ng-container *ngIf="item.controls['isAdded'].value && !item.controls['isDeleted'].value">
                     <ion-grid class="list-content">
                       <ion-row>
+                        <ion-col size="10">
+                          <ion-text>
+                            {{item.controls['title'].value}}
+                          </ion-text>
+                        </ion-col>
                         <ion-col size="15">
                           <ion-text>
                             {{item.controls['forename'].value}}
@@ -157,17 +165,17 @@
                             {{ item.controls['surname'].value}}
                           </ion-text>
                         </ion-col>
-                        <ion-col size="30">
-                          <ion-text>
-                            {{item.controls['email'].value}}
-                          </ion-text>
-                        </ion-col>
                         <ion-col size="20">
                           <ion-text>
                             {{item.controls['mobile'].value || 'N/A'}}
                           </ion-text>
                         </ion-col>
-                        <ion-col size="10">
+                        <ion-col size="25">
+                          <ion-text>
+                            {{item.controls['email'].value}}
+                          </ion-text>
+                        </ion-col>
+                        <ion-col size="5">
                           <ion-checkbox class="ml-15" style="opacity: unset;" formControlName="isLead" (ionChange)="onLeadSelection(item)" [checked]="item.controls['isLead'].value"
                           [disabled]="item.controls['isLead'].value"
                             color="success"></ion-checkbox>
@@ -182,6 +190,17 @@
                     </ion-grid>
                   </ng-container>
                   <ng-container *ngIf="!item.controls['isAdded'].value">
+                    <ion-col size="10">
+                      <ion-item>
+                        <ion-label position="floating"> Title </ion-label>
+                        <ion-select interface="popover" formControlName="title">
+                          <ion-select-option class="wider-popover" [value]="item?.value" *ngFor="let item of titleList">
+                            {{ item?.value }}
+                          </ion-select-option>
+                        </ion-select>
+                      </ion-item>
+                      <app-validation-message [control]="item.controls.title"></app-validation-message>
+                    </ion-col>
                     <ion-col size="15">
                       <ion-item>
                         <ion-label position="floating">Forename <ion-text class="mandatory">*</ion-text>
@@ -198,14 +217,6 @@
                       </ion-item>
                       <app-validation-message [control]="item.controls.surname"></app-validation-message>
                     </ion-col>
-                    <ion-col size="30">
-                      <ion-item>
-                        <ion-label position="floating">Email address <ion-text class="mandatory">*</ion-text>
-                        </ion-label>
-                        <ion-input type="email" formControlName="email"></ion-input>
-                      </ion-item>
-                      <app-validation-message [control]="item.controls.email"></app-validation-message>
-                    </ion-col>
                     <ion-col size="20">
                       <ion-item>
                         <ion-label position="floating">Phone <ion-text class="mandatory">*</ion-text>
@@ -214,7 +225,16 @@
                       </ion-item>
                       <app-validation-message [control]="item.controls.mobile"></app-validation-message>
                     </ion-col>
-                    <ion-col style="padding-top: 5px" size="20">
+                    <ion-col size="25">
+                      <ion-item>
+                        <ion-label position="floating">Email address <ion-text class="mandatory">*</ion-text>
+                        </ion-label>
+                        <ion-input type="email" formControlName="email"></ion-input>
+                      </ion-item>
+                      <app-validation-message [control]="item.controls.email"></app-validation-message>
+                    </ion-col>
+                    
+                    <ion-col style="padding-top: 5px" size="15">
                       <ion-button color="success" [disabled]="!occupantForm.valid" (click)="addApplicant(item,i)">Add
                         New</ion-button>
                     </ion-col>

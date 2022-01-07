@@ -535,7 +535,7 @@ export class ApplicationDetailPage implements OnInit {
       createdBy: 'AGENT',
       isAdded: true,
       isDeleted: false,
-      title: '',
+      title: control.value.title,
       applicantId: ''
     }
     ))
@@ -555,7 +555,7 @@ export class ApplicationDetailPage implements OnInit {
       createdBy: 'AGENT',
       isAdded: true,
       isDeleted: false,
-      title: '',
+      title: response.title,
       applicantId: response.applicantId
     }
     ))
@@ -594,7 +594,7 @@ export class ApplicationDetailPage implements OnInit {
             createdBy: 'AGENT',
             isAdded: true,
             isDeleted: false,
-            title: '',
+            title: element.title,
             applicantId: element.applicantId
           }));
         }
