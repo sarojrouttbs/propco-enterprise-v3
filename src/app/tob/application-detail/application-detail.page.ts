@@ -53,7 +53,7 @@ export class ApplicationDetailPage implements OnInit {
   applicantQuestionForm: FormGroup;
   tenancyDetailForm: FormGroup;
   guarantorForm: FormGroup;
-  propertyType = null; /*0: private , 1:student*/
+  isStudentProperty: boolean = false;
   showPostcodeLoader: Boolean = null;
   showAddressLoader: Boolean = null;
   addressList: any[];
@@ -332,7 +332,10 @@ export class ApplicationDetailPage implements OnInit {
           if (res) {
             this.getNoDeposit();
             this.propertyDetails = res.data;
-            this.propertyType = this.commonService.getLookupValue(this.lookupdata.rentCategories, this.propertyDetails.rentCategory);
+            const propertyType = this.commonService.getLookupValue(this.lookupdata.rentCategories, this.propertyDetails.rentCategory);
+            if(propertyType === 'Student') {
+              this.isStudentProperty = true;
+            }
             this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
             this.setValidator();
             resolve(true);
@@ -888,7 +891,7 @@ export class ApplicationDetailPage implements OnInit {
         addressdetails: ''
       }
     });
-    if (this.propertyType == 'Student') {
+    if (this.isStudentProperty) {
       this.addressDetailsForm.patchValue({
         correspondenceAddress: {
           postcode: this.applicantDetail.correspondenceAddress.postcode,
@@ -1035,7 +1038,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private setValidator() {
-    if (this.propertyType === 'Student') {
+    if (this.isStudentProperty) {
       this.guarantorForm.controls.title.setValidators(Validators.required);
       this.guarantorForm.controls.forename.setValidators(Validators.required);
       this.guarantorForm.controls.surname.setValidators(Validators.required);

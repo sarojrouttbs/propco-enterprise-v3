@@ -462,10 +462,10 @@
         </ion-col>
       </ion-row>
 
-      <ng-container *ngIf="propertyType == 'Student'">
+      <ng-container *ngIf="isStudentProperty">
         <ion-row formGroupName="correspondenceAddress">
           <ion-col size="100">
-            <div class="page-heading" [ngClass]="{'term-time':(propertyType == 'Student')}">Term Time Address</div>
+            <div class="page-heading" [ngClass]="{'term-time':(isStudentProperty)}">Term Time Address</div>
           </ion-col>
           <ion-col size-xs="100" size-sm="33.3">
             <ion-item>
@@ -776,7 +776,7 @@
       <ion-row>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
-            <ion-label position="floating">Title <span *ngIf="propertyType == 'Student'">
+            <ion-label position="floating">Title <span *ngIf="isStudentProperty">
                 <ion-text class="mandatory">*</ion-text>
               </span>
             </ion-label>
@@ -789,7 +789,7 @@
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
-            <ion-label position="floating">Forename <span *ngIf="propertyType == 'Student'">
+            <ion-label position="floating">Forename <span *ngIf="isStudentProperty">
                 <ion-text class="mandatory">*</ion-text>
               </span>
             </ion-label>
@@ -799,7 +799,7 @@
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
-            <ion-label position="floating">Surname <span *ngIf="propertyType == 'Student'">
+            <ion-label position="floating">Surname <span *ngIf="isStudentProperty">
                 <ion-text class="mandatory">*</ion-text>
               </span>
             </ion-label>
@@ -809,7 +809,7 @@
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
-            <ion-label position="floating">Email address <span *ngIf="propertyType == 'Student'">
+            <ion-label position="floating">Email address <span *ngIf="isStudentProperty">
                 <ion-text class="mandatory">*</ion-text>
               </span>
             </ion-label>
@@ -819,7 +819,7 @@
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
-            <ion-label position="floating">Phone <span *ngIf="propertyType == 'Student'">
+            <ion-label position="floating">Phone <span *ngIf="isStudentProperty">
                 <ion-text class="mandatory">*</ion-text>
               </span>
             </ion-label>
