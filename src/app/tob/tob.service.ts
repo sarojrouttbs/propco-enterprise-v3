@@ -188,14 +188,14 @@ export class TobService {
   }
 
   getTenantGuarantors(tenantId: string): Observable<any> {
-    return this.httpClient.get<any>(environment.API_BASE_URL + `tenants/${tenantId}/guarantor`).pipe(
+    return this.httpClient.get<any>(environment.API_BASE_URL + `tenants/${tenantId}/guarantors`).pipe(
       tap(() => { }),
       catchError(this.handleError<any>(''))
     );
   }
 
   getApplicantGuarantors(applicantId: string): Observable<any> {
-    return this.httpClient.get<any>(environment.API_BASE_URL + `applicants/${applicantId}/guarantor`).pipe(
+    return this.httpClient.get<any>(environment.API_BASE_URL + `applicants/${applicantId}/guarantors`).pipe(
       tap(() => { }),
       catchError(this.handleError<any>(''))
     );
