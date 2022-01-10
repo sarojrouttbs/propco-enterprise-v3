@@ -120,5 +120,6 @@ declare namespace ApplicationModels {
         paidById: string;
         createdById: string;
         submittedById?: any;
+        leadApplicantItemtype: string;
     }
 }
