@@ -63,7 +63,8 @@ export class ApplicationDetailPage implements OnInit {
   maxMoveInDate = this.commonService.getFormatedDate(new Date().setFullYear(new Date().getFullYear() + 5));
   itemList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   applicationDetails: ApplicationModels.IApplicationResponse;
-  applicationApplicantDetails: any[];
+  applicationApplicantDetails: ApplicationModels.ICoApplicants[];
+  leadApplicationApplicantId: any;
   titleList = [
     { index: 0, value: 'Mr' },
     { index: 1, value: 'Mrs' },
@@ -104,15 +105,16 @@ export class ApplicationDetailPage implements OnInit {
       switchMap((value: string) => (value && value.length > 2) ? this.searchApplicant(value) : new Observable()));
   }
 
-  async getApplicantDetails(applicantId: string, index?: number) {
+  async getApplicantDetails(applicantId: string, index?: number, isSearch?: boolean) {
     this.applicantId = applicantId;
     this._tobService.getApplicantDetails(applicantId).subscribe(res => {
       if (res) {
         this.applicantDetail = res;
         this.resultsAvailable = false;
         this.searchApplicantForm.get('searchApplicant').setValue('');
-        if(index) {
+        if (isSearch) {
           this.addSearchApplicant(res, index);
+          this.getApplicantCoApplicants(applicantId);
         }
         this.patchApplicantDetail();
         this.patchApplicantAddressDetail();
@@ -191,7 +193,7 @@ export class ApplicationDetailPage implements OnInit {
     this.getApplicantDetails(this.applicantId);
     if (this.applicationDetails.leadApplicantItemtype == "M") {
       this.getTenantBankDetails(this.applicantId);
-      this.geTenantGuarantors(this.applicantId);
+      this.getTenantGuarantors(this.applicantId);
     } else {
       this.getApplicantBankDetails(this.applicantId);
       this.getApplicantGuarantors(this.applicantId);
@@ -200,33 +202,68 @@ export class ApplicationDetailPage implements OnInit {
 
   saveApplicantsToApplication() {
     let apiObservableArray = [];
-    if (this.checkFormDirty(this.occupantForm) || this.isCoApplicantDeleted) {
-      this.occupantForm.controls['coApplicants'].value.map((element) => {
-        if (!element.applicantId && !element.applicationApplicantId && element.isAdded && !element.isDeleted) {
-          apiObservableArray.push(this._tobService.addApplicantToApplication(this.applicationId, element));
-        }
+    this.occupantForm.controls['coApplicants'].value.map((element) => {
+      if (!element.applicantId && !element.applicationApplicantId && element.isAdded && !element.isDeleted) {
+        let isLeadApplicant: boolean = element.isLead;
+        apiObservableArray.push(this._tobService.addApplicantToApplication(this.applicationId, element, isLeadApplicant));
+      }
 
-        if (element.applicantId && !element.applicationApplicantId && element.isAdded && !element.isDeleted) {
-          apiObservableArray.push(this._tobService.linkApplicantToApplication(this.applicationId, element, element.applicantId));
-        }
+      if (element.applicantId && !element.applicationApplicantId && element.isAdded && !element.isDeleted) {
+        let isLeadApplicant: boolean = element.isLead;
+        apiObservableArray.push(this._tobService.linkApplicantToApplication(this.applicationId, element, element.applicantId, isLeadApplicant));
+      }
 
-        if (element.applicationApplicantId && element.isDeleted) {
-          apiObservableArray.push(this._tobService.deleteApplicationApplicant(
-            this.applicationId, element.applicationApplicantId,
-            { "deletedById": element.applicantId, "deletedBy": "APPLICANT" },
-          ));
+      if (this.checkFormDirty(this.occupantForm) && element.applicationApplicantId && element.isLead && element.isAdded && !element.isDeleted) {
+        let updateLeadData = {
+          modifiedById: '',
+          modifiedBy: "AGENT"
+        };
+        apiObservableArray.push(this._tobService.updateLead(updateLeadData, this.applicationId, element.applicationApplicantId));
+      }
+    });
+
+
+    forkJoin(apiObservableArray).subscribe((response: any[]) => {
+      this.occupantForm.reset(this.occupantForm.value);
+      this.getApplicationApplicants(this.applicationId);
+    }, error => {
+    });
+  }
+
+
+  async onLeadSelection(comp: FormGroup) {
+    let isLead = comp.controls['isLead'].value;
+    let leadApplicantId = comp.controls['applicantId'].value;
+    let formArray: FormArray = this.occupantFormArray;
+    if (isLead && comp.controls['applicationApplicantId'].value) {
+      comp.controls['isLead'].setValue(true);
+      formArray.controls.forEach((currentGroup: FormGroup) => {
+        if (leadApplicantId !== currentGroup.controls['applicantId'].value) {
+          currentGroup.controls['isLead'].setValue(false);
         }
       });
     }
-
-    setTimeout(() => {
-      forkJoin(apiObservableArray).subscribe(() => {
-        this.isCoApplicantDeleted = null;
-        this.occupantForm.reset(this.occupantForm.value);
-        this.getApplicationApplicants(this.applicationId);
-      }, error => {
+    else if (isLead && !comp.controls['applicationApplicantId'].value) {
+      formArray.controls.forEach((currentGroup: FormGroup) => {
+        if (leadApplicantId !== currentGroup.controls['applicantId'].value) {
+          currentGroup.controls['isLead'].setValue(false);
+        }
       });
-    }, 1000);
+    }
+  }
+
+  private async getApplicantCoApplicants(applicantId: string) {
+    this._tobService.getApplicantCoApplicants(applicantId).subscribe(response => {
+      if (response && response.length) {
+        let finalData = this.occupantForm.get("coApplicants").value;
+        response.forEach((item: any) => {
+          item.isLead = false;
+          finalData.push(item)
+        });
+        (this.occupantForm.get("coApplicants") as FormArray)['controls'].splice(0);
+        this.updateOccupantForm(finalData)
+      }
+    })
   }
 
   private getApplicationDetails(applicationId) {
@@ -248,11 +285,19 @@ export class ApplicationDetailPage implements OnInit {
     return new Promise((resolve, reject) => {
       this._tobService.getApplicationApplicants(applicationId).subscribe(
         res => {
+          (this.occupantForm.get("coApplicants") as FormArray)['controls'].splice(0);
           this.applicationApplicantDetails = (res && res.data) ? res.data : [];
+          this.applicationApplicantDetails.filter(item => {
+            if (item.isLead) {
+              this.leadApplicationApplicantId = item.applicationApplicantId;
+            }
+          })
           var leadApplicantDetails = this.applicationApplicantDetails.filter(function (occupant) {
             return occupant.isLead;
           });
-          this.applicantId = leadApplicantDetails[0].applicantId;
+          if (leadApplicantDetails && leadApplicantDetails.length > 0) {
+            this.applicantId = leadApplicantDetails[0].applicantId;
+          }
           this.updateOccupantForm(this.applicationApplicantDetails);
           resolve(true);
         },
@@ -486,7 +531,7 @@ export class ApplicationDetailPage implements OnInit {
       createdBy: 'AGENT',
       isAdded: true,
       isDeleted: false,
-      title: '',
+      title: control.value.title,
       applicantId: ''
     }
     ))
@@ -501,12 +546,12 @@ export class ApplicationDetailPage implements OnInit {
       email: response.email,
       mobile: response.mobile,
       applicationApplicantId: null,
-      isLead: false,
+      isLead: index === 0 ? true : false,
       createdById: null,
       createdBy: 'AGENT',
       isAdded: true,
       isDeleted: false,
-      title: '',
+      title: response.title,
       applicantId: response.applicantId
     }
     ))
@@ -514,11 +559,17 @@ export class ApplicationDetailPage implements OnInit {
     this.createItem();
   }
 
-  removeCoApplicant(group: FormGroup) {
+  removeCoApplicant(item: FormGroup) {
     this.commonService.showConfirm('Remove Applicant', 'Are you sure, you want to remove this applicant ?', '', 'YES', 'NO').then(response => {
       if (response) {
-        group.controls['isDeleted'].setValue(true);
-        this.isCoApplicantDeleted = group.controls['isDeleted'].value;
+        if (item.controls['applicationApplicantId'].value) {
+          this._tobService.deleteApplicationApplicant(this.applicationId, item.controls['applicationApplicantId'].value, { "deletedBy": "AGENT" }).subscribe(response => {
+            this.getApplicationApplicants(this.applicationId);
+          })
+        }
+        else {
+          item.controls['isDeleted'].setValue(true);
+        }
       }
     })
   }
@@ -527,20 +578,22 @@ export class ApplicationDetailPage implements OnInit {
     if (Array.isArray(occupantsList) && occupantsList.length > 0) {
       let occupantsArray = this.occupantFormArray;
       occupantsList.forEach(element => {
-        occupantsArray.push(this._formBuilder.group({
-          surname: element.surname,
-          forename: element.forename,
-          email: element.email,
-          mobile: element.mobile,
-          applicationApplicantId: element.applicationApplicantId,
-          isLead: element.isLead,
-          createdById: null,
-          createdBy: 'AGENT',
-          isAdded: true,
-          isDeleted: false,
-          title: '',
-          applicantId: element.applicantId
-        }));
+        if (element.applicantId) {
+          occupantsArray.push(this._formBuilder.group({
+            surname: element.surname,
+            forename: element.forename,
+            email: element.email,
+            mobile: element.mobile,
+            applicationApplicantId: element.applicationApplicantId,
+            isLead: element.isLead,
+            createdById: null,
+            createdBy: 'AGENT',
+            isAdded: true,
+            isDeleted: false,
+            title: element.title,
+            applicantId: element.applicantId
+          }));
+        }
       });
     }
     this.createItem();
@@ -1011,7 +1064,7 @@ export class ApplicationDetailPage implements OnInit {
     );
   }
 
-  private geTenantGuarantors(tenantId): void {
+  private getTenantGuarantors(tenantId): void {
     this._tobService.getTenantGuarantors(tenantId).subscribe(
       res => {
         if (res && res.data) {

@@ -51,7 +51,7 @@ export class OfferListPage implements OnInit {
   toblookupdata: any;
   lookupdata: any;
   offerStatuses: any;
-  rentFrequencyTypes: any;  
+  rentFrequencyTypes: any;
   notesCategories: any;
   notesComplaints: any;
   notesTypes: any;
@@ -140,7 +140,7 @@ export class OfferListPage implements OnInit {
     }
   }
 
-  showMenu(event, id, data, className, isCard?, isOffer?) {
+  showMenu(event: any, id: any, data: any, className: any, isCard?: any, isOffer?: any) {
     isOffer ? (this.selectedOfferRow = data) : (this.selectedNotesRow = data);
     const baseContainer = $(event.target).parents('.' + className);
     const divOverlay = $('#' + id);
@@ -151,7 +151,7 @@ export class OfferListPage implements OnInit {
     const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    const divOverlayLeft = isCard ? baseContainerPosition.left : overlayContainerLeftPadding;
+    const divOverlayLeft = (divOverlay.parent('.overlay-container').innerWidth() - baseContainerWidth - (id == 'divOverlayChild' ? 0 : 25));
 
     let origDivOverlayHeight;
     let origDivOverlayTop;
@@ -207,7 +207,7 @@ export class OfferListPage implements OnInit {
   private async getOfferNotes(offerId) {
     this.hideMenu('', 'divOverlay');
     this.hideMenu('', 'divOverlayChild');
-    this.offerNotes = await this.getNotesList(offerId) as OfferNotesData[];    
+    this.offerNotes = await this.getNotesList(offerId) as OfferNotesData[];
     this.initOfferNotesListData()
   }
 
@@ -281,7 +281,7 @@ export class OfferListPage implements OnInit {
     });
 
     const data = modal.onDidDismiss().then(res => {
-      if (res.data && res.data.noteId) {        
+      if (res.data && res.data.noteId) {
         this.getOfferNotes(offerId);
       }
     });
@@ -384,9 +384,9 @@ export class OfferListPage implements OnInit {
   }
 
   viewDetails(offerId?) {
-    if (offerId != undefined && offerId != null) {
+    if (offerId !== undefined && offerId !== null) {
       this.router.navigate([`tob/${offerId}/view`], { replaceUrl: true });
-    } else if(this.selectedOfferRow?.offerId != undefined && this.selectedOfferRow?.offerId != null) {
+    } else if (this.selectedOfferRow?.offerId !== undefined && this.selectedOfferRow?.offerId !== null) {
       this.router.navigate([`tob/${this.selectedOfferRow.offerId}/view`], { replaceUrl: true });
     }
   }

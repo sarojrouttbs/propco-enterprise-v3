@@ -79,7 +79,7 @@
   </ng-container>
 
   <ng-container>
-    <div style="position: relative;">
+    <div style="position: relative;" class="overlay-container">
       <ion-card *ngFor="let item of obsOfferList | async; let i = index;" (click)="onOfferClick(item)">
         <ion-card-content>
           <ion-grid>
@@ -89,7 +89,7 @@
                   <img [src]=" item.numberOfCoApplicants > 0 ? 'assets/images/tob/multi-user.svg' : 'assets/images/tob/single-user.svg' ">
                 </div>
               </ion-col>
-              <ion-col class="" size-xl="85" size="80">
+              <ion-col class="" size-xl="85" size="80" style="position: static;">
                 <ion-grid style="height:100%;" class="no-padding-top">
                   <ion-row class="offer-title-row fs-18">
                     <ion-col class="no-padding-top col1" size="60">
@@ -196,8 +196,8 @@
       <ion-row class="offer-notes">
         <ion-col size="100">
           <h4>Offer Notes:</h4>
-          <div>
-            <table class="fs-14">
+          <div style="position: relative;" class="overlay-container">
+            <table class="fs-14" >
               <thead>
                 <tr>
                   <th style="width:10%">Date</th>

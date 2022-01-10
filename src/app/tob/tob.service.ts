@@ -11,6 +11,17 @@ export class TobService {
 
   constructor(private httpClient: HttpClient) { }
 
+  getApplicantCoApplicants(applicantId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `applicants/${applicantId}/co-applicants`);
+  }
+
+  updateLead(data: object, applicationId: string, applicationApplicantId: string): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicationApplicantId}`, data).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
   createApplication(body: any): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `applications/create-application`, body).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
@@ -21,8 +32,9 @@ export class TobService {
     return this.httpClient.get(environment.API_BASE_URL + `applications/${applicationId}`);
   }
 
-  addApplicantToApplication(applicationId: string, body: any) {
-    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants`, body).pipe(tap((res: any) => { }),
+  addApplicantToApplication(applicationId: string, body: any, isLeadApplicant: any) {
+    let params = new HttpParams().set('isLeadApplicant', isLeadApplicant);
+    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants`, body,  {params}).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
   }
@@ -37,8 +49,9 @@ export class TobService {
     return this.httpClient.delete(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body);
   }
 
-  linkApplicantToApplication(applicationId: string, body: any, applicantId) {
-    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body).pipe(tap((res: any) => { }),
+  linkApplicantToApplication(applicationId: string, body: any, applicantId, isLeadApplicant: any) {
+    let params = new HttpParams().set('isLeadApplicant', isLeadApplicant);
+    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body , {params}).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
   }

@@ -122,4 +122,19 @@ declare namespace ApplicationModels {
         submittedById?: any;
         leadApplicantItemtype: string;
     }
+
+    export interface ICoApplicants {
+        isLead: boolean;
+        email: string;
+        title: string;
+        init?: any;
+        surname: string;
+        forename: string;
+        displayAs: string;
+        applicationApplicantId: string;
+        applicantId: string;
+        mobile: string;
+    }
+
+
 }
