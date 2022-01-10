@@ -1,16 +1,10 @@
-function openJavaLink(key) {
-    switch (key) {
-        case 'OpenApplicantCard':
-            window.propCoFunction({
-                request: '["OpenApplicantCard"]',
-                persistent: false,
-                onSuccess: function (response) {
-                    print(response);
-                },
-                onFailure: function (error_code, error_message) {}
-            });
-            break;
-        default:
-            // code block
-    }
+function openJavaLink(key, value) {
+    window.propCoFunction({
+        request: !value ? `["${key}"]` : (`["${key}"]` , `["${value}"]`),
+        persistent: false,
+        onSuccess: function (response) {
+            print(response);
+        },
+        onFailure: function (error_code, error_message) {}
+    });
 }
