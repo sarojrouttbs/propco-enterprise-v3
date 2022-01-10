@@ -624,16 +624,17 @@ mat-form-field {
 }
 
 .searchbarCustom {
-  .searchbar-input {
-    line-height: 37px;
-  }
-  .searchbar-search-icon {
-    height: 32px;
-  }
-  .searchbar-search-icon {
-    background-image: url("assets/images/solr/propcoLogo.svg")!important;
-    color: transparent;
-    background-size: cover;
+    padding: 0;
+    .searchbar-input {
+      line-height: 37px;
+    }
+    .searchbar-search-icon {
+      height: 32px;
+    }
+    .searchbar-search-icon {
+      background-image: url("assets/images/solr/propcoLogo.svg")!important;
+      color: transparent;
+      background-size: cover;
     }
 }
 
