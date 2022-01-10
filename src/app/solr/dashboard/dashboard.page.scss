@@ -1,4 +1,4 @@
-#solr-dashboard {
+#solr-dashboard {  
   --padding-top: var(--ion-padding-top);
   --padding-end: var(--ion-padding-end);
   --padding-bottom: var(--ion-padding-bottom);
@@ -10,25 +10,27 @@
     padding: 10px;
     text-align: center;
     border-radius: 4px;
-    min-height: 150px;
-    height: 150px;
+    min-height: 100px;
+    height: 100px;
     overflow: hidden;
     cursor: pointer;
     transition: all 0.3s;
+    margin-bottom: 10px;
 
     i.propcoicon {
       margin-bottom: 5px;
       padding: 15px;
-      font-size: 80px;
+      font-size: 40px;
       background-color: transparent;
       display: inline-table;
       padding-bottom: 5px;
+      padding-top: 0;
     }
 
     p {
       text-align: center;
       margin-top: auto;
-      font-size: 14px;
+      font-size: 11px;
     }
 
   }
@@ -49,9 +51,9 @@
 
     .solrSuggestionListItem {
       cursor: pointer;
-      font-size: 14px;
+      font-size: 11px;
       overflow: hidden;
-      padding: 0 15px;
+      padding: 0 2px;
       line-height: 48px;
       height: 48px;
       margin: 0;
@@ -78,6 +80,4 @@
       }
     }
   }
-
-
 }

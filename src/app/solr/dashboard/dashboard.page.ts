@@ -40,6 +40,7 @@ export class DashboardPage implements OnInit {
   lookupdata: any;
   officeLookupDetails: any;
   officeLookupMap = new Map();
+  showLoader: boolean = false;
   constructor(
     private solrService: SolrService,
     private commonService: CommonService
@@ -54,6 +55,7 @@ export class DashboardPage implements OnInit {
 
     // if the value is an empty string don't filter the items
     if (searchText && searchText.trim() !== "" && searchText.length > 3) {
+      this.showLoader = true;
       this.getSuggestions(this.prepareSearchParams(searchText));
     } else {
       this.isItemAvailable = false;
@@ -67,6 +69,7 @@ export class DashboardPage implements OnInit {
         .set("searchTerm", searchText)
         .set("searchTypes", this.entityControl.value)
         .set("searchSwitch", this.solrSuggestionConfig.searchSwitch)
+        .set("hideLoader", "true")
     );
   }
 
@@ -128,6 +131,7 @@ export class DashboardPage implements OnInit {
       if (this.suggestions.length > 0) {
         this.isItemAvailable = true;
       }
+      this.showLoader = false;
     });
   }
 

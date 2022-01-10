@@ -10,15 +10,19 @@ export class SolrService {
   constructor(private httpClient: HttpClient) {}
 
   getUserDetails(): Observable<any> {
+    // let params = new HttpParams().set("hideLoader", "true");
     return this.httpClient.get(environment.API_BASE_URL + `user/logged-in`);
   }
 
   entityGetSuggestion(params: HttpParams): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `entities/suggestions`, {
-      params,
-    });
+    return this.httpClient.get(
+      environment.API_BASE_URL + `entities/suggestions`,
+      {
+        params,
+      }
+    );
   }
-  
+
   entitySearch(params: HttpParams): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, {
       params,

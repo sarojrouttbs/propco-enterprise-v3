@@ -1,6 +1,6 @@
 function openJavaLink(key, value) {
     window.propCoFunction({
-        request: !value ? `["${key}"]` : (`["${key}"]` , `["${value}"]`),
+        request: !value ? `["${key}"]` : (`["${key}" , "${value}"]`),
         persistent: false,
         onSuccess: function (response) {
             print(response);
