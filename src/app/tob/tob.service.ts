@@ -187,8 +187,8 @@ export class TobService {
     );
   }
 
-  getTenantGuarantors(tenantId: string): Observable<any> {
-    return this.httpClient.get<any>(environment.API_BASE_URL + `tenants/${tenantId}/guarantors`).pipe(
+  getTenantGuarantors(applicantId: string): Observable<any> {
+    return this.httpClient.get<any>(environment.API_BASE_URL + `tenants/${applicantId}/guarantors`).pipe(
       tap(() => { }),
       catchError(this.handleError<any>(''))
     );
@@ -201,22 +201,22 @@ export class TobService {
     );
   }
 
-  getTenantBankDetails(tenantId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}/banking-details`).pipe(
+  getTenantBankDetails(applicantId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `tenants/${applicantId}/banking-details`).pipe(
       tap(() => { }),
       catchError(this.handleError<any>(''))
     );
   }
 
   updateGuarantorDetails(guarantorDetails: any, guarantorId: string): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `applicants/guarantors/${guarantorId}`, guarantorDetails).pipe(
+    return this.httpClient.put(environment.API_BASE_URL + `guarantors/${guarantorId}`, guarantorDetails).pipe(
       tap(() => { }),
       catchError(this.handleError<any>(''))
     );
   }
 
-  createGuarantor(guarantorDetails: any): Observable<any> {
-    return this.httpClient.post<any>(environment.API_BASE_URL + 'applicants/guarantors', guarantorDetails).pipe(
+  createGuarantor(guarantorDetails: any, applicantId: string): Observable<any> {
+    return this.httpClient.post<any>(environment.API_BASE_URL + `applicants/${applicantId}/guarantors`, guarantorDetails).pipe(
       tap(() => { }),
       catchError(this.handleError<any>(''))
     );
