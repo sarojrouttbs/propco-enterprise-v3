@@ -4,7 +4,7 @@ import { FormControl } from "@angular/forms";
 import { PROPCO } from "src/app/shared/constants";
 import { CommonService } from "src/app/shared/services/common.service";
 import { SolrService } from "../solr.service";
-declare function openJavaLink(key: string, value: any): any;
+declare function openScreen(key: string, value: any): any;
 
 @Component({
   selector: "app-dashboard",
@@ -136,6 +136,6 @@ export class DashboardPage implements OnInit {
   }
 
   openHomeCategory(key: string, value = null) {
-    openJavaLink(key, value);
+    openScreen(key, value);
   }
 }

@@ -1,4 +1,4 @@
-function openJavaLink(key, value) {
+function openScreen(key, value) {
     window.propCoFunction({
         request: !value ? `["${key}"]` : (`["${key}" , "${value}"]`),
         persistent: false,
