@@ -549,3 +549,8 @@ export const APPLICATION_STATUSES = {
   REJECTED: 3,
   ON_HOLD: 4
 };
+
+export const APPLICATION_ACTION_TYPE = {
+  SAVE_FOR_LATER: 'saveForLater'
+}
+

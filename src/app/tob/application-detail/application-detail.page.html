@@ -5,13 +5,14 @@
     <ion-grid>
       <ion-row>
         <ion-col size="100">
-          <mat-horizontal-stepper class="stepper-section" id="application-stepper" #stepper labelPosition="bottom"
+          <mat-horizontal-stepper (selectionChange)="onStepChange($event)" [selectedIndex]="currentStepperIndex" class="stepper-section" id="application-stepper" #stepper labelPosition="bottom"
             [selectedIndex]="currentStepperIndex">
             <mat-step>
               <ng-container *ngTemplateOutlet="occupants"></ng-container>
               <ng-template matStepLabel>Occupants</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
+                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
@@ -20,6 +21,7 @@
               <ng-template matStepLabel>Applicant Details</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
+                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -29,6 +31,7 @@
               <ng-template matStepLabel>Address</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
+                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -38,6 +41,7 @@
               <ng-template matStepLabel>Bank Details</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
+                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -47,6 +51,7 @@
               <ng-template matStepLabel>Application Questions</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
+                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -56,6 +61,7 @@
               <ng-template matStepLabel>Tenancy Details</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
+                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -65,6 +71,7 @@
               <ng-template matStepLabel>Restrictions</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
+                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -74,6 +81,7 @@
               <ng-template matStepLabel>Clauses </ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
+                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -83,6 +91,7 @@
               <ng-template matStepLabel>Guarantor Details</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
+                  <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -102,7 +111,6 @@
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
-                <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
 
@@ -112,6 +120,13 @@
     </ion-grid>
   </ion-grid>
 </ion-content>
+
+<ng-template #saveForLater>
+  <ion-button color="medium" (click)="saveStepData(stepper.selectedIndex, 'saveForLater')"
+    [disabled]="saveDataLoader" >Save for Later
+    <ion-icon *ngIf="saveDataLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+  </ion-button>&nbsp;
+</ng-template>
 
 <ng-template #occupants>
   <ion-grid id="occupant-details">
@@ -176,12 +191,12 @@
                           </ion-text>
                         </ion-col>
                         <ion-col size="5">
-                          <ion-checkbox class="ml-15" style="opacity: unset;" formControlName="isLead" (ionChange)="onLeadSelection(item)" [checked]="item.controls['isLead'].value"
+                          <ion-checkbox class="ml-15" style="opacity: unset;" formControlName="isLead" (click)="onLeadSelection(item); $event.stopPropagation();" [checked]="item.controls['isLead'].value"
                           [disabled]="item.controls['isLead'].value  || !item.controls['applicationApplicantId'].value"
                             color="success"></ion-checkbox>
                         </ion-col>
                         <ion-col size="10">
-                          <ion-icon (click)="removeCoApplicant(item)" color="danger" class="remove-btn"
+                          <ion-icon (click)="removeCoApplicant(item); $event.stopPropagation();" color="danger" class="remove-btn"
                           *ngIf="!item.controls['isLead'].value"
                             name="close-circle">
                           </ion-icon>

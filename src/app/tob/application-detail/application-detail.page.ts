@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PROPCO, APPLICATION_STATUSES } from 'src/app/shared/constants';
+import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { switchMap, debounceTime } from 'rxjs/operators';
 import { forkJoin, Observable } from 'rxjs';
-import { ModalController } from '@ionic/angular';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ValidationService } from 'src/app/shared/services/validation.service';
-
 
 @Component({
   selector: 'app-application-detail',
@@ -64,6 +62,8 @@ export class ApplicationDetailPage implements OnInit {
   applicationDetails: ApplicationModels.IApplicationResponse;
   applicationApplicantDetails: ApplicationModels.ICoApplicants[];
   leadApplicationApplicantId: any;
+  selectionType: any;
+
   titleList = [
     { index: 0, value: 'Mr' },
     { index: 1, value: 'Mrs' },
@@ -76,7 +76,6 @@ export class ApplicationDetailPage implements OnInit {
     private commonService: CommonService,
     private _formBuilder: FormBuilder,
     private _tobService: TobService,
-    private modalController: ModalController,
     private router: Router
   ) {
   }
@@ -190,56 +189,150 @@ export class ApplicationDetailPage implements OnInit {
     this.getApplicantQuestions();
   }
 
-  saveApplicantsToApplication() {
+  /** Step Change functionality **/
+  public onStepChange(event: any): void {
+    let nextIndex = event.selectedIndex;
+    let previousIndex = event.previouslySelectedIndex;
+    if (nextIndex > previousIndex) {
+      /*call API only in next step*/
+      this.savePreviousStep(event);
+      // this.findInvalidControls();
+      if (this.applicantDetailsForm.invalid) {
+        this.applicantDetailsForm.markAllAsTouched();
+      }
+      if (this.addressDetailsForm.invalid) {
+        this.addressDetailsForm.markAllAsTouched();
+      }
+      if (this.bankDetailsForm.invalid) {
+        this.bankDetailsForm.markAllAsTouched();
+      }
+      if (this.tenancyDetailForm.invalid) {
+        this.tenancyDetailForm.markAllAsTouched();
+      }
+      // if (this.guarantorForm.invalid) {
+      //   this.guarantorForm.markAllAsTouched();
+      // }
+      if (nextIndex === 10) {
+        // this.initPaymentConfiguration();
+      }
+    }
+  }
+
+  private savePreviousStep(event) {
+    if (this.applicationDetails.isSubmitted) {
+      return;
+    }
+    let previouslySelectedIndex = event.previouslySelectedIndex;
+    this.savePreviouslySelectedData(previouslySelectedIndex);
+
+  }
+
+  private savePreviouslySelectedData(index) {
+    switch (index) {
+      case 0:
+        if (!this.applicationDetails.isSubmitted) {
+          this.saveApplicantsToApplication();
+        }
+      case 1:
+        if (!this.applicationDetails.isSubmitted) {
+          this.savePersonalDetails();
+        }
+        break;
+      case 2:
+        if (!this.applicationDetails.isSubmitted) {
+          this.saveAddressDetails();
+        }
+        break;
+      case 3:
+        if (!this.applicationDetails.isSubmitted) {
+          this.saveBankDetails();
+        }
+        break;
+      case 4:
+        if (!this.applicationDetails.isSubmitted) {
+          this.saveApplicationQuestions();
+        }
+        break;
+      case 5:
+        if (!this.applicationDetails.isSubmitted) {
+        }
+        break;
+      case 6:
+        if (!this.applicationDetails.isSubmitted) {
+        }
+        break;
+      case 8:
+        if (!this.applicationDetails.isSubmitted) {
+          // this.saveGuarantorDetails();
+        }
+        break;
+      case 10:
+        // this.initPaymentConfiguration();
+        break;
+    }
+  }
+
+  saveStepData(index: number, type: string) {
+    if (index === 3) {
+      this.commonService.showMessage('Please accept the terms and conditions.', 'Terms & Conditions', 'error');
+      return;
+    }
+    if (type === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
+      this.selectionType = APPLICATION_ACTION_TYPE.SAVE_FOR_LATER;
+    }
+    this.savePreviouslySelectedData(index);
+  }
+
+  private async onSave() {
+    let title = 'Save for later';
+    let message = 'Your application has been saved. Please complete your application within 14 days in order to guarantee a reservation.'
+    this.commonService.showAlert(title, message, '').then(res => {
+      if (res) {
+        this.router.navigate([`tob/${this.propertyId}/applications`]);
+      }
+    })
+  }
+
+  private saveApplicantsToApplication() {
     let apiObservableArray = [];
     this.occupantForm.controls['coApplicants'].value.map((element) => {
-      if (!element.applicantId && !element.applicationApplicantId && element.isAdded && !element.isDeleted) {
-        let isLeadApplicant: boolean = element.isLead;
-        apiObservableArray.push(this._tobService.addApplicantToApplication(this.applicationId, element, isLeadApplicant));
-      }
-
-      if (element.applicantId && !element.applicationApplicantId && element.isAdded && !element.isDeleted) {
-        let isLeadApplicant: boolean = element.isLead;
-        apiObservableArray.push(this._tobService.linkApplicantToApplication(this.applicationId, element, element.applicantId, isLeadApplicant));
-      }
-
-      if (this.checkFormDirty(this.occupantForm) && element.applicationApplicantId && element.isLead && element.isAdded && !element.isDeleted) {
-        let updateLeadData = {
-          modifiedById: '',
-          modifiedBy: "AGENT"
-        };
-        apiObservableArray.push(this._tobService.updateLead(updateLeadData, this.applicationId, element.applicationApplicantId));
+      if (!element.applicationApplicantId && element.isAdded && !element.isDeleted) {
+        if (!element.applicantId) {
+          let isLeadApplicant: boolean = element.isLead;
+          apiObservableArray.push(this._tobService.addApplicantToApplication(this.applicationId, element, isLeadApplicant));
+        }
+        if (element.applicantId) {
+          let isLeadApplicant: boolean = element.isLead;
+          apiObservableArray.push(this._tobService.linkApplicantToApplication(this.applicationId, element, element.applicantId, isLeadApplicant));
+        }
       }
     });
-
 
     forkJoin(apiObservableArray).subscribe((response: any[]) => {
       this.occupantForm.reset(this.occupantForm.value);
       this.getApplicationApplicants(this.applicationId);
+      if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
+        this.onSave();
+      }
     }, error => {
     });
   }
 
-
-  async onLeadSelection(comp: FormGroup) {
-    let isLead = comp.controls['isLead'].value;
-    let leadApplicantId = comp.controls['applicantId'].value;
-    let formArray: FormArray = this.occupantFormArray;
-    if (isLead && comp.controls['applicationApplicantId'].value) {
-      comp.controls['isLead'].setValue(true);
-      formArray.controls.forEach((currentGroup: FormGroup) => {
-        if (leadApplicantId !== currentGroup.controls['applicantId'].value) {
-          currentGroup.controls['isLead'].setValue(false);
-        }
-      });
-    }
-    else if (isLead && !comp.controls['applicationApplicantId'].value) {
-      formArray.controls.forEach((currentGroup: FormGroup) => {
-        if (leadApplicantId !== currentGroup.controls['applicantId'].value) {
-          currentGroup.controls['isLead'].setValue(false);
-        }
-      });
-    }
+  onLeadSelection(item: FormGroup) {
+    this.commonService.showConfirm('Lead Applicant', 'Are you sure, you want to make this applicant to lead applicant?', '', 'YES', 'NO').then(response => {
+      if (response && item.controls['applicationApplicantId'].value) {
+        let updateLeadData = {
+          modifiedById: '',
+          modifiedBy: "AGENT"
+        };
+        this._tobService.updateLead(updateLeadData, this.applicationId, item.controls['applicationApplicantId'].value).subscribe(response => {
+          this.getApplicationApplicants(this.applicationId);
+        })
+      }
+      else {
+        item.controls['isLead'].setValue(false);
+      }
+    })
   }
 
   private async getApplicantCoApplicants(applicantId: string) {
@@ -551,15 +644,13 @@ export class ApplicationDetailPage implements OnInit {
 
   removeCoApplicant(item: FormGroup) {
     this.commonService.showConfirm('Remove Applicant', 'Are you sure, you want to remove this applicant ?', '', 'YES', 'NO').then(response => {
-      if (response) {
-        if (item.controls['applicationApplicantId'].value) {
-          this._tobService.deleteApplicationApplicant(this.applicationId, item.controls['applicationApplicantId'].value, { "deletedBy": "AGENT" }).subscribe(response => {
-            this.getApplicationApplicants(this.applicationId);
-          })
-        }
-        else {
-          item.controls['isDeleted'].setValue(true);
-        }
+      if (response && item.controls['applicationApplicantId'].value) {
+        this._tobService.deleteApplicationApplicant(this.applicationId, item.controls['applicationApplicantId'].value, { "deletedBy": "AGENT" }).subscribe(response => {
+          this.getApplicationApplicants(this.applicationId);
+        })
+      }
+      else {
+        item.controls['isDeleted'].setValue(true);
       }
     })
   }
@@ -594,9 +685,9 @@ export class ApplicationDetailPage implements OnInit {
     if (Object.keys(dirtyForm).length) {
       return true;
     }
-    // else if (this.selectionType == 'saveForLater') {
-    //   this.onSave();
-    // }
+    else if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
+      this.onSave();
+    }
   }
 
   /** Occupants Functionality **/
@@ -933,7 +1024,7 @@ export class ApplicationDetailPage implements OnInit {
     });
   }
 
-  private saveBankDtails() {
+  private saveBankDetails() {
     let bankDetails = this.bankDetailsForm.value.bankDetails;
     if (this.checkFormDirty(this.bankDetailsForm)) {
       this.updateBankDetails(bankDetails);
