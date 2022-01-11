@@ -173,15 +173,50 @@ export class TobService {
     );
   }
 
-  getBankDetails(applicationId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `applicants/${applicationId}/banking-details`).pipe(
+  getApplicantBankDetails(applicantId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `applicants/${applicantId}/banking-details`).pipe(
       tap(() => { }),
       catchError(this.handleError<any>(''))
     );
   }
 
-  updateBankDetails(applicationId: string, bankDetails: any): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `applicants/${applicationId}/banking-details`, bankDetails).pipe(
+  updateBankDetails(applicantId: string, bankDetails: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `applicants/${applicantId}/banking-details`, bankDetails).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  getTenantGuarantors(applicantId: string): Observable<any> {
+    return this.httpClient.get<any>(environment.API_BASE_URL + `tenants/${applicantId}/guarantors`).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  getApplicantGuarantors(applicantId: string): Observable<any> {
+    return this.httpClient.get<any>(environment.API_BASE_URL + `applicants/${applicantId}/guarantors`).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  getTenantBankDetails(applicantId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `tenants/${applicantId}/banking-details`).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  updateGuarantorDetails(guarantorDetails: any, guarantorId: string): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `guarantors/${guarantorId}`, guarantorDetails).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  createGuarantor(guarantorDetails: any, applicantId: string): Observable<any> {
+    return this.httpClient.post<any>(environment.API_BASE_URL + `applicants/${applicantId}/guarantors`, guarantorDetails).pipe(
       tap(() => { }),
       catchError(this.handleError<any>(''))
     );

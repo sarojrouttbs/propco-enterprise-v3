@@ -52,7 +52,8 @@ export class ApplicationDetailPage implements OnInit {
   bankDetailsForm: FormGroup;
   applicantQuestionForm: FormGroup;
   tenancyDetailForm: FormGroup;
-  propertyType = null; /*0: private , 1:student*/
+  guarantorForm: FormGroup;
+  isStudentProperty: boolean = false;
   showPostcodeLoader: Boolean = null;
   showAddressLoader: Boolean = null;
   addressList: any[];
@@ -167,6 +168,7 @@ export class ApplicationDetailPage implements OnInit {
     this.initBankDetailsForm();
     this.initApplicantQuestionForm();
     this.initTenancyDetailsForm();
+    this.initGuarantorForm();
   }
 
   private async initCreateApiCalls() {
@@ -185,9 +187,17 @@ export class ApplicationDetailPage implements OnInit {
     this.getPropertyDetails(this.propertyId);
     this.getPropertyClauses(this.propertyId);
     this.getPropertyRestrictions(this.propertyId);
-    this.getApplicationDetails(this.applicationId);
-    this.getApplicationApplicants(this.applicationId);
+    await this.getApplicationDetails(this.applicationId);
     this.getApplicantQuestions();
+    await this.getApplicationApplicants(this.applicationId);
+    this.getApplicantDetails(this.applicantId);
+    if (this.applicationDetails.leadApplicantItemtype == "M") {
+      this.getTenantBankDetails(this.applicantId);
+      this.getTenantGuarantors(this.applicantId);
+    } else {
+      this.getApplicantBankDetails(this.applicantId);
+      this.getApplicantGuarantors(this.applicantId);
+    }
   }
 
   saveApplicantsToApplication() {
@@ -287,8 +297,6 @@ export class ApplicationDetailPage implements OnInit {
           });
           if (leadApplicantDetails && leadApplicantDetails.length > 0) {
             this.applicantId = leadApplicantDetails[0].applicantId;
-            this.getApplicantDetails(this.applicantId);
-            this.getBankDetails();
           }
           this.updateOccupantForm(this.applicationApplicantDetails);
           resolve(true);
@@ -324,8 +332,12 @@ export class ApplicationDetailPage implements OnInit {
           if (res) {
             this.getNoDeposit();
             this.propertyDetails = res.data;
-            this.propertyType = this.commonService.getLookupValue(this.lookupdata.rentCategories, this.propertyDetails.rentCategory);
+            const propertyType = this.commonService.getLookupValue(this.lookupdata.rentCategories, this.propertyDetails.rentCategory);
+            if(propertyType === 'Student') {
+              this.isStudentProperty = true;
+            }
             this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
+            this.setValidator();
             resolve(true);
           }
         },
@@ -365,6 +377,7 @@ export class ApplicationDetailPage implements OnInit {
       this._tobService.getPropertyRestrictions(propertyId).subscribe(
         res => {
           this.propertyRestrictions = res && res.data ? res.data.filter(result => result.value) : [];
+          this.propertyRestrictions.map(restrict => restrict.restrictionName = this.commonService.camelize(restrict.key.replace(/_/g, ' ')));
           resolve(true);
         },
         error => {
@@ -637,10 +650,10 @@ export class ApplicationDetailPage implements OnInit {
         postcode = this.addressDetailsForm.controls.correspondenceAddress['controls'].postcode;
         postcode.value ? (this.showAddressLoader = true) : '';
         break;
-      // case 'guarantor':
-      //   postcode = this.guarantorForm.controls.address['controls'].postcode;
-      //   postcode.value ? (this.showPostcodeLoader = true) : '';
-      //   break;
+      case 'guarantor':
+        postcode = this.guarantorForm.controls.address['controls'].postcode;
+        postcode.value ? (this.showPostcodeLoader = true) : '';
+        break;
     }
     if (postcode.valid && postcode.value) {
       this.commonService.getPostcodeAddressList(postcode.value).subscribe(
@@ -669,6 +682,7 @@ export class ApplicationDetailPage implements OnInit {
           this.showPostcodeLoader = false;
           this.showAddressLoader = false;
           this.addressList = [];
+          this.guarantorAddressList = [];
           this.correspondenceAddressList = [];
           const data: any = {};
           data.title = 'Postcode Lookup';
@@ -676,6 +690,12 @@ export class ApplicationDetailPage implements OnInit {
           this.commonService.showMessage(data.message, data.title, 'error');
         }
       );
+    } else {
+      this.showPostcodeLoader = false;
+      this.showAddressLoader = false;
+      this.addressList = [];
+      this.guarantorAddressList = [];
+      this.correspondenceAddressList = [];
     }
   }
 
@@ -701,12 +721,13 @@ export class ApplicationDetailPage implements OnInit {
               this.addressDetailsForm.controls.correspondenceAddress['controls'].country.setValue(res.countryName);
               break;
             case 'guarantor':
-            // this.guarantorForm.controls.address['controls'].addressLine1.setValue(res.line1);
-            // this.guarantorForm.controls.address['controls'].addressLine2.setValue(res.line2);
-            // // this.guarantorForm['controls'].town.setValue(res.line5);
-            // this.guarantorForm.controls.address['controls'].county.setValue(res.provinceName);
-            // this.guarantorForm.controls.address['controls'].country.setValue(res.countryName);
-            // break;
+              this.guarantorForm.controls.address['controls'].addressLine1.setValue(res.line1);
+              this.guarantorForm.controls.address['controls'].addressLine2.setValue(res.line2);
+              this.guarantorForm.controls.address['controls'].locality.setValue(res.line4);
+              this.guarantorForm.controls.address['controls'].town.setValue(res.line5);
+              this.guarantorForm.controls.address['controls'].county.setValue(res.provinceName);
+              this.guarantorForm.controls.address['controls'].country.setValue(res.countryName);
+              break;
           }
         }
       },
@@ -870,8 +891,8 @@ export class ApplicationDetailPage implements OnInit {
         addressdetails: ''
       }
     });
-    if (this.propertyType == 'Student') {
-      this.addressDetailsForm.setValue({
+    if (this.isStudentProperty) {
+      this.addressDetailsForm.patchValue({
         correspondenceAddress: {
           postcode: this.applicantDetail.correspondenceAddress.postcode,
           addressLine1: this.applicantDetail.correspondenceAddress.addressLine1,
@@ -904,9 +925,28 @@ export class ApplicationDetailPage implements OnInit {
     }
   }
 
-  private getBankDetails() {
+  private getApplicantBankDetails(applicantId) {
     return new Promise((resolve, reject) => {
-      this._tobService.getBankDetails(this.applicantId).subscribe(
+      this._tobService.getApplicantBankDetails(applicantId).subscribe(
+        res => {
+          if (res) {
+            this.patchBankDetails(res);
+          }
+          resolve(true);
+        },
+        error => {
+          // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Bank Details', 'error');
+          reject(undefined);
+          console.log(error);
+        }
+      );
+    });
+  }
+
+
+  private getTenantBankDetails(tenantId) {
+    return new Promise((resolve, reject) => {
+      this._tobService.getTenantBankDetails(tenantId).subscribe(
         res => {
           if (res) {
             this.patchBankDetails(res);
@@ -971,5 +1011,154 @@ export class ApplicationDetailPage implements OnInit {
       numberOfHouseHolds: details.numberOfHouseHolds,
       isNoDepositScheme: details.isNoDepositScheme
     });
+  }
+
+
+  /** Guarantor Details Functionality **/
+
+  private initGuarantorForm(): void {
+    this.guarantorForm = this._formBuilder.group({
+      guarantorId: [''],
+      title: ['', [ValidationService.speacialValidator]],
+      forename: ['', [ValidationService.alphabetValidator]],
+      surname: ['', [ValidationService.alphabetValidator]],
+      email: ['', [ValidationService.emailValidator]],
+      mobile: ['', [ValidationService.contactValidator, Validators.minLength(5), Validators.maxLength(15)]],
+      address: this._formBuilder.group({
+        postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
+        addressdetails: [''],
+        addressLine1: ['', Validators.required],
+        addressLine2: '',
+        locality: '',
+        town: ['', Validators.required],
+        county: '',
+        country: ''
+      })
+    });
+  }
+
+  private setValidator() {
+    if (this.isStudentProperty) {
+      this.guarantorForm.controls.title.setValidators(Validators.required);
+      this.guarantorForm.controls.forename.setValidators(Validators.required);
+      this.guarantorForm.controls.surname.setValidators(Validators.required);
+      this.guarantorForm.controls.email.setValidators(Validators.required);
+      this.guarantorForm.controls.mobile.setValidators(Validators.required);
+      
+      this.guarantorForm.controls.title.updateValueAndValidity();
+      this.guarantorForm.controls.forename.updateValueAndValidity();
+      this.guarantorForm.controls.surname.updateValueAndValidity();
+      this.guarantorForm.controls.email.updateValueAndValidity();
+      this.guarantorForm.controls.mobile.updateValueAndValidity();
+    }
+  }
+
+  private getApplicantGuarantors(applicantId): void {
+    this._tobService.getApplicantGuarantors(applicantId).subscribe(
+      res => {
+        if (res && res.data) {
+          this.setGuarantorDetails(res.data[0]);
+        }
+      },
+      error => {
+        // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Guarantor Details', 'error');
+        console.log(error);
+      }
+    );
+  }
+
+  private getTenantGuarantors(tenantId): void {
+    this._tobService.getTenantGuarantors(tenantId).subscribe(
+      res => {
+        if (res && res.data) {
+          this.setGuarantorDetails(res.data[0]);
+        }
+      },
+      error => {
+        // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Guarantor Details', 'error');
+        console.log(error);
+      }
+    );
+  }
+
+  private setGuarantorDetails(details): void {
+    this.guarantorForm.patchValue({
+      guarantorId: details.guarantorId,
+      title: details.title,
+      forename: details.forename,
+      surname: details.surname,
+      email: details.email,
+      mobile: details.mobile,
+      address: {
+        postcode: details.address.postcode,
+        addressLine1: details.address.addressLine1,
+        addressLine2: details.address.addressLine2,
+        locality: details.address.locality,
+        town: details.address.town,
+        county: details.address.county,
+        country: details.address.country,
+        addressdetails: ''
+      }
+    });
+  }
+
+  private saveGuarantorDetails() {
+    if (this.checkFormDirty(this.guarantorForm)) {
+      if (this.guarantorForm.controls['guarantorId'].value) {
+        this.updateGuarantorDetails(Object.assign({}, this.guarantorForm.value));
+      }
+      else {
+        this.createGuarantor(this.guarantorForm.value);
+      }
+    }
+  }
+
+  private updateGuarantorDetails(guarantorDetails): void {
+    // if (this.selectionType == 'saveForLater') {
+    //   this.saveDataLoader = true;
+    // }
+    guarantorDetails = this.commonService.replaceEmptyStringWithNull(guarantorDetails);
+    let guarantorId = guarantorDetails.guarantorId;
+    delete guarantorDetails.guarantorId;
+    this._tobService.updateGuarantorDetails(guarantorDetails, guarantorId).subscribe(
+      res => {
+        // this.saveDataLoader = false;
+        // if (this.selectionType == 'saveForLater') {
+        //   this.onSave();
+        // }
+        this.guarantorForm.reset(this.guarantorForm.value);
+        if (res) {
+        }
+      },
+      error => {
+        // this.saveDataLoader = false;
+        // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Update Guarantor', 'error');
+        console.log(error);
+      }
+    );
+  }
+
+  private createGuarantor(guarantorDetails): void {
+    // if (this.selectionType == 'saveForLater') {
+    //   this.saveDataLoader = true;
+    // }
+    guarantorDetails = this.commonService.replaceEmptyStringWithNull(guarantorDetails);
+    this._tobService.createGuarantor(guarantorDetails).subscribe(
+      res => {
+        // this.saveDataLoader = false;
+        // if (this.selectionType == 'saveForLater') {
+        //   this.onSave();
+        // }
+        this.guarantorForm.reset(this.guarantorForm.value);
+        if (res) {
+          this.guarantorForm.controls['guarantorId'].setValue(res.guarantorId);
+        }
+      },
+      error => {
+        // this.saveDataLoader = false;
+        // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Save Guarantor', 'error');
+        console.log(error);
+      }
+    );
   }
 }
