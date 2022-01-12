@@ -551,7 +551,7 @@ export const APPLICATION_STATUSES = {
 };
 
 export const APPLICATION_ACTION_TYPE = {
-  SAVE_FOR_LATER: 'saveForLater'
+  SAVE_FOR_LATER: 'SAVE_FOR_LATER'
 }
 
 export const ENTITY_TYPE = {
