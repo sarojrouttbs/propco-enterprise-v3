@@ -43,7 +43,8 @@ export class FaultsService {
   }
 
   uploadDocument(formData: FormData, faultId): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/documents/upload`, formData);
+    let params = new HttpParams().set('submittedByType', 'SECUR_USER');
+    return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/documents/upload`, formData, { params });
   }
 
   escalateFault(faultId, requestObj): Observable<any> {
@@ -67,13 +68,16 @@ export class FaultsService {
   }
 
   searchContractor(text: string, skillSet = ''): Observable<any> {
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('limit', '10')
       .set('page', '1')
       .set('text', text)
       .set('types', 'CONTRACTOR')
-      .set('con.ocp', skillSet)
-      .set('con.status', 'Active')
+      .set('con.status', 'Active');
+
+    if(skillSet){
+      params.set('con.ocp', skillSet)
+    }
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 
@@ -102,11 +106,15 @@ export class FaultsService {
   }
 
   updateFaultStatus(faultId: string, status: number): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/status/${status}`, {});
+    let reqBody = {} as any;
+    reqBody.submittedByType = 'SECUR_USER';
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/status/${status}`, reqBody);
   }
 
   startProgress(faultId: string): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/start-progress`, {});
+    let reqBody = {} as any;
+    reqBody.submittedByType = 'SECUR_USER';
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/start-progress`, reqBody);
   }
 
   getFaultDocuments(faultId: string): Observable<any> {
@@ -161,8 +169,8 @@ export class FaultsService {
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/maintenance`, { params });
   }
 
-  updateFaultQuoteContractor(data, faultId, maintenanceId): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/maintenance/${maintenanceId}`, data);
+  updateFaultQuoteContractor(data, maintenanceId): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `maintenance/quote/${maintenanceId}/contractors`, data);
   }
 
   updateQuoteDetails(data, maintenanceId): Observable<any> {
@@ -239,8 +247,16 @@ export class FaultsService {
     return this.httpClient.post(environment.API_BASE_URL + `faults/notifications/${faultNotificationId}/response/wo/contractor-visit`, notificationObj);
   }
 
-  getWorksOrderPaymentRules(faultId: string) {
-    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/check-payment-rules`);
+  getWorksOrderPaymentRules(faultId: string, contractorId?: string, repairCost?: any) {
+    let params = new HttpParams().set('contractorId', contractorId)
+    .set('repairCost', repairCost);
+    if (contractorId == null && contractorId == undefined) {
+      params = params.delete('contractorId')
+    }
+    if (repairCost == null && repairCost == undefined) {
+      params = params.delete('repairCost')
+    }
+    return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/check-payment-rules`, { params });
   }
 
   issueWorksOrderContractor(faultId: string, requestObj) {
@@ -366,6 +382,10 @@ export class FaultsService {
 
   getFaultEvents(faultId): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `faults/${faultId}/events`);
+  }
+
+  saveSnoozeFaultData(body: any, faultId): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `faults/${faultId}/snooze`, body);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

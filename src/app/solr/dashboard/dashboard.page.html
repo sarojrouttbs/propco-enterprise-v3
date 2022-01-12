@@ -1,0 +1,221 @@
+<ion-content id="solr-dashboard">
+  <ion-grid class="ion-no-padding" fixed>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="30" class="ion-text-center ion-no-padding">
+        <img src="assets/images/solr/propcoLogo.svg" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center ion-no-padding">
+        <h4 class="ion-no-margin">Welcome {{loggedInUserData?.name}}</h4>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center ion-margin-vertical">
+      <ion-col size="65" style="padding-right: 0;" class="ion-no-padding">
+          <div>
+            <ion-searchbar 
+            [(ngModel)]="searchTerm" 
+            placeholder="Start typing to search" 
+            class="searchbarCustom" 
+            debounce="500" 
+            (ionChange)="getItems($event)"
+            >
+            <!-- (ionBlur) = "isItemAvailable = false"
+            (ionFocus) = "suggestions.length > 0 ? isItemAvailable = true : false" -->
+            </ion-searchbar>
+            <ion-progress-bar color="danger" [type]="'indeterminate'" *ngIf="showLoader"></ion-progress-bar>
+            <ion-list *ngIf="isItemAvailable" class="solrSuggestionList">
+              <ion-item *ngFor="let item of suggestions" class="solrSuggestionListItem">
+                <ng-container [ngTemplateOutlet]="propertySuggestion"  *ngIf="item?.entityType === 'PROPERTY'"
+                    [ngTemplateOutletContext]="{item:item}">
+                </ng-container>
+                <ng-container [ngTemplateOutlet]="landlordSuggestion"  *ngIf="item?.entityType === 'LANDLORD'"
+                    [ngTemplateOutletContext]="{item:item}">
+                </ng-container>
+                <ng-container [ngTemplateOutlet]="applicantSuggestion"  *ngIf="item?.entityType === 'APPLICANT'"
+                    [ngTemplateOutletContext]="{item:item}">
+                </ng-container>
+                <ng-container [ngTemplateOutlet]="tenantSuggestion"  *ngIf="item?.entityType === 'TENANT'"
+                    [ngTemplateOutletContext]="{item:item}">
+                </ng-container>
+                <ng-container [ngTemplateOutlet]="contractorSuggestion"  *ngIf="item?.entityType === 'CONTRACTOR'"
+                    [ngTemplateOutletContext]="{item:item}">
+                </ng-container>
+                <ng-container [ngTemplateOutlet]="agentSuggestion"  *ngIf="item?.entityType === 'AGENT'"
+                    [ngTemplateOutletContext]="{item:item}">
+                </ng-container>
+              </ion-item>
+          </ion-list>
+          </div>
+      </ion-col>
+      <ion-col size="3" class="solrMutiSelect" style="padding: 0;">
+          <mat-form-field appearance="fill">
+            <mat-select [formControl]="entityControl" multiple>
+              <mat-option class="red-text" *ngFor="let topping of entityList" [value]="topping">{{topping}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+      </ion-col>
+      <ion-col size="6">
+          <ion-buttons end>
+            <i class="propcoicon propcoicon-search no-background red-icon" style="font-size: 19px;line-height: 40px;height: 38px;width: 36px;"></i>
+          </ion-buttons>     
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenApplicantCard')">
+          <i class="propcoicon red-icon propcoicon-applicant-card"></i>
+          <p>Applicant Card</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenAvailPropertyList')">
+          <i class="propcoicon red-icon propcoicon-available-property-list"></i>
+          <p>Available Property List</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenMarketAppraisal')">
+          <i class="propcoicon red-icon propcoicon-market-apprasial"></i>
+          <p>Market Appraisal Form</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20" style="margin-right: 15px;"   class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenApplicantManagement')">
+          <i class="propcoicon propcoicon-applicant-management red-icon"></i>
+          <p>Applicant Management</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20" style="margin-right: 15px;"   class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenReadEmail')">
+          <i class="propcoicon propcoicon-email-open red-icon"></i>
+          <p>Read Email</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenWriteEmail')">
+          <i class="propcoicon propcoicon-email red-icon"></i>
+          <p>Write Email</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenTaskManagement')">
+          <i class="propcoicon propcoicon-task-manager red-icon"></i>
+          <p>Task Management</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20" style="margin-right: 15px;"   class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenReporting')">
+          <i class="propcoicon propcoicon-reports red-icon"></i>
+          <p>Reporting Suite</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20" style="margin-right: 15px;"   class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenWorkflow')">
+          <i class="propcoicon propcoicon-workflow red-icon"></i>
+          <p>Workflow suite</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20" style="margin-right: 15px;"   class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenCashRegister')">
+          <i class="propcoicon propcoicon-cash-register red-icon"></i>
+          <p>Cash Register</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20" style="margin-right: 15px;"   class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenBalanceSheet')">
+          <i class="propcoicon propcoicon-balance-sheet red-icon"></i>
+          <p>Balance Sheet</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20" style="margin-right: 15px;"   class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenMiscCreditDebit')">
+          <i class="propcoicon propcoicon-misc-cr-db red-icon"></i>
+          <p>Misc Cr/Db</p>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ng-template #propertySuggestion  let-item="item">
+  <div (click)="openHomeCategory('OpenProperty',item.entityId)">
+    <span>
+      <i class="propcoicon no-background propcoicon-property red-icon"></i>
+    </span>
+    <span class="text-color-lightblue ">{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span class="">{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span class="text-color-gray-six ">{{item.reference}}</span>&nbsp;
+    <span class=" ng-scope">{{item.propertyRent || 0 | currency : "£"}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>
+
+<ng-template #landlordSuggestion  let-item="item">
+  <div (click)="openHomeCategory('OpenLandlord',item.entityId)">
+    <span>
+      <i class="propcoicon no-background propcoicon-landlord red-icon"></i>
+    </span>
+    <span class="text-color-lightblue ">{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span>{{item.name}}</span>&nbsp;
+    <span class="text-color-gray-six ">{{item.reference}}</span>&nbsp;
+    <span class="">{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.daytime}}</span>&nbsp;
+    <span>{{item.mobile}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>
+
+<ng-template #applicantSuggestion  let-item="item">
+  <div (click)="openHomeCategory('OpenApplicant',item.entityId)">
+    <span>
+      <i class="propcoicon no-background propcoicon-applicant-let red-icon"></i>
+    </span>
+    <span class="text-color-lightblue ">{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span>{{item.name}}</span>&nbsp;
+    <span class="text-color-gray-six ">{{item.reference}}</span>&nbsp;
+    <span class="">{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.daytime}}</span>&nbsp;
+    <span>{{item.mobile}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>
+
+<ng-template #tenantSuggestion  let-item="item">
+  <div (click)="openHomeCategory('OpenTenant',item.entityId)">
+    <span>
+      <i class="propcoicon no-background propcoicon-tenant red-icon"></i>
+    </span>
+    <span>{{item.name}}</span>&nbsp;
+    <span class="text-color-gray-six ">{{item.reference}}</span>&nbsp;
+    <span class="">{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.daytime}}</span>&nbsp;
+    <span>{{item.mobile}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>
+
+<ng-template #contractorSuggestion  let-item="item">
+  <div (click)="openHomeCategory('OpenContractor',item.entityId)">
+    <span>
+      <i class="propcoicon no-background propcoicon-contractor red-icon"></i>
+    </span>
+    <span>{{item.name}}</span>&nbsp;
+    <span class="text-color-gray-six ">{{item.reference}}</span>&nbsp;
+    <span class="">{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.daytime}}</span>&nbsp;
+    <span>{{item.mobile}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>
+
+<ng-template #agentSuggestion  let-item="item">
+  <div (click)="openHomeCategory('OpenAgent',item.entityId)">
+    <span>
+      <i class="propcoicon no-background propcoicon-agent red-icon"></i>
+    </span>
+    <span>{{item.name}}</span>&nbsp;
+    <span class="text-color-gray-six ">{{item.reference}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>

@@ -1,57 +1,85 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Chronological History</ion-title>
-    <ion-buttons slot="end">
-      <ion-icon name="close" (click)="dismiss()"></ion-icon>
-    </ion-buttons>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>Chronological History</ion-title>
+        <ion-buttons slot="end">
+            <ion-icon name="close" (click)="dismiss()"></ion-icon>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <div class="email-body-checkbox">
-          <label><input type="checkbox" class="email-body" [(ngModel)]="isEmailRequire" /> Include email body in
-            export</label>
-        </div>
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
-          style="border-spacing: 0 2px; ">
-          <thead>
-            <tr>
-              <th>Date/Time</th>
-              <th>Action</th>
-              <th>Category</th>
-              <th class="none">By</th>
-              <th class="none">Notification TemplateCode</th>
-              <th class="none">Question</th>
-              <th class="none">Response Option</th>
-              <th class="none">How</th>
-              <th class="none">Recipient</th>
-              <th class="none">Stage</th>
-              <th class="none">To</th>
-              <th class="none">Subject</th>
-              <th class="none">Email</th>
-          </thead>
-          <tbody>
-            <tr *ngFor="let elem of eventList">
-              <td>{{ elem.eventAt | date : 'dd/MM/yyyy HH:mm' }}</td>
-              <td>{{ elem.eventType || '-' }}</td>
-              <td>{{ elem.category || '-' }}</td>
-              <td>{{ elem.data.by || '-' }}</td>
-              <td>{{ elem.data.notificationTemplateCode || '-' }}</td>
-              <td>{{ elem.data.question || '-' }}</td>
-              <td>{{ elem.data.responseOption || '-' }}</td>
-              <td>{{ elem.data.how || '-' }}</td>
-              <td>{{ elem.data.recipient || '-' }}</td>
-              <td>{{ elem.data.stage || '-' }}</td>
-              <td>{{ elem.data.to || '-' }}</td>
-              <td>{{ elem.data.subject || '-' }}</td>
-              <td [innerHtml]="elem.data.body ? elem.data.body : '-' "></td>
-            </tr>
-          </tbody>
-        </table>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+<ion-content id="chronological-history">
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <ng-container *ngIf="isTableReady">
+                    <div class="show-hide-section" *ngIf="eventList?.length > 0">
+                        <ion-button size="small" (click)="showHideAll(showAll)"> {{ showAll ? 'Expand All' : 'Collapse All' }} </ion-button>
+                    </div>
+                    <div class="email-body-checkbox" *ngIf="eventList?.length > 0">
+                        <label><input type="checkbox" class="email-body" [(ngModel)]="isEmailRequire" /> Include email body in
+              export</label>
+                    </div>
+                    <table id="chronological" datatable [dtOptions]="dtOptions" class="row-border hover" style="border-spacing: 0 2px; ">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Date/Time</th>
+                                <th>Action</th>
+                                <th>Category</th>
+                                <th class="none">By</th>
+                                <th class="none">Closing Reason</th>
+                                <th class="none">Cli Action Selected</th>
+                                <th class="none">Status</th>
+                                <th class="none">Notification Id</th>
+                                <th class="none">Escalation Reason</th>
+                                <th class="none">Rejection Reason</th>
+                                <th class="none">Documents</th>
+                                <th class="none">Category</th>
+                                <th class="none">Note Description</th>
+                                <th class="none">Type</th>
+                                <th class="none">Question</th>
+                                <th class="none">Response Option</th>
+                                <th class="none">How</th>
+                                <th class="none">Recipient</th>
+                                <th class="none">Stage</th>
+                                <th class="none">From</th>
+                                <th class="none">To</th>
+                                <th class="none">Subject</th>
+                                <th class="none">Email</th>
+                                <th class="none">Snoozed Till</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let elem of eventList">
+                                <td></td>
+                                <td>{{ elem.eventAt | date : 'dd/MM/yyyy HH:mm:ss' }}</td>
+                                <td>{{ elem.eventType || '-' }}</td>
+                                <td>{{ elem.category || '-' }}</td>
+                                <td>{{ elem.data.by}}</td>
+                                <td>{{ elem.data.closingReason}}</td>
+                                <td>{{ elem.data.cliSelectedAction}}</td>
+                                <td>{{ elem.data.status}}</td>
+                                <td>{{ elem.data.notificationTemplateCode}}</td>
+                                <td>{{ elem.data.escalationReason}}</td>
+                                <td>{{ elem.data.rejectionReason}}</td>
+                                <td>{{ elem.data.document}}</td>
+                                <td>{{ elem.data.category}}</td>
+                                <td [innerHtml]="elem.data.noteDescription"></td>
+                                <td>{{ elem.data.type}}</td>
+                                <td>{{ elem.data.question}}</td>
+                                <td>{{ elem.data.responseOption}}</td>
+                                <td>{{ elem.data.how}}</td>
+                                <td>{{ elem.data.recipient}}</td>
+                                <td>{{ elem.data.stage}}</td>
+                                <td>{{ elem.data.from }}</td>
+                                <td>{{ elem.data.to}}</td>
+                                <td>{{ elem.data.subject}}</td>
+                                <td [innerHtml]="elem.data.body"></td>
+                                <td>{{ elem.data.snoozeUntilDate | date : 'dd/MM/yyyy'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ng-container>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>

@@ -10,7 +10,8 @@ export const PROPCO = {
   REFERENCING_PRODUCT_LIST: 'referencing_product_list',
   FAULTS_LOOKUP_DATA: 'faults_lookup_data',
   LET_CATEGORY: 'let_category',
-  SSO_KEY: 'sso_key'
+  SSO_KEY: 'sso_key',
+  TOB_LOOKUP_DATA: 'tob_lookup_data'
 };
 
 export const USER_TYPES = {
@@ -233,7 +234,9 @@ export const SYSTEM_CONFIG = {
   MAXIMUM_FAULT_QUOTE_REJECTION: 'MAXIMUM_FAULT_QUOTE_REJECTION',
   FAULT_MANAGEMENT_LETCAT: 'FAULT_MANAGEMENT_LETCAT',
   FAULT_DEFAULT_NOTE_CATEGORY: 'FAULT_DEFAULT_NOTE_CATEGORY',
-  FAULT_DEFAULT_NOTE_TYPE: 'FAULT_DEFAULT_NOTE_TYPE'
+  FAULT_DEFAULT_NOTE_TYPE: 'FAULT_DEFAULT_NOTE_TYPE',
+  MAX_ACTIVE_QUOTE_CONTRACTOR: 'MAX_ACTIVE_QUOTE_CONTRACTOR',
+  FAULT_OVERRIDE_COMMUNICATION_CONSENT: 'FAULT_OVERRIDE_COMMUNICATION_CONSENT'
 };
 
 export const SYSTEM_OPTIONS = {
@@ -282,10 +285,23 @@ export const CLOSE_REASON = [
     "value": "Landlord would not fix"
   },
   {
+    "index": "CLOSE_INTERNAL_USE_ONLY",
+    "value": "Close - Internal use only"
+  },
+  {
     "index": "OTHER",
     "value": "Other"
   }
 ];
+
+export const CLOSE_REASON_KEYS = {
+  "FAULT_DOES_NOT_EXIST_ANYMORE": "FAULT_DOES_NOT_EXIST_ANYMORE",
+  "TENANTS_RESPONSIBILITY": "TENANTS_RESPONSIBILITY",
+  "APPOINTMENT_NOT_BOOKED": "APPOINTMENT_NOT_BOOKED",
+  "LANDLORD_WOULD_NOT_FIX": "LANDLORD_WOULD_NOT_FIX",
+  "CLOSE_INTERNAL_USE_ONLY": "CLOSE_INTERNAL_USE_ONLY",
+  "OTHER": "OTHER"
+};
 
 export const ScriptStore = [
 ];
@@ -397,7 +413,8 @@ export const FAULT_EVENT_TYPES = [
   {
     "Escalations": [
       "Escalated",
-      "De Escalated"
+      "De Escalated",
+      "Fault Snoozed"
     ]
   },
   {
@@ -412,7 +429,11 @@ export const FAULT_EVENT_TYPES = [
   },
   {
     "Notifications": [
-      "Response Received",
+      "Response Received"
+    ]
+  },
+  {
+    "Notification Sent": [
       "Notification Sent"
     ]
   },
@@ -428,7 +449,95 @@ export const FAULT_EVENT_TYPES = [
   }
 ]
 
+export const FAULT_EVENT_TYPES_ID = {
+  RESPONSE_RECEIVED: 12,
+  NOTIFICATION_SENT: 15,
+  NOTES_ADDED: 13,
+  STAGE_CHANGED: 10,
+  CLI_ACTION_SELECTED: 3,
+  STATUS_CHANGED: 11,
+  DOCUMENT_ADDED: 14,
+  ESCALATED: 8,
+  FAULT_CLOSED: 7,
+  FAULT_SNOOZED: 16
+}
+
+export const QUOTE_CC_STATUS_ID = {
+  REJECTED: 3
+}
+
 export const NOTES_ORIGIN = {
   FAULT_STAGE: 'FAULT_STAGE',
   DASHBOARD: 'DASHBOARD'
+}
+
+export const RECIPIENT = [
+  'Landlord',
+  'Tenant',
+  'Contractor'
+];
+
+export const RECIPIENTS = {
+  'LANDLORD': 'Landlord',
+  'TENANT': 'Tenant',
+  'CONTRACTOR': 'Contractor'
+};
+
+export const PROPERTY_LINK_STATUS = {
+  'CURRENT': 'Current'
+};
+
+export const DATE_TIME_TYPES = [
+  {
+    "index": "DATE_WITH_TIME",
+    "value": "Date with time"
+  },
+  {
+    "index": "DATE_WITH_SESSION",
+    "value": "Date with session"
+  }
+];
+
+export const DATE_TIME_TYPES_KEYS = {
+  "DATE_WITH_TIME": "DATE_WITH_TIME",
+  "DATE_WITH_SESSION": "DATE_WITH_SESSION",
+}
+
+export const MAINTENANCE_TYPES_FOR_SEND_EMAIL = {
+  QUOTE: 'quote',
+  WO: 'wo',
+  ESTIMATE: 'estimate'
+}
+
+export const FAULT_STAGES_ACTIONS = {
+  FAULT_LOGGED : 'LOGGED'
+}
+
+
+export const NGX_QUILL_EDITOR_TOOLBAR_SETTINGS = {
+  toolbar: {
+    container: [
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'align': [] }]
+    ]
+  },
+};
+
+export const OFFER_STATUSES = {
+  NEW: 0,
+  ACCEPTED: 1,
+  REJECTED: 2,
+  WITHDRAWN_BY_APPLICANT: 3,
+  WITHDRAWN_BY_LANDLORD: 4,
+  AGREED_IN_PRINCIPLE: 5,
+  COUNTER_OFFER_BY_LL_AGENT: 6,
+  COUNTER_OFFER_BY_APPLICANT: 7
+};
+
+export const NOTES_TYPE = {
+  OFFER: 'OFFER',
+  FAULT: 'FAULT'
 }

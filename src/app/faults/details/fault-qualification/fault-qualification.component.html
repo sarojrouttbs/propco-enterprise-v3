@@ -1,13 +1,13 @@
 <ion-grid>
   <ion-row *ngIf="faultDetails?.isClosed">
-    <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+    <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
       <app-close-fault  [notificationData]="iqfNotification" [faultDetails]="faultDetails" [action]="getLookupValue(iqfNotification?.faultStageAction, iqfStageActions)?getLookupValue(iqfNotification?.faultStageAction, iqfStageActions) :'Fault Qualification'"></app-close-fault>
     </ion-col>
   </ion-row>
 
   <ion-row *ngIf="iqfNotification && !showSkeleton && !faultDetails?.isClosed">
     <!-- || (!iqfNotification?.responseReceived && iqfNotification?.templateCode === 'FI-T-E-1') -->
-    <ion-col offset-xl="20" size-xl="60" offset="0" size="100">
+    <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
       <div class="fault-qualification">
         <div class="banner">
           <ion-row>
@@ -129,6 +129,8 @@
                   </ion-button>
                 </div>
               </ng-container>
+              <ion-button *ngIf="faultDetails?.isEscalated"  color="success" expand="block" class="action-btn" fill="outline" (click)="snoozeFault()">
+                Snooze Fault</ion-button>
             </ion-row>
           </ion-grid>
           <div class="border-bottom" *ngIf="iqfNotification?.templateCode === 'FI-T-E-1'"></div>

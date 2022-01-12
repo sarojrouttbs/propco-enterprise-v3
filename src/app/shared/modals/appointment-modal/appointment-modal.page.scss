@@ -9,3 +9,24 @@
 .unsaved-data-error{
     background: #ea828247;
 }
+
+.error-message{
+    display: inline-block;
+    padding-top: 10px;
+    font-size: 14px;
+}
+
+.session-label {
+    margin-top: 15px;
+}
+
+.session-block {
+    // display: flex;
+    // flex-wrap: wrap;
+    div {
+        margin-bottom: -16px;
+    }
+    .ion-radio {
+        margin: 0px 20px -5px 0px;
+    }
+}

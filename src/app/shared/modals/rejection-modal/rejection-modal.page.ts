@@ -18,6 +18,7 @@ export class RejectionModalPage implements OnInit {
   rejectedByType;
   showLoader: boolean = false;
   unSavedData = false;
+  contractorId;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -31,14 +32,20 @@ export class RejectionModalPage implements OnInit {
       submittedById: '',
       submittedByType: 'SECUR_USER',
       other: '',
-      doesWantAnotherQuote: false,
-      rejectedByType: this.rejectedByType
+      isLandlordWantAnotherQuote: false,
+      rejectedByType: this.rejectedByType,
+      contractorId: this.contractorId
     });
     this.commonService.sortBy('index', this.faultMaintRejectionReasons)
   }
 
   saveFaultLLAuth() {
     this.showLoader = true;
+    if(!this.rejectionForm.valid) {
+      this.showLoader = false;
+      this.rejectionForm.markAllAsTouched();
+      return;
+    }
     let reqObj = JSON.parse(JSON.stringify(this.rejectionForm.value));
     if (reqObj.rejectionReason === 'Other') {
       if (reqObj.other) {
@@ -60,8 +67,18 @@ export class RejectionModalPage implements OnInit {
     })
   }
 
+  onReasonChange() {
+    this.rejectionForm.get('other').clearValidators();
+    this.rejectionForm.get('other').updateValueAndValidity();
+    this.rejectionForm.get('other').reset();
+    if (this.rejectionForm.get('rejectionReason').value === 'Other' ) {
+      this.rejectionForm.get('other').setValidators(Validators.required);
+      this.rejectionForm.get('other').updateValueAndValidity();
+    }
+  }
+
   async onCancel() {
-    if (this.rejectionForm.value.doesWantAnotherQuote || this.rejectionForm.value.other || this.rejectionForm.value.rejectionReason) {
+    if (this.rejectionForm.value.isLandlordWantAnotherQuote || this.rejectionForm.value.other || this.rejectionForm.value.rejectionReason) {
       this.unSavedData = true;
     } else {
       this.dismiss();

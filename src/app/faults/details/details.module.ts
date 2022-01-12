@@ -48,6 +48,8 @@ import { PaymentRequestModalPageModule } from 'src/app/shared/modals/payment-req
 import { LandlordInstructionComponent } from './landlord-instruction/landlord-instruction.component';
 import { ContactDetailsModalPageModule } from 'src/app/shared/modals/contact-details-modal/contact-details-modal.module';
 import { ChronologicalHistoryPageModule } from 'src/app/shared/modals/chronological-history/chronological-history.module';
+import { SnoozeFaultModalPageModule } from 'src/app/shared/modals/snooze-fault-modal/snooze-fault-modal.module';
+import { SendEmailModalModule } from 'src/app/shared/modals/send-email-modal/send-email-modal.module';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -95,7 +97,9 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     PaymentRequestModalPageModule,
     ContractorSelectionModule,
     ContactDetailsModalPageModule,
-    ChronologicalHistoryPageModule
+    ChronologicalHistoryPageModule,
+    SnoozeFaultModalPageModule,
+    SendEmailModalModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
     PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent, JobCompletionComponent,

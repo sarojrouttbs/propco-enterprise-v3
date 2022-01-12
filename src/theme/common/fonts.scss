@@ -68,6 +68,10 @@
   //color: $text-color-sixth;
 }
 
+.red-icon {
+  color: #c5332c;
+}
+
 .propcoicon-paint-roller:before {
   content: "";
 }
@@ -506,6 +510,10 @@
 
 .propcoicon-offers:before {
   content: "d";
+}
+
+.propcoicon-applicant-let:before{
+	content: '2';
 }
 
 .propcoicon.propcoicon-property-description {

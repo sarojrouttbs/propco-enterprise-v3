@@ -1,6 +1,6 @@
 import { ModalController, PopoverController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP, MAX_DOC_UPLOAD_SIZE, ERROR_CODE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE } from './../../shared/constants';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP, MAX_DOC_UPLOAD_SIZE, ERROR_CODE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STAGES_ACTIONS } from './../../shared/constants';
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,6 +18,7 @@ import { JobCompletionModalPage } from 'src/app/shared/modals/job-completion-mod
 import { saveAs } from 'file-saver';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.page';
+import { SnoozeFaultModalPage } from 'src/app/shared/modals/snooze-fault-modal/snooze-fault-modal.page';
 
 @Component({
   selector: 'fault-details',
@@ -35,7 +36,7 @@ export class DetailsPage implements OnInit {
   propertyHMODetails: any[] = [];
   faultHistory;
   addtionalInfo;
-  files = [];
+  files : any = [];
   describeFaultForm: FormGroup;
   faultDetailsForm: FormGroup;
   addAdditionalDetForm: FormGroup;
@@ -333,7 +334,8 @@ export class DetailsPage implements OnInit {
         this.contractorEntityId = details.contractorId;
         this.oldUserSelectedAction = this.faultDetails.userSelectedAction;
         this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
-        this.getFaultDocuments(this.faultId);
+        this.files = await this.getFaultDocuments(this.faultId);
+        this.filterDocsByStage(this.faultDetails);
         this.getFaultHistory();
         if (this.contractorEntityId) {
           this.isContractorSearch = false;
@@ -397,7 +399,7 @@ export class DetailsPage implements OnInit {
   }
 
   private checkIfPropertyCheckedIn() {
-    if (this.propertyTenancyList) {
+    if (this.propertyTenancyList && this.propertyTenancyList.length) {
       let keepgoing: boolean = true;
       this.propertyTenancyList.forEach((res, index, array) => {
         if (index === (array.length - 1)) {
@@ -938,20 +940,29 @@ export class DetailsPage implements OnInit {
     }, 1000);
   }
 
-  getFaultDocuments(faultId) {
-    this.faultsService.getFaultDocuments(faultId).subscribe(response => {
-      if (response) {
-        this.files = response.data;
-        // this.getDocs();
-        if (this.faultDetails.stage === FAULT_STAGES.JOB_COMPLETION || this.faultDetails.stage === FAULT_STAGES.PAYMENT) {
-          this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[4]['index'] || data.folderName === FOLDER_NAMES[5]['index']).filter(data => !data.isRejected);
+  getFaultDocuments(faultId: string) {
+    const promise = new Promise((resolve, reject) => {
+      this.faultsService.getFaultDocuments(faultId).subscribe(response => {
+        if (response) {
+          resolve(response.data);
+        } else {
+          resolve([]);  
         }
-        else {
-          this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[1]['index']).filter(data => !data.isRejected);
-        }
-        this.prepareDocumentsList();
-      }
-    })
+      },err =>{
+        resolve([]);
+      });
+    });
+    return promise;
+  }
+
+  private  filterDocsByStage(details : FaultModels.IFaultResponse) {
+    if (details.stage === FAULT_STAGES.JOB_COMPLETION || details.stage === FAULT_STAGES.PAYMENT) {
+      this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[4]['index'] || data.folderName === FOLDER_NAMES[5]['index']).filter(data => !data.isRejected);
+    }
+    else {
+      this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[1]['index']).filter(data => !data.isRejected);
+    }
+    this.prepareDocumentsList();
   }
 
   // downloadFaultDocument(documentId, name) {
@@ -1297,6 +1308,7 @@ export class DetailsPage implements OnInit {
       additionalInfo: this.faultDetailsForm.get('additionalInfo').value,
       isDraft: false,
       stage: FAULT_STAGES.FAULT_LOGGED,
+      stageAction: FAULT_STAGES_ACTIONS.FAULT_LOGGED
     }
     return faultDetails;
   }
@@ -1433,18 +1445,19 @@ export class DetailsPage implements OnInit {
   }
 
   private async refreshDetailsAndStage(reloadFaultDocs = false) {
-    if (reloadFaultDocs) {
-      this.getFaultDocuments(this.faultDetails.faultId);
-    }
     const details: any = await this.getFaultDetails();
+    if (reloadFaultDocs) {
+      this.files = await this.getFaultDocuments(this.faultDetails.faultId);
+      this.filterDocsByStage(details);
+    }
     this.selectStageStepper(details.stage);
     this.faultDetails = details;
     this.getStageIndex(this.faultDetails);
     this.userSelectedActionControl.setValue(this.faultDetails.userSelectedAction);
     this.oldUserSelectedAction = this.userSelectedActionControl.value;
     this.proceeding = false;
+    this.commonService.scrollToTopById('matStepperTop');
   }
-
 
   reOpenFault() {
     this.commonService.showConfirm('Re-open Fault', 'This will reopen the fault and notify the property manager.<br/> Are you sure?').then(res => {
@@ -2137,7 +2150,30 @@ export class DetailsPage implements OnInit {
         this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
         break;
       }
+      case 'snooze': {
+        this.snoozeFault();
+        break;
+      }
     }
+  }
+
+  async snoozeFault() {
+    const modal = await this.modalController.create({
+      component: SnoozeFaultModalPage,
+      cssClass: 'modal-container',
+      componentProps: {
+        faultId: this.faultDetails.faultId,
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if(res && res.data && res.data == 'success'){
+        this.commonService.showMessage('Fault has been snooze successfully.', 'Snooze Fault', 'success');
+        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+      }
+    });
+    await modal.present();
   }
 
   private async saveLaterChild() {
@@ -2158,7 +2194,7 @@ export class DetailsPage implements OnInit {
   // }
 
   filterByGroupName(folderName) {
-    this.filteredDocuments = this.files.filter(data => data.folderName === folderName);
+    this.filteredDocuments = this.files.filter(data => data.folderName === folderName).filter(data => !data.isDraft);
     this.mediaType = 'documents';
     this.folderName = folderName;
   }
@@ -2200,6 +2236,12 @@ export class DetailsPage implements OnInit {
   private prepareDocumentsList() {
     if (this.files.length > 0) {
       this.files.forEach((e, i) => {
+        if (this.files[i].folderName == null) {
+          this.files[i].folderName = FOLDER_NAMES[0].index;
+        }
+        if(this.files[i].folderName === FOLDER_NAMES[1].index && this.files[i].contractorCompanyName ){
+          this.files[i].folderName = e.folderName + ' - '+ e.contractorCompanyName;
+        }
         this.files[i].folderName = e.folderName.replace(/_/g, " ");
         this.files[i].isUploaded = true;
         if (e.name != null && DOCUMENTS_TYPE.indexOf(e.name.split('.')[1]) !== -1) {

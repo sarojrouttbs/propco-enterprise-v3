@@ -20,6 +20,7 @@
               </ion-text>
             </ion-label>
             <ion-select interface="popover" formControlName="rejectionReason" class="ion-select-options"
+            (ionChange)="onReasonChange()"
               [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
               <ion-select-option [value]="item.value" *ngFor="let item of faultMaintRejectionReasons">
                 {{ item.index === 'Other'? item.value +' (Please specify in the box)':item.value}}
@@ -32,6 +33,7 @@
           <ion-item>
             <ion-textarea formControlName="other" placeholder="Comment..."></ion-textarea>
           </ion-item>
+          <app-validation-message [control]="rejectionForm.controls.other"></app-validation-message>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -53,7 +55,7 @@
         <ion-col size="60" class="checkbox-wrapper" *ngIf="userType =='landlord'">
           <form [formGroup]="rejectionForm" *ngIf="!disableAnotherQuote">
             <div>
-              <ion-checkbox slot="start" color="success" class="check-box" formControlName="doesWantAnotherQuote">
+              <ion-checkbox slot="start" color="success" class="check-box" formControlName="isLandlordWantAnotherQuote">
               </ion-checkbox>
               <span>Landlord wants another Quote</span>
             </div>

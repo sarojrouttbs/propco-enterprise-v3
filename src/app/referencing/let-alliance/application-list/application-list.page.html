@@ -65,25 +65,25 @@
                 <ion-input formControlName="searchTerm"></ion-input>
               </ion-item>
           </ion-col>
-          <ion-col size-xl="21" size-lg="23" size-md="38" size-sm="50" size-xs="100">
-            <ion-item>
-              <ion-label position="floating">Date of Submission From
-              </ion-label>
-              <ion-datetime [max]="currentDate" formControlName="fromDate"  displayFormat="DD MMM YYYY" interface="popover"></ion-datetime>
-              <ion-icon ion-datetime-picker name="calendar" slot="start" class="datetime-icon"></ion-icon>
-            </ion-item>
-            <div *ngIf='applicationFilterForm?.errors?.startDateRequired' class="error-message">
+          <ion-col size-xl="21" size-lg="23" size-md="38" size-sm="50" size-xs="100" style="padding-top:21px">
+            <mat-form-field appearance="fill">
+              <mat-label>Date of Submission From</mat-label>
+              <input matInput [matDatepicker]="picker" [max]="currentDate" formControlName="fromDate" readonly>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <div *ngIf='applicationFilterForm?.errors?.startDateRequired' class="error-message" style="margin-top: -20px !important;">
               Please enter From
            </div>
           </ion-col>
-          <ion-col size-xl="21" size-lg="23" size-md="38" size-sm="50" size-xs="100">
-            <ion-item>
-              <ion-label position="floating">Date of Submission To
-              </ion-label>
-              <ion-datetime [max]='currentDate' formControlName="toDate" displayFormat="DD MMM YYYY" interface="popover"></ion-datetime>
-              <ion-icon ion-datetime-picker name="calendar" slot="start" class="datetime-icon"></ion-icon>
-            </ion-item>
-            <div *ngIf='applicationFilterForm?.errors?.invalidEndDate' class="error-message">
+          <ion-col size-xl="21" size-lg="23" size-md="38" size-sm="50" size-xs="100" style="padding-top:21px">
+            <mat-form-field appearance="fill">
+              <mat-label>Date of Submission To</mat-label>
+              <input matInput [matDatepicker]="picker1" [max]="currentDate" formControlName="toDate" readonly>
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+            <div *ngIf='applicationFilterForm?.errors?.invalidEndDate' class="error-message" style="margin-top: -20px !important;">
               To cannot be before and equal to From
            </div>
           </ion-col>

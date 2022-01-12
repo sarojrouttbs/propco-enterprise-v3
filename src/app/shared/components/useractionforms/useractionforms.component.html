@@ -1,0 +1,118 @@
+<ng-container *ngIf="hideWOform">
+  <div class="contractor-selection" *ngIf="actionSelected === 'PROCEED_WITH_WORKSORDER' || actionSelected === 'OBTAIN_AUTHORISATION'">
+    <form [formGroup]="userActionForms">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="50">
+            <ion-item>
+              <ion-label position="floating">Select Contractor<ion-text class="mandatory">*</ion-text></ion-label>
+              <ion-input type="text" debounce="1000" (ionInput)="onSearchChange($event)"
+                formControlName='contractor'
+               >
+              </ion-input>
+            </ion-item>
+            <ion-list class="contractor-list" *ngIf="resultsAvailable">
+              <ion-item *ngFor="let result of (selectedContractor | async)?.data" (click)="contractorSelected(result)" button
+                style="font-size: 13px !important; ">
+                <span>
+                  <i class="propcoicon no-background propcoicon-contractor"
+                    style="background: transparent;"></i>
+                </span>&nbsp;
+                <label style="color: var(--ion-color-step-200);padding-right: 5px;">{{result.fullName}}&nbsp;
+                  <span style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
+                  <span class="text-color-lightgreen" style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;  
+                </label>                        
+              </ion-item>
+            </ion-list>
+            <app-validation-message [control]="userActionForms.controls.contractor"></app-validation-message>
+            <div *ngIf="userActionForms.get('contractor').hasError('invalidContractor') && userActionForms.get('contractor').touched" class="contractor-error-message">
+              {{userActionForms.get('contractor').errors.message}}</div>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item>
+              <ion-label position="stacked">Confirmed Estimate<ion-text class="mandatory">*</ion-text></ion-label>
+              <input currencyMask formControlName="confirmedEstimate"
+                #estimate/>
+            </ion-item>
+            <app-validation-message [control]="userActionForms.controls.confirmedEstimate"></app-validation-message>
+          </ion-col>
+          <ion-col size="50" *ngIf="isAuthorizationfields">              
+            <ion-item class="select-block">
+              <ion-label position="floating">Nominal Code <ion-text class="mandatory">*</ion-text>
+              </ion-label>
+              <ionic-selectable item-content itemValueField="nominalCode" itemTextField="concat" [items]="codes"
+                [canSearch]="true" [canClear]="true" clearButtonText="Clear" closeButtonSlot="end" confirmButtonText="Apply"
+                searchPlaceholder="Search Nominal Code" #nominalCodeType formControlName="nominalCode"
+                [shouldStoreItemValue]="false" class="selectable-height" (click)="startLoading()" (onOpen)="endLoading()"
+                [shouldBackdropClose]="false">
+    
+                <ng-template ionicSelectableHeaderTemplate>
+                  <ion-toolbar>
+                    <ion-buttons end>
+                    </ion-buttons>
+                    <ion-title>
+                      {{nominalCodeType.label}}
+                    </ion-title>
+                  </ion-toolbar>
+                </ng-template>
+    
+                <ng-template ionicSelectableFooterTemplate>
+                  <ion-toolbar>                             
+                    <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                      (click)="nominalCodeType.close()">
+                      Cancel
+                    </ion-button>
+                    <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                      (click)="nominalCodeType.clear();nominalCodeType.close();"
+                      [disabled]="!nominalCodeType.itemsToConfirm.length">
+                      Clear
+                    </ion-button>
+                    <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
+                      (click)="nominalCodeType.confirm();nominalCodeType.close();"
+                      [disabled]="!nominalCodeType.itemsToConfirm.length">
+                      Apply
+                    </ion-button>
+                  </ion-toolbar>
+                </ng-template>
+              </ionic-selectable>
+            </ion-item>
+            <app-validation-message [control]="userActionForms.controls.nominalCode"></app-validation-message>
+          </ion-col>
+          <ion-col size="50" *ngIf="isAuthorizationfields">
+            <ion-item>
+              <ion-label position="floating">Required Start Date <ion-text class="mandatory">*</ion-text></ion-label>
+              <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
+                formControlName="requiredStartDate" [min]="currentDate">
+              </ion-datetime>
+            </ion-item>
+            <app-validation-message [control]="userActionForms.controls.requiredStartDate"></app-validation-message>
+          </ion-col>
+
+          <ion-col size="50" *ngIf="isAuthorizationfields">
+            <ion-item>
+              <ion-label position="floating">Required Completion Date <ion-text class="mandatory">*</ion-text></ion-label>
+              <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
+                formControlName="requiredCompletionDate" [min]="currentDate">
+              </ion-datetime>
+            </ion-item>
+            <app-validation-message [control]="userActionForms.controls.requiredCompletionDate"></app-validation-message>
+          </ion-col>
+
+          <ion-col size="50" *ngIf="isAuthorizationfields">
+            <ion-item>
+              <ion-label position="floating">Ordered By </ion-label>
+              <ion-input formControlName="orderedBy"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="100">
+            <ion-item>
+              <ion-label position="stacked">Notes</ion-label>
+              <ion-textarea placeholder="Enter more information here..." 
+                rows=1 auto-grow="true"></ion-textarea>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </div>
+</ng-container>

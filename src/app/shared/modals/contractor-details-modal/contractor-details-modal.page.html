@@ -44,17 +44,54 @@
         <app-validation-message [control]="contractorDetailForm.controls.email"></app-validation-message>
       </ion-col>
 
-
-      <ion-col size="50">
+      <ion-col size="100">
         <ion-item>
-          <ion-label position="floating">Scheduled on
+          <ion-label position="floating">Select Date/Time Type
           </ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY HH:mm" displayFormat="DD MMM YYYY HH:mm" class="scheduled-on"
-            formControlName="estimatedVisitAt" [min]="currentDate">
+          <ion-select interface="popover" formControlName="dateTimeType" (ionChange)="onDateTimeTypeSelection()">
+            <ion-select-option [value]="item.index" *ngFor="let item of dateTimeTypeList">{{ item.value }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="100" *ngIf="isDateWithTime">
+        <ion-item>
+          <ion-label position="floating">Visit Date/Time
+          </ion-label>
+          <ion-datetime formControlName="estimatedVisitAt" dateFormat="MM/DD/YYYY HH:mm" displayFormat="DD MMM YYYY HH:mm" interface="popover" (ionChange)="checkPastDate()"
+            class="request-start-date" [min]="minDate">
           </ion-datetime>
         </ion-item>
-        <!-- <app-validation-message [control]="contractorDetailForm.controls.estimatedVisitAt"></app-validation-message> -->
+        <ion-text class="error-message" color="danger" *ngIf="pastDateError">The date/time you have chosen is in past, indicating your Contractor has already visited the property.</ion-text>
       </ion-col>
+
+      <ng-container *ngIf="isDateWithSession">
+        <ion-col size="100" class="session-label">
+          <ion-label position="floating">Select session</ion-label>
+          <ion-radio-group formControlName="estimatedVisitSlot" class="session-block" (ionChange)="checkPastDateWithSession()">
+            <div *ngFor="let item of sessionSlots" matTooltip="{{ item.value.split(',')[1] }}" matTooltipPosition="above">
+            <ion-item class="ion-item" lines="none" >
+                <ion-label>
+                  {{ item.value.split(',')[0] }}
+                </ion-label>
+                <ion-radio [disabled]="estimatedVisitAt != null" slot="start" class="ion-radio" [value]="item"></ion-radio>
+            </ion-item>
+          </div>
+          </ion-radio-group>
+        </ion-col>
+
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Select Date
+            </ion-label>
+            <ion-datetime formControlName="estimatedVisitAt" dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" interface="popover" (ionChange)="checkPastDateWithSession()"
+              class="request-start-date" [min]="minDate">
+            </ion-datetime>
+          </ion-item>
+          <ion-text class="error-message" color="danger" *ngIf="pastDateErrorWithSession">The date/time you have chosen is in past, indicating your Contractor has already visited the property.</ion-text>
+        </ion-col>
+      </ng-container>
 
       <ion-col size="100">
         <ion-item>

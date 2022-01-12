@@ -1,9 +1,10 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { NOTES_ORIGIN } from '../../constants';
+import { NOTES_ORIGIN, NOTES_TYPE } from '../../constants';
 import { ChronologicalHistoryPage } from '../../modals/chronological-history/chronological-history.page';
 import { NotesModalPage } from '../../modals/notes-modal/notes-modal.page';
+import { SendEmailModalPage } from '../../modals/send-email-modal/send-email-modal.component';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -17,6 +18,7 @@ export class FaultTitleComponent implements OnInit {
   @Input() title;
   @Input() faultNotificationDetails;
   @Input() propertyDetails;
+  @Input() categoryName;
   isEditable = false;
 
   constructor(
@@ -72,7 +74,7 @@ export class FaultTitleComponent implements OnInit {
       component: NotesModalPage,
       cssClass: 'modal-container',
       componentProps: {
-        notesType: 'fault',
+        notesType: NOTES_TYPE.FAULT,
         notesTypeId: this.faultDetails?.faultId,
         isAddNote: true,
         notesOrigin: NOTES_ORIGIN.FAULT_STAGE,
@@ -105,4 +107,25 @@ export class FaultTitleComponent implements OnInit {
     await modal.present();
   }
 
+  async sendEmailModal() {
+    const modal = await this.modalController.create({
+      component: SendEmailModalPage,
+      cssClass: 'modal-container send-email-modal',
+      componentProps: {
+        faultDetails: this.faultDetails,
+        propertyDetails: this.propertyDetails,
+        faultCategoryName: this.categoryName
+      },
+      backdropDismiss: false
+    });
+
+    const data = modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this.commonService.showMessage('Email has been sent successfully', 'Send Email', 'success');
+        return;
+      }
+    });
+
+    await modal.present();
+  }
 }

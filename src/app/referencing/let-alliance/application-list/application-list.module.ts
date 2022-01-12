@@ -10,6 +10,7 @@ import { ApplicationListPage } from './application-list.page';
 import { DataTablesModule } from 'angular-datatables';
 import { ResendLinkModalPageModule } from 'src/app/shared/modals/resend-link-modal/resend-link-modal.module';
 import { IonicSelectableModule } from 'ionic-selectable';
+import { MaterialModule } from 'src/app/material.module';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { IonicSelectableModule } from 'ionic-selectable';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
+    MaterialModule,
     ApplicationListPageRoutingModule,
     DataTablesModule,
     ResendLinkModalPageModule,

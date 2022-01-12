@@ -37,6 +37,10 @@
               "node_modules/datatables.net-responsive-dt/css/responsive.dataTables.css",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/datatables.net-colreorder-dt/css/colReorder.dataTables.css",
+
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.bubble.css",
+              "node_modules/quill/dist/quill.snow.css",
               {
                 "input": "src/theme/variables.scss"
               },
@@ -56,7 +60,8 @@
               "node_modules/datatables.net-buttons/js/buttons.print.js",
               "node_modules/pdfmake/build/pdfmake.min.js",
               "node_modules/pdfmake/build/vfs_fonts.js",
-              "node_modules/datatables.net-colreorder/js/dataTables.colReorder.js"
+              "node_modules/datatables.net-colreorder/js/dataTables.colReorder.js",
+              "src/lib/java-ng.js"
             ]
           },
           "configurations": {

@@ -22,6 +22,14 @@ const routes: Routes = [
   {
     path: 'chronological-history',
     loadChildren: () => import('./shared/modals/chronological-history/chronological-history.module').then( m => m.ChronologicalHistoryPageModule)
+  },
+  {
+    path: 'tob',
+    loadChildren: () => import('./tob/tob.module').then( m => m.TobPageModule)
+  },
+  {
+    path: 'solr',
+    loadChildren: () => import('./solr/solr.module').then( m => m.SolrPageModule)
   }
 ];
 

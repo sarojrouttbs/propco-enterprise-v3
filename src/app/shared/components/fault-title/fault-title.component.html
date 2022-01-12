@@ -1,11 +1,11 @@
 <ion-grid style="margin-bottom:10px">
   <ion-row class="ion-justify-content-start fault-title">
-    <ion-col size="93" style="display: inline-flex; padding-left: 0px; ">
+    <ion-col size="90" style="display: inline-flex; padding-left: 0px; ">
       <ion-row>
         <ion-col size="auto">
           <h2>
             <ion-text *ngIf="faultDetails?.faultId">{{faultDetails?.reference || ''}} </ion-text>
-            {{title}} <ion-text
+            {{title}}  <ion-text
             color="success">&gt;</ion-text>
           </h2>
         </ion-col>
@@ -22,12 +22,10 @@
         </ion-col>
       </ion-row>
     </ion-col>
-    <ion-col size="3" class="note-block" title="Cronological History" (click)="cronologicalHistoryModal()">
-      <ion-icon name="timer" class="ion-align-self-center edit-title-icon edit-title"></ion-icon>
+    <ion-col size="10" class="note-block" *ngIf="faultDetails?.faultId">
+      <img src="assets/images/fault-categories/send_email.svg" class="send_mail_icon" matTooltip="Compose Email" matTooltipPosition="above" (click)="sendEmailModal()"/>&nbsp;
+      <img src="assets/images/fault-categories/chronological_history.svg" matTooltip="Chronological History" matTooltipPosition="above" (click)="cronologicalHistoryModal()"/>&nbsp;
+      <img src="assets/images/fault-categories/add_notes.png" matTooltip="Add Note" matTooltipPosition="above" (click)="notesModal()"/>&nbsp;
     </ion-col>
-    <ion-col size="4" class="note-block" (click)="notesModal()" title="Add Note" *ngIf="faultDetails?.faultId">
-      <img src="assets/images/fault-categories/add_notes.png" matTooltip="Add Note" matTooltipPosition="above" />&nbsp;
-    </ion-col>
-
   </ion-row>
 </ion-grid>
