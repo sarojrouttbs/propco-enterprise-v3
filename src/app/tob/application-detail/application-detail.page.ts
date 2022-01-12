@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE } from 'src/app/shared/constants';
+import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { switchMap, debounceTime } from 'rxjs/operators';
@@ -23,27 +23,23 @@ import { ValidationService } from 'src/app/shared/services/validation.service';
 export class ApplicationDetailPage implements OnInit {
   lookupdata: any;
   toblookupdata: any;
-  letDurations: OfferModels.ILookupResponse[];
   howLong = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
   occupants = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   childrens = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  itemList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   tenantCurrentPositionTypes: OfferModels.ILookupResponse[];
   applicantGuarantorTypes: OfferModels.ILookupResponse[];
-  currentStepperIndex = 0;
-  applicantDetailsForm: FormGroup;
-  propertyId: any;
-  applicationId: any;
-  propertyDetails: any;
-  propertyClauses;
-  propertyRestrictions;
-  searchApplicantForm: FormGroup;
-  applicantList: Observable<OfferModels.IApplicantLisResponse>;
-  applicantDetail: OfferModels.IApplicantDetails;
-  disableSearchApplicant: boolean = false;
-  applicantId: string;
-  resultsAvailable: boolean = null;
+  letDurations: OfferModels.ILookupResponse[];
   rentFrequencyTypes: OfferModels.ILookupResponse[];
   offerDetails: OfferModels.IOfferResponse;
+  applicantList: Observable<OfferModels.IApplicantLisResponse>;
+  applicantDetail: OfferModels.IApplicantDetails;
+  applicationDetails: ApplicationModels.IApplicationResponse;
+  applicationApplicantDetails: ApplicationModels.ICoApplicants[];
+  rentCategories: OfferModels.ILookupResponse[];
+  currentStepperIndex = 0;
+  searchApplicantForm: FormGroup;
+  applicantDetailsForm: FormGroup;
   occupantForm: FormGroup;
   isCoApplicantDeleted: any;
   addressDetailsForm: FormGroup;
@@ -51,26 +47,33 @@ export class ApplicationDetailPage implements OnInit {
   applicantQuestionForm: FormGroup;
   tenancyDetailForm: FormGroup;
   guarantorForm: FormGroup;
+  propertyId: any;
+  applicationId: any;
+  propertyDetails: any;
+  propertyClauses: any[];
+  propertyRestrictions: any[];
+  applicantId: string;
+  disableSearchApplicant: boolean = false;
+  resultsAvailable: boolean = null;
   isStudentProperty: boolean = false;
   showPostcodeLoader: Boolean = null;
   showAddressLoader: Boolean = null;
+  showPayment: boolean = false;
+  saveDataLoader: boolean = false;
   addressList: any[];
   guarantorAddressList: any[];
   correspondenceAddressList: any[];
-  currentDate = this.commonService.getFormatedDate(new Date());
-  maxMoveInDate = this.commonService.getFormatedDate(new Date().setFullYear(new Date().getFullYear() + 5));
-  itemList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  applicationDetails: ApplicationModels.IApplicationResponse;
-  applicationApplicantDetails: ApplicationModels.ICoApplicants[];
   leadApplicationApplicantId: any;
   selectionType: any;
-
   titleList = [
     { index: 0, value: 'Mr' },
     { index: 1, value: 'Mrs' },
     { index: 2, value: 'Ms' }
   ];
-  leadApplicantId: any;
+  maxMoveInDate = this.commonService.getFormatedDate(new Date().setFullYear(new Date().getFullYear() + 5));
+  currentDate = this.commonService.getFormatedDate(new Date());
+  termsConditionControl: boolean = false;
+  isTermsConditionRead: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -84,16 +87,17 @@ export class ApplicationDetailPage implements OnInit {
   ngOnInit() {
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
     this.applicationId = this.route.snapshot.paramMap.get('applicationId');
-    if (typeof this.applicationId !== 'undefined' && this.applicationId != null) {
+    if (typeof this.applicationId !== 'undefined' && this.applicationId !== null) {
       this.initViewApiCalls();
     }
-    else if (typeof this.propertyId !== 'undefined' && this.propertyId != null) {
+    else if (typeof this.propertyId !== 'undefined' && this.propertyId !== null) {
       this.initCreateApiCalls();
     }
     this.initForms();
+    this.initApiCalls();
   }
 
-  onSearch(event: any) {
+  onSearch(event: any): void {
     const searchString = event.target.value;
     if (searchString.length > 2) {
       this.resultsAvailable = true;
@@ -115,15 +119,18 @@ export class ApplicationDetailPage implements OnInit {
           this.addSearchApplicant(res, index);
           this.getApplicantCoApplicants(applicantId);
         }
-        this.patchApplicantDetail();
-        this.patchApplicantAddressDetail();
+        else {
+          this.patchApplicantDetail();
+          this.patchApplicantAddressDetail();
+        }
+
       }
     },
       error => {
       })
   }
 
-  private patchApplicantDetail() {
+  private patchApplicantDetail(): void {
     this.applicantDetailsForm.patchValue({
       title: this.applicantDetail.title,
       forename: this.applicantDetail.forename,
@@ -140,15 +147,6 @@ export class ApplicationDetailPage implements OnInit {
     });
   }
 
-  async deleteApplicant() {
-    const isAgree: boolean = await this.commonService.showConfirm('Delete Applicant', 'Are you sure, you want to remove this applicant ?', '', 'Yes', 'No') as boolean;
-    if (isAgree) {
-      this.applicantDetail = null;
-      this.searchApplicantForm.get('searchApplicant').setValue('');
-      this.disableSearchApplicant = false;
-    }
-  }
-
   resetSearch() {
     this.searchApplicantForm.get('searchApplicant').setValue('');
     this.resultsAvailable = false;
@@ -157,6 +155,13 @@ export class ApplicationDetailPage implements OnInit {
   private searchApplicant(applicantId: string): Observable<any> {
     let response = this._tobService.searchApplicant(applicantId);
     return response;
+  }
+
+  private async initApiCalls() {
+    this.getLookUpData();
+    this.getTobLookupData();
+    await this.getPropertyDetails(this.propertyId);
+    this.getNoDeposit();
   }
 
   private initForms() {
@@ -171,32 +176,21 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private async initCreateApiCalls() {
-    this.getLookUpData();
-    this.getTobLookupData();
-    await this.getPropertyDetails(this.propertyId);
     await this.getPropertyClauses(this.propertyId);
     await this.getPropertyRestrictions(this.propertyId);
     await this.createApplication();
-    await this.getApplicantQuestions();
   }
 
   private async initViewApiCalls() {
-    this.getLookUpData();
-    this.getTobLookupData();
-    this.getPropertyDetails(this.propertyId);
-    this.getPropertyClauses(this.propertyId);
-    this.getPropertyRestrictions(this.propertyId);
-    await this.getApplicationDetails(this.applicationId);
-    this.getApplicantQuestions();
-    await this.getApplicationApplicants(this.applicationId);
-    this.getApplicantDetails(this.applicantId);
-    if (this.applicationDetails.leadApplicantItemtype == "M") {
-      this.getTenantBankDetails(this.applicantId);
-      this.getTenantGuarantors(this.applicantId);
-    } else {
-      this.getApplicantBankDetails(this.applicantId);
-      this.getApplicantGuarantors(this.applicantId);
-    }
+    const application = await this.getApplicationDetails(this.applicationId) as ApplicationModels.IApplicationResponse;
+    await this.setApplicationDetails(application);
+    const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
+    await this.setApplicationApplicants(applicants);
+    await this.setLeadApplicantDetails();
+    const questionData = await this.getApplicantQuestions();
+    this.createQuestionItems(questionData);
+    this.getApplicationQuestionsAnswer(this.applicationId);
+
   }
 
   /** Step Change functionality **/
@@ -219,16 +213,16 @@ export class ApplicationDetailPage implements OnInit {
       if (this.tenancyDetailForm.invalid) {
         this.tenancyDetailForm.markAllAsTouched();
       }
-      // if (this.guarantorForm.invalid) {
-      //   this.guarantorForm.markAllAsTouched();
-      // }
+      if (this.guarantorForm.invalid) {
+        this.guarantorForm.markAllAsTouched();
+      }
       if (nextIndex === 10) {
         // this.initPaymentConfiguration();
       }
     }
   }
 
-  private savePreviousStep(event) {
+  private savePreviousStep(event: any) {
     if (this.applicationDetails.isSubmitted) {
       return;
     }
@@ -237,24 +231,24 @@ export class ApplicationDetailPage implements OnInit {
 
   }
 
-  private savePreviouslySelectedData(index) {
+  private savePreviouslySelectedData(index: number) {
     switch (index) {
       case 0:
         if (!this.applicationDetails.isSubmitted) {
           this.saveApplicantsToApplication();
         }
       case 1:
-        if (!this.applicationDetails.isSubmitted) {
-          this.savePersonalDetails();
+        if (!this.applicationDetails.isSubmitted && this.applicantId) {
+          this.saveApplicantDetails();
         }
         break;
       case 2:
-        if (!this.applicationDetails.isSubmitted) {
+        if (!this.applicationDetails.isSubmitted && this.applicantId) {
           this.saveAddressDetails();
         }
         break;
       case 3:
-        if (!this.applicationDetails.isSubmitted) {
+        if (!this.applicationDetails.isSubmitted && this.applicantId) {
           this.saveBankDetails();
         }
         break;
@@ -265,15 +259,12 @@ export class ApplicationDetailPage implements OnInit {
         break;
       case 5:
         if (!this.applicationDetails.isSubmitted) {
-        }
-        break;
-      case 6:
-        if (!this.applicationDetails.isSubmitted) {
+          this.saveTenancyDetail();
         }
         break;
       case 8:
         if (!this.applicationDetails.isSubmitted) {
-          // this.saveGuarantorDetails();
+          this.saveGuarantorDetails();
         }
         break;
       case 10:
@@ -283,7 +274,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   saveStepData(index: number, type: string) {
-    if (index === 3) {
+    if (index === 4) {
       this.commonService.showMessage('Please accept the terms and conditions.', 'Terms & Conditions', 'error');
       return;
     }
@@ -298,7 +289,7 @@ export class ApplicationDetailPage implements OnInit {
     let message = 'Your application has been saved. Please complete your application within 14 days in order to guarantee a reservation.'
     this.commonService.showAlert(title, message, '').then(res => {
       if (res) {
-        this.router.navigate([`tob/${this.propertyId}/applications`]);
+        this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
       }
     })
   }
@@ -318,14 +309,19 @@ export class ApplicationDetailPage implements OnInit {
       }
     });
 
-    forkJoin(apiObservableArray).subscribe((response: any[]) => {
-      this.occupantForm.reset(this.occupantForm.value);
-      this.getApplicationApplicants(this.applicationId);
-      if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
-        this.onSave();
-      }
-    }, error => {
-    });
+    setTimeout(() => {
+      forkJoin(apiObservableArray).subscribe(async (response: any[]) => {
+        this.occupantForm.reset(this.occupantForm.value);
+        const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
+        await this.setApplicationApplicants(applicants);
+        await this.setLeadApplicantDetails();
+        if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
+          this.onSave();
+        }
+      }, error => {
+        this.occupantForm.reset(this.occupantForm.value);
+      });
+    }, 1000)
   }
 
   onLeadSelection(item: FormGroup) {
@@ -333,10 +329,12 @@ export class ApplicationDetailPage implements OnInit {
       if (response && item.controls['applicationApplicantId'].value) {
         let updateLeadData = {
           modifiedById: '',
-          modifiedBy: "AGENT"
+          modifiedBy: ENTITY_TYPE.AGENT
         };
-        this._tobService.updateLead(updateLeadData, this.applicationId, item.controls['applicationApplicantId'].value).subscribe(response => {
-          this.getApplicationApplicants(this.applicationId);
+        this._tobService.updateLead(updateLeadData, this.applicationId, item.controls['applicationApplicantId'].value).subscribe(async (response) => {
+          const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
+          await this.setApplicationApplicants(applicants);
+          await this.setLeadApplicantDetails();
         })
       }
       else {
@@ -359,13 +357,11 @@ export class ApplicationDetailPage implements OnInit {
     })
   }
 
-  private getApplicationDetails(applicationId) {
+  private getApplicationDetails(applicationId: string) {
     return new Promise((resolve, reject) => {
       this._tobService.getApplicationDetails(applicationId).subscribe(
         res => {
-          this.applicationDetails = res ? res : [];
-          this.setTenancyDetails(this.applicationDetails);
-          resolve(true);
+          resolve(res);
         },
         error => {
           reject(undefined);
@@ -374,36 +370,73 @@ export class ApplicationDetailPage implements OnInit {
     });
   }
 
-  private getApplicationApplicants(applicationId) {
+  private setApplicationDetails(res: ApplicationModels.IApplicationResponse) {
+    return new Promise((resolve, reject) => {
+      this.applicationDetails = res;
+      this.applicationDetails.applicationClauses = res.applicationClauses ? res.applicationClauses : []
+      this.applicationDetails.applicationRestrictions = res.applicationRestrictions ? res.applicationRestrictions : [];
+      // this.applicationDetails = this.commonService.getLookupValue(this.applicationStatuses, this.applicationDetails.status);
+      // if (this.applicationStatus === 'Accepted' && this.entityType == Role.Applicant) {
+      //   this.currentStepperIndex = 10;
+      //   this.showPayment = true;
+      //   this.initPaymentConfiguration();
+      // }
+      this.applicationDetails.applicationRestrictions = this.applicationDetails.applicationRestrictions.filter(restrict => restrict.value);
+      this.applicationDetails.applicationRestrictions.map(
+        restrict =>
+        (restrict.restrictionName = this.commonService.camelize(
+          restrict.key.replace(/_/g, ' ')
+        ))
+      );
+      this.setTenancyDetails(res);
+      return resolve(true);
+    });
+  }
+
+  private getApplicationApplicants(applicationId: string) {
     return new Promise((resolve, reject) => {
       this._tobService.getApplicationApplicants(applicationId).subscribe(
         res => {
-          (this.occupantForm.get("coApplicants") as FormArray)['controls'].splice(0);
-          this.applicationApplicantDetails = (res && res.data) ? res.data : [];
-          this.applicationApplicantDetails.filter(item => {
-            if (item.isLead) {
-              this.leadApplicationApplicantId = item.applicationApplicantId;
-            }
-          })
-          var leadApplicantDetails = this.applicationApplicantDetails.filter(function (occupant) {
-            return occupant.isLead;
-          });
-          if (leadApplicantDetails && leadApplicantDetails.length > 0) {
-            this.applicantId = leadApplicantDetails[0].applicantId;
-          }
-          this.updateOccupantForm(this.applicationApplicantDetails);
-          resolve(true);
+          resolve(res);
         },
         error => {
           reject(undefined);
         }
       );
     });
+  }
+
+  private setApplicationApplicants(res: any) {
+    return new Promise((resolve, reject) => {
+      (this.occupantForm.get("coApplicants") as FormArray)['controls'].splice(0);
+      this.applicationApplicantDetails = (res && res.data) ? res.data : [];
+      var leadApplicantDetails = this.applicationApplicantDetails.filter(function (occupant) {
+        return occupant.isLead;
+      });
+      if (leadApplicantDetails && leadApplicantDetails.length > 0) {
+        this.applicantId = leadApplicantDetails[0].applicantId;
+      }
+      this.updateOccupantForm(this.applicationApplicantDetails);
+      return resolve(true);
+    });
+  }
+
+  private async setLeadApplicantDetails() {
+    if (this.applicantId) {
+      this.getApplicantDetails(this.applicantId);
+      if (this.applicationDetails.leadApplicantItemtype === "M") {
+        this.getTenantBankDetails(this.applicantId);
+        this.getTenantGuarantors(this.applicantId);
+      } else {
+        this.getApplicantBankDetails(this.applicantId);
+        this.getApplicantGuarantors(this.applicantId);
+      }
+    }
   }
 
   private async createApplication() {
     let requestObj: any = {};
-    requestObj.createdBy = 'AGENT';
+    requestObj.createdBy = ENTITY_TYPE.AGENT;
     requestObj.propertyId = this.propertyId;
     requestObj.status = APPLICATION_STATUSES.NEW;
     requestObj.rent = this.propertyDetails.advertisementRent;
@@ -418,25 +451,23 @@ export class ApplicationDetailPage implements OnInit {
     );
   }
 
-  private getPropertyDetails(propertyId) {
+  private getPropertyDetails(propertyId: string) {
     return new Promise((resolve, reject) => {
       this._tobService.getPropertyDetails(propertyId).subscribe(
         res => {
           if (res) {
-            this.getNoDeposit();
             this.propertyDetails = res.data;
-            const propertyType = this.commonService.getLookupValue(this.lookupdata.rentCategories, this.propertyDetails.rentCategory);
-            if(propertyType === 'Student') {
+            const propertyType = this.commonService.getLookupValue(this.rentCategories, this.propertyDetails.rentCategory);
+            if (propertyType === 'Student') {
               this.isStudentProperty = true;
+              this.isStudentGuarantor();
             }
             this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
-            this.setValidator();
             resolve(true);
           }
         },
         error => {
           reject(undefined);
-          console.log(error);
         }
       );
     });
@@ -451,7 +482,7 @@ export class ApplicationDetailPage implements OnInit {
     });
   }
 
-  private getPropertyClauses(propertyId) {
+  private getPropertyClauses(propertyId: string) {
     return new Promise((resolve, reject) => {
       this._tobService.getPropertyClauses(propertyId).subscribe(
         res => {
@@ -469,7 +500,7 @@ export class ApplicationDetailPage implements OnInit {
     return new Promise((resolve, reject) => {
       this._tobService.getPropertyRestrictions(propertyId).subscribe(
         res => {
-          this.propertyRestrictions = res && res.data ? res.data.filter(result => result.value) : [];
+          this.propertyRestrictions = (res && res.data) ? res.data.filter(result => result.value) : [];
           this.propertyRestrictions.map(restrict => restrict.restrictionName = this.commonService.camelize(restrict.key.replace(/_/g, ' ')));
           resolve(true);
         },
@@ -485,6 +516,9 @@ export class ApplicationDetailPage implements OnInit {
     const requestObj = this.applicantDetailsForm.value;
     requestObj.moveInDate = this.commonService.getFormatedDate(requestObj.moveInDate);
     this._tobService.updateApplicantDetails(this.applicantId, requestObj).subscribe(res => {
+      if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
+        this.onSave();
+      }
     }, error => {
     });
   }
@@ -521,6 +555,7 @@ export class ApplicationDetailPage implements OnInit {
     this.tenantCurrentPositionTypes = this.lookupdata.tenantCurrentPositionTypes;
     this.applicantGuarantorTypes = this.lookupdata.applicantGuarantorTypes;
     this.rentFrequencyTypes = this.lookupdata.advertisementRentFrequencies;
+    this.rentCategories = this.lookupdata.rentCategories;
   }
 
   private setTobLookupData(): void {
@@ -543,10 +578,10 @@ export class ApplicationDetailPage implements OnInit {
       dateOfBirth: ['', Validators.required],
       occupation: [''],
       hasPets: false,
-      petsInfo: { value: '', disabled: true },
+      petsInfo: ['', { disabled: false }],
       guarantor: false,
-      guarantorType: [{ value: '', disabled: false }],
-      currentPosition: '1'
+      guarantorType: ['', { disabled: false }],
+      currentPosition: ''
     });
   }
 
@@ -554,46 +589,22 @@ export class ApplicationDetailPage implements OnInit {
     return [Validators.required];
   }
 
-  isEnable(type) {
-    switch (type) {
-      case 'guarantor':
-        if (this.applicantDetailsForm.value.hasGuarantor) {
-          this.applicantDetailsForm.controls.guarantorType.setValidators(this.setRequired());
-          this.applicantDetailsForm.controls.guarantorType.enable();
-        } else {
-          this.applicantDetailsForm.controls.guarantorType.clearValidators();
-          this.applicantDetailsForm.get('guarantorType').updateValueAndValidity();
-          this.applicantDetailsForm.controls.guarantorType.disable();
-        }
-        break;
-      case 'pets':
-        if (this.applicantDetailsForm.value.hasPets) {
-          this.applicantDetailsForm.controls.petsInfo.enable();
-        }
-        else {
-          this.applicantDetailsForm.controls.petsInfo.disable();
-        }
-        break;
-    }
-  }
-
   async onCancel() {
     const isCancel: boolean = await this.commonService.showConfirm('Cancel', 'Are you sure, you want to cancel this operation?', '', 'Yes', 'No') as boolean;
     if (isCancel) {
-      const propertyId = this.propertyId;
-      this.router.navigate([`tob/${propertyId}/applications`], { replaceUrl: true });
+      this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
     }
   }
 
   /** Occupants Functionality **/
 
-  initOccupantForm(): void {
+  private initOccupantForm(): void {
     this.occupantForm = this._formBuilder.group({
       coApplicants: this._formBuilder.array([])
     });
   }
 
-  createItem() {
+  private createItem(): void {
     this.occupantFormArray.push(this._formBuilder.group({
       surname: ['', [Validators.required, ValidationService.alphabetValidator]],
       forename: ['', [Validators.required, ValidationService.alphabetValidator]],
@@ -602,7 +613,7 @@ export class ApplicationDetailPage implements OnInit {
       applicationApplicantId: null,
       isLead: false,
       createdById: null,
-      createdBy: 'AGENT',
+      createdBy: ENTITY_TYPE.AGENT,
       isAdded: false,
       isDeleted: false,
       title: '',
@@ -624,7 +635,7 @@ export class ApplicationDetailPage implements OnInit {
       applicationApplicantId: null,
       isLead: index === 0 ? true : false,
       createdById: null,
-      createdBy: 'AGENT',
+      createdBy: ENTITY_TYPE.AGENT,
       isAdded: true,
       isDeleted: false,
       title: control.value.title,
@@ -635,7 +646,7 @@ export class ApplicationDetailPage implements OnInit {
     this.createItem();
   }
 
-  addSearchApplicant(response: any, index: number) {
+  private addSearchApplicant(response: any, index: number) {
     this.occupantFormArray.push(this._formBuilder.group({
       surname: response.surname,
       forename: response.forename,
@@ -644,7 +655,7 @@ export class ApplicationDetailPage implements OnInit {
       applicationApplicantId: null,
       isLead: index === 0 ? true : false,
       createdById: null,
-      createdBy: 'AGENT',
+      createdBy: ENTITY_TYPE.AGENT,
       isAdded: true,
       isDeleted: false,
       title: response.title,
@@ -658,8 +669,10 @@ export class ApplicationDetailPage implements OnInit {
   removeCoApplicant(item: FormGroup) {
     this.commonService.showConfirm('Remove Applicant', 'Are you sure, you want to remove this applicant ?', '', 'YES', 'NO').then(response => {
       if (response && item.controls['applicationApplicantId'].value) {
-        this._tobService.deleteApplicationApplicant(this.applicationId, item.controls['applicationApplicantId'].value, { "deletedBy": "AGENT" }).subscribe(response => {
-          this.getApplicationApplicants(this.applicationId);
+        this._tobService.deleteApplicationApplicant(this.applicationId, item.controls['applicationApplicantId'].value, { "deletedBy": "AGENT" }).subscribe(async (response) => {
+          const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
+          await this.setApplicationApplicants(applicants);
+          await this.setLeadApplicantDetails();
         })
       }
       else {
@@ -668,7 +681,7 @@ export class ApplicationDetailPage implements OnInit {
     })
   }
 
-  updateOccupantForm(occupantsList) {
+  private updateOccupantForm(occupantsList: any[]) {
     if (Array.isArray(occupantsList) && occupantsList.length > 0) {
       let occupantsArray = this.occupantFormArray;
       occupantsList.forEach(element => {
@@ -681,7 +694,7 @@ export class ApplicationDetailPage implements OnInit {
             applicationApplicantId: element.applicationApplicantId,
             isLead: element.isLead,
             createdById: null,
-            createdBy: 'AGENT',
+            createdBy: ENTITY_TYPE.AGENT,
             isAdded: true,
             isDeleted: false,
             title: element.title,
@@ -730,7 +743,7 @@ export class ApplicationDetailPage implements OnInit {
     });
   }
 
-  getAddressList(addressType) {
+  getAddressList(addressType: string) {
     let postcode;
     switch (addressType) {
       case 'personal':
@@ -747,41 +760,9 @@ export class ApplicationDetailPage implements OnInit {
         break;
     }
     if (postcode.valid && postcode.value) {
-      this.commonService.getPostcodeAddressList(postcode.value).subscribe(
-        res => {
-          this.addressList = [];
-          this.guarantorAddressList = [];
-          this.correspondenceAddressList = [];
-          if (res && res.data && res.data.length) {
-            switch (addressType) {
-              case 'personal':
-                this.addressList = res.data;
-                this.showPostcodeLoader = false;
-                break;
-              case 'guarantor':
-                this.guarantorAddressList = res.data;
-                this.showPostcodeLoader = false;
-                break;
-              case 'correspondence-address':
-                this.correspondenceAddressList = res.data;
-                this.showAddressLoader = false;
-                break;
-            }
-          }
-        },
-        error => {
-          this.showPostcodeLoader = false;
-          this.showAddressLoader = false;
-          this.addressList = [];
-          this.guarantorAddressList = [];
-          this.correspondenceAddressList = [];
-          const data: any = {};
-          data.title = 'Postcode Lookup';
-          data.message = error.error ? error.error.message : error.message;
-          this.commonService.showMessage(data.message, data.title, 'error');
-        }
-      );
-    } else {
+      this.getPostcodeAddress(addressType, postcode.value);
+    }
+    else {
       this.showPostcodeLoader = false;
       this.showAddressLoader = false;
       this.addressList = [];
@@ -790,36 +771,48 @@ export class ApplicationDetailPage implements OnInit {
     }
   }
 
-  getAddressDetails(addressId, addressType) {
+  getPostcodeAddress(addressType: string, postcode: string) {
+    this.commonService.getPostcodeAddressList(postcode).subscribe(
+      res => {
+        this.addressList = [];
+        this.guarantorAddressList = [];
+        this.correspondenceAddressList = [];
+        if (res && res.data && res.data.length) {
+          switch (addressType) {
+            case 'personal':
+              this.addressList = res.data;
+              this.showPostcodeLoader = false;
+              break;
+            case 'guarantor':
+              this.guarantorAddressList = res.data;
+              this.showPostcodeLoader = false;
+              break;
+            case 'correspondence-address':
+              this.correspondenceAddressList = res.data;
+              this.showAddressLoader = false;
+              break;
+          }
+        }
+      },
+      error => {
+        this.showPostcodeLoader = false;
+        this.showAddressLoader = false;
+        this.addressList = [];
+        this.guarantorAddressList = [];
+        this.correspondenceAddressList = [];
+        const data: any = {};
+        data.title = 'Postcode Lookup';
+        data.message = error.error ? error.error.message : error.message;
+        this.commonService.showMessage(data.message, data.title, 'error');
+      }
+    );
+  }
+
+  getAddressDetails(addressId: string, addressType: string) {
     this.commonService.getPostcodeAddressDetails(addressId).subscribe(
       res => {
         if (res && res.line1) {
-          switch (addressType) {
-            case 'personal':
-              this.addressDetailsForm.controls.address['controls'].addressLine1.setValue(res.line1);
-              this.addressDetailsForm.controls.address['controls'].addressLine2.setValue(res.line2);
-              this.addressDetailsForm.controls.address['controls'].locality.setValue(res.line4);
-              this.addressDetailsForm.controls.address['controls'].town.setValue(res.line5);
-              this.addressDetailsForm.controls.address['controls'].county.setValue(res.provinceName);
-              this.addressDetailsForm.controls.address['controls'].country.setValue(res.countryName);
-              break;
-            case 'correspondence-address':
-              this.addressDetailsForm.controls.correspondenceAddress['controls'].addressLine1.setValue(res.line1);
-              this.addressDetailsForm.controls.correspondenceAddress['controls'].addressLine2.setValue(res.line2);
-              this.addressDetailsForm.controls.correspondenceAddress['controls'].locality.setValue(res.line2);
-              this.addressDetailsForm.controls.correspondenceAddress['controls'].town.setValue(res.line5);
-              this.addressDetailsForm.controls.correspondenceAddress['controls'].county.setValue(res.provinceName);
-              this.addressDetailsForm.controls.correspondenceAddress['controls'].country.setValue(res.countryName);
-              break;
-            case 'guarantor':
-              this.guarantorForm.controls.address['controls'].addressLine1.setValue(res.line1);
-              this.guarantorForm.controls.address['controls'].addressLine2.setValue(res.line2);
-              this.guarantorForm.controls.address['controls'].locality.setValue(res.line4);
-              this.guarantorForm.controls.address['controls'].town.setValue(res.line5);
-              this.guarantorForm.controls.address['controls'].county.setValue(res.provinceName);
-              this.guarantorForm.controls.address['controls'].country.setValue(res.countryName);
-              break;
-          }
+          this.setAddressDetails(addressType, res);
         }
       },
       error => {
@@ -829,6 +822,35 @@ export class ApplicationDetailPage implements OnInit {
         this.commonService.showMessage(data.message, data.title, 'error');
       }
     );
+  }
+
+  setAddressDetails(addressType: string, res: any) {
+    switch (addressType) {
+      case 'personal':
+        this.addressDetailsForm.controls.address['controls'].addressLine1.setValue(res.line1);
+        this.addressDetailsForm.controls.address['controls'].addressLine2.setValue(res.line2);
+        this.addressDetailsForm.controls.address['controls'].locality.setValue(res.line4);
+        this.addressDetailsForm.controls.address['controls'].town.setValue(res.line5);
+        this.addressDetailsForm.controls.address['controls'].county.setValue(res.provinceName);
+        this.addressDetailsForm.controls.address['controls'].country.setValue(res.countryName);
+        break;
+      case 'correspondence-address':
+        this.addressDetailsForm.controls.correspondenceAddress['controls'].addressLine1.setValue(res.line1);
+        this.addressDetailsForm.controls.correspondenceAddress['controls'].addressLine2.setValue(res.line2);
+        this.addressDetailsForm.controls.correspondenceAddress['controls'].locality.setValue(res.line2);
+        this.addressDetailsForm.controls.correspondenceAddress['controls'].town.setValue(res.line5);
+        this.addressDetailsForm.controls.correspondenceAddress['controls'].county.setValue(res.provinceName);
+        this.addressDetailsForm.controls.correspondenceAddress['controls'].country.setValue(res.countryName);
+        break;
+      case 'guarantor':
+        this.guarantorForm.controls.address['controls'].addressLine1.setValue(res.line1);
+        this.guarantorForm.controls.address['controls'].addressLine2.setValue(res.line2);
+        this.guarantorForm.controls.address['controls'].locality.setValue(res.line4);
+        this.guarantorForm.controls.address['controls'].town.setValue(res.line5);
+        this.guarantorForm.controls.address['controls'].county.setValue(res.provinceName);
+        this.guarantorForm.controls.address['controls'].country.setValue(res.countryName);
+        break;
+    }
   }
 
   initBankDetailsForm(): void {
@@ -860,7 +882,7 @@ export class ApplicationDetailPage implements OnInit {
     );
   }
 
-  setHouseHoldValue(value) {
+  setHouseHoldValue(value: number) {
     if (value === 1) {
       this.tenancyDetailForm.get('hasSameHouseholdApplicants').disable();
       this.tenancyDetailForm.get('numberOfHouseHolds').disable();
@@ -868,6 +890,55 @@ export class ApplicationDetailPage implements OnInit {
       this.tenancyDetailForm.get('hasSameHouseholdApplicants').enable();
       this.tenancyDetailForm.get('numberOfHouseHolds').enable();
     }
+  }
+
+  private saveTenancyDetail(): void {
+    this.applicationDetails.moveInDate = this.commonService.getFormatedDate(this.tenancyDetailForm.value.moveInDate);
+    this.applicationDetails.rentingTime = this.tenancyDetailForm.value.rentingTime;
+    this.applicationDetails.preferredTenancyEndDate = this.commonService.getFormatedDate(this.tenancyDetailForm.value.preferredTenancyEndDate);
+    this.applicationDetails.rentDueDay = this.tenancyDetailForm.value.rentDueDay;
+    this.applicationDetails.numberOfAdults = this.tenancyDetailForm.value.numberOfAdults;
+    this.applicationDetails.numberOfChildren = this.tenancyDetailForm.value.numberOfChildren;
+    // this.applicationdetails.noOfOccupants = this.tenancyDetailForm.value.noOfOccupants;
+    this.applicationDetails.hasSameHouseholdApplicants = this.tenancyDetailForm.value.hasSameHouseholdApplicants;
+    this.applicationDetails.numberOfHouseHolds = this.tenancyDetailForm.value.numberOfHouseHolds;
+    this.applicationDetails.isNoDepositScheme = this.tenancyDetailForm.value.isNoDepositScheme;
+
+    if (this.checkFormDirty(this.tenancyDetailForm)) {
+      this.updateApplicationDetails();
+    }
+  }
+
+  private updateApplicationDetails() {
+    // if (this.selectionType == 'saveForLater') {
+    //   this.saveDataLoader = true;
+    // }
+    let requestObj = JSON.parse(JSON.stringify(this.applicationDetails));
+    requestObj.applicationRestrictions.map(restrict => { delete restrict.restrictionName; }
+    );
+    if (requestObj.numberOfAdults) {
+      requestObj.hasSameHouseholdApplicants = true;
+      requestObj.numberOfHouseHolds = 1;
+    }
+    if (requestObj.hasSameHouseholdApplicants) {
+      requestObj.numberOfHouseHolds = 1;
+    }
+    // requestObj.isTermsAndConditionsAccepted = this.termsConditionControl;
+    requestObj.rent = requestObj.rent ? requestObj.rent : this.propertyDetails.advertisementRent;
+    requestObj.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
+    this._tobService.updateApplicationDetails(requestObj, this.applicationId).subscribe(
+      res => {
+        // this.saveDataLoader = false;
+        if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
+          this.onSave();
+        }
+        this.applicationDetails.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
+        this.tenancyDetailForm.reset(this.tenancyDetailForm.value);
+      },
+      error => {
+        // this.saveDataLoader = false;
+      }
+    );
   }
 
   /** Application Question Functionality **/
@@ -883,19 +954,18 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private async getApplicantQuestions() {
-    this._tobService.getApplicantQuestions().subscribe(async (res) => {
-      if (res && res.data) {
-        await this.createQuestionItems(res.data);
-        if (this.applicationId) {
-          await this.getApplicationQuestionsAnswer(this.applicationId);
-        }
-      }
-    }, error => {
-      console.log(error);
+    return new Promise((resolve, reject) => {
+      this._tobService.getApplicantQuestions().subscribe(res => {
+        const response = (res && res.data) ? res.data : undefined;
+        resolve(response)
+      }, error => {
+        reject(undefined)
+      });
     });
+
   }
 
-  private async getApplicationQuestionsAnswer(applicationId) {
+  private getApplicationQuestionsAnswer(applicationId: string) {
     this._tobService.getApplicationQuestionsAnswer(applicationId).subscribe(res => {
       if (res && res.count) {
         this.questionFormArray.controls.forEach(element => {
@@ -909,11 +979,10 @@ export class ApplicationDetailPage implements OnInit {
         });
       }
     }, error => {
-      console.log(error);
     });
   }
 
-  private createQuestionItems(questionArray) {
+  private createQuestionItems(questionArray: any) {
     const questionFormArray = this.questionFormArray;
     questionArray.forEach(element => {
       let questionForm = this._formBuilder.group({
@@ -944,18 +1013,14 @@ export class ApplicationDetailPage implements OnInit {
         apiObservableArray.push(this._tobService.updateApplicationQuestionAnswer(this.applicationId, question.applicationQuestionId, questionDetails));
       });
     }
-
-    // setTimeout(() => {
-    //   forkJoin(apiObservableArray).subscribe(() => {
-    //     this.saveDataLoader = false;
-    //     this.applicantQuestionForm.reset(this.applicantQuestionForm.value);
-    //     if (this.selectionType == 'saveForLater') {
-    //       this.onSave();
-    //     }
-    //   }, error => {
-    //     // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Application Question Answers', 'error');
-    //   });
-    // }, 1000);
+    forkJoin(apiObservableArray).subscribe(() => {
+      // this.saveDataLoader = false;
+      this.applicantQuestionForm.reset(this.applicantQuestionForm.value);
+      if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
+        this.onSave();
+      }
+    }, error => {
+    });
   }
 
   /** Application Question Functionality **/
@@ -998,9 +1063,9 @@ export class ApplicationDetailPage implements OnInit {
     }
   }
 
-  private savePersonalDetails() {
+  private saveApplicantDetails() {
     let applicantDetails = this.applicantDetailsForm.value;
-    applicantDetails.dateOfBirth = this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
+    applicantDetails.dateOfBirth = applicantDetails.dateOfBirth ?? this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
     if (this.checkFormDirty(this.applicantDetailsForm)) {
       this.updateApplicantDetails();
     }
@@ -1009,14 +1074,14 @@ export class ApplicationDetailPage implements OnInit {
   private saveAddressDetails() {
     let applicantDetails = this.applicantDetailsForm.value;
     applicantDetails.address = this.addressDetailsForm.value.address;
-    applicantDetails.dateOfBirth = this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
+    applicantDetails.dateOfBirth = applicantDetails.dateOfBirth ?? this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
     applicantDetails.correspondenceAddress = this.addressDetailsForm.value.correspondenceAddress;
-    if (this.checkFormDirty(this.applicantDetailsForm)) {
+    if (this.checkFormDirty(this.addressDetailsForm)) {
       this.updateApplicantDetails();
     }
   }
 
-  private getApplicantBankDetails(applicantId) {
+  private getApplicantBankDetails(applicantId: string) {
     return new Promise((resolve, reject) => {
       this._tobService.getApplicantBankDetails(applicantId).subscribe(
         res => {
@@ -1026,18 +1091,16 @@ export class ApplicationDetailPage implements OnInit {
           resolve(true);
         },
         error => {
-          // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Bank Details', 'error');
           reject(undefined);
-          console.log(error);
         }
       );
     });
   }
 
 
-  private getTenantBankDetails(tenantId) {
+  private getTenantBankDetails(applicantId: string) {
     return new Promise((resolve, reject) => {
-      this._tobService.getTenantBankDetails(tenantId).subscribe(
+      this._tobService.getTenantBankDetails(applicantId).subscribe(
         res => {
           if (res) {
             this.patchBankDetails(res);
@@ -1045,15 +1108,13 @@ export class ApplicationDetailPage implements OnInit {
           resolve(true);
         },
         error => {
-          // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Bank Details', 'error');
           reject(undefined);
-          console.log(error);
         }
       );
     });
   }
 
-  private patchBankDetails(bankDetails) {
+  private patchBankDetails(bankDetails: any) {
     this.bankDetailsForm.patchValue({
       bankDetails: {
         bankName: bankDetails.bankName ? bankDetails.bankName : "",
@@ -1071,7 +1132,7 @@ export class ApplicationDetailPage implements OnInit {
     }
   }
 
-  private updateBankDetails(bankDetails): void {
+  private updateBankDetails(bankDetails: any) {
     // if (this.selectionType == 'saveForLater') {
     //   this.saveDataLoader = true;
     // }
@@ -1085,13 +1146,11 @@ export class ApplicationDetailPage implements OnInit {
       },
       error => {
         // this.saveDataLoader = false;
-        // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Update Bank Details', 'error');
-        console.log(error);
       }
     );
   }
 
-  setTenancyDetails(details): void {
+  setTenancyDetails(details: any) {
     this.tenancyDetailForm.patchValue({
       moveInDate: details.moveInDate,
       preferredTenancyEndDate: details.preferredTenancyEndDate,
@@ -1104,7 +1163,6 @@ export class ApplicationDetailPage implements OnInit {
     });
   }
 
-
   /** Guarantor Details Functionality **/
 
   private initGuarantorForm(): void {
@@ -1116,35 +1174,38 @@ export class ApplicationDetailPage implements OnInit {
       email: ['', [ValidationService.emailValidator]],
       mobile: ['', [ValidationService.contactValidator, Validators.minLength(5), Validators.maxLength(15)]],
       address: this._formBuilder.group({
-        postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
+        postcode: ['', [ValidationService.postcodeValidator]],
         addressdetails: [''],
-        addressLine1: ['', Validators.required],
+        addressLine1: [''],
         addressLine2: '',
         locality: '',
-        town: ['', Validators.required],
+        town: [''],
         county: '',
         country: ''
       })
     });
   }
 
-  private setValidator() {
-    if (this.isStudentProperty) {
-      this.guarantorForm.controls.title.setValidators(Validators.required);
-      this.guarantorForm.controls.forename.setValidators(Validators.required);
-      this.guarantorForm.controls.surname.setValidators(Validators.required);
-      this.guarantorForm.controls.email.setValidators(Validators.required);
-      this.guarantorForm.controls.mobile.setValidators(Validators.required);
-      
-      this.guarantorForm.controls.title.updateValueAndValidity();
-      this.guarantorForm.controls.forename.updateValueAndValidity();
-      this.guarantorForm.controls.surname.updateValueAndValidity();
-      this.guarantorForm.controls.email.updateValueAndValidity();
-      this.guarantorForm.controls.mobile.updateValueAndValidity();
-    }
+  private isStudentGuarantor() {
+    this.guarantorForm.controls.title.setValidators(Validators.required);
+    this.guarantorForm.controls.forename.setValidators(Validators.required);
+    this.guarantorForm.controls.surname.setValidators(Validators.required);
+    this.guarantorForm.controls.email.setValidators(Validators.required);
+    this.guarantorForm.controls.mobile.setValidators(Validators.required);
+    this.guarantorForm.controls.address['controls'].postcode.setValidators(Validators.required);
+    this.guarantorForm.controls.address['controls'].addressLine1.setValidators(Validators.required);
+    this.guarantorForm.controls.address['controls'].town.setValidators(Validators.required);
+    this.guarantorForm.controls.title.updateValueAndValidity();
+    this.guarantorForm.controls.forename.updateValueAndValidity();
+    this.guarantorForm.controls.surname.updateValueAndValidity();
+    this.guarantorForm.controls.email.updateValueAndValidity();
+    this.guarantorForm.controls.mobile.updateValueAndValidity();
+    this.guarantorForm.controls.address['controls'].postcode.updateValueAndValidity();
+    this.guarantorForm.controls.address['controls'].addressLine1.updateValueAndValidity();
+    this.guarantorForm.controls.address['controls'].town.updateValueAndValidity();
   }
 
-  private getApplicantGuarantors(applicantId): void {
+  private getApplicantGuarantors(applicantId: string): void {
     this._tobService.getApplicantGuarantors(applicantId).subscribe(
       res => {
         if (res && res.data) {
@@ -1152,27 +1213,23 @@ export class ApplicationDetailPage implements OnInit {
         }
       },
       error => {
-        // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Guarantor Details', 'error');
-        console.log(error);
       }
     );
   }
 
-  private getTenantGuarantors(tenantId): void {
-    this._tobService.getTenantGuarantors(tenantId).subscribe(
+  private getTenantGuarantors(applicantId: string): void {
+    this._tobService.getTenantGuarantors(applicantId).subscribe(
       res => {
         if (res && res.data) {
           this.setGuarantorDetails(res.data[0]);
         }
       },
       error => {
-        // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Guarantor Details', 'error');
-        console.log(error);
       }
     );
   }
 
-  private setGuarantorDetails(details): void {
+  private setGuarantorDetails(details: any): void {
     this.guarantorForm.patchValue({
       guarantorId: details.guarantorId,
       title: details.title,
@@ -1204,7 +1261,7 @@ export class ApplicationDetailPage implements OnInit {
     }
   }
 
-  private updateGuarantorDetails(guarantorDetails): void {
+  private updateGuarantorDetails(guarantorDetails: any) {
     // if (this.selectionType == 'saveForLater') {
     //   this.saveDataLoader = true;
     // }
@@ -1214,32 +1271,28 @@ export class ApplicationDetailPage implements OnInit {
     this._tobService.updateGuarantorDetails(guarantorDetails, guarantorId).subscribe(
       res => {
         // this.saveDataLoader = false;
-        // if (this.selectionType == 'saveForLater') {
-        //   this.onSave();
-        // }
-        this.guarantorForm.reset(this.guarantorForm.value);
-        if (res) {
+        if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
+          this.onSave();
         }
+        this.guarantorForm.reset(this.guarantorForm.value);
       },
       error => {
         // this.saveDataLoader = false;
-        // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Update Guarantor', 'error');
-        console.log(error);
       }
     );
   }
 
-  private createGuarantor(guarantorDetails): void {
+  private createGuarantor(guarantorDetails: any): void {
     // if (this.selectionType == 'saveForLater') {
     //   this.saveDataLoader = true;
     // }
     guarantorDetails = this.commonService.replaceEmptyStringWithNull(guarantorDetails);
-    this._tobService.createGuarantor(guarantorDetails).subscribe(
+    this._tobService.createGuarantor(guarantorDetails, this.applicantId).subscribe(
       res => {
         // this.saveDataLoader = false;
-        // if (this.selectionType == 'saveForLater') {
-        //   this.onSave();
-        // }
+        if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
+          this.onSave();
+        }
         this.guarantorForm.reset(this.guarantorForm.value);
         if (res) {
           this.guarantorForm.controls['guarantorId'].setValue(res.guarantorId);
@@ -1247,8 +1300,6 @@ export class ApplicationDetailPage implements OnInit {
       },
       error => {
         // this.saveDataLoader = false;
-        // this.commonService.showMessage(ERROR_MESSAGE.DEFAULT, 'Save Guarantor', 'error');
-        console.log(error);
       }
     );
   }

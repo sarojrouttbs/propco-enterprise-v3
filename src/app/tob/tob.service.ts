@@ -11,6 +11,13 @@ export class TobService {
 
   constructor(private httpClient: HttpClient) { }
 
+  updateApplicationDetails(applicationDetails: object, applicationId: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `applications/${applicationId}`, applicationDetails).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
   getApplicantCoApplicants(applicantId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `applicants/${applicantId}/co-applicants`);
   }
@@ -209,7 +216,7 @@ export class TobService {
   }
 
   updateGuarantorDetails(guarantorDetails: any, guarantorId: string): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `guarantors/${guarantorId}`, guarantorDetails).pipe(
+    return this.httpClient.put(environment.API_BASE_URL + `applicants/guarantors/${guarantorId}`, guarantorDetails).pipe(
       tap(() => { }),
       catchError(this.handleError<any>(''))
     );
