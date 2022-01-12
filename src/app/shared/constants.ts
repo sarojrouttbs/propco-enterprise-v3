@@ -510,7 +510,7 @@ export const MAINTENANCE_TYPES_FOR_SEND_EMAIL = {
 }
 
 export const FAULT_STAGES_ACTIONS = {
-  FAULT_LOGGED : 'LOGGED'
+  FAULT_LOGGED: 'LOGGED'
 }
 
 
@@ -549,3 +549,11 @@ export const APPLICATION_STATUSES = {
   REJECTED: 3,
   ON_HOLD: 4
 };
+
+export const APPLICATION_ACTION_TYPE = {
+  SAVE_FOR_LATER: 'SAVE_FOR_LATER'
+}
+
+export const ENTITY_TYPE = {
+  AGENT: 'AGENT'
+}
