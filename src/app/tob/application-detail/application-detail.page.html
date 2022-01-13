@@ -1012,18 +1012,7 @@
             </ion-col>
             <ion-col size="100" class="header-content">
               <ion-text class="content">
-                {{ addressDetailsForm.controls.address['controls'].addressLine1.value ?
-                addressDetailsForm.controls.address['controls'].addressLine1.value + "," : "" }}
-                {{ addressDetailsForm.controls.address['controls'].addressLine2.value ?
-                addressDetailsForm.controls.address['controls'].addressLine2.value + "," : "" }}
-                {{ addressDetailsForm.controls.address['controls'].town.value ?
-                addressDetailsForm.controls.address['controls'].town.value + "," : "" }}
-                {{ addressDetailsForm.controls.address['controls'].county.value ?
-                addressDetailsForm.controls.address['controls'].county.value + "," : "" }}
-                {{ addressDetailsForm.controls.address['controls'].country.value ?
-                addressDetailsForm.controls.address['controls'].country.value + "," : "" }}
-                {{ addressDetailsForm.controls.address['controls'].postcode.value ?
-                addressDetailsForm.controls.address['controls'].postcode.value : "" }}
+                {{ addressDetailsForm.controls.address.value | addressStringPipe }}
               </ion-text>
             </ion-col>
             <ng-container *ngIf="isStudentProperty">
@@ -1032,18 +1021,7 @@
               </ion-col>
               <ion-col size="100" class="header-content">
                 <ion-text class="content">
-                  {{ addressDetailsForm.controls.correspondenceAddress['controls'].addressLine1.value ?
-                  addressDetailsForm.controls.correspondenceAddress['controls'].addressLine1.value + "," : "" }}
-                  {{ addressDetailsForm.controls.correspondenceAddress['controls'].addressLine2.value ?
-                  addressDetailsForm.controls.correspondenceAddress['controls'].addressLine2.value + "," : "" }}
-                  {{ addressDetailsForm.controls.correspondenceAddress['controls'].town.value ?
-                  addressDetailsForm.controls.correspondenceAddress['controls'].town.value + "," : "" }}
-                  {{ addressDetailsForm.controls.correspondenceAddress['controls'].county.value ?
-                  addressDetailsForm.controls.correspondenceAddress['controls'].county.value + "," : "" }}
-                  {{ addressDetailsForm.controls.correspondenceAddress['controls'].country.value ?
-                  addressDetailsForm.controls.correspondenceAddress['controls'].country.value + "," : "" }}
-                  {{ addressDetailsForm.controls.correspondenceAddress['controls'].postcode.value ?
-                  addressDetailsForm.controls.correspondenceAddress['controls'].postcode.value : "" }}
+                  {{ addressDetailsForm.controls.correspondenceAddress.value | addressStringPipe }}
                 </ion-text>
               </ion-col>
             </ng-container>
@@ -1174,16 +1152,7 @@
               <ion-col size-xs="100" size-sm="50" class="header-content">
                 <ion-text class="header">Address</ion-text><br />
                 <ion-text class="content">
-                  {{ guarantorForm.controls.address['controls'].addressLine1.value ?
-                  guarantorForm.controls.address['controls'].addressLine1.value + "," : "" }}
-                  {{ guarantorForm.controls.address['controls'].addressLine2.value ?
-                  guarantorForm.controls.address['controls'].addressLine2.value + "," : "" }}
-                  {{ guarantorForm.controls.address['controls'].county.value ?
-                  guarantorForm.controls.address['controls'].county.value + "," : "" }}
-                  {{ guarantorForm.controls.address['controls'].country.value ?
-                  guarantorForm.controls.address['controls'].country.value + "," : "" }}
-                  {{ guarantorForm.controls.address['controls'].postcode.value ?
-                  guarantorForm.controls.address['controls'].postcode.value: "" }}
+                  {{ guarantorForm.controls.address.value | addressStringPipe }}
                 </ion-text>
               </ion-col>
             </ng-container>
