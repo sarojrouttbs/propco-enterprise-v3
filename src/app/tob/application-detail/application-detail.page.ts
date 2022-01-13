@@ -281,6 +281,9 @@ export class ApplicationDetailPage implements OnInit {
     if (type === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
       this.selectionType = APPLICATION_ACTION_TYPE.SAVE_FOR_LATER;
     }
+    if (index === 6 || index === 7 || index === 9) {
+      this.onSave();
+    }
     this.savePreviouslySelectedData(index);
   }
 

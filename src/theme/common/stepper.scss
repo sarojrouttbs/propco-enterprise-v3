@@ -310,6 +310,19 @@
   }
 }
 
+#application-stepper {
+  .mat-stepper-horizontal .mat-horizontal-stepper-header-container {
+    margin: 0px;
+  }
+  .mat-stepper-horizontal .mat-horizontal-stepper-header-container .mat-horizontal-stepper-header {
+    padding: 24px 3px;
+  }
+  .mat-stepper-horizontal .mat-horizontal-stepper-header-container .mat-horizontal-stepper-header .mat-step-label {
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+
 @media screen and (min-width: 0px) and (max-width: 960px) {
   
   #fault-details {
