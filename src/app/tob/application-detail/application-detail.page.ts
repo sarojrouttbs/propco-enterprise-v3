@@ -281,6 +281,9 @@ export class ApplicationDetailPage implements OnInit {
     if (type === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
       this.selectionType = APPLICATION_ACTION_TYPE.SAVE_FOR_LATER;
     }
+    if (index === 6 || index === 7 || index === 9) {
+      this.onSave();
+    }
     this.savePreviouslySelectedData(index);
   }
 
@@ -668,15 +671,16 @@ export class ApplicationDetailPage implements OnInit {
 
   removeCoApplicant(item: FormGroup) {
     this.commonService.showConfirm('Remove Applicant', 'Are you sure, you want to remove this applicant ?', '', 'YES', 'NO').then(response => {
-      if (response && item.controls['applicationApplicantId'].value) {
-        this._tobService.deleteApplicationApplicant(this.applicationId, item.controls['applicationApplicantId'].value, { "deletedBy": "AGENT" }).subscribe(async (response) => {
-          const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
-          await this.setApplicationApplicants(applicants);
-          await this.setLeadApplicantDetails();
-        })
-      }
-      else {
-        item.controls['isDeleted'].setValue(true);
+      if (response) {
+        if (item.controls['applicationApplicantId'].value) {
+          this._tobService.deleteApplicationApplicant(this.applicationId, item.controls['applicationApplicantId'].value, { "deletedBy": "AGENT" }).subscribe(async (response) => {
+            const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
+            await this.setApplicationApplicants(applicants);
+          })
+        }
+        else {
+          item.controls['isDeleted'].setValue(true);
+        }
       }
     })
   }

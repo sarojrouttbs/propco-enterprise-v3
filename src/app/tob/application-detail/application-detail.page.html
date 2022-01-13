@@ -2,11 +2,11 @@
   <ion-grid class="offer-details">
     <app-tob-property-details [propertyDetails]="propertyDetails" [rentFrequencyTypes]="rentFrequencyTypes">
     </app-tob-property-details>
-    <ion-grid>
+    <ion-grid id="application-stepper"> 
       <ion-row>
         <ion-col size="100">
           <mat-horizontal-stepper (selectionChange)="onStepChange($event)" [selectedIndex]="currentStepperIndex"
-            class="stepper-section" id="application-stepper" #stepper labelPosition="bottom"
+            class="stepper-section" #stepper labelPosition="bottom"
             [selectedIndex]="currentStepperIndex">
             <mat-step>
               <ng-container *ngTemplateOutlet="occupants"></ng-container>
@@ -14,12 +14,13 @@
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
                 <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
+                <button [disabled]="currentStepperIndex === 0" mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
             <mat-step [stepControl]="applicantDetailsForm">
               <ng-container *ngTemplateOutlet="applicantDetails"></ng-container>
-              <ng-template matStepLabel>Applicant Details</ng-template>
+              <ng-template matStepLabel>Applicant <br/> Details</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
                 <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
@@ -39,7 +40,7 @@
             </mat-step>
             <mat-step [stepControl]="bankDetailsForm">
               <ng-container *ngTemplateOutlet="bankDetails"></ng-container>
-              <ng-template matStepLabel>Bank Details</ng-template>
+              <ng-template matStepLabel>Bank <br/> Details</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
                 <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
@@ -49,7 +50,7 @@
             </mat-step>
             <mat-step>
               <ng-container *ngTemplateOutlet="applicationQuestion"></ng-container>
-              <ng-template matStepLabel>Application Questions</ng-template>
+              <ng-template matStepLabel>Application <br/> Questions</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
                 <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
@@ -59,7 +60,7 @@
             </mat-step>
             <mat-step [stepControl]="tenancyDetailForm">
               <ng-container *ngTemplateOutlet="tenancyDetails"></ng-container>
-              <ng-template matStepLabel>Tenancy Details</ng-template>
+              <ng-template matStepLabel>Tenancy <br/> Details</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
                 <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
@@ -72,6 +73,7 @@
               <ng-template matStepLabel>Restrictions</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
+                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -81,13 +83,14 @@
               <ng-template matStepLabel>Clauses </ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
+                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
             <mat-step [stepControl]="guarantorForm">
               <ng-container *ngTemplateOutlet="guarantorDetails"></ng-container>
-              <ng-template matStepLabel>Guarantor Details</ng-template>
+              <ng-template matStepLabel>Guarantor <br/> Details</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
                 <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
@@ -100,13 +103,15 @@
               <ng-template matStepLabel>Review</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-                <!-- <ion-button color="success">Submit</ion-button> -->
+                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
+                <!-- <ion-button  color="success">Submit</ion-button> -->
                 <button class="next-back-button" mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
+                <button [disabled]="!showPayment" mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
             <mat-step *ngIf="showPayment">
               <ng-container *ngTemplateOutlet="payment"></ng-container>
-              <ng-template matStepLabel>Holding Deposit</ng-template>
+              <ng-template matStepLabel>Holding <br/> Deposit</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
@@ -121,7 +126,7 @@
 </ion-content>
 
 <ng-template #saveForLater>
-  <ion-button color="medium" (click)="saveStepData(stepper.selectedIndex, 'SAVE_FOR_LATER')">Save for Later
+  <ion-button (click)="saveStepData(stepper.selectedIndex, 'SAVE_FOR_LATER')">Save for Later
     <ion-icon *ngIf="saveDataLoader" name="refresh" class="rotating submit-loader"></ion-icon>
   </ion-button>&nbsp;
 </ng-template>
@@ -144,10 +149,10 @@
             <ion-col size="20">
               <ion-text>Mobile</ion-text>
             </ion-col>
-            <ion-col size="25">
+            <ion-col size="22">
               <ion-text>Email Address</ion-text>
             </ion-col>
-            <ion-col size="5">
+            <ion-col size="8">
               <ion-text>Lead</ion-text>
             </ion-col>
             <ion-col size="10">
@@ -183,12 +188,12 @@
                             {{item.controls['mobile'].value || '-'}}
                           </ion-text>
                         </ion-col>
-                        <ion-col size="25">
+                        <ion-col size="22">
                           <ion-text>
                             {{item.controls['email'].value}}
                           </ion-text>
                         </ion-col>
-                        <ion-col size="5">
+                        <ion-col size="8">
                           <ion-checkbox class="ml-15" style="opacity: unset;" formControlName="isLead"
                             (click)="onLeadSelection(item); $event.stopPropagation();"
                             [checked]="item.controls['isLead'].value"
@@ -369,7 +374,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item lines="full" class="margin-top-7">
             <ion-label>Do you have a guarantor?</ion-label>
-            <ion-toggle (ionChange)="isGurantorEnable()" formControlName="guarantor" color="tertiary">
+            <ion-toggle (ionChange)="isGurantorEnable()" formControlName="guarantor" color="success">
             </ion-toggle>
           </ion-item>
         </ion-col>
@@ -390,7 +395,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item lines="full" class="margin-top-7">
             <ion-label>Any Pets?</ion-label>
-            <ion-toggle formControlName="hasPets" color="tertiary"></ion-toggle>
+            <ion-toggle formControlName="hasPets" color="success"></ion-toggle>
           </ion-item>
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
@@ -605,7 +610,7 @@
                 <ion-label style="color:var(--ion-color-dark) !important" class="ion-text-wrap">
                   {{question.controls['question'].value}}
                 </ion-label>
-                <ion-toggle [checked]="" formControlName="toggle" color="tertiary"></ion-toggle>
+                <ion-toggle [checked]="" formControlName="toggle" color="success"></ion-toggle>
               </ion-item>
             </ion-col>
             <ion-col size-xs="100" size-sm="33.3">
@@ -717,7 +722,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item lines="full" class="margin-top-7">
             <ion-label>Are all occupants from the same household?</ion-label>
-            <ion-toggle formControlName="hasSameHouseholdApplicants" color="tertiary"></ion-toggle>
+            <ion-toggle formControlName="hasSameHouseholdApplicants" color="success"></ion-toggle>
           </ion-item>
           <app-validation-message [control]="tenancyDetailForm.controls.hasSameHouseholdApplicants">
           </app-validation-message>
@@ -927,7 +932,7 @@
 <ng-template #finalView>
   <ion-grid>
     <ion-row>
-      <ion-col size="100" size-md="60" offset-md="20">
+      <ion-col size="100" size-xl="60" offset-xl="20">
         <ion-grid id="final-view">
           <ion-row class="ion-justify-content-between">
             <ion-col size="100">
