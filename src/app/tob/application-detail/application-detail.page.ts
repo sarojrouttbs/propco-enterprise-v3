@@ -676,7 +676,6 @@ export class ApplicationDetailPage implements OnInit {
           this._tobService.deleteApplicationApplicant(this.applicationId, item.controls['applicationApplicantId'].value, { "deletedBy": "AGENT" }).subscribe(async (response) => {
             const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
             await this.setApplicationApplicants(applicants);
-            await this.setLeadApplicantDetails();
           })
         }
         else {
