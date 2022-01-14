@@ -1,10 +1,10 @@
 import { NgModule } from "@angular/core";
 import { LookupPipe } from "./lookup-pipe";
-import { AddressStringPipePipe } from './address-string-pipe.pipe';
+import { AddressPipe } from './address-string-pipe.pipe';
 
 @NgModule({
-	declarations: [LookupPipe, AddressStringPipePipe],
+	declarations: [LookupPipe, AddressPipe],
 	imports: [],
-	exports: [LookupPipe, AddressStringPipePipe]
+	exports: [LookupPipe, AddressPipe]
 })
 export class PipesModule {}

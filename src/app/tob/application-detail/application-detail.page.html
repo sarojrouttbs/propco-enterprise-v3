@@ -1017,7 +1017,7 @@
             </ion-col>
             <ion-col size="100" class="header-content">
               <ion-text class="content">
-                {{ addressDetailsForm.controls.address.value | addressStringPipe }}
+                {{ addressDetailsForm.controls.address.value | address }}
               </ion-text>
             </ion-col>
             <ng-container *ngIf="isStudentProperty">
@@ -1026,7 +1026,7 @@
               </ion-col>
               <ion-col size="100" class="header-content">
                 <ion-text class="content">
-                  {{ addressDetailsForm.controls.correspondenceAddress.value | addressStringPipe }}
+                  {{ addressDetailsForm.controls.correspondenceAddress.value | address }}
                 </ion-text>
               </ion-col>
             </ng-container>
@@ -1157,7 +1157,7 @@
               <ion-col size-xs="100" size-sm="50" class="header-content">
                 <ion-text class="header">Address</ion-text><br />
                 <ion-text class="content">
-                  {{ guarantorForm.controls.address.value | addressStringPipe }}
+                  {{ guarantorForm.controls.address.value | address }}
                 </ion-text>
               </ion-col>
             </ng-container>

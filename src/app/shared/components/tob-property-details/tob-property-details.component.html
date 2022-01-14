@@ -11,10 +11,7 @@
               <ion-text *ngIf="propertyDetails?.publishedAddress" class="address ion-no-margin">
                 {{propertyDetails?.publishedAddress}}</ion-text>
               <ion-text *ngIf="!propertyDetails?.publishedAddress" class="address ion-no-margin">
-                {{ propertyDetails?.address?.addressLine1 ? propertyDetails?.address?.addressLine1 + ',' : ''}}
-                {{ propertyDetails?.address?.addressLine2 ? propertyDetails?.address?.addressLine2 + ',' : ''}}
-                {{ propertyDetails?.address?.town ? propertyDetails?.address?.town + ',' : ''}}
-                {{ propertyDetails?.address?.postcode ? propertyDetails?.address?.postcode : ''}}
+                {{ propertyDetails?.address | address }}
               </ion-text>
             </ion-row>
             <ion-row class="description">
