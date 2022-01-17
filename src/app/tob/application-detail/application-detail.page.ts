@@ -109,6 +109,16 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   async getApplicantDetails(applicantId: string, index?: number, isSearch?: boolean) {
+    if (applicantId && isSearch) {
+      let existingApplicant = this.applicationApplicantDetails.filter((occupant) => {
+        return (occupant.applicantId === applicantId);
+      });
+      if (existingApplicant.length) {
+        this.commonService.showAlert('Applicant', 'Applicant is already added to the application');
+        this.resultsAvailable = false;
+        return;
+      }
+    }
     this.applicantId = applicantId;
     this._tobService.getApplicantDetails(applicantId).subscribe(res => {
       if (res) {
@@ -348,9 +358,9 @@ export class ApplicationDetailPage implements OnInit {
 
   private async getApplicantCoApplicants(applicantId: string) {
     this._tobService.getApplicantCoApplicants(applicantId).subscribe(response => {
-      if (response && response.length) {
+      if (response && response.data) {
         let finalData = this.occupantForm.get("coApplicants").value;
-        response.forEach((item: any) => {
+        response.data.forEach((item: any) => {
           item.isLead = false;
           finalData.push(item)
         });
@@ -413,9 +423,7 @@ export class ApplicationDetailPage implements OnInit {
     return new Promise((resolve, reject) => {
       (this.occupantForm.get("coApplicants") as FormArray)['controls'].splice(0);
       this.applicationApplicantDetails = (res && res.data) ? res.data : [];
-      var leadApplicantDetails = this.applicationApplicantDetails.filter(function (occupant) {
-        return occupant.isLead;
-      });
+      let leadApplicantDetails = this.applicationApplicantDetails.filter((occupant) => occupant.isLead);
       if (leadApplicantDetails && leadApplicantDetails.length > 0) {
         this.applicantId = leadApplicantDetails[0].applicantId;
       }
@@ -1069,7 +1077,7 @@ export class ApplicationDetailPage implements OnInit {
 
   private saveApplicantDetails() {
     let applicantDetails = this.applicantDetailsForm.value;
-    applicantDetails.dateOfBirth = applicantDetails.dateOfBirth ?? this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
+    applicantDetails.dateOfBirth = this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
     if (this.checkFormDirty(this.applicantDetailsForm)) {
       this.updateApplicantDetails();
     }
@@ -1078,7 +1086,7 @@ export class ApplicationDetailPage implements OnInit {
   private saveAddressDetails() {
     let applicantDetails = this.applicantDetailsForm.value;
     applicantDetails.address = this.addressDetailsForm.value.address;
-    applicantDetails.dateOfBirth = applicantDetails.dateOfBirth ?? this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
+    applicantDetails.dateOfBirth = this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
     applicantDetails.correspondenceAddress = this.addressDetailsForm.value.correspondenceAddress;
     if (this.checkFormDirty(this.addressDetailsForm)) {
       this.updateApplicantDetails();
