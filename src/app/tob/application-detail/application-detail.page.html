@@ -12,8 +12,8 @@
               <ng-container *ngTemplateOutlet="occupants"></ng-container>
               <ng-template matStepLabel>Occupants</ng-template>
               <div class="action-btn-section">
-                <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
+                <!-- Stepper event not working with ion-button -->
+                <ng-container *ngTemplateOutlet="saveAndCancel"></ng-container>
                 <button [disabled]="currentStepperIndex === 0" mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -22,8 +22,7 @@
               <ng-container *ngTemplateOutlet="applicantDetails"></ng-container>
               <ng-template matStepLabel>Applicant <br/> Details</ng-template>
               <div class="action-btn-section">
-                <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
+                <ng-container *ngTemplateOutlet="saveAndCancel"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -32,8 +31,7 @@
               <ng-container *ngTemplateOutlet="applicantAddress"></ng-container>
               <ng-template matStepLabel>Address</ng-template>
               <div class="action-btn-section">
-                <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
+                <ng-container *ngTemplateOutlet="saveAndCancel"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -42,8 +40,7 @@
               <ng-container *ngTemplateOutlet="bankDetails"></ng-container>
               <ng-template matStepLabel>Bank <br/> Details</ng-template>
               <div class="action-btn-section">
-                <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
+                <ng-container *ngTemplateOutlet="saveAndCancel"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -52,8 +49,7 @@
               <ng-container *ngTemplateOutlet="applicationQuestion"></ng-container>
               <ng-template matStepLabel>Application <br/> Questions</ng-template>
               <div class="action-btn-section">
-                <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
+                <ng-container *ngTemplateOutlet="saveAndCancel"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -62,8 +58,7 @@
               <ng-container *ngTemplateOutlet="tenancyDetails"></ng-container>
               <ng-template matStepLabel>Tenancy <br/> Details</ng-template>
               <div class="action-btn-section">
-                <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
+                <ng-container *ngTemplateOutlet="saveAndCancel"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -72,8 +67,7 @@
               <ng-container *ngTemplateOutlet="restriction"></ng-container>
               <ng-template matStepLabel>Restrictions</ng-template>
               <div class="action-btn-section">
-                <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
+                <ng-container *ngTemplateOutlet="saveAndCancel"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -82,8 +76,7 @@
               <ng-container *ngTemplateOutlet="clauses"></ng-container>
               <ng-template matStepLabel>Clauses </ng-template>
               <div class="action-btn-section">
-                <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
+                <ng-container *ngTemplateOutlet="saveAndCancel"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -92,8 +85,7 @@
               <ng-container *ngTemplateOutlet="guarantorDetails"></ng-container>
               <ng-template matStepLabel>Guarantor <br/> Details</ng-template>
               <div class="action-btn-section">
-                <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
+                <ng-container *ngTemplateOutlet="saveAndCancel"></ng-container>
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -102,8 +94,7 @@
               <ng-container *ngTemplateOutlet="finalView"></ng-container>
               <ng-template matStepLabel>Review</ng-template>
               <div class="action-btn-section">
-                <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-                <ng-container *ngTemplateOutlet="saveForLater"></ng-container>
+                <ng-container *ngTemplateOutlet="saveAndCancel"></ng-container>
                 <!-- <ion-button  color="success">Submit</ion-button> -->
                 <button class="next-back-button" mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button [disabled]="!showPayment" mat-button matStepperNext class="stepper-next">Next</button>
@@ -125,7 +116,8 @@
   </ion-grid>
 </ion-content>
 
-<ng-template #saveForLater>
+<ng-template #saveAndCancel>
+  <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
   <ion-button (click)="saveStepData(stepper.selectedIndex, 'SAVE_FOR_LATER')">Save for Later
     <ion-icon *ngIf="saveDataLoader" name="refresh" class="rotating submit-loader"></ion-icon>
   </ion-button>&nbsp;
