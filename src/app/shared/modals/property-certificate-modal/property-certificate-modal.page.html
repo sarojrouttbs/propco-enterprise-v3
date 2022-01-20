@@ -26,7 +26,7 @@
       </ion-col>
     </ion-row>
 
-    <div class="table-container" *ngIf="isEditable">
+    <div class="table-container" *ngIf="isEditable" [formGroup]="propertyCertificateListForm">
       <table>
         <tr>
           <th>Select</th>
@@ -39,20 +39,20 @@
           <th>Start Date</th>
           <th>End Date</th>
         </tr>
-      <tbody>
-        <tr *ngFor="let certificate of propertyCertificateList; let i=index;" class="table-row">
+      <tbody formArrayName="propertyCertificateList">
+        <tr *ngFor="let certificate of propertyCertificateListForm.get('propertyCertificateList')['controls'] let i=index;" class="table-row"  [formGroupName]="i">
           <td>
-            <ion-checkbox (ionChange)="selectCertificate(certificate, $event.target.checked)" color="primary"
-              [checked]="certificate?.isRowChecked" [disabled]="!certificate?.expired"></ion-checkbox>
+            <ion-checkbox (click)="selectCertificate(certificate.value, i)" color="primary"
+            formControlName="checked"  [disabled]="!certificate.get('expired').value"></ion-checkbox>
           </td>
-          <td>{{certificate?.certificateNumber || '-'}}</td>
-          <td>{{certificate?.appliance || '-'}}</td>
-          <td>{{certificate?.contact || '-'}} </td>
-          <td>{{certificate?.certificateNumber || '-'}}</td>
-          <td>{{certificate?.model || '-'}} </td>
-          <td>{{certificate?.serialNumber || '-'}}</td>
-          <td>{{certificate?.startDate | date: 'dd/MM/yyyy' || '-'}}</td>
-          <td>{{certificate?.expireDate | date: 'dd/MM/yyyy' || '-'}}</td>
+          <td>{{certificate.get('certificateNumber').value || '-'}}</td>
+          <td>{{certificate.get('appliance').value || '-'}}</td>
+          <td>{{certificate.get('contact').value || '-'}} </td>
+          <td>{{certificate.get('certificateNumber').value || '-'}}</td>
+          <td>{{certificate.get('model').value || '-'}} </td>
+          <td>{{certificate.get('serialNumber').value || '-'}}</td>
+          <td>{{certificate.get('startDate').value | date: 'dd/MM/yyyy' || '-'}}</td>
+          <td>{{certificate.get('expireDate').value | date: 'dd/MM/yyyy' || '-'}}</td>
         </tr>
       </tbody>
       </table>
@@ -121,7 +121,7 @@
   </ion-grid>
 </ng-template>
 <ng-template #contractDetailsTemplate>
-  <div class="table-container" style="margin-top: 20px;" *ngIf="isEditable">
+  <div class="table-container" style="margin-top: 20px;" *ngIf="isEditable" [formGroup]="propertyCertificateListForm">
     <table>
       <tr>
         <th>Select</th>
@@ -131,17 +131,17 @@
         <th>Start Date</th>
         <th>End Date</th>
       </tr>
-     <tbody>
-      <tr *ngFor="let certificate of propertyCertificate; let i=index;" class="table-row">
+     <tbody formArrayName="propertyCertificateList">
+      <tr *ngFor="let certificate of propertyCertificateListForm.get('propertyCertificateList')['controls']; let i=index;" class="table-row" [formGroupName]="i">
         <td>
-          <ion-checkbox (ionChange)="selectCertificate(certificate, $event.target.checked)" color="primary"
-            [checked]="certificate?.isRowChecked" [disabled]="!certificate?.expired"></ion-checkbox>
+          <ion-checkbox (click)="selectCertificate(certificate.value, i)" color="primary"
+          formControlName="checked" [disabled]="!certificate.get('expired').value"></ion-checkbox>
         </td>
-        <td>{{certificate?.certificateNumber || '-'}}</td>
-        <td>{{certificate?.membershipNumber || '-'}} </td>
-        <td>{{certificate?.contact || '-'}}</td>
-        <td>{{certificate?.startDate | date: 'dd/MM/yyyy' || '-'}}</td>
-        <td>{{certificate?.expireDate | date: 'dd/MM/yyyy' || '-'}}</td>
+        <td>{{certificate.get('certificateNumber').value || '-'}}</td>
+        <td>{{certificate.get('membershipNumber').value || '-'}} </td>
+        <td>{{certificate.get('contact').value || '-'}}</td>
+        <td>{{certificate.get('startDate').value | date: 'dd/MM/yyyy' || '-'}}</td>
+        <td>{{certificate.get('expireDate').value | date: 'dd/MM/yyyy' || '-'}}</td>
       </tr>
      </tbody>
     </table>
