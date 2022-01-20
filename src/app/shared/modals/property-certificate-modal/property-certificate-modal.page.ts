@@ -1,16 +1,16 @@
-import { CommonService } from './../../services/common.service';
-import { CERTIFICATES_CATEGORY } from './../../constants';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { DataTableDirective } from 'angular-datatables';
-import { Subject } from 'rxjs';
+import { CommonService } from "./../../services/common.service";
+import { CERTIFICATES_CATEGORY } from "./../../constants";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { ModalController } from "@ionic/angular";
+import { DataTableDirective } from "angular-datatables";
+import { Subject } from "rxjs";
+import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 @Component({
-  selector: 'app-property-certificate-modal',
-  templateUrl: './property-certificate-modal.page.html',
-  styleUrls: ['./property-certificate-modal.page.scss'],
+  selector: "app-property-certificate-modal",
+  templateUrl: "./property-certificate-modal.page.html",
+  styleUrls: ["./property-certificate-modal.page.scss"],
 })
 export class PropertyCertificateModalPage implements OnInit {
-
   propertyCertificate;
   category;
   certificateId;
@@ -21,13 +21,20 @@ export class PropertyCertificateModalPage implements OnInit {
   // @ViewChild(DataTableDirective, { static: false })
   // dtElement: DataTableDirective;
   propertyCertificateList: any[] = [];
+  propertyCertificateListForm = new FormGroup({
+    propertyCertificateList: new FormArray([]),
+  });
   showDetails = false;
   warrantyDetails;
   contractDetails;
   CERTIFICATES_CATEGORY = CERTIFICATES_CATEGORY;
   certificateEmail;
 
-  constructor(private modalController: ModalController, private commonCervice: CommonService) { }
+  constructor(
+    private modalController: ModalController,
+    private commonCervice: CommonService,
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit() {
     // this.dtOptions = {
@@ -45,31 +52,62 @@ export class PropertyCertificateModalPage implements OnInit {
     // };
     this.propertyCertificateList = this.propertyCertificate;
     this.propertyCertificateList.forEach((item) => {
-      item.isRowChecked = false;
-      item.expired = this.commonCervice.getFormatedDate(item.expireDate, 'yyyy-MM-dd') > this.commonCervice.getFormatedDate(new Date(), 'yyyy-MM-dd') ? true : false;
+      item.expired =
+        this.commonCervice.getFormatedDate(item.expireDate, "yyyy-MM-dd") >
+        this.commonCervice.getFormatedDate(new Date(), "yyyy-MM-dd")
+          ? true
+          : false;
+      this.patchPropCrtList(item);
     });
-    if (this.certificateId) {
-      const certificate = this.propertyCertificate.filter(x => x.certificateId === this.certificateId);
-      this.selectCertificate(certificate[0], true);
+  }
+
+  private patchPropCrtList(data) {
+    const propCrtList = this.propertyCertificateListForm.get(
+      "propertyCertificateList"
+    ) as FormArray;
+    const contGrup = this.formBuilder.group({
+      type: data.type,
+      notes: data.notes,
+      certificateNumber: data.certificateNumber,
+      membershipNumber: data.membershipNumber,
+      contact: data.contact,
+      contactNumber: data.contactNumber,
+      contactRef: data.contactRef,
+      supplierAddress: data.supplierAddress,
+      starRating: data.starRating,
+      appliance: data.appliance,
+      model: data.model,
+      age: data.age,
+      serialNumber: data.serialNumber,
+      isArchived: data.isArchived,
+      startDate: data.startDate,
+      expireDate: data.expireDate,
+      otherType: data.otherType,
+      category: data.category,
+      certificateId: data.certificateId,
+      checked: this.certificateId === data.certificateId ? true : false,
+      expired: data.expired,
+    });
+    propCrtList.push(contGrup);
+    if (this.certificateId === data.certificateId) {
+      this.setDetails(contGrup.value);
+      this.showDetails = true;
     }
   }
 
-  selectCertificate(certificate, e) {
-    certificate.isRowChecked = e;
-    if (e) {
-      this.propertyCertificate.forEach(
-        ele => {
-          if (ele.certificateId != certificate.certificateId) {
-            ele.isRowChecked = false;
-          } else {
-            certificate.typeName = this.getCertificateTypeName(certificate.type);
-            if (this.category === CERTIFICATES_CATEGORY[0]) this.warrantyDetails = certificate;
-            if (this.category === CERTIFICATES_CATEGORY[1]) this.contractDetails = certificate;
-            this.certificateId = this.category === CERTIFICATES_CATEGORY[0] ? this.warrantyDetails.certificateId : this.contractDetails.certificateId;
-            this.certificateEmail = this.category === CERTIFICATES_CATEGORY[0] ? this.warrantyDetails.contact : this.contractDetails.contact;
-            this.showDetails = true;
-          }
-        });
+  selectCertificate(certificate, i) {
+    const contlistArray = this.propertyCertificateListForm.get(
+      "propertyCertificateList"
+    ) as FormArray;
+    if (!certificate.checked) {
+      contlistArray.controls.forEach((element, index) => {
+        if (i != index) {
+          element.get("checked").setValue(false);
+        } else {
+          this.setDetails(certificate);
+          this.showDetails = true;
+        }
+      });
     } else {
       this.showDetails = false;
       this.certificateId = null;
@@ -77,9 +115,25 @@ export class PropertyCertificateModalPage implements OnInit {
     }
   }
 
+  private setDetails(certificate) {
+    certificate.typeName = this.getCertificateTypeName(certificate.type);
+    if (this.category === CERTIFICATES_CATEGORY[0])
+      this.warrantyDetails = certificate;
+    if (this.category === CERTIFICATES_CATEGORY[1])
+      this.contractDetails = certificate;
+    this.certificateId =
+      this.category === CERTIFICATES_CATEGORY[0]
+        ? this.warrantyDetails.certificateId
+        : this.contractDetails.certificateId;
+    this.certificateEmail =
+      this.category === CERTIFICATES_CATEGORY[0]
+        ? this.warrantyDetails.contact
+        : this.contractDetails.contact;
+  }
+
   private getCertificateTypeName(id) {
     if (!id || !this.certificateTypes) return;
-    const name = this.certificateTypes.filter(type => type.index === id);
+    const name = this.certificateTypes.filter((type) => type.index === id);
     if (Array.isArray(name)) {
       return name[0].value;
     }
@@ -88,7 +142,7 @@ export class PropertyCertificateModalPage implements OnInit {
   dismiss() {
     let obj = {
       certificateEmail: this.certificateEmail,
-      certificateId: this.certificateId
+      certificateId: this.certificateId,
     };
     this.modalController.dismiss(obj);
   }
