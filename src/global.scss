@@ -637,15 +637,7 @@ mat-form-field {
       background-size: cover;
     }
 }
-
 .solrMutiSelect {
-	ion-select {
-		color: red;
-		padding: 0;
-		.select-text {
-			display: none;
-		}
-	}
 	.mat-form-field {
 		.mat-form-field-underline {
 			display: none;
@@ -666,4 +658,11 @@ mat-form-field {
 			opacity: 0;
 		}
 	}
+}
+
+.result-headers-align {
+  background-color: var(--ion-color-step-1750);
+  .mat-expansion-panel-body{
+    padding: 0;
+  }
 }

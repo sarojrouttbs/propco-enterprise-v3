@@ -1,0 +1,306 @@
+.example-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.example-is-mobile .example-toolbar {
+  position: fixed;
+  /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+  z-index: 2;
+}
+
+h1.example-app-name {
+  margin-left: 8px;
+}
+
+.example-sidenav {
+  background-color: var(--ion-color-step-1750);
+  width: 28%
+}
+
+.example-sidenav-container {
+  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+     causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+  flex: 1;
+}
+
+.example-is-mobile .example-sidenav-container {
+  /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+     `<body>` to be our scrolling element for mobile layouts. */
+  flex: 1 0 auto;
+}
+
+.example-action-buttons {
+  padding-bottom: 20px;
+}
+
+.result-headers-align .mat-expansion-panel-header-title,
+.result-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.result-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.result-headers-align .mat-form-field+.mat-form-field {
+  margin-left: 8px;
+}
+
+.rowStyle {
+  padding-left: 10px;
+  border-radius: 30px;
+  margin-bottom: 10px;
+
+  ion-icon {
+    margin-top: 13px;
+    margin-right: 10px;
+  }
+}
+
+.list {
+  background-color: var(--ion-color-solr-sidenav);
+  padding-left: 13px;
+  padding-right: 13px;
+}
+
+.dual-range {
+  ion-range::part(pin) {
+    transform: translate3d(0px, -24px, 0px) scale(1);
+  }
+}
+
+ion-range::part(pin) {
+  transform: translate3d(0px, -24px, 0px) scale(1);
+  font-size: 9px;
+  font-weight: bold;
+}
+
+ion-item {
+  --border-width: 0;
+  --inner-border-width: 0;
+}
+
+.mat-expansion-panel-body {
+  padding: 0 7px 0px;
+}
+
+.filter-heading-wrapper {
+  padding-top: 22px;
+  padding-left: 11px;
+  padding-right: 11px;
+  padding-bottom: 30px;
+}
+
+.main-container {
+  padding: 30px;
+
+  .mat-paginator {
+    width: 77% !important;
+  }
+
+  .overlay-container {
+    position: relative;
+  }
+
+  .well {
+    background-color: #F0F0F0;
+    border: 0;
+    border-radius: 6px;
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+  }
+
+  .layout-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+
+  ion-card {
+    display: flex;
+    flex-direction: column;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+}
+
+
+@mixin set-text-style($size, $lheight) {
+  font-size: $size;
+  line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
+#property-details {
+  min-height: 96px;
+  padding: 0;
+  color: var(--ion-color-step-250);
+  background-color: var(--ion-color-solr-sidenav);
+  height: 100%;
+  padding: 0;
+  margin-bottom: 10px;
+
+  .heading {
+    @include set-text-style(22px, 26px);
+  }
+
+  .solr-prop-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  ion-row.property-details-row {
+    margin-bottom: 10px;
+
+    .non-urgent {
+      color: var(--ion-color-primary);
+      @include set-text-style(22px, 26px);
+    }
+
+    .urgent {
+      color: var(--ion-color-warning);
+      @include set-text-style(22px, 26px);
+    }
+
+    .emergency {
+      color: var(--ion-color-danger);
+      @include set-text-style(22px, 26px);
+    }
+  }
+
+  ion-row.fault-data-row {
+    ion-col {
+      @include set-text-style(16px, 20px);
+      margin: 0;
+
+      .text {
+        @include set-text-style(14px, 17px);
+        color: grey;
+        display: inline-block;
+      }
+    }
+  }
+
+  ion-row.fault-meter-row {
+    margin-top: 12px;
+
+    ion-col {
+      @include set-text-style(16px, 20px);
+      margin: 0;
+
+      img {
+        vertical-align: bottom;
+        width: 20px;
+      }
+    }
+  }
+
+  .address {
+    font-size: 20px;
+  }
+
+  .text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+
+  .status {
+    color: #737373;
+    font-size: 20px;
+  }
+
+  .ref {
+    font-size: 16px;
+    color: #4D4D4D;
+    text-transform: uppercase;
+  }
+}
+
+.override-communication {
+  margin-top: 10px;
+}
+
+.status-list {
+  width: 100%;
+  max-height: 200px;
+  position: absolute !important;
+  z-index: 5 !important;
+  cursor: pointer;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.status-pointer {
+  cursor: pointer;
+}
+
+#property-details-skeleton {
+  min-height: 96px;
+  padding: 0;
+  color: var(--ion-color-step-250);
+  background-color: var(--ion-color-step-2000);
+  height: 100%;
+  padding: 15px;
+
+  ion-skeleton-text {
+    margin-top: 10px;
+  }
+
+  ion-thumbnail {
+    height: 190px;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  ion-row.property-details-row {
+    margin-bottom: 10px;
+    margin-top: 5px;
+  }
+
+  ion-row.fault-meter-row {
+    margin-top: 12px;
+
+    .avatar-col>ion-avatar {
+      height: 20px;
+      width: 20px;
+      display: inline-block;
+
+      ion-skeleton-text {
+        margin-top: 0px;
+      }
+    }
+
+    .avatar-col>ion-skeleton-text {
+      width: 70%;
+      display: inline-block;
+      margin-left: 5px;
+      height: 18px;
+    }
+  }
+}
+
+.main-container {
+  background-color: var(--ion-color-step-1750);
+}
+
+.mat-expansion-panel {
+  box-shadow: none;
+  background-color: var(--ion-color-step-1750);
+}

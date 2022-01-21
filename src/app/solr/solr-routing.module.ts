@@ -23,6 +23,13 @@ const routes: Routes = [
             (m) => m.DashboardPageModule
           ),
       },
+      {
+        path: "search-results",
+        loadChildren: () =>
+          import("./search-results/search-results.module").then(
+            (m) => m.SearchResultsPageModule
+          ),
+      },
     ],
   },
 ];

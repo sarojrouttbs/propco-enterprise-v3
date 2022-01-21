@@ -1,13 +1,15 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { IonicModule } from '@ionic/angular';
+import { IonicModule } from "@ionic/angular";
 
-import { DashboardPageRoutingModule } from './dashboard-routing.module';
+import { DashboardPageRoutingModule } from "./dashboard-routing.module";
 
-import { DashboardPage } from './dashboard.page';
-import { MaterialModule } from 'src/app/material.module';
+import { DashboardPage } from "./dashboard.page";
+import { MaterialModule } from "src/app/material.module";
+import { SearchSuggestionComponent } from "../shared/search-suggestion/search-suggestion.component";
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
   imports: [
@@ -16,8 +18,9 @@ import { MaterialModule } from 'src/app/material.module';
     IonicModule,
     DashboardPageRoutingModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule,
   ],
-  declarations: [DashboardPage]
+  declarations: [DashboardPage],
 })
 export class DashboardPageModule {}
