@@ -228,4 +228,23 @@ export class TobService {
       catchError(this.handleError<any>(''))
     );
   }
+
+  getTermsAndConditions() {
+    return this.httpClient.get(environment.API_BASE_URL + 'terms-and-conditions');
+  }
+
+  updateApplicationStatus(applicationId: string, status: number, body: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `applications/${applicationId}/status/${status}`, body).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  rejectAllApplication(body: any): Observable<any> {
+    console.log('body', body)
+    return this.httpClient.put(environment.API_BASE_URL + `applications/reject`, body).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
 }

@@ -1155,19 +1155,19 @@
             </ng-container>
           </ion-row>
 
-          <!-- <ion-row>
+          <ion-row>
             <ion-item lines="none" class="ion-no-padding ion-no-margin">
               <ion-checkbox slot="start" class="ion-margin" [(ngModel)]="termsConditionControl"
-                [disabled]="!isTermsConditionRead" [ngModelOptions]="{standalone: true}"
+                [disabled]="true" [ngModelOptions]="{standalone: true}"
                 (ionChange)="onTermsModelChanged($event)" style="margin-left: 5px;"></ion-checkbox>
             </ion-item>
             <ion-item lines="none" class="ion-no-padding ion-no-margin">
               <ion-label>I have read the <a class="terms-and-condition" (click)="openTermsAndConditionModal()">terms and conditions</a></ion-label>
             </ion-item>
           </ion-row>
-          <ion-row *ngIf="!isTermsConditionRead">
+          <ion-row *ngIf="!termsConditionControl">
             <span class="tandc-text"> Note: Please read the terms and conditions first.</span>
-          </ion-row> -->
+          </ion-row>
         </ion-grid>
       </ion-col>
     </ion-row>

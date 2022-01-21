@@ -8,6 +8,8 @@ import { switchMap, debounceTime } from 'rxjs/operators';
 import { forkJoin, Observable } from 'rxjs';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ValidationService } from 'src/app/shared/services/validation.service';
+import { ModalController } from '@ionic/angular';
+import { TermsAndConditionModalPage } from 'src/app/shared/modals/terms-and-condition-modal/terms-and-condition-modal.page';
 
 @Component({
   selector: 'app-application-detail',
@@ -73,14 +75,15 @@ export class ApplicationDetailPage implements OnInit {
   maxMoveInDate = this.commonService.getFormatedDate(new Date().setFullYear(new Date().getFullYear() + 5));
   currentDate = this.commonService.getFormatedDate(new Date());
   termsConditionControl: boolean = false;
-  isTermsConditionRead: boolean = false;
+  termsAndConditionData: any = {};
 
   constructor(
     private route: ActivatedRoute,
     private commonService: CommonService,
     private _formBuilder: FormBuilder,
     private _tobService: TobService,
-    private router: Router
+    private router: Router,
+    private modalController: ModalController
   ) {
   }
 
@@ -172,6 +175,7 @@ export class ApplicationDetailPage implements OnInit {
     this.getTobLookupData();
     await this.getPropertyDetails(this.propertyId);
     this.getNoDeposit();
+    this.initTermsAndConditionData();
   }
 
   private initForms() {
@@ -401,6 +405,7 @@ export class ApplicationDetailPage implements OnInit {
           restrict.key.replace(/_/g, ' ')
         ))
       );
+      this.termsConditionControl = this.applicationDetails.isTermsAndConditionsAccepted;
       this.setTenancyDetails(res);
       return resolve(true);
     });
@@ -935,7 +940,7 @@ export class ApplicationDetailPage implements OnInit {
     if (requestObj.hasSameHouseholdApplicants) {
       requestObj.numberOfHouseHolds = 1;
     }
-    // requestObj.isTermsAndConditionsAccepted = this.termsConditionControl;
+    requestObj.isTermsAndConditionsAccepted = this.termsConditionControl;
     requestObj.rent = requestObj.rent ? requestObj.rent : this.propertyDetails.advertisementRent;
     requestObj.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
     this._tobService.updateApplicationDetails(requestObj, this.applicationId).subscribe(
@@ -1315,4 +1320,52 @@ export class ApplicationDetailPage implements OnInit {
       }
     );
   }
+
+  /** Terms and Conditions Functionality **/
+
+  private initTermsAndConditionData() {
+    this.termsAndConditionData = this.commonService.getItem('terms_and_conditions', true);
+    if (this.termsAndConditionData) {
+      this.setTermsAndConditionData();
+    } else {
+      this._tobService.getTermsAndConditions().subscribe(data => {
+        this.commonService.setItem('terms_and_conditions', data);
+        this.setTermsAndConditionData();
+      }, error => {});
+    }
+  }
+
+  private setTermsAndConditionData() {
+    this.termsAndConditionData = this.commonService.getItem('terms_and_conditions', true);
+  }
+
+  async openTermsAndConditionModal() {
+    let tNc = this.termsAndConditionData?.application?.termsAndCondition;
+    const modal = await this.modalController.create({
+      component: TermsAndConditionModalPage,
+      cssClass: 'modal-container terms-and-condition-modal',
+      componentProps: {
+        data: tNc,
+        heading: 'Terms and Conditions',
+        button: 'Accept'
+      },
+      backdropDismiss: false
+    });
+
+    const data = modal.onDidDismiss().then(res => {
+      if(!this.termsConditionControl) {
+        this.termsConditionControl = res.data.accepted;
+      }
+    });
+    await modal.present();
+  }
+
+  async onTermsModelChanged(event) {
+    if (!this.applicationDetails.isTermsAndConditionsAccepted) {
+      await this.updateApplicationDetails();
+      this.applicationDetails.isTermsAndConditionsAccepted = this.termsConditionControl
+    }
+  }
+
+  /** Terms and Conditions Functionality **/
 }
