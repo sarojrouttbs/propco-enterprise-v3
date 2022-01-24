@@ -1,0 +1,709 @@
+<!-- <ion-header>
+  <app-search-suggestion></app-search-suggestion> 
+</ion-header> -->
+
+<ion-content class="main-container">
+  <mat-drawer-container class="drawer-container">
+      <mat-drawer #drawer class="example-sidenav" mode="side" [(opened)]="opened" >
+        <div class="filter-heading-wrapper">
+          <h1><span title="Collapse [" class="status-pointer"><ion-icon name="chevron-back-outline" size="medium" (click)="drawer.toggle();"></ion-icon></span>Filter your search</h1>
+          <section>
+            <ion-button color="danger">Reset All</ion-button>
+            <ion-button color="medium">Select All</ion-button>
+            <ion-button color="medium">Refresh</ion-button>
+          </section>
+        </div>
+        <mat-accordion class="result-headers-align">
+          <mat-expansion-panel  (opened)="setStep(0)">
+            <mat-expansion-panel-header>
+              <mat-checkbox checked color="primary" 
+                (click)="$event.stopPropagation()" 
+                (keydown)="$event.stopPropagation()">
+                PROPERTY
+              </mat-checkbox>
+            </mat-expansion-panel-header>
+            <ion-list class="list">
+              <ion-list-header>
+                <ion-label>Rent Type</ion-label>
+              </ion-list-header>
+              <ion-radio-group >
+                <ion-row class="rowStyle">
+                  <ion-item color="primary-contrast">
+                    <ion-label>Default rent</ion-label>
+                    <ion-radio slot="start" value="customer"></ion-radio>
+                  </ion-item>
+                  <ion-item color="primary-contrast">
+                    <ion-label>Advertise rent</ion-label>
+                    <ion-radio slot="start" value="supplier"></ion-radio>
+                  </ion-item>
+                </ion-row>
+              </ion-radio-group>
+            </ion-list>
+            <ion-list class="list">
+              <ion-list-header>
+                <ion-label>Price Range</ion-label>
+              </ion-list-header>
+              <ion-item>
+                <ion-range class="dual-range"  min="0" max="5000"  dual-knobs [pin]="true" color="primary" [(ngModel)]="priceKnobValues" [pinFormatter]="customFormatter">
+                </ion-range>
+              </ion-item>
+              <ion-list-header>
+                <ion-label>Bed Range</ion-label>
+              </ion-list-header>
+              <ion-item>
+                <ion-range class="dual-range"  min="0" max="20"  dual-knobs [pin]="true" color="primary" [(ngModel)]="bedKnobValues" [pinFormatter]="customFormatter">
+                </ion-range>
+              </ion-item>
+            </ion-list>
+            <ion-list class="list">
+              <ion-row>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Management Type" [formControl]="toppings" multiple>
+                      <mat-select-trigger>
+                        {{toppings.value ? toppings.value[0] : ''}}
+                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Style" [formControl]="toppings" multiple>
+                      <mat-select-trigger>
+                        {{toppings.value ? toppings.value[0] : ''}}
+                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Type" [formControl]="toppings" multiple>
+                      <mat-select-trigger>
+                        {{toppings.value ? toppings.value[0] : ''}}
+                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Status" [formControl]="toppings" multiple>
+                      <mat-select-trigger>
+                        {{toppings.value ? toppings.value[0] : ''}}
+                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Office" [formControl]="toppings" multiple>
+                      <mat-select-trigger>
+                        {{toppings.value ? toppings.value[0] : ''}}
+                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Property Management" [formControl]="toppings" multiple>
+                      <mat-select-trigger>
+                        {{toppings.value ? toppings.value[0] : ''}}
+                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Negotiator" [formControl]="toppings" multiple>
+                      <mat-select-trigger>
+                        {{toppings.value ? toppings.value[0] : ''}}
+                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+            </ion-list>
+            <mat-action-row>
+              <ion-button color="danger">Reset</ion-button>
+              <ion-button  color="medium">Refresh</ion-button>
+            </mat-action-row>
+          </mat-expansion-panel>
+        
+          <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
+            <mat-expansion-panel-header>
+              <mat-checkbox checked color="primary" 
+                (click)="$event.stopPropagation()" 
+                (keydown)="$event.stopPropagation()">
+                LANDLORD
+              </mat-checkbox>
+            </mat-expansion-panel-header>
+            <ion-list class="list">
+              <ion-row>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Status" [formControl]="toppings" multiple>
+                      <mat-select-trigger>
+                        {{toppings.value ? toppings.value[0] : ''}}
+                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Office" [formControl]="toppings" multiple>
+                      <mat-select-trigger>
+                        {{toppings.value ? toppings.value[0] : ''}}
+                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="100">
+                  <ion-item>
+                    <ion-toggle color="primary"></ion-toggle>
+                    Overseas
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              </ion-list>
+              <mat-action-row>
+                <ion-button color="danger">Reset</ion-button>
+                <ion-button  color="medium">Refresh</ion-button>
+              </mat-action-row>
+          </mat-expansion-panel>
+        
+          <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
+            <mat-expansion-panel-header>
+              <mat-checkbox checked color="primary" 
+                (click)="$event.stopPropagation()" 
+                (keydown)="$event.stopPropagation()">
+                TENANT
+              </mat-checkbox>
+            </mat-expansion-panel-header>
+            <ion-list class="list">
+              <ion-row>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Entity Type" [formControl]="toppings" multiple>
+                      <mat-select-trigger>
+                        {{toppings.value ? toppings.value[0] : ''}}
+                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Office" [formControl]="toppings" multiple>
+                      <mat-select-trigger>
+                        {{toppings.value ? toppings.value[0] : ''}}
+                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Status" [formControl]="toppings" multiple>
+                      <mat-select-trigger>
+                        {{toppings.value ? toppings.value[0] : ''}}
+                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              </ion-list>
+              <mat-action-row>
+                <ion-button color="danger">Reset</ion-button>
+                <ion-button  color="medium">Refresh</ion-button>
+              </mat-action-row>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)">
+            <mat-expansion-panel-header>
+              <mat-checkbox checked color="primary" 
+                (click)="$event.stopPropagation()" 
+                (keydown)="$event.stopPropagation()">
+                APPLICANT
+              </mat-checkbox>
+            </mat-expansion-panel-header>
+            <ion-list class="list">
+              <ion-row>
+                <ion-col size="100">
+                  <ion-item>
+                    <ion-toggle color="primary"></ion-toggle>
+                    Hot
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="100">
+                  <ion-item>
+                    <ion-toggle color="primary"></ion-toggle>
+                    Is a Student
+                  </ion-item>
+                  </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Entity Type" [formControl]="toppings" multiple>
+                      <mat-select-trigger>
+                        {{toppings.value ? toppings.value[0] : ''}}
+                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              </ion-list>
+              <mat-action-row>
+                <ion-button color="danger">Reset</ion-button>
+                <ion-button  color="medium">Refresh</ion-button>
+              </mat-action-row>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)">
+            <mat-expansion-panel-header>
+              <mat-checkbox checked color="primary" 
+                (click)="$event.stopPropagation()" 
+                (keydown)="$event.stopPropagation()">
+                AGENT
+              </mat-checkbox>
+            </mat-expansion-panel-header>
+            <ion-list class="list">
+              <ion-row>
+                <ion-col size="100">
+                  <ion-item>
+                    <ion-toggle color="primary"></ion-toggle>
+                    VAT Registered
+                  </ion-item>
+                </ion-col>
+                <ion-col size="100">
+                  <ion-item>
+                    <ion-toggle color="primary"></ion-toggle>
+                    Journal Exclude
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Status" [formControl]="toppings" multiple>
+                      <mat-select-trigger>
+                        {{toppings.value ? toppings.value[0] : ''}}
+                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                        </span>
+                      </mat-select-trigger>
+                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              </ion-list>
+              <mat-action-row>
+                <ion-button color="danger">Reset</ion-button>
+                <ion-button  color="medium">Refresh</ion-button>
+              </mat-action-row>
+          </mat-expansion-panel>
+        
+        <mat-expansion-panel [expanded]="step === 5" (opened)="setStep(5)">
+          <mat-expansion-panel-header>
+            <mat-checkbox checked color="primary" 
+              (click)="$event.stopPropagation()" 
+              (keydown)="$event.stopPropagation()">
+              CONTRACTOR
+            </mat-checkbox>
+          </mat-expansion-panel-header>
+          <ion-list class="list">
+            <ion-row>
+              <ion-col size="50">
+                <mat-form-field [floatLabel]="'never'">
+                  <mat-select placeholder="Status" [formControl]="toppings" multiple>
+                    <mat-select-trigger>
+                      {{toppings.value ? toppings.value[0] : ''}}
+                      <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                        (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                      </span>
+                    </mat-select-trigger>
+                    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </ion-col>
+              <ion-col size="50">
+                <mat-form-field [floatLabel]="'never'">
+                  <mat-select placeholder="Skill Set" [formControl]="toppings" multiple>
+                    <mat-select-trigger>
+                      {{toppings.value ? toppings.value[0] : ''}}
+                      <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                        (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                      </span>
+                    </mat-select-trigger>
+                    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="100">
+                <ion-item>
+                  <ion-toggle color="primary"></ion-toggle>
+                  VAT Registered
+                </ion-item>
+              </ion-col>
+              <ion-col size="100">
+                <ion-item>
+                  <ion-toggle color="primary"></ion-toggle>
+                  Agency Approved
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            </ion-list>
+            <mat-action-row>
+              <ion-button color="danger">Reset</ion-button>
+              <ion-button  color="medium">Refresh</ion-button>
+            </mat-action-row>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </mat-drawer>
+      <mat-drawer-content class="main-container" *ngIf="loaded">
+          <mat-paginator #paginator
+            [length]="length"
+            [showFirstLastButtons]="true"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            (page)="pageEvent = handlePage($event)">
+        </mat-paginator>
+        
+        <ion-grid>
+          <ion-row>
+            <ion-col size="80">
+              <h3>{{length}} result(s) found</h3>
+            </ion-col>
+            <ion-col size="20" class="ion-text-right">
+              <br>
+              <ion-buttons (click)="drawer.toggle();" >
+                Filter&nbsp;&nbsp;<ion-icon name="options-outline"></ion-icon>
+              </ion-buttons>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+  
+        <div *ngFor="let item of results">
+          <ng-container [ngTemplateOutlet]="propertySuggestion"  *ngIf="item?.entityType === 'PROPERTY'"
+                [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
+          <ng-container [ngTemplateOutlet]="landlordSuggestion"  *ngIf="item?.entityType === 'LANDLORD'"
+                [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
+          <ng-container [ngTemplateOutlet]="tenantSuggestion"  *ngIf="item?.entityType === 'TENANT'"
+                [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
+          <ng-container [ngTemplateOutlet]="contractorSuggestion"  *ngIf="item?.entityType === 'CONTRACTOR'"
+                [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
+          <ng-container [ngTemplateOutlet]="agentSuggestion"  *ngIf="item?.entityType === 'AGENT'"
+                [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
+        </div>
+  
+        <mat-paginator #paginator
+            [length]="length"
+            [showFirstLastButtons]="true"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            (page)="pageEvent = handlePage($event)">
+        </mat-paginator>
+      </mat-drawer-content>
+  </mat-drawer-container>
+</ion-content>
+
+
+<ng-template #propertySuggestion  let-item="item">
+  <ion-card-content id="details" (click)="openDetails('OpenProperty',item.entityId)">
+    <ion-grid >
+      <ion-row class="main-row">
+        <ion-col class="ion-no-padding" size-xl="17" size="30">
+          <ion-grid >
+            <ion-row>
+              <ion-col size="80">
+                <div style="display: block;"><img style="min-height: 130px;" [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.jpg';"></div>
+              </ion-col>
+              <ion-col size="20" class="ion-no-padding">
+                <ion-grid class="ion-no-padding ion-align-items-center">
+                  <ion-row class="ion-align-items-center ion-justify-content-center">
+                    <ion-col>
+                      <i class="propcoicon propcoicon-beds no-background"></i>
+                    </ion-col>
+                    <ion-col>
+                      <span >&nbsp;6</span>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="ion-align-items-center ion-justify-content-center">
+                    <ion-col>
+                      <i class="propcoicon propcoicon-bathrooms no-background"></i>
+                    </ion-col>
+                    <ion-col>
+                      <span >&nbsp;6</span>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="ion-align-items-center ion-justify-content-center">
+                    <ion-col>
+                      <i class="propcoicon propcoicon-lounge no-background"></i>
+                    </ion-col>
+                    <ion-col>
+                      <span >&nbsp;6</span>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="ion-align-items-center ion-justify-content-center">
+                    <ion-col>
+                      <i class="propcoicon propcoicon-garage no-background"></i>
+                    </ion-col>
+                    <ion-col>
+                      <span >&nbsp;6</span>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+        <ion-col  size-xl="77" size="70">
+          <ion-grid class="no-padding-top">
+            <ion-row class="property-details-row">
+              <ion-col class="no-padding-top col1" size="75">
+                <div>
+                  <p class="title text-ellipsis">{{item?.address}}</p>
+                </div>
+              </ion-col>
+              <ion-col class="no-padding-top col2 ion-text-end" size="25">
+                <p class="status">{{item?.status}}</p>
+                <p class="ref">{{item?.reference}}</p>
+              </ion-col>
+            </ion-row>
+            <ion-row class="fault-data-row">
+              <ion-col size-xl="25" size-lg="22" size-md="22">
+                <p>
+                  <span class="text">Agreement Dates</span>
+                <br />
+                {{item?.propertyAgreementDate || 'N/A'}}
+                </p>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="22" size-md="22">
+                <p>
+                  <span class="text">Tenant Name(s)</span>
+                <br />
+                {{item?.propertyTenant || 'N/A'}}
+                </p>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="22" size-md="22">
+                <p>
+                  <span class="text">Manager</span>
+                <br />
+                {{item?.propertyManager || 'N/A'}}
+                </p>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="34" size-md="34">
+                <p>
+                  <span class="text">Negotiator</span>
+                <br />
+                {{item?.propertyNegotiator || 'N/A'}}
+                </p>
+              </ion-col>
+            </ion-row>
+            <ion-row class="fault-meter-row">
+              
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+</ng-template>
+<ng-template #landlordSuggestion  let-item="item">
+  <ion-card-content id="details" class="landlord" (click)="openDetails('OpenLanlord',item.entityId)">
+    <ion-grid >
+      <ion-row class="main-row">
+        <ion-col class="ion-no-padding" size-xl="10" size="15">
+          <p class="uppercase">Landlord</p>
+          <br>
+          <i class="propcoicon propcoicon-landlord no-background"></i>
+        </ion-col>
+        <ion-col  size-xl="75" size="85">
+          <ion-grid class="no-padding-top">
+            <ion-row class="property-details-row">
+              <ion-col class="no-padding-top col1" size="75">
+                <div>
+                  <!-- <p class="office">{{result.officeName[0]}}</p> -->
+                  <p class="name">{{item?.fullName}}</p>
+                  <p class="address">{{item?.address}}</p>
+                </div>
+              </ion-col>
+              <ion-col class="no-padding-top col2 ion-text-end" size="25">
+                <p class="status">{{item?.status}}</p>
+                <p class="ref">{{item?.reference}}</p>
+              </ion-col>
+            </ion-row>
+            <ion-row class="fault-data-row">
+              <ion-col size="75">
+                <div >
+                  <p *ngIf="item.landlordFirstPropertyReference">
+                      <span class="text">Property ref</span> <br />{{item?.landlordFirstPropertyReference || '-'}}&nbsp;&nbsp;&nbsp;&nbsp;
+                      {{item?.landlordFirstPropertyAddress}}
+                  </p>
+                  <p class="other-property" *ngIf="item?.landlordOtherPropertiesCount>0">+{{item?.landlordOtherPropertiesCount}} other properties</p>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+</ng-template>
+<ng-template #tenantSuggestion  let-item="item">
+  <ion-card-content id="details" class="tenant" (click)="openDetails('OpenTenant',item.entityId)">
+    <ion-grid >
+      <ion-row class="main-row">
+        <ion-col class="ion-no-padding" size-xl="10" size="15">
+          <p class="uppercase">Tenant</p>
+          <br>
+          <i class="propcoicon propcoicon-tenant"></i>
+        </ion-col>
+        <ion-col  size-xl="75" size="85">
+          <ion-grid class="no-padding-top">
+            <ion-row class="property-details-row">
+              <ion-col class="no-padding-top col1" size="75">
+                <div>
+                  <!-- <p class="office">{{result.officeName[0]}}</p> -->
+                  <p class="name">{{item?.fullName}}</p>
+                  <p class="address">{{item?.address || '-'}}</p>
+                </div>
+              </ion-col>
+              <ion-col class="no-padding-top col2 ion-text-end" size="25">
+                <p class="status">{{item?.status}}</p>
+                <p class="ref">{{item?.reference}}</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+</ng-template>
+<ng-template #contractorSuggestion  let-item="item">
+  <ion-card-content id="details" class="contractor" (click)="openDetails('OpenContractor',item.entityId)">
+    <ion-grid >
+      <ion-row class="main-row">
+        <ion-col class="ion-no-padding" size-xl="10" size="15">
+          <p class="uppercase">Contractor</p>
+          <br>
+          <i class="propcoicon propcoicon-contractor no-background"></i>
+        </ion-col>
+        <ion-col  size-xl="75" size="85">
+          <ion-grid class="no-padding-top">
+            <ion-row class="property-details-row">
+              <ion-col class="no-padding-top col1" size="75">
+                <div>
+                  <!-- <p class="office">{{result.officeName[0]}}</p> -->
+                  <p class="name">{{item.fullName}}</p>
+                  <p class="name">{{item.company}}</p>
+                  <p class="address">{{item.address ? item.address + ', ': ''}} {{item.postcode}}</p>
+                  <p class="skill-set">{{item.occupation}}</p>
+                  <p class="agent-approved">{{isAgentApproved(item.isAgentContractorApproved)}}</p>
+                </div>
+              </ion-col>
+              <ion-col class="no-padding-top col2 ion-text-end" size="25">
+                <p class="status">{{item?.status}}</p>
+                <p class="ref">{{item?.reference}}</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+</ng-template>
+<ng-template #agentSuggestion  let-item="item">
+  <ion-card-content id="details" class="agent" (click)="openDetails('OpenAgent',item.entityId)">
+    <ion-grid >
+      <ion-row class="main-row">
+        <ion-col class="ion-no-padding" size-xl="10" size="15">
+          <p class="uppercase">Agent</p>
+          <br>
+          <i class="propcoicon propcoicon-agent no-background"></i>
+        </ion-col>
+        <ion-col  size-xl="75" size="85">
+          <ion-grid class="no-padding-top">
+            <ion-row class="property-details-row">
+              <ion-col class="no-padding-top col2 ion-text-end" size="70">
+              </ion-col>
+              <ion-col class="no-padding-top col2 ion-text-end" size="25">
+                <p class="status">{{item?.status}}</p>
+                <p class="ref">{{item?.reference}}</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+</ng-template>

@@ -1,0 +1,134 @@
+<ion-row class="ion-align-items-center ion-justify-content-center ion-margin-vertical">
+  <ion-col size="65" style="padding-right: 0;" class="ion-no-padding">
+    <div>
+      <ion-searchbar 
+      [(ngModel)]="searchTerm" 
+      placeholder="Start typing to search" 
+      class="searchbarCustom" 
+      debounce="500" 
+      (ionChange)="getItems($event)"
+      [formControl]="searchTermControl"
+      >
+      <!-- (ionBlur) = "isItemAvailable = false"
+      (ionFocus) = "suggestions.length > 0 ? isItemAvailable = true : false" -->
+      </ion-searchbar>
+      <ion-progress-bar color="danger" [type]="'indeterminate'" *ngIf="showLoader"></ion-progress-bar>
+      <ion-list *ngIf="isItemAvailable" class="solrSuggestionList">
+        <ion-item *ngFor="let item of suggestions" class="solrSuggestionListItem">
+          <ng-container [ngTemplateOutlet]="propertySuggestion"  *ngIf="item?.entityType === 'PROPERTY'"
+              [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
+          <ng-container [ngTemplateOutlet]="landlordSuggestion"  *ngIf="item?.entityType === 'LANDLORD'"
+              [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
+          <ng-container [ngTemplateOutlet]="applicantSuggestion"  *ngIf="item?.entityType === 'APPLICANT'"
+              [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
+          <ng-container [ngTemplateOutlet]="tenantSuggestion"  *ngIf="item?.entityType === 'TENANT'"
+              [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
+          <ng-container [ngTemplateOutlet]="contractorSuggestion"  *ngIf="item?.entityType === 'CONTRACTOR'"
+              [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
+          <ng-container [ngTemplateOutlet]="agentSuggestion"  *ngIf="item?.entityType === 'AGENT'"
+              [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
+        </ion-item>
+    </ion-list>
+    </div>
+  </ion-col>
+  <ion-col size="3" class="solrMutiSelect ion-no-padding">
+    <mat-form-field appearance="fill">
+      <mat-select [formControl]="entityControl" multiple class="mat-select-red">
+        <mat-option class="red-text" *ngFor="let topping of entityList" [value]="topping">{{topping}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </ion-col>
+  <ion-col size="6">
+    <ion-buttons end (click)="goToPage()">
+      <i class="propcoicon propcoicon-search no-background red-icon search-icon"></i>
+    </ion-buttons>     
+  </ion-col>
+</ion-row>
+
+<ng-template #propertySuggestion  let-item="item">
+  <div (click)="openHomeCategory('OpenProperty',item.entityId)">
+    <span>
+      <i class="propcoicon no-background propcoicon-property red-icon"></i>
+    </span>
+    <span >{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span >{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span >{{item.reference}}</span>&nbsp;
+    <span class=" ng-scope">{{item.propertyRent || 0 | currency : "£"}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>
+
+<ng-template #landlordSuggestion  let-item="item">
+  <div (click)="openHomeCategory('OpenLandlord',item.entityId)">
+    <span>
+      <i class="propcoicon no-background propcoicon-landlord red-icon"></i>
+    </span>
+    <span >{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span>{{item.name}}</span>&nbsp;
+    <span >{{item.reference}}</span>&nbsp;
+    <span >{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.daytime}}</span>&nbsp;
+    <span>{{item.mobile}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>
+
+<ng-template #applicantSuggestion  let-item="item">
+  <div (click)="openHomeCategory('OpenApplicant',item.entityId)">
+    <span>
+      <i class="propcoicon no-background propcoicon-applicant-let red-icon"></i>
+    </span>
+    <span >{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span>{{item.name}}</span>&nbsp;
+    <span >{{item.reference}}</span>&nbsp;
+    <span >{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.daytime}}</span>&nbsp;
+    <span>{{item.mobile}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>
+
+<ng-template #tenantSuggestion  let-item="item">
+  <div (click)="openHomeCategory('OpenTenant',item.entityId)">
+    <span>
+      <i class="propcoicon no-background propcoicon-tenant red-icon"></i>
+    </span>
+    <span>{{item.name}}</span>&nbsp;
+    <span >{{item.reference}}</span>&nbsp;
+    <span >{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.daytime}}</span>&nbsp;
+    <span>{{item.mobile}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>
+
+<ng-template #contractorSuggestion  let-item="item">
+  <div (click)="openHomeCategory('OpenContractor',item.entityId)">
+    <span>
+      <i class="propcoicon no-background propcoicon-contractor red-icon"></i>
+    </span>
+    <span>{{item.name}}</span>&nbsp;
+    <span >{{item.reference}}</span>&nbsp;
+    <span >{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.daytime}}</span>&nbsp;
+    <span>{{item.mobile}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>
+
+<ng-template #agentSuggestion  let-item="item">
+  <div (click)="openHomeCategory('OpenAgent',item.entityId)">
+    <span>
+      <i class="propcoicon no-background propcoicon-agent red-icon"></i>
+    </span>
+    <span>{{item.name}}</span>&nbsp;
+    <span >{{item.reference}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>

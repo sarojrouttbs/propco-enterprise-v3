@@ -23,7 +23,7 @@
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
       <mat-option *ngFor="let result of (filteredProperty | async)?.data" [value]="result"
         style="border-bottom: 1px solid gray; line-height: 16px; font-size: 14px;">
-        <!-- <span class="text-color-lightblue">{{getLookupValue(result.officeCode, officeLookupDetails)}}&nbsp;</span> -->
+        <!-- <span>{{getLookupValue(result.officeCode, officeLookupDetails)}}&nbsp;</span> -->
         <span>
           <i class="propcoicon no-background propcoicon-property"
             style="background: transparent;vertical-align:middle"></i>
