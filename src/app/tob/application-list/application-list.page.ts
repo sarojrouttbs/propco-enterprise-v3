@@ -64,6 +64,7 @@ export class ApplicationListPage implements OnInit {
   private initApplicationList() {
     this.filteredApplicationList.data = this.applicationsDetails.applications as ApplicationData[];
     this.filteredApplicationList.paginator = this.paginator;
+    this.filteredApplicationList.paginator.pageIndex = 0;
   }
 
   private getApplicationList() {
@@ -237,24 +238,89 @@ export class ApplicationListPage implements OnInit {
     this.filteredApplicationList.data = this.applicationList;
   }
 
-  rejectAllApplications() {
-
-  }
-
   createApplication() {
     this.router.navigate([`tob/${this.propertyId}/create-application`], { replaceUrl: true });
   }
 
-  acceptApplication() {
+  rejectAllApplications() {
+    this.commonService.showConfirm('Reject All Application', 'Are you sure, you want to reject all application?', '', 'YES', 'NO').then(response => {
+      if (response) {
+        var applicationId = this.applicationList.map(function (application) {
+          return application.applicationId;
+        });
+        if (applicationId.length > 0) {
+          const requestObj: any = {
+            applicationId: applicationId
+          };
+          this.tobService.rejectAllApplication(requestObj).subscribe((response) => {
+            this.commonService.showAlert('Reject All Application', 'All applications have been rejected successfully.').then(response => {
+              if(response) {
+                this.initApiCalls();
+              }
+            });
+          },
+          (error) => {});
+        } else {
+          this.commonService.showAlert('Reject All Application', 'Only Applications except Accept status are rejected as all.');
+        }
+      }
+    });
+  }
 
+  acceptApplication() {
+    var isAccepted = this.applicationList.find((application) => application.status == APPLICATION_STATUSES.ACCEPTED);
+    if(isAccepted) {
+      this.commonService.showAlert('Accept Application', 'One application is already accepted, Please reject them first then accept this application.');
+    } else {
+      this.commonService.showConfirm('Accept Application', 'Are you sure, you want to accept this application?', '', 'YES', 'NO').then(response => {
+        if (response) {
+          this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.ACCEPTED, {}).subscribe((response) => {
+            this.commonService.showAlert('Accept Application', 'Application has been accepted successfully.').then(response => {
+              if(response) {
+                this.initApiCalls();
+              }
+            });
+          },
+          (error) => {
+
+          });
+        }
+      });
+    }
   }
 
   rejectApplication() {
-
+    this.commonService.showConfirm('Reject Application', 'Are you sure, you want to reject this application?', '', 'YES', 'NO').then(response => {
+      if (response) {
+        this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.REJECTED, {}).subscribe((response) => {
+          this.commonService.showAlert('Reject Application', 'Application has been rejected successfully.').then(response => {
+            if(response) {
+              this.initApiCalls();
+            }
+          });
+        },
+        (error) => {
+          
+        });
+      }
+    });
   }
 
   holdApplication() {
-
+    this.commonService.showConfirm('On Hold Application', 'Are you sure, you want to on hold this application?', '', 'YES', 'NO').then(response => {
+      if (response) {
+        this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.ON_HOLD, {}).subscribe((response) => {
+          this.commonService.showAlert('On Hold Application', 'Application status has been changed to on hold successfully.').then(response => {
+            if(response) {
+              this.initApiCalls();
+            }
+          });
+        },
+        (error) => {
+          
+        });
+      }
+    });
   }
 
   markHoldingDepositPaid() {
