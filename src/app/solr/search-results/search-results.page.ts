@@ -100,7 +100,6 @@ export class SearchResultsPage implements OnInit {
       .entitySearch(this.prepareSearchParams())
       .subscribe((res) => {
         this.results = res ? res.data : [];
-        console.log(this.results);
         this.length = res.count;
         this.opened = true;
         this.loaded = true;
