@@ -1,4 +1,4 @@
-.example-container {
+.drawer-container {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -65,7 +65,7 @@ h1.example-app-name {
 }
 
 .list {
-  background-color: var(--ion-color-solr-sidenav);
+  background-color: var(--ion-color-step-1900);
   padding-left: 13px;
   padding-right: 13px;
 }
@@ -145,13 +145,12 @@ ion-item {
   border-radius: $radius;
 }
 
-#property-details {
+#details {
   min-height: 96px;
-  padding: 0;
+  padding: 10px;
   color: var(--ion-color-step-250);
-  background-color: var(--ion-color-solr-sidenav);
+  background-color: var(--ion-color-step-1900);
   height: 100%;
-  padding: 0;
   margin-bottom: 10px;
 
   .heading {
@@ -212,6 +211,7 @@ ion-item {
 
   .address {
     font-size: 20px;
+    color: var(--ion-color-step-850);
   }
 
   .text-ellipsis {
@@ -222,7 +222,7 @@ ion-item {
   }
 
   .status {
-    color: #737373;
+    color: var(--ion-color-step-1100);
     font-size: 20px;
   }
 
@@ -231,6 +231,44 @@ ion-item {
     color: #4D4D4D;
     text-transform: uppercase;
   }
+
+  .uppercase {
+    text-transform: uppercase;
+  }
+
+  .name {
+    font-size: 20px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .skill-set {
+    color: var(--ion-color-step-950);
+    font-size: 18px;
+  }
+
+  .agent-approved {
+    color: #ff9335;
+    font-size: 18px;
+  }
+}
+
+.landlord i.propcoicon {
+  font-size: 70px;
+}
+
+.tenant i.propcoicon {
+  font-size: 70px;
+}
+
+.contractor i.propcoicon {
+  font-size: 70px;
+}
+
+.agent i.propcoicon {
+  font-size: 70px;
 }
 
 .override-communication {

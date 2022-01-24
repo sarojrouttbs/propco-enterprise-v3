@@ -107,7 +107,7 @@ export class SearchSuggestionComponent implements OnInit {
   private setOfficeLookupMap(data) {
     if (data) {
       this.officeLookupDetails = data;
-      data.map((occ, index) => {
+      data.map((occ) => {
         this.officeLookupMap.set(occ.index, occ.value);
       });
     }

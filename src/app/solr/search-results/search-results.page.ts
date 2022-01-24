@@ -1,7 +1,8 @@
 import { HttpParams } from "@angular/common/http";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, HostListener, OnInit, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatDrawer } from "@angular/material/sidenav";
 import { ActivatedRoute } from "@angular/router";
 import { SolrService } from "../solr.service";
 
@@ -9,6 +10,9 @@ import { SolrService } from "../solr.service";
   selector: "app-search-results",
   templateUrl: "./search-results.page.html",
   styleUrls: ["./search-results.page.scss"],
+  host: {
+    '(document:keypress)': 'handleKeyboardEvent($event)'
+  }
 })
 export class SearchResultsPage implements OnInit {
   showFiller = true;
@@ -56,8 +60,11 @@ export class SearchResultsPage implements OnInit {
   length: number;
   pageIndex: number = 1;
   opened: boolean;
+  loaded: boolean = false;
+  key;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatDrawer) drawer: MatDrawer;
 
   constructor(
     private route: ActivatedRoute,
@@ -76,8 +83,8 @@ export class SearchResultsPage implements OnInit {
   private getQueryParams() {
     const promise = new Promise((resolve, reject) => {
       this.route.queryParams.subscribe((params) => {
-        this.solrSearchConfig.types = params["types"]
-          ? params["types"]
+        this.solrSearchConfig.types = params["type"]
+          ? params["type"]
           : "PROPERTY";
         this.solrSearchConfig.searchTerm = params["searchTerm"]
           ? params["searchTerm"]
@@ -95,6 +102,7 @@ export class SearchResultsPage implements OnInit {
         console.log(this.results);
         this.length = res.count;
         this.opened = true;
+        this.loaded = true;
         // this.iterator();
       });
   }
@@ -116,5 +124,20 @@ export class SearchResultsPage implements OnInit {
     this.pageSize = e.pageSize;
     this.getSearchResults();
     return e;
+  }
+
+  public isAgentApproved(agentApproved) {
+    let value = "";
+    if (agentApproved === true) {
+      value = "Agency Approved";
+    }
+    return value;
+  }
+
+  handleKeyboardEvent(event: KeyboardEvent) { 
+    this.key = event.key;
+    if(this.key === '['){
+      this.drawer.toggle();
+    }
   }
 }
