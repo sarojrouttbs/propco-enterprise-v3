@@ -1340,12 +1340,12 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   async openTermsAndConditionModal() {
-    let tNc = this.termsAndConditionData?.application?.termsAndCondition;
+    const termsAndCondition = this.termsAndConditionData?.application?.termsAndCondition;
     const modal = await this.modalController.create({
       component: TermsAndConditionModalPage,
       cssClass: 'modal-container terms-and-condition-modal',
       componentProps: {
-        data: tNc,
+        data: termsAndCondition,
         heading: 'Terms and Conditions',
         button: 'Accept'
       },
