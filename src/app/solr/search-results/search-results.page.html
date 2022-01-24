@@ -479,10 +479,10 @@
 
 <ng-template #propertySuggestion  let-item="item">
   <ion-card-content id="details" (click)="openDetails('OpenProperty',item.entityId)">
-    <ion-grid class="">
+    <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="17" size="30">
-          <ion-grid class="">
+          <ion-grid >
             <ion-row>
               <ion-col size="80">
                 <div style="display: block;"><img style="min-height: 130px;" [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.jpg';"></div>
@@ -494,7 +494,7 @@
                       <i class="propcoicon propcoicon-beds no-background"></i>
                     </ion-col>
                     <ion-col>
-                      <span class="">&nbsp;6</span>
+                      <span >&nbsp;6</span>
                     </ion-col>
                   </ion-row>
                   <ion-row class="ion-align-items-center ion-justify-content-center">
@@ -502,7 +502,7 @@
                       <i class="propcoicon propcoicon-bathrooms no-background"></i>
                     </ion-col>
                     <ion-col>
-                      <span class="">&nbsp;6</span>
+                      <span >&nbsp;6</span>
                     </ion-col>
                   </ion-row>
                   <ion-row class="ion-align-items-center ion-justify-content-center">
@@ -510,7 +510,7 @@
                       <i class="propcoicon propcoicon-lounge no-background"></i>
                     </ion-col>
                     <ion-col>
-                      <span class="">&nbsp;6</span>
+                      <span >&nbsp;6</span>
                     </ion-col>
                   </ion-row>
                   <ion-row class="ion-align-items-center ion-justify-content-center">
@@ -518,7 +518,7 @@
                       <i class="propcoicon propcoicon-garage no-background"></i>
                     </ion-col>
                     <ion-col>
-                      <span class="">&nbsp;6</span>
+                      <span >&nbsp;6</span>
                     </ion-col>
                   </ion-row>
                 </ion-grid>
@@ -526,7 +526,7 @@
             </ion-row>
           </ion-grid>
         </ion-col>
-        <ion-col class="" size-xl="77" size="70">
+        <ion-col  size-xl="77" size="70">
           <ion-grid class="no-padding-top">
             <ion-row class="property-details-row">
               <ion-col class="no-padding-top col1" size="75">
@@ -580,14 +580,14 @@
 </ng-template>
 <ng-template #landlordSuggestion  let-item="item">
   <ion-card-content id="details" class="landlord" (click)="openDetails('OpenLanlord',item.entityId)">
-    <ion-grid class="">
+    <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
           <p class="uppercase">Landlord</p>
           <br>
           <i class="propcoicon propcoicon-landlord no-background"></i>
         </ion-col>
-        <ion-col class="" size-xl="75" size="85">
+        <ion-col  size-xl="75" size="85">
           <ion-grid class="no-padding-top">
             <ion-row class="property-details-row">
               <ion-col class="no-padding-top col1" size="75">
@@ -621,14 +621,14 @@
 </ng-template>
 <ng-template #tenantSuggestion  let-item="item">
   <ion-card-content id="details" class="tenant" (click)="openDetails('OpenTenant',item.entityId)">
-    <ion-grid class="">
+    <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
           <p class="uppercase">Tenant</p>
           <br>
           <i class="propcoicon propcoicon-tenant"></i>
         </ion-col>
-        <ion-col class="" size-xl="75" size="85">
+        <ion-col  size-xl="75" size="85">
           <ion-grid class="no-padding-top">
             <ion-row class="property-details-row">
               <ion-col class="no-padding-top col1" size="75">
@@ -651,14 +651,14 @@
 </ng-template>
 <ng-template #contractorSuggestion  let-item="item">
   <ion-card-content id="details" class="contractor" (click)="openDetails('OpenContractor',item.entityId)">
-    <ion-grid class="">
+    <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
           <p class="uppercase">Contractor</p>
           <br>
           <i class="propcoicon propcoicon-contractor no-background"></i>
         </ion-col>
-        <ion-col class="" size-xl="75" size="85">
+        <ion-col  size-xl="75" size="85">
           <ion-grid class="no-padding-top">
             <ion-row class="property-details-row">
               <ion-col class="no-padding-top col1" size="75">
@@ -684,14 +684,14 @@
 </ng-template>
 <ng-template #agentSuggestion  let-item="item">
   <ion-card-content id="details" class="agent" (click)="openDetails('OpenAgent',item.entityId)">
-    <ion-grid class="">
+    <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
           <p class="uppercase">Agent</p>
           <br>
           <i class="propcoicon propcoicon-agent no-background"></i>
         </ion-col>
-        <ion-col class="" size-xl="75" size="85">
+        <ion-col  size-xl="75" size="85">
           <ion-grid class="no-padding-top">
             <ion-row class="property-details-row">
               <ion-col class="no-padding-top col2 ion-text-end" size="70">
