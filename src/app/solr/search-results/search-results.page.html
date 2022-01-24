@@ -478,7 +478,7 @@
 
 
 <ng-template #propertySuggestion  let-item="item">
-  <ion-card-content id="details">
+  <ion-card-content id="details" (click)="openDetails('OpenProperty',item.entityId)">
     <ion-grid class="">
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="17" size="30">
@@ -579,7 +579,7 @@
   </ion-card-content>
 </ng-template>
 <ng-template #landlordSuggestion  let-item="item">
-  <ion-card-content id="details" class="landlord">
+  <ion-card-content id="details" class="landlord" (click)="openDetails('OpenLanlord',item.entityId)">
     <ion-grid class="">
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
@@ -620,7 +620,7 @@
   </ion-card-content>
 </ng-template>
 <ng-template #tenantSuggestion  let-item="item">
-  <ion-card-content id="details" class="tenant">
+  <ion-card-content id="details" class="tenant" (click)="openDetails('OpenTenant',item.entityId)">
     <ion-grid class="">
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
@@ -650,7 +650,7 @@
   </ion-card-content>
 </ng-template>
 <ng-template #contractorSuggestion  let-item="item">
-  <ion-card-content id="details" class="contractor">
+  <ion-card-content id="details" class="contractor" (click)="openDetails('OpenContractor',item.entityId)">
     <ion-grid class="">
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
@@ -683,7 +683,7 @@
   </ion-card-content>
 </ng-template>
 <ng-template #agentSuggestion  let-item="item">
-  <ion-card-content id="details" class="agent">
+  <ion-card-content id="details" class="agent" (click)="openDetails('OpenAgent',item.entityId)">
     <ion-grid class="">
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">

@@ -5,6 +5,7 @@ import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatDrawer } from "@angular/material/sidenav";
 import { ActivatedRoute } from "@angular/router";
 import { SolrService } from "../solr.service";
+declare function openScreen(key: string, value: any): any;
 
 @Component({
   selector: "app-search-results",
@@ -139,5 +140,9 @@ export class SearchResultsPage implements OnInit {
     if(this.key === '['){
       this.drawer.toggle();
     }
+  }
+
+  openDetails(key: string, value = null) {
+    openScreen(key, value);
   }
 }
