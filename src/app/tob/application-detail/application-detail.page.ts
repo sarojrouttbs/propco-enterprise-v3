@@ -1324,19 +1324,19 @@ export class ApplicationDetailPage implements OnInit {
   /** Terms and Conditions Functionality **/
 
   private initTermsAndConditionData() {
-    this.termsAndConditionData = this.commonService.getItem('terms_and_conditions', true);
+    this.termsAndConditionData = this.commonService.getItem(PROPCO.TERMS_AND_CONDITIONS, true);
     if (this.termsAndConditionData) {
       this.setTermsAndConditionData();
     } else {
       this._tobService.getTermsAndConditions().subscribe(data => {
-        this.commonService.setItem('terms_and_conditions', data);
+        this.commonService.setItem(PROPCO.TERMS_AND_CONDITIONS, data);
         this.setTermsAndConditionData();
       }, error => {});
     }
   }
 
   private setTermsAndConditionData() {
-    this.termsAndConditionData = this.commonService.getItem('terms_and_conditions', true);
+    this.termsAndConditionData = this.commonService.getItem(PROPCO.TERMS_AND_CONDITIONS, true);
   }
 
   async openTermsAndConditionModal() {
