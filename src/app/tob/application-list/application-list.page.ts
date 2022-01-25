@@ -3,8 +3,10 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { APPLICATION_STATUSES, PROPCO } from 'src/app/shared/constants';
+import { HoldingDepositePaidModalPage } from 'src/app/shared/modals/holding-deposite-paid-modal/holding-deposite-paid-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { ApplicationData } from './application-list.model';
@@ -35,11 +37,12 @@ export class ApplicationListPage implements OnInit {
   lookupdata: any;
   rentFrequencyTypes: any;
   applicationStatusTypes: any;
+  offlinePaymentTypes: any;
   toblookupdata: any;
   fromDate = new FormControl('', []);
   toDate = new FormControl('', []);
   
-  constructor(private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
+  constructor(private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
     this.getTobLookupData();
     this.getLookUpData();
   }
@@ -134,6 +137,7 @@ export class ApplicationListPage implements OnInit {
   private setTobLookupData(): void {
     this.toblookupdata = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
     this.applicationStatusTypes = this.toblookupdata.applicationStatuses;
+    this.offlinePaymentTypes = this.toblookupdata.offlinePaymentTypes
   }
   
   getStatusColor(status) {
@@ -323,8 +327,25 @@ export class ApplicationListPage implements OnInit {
     });
   }
 
-  markHoldingDepositPaid() {
+  async markHoldingDepositPaid() {
+    const modal = await this.modalController.create({
+      component: HoldingDepositePaidModalPage,
+      cssClass: 'modal-container modal-width',
+      componentProps: {
+        heading: 'Holding Deposit Already Paid',
+        offlinePaymentTypes: this.offlinePaymentTypes,
+        propertyId: this.propertyId,
+        selectedApplication: this.selectedApplicationRow
+      },
+      backdropDismiss: false
+    });
 
+    const data = modal.onDidDismiss().then(res => {
+      if(res?.data?.holdingDepositePaid) {
+        this.initApiCalls();
+      }
+    });
+    await modal.present();
   }
 
   startReferencing() {
