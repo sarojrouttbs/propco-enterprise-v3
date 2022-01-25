@@ -3,6 +3,7 @@
   line-height: $lheight;
 }
 
+
 .cdk-overlay-container {
   .mat-option-text {
     color: var(--ion-solr-font-color);
@@ -27,13 +28,6 @@
   --padding-end: var(--ion-padding-end);
   --padding-bottom: var(--ion-padding-bottom);
   --padding-start: var(--ion-padding-start);
-
-  i.search-icon {
-    background-color: var(--ion-color-step-1750);
-    @include set-text-style(19px, 40px);
-    height: 38px;
-    width: 36px;
-  }
 
   i.search-icon:hover {
     cursor: pointer;
@@ -70,38 +64,5 @@
   .block:hover {
     background-color: #FFF !important;
     transform: scale(1.04);
-  }
-
-  .solrSuggestionList {
-    position: absolute;
-    z-index: 100;
-    width: 100%;
-    margin: 0;
-    list-style: none;
-    padding: 0;
-    box-shadow: 0 2px 5px rgb(0 0 0 / 25%);
-
-    .solrSuggestionListItem {
-      cursor: pointer;
-      @include set-text-style(11px, 48px);
-      overflow: hidden;
-      padding: 0 2px;
-      height: 48px;
-      margin: 0;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      // background-color: #f7f7f7;
-      border-bottom: 1px solid #666;
-
-      i.propcoicon {
-        display: inline-table;
-        vertical-align: sub;
-        background: var(--ion-color-step-1750);
-      }
-
-      .text-color-lightgreen {
-        color: #21b573 !important;
-      }
-    }
   }
 }

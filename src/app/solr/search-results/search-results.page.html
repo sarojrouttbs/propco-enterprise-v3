@@ -1,6 +1,8 @@
-<!-- <ion-header>
-  <app-search-suggestion></app-search-suggestion> 
-</ion-header> -->
+<ion-header >
+  <ion-grid class="ion-no-padding" fixed *ngIf="loaded">
+    <app-search-suggestion [entityControl]="entityControl"></app-search-suggestion> 
+  </ion-grid>
+</ion-header>
 
 <ion-content class="main-container">
   <mat-drawer-container class="drawer-container">
@@ -12,12 +14,14 @@
             <ion-button color="medium">Select All</ion-button>
             <ion-button color="medium">Refresh</ion-button>
           </section>
+          
         </div>
         <mat-accordion class="result-headers-align">
           <mat-expansion-panel  (opened)="setStep(0)">
             <mat-expansion-panel-header>
               <mat-checkbox checked color="primary" 
-                (click)="$event.stopPropagation()" 
+              [formControl]="propertyCheck"
+                (click)="$event.stopPropagation();onChangeEntity('property',$event.target.value)" 
                 (keydown)="$event.stopPropagation()">
                 PROPERTY
               </mat-checkbox>
@@ -165,6 +169,7 @@
           <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
             <mat-expansion-panel-header>
               <mat-checkbox checked color="primary" 
+              [formControl]="landlordCheck"
                 (click)="$event.stopPropagation()" 
                 (keydown)="$event.stopPropagation()">
                 LANDLORD
@@ -217,6 +222,7 @@
           <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
             <mat-expansion-panel-header>
               <mat-checkbox checked color="primary" 
+                [formControl]="tenantCheck"
                 (click)="$event.stopPropagation()" 
                 (keydown)="$event.stopPropagation()">
                 TENANT
@@ -275,7 +281,7 @@
   
           <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)">
             <mat-expansion-panel-header>
-              <mat-checkbox checked color="primary" 
+              <mat-checkbox [formControl]="applicantCheck" color="primary" 
                 (click)="$event.stopPropagation()" 
                 (keydown)="$event.stopPropagation()">
                 APPLICANT
@@ -322,7 +328,7 @@
   
           <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)">
             <mat-expansion-panel-header>
-              <mat-checkbox checked color="primary" 
+              <mat-checkbox [formControl]="agentCheck" color="primary" 
                 (click)="$event.stopPropagation()" 
                 (keydown)="$event.stopPropagation()">
                 AGENT
@@ -367,7 +373,7 @@
         
         <mat-expansion-panel [expanded]="step === 5" (opened)="setStep(5)">
           <mat-expansion-panel-header>
-            <mat-checkbox checked color="primary" 
+            <mat-checkbox [formControl]="contractorCheck" color="primary" 
               (click)="$event.stopPropagation()" 
               (keydown)="$event.stopPropagation()">
               CONTRACTOR
