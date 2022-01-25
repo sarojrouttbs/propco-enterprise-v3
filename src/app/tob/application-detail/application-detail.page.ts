@@ -39,6 +39,7 @@ export class ApplicationDetailPage implements OnInit {
   applicationDetails: ApplicationModels.IApplicationResponse;
   applicationApplicantDetails: ApplicationModels.ICoApplicants[];
   rentCategories: OfferModels.ILookupResponse[];
+  applicationStatuses: OfferModels.ILookupResponse[];
   currentStepperIndex = 0;
   searchApplicantForm: FormGroup;
   applicantDetailsForm: FormGroup;
@@ -76,6 +77,7 @@ export class ApplicationDetailPage implements OnInit {
   currentDate = this.commonService.getFormatedDate(new Date());
   termsConditionControl: boolean = false;
   termsAndConditionData: any = {};
+  applicationStatus: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -206,6 +208,71 @@ export class ApplicationDetailPage implements OnInit {
     this.getApplicationQuestionsAnswer(this.applicationId);
 
   }
+
+  /** Submit Application Functionality **/
+
+  async submit() {
+    let isValid = await this.checkFormsValidity();
+    if (!isValid) {
+      this.commonService.showMessage('Please provide complete information.', 'Application Details', 'error');
+      return;
+    }
+    if (!this.termsConditionControl) {
+      this.commonService.showMessage('Please review the terms and conditions.', 'Terms & Conditions', 'error');
+      return;
+    }
+    this.saveGuarantorDetails();
+    this.onSubmit();
+  }
+
+  checkFormsValidity() {
+    return new Promise((resolve, reject) => {
+      let valid = false;
+      let applicantDetails = this.applicantDetailsForm.valid;
+      let bankDetails = this.bankDetailsForm.valid;
+      let address = this.addressDetailsForm.valid;
+      let tenancyDetails = this.tenancyDetailForm.valid;
+      let guarantorDetails = this.guarantorForm.valid;
+      if (applicantDetails && tenancyDetails && guarantorDetails && bankDetails && address) {
+        valid = true;
+      }
+      return resolve(valid);
+    });
+  }
+
+  async onSubmit() {
+    const response = await this.commonService.showConfirm('Application', 'Do you want to submit the application?');
+    if (response) {
+      this.submitApplication();
+    }
+  }
+
+  submitApplication(): void {
+    // this.showLoader = true;
+    let data: any = {};
+    data.submittedBy = ENTITY_TYPE.AGENT;
+    data.submittedById = '';
+    this._tobService.submitApplication(this.applicationDetails.applicationId, data).subscribe(
+      res => {
+        this.commonService.showMessage('Your application has been submitted successfully.', 'Application', 'success');
+        if (this.isStudentProperty) {
+          this.showPayment = true;
+          this.currentStepperIndex = 10;
+          // this.radioTabModel = 'payment';
+        } else {
+          this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+        }
+        // this.showLoader = false;
+      },
+      error => {
+        // this.showLoader = false;
+        const errorMessage = error.error ? error.error.message : error.message;
+        this.commonService.showMessage((errorMessage || 'Internal server error') + ', Please contact support.', 'Application', 'error');
+      }
+    );
+  }
+
+  /** Submit Application Functionality **/
 
   /** Step Change functionality **/
   public onStepChange(event: any): void {
@@ -392,12 +459,12 @@ export class ApplicationDetailPage implements OnInit {
       this.applicationDetails = res;
       this.applicationDetails.applicationClauses = res.applicationClauses ? res.applicationClauses : []
       this.applicationDetails.applicationRestrictions = res.applicationRestrictions ? res.applicationRestrictions : [];
-      // this.applicationDetails = this.commonService.getLookupValue(this.applicationStatuses, this.applicationDetails.status);
-      // if (this.applicationStatus === 'Accepted' && this.entityType == Role.Applicant) {
-      //   this.currentStepperIndex = 10;
-      //   this.showPayment = true;
-      //   this.initPaymentConfiguration();
-      // }
+      this.applicationStatus = this.commonService.getLookupValue(this.applicationDetails.status, this.applicationStatuses);
+      if (this.applicationStatus === 'Accepted') {
+        this.currentStepperIndex = 10;
+        this.showPayment = true;
+        //   this.initPaymentConfiguration();
+      }
       this.applicationDetails.applicationRestrictions = this.applicationDetails.applicationRestrictions.filter(restrict => restrict.value);
       this.applicationDetails.applicationRestrictions.map(
         restrict =>
@@ -576,6 +643,7 @@ export class ApplicationDetailPage implements OnInit {
 
   private setTobLookupData(): void {
     this.toblookupdata = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
+    this.applicationStatuses = this.toblookupdata.applicationStatuses;
   }
 
   private initSearchForm(): void {
