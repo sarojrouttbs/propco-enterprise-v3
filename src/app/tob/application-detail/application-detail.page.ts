@@ -1411,11 +1411,10 @@ export class ApplicationDetailPage implements OnInit {
     const termsAndCondition = this.termsAndConditionData?.application?.termsAndCondition;
     const modal = await this.modalController.create({
       component: TermsAndConditionModalPage,
-      cssClass: 'modal-container terms-and-condition-modal',
+      cssClass: 'modal-container modal-width',
       componentProps: {
         data: termsAndCondition,
-        heading: 'Terms and Conditions',
-        button: 'Accept'
+        heading: 'Terms and Conditions'
       },
       backdropDismiss: false
     });

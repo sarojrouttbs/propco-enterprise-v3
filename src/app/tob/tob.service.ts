@@ -248,7 +248,6 @@ export class TobService {
   }
 
   rejectAllApplication(body: any): Observable<any> {
-    console.log('body', body)
     return this.httpClient.put(environment.API_BASE_URL + `applications/reject`, body).pipe(
       tap(() => { }),
       catchError(this.handleError<any>(''))

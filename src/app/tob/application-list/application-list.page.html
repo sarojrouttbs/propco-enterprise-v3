@@ -139,9 +139,9 @@
       <div id="divOverlay">
         <ion-button color="success" *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status != 1 && selectedApplicationRow?.status != 2)" (click)="acceptApplication()">Accept</ion-button>
         <ion-button color="danger" *ngIf="selectedApplicationRow?.isSubmitted && selectedApplicationRow?.status != 1 && selectedApplicationRow?.status != 3" (click)="rejectApplication()">Reject</ion-button>
-        <ion-button *ngIf="selectedApplicationRow?.status == 2" (click)="holdApplication()">Hold</ion-button>
-        <ion-button *ngIf="selectedApplicationRow?.status == 2 && !selectedApplicationRow?.isHoldingDepositPaid" (click)="markHoldingDepositPaid()">Holding Deposit Paid</ion-button>
-        <ion-button *ngIf="selectedApplicationRow?.status == 2 && selectedApplicationRow?.isHoldingDepositPaid" (click)="startReferencing()">Start Referencing</ion-button>
+        <ion-button *ngIf="selectedApplicationRow?.isSubmitted && selectedApplicationRow?.status == 2" (click)="holdApplication()">Hold</ion-button>
+        <ion-button *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status == 2 && !selectedApplicationRow?.isHoldingDepositPaid)" (click)="markHoldingDepositPaid()">Holding Deposit Paid</ion-button>
+        <ion-button *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status == 2 && selectedApplicationRow?.isHoldingDepositPaid)" (click)="startReferencing()">Start Referencing</ion-button>
         <ion-button (click)="viewDetails(selectedApplicationRow?.applicationId)">View Details</ion-button>
         <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>
