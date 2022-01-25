@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ heading }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ion-margin">
+  <div class="warning-msg">
+    <img src="assets/images/tob/icon-not-negotiable.svg">
+    By submitting these details, property will be reserved for the Applicant and property will also go off market.
+  </div>
+
+  <form [formGroup]="holdingDepositForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating"> Payment Method <ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-select interface="popover" formControlName="offlinePaymentMethod">
+              <ion-select-option [value]="item?.index" *ngFor="let item of offlinePaymentTypes">
+                {{ item?.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="holdingDepositForm.controls.offlinePaymentMethod"></app-validation-message>
+        </ion-col>
+
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item>
+            <ion-label position="floating"> Payment Referance <ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-input type="text" formControlName="offlinePaymentReference"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="holdingDepositForm.controls.offlinePaymentReference"></app-validation-message>
+        </ion-col>
+
+        <ion-col size-xs="100" size-sm="50" style="margin-top: 45px;">
+          <mat-form-field appearance="fill">
+            <mat-label> Payment Date <ion-text class="mandatory">*</ion-text></mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="offlinePaymentDate" readonly>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <div style="margin-top: -20px !important;">
+            <app-validation-message [control]="holdingDepositForm.controls.offlinePaymentDate"></app-validation-message>
+          </div>
+        </ion-col>
+       
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <div class="ion-text-end ion-padding">
+    <ion-button color="success" (click)="submit()"> Submit </ion-button>
+  </div>
+</ion-footer>
