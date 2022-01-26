@@ -225,7 +225,7 @@ export class ApplicationDetailPage implements OnInit {
     this.onSubmit();
   }
 
-  checkFormsValidity() {
+  private checkFormsValidity() {
     return new Promise((resolve, reject) => {
       let valid = false;
       let applicantDetails = this.applicantDetailsForm.valid;
@@ -240,14 +240,14 @@ export class ApplicationDetailPage implements OnInit {
     });
   }
 
-  async onSubmit() {
+  private async onSubmit() {
     const response = await this.commonService.showConfirm('Application', 'Do you want to submit the application?');
     if (response) {
       this.submitApplication();
     }
   }
 
-  submitApplication(): void {
+  private submitApplication(): void {
     // this.showLoader = true;
     let data: any = {};
     data.submittedBy = ENTITY_TYPE.AGENT;
