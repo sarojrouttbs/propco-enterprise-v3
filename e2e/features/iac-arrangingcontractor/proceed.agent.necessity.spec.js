@@ -6,7 +6,7 @@ var proceedAgentNecessityJson = require('../../resources/json/proceedagentnecess
 describe('FixAFault Module', function(){
 
     it('should allow PM to complete Proceed As Agent of Necessity repair', function(){
-        let json = proceedAgentNecessityJson.fault_details.proceedAgentNecessityComplete; 
+        let json = proceedAgentNecessityJson.faultDetails.proceedAgentNecessityComplete; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let agentNecessityRepair = new proceedAgentNecessity(json);
@@ -17,7 +17,7 @@ describe('FixAFault Module', function(){
     }); 
 
     it('should allow PM to reject Works Order request on behalf of contractor during Proceed As Agent of Necessity repair', function(){
-        let json = proceedAgentNecessityJson.fault_details.proceedAgentNecessityComplete; 
+        let json = proceedAgentNecessityJson.faultDetails.proceedAgentNecessityComplete; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let agentNecessityRepair = new proceedAgentNecessity(json);
@@ -28,7 +28,7 @@ describe('FixAFault Module', function(){
     });
 
     it('should allow PM to submit response during Proceed As Agent of Necessity repair - contractor could not complete the job', function(){
-        let json =  proceedAgentNecessityJson.fault_details.proceedAgentNecessityComplete;  
+        let json =  proceedAgentNecessityJson.faultDetails.proceedAgentNecessityComplete;  
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let agentNecessityRepair = new proceedAgentNecessity(json);
@@ -39,7 +39,7 @@ describe('FixAFault Module', function(){
     }); 
 
     it('should validate Works Order details during Proceed As Agent of Necessity repair', function(){
-        let json =  proceedAgentNecessityJson.fault_details.worksOrderDetails; 
+        let json =  proceedAgentNecessityJson.faultDetails.worksOrderDetails; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let agentNecessityRepair = new proceedAgentNecessity(json);
@@ -50,7 +50,7 @@ describe('FixAFault Module', function(){
     });
 
     it('should allow PM to edit Works Order visit time during Proceed As Agent of Necessity repair', function(){
-        let json =  proceedAgentNecessityJson.fault_details.editWOVisitTime; 
+        let json =  proceedAgentNecessityJson.faultDetails.editWOVisitTime; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let agentNecessityRepair = new proceedAgentNecessity(json);
@@ -61,7 +61,7 @@ describe('FixAFault Module', function(){
     });
 
     it('should allow PM to switch Proceed As Agent of Necessity repair Repair flow to a different way', function(){
-        let json =  proceedAgentNecessityJson.fault_details.switchRepairToLLOwnRepair; 
+        let json =  proceedAgentNecessityJson.faultDetails.switchRepairToLLOwnRepair; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let agentNecessityRepair = new proceedAgentNecessity(json);

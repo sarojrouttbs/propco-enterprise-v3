@@ -6,7 +6,7 @@ var obtainQuoteJson = require('../../resources/json/obtainquote.json');
 describe('FixAFault Module', function(){
 
     it('should allow PM to complete Obtain Quote and Repair process', function(){
-        let json = obtainQuoteJson.fault_details.obtainQuoteComplete; 
+        let json = obtainQuoteJson.faultDetails.obtainQuoteComplete; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let quoteRepair = new obtainQuote(json);
@@ -17,7 +17,7 @@ describe('FixAFault Module', function(){
     }); 
 
     it('should allow PM to reject Quote request on behalf of contractor', function(){
-        let json = obtainQuoteJson.fault_details.obtainQuoteComplete; 
+        let json = obtainQuoteJson.faultDetails.obtainQuoteComplete; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let quoteRepair = new obtainQuote(json);
@@ -28,7 +28,7 @@ describe('FixAFault Module', function(){
     });
 
     it('should allow PM to submit response - contractor could not carry out the quote', function(){
-        let json = obtainQuoteJson.fault_details.obtainQuoteComplete; 
+        let json = obtainQuoteJson.faultDetails.obtainQuoteComplete; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let quoteRepair = new obtainQuote(json);
@@ -39,7 +39,7 @@ describe('FixAFault Module', function(){
     }); 
 
     it('should allow PM to reject Quote request on behalf of landlord', function(){
-        let json = obtainQuoteJson.fault_details.obtainQuoteComplete; 
+        let json = obtainQuoteJson.faultDetails.obtainQuoteComplete; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let quoteRepair = new obtainQuote(json);
@@ -50,7 +50,7 @@ describe('FixAFault Module', function(){
     });
 
     it('should validate Quote details', function(){
-        let json = obtainQuoteJson.fault_details.quoteDetails; 
+        let json = obtainQuoteJson.faultDetails.quoteDetails; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let quoteRepair = new obtainQuote(json);
@@ -61,7 +61,7 @@ describe('FixAFault Module', function(){
     });
 
     it('should allow PM to edit quote visit time', function(){
-        let json = obtainQuoteJson.fault_details.editQuoteVisitTime; 
+        let json = obtainQuoteJson.faultDetails.editQuoteVisitTime; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let quoteRepair = new obtainQuote(json);
@@ -72,7 +72,7 @@ describe('FixAFault Module', function(){
     });
 
     it('should allow PM to switch Obtain Quote Repair flow to a different way', function(){
-        let json = obtainQuoteJson.fault_details.switchRepairToWorksOrder; 
+        let json = obtainQuoteJson.faultDetails.switchRepairToWorksOrder; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let quoteRepair = new obtainQuote(json);

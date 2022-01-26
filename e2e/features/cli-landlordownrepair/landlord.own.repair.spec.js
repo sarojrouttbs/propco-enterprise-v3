@@ -6,7 +6,7 @@ var llOwnRepairJson = require('../../resources/json/llownrepair.json');
 describe('FixAFault Module', function(){
 
     it('should allow PM to complete Landlord Own Repair process', function(){
-        let json = llOwnRepairJson.fault_details.llOwnRepairComplete; 
+        let json = llOwnRepairJson.faultDetails.llOwnRepairComplete; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let llOwnRepair = new landlordOwnRepair(json);
@@ -17,7 +17,7 @@ describe('FixAFault Module', function(){
     }); 
 
     it('should allow PM to edit Landlord contractor details', function(){
-        let json = llOwnRepairJson.fault_details.llContractorDetails; 
+        let json = llOwnRepairJson.faultDetails.llContractorDetails; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let llOwnRepair = new landlordOwnRepair(json);
@@ -28,7 +28,7 @@ describe('FixAFault Module', function(){
     });
 
     it('should allow PM to submit response - Landlord does not want to proceed with own contractor', function(){
-        let json = llOwnRepairJson.fault_details.llOwnRepairComplete; 
+        let json = llOwnRepairJson.faultDetails.llOwnRepairComplete; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let llOwnRepair = new landlordOwnRepair(json);
@@ -39,7 +39,7 @@ describe('FixAFault Module', function(){
     });
 
     it('should allow PM to submit response - Landlord wants to arrange a new contractor', function(){
-        let json = llOwnRepairJson.fault_details.llOwnRepairComplete; 
+        let json = llOwnRepairJson.faultDetails.llOwnRepairComplete; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let llOwnRepair = new landlordOwnRepair(json);
@@ -50,7 +50,7 @@ describe('FixAFault Module', function(){
     });
 
     it('should allow PM to submit response - Tenant is not satisfied with repair', function(){
-        let json = llOwnRepairJson.fault_details.llOwnRepairComplete; 
+        let json = llOwnRepairJson.faultDetails.llOwnRepairComplete; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let llOwnRepair = new landlordOwnRepair(json);
@@ -61,7 +61,7 @@ describe('FixAFault Module', function(){
     });
     
     it('should allow PM to switch Landlord Own Repair flow to a different way', function(){
-        let json = llOwnRepairJson.fault_details.switchRepairToObtainQuote; 
+        let json = llOwnRepairJson.faultDetails.switchRepairToObtainQuote; 
         let addFault = new fault(json); 
         let summary = new faultSummary(json);
         let llOwnRepair = new landlordOwnRepair(json);

@@ -1,5 +1,5 @@
 {
-    "fault_details": {
+    "faultDetails": {
         "parentFault": {
             "childFault": "0",
             "propertyId": "000002063",
