@@ -11,6 +11,13 @@ export class TobService {
 
   constructor(private httpClient: HttpClient) { }
 
+  submitApplication(applicationId: string, data: object): Observable<any> {
+    return this.httpClient.put<any>(environment.API_BASE_URL + `applications/${applicationId}/submit`, data).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
   updateApplicationDetails(applicationDetails: object, applicationId: string): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `applications/${applicationId}`, applicationDetails).pipe(
       tap(() => { }),

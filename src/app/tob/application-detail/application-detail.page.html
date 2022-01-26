@@ -6,8 +6,7 @@
       <ion-row>
         <ion-col size="100">
           <mat-horizontal-stepper (selectionChange)="onStepChange($event)" [selectedIndex]="currentStepperIndex"
-            class="stepper-section" #stepper labelPosition="bottom"
-            [selectedIndex]="currentStepperIndex">
+            class="stepper-section" #stepper labelPosition="bottom">
             <mat-step>
               <ng-container *ngTemplateOutlet="occupants"></ng-container>
               <ng-template matStepLabel>Occupants</ng-template>
@@ -95,18 +94,18 @@
               <ng-template matStepLabel>Review</ng-template>
               <div class="action-btn-section">
                 <ng-container *ngTemplateOutlet="saveAndCancel"></ng-container>
-                <!-- <ion-button  color="success">Submit</ion-button> -->
+                <ion-button [disabled]="applicationDetails?.isSubmitted" (click)="submit()" color="success">Submit</ion-button>
                 <button class="next-back-button" mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button [disabled]="!showPayment" mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
-            <mat-step *ngIf="showPayment">
+            <mat-step [aria-labelledby]="!(showPayment || applicationStatus === 'Accepted') ? 'disabled_stepper_step' : null">
               <ng-container *ngTemplateOutlet="payment"></ng-container>
               <ng-template matStepLabel>Holding <br/> Deposit</ng-template>
-              <div class="action-btn-section">
+              <!-- <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
                 <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
-              </div>
+              </div> -->
             </mat-step>
 
           </mat-horizontal-stepper>
@@ -118,7 +117,7 @@
 
 <ng-template #saveAndCancel>
   <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-  <ion-button (click)="saveStepData(stepper.selectedIndex, 'SAVE_FOR_LATER')">Save for Later
+  <ion-button [disabled]="applicationDetails?.isSubmitted" (click)="saveStepData(stepper.selectedIndex, 'SAVE_FOR_LATER')">Save for Later
     <ion-icon *ngIf="saveDataLoader" name="refresh" class="rotating submit-loader"></ion-icon>
   </ion-button>&nbsp;
 </ng-template>
@@ -189,18 +188,18 @@
                           <ion-checkbox class="ml-15" style="opacity: unset;" formControlName="isLead"
                             (click)="onLeadSelection(item); $event.stopPropagation();"
                             [checked]="item.controls['isLead'].value"
-                            [disabled]="item.controls['isLead'].value  || !item.controls['applicationApplicantId'].value"
+                            [disabled]="item.controls['isLead'].value  || !item.controls['applicationApplicantId'].value && !applicationDetails?.isSubmitted"
                             color="success"></ion-checkbox>
                         </ion-col>
                         <ion-col size="10">
                           <ion-icon (click)="removeCoApplicant(item); $event.stopPropagation();" color="danger"
-                            class="remove-btn" *ngIf="!item.controls['isLead'].value" name="close-circle">
+                            class="remove-btn" *ngIf="!item.controls['isLead'].value && !applicationDetails?.isSubmitted" name="close-circle">
                           </ion-icon>
                         </ion-col>
                       </ion-row>
                     </ion-grid>
                   </ng-container>
-                  <ng-container *ngIf="!item.controls['isAdded'].value">
+                  <ng-container *ngIf="!item.controls['isAdded'].value && !applicationDetails?.isSubmitted">
                     <ion-col size="10">
                       <ion-item>
                         <ion-label position="floating"> Title </ion-label>
@@ -250,7 +249,7 @@
                         New</ion-button>
                     </ion-col>
                   </ng-container>
-                  <ng-container *ngIf="!item.controls['isAdded'].value">
+                  <ng-container *ngIf="!item.controls['isAdded'].value && !applicationDetails?.isSubmitted">
                     <ion-grid>
                       <ion-row class="ion-justify-content-end search-row" [formGroup]="searchApplicantForm">
                         <ion-col size-sm="50" size-xl="35" id="tob-applicant-search">
@@ -411,7 +410,7 @@
             <ion-label position="floating"> Postcode <ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-input type="text" formControlName="postcode"></ion-input>
-            <ion-button color="success" [disabled]="showPostcodeLoader" class="postcode-search"
+            <ion-button color="success" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
               (click)="getAddressList('personal')">Lookup
               <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
             </ion-button>
@@ -484,7 +483,7 @@
               <ion-label position="floating">Postcode <ion-text class="mandatory">*</ion-text>
               </ion-label>
               <ion-input type="text" formControlName="postcode"></ion-input>
-              <ion-button class="postcode-search" [disabled]="showAddressLoader" color="success"
+              <ion-button class="postcode-search" [disabled]="showAddressLoader || applicationDetails?.isSubmitted" color="success"
                 (click)="getAddressList('correspondence-address')"> Lookup
                 <ion-icon *ngIf="showAddressLoader" name="refresh" class="rotating submit-loader"></ion-icon>
               </ion-button>
@@ -852,7 +851,7 @@
                 </ion-text>
               </ion-label>
               <ion-input type="text" formControlName="postcode"></ion-input>
-              <ion-button color="success" [disabled]="showPostcodeLoader" class="postcode-search"
+              <ion-button color="success" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
                 (click)="getAddressList('guarantor')">Lookup
                 <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
               </ion-button>
@@ -1157,7 +1156,7 @@
 
           <ion-row>
             <ion-item lines="none" class="ion-no-padding ion-no-margin">
-              <ion-checkbox slot="start" class="ion-margin" [(ngModel)]="termsConditionControl"
+              <ion-checkbox color="success" slot="start" class="ion-margin" [(ngModel)]="termsConditionControl"
                 [disabled]="true" [ngModelOptions]="{standalone: true}"
                 (ionChange)="onTermsModelChanged($event)" style="margin-left: 5px;"></ion-checkbox>
             </ion-item>
@@ -1173,4 +1172,14 @@
     </ion-row>
   </ion-grid>
 </ng-template>
-<ng-template #payment></ng-template>
+<ng-template #payment>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <h2 class="payment-heading">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
+        <ion-button>Pay</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ng-template>
