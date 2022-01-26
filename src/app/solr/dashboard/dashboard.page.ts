@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { FormControl } from "@angular/forms";
 import { SolrService } from "../solr.service";
 declare function openScreen(key: string, value: any): any;
 
@@ -12,6 +13,8 @@ export class DashboardPage implements OnInit {
   loggedInUserData;
 
   hideSuggestion: boolean = false;
+  entityControl = new FormControl(["Property"]);
+  loaded: boolean = false;
 
   constructor(private solrService: SolrService) {}
 
@@ -25,6 +28,7 @@ export class DashboardPage implements OnInit {
 
   private async initApiCalls() {
     this.loggedInUserData = await this.getUserDetails();
+    this.loaded = true;
   }
 
   private getUserDetails() {

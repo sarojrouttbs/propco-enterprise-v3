@@ -1,5 +1,5 @@
 <ion-content id="solr-dashboard">
-  <ion-grid class="ion-no-padding" fixed>
+  <ion-grid class="ion-no-padding" fixed *ngIf="loaded">
     <ion-row class="ion-justify-content-center">
       <ion-col size="30" class="ion-text-center ion-no-padding">
         <img src="assets/images/solr/propcoLogo.svg" />
@@ -11,7 +11,7 @@
       </ion-col>
     </ion-row>
     <!-- <ion-row class="ion-align-items-center ion-justify-content-center ion-margin-vertical"> -->
-      <app-search-suggestion></app-search-suggestion>
+      <app-search-suggestion [entityControl]="entityControl" [pageType]="'dashboard'"></app-search-suggestion>
     <!-- </ion-row> -->
     <ion-row class="ion-align-items-center ion-justify-content-center">
       <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
