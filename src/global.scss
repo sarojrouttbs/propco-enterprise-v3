@@ -629,12 +629,24 @@ mat-form-field {
       line-height: 27px;
     }
     .searchbar-search-icon {
-      height: 22px;
+      display:none; 
+      width:0; 
+      height:0;
     }
     .searchbar-search-icon {
       background-image: url("assets/images/solr/propcoLogo.svg")!important;
       color: transparent;
       background-size: cover;
+    }
+    .searchbar-input-container{
+      border: 1px solid #ccc;
+      box-shadow: none;
+      border-left: 0;
+      .searchbar-input {
+        box-shadow: none;
+        padding-top: 4px;
+        padding-left: 10px;
+      }
     }
 }
 .solrMutiSelect {
@@ -642,21 +654,28 @@ mat-form-field {
 		.mat-form-field-underline {
 			display: none;
 		}
-		.mat-form-field-infix {
-			width: 0px;
-		}
+		// .mat-form-field-infix {
+		// 	width: 0px;
+		// }
 		.mat-form-field-wrapper {
-			padding: 0;
+			border: 1px solid;
+      padding-bottom: 0;
+      color: #ccc;
+      border-radius: 3px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      padding-left: 6px;
+      font-size: 15px;
 		}
-		.mat-select-arrow {
-			color: rgb(197 51 44);
-			border-left: 8px solid transparent;
-			border-right: 8px solid transparent;
-			border-top: 7px solid;
-		}
-		.mat-select-min-line {
-			opacity: 0;
-		}
+		// .mat-select-arrow {
+		// 	color: rgb(197 51 44);
+		// 	border-left: 8px solid transparent;
+		// 	border-right: 8px solid transparent;
+		// 	border-top: 7px solid;
+		// }
+		// .mat-select-min-line {
+		// 	opacity: 0;
+		// }
 	}
 }
 
@@ -665,4 +684,8 @@ mat-form-field {
   .mat-expansion-panel-body{
     padding: 0;
   }
+}
+
+.search-header {
+  background-color: var(--ion-background-color);
 }

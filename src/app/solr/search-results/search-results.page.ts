@@ -12,8 +12,8 @@ declare function openScreen(key: string, value: any): any;
   templateUrl: "./search-results.page.html",
   styleUrls: ["./search-results.page.scss"],
   host: {
-    '(document:keypress)': 'handleKeyboardEvent($event)'
-  }
+    "(document:keypress)": "handleKeyboardEvent($event)",
+  },
 })
 export class SearchResultsPage implements OnInit {
   showFiller = true;
@@ -63,6 +63,13 @@ export class SearchResultsPage implements OnInit {
   opened: boolean;
   loaded: boolean = false;
   key;
+  entityControl = new FormControl([]);
+  propertyCheck = new FormControl();
+  landlordCheck = new FormControl();
+  tenantCheck = new FormControl();
+  applicantCheck = new FormControl();
+  agentCheck = new FormControl();
+  contractorCheck = new FormControl();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatDrawer) drawer: MatDrawer;
@@ -75,10 +82,14 @@ export class SearchResultsPage implements OnInit {
   ngOnInit() {
     this.initResults();
     this.getSearchResults();
+    this.entityControl.valueChanges.subscribe(() => {
+      console.log(this.entityControl.value);
+    });
   }
 
   private async initResults() {
     await this.getQueryParams();
+    this.initFilter();
   }
 
   private getQueryParams() {
@@ -90,9 +101,34 @@ export class SearchResultsPage implements OnInit {
         this.solrSearchConfig.searchTerm = params["searchTerm"]
           ? params["searchTerm"]
           : "*";
+        resolve(true);
       });
     });
     return promise;
+  }
+
+  private initFilter() {
+    if (this.solrSearchConfig.types) {
+      this.entityControl.setValue(this.solrSearchConfig.types);
+      let types: string[] = Array.isArray(this.solrSearchConfig.types)
+        ? this.solrSearchConfig.types
+        : [this.solrSearchConfig.types];
+      types.map((res) => {
+        if (res === "Property") {
+          this.propertyCheck.setValue(true);
+        } else if (res === "Landlord") {
+          this.landlordCheck.setValue(true);
+        } else if (res === "Tenant") {
+          this.tenantCheck.setValue(true);
+        } else if (res === "Applicant") {
+          this.tenantCheck.setValue(true);
+        } else if (res === "Agent") {
+          this.agentCheck.setValue(true);
+        } else if (res === "Contractor") {
+          this.contractorCheck.setValue(true);
+        }
+      });
+    }
   }
 
   getSearchResults() {
@@ -112,7 +148,7 @@ export class SearchResultsPage implements OnInit {
       .set("limit", this.pageSize.toString())
       .set("page", this.pageIndex.toString())
       .set("searchTerm", this.solrSearchConfig.searchTerm)
-      .set("types", this.solrSearchConfig.types);
+      .set("types", this.transformToUpperCase(this.solrSearchConfig.types));
   }
 
   public customFormatter(value: number) {
@@ -134,9 +170,9 @@ export class SearchResultsPage implements OnInit {
     return value;
   }
 
-  handleKeyboardEvent(event: KeyboardEvent) { 
+  handleKeyboardEvent(event: KeyboardEvent) {
     this.key = event.key;
-    if(this.key === '['){
+    if (this.key === "[") {
       this.drawer.toggle();
     }
   }
@@ -144,4 +180,25 @@ export class SearchResultsPage implements OnInit {
   openDetails(key: string, value = null) {
     openScreen(key, value);
   }
+
+  refreshAll() {}
+  resetAll() {}
+  refresh() {}
+  reset() {}
+  onChangeEntity(type: string, checked) {
+    switch (type) {
+      case "property":
+        if (checked) {
+        }
+    }
+  }
+  update;
+  private renderEntity() {}
+
+  private transformToUpperCase(data: any) {
+    return data.map((x: string) => {
+      return x.toUpperCase();
+    });
+  }
+
 }

@@ -1,0 +1,53 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
+i.search-icon {
+    @include set-text-style(19px, 40px);
+    height: 39px;
+    width: 40px;
+    border: 1px solid #ccc;
+    border-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    font-weight: bold;
+}
+
+.solrSuggestionList {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    margin: 0;
+    list-style: none;
+    padding: 0;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 25%);
+
+    .solrSuggestionListItem {
+        cursor: pointer;
+        @include set-text-style(11px, 48px);
+        overflow: hidden;
+        padding: 0 2px;
+        height: 48px;
+        margin: 0;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        // background-color: #f7f7f7;
+        border-bottom: 1px solid #666;
+
+        i.propcoicon {
+            display: inline-table;
+            vertical-align: sub;
+            background: var(--ion-color-step-1750);
+        }
+
+        .text-color-lightgreen {
+            color: #21b573 !important;
+        }
+    }
+}
+
+.main-row {
+    margin-top: 7px;
+    margin-bottom: 7px;
+}

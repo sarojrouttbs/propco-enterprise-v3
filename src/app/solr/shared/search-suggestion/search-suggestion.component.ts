@@ -1,5 +1,5 @@
 import { HttpParams } from "@angular/common/http";
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import { PROPCO } from "src/app/shared/constants";
@@ -19,7 +19,7 @@ export class SearchSuggestionComponent implements OnInit {
   }
   isItemAvailable = false;
   suggestions = [];
-  entityControl = new FormControl(["Property"]);
+  @Input() entityControl: FormControl;
   searchTermControl = new FormControl();
   private solrSuggestionConfig = {
     limit: "30",
@@ -40,6 +40,7 @@ export class SearchSuggestionComponent implements OnInit {
   officeLookupDetails: any;
   officeLookupMap = new Map();
   showLoader: boolean = false;
+  @Input() pageType: string;
   constructor(
     private solrService: SolrService,
     private commonService: CommonService,
@@ -131,7 +132,7 @@ export class SearchSuggestionComponent implements OnInit {
     this.router.navigate(["/solr/search-results"], {
       queryParams: {
         searchTerm: this.searchTermControl.value,
-        type: this.transformToUpperCase(this.entityControl.value),
+        type: this.entityControl.value,
       },
     });
   }
