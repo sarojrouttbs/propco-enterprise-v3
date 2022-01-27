@@ -225,7 +225,7 @@ export class CommonService {
     });
   }
 
-  async showConfirm(title: string, displayText: string, subtitle?: string, okText?: string, cancelText?: string, input?: any) {
+  async showConfirm(title: string, displayText: string, subtitle?: string, okText?: string, cancelText?: string, inputs?: any) {
     return new Promise((resolve, reject) => {
       let alertPopup: any;
       this.alertCtrl.create({
@@ -257,7 +257,7 @@ export class CommonService {
           }
         ],
         backdropDismiss: false,
-        inputs: input
+        inputs: inputs
       }).then(res => {
         alertPopup = res;
         res.present();
@@ -667,6 +667,6 @@ export class CommonService {
   }
 
   getReferencingInfo(): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + 'agents/referencing/info', { responseType: 'json' });
+    return this.httpClient.get(environment.API_BASE_URL + 'agents/referencing/info', {});
   }
 }
