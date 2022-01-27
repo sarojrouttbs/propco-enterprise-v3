@@ -7,7 +7,7 @@
         <ion-col size="100">
           <mat-horizontal-stepper (selectionChange)="onStepChange($event)" [selectedIndex]="currentStepperIndex"
             class="stepper-section" #stepper labelPosition="bottom">
-            <mat-step>
+            <mat-step [completed]="applicationDetails?.isSubmitted">
               <ng-container *ngTemplateOutlet="occupants"></ng-container>
               <ng-template matStepLabel>Occupants</ng-template>
               <div class="action-btn-section">
@@ -17,7 +17,7 @@
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
-            <mat-step [stepControl]="applicantDetailsForm">
+            <mat-step [completed]="applicationDetails?.isSubmitted" [stepControl]="applicantDetailsForm">
               <ng-container *ngTemplateOutlet="applicantDetails"></ng-container>
               <ng-template matStepLabel>Applicant <br/> Details</ng-template>
               <div class="action-btn-section">
@@ -26,7 +26,7 @@
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
-            <mat-step [stepControl]="addressDetailsForm">
+            <mat-step [completed]="applicationDetails?.isSubmitted" [stepControl]="addressDetailsForm">
               <ng-container *ngTemplateOutlet="applicantAddress"></ng-container>
               <ng-template matStepLabel>Address</ng-template>
               <div class="action-btn-section">
@@ -35,7 +35,7 @@
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
-            <mat-step [stepControl]="bankDetailsForm">
+            <mat-step [completed]="applicationDetails?.isSubmitted" [stepControl]="bankDetailsForm">
               <ng-container *ngTemplateOutlet="bankDetails"></ng-container>
               <ng-template matStepLabel>Bank <br/> Details</ng-template>
               <div class="action-btn-section">
@@ -44,7 +44,7 @@
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
-            <mat-step>
+            <mat-step [completed]="applicationDetails?.isSubmitted">
               <ng-container *ngTemplateOutlet="applicationQuestion"></ng-container>
               <ng-template matStepLabel>Application <br/> Questions</ng-template>
               <div class="action-btn-section">
@@ -53,7 +53,7 @@
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
-            <mat-step [stepControl]="tenancyDetailForm">
+            <mat-step [completed]="applicationDetails?.isSubmitted" [stepControl]="tenancyDetailForm">
               <ng-container *ngTemplateOutlet="tenancyDetails"></ng-container>
               <ng-template matStepLabel>Tenancy <br/> Details</ng-template>
               <div class="action-btn-section">
@@ -62,7 +62,7 @@
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
-            <mat-step>
+            <mat-step [completed]="applicationDetails?.isSubmitted">
               <ng-container *ngTemplateOutlet="restriction"></ng-container>
               <ng-template matStepLabel>Restrictions</ng-template>
               <div class="action-btn-section">
@@ -71,7 +71,7 @@
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
-            <mat-step>
+            <mat-step [completed]="applicationDetails?.isSubmitted">
               <ng-container *ngTemplateOutlet="clauses"></ng-container>
               <ng-template matStepLabel>Clauses </ng-template>
               <div class="action-btn-section">
@@ -80,7 +80,7 @@
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
-            <mat-step [stepControl]="guarantorForm">
+            <mat-step [completed]="applicationDetails?.isSubmitted" [stepControl]="guarantorForm">
               <ng-container *ngTemplateOutlet="guarantorDetails"></ng-container>
               <ng-template matStepLabel>Guarantor <br/> Details</ng-template>
               <div class="action-btn-section">
@@ -89,7 +89,7 @@
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
-            <mat-step>
+            <mat-step [completed]="applicationDetails?.isSubmitted">
               <ng-container *ngTemplateOutlet="finalView"></ng-container>
               <ng-template matStepLabel>Review</ng-template>
               <div class="action-btn-section">
@@ -99,7 +99,7 @@
                 <button [disabled]="!showPayment" mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
-            <mat-step [aria-labelledby]="!(showPayment || applicationStatus === 'Accepted') ? 'disabled_stepper_step' : null">
+            <mat-step [completed]="applicationDetails?.isSubmitted" [aria-labelledby]="!(showPayment || applicationStatus === 'Accepted') ? 'disabled_stepper_step' : null">
               <ng-container *ngTemplateOutlet="payment"></ng-container>
               <ng-template matStepLabel>Holding <br/> Deposit</ng-template>
               <!-- <div class="action-btn-section">
@@ -1177,9 +1177,9 @@
     <ion-row>
       <ion-col class="ion-text-center">
         <h2 class="payment-heading">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
+        <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
         <ion-button>Pay</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
-
 </ng-template>
