@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE } from 'src/app/shared/constants';
+import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAYMENT_TYPES, PAYMENT_CONFIG, APPLICATION_ENTITIES } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { switchMap, debounceTime } from 'rxjs/operators';
@@ -10,6 +10,9 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ValidationService } from 'src/app/shared/services/validation.service';
 import { ModalController } from '@ionic/angular';
 import { TermsAndConditionModalPage } from 'src/app/shared/modals/terms-and-condition-modal/terms-and-condition-modal.page';
+import { environment } from 'src/environments/environment';
+import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
+import * as CryptoJS from 'crypto-js/crypto-js';
 
 @Component({
   selector: 'app-application-detail',
@@ -78,6 +81,12 @@ export class ApplicationDetailPage implements OnInit {
   termsConditionControl: boolean = false;
   termsAndConditionData: any = {};
   applicationStatus: string;
+
+  PAYMENT_METHOD = environment.PAYMENT_METHOD;
+  PAYMENT_PROD = environment.PAYMENT_PROD;
+  paymentDetails: any = {};
+  showWorldpayIframe: boolean = false;
+  hidePaymentForm: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -298,7 +307,7 @@ export class ApplicationDetailPage implements OnInit {
         this.guarantorForm.markAllAsTouched();
       }
       if (nextIndex === 10) {
-        // this.initPaymentConfiguration();
+        this.initPaymentConfiguration();
       }
     }
   }
@@ -349,7 +358,7 @@ export class ApplicationDetailPage implements OnInit {
         }
         break;
       case 10:
-        // this.initPaymentConfiguration();
+        this.initPaymentConfiguration();
         break;
     }
   }
@@ -463,7 +472,7 @@ export class ApplicationDetailPage implements OnInit {
       if (this.applicationStatus === 'Accepted') {
         this.currentStepperIndex = 10;
         this.showPayment = true;
-        //   this.initPaymentConfiguration();
+        this.initPaymentConfiguration();
       }
       this.applicationDetails.applicationRestrictions = this.applicationDetails.applicationRestrictions.filter(restrict => restrict.value);
       this.applicationDetails.applicationRestrictions.map(
@@ -984,7 +993,7 @@ export class ApplicationDetailPage implements OnInit {
     this.applicationDetails.rentDueDay = this.tenancyDetailForm.value.rentDueDay;
     this.applicationDetails.numberOfAdults = this.tenancyDetailForm.value.numberOfAdults;
     this.applicationDetails.numberOfChildren = this.tenancyDetailForm.value.numberOfChildren;
-    // this.applicationdetails.noOfOccupants = this.tenancyDetailForm.value.noOfOccupants;
+    // this.applicationDetails.noOfOccupants = this.tenancyDetailForm.value.noOfOccupants;
     this.applicationDetails.hasSameHouseholdApplicants = this.tenancyDetailForm.value.hasSameHouseholdApplicants;
     this.applicationDetails.numberOfHouseHolds = this.tenancyDetailForm.value.numberOfHouseHolds;
     this.applicationDetails.isNoDepositScheme = this.tenancyDetailForm.value.isNoDepositScheme;
@@ -1399,7 +1408,7 @@ export class ApplicationDetailPage implements OnInit {
       this._tobService.getTermsAndConditions().subscribe(data => {
         this.commonService.setItem(PROPCO.TERMS_AND_CONDITIONS, data);
         this.setTermsAndConditionData();
-      }, error => {});
+      }, error => { });
     }
   }
 
@@ -1420,7 +1429,7 @@ export class ApplicationDetailPage implements OnInit {
     });
 
     const data = modal.onDidDismiss().then(res => {
-      if(!this.termsConditionControl) {
+      if (!this.termsConditionControl) {
         this.termsConditionControl = res.data.accepted;
       }
     });
@@ -1435,4 +1444,205 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   /** Terms and Conditions Functionality **/
+
+  private initPrePaymentDetails() {
+    const currentWebUrl = location.origin + location.pathname;
+    // const currentWebUrl = 'http://localhost:8100/';
+
+    let orderCode = 'PROPCOTESTM1TBS' + Math.random();
+    // this.paymentDetails = {};
+    this.paymentDetails.email = this.applicantDetailsForm.controls['email'].value;
+    this.paymentDetails.desc = 'Online Reservation - PropCo Web';
+    this.paymentDetails.instId = 1277936;
+    this.paymentDetails.cartId = orderCode;
+    this.paymentDetails.amount = this.applicationDetails.depositAmount;
+    this.paymentDetails.hostWebUrl = currentWebUrl + '#/worldpay';
+    this.paymentDetails.marchentCode = 'PROPCOTESTM1';
+    this.paymentDetails.applicationId = this.applicationId;
+
+    this.paymentDetails.postcode = this.addressDetailsForm.controls.address['controls'].postcode.value;
+    this.paymentDetails.address1 = this.addressDetailsForm.controls.address['controls'].addressLine1.value;
+    this.paymentDetails.address2 = this.addressDetailsForm.controls.address['controls'].addressLine2.value;
+    this.paymentDetails.town = this.addressDetailsForm.controls.address['controls'].town.value;
+    this.paymentDetails.county = this.addressDetailsForm.controls.address['controls'].county.value;
+    this.paymentDetails.country = 'GB';
+  }
+
+  showWorldpayIframeAction() {
+    if (this.PAYMENT_METHOD === PAYMENT_TYPES.WORLDPAY_REDIRECT && !this.PAYMENT_PROD && this.applicationDetails.depositAmount > 500) {
+      this.commonService.showMessage('Deposit amount should be less than 500. Above 500 not allowed in TEST Mode', 'Invalid Amount', 'error');
+      return;
+    }
+    this.showWorldpayIframe = true;
+  }
+
+  private initBarclayCardPaymentDetails() {
+    var barclayResponseUrl = window.location.origin + window.location.pathname + '#!/propco/barclaycard';
+    var paymentConfigUrl = this.PAYMENT_PROD ? PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.PROD_URL: PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.TEST_URL;
+    this.paymentDetails = {};
+    this.paymentDetails.actionUrl = paymentConfigUrl;
+    this.paymentDetails.acceptUrl = barclayResponseUrl;
+    this.paymentDetails.cancelUrl = barclayResponseUrl;
+    this.paymentDetails.declineUrl = barclayResponseUrl;
+    this.paymentDetails.email = this.applicantDetail?.email;
+    this.paymentDetails.exceptionUrl = barclayResponseUrl;
+    this.paymentDetails.orderId = 'TBS' + Math.random();
+    this.paymentDetails.PSPID = PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.PSPID;
+    this.paymentDetails.SHASIGN = this.createSHASIGN();
+    // console.log('Payment Details', this.paymentDetails);
+}
+
+
+  private createSHASIGN() {
+    var AMOUNT = 'AMOUNT=' + (this.applicationDetails.depositAmount * 100) + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    var CURRENCY = 'CURRENCY=' + 'GBP' + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    var EMAIL = 'EMAIL=' + this.paymentDetails.email + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    var LANGUAGE = 'LANGUAGE=' + 'en_US' + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    var ORDER_ID = 'ORDERID=' + this.paymentDetails.orderId + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    var PSPID = 'PSPID=' + this.paymentDetails.PSPID + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    var ACCEPT_URL = 'ACCEPTURL=' + this.paymentDetails.acceptUrl + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    var CANCEL_URL = 'CANCELURL=' + this.paymentDetails.cancelUrl + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    var DECLINE_URL = 'DECLINEURL=' + this.paymentDetails.declineUrl + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    var EXCEPTION_URL = 'EXCEPTIONURL=' + this.paymentDetails.exceptionUrl + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    var shaSignature = ACCEPT_URL + AMOUNT + CANCEL_URL + CURRENCY + DECLINE_URL + EMAIL + EXCEPTION_URL + LANGUAGE + ORDER_ID + PSPID;
+    // console.log('shaSignature', shaSignature);
+    return CryptoJS.SHA512(shaSignature).toString(CryptoJS.enc.hex).toUpperCase();
+
+  }
+
+
+  initPaymentConfiguration() {
+    switch (this.PAYMENT_METHOD) {
+      case PAYMENT_TYPES.WORLDPAY_REDIRECT:
+        this.initPrePaymentDetails();
+        break;
+      case PAYMENT_TYPES.BARCLAYCARD_REDIRECT:
+        this.initBarclayCardPaymentDetails();
+        break;
+    }
+  }
+
+  paymentDone() {
+    let paymentResponse;
+    switch (this.PAYMENT_METHOD) {
+      case PAYMENT_TYPES.WORLDPAY_REDIRECT:
+        paymentResponse = this.commonService.getItem('worldpay_response', true);
+        this.commonService.removeItem('worldpay_response');
+        //this.libraryObject.destroy();
+        this.handleWorldpayResponse(paymentResponse);
+        break;
+      case PAYMENT_TYPES.BARCLAYCARD_REDIRECT:
+        paymentResponse = this.commonService.getItem('barclaycard_response', true);
+        this.commonService.removeItem('barclaycard_response');
+        this.handleBarclaycardResponse(paymentResponse);
+        break;
+    }
+  }
+
+  handleWorldpayResponse(response) {
+    this.showWorldpayIframe = false;
+    if (response && response.transaction) {
+      this.hidePaymentForm = true;
+      // this.showConfirmation = true;
+      // this.radioTabModel = 'confirmation';
+      let transactionId = response.transaction;
+      let depositAmountPaid = this.applicationDetails.depositAmount;
+      this.processPayment(transactionId, depositAmountPaid);
+    } else {
+      this.hidePaymentForm = false;
+      this.commonService.showMessage('Sorry, your payment has failed.', 'Payment Failed', 'error');
+    }
+  }
+
+  handleBarclaycardResponse(response) {
+    this.showWorldpayIframe = false;
+    if (response && response.STATUS == '5') {
+      this.hidePaymentForm = true;
+      // this.showConfirmation = true;
+      // this.radioTabModel = 'confirmation';
+      this.processPayment(response.PAYID, this.applicationDetails.depositAmount);
+    } else {
+      this.initBarclayCardPaymentDetails();
+      this.hidePaymentForm = false;
+      if (response && response.STATUS == '1') {
+        // this.commonService.showMessage('Payment cancelled', 'Barclay Card', 'error');
+      }
+      else if (response && response.STATUS == '0') {
+        this.commonService.showMessage('Invalid or incomplete request, please try again.', 'Payment Failed', 'error');
+      }
+      else {
+        this.commonService.showMessage('Something went wrong on server, please try again.', 'Payment Failed', 'error');
+      }
+    }
+  }
+
+
+  processPayment(transactionId, depositAmountPaid) {
+    this.commonService.showLoader();
+    let paymentDetails: any = {};
+    paymentDetails.propertyId = this.propertyId;
+    paymentDetails.createdById = '';
+    paymentDetails.transactionId = transactionId;
+    paymentDetails.depositAmountPaid = depositAmountPaid;
+    paymentDetails.paidBy = APPLICATION_ENTITIES.AGENT;
+
+    this._tobService.processPayment(paymentDetails, this.applicationId).subscribe((res) => {
+      this.commonService.hideLoader();
+      this.proposeTenancy(transactionId);
+    }, error => {
+      this.commonService.hideLoader();
+      this.commonService.showMessage('Something went wrong on server, please contact us.', 'Process Payment', 'error');
+      // this.router.navigate(['applicant/applications'], { replaceUrl: true });
+      this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+    });
+  }
+
+  proposeTenancy(transactionId) {
+    this.commonService.showLoader();
+    const proposeTenancyDetails: any = {};
+    proposeTenancyDetails.applicationId = this.applicationId;
+    proposeTenancyDetails.contractType = 1;
+    proposeTenancyDetails.startDate = this.applicationDetails.moveInDate;
+    proposeTenancyDetails.expiryDate = this.applicationDetails.preferredTenancyEndDate;
+    proposeTenancyDetails.transactionId = transactionId;
+
+    this._tobService.proposeTenancy(proposeTenancyDetails, this.propertyId).subscribe((res) => {
+      this.commonService.hideLoader();
+      this.openPaymentConfirmation();
+    }, error => {
+      this.commonService.hideLoader();
+      this.commonService.showMessage('Something went wrong on server, please try again.', 'Propose Tenancy', 'error');
+      this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+    });
+  }
+
+  flowCallbackFunction(result: any) {
+    console.log('flow callback', result);
+  }
+
+  resultCallbackFunction(result: any) {
+    console.log('result callback', result);
+  }
+
+  async openPaymentConfirmation() {
+    // this.refreshedTenantDetail = await this.getNewTenantWebToken();
+    let message = '<h1> Congratulations! </h1>' + '<h5>Your payment has been completed successfully and property has been reserved.</h5>' + '<p>Now you have been converted into tenant. You will be redirected to tenant dashboard.</p>';
+    const simplaModal = await this.modalController.create({
+      component: SimpleModalPage,
+      backdropDismiss: false,
+      componentProps: {
+        data: message,
+        heading: 'Successful Payment',
+        button: 'Ok',
+      }
+    });
+
+    simplaModal.onDidDismiss().then(res => {
+      // this.redirectToTenantPage();
+      // this.commonService.logout();
+      // this.document.location.href = environment.HOST_WEBURL;
+    });
+    await simplaModal.present();
+  }
+
 }
