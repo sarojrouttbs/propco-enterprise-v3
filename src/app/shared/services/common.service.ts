@@ -225,7 +225,7 @@ export class CommonService {
     });
   }
 
-  async showConfirm(title: string, displayText: string, subtitle?: string, okText?: string, cancelText?: string) {
+  async showConfirm(title: string, displayText: string, subtitle?: string, okText?: string, cancelText?: string, inputs?: any) {
     return new Promise((resolve, reject) => {
       let alertPopup: any;
       this.alertCtrl.create({
@@ -248,15 +248,16 @@ export class CommonService {
           {
             text: okText ? okText : 'Ok',
             cssClass: 'ion-color-success',
-            handler: () => {
+            handler: (data) => {
               alertPopup.dismiss().then((res) => {
-                resolve(true);
+                data ? resolve(data) : resolve(true);
               });
               return false;
             }
           }
         ],
         backdropDismiss: false,
+        inputs: inputs
       }).then(res => {
         alertPopup = res;
         res.present();
@@ -659,10 +660,19 @@ export class CommonService {
 
   sanitizeHtml(html) {
     return this.sanitizer.bypassSecurityTrustHtml(html);
- }
+  }
 
- deleteNote(noteId: number): Observable<any> {
-  return this.httpClient.delete(environment.API_BASE_URL + `notes/${noteId}`, {});
-}
+  deleteNote(noteId: number): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + `notes/${noteId}`, {});
+  }
 
+  getReferencingInfo(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'agents/referencing/info', {});
+  }
+
+  redirectUrl(url) {
+    if (url && typeof url === 'string') {
+      window.open(url);
+    }
+  }
 }
