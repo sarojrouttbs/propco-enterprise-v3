@@ -669,4 +669,10 @@ export class CommonService {
   getReferencingInfo(): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + 'agents/referencing/info', {});
   }
+
+  redirectUrl(url) {
+    if (url && typeof url === 'string') {
+      window.open(url);
+    }
+  }
 }

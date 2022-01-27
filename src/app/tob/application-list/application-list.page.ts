@@ -352,31 +352,20 @@ export class ApplicationListPage implements OnInit {
   }
 
   startReferencing() {
-    // prepare static data for development
-    
-    const prepareReferencingInfo = [
-      {name: "LETTINGS_HUB", url: ''},
-      {name: "HOMELET", url: ''},
-      {name: "MANUALLY", url: ''},
-    ]
-    this.referencingInfo = prepareReferencingInfo;
-    
-    // prepare static data for development
-    
     if (this.referencingInfo.length === 1) {
       switch (this.referencingInfo[0].name) {
         case REFERENCING_TYPES.HOMELET:
-          window.open(this.referencingInfo[0].url);
+          this.commonService.redirectUrl(this.referencingInfo[0].url);
           break;
         case REFERENCING_TYPES.LETTINGS_HUB:
-          window.open(this.referencingInfo[0].url);
+          this.commonService.redirectUrl(this.referencingInfo[0].url);
           break;
         case REFERENCING_TYPES.MANUALLY:
-          window.open(this.referencingInfo[0].url);
+          this.commonService.redirectUrl(this.referencingInfo[0].url);
           break;
       }
     } else if (this.referencingInfo.length > 1) { 
-      this.startReferencingForMultipleType();
+      this.selectReferecingType();
     } else {
       this.commonService.showAlert('Referencing', 'There is no referencing partner configured for this domain. Please contact support or an administrator.');
     }
@@ -401,19 +390,36 @@ export class ApplicationListPage implements OnInit {
   private setReferancingInfoData() {
     this.referencingInfodata = this.commonService.getItem(PROPCO.REFERENCING_INFO, true);
     this.referencingInfo =  this.referencingInfodata.referencingPartners;
+    this.prepareReferencingInfoData();
   }
 
-  private async startReferencingForMultipleType() {
+  private async selectReferecingType() {
     const radioInput = [];
     this.referencingInfo.forEach(element => {
-      radioInput.push({label: element.name, type: "radio", value: element.url});
+      radioInput.push({label: element.label, type: "radio", value: element.url});
     });
 
     this.commonService.showConfirm('Referencing', 'Please select referencing partner', '', '', '', radioInput).then(result => {
-      console.log(result)
-      if (result && typeof result === 'string') {
-        window.open(result);
+      this.commonService.redirectUrl(result);
+    });
+  }
+
+  private prepareReferencingInfoData() {
+    // add URL's here
+    const prepareReferencingInfoData = [];
+    this.referencingInfo.forEach(element => {
+      switch (element) {
+        case REFERENCING_TYPES.HOMELET:
+          prepareReferencingInfoData.push({name: element, label: 'Homelet', url: ''});
+          break;
+        case REFERENCING_TYPES.LETTINGS_HUB:
+          prepareReferencingInfoData.push({name: element, label: 'Lettings Hub', url: ''});
+          break;
+        case REFERENCING_TYPES.MANUALLY:
+          prepareReferencingInfoData.push({name: element, label: 'Manually', url: ''});
+          break;
       }
     });
+    this.referencingInfo = prepareReferencingInfoData;
   }
 }
