@@ -62,3 +62,18 @@
     color: var(--ion-color-step-900);
     margin-bottom: 40px;
 }
+
+// #barclaycard-iframe {
+//     min-height: 530px;
+//     border: 0;
+//     width: 70%;
+//     margin: 0 15%;
+//   }
+
+#barclaycard-iframe {
+    border-radius: 6px;
+    min-height: 700px;
+    border: 0;
+    width: 100%;
+    background: var(--ion-color-step-2000);
+}

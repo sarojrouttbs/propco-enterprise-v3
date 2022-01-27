@@ -1173,13 +1173,158 @@
   </ion-grid>
 </ng-template>
 <ng-template #payment>
-  <ion-grid>
+  <!-- <ion-grid>
     <ion-row>
       <ion-col class="ion-text-center">
         <h2 class="payment-heading">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
         <ion-button>Pay</ion-button>
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-grid> -->
+<!-- </ng-template>
+<ng-template #payment> -->
+  <ng-container *ngIf="PAYMENT_METHOD == 'WORLDPAY_REDIRECT'" >
+  <!--payment method 1 starts -->
+    <ion-grid class="ion-no-padding" [hidden]="showWorldpayIframe" id="payment-detail">
+      <ion-row [hidden]="hidePaymentForm" class="ion-justify-content-between">
+        <ion-col size="100" [hidden]="showWorldpayIframe">
+          <div class="page-heading">Payment Details</div>
+        </ion-col>
+        <ion-col size="100" class="ion-text-center holding-deposit" style="margin-top:200px;">
+          <div class="heading">Holding Deposit: &nbsp;&nbsp;&nbsp;<ion-text class="value">
+              {{applicationDetails?.depositAmount | currency: 'GBP'}}</ion-text>
+          </div>
+        </ion-col>
+      
+      </ion-row>
+      <ion-row [hidden]="!hidePaymentForm" class="ion-text-center">
+        <ion-col size="100">
+          <h2>Payment</h2>
+        </ion-col>
+        <ion-col size="100">
+          <h3>Your payment has been done!</h3>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
+    <div style="padding:10px 4px;" [hidden]="hidePaymentForm">
+      <ion-button [hidden]="true" id="worldpayResponse" (click)="paymentDone()">Payment Done</ion-button>
+      <iframe name="worldpay-iframe" id="worldpay-iframe" [hidden]="!showWorldpayIframe"></iframe>
+      <form ngNoForm [action]="PAYMENT_URL" method="POST" target="worldpay-iframe"
+        class="payment-form">
+        <input id="email" name="email" [value]="paymentDetails?.email" type="hidden" />
+        <input id="desc" name="desc" type="hidden" [value]="paymentDetails?.desc" />
+        <input id="instId" name="instId" [value]="paymentDetails?.instId" type="hidden" />
+        <input id="cartId" name="cartId" [value]="paymentDetails?.cartId" type="hidden" />
+        <input id="currency" name="currency" value="GBP" type="hidden" />
+        <input id="testMode" name="testMode" value="100" type="hidden" />
+        <input id="amount" name="amount" type="hidden" [value]="paymentDetails?.amount" />
+        <input id="MC_WEBSITE_URL" name="MC_WEBSITE_URL" [value]="paymentDetails?.hostWebUrl" type="hidden" />
+        <input id="MC_APPLICATION_ID" name="MC_APPLICATION_ID" [value]="paymentDetails?.applicationId" type="hidden" />
+        <input id="accId1" name="accId1" [value]="paymentDetails?.marchentCode" type="hidden" />
+        <input id="postcode" name="postcode" [value]="paymentDetails?.postcode" type="hidden" />
+        <input id="address1" name="address1" [value]="paymentDetails?.address1" type="hidden" />
+        <input id="address2" name="address2" [value]="paymentDetails?.address2" type="hidden" />
+        <input id="town" name="town" [value]="paymentDetails?.town" type="hidden" />
+        <input id="region" name="region" [value]="paymentDetails?.county" type="hidden" />
+        <input id="country" name="country" [value]="paymentDetails?.country" type="hidden" />
+        <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="showWorldpayIframeAction()">
+          Pay</ion-button>
+      </form>
+    </div>
+    <!--payment method 1 ends -->
+  </ng-container>
+
+  <ng-container *ngIf="PAYMENT_METHOD === 'WORLDPAY_OWNFORM'">
+    <ion-grid class="ion-no-padding" *ngIf="!showworldpayInternalForm" id="payment-detail">
+      <ion-row class="ion-justify-content-between">
+        <ion-col size="100" [hidden]="showworldpayInternalForm">
+          <div class="page-heading">Payment Details</div>
+        </ion-col>
+        <ion-col size="100" class="ion-text-center holding-deposit" style="margin-top:200px;">
+          <div class="heading">Holding Deposit: &nbsp;&nbsp;&nbsp;<ion-text class="value">
+              {{applicationDetails?.depositAmount | currency: 'GBP'}}</ion-text>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <div style="padding:10px 4px;" *ngIf="!showworldpayInternalForm" >
+      <ion-button [hidden]="true" id="worldpayResponse" (click)="paymentDone()">Payment Done</ion-button>
+      <iframe name="worldpay-iframe" id="worldpay-iframe" [hidden]="!showWorldpayIframe"></iframe>
+      <form  target="worldpay-iframe"
+        class="payment-form">
+        <ion-button type="submit" color="success" [disabled]="!applicationDetails?.depositAmount" [hidden]="showworldpayInternalForm" (click)="showworldpayInternalForm = true;">
+          Pay</ion-button>
+      </form>
+    </div>
+    <app-template-form *ngIf="showworldpayInternalForm" [worldPayInternalData]="worldPayInternalData" (successPayment)='onInternalWorldpaySuccess($event)'></app-template-form>
+  </ng-container>
+
+  <ng-container *ngIf="PAYMENT_METHOD == 'BARCLAYCARD_REDIRECT'" >
+    <!--payment method 3 starts -->
+    <ion-grid class="ion-no-padding" [hidden]="showWorldpayIframe" id="payment-detail">
+      <ion-row [hidden]="hidePaymentForm" class="ion-justify-content-between">
+        <ion-col size="100" [hidden]="showWorldpayIframe" class="ion-text-center">
+          <h2 class="payment-heading">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
+          <!-- <div class="page-heading">Payment Details</div> -->
+        </ion-col>
+        <!-- <ion-col size="100" class="ion-text-center holding-deposit" style="margin-top:200px;">
+          <div class="heading">Holding Deposit: &nbsp;&nbsp;&nbsp;<ion-text class="value">
+              {{applicationDetails?.depositAmount | currency: 'GBP'}}</ion-text>
+          </div>
+        </ion-col> -->
+      </ion-row>
+      <ion-row [hidden]="!hidePaymentForm" class="ion-text-center">
+        <ion-col size="100">
+          <h2>Payment</h2>
+        </ion-col>
+        <ion-col size="100">
+          <h3>Your payment has been done!</h3>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <div style="padding:10px 4px;" [hidden]="hidePaymentForm">
+      <ion-button [hidden]="true" id="barclaycardResponse" (click)="paymentDone()">Payment Done</ion-button>
+      <iframe name="barclaycard-iframe" id="barclaycard-iframe" [hidden]="!showWorldpayIframe"></iframe>
+      <form ngNoForm [action]="paymentDetails?.actionUrl" method="POST" target="barclaycard-iframe"
+        id="form1" name="form1" class="payment-form ion-text-center">
+        <input type="hidden" name="SHASIGN" [value]="paymentDetails?.SHASIGN">
+        <input type="hidden" name="ACCEPTURL" [value]="paymentDetails?.acceptUrl">
+        <input type="hidden" name="AMOUNT" [value]="applicationDetails?.depositAmount * 100">
+        <input type="hidden" name="CANCELURL" [value]="paymentDetails?.cancelUrl">
+        <input type="hidden" name="CURRENCY" value="GBP">
+        <input type="hidden" name="DECLINEURL"[value]="paymentDetails?.declineUrl">
+        <input type="hidden" name="EMAIL" [value]="paymentDetails?.email">
+        <input type="hidden" name="EXCEPTIONURL" [value]="paymentDetails?.exceptionUrl">
+        <input type="hidden" name="LANGUAGE" value="en_US">
+        <input type="hidden" name="ORDERID" [value]="paymentDetails?.orderId">
+        <input type="hidden" name="PSPID" [value]="paymentDetails?.PSPID">  
+          <!-- <input type="hidden" name="CN" value=""> -->
+          
+          <!--<input type="hidden" name="OWNERZIP" [value]="">
+          <input type="hidden" name="OWNERADDRESS" [value]="">
+          <input type="hidden" name="OWNERCTY" [value]="">
+          <input type="hidden" name="OWNERTOWN" [value]="">
+          <input type="hidden" name="OWNERTELNO" value=""> -->
+          
+          <!-- <input type="hidden" name="TITLE" value="">
+          <input type="hidden" name="BGCOLOR" value="">
+          <input type="hidden" name="TXTCOLOR" value="">
+          <input type="hidden" name="TBLBGCOLOR" value="">
+          <input type="hidden" name="TBLTXTCOLOR" value="">
+          <input type="hidden" name="BUTTONBGCOLOR" value="">
+          <input type="hidden" name="BUTTONTXTCOLOR" value="">
+          <input type="hidden" name="LOGO" value="">
+          <input type="hidden" name="FONTTYPE" value=""> -->
+          
+         
+          
+         
+          <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="showWorldpayIframe = true;">
+            Pay</ion-button>
+      </form>
+    </div>
+    <!--payment method 1 ends -->
+  </ng-container>
+  
 </ng-template>
