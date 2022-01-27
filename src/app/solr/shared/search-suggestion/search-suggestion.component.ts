@@ -1,9 +1,10 @@
 import { HttpParams } from "@angular/common/http";
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, Output } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import { PROPCO } from "src/app/shared/constants";
 import { CommonService } from "src/app/shared/services/common.service";
+import { EventEmitter } from '@angular/core';
 import { SolrService } from "../../solr.service";
 declare function openScreen(key: string, value: any): any;
 
@@ -20,6 +21,7 @@ export class SearchSuggestionComponent implements OnInit {
   isItemAvailable = false;
   suggestions = [];
   @Input() entityControl: FormControl;
+  @Output() searchClickEvent = new EventEmitter();
   searchTermControl = new FormControl();
   private solrSuggestionConfig = {
     limit: "30",
@@ -135,5 +137,8 @@ export class SearchSuggestionComponent implements OnInit {
         type: this.entityControl.value,
       },
     });
+    if (this.pageType !== "dashboard") {
+      this.searchClickEvent.emit(this.searchTermControl.value);
+    }
   }
 }

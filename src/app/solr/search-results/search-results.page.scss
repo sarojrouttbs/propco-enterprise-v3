@@ -232,6 +232,25 @@ ion-item {
     text-transform: uppercase;
   }
 
+  .cdk-overlay-container {
+  .mat-option-text {
+    color: var(--ion-solr-font-color);
+    @include set-text-style(14px, 18px);
+  }
+
+  .mat-pseudo-checkbox {
+    color: var(--ion-solr-font-color);
+  }
+
+  .mat-pseudo-checkbox-checked {
+    background: var(--ion-solr-font-color);
+  }
+
+  .mat-select-panel {
+    max-height: none;
+  }
+}
+
   .uppercase {
     text-transform: uppercase;
   }
