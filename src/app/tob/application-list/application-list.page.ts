@@ -3,9 +3,9 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { APPLICATION_STATUSES, PROPCO } from 'src/app/shared/constants';
+import { APPLICATION_STATUSES, PROPCO, REFERENCING_TYPES } from 'src/app/shared/constants';
 import { HoldingDepositePaidModalPage } from 'src/app/shared/modals/holding-deposite-paid-modal/holding-deposite-paid-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
@@ -41,10 +41,13 @@ export class ApplicationListPage implements OnInit {
   toblookupdata: any;
   fromDate = new FormControl('', []);
   toDate = new FormControl('', []);
+  referencingInfodata: any;
+  referencingInfo: any;
   
-  constructor(private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
+  constructor(private alertCtrl: AlertController, private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
     this.getTobLookupData();
     this.getLookUpData();
+    this.getReferancingInfo();
   }
 
   ngOnInit() {
@@ -349,10 +352,102 @@ export class ApplicationListPage implements OnInit {
   }
 
   startReferencing() {
-
+    // prepare static data for development
+    
+    const prepareReferencingInfo = [
+      {name: "LETTINGS_HUB", url: 'http://google.com/'},
+      {name: "HOMELET", url: 'http://google.com/'},
+      {name: "MANUALLY", url: 'http://google.com/'},
+    ]
+    this.referencingInfo = prepareReferencingInfo;
+    
+    // prepare static data for development
+    
+    if (this.referencingInfo.length === 1) {
+      switch (this.referencingInfo[0].name) {
+        case REFERENCING_TYPES.HOMELET:
+          window.open(this.referencingInfo[0].url);
+          break;
+        case REFERENCING_TYPES.LETTINGS_HUB:
+          window.open(this.referencingInfo[0].url);
+          break;
+        case REFERENCING_TYPES.MANUALLY:
+          window.open(this.referencingInfo[0].url);
+          break;
+      }
+    } else if (this.referencingInfo.length > 1) { 
+      this.startReferencingForMultipleType();
+    } else {
+      this.commonService.showAlert('Referencing', 'There is no referencing partner configured for this domain. Please contact support or an administrator.');
+    }
   }
 
   viewDetails(applicantId: string) {
     this.router.navigate([`tob/${this.propertyId}/application/${applicantId}`], { replaceUrl: true });
+  }
+
+  private getReferancingInfo() {
+    this.referencingInfodata = this.commonService.getItem(PROPCO.REFERENCING_INFO, true);
+    if (this.referencingInfodata) {
+      this.setReferancingInfoData();
+    } else {
+      this.commonService.getReferencingInfo().subscribe(data => {
+        this.commonService.setItem(PROPCO.REFERENCING_INFO, data);
+        this.setReferancingInfoData();
+      });
+    }
+  }
+
+  private setReferancingInfoData() {
+    this.referencingInfodata = this.commonService.getItem(PROPCO.REFERENCING_INFO, true);
+    this.referencingInfo =  this.referencingInfodata.referencingPartners;
+  }
+
+  private async startReferencingForMultipleType() {
+    let alertPopup: any;
+    const radioInput = [];
+    
+    this.referencingInfo.forEach(element => {
+      radioInput.push({label: element.name, type: "radio", value: element.url});
+    });
+
+    return new Promise((resolve, reject) => {
+      const alert = this.alertCtrl.create({
+        header: 'Start Referencing',
+        message: 'Please select an option.',
+        inputs: radioInput,
+        cssClass: 'common-alert-box',
+        buttons: [
+          {
+            text: 'Cancel',
+            cssClass: 'ion-color-danger',
+            role: 'cancel',
+            handler: () => {
+              alertPopup.dismiss().then((res) => {
+                resolve(false);
+              });
+              return false;
+            }
+          },
+          {
+            text: 'Ok',
+            cssClass: 'ion-color-success',
+            handler: (data) => {
+              if(data) {
+                window.open(data);
+                alertPopup.dismiss().then((res) => {
+                  resolve(true);
+                });
+                return false;
+              }
+            }
+          }
+        ],
+        backdropDismiss: false,
+      }).then(res => {
+        alertPopup = res;
+        res.present();
+      });
+    }); 
   }
 }

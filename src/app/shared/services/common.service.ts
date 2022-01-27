@@ -659,10 +659,13 @@ export class CommonService {
 
   sanitizeHtml(html) {
     return this.sanitizer.bypassSecurityTrustHtml(html);
- }
+  }
 
- deleteNote(noteId: number): Observable<any> {
-  return this.httpClient.delete(environment.API_BASE_URL + `notes/${noteId}`, {});
-}
+  deleteNote(noteId: number): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + `notes/${noteId}`, {});
+  }
 
+  getReferencingInfo(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'agents/referencing/info', { responseType: 'json' });
+  }
 }
