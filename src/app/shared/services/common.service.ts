@@ -225,7 +225,7 @@ export class CommonService {
     });
   }
 
-  async showConfirm(title: string, displayText: string, subtitle?: string, okText?: string, cancelText?: string) {
+  async showConfirm(title: string, displayText: string, subtitle?: string, okText?: string, cancelText?: string, input?: any) {
     return new Promise((resolve, reject) => {
       let alertPopup: any;
       this.alertCtrl.create({
@@ -248,15 +248,16 @@ export class CommonService {
           {
             text: okText ? okText : 'Ok',
             cssClass: 'ion-color-success',
-            handler: () => {
+            handler: (data) => {
               alertPopup.dismiss().then((res) => {
-                resolve(true);
+                data ? resolve(data) : resolve(true);
               });
               return false;
             }
           }
         ],
         backdropDismiss: false,
+        inputs: input
       }).then(res => {
         alertPopup = res;
         res.present();

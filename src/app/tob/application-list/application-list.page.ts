@@ -355,9 +355,9 @@ export class ApplicationListPage implements OnInit {
     // prepare static data for development
     
     const prepareReferencingInfo = [
-      {name: "LETTINGS_HUB", url: 'http://google.com/'},
-      {name: "HOMELET", url: 'http://google.com/'},
-      {name: "MANUALLY", url: 'http://google.com/'},
+      {name: "LETTINGS_HUB", url: ''},
+      {name: "HOMELET", url: ''},
+      {name: "MANUALLY", url: ''},
     ]
     this.referencingInfo = prepareReferencingInfo;
     
@@ -404,50 +404,16 @@ export class ApplicationListPage implements OnInit {
   }
 
   private async startReferencingForMultipleType() {
-    let alertPopup: any;
     const radioInput = [];
-    
     this.referencingInfo.forEach(element => {
       radioInput.push({label: element.name, type: "radio", value: element.url});
     });
 
-    return new Promise((resolve, reject) => {
-      const alert = this.alertCtrl.create({
-        header: 'Start Referencing',
-        message: 'Please select an option.',
-        inputs: radioInput,
-        cssClass: 'common-alert-box',
-        buttons: [
-          {
-            text: 'Cancel',
-            cssClass: 'ion-color-danger',
-            role: 'cancel',
-            handler: () => {
-              alertPopup.dismiss().then((res) => {
-                resolve(false);
-              });
-              return false;
-            }
-          },
-          {
-            text: 'Ok',
-            cssClass: 'ion-color-success',
-            handler: (data) => {
-              if(data) {
-                window.open(data);
-                alertPopup.dismiss().then((res) => {
-                  resolve(true);
-                });
-                return false;
-              }
-            }
-          }
-        ],
-        backdropDismiss: false,
-      }).then(res => {
-        alertPopup = res;
-        res.present();
-      });
-    }); 
+    this.commonService.showConfirm('Referencing', 'Please select referencing partner', '', '', '', radioInput).then(result => {
+      console.log(result)
+      if (result && typeof result === 'string') {
+        window.open(result);
+      }
+    });
   }
 }
