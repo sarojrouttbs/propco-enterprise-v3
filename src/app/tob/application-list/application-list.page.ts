@@ -3,9 +3,9 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { APPLICATION_STATUSES, PROPCO } from 'src/app/shared/constants';
+import { APPLICATION_STATUSES, PROPCO, REFERENCING_TYPES } from 'src/app/shared/constants';
 import { HoldingDepositePaidModalPage } from 'src/app/shared/modals/holding-deposite-paid-modal/holding-deposite-paid-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
@@ -41,10 +41,13 @@ export class ApplicationListPage implements OnInit {
   toblookupdata: any;
   fromDate = new FormControl('', []);
   toDate = new FormControl('', []);
+  referencingInfodata: any;
+  referencingInfo: any;
   
-  constructor(private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
+  constructor(private alertCtrl: AlertController, private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
     this.getTobLookupData();
     this.getLookUpData();
+    this.getReferancingInfo();
   }
 
   ngOnInit() {
@@ -349,10 +352,74 @@ export class ApplicationListPage implements OnInit {
   }
 
   startReferencing() {
-
+    if (this.referencingInfo.length === 1) {
+      switch (this.referencingInfo[0].name) {
+        case REFERENCING_TYPES.HOMELET:
+          this.commonService.redirectUrl(this.referencingInfo[0].url);
+          break;
+        case REFERENCING_TYPES.LETTINGS_HUB:
+          this.commonService.redirectUrl(this.referencingInfo[0].url);
+          break;
+        case REFERENCING_TYPES.MANUALLY:
+          this.commonService.redirectUrl(this.referencingInfo[0].url);
+          break;
+      }
+    } else if (this.referencingInfo.length > 1) { 
+      this.selectReferecingType();
+    } else {
+      this.commonService.showAlert('Referencing', 'There is no referencing partner configured for this domain. Please contact support or an administrator.');
+    }
   }
 
   viewDetails(applicantId: string) {
     this.router.navigate([`tob/${this.propertyId}/application/${applicantId}`], { replaceUrl: true });
+  }
+
+  private getReferancingInfo() {
+    this.referencingInfodata = this.commonService.getItem(PROPCO.REFERENCING_INFO, true);
+    if (this.referencingInfodata) {
+      this.setReferancingInfoData();
+    } else {
+      this.commonService.getReferencingInfo().subscribe(data => {
+        this.commonService.setItem(PROPCO.REFERENCING_INFO, data);
+        this.setReferancingInfoData();
+      });
+    }
+  }
+
+  private setReferancingInfoData() {
+    this.referencingInfodata = this.commonService.getItem(PROPCO.REFERENCING_INFO, true);
+    this.referencingInfo =  this.referencingInfodata.referencingPartners;
+    this.prepareReferencingInfoData();
+  }
+
+  private async selectReferecingType() {
+    const radioInput = [];
+    this.referencingInfo.forEach(element => {
+      radioInput.push({label: element.label, type: "radio", value: element.url});
+    });
+
+    this.commonService.showConfirm('Referencing', 'Please select referencing partner', '', '', '', radioInput).then(result => {
+      this.commonService.redirectUrl(result);
+    });
+  }
+
+  private prepareReferencingInfoData() {
+    // add URL's here
+    const prepareReferencingInfoData = [];
+    this.referencingInfo.forEach(element => {
+      switch (element) {
+        case REFERENCING_TYPES.HOMELET:
+          prepareReferencingInfoData.push({name: element, label: 'Homelet', url: ''});
+          break;
+        case REFERENCING_TYPES.LETTINGS_HUB:
+          prepareReferencingInfoData.push({name: element, label: 'Lettings Hub', url: ''});
+          break;
+        case REFERENCING_TYPES.MANUALLY:
+          prepareReferencingInfoData.push({name: element, label: 'Manually', url: ''});
+          break;
+      }
+    });
+    this.referencingInfo = prepareReferencingInfoData;
   }
 }

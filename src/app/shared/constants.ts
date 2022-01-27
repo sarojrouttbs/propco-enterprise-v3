@@ -12,7 +12,8 @@ export const PROPCO = {
   LET_CATEGORY: 'let_category',
   SSO_KEY: 'sso_key',
   TOB_LOOKUP_DATA: 'tob_lookup_data',
-  TERMS_AND_CONDITIONS: 'terms_and_conditions'
+  TERMS_AND_CONDITIONS: 'terms_and_conditions',
+  REFERENCING_INFO: 'referencing_info'
 };
 
 export const USER_TYPES = {
@@ -589,4 +590,10 @@ export const PAYMENT_CONFIG = {
 export const APPLICATION_ENTITIES = {
   AGENT: 1,
   APPLICANT: 2
+}
+
+export const REFERENCING_TYPES = {
+  MANUALLY: 'MANUALLY',
+  HOMELET: 'HOMELET',
+  LETTINGS_HUB: 'LETTINGS_HUB'
 }
