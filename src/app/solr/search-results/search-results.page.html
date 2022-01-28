@@ -1,6 +1,6 @@
 <ion-header >
   <ion-grid class="ion-no-padding" fixed *ngIf="loaded">
-    <app-search-suggestion [entityControl]="entityControl"></app-search-suggestion> 
+    <app-search-suggestion [entityControl]="entityControl" (searchClickEvent)="searchHandler($event)"></app-search-suggestion> 
   </ion-grid>
 </ion-header>
 
@@ -10,35 +10,36 @@
         <div class="filter-heading-wrapper">
           <h1><span title="Collapse [" class="status-pointer"><ion-icon name="chevron-back-outline" size="medium" (click)="drawer.toggle();"></ion-icon></span>Filter your search</h1>
           <section>
-            <ion-button color="danger">Reset All</ion-button>
-            <ion-button color="medium">Select All</ion-button>
-            <ion-button color="medium">Refresh</ion-button>
+            <ion-button size="small" color="danger" (click)="resetAll()">Reset All</ion-button>
+            <ion-button size="small" color="medium" (click)="!isAllselected?selectAll():deselectAll()">{{!isAllselected?'Select All':'Select None'}}</ion-button>
+            <ion-button size="small" color="medium" (click)="refreshAll()">Refresh</ion-button>
           </section>
           
         </div>
         <mat-accordion class="result-headers-align">
           <mat-expansion-panel  (opened)="setStep(0)">
             <mat-expansion-panel-header>
-              <mat-checkbox checked color="primary" 
+              <mat-checkbox  color="primary" 
               [formControl]="propertyCheck"
-                (click)="$event.stopPropagation();onChangeEntity('property',$event.target.value)" 
+                (click)="$event.stopPropagation();onChangeEntity('property')" 
                 (keydown)="$event.stopPropagation()">
                 PROPERTY
               </mat-checkbox>
             </mat-expansion-panel-header>
+            <form [formGroup]="propertyFilter">
             <ion-list class="list">
               <ion-list-header>
                 <ion-label>Rent Type</ion-label>
               </ion-list-header>
-              <ion-radio-group >
+              <ion-radio-group formControlName="rentType">
                 <ion-row class="rowStyle">
                   <ion-item color="primary-contrast">
                     <ion-label>Default rent</ion-label>
-                    <ion-radio slot="start" value="customer"></ion-radio>
+                    <ion-radio slot="start" value="DEFAULT_RENT"></ion-radio>
                   </ion-item>
                   <ion-item color="primary-contrast">
                     <ion-label>Advertise rent</ion-label>
-                    <ion-radio slot="start" value="supplier"></ion-radio>
+                    <ion-radio slot="start" value="ADVERTISED_RENT"></ion-radio>
                   </ion-item>
                 </ion-row>
               </ion-radio-group>
@@ -48,14 +49,14 @@
                 <ion-label>Price Range</ion-label>
               </ion-list-header>
               <ion-item>
-                <ion-range class="dual-range"  min="0" max="5000"  dual-knobs [pin]="true" color="primary" [(ngModel)]="priceKnobValues">
+                <ion-range class="dual-range"  min="0" max="5000"  dual-knobs [pin]="true" color="primary" formControlName="propertyRent">
                 </ion-range>
               </ion-item>
               <ion-list-header>
                 <ion-label>Bed Range</ion-label>
               </ion-list-header>
               <ion-item>
-                <ion-range class="dual-range"  min="0" max="20"  dual-knobs [pin]="true" color="primary" [(ngModel)]="bedKnobValues">
+                <ion-range class="dual-range"  min="0" max="20"  dual-knobs [pin]="true" color="primary" formControlName="numberOfBedroom">
                 </ion-range>
               </ion-item>
             </ion-list>
@@ -63,27 +64,15 @@
               <ion-row>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
-                    <mat-select placeholder="Management Type" [formControl]="toppings" multiple>
-                      <mat-select-trigger>
-                        {{toppings.value ? toppings.value[0] : ''}}
-                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    <mat-select placeholder="Management Type" formControlName="managementType" multiple>
+                      <mat-option *ngFor="let item of managementTypes" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
-                    <mat-select placeholder="Style" [formControl]="toppings" multiple>
-                      <mat-select-trigger>
-                        {{toppings.value ? toppings.value[0] : ''}}
-                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    <mat-select placeholder="Style" formControlName="propertyStyle" multiple>
+                      <mat-option *ngFor="let item of propertyStyles" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -91,27 +80,15 @@
               <ion-row>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
-                    <mat-select placeholder="Type" [formControl]="toppings" multiple>
-                      <mat-select-trigger>
-                        {{toppings.value ? toppings.value[0] : ''}}
-                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    <mat-select placeholder="Type" formControlName="houseType" multiple>
+                      <mat-option *ngFor="let item of houseTypes" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
-                    <mat-select placeholder="Status" [formControl]="toppings" multiple>
-                      <mat-select-trigger>
-                        {{toppings.value ? toppings.value[0] : ''}}
-                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    <mat-select placeholder="Status" formControlName="status" multiple>
+                      <mat-option *ngFor="let item of propertyStatuses" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -119,18 +96,12 @@
               <ion-row>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
-                    <mat-select placeholder="Office" [formControl]="toppings" multiple>
-                      <mat-select-trigger>
-                        {{toppings.value ? toppings.value[0] : ''}}
-                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    <mat-select placeholder="Office" formControlName="officeCode" multiple>
+                      <mat-option *ngFor="let item of officeCodes" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
-                <ion-col size="50">
+                <!-- <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
                     <mat-select placeholder="Property Management" [formControl]="toppings" multiple>
                       <mat-select-trigger>
@@ -142,9 +113,9 @@
                       <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
                     </mat-select>
                   </mat-form-field>
-                </ion-col>
+                </ion-col> -->
               </ion-row>
-              <ion-row>
+              <!-- <ion-row>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
                     <mat-select placeholder="Negotiator" [formControl]="toppings" multiple>
@@ -158,48 +129,38 @@
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
-              </ion-row>
+              </ion-row> -->
             </ion-list>
+            </form>
             <mat-action-row>
-              <ion-button color="danger">Reset</ion-button>
-              <ion-button  color="medium">Refresh</ion-button>
+              <ion-button size="small"color="danger" (click)="reset(propertyFilter)">Reset</ion-button>
+              <ion-button  size="small" color="medium" (click)="refresh('PROPERTY')">Refresh</ion-button>
             </mat-action-row>
           </mat-expansion-panel>
         
           <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
             <mat-expansion-panel-header>
-              <mat-checkbox checked color="primary" 
+              <mat-checkbox  color="primary" 
               [formControl]="landlordCheck"
-                (click)="$event.stopPropagation()" 
+                (click)="$event.stopPropagation();onChangeEntity('landlord')" 
                 (keydown)="$event.stopPropagation()">
                 LANDLORD
               </mat-checkbox>
             </mat-expansion-panel-header>
+            <form [formGroup]="landlordFilter">
             <ion-list class="list">
               <ion-row>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
-                    <mat-select placeholder="Status" [formControl]="toppings" multiple>
-                      <mat-select-trigger>
-                        {{toppings.value ? toppings.value[0] : ''}}
-                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    <mat-select placeholder="Status" formControlName="status" multiple>
+                      <mat-option *ngFor="let item of landlordStatuses" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
-                    <mat-select placeholder="Office" [formControl]="toppings" multiple>
-                      <mat-select-trigger>
-                        {{toppings.value ? toppings.value[0] : ''}}
-                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    <mat-select placeholder="Office" formControlName="officeCode" multiple>
+                      <mat-option *ngFor="let item of officeCodes" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -207,52 +168,43 @@
               <ion-row>
                 <ion-col size="100">
                   <ion-item>
-                    <ion-toggle color="primary"></ion-toggle>
+                    <ion-toggle color="primary" formControlName="isOverseas"></ion-toggle>
                     Overseas
                   </ion-item>
                 </ion-col>
               </ion-row>
-              </ion-list>
-              <mat-action-row>
-                <ion-button color="danger">Reset</ion-button>
-                <ion-button  color="medium">Refresh</ion-button>
-              </mat-action-row>
+            </ion-list>
+            </form>
+            <mat-action-row>
+              <ion-button size="small"color="danger" (click)="reset(landlordFilter)">Reset</ion-button>
+              <ion-button  size="small" color="medium" (click)="refresh('LANDLORD')">Refresh</ion-button>
+            </mat-action-row>
           </mat-expansion-panel>
         
           <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
             <mat-expansion-panel-header>
-              <mat-checkbox checked color="primary" 
+              <mat-checkbox  color="primary" 
                 [formControl]="tenantCheck"
-                (click)="$event.stopPropagation()" 
+                (click)="$event.stopPropagation();onChangeEntity('tenant')" 
                 (keydown)="$event.stopPropagation()">
                 TENANT
               </mat-checkbox>
             </mat-expansion-panel-header>
+            <form [formGroup]="tenantFilter">
             <ion-list class="list">
               <ion-row>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
-                    <mat-select placeholder="Entity Type" [formControl]="toppings" multiple>
-                      <mat-select-trigger>
-                        {{toppings.value ? toppings.value[0] : ''}}
-                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    <mat-select placeholder="Entity Type" formControlName="tenantType" multiple>
+                      <mat-option  [value]="'LEAD_TENANT'">Tenant</mat-option>
+                      <mat-option  [value]="'CO_TENANT'">Co Tenant</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
-                    <mat-select placeholder="Office" [formControl]="toppings" multiple>
-                      <mat-select-trigger>
-                        {{toppings.value ? toppings.value[0] : ''}}
-                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    <mat-select placeholder="Office" formControlName="officeCode" multiple>
+                      <mat-option *ngFor="let item of officeCodes" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -260,38 +212,34 @@
               <ion-row>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
-                    <mat-select placeholder="Status" [formControl]="toppings" multiple>
-                      <mat-select-trigger>
-                        {{toppings.value ? toppings.value[0] : ''}}
-                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    <mat-select placeholder="Status" formControlName="status" multiple>
+                      <mat-option *ngFor="let item of tenantStatuses" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
               </ion-row>
               </ion-list>
+            </form>
               <mat-action-row>
-                <ion-button color="danger">Reset</ion-button>
-                <ion-button  color="medium">Refresh</ion-button>
+                <ion-button size="small" color="danger" (click)="reset(tenantFilter)">Reset</ion-button>
+                <ion-button  size="small" color="medium" (click)="refresh('TENANT')">Refresh</ion-button>
               </mat-action-row>
           </mat-expansion-panel>
   
           <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)">
             <mat-expansion-panel-header>
               <mat-checkbox [formControl]="applicantCheck" color="primary" 
-                (click)="$event.stopPropagation()" 
+                (click)="$event.stopPropagation();onChangeEntity('applicant')" 
                 (keydown)="$event.stopPropagation()">
                 APPLICANT
               </mat-checkbox>
             </mat-expansion-panel-header>
+            <form [formGroup]="applicantFilter">
             <ion-list class="list">
               <ion-row>
                 <ion-col size="100">
                   <ion-item>
-                    <ion-toggle color="primary"></ion-toggle>
+                    <ion-toggle color="primary" formControlName="isHot"></ion-toggle>
                     Hot
                   </ion-item>
                 </ion-col>
@@ -299,7 +247,7 @@
               <ion-row>
                 <ion-col size="100">
                   <ion-item>
-                    <ion-toggle color="primary"></ion-toggle>
+                    <ion-toggle color="primary" formControlName="isStudent"></ion-toggle>
                     Is a Student
                   </ion-item>
                   </ion-col>
@@ -307,44 +255,40 @@
               <ion-row>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
-                    <mat-select placeholder="Entity Type" [formControl]="toppings" multiple>
-                      <mat-select-trigger>
-                        {{toppings.value ? toppings.value[0] : ''}}
-                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    <mat-select placeholder="Office" formControlName="officeCode" multiple>
+                      <mat-option *ngFor="let item of officeCodes" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
               </ion-row>
               </ion-list>
-              <mat-action-row>
-                <ion-button color="danger">Reset</ion-button>
-                <ion-button  color="medium">Refresh</ion-button>
-              </mat-action-row>
+            </form>
+            <mat-action-row>
+              <ion-button size="small" color="danger" (click)="reset(applicantFilter)">Reset</ion-button>
+              <ion-button  size="small" color="medium" (click)="refresh('APPLICANT')">Refresh</ion-button>
+            </mat-action-row>
           </mat-expansion-panel>
   
           <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)">
             <mat-expansion-panel-header>
               <mat-checkbox [formControl]="agentCheck" color="primary" 
-                (click)="$event.stopPropagation()" 
+                (click)="$event.stopPropagation();onChangeEntity('agent')" 
                 (keydown)="$event.stopPropagation()">
                 AGENT
               </mat-checkbox>
             </mat-expansion-panel-header>
+            <form [formGroup]="agentFilter">
             <ion-list class="list">
               <ion-row>
                 <ion-col size="100">
                   <ion-item>
-                    <ion-toggle color="primary"></ion-toggle>
+                    <ion-toggle color="primary" formControlName="isJournalExclude"></ion-toggle>
                     VAT Registered
                   </ion-item>
                 </ion-col>
                 <ion-col size="100">
                   <ion-item>
-                    <ion-toggle color="primary"></ion-toggle>
+                    <ion-toggle color="primary" formControlName="isVatRegistered"></ion-toggle>
                     Journal Exclude
                   </ion-item>
                 </ion-col>
@@ -352,58 +296,42 @@
               <ion-row>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
-                    <mat-select placeholder="Status" [formControl]="toppings" multiple>
-                      <mat-select-trigger>
-                        {{toppings.value ? toppings.value[0] : ''}}
-                        <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                          (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                        </span>
-                      </mat-select-trigger>
-                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                    <mat-select placeholder="Status" formControlName="status" multiple>
+                      <mat-option *ngFor="let item of applicantStatuses" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
               </ion-row>
-              </ion-list>
+            </ion-list>
+              </form>
               <mat-action-row>
-                <ion-button color="danger">Reset</ion-button>
-                <ion-button  color="medium">Refresh</ion-button>
+                <ion-button size="small" color="danger" (click)="reset(agentFilter)">Reset</ion-button>
+                <ion-button  size="small" color="medium" (click)="refresh('AGENT')">Refresh</ion-button>
               </mat-action-row>
           </mat-expansion-panel>
         
         <mat-expansion-panel [expanded]="step === 5" (opened)="setStep(5)">
           <mat-expansion-panel-header>
             <mat-checkbox [formControl]="contractorCheck" color="primary" 
-              (click)="$event.stopPropagation()" 
+              (click)="$event.stopPropagation();onChangeEntity('contractor')" 
               (keydown)="$event.stopPropagation()">
               CONTRACTOR
             </mat-checkbox>
           </mat-expansion-panel-header>
+          <form [formGroup]="contractorFilter">
           <ion-list class="list">
             <ion-row>
               <ion-col size="50">
                 <mat-form-field [floatLabel]="'never'">
-                  <mat-select placeholder="Status" [formControl]="toppings" multiple>
-                    <mat-select-trigger>
-                      {{toppings.value ? toppings.value[0] : ''}}
-                      <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                        (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                      </span>
-                    </mat-select-trigger>
-                    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                  <mat-select placeholder="Status" formControlName="status" multiple>
+                    <mat-option *ngFor="let item of contractorStatuses" [value]="item.index">{{item.value}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </ion-col>
               <ion-col size="50">
                 <mat-form-field [floatLabel]="'never'">
-                  <mat-select placeholder="Skill Set" [formControl]="toppings" multiple>
-                    <mat-select-trigger>
-                      {{toppings.value ? toppings.value[0] : ''}}
-                      <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                        (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                      </span>
-                    </mat-select-trigger>
-                    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                  <mat-select placeholder="Skill Set" formControlName="skills" multiple>
+                    <mat-option *ngFor="let item of contractorSkills" [value]="item.index">{{item.value}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </ion-col>
@@ -411,22 +339,23 @@
             <ion-row>
               <ion-col size="100">
                 <ion-item>
-                  <ion-toggle color="primary"></ion-toggle>
+                  <ion-toggle color="primary" formControlName="vatRegistered"></ion-toggle>
                   VAT Registered
                 </ion-item>
               </ion-col>
               <ion-col size="100">
                 <ion-item>
-                  <ion-toggle color="primary"></ion-toggle>
+                  <ion-toggle color="primary" formControlName="approvedByAgent"></ion-toggle>
                   Agency Approved
                 </ion-item>
               </ion-col>
             </ion-row>
-            </ion-list>
-            <mat-action-row>
-              <ion-button color="danger">Reset</ion-button>
-              <ion-button  color="medium">Refresh</ion-button>
-            </mat-action-row>
+          </ion-list>
+          </form>
+          <mat-action-row>
+            <ion-button size="small" color="danger" (click)="reset(contractorFilter)">Reset</ion-button>
+            <ion-button  size="small" color="medium" (click)="refresh('CONTRACTOR')">Refresh</ion-button>
+          </mat-action-row>
           </mat-expansion-panel>
         </mat-accordion>
       </mat-drawer>
@@ -467,6 +396,9 @@
                 [ngTemplateOutletContext]="{item:item}">
           </ng-container>
           <ng-container [ngTemplateOutlet]="agentSuggestion"  *ngIf="item?.entityType === 'AGENT'"
+                [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
+          <ng-container [ngTemplateOutlet]="applicantSuggestion"  *ngIf="item?.entityType === 'APPLICANT'"
                 [ngTemplateOutletContext]="{item:item}">
           </ng-container>
         </div>
@@ -705,6 +637,36 @@
               <ion-col class="no-padding-top col2 ion-text-end" size="25">
                 <p class="status">{{item?.status}}</p>
                 <p class="ref">{{item?.reference}}</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+</ng-template>
+<ng-template #applicantSuggestion  let-item="item">
+  <ion-card-content id="details" class="contractor" (click)="openDetails('OpenApplicant',item.entityId)">
+    <ion-grid >
+      <ion-row class="main-row">
+        <ion-col class="ion-no-padding" size-xl="10" size="15">
+          <p class="uppercase">Applicant</p>
+          <br>
+          <i class="propcoicon propcoicon-applicant-let no-background"></i>
+        </ion-col>
+        <ion-col  size-xl="75" size="85">
+          <ion-grid class="no-padding-top">
+            <ion-row class="property-details-row">
+              <ion-col class="no-padding-top col1" size="75">
+                <div>
+                  <!-- <p class="office">{{result.officeName[0]}}</p> -->
+                  <p class="name">{{item.fullName}}</p>
+                  <p class="address">{{item.address ? item.address + ', ': ''}} {{item.postcode}}</p>
+                </div>
+              </ion-col>
+              <ion-col class="no-padding-top col2 ion-text-end" size="25">
+                <p class="status">Legacy Reference</p>
+                <p class="ref">{{item?.legacyReference || 'N/A'}}</p>
               </ion-col>
             </ion-row>
           </ion-grid>

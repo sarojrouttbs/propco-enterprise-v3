@@ -23,9 +23,10 @@ export class SolrService {
     );
   }
 
-  entitySearch(params: HttpParams): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `entities/search`, {
-      params,
-    });
+  entitySearch(body: object): Observable<any> {
+    return this.httpClient.post(
+      environment.API_BASE_URL + `entities/search`,
+      body
+    );
   }
 }
