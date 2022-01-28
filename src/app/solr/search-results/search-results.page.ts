@@ -246,8 +246,8 @@ export class SearchResultsPage implements OnInit {
     this.solrService
       .entitySearch(this.prepareSearchParams())
       .subscribe((res) => {
-        this.results = res ? res.data : [];
-        this.length = res ? res.count : 0;
+        this.results = res && res.data ? res.data : [];
+        this.length = res && res.count ? res.count : 0;
         this.opened = true;
         this.loaded = true;
         // this.iterator();
