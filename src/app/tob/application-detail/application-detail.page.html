@@ -1211,7 +1211,7 @@
     <div style="padding:10px 4px;" [hidden]="hidePaymentForm">
       <ion-button [hidden]="true" id="worldpayResponse" (click)="paymentDone()">Payment Done</ion-button>
       <iframe name="worldpay-iframe" id="worldpay-iframe" [hidden]="!showWorldpayIframe"></iframe>
-      <form ngNoForm [action]="PAYMENT_URL" method="POST" target="worldpay-iframe"
+      <form ngNoForm [action]="paymentDetails?.actionUrl" method="POST" target="worldpay-iframe"
         class="payment-form">
         <input id="email" name="email" [value]="paymentDetails?.email" type="hidden" />
         <input id="desc" name="desc" type="hidden" [value]="paymentDetails?.desc" />
@@ -1237,7 +1237,7 @@
     <!--payment method 1 ends -->
   </ng-container>
 
-  <ng-container *ngIf="PAYMENT_METHOD === 'WORLDPAY_OWNFORM'">
+  <!-- <ng-container *ngIf="PAYMENT_METHOD === 'WORLDPAY_OWNFORM'">
     <ion-grid class="ion-no-padding" *ngIf="!showworldpayInternalForm" id="payment-detail">
       <ion-row class="ion-justify-content-between">
         <ion-col size="100" [hidden]="showworldpayInternalForm">
@@ -1260,7 +1260,7 @@
       </form>
     </div>
     <app-template-form *ngIf="showworldpayInternalForm" [worldPayInternalData]="worldPayInternalData" (successPayment)='onInternalWorldpaySuccess($event)'></app-template-form>
-  </ng-container>
+  </ng-container> -->
 
   <ng-container *ngIf="PAYMENT_METHOD == 'BARCLAYCARD_REDIRECT'" >
     <!--payment method 3 starts -->
