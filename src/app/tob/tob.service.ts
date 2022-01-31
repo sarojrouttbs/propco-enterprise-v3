@@ -253,4 +253,19 @@ export class TobService {
       catchError(this.handleError<any>(''))
     );
   }
+
+  processPayment(paymentDetails, applicationId): Observable<any> {
+    return this.httpClient.post<any>(environment.API_BASE_URL + `applications/${applicationId}/process-payment`, paymentDetails).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  proposeTenancy(paymentDetails, propertyId): Observable<any> {
+    return this.httpClient.post<any>(environment.API_BASE_URL + `properties/${propertyId}/propose-tenancy`, paymentDetails).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
 }

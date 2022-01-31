@@ -2,10 +2,15 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { PAYMENT_TYPES } from "src/app/shared/constants";
+
 export const environment = {
   production: false,
-  API_BASE_URL: "http://localhost:3001/api/v1/" 
+  API_BASE_URL: "http://localhost:3001/api/v1/",
   // API_BASE_URL: "https://saas-uat-api.propco.co.uk/v3-dev/api/" 
+  MEDIA_HOST_URL: 'https://saas-qa.propco.co.uk/demolocal/',
+  PAYMENT_METHOD: PAYMENT_TYPES.BARCLAYCARD_REDIRECT,
+  PAYMENT_PROD: false 
 };
 
 /*
