@@ -149,7 +149,7 @@
     <mat-paginator [hidden]="!filteredApplicationList.data.length" class="table-pagination margin-left" #paginator
       [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
       [length]="filteredApplicationList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
-      [showFirstLastButtons]="paginatorConfig.showFirstLastButtons">
+      [showFirstLastButtons]="paginatorConfig.showFirstLastButtons" (page)="onPaginateChange()">
     </mat-paginator>
   </ng-container>
   

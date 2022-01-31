@@ -184,7 +184,7 @@
     <mat-paginator [hidden]="!filteredOfferList.data.length" class="table-pagination margin-left" #paginator
       [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
       [length]="filteredOfferList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
-      [showFirstLastButtons]="paginatorConfig.showFirstLastButtons">
+      [showFirstLastButtons]="paginatorConfig.showFirstLastButtons" (page)="onPaginateChange(false)">
     </mat-paginator>
   </ng-container>
 
@@ -241,7 +241,7 @@
             <mat-paginator [hidden]="!filteredNotesList.data.length" class="table-pagination" #notesPaginator
               [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
               [length]="filteredNotesList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
-              [showFirstLastButtons]="paginatorConfig.showFirstLastButtons">
+              [showFirstLastButtons]="paginatorConfig.showFirstLastButtons" (page)="onPaginateChange(true)">
             </mat-paginator>
           </div>
         </ion-col>

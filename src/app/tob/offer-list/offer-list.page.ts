@@ -394,4 +394,8 @@ export class OfferListPage implements OnInit {
   makeAnOffer() {
     this.router.navigate([`tob/${this.propertyId}/create-offer`], { replaceUrl: true });
   }
+
+  onPaginateChange(isNotes) {
+    isNotes ? this.hideMenu('', 'divOverlayChild') : this.hideMenu('', 'divOverlay');
+  }
 }

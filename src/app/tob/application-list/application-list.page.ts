@@ -61,6 +61,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   private async initApiCalls() {
+    this.hideMenu('', 'divOverlay');
     this.propertyDetails = await this.getPropertyById();
     this.applicationsDetails = await this.getApplicationList();
     this.applicationList = this.applicationsDetails?.applications;
@@ -421,5 +422,9 @@ export class ApplicationListPage implements OnInit {
       }
     });
     this.referencingInfo = prepareReferencingInfoData;
+  }
+
+  onPaginateChange() {
+    this.hideMenu('', 'divOverlay');    
   }
 }
