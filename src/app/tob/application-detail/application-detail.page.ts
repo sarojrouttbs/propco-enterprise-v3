@@ -1444,19 +1444,17 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   /** Terms and Conditions Functionality **/
-
-  private initPrePaymentDetails() {
-    const currentWebUrl = location.origin + location.pathname;
-    // const currentWebUrl = 'http://localhost:8100/';
-
-    let orderCode = 'PROPCOTESTM1TBS' + Math.random();
-    // this.paymentDetails = {};
-    this.paymentDetails.email = this.applicantDetailsForm.controls['email'].value;
-    this.paymentDetails.desc = 'Online Reservation - PropCo Web';
-    this.paymentDetails.instId = 1277936;
+  private initWorldpayPaymentDetails() {
+    var orderCode = 'PROPCOTESTM1TBS' + Math.random();
+    this.paymentDetails = {};
+    var paymentConfigUrl = this.PAYMENT_PROD ? PAYMENT_CONFIG.WORLDPAY_REDIRECT.PROD_URL: PAYMENT_CONFIG.WORLDPAY_REDIRECT.TEST_URL;
+    this.paymentDetails.actionUrl = paymentConfigUrl;
     this.paymentDetails.cartId = orderCode;
+    this.paymentDetails.desc = 'Online Reservation - PropCo Web';
+    this.paymentDetails.email = this.applicantDetailsForm.controls['email'].value;
+    this.paymentDetails.instId = PAYMENT_CONFIG.WORLDPAY_REDIRECT.INST_ID;
     this.paymentDetails.amount = this.applicationDetails.depositAmount;
-    this.paymentDetails.hostWebUrl = currentWebUrl + '#/worldpay';
+    this.paymentDetails.hostWebUrl = window.location.origin + window.location.pathname + '#!/propco/worldpay';
     this.paymentDetails.marchentCode = 'PROPCOTESTM1';
     this.paymentDetails.applicationId = this.applicationId;
 
@@ -1466,7 +1464,7 @@ export class ApplicationDetailPage implements OnInit {
     this.paymentDetails.town = this.addressDetailsForm.controls.address['controls'].town.value;
     this.paymentDetails.county = this.addressDetailsForm.controls.address['controls'].county.value;
     this.paymentDetails.country = 'GB';
-  }
+}
 
   showWorldpayIframeAction() {
     if (this.PAYMENT_METHOD === PAYMENT_TYPES.WORLDPAY_REDIRECT && !this.PAYMENT_PROD && this.applicationDetails.depositAmount > 500) {
@@ -1514,7 +1512,7 @@ export class ApplicationDetailPage implements OnInit {
   initPaymentConfiguration() {
     switch (this.PAYMENT_METHOD) {
       case PAYMENT_TYPES.WORLDPAY_REDIRECT:
-        this.initPrePaymentDetails();
+        this.initWorldpayPaymentDetails();
         break;
       case PAYMENT_TYPES.BARCLAYCARD_REDIRECT:
         this.initBarclayCardPaymentDetails();

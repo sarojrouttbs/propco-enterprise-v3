@@ -576,14 +576,16 @@ export const PAYMENT_CONFIG = {
     }
   },
   WORLDPAY_REDIRECT: {
-    TEST_URL : 'https://secure-test.worldpay.com/wcc/purchase',
-    PROD_URL : 'https://secure.worldpay.com/wcc/purchase ',
+    TEST_URL: 'https://secure-test.worldpay.com/wcc/purchase',
+    PROD_URL: 'https://secure.worldpay.com/wcc/purchase',
+    INST_ID: 1277936,
+    MERCHANT_CODE: 'PROPCOTESTM1'
   },
   BARCLAYCARD_REDIRECT: {
     TEST_URL: 'https://mdepayments.epdq.co.uk/ncol/test/orderstandard_utf8.asp',
     PROD_URL: 'https://payments.epdq.co.uk/ncol/prod/orderstandard_utf8.asp',
     PSPID: 'RAMAN123',
-    SHA_IN_PASS:"B+gbQ;RyjJBFM!i8bZQV4%WQei;2=x%S",
+    SHA_IN_PASS: "B+gbQ;RyjJBFM!i8bZQV4%WQei;2=x%S",
   }
 };
 
