@@ -34,12 +34,12 @@ export class SearchResultsPage implements OnInit {
     this.step--;
   }
   priceKnobValues: Object = {
-    upper: 200,
-    lower: 2000,
+    upper: 2000,
+    lower: 200,
   };
   bedKnobValues: Object = {
-    upper: 1,
-    lower: 10,
+    upper: 10,
+    lower: 1,
   };
   toppings = new FormControl();
   private solrSearchConfig = {
@@ -95,6 +95,14 @@ export class SearchResultsPage implements OnInit {
 
   refreshType: string;
   isAllselected: boolean = false;
+  entityList: string[] = [
+    "Property",
+    "Landlord",
+    "Tenant",
+    "Applicant",
+    "Agent",
+    "Contractor",
+  ];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatDrawer) drawer: MatDrawer;
@@ -109,8 +117,7 @@ export class SearchResultsPage implements OnInit {
   ngOnInit() {
     this.initResults();
     this.initFilterForm();
-    this.entityControl.valueChanges.subscribe(() => {
-    });
+    this.entityControl.valueChanges.subscribe(() => {});
   }
 
   private async initResults() {
@@ -189,14 +196,8 @@ export class SearchResultsPage implements OnInit {
   initFilterForm() {
     this.propertyFilter = this.fb.group({
       rentType: "DEFAULT_RENT",
-      propertyRent: {
-        upper: 100,
-        lower: 2000,
-      },
-      numberOfBedroom: {
-        upper: 1,
-        lower: 10,
-      },
+      propertyRent: this.priceKnobValues,
+      numberOfBedroom: this.bedKnobValues,
       managementType: [[]],
       propertyStyle: [[]],
       houseType: [[]],
@@ -266,12 +267,12 @@ export class SearchResultsPage implements OnInit {
     if (this.entityControl.value.indexOf("Property") !== -1) {
       params.propertyFilter = Object.assign({}, this.propertyFilter.value);
       params.propertyFilter.propertyRent = {
-        min: params.propertyFilter.propertyRent.upper,
-        max: params.propertyFilter.propertyRent.lower,
+        max: params.propertyFilter.propertyRent.upper,
+        min: params.propertyFilter.propertyRent.lower,
       };
       params.propertyFilter.numberOfBedroom = {
-        min: params.propertyFilter.numberOfBedroom.upper,
-        max: params.propertyFilter.numberOfBedroom.lower,
+        max: params.propertyFilter.numberOfBedroom.upper,
+        min: params.propertyFilter.numberOfBedroom.lower,
       };
     }
     if (this.entityControl.value.indexOf("Landlord") !== -1) {
@@ -328,14 +329,10 @@ export class SearchResultsPage implements OnInit {
 
   resetAll() {
     this.propertyFilter.reset();
-    this.propertyFilter.controls["propertyRent"].setValue({
-      upper: 100,
-      lower: 2000,
-    });
-    this.propertyFilter.controls["numberOfBedroom"].setValue({
-      upper: 1,
-      lower: 10,
-    });
+    this.propertyFilter.controls["propertyRent"].setValue(this.priceKnobValues);
+    this.propertyFilter.controls["numberOfBedroom"].setValue(
+      this.bedKnobValues
+    );
     this.propertyFilter.controls["rentType"].setValue("DEFAULT_RENT");
     this.landlordFilter.reset();
     this.tenantFilter.reset();
@@ -353,6 +350,8 @@ export class SearchResultsPage implements OnInit {
     this.applicantCheck.setValue(true);
     this.contractorCheck.setValue(true);
     this.agentCheck.setValue(true);
+    this.entityControl.setValue([]);
+    this.entityControl.setValue(this.entityList);
   }
 
   deselectAll() {
@@ -363,6 +362,7 @@ export class SearchResultsPage implements OnInit {
     this.applicantCheck.setValue(false);
     this.contractorCheck.setValue(false);
     this.agentCheck.setValue(false);
+    this.entityControl.setValue([]);
   }
 
   refresh(type: string) {
@@ -374,21 +374,15 @@ export class SearchResultsPage implements OnInit {
     if (form) {
       form.reset();
       if (form.value.hasOwnProperty("propertyRent")) {
-        form.controls["propertyRent"].setValue({
-          upper: 100,
-          lower: 2000,
-        });
-        form.controls["numberOfBedroom"].setValue({
-          upper: 1,
-          lower: 10,
-        });
+        form.controls["propertyRent"].setValue(this.priceKnobValues);
+        form.controls["numberOfBedroom"].setValue(this.bedKnobValues);
         form.controls["rentType"].setValue("DEFAULT_RENT");
       }
     }
   }
 
   onChangeEntity(type: string) {
-    let tmpArray: string[] = this.entityControl.value;
+    let tmpArray: string[] = Object.assign(this.entityControl.value, {});
     this.entityControl.setValue([]);
     switch (type) {
       case "property":

@@ -1,4 +1,3 @@
-
 @mixin set-text-style($size, $lheight) {
   font-size: $size;
   line-height: $lheight;
@@ -31,8 +30,8 @@ h1.example-app-name {
   margin-left: 8px;
 }
 
-.example-sidenav {
-  background-color: var(--ion-color-step-1750);
+.solr-filter-sidenav {
+  background-color: var(--ion-color-step-1700);
   width: 28%
 }
 
@@ -64,6 +63,10 @@ h1.example-app-name {
 
 .result-headers-align .mat-form-field+.mat-form-field {
   margin-left: 8px;
+}
+
+.result-headers-align .mat-checkbox-checked .mat-checkbox-background {
+  background-color: black !important;
 }
 
 .rowStyle {
@@ -111,8 +114,12 @@ ion-item {
   padding-bottom: 30px;
 }
 
-.main-container {
+.solr-pagginater-container {
   padding: 30px;
+
+  .mat-select-value {
+    color: var(--ion-color-step-2000);
+  }
 
   .mat-paginator {
     width: 77% !important;
@@ -233,23 +240,23 @@ ion-item {
   }
 
   .cdk-overlay-container {
-  .mat-option-text {
-    color: var(--ion-solr-font-color);
-    @include set-text-style(14px, 18px);
-  }
+    .mat-option-text {
+      color: var(--ion-solr-font-color);
+      @include set-text-style(14px, 18px);
+    }
 
-  .mat-pseudo-checkbox {
-    color: var(--ion-solr-font-color);
-  }
+    .mat-pseudo-checkbox {
+      color: var(--ion-solr-font-color);
+    }
 
-  .mat-pseudo-checkbox-checked {
-    background: var(--ion-solr-font-color);
-  }
+    .mat-pseudo-checkbox-checked {
+      background: var(--ion-solr-font-color);
+    }
 
-  .mat-select-panel {
-    max-height: none;
+    .mat-select-panel {
+      max-height: none;
+    }
   }
-}
 
   .uppercase {
     text-transform: uppercase;
@@ -353,11 +360,24 @@ ion-item {
   }
 }
 
-.main-container {
-  background-color: var(--ion-color-step-1750);
+.solr-pagginater-container {
+  background-color: var(--ion-color-step-1700);
 }
 
 .mat-expansion-panel {
+  margin-top: 0;
   box-shadow: none;
-  background-color: var(--ion-color-step-1750);
+  background-color: var(--ion-color-step-1700);
+}
+.mat-expansion-panel-header{
+  border: 1px solid var(--ion-color-step-1800);
+  border-right: none;
+}
+.mat-drawer-side {
+  border-right: solid 1px var(--ion-color-step-1800);
+}
+
+.align-end {
+  justify-content: flex-end;
+  display: flex;
 }

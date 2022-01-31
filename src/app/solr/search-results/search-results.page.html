@@ -6,7 +6,7 @@
 
 <ion-content class="main-container">
   <mat-drawer-container class="drawer-container">
-      <mat-drawer #drawer class="example-sidenav" mode="side" [(opened)]="opened" >
+      <mat-drawer #drawer class="solr-filter-sidenav" mode="side" [(opened)]="opened" >
         <div class="filter-heading-wrapper">
           <h1><span title="Collapse [" class="status-pointer"><ion-icon name="chevron-back-outline" size="medium" (click)="drawer.toggle();"></ion-icon></span>Filter your search</h1>
           <section>
@@ -19,7 +19,7 @@
         <mat-accordion class="result-headers-align">
           <mat-expansion-panel  (opened)="setStep(0)">
             <mat-expansion-panel-header>
-              <mat-checkbox  color="primary" 
+              <mat-checkbox  
               [formControl]="propertyCheck"
                 (click)="$event.stopPropagation();onChangeEntity('property')" 
                 (keydown)="$event.stopPropagation()">
@@ -359,8 +359,9 @@
           </mat-expansion-panel>
         </mat-accordion>
       </mat-drawer>
-      <mat-drawer-content class="main-container" *ngIf="loaded">
+      <mat-drawer-content class="solr-pagginater-container" *ngIf="loaded">
           <mat-paginator #paginator
+          class=""
             [length]="length"
             [showFirstLastButtons]="true"
             [pageSize]="pageSize"
@@ -373,7 +374,7 @@
             <ion-col size="80">
               <h3>{{length}} result(s) found</h3>
             </ion-col>
-            <ion-col size="20" class="ion-text-right">
+            <ion-col size="20" class="ion-text-right align-end">
               <br>
               <ion-buttons (click)="drawer.toggle();" >
                 Filter&nbsp;&nbsp;<ion-icon name="options-outline"></ion-icon>
