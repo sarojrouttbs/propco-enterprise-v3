@@ -115,6 +115,10 @@ var CommonFunction = function() {
         browser.actions().sendKeys(protractor.Key.END).perform();       
     }
 
+    this.pressKey = function(key){
+        browser.actions().sendKeys(key).perform();       
+    }
+
     this.uploadImage = function(loc, fileToUpload, value){
         browser.controlFlow().execute(function () {
            browser.executeScript("console.log('" + value + " is uploaded');");           
@@ -164,6 +168,7 @@ var CommonFunction = function() {
                     //this.scrollToElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + currentDay-2 + "']")));
                     this.clickOnElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + (currentDay-2).toString() + "']")), currentDay-1);
                     this.clickOnElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + (currentDay-4).toString() + "']")), currentDay-3);
+                    this.clickOnElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + (currentDay-6).toString() + "']")), currentDay-5);
                     this.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
                     break;
                 } 
