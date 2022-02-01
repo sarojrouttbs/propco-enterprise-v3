@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { APPLICATION_STATUSES, PROPCO, REFERENCING_TYPES } from 'src/app/shared/constants';
 import { HoldingDepositePaidModalPage } from 'src/app/shared/modals/holding-deposite-paid-modal/holding-deposite-paid-modal.page';
@@ -44,7 +44,7 @@ export class ApplicationListPage implements OnInit {
   referencingInfodata: any;
   referencingInfo: any;
   
-  constructor(private alertCtrl: AlertController, private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
+  constructor(private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
     this.getTobLookupData();
     this.getLookUpData();
     this.getReferancingInfo();
@@ -64,12 +64,12 @@ export class ApplicationListPage implements OnInit {
     this.hideMenu('', 'divOverlay');
     this.propertyDetails = await this.getPropertyById();
     this.applicationsDetails = await this.getApplicationList();
-    this.applicationList = this.applicationsDetails?.applications;
+    this.applicationList = (this.applicationsDetails.applications && this.applicationsDetails.applications.length > 0) ? this.applicationsDetails.applications as ApplicationData[] : [];
     this.initApplicationList();
   }
 
   private initApplicationList() {
-    this.filteredApplicationList.data = this.applicationsDetails.applications as ApplicationData[];
+    this.filteredApplicationList.data = this.applicationList;
     this.filteredApplicationList.paginator = this.paginator;
     this.filteredApplicationList.paginator.pageIndex = 0;
   }
@@ -354,17 +354,7 @@ export class ApplicationListPage implements OnInit {
 
   startReferencing() {
     if (this.referencingInfo.length === 1) {
-      switch (this.referencingInfo[0].name) {
-        case REFERENCING_TYPES.HOMELET:
-          this.commonService.redirectUrl(this.referencingInfo[0].url);
-          break;
-        case REFERENCING_TYPES.LETTINGS_HUB:
-          this.commonService.redirectUrl(this.referencingInfo[0].url);
-          break;
-        case REFERENCING_TYPES.MANUALLY:
-          this.commonService.redirectUrl(this.referencingInfo[0].url);
-          break;
-      }
+      this.commonService.redirectUrl(this.referencingInfo[0].url);
     } else if (this.referencingInfo.length > 1) { 
       this.selectReferecingType();
     } else {
@@ -415,9 +405,6 @@ export class ApplicationListPage implements OnInit {
           break;
         case REFERENCING_TYPES.LETTINGS_HUB:
           prepareReferencingInfoData.push({name: element, label: 'Lettings Hub', url: ''});
-          break;
-        case REFERENCING_TYPES.MANUALLY:
-          prepareReferencingInfoData.push({name: element, label: 'Manually', url: ''});
           break;
       }
     });
