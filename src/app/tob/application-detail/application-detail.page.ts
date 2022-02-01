@@ -212,6 +212,11 @@ export class ApplicationDetailPage implements OnInit {
     const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
     await this.setApplicationApplicants(applicants);
     await this.setLeadApplicantDetails();
+    if (this.applicationStatus === 'Accepted') {
+      this.currentStepperIndex = 10;
+      this.showPayment = true;
+      this.initPaymentConfiguration();
+    }
     const questionData = await this.getApplicantQuestions();
     this.createQuestionItems(questionData);
     this.getApplicationQuestionsAnswer(this.applicationId);
@@ -469,11 +474,11 @@ export class ApplicationDetailPage implements OnInit {
       this.applicationDetails.applicationClauses = res.applicationClauses ? res.applicationClauses : []
       this.applicationDetails.applicationRestrictions = res.applicationRestrictions ? res.applicationRestrictions : [];
       this.applicationStatus = this.commonService.getLookupValue(this.applicationDetails.status, this.applicationStatuses);
-      if (this.applicationStatus === 'Accepted') {
-        this.currentStepperIndex = 10;
-        this.showPayment = true;
-        this.initPaymentConfiguration();
-      }
+      // if (this.applicationStatus === 'Accepted') {
+      //   this.currentStepperIndex = 10;
+      //   this.showPayment = true;
+      //   this.initPaymentConfiguration();
+      // }
       this.applicationDetails.applicationRestrictions = this.applicationDetails.applicationRestrictions.filter(restrict => restrict.value);
       this.applicationDetails.applicationRestrictions.map(
         restrict =>
@@ -515,7 +520,7 @@ export class ApplicationDetailPage implements OnInit {
 
   private async setLeadApplicantDetails() {
     if (this.applicantId) {
-      this.getApplicantDetails(this.applicantId);
+      await this.getApplicantDetails(this.applicantId);
       if (this.applicationDetails.leadApplicantItemtype === "M") {
         this.getTenantBankDetails(this.applicantId);
         this.getTenantGuarantors(this.applicantId);
@@ -1454,8 +1459,8 @@ export class ApplicationDetailPage implements OnInit {
     this.paymentDetails.email = this.applicantDetailsForm.controls['email'].value;
     this.paymentDetails.instId = PAYMENT_CONFIG.WORLDPAY_REDIRECT.INST_ID;
     this.paymentDetails.amount = this.applicationDetails.depositAmount;
-    this.paymentDetails.hostWebUrl = window.location.origin + window.location.pathname + '#!/propco/worldpay';
-    this.paymentDetails.marchentCode = 'PROPCOTESTM1';
+    this.paymentDetails.hostWebUrl = window.location.origin + window.location.pathname + '#/worldpay';
+    this.paymentDetails.marchentCode = PAYMENT_CONFIG.WORLDPAY_REDIRECT.MERCHANT_CODE;
     this.paymentDetails.applicationId = this.applicationId;
 
     this.paymentDetails.postcode = this.addressDetailsForm.controls.address['controls'].postcode.value;
@@ -1475,7 +1480,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private initBarclayCardPaymentDetails() {
-    var barclayResponseUrl = window.location.origin + window.location.pathname + '#!/propco/barclaycard';
+    var barclayResponseUrl = window.location.origin + window.location.pathname + '#/barclaycard';
     var paymentConfigUrl = this.PAYMENT_PROD ? PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.PROD_URL: PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.TEST_URL;
     this.paymentDetails = {};
     this.paymentDetails.actionUrl = paymentConfigUrl;
