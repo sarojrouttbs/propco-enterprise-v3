@@ -26,6 +26,14 @@ const routes: Routes = [
   {
     path: 'tob',
     loadChildren: () => import('./tob/tob.module').then( m => m.TobPageModule)
+  },
+  {
+    path: 'barclaycard',
+    loadChildren: () => import('./barclaycard/barclaycard.module').then( m => m.BarclaycardPageModule)
+  },
+  {
+    path: 'worldpay',
+    loadChildren: () => import('./worldpay/worldpay.module').then( m => m.WorldpayPageModule)
   }
 ];
 
