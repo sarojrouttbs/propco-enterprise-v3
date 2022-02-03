@@ -1,10 +1,10 @@
 import { HttpParams } from "@angular/common/http";
-import { Component, Input, OnInit, Output } from "@angular/core";
+import { Component, Input, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import { PROPCO } from "src/app/shared/constants";
 import { CommonService } from "src/app/shared/services/common.service";
-import { EventEmitter } from '@angular/core';
+import { EventEmitter } from "@angular/core";
 import { SolrService } from "../../solr.service";
 declare function openScreen(key: string, value: any): any;
 
@@ -21,6 +21,7 @@ export class SearchSuggestionComponent implements OnInit {
   isItemAvailable = false;
   suggestions = [];
   @Input() entityControl: FormControl;
+  @Input() isAuthSuccess: boolean;
   @Output() searchClickEvent = new EventEmitter();
   searchTermControl = new FormControl();
   private solrSuggestionConfig = {
@@ -43,6 +44,7 @@ export class SearchSuggestionComponent implements OnInit {
   officeLookupMap = new Map();
   showLoader: boolean = false;
   @Input() pageType: string;
+  @Input() loaded: string;
   constructor(
     private solrService: SolrService,
     private commonService: CommonService,
@@ -82,9 +84,13 @@ export class SearchSuggestionComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.initDashboard();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.isAuthSuccess && changes.isAuthSuccess.currentValue) {
+      this.initDashboard();
+    }
   }
+
+  ngOnInit() {}
 
   private initDashboard() {
     this.getLookupData();

@@ -33,6 +33,20 @@
     cursor: pointer;
   }
 
+  .welcome-skeleton {
+    width: 19%;
+    margin: 0 auto;
+    height: 15px;
+  }
+
+  .searchbar-skeleton {
+    width: 75%;
+    margin: 0 auto;
+    height: 31px;
+    margin-top: 17px;
+    margin-bottom: 28px;
+  }
+
   .block {
     background-color: var(--ion-color-step-1750);
     padding: 10px;
