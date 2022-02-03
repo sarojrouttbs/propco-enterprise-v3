@@ -152,7 +152,7 @@ var CommonFunction = function() {
         const d = new Date();
         let currentDay = d.getDate();
         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-        let currentMonth = months[d.getMonth()];
+        let currentMonth = d.getMonth();
         let pastMonth = (d.getMonth() == 0) ? months[11] : months[d.getMonth()-1];
         let futureMonth = (d.getMonth() == 11) ? months[0] : months[d.getMonth()+1];
         switch(dValue){
@@ -161,7 +161,8 @@ var CommonFunction = function() {
                 break;
             case "past":
                 if(currentDay < 4){
-                   this.clickOnElement(element(by.xpath("//button[contains(text(), '" + pastMonth + "')]")), pastMonth);
+                  // this.clickOnElement(element(by.xpath("//button[contains(text(), '" + pastMonth + "')]")), pastMonth);
+                   this.clickOnElement(element(by.xpath("//ion-picker-column[2]/div/button[contains(@class, 'picker-opt-selected')]/preceding-sibling::button")));
                    this.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
                    break;
                 } else{
@@ -174,15 +175,17 @@ var CommonFunction = function() {
                 } 
             case "future":                
                 if(currentDay == 31){
-                    this.clickOnElement(element(by.xpath("//button[contains(text(), '" + futureMonth + "')]")), futureMonth);
+                   // this.clickOnElement(element(by.xpath("//button[contains(text(), '" + futureMonth + "')]")), futureMonth);
+                    this.clickOnElement(element(by.xpath("//ion-picker-column[2]/div/button[contains(@class, 'picker-opt-selected')]/following-sibling::button[1]")));
                     this.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
                     break;
                 } else{
                     this.getAttribute(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + currentDay.toString() + "']")), 'class').then(function(text){
                         let cf = new CommonFunction();
                         if(text.includes("picker-opt-disabled")){
-                            cf.clickOnElement(element(by.xpath("//button[contains(text(), '" + futureMonth + "')]")), futureMonth);
-                            cf.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
+                           // cf.clickOnElement(element(by.xpath("//button[contains(text(), '" + futureMonth + "')]")), futureMonth);
+                           cf.clickOnElement(element(by.xpath("//ion-picker-column[2]/div/button[contains(@class, 'picker-opt-selected')]/following-sibling::button[1]")));
+                           cf.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
                         } else {
                             cf.clickOnElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + currentDay.toString() + "']")), currentDay+1);
                             cf.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
