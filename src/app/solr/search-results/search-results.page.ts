@@ -1,7 +1,5 @@
-import { HttpParams } from "@angular/common/http";
-import { Component, HostListener, OnInit, ViewChild } from "@angular/core";
-import { FormArray, FormBuilder, FormControl, FormGroup } from "@angular/forms";
-import { MatCheckboxChange } from "@angular/material/checkbox";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatDrawer } from "@angular/material/sidenav";
 import { ActivatedRoute } from "@angular/router";
@@ -9,6 +7,7 @@ import { PROPCO } from "src/app/shared/constants";
 import { CommonService } from "src/app/shared/services/common.service";
 import { SolrService } from "../solr.service";
 declare function openScreen(key: string, value: any): any;
+import { Options, LabelType } from "@angular-slider/ngx-slider";
 
 @Component({
   selector: "app-search-results",
@@ -33,14 +32,8 @@ export class SearchResultsPage implements OnInit {
   prevStep() {
     this.step--;
   }
-  priceKnobValues: Object = {
-    upper: 2000,
-    lower: 200,
-  };
-  bedKnobValues: Object = {
-    upper: 10,
-    lower: 1,
-  };
+  priceKnobValues: number[] = [200, 2000];
+  bedKnobValues: number[] = [1, 10];
   toppings = new FormControl();
   private solrSearchConfig = {
     types: "",
@@ -83,15 +76,25 @@ export class SearchResultsPage implements OnInit {
 
   lookupdata: any;
   managementTypes;
+  managementTypesFiltered;
   propertyStyles;
+  propertyStylesFiltered;
   houseTypes;
+  houseTypesFiltered;
   propertyStatuses;
+  propertyStatusesFiltered;
   officeCodes;
+  officeCodesFiltered;
   landlordStatuses;
+  landlordStatusesFiltered;
   applicantStatuses;
+  applicantStatusesFiltered;
   tenantStatuses;
+  tenantStatusesFiltered;
   contractorStatuses;
+  contractorStatusesFiltered;
   contractorSkills;
+  contractorSkillsFiltered;
 
   refreshType: string;
   isAllselected: boolean = false;
@@ -107,17 +110,50 @@ export class SearchResultsPage implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatDrawer) drawer: MatDrawer;
 
+  showSkeleton: boolean = true;
+  managementTypeFilterCtrl: FormControl = new FormControl();
+  propertyStyleFilterCtrl: FormControl = new FormControl();
+  houseTypeFilterCtrl: FormControl = new FormControl();
+  propertyStatusFilterCtrl: FormControl = new FormControl();
+  officeCodesFilterCtrl: FormControl = new FormControl();
+  landlordStatusFilterCtrl: FormControl = new FormControl();
+  tenantStatusFilterCtrl: FormControl = new FormControl();
+  applicantStatuFilterCtrl: FormControl = new FormControl();
+  contractorStatusFilterCtrl: FormControl = new FormControl();
+  contractorSkillFilterCtrl: FormControl = new FormControl();
+
+  propRentOptions: Options = {
+    floor: 0,
+    ceil: 5000,
+    translate: (value: number, label: LabelType): string => {
+      switch (label) {
+        case LabelType.Low:
+          return "£" + value;
+        case LabelType.High:
+          return "£" + value;
+        default:
+          return "£" + value;
+      }
+    },
+  };
+
+  numberOfBedroomOptions: Options = {
+    floor: 0,
+    ceil: 20,
+  };
+
   constructor(
     private route: ActivatedRoute,
     private solrService: SolrService,
     private fb: FormBuilder,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private el: ElementRef<HTMLElement>
   ) {}
 
   ngOnInit() {
     this.initResults();
     this.initFilterForm();
-    this.entityControl.valueChanges.subscribe(() => {});
+    this.multiSearchFilterHandler();
   }
 
   private async initResults() {
@@ -125,6 +161,156 @@ export class SearchResultsPage implements OnInit {
     await this.getQueryParams();
     this.initFilter();
     this.getSearchResults();
+  }
+
+  private multiSearchFilterHandler() {
+    // listen for multi selct search field value changes
+    this.managementTypeFilterCtrl.valueChanges.subscribe((src) => {
+      this.filterMultiSearch(src, "mgnType");
+    });
+    this.propertyStyleFilterCtrl.valueChanges.subscribe((src) => {
+      this.filterMultiSearch(src, "propStyle");
+    });
+    this.houseTypeFilterCtrl.valueChanges.subscribe((src) => {
+      this.filterMultiSearch(src, "houseType");
+    });
+    this.propertyStatusFilterCtrl.valueChanges.subscribe((src) => {
+      this.filterMultiSearch(src, "propStatus");
+    });
+    this.officeCodesFilterCtrl.valueChanges.subscribe((src) => {
+      this.filterMultiSearch(src, "officeCode");
+    });
+    this.landlordStatusFilterCtrl.valueChanges.subscribe((src) => {
+      this.filterMultiSearch(src, "lanStatus");
+    });
+    this.applicantStatuFilterCtrl.valueChanges.subscribe((src) => {
+      this.filterMultiSearch(src, "appStatus");
+    });
+    this.tenantStatusFilterCtrl.valueChanges.subscribe((src) => {
+      this.filterMultiSearch(src, "tenantStatus");
+    });
+    this.contractorSkillFilterCtrl.valueChanges.subscribe((src) => {
+      this.filterMultiSearch(src, "conSkill");
+    });
+    this.contractorStatusFilterCtrl.valueChanges.subscribe((src) => {
+      this.filterMultiSearch(src, "conStatus");
+    });
+  }
+
+  private filterMultiSearch(srchStr: string, type: string) {
+    let tmp = [];
+    switch (type) {
+      case "mgnType": {
+        if (!srchStr) {
+          this.managementTypesFiltered = this.managementTypes;
+          return;
+        }
+        tmp = this.managementTypes.filter(
+          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+        );
+        this.managementTypesFiltered = tmp;
+        break;
+      }
+      case "propStyle": {
+        if (!srchStr) {
+          this.propertyStylesFiltered = this.propertyStyles;
+          return;
+        }
+        tmp = this.propertyStyles.filter(
+          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+        );
+        this.propertyStylesFiltered = tmp;
+        break;
+      }
+      case "houseType": {
+        if (!srchStr) {
+          this.houseTypesFiltered = this.houseTypes;
+          return;
+        }
+        tmp = this.houseTypes.filter(
+          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+        );
+        this.houseTypesFiltered = tmp;
+        break;
+      }
+      case "propStatus": {
+        if (!srchStr) {
+          this.propertyStatusesFiltered = this.propertyStatuses;
+          return;
+        }
+        tmp = this.propertyStatuses.filter(
+          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+        );
+        this.propertyStatusesFiltered = tmp;
+        break;
+      }
+      case "officeCode": {
+        if (!srchStr) {
+          this.officeCodesFiltered = this.officeCodes;
+          return;
+        }
+        tmp = this.officeCodes.filter(
+          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+        );
+        this.officeCodesFiltered = tmp;
+        break;
+      }
+      case "lanStatus": {
+        if (!srchStr) {
+          this.landlordStatusesFiltered = this.landlordStatuses;
+          return;
+        }
+        tmp = this.landlordStatuses.filter(
+          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+        );
+        this.landlordStatusesFiltered = tmp;
+        break;
+      }
+      case "appStatus": {
+        if (!srchStr) {
+          this.applicantStatusesFiltered = this.applicantStatuses;
+          return;
+        }
+        tmp = this.applicantStatuses.filter(
+          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+        );
+        this.applicantStatusesFiltered = tmp;
+        break;
+      }
+      case "tenantStatus": {
+        if (!srchStr) {
+          this.tenantStatusesFiltered = this.tenantStatuses;
+          return;
+        }
+        tmp = this.tenantStatuses.filter(
+          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+        );
+        this.tenantStatusesFiltered = tmp;
+        break;
+      }
+      case "conSkill": {
+        if (!srchStr) {
+          this.contractorSkillsFiltered = this.contractorSkills;
+          return;
+        }
+        tmp = this.contractorSkills.filter(
+          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+        );
+        this.contractorSkillsFiltered = tmp;
+        break;
+      }
+      case "conStatus": {
+        if (!srchStr) {
+          this.contractorStatusesFiltered = this.contractorStatuses;
+          return;
+        }
+        tmp = this.contractorStatuses.filter(
+          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+        );
+        this.contractorStatusesFiltered = tmp;
+        break;
+      }
+    }
   }
 
   private getLookupData() {
@@ -141,16 +327,21 @@ export class SearchResultsPage implements OnInit {
   }
 
   private setLookupData(data) {
-    this.managementTypes = data.managementTypes;
-    this.propertyStyles = data.propertyStyles;
-    this.houseTypes = data.houseTypes;
-    this.propertyStatuses = data.propertyStatuses;
-    this.officeCodes = data.officeCodes;
-    this.landlordStatuses = data.landlordStatuses;
-    this.applicantStatuses = data.applicantStatuses;
-    this.tenantStatuses = data.tenantStatuses;
-    this.contractorSkills = data.contractorSkills;
-    this.contractorStatuses = data.contractorStatuses;
+    this.managementTypes = this.managementTypesFiltered = data.managementTypes;
+    this.propertyStyles = this.propertyStylesFiltered = data.propertyStyles;
+    this.houseTypes = this.houseTypesFiltered = data.houseTypes;
+    this.propertyStatuses = this.propertyStatusesFiltered =
+      data.propertyStatuses;
+    this.officeCodes = this.officeCodesFiltered = data.officeCodes;
+    this.landlordStatuses = this.landlordStatusesFiltered =
+      data.landlordStatuses;
+    this.applicantStatuses = this.applicantStatusesFiltered =
+      data.applicantStatuses;
+    this.tenantStatuses = this.tenantStatusesFiltered = data.tenantStatuses;
+    this.contractorSkills = this.contractorSkillsFiltered =
+      data.contractorSkills;
+    this.contractorStatuses = this.contractorStatusesFiltered =
+      data.contractorStatuses;
   }
 
   private getQueryParams() {
@@ -196,8 +387,8 @@ export class SearchResultsPage implements OnInit {
   initFilterForm() {
     this.propertyFilter = this.fb.group({
       rentType: "DEFAULT_RENT",
-      propertyRent: this.priceKnobValues,
-      numberOfBedroom: this.bedKnobValues,
+      propertyRent: [this.priceKnobValues],
+      numberOfBedroom: [this.bedKnobValues],
       managementType: [[]],
       propertyStyle: [[]],
       houseType: [[]],
@@ -234,6 +425,23 @@ export class SearchResultsPage implements OnInit {
     });
   }
 
+  private customizePaginator(): void {
+    setTimeout(() => {
+      const lastBtn = this.el.nativeElement.querySelector(
+        ".mat-paginator-navigation-last"
+      );
+      if (lastBtn) {
+        lastBtn.innerHTML = "Last";
+      }
+      const firstBtn = this.el.nativeElement.querySelector(
+        ".mat-paginator-navigation-first"
+      );
+      if (firstBtn) {
+        firstBtn.innerHTML = "First";
+      }
+    }, 500);
+  }
+
   private emptyEntityChecksCtrl() {
     this.propertyCheck.setValue(false);
     this.landlordCheck.setValue(false);
@@ -244,6 +452,7 @@ export class SearchResultsPage implements OnInit {
   }
 
   getSearchResults() {
+    this.showSkeleton = true;
     this.solrService
       .entitySearch(this.prepareSearchParams())
       .subscribe((res) => {
@@ -251,6 +460,8 @@ export class SearchResultsPage implements OnInit {
         this.length = res && res.count ? res.count : 0;
         this.opened = true;
         this.loaded = true;
+        this.showSkeleton = false;
+        this.customizePaginator();
         // this.iterator();
       });
   }
@@ -267,12 +478,12 @@ export class SearchResultsPage implements OnInit {
     if (this.entityControl.value.indexOf("Property") !== -1) {
       params.propertyFilter = Object.assign({}, this.propertyFilter.value);
       params.propertyFilter.propertyRent = {
-        max: params.propertyFilter.propertyRent.upper,
-        min: params.propertyFilter.propertyRent.lower,
+        max: params.propertyFilter.propertyRent[1],
+        min: params.propertyFilter.propertyRent[0],
       };
       params.propertyFilter.numberOfBedroom = {
-        max: params.propertyFilter.numberOfBedroom.upper,
-        min: params.propertyFilter.numberOfBedroom.lower,
+        max: params.propertyFilter.numberOfBedroom[1],
+        min: params.propertyFilter.numberOfBedroom[0],
       };
     }
     if (this.entityControl.value.indexOf("Landlord") !== -1) {

@@ -13,7 +13,7 @@
       </mat-select>
     </mat-form-field>
   </ion-col>
-  <ion-col size="60" style="padding-right: 0;" class="ion-no-padding">
+  <ion-col [size]="pageType == 'dashboard'?'69':'60'" size-xl="40" style="padding-right: 0;" class="ion-no-padding">
     <div>
       <ion-searchbar 
       [(ngModel)]="searchTerm" 

@@ -13,6 +13,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-slider/ngx-slider": "^2.0.3",
     "@angular/animations": "^11.2.7",
     "@angular/cdk": "^11.2.6",
     "@angular/common": "~11.2.7",
@@ -46,6 +47,7 @@
     "jszip": "^3.7.0",
     "moment": "^2.29.1",
     "ng2-currency-mask": "^11.0.0",
+    "ngx-mat-select-search": "^3.3.3",
     "ngx-quill": "^13.2.0",
     "ngx-toastr": "^13.2.1",
     "pdfmake": "^0.2.0",

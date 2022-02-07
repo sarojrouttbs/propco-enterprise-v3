@@ -717,4 +717,41 @@ mat-form-field {
   .mat-select-arrow{
     color: var(--ion-color-step-2000);
   }
+  .mat-paginator-range-label {
+    display: none;
+  }
+  .mat-paginator-outer-container{
+    height: auto;
+    width: 100%;
+  }
+  .mat-paginator-container {
+    justify-content: space-between;
+    flex-wrap: wrap-reverse;
+    padding-bottom: 3px;
+    width: 100%;
+  }
+  .mat-form-field-appearance-legacy .mat-form-field-underline {
+    display: none;
+  }
+}
+
+#solr-search-result {
+  .ngx-slider .ngx-slider-bubble.ngx-slider-limit {
+    display: none;
+  }
+  .ngx-slider .ngx-slider-pointer{
+    width: 23px;
+    height: 23px;
+    top: -10px;
+    background-color: var(--ion-color-step-1700);
+  }
+  .ngx-slider .ngx-slider-pointer:after{
+    display: none;
+  }
+  .ngx-slider .ngx-slider-bar{
+    height: 2px;
+  }
+  .ngx-slider .ngx-slider-selection{
+    background: var(--ion-color-solr);
+  }
 }
