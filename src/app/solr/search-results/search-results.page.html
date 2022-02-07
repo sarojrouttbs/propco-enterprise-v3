@@ -1,6 +1,6 @@
 <ion-header >
   <ion-grid class="ion-no-padding" *ngIf="loaded" class="result-search-grid">
-    <app-search-suggestion [entityControl]="entityControl" (searchClickEvent)="searchHandler($event)"></app-search-suggestion> 
+    <app-search-suggestion [entityControl]="entityControl" (searchClickEvent)="searchHandler($event)" [searchTerm]="solrSearchConfig.searchTerm"></app-search-suggestion> 
   </ion-grid>
 </ion-header>
 

@@ -14,7 +14,7 @@ declare function openScreen(key: string, value: any): any;
   styleUrls: ["./search-suggestion.component.scss"],
 })
 export class SearchSuggestionComponent implements OnInit {
-  searchTerm;
+  @Input() searchTerm;
   initializeItems() {
     this.suggestions = [];
   }
