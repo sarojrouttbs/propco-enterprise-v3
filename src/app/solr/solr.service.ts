@@ -26,20 +26,26 @@ export class SolrService {
   }
 
   entitySearch(body: object): Observable<any> {
+    let params = new HttpParams().set("hideLoader", "true");
     return this.httpClient.post(
       environment.API_BASE_URL + `entities/search`,
-      body
+      body,
+      { params }
     );
   }
 
   authenticateSsoToken(encodedString: string): Observable<any> {
-    const requestObj = { env: 'saas-cw-uat' };
+    const requestObj = { env: "saas-cw-uat" };
     let params = new HttpParams().set("hideLoader", "true");
-    return this.httpClient.post(environment.API_BASE_URL + 'authentication/sso/token', requestObj, {
-      headers: {
-        Authorization: 'Basic ' + encodedString
-      },
-      params
-    });
+    return this.httpClient.post(
+      environment.API_BASE_URL + "authentication/sso/token",
+      requestObj,
+      {
+        headers: {
+          Authorization: "Basic " + encodedString,
+        },
+        params,
+      }
+    );
   }
 }

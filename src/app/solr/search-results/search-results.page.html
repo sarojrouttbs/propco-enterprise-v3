@@ -1,14 +1,17 @@
 <ion-header >
-  <ion-grid class="ion-no-padding" fixed *ngIf="loaded">
+  <ion-grid class="ion-no-padding" *ngIf="loaded" class="result-search-grid">
     <app-search-suggestion [entityControl]="entityControl" (searchClickEvent)="searchHandler($event)"></app-search-suggestion> 
   </ion-grid>
 </ion-header>
 
-<ion-content class="main-container">
+<ion-content id="solr-search-result" class="main-container">
   <mat-drawer-container class="drawer-container">
       <mat-drawer #drawer class="solr-filter-sidenav" mode="side" [(opened)]="opened" >
         <div class="filter-heading-wrapper">
-          <h1><span title="Collapse [" class="status-pointer"><ion-icon name="chevron-back-outline" size="medium" (click)="drawer.toggle();"></ion-icon></span>Filter your search</h1>
+          <div class="filter-heading-container">
+            <span title="Collapse [" class="status-pointer"><ion-icon name="arrow-back-outline" size="medium" (click)="drawer.toggle();"></ion-icon></span>
+            <h1>Filter your search</h1>
+          </div>
           <section>
             <ion-button size="small" color="danger" (click)="resetAll()">Reset All</ion-button>
             <ion-button size="small" color="medium" (click)="!isAllselected?selectAll():deselectAll()">{{!isAllselected?'Select All':'Select None'}}</ion-button>
@@ -49,15 +52,17 @@
                 <ion-label>Price Range</ion-label>
               </ion-list-header>
               <ion-item>
-                <ion-range class="dual-range"  min="0" max="5000"  dual-knobs [pin]="true" color="primary" formControlName="propertyRent">
-                </ion-range>
+                <!-- <ion-range class="dual-range"  min="0" max="5000"  dual-knobs  color="primary" formControlName="propertyRent">
+                </ion-range> -->
+                <ngx-slider  [options]="propRentOptions" formControlName="propertyRent"></ngx-slider>
               </ion-item>
               <ion-list-header>
                 <ion-label>Bed Range</ion-label>
               </ion-list-header>
               <ion-item>
-                <ion-range class="dual-range"  min="0" max="20"  dual-knobs [pin]="true" color="primary" formControlName="numberOfBedroom">
-                </ion-range>
+                <!-- <ion-range class="dual-range"  min="0" max="20"  dual-knobs [pin]="true" color="primary" formControlName="numberOfBedroom">
+                </ion-range> -->
+                <ngx-slider  [options]="numberOfBedroomOptions" formControlName="numberOfBedroom"></ngx-slider>
               </ion-item>
             </ion-list>
             <ion-list class="list">
@@ -65,14 +70,26 @@
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
                     <mat-select placeholder="Management Type" formControlName="managementType" multiple>
-                      <mat-option *ngFor="let item of managementTypes" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="managementTypeFilterCtrl"
+                          placeholderLabel="search"
+                          noEntriesFoundLabel="'no matching found'"
+                        ></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of managementTypesFiltered" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
                     <mat-select placeholder="Style" formControlName="propertyStyle" multiple>
-                      <mat-option *ngFor="let item of propertyStyles" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="propertyStyleFilterCtrl"
+                          placeholderLabel="search"
+                          noEntriesFoundLabel="'no matching found'"
+                        ></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of propertyStylesFiltered" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -81,14 +98,26 @@
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
                     <mat-select placeholder="Type" formControlName="houseType" multiple>
-                      <mat-option *ngFor="let item of houseTypes" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="houseTypeFilterCtrl"
+                      placeholderLabel="search"
+                      noEntriesFoundLabel="'no matching found'"
+                    ></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of houseTypesFiltered" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
                     <mat-select placeholder="Status" formControlName="status" multiple>
-                      <mat-option *ngFor="let item of propertyStatuses" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="propertyStatusFilterCtrl"
+                      placeholderLabel="search"
+                      noEntriesFoundLabel="'no matching found'"
+                    ></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of propertyStatusesFiltered" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -97,7 +126,13 @@
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
                     <mat-select placeholder="Office" formControlName="officeCode" multiple>
-                      <mat-option *ngFor="let item of officeCodes" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="officeCodesFilterCtrl"
+                      placeholderLabel="search"
+                      noEntriesFoundLabel="'no matching found'"
+                    ></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of officeCodesFiltered" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -153,14 +188,26 @@
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
                     <mat-select placeholder="Status" formControlName="status" multiple>
-                      <mat-option *ngFor="let item of landlordStatuses" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="landlordStatusFilterCtrl"
+                      placeholderLabel="search"
+                      noEntriesFoundLabel="'no matching found'"
+                    ></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of landlordStatusesFiltered" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
                     <mat-select placeholder="Office" formControlName="officeCode" multiple>
-                      <mat-option *ngFor="let item of officeCodes" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="officeCodesFilterCtrl"
+                      placeholderLabel="search"
+                      noEntriesFoundLabel="'no matching found'"
+                    ></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of officeCodesFiltered" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -204,7 +251,13 @@
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
                     <mat-select placeholder="Office" formControlName="officeCode" multiple>
-                      <mat-option *ngFor="let item of officeCodes" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="officeCodesFilterCtrl"
+                      placeholderLabel="search"
+                      noEntriesFoundLabel="'no matching found'"
+                    ></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of officeCodesFiltered" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -213,7 +266,13 @@
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
                     <mat-select placeholder="Status" formControlName="status" multiple>
-                      <mat-option *ngFor="let item of tenantStatuses" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="tenantStatusFilterCtrl"
+                        placeholderLabel="search"
+                        noEntriesFoundLabel="'no matching found'"
+                      ></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of tenantStatusesFiltered" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -256,7 +315,13 @@
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
                     <mat-select placeholder="Office" formControlName="officeCode" multiple>
-                      <mat-option *ngFor="let item of officeCodes" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="officeCodesFilterCtrl"
+                      placeholderLabel="search"
+                      noEntriesFoundLabel="'no matching found'"
+                    ></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of officeCodesFiltered" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -297,7 +362,13 @@
                 <ion-col size="50">
                   <mat-form-field [floatLabel]="'never'">
                     <mat-select placeholder="Status" formControlName="status" multiple>
-                      <mat-option *ngFor="let item of applicantStatuses" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="applicantStatuFilterCtrl"
+                      placeholderLabel="search"
+                      noEntriesFoundLabel="'no matching found'"
+                    ></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of applicantStatusesFiltered" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -324,14 +395,26 @@
               <ion-col size="50">
                 <mat-form-field [floatLabel]="'never'">
                   <mat-select placeholder="Status" formControlName="status" multiple>
-                    <mat-option *ngFor="let item of contractorStatuses" [value]="item.index">{{item.value}}</mat-option>
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="contractorStatusFilterCtrl"
+                    placeholderLabel="search"
+                    noEntriesFoundLabel="'no matching found'"
+                  ></ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let item of contractorStatusesFiltered" [value]="item.index">{{item.value}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </ion-col>
               <ion-col size="50">
                 <mat-form-field [floatLabel]="'never'">
                   <mat-select placeholder="Skill Set" formControlName="skills" multiple>
-                    <mat-option *ngFor="let item of contractorSkills" [value]="item.index">{{item.value}}</mat-option>
+                    <mat-option>
+                      <ngx-mat-select-search [formControl]="contractorSkillFilterCtrl"
+                    placeholderLabel="search"
+                    noEntriesFoundLabel="'no matching found'"
+                  ></ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let item of contractorSkillsFiltered" [value]="item.index">{{item.value}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </ion-col>
@@ -360,28 +443,26 @@
         </mat-accordion>
       </mat-drawer>
       <mat-drawer-content class="solr-pagginater-container" *ngIf="loaded">
-          <mat-paginator #paginator
-          class=""
-            [length]="length"
-            [showFirstLastButtons]="true"
-            [pageSize]="pageSize"
-            [pageSizeOptions]="[5, 10, 25, 100]"
-            (page)="pageEvent = handlePage($event)">
-        </mat-paginator>
-        
-        <ion-grid>
-          <ion-row>
-            <ion-col size="80">
-              <h3>{{length}} result(s) found</h3>
-            </ion-col>
-            <ion-col size="20" class="ion-text-right ion-align-self-end">
-              <br>
-              <ion-buttons (click)="drawer.toggle();" >
-                Filter&nbsp;&nbsp;<ion-icon name="options-outline"></ion-icon>
-              </ion-buttons>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+        <div class="paginator-grid" *ngIf="!showSkeleton">
+            <ng-container *ngIf="length > 0">
+              <div class="filter-icon-wrapper" *ngIf="!drawer.opened">
+                <ion-buttons (click)="drawer.toggle();" >
+                  <ion-icon name="options-outline"></ion-icon>
+                </ion-buttons>
+              </div>
+              <div class="result-wrapper">{{pageEvent?.pageIndex + 1 + "-" + (length/pageSize?pageSize:pageEvent?.pageSize)}} of {{length}} result(s) found</div>
+              <div>
+                <mat-paginator #paginator
+                [length]="length"
+                [showFirstLastButtons]="true"
+                [pageSize]="pageSize"
+                [pageSizeOptions]="[5, 10, 25, 100]"
+                (page)="pageEvent = handlePage($event)">
+              </mat-paginator>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!length"><h3>No Result(s) found</h3></ng-container>
+        </div>
   
         <div *ngFor="let item of results">
           <ng-container [ngTemplateOutlet]="propertySuggestion"  *ngIf="item?.entityType === 'PROPERTY'"
@@ -403,14 +484,6 @@
                 [ngTemplateOutletContext]="{item:item}">
           </ng-container>
         </div>
-  
-        <mat-paginator #paginator
-            [length]="length"
-            [showFirstLastButtons]="true"
-            [pageSize]="pageSize"
-            [pageSizeOptions]="[5, 10, 25, 100]"
-            (page)="pageEvent = handlePage($event)">
-        </mat-paginator>
       </mat-drawer-content>
   </mat-drawer-container>
 </ion-content>

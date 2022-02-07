@@ -59,7 +59,7 @@ export const MY_FORMATS = {
     MatSidenavModule,
     MatExpansionModule,
     MatCheckboxModule,
-    MatCardModule
+    MatCardModule,
   ],
   providers: [
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
