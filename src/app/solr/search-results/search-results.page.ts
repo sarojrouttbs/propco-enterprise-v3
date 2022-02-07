@@ -35,9 +35,9 @@ export class SearchResultsPage implements OnInit {
   priceKnobValues: number[] = [200, 2000];
   bedKnobValues: number[] = [1, 10];
   toppings = new FormControl();
-  private solrSearchConfig = {
+  solrSearchConfig = {
     types: "",
-    searchTerm: "*",
+    searchTerm: "",
     page: "1",
     limit: "5",
   };
@@ -352,7 +352,7 @@ export class SearchResultsPage implements OnInit {
           : "PROPERTY";
         this.solrSearchConfig.searchTerm = params["searchTerm"]
           ? params["searchTerm"]
-          : "*";
+          : "";
         resolve(true);
       });
     });
@@ -470,7 +470,9 @@ export class SearchResultsPage implements OnInit {
     let params: any = {};
     params.limit = this.pageSize;
     params.page = this.pageIndex;
-    params.searchTerm = this.solrSearchConfig.searchTerm;
+    params.searchTerm = this.solrSearchConfig.searchTerm
+      ? this.solrSearchConfig.searchTerm
+      : "*";
     params.searchTypes = this.transformToUpperCase(this.entityControl.value);
 
     if (this.refreshType === "ALL") {
@@ -642,7 +644,7 @@ export class SearchResultsPage implements OnInit {
   }
 
   searchHandler(term) {
-    this.solrSearchConfig.searchTerm = term ? term : "*";
+    this.solrSearchConfig.searchTerm = term ? term : "";
     this.initResults();
   }
 }
