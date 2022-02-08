@@ -219,19 +219,6 @@ ion-item {
     }
   }
 
-  ion-row.fault-data-row {
-    ion-col {
-      @include set-text-style(16px, 20px);
-      margin: 0;
-
-      .text {
-        @include set-text-style(14px, 17px);
-        color: grey;
-        display: inline-block;
-      }
-    }
-  }
-
   ion-row.fault-meter-row {
     margin-top: 12px;
 
@@ -265,7 +252,7 @@ ion-item {
 
   .ref {
     @include set-text-style(13px, 21px);
-    color: #4D4D4D;
+    color: var(--ion-color-step-600);
     text-transform: uppercase;
   }
 
@@ -348,19 +335,6 @@ ion-item {
     }
   }
 
-  ion-row.fault-data-row {
-    ion-col {
-      @include set-text-style(16px, 20px);
-      margin: 0;
-
-      .text {
-        @include set-text-style(14px, 17px);
-        color: grey;
-        display: inline-block;
-      }
-    }
-  }
-
   ion-row.fault-meter-row {
     margin-top: 12px;
 
@@ -394,7 +368,7 @@ ion-item {
 
   .ref {
     @include set-text-style(13px, 21px);
-    color: #4D4D4D;
+    color: var(--ion-color-step-600);
     text-transform: uppercase;
   }
 
@@ -422,34 +396,34 @@ ion-item {
   }
 
   .name {
-    font-size: 20px;
+    @include set-text-style(20px, 24px);
   }
 
   .title {
-    font-size: 20px;
+    @include set-text-style(20px, 24px);
   }
 
   .skill-set {
     color: var(--ion-color-step-950);
-    font-size: 18px;
+    @include set-text-style(18px, 22px);
   }
 
   .agent-approved {
     color: #ff9335;
-    font-size: 18px;
+    @include set-text-style(18px, 22px);
   }
 }
 
 .landlord i.propcoicon {
-  font-size: 70px;
+  @include set-text-style(70px, 77px);
 }
 
 .tenant i.propcoicon {
-  font-size: 70px;
+  @include set-text-style(70px, 77px);
 }
 
 .contractor i.propcoicon {
-  font-size: 70px;
+  @include set-text-style(70px, 77px);
 }
 
 .agent i.propcoicon {
