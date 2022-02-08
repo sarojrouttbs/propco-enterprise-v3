@@ -1,3 +1,8 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
 #occupant-details {
     padding: 0;
     .list-section {
@@ -96,7 +101,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: var(--ion-color-step-950);
+    background-color: var(--ion-color-step-950);
     color: var(--ion-color-step-2000);
-    font-size: 22px;
+    @include set-text-style(22px, 25px);    
 }
