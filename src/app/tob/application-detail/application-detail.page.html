@@ -253,16 +253,13 @@
                     <ion-grid>
                       <ion-row class="ion-justify-content-end search-row" [formGroup]="searchApplicantForm">
                         <ion-col size-sm="50" size-xl="35" id="tob-applicant-search">
-                          <ion-item>
-                            <ion-label position="floating">Start Typing to Search Applicants</ion-label>
-                            <ion-input type="text" debounce="300" (ionInput)="onSearch($event)"
-                              formControlName='searchApplicant'>
-                            </ion-input>
-                            <ion-icon class="input-close" (click)="resetSearch()"
-                              *ngIf="searchApplicantForm.controls.searchApplicant.value.length > 2 && !applicantDetail"
-                              color="medium" name="close-circle"></ion-icon>
-                          </ion-item>
-
+                          <ion-searchbar 
+                            placeholder="Start Typing to Search Applicants" 
+                            class="applicantSearchbarCustom" 
+                            debounce="300" 
+                            (ionInput)="onSearch($event)"
+                            formControlName="searchApplicant"
+                          ></ion-searchbar>
                           <ion-list class="applicant-list" *ngIf="resultsAvailable">
                             <ion-item *ngFor="let result of (applicantList | async)?.data" button
                               (click)="getApplicantDetails(result?.entityId, i, true)" button>
@@ -276,6 +273,11 @@
                               </label>
                             </ion-item>
                           </ion-list>
+                        </ion-col>
+                        <ion-col size="4" class="ion-no-padding">
+                          <ion-buttons end class="search-button">
+                            <i class="propcoicon propcoicon-search no-background"></i>
+                          </ion-buttons>     
                         </ion-col>
                       </ion-row>
                     </ion-grid>
