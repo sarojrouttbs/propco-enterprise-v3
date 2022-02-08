@@ -554,7 +554,7 @@ export class ApplicationDetailPage implements OnInit {
         res => {
           if (res) {
             this.propertyDetails = res.data;
-            const propertyType = this.commonService.getLookupValue(this.rentCategories, this.propertyDetails.rentCategory);
+            const propertyType = this.commonService.getLookupValue(this.propertyDetails.rentCategory, this.rentCategories);
             if (propertyType === 'Student') {
               this.isStudentProperty = true;
               this.isStudentGuarantor();
@@ -936,7 +936,7 @@ export class ApplicationDetailPage implements OnInit {
       case 'correspondence-address':
         this.addressDetailsForm.controls.correspondenceAddress['controls'].addressLine1.setValue(res.line1);
         this.addressDetailsForm.controls.correspondenceAddress['controls'].addressLine2.setValue(res.line2);
-        this.addressDetailsForm.controls.correspondenceAddress['controls'].locality.setValue(res.line2);
+        this.addressDetailsForm.controls.correspondenceAddress['controls'].locality.setValue(res.line4);
         this.addressDetailsForm.controls.correspondenceAddress['controls'].town.setValue(res.line5);
         this.addressDetailsForm.controls.correspondenceAddress['controls'].county.setValue(res.provinceName);
         this.addressDetailsForm.controls.correspondenceAddress['controls'].country.setValue(res.countryName);
