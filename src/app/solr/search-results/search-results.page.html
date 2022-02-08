@@ -450,14 +450,15 @@
                   <ion-icon name="options-outline"></ion-icon>
                 </ion-buttons>
               </div>
-              <div class="result-wrapper">{{pageEvent?.pageIndex + 1 + "-" + (length/(pageSize?pageSize:pageEvent?.pageSize)  | number: '1.0-0')}} of {{length}} result(s) found</div>
+              <div class="result-wrapper">{{(pageEvent?.pageIndex ? pageEvent?.pageIndex + 1 : 1) + "-" + (length/(pageSize?pageSize:pageEvent?.pageSize)  | number: '1.0-0')}} of {{length}} result(s) found</div>
               <div>
                 <mat-paginator #paginator
                 [length]="length"
-                [showFirstLastButtons]="true"
                 [pageSize]="pageSize"
+                [pageIndex]="pageIndex"
+                [showFirstLastButtons]="true"
                 [pageSizeOptions]="[5, 10, 25, 100]"
-                (page)="pageEvent = handlePage($event)">
+                (page)="pageEvent = handlePage($event);">
               </mat-paginator>
               </div>
             </ng-container>

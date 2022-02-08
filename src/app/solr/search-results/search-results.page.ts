@@ -55,7 +55,7 @@ export class SearchResultsPage implements OnInit {
   results: any[] = [];
   pageEvent: PageEvent;
   length: number;
-  pageIndex: number = 1;
+  pageIndex: number = 0;
   opened: boolean;
   loaded: boolean = false;
   key;
@@ -441,7 +441,7 @@ export class SearchResultsPage implements OnInit {
       if (firstBtn) {
         firstBtn.innerHTML = "First";
       }
-    }, 500);
+    }, 100);
   }
 
   private emptyEntityChecksCtrl() {
@@ -471,7 +471,7 @@ export class SearchResultsPage implements OnInit {
   private prepareSearchParams() {
     let params: any = {};
     params.limit = this.pageSize;
-    params.page = this.pageIndex;
+    params.page = this.pageIndex + 1;
     params.searchTerm = this.solrSearchConfig.searchTerm
       ? this.solrSearchConfig.searchTerm
       : "*";
@@ -512,8 +512,8 @@ export class SearchResultsPage implements OnInit {
     return `£${value}`;
   }
 
-  public handlePage(e: any) {
-    this.pageIndex = e.pageIndex + 1;
+  public handlePage(e: PageEvent) {
+    this.pageIndex = e.pageIndex;
     this.pageSize = e.pageSize;
     this.getSearchResults();
     return e;
