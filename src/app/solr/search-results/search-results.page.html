@@ -1,5 +1,5 @@
 <ion-header >
-  <ion-grid class="ion-no-padding" *ngIf="loaded" class="result-search-grid">
+  <ion-grid class="ion-no-padding" class="result-search-grid">
     <app-search-suggestion [entityControl]="entityControl" (searchClickEvent)="searchHandler($event)" [searchTerm]="solrSearchConfig.searchTerm"></app-search-suggestion> 
   </ion-grid>
 </ion-header>
@@ -9,7 +9,7 @@
       <mat-drawer #drawer class="solr-filter-sidenav" mode="side" [(opened)]="opened" >
         <div class="filter-heading-wrapper">
           <div class="filter-heading-container">
-            <span title="Collapse [" class="status-pointer"><ion-icon name="arrow-back-outline" size="medium" (click)="drawer.toggle();"></ion-icon></span>
+            <span title="Collapse [" class="status-pointer"><ion-icon name="arrow-back-outline" (click)="drawer.toggle();"></ion-icon></span>
             <h1>Filter your search</h1>
           </div>
           <section>
@@ -19,7 +19,7 @@
           </section>
           
         </div>
-        <mat-accordion class="result-headers-align">
+        <mat-accordion id="filter-details-accordian" class="result-headers-align">
           <mat-expansion-panel  (opened)="setStep(0)">
             <mat-expansion-panel-header>
               <mat-checkbox  
@@ -442,7 +442,7 @@
           </mat-expansion-panel>
         </mat-accordion>
       </mat-drawer>
-      <mat-drawer-content class="solr-pagginater-container" *ngIf="loaded">
+      <mat-drawer-content class="solr-pagginater-container">
         <div class="paginator-grid" *ngIf="!showSkeleton">
             <ng-container *ngIf="length > 0">
               <div class="filter-icon-wrapper" *ngIf="!drawer.opened">
@@ -450,7 +450,7 @@
                   <ion-icon name="options-outline"></ion-icon>
                 </ion-buttons>
               </div>
-              <div class="result-wrapper">{{pageEvent?.pageIndex + 1 + "-" + (length/pageSize?pageSize:pageEvent?.pageSize)}} of {{length}} result(s) found</div>
+              <div class="result-wrapper">{{pageEvent?.pageIndex + 1 + "-" + (length/(pageSize?pageSize:pageEvent?.pageSize)  | number: '1.0-0')}} of {{length}} result(s) found</div>
               <div>
                 <mat-paginator #paginator
                 [length]="length"
@@ -463,27 +463,49 @@
             </ng-container>
             <ng-container *ngIf="!length"><h3>No Result(s) found</h3></ng-container>
         </div>
-  
-        <div *ngFor="let item of results">
-          <ng-container [ngTemplateOutlet]="propertySuggestion"  *ngIf="item?.entityType === 'PROPERTY'"
-                [ngTemplateOutletContext]="{item:item}">
+       <div>
+        <ng-container *ngIf="!showSkeleton">
+          <ng-container *ngFor="let item of results">
+            <!-- <ng-container *ngIf="viewType === 'LIST'">
+              <mat-accordion class="list-view-accordian" multi>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Personal data
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      Type your name and age
+                      <mat-icon></mat-icon>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </ng-container> -->
+            <ng-container [ngTemplateOutlet]="propertySuggestion"  *ngIf="item?.entityType === 'PROPERTY'"
+            [ngTemplateOutletContext]="{item:item}">
+            </ng-container>
+            <ng-container [ngTemplateOutlet]="landlordSuggestion"  *ngIf="item?.entityType === 'LANDLORD'"
+                  [ngTemplateOutletContext]="{item:item}">
+            </ng-container>
+            <ng-container [ngTemplateOutlet]="tenantSuggestion"  *ngIf="item?.entityType === 'TENANT'"
+                  [ngTemplateOutletContext]="{item:item}">
+            </ng-container>
+            <ng-container [ngTemplateOutlet]="contractorSuggestion"  *ngIf="item?.entityType === 'CONTRACTOR'"
+                  [ngTemplateOutletContext]="{item:item}">
+            </ng-container>
+            <ng-container [ngTemplateOutlet]="agentSuggestion"  *ngIf="item?.entityType === 'AGENT'"
+                  [ngTemplateOutletContext]="{item:item}">
+            </ng-container>
+            <ng-container [ngTemplateOutlet]="applicantSuggestion"  *ngIf="item?.entityType === 'APPLICANT'"
+                  [ngTemplateOutletContext]="{item:item}">
+            </ng-container>
           </ng-container>
-          <ng-container [ngTemplateOutlet]="landlordSuggestion"  *ngIf="item?.entityType === 'LANDLORD'"
-                [ngTemplateOutletContext]="{item:item}">
+         </ng-container>
+        <ng-container *ngIf="showSkeleton">
+          <ng-container [ngTemplateOutlet]="listskeleton">
           </ng-container>
-          <ng-container [ngTemplateOutlet]="tenantSuggestion"  *ngIf="item?.entityType === 'TENANT'"
-                [ngTemplateOutletContext]="{item:item}">
-          </ng-container>
-          <ng-container [ngTemplateOutlet]="contractorSuggestion"  *ngIf="item?.entityType === 'CONTRACTOR'"
-                [ngTemplateOutletContext]="{item:item}">
-          </ng-container>
-          <ng-container [ngTemplateOutlet]="agentSuggestion"  *ngIf="item?.entityType === 'AGENT'"
-                [ngTemplateOutletContext]="{item:item}">
-          </ng-container>
-          <ng-container [ngTemplateOutlet]="applicantSuggestion"  *ngIf="item?.entityType === 'APPLICANT'"
-                [ngTemplateOutletContext]="{item:item}">
-          </ng-container>
-        </div>
+        </ng-container>
+       </div>
       </mat-drawer-content>
   </mat-drawer-container>
 </ion-content>
@@ -749,3 +771,39 @@
     </ion-grid>
   </ion-card-content>
 </ng-template>
+
+<!--List views-->
+<ng-template #propertySuggestionListView  let-item="item">
+  id="propertyList"
+</ng-template>
+<!--List view ends-->
+
+
+<!--List view skeleton-->
+<ng-template #listskeleton>
+  <div class="list-skeleton">
+    <div class="filter-skeleton-wrapper">
+      <div class="total-page"><ion-skeleton-text animated></ion-skeleton-text></div>
+      <div class="paginator"><ion-skeleton-text animated></ion-skeleton-text></div>
+    </div>
+    <ion-list>
+      <ion-item *ngFor="let item of [0,1,2,3,4,5,6,7,8]">
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ng-template>
+<!--Ends-->

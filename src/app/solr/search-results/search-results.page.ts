@@ -142,6 +142,8 @@ export class SearchResultsPage implements OnInit {
     ceil: 20,
   };
 
+  viewType: string = "LIST";
+
   constructor(
     private route: ActivatedRoute,
     private solrService: SolrService,
