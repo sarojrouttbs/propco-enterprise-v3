@@ -461,7 +461,14 @@
               </mat-paginator>
               </div>
             </ng-container>
-            <ng-container *ngIf="!length"><h3>No Result(s) found</h3></ng-container>
+            <ng-container *ngIf="!length">
+              <div class="filter-icon-wrapper" *ngIf="!drawer.opened">
+                <ion-buttons (click)="drawer.toggle();" >
+                  <ion-icon name="options-outline"></ion-icon>
+                </ion-buttons>
+              </div>
+              <h3>No Result(s) found</h3>
+            </ng-container>
         </div>
        <div>
         <ng-container *ngIf="!showSkeleton">
