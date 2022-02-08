@@ -633,3 +633,27 @@ mat-form-field {
 .modal-width .modal-wrapper {
   width: 740px !important;
 }
+
+.applicantSearchbarCustom {
+  padding: 0;
+  .searchbar-input {
+    line-height: 27px;
+    padding: 5px 15px;
+  }
+  .searchbar-search-icon {
+    display:none; 
+    width:0; 
+    height:0;
+  }
+  
+  .searchbar-input-container{
+    border: 1px solid #ccc;
+    box-shadow: none;
+    border-left: 0;
+    .searchbar-input {
+      box-shadow: none;
+      padding-top: 4px;
+      padding-left: 10px;
+    }
+  }
+}

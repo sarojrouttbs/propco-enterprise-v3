@@ -86,3 +86,17 @@
       width: 150px;
     }
 }
+
+.search-button {
+    margin-left: -6px;
+    margin-top: 6px;
+}
+
+.propcoicon-search {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #7a7a7a;
+    color: #fff;
+    font-size: 22px;
+}
