@@ -631,7 +631,7 @@ mat-form-field {
 }
 
 .modal-width .modal-wrapper {
-  width: 740px !important;
+  width: 650px !important;
 }
 
 .applicantSearchbarCustom {
@@ -647,7 +647,7 @@ mat-form-field {
   }
   
   .searchbar-input-container{
-    border: 1px solid #ccc;
+    border: 1px solid -var(--ion-color-step-1600);
     box-shadow: none;
     border-left: 0;
     .searchbar-input {

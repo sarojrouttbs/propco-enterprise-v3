@@ -89,14 +89,14 @@
 
 .search-button {
     margin-left: -6px;
-    margin-top: 6px;
+    margin-top: 5px;
 }
 
 .propcoicon-search {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: #7a7a7a;
-    color: #fff;
+    background: var(--ion-color-step-950);
+    color: var(--ion-color-step-2000);
     font-size: 22px;
 }
