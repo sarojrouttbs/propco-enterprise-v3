@@ -43,6 +43,7 @@ export class ApplicationListPage implements OnInit {
   toDate = new FormControl('', []);
   referencingInfodata: any;
   referencingInfo: any;
+  isRecordsAvailable: boolean = false;
   
   constructor(private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
     this.getTobLookupData();
@@ -69,6 +70,9 @@ export class ApplicationListPage implements OnInit {
   }
 
   private initApplicationList() {
+    if(this.applicationList.length > 0) {
+      this.isRecordsAvailable = true;
+    }
     this.filteredApplicationList.data = this.applicationList;
     this.filteredApplicationList.paginator = this.paginator;
     this.filteredApplicationList.paginator.pageIndex = 0;

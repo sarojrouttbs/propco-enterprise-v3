@@ -154,7 +154,7 @@
         <form [formGroup]="occupantForm">
           <ion-grid class="content">
             <ng-container formArrayName="coApplicants">
-              <ion-row *ngFor="let item of occupantForm.get('coApplicants')['controls']; let i=index">
+              <ion-row class="content-row" *ngFor="let item of occupantForm.get('coApplicants')['controls']; let i=index">
                 <ng-container [formGroupName]="i">
                   <ng-container *ngIf="item.controls['isAdded'].value && !item.controls['isDeleted'].value">
                     <ion-grid class="list-content">
@@ -192,8 +192,8 @@
                             color="success"></ion-checkbox>
                         </ion-col>
                         <ion-col size="10">
-                          <ion-icon (click)="removeCoApplicant(item); $event.stopPropagation();" color="danger"
-                            class="remove-btn" *ngIf="!item.controls['isLead'].value && !applicationDetails?.isSubmitted" name="close-circle">
+                          <ion-icon (click)="removeCoApplicant(item, i); $event.stopPropagation();" color="danger"
+                            class="remove-btn pointer" *ngIf="!item.controls['isLead'].value && !applicationDetails?.isSubmitted" name="close-circle">
                           </ion-icon>
                         </ion-col>
                       </ion-row>
@@ -250,7 +250,7 @@
                     </ion-col>
                   </ng-container>
                   <ng-container *ngIf="!item.controls['isAdded'].value && !applicationDetails?.isSubmitted">
-                    <ion-grid>
+                    <ion-grid class="search-box-grid">
                       <ion-row class="ion-justify-content-end search-row" [formGroup]="searchApplicantForm">
                         <ion-col size-sm="50" size-xl="35" id="tob-applicant-search">
                           <ion-searchbar 
