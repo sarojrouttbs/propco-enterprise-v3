@@ -474,22 +474,7 @@
        <div>
         <ng-container *ngIf="!showSkeleton">
           <ng-container *ngFor="let item of results">
-            <!-- <ng-container *ngIf="viewType === 'LIST'">
-              <mat-accordion class="list-view-accordian" multi>
-                <mat-expansion-panel>
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      Personal data
-                    </mat-panel-title>
-                    <mat-panel-description>
-                      Type your name and age
-                      <mat-icon></mat-icon>
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
-                </mat-expansion-panel>
-              </mat-accordion>
-            </ng-container> -->
-            <ng-container [ngTemplateOutlet]="propertySuggestion"  *ngIf="item?.entityType === 'PROPERTY'"
+            <ng-container [ngTemplateOutlet]="propertySuggestionListView"  *ngIf="item?.entityType === 'PROPERTY'"
             [ngTemplateOutletContext]="{item:item}">
             </ng-container>
             <ng-container [ngTemplateOutlet]="landlordSuggestion"  *ngIf="item?.entityType === 'LANDLORD'"
@@ -782,7 +767,86 @@
 
 <!--List views-->
 <ng-template #propertySuggestionListView  let-item="item">
-  id="propertyList"
+              <mat-accordion class="list-view-accordian" multi>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <!-- <mat-panel-title> -->
+                     <div class="list-header">
+                      <div (click)="$event.stopPropagation();openDetails('OpenProperty',item.entityId)" style="width: 60%;">
+                        <p class="title text-ellipsis" >{{item?.address}}</p>
+                        <span style="display: flex;">
+                          <p class="emenities-wrapper">
+                            <i class="propcoicon propcoicon-beds no-background"></i>
+                            <span >6</span>
+                          </p>
+                          <p class="emenities-wrapper">
+                            <i class="propcoicon propcoicon-bathrooms no-background"></i>
+                            <span >2</span>
+                          </p>
+                          <p class="emenities-wrapper">
+                            <i class="propcoicon propcoicon-lounge no-background"></i>
+                            <span >2</span>
+                          </p>
+                          <p class="emenities-wrapper">
+                            <i class="propcoicon propcoicon-garage no-background"></i>
+                            <span >2</span>
+                          </p>
+                        </span>
+                      </div>
+                      <div class="ref-header">
+                        <p class="status">{{item?.status}}</p>
+                        <p class="ref">{{item?.reference}}</p></div>
+                     </div>
+                  </mat-expansion-panel-header>
+                  <ion-card-content id="details">
+                    <ion-grid (click)="openDetails('OpenProperty',item.entityId)">
+                      <ion-row class="main-row">
+                        <ion-col class="ion-no-padding" size-xl="17" size="30">
+                          <div style="display: block;"><img style="min-height: 130px;" [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.jpg';"></div>
+                        </ion-col>
+                        <ion-col  size-xl="77" size="70">
+                          <ion-grid class="no-padding-top">
+                            <ion-row class="fault-data-row">
+                              <ion-col size-xl="25" size-lg="22" size-md="22">
+                                <p>
+                                  <span class="text">Agreement Dates</span>
+                                <br />
+                                {{item?.propertyAgreementDate || 'N/A'}}
+                                </p>
+                              </ion-col>
+                              <ion-col size-xl="25" size-lg="22" size-md="22">
+                                <p>
+                                  <span class="text">Tenant Name(s)</span>
+                                <br />
+                                {{item?.propertyTenant || 'N/A'}}
+                                </p>
+                              </ion-col>
+                              <ion-col size-xl="25" size-lg="22" size-md="22">
+                                <p>
+                                  <span class="text">Manager</span>
+                                <br />
+                                {{item?.propertyManager || 'N/A'}}
+                                </p>
+                              </ion-col>
+                              <ion-col size-xl="25" size-lg="34" size-md="34">
+                                <p>
+                                  <span class="text">Negotiator</span>
+                                <br />
+                                {{item?.propertyNegotiator || 'N/A'}}
+                                </p>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row class="fault-meter-row">
+                              
+                            </ion-row>
+                          </ion-grid>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-card-content>
+                </mat-expansion-panel>
+
+              </mat-accordion>
 </ng-template>
 <!--List view ends-->
 

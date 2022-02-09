@@ -755,3 +755,14 @@ mat-form-field {
     background: var(--ion-color-solr);
   }
 }
+
+.list-view-accordian {
+  .mat-expansion-panel-header {
+    .mat-content {
+      height: 100%
+    }
+  }
+  .mat-expansion-panel-body{
+    padding: 0;
+  }
+}
