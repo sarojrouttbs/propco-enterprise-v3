@@ -26,6 +26,22 @@ const routes: Routes = [
         path: ':offerId/view',
         loadChildren: () => import('./offer-detail/offer-detail.module').then(m => m.OfferDetailPageModule)
       },
+      {
+        path: ':propertyId/applications',
+        loadChildren: () => import('./application-list/application-list.module').then(m => m.ApplicationListPageModule)
+      },
+      {
+        path: ':propertyId/create-application',
+        loadChildren: () => import('./application-detail/application-detail.module').then( m => m.ApplicationDetailPageModule)
+      },
+      {
+        path: 'application/:applicationId',
+        loadChildren: () => import('./application-detail/application-detail.module').then( m => m.ApplicationDetailPageModule)
+      },
+      {
+        path: ':propertyId/application/:applicationId',
+        loadChildren: () => import('./application-detail/application-detail.module').then( m => m.ApplicationDetailPageModule)
+      }
     ]
   }
 ];
