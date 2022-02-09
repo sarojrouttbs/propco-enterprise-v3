@@ -30,6 +30,14 @@ const routes: Routes = [
   {
     path: 'solr',
     loadChildren: () => import('./solr/solr.module').then( m => m.SolrPageModule)
+  },
+  {
+    path: 'barclaycard',
+    loadChildren: () => import('./barclaycard/barclaycard.module').then( m => m.BarclaycardPageModule)
+  },
+  {
+    path: 'worldpay',
+    loadChildren: () => import('./worldpay/worldpay.module').then( m => m.WorldpayPageModule)
   }
 ];
 
