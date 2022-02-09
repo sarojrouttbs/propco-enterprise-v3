@@ -2,10 +2,9 @@ ion-card {
     --background: var(--ion-color-step-1750);
     position: static;
     ion-card-content {
-        position: static;
         background-color: var(--ion-color-step-1750);
         padding: 0px;
-        cursor: pointer;
+        position: static;
     }
 }
 
@@ -18,23 +17,18 @@ ion-card {
 
 .property-details {
     margin: 10px;
-
     .address {
         align-items: center;
         margin: 20px 0px;
         color: var(--ion-color-step-800);
     }
-
     .filters {
         margin-bottom: 20px;
         align-items: center;
-        .sort-offer {
-            margin-top: -20px;
-        }
     }
 }
 
-.row-details {
+.details {
     padding-top: 10px;
     margin-bottom: -10px;
 }
@@ -52,39 +46,11 @@ ion-card {
     color: var(--ion-color-tertiary-tint);
 }
 
-.text-color-line-height {
-    line-height: 40px;
-}
-
 .margin-left {
     margin-left: 10px;
 }
 
-table {
-    width: 100%;
-    border: 1px solid var(--ion-color-step-1750);
-    margin: 15px 0px;
-    th {
-        background: var(--ion-color-step-800);
-        color: var(--ion-color-step-2000);
-    }
-    th {
-        text-align: left;
-        padding: 15px 5px;
-    }
-    tr {
-        border: 1px solid var(--ion-color-step-1750);
-        td {
-            padding: 5px 5px;
-        }
-    }
-}
-
-.offer-notes {
-    color: var(--ion-color-step-800);
-}
-
-.offer-status {
+.application-status {
     margin: 5px 0px !important;
     display: inline-block;
     border: 2px solid;

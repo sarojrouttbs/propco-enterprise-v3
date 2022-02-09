@@ -11,7 +11,9 @@ export const PROPCO = {
   FAULTS_LOOKUP_DATA: 'faults_lookup_data',
   LET_CATEGORY: 'let_category',
   SSO_KEY: 'sso_key',
-  TOB_LOOKUP_DATA: 'tob_lookup_data'
+  TOB_LOOKUP_DATA: 'tob_lookup_data',
+  TERMS_AND_CONDITIONS: 'terms_and_conditions',
+  REFERENCING_INFO: 'referencing_info'
 };
 
 export const USER_TYPES = {
@@ -510,7 +512,7 @@ export const MAINTENANCE_TYPES_FOR_SEND_EMAIL = {
 }
 
 export const FAULT_STAGES_ACTIONS = {
-  FAULT_LOGGED : 'LOGGED'
+  FAULT_LOGGED: 'LOGGED'
 }
 
 
@@ -540,4 +542,59 @@ export const OFFER_STATUSES = {
 export const NOTES_TYPE = {
   OFFER: 'OFFER',
   FAULT: 'FAULT'
+}
+
+export const APPLICATION_STATUSES = {
+  NEW: 0,
+  DRAFT: 1,
+  ACCEPTED: 2,
+  REJECTED: 3,
+  ON_HOLD: 4
+};
+
+export const APPLICATION_ACTION_TYPE = {
+  SAVE_FOR_LATER: 'SAVE_FOR_LATER'
+}
+
+export const ENTITY_TYPE = {
+  AGENT: 'AGENT'
+}
+
+export const PAYMENT_TYPES = {
+  WORLDPAY_OWNFORM: 'WORLDPAY_OWNFORM',
+  WORLDPAY_REDIRECT: 'WORLDPAY_REDIRECT',
+  BARCLAYCARD_REDIRECT: 'BARCLAYCARD_REDIRECT'
+};
+
+export const PAYMENT_CONFIG = {
+  WORLDPAY_OWNFORM: {
+    TEST: {
+      URL: '/complete'
+    },
+    PROD: {
+      URL: '/complete'
+    }
+  },
+  WORLDPAY_REDIRECT: {
+    TEST_URL: 'https://secure-test.worldpay.com/wcc/purchase',
+    PROD_URL: 'https://secure.worldpay.com/wcc/purchase',
+    INST_ID: 1277936,
+    MERCHANT_CODE: 'PROPCOTESTM1'
+  },
+  BARCLAYCARD_REDIRECT: {
+    TEST_URL: 'https://mdepayments.epdq.co.uk/ncol/test/orderstandard_utf8.asp',
+    PROD_URL: 'https://payments.epdq.co.uk/ncol/prod/orderstandard_utf8.asp',
+    PSPID: 'RAMAN123',
+    SHA_IN_PASS: "B+gbQ;RyjJBFM!i8bZQV4%WQei;2=x%S",
+  }
+};
+
+export const APPLICATION_ENTITIES = {
+  AGENT: 1,
+  APPLICANT: 2
+}
+
+export const REFERENCING_TYPES = {
+  HOMELET: 'HOMELET',
+  LETTINGS_HUB: 'LETTINGS_HUB'
 }
