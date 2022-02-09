@@ -457,7 +457,7 @@
                 [pageSize]="pageSize"
                 [pageIndex]="pageIndex"
                 [showFirstLastButtons]="true"
-                [pageSizeOptions]="[5, 10, 25, 100]"
+                [pageSizeOptions]="[10, 20, 30, 100]"
                 (page)="pageEvent = handlePage($event);">
               </mat-paginator>
               </div>
@@ -471,7 +471,7 @@
               <h3>No Result(s) found</h3>
             </ng-container>
         </div>
-       <div>
+       <div class="list-container">
         <ng-container *ngIf="!showSkeleton">
           <ng-container *ngFor="let item of results">
             <ng-container [ngTemplateOutlet]="propertySuggestionListView"  *ngIf="item?.entityType === 'PROPERTY'"
@@ -563,7 +563,7 @@
               </ion-col>
               <ion-col class="no-padding-top col2 ion-text-end" size="25">
                 <p class="status">{{item?.status}}</p>
-                <p class="ref">{{item?.reference}}</p>
+                <p class="ref">{{item?.status}}</p>
               </ion-col>
             </ion-row>
             <ion-row class="fault-data-row">
@@ -776,63 +776,112 @@
                         <p class="title text-ellipsis" >{{item?.address}}</p>
                         <span style="display: flex;">
                           <p class="emenities-wrapper">
+                            <span>
+                              <p class="ref">Rent&nbsp;&nbsp;<span class="pricetag">£{{(item?.propertyRent | number: '1.2-2' ) || 0}}</span><span class="verticalLine"></span></p>
+                            </span>
+                          </p>
+                          <p class="emenities-wrapper">
                             <i class="propcoicon propcoicon-beds no-background"></i>
-                            <span >6</span>
+                            <span >{{item?.numberOfBedroom || 0}}</span>
                           </p>
                           <p class="emenities-wrapper">
                             <i class="propcoicon propcoicon-bathrooms no-background"></i>
-                            <span >2</span>
+                            <span >{{item?.propertyBathrooms || 0}}</span>
                           </p>
                           <p class="emenities-wrapper">
                             <i class="propcoicon propcoicon-lounge no-background"></i>
-                            <span >2</span>
+                            <span >{{item?.propertyReceptions || 0}}</span>
                           </p>
                           <p class="emenities-wrapper">
                             <i class="propcoicon propcoicon-garage no-background"></i>
-                            <span >2</span>
+                            <span >{{item?.propertyParkings || 0}}</span>
                           </p>
                         </span>
                       </div>
                       <div class="ref-header">
+                        <p class="ref">Status</p>
                         <p class="status">{{item?.status}}</p>
-                        <p class="ref">{{item?.reference}}</p></div>
+                      </div>
                      </div>
                   </mat-expansion-panel-header>
                   <ion-card-content id="details">
-                    <ion-grid (click)="openDetails('OpenProperty',item.entityId)">
+                    <ion-grid (click)="openDetails('OpenProperty',item.entityId)" class="ion-no-padding">
                       <ion-row class="main-row">
-                        <ion-col class="ion-no-padding" size-xl="17" size="30">
-                          <div style="display: block;"><img style="min-height: 130px;" [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.jpg';"></div>
+                        <ion-col class="ion-no-padding" size-xl="17" size="25">
+                          <div style="display: block;"><img style="max-height: 120px;" [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.png';"></div>
                         </ion-col>
-                        <ion-col  size-xl="77" size="70">
+                        <ion-col class="ion-no-padding" size-xl="77" size="70">
                           <ion-grid class="no-padding-top">
                             <ion-row class="fault-data-row">
-                              <ion-col size-xl="25" size-lg="22" size-md="22">
+                              <ion-col size-xl="25" size-lg="25" size-md="25">
                                 <p>
-                                  <span class="text">Agreement Dates</span>
+                                  <span class="text">PropCo ID</span>
                                 <br />
-                                {{item?.propertyAgreementDate || 'N/A'}}
+                                <span class="text-value">
+                                  {{item?.propcoId || 'N/A'}}
+                                </span>
                                 </p>
                               </ion-col>
-                              <ion-col size-xl="25" size-lg="22" size-md="22">
+                              <ion-col size-xl="35" size-lg="35" size-md="35">
                                 <p>
                                   <span class="text">Tenant Name(s)</span>
                                 <br />
-                                {{item?.propertyTenant || 'N/A'}}
+                                <span class="text-value">
+                                  {{item?.propertyTenant || 'N/A'}}
+                                </span>
                                 </p>
                               </ion-col>
-                              <ion-col size-xl="25" size-lg="22" size-md="22">
+                              <ion-col size-xl="37" size-lg="37" size-md="37">
+                                <p>
+                                  <span class="text">Agreement Dates</span>
+                                <br />
+                                <span class="text-value">{{item?.propertyAgreementDate || 'N/A'}}</span>
+                                </p>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row class="fault-data-row">
+                              <ion-col size-xl="25" size-lg="25" size-md="25">
+                                <p>
+                                  <span class="text">Type</span>
+                                <br />
+                                <span class="text-value">{{item?.entityType || 'N/A'}}</span>
+                                </p>
+                              </ion-col>
+                              <ion-col size-xl="35" size-lg="35" size-md="35">
+                                <p>
+                                  <span class="text">Office</span>
+                                <br />
+                                <span class="text-value">{{item?.officeCode || 'N/A'}}</span>
+                                </p>
+                              </ion-col>
+                              <ion-col size-xl="37" size-lg="37" size-md="37">
+                                <p>
+                                  <span class="text">Management Type</span>
+                                <br />
+                                <span class="text-value">{{item?.managementType || 'N/A'}}</span>
+                                </p>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row class="fault-data-row">
+                              <ion-col size-xl="25" size-lg="25" size-md="25">
+                                <p>
+                                  <span class="text">Style</span>
+                                <br />
+                                <span class="text-value">{{item?.property_style || 'N/A'}}</span>
+                                </p>
+                              </ion-col>
+                              <ion-col size-xl="35" size-lg="35" size-md="35">
                                 <p>
                                   <span class="text">Manager</span>
                                 <br />
-                                {{item?.propertyManager || 'N/A'}}
+                                <span class="text-value">{{item?.propertyManager || 'N/A'}}</span>
                                 </p>
                               </ion-col>
-                              <ion-col size-xl="25" size-lg="34" size-md="34">
+                              <ion-col size-xl="37" size-lg="37" size-md="37">
                                 <p>
                                   <span class="text">Negotiator</span>
                                 <br />
-                                {{item?.propertyNegotiator || 'N/A'}}
+                                <span class="text-value">{{item?.propertyNegotiator || 'N/A'}}</span>
                                 </p>
                               </ion-col>
                             </ion-row>

@@ -51,7 +51,7 @@ export class SearchResultsPage implements OnInit {
     "Tomato",
   ];
 
-  public pageSize = 5;
+  public pageSize = 10;
   results: any[] = [];
   pageEvent: PageEvent;
   length: number;
