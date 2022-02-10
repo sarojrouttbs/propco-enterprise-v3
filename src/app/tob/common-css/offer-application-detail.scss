@@ -201,6 +201,7 @@ ion-content {
   position: absolute !important;
   z-index: 5 !important;
   cursor: pointer;
+  border: 1px solid var(--ion-color-step-1650);
 }
 
 .currency-input {
