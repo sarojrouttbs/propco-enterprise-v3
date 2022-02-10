@@ -1603,6 +1603,7 @@ export class ApplicationDetailPage implements OnInit {
   proposeTenancy(transactionId) {
     this.commonService.showLoader();
     const proposeTenancyDetails: any = {};
+    proposeTenancyDetails.applicantId = this.leadApplicationApplicantId;
     proposeTenancyDetails.applicationId = this.applicationId;
     proposeTenancyDetails.contractType = 1;
     proposeTenancyDetails.startDate = this.applicationDetails.moveInDate;
