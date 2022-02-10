@@ -808,10 +808,10 @@
                     <ion-grid (click)="openDetails('OpenProperty',item.entityId)" class="ion-no-padding">
                       <ion-row class="main-row">
                         <ion-col class="ion-no-padding" size-xl="17" size="25">
-                          <div style="display: block;"><img style="max-height: 120px;" [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.png';"></div>
+                          <img [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.png';">
                         </ion-col>
                         <ion-col class="ion-no-padding" size-xl="77" size="70">
-                          <ion-grid class="no-padding-top">
+                          <ion-grid class="no-padding-top ion-no-padding">
                             <ion-row class="fault-data-row">
                               <ion-col size-xl="25" size-lg="25" size-md="25">
                                 <p>
