@@ -190,7 +190,7 @@ ion-item {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
   }
 
@@ -603,7 +603,7 @@ ion-item {
   .list-header {
     display: flex;
     flex-direction: row;
-    align-items: end;
+    align-items: flex-end;
     justify-content: space-between;
     flex-wrap: wrap;
     width: 100%;
@@ -620,7 +620,7 @@ ion-item {
     .emenities-wrapper {
       display: flex;
       flex-direction: row;
-      justify-content: end;
+      justify-content: flex-end;
       align-items: center;
       font-size: 12px;
 
