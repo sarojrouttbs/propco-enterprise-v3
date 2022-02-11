@@ -56,7 +56,7 @@ export class SearchResultsPage implements OnInit {
   pageEvent: PageEvent;
   length: number;
   pageIndex: number = 0;
-  opened: boolean;
+  opened: boolean = false;
   loaded: boolean = false;
   key;
   entityControl = new FormControl([]);
@@ -441,6 +441,13 @@ export class SearchResultsPage implements OnInit {
       if (firstBtn) {
         firstBtn.innerHTML = "First";
       }
+
+      const perPage = this.el.nativeElement.querySelector(
+        ".mat-paginator-page-size-label"
+      );
+      if (perPage) {
+        perPage.innerHTML = "Per page";
+      }
     }, 100);
   }
 
@@ -460,7 +467,7 @@ export class SearchResultsPage implements OnInit {
       .subscribe((res) => {
         this.results = res && res.data ? res.data : [];
         this.length = res && res.count ? res.count : 0;
-        this.opened = true;
+        // this.opened = true;
         this.loaded = true;
         this.showSkeleton = false;
         this.customizePaginator();
