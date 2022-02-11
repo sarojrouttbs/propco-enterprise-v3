@@ -764,17 +764,16 @@ export class ApplicationDetailPage implements OnInit {
     this.createItem();
   }
 
-  removeCoApplicant(item: FormGroup) {
+  removeCoApplicant(item: FormGroup, index: number) {
     this.commonService.showConfirm('Remove Applicant', 'Are you sure, you want to remove this applicant ?', '', 'YES', 'NO').then(response => {
       if (response) {
         if (item.controls['applicationApplicantId'].value) {
           this._tobService.deleteApplicationApplicant(this.applicationId, item.controls['applicationApplicantId'].value, { "deletedBy": "AGENT" }).subscribe(async (response) => {
             const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
             await this.setApplicationApplicants(applicants);
-          })
-        }
-        else {
-          item.controls['isDeleted'].setValue(true);
+          });
+        } else {
+          this.occupantFormArray.removeAt(index);
         }
       }
     })
@@ -1603,6 +1602,7 @@ export class ApplicationDetailPage implements OnInit {
   proposeTenancy(transactionId) {
     this.commonService.showLoader();
     const proposeTenancyDetails: any = {};
+    proposeTenancyDetails.applicantId = this.applicantId;
     proposeTenancyDetails.applicationId = this.applicationId;
     proposeTenancyDetails.contractType = 1;
     proposeTenancyDetails.startDate = this.applicationDetails.moveInDate;
@@ -1611,7 +1611,10 @@ export class ApplicationDetailPage implements OnInit {
 
     this._tobService.proposeTenancy(proposeTenancyDetails, this.propertyId).subscribe((res) => {
       this.commonService.hideLoader();
-      this.openPaymentConfirmation();
+      this.commonService.showAlert('Tenancy', 'Tenancy has been proposed successfully on the property.').then(function (resp) {
+        window.history.back();
+      });
+      
     }, error => {
       this.commonService.hideLoader();
       this.commonService.showMessage('Something went wrong on server, please try again.', 'Propose Tenancy', 'error');
@@ -1625,27 +1628,6 @@ export class ApplicationDetailPage implements OnInit {
 
   resultCallbackFunction(result: any) {
     console.log('result callback', result);
-  }
-
-  async openPaymentConfirmation() {
-    // this.refreshedTenantDetail = await this.getNewTenantWebToken();
-    let message = '<h1> Congratulations! </h1>' + '<h5>Your payment has been completed successfully and property has been reserved.</h5>' + '<p>Now you have been converted into tenant. You will be redirected to tenant dashboard.</p>';
-    const simplaModal = await this.modalController.create({
-      component: SimpleModalPage,
-      backdropDismiss: false,
-      componentProps: {
-        data: message,
-        heading: 'Successful Payment',
-        button: 'Ok',
-      }
-    });
-
-    simplaModal.onDidDismiss().then(res => {
-      // this.redirectToTenantPage();
-      // this.commonService.logout();
-      // this.document.location.href = environment.HOST_WEBURL;
-    });
-    await simplaModal.present();
   }
 
 }

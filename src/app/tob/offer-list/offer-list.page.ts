@@ -56,6 +56,7 @@ export class OfferListPage implements OnInit {
   notesComplaints: any;
   notesTypes: any;
   isAddNote: boolean = false;
+  isRecordsAvailable: boolean = false;
 
   constructor(private router: Router, private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private tobService: TobService) {
     this.getTobLookupData();
@@ -81,6 +82,9 @@ export class OfferListPage implements OnInit {
   }
 
   private initOfferList() {
+    if(this.offerList.length > 0) {
+      this.isRecordsAvailable = true;
+    }
     this.filteredOfferList.data = this.offerList as OfferData[];
     this.filteredOfferList.paginator = this.paginator;
     this.sortKey = '1';

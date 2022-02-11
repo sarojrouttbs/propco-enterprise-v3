@@ -50,7 +50,7 @@
             <ion-button class="btn-filter" color="danger" (click)="resetFilters()" expand="block">Reset</ion-button>
           </ion-col>
 
-          <ion-col class="ion-no-padding ion-text-end" size-xl="30">
+          <ion-col class="ion-no-padding ion-text-end btn-top-space" size-xl="30">
             <ion-button (click)="createApplication()" [disabled]="!propertyDetails?.isAvailable"> Create Application </ion-button>
             <ion-button (click)="hideRecords()"> {{ isHideRejected ? "Show Rejected" : "Hide Rejected"}} </ion-button>
           </ion-col>
@@ -67,11 +67,11 @@
             <ion-row class="main-row">
               <ion-col size-xl="15" size="20">
                 <div>
-                  <img [src]="item.numberOfCoApplicants > 0 ? 'assets/images/tob/multi-user.svg' : 'assets/images/tob/single-user.svg'">
+                  <img class="applicant-img" [src]="item.numberOfCoApplicants > 0 ? 'assets/images/tob/multi-user.svg' : 'assets/images/tob/single-user.svg'">
                 </div>
               </ion-col>
               <ion-col size-xl="85" size="80" style="position: static;">
-                <ion-grid style="height:100%;" class="no-padding-top">
+                <ion-grid style="height:100%;" class="no-padding">
                   <ion-row class="application-title fs-18">
                     <ion-col class="no-padding-top col1" size="60">
                       <ion-text class="fs-20"> {{ item?.rent | currency: 'GBP' }} {{ (applicationsDetails?.frequencyType | lookup: rentFrequencyTypes) || '-' }}
@@ -129,7 +129,7 @@
           </ion-grid>
         </ion-card-content>
       </ion-card>
-      <ion-card *ngIf="filteredApplicationList && !filteredApplicationList.data.length">
+      <ion-card *ngIf="isRecordsAvailable && filteredApplicationList.data.length === 0">
         <ion-card-content>
           <div class="ion-padding ion-text-center">
             <h1>No applications found.</h1>
