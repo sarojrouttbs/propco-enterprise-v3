@@ -720,6 +720,7 @@ mat-form-field {
       border: none;
       padding-top: 8px;
       margin-top: 4px;
+      font-size: 14px;
     }
 	}
 }
@@ -753,7 +754,7 @@ mat-form-field {
     color: var(--ion-color-step-2000);
   }
   .mat-paginator-range-label {
-    display: none;
+    // display: none;
   }
   .mat-paginator-outer-container{
     height: auto;

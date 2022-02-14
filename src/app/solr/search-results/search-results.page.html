@@ -15,7 +15,7 @@
           <section>
             <ion-button size="small" color="danger" (click)="resetAll()">Reset All</ion-button>
             <ion-button size="small" color="medium" (click)="!isAllselected?selectAll():deselectAll()">{{!isAllselected?'Select All':'Select None'}}</ion-button>
-            <ion-button size="small" color="medium" (click)="refreshAll()">Refresh</ion-button>
+            <ion-button size="small" color="medium" (click)="refreshAll()">Apply</ion-button>
           </section>
           
         </div>
@@ -169,7 +169,7 @@
             </form>
             <mat-action-row>
               <ion-button size="small"color="danger" (click)="reset(propertyFilter)">Reset</ion-button>
-              <ion-button  size="small" color="medium" (click)="refresh('PROPERTY')">Refresh</ion-button>
+              <ion-button  size="small" color="medium" (click)="refresh('PROPERTY')">Apply</ion-button>
             </mat-action-row>
           </mat-expansion-panel>
         
@@ -224,7 +224,7 @@
             </form>
             <mat-action-row>
               <ion-button size="small"color="danger" (click)="reset(landlordFilter)">Reset</ion-button>
-              <ion-button  size="small" color="medium" (click)="refresh('LANDLORD')">Refresh</ion-button>
+              <ion-button  size="small" color="medium" (click)="refresh('LANDLORD')">Apply</ion-button>
             </mat-action-row>
           </mat-expansion-panel>
         
@@ -281,7 +281,7 @@
             </form>
               <mat-action-row>
                 <ion-button size="small" color="danger" (click)="reset(tenantFilter)">Reset</ion-button>
-                <ion-button  size="small" color="medium" (click)="refresh('TENANT')">Refresh</ion-button>
+                <ion-button  size="small" color="medium" (click)="refresh('TENANT')">Apply</ion-button>
               </mat-action-row>
           </mat-expansion-panel>
   
@@ -330,7 +330,7 @@
             </form>
             <mat-action-row>
               <ion-button size="small" color="danger" (click)="reset(applicantFilter)">Reset</ion-button>
-              <ion-button  size="small" color="medium" (click)="refresh('APPLICANT')">Refresh</ion-button>
+              <ion-button  size="small" color="medium" (click)="refresh('APPLICANT')">Apply</ion-button>
             </mat-action-row>
           </mat-expansion-panel>
   
@@ -347,13 +347,13 @@
               <ion-row>
                 <ion-col size="100">
                   <ion-item>
-                    <ion-toggle color="primary" formControlName="isJournalExclude"></ion-toggle>
+                    <ion-toggle color="primary" formControlName="isVatRegistered"></ion-toggle>
                     VAT Registered
                   </ion-item>
                 </ion-col>
                 <ion-col size="100">
                   <ion-item>
-                    <ion-toggle color="primary" formControlName="isVatRegistered"></ion-toggle>
+                    <ion-toggle color="primary" formControlName="isJournalExclude"></ion-toggle>
                     Journal Exclude
                   </ion-item>
                 </ion-col>
@@ -377,7 +377,7 @@
               </form>
               <mat-action-row>
                 <ion-button size="small" color="danger" (click)="reset(agentFilter)">Reset</ion-button>
-                <ion-button  size="small" color="medium" (click)="refresh('AGENT')">Refresh</ion-button>
+                <ion-button  size="small" color="medium" (click)="refresh('AGENT')">Apply</ion-button>
               </mat-action-row>
           </mat-expansion-panel>
         
@@ -437,7 +437,7 @@
           </form>
           <mat-action-row>
             <ion-button size="small" color="danger" (click)="reset(contractorFilter)">Reset</ion-button>
-            <ion-button  size="small" color="medium" (click)="refresh('CONTRACTOR')">Refresh</ion-button>
+            <ion-button  size="small" color="medium" (click)="refresh('CONTRACTOR')">Apply</ion-button>
           </mat-action-row>
           </mat-expansion-panel>
         </mat-accordion>
@@ -450,7 +450,8 @@
                   <ion-icon name="options-outline"></ion-icon>
                 </ion-buttons>
               </div>
-              <div class="result-wrapper">{{(pageEvent?.pageIndex ? pageEvent?.pageIndex + 1 : 1) + "-" + (length/(pageSize?pageSize:pageEvent?.pageSize)  | number: '1.0-0')}} of {{length}} result(s) found</div>
+              <!-- <div class="result-wrapper">{{(pageEvent?.pageIndex ? pageEvent?.pageIndex + 1 : 1) + "-" + (length/(pageSize?pageSize:pageEvent?.pageSize)  | number: '1.0-0')}} of {{length}} result(s) found</div> -->
+              <div class="result-wrapper">{{length}} result(s) found</div>
               <div>
                 <mat-paginator #paginator
                 [length]="length"
@@ -773,7 +774,7 @@
                     <!-- <mat-panel-title> -->
                      <div class="list-header">
                       <div (click)="$event.stopPropagation();openDetails('OpenProperty',item.entityId)" style="width: 60%;">
-                        <p class="title text-ellipsis" >{{item?.address}}</p>
+                        <p class="title text-ellipsis" [title]="item?.address">{{item?.address}}</p>
                         <span style="display: flex;">
                           <p class="emenities-wrapper">
                             <span>
@@ -795,6 +796,11 @@
                           <p class="emenities-wrapper">
                             <i class="propcoicon propcoicon-garage no-background"></i>
                             <span >{{item?.propertyParkings || 0}}</span>
+                          </p>
+                          <p class="emenities-wrapper">
+                            <span>
+                              <p class="ref"><span class="verticalLine"></span>Ref&nbsp;&nbsp;<span class="reftag">{{(item?.reference ) || 0}}</span></p>
+                            </span>
                           </p>
                         </span>
                       </div>
@@ -826,7 +832,7 @@
                                 <p>
                                   <span class="text">Tenant Name(s)</span>
                                 <br />
-                                <span class="text-value">
+                                <span class="text-value" [title]="item?.propertyTenant">
                                   {{item?.propertyTenant || 'N/A'}}
                                 </span>
                                 </p>
