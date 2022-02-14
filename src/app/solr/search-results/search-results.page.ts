@@ -498,19 +498,49 @@ export class SearchResultsPage implements OnInit {
       };
     }
     if (this.entityControl.value.indexOf("Landlord") !== -1) {
-      params.landlordFilter = this.landlordFilter.value;
+      let llFilter = Object.assign(this.landlordFilter.value, {});
+
+      if (!llFilter.isOverseas) {
+        delete llFilter.isOverseas;
+      }
+      params.landlordFilter = llFilter;
     }
     if (this.entityControl.value.indexOf("Tenant") !== -1) {
       params.tenantFilter = this.tenantFilter.value;
     }
     if (this.entityControl.value.indexOf("Agent") !== -1) {
-      params.agentFilter = this.agentFilter.value;
+      let atFilter = Object.assign(this.agentFilter.value, {});
+
+      if (!atFilter.isJournalExclude) {
+        delete atFilter.isJournalExclude;
+      }
+      if (!atFilter.isVatRegistered) {
+        delete atFilter.isVatRegistered;
+      }
+      params.agentFilter = atFilter;
     }
     if (this.entityControl.value.indexOf("Contractor") !== -1) {
-      params.contractorFilter = this.contractorFilter.value;
+      let ccFilter = Object.assign(this.contractorFilter.value, {});
+
+      if (!ccFilter.vatRegistered) {
+        delete ccFilter.vatRegistered;
+      }
+      if (!ccFilter.approvedByAgent) {
+        delete ccFilter.approvedByAgent;
+      }
+      params.contractorFilter = ccFilter;
+      
     }
     if (this.entityControl.value.indexOf("Applicant") !== -1) {
-      params.applicantFilter = this.applicantFilter.value;
+      let apFilter = Object.assign(this.applicantFilter.value, {});
+
+      if (!apFilter.isHot) {
+        delete apFilter.isHot;
+      }
+      if (!apFilter.isStudent) {
+        delete apFilter.isStudent;
+      }
+      params.applicantFilter = apFilter;
     }
     return params;
   }
