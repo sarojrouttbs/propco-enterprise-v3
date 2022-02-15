@@ -3,6 +3,9 @@ ion-card {
   
     ion-card-content {
       background-color: var(--ion-color-step-1750);
+      img {
+          height: auto;
+      }
     }
 }
 

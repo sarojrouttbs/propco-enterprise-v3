@@ -6,21 +6,13 @@
 
 .cdk-overlay-container {
   .mat-option-text {
-    color: var(--ion-solr-font-color);
+    color: var(--ion-color-step-50);
     @include set-text-style(14px, 18px);
   }
 
-  .mat-pseudo-checkbox {
-    color: var(--ion-solr-font-color);
-  }
-
   .mat-pseudo-checkbox-checked {
-    background: var(--ion-solr-font-color);
+    background: var(--ion-color-success);
   }
-
-  // .mat-select-panel {
-  //   max-height: none;
-  // }
 }
 
 #solr-dashboard {
