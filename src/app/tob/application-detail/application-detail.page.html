@@ -476,7 +476,7 @@
       </ion-row>
 
       <ng-container *ngIf="isStudentProperty">
-        <ion-row formGroupName="correspondenceAddress">
+        <ion-row formGroupName="forwardingAddress">
           <ion-col size="100">
             <div class="page-heading" [ngClass]="{'term-time':(isStudentProperty)}">Term Time Address</div>
           </ion-col>
@@ -490,7 +490,7 @@
                 <ion-icon *ngIf="showAddressLoader" name="refresh" class="rotating submit-loader"></ion-icon>
               </ion-button>
             </ion-item>
-            <app-validation-message [control]="addressDetailsForm.controls.correspondenceAddress['controls'].postcode">
+            <app-validation-message [control]="addressDetailsForm.controls.forwardingAddress['controls'].postcode">
             </app-validation-message>
           </ion-col>
           <ion-col size-xs="100" size-sm="33.3">
@@ -500,7 +500,7 @@
               <ion-input type="text" formControlName="addressLine1"></ion-input>
             </ion-item>
             <app-validation-message
-              [control]="addressDetailsForm.controls.correspondenceAddress['controls'].addressLine1">
+              [control]="addressDetailsForm.controls.forwardingAddress['controls'].addressLine1">
             </app-validation-message>
           </ion-col>
           <ion-col size-xs="100" size-sm="16.5">
@@ -515,16 +515,16 @@
               </ion-label>
               <ion-input type="text" formControlName="town"></ion-input>
             </ion-item>
-            <app-validation-message [control]="addressDetailsForm.controls.correspondenceAddress['controls'].town">
+            <app-validation-message [control]="addressDetailsForm.controls.forwardingAddress['controls'].town">
             </app-validation-message>
           </ion-col>
           <ion-col size-xs="100" size-sm="33.3">
             <ion-item>
               <ion-label position="floating">Select address</ion-label>
               <ion-select interface="popover" formControlName="addressdetails"
-                (ionChange)="getAddressDetails(correspondenceAddress.value, 'correspondence-address')"
-                [disabled]="!correspondenceAddressList" #correspondenceAddress>
-                <ion-select-option [value]="address?.id" *ngFor="let address of correspondenceAddressList">
+                (ionChange)="getAddressDetails(forwardingAddress.value, 'correspondence-address')"
+                [disabled]="!forwardingAddressList" #forwardingAddress>
+                <ion-select-option [value]="address?.id" *ngFor="let address of forwardingAddressList">
                   {{ address?.text }}
                 </ion-select-option>
               </ion-select>
@@ -1019,7 +1019,7 @@
               </ion-col>
               <ion-col size="100" class="header-content">
                 <ion-text class="content">
-                  {{ addressDetailsForm.controls.correspondenceAddress.value | address }}
+                  {{ addressDetailsForm.controls.forwardingAddress.value | address }}
                 </ion-text>
               </ion-col>
             </ng-container>
