@@ -708,3 +708,9 @@ ion-item {
   display: flex;
   flex-direction: column;
 }
+
+.cdk-overlay-container {
+  .mat-primary .mat-pseudo-checkbox-checked, .mat-primary .mat-pseudo-checkbox-indeterminate{
+    background-color: var(--ion-color-success) !important;
+  }
+}

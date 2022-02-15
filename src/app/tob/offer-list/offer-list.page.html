@@ -181,7 +181,7 @@
         <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>
     </div>
-    <mat-paginator [hidden]="!filteredOfferList.data.length" class="table-pagination margin-left" #paginator
+    <mat-paginator [hidden]="!filteredOfferList.data.length" class="table-pagination" #paginator
       [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
       [length]="filteredOfferList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
       [showFirstLastButtons]="paginatorConfig.showFirstLastButtons" (page)="onPaginateChange(false)">

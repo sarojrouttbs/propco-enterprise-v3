@@ -146,7 +146,7 @@
         <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>
     </div>
-    <mat-paginator [hidden]="!filteredApplicationList.data.length" class="table-pagination margin-left" #paginator
+    <mat-paginator [hidden]="!filteredApplicationList.data.length" class="table-pagination" #paginator
       [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
       [length]="filteredApplicationList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
       [showFirstLastButtons]="paginatorConfig.showFirstLastButtons" (page)="onPaginateChange()">
