@@ -168,7 +168,7 @@
           </ion-grid>
         </ion-card-content>
       </ion-card>
-      <ion-card *ngIf="isRecordsAvailable && filteredOfferList.data.length === 0">
+      <ion-card *ngIf="!isRecordsAvailable && filteredOfferList.data.length === 0">
         <ion-card-content>
           <div class="ion-padding ion-text-center">
             <h1>No offers found.</h1>
@@ -181,11 +181,13 @@
         <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>
     </div>
-    <mat-paginator [hidden]="!filteredOfferList.data.length" class="table-pagination" #paginator
-      [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
-      [length]="filteredOfferList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
-      [showFirstLastButtons]="paginatorConfig.showFirstLastButtons" (page)="onPaginateChange(false)">
-    </mat-paginator>
+    <div class="table-pagination">
+      <mat-paginator [hidden]="!filteredOfferList.data.length" class="paginator" #paginator
+        [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
+        [length]="filteredOfferList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
+        [showFirstLastButtons]="paginatorConfig.showFirstLastButtons" (page)="onPaginateChange(false)">
+      </mat-paginator>
+    </div>
   </ng-container>
 
   <ng-container *ngIf="filteredOfferList.data.length > 0">
@@ -238,11 +240,13 @@
               </div>
             </div>
 
-            <mat-paginator [hidden]="!filteredNotesList.data.length" class="table-pagination" #notesPaginator
-              [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
-              [length]="filteredNotesList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
-              [showFirstLastButtons]="paginatorConfig.showFirstLastButtons" (page)="onPaginateChange(true)">
-            </mat-paginator>
+            <div class="table-pagination">
+              <mat-paginator [hidden]="!filteredNotesList.data.length" class="notesPaginator" #notesPaginator
+                [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
+                [length]="filteredNotesList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
+                [showFirstLastButtons]="paginatorConfig.showFirstLastButtons" (page)="onPaginateChange(true)">
+              </mat-paginator>
+            </div>
           </div>
         </ion-col>
       </ion-row>

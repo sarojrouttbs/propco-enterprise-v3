@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -43,9 +43,9 @@ export class ApplicationListPage implements OnInit {
   toDate = new FormControl('', []);
   referencingInfodata: any;
   referencingInfo: any;
-  isRecordsAvailable: boolean = false;
+  isRecordsAvailable: boolean = true;
   
-  constructor(private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
+  constructor(private el: ElementRef<HTMLElement>, private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
     this.getTobLookupData();
     this.getLookUpData();
     this.getReferancingInfo();
@@ -70,12 +70,11 @@ export class ApplicationListPage implements OnInit {
   }
 
   private initApplicationList() {
-    if(this.applicationList.length > 0) {
-      this.isRecordsAvailable = true;
-    }
     this.filteredApplicationList.data = this.applicationList;
     this.filteredApplicationList.paginator = this.paginator;
     this.filteredApplicationList.paginator.pageIndex = 0;
+    this.checkApplicationsAvailable();
+    this.customizePaginator('paginator');
   }
 
   private getApplicationList() {
@@ -237,17 +236,20 @@ export class ApplicationListPage implements OnInit {
       this.filteredApplicationList.data = this.applicationList;
       this.isHideRejected = false;
     }
+    this.checkApplicationsAvailable();
   }
 
   filterByDate() {
     this.filteredApplicationList.data = this.applicationList;
     this.filteredApplicationList.data = this.filteredApplicationList.data.filter(e => new Date(this.commonService.getFormatedDate(e.createdAt, 'yyyy-MM-dd')) >= new Date(this.commonService.getFormatedDate(this.fromDate.value, 'yyyy-MM-dd')) && new Date(this.commonService.getFormatedDate(e.createdAt, 'yyyy-MM-dd')) <= new Date(this.commonService.getFormatedDate(this.toDate.value, 'yyyy-MM-dd')));
+    this.checkApplicationsAvailable();
   }
 
   resetFilters() {
     this.fromDate.reset();
     this.toDate.reset();
     this.filteredApplicationList.data = this.applicationList;
+    this.checkApplicationsAvailable();
   }
 
   createApplication() {
@@ -417,5 +419,24 @@ export class ApplicationListPage implements OnInit {
 
   onPaginateChange() {
     this.hideMenu('', 'divOverlay');    
+  }
+
+  private checkApplicationsAvailable() {
+    (this.filteredApplicationList?.data.length > 0) ? this.isRecordsAvailable = true : this.isRecordsAvailable = false;
+  }
+
+  private customizePaginator(paginatorClassName): void {
+    const lastBtn = this.el.nativeElement.querySelector(`.${paginatorClassName} .mat-paginator-navigation-last`);
+    if (lastBtn) {
+      lastBtn.innerHTML = "Last";
+    }
+    const firstBtn = this.el.nativeElement.querySelector(`.${paginatorClassName} .mat-paginator-navigation-first`);
+    if (firstBtn) {
+      firstBtn.innerHTML = "First";
+    }
+    const perPage = this.el.nativeElement.querySelector(`.${paginatorClassName} .mat-paginator-page-size-label`);
+    if (perPage) {
+      perPage.innerHTML = "Per page";
+    }
   }
 }

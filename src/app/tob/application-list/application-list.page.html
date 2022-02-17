@@ -44,7 +44,7 @@
             </mat-form-field>
           </ion-col>
 
-          <ion-col class="ion-text-end" size-xl="15" size-sm="25">
+          <ion-col class="ion-text-end no-padding-right" size-xl="15" size-sm="25">
             <ion-button class="btn-filter" color="success" [disabled]="fromDate.value && toDate.value ? false : true"
               (click)="filterByDate()" expand="block">Filter</ion-button>
             <ion-button class="btn-filter" color="danger" (click)="resetFilters()" expand="block">Reset</ion-button>
@@ -129,7 +129,7 @@
           </ion-grid>
         </ion-card-content>
       </ion-card>
-      <ion-card *ngIf="isRecordsAvailable && filteredApplicationList.data.length === 0">
+      <ion-card *ngIf="!isRecordsAvailable && filteredApplicationList.data.length === 0">
         <ion-card-content>
           <div class="ion-padding ion-text-center">
             <h1>No applications found.</h1>
@@ -146,11 +146,13 @@
         <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>
     </div>
-    <mat-paginator [hidden]="!filteredApplicationList.data.length" class="table-pagination" #paginator
-      [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
-      [length]="filteredApplicationList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
-      [showFirstLastButtons]="paginatorConfig.showFirstLastButtons" (page)="onPaginateChange()">
-    </mat-paginator>
+    <div class="table-pagination">
+      <mat-paginator [hidden]="!filteredApplicationList.data.length" class="paginator" #paginator
+        [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
+        [length]="filteredApplicationList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
+        [showFirstLastButtons]="paginatorConfig.showFirstLastButtons" (page)="onPaginateChange()">
+      </mat-paginator>
+    </div>
   </ng-container>
   
 </ion-content>
