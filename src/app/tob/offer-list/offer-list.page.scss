@@ -1,16 +1,17 @@
 ion-card {
     --background: var(--ion-color-step-1750);
-  
+    position: static;
     ion-card-content {
-      background-color: var(--ion-color-step-1750);
-      padding: 0px;
-      cursor: pointer;
+        position: static;
+        background-color: var(--ion-color-step-1750);
+        padding: 0px;
+        cursor: pointer;
     }
 }
 
 .action-icon {
     display: inline-flex;
-    align-items: center!important;
+    align-items: center !important;
     justify-content: flex-end;
     margin: 0px 0px -6px -5px;
 }
@@ -53,10 +54,6 @@ ion-card {
 
 .text-color-line-height {
     line-height: 40px;
-}
-
-.margin-left {
-    margin-left: 10px;
 }
 
 table {

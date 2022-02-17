@@ -1,0 +1,115 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
+#occupant-details {
+    padding: 0;
+    .list-section {
+        padding: 0;
+    }
+    ion-text {
+        font-size: 14px;
+    }
+    .header {
+        background-color: var(--ion-color-step-800);
+        text-align: left;
+        color: var(--ion-color-step-2000);
+        padding: 15px 10px;
+    }
+    .content {
+        padding: 0px;
+        border: 1px solid var(--ion-color-step-1650);
+        .content-row {
+            border-bottom: 1px solid var(--ion-color-step-1650);
+            padding: 5px 10px;
+            .search-box-grid {
+                background-color: var(--ion-color-step-1650);
+                margin: 10px -10px -5px -10px;
+            }
+        }
+    }
+    .remove-btn {
+        font-size: 24px;
+    }
+    .list-content {
+        padding: 0;
+    }
+}
+.postcode-search {
+    position: absolute;
+    top: 15px;
+    font-size: 14px;
+    color: var(--ion-color-tertiary);
+    cursor: pointer;
+    z-index: 2;
+    height: 30px;
+    right: 0;
+}
+
+.page-heading {
+    text-align: center;
+    font-size: 22px;
+}
+
+.margin-top-7 {
+    margin-top: 7px;
+}
+
+.header {
+    color: var(--ion-color-step-900);
+}
+
+.content {
+    font-size: 20px;
+    // font-weight: 700;
+    color: var(--ion-color-step-800);
+}
+
+.term-time {
+    text-align: left;
+    padding-top: 18px;
+}
+
+.payment-heading {
+    color: var(--ion-color-step-900);
+    margin-bottom: 40px;
+}
+
+#barclaycard-iframe {
+    border-radius: 6px;
+    min-height: 700px;
+    border: 0;
+    width: 100%;
+    background: var(--ion-color-step-2000);
+}
+#worldpay-iframe {
+    border-radius: 6px;
+    min-height: 700px;
+    border: 0;
+    width: 100%;
+    // padding-top: 75px;
+    //margin: 0 20%;
+}
+.payment-form {
+    text-align: center;
+    margin-top: 20px;
+
+    ion-button {
+      width: 150px;
+    }
+}
+
+.search-button {
+    margin-left: -6px;
+    margin-top: 5px;
+}
+
+.propcoicon-search {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--ion-color-step-950);
+    color: var(--ion-color-step-2000);
+    @include set-text-style(22px, 25px);    
+}

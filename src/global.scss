@@ -586,6 +586,8 @@ mat-form-field {
 }
 
 .table-pagination {  
+    justify-content: center;
+    margin: 0 7px 0 auto;
   .mat-paginator-page-size {
       display: flex;
       align-items: center;
@@ -615,11 +617,46 @@ mat-form-field {
   display: none !important;
 }
 
-#offer-stepper {
-  .mat-button {
-    background-color: var(--ion-color-medium);
-    margin: 4px;
-    color: var(--ion-color-step-2000);
+#offer-stepper,
+#application-stepper {
+  .action-btn-section {
+    .mat-button {
+      background-color: var(--ion-color-step-950);
+      margin: 4px;
+      color: var(--ion-color-step-2000);
+    }
+    .mat-button-disabled {
+      background-color: var(--ion-color-step-1150);
+      cursor: not-allowed;
+    }
+  }
+}
+
+.modal-width .modal-wrapper {
+  width: 650px !important;
+}
+
+.applicantSearchbarCustom {
+  padding: 0;
+  .searchbar-input {
+    line-height: 27px;
+    padding: 5px 15px;
+  }
+  .searchbar-search-icon {
+    display:none; 
+    width:0; 
+    height:0;
+  }
+  
+  .searchbar-input-container{
+    border: 1px solid -var(--ion-color-step-1600);
+    box-shadow: none;
+    border-left: 0;
+    .searchbar-input {
+      box-shadow: none;
+      padding-top: 4px;
+      padding-left: 10px;
+    }
   }
 }
 
@@ -666,6 +703,7 @@ mat-form-field {
       border-bottom-right-radius: 0;
       padding-left: 6px;
       font-size: 15px;
+      background-color: var(--ion-color-step-1750);
 		}
 		// .mat-select-arrow {
 		// 	color: rgb(197 51 44);
@@ -685,6 +723,7 @@ mat-form-field {
       border: none;
       padding-top: 8px;
       margin-top: 4px;
+      font-size: 14px;
     }
 	}
 }
@@ -697,12 +736,12 @@ mat-form-field {
   // overwrite the checkbox background
   .mat-checkbox-checked .mat-checkbox-background, 
   .mat-checkbox-indeterminate .mat-checkbox-background {
-   background-color: var(--ion-solr-font-color) !important;
+   background-color: var(--ion-color-success) !important;
  }
  
   // overwrite the ripple overlay on hover and click
   .mat-checkbox:not(.mat-checkbox-disabled) .mat-checkbox-ripple .mat-ripple-element {
-    background-color: var(--ion-solr-font-color) !important;
+    background-color: var(--ion-color-success) !important;
   }
 }
 
@@ -716,5 +755,53 @@ mat-form-field {
   }
   .mat-select-arrow{
     color: var(--ion-color-step-2000);
+  }
+  .mat-paginator-range-label {
+    // display: none;
+  }
+  .mat-paginator-outer-container{
+    height: auto;
+    width: 100%;
+  }
+  .mat-paginator-container {
+    justify-content: space-between;
+    flex-wrap: wrap-reverse;
+    padding-bottom: 3px;
+    width: 100%;
+  }
+  .mat-form-field-appearance-legacy .mat-form-field-underline {
+    display: none;
+  }
+}
+
+#solr-search-result {
+  .ngx-slider .ngx-slider-bubble.ngx-slider-limit {
+    display: none;
+  }
+  .ngx-slider .ngx-slider-pointer{
+    width: 23px;
+    height: 23px;
+    top: -10px;
+    background-color: var(--ion-color-step-1700);
+  }
+  .ngx-slider .ngx-slider-pointer:after{
+    display: none;
+  }
+  .ngx-slider .ngx-slider-bar{
+    height: 2px;
+  }
+  .ngx-slider .ngx-slider-selection{
+    background: var(--ion-color-solr);
+  }
+}
+
+.list-view-accordian {
+  .mat-expansion-panel-header {
+    .mat-content {
+      height: 100%
+    }
+  }
+  .mat-expansion-panel-body{
+    padding: 0;
   }
 }

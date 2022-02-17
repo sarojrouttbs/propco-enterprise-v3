@@ -11,10 +11,7 @@
             <h1 *ngIf="propertyDetails?.publishedAddress" class="ion-no-margin">{{ propertyDetails?.publishedAddress }}
             </h1>
             <h1 *ngIf="!propertyDetails?.publishedAddress" class="ion-no-margin">
-              {{ propertyDetails?.address?.addressLine1 ? propertyDetails?.address?.addressLine1 + ',' : ''}}
-              {{ propertyDetails?.address?.addressLine2 ? propertyDetails?.address?.addressLine2 + ',' : ''}}
-              {{ propertyDetails?.address?.town ? propertyDetails?.address?.town + ',' : ''}}
-              {{ propertyDetails?.address?.postcode ? propertyDetails?.address?.postcode : ''}}
+              {{ propertyDetails?.address | address }}
             </h1>
           </ion-col>
           <ion-col class="ion-no-padding ion-text-end" size="20">
@@ -63,7 +60,7 @@
             </mat-form-field>
           </ion-col>
 
-          <ion-col class="ion-text-end" size-xl="15" size-sm="25">
+          <ion-col class="ion-text-end no-padding-right" size-xl="15" size-sm="25">
             <ion-button class="btn-filter" color="success" [disabled]="fromDate.value && toDate.value ? false : true"
               (click)="filterByDate()" expand="block">Filter</ion-button>
             <ion-button class="btn-filter" color="danger" (click)="resetFilters()" expand="block">Reset</ion-button>
@@ -79,17 +76,17 @@
   </ng-container>
 
   <ng-container>
-    <div style="position: relative;">
+    <div style="position: relative;" class="overlay-container">
       <ion-card *ngFor="let item of obsOfferList | async; let i = index;" (click)="onOfferClick(item)">
         <ion-card-content>
           <ion-grid>
             <ion-row class="main-row">
               <ion-col class="" size-xl="15" size="20">
                 <div (click)="viewDetails(item.offerId)">
-                  <img [src]=" item.numberOfCoApplicants > 0 ? 'assets/images/offers/multi-user.svg' : 'assets/images/offers/single-user.svg' ">
+                  <img [src]=" item.numberOfCoApplicants > 0 ? 'assets/images/tob/multi-user.svg' : 'assets/images/tob/single-user.svg' ">
                 </div>
               </ion-col>
-              <ion-col class="" size-xl="85" size="80">
+              <ion-col class="" size-xl="85" size="80" style="position: static;">
                 <ion-grid style="height:100%;" class="no-padding-top">
                   <ion-row class="offer-title-row fs-18">
                     <ion-col class="no-padding-top col1" size="60">
@@ -171,7 +168,7 @@
           </ion-grid>
         </ion-card-content>
       </ion-card>
-      <ion-card *ngIf="filteredOfferList && !filteredOfferList.data.length">
+      <ion-card *ngIf="isRecordsAvailable && filteredOfferList.data.length === 0">
         <ion-card-content>
           <div class="ion-padding ion-text-center">
             <h1>No offers found.</h1>
@@ -184,10 +181,10 @@
         <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>
     </div>
-    <mat-paginator [hidden]="!filteredOfferList.data.length" class="table-pagination margin-left" #paginator
+    <mat-paginator [hidden]="!filteredOfferList.data.length" class="table-pagination" #paginator
       [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
       [length]="filteredOfferList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
-      [showFirstLastButtons]="paginatorConfig.showFirstLastButtons">
+      [showFirstLastButtons]="paginatorConfig.showFirstLastButtons" (page)="onPaginateChange(false)">
     </mat-paginator>
   </ng-container>
 
@@ -196,8 +193,8 @@
       <ion-row class="offer-notes">
         <ion-col size="100">
           <h4>Offer Notes:</h4>
-          <div>
-            <table class="fs-14">
+          <div style="position: relative;" class="overlay-container">
+            <table class="fs-14" >
               <thead>
                 <tr>
                   <th style="width:10%">Date</th>
@@ -244,7 +241,7 @@
             <mat-paginator [hidden]="!filteredNotesList.data.length" class="table-pagination" #notesPaginator
               [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
               [length]="filteredNotesList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
-              [showFirstLastButtons]="paginatorConfig.showFirstLastButtons">
+              [showFirstLastButtons]="paginatorConfig.showFirstLastButtons" (page)="onPaginateChange(true)">
             </mat-paginator>
           </div>
         </ion-col>

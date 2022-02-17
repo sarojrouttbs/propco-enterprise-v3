@@ -9,9 +9,11 @@ import { environment } from "src/environments/environment";
 export class SolrService {
   constructor(private httpClient: HttpClient) {}
 
-  getUserDetails(): Observable<any> {
+  getUserDetails(params: HttpParams): Observable<any> {
     // let params = new HttpParams().set("hideLoader", "true");
-    return this.httpClient.get(environment.API_BASE_URL + `user/logged-in`);
+    return this.httpClient.get(environment.API_BASE_URL + `user/logged-in`, {
+      params,
+    });
   }
 
   entityGetSuggestion(params: HttpParams): Observable<any> {
@@ -24,9 +26,26 @@ export class SolrService {
   }
 
   entitySearch(body: object): Observable<any> {
+    let params = new HttpParams().set("hideLoader", "true");
     return this.httpClient.post(
       environment.API_BASE_URL + `entities/search`,
-      body
+      body,
+      { params }
+    );
+  }
+
+  authenticateSsoToken(encodedString: string): Observable<any> {
+    const requestObj = { env: "saas-cw-uat" };
+    let params = new HttpParams().set("hideLoader", "true");
+    return this.httpClient.post(
+      environment.API_BASE_URL + "authentication/sso/token",
+      requestObj,
+      {
+        headers: {
+          Authorization: "Basic " + encodedString,
+        },
+        params,
+      }
     );
   }
 }

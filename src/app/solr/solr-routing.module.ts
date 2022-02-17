@@ -8,7 +8,6 @@ import { SolrPage } from "./solr.page";
 const routes: Routes = [
   {
     path: "",
-    canActivate: [AuthGuard],
     component: SolrPage,
     children: [
       {

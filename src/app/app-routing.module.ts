@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { NoPreloading, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
@@ -30,12 +30,20 @@ const routes: Routes = [
   {
     path: 'solr',
     loadChildren: () => import('./solr/solr.module').then( m => m.SolrPageModule)
+  },
+  {
+    path: 'barclaycard',
+    loadChildren: () => import('./barclaycard/barclaycard.module').then( m => m.BarclaycardPageModule)
+  },
+  {
+    path: 'worldpay',
+    loadChildren: () => import('./worldpay/worldpay.module').then( m => m.WorldpayPageModule)
   }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes, { preloadingStrategy: NoPreloading })
   ],
   exports: [RouterModule]
 })

@@ -5,6 +5,9 @@ import { Subject } from 'rxjs';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { FAULT_EVENT_TYPES, FAULT_EVENT_TYPES_ID, LL_INSTRUCTION_TYPES, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
+import * as pdfMake from "pdfmake/build/pdfmake";
+import * as  pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs= pdfFonts.pdfMake.vfs;
 
 @Component({
    selector: 'app-chronological-history',

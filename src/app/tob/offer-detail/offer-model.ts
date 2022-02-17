@@ -17,7 +17,8 @@ declare namespace OfferModels {
     }
 
     export interface IApplicantDetails {
-        address: string;
+        address: any;
+        forwardingAddress: any;
         addressee: string;
         alternativeEmail: string;
         alternativeFax: string;

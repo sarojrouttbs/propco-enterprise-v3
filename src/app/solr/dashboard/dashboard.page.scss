@@ -6,20 +6,12 @@
 
 .cdk-overlay-container {
   .mat-option-text {
-    color: var(--ion-solr-font-color);
+    color: var(--ion-color-step-50);
     @include set-text-style(14px, 18px);
   }
 
-  .mat-pseudo-checkbox {
-    color: var(--ion-solr-font-color);
-  }
-
   .mat-pseudo-checkbox-checked {
-    background: var(--ion-solr-font-color);
-  }
-
-  .mat-select-panel {
-    max-height: none;
+    background: var(--ion-color-success);
   }
 }
 
@@ -31,6 +23,20 @@
 
   i.search-icon:hover {
     cursor: pointer;
+  }
+
+  .welcome-skeleton {
+    width: 19%;
+    margin: 0 auto;
+    height: 15px;
+  }
+
+  .searchbar-skeleton {
+    width: 75%;
+    margin: 0 auto;
+    height: 31px;
+    margin-top: 17px;
+    margin-bottom: 28px;
   }
 
   .block {

@@ -9,6 +9,8 @@ import { SearchResultsPageRoutingModule } from './search-results-routing.module'
 import { SearchResultsPage } from './search-results.page';
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from 'src/app/material.module';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 @NgModule({
   imports: [
@@ -18,7 +20,9 @@ import { MaterialModule } from 'src/app/material.module';
     SearchResultsPageRoutingModule,
     SharedModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxMatSelectSearchModule,
+    NgxSliderModule
   ],
   declarations: [SearchResultsPage]
 })
