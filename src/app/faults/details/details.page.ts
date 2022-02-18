@@ -493,6 +493,10 @@ export class DetailsPage implements OnInit {
   }
 
   private initPatching(): void {
+    if(this.faultDetails.sourceType === 'FIXFLO'){
+      this.describeFaultForm.controls['category'].clearValidators();
+      this.describeFaultForm.controls['category'].updateValueAndValidity();
+    }
     this.describeFaultForm.patchValue({
       title: this.faultDetails.title,
       category: this.faultDetails.category
