@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -58,7 +58,7 @@ export class OfferListPage implements OnInit {
   isAddNote: boolean = false;
   isRecordsAvailable: boolean = true;
 
-  constructor(private el: ElementRef<HTMLElement>, private router: Router, private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private tobService: TobService) {
+  constructor(private router: Router, private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private tobService: TobService) {
     this.getTobLookupData();
     this.getLookUpData();
   }
@@ -87,7 +87,7 @@ export class OfferListPage implements OnInit {
     this.sortKey = '1';
     this.sortResult();
     this.checkOffersAvailable();
-    this.customizePaginator('paginator');
+    this.commonService.customizePaginator('paginator');
   }
 
   sortResult() {
@@ -214,7 +214,7 @@ export class OfferListPage implements OnInit {
     this.hideMenu('', 'divOverlayChild');
     this.offerNotes = await this.getNotesList(offerId) as OfferNotesData[];
     await this.initOfferNotesListData();
-    this.customizePaginator('notesPaginator');
+    this.commonService.customizePaginator('notesPaginator');
   }
 
   private initOfferNotesListData() {
@@ -407,20 +407,5 @@ export class OfferListPage implements OnInit {
 
   private checkOffersAvailable() {
     (this.filteredOfferList?.data.length > 0) ? this.isRecordsAvailable = true : this.isRecordsAvailable = false;
-  }
-
-  private customizePaginator(paginatorClassName): void {
-    const lastBtn = this.el.nativeElement.querySelector(`.${paginatorClassName} .mat-paginator-navigation-last`);
-    if (lastBtn) {
-      lastBtn.innerHTML = "Last";
-    }
-    const firstBtn = this.el.nativeElement.querySelector(`.${paginatorClassName} .mat-paginator-navigation-first`);
-    if (firstBtn) {
-      firstBtn.innerHTML = "First";
-    }
-    const perPage = this.el.nativeElement.querySelector(`.${paginatorClassName} .mat-paginator-page-size-label`);
-    if (perPage) {
-      perPage.innerHTML = "Per page";
-    }
   }
 }

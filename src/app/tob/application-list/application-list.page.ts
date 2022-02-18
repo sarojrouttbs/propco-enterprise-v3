@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -45,7 +45,7 @@ export class ApplicationListPage implements OnInit {
   referencingInfo: any;
   isRecordsAvailable: boolean = true;
   
-  constructor(private el: ElementRef<HTMLElement>, private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
+  constructor(private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
     this.getTobLookupData();
     this.getLookUpData();
     this.getReferancingInfo();
@@ -74,7 +74,7 @@ export class ApplicationListPage implements OnInit {
     this.filteredApplicationList.paginator = this.paginator;
     this.filteredApplicationList.paginator.pageIndex = 0;
     this.checkApplicationsAvailable();
-    this.customizePaginator('paginator');
+    this.commonService.customizePaginator('paginator');
   }
 
   private getApplicationList() {
@@ -423,20 +423,5 @@ export class ApplicationListPage implements OnInit {
 
   private checkApplicationsAvailable() {
     (this.filteredApplicationList?.data.length > 0) ? this.isRecordsAvailable = true : this.isRecordsAvailable = false;
-  }
-
-  private customizePaginator(paginatorClassName): void {
-    const lastBtn = this.el.nativeElement.querySelector(`.${paginatorClassName} .mat-paginator-navigation-last`);
-    if (lastBtn) {
-      lastBtn.innerHTML = "Last";
-    }
-    const firstBtn = this.el.nativeElement.querySelector(`.${paginatorClassName} .mat-paginator-navigation-first`);
-    if (firstBtn) {
-      firstBtn.innerHTML = "First";
-    }
-    const perPage = this.el.nativeElement.querySelector(`.${paginatorClassName} .mat-paginator-page-size-label`);
-    if (perPage) {
-      perPage.innerHTML = "Per page";
-    }
   }
 }
