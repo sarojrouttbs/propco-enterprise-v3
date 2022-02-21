@@ -179,10 +179,10 @@ ion-content {
     }
 
     .search-row {
-      background: var(--ion-color-step-1650);
-      margin: 5px;
+      background-color: var(--ion-color-step-1650);
+      margin: 0px 5px;
       margin-top: 0;
-      padding: 0px 20px 20px 0;
+      padding: 10px 10px 10px 0px;
     }
   }
   .stepper-section {
@@ -209,4 +209,18 @@ ion-content {
   outline: 0;
   padding: 5px 0;
   background: transparent;
+}
+
+.search-button {
+  margin-left: -6px;
+  margin-top: 5px;
+}
+
+.propcoicon-search {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--ion-color-step-950);
+  color: var(--ion-color-step-2000);
+  @include set-text-style(22px, 25px);    
 }

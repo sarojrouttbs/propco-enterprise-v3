@@ -4,7 +4,7 @@ ion-card {
     ion-card-content {
       background-color: var(--ion-color-step-1750);
       img {
-          height: auto;
+          height: 100%;
       }
     }
 }
@@ -31,4 +31,8 @@ ion-card {
             right: 20px;
         }
     }
+}
+
+.amount-alignment {
+    margin-top: 30px;
 }

@@ -43,7 +43,7 @@ export class ApplicationListPage implements OnInit {
   toDate = new FormControl('', []);
   referencingInfodata: any;
   referencingInfo: any;
-  isRecordsAvailable: boolean = false;
+  isRecordsAvailable: boolean = true;
   
   constructor(private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
     this.getTobLookupData();
@@ -70,12 +70,11 @@ export class ApplicationListPage implements OnInit {
   }
 
   private initApplicationList() {
-    if(this.applicationList.length > 0) {
-      this.isRecordsAvailable = true;
-    }
     this.filteredApplicationList.data = this.applicationList;
     this.filteredApplicationList.paginator = this.paginator;
     this.filteredApplicationList.paginator.pageIndex = 0;
+    this.checkApplicationsAvailable();
+    this.commonService.customizePaginator('paginator');
   }
 
   private getApplicationList() {
@@ -237,17 +236,20 @@ export class ApplicationListPage implements OnInit {
       this.filteredApplicationList.data = this.applicationList;
       this.isHideRejected = false;
     }
+    this.checkApplicationsAvailable();
   }
 
   filterByDate() {
     this.filteredApplicationList.data = this.applicationList;
     this.filteredApplicationList.data = this.filteredApplicationList.data.filter(e => new Date(this.commonService.getFormatedDate(e.createdAt, 'yyyy-MM-dd')) >= new Date(this.commonService.getFormatedDate(this.fromDate.value, 'yyyy-MM-dd')) && new Date(this.commonService.getFormatedDate(e.createdAt, 'yyyy-MM-dd')) <= new Date(this.commonService.getFormatedDate(this.toDate.value, 'yyyy-MM-dd')));
+    this.checkApplicationsAvailable();
   }
 
   resetFilters() {
     this.fromDate.reset();
     this.toDate.reset();
     this.filteredApplicationList.data = this.applicationList;
+    this.checkApplicationsAvailable();
   }
 
   createApplication() {
@@ -417,5 +419,9 @@ export class ApplicationListPage implements OnInit {
 
   onPaginateChange() {
     this.hideMenu('', 'divOverlay');    
+  }
+
+  private checkApplicationsAvailable() {
+    (this.filteredApplicationList?.data.length > 0) ? this.isRecordsAvailable = true : this.isRecordsAvailable = false;
   }
 }

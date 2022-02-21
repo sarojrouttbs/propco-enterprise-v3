@@ -56,7 +56,7 @@ export class OfferListPage implements OnInit {
   notesComplaints: any;
   notesTypes: any;
   isAddNote: boolean = false;
-  isRecordsAvailable: boolean = false;
+  isRecordsAvailable: boolean = true;
 
   constructor(private router: Router, private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private tobService: TobService) {
     this.getTobLookupData();
@@ -82,13 +82,12 @@ export class OfferListPage implements OnInit {
   }
 
   private initOfferList() {
-    if(this.offerList.length > 0) {
-      this.isRecordsAvailable = true;
-    }
     this.filteredOfferList.data = this.offerList as OfferData[];
     this.filteredOfferList.paginator = this.paginator;
     this.sortKey = '1';
     this.sortResult();
+    this.checkOffersAvailable();
+    this.commonService.customizePaginator('paginator');
   }
 
   sortResult() {
@@ -121,12 +120,14 @@ export class OfferListPage implements OnInit {
   filterByDate() {
     this.filteredOfferList.data = this.offerList;
     this.filteredOfferList.data = this.filteredOfferList.data.filter(e => new Date(this.commonService.getFormatedDate(e.offerAt, 'yyyy-MM-dd')) >= new Date(this.commonService.getFormatedDate(this.fromDate.value, 'yyyy-MM-dd')) && new Date(this.commonService.getFormatedDate(e.offerAt, 'yyyy-MM-dd')) <= new Date(this.commonService.getFormatedDate(this.toDate.value, 'yyyy-MM-dd')));
+    this.checkOffersAvailable();
   }
 
   resetFilters() {
     this.fromDate.reset();
     this.toDate.reset();
     this.filteredOfferList.data = this.offerList;
+    this.checkOffersAvailable();
   }
 
   hideRecords() {
@@ -137,11 +138,11 @@ export class OfferListPage implements OnInit {
           return true;
         }
       });
-    }
-    else {
+    } else {
       this.filteredOfferList.data = this.offerList;
       this.isHideRejected = false;
     }
+    this.checkOffersAvailable();
   }
 
   showMenu(event: any, id: any, data: any, className: any, isCard?: any, isOffer?: any) {
@@ -212,7 +213,8 @@ export class OfferListPage implements OnInit {
     this.hideMenu('', 'divOverlay');
     this.hideMenu('', 'divOverlayChild');
     this.offerNotes = await this.getNotesList(offerId) as OfferNotesData[];
-    this.initOfferNotesListData()
+    await this.initOfferNotesListData();
+    this.commonService.customizePaginator('notesPaginator');
   }
 
   private initOfferNotesListData() {
@@ -401,5 +403,9 @@ export class OfferListPage implements OnInit {
 
   onPaginateChange(isNotes) {
     isNotes ? this.hideMenu('', 'divOverlayChild') : this.hideMenu('', 'divOverlay');
+  }
+
+  private checkOffersAvailable() {
+    (this.filteredOfferList?.data.length > 0) ? this.isRecordsAvailable = true : this.isRecordsAvailable = false;
   }
 }
