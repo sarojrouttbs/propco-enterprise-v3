@@ -57,6 +57,8 @@ export class OfferListPage implements OnInit {
   notesTypes: any;
   isAddNote: boolean = false;
   isRecordsAvailable: boolean = true;
+  isPropertyDetails: boolean = false;
+  isOffersList: boolean = false;
 
   constructor(private router: Router, private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private tobService: TobService) {
     this.getTobLookupData();
@@ -229,6 +231,7 @@ export class OfferListPage implements OnInit {
       this.tobService.getPropertyDetails(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
+            this.isPropertyDetails = true;
             resolve(res.data);
           } else {
             resolve({});
@@ -248,6 +251,7 @@ export class OfferListPage implements OnInit {
       this.tobService.getOfferList(this.propertyId).subscribe(
         (res) => {
           if (res && res.data) {
+            this.isOffersList = true;
             resolve(res.data);
           } else {
             resolve([]);
