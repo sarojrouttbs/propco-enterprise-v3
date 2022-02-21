@@ -87,6 +87,7 @@ export class ApplicationDetailPage implements OnInit {
   paymentDetails: any = {};
   showWorldpayIframe: boolean = false;
   hidePaymentForm: boolean = false;
+  isTobPropertyCardReady: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -560,6 +561,7 @@ export class ApplicationDetailPage implements OnInit {
               this.isStudentGuarantor();
             }
             this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
+            this.isTobPropertyCardReady = true;
             resolve(true);
           }
         },
