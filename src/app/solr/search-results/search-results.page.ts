@@ -84,6 +84,7 @@ export class SearchResultsPage implements OnInit {
   propertyStatuses;
   propertyStatusesFiltered;
   officeCodes;
+  officeCodesMap = new Map();
   officeCodesFiltered;
   landlordStatuses;
   landlordStatusesFiltered;
@@ -335,6 +336,7 @@ export class SearchResultsPage implements OnInit {
     this.propertyStatuses = this.propertyStatusesFiltered =
       data.propertyStatuses;
     this.officeCodes = this.officeCodesFiltered = data.officeCodes;
+    this.setOfficeCodeMap();
     this.landlordStatuses = this.landlordStatusesFiltered =
       data.landlordStatuses;
     this.applicantStatuses = this.applicantStatusesFiltered =
@@ -344,6 +346,12 @@ export class SearchResultsPage implements OnInit {
       data.contractorSkills;
     this.contractorStatuses = this.contractorStatusesFiltered =
       data.contractorStatuses;
+  }
+
+  private setOfficeCodeMap() {
+    this.officeCodes.map((code, index) => {
+      this.officeCodesMap.set(code.index, code.value);
+    });
   }
 
   private getQueryParams() {
@@ -466,6 +474,14 @@ export class SearchResultsPage implements OnInit {
       .entitySearch(this.prepareSearchParams())
       .subscribe((res) => {
         this.results = res && res.data ? res.data : [];
+        this.results.map((x) => {
+          if (x.officeCode) {
+            let newValues = x.officeCode.map((code) => {
+              return this.officeCodesMap.get(code);
+            });
+            x.officeCode = newValues;
+          }
+        });
         this.length = res && res.count ? res.count : 0;
         // this.opened = true;
         this.loaded = true;
@@ -529,7 +545,6 @@ export class SearchResultsPage implements OnInit {
         delete ccFilter.approvedByAgent;
       }
       params.contractorFilter = ccFilter;
-      
     }
     if (this.entityControl.value.indexOf("Applicant") !== -1) {
       let apFilter = Object.assign(this.applicantFilter.value, {});
