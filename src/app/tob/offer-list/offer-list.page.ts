@@ -250,8 +250,8 @@ export class OfferListPage implements OnInit {
     return new Promise((resolve, reject) => {
       this.tobService.getOfferList(this.propertyId).subscribe(
         (res) => {
-          if (res && res.data) {
-            this.isOffersList = true;
+          this.isOffersList = true;
+          if (res && res.data) {            
             resolve(res.data);
           } else {
             resolve([]);
