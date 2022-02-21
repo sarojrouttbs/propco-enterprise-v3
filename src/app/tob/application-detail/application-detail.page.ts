@@ -68,7 +68,7 @@ export class ApplicationDetailPage implements OnInit {
   saveDataLoader: boolean = false;
   addressList: any[];
   guarantorAddressList: any[];
-  correspondenceAddressList: any[];
+  forwardingAddressList: any[];
   leadApplicationApplicantId: any;
   selectionType: any;
   titleList = [
@@ -828,7 +828,7 @@ export class ApplicationDetailPage implements OnInit {
         county: '',
         country: ''
       }),
-      correspondenceAddress: this._formBuilder.group({
+      forwardingAddress: this._formBuilder.group({
         postcode: '',
         addressdetails: [''],
         addressLine1: '',
@@ -849,7 +849,7 @@ export class ApplicationDetailPage implements OnInit {
         postcode.value ? (this.showPostcodeLoader = true) : '';
         break;
       case 'correspondence-address':
-        postcode = this.addressDetailsForm.controls.correspondenceAddress['controls'].postcode;
+        postcode = this.addressDetailsForm.controls.forwardingAddress['controls'].postcode;
         postcode.value ? (this.showAddressLoader = true) : '';
         break;
       case 'guarantor':
@@ -865,7 +865,7 @@ export class ApplicationDetailPage implements OnInit {
       this.showAddressLoader = false;
       this.addressList = [];
       this.guarantorAddressList = [];
-      this.correspondenceAddressList = [];
+      this.forwardingAddressList = [];
     }
   }
 
@@ -874,7 +874,7 @@ export class ApplicationDetailPage implements OnInit {
       res => {
         this.addressList = [];
         this.guarantorAddressList = [];
-        this.correspondenceAddressList = [];
+        this.forwardingAddressList = [];
         if (res && res.data && res.data.length) {
           switch (addressType) {
             case 'personal':
@@ -886,7 +886,7 @@ export class ApplicationDetailPage implements OnInit {
               this.showPostcodeLoader = false;
               break;
             case 'correspondence-address':
-              this.correspondenceAddressList = res.data;
+              this.forwardingAddressList = res.data;
               this.showAddressLoader = false;
               break;
           }
@@ -897,7 +897,7 @@ export class ApplicationDetailPage implements OnInit {
         this.showAddressLoader = false;
         this.addressList = [];
         this.guarantorAddressList = [];
-        this.correspondenceAddressList = [];
+        this.forwardingAddressList = [];
         const data: any = {};
         data.title = 'Postcode Lookup';
         data.message = error.error ? error.error.message : error.message;
@@ -933,12 +933,12 @@ export class ApplicationDetailPage implements OnInit {
         this.addressDetailsForm.controls.address['controls'].country.setValue(res.countryName);
         break;
       case 'correspondence-address':
-        this.addressDetailsForm.controls.correspondenceAddress['controls'].addressLine1.setValue(res.line1);
-        this.addressDetailsForm.controls.correspondenceAddress['controls'].addressLine2.setValue(res.line2);
-        this.addressDetailsForm.controls.correspondenceAddress['controls'].locality.setValue(res.line4);
-        this.addressDetailsForm.controls.correspondenceAddress['controls'].town.setValue(res.line5);
-        this.addressDetailsForm.controls.correspondenceAddress['controls'].county.setValue(res.provinceName);
-        this.addressDetailsForm.controls.correspondenceAddress['controls'].country.setValue(res.countryName);
+        this.addressDetailsForm.controls.forwardingAddress['controls'].addressLine1.setValue(res.line1);
+        this.addressDetailsForm.controls.forwardingAddress['controls'].addressLine2.setValue(res.line2);
+        this.addressDetailsForm.controls.forwardingAddress['controls'].locality.setValue(res.line4);
+        this.addressDetailsForm.controls.forwardingAddress['controls'].town.setValue(res.line5);
+        this.addressDetailsForm.controls.forwardingAddress['controls'].county.setValue(res.provinceName);
+        this.addressDetailsForm.controls.forwardingAddress['controls'].country.setValue(res.countryName);
         break;
       case 'guarantor':
         this.guarantorForm.controls.address['controls'].addressLine1.setValue(res.line1);
@@ -1147,14 +1147,14 @@ export class ApplicationDetailPage implements OnInit {
     });
     if (this.isStudentProperty) {
       this.addressDetailsForm.patchValue({
-        correspondenceAddress: {
-          postcode: this.applicantDetail.correspondenceAddress.postcode,
-          addressLine1: this.applicantDetail.correspondenceAddress.addressLine1,
-          addressLine2: this.applicantDetail.correspondenceAddress.addressLine2,
-          town: this.applicantDetail.correspondenceAddress.town,
-          county: this.applicantDetail.correspondenceAddress.county,
-          country: this.applicantDetail.correspondenceAddress.country,
-          locality: this.applicantDetail.address.locality,
+        forwardingAddress: {
+          postcode: this.applicantDetail.forwardingAddress.postcode,
+          addressLine1: this.applicantDetail.forwardingAddress.addressLine1,
+          addressLine2: this.applicantDetail.forwardingAddress.addressLine2,
+          town: this.applicantDetail.forwardingAddress.town,
+          county: this.applicantDetail.forwardingAddress.county,
+          country: this.applicantDetail.forwardingAddress.country,
+          locality: this.applicantDetail.forwardingAddress.locality,
           addressdetails: ''
         }
       });
@@ -1173,7 +1173,7 @@ export class ApplicationDetailPage implements OnInit {
     let applicantDetails = this.applicantDetailsForm.value;
     applicantDetails.address = this.addressDetailsForm.value.address;
     applicantDetails.dateOfBirth = this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
-    applicantDetails.correspondenceAddress = this.addressDetailsForm.value.correspondenceAddress;
+    applicantDetails.forwardingAddress = this.addressDetailsForm.value.forwardingAddress;
     if (this.checkFormDirty(this.addressDetailsForm)) {
       this.updateApplicantDetails();
     }
