@@ -59,7 +59,7 @@
 </ion-row>
 
 <ng-template #propertySuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenProperty',item.entityId)">
+  <div (click)="openHomeCategory('OpenProperty',item.propcoId)">
     <span>
       <i class="propcoicon no-background propcoicon-property red-icon"></i>
     </span>
@@ -72,7 +72,7 @@
 </ng-template>
 
 <ng-template #landlordSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenLandlord',item.entityId)">
+  <div (click)="openHomeCategory('OpenLandlord',item.propcoId)">
     <span>
       <i class="propcoicon no-background propcoicon-landlord red-icon"></i>
     </span>
@@ -87,7 +87,7 @@
 </ng-template>
 
 <ng-template #applicantSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenApplicant',item.entityId)">
+  <div (click)="openHomeCategory('OpenApplicant',item.propcoId)">
     <span>
       <i class="propcoicon no-background propcoicon-applicant-let red-icon"></i>
     </span>
@@ -102,7 +102,7 @@
 </ng-template>
 
 <ng-template #tenantSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenTenant',item.entityId)">
+  <div (click)="openHomeCategory('OpenTenant',item.propcoId)">
     <span>
       <i class="propcoicon no-background propcoicon-tenant red-icon"></i>
     </span>
@@ -116,7 +116,7 @@
 </ng-template>
 
 <ng-template #contractorSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenContractor',item.entityId)">
+  <div (click)="openHomeCategory('OpenContractor',item.propcoId)">
     <span>
       <i class="propcoicon no-background propcoicon-contractor red-icon"></i>
     </span>
@@ -130,7 +130,7 @@
 </ng-template>
 
 <ng-template #agentSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenAgent',item.entityId)">
+  <div (click)="openHomeCategory('OpenAgent',item.propcoId)">
     <span>
       <i class="propcoicon no-background propcoicon-agent red-icon"></i>
     </span>

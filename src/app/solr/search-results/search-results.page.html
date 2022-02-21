@@ -506,7 +506,7 @@
 
 
 <ng-template #propertySuggestion  let-item="item">
-  <ion-card-content id="details" (click)="openDetails('OpenProperty',item.entityId)">
+  <ion-card-content id="details" (click)="openDetails('OpenProperty',item.propcoId)">
     <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="17" size="30">
@@ -607,7 +607,7 @@
   </ion-card-content>
 </ng-template>
 <ng-template #landlordSuggestion  let-item="item">
-  <ion-card-content id="details" class="landlord" (click)="openDetails('OpenLanlord',item.entityId)">
+  <ion-card-content id="details" class="landlord" (click)="openDetails('OpenLanlord',item.propcoId)">
     <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
@@ -648,7 +648,7 @@
   </ion-card-content>
 </ng-template>
 <ng-template #tenantSuggestion  let-item="item">
-  <ion-card-content id="details" class="tenant" (click)="openDetails('OpenTenant',item.entityId)">
+  <ion-card-content id="details" class="tenant" (click)="openDetails('OpenTenant',item.propcoId)">
     <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
@@ -678,7 +678,7 @@
   </ion-card-content>
 </ng-template>
 <ng-template #contractorSuggestion  let-item="item">
-  <ion-card-content id="details" class="contractor" (click)="openDetails('OpenContractor',item.entityId)">
+  <ion-card-content id="details" class="contractor" (click)="openDetails('OpenContractor',item.propcoId)">
     <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
@@ -711,7 +711,7 @@
   </ion-card-content>
 </ng-template>
 <ng-template #agentSuggestion  let-item="item">
-  <ion-card-content id="details" class="agent" (click)="openDetails('OpenAgent',item.entityId)">
+  <ion-card-content id="details" class="agent" (click)="openDetails('OpenAgent',item.propcoId)">
     <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
@@ -736,7 +736,7 @@
   </ion-card-content>
 </ng-template>
 <ng-template #applicantSuggestion  let-item="item">
-  <ion-card-content id="details" class="contractor" (click)="openDetails('OpenApplicant',item.entityId)">
+  <ion-card-content id="details" class="contractor" (click)="openDetails('OpenApplicant',item.propcoId)">
     <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
@@ -773,7 +773,7 @@
                   <mat-expansion-panel-header>
                     <!-- <mat-panel-title> -->
                      <div class="list-header">
-                      <div (click)="$event.stopPropagation();openDetails('OpenProperty',item.entityId)" style="width: 60%;">
+                      <div (click)="$event.stopPropagation();openDetails('OpenProperty',item.propcoId)" style="width: 60%;">
                         <p class="title text-ellipsis" [title]="item?.address">{{item?.address}}</p>
                         <span style="display: flex;">
                           <p class="emenities-wrapper">
@@ -811,7 +811,7 @@
                      </div>
                   </mat-expansion-panel-header>
                   <ion-card-content id="details">
-                    <ion-grid (click)="openDetails('OpenProperty',item.entityId)" class="ion-no-padding">
+                    <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
                       <ion-row class="main-row">
                         <ion-col class="ion-no-padding" size-xl="17" size="25">
                           <img [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.png';">
@@ -850,7 +850,7 @@
                                 <p>
                                   <span class="text">Type</span>
                                 <br />
-                                <span class="text-value">{{item?.entityType || 'N/A'}}</span>
+                                <span class="text-value">{{item?.houseType || 'N/A'}}</span>
                                 </p>
                               </ion-col>
                               <ion-col size-xl="35" size-lg="35" size-md="35">
@@ -873,7 +873,7 @@
                                 <p>
                                   <span class="text">Style</span>
                                 <br />
-                                <span class="text-value">{{item?.property_style || 'N/A'}}</span>
+                                <span class="text-value">{{item?.propertyStyle || 'N/A'}}</span>
                                 </p>
                               </ion-col>
                               <ion-col size-xl="35" size-lg="35" size-md="35">
