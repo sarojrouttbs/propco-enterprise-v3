@@ -2,7 +2,7 @@
   <ion-grid class="offer-details">
     <app-tob-property-details [propertyDetails]="propertyDetails" [rentFrequencyTypes]="rentFrequencyTypes" [isTobPropertyCardReady]="isTobPropertyCardReady">
     </app-tob-property-details>
-    <ion-grid class="applicant-detail no-padding-top" *ngIf="isApplicantDetails">
+    <ion-grid class="applicant-detail no-padding-top" *ngIf="isApplicantDetailsAvailable">
       <ion-row>
         <ion-col>
           <h5  class="no-margin-bottom" color="medium">Applicant(s) Details</h5>
@@ -73,7 +73,7 @@
     </ion-grid>
 
     <!-- Skeleton -->
-    <ion-grid class="applicant-detail no-padding-top" *ngIf="!isApplicantDetails">
+    <ion-grid class="applicant-detail no-padding-top" *ngIf="!isApplicantDetailsAvailable">
       <ion-row>
         <ion-col>
           <h5 class="no-margin-bottom">
@@ -170,7 +170,7 @@
 </ion-content>
 
 <ng-template #offerDetails>
-  <form [formGroup]="makeAnOfferForm" id="makeAnOfferForm" *ngIf="isOffersDetails">
+  <form [formGroup]="makeAnOfferForm" id="makeAnOfferForm" *ngIf="isOffersDetailsAvailable">
     <ion-grid>
       <ion-row class=" ion-justify-content-center">
         <ion-col size-xs="100" size-sm="33.3">
@@ -314,7 +314,7 @@
   </form>
   
   <!-- skeleton -->
-  <ion-grid *ngIf="!isOffersDetails">
+  <ion-grid *ngIf="!isOffersDetailsAvailable">
     <ion-row class=" ion-justify-content-center">
       <ion-col size-xs="100" size-sm="33.3">
         <ion-item lines="none">

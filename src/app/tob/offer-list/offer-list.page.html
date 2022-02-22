@@ -7,14 +7,14 @@
     <div class="property-details">
       <ion-grid>
         <ion-row class="address">
-          <ion-col class="ion-no-padding" size="80" *ngIf="isPropertyDetails">
+          <ion-col class="ion-no-padding" size="80" *ngIf="isPropertyDetailsAvailable">
             <h1 *ngIf="propertyDetails?.publishedAddress" class="ion-no-margin">{{ propertyDetails?.publishedAddress }}
             </h1>
             <h1 *ngIf="!propertyDetails?.publishedAddress" class="ion-no-margin">
               {{ propertyDetails?.address | address }}
             </h1>
           </ion-col>
-          <ion-col class="ion-no-padding" size="80" *ngIf="!isPropertyDetails">
+          <ion-col class="ion-no-padding" size="80" *ngIf="!isPropertyDetailsAvailable">
             <ion-skeleton-text animated></ion-skeleton-text>
           </ion-col>
           <ion-col class="ion-no-padding ion-text-end" size="20">
@@ -79,7 +79,8 @@
   </ng-container>
 
   <ng-container>
-    <div *ngIf="!isOffersList">
+    <!-- skeleton -->
+    <div *ngIf="!isOffersListAvailable">
       <ion-card *ngFor="let number of [0,1,2,3,4]">
         <ion-card-content>
           <ion-grid>
@@ -153,8 +154,9 @@
         </ion-card-content>
       </ion-card>
     </div>
+    <!-- skeleton -->
 
-    <div style="position: relative;" class="overlay-container" *ngIf="isOffersList">
+    <div style="position: relative;" class="overlay-container" *ngIf="isOffersListAvailable">
       <ion-card *ngFor="let item of obsOfferList | async; let i = index;" (click)="onOfferClick(item)">
         <ion-card-content>
           <ion-grid>
