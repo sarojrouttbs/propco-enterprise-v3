@@ -1,47 +1,93 @@
-<ion-card class="no-margin-bottom">
-  <ion-card-content class="ion-no-padding">
-    <ion-grid class="ion-no-padding">
-      <ion-row class="main-row">
-        <ion-col class="" size-xl="23" size="23">
-            <img height="100%" [src]=" propertyDetails?.propertyImageUrl ? commonService.getResizedImageUrl(propertyDetails?.propertyImageUrl) : 'assets/images/default.jpg'" onerror="this.src='assets/images/default.jpg'">
-        </ion-col>
-        <ion-col class="property-details" size-xl="77" size="77">
-          <ion-grid style="height:100%;" class="no-padding-top">
-            <ion-row class="property-details-row">
-              <ion-text *ngIf="propertyDetails?.publishedAddress" class="address ion-no-margin">
-                {{propertyDetails?.publishedAddress}}</ion-text>
-              <ion-text *ngIf="!propertyDetails?.publishedAddress" class="address ion-no-margin">
-                {{ propertyDetails?.address | address }}
-              </ion-text>
-            </ion-row>
-            <ion-row class="description">
-              <ion-text class="fs-16">
-                {{ propertyDetails?.fullDescription?.length > 500 ? ((propertyDetails?.fullDescription | slice : 0:500) +
-                '...') : propertyDetails?.fullDescription }} <br>
-              </ion-text>
-            </ion-row>
+<ng-container *ngIf="isTobPropertyCardReady; then propDetails else propDetailsSkeleton"></ng-container>
 
-            <ion-row>
-              <ion-col class="ion-text-start amount">
-                <h4 class="ion-text-start fs-18 bottom-align">{{ propertyDetails?.advertisementRent | currency: 'GBP'}}
-                  {{ (propertyDetails?.advertisementRentFrequency | lookup: rentFrequencyTypes) }}
-                </h4>
-              </ion-col>
-              <ion-col class="ion-text-end amount">
-                <h4 *ngIf="propertyDetails?.noDepositScheme" class="fs-18 bottom-align right-align">
-                  <span *ngIf="propertyDetails?.depositScheme == propertyDetails?.noDepositScheme && propertyDetails?.deposit">
-                    No Deposit Option (or {{ propertyDetails.deposit | currency: 'GBP' }} Standard Deposit)</span>
-                  <span *ngIf="propertyDetails?.depositScheme != propertyDetails?.noDepositScheme && propertyDetails?.deposit">
-                    Standard Deposit: {{ propertyDetails?.deposit | currency: 'GBP' }}</span>
-                  <span *ngIf="propertyDetails?.depositScheme == propertyDetails?.noDepositScheme && !propertyDetails?.deposit">No
-                    Deposit
-                    Option</span>
-                </h4>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card-content>
-</ion-card>
+<ng-template #propDetails>
+  <ion-card class="no-margin-bottom">
+    <ion-card-content class="ion-no-padding">
+      <ion-grid class="ion-no-padding">
+        <ion-row class="main-row">
+          <ion-col size="25">
+            <img height="100%"
+              [src]=" propertyDetails?.propertyImageUrl ? commonService.getResizedImageUrl(propertyDetails?.propertyImageUrl) : 'assets/images/default.jpg'"
+              onerror="this.src='assets/images/default.jpg'">
+          </ion-col>
+          <ion-col class="property-details" size="75">
+            <ion-grid style="height:100%;" class="no-padding">
+              <ion-row class="property-details-row">
+                <ion-text *ngIf="propertyDetails?.publishedAddress" class="address ion-no-margin">
+                  {{propertyDetails?.publishedAddress}}</ion-text>
+                <ion-text *ngIf="!propertyDetails?.publishedAddress" class="address ion-no-margin">
+                  {{ propertyDetails?.address | address }}
+                </ion-text>
+              </ion-row>
+              <ion-row class="description">
+                <ion-text class="fs-16">
+                  {{ propertyDetails?.fullDescription?.length > 500 ? ((propertyDetails?.fullDescription | slice :
+                  0:500) +
+                  '...') : propertyDetails?.fullDescription }} <br>
+                </ion-text>
+              </ion-row>
+              <ion-row>
+                <div class="amount-alignment">
+                  <ion-col class="ion-text-start amount">
+                    <h4 class="ion-text-start fs-18 bottom-align">{{ propertyDetails?.advertisementRent | currency:
+                      'GBP'}}
+                      {{ (propertyDetails?.advertisementRentFrequency | lookup: rentFrequencyTypes) }}
+                    </h4>
+                  </ion-col>
+                  <ion-col class="ion-text-end amount">
+                    <h4 *ngIf="propertyDetails?.noDepositScheme" class="fs-18 bottom-align right-align">
+                      <span
+                        *ngIf="propertyDetails?.depositScheme == propertyDetails?.noDepositScheme && propertyDetails?.deposit">
+                        No Deposit Option (or {{ propertyDetails.deposit | currency: 'GBP' }} Standard Deposit)</span>
+                      <span
+                        *ngIf="propertyDetails?.depositScheme != propertyDetails?.noDepositScheme && propertyDetails?.deposit">
+                        Standard Deposit: {{ propertyDetails?.deposit | currency: 'GBP' }}</span>
+                      <span
+                        *ngIf="propertyDetails?.depositScheme == propertyDetails?.noDepositScheme && !propertyDetails?.deposit">No
+                        Deposit
+                        Option</span>
+                    </h4>
+                  </ion-col>
+                </div>
+              </ion-row>
+            </ion-grid>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</ng-template>
+
+<ng-template #propDetailsSkeleton>
+  <ion-card class="no-margin-bottom">
+    <ion-card-content class="ion-no-padding">
+      <ion-grid class="ion-no-padding">
+        <ion-row class="main-row">
+          <ion-col size="25">
+              <div>
+                <ion-skeleton-text animated style="width: 100%; height: 170px;"></ion-skeleton-text>
+              </div>
+          </ion-col>
+          <ion-col class="property-details" size="75">
+            <ion-grid style="height:100%;" class="no-padding">
+              <ion-row class="property-details-row">
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-row>
+              <ion-row class="description">
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-row>
+              <ion-row style="margin-top: 50px;">
+                <ion-col>
+                  <ion-skeleton-text animated style="width: 50%;"></ion-skeleton-text>
+                </ion-col>
+                <ion-col class="ion-text-end">
+                  <ion-skeleton-text animated style="width: 50%; float: right;"></ion-skeleton-text>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</ng-template>

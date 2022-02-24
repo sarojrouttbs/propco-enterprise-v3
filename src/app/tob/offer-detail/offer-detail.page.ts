@@ -49,6 +49,9 @@ export class OfferDetailPage implements OnInit {
   resultsAvailable: boolean = null;
   rentFrequencyTypes: OfferModels.ILookupResponse[];
   offerDetails: OfferModels.IOfferResponse;
+  isTobPropertyCardReady: boolean = false;
+  isApplicantDetailsAvailable: boolean = false;
+  isOffersDetailsAvailable: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -88,6 +91,7 @@ export class OfferDetailPage implements OnInit {
     this._tobService.getApplicantDetails(applicantId).subscribe(res => {
       if (res) {
         this.applicantDetail = res;
+        this.isApplicantDetailsAvailable = true;
         this.disableSearchApplicant = true;
         this.resultsAvailable = false;
         this.searchApplicantForm.get('searchApplicant').setValue('');
@@ -201,6 +205,7 @@ export class OfferDetailPage implements OnInit {
       });
     } catch (e) {
     }
+    this.isOffersDetailsAvailable = true;
   }
 
   private getPropertyDetails(propertyId) {
@@ -219,6 +224,7 @@ export class OfferDetailPage implements OnInit {
         Validators.max(this.propertyDetails.maxRent)
       ]);
       this.makeAnOfferForm.get('amount').updateValueAndValidity();
+      this.isTobPropertyCardReady = true;
     }, (error) => {
     });
   }
