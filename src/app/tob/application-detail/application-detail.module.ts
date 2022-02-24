@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-
 import { ApplicationDetailPageRoutingModule } from './application-detail-routing.module';
-
 import { ApplicationDetailPage } from './application-detail.page';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { ComponentsModule } from 'src/app/shared/components/components.module';
 import { MaterialModule } from 'src/app/material.module'
+import { TemplateFormModule } from 'src/app/worldpay-ownform/template-form/template-form.module';
 
 @NgModule({
   imports: [
@@ -20,7 +18,8 @@ import { MaterialModule } from 'src/app/material.module'
     ReactiveFormsModule,
     PipesModule,
     ComponentsModule,
-    MaterialModule
+    MaterialModule,
+    TemplateFormModule
   ],
   declarations: [ApplicationDetailPage]
 })

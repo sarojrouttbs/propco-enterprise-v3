@@ -88,6 +88,18 @@ export class ApplicationDetailPage implements OnInit {
   showWorldpayIframe: boolean = false;
   hidePaymentForm: boolean = false;
   isTobPropertyCardReady: boolean = false;
+  showworldpayInternalForm: boolean = false;
+  refreshedTenantDetail;
+  worldPayInternalData: {
+    applicationId?: string,
+    startDate?: string,
+    expiryDate?: string,
+    transactionId?: number,
+    createdByUuid?: string,
+    propertyId?: string,
+    amount?: number,
+    entityType?: string
+  } = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -210,6 +222,7 @@ export class ApplicationDetailPage implements OnInit {
   private async initViewApiCalls() {
     const application = await this.getApplicationDetails(this.applicationId) as ApplicationModels.IApplicationResponse;
     await this.setApplicationDetails(application);
+    await this.setWorldpayInternalData();
     const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
     await this.setApplicationApplicants(applicants);
     await this.setLeadApplicantDetails();
@@ -1632,4 +1645,69 @@ export class ApplicationDetailPage implements OnInit {
     console.log('result callback', result);
   }
 
+  onInternalWorldpaySuccess(event) {
+    if (event) {
+      this.openPaymentConfirmation();
+    }
+  }
+
+  async openPaymentConfirmation() {
+    this.refreshedTenantDetail = await this.getNewTenantWebToken();
+    let tNc = '<h1> Congratulations! </h1>' + '<h5>Your payment has been completed successfully and property has been reserved.</h5>' + '<p>Now you have been converted into tenant. You will be redirected to tenant dashboard.</p>';
+    const simpleModal = await this.modalController.create({
+      component: SimpleModalPage,
+      backdropDismiss: false,
+      componentProps: {
+        data: tNc,
+        heading: 'Successful Payment',
+        button: 'Ok',
+      }
+    });
+
+    simpleModal.onDidDismiss().then(res => {
+      this.redirectToTenantPage();
+      // this.commonService.logout();
+      // this.document.location.href = environment.HOST_WEBURL;
+    });
+    await simpleModal.present();
+  }
+
+  async redirectToTenantPage() {
+    await this.refreshAccessToken();
+    this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+    // this.router.navigate(['/tenant/dashboard'], { replaceUrl: true });
+  }
+
+  refreshAccessToken() {
+    return new Promise((resolve, reject) => {
+      this.commonService.setItem('user_type', this.refreshedTenantDetail.user_type);
+      let userInfo = this.commonService.getItem('login_details', true);
+      userInfo.role = this.refreshedTenantDetail.user_type;
+      this.commonService.setItem('login_details', userInfo);
+      return resolve(true);
+    });
+  }
+
+  getNewTenantWebToken() {
+    // this.showLoader = true;
+    return new Promise((resolve, reject) => {
+      this._tobService.refreshApplicantToken().subscribe((res) => {
+        // this.showLoader = false;
+        return resolve(res);
+      }, error => {
+        // this.showLoader = false;
+        return reject(false);
+      });
+    });
+  }
+
+  private setWorldpayInternalData() {
+    this.worldPayInternalData.applicationId = this.applicationId;
+    this.worldPayInternalData.createdByUuid = '';
+    this.worldPayInternalData.startDate = this.applicationDetails.moveInDate;
+    this.worldPayInternalData.expiryDate = this.applicationDetails.preferredTenancyEndDate;
+    this.worldPayInternalData.propertyId = this.propertyId;
+    this.worldPayInternalData.entityType = ENTITY_TYPE.APPLICANT;
+    this.worldPayInternalData.amount = this.applicationDetails.depositAmount;
+  }
 }

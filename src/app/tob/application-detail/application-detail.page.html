@@ -1243,9 +1243,9 @@
     <!--payment method 1 ends -->
   </ng-container>
 
-  <!-- <ng-container *ngIf="PAYMENT_METHOD === 'WORLDPAY_OWNFORM'">
+  <ng-container *ngIf="PAYMENT_METHOD === 'WORLDPAY_OWNFORM'">
     <ion-grid class="ion-no-padding" *ngIf="!showworldpayInternalForm" id="payment-detail">
-      <ion-row class="ion-justify-content-between">
+      <!-- <ion-row class="ion-justify-content-between">
         <ion-col size="100" [hidden]="showworldpayInternalForm">
           <div class="page-heading">Payment Details</div>
         </ion-col>
@@ -1254,19 +1254,24 @@
               {{applicationDetails?.depositAmount | currency: 'GBP'}}</ion-text>
           </div>
         </ion-col>
+      </ion-row> -->
+
+      <ion-row [hidden]="hidePaymentForm" class="ion-justify-content-between">
+        <ion-col size="100" [hidden]="showWorldpayIframe" class="ion-text-center">
+          <h2 class="payment-heading">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
+        </ion-col>
       </ion-row>
     </ion-grid>
     <div style="padding:10px 4px;" *ngIf="!showworldpayInternalForm" >
       <ion-button [hidden]="true" id="worldpayResponse" (click)="paymentDone()">Payment Done</ion-button>
       <iframe name="worldpay-iframe" id="worldpay-iframe" [hidden]="!showWorldpayIframe"></iframe>
-      <form  target="worldpay-iframe"
-        class="payment-form">
-        <ion-button type="submit" color="success" [disabled]="!applicationDetails?.depositAmount" [hidden]="showworldpayInternalForm" (click)="showworldpayInternalForm = true;">
-          Pay</ion-button>
+      <form target="worldpay-iframe" class="payment-form">
+        <ion-button color="danger" [hidden]="showworldpayInternalForm" (click)=onCancel()>Cancel</ion-button>&nbsp;
+        <ion-button type="submit" color="success" [disabled]="!applicationDetails?.depositAmount" [hidden]="showworldpayInternalForm" (click)="showworldpayInternalForm = true;">Pay</ion-button>
       </form>
     </div>
     <app-template-form *ngIf="showworldpayInternalForm" [worldPayInternalData]="worldPayInternalData" (successPayment)='onInternalWorldpaySuccess($event)'></app-template-form>
-  </ng-container> -->
+  </ng-container>
 
   <ng-container *ngIf="PAYMENT_METHOD == 'BARCLAYCARD_REDIRECT'" >
     <!--payment method 3 starts -->

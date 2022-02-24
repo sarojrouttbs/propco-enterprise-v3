@@ -268,4 +268,11 @@ export class TobService {
     );
   }
 
+  refreshApplicantToken(){
+    return this.httpClient.get(environment.API_BASE_URL + `oauth/token/refresh`).pipe(
+      tap(() => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
 }
