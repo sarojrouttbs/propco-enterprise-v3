@@ -571,14 +571,6 @@ export class SearchResultsPage implements OnInit {
     return e;
   }
 
-  public isAgentApproved(agentApproved) {
-    let value = "";
-    if (agentApproved === true) {
-      value = "Agency Approved";
-    }
-    return value;
-  }
-
   handleKeyboardEvent(event: KeyboardEvent) {
     this.key = event.key;
     if (this.key === "[") {
