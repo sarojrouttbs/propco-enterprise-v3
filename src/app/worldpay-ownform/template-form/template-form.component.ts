@@ -26,6 +26,7 @@ export class TemplateFormComponent implements OnInit {
     propertyId?: String,
     amount?: number,
     entityType?: String
+    entityId?: string
   } = {};
   
   @Input()
@@ -44,6 +45,7 @@ export class TemplateFormComponent implements OnInit {
   constructor(private worldpayService: TemplateFormService,
     public commonService: CommonService,
     private fb: FormBuilder) {
+    this.loadScript('https://cdn.worldpay.com/v1/worldpay.js');
     this.PAYMENT_URL = this.commonService.getPaymentUrl(PAYMENT_CONFIG);
   }
 
@@ -103,7 +105,7 @@ export class TemplateFormComponent implements OnInit {
       addressLine2: this.addressForm.value.addressLine2
     };
     this.processPaymentReqBody.entityType = this._worldPayInternalData.entityType;
-    this.processPaymentReqBody.entityId = '';
+    this.processPaymentReqBody.entityId = this._worldPayInternalData.entityId;
     this.worldpayService.processWorpayPayment(this.processPaymentReqBody).subscribe((res: any) => {
       this.commonService.hideLoader();
       if (res.status == 'SUCCESS') {

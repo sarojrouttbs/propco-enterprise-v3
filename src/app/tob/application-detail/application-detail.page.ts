@@ -89,7 +89,7 @@ export class ApplicationDetailPage implements OnInit {
   hidePaymentForm: boolean = false;
   isTobPropertyCardReady: boolean = false;
   showWorldpayInternalForm: boolean = false;
-  refreshedTenantDetail;
+  // refreshedTenantDetail;
   worldPayInternalData: {
     applicationId?: string,
     startDate?: string,
@@ -98,7 +98,8 @@ export class ApplicationDetailPage implements OnInit {
     createdByUuid?: string,
     propertyId?: string,
     amount?: number,
-    entityType?: string
+    entityType?: string,
+    entityId?:string
   } = {};
 
   constructor(
@@ -222,10 +223,10 @@ export class ApplicationDetailPage implements OnInit {
   private async initViewApiCalls() {
     const application = await this.getApplicationDetails(this.applicationId) as ApplicationModels.IApplicationResponse;
     await this.setApplicationDetails(application);
-    await this.setWorldpayInternalData();
     const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
     await this.setApplicationApplicants(applicants);
     await this.setLeadApplicantDetails();
+    await this.setWorldpayInternalData();
     if (this.applicationStatus === 'Accepted') {
       this.currentStepperIndex = 10;
       this.showPayment = true;
@@ -1595,47 +1596,21 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   async openPaymentConfirmation() {
-    this.refreshedTenantDetail = await this.getNewTenantWebToken();
-    let tNc = '<h1> Congratulations! </h1>' + '<h5>Your payment has been completed successfully and property has been reserved.</h5>' + '<p>Now you have been converted into tenant. You will be redirected to tenant dashboard.</p>';
+    let tNc = '<h1> Congratulations! </h1>' + '<h5>Tenancy has been proposed successfully on the property.</h5>';
     const simpleModal = await this.modalController.create({
       component: SimpleModalPage,
       backdropDismiss: false,
       componentProps: {
         data: tNc,
-        heading: 'Successful Payment',
+        heading: 'Tenancy',
         button: 'Ok',
       }
     });
 
     simpleModal.onDidDismiss().then(res => {
-      this.redirectToTenantPage();
+      this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
     });
     await simpleModal.present();
-  }
-
-  async redirectToTenantPage() {
-    await this.refreshAccessToken();
-    this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
-  }
-
-  refreshAccessToken() {
-    return new Promise((resolve, reject) => {
-      this.commonService.setItem('user_type', this.refreshedTenantDetail.user_type);
-      let userInfo = this.commonService.getItem('login_details', true);
-      userInfo.role = this.refreshedTenantDetail.user_type;
-      this.commonService.setItem('login_details', userInfo);
-      return resolve(true);
-    });
-  }
-
-  getNewTenantWebToken() {
-    return new Promise((resolve, reject) => {
-      this._tobService.refreshApplicantToken().subscribe((res) => {
-        return resolve(res);
-      }, error => {
-        return reject(false);
-      });
-    });
   }
 
   private setWorldpayInternalData() {
@@ -1644,7 +1619,8 @@ export class ApplicationDetailPage implements OnInit {
     this.worldPayInternalData.startDate = this.applicationDetails.moveInDate;
     this.worldPayInternalData.expiryDate = this.applicationDetails.preferredTenancyEndDate;
     this.worldPayInternalData.propertyId = this.propertyId;
-    this.worldPayInternalData.entityType = ENTITY_TYPE.APPLICANT;
+    this.worldPayInternalData.entityType = ENTITY_TYPE.AGENT;
+    this.worldPayInternalData.entityId = this.applicantId;
     this.worldPayInternalData.amount = this.applicationDetails.depositAmount;
   }
 }

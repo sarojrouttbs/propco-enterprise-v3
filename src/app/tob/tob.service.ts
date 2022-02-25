@@ -267,12 +267,4 @@ export class TobService {
       catchError(this.handleError<any>(''))
     );
   }
-
-  refreshApplicantToken(){
-    return this.httpClient.get(environment.API_BASE_URL + `oauth/token/refresh`).pipe(
-      tap(() => { }),
-      catchError(this.handleError<any>(''))
-    );
-  }
-
 }
