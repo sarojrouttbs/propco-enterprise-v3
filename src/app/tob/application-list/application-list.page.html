@@ -7,12 +7,15 @@
     <div class="property-details">
       <ion-grid>
         <ion-row class="address">
-          <ion-col class="ion-no-padding">
+          <ion-col class="ion-no-padding" *ngIf="isPropertyDetailsAvailable">
             <h1 *ngIf="propertyDetails?.publishedAddress" class="ion-no-margin">{{ propertyDetails?.publishedAddress }}
             </h1>
             <h1 *ngIf="!propertyDetails?.publishedAddress" class="ion-no-margin">
               {{ propertyDetails?.address | address }}
             </h1>
+          </ion-col>
+          <ion-col class="ion-no-padding" *ngIf="!isPropertyDetailsAvailable">
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
           </ion-col>
         </ion-row>
         <ion-row class="filters">
@@ -60,7 +63,77 @@
   </ng-container>
 
   <ng-container>
-    <div style="position: relative;" class="overlay-container">
+    <div *ngIf="!isApplicationListAvailable">
+      <ion-card *ngFor="let number of [0,1,2,3,4]">
+        <ion-card-content>
+          <ion-grid>
+            <ion-row class="main-row">
+              <ion-col size-xl="15" size="20">
+                <div>
+                  <ion-skeleton-text animated style="width: 90%; height: 132px;"></ion-skeleton-text>
+                </div>
+              </ion-col>
+              <ion-col size-xl="85" size="80" style="position: static;">
+                <ion-grid style="height:100%;" class="no-padding-top">
+                  <ion-row class="application-title fs-18">
+                    <ion-col class="no-padding-top col1" size="60">
+                      <ion-text class="fs-20">    
+                        <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                      </ion-text> <br />
+                    </ion-col>
+                    <ion-col class="no-padding-top col2 ion-text-end" size="40">
+                      <ion-text class="" >
+                        <ion-skeleton-text animated style="width: 15%; float: right;"></ion-skeleton-text>
+                      </ion-text>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="application-details">
+                    <ion-col class="no-padding-top col1" size="75">
+                      <ion-grid class="no-padding-left">
+                        <ion-row>
+                          <ion-col class="no-padding-left col2" size="33">
+                          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                          </ion-col>
+                          <ion-col class="no-padding-left col3" size="33">
+                            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                          </ion-col>
+                          <ion-col class="no-padding-left col1" size="33">
+                            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row class="details">
+                          <ion-col class="no-padding-left col1" size="33">
+                            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                          </ion-col>
+                          <ion-col class="no-padding-left col2" size="33">
+                            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                          </ion-col>
+                          <ion-col class="no-padding-left col3" size="33">
+                            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-col>
+                    <ion-col class="no-padding-top col2 ion-text-end action-icon" size="25">
+                      <!-- <div> -->
+                        <ion-skeleton-text animated style="width: 15%"></ion-skeleton-text>
+                      <!-- </div> -->
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div style="position: relative;" class="overlay-container" *ngIf="isApplicationListAvailable">
       <ion-card *ngFor="let item of obsApplicationList | async;">
         <ion-card-content>
           <ion-grid>

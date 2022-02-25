@@ -88,6 +88,7 @@ export class ApplicationDetailPage implements OnInit {
   showWorldpayIframe: boolean = false;
   hidePaymentForm: boolean = false;
   isTobPropertyCardReady: boolean = false;
+  isApplicantDetailsAvailable: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -497,6 +498,7 @@ export class ApplicationDetailPage implements OnInit {
     return new Promise((resolve, reject) => {
       this._tobService.getApplicationApplicants(applicationId).subscribe(
         res => {
+          this.isApplicantDetailsAvailable = true;
           resolve(res);
         },
         error => {
