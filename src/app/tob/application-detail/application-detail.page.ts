@@ -89,7 +89,6 @@ export class ApplicationDetailPage implements OnInit {
   hidePaymentForm: boolean = false;
   isTobPropertyCardReady: boolean = false;
   showWorldpayInternalForm: boolean = false;
-  // refreshedTenantDetail;
   worldPayInternalData: {
     applicationId?: string,
     startDate?: string,
@@ -101,6 +100,7 @@ export class ApplicationDetailPage implements OnInit {
     entityType?: string,
     entityId?:string
   } = {};
+  isApplicantDetailsAvailable: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -500,6 +500,7 @@ export class ApplicationDetailPage implements OnInit {
     return new Promise((resolve, reject) => {
       this._tobService.getApplicationApplicants(applicationId).subscribe(
         res => {
+          this.isApplicantDetailsAvailable = true;
           resolve(res);
         },
         error => {

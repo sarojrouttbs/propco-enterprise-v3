@@ -44,7 +44,9 @@ export class ApplicationListPage implements OnInit {
   referencingInfodata: any;
   referencingInfo: any;
   isRecordsAvailable: boolean = true;
-  
+  isPropertyDetailsAvailable: boolean = false;
+  isApplicationListAvailable: boolean = false;
+
   constructor(private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
     this.getTobLookupData();
     this.getLookUpData();
@@ -82,6 +84,7 @@ export class ApplicationListPage implements OnInit {
       this.tobService.getApplicationList(this.propertyId).subscribe(
         (res) => {
           if (res) {
+            this.isApplicationListAvailable = true;
             resolve(res);
           } else {
             resolve([]);
@@ -96,6 +99,7 @@ export class ApplicationListPage implements OnInit {
       this.tobService.getPropertyDetails(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
+            this.isPropertyDetailsAvailable = true;
             resolve(res.data);
           } else {
             resolve({});
