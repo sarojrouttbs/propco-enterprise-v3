@@ -373,7 +373,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   viewDetails(applicantId: string) {
-    this.router.navigate([`tob/${this.propertyId}/application/${applicantId}`], { replaceUrl: true });
+    this.router.navigate([`tob/${this.propertyId}/application/${applicantId}`]);
   }
 
   private getReferancingInfo() {

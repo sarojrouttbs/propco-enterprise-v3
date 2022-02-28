@@ -557,7 +557,8 @@ export const APPLICATION_ACTION_TYPE = {
 }
 
 export const ENTITY_TYPE = {
-  AGENT: 'AGENT'
+  AGENT: 'AGENT',
+  LET_APPLICANT: 'LET_APPLICANT'
 }
 
 export const PAYMENT_TYPES = {

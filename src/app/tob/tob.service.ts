@@ -267,5 +267,4 @@ export class TobService {
       catchError(this.handleError<any>(''))
     );
   }
-
 }
