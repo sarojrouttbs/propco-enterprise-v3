@@ -395,9 +395,9 @@ export class OfferListPage implements OnInit {
 
   viewDetails(offerId?) {
     if (offerId !== undefined && offerId !== null) {
-      this.router.navigate([`tob/${offerId}/view`], { replaceUrl: true });
+      this.router.navigate([`tob/${offerId}/view`]);
     } else if (this.selectedOfferRow?.offerId !== undefined && this.selectedOfferRow?.offerId !== null) {
-      this.router.navigate([`tob/${this.selectedOfferRow.offerId}/view`], { replaceUrl: true });
+      this.router.navigate([`tob/${this.selectedOfferRow.offerId}/view`]);
     }
   }
 

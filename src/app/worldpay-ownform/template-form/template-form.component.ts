@@ -22,7 +22,6 @@ export class TemplateFormComponent implements OnInit {
     startDate?: string,
     expiryDate?: string,
     transactionId?: number,
-    createdByUuid?: string,
     propertyId?: String,
     amount?: number,
     entityType?: String

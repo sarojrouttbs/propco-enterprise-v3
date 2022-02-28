@@ -94,7 +94,6 @@ export class ApplicationDetailPage implements OnInit {
     startDate?: string,
     expiryDate?: string,
     transactionId?: number,
-    createdByUuid?: string,
     propertyId?: string,
     amount?: number,
     entityType?: string,
@@ -1599,12 +1598,12 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   async openPaymentConfirmation() {
-    let tNc = '<h1> Congratulations! </h1>' + '<h5>Tenancy has been proposed successfully on the property.</h5>';
+    let message = '<h1> Congratulations! </h1>' + '<h5>Tenancy has been proposed successfully on the property.</h5>';
     const simpleModal = await this.modalController.create({
       component: SimpleModalPage,
       backdropDismiss: false,
       componentProps: {
-        data: tNc,
+        data: message,
         heading: 'Tenancy',
         button: 'Ok',
       }
@@ -1618,11 +1617,10 @@ export class ApplicationDetailPage implements OnInit {
 
   private setWorldpayInternalData() {
     this.worldPayInternalData.applicationId = this.applicationId;
-    this.worldPayInternalData.createdByUuid = '';
     this.worldPayInternalData.startDate = this.applicationDetails.moveInDate;
     this.worldPayInternalData.expiryDate = this.applicationDetails.preferredTenancyEndDate;
     this.worldPayInternalData.propertyId = this.propertyId;
-    this.worldPayInternalData.entityType = ENTITY_TYPE.AGENT;
+    this.worldPayInternalData.entityType = ENTITY_TYPE.LET_APPLICANT;
     this.worldPayInternalData.entityId = this.applicantId;
     this.worldPayInternalData.amount = this.applicationDetails.depositAmount;
   }
