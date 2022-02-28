@@ -1,0 +1,88 @@
+@mixin set-text-style($size, $lheight, $family) {
+  font-size: $size;
+  line-height: $lheight;
+  font-family: $family;
+}
+
+:host {
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  width: 100%;
+}
+
+.login-header {
+  text-align: center;
+  padding: 10px 0px;
+  color: var(--ion-color-step-2000);
+  padding-bottom: 30px;
+}
+
+.login-form {
+  background-image: url("../../assets/images/login-bg.svg");
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  .submit-loader {
+    margin-left: 10px;
+  }
+
+  .login-container {
+    padding: 0;
+    ion-card {
+      width: 375px;
+      margin: 0 auto;
+      border-radius: 5px;
+      ion-card-content {
+        padding: 5px 20px 30px;       
+      }
+      .forgot-password {
+        display: flex;
+        align-items: center;
+        a {
+          color: var(--ion-color-dark-light);
+          @include set-text-style(14px, 19px, 'Inter-Regular');
+          text-decoration: none;
+        }
+      }
+      .forgot-password a:hover {
+        text-decoration: underline;
+      }     
+    }
+  }
+}
+
+.speaker-logo {
+  display: flex;
+    font-size: 20px;
+    color: var(--ion-color-step-2000);
+    justify-content: center;
+    padding: 30px 0px 10px;
+}
+
+.contact-details {
+  text-align: center;
+  line-height: 22px;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+ion-button {
+  letter-spacing: 0px;
+}
+
+@media (max-width: 425px) {
+  .login-form {
+    .login-container {
+      ion-card {
+        width: 100%;
+        ion-card-content {
+          padding: 50px 25px 30px;
+          margin-left: 25px;
+          margin-right: 25px;
+        }
+      }
+    }
+  }
+}
