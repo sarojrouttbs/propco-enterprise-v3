@@ -6,7 +6,10 @@ import { PROPCO } from "src/app/shared/constants";
 import { CommonService } from "src/app/shared/services/common.service";
 import { SolrService } from "../solr.service";
 import { GuidedTourService } from "ngx-guided-tour";
-import { GuidedTour, Orientation } from "../../shared/interface/guided-tour.model";
+import {
+  GuidedTour,
+  Orientation,
+} from "../../shared/interface/guided-tour.model";
 declare function openScreen(key: string, value: any): any;
 
 @Component({
@@ -56,6 +59,12 @@ export class DashboardPage implements OnInit {
         orientation: Orientation.Right,
       },
     ],
+    skipCallback: (stepSkippedOn: number) => {
+      this.disableWelcomeTour();
+    },
+    completeCallback: () => {
+      this.disableWelcomeTour();
+    },
   };
 
   constructor(
@@ -78,9 +87,11 @@ export class DashboardPage implements OnInit {
     if (isAuthSuccess) {
       this.loggedInUserData = await this.getUserDetails();
       this.loaded = true;
-      setTimeout(() => {
-        this.guidedTourService.startTour(this.dashboardTour);
-      }, 300);
+      if (!this.commonService.getItem("disableTour")) {
+        setTimeout(() => {
+          this.guidedTourService.startTour(this.dashboardTour);
+        }, 300);
+      }
     }
   }
 
@@ -123,5 +134,9 @@ export class DashboardPage implements OnInit {
 
   openHomeCategory(key: string, value = null) {
     openScreen(key, value);
+  }
+
+  private disableWelcomeTour() {
+    this.commonService.setItem("disableTour", true);
   }
 }
