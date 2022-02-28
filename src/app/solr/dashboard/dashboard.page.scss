@@ -1,3 +1,4 @@
+@import '../../../../node_modules/ngx-guided-tour/scss/guided-tour-base-theme.scss';
 @mixin set-text-style($size, $lheight) {
   font-size: $size;
   line-height: $lheight;

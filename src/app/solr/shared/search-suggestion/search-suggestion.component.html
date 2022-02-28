@@ -1,5 +1,5 @@
 <ion-row [ngClass]="pageType == 'dashboard' ? 'ion-align-items-center ion-justify-content-center ion-margin-vertical' : 'ion-align-items-center main-row ion-justify-content-end ion-margin-vertical'">
-  <ion-col size="11" class="solrMutiSelect ion-no-padding">
+  <ion-col size="11" class="solrMutiSelect ion-no-padding tour-1">
     <mat-form-field appearance="fill">
       <!-- <mat-label>Select</mat-label> -->
       <mat-select [formControl]="entityControl" multiple class="mat-select-red" class="solr-entity-selector">
@@ -13,7 +13,7 @@
       </mat-select>
     </mat-form-field>
   </ion-col>
-  <ion-col [size]="pageType == 'dashboard'?'69':'60'" size-xl="40" style="padding-right: 0;" class="ion-no-padding">
+  <ion-col [size]="pageType == 'dashboard'?'69':'60'" size-xl="40" style="padding-right: 0;" class="ion-no-padding tour-2">
     <div>
       <ion-searchbar 
       [(ngModel)]="searchTerm" 
@@ -51,7 +51,7 @@
       </ion-list>
     </div>
   </ion-col>
-  <ion-col size="4" class="ion-no-padding">
+  <ion-col size="4" class="ion-no-padding tour-3">
     <ion-buttons end (click)="goToPage()">
       <i class="propcoicon propcoicon-search no-background red-icon search-icon"></i>
     </ion-buttons>     
