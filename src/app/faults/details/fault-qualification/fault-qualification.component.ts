@@ -414,13 +414,11 @@ export class FaultQualificationComponent implements OnInit {
     };
     this.faultsService.updateFault(this.faultDetails.faultId, requestObj).subscribe(
       () => {
-        // this.commonService.hideLoader();
         this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Qualification', 'success');
         this.router.navigate(['faults/dashboard'], { replaceUrl: true });
       },
       error => {
         this.saving = false;
-        // this.commonService.hideLoader();
       }
     );
   }
@@ -526,7 +524,6 @@ export class FaultQualificationComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.updateFault(faultId, requestObj).subscribe(
         () => {
-          // this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
           resolve(true);
         },
         error => {

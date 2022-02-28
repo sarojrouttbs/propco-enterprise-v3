@@ -5,13 +5,12 @@ import { forkJoin, Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FILE_IDS, MAINT_CONTACT, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES, REGEX, FAULT_STAGES_INDEX } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FILE_IDS, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, REGEX } from './../../../shared/constants';
 import { ModalController, PopoverController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 import { DomSanitizer } from '@angular/platform-browser';
-import { HttpParams } from '@angular/common/http';
 import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.page';
 import { JobCompletionModalPage } from 'src/app/shared/modals/job-completion-modal/job-completion-modal.page';
 import { SimplePopoverPage } from 'src/app/shared/popover/simple-popover/simple-popover.page';
@@ -172,10 +171,6 @@ export class LandlordInstructionComponent implements OnInit {
       let contractorDetails: any = await this.getContractorDetails(this.contractorEntityId);
       if (contractorDetails) {
         contractorDetails.fullName = contractorDetails.name;
-        // this.landlordInstFrom.patchValue({
-        //   contractor: contractorDetails
-        // });
-
         this.contractorSelected(contractorDetails);
       }
     }
@@ -185,20 +180,10 @@ export class LandlordInstructionComponent implements OnInit {
     if(this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
       this.addValidations();
     }
-    // if (this.faultMaintenanceDetails) {
       await this.faultNotification(this.faultDetails.stageAction);
       this.initPatching();
       this.getUserDetails();
-    // } else {
-      // if (!this.isWorksOrder) {
       this.propertyLandlords.map((x) => { this.getPreferredSuppliers(x.landlordId) });
-      // this.checkMaintenanceDetail();
-      // }
-      // let userDetails: any = await this.getUserDetails();
-      // if (userDetails) {
-        // this.isWorksOrder ? this.workOrderForm.get('orderedBy').setValue(userDetails.name) : this.raiseQuoteForm.get('orderedBy').setValue(userDetails.name);
-      // }
-    // }
 
     let landlordId;
     if (this.propertyLandlords.length > 1) {
@@ -272,15 +257,10 @@ export class LandlordInstructionComponent implements OnInit {
     let notifications = await this.checkFaultNotifications(this.faultDetails.faultId);
     this.cliNotification = await this.filterNotifications(notifications, FAULT_STAGES.LANDLORD_INSTRUCTION, this.faultDetails.userSelectedAction);
     this.getPendingHours();
-    // if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index) {
-    //   if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
-    //     this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
-    //   }
-    // } else 
+    
     if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
       if (this.cliNotification && this.cliNotification.responseReceived) {
         if (this.cliNotification.responseReceived.isAccepted) {
-          // this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
         } else {
           this.isUserActionChange = true;
           this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
@@ -303,7 +283,6 @@ export class LandlordInstructionComponent implements OnInit {
 
   initPatching(): void {
     this.landlordInstFrom.patchValue({
-      // contractor: this.faultDetails.contractorId,
       confirmedEstimate: this.faultDetails.confirmedEstimate,
       userSelectedAction: this.faultDetails.userSelectedAction,
       estimationNotes: this.faultDetails.estimationNotes,
@@ -476,7 +455,6 @@ export class LandlordInstructionComponent implements OnInit {
     document.querySelector('ion-content').scrollToTop(500);
     if (this.cliNotification) {
       if (!this.isUserActionChange) {
-        // && !this.userSelectedActionControl.value    
         this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
         this.proceeding = false;
         return;
@@ -510,10 +488,6 @@ export class LandlordInstructionComponent implements OnInit {
         }
         var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action.<br/> Are you sure?', '', 'Yes', 'No');
         if (response) {
-          // if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
-          //   let voidResponce = await this.voidNotification();
-          //   if (!voidResponce) return;
-          // }
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
@@ -534,10 +508,6 @@ export class LandlordInstructionComponent implements OnInit {
       case LL_INSTRUCTION_TYPES[2].index: //cli006c
         var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action.<br/>  Are you sure?', '', 'Yes', 'No');
         if (response) {
-          // if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
-          //   let voidResponce = await this.voidNotification();
-          //   if (!voidResponce) return;
-          // }
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
@@ -567,10 +537,6 @@ export class LandlordInstructionComponent implements OnInit {
         }
         var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action.<br/> Are you sure?', '', 'Yes', 'No');
         if (response) {
-          // if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
-          //   let voidResponce = await this.voidNotification();
-          //   if (!voidResponce) return;
-          // }
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
@@ -591,10 +557,6 @@ export class LandlordInstructionComponent implements OnInit {
       case LL_INSTRUCTION_TYPES[0].index: //cli006a
         var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. <br/> Are you sure?', '', 'Yes', 'No');
         if (response) {
-          // if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
-          //   let voidResponce = await this.voidNotification();
-          //   if (!voidResponce) return;
-          // }
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
@@ -602,18 +564,13 @@ export class LandlordInstructionComponent implements OnInit {
           const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
-          // if (this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD) {
-          //   requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
-          // }
           forkJoin(requestArray).subscribe(data => {
             this._btnHandler('refresh');
-            // this.commonService.showLoader();
             setTimeout(async () => {
               await this.checkFaultNotifications(this.faultDetails.faultId);
               this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
               this.getPendingHours();
               if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
-                // this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
                 this._btnHandler('changeStepToJobCompl');
               }
               this.proceeding = false;
@@ -631,10 +588,6 @@ export class LandlordInstructionComponent implements OnInit {
         }
         var response = await this.commonService.showConfirm('Landlord Instructions', `You have selected the "Obtain Landlord's Authorisation" action. This will send out a notification to Landlord. <br/> Are you sure?`, '', 'Yes', 'No');
         if (response) {
-          // if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
-          //   let voidResponce = await this.voidNotification();
-          //   if (!voidResponce) return;
-          // }
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
@@ -646,12 +599,8 @@ export class LandlordInstructionComponent implements OnInit {
           const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
-          // if (this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD) {
-          //   requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
-          // }
           forkJoin(requestArray).subscribe(data => {
             this._btnHandler('refresh');
-            // this.commonService.showLoader();
             setTimeout(async () => {
               let notification = await this.checkFaultNotifications(this.faultDetails.faultId);
               this.cliNotification = await this.filterNotifications(notification, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
@@ -674,10 +623,6 @@ export class LandlordInstructionComponent implements OnInit {
           this.proceeding = false;
           return;
         }
-        // if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
-        //   let voidResponce = await this.voidNotification();
-        //   if (!voidResponce) return;
-        // }
         if (this.landlordInstFrom.get('confirmedEstimate').value > 0) {
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
@@ -730,7 +675,6 @@ export class LandlordInstructionComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.updateFault(this.faultDetails.faultId, requestObj).subscribe(
         res => {
-          // this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
           resolve(true);
         },
         error => {
@@ -754,7 +698,6 @@ export class LandlordInstructionComponent implements OnInit {
     faultRequestObj.submittedById = '';
     faultRequestObj.stage = this.faultDetails.stage;
     faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
-    // Object.assign(faultRequestObj, this.landlordInstFrom.value);
     faultRequestObj.contractor = this.landlordInstFrom.value.contractor;
     faultRequestObj.confirmedEstimate = this.landlordInstFrom.value.confirmedEstimate;
     faultRequestObj.nominalCode = this.landlordInstFrom.value.nominalCode ? this.landlordInstFrom.value.nominalCode.nominalCode : null;
@@ -783,15 +726,12 @@ export class LandlordInstructionComponent implements OnInit {
 
   private createFaultFormValues(): any {
     let faultDetails = {
-      // urgencyStatus: this.landlordInstFrom.get('urgencyStatus').value,
       category: this.describeFaultForm.get('category').value,
       title: this.describeFaultForm.get('title').value,
-      // notes: this.landlordInstFrom.get('notes').value,
       isTenantPresenceRequired: this.accessInfoForm.get('isTenantPresenceRequired').value,
       areOccupiersVulnerable: this.accessInfoForm.get('areOccupiersVulnerable').value,
       tenantNotes: this.accessInfoForm.get('tenantNotes').value,
       sourceType: "FAULT",
-      // additionalInfo: this.landlordInstFrom.get('additionalInfo').value
     }
     return faultDetails;
   }
@@ -879,15 +819,11 @@ export class LandlordInstructionComponent implements OnInit {
       filtereData = data.filter((x => x.faultStage === currentStage)).filter((x => x.faultStageAction === currentAction)).filter((x => x.isResponseExpected));
       if (filtereData.length == 0)
         resolve(null);
-      // if (filtereData[0].firstEmailSentAt) {
       filtereData = filtereData.sort((a, b) => {
         return <any>new Date(b.createdAt) - <any>new Date(a.createdAt);
       });
       filtereData[0].chase = filtereData[0].numberOfChasesDone + 1;
       resolve(filtereData[0]);
-      // } else {
-      //   resolve(filtereData[0]);
-      // }
     });
     return promise;
   }
@@ -1220,24 +1156,6 @@ export class LandlordInstructionComponent implements OnInit {
 
 
 
-  private getFaultDetails(faultId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
-      this.faultsService.getFaultDetails(faultId).subscribe(
-        res => {
-          if (res) {
-            resolve(res);
-          }
-        },
-        error => {
-          resolve(null);
-        }
-      );
-    });
-    return promise;
-  }
-
-
-
   async faultNotification(action) {
     let faultNotifications = await this.checkFaultNotifications(this.faultDetails.faultId);
     this.cliNotification = await this.filterNotifications(faultNotifications, FAULT_STAGES.ARRANGING_CONTRACTOR, action);
@@ -1285,23 +1203,6 @@ export class LandlordInstructionComponent implements OnInit {
     await modal.present();
   }
 
-
-  private submitJobCompletion() {
-    let notificationObj = {} as any;
-    notificationObj.isAccepted = false;
-    notificationObj.submittedByType = 'SECUR_USER';
-    const promise = new Promise((resolve, reject) => {
-      this.faultsService.saveWorksOrderCompletion(notificationObj, this.cliNotification.faultNotificationId).subscribe(
-        res => {
-          resolve(true);
-        },
-        error => {
-          resolve(false);
-        }
-      );
-    });
-    return promise;
-  }
 
   enableMarkCompletedBtn(): boolean {
     let enable = false;

@@ -1,6 +1,5 @@
 <ion-grid>
   <ion-row *ngIf="!showSkeleton">
-    <!-- <ion-col offset-xl="25" size-xl="50" offset ="0" size="100">  -->
     <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
       <div class="landlord-instructions">
         <app-close-fault *ngIf="faultDetails?.isClosed" [notificationData]="cliNotification" [faultDetails]="faultDetails" [action]="getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes)? getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes):'Landlord Instructions'"></app-close-fault>
@@ -182,12 +181,6 @@
             <ion-grid>
               <ion-row>
                 <ion-col size="50">
-                  <!-- <ion-item>
-                    <ion-label position="floating">Select Contractor</ion-label>
-                    <ion-select interface="popover" formControlName="contractorId">
-                      <ion-select-option>Choose</ion-select-option>
-                    </ion-select>
-                  </ion-item> -->
                   <ion-item>
                     <ion-label position="floating">Select Contractor</ion-label>
                     <ion-input type="text" debounce="1000" (ionInput)="onSearchChange($event)"

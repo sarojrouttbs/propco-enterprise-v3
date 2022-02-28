@@ -4,7 +4,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { debounceTime, delay, min, switchMap } from 'rxjs/operators';
+import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
 import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, CERTIFICATES_CATEGORY } from './../../../shared/constants';
@@ -156,10 +156,6 @@ export class JobCompletionComponent implements OnInit {
 
   private getAccessDetails(tenantPresence): string {
     return (tenantPresence ? MAINT_CONTACT.CONTACT_TENANT : MAINT_CONTACT.ACCESS_VIA_KEY);
-    // if (tenantPresence != null) {
-    //   let data = this.accessInfoList.filter(data => data.value == tenantPresence);
-    //   return data && data[0] ? data[0].title : '';
-    // }
   }
 
 
@@ -333,7 +329,6 @@ export class JobCompletionComponent implements OnInit {
       if (data.length === 0) {
         resolve(null);
       }
-      // filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
       filtereData = data.filter((x => x.faultStage === stage)).filter((x => !x.isVoided));
       if (filtereData.length === 0) {
         resolve(null);
