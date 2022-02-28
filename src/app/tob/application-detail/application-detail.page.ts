@@ -226,7 +226,9 @@ export class ApplicationDetailPage implements OnInit {
     const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
     await this.setApplicationApplicants(applicants);
     await this.setLeadApplicantDetails();
-    await this.setWorldpayInternalData();
+    if(this.PAYMENT_METHOD === PAYMENT_TYPES.WORLDPAY_OWNFORM) {
+      await this.setWorldpayInternalData();
+    }
     if (this.applicationStatus === 'Accepted') {
       this.currentStepperIndex = 10;
       this.showPayment = true;
