@@ -1,4 +1,7 @@
 <ion-content id="solr-dashboard">
+  <ion-chip title="Switch to old dashboard" (click)="openHomeCategory('OpenPropcoDashBoard')">
+    <span><ion-icon name="home-outline" color="danger" size="small"></ion-icon></span>
+  </ion-chip>
   <ion-grid class="ion-no-padding" fixed >
     <ion-row class="ion-justify-content-center">
       <ion-col size="30" class="ion-text-center ion-no-padding">
@@ -16,7 +19,7 @@
       <ion-skeleton-text class="searchbar-skeleton" animated *ngIf="!loaded"></ion-skeleton-text>
     <!-- </ion-row> -->
     <ion-row class="ion-align-items-center ion-justify-content-center">
-      <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
+      <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding tour-4">
         <div class="block" (click)="openHomeCategory('OpenApplicantCard')">
           <i class="propcoicon red-icon propcoicon-applicant-card"></i>
           <p>Applicant Card</p>
@@ -90,4 +93,5 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  <ngx-guided-tour></ngx-guided-tour>
 </ion-content>

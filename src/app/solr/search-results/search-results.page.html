@@ -918,6 +918,12 @@
                 <span *ngIf="item?.address" [title]="item?.address">{{item?.address}}&nbsp;</span>
                 <span  class="verticalLine" *ngIf="item?.address && item?.isVatRegistered">&nbsp;</span>
                 <span class="vat" *ngIf="item?.isVatRegistered">VAT Registered</span>
+                <span  class="verticalLine" *ngIf="item?.isPartPayment">&nbsp;</span>
+                <span class="vat" *ngIf="item?.isPartPayment">Part payment</span>
+                <span  class="verticalLine" *ngIf="item?.isJournalExcluded">&nbsp;</span>
+                <span class="vat" *ngIf="item?.isJournalExcluded">Journal Excluded</span>
+                <span  class="verticalLine" *ngIf="item?.isReconcile">&nbsp;</span>
+                <span class="vat" *ngIf="item?.isReconcile">Reconcile</span>
               </p>
             </span>
           </div>
@@ -953,9 +959,9 @@
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
-                      <span class="text">Standard Balance</span>
+                      <span class="text">Default Bank</span>
                     <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
+                    <span class="text-value">{{item?.defaultBank || 'N/A'}}</span>
                     </p>
                   </ion-col>
                 </ion-row>
@@ -969,35 +975,10 @@
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
-                      <span class="text">Part payment</span>
+                      <span class="text">Standard Balance</span>
                     <br />
                     <span class="text-value">{{null || 'N/A'}}</span>
                     </p>
-                  </ion-col>
-                  <ion-col size-xl="33" size-lg="33" size-md="33">
-                    <p>
-                      <span class="text">Journal Excluded</span>
-                    <br />
-                    <span class="text-value">{{null|| 'N/A'}}</span>
-                    </p>
-                  </ion-col>
-                </ion-row>
-                <ion-row class="fault-data-row">
-                  <ion-col size-xl="33" size-lg="33" size-md="33">
-                    <p>
-                      <span class="text">Reconcile</span>
-                    <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
-                    </p>
-                  </ion-col>
-                  <ion-col size-xl="33" size-lg="33" size-md="33">
-                    <p>
-                      <span class="text">Default Bank</span>
-                    <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
-                    </p>
-                  </ion-col>
-                  <ion-col size-xl="33" size-lg="33" size-md="33">
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -1022,8 +1003,8 @@
               <p class="title text-ellipsis" [title]="item?.fullName">{{item?.fullName}}</p>
               <p class="address-ref-wrapper">
                 <span class="text-ellipsis address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
-                <span  class="verticalLine" *ngIf="item?.address && item?.overseas">&nbsp;</span>
-                <span class="vat" *ngIf="item?.overseas">Overseas</span>
+                <span  class="verticalLine" *ngIf="item?.address && item?.isOverseas">&nbsp;</span>
+                <span class="vat" *ngIf="item?.isOverseas">Overseas</span>
               </p>
             </span>
           </div>
@@ -1061,7 +1042,7 @@
                     <p>
                       <span class="text">Type</span>
                     <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
+                    <span class="text-value">{{item?.type || 'N/A'}}</span>
                     </p>
                   </ion-col>
                 </ion-row>
@@ -1077,14 +1058,14 @@
                     <p>
                       <span class="text">Phone Number</span>
                     <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
+                    <span class="text-value">{{item?.mobile || 'N/A'}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
                       <span class="text">Landlord Reg Number</span>
                     <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
+                    <span class="text-value">{{item?.landlordRegNumber || 'N/A'}}</span>
                   </ion-col>
                 </ion-row>
                 <ion-row class="fault-data-row">
@@ -1169,7 +1150,7 @@
                     <p>
                       <span class="text">Type</span>
                     <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
+                    <span class="text-value">{{item?.type || 'N/A'}}</span>
                     </p>
                   </ion-col>
                 </ion-row>
@@ -1192,7 +1173,7 @@
                     <p>
                       <span class="text">Right to rent - Expiry date</span>
                     <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
+                    <span class="text-value">{{(item?.rightToRentExpiryDate | date: 'dd/MM/yyyy') || 'N/A'}}</span>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -1214,7 +1195,10 @@
           <div (click)="$event.stopPropagation();openDetails('OpenTenant',item.propcoId)" class="left-side">
             <i class="propcoicon propcoicon-applicant-let no-background"></i>
             <span class="title-wrapper">
-              <p class="title" [title]="item?.fullName">{{item?.fullName}}&nbsp;&nbsp;<span title="hot"><ion-icon color="danger" name="flame-outline"></ion-icon></span></p>
+              <p class="title" [title]="item?.fullName">{{item?.fullName}}&nbsp;&nbsp;
+                <span title="Hot" *ngIf="item?.isHot"><ion-icon color="danger" name="flame-outline"></ion-icon></span>
+                <span title="Student" *ngIf="item?.isStudent"><ion-icon color="danger"name="person-circle-outline"></ion-icon></span>
+              </p>
               <p class="address-ref-wrapper">
                 <span *ngIf="item?.address" class="text-ellipsis address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
                 <span  class="verticalLine" *ngIf="item?.address">&nbsp;</span>
@@ -1256,7 +1240,7 @@
                     <p>
                       <span class="text">Negotiator</span>
                     <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
+                    <span class="text-value">{{item?.negotiator || 'N/A'}}</span>
                     </p>
                   </ion-col>
                 </ion-row>
@@ -1265,21 +1249,21 @@
                     <p>
                       <span class="text">Price Range</span>
                     <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
+                    <span class="text-value">{{item?.priceRange || 'N/A'}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
                       <span class="text">Bed Range</span>
                     <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
+                    <span class="text-value">{{item?.bedRange || 'N/A'}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
                       <span class="text">How soon looking to move?</span>
                     <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
+                    <span class="text-value">{{item?.howSoonLookingToMove | date: 'dd/MM/yyyy' || 'N/A'}}</span>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -1303,8 +1287,8 @@
             <span class="title-wrapper">
               <p class="title" [title]="item?.fullName">{{item?.fullName}}</p>
               <p class="address-ref-wrapper">
-                <!-- <span *ngIf="item?.address" class="text-ellipsis address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
-                <span  class="verticalLine" *ngIf="item?.address">&nbsp;</span> -->
+                <span *ngIf="item?.address" class="text-ellipsis address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
+                <span  class="verticalLine" *ngIf="item?.address">&nbsp;</span>
                 <span class="ref">Ref&nbsp;&nbsp;<span class="reftag">{{(item?.reference ) || 0}}&nbsp;</span></span>
                 <span  class="verticalLine" *ngIf="item?.isAgentContractorApproved">&nbsp;</span>
                 <span class="vat" *ngIf="item?.isAgentContractorApproved">Agency Approved&nbsp;</span>
@@ -1334,32 +1318,22 @@
                     </span>
                     </p>
                   </ion-col>
-                  <ion-col size-xl="66" size-lg="66" size-md="66">
-                    <p>
-                      <span class="text">Address</span>
-                    <br />
-                    <span class="text-value">
-                      {{item?.address || 'N/A'}}
-                    </span>
-                    </p>
-                  </ion-col>
-                  <ion-col size-xl="33" size-lg="33" size-md="33">
-                   
-                  </ion-col>
-                </ion-row>
-                <ion-row class="detail-row">
-                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                  <ion-col size-xl="60" size-lg="60" size-md="60">
                     <p>
                       <span class="text">Occupation/Service</span>
                     <br />
-                    <span class="text-value">{{item?.occupation || 'N/A'}}</span>
+                    <span class="text-value" >{{(item?.occupation | replaceSquareBrackets) || 'N/A'}}</span>
                     </p>
                   </ion-col>
+                  <ion-col ></ion-col>
+                </ion-row>
+                <ion-row class="detail-row">
+                  
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
                       <span class="text">Phone Number</span>
                     <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
+                    <span class="text-value">{{item?.mobile || 'N/A'}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
@@ -1368,9 +1342,7 @@
                     <br />
                     <span class="text-value">{{item?.email || 'N/A'}}</span>
                   </ion-col>
-                </ion-row>
-                <ion-row class="detail-row">
-                  <ion-col size-xl="100" size-lg="100" size-md="100">
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
                       <span class="text">Expiry date</span>
                     <br />

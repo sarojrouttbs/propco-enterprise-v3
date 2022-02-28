@@ -11,6 +11,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from 'src/app/material.module';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { ReplaceSquareBracketsPipe } from '../pipes/replace-square-brackets.pipe';
 
 @NgModule({
   imports: [
@@ -24,6 +25,6 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     NgxMatSelectSearchModule,
     NgxSliderModule
   ],
-  declarations: [SearchResultsPage]
+  declarations: [SearchResultsPage,ReplaceSquareBracketsPipe]
 })
 export class SearchResultsPageModule {}
