@@ -26,7 +26,7 @@ i.search-icon {
 
     .solrSuggestionListItem {
         cursor: pointer;
-        @include set-text-style(11px, 48px);
+        @include set-text-style(14px, 48px);
         overflow: hidden;
         padding: 0 2px;
         height: 48px;
