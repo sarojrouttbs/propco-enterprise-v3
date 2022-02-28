@@ -9,6 +9,7 @@ import { ValidationService } from '../../services/validation.service';
   styleUrls: ['./forgot-password-modal.page.scss'],
 })
 export class ForgotPasswordModalPage implements OnInit {
+  heading;
   email = new FormControl('', [Validators.required, ValidationService.emailValidator]);
   constructor(private modalController: ModalController) { }
 
