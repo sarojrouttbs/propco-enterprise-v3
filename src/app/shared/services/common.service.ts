@@ -692,4 +692,16 @@ export class CommonService {
       }
     }, 100);
   }
+
+  getPaymentUrl(config): string {
+    let url: string;
+    let payment_method = environment.PAYMENT_METHOD;
+    let payment_config = config[payment_method];
+    if (environment.PAYMENT_PROD) {
+      url = payment_config.PROD.URL;
+    } else {
+      url = payment_config.TEST.URL;
+    }
+    return url;
+  }
 }
