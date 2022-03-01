@@ -30,7 +30,7 @@ export class DashboardPage implements OnInit {
     useOrb: false,
     steps: [
       {
-        title: "Welcome to the New Daashbord",
+        title: "Welcome to the New Dashboard",
         content:
           "Just getting started? Let's take a look at the new user interface",
       },
