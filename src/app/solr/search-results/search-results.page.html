@@ -917,11 +917,11 @@
               <p>
                 <span *ngIf="item?.address" [title]="item?.address">{{item?.address}}&nbsp;</span>
                 <span  class="verticalLine" *ngIf="item?.address && item?.isVatRegistered">&nbsp;</span>
-                <span class="vat" *ngIf="item?.isVatRegistered">VAT Registered</span>
+                <span class="vat" *ngIf="item?.isVatRegistered">VAT Registered&nbsp;</span>
                 <span  class="verticalLine" *ngIf="item?.isPartPayment">&nbsp;</span>
-                <span class="vat" *ngIf="item?.isPartPayment">Part payment</span>
+                <span class="vat" *ngIf="item?.isPartPayment">Part payment&nbsp;</span>
                 <span  class="verticalLine" *ngIf="item?.isJournalExcluded">&nbsp;</span>
-                <span class="vat" *ngIf="item?.isJournalExcluded">Journal Excluded</span>
+                <span class="vat" *ngIf="item?.isJournalExcluded">Journal Excluded&nbsp;</span>
                 <span  class="verticalLine" *ngIf="item?.isReconcile">&nbsp;</span>
                 <span class="vat" *ngIf="item?.isReconcile">Reconcile</span>
               </p>
@@ -936,7 +936,7 @@
       <ion-card-content id="details" class="padding-left">
         <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
           <ion-row class="main-row">
-            <ion-col class="ion-no-padding" size-xl="77" size="70">
+            <ion-col class="ion-no-padding" size-xl="77 " size="100">
               <ion-grid class="no-padding-top ion-no-padding">
                 <ion-row class="fault-data-row">
                   <ion-col size-xl="33" size-lg="33" size-md="33">
@@ -1000,11 +1000,13 @@
           <div (click)="$event.stopPropagation();openDetails('OpenLandlord',item.propcoId)" class="left-side">
             <i class="propcoicon propcoicon-landlord no-background"></i>
             <span class="title-wrapper">
-              <p class="title text-ellipsis" [title]="item?.fullName">{{item?.fullName}}</p>
+              <p class="title" [title]="item?.fullName">{{item?.fullName}}</p>
               <p class="address-ref-wrapper">
-                <span class="text-ellipsis address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
-                <span  class="verticalLine" *ngIf="item?.address && item?.isOverseas">&nbsp;</span>
-                <span class="vat" *ngIf="item?.isOverseas">Overseas</span>
+                <span *ngIf="item?.address" class="text-ellipsis address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
+                <span  class="verticalLine" *ngIf="item?.address">&nbsp;</span>
+                <span class="ref">Ref&nbsp;&nbsp;<span class="reftag">{{(item?.reference ) || 'N/A'}}&nbsp;</span></span>
+                <span  class="verticalLine" *ngIf="item?.isOverseas">&nbsp;</span>
+                <span class="vat" *ngIf="item?.isOverseas">Overseas&nbsp;</span>
               </p>
             </span>
           </div>
@@ -1017,7 +1019,7 @@
       <ion-card-content id="details" class="padding-left">
         <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
           <ion-row class="main-row">
-            <ion-col class="ion-no-padding" size-xl="77" size="70">
+            <ion-col class="ion-no-padding" size-xl="77 " size="100">
               <ion-grid class="no-padding-top ion-no-padding">
                 <ion-row class="fault-data-row">
                   <ion-col size-xl="33" size-lg="33" size-md="33">
@@ -1058,7 +1060,7 @@
                     <p>
                       <span class="text">Phone Number</span>
                     <br />
-                    <span class="text-value">{{item?.mobile || 'N/A'}}</span>
+                    <span class="text-value">{{item?.phoneNumber || 'N/A'}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
@@ -1081,7 +1083,7 @@
                       <span class="text">Property Ref</span>
                     <br />
                     <span class="text-value">
-                      <span *ngIf="item?.landlordFirstPropertyReference">{{item?.landlordFirstPropertyReference}}</span>
+                      <span *ngIf="item?.landlordFirstPropertyReference">{{item?.landlordFirstPropertyReference}}&nbsp;</span>
                       <span  class="verticalLine" *ngIf="item?.landlordFirstPropertyReference && item?.landlordFirstPropertyAddress">&nbsp;</span>
                       <span *ngIf="item?.landlordFirstPropertyAddress">{{item?.landlordFirstPropertyAddress}}</span>
                       <span *ngIf="!item?.landlordFirstPropertyReference && !item?.landlordFirstPropertyAddress">N/A</span>
@@ -1215,7 +1217,7 @@
       <ion-card-content id="details" class="padding-left">
         <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
           <ion-row class="main-row">
-            <ion-col class="ion-no-padding" size-xl="77" size="70">
+            <ion-col class="ion-no-padding" size-xl="77 " size="100">
               <ion-grid class="no-padding-top ion-no-padding">
                 <ion-row class="detail-row">
                   <ion-col size-xl="33" size-lg="33" size-md="33">
@@ -1263,7 +1265,7 @@
                     <p>
                       <span class="text">How soon looking to move?</span>
                     <br />
-                    <span class="text-value">{{item?.howSoonLookingToMove | date: 'dd/MM/yyyy' || 'N/A'}}</span>
+                    <span class="text-value">{{(item?.howSoonLookingToMove | date: 'dd/MM/yyyy') || 'N/A'}}</span>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -1306,7 +1308,7 @@
       <ion-card-content id="details" class="padding-left">
         <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
           <ion-row class="main-row">
-            <ion-col class="ion-no-padding" size-xl="77" size="70">
+            <ion-col class="ion-no-padding" size-xl="77 " size="100">
               <ion-grid class="no-padding-top ion-no-padding">
                 <ion-row class="detail-row">
                   <ion-col size-xl="33" size-lg="33" size-md="33">
@@ -1322,7 +1324,7 @@
                     <p>
                       <span class="text">Occupation/Service</span>
                     <br />
-                    <span class="text-value" >{{(item?.occupation | replaceSquareBrackets) || 'N/A'}}</span>
+                    <span class="text-value" >{{(item?.occupation) || 'N/A'}}</span>
                     </p>
                   </ion-col>
                   <ion-col ></ion-col>
@@ -1333,7 +1335,7 @@
                     <p>
                       <span class="text">Phone Number</span>
                     <br />
-                    <span class="text-value">{{item?.mobile || 'N/A'}}</span>
+                    <span class="text-value">{{item?.phoneNumber || 'N/A'}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
@@ -1346,7 +1348,7 @@
                     <p>
                       <span class="text">Expiry date</span>
                     <br />
-                    <span class="text-value">{{item?.supplierLiabilityExpiryDate | date: 'dd/MM/yyyy' || 'N/A'}}</span>
+                    <span class="text-value">{{(item?.supplierLiabilityExpiryDate | date: 'dd/MM/yyyy') || 'N/A'}}</span>
                     </p>
                   </ion-col>
                 </ion-row>
