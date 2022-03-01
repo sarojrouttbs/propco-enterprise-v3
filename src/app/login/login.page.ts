@@ -12,7 +12,9 @@ export class LoginPage implements OnInit {
   loginForm: FormGroup;
   showLoader: boolean = false;
 
-  constructor(private _formBuilder: FormBuilder, private modalController: ModalController) {
+  constructor(private _formBuilder: FormBuilder, private modalController: ModalController) {}
+
+  ngOnInit() {
     this.initForm();
   }
 
@@ -21,9 +23,6 @@ export class LoginPage implements OnInit {
       username: ['', Validators.required],
       password: ['', Validators.required]      
     });
-  }
-
-  ngOnInit() {
   }
 
   onLoginSubmit() {
