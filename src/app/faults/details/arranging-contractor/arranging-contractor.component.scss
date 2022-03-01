@@ -23,8 +23,6 @@
   .cc-list {
     padding: 10px 5px;
     ion-col {
-      // display: flex;
-      // align-items: center;
       ion-text {
         font-size: 16px;
       }
@@ -50,7 +48,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // margin-top: 10px;
   .list-checkbox {
     height: 36px;
     width: 36px;
@@ -79,7 +76,6 @@
   .expand-btn {
     height: 36px;
     width: 36px;
-    // margin-top: 10px;
     --color: var(--ion-color-step-2000);
     --background: var(--ion-color-warning);
     .propcoicon {
@@ -307,7 +303,6 @@
 
 .defaultCommission {
   display: inline-flex;
-  // flex-wrap: wrap;
 }
 
 .defaultCommission .ion-item,
@@ -342,7 +337,6 @@ input {
 
 .prefered-cc {
   font-size: 24px;
-  // padding-top: 5px;
   padding-right: 5px;
   color: var(--ion-color-success-shade);
   cursor: pointer;
