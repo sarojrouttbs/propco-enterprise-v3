@@ -13,9 +13,9 @@
 
 .login-header {
   text-align: center;
-  padding: 10px 0px;
+  padding: 0px 50px 30px;
   color: var(--ion-color-step-2000);
-  padding-bottom: 30px;
+  font-size: 14pt;
 }
 
 .login-form {
@@ -31,7 +31,7 @@
   .login-container {
     padding: 0;
     ion-card {
-      width: 375px;
+      width: 320px;
       margin: 0 auto;
       border-radius: 5px;
       ion-card-content {
@@ -53,19 +53,24 @@
   }
 }
 
+.card-width {
+  width: 320px;
+  margin: 0 auto;
+}
+
 .speaker-logo {
   display: flex;
     font-size: 20px;
     color: var(--ion-color-step-2000);
     justify-content: center;
-    padding: 30px 0px 10px;
+    padding: 10px 0px 10px;
 }
 
 .contact-details {
   text-align: center;
   line-height: 22px;
   font-size: 16px;
-  color: #ffffff;
+  color: var(--ion-color-step-2000);
 }
 
 ion-button {
