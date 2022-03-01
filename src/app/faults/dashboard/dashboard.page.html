@@ -430,9 +430,7 @@
               <tbody>
                 <tr *ngFor="let fault of faultList;" class="table-row" (click)="onClickRow(fault); $event.stopPropagation();"
                   [ngClass]="{'row-selected' : fault.isSelected, 'escalated': fault.isEscalated }" [class.data-selected]="fault.isSelected" >
-                  <!-- <td>
-                    <ion-icon name="ellipse" [class]="fault.urgencyStatus==1 ? 'emergency' : (fault.urgencyStatus==2? 'urgent' : 'non-urgent')"></ion-icon>
-                  </td> -->
+                  
                   <td>
                     <ion-badge [color]="fault.urgencyStatus==1 ? 'danger' : (fault.urgencyStatus==2? 'warning' : 'success')">
                       {{fault.reference || '-'}}
@@ -443,7 +441,7 @@
                     {{(fault.sourceType === 'FIXFLO') ? (fault.fixfloCategory || '-') : (getLookupValue(fault.category,
                     faultCategories, 'category') || '-')}}
                   </td>
-                  <!-- <td></td> -->
+                  
                   <td>{{fault.propertyReference || '-'}} <br>{{fault.propertyAddress.addressLine1}}</td>
                   <td>{{getLookupValue(fault.propertyOfficeCode, officeCodes) || '-'}}</td>
                   <td>{{fault.propertyManagerName || '-'}}</td>
@@ -454,7 +452,7 @@
                       (ionChange)="selectFault(fault, $event);" (click)="$event.stopPropagation();" [checked]="fault?.isChecked">
                     </ion-checkbox> 
                   </td>
-                  <!-- <td>{{fault?.isEscalated ? 'Escalation' : getLookupValue(fault.status, faultStatuses) || '-'}}</td> -->
+                  
                   <td>
                     <span>
                       <ion-icon name="alarm" *ngIf="fault?.snoozeUntil && (fault?.snoozeUntil > currentDate)" title="snooze" style="font-size: 15px;vertical-align: text-bottom;"></ion-icon>
@@ -462,7 +460,7 @@
                       (fault?.isEscalated ? 'Escalation' : getLookupValue(fault?.status, faultStatuses)) || '-' }}
                     </span>
                   </td>
-                  <!-- <td>{{getLookupValue(fault.urgencyStatus, faultUrgencyStatuses) || '-'}}</td> -->
+                  
                   <td class="resp-action-icon">
                     <i (click)="showMenu($event,'divOverlay', fault, 'table-row')"
                       class="propcoicon propcoicon-actions-on action-btn"></i>
@@ -502,7 +500,7 @@
                   <th style="width:15%">Category</th>
                   <th>User</th>
                   <th style="width:40px">Notes</th>
-                  <!-- <th style="width:5%"></th> -->
+                  
                 </tr>
               </thead>
               <tbody>
@@ -515,18 +513,13 @@
                   <td>{{notes.userName || '-'}}</td>
                   <td><i (click)="showNoteDescription(notes.notes);"
                       class="propcoicon propcoicon-property-description"></i></td>
-                  <!-- <td class="resp-action-icon">
-                      <i (click)="showMenu($event,'divOverlay', notes, 'table-row')"
-                        class="propcoicon propcoicon-actions-on"></i>
-                    </td> -->
+                  
                 </tr>
-                <!-- <tr *ngIf="!faultNotes" class="table-row odd">
-                    <td colspan="8" class="no-data-available">Please select the fault to view notes!</td>
-                  </tr> -->
+                
               </tbody>
             </table>
             <div id="divOverlay">
-              <!-- <ion-button ng-click="viewApplicant()">view</ion-button> -->
+             
               <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
             </div>
           </div>
@@ -535,4 +528,3 @@
   
     </ion-grid>
   </ion-content>
-  <!-- </div> -->

@@ -11,7 +11,6 @@
               </ion-select-option>
             </ion-select>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
         <ion-col [size]="faultId? 75 : 100">
           <ion-item>
@@ -180,42 +179,42 @@
             <ion-label position="floating">Title</ion-label>
             <ion-input formControlName="title"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Forename</ion-label>
             <ion-input formControlName="forename"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Surname</ion-label>
             <ion-input formControlName="surname"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">E-mail</ion-label>
             <ion-input formControlName="email"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Mobile</ion-label>
             <ion-input formControlName="mobile"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Telephone</ion-label>
             <ion-input formControlName="alternativeNo"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -242,14 +241,14 @@
             <ion-label>Is there a vulnerable occupier at this property?</ion-label>
             <ion-toggle slot="start" formControlName="areOccupiersVulnerable"></ion-toggle>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
         <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Useful instructions</ion-label>
             <ion-textarea rows="1" formControlName="tenantNotes" auto-grow="true"></ion-textarea>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -264,8 +263,6 @@
           <ion-grid>
             <ion-row>
               <ion-col size="100" class="folder-wrapper">
-                <!-- <img src="assets/images/default.jpg" (click)="filterByGroupName(file)"
-                  > -->
                   <ion-icon name="folder-open-outline" title="Click to View Documents" (click)="filterByGroupName(file)" class="folder-icon"></ion-icon>
               </ion-col>
             </ion-row>
@@ -313,7 +310,6 @@
           </div>
         </ion-col>
       </ion-row>
-      <!-- <button (click)="uploadFiles()">Upload</button> -->
     </ion-grid>
   </form>
   <ion-grid [hidden]="mediaType != 'documents'">
@@ -330,12 +326,6 @@
         <div class="delete-icon-wrapper">
           <ion-grid>
             <ion-row>
-              <!-- <ion-col size="100" *ngIf="getFileType(file.name)">
-                <img src="assets/images/default.jpg" (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download PDF">
-              </ion-col>
-              <ion-col size="100" *ngIf="!getFileType(file.name)">
-                <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download">
-              </ion-col> -->
               <ion-col size="100">
                 <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file)" title="Click To Download">
               </ion-col>
@@ -359,9 +349,6 @@
 <ng-template #faultHistoryTab>
   <ion-grid class="view-details">
     <ion-row class="ion-justify-content-between">
-      <!-- <ion-col size="100">
-        <div class="title">Fault History</div>
-      </ion-col> -->
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Last Repair</ion-text><br />
         <ion-text class="content">{{faultHistory?.description || 'N/A'}}</ion-text>
@@ -433,10 +420,6 @@
         <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}
         </ion-text>
       </ion-col>
-      <!--  <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Agreement</ion-text><br />
-        <ion-text class="content"></ion-text>
-      </ion-col> -->
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ng-container *ngIf="reportedByForm.controls.reportedBy.value =='THIRD_PARTY'" >
           <ion-text class="header ion-text-capitalize">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}
@@ -738,7 +721,6 @@
       <ion-col size-xl="20" size="25" *ngFor="let item of faultCategories">
         <div class="block" [class.active]="item.index == describeFaultForm?.controls?.category?.value"
           (click)="goToPage(2);setCategory(item.index)">
-          <!-- <img [src]="item.imgPath" /> -->
           <h4 class="center">{{item.value}}</h4>
         </div>
       </ion-col>
@@ -802,7 +784,6 @@
           <h2 class="heading-initial">
             <span *ngIf="!faultId">Initial Issue</span>
             <span *ngIf="faultId">
-              <!-- {{faultDetails?.isEscalated ? 'Escalation' : getLookupValue(faultDetails?.status, faultStatuses)}} &nbsp; -->
               {{faultDetails?.isClosed || (faultDetails?.isClosed && faultDetails?.isEscalated) ? 'Closed' : 
               (faultDetails?.isEscalated ? 'Escalation' : getLookupValue(faultDetails?.status, faultStatuses))  }} &nbsp;
               <img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.isEscalated" />
@@ -822,38 +803,31 @@
               [hasPropertyCheckedIn]="hasPropertyCheckedIn"
               (getStatus)="getStatus($event)">
             </app-property-details>
-            <!-- <app-property-skeleton *ngIf="!propertyDetails"></app-property-skeleton> -->
           </ion-card>
         </ion-col>
         <ion-col size="100" id="matStepperTop">
           <mat-horizontal-stepper #stepper labelPosition="bottom" [selectedIndex]="currentStepperIndex">
             <mat-step  [completed]="stepper.selectedIndex > 0">
-              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 0"> -->
               <ng-container *ngTemplateOutlet="caseLogged"></ng-container>
               <ng-template matStepLabel>Fault Logged</ng-template>
             </mat-step>
             <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 1 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 1">
-              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 1"> -->
               <ng-container *ngTemplateOutlet="caseQualification"></ng-container>
               <ng-template matStepLabel>Fault Qualification</ng-template>
             </mat-step>
             <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 2 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 2">
-              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 2"> -->
               <ng-container *ngTemplateOutlet="landlordInstructions"></ng-container>
               <ng-template matStepLabel>Landlord Instructions</ng-template>
             </mat-step>
             <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 3 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 3">
-              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 3"> -->
               <ng-container *ngTemplateOutlet="arrangingContractor"></ng-container>
               <ng-template matStepLabel>Arranging Contractor</ng-template>
             </mat-step>
             <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 4 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 4">
-              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 4"> -->
               <ng-container *ngTemplateOutlet="jobCompletion"></ng-container>
               <ng-template matStepLabel>Job Completion</ng-template>
             </mat-step>
             <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 5 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 5">
-              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 5"> -->
               <ng-container *ngTemplateOutlet="payment"></ng-container>
               <ng-template matStepLabel>Payment</ng-template>
             </mat-step>
