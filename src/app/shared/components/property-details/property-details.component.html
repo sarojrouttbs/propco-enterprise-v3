@@ -11,17 +11,6 @@
               (change)="submit($event.target.files)" accept=".png,.jpeg,.jpg,.pdf,.gif,.bmp,.text,.doc,.csv,.docx,.odt">
             <label for="files" class="browse-btn">Browse Files</label>
           </form>
-
-          <!-- <form class="drop-zone" [formGroup]="uploadDocForm" file-drop (files)="submit($event)">
-          <ion-icon class="icon" name="cloud-upload"></ion-icon>
-          <input type="file" class="custom-file-input form-control" id="files" multiple (change)="submit($event.target.files)"
-          accept="image/x-png,image/jpeg">
-          <span class="drag-text">Drag files to upload here</span> <br>
-          <label for="files" class="browse-btn">Browse Files</label>
-        </form> -->
-          <!-- <div *ngIf="files.length" class="fault-image">
-          <img [src]="files[0].documentUrl ? files[0].documentUrl : 'assets/images/default.jpg'">
-        </div> -->
           <div *ngIf="files.length" class="fault-image">
             <img [src]="getFilteredDocs(files)">
           </div>
@@ -82,16 +71,6 @@
                 {{propertyDetails?.landlordOccupancy === 1 ? 'Landlord Occupied': propertyDetails?.isPropertyCheckedIn ?
                 'Tenanted' : 'Vacant' }}
               </ion-col>
-              <!-- <ion-col size-lg="22" size="33.3">
-                <span class="text">Licence Details</span>
-                <br />
-                Has HMO Licence? {{ hmoDetails[0]?.isPropertyLicensed ? 'Yes' : 'No' }}
-              </ion-col>
-              <ion-col size-lg="22" size="33.3">
-                <span class="text">Licence Scheme</span>
-                <br />
-                {{getLookupValue(hmoDetails[0]?.licenceSchemeLookup, hmoLicenceSchemes) || 'N/A'}}
-              </ion-col> -->
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Licence Details</span>
                 <br />

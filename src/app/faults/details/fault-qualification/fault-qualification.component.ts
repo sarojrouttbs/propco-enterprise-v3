@@ -1,4 +1,4 @@
-import { CERTIFICATES_CATEGORY, FILE_IDS, PROPCO } from './../../../shared/constants';
+import { CERTIFICATES_CATEGORY, DEFAULT_MESSAGES, FAULT_NOTIFICATION_STATE, FAULT_QUALIFICATION_ACTION_LIST, FILE_IDS, PROPCO } from './../../../shared/constants';
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -56,6 +56,9 @@ export class FaultQualificationComponent implements OnInit {
   fileIds = FILE_IDS;
   FAULT_STAGES = FAULT_STAGES;
   @Input() describeFaultForm;
+  notificationState = FAULT_NOTIFICATION_STATE;
+  actionList = FAULT_QUALIFICATION_ACTION_LIST;
+  DEFAULT_MESSAGES = DEFAULT_MESSAGES;
 
   constructor(
     private fb: FormBuilder,
