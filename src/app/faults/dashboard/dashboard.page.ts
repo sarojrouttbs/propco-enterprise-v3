@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { ERROR_MESSAGE, FAULT_STATUSES, NOTES_TYPE, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES } from './../../shared/constants';
+import { ERROR_MESSAGE, FAULT_STATUSES, NOTES_TYPE, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES,MAINT_SOURCE_TYPES, DEFAULT_MESSAGES } from './../../shared/constants';
 import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
 import { Router } from '@angular/router';
@@ -90,6 +90,8 @@ export class DashboardPage implements OnInit {
   minDate;
   futureDate;
   currentDate;
+  maintSourceTypes = MAINT_SOURCE_TYPES;
+  DEFAULT_MESSAGES = DEFAULT_MESSAGES;
 
   constructor(
     private commonService: CommonService,

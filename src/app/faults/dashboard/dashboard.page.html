@@ -414,7 +414,7 @@
                   </td>
                   <td>{{fault.createdAt | date: 'dd/MM/yyyy HH:mm' || '-'}}</td>
                   <td>
-                    {{(fault.sourceType === 'FIXFLO') ? (fault.fixfloCategory || '-') : (getLookupValue(fault.category,
+                    {{(fault.sourceType === maintSourceTypes.FIXFLO) ? (fault.fixfloCategory || '-') : (getLookupValue(fault.category,
                     faultCategories, 'category') || '-')}}
                   </td>
                   
@@ -443,7 +443,7 @@
                   </td>
                 </tr>
                 <tr *ngIf="faultList?.length == 0">
-                  <td colspan="11" class="no-data-available" style="text-align: center;"><b>No data found!</b></td>
+                  <td colspan="11" class="no-data-available" style="text-align: center;"><b>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</b></td>
                 </tr>
               </tbody>
             </table>

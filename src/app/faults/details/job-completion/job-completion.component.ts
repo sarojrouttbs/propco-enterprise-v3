@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, CERTIFICATES_CATEGORY } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, CERTIFICATES_CATEGORY, FAULT_NOTIFICATION_STATE, RECIPIENTS } from './../../../shared/constants';
 import { ModalController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
@@ -79,6 +79,8 @@ export class JobCompletionComponent implements OnInit {
   CERTIFICATES_CATEGORY = CERTIFICATES_CATEGORY;
   blockManagement: any;
   certificateTypes: any;
+  notificationState = FAULT_NOTIFICATION_STATE;
+  recipientTypes = RECIPIENTS;
 
   constructor(
     private fb: FormBuilder,
