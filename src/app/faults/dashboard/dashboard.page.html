@@ -1,4 +1,3 @@
-<!-- <div class="dashboard-container"> -->
   <ion-content id="fault-list">
     <ion-grid>
       <ion-row class="heading-block">
@@ -23,16 +22,6 @@
             <div class="filter-grid-count" *ngIf="!activeRepairLoader">{{activeRepairCount}}</div>
             <div class="filter-grid-text">Active Repairs</div>
           </ion-col>
-          <!-- <ion-col size="12" size-md [ngClass]="filterForm.get('newRepairs').value?'filter-grid-active':'filter-grid'"
-            (click)="clickCheckbox('newRepairs');" class="pointer">
-            <div>
-              <ion-checkbox class="filter-checkbox" color="medium" mode="ios" formControlName="newRepairs"
-                (ionChange)="checkboxClick('newRepairs')" (click)="$event.stopPropagation();">
-              </ion-checkbox>
-            </div> -->
-          <!-- <div class="filter-grid-count">269</div> -->
-          <!-- <div class="filter-grid-text">New Repairs</div>
-          </ion-col> -->
           <ion-col size="12" size-md [ngClass]="filterForm.get('emergency').value?'filter-grid-active':'filter-grid'"
           (click)="clickCheckbox('emergency');$event.stopPropagation();" class="pointer">
             <div>
@@ -268,13 +257,6 @@
           <ion-col size=20 *ngIf="isStatusFilter">
             <ion-item class="select-block">
               <ion-label position="floating">Status</ion-label>
-              <!-- <ion-select formControlName="statusFilter" multiple="true" okText="Apply" cancelText="Cancel"
-                (ionChange)="onStatusChange()">
-                <ion-select-option [value]="status.index" *ngFor="let status of faultStatuses">
-                  {{ status.value }}
-                </ion-select-option>
-              </ion-select> -->
-  
               <ionic-selectable item-content itemValueField="index" itemTextField="value" [items]="faultStatuses"
                 [isEnabled]="!isBucketActive"
                 [canSearch]="true" [isMultiple]="true" class="selectable-height" [canClear]="true" clearButtonText="Clear"
@@ -389,12 +371,6 @@
         </ion-row>
         
         <ion-row>
-          <!-- <ion-col size="25" size-md class="pointer ">
-            <ion-item lines="none">
-              <ion-label>Show my repairs</ion-label>
-              <ion-checkbox color="primary" checked slot="start" class="repair-block"></ion-checkbox>
-            </ion-item>
-          </ion-col> -->
 
           <ion-col size="25" size-md>
             <ion-item lines="none">
