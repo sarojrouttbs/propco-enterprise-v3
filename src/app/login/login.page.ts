@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { ForgotPasswordModalPage } from '../shared/modals/forgot-password-modal/forgot-password-modal.page';
 
@@ -12,7 +13,7 @@ export class LoginPage implements OnInit {
   loginForm: FormGroup;
   showLoader: boolean = false;
 
-  constructor(private _formBuilder: FormBuilder, private modalController: ModalController) {}
+  constructor(private _formBuilder: FormBuilder, private modalController: ModalController, private router: Router) {}
 
   ngOnInit() {
     this.initForm();
@@ -26,7 +27,7 @@ export class LoginPage implements OnInit {
   }
 
   onLoginSubmit() {
-    
+    this.router.navigate(['agent/dashboard'], { replaceUrl: true });
   }
 
   async forgotPassword() {
