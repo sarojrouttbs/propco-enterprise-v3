@@ -15,8 +15,8 @@
             </ion-col>
           </ion-row>
           <h2 class="banner-heading">
-            {{iqfNotification && iqfNotification?.responseReceived ? 'Response Received': 
-            (iqfNotification?.responseReceived === null && iqfNotification?.allowedNumberOfChases === iqfNotification?.numberOfChasesDone && !iqfNotification?.hoursLeft?'No response':'Awaiting response')}}
+            {{iqfNotification && iqfNotification?.responseReceived ? notificationState.RESPONSE_RECEIVED: 
+            (iqfNotification?.responseReceived === null && iqfNotification?.allowedNumberOfChases === iqfNotification?.numberOfChasesDone && !iqfNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE)}}
           </h2>
           <h6 class="banner-title">Here’s the action you chose:</h6>
           <ion-button color="success" class="icon-button">
@@ -26,8 +26,8 @@
           <ng-container *ngIf="iqfNotification && iqfNotification?.responseReceived">
             <h6 class="banner-title response-recived">
               <ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from 
-              <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === 'UNDER_WARRANTY'">Guarantee Management Company</span> 
-              <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === 'UNDER_SERVICE_CONTRACT'">Service Contract Company</span>
+              <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === actionList.UNDER_WARRANTY">Guarantee Management Company</span> 
+              <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === actionList.UNDER_SERVICE_CONTRACT">Service Contract Company</span>
               <span *ngIf="iqfNotification?.recipientType === 148">Block Management/Factors Company</span>
               {{iqfNotification?.chaseTemplateCode}} {{iqfNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}
             </h6>
@@ -38,9 +38,9 @@
             [ngClass]="iqfNotification?.responseReceived === null && iqfNotification?.allowedNumberOfChases === iqfNotification?.numberOfChasesDone && !iqfNotification?.hoursLeft?'no-response':'awaiting-response'"
             >
               <ion-icon name="ellipse" class="response-circle"></ion-icon> 
-              {{iqfNotification?.responseReceived === null && iqfNotification?.allowedNumberOfChases === iqfNotification?.numberOfChasesDone && !iqfNotification?.hoursLeft?'No response':'Awaiting response'}} from the 
-              <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === 'UNDER_WARRANTY'">Guarantee Management Company</span> 
-              <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === 'UNDER_SERVICE_CONTRACT'">Service Contract Company</span>
+              {{iqfNotification?.responseReceived === null && iqfNotification?.allowedNumberOfChases === iqfNotification?.numberOfChasesDone && !iqfNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE}} from the 
+              <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === actionList.UNDER_WARRANTY">Guarantee Management Company</span> 
+              <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === actionList.UNDER_SERVICE_CONTRACT">Service Contract Company</span>
               <span *ngIf="iqfNotification?.recipientType === 148">Block Management/Factors Company</span>
               <span *ngIf="iqfNotification?.recipientType === 1">Tenant</span>
             </h6>
@@ -76,8 +76,8 @@
           <h6 *ngIf="iqfNotification?.templateCode !== 'FI-T-E-1'">
             <ion-text color="danger">Please note: </ion-text>
             <span>The Fault will be <i>escalated</i> automatically if  
-              <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === 'UNDER_WARRANTY'">Guarantee Management Company</span> 
-              <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === 'UNDER_SERVICE_CONTRACT'">Service Contract Company</span>
+              <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === actionList.UNDER_WARRANTY">Guarantee Management Company</span> 
+              <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === actionList.UNDER_SERVICE_CONTRACT">Service Contract Company</span>
               <span *ngIf="iqfNotification?.recipientType === 148">Block Management/Factors Company</span> does not respond within {{iqfNotification?.hoursLeft}}.
             </span>
           </h6>
@@ -243,7 +243,7 @@
               (click)="viewTenancyClause()">View</ion-button>
           </ion-col>
         </ion-row>
-        <ion-text color="danger" *ngIf="!tenancyClauses">No details available</ion-text>
+        <ion-text color="danger" *ngIf="!tenancyClauses">{{DEFAULT_MESSAGES.NO_DETAILS_AVAILABLE}}</ion-text>
       </ion-col>
 
       <ion-col class="card">
@@ -275,7 +275,7 @@
               (click)="viewBlockManagement();  $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
-        <ion-text color="danger" *ngIf="!blockManagement">No details available</ion-text>
+        <ion-text color="danger" *ngIf="!blockManagement">{{DEFAULT_MESSAGES.NO_DETAILS_AVAILABLE}}</ion-text>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -310,7 +310,7 @@
               (click)="viewPropertyCertificate(CERTIFICATES_CATEGORY[0]); $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
-        <ion-text color="danger" *ngIf="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])?.length">No details available</ion-text>
+        <ion-text color="danger" *ngIf="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])?.length">{{DEFAULT_MESSAGES.NO_DETAILS_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col class="card">
         <h3>Service Contract/ Appliance Cover</h3>
@@ -341,7 +341,7 @@
               (click)="viewPropertyCertificate(CERTIFICATES_CATEGORY[1]); $event.stopPropagation();">View</ion-button>
           </ion-col>
         </ion-row>
-        <ion-text color="danger" *ngIf="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1])?.length && !certificateCategoriesMap.get(CERTIFICATES_CATEGORY[2])?.length">No details available</ion-text>
+        <ion-text color="danger" *ngIf="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[1])?.length && !certificateCategoriesMap.get(CERTIFICATES_CATEGORY[2])?.length">{{DEFAULT_MESSAGES.NO_DETAILS_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col class="card-extra"></ion-col>
     </ion-row>

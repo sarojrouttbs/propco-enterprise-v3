@@ -15,8 +15,8 @@
                 }}</b>
             </div>
             <h2 class="banner-heading">
-              {{iacNotification && iacNotification?.responseReceived ? 'Response Received': 
-              (iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response')}}
+              {{iacNotification && iacNotification?.responseReceived ? notificationState.RESPONSE_RECEIVED: 
+              (iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE)}}
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
@@ -26,9 +26,9 @@
             <ng-container *ngIf="iacNotification && iacNotification?.responseReceived">
               <h6 class="banner-title response-recived">
                 <ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from 
-                <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
-                <span *ngIf="iacNotification?.recipientType === 11">Contractor</span>
-                <span *ngIf="iacNotification?.recipientType === 1">Tenant</span>
+                <span *ngIf="iacNotification?.recipientType === 8">{{recipientTypes.LANDLORD}}</span>
+                <span *ngIf="iacNotification?.recipientType === 11">{{recipientTypes.CONTRACTOR}}</span>
+                <span *ngIf="iacNotification?.recipientType === 1">{{recipientTypes.TENANT}}</span>
                 {{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}
               </h6>
             </ng-container>
@@ -36,10 +36,10 @@
               <h6 class="banner-title"
               [ngClass]="iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'no-response':'awaiting-response'"
               >
-                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response'}} from the  
-                  <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
-                  <span *ngIf="iacNotification?.recipientType == 11">Contractor</span>
-                  <span *ngIf="iacNotification?.recipientType == 1">Tenant</span>
+                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE}} from the  
+                  <span *ngIf="iacNotification?.recipientType === 8">{{recipientTypes.LANDLORD}}</span>
+                  <span *ngIf="iacNotification?.recipientType == 11">{{recipientTypes.CONTRACTOR}}</span>
+                  <span *ngIf="iacNotification?.recipientType == 1">{{recipientTypes.TENANT}}</span>
               </h6>
               <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt" >{{iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone?'Escalation due': iacNotification.chase === iacNotification.allowedNumberOfChases ? 'Last chase due('+iacNotification.chase+')' : 'Next chase due('+iacNotification.chase+')'}}:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}

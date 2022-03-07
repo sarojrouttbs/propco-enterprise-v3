@@ -26,7 +26,7 @@
         <ion-row>
           <ng-container *ngIf="landLordList?.length === 0">
             <ion-label class="not-found">
-              No data found!
+              {{DEFAULT_MESSAGES.NO_DATA_FOUND}}
             </ion-label>
           </ng-container>
           <ng-container *ngIf="landLordList?.length > 0">

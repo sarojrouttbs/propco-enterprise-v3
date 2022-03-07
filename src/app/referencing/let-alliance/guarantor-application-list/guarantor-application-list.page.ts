@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, QueryList, OnDestroy } from '@angular/core';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { PROPCO, REFERENCING } from 'src/app/shared/constants';
+import { DEFAULT_MESSAGES, PROPCO, REFERENCING } from 'src/app/shared/constants';
 import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -46,6 +46,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
 
   selectedData: any;
   applicationFilterForm: FormGroup;
+  DEFAULT_MESSAGES = DEFAULT_MESSAGES;
 
   constructor(
     public commonService: CommonService,

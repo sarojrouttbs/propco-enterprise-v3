@@ -15,8 +15,8 @@
                 }}</b>
             </div>
             <h2 class="banner-heading">
-              {{iacNotification && iacNotification?.responseReceived ? 'Response Received': 
-              (iacNotification?.responseReceived === null && (iacNotification?.allowedNumberOfChases !== 0 && iacNotification?.numberOfChasesDone !== 0) && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response')}}
+              {{iacNotification && iacNotification?.responseReceived ? notificationState.RESPONSE_RECEIVED: 
+              (iacNotification?.responseReceived === null && (iacNotification?.allowedNumberOfChases !== 0 && iacNotification?.numberOfChasesDone !== 0) && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE)}}
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
@@ -26,9 +26,9 @@
             <ng-container *ngIf="iacNotification && iacNotification?.responseReceived">
               <h6 class="banner-title response-recived">
                 <ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from 
-                <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
-                <span *ngIf="iacNotification?.recipientType === 11">Contractor</span>
-                <span *ngIf="iacNotification?.recipientType === 1">Tenant</span>
+                <span *ngIf="iacNotification?.recipientType === 8">{{recipientTypes.LANDLORD}}</span>
+                <span *ngIf="iacNotification?.recipientType === 11">{{recipientTypes.CONTRACTOR}}</span>
+                <span *ngIf="iacNotification?.recipientType === 1">{{recipientTypes.TENANT}}</span>
                 {{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}
               </h6>
             </ng-container>
@@ -37,10 +37,10 @@
               <h6 class="banner-title"
               [ngClass]="iacNotification?.responseReceived === null && (iacNotification?.allowedNumberOfChases !== 0 && iacNotification?.numberOfChasesDone !== 0) && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'no-response':'awaiting-response'"
               >
-                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{iacNotification?.responseReceived === null && (iacNotification?.allowedNumberOfChases !== 0 && iacNotification?.numberOfChasesDone !== 0) && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response'}} from the 
-                  <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
-                  <span *ngIf="iacNotification?.recipientType === 11">Contractor</span>
-                  <span *ngIf="iacNotification?.recipientType === 1">Tenant</span>
+                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{iacNotification?.responseReceived === null && (iacNotification?.allowedNumberOfChases !== 0 && iacNotification?.numberOfChasesDone !== 0) && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE}} from the 
+                  <span *ngIf="iacNotification?.recipientType === 8">{{recipientTypes.LANDLORD}}</span>
+                  <span *ngIf="iacNotification?.recipientType === 11">{{recipientTypes.CONTRACTOR}}</span>
+                  <span *ngIf="iacNotification?.recipientType === 1">{{recipientTypes.TENANT}}</span>
               </h6>
 
               <h6 *ngIf="iacNotification?.templateCode === 'LNP-L-E' 
@@ -78,9 +78,6 @@
                 {{filteredCCDetails.rejectionReason || 'N/A'}}
                 <div *ngIf="filteredCCDetails?.isLandlordWantAnotherQuote">Landlord wants another Quote</div>
               </ion-text>
-                <!-- <h6 *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted === false && this.iacNotification?.templateCode!='CWO-C-E'">
-                  <ion-text color="danger">Please select an appropriate action.</ion-text>
-                </h6> -->
                 <div class="border-bottom"></div>
             </ng-container>
           </div>
@@ -117,7 +114,7 @@
                 <h4 class="ion-text-center">Next Step:</h4> 
                 <h6 *ngIf="iacNotification?.chaseTemplateCode!='LNP-L-E'">  
                   <ion-text color="danger">Please note: </ion-text>
-                  <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
+                  <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1? recipientTypes.TENANT :(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} doesn't respond within
                     {{iacNotification?.hoursLeft}}.
                   </span>
                 </h6>
@@ -143,7 +140,7 @@
                   </span>
 
                   <span>
-                    The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to upload the Quote and photos.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
+                    The next step is for the {{iacNotification?.recipientType == 1?recipientTypes.TENANT:(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} to upload the Quote and photos.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?recipientTypes.TENANT:(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} doesn't respond within
                     {{iacNotification?.hoursLeft}}.
                   </span>
                 </h6>
@@ -265,7 +262,6 @@
             </ion-grid>
           </div>
           <app-useractionforms [codes]="codes"  [isAuthorizationfields] = "isAuthorizationfields" [hideWOform]="hideWOform" [userActionForms]="userActionForms" [actionSelected]="userSelectedActionControl.value" [faultDetails]="faultDetails"></app-useractionforms>
-          <!-- <ion-button (click)="questionActionQuoteUpload(true)">Upload</ion-button> -->
         </div>
       </ion-col>
     </ion-row>
@@ -279,14 +275,6 @@
               <div class="delete-icon-wrapper">
                 <ion-grid>
                   <ion-row>
-                    <!-- <ion-col size="100" *ngIf="getFileType(file.name)">
-                      <img src="/assets/images/default.jpg" (click)="downloadDocumentByURl(file.documentUrl)"
-                        title="Click To Download PDF">
-                    </ion-col>
-                    <ion-col size="100" *ngIf="!getFileType(file.name)">
-                      <img [src]="file.documentUrl ? file.documentUrl : '/assets/images/default.jpg'"
-                        (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download">
-                    </ion-col> -->
                     <ion-col size="100">
                       <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file?.documentUrl, file?.name)" title="Click To Download">
                     </ion-col>    
@@ -367,28 +355,9 @@
                             <ion-fab-list side="start">
                               <ion-button *ngIf="item.get('quoteContractorStatus').value" (click)="selectedCCDetails(item.get('contractorId').value)">View </ion-button>
                               <ion-button  (click)="removeContractor(i,item.get('isRejected').value)" *ngIf="!item.get('quoteContractorStatus').value">Remove</ion-button>
-                               <!-- <ion-fab-button class="check-button" *ngIf="item.get('isPreferred').value">
-                                <span matTooltip="Preferred Contractor" matTooltipPosition="above">
-                                  <ion-icon class="list-button" name="checkmark-circle-outline"> </ion-icon>
-                                </span>
-                              </ion-fab-button> -->
-                               <!-- <ion-fab-button class="check-button" *ngIf="item.get('isPreferred').value">
-                                 <span matTooltip="Preferred Contractor" matTooltipPosition="above">
-                                   <ion-icon class="list-button" name="checkmark-circle-outline"> </ion-icon>
-                                 </span>
-                               </ion-fab-button>
-                               <ion-fab-button class="close-button">
-                                 <span  (click)="removeContractor(i,item.get('isRejected').value)" matTooltip="Delete" matTooltipPosition="above">
-                                   <ion-icon class="list-button" name="close-circle-outline"></ion-icon>
-                                 </span>
-                               </ion-fab-button> -->
+                              
                             </ion-fab-list>
                           </ion-fab>
-                          <!-- <ion-icon class="list-button" *ngIf="item.get('isPreferred').value"
-                            matTooltip="Preferred Contractor" matTooltipPosition="above" name="checkmark-circle-outline">
-                          </ion-icon>
-                          <ion-icon class="list-button" color="danger"
-                            (click)="removeContractor(i,item.get('isRejected').value)" name="close-circle-outline"></ion-icon> -->
                         </div>
                       </ion-col>
                     </ion-row>
@@ -412,7 +381,6 @@
                         <ion-label position="floating">Start Typing to Search Contractors</ion-label>
                         <ion-input type="text" debounce="300" (ionInput)="onSearch($event)" formControlName='contractor'
                           placeholder="" (ionFocus)="onSearch($event)"> 
-                          <!-- (ionBlur)="onBlurContractorSearch($event)"> -->
                         </ion-input>
                       </ion-item>
       
@@ -585,12 +553,6 @@
         </ion-item>
       </ion-col>
   
-      <!-- <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Access Information </ion-label>
-          <ion-input formControlName="accessDetails"></ion-input>
-        </ion-item>
-      </ion-col> -->
       <ion-col size="100">
         <ion-item>
           <ion-label position="floating">Full Job Description <ion-text class="mandatory">*</ion-text></ion-label>
