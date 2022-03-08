@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content id="tenant-list-modal">
-  <div class="table-container" *ngIf="!isTenantList">
+  <div class="table-container" *ngIf="isTableReady && laTenantList.length > 0">
     <table datatable [dtOptions]="dtOptions" class="row-border hover" style="width: 100%;">
       <thead>
         <tr>
@@ -44,5 +44,5 @@
       </ion-row>
     </ion-grid>
   </div>
-  <div *ngIf="isTenantList" style="padding-top: 20px;"> No Record Found</div>
+  <div *ngIf="isTableReady && laTenantList.length === 0" style="padding-top: 20px;"> No Record Found</div>
 </ion-content>

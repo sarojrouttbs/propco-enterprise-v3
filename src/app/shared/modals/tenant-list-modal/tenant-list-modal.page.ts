@@ -33,7 +33,7 @@ export class TenantListModalPage implements OnInit {
   referencingApplicantStatusTypes: any[] = [];
 
   @Input() paramPropertyId: string;
-  isTenantList: boolean = false;
+  isTableReady: boolean  = false;
 
   constructor(
     private referencingService: ReferencingService,
@@ -42,7 +42,7 @@ export class TenantListModalPage implements OnInit {
     private commonService: CommonService,
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.propertyId = this.navParams.get('paramPropertyId');
     this.getLookupData();
     this.dtOptions = {
@@ -53,9 +53,11 @@ export class TenantListModalPage implements OnInit {
       ordering: false,
       info: false,
       scrollY: '97px',
-      scrollCollapse: false,
+      scrollCollapse: false
     };
-    this.getTenantList();
+    await this.getTenantList();
+    this.isTableReady = true
+
   }
 
   private getLookupData() {
@@ -99,18 +101,12 @@ export class TenantListModalPage implements OnInit {
       this.referencingService.getPropertyTenantList(this.propertyId, params).subscribe(
         res => {
           this.laTenantList = res ? res.data : [];
-          this.isTenantList = this.laTenantList ? false : true;
-     
-          if(this.laTenantList.length == 0) {
-            this.isTenantList = !this.isTenantList;
-          }
           this.laTenantList.forEach((item) => {
             item.isRowChecked = false;
           });
           resolve(this.laTenantList);
         },
         (error) => {
-          console.log(error);
           resolve(this.laTenantList);
         }
       );
