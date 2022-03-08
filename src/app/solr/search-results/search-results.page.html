@@ -965,22 +965,6 @@
                     </p>
                   </ion-col>
                 </ion-row>
-                <ion-row class="fault-data-row">
-                  <ion-col size-xl="33" size-lg="33" size-md="33">
-                    <p>
-                      <span class="text">VAT Balance</span>
-                    <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
-                    </p>
-                  </ion-col>
-                  <ion-col size-xl="33" size-lg="33" size-md="33">
-                    <p>
-                      <span class="text">Standard Balance</span>
-                    <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
-                    </p>
-                  </ion-col>
-                </ion-row>
               </ion-grid>
             </ion-col>
           </ion-row>
@@ -1161,14 +1145,14 @@
                     <p>
                       <span class="text">Guarantor Name</span>
                     <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
+                    <span class="text-value" [title]="item?.guarantor || 'N/A'">{{(item?.guarantor | RemainingCountPipe) || 'N/A'}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
                       <span class="text">Co-Tenant Name</span>
                     <br />
-                    <span class="text-value">{{null || 'N/A'}}</span>
+                    <span class="text-value" [title]="item?.coTenant || 'N/A'">{{(item?.coTenant | RemainingCountPipe) || 'N/A'}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
