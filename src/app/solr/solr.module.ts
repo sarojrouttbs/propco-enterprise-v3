@@ -7,7 +7,6 @@ import { IonicModule } from "@ionic/angular";
 import { SolrPageRoutingModule } from "./solr-routing.module";
 
 import { SolrPage } from "./solr.page";
-import { ShowRemainingCountPipe } from './pipes/show-remaining-count.pipe';
 
 @NgModule({
   imports: [
@@ -16,6 +15,6 @@ import { ShowRemainingCountPipe } from './pipes/show-remaining-count.pipe';
     IonicModule,
     SolrPageRoutingModule,
   ],
-  declarations: [SolrPage, ShowRemainingCountPipe],
+  declarations: [SolrPage],
 })
 export class SolrPageModule {}

@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-  name: "showRemainingCount",
+  name: "RemainingCountPipe",
 })
 export class ShowRemainingCountPipe implements PipeTransform {
   transform(value: Array<string>): string {
