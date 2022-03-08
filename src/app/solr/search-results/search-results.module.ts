@@ -12,7 +12,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { ReplaceSquareBracketsPipe } from '../pipes/replace-square-brackets.pipe';
-import { ShowRemainingCountPipe } from '../pipes/show-remaining-count.pipe';
+import { RemainingCountPipe } from '../pipes/remaining-count.pipe';
 
 @NgModule({
   imports: [
@@ -26,6 +26,6 @@ import { ShowRemainingCountPipe } from '../pipes/show-remaining-count.pipe';
     NgxMatSelectSearchModule,
     NgxSliderModule
   ],
-  declarations: [SearchResultsPage,ReplaceSquareBracketsPipe,ShowRemainingCountPipe]
+  declarations: [SearchResultsPage,ReplaceSquareBracketsPipe,RemainingCountPipe]
 })
 export class SearchResultsPageModule {}
