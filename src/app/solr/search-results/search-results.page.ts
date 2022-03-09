@@ -144,6 +144,7 @@ export class SearchResultsPage implements OnInit {
   };
 
   viewType: string = "LIST";
+  currentDate;
 
   constructor(
     private route: ActivatedRoute,
@@ -151,7 +152,9 @@ export class SearchResultsPage implements OnInit {
     private fb: FormBuilder,
     private commonService: CommonService,
     private el: ElementRef<HTMLElement>
-  ) {}
+  ) {
+    this.currentDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
+  }
 
   ngOnInit() {
     this.initResults();
