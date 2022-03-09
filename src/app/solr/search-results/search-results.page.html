@@ -988,7 +988,7 @@
               <p class="address-ref-wrapper">
                 <span *ngIf="item?.address" class="text-ellipsis address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
                 <span  class="verticalLine" *ngIf="item?.address">&nbsp;</span>
-                <span class="ref">Ref&nbsp;&nbsp;<span class="reftag">{{(item?.reference ) || 'N/A'}}&nbsp;</span></span>
+                <span class="ref" [title]="item?.reference">Ref&nbsp;&nbsp;<span class="reftag">{{(item?.reference | RemainingCountPipe:'onlyString') || 'N/A'}}&nbsp;</span></span>
                 <span  class="verticalLine" *ngIf="item?.isOverseas">&nbsp;</span>
                 <span class="vat" *ngIf="item?.isOverseas">Overseas&nbsp;</span>
               </p>
@@ -1332,7 +1332,7 @@
                     <p>
                       <span class="text">Expiry date</span>
                     <br />
-                    <span class="text-value">{{(item?.supplierLiabilityExpiryDate | date: 'dd/MM/yyyy') || 'N/A'}}</span>
+                    <span class="text-value" [ngClass]="{'expired' : item?.supplierLiabilityExpiryDate < currentDate}">{{(item?.supplierLiabilityExpiryDate | date: 'dd/MM/yyyy') || 'N/A'}}</span>
                     </p>
                   </ion-col>
                 </ion-row>

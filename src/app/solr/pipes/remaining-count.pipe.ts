@@ -4,8 +4,11 @@ import { Pipe, PipeTransform } from "@angular/core";
   name: "RemainingCountPipe",
 })
 export class RemainingCountPipe implements PipeTransform {
-  transform(value: Array<string>): string {
+  transform(value: any, type: string = ''): string {
     if (value) {
+      if(type === 'onlyString'){
+        value = value.split(',');
+      }
       if (value.length === 1) {
         return value[0];
       } else {
