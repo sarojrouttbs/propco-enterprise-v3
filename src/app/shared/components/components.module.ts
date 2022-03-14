@@ -14,6 +14,7 @@ import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng
 import { TobPropertyDetailsComponent } from './tob-property-details/tob-property-details.component';
 import { PipesModule } from '../pipes/pipes.module';
 import { AgentHeaderComponent } from './agent-header/agent-header.component';
+import { SearchSuggestionComponent } from './search-suggestion/search-suggestion.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "left",
@@ -35,8 +36,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CurrencyMaskModule,
         PipesModule
     ],
-    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent],
-    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent],
+    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent],
+    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent],
     providers: [CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
 })
 

@@ -8,8 +8,8 @@ import { DashboardPageRoutingModule } from "./dashboard-routing.module";
 
 import { DashboardPage } from "./dashboard.page";
 import { MaterialModule } from "src/app/material.module";
-import { SharedModule } from "../shared/shared.module";
 import { GuidedTourModule, GuidedTourService } from "ngx-guided-tour";
+import { ComponentsModule } from "src/app/shared/components/components.module";
 
 @NgModule({
   imports: [
@@ -19,7 +19,7 @@ import { GuidedTourModule, GuidedTourService } from "ngx-guided-tour";
     DashboardPageRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
-    SharedModule,
+    ComponentsModule,
     GuidedTourModule,
   ],
   declarations: [DashboardPage],
