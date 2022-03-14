@@ -796,3 +796,13 @@ mat-form-field {
 .modal-height .modal-wrapper{
   min-height: 235px;
 }
+
+#agent-header {
+  .mat-button-focus-overlay {
+    background-color: transparent;
+  }
+}
+.mat-menu-panel {
+  overflow: hidden!important;
+  box-shadow: none!important;
+}

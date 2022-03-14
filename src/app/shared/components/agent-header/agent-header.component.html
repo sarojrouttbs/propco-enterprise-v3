@@ -1,2 +1,63 @@
-<p>
-</p>
+<div id="agent-header">
+  <header >
+      <nav class="navbar navbar-default">
+          <div class="nav-sub">
+            <div class="collapse navbar-collapse menu left-menu" id="propco-navbar-collapse">
+              <a class="pull-left">
+                  <img alt="PropCo Enterprise" title="PropCo Enterprise" src="assets/images/agent/propco-button.png" />
+              </a>
+              <a class="pull-left" style="margin-top: 6px;" title="Go to the workspace" >
+                  <i class="propcoicon propcoicon-folder workspace-icon"></i>
+              </a>
+              <span (mouseover)="createPlanmenuTrigger.openMenu()" 
+              >
+                <button mat-button #createPlanmenuTrigger="matMenuTrigger" [matMenuTriggerFor]="marketing" class="color-black">Marketing</button>
+              <mat-menu #marketing="matMenu">
+                <button mat-menu-item [matMenuTriggerFor]="property">Property</button>
+                <button mat-menu-item [matMenuTriggerFor]="applicant">Applicant</button>
+                <button mat-menu-item [matMenuTriggerFor]="landlord">Landlord/Vendor</button>
+                <button mat-menu-item [matMenuTriggerFor]="tenancies">Tenancies</button>
+              </mat-menu>
+
+              <mat-menu #property="matMenu">
+                <button mat-menu-item>Property Matching</button>
+                <button mat-menu-item>Market Appraisal</button>
+              </mat-menu>
+              <mat-menu #applicant="matMenu">
+                <button mat-menu-item>Register An Applicant</button>
+                <button mat-menu-item>Applicant Matching</button>
+              </mat-menu>
+              <mat-menu #landlord="matMenu">
+                <button mat-menu-item>Register New Enquiry (MA Form)</button>
+              </mat-menu>
+              <mat-menu #tenancies="matMenu">
+                <button mat-menu-item>Propose Tenancy</button>
+                <button mat-menu-item>Review Proposal</button>
+                <button mat-menu-item>Cancel Proposal</button>
+                <button mat-menu-item>Confirm Tenancy</button>
+              </mat-menu>
+              </span>
+              <span (mouseover)="maintTrigger.openMenu()" (mouseout)="maintTrigger.openMenu()">
+                <button mat-button #maintTrigger="matMenuTrigger" [matMenuTriggerFor]="maintenance" class="color-black">Maintenance</button>
+              <mat-menu #maintenance="matMenu">
+                <button mat-menu-item [matMenuTriggerFor]="contractor">Contractor</button>
+              </mat-menu>
+              <mat-menu #contractor="matMenu">
+                <button mat-menu-item>Add New Contractor</button>
+              </mat-menu>
+              </span>
+            </div>
+          <div class="right-menu">
+            <div class="ion-no-padding" class="result-search-grid">
+              <app-search-suggestion [pageType]="'agent-header'" [entityControl]="entityControl" (searchClickEvent)="searchHandler($event)" [searchTerm]="''"></app-search-suggestion>  
+          </div>
+            <div id="userInfo" layout="row">
+              <span class="circle name">SR</span>
+              <span class="flex"></span>
+              <ion-icon name="power" class="fa-power-off" size="small"></ion-icon>
+            </div>
+          </div>
+          </div>
+      </nav>
+  </header>
+</div>

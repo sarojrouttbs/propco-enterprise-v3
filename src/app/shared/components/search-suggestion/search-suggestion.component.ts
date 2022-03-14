@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { PROPCO } from "src/app/shared/constants";
 import { CommonService } from "src/app/shared/services/common.service";
 import { EventEmitter } from "@angular/core";
-import { SolrService } from "../../solr.service";
+import { SolrService } from "../../../solr/solr.service";
 declare function openScreen(key: string, value: any): any;
 
 @Component({

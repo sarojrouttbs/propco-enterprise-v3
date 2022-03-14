@@ -1,5 +1,9 @@
-<ion-row [ngClass]="pageType == 'dashboard' ? 'ion-align-items-center ion-justify-content-center ion-margin-vertical' : 'ion-align-items-center main-row ion-justify-content-end ion-margin-vertical'">
-  <ion-col size="11" class="solrMutiSelect ion-no-padding tour-1">
+<ion-row
+[ngClass]="pageType === 'dashboard' ? 'ion-align-items-center ion-justify-content-center ion-margin-vertical' : 
+(pageType === 'solr-resultpage' ? 'ion-align-items-center main-row ion-justify-content-end ion-margin-vertical' : 'ion-align-items-center main-row agent-main-row ion-margin-vertical')"
+
+>
+  <ion-col [size]="pageType == 'dashboard' || pageType == 'solr-resultpage'?'11':'22'" class="solrMutiSelect ion-no-padding tour-1">
     <mat-form-field appearance="fill">
       <!-- <mat-label>Select</mat-label> -->
       <mat-select [formControl]="entityControl" multiple class="mat-select-red" class="solr-entity-selector">
@@ -13,7 +17,7 @@
       </mat-select>
     </mat-form-field>
   </ion-col>
-  <ion-col [size]="pageType == 'dashboard'?'69':'60'" size-xl="40" style="padding-right: 0;" class="ion-no-padding tour-2">
+  <ion-col [size]="pageType == 'dashboard'?'69':(pageType == 'solr-resultpage' ? '50' : '70')" style="padding-right: 0;" class="ion-no-padding tour-2">
     <div>
       <ion-searchbar 
       [(ngModel)]="searchTerm" 
@@ -26,8 +30,9 @@
       <!-- (ionBlur) = "isItemAvailable = false"
       (ionFocus) = "suggestions.length > 0 ? isItemAvailable = true : false" -->
       </ion-searchbar>
-      <ion-progress-bar color="danger" [type]="'indeterminate'" *ngIf="showLoader"></ion-progress-bar>
-      <ion-list *ngIf="isItemAvailable" class="solrSuggestionList">
+      <ion-progress-bar color="danger" [type]="'indeterminate'" *ngIf="showLoader" style="position: absolute;"></ion-progress-bar>
+      <ion-list *ngIf="isItemAvailable" class="solrSuggestionList" 
+      [class.agent-list] = "pageType === 'agent-header'">
         <ion-item *ngFor="let item of suggestions" class="solrSuggestionListItem">
           <ng-container [ngTemplateOutlet]="propertySuggestion"  *ngIf="item?.entityType === 'PROPERTY'"
               [ngTemplateOutletContext]="{item:item}">
@@ -51,7 +56,7 @@
       </ion-list>
     </div>
   </ion-col>
-  <ion-col size="4" class="ion-no-padding tour-3">
+  <ion-col [size]="pageType == 'dashboard' || pageType == 'solr-resultpage'?'4':'8'" class="ion-no-padding tour-3">
     <ion-buttons end (click)="goToPage()">
       <i class="propcoicon propcoicon-search no-background red-icon search-icon"></i>
     </ion-buttons>     

@@ -7,12 +7,12 @@ import { IonicModule } from '@ionic/angular';
 import { SearchResultsPageRoutingModule } from './search-results-routing.module';
 
 import { SearchResultsPage } from './search-results.page';
-import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from 'src/app/material.module';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { ReplaceSquareBracketsPipe } from '../pipes/replace-square-brackets.pipe';
 import { RemainingCountPipe } from '../pipes/remaining-count.pipe';
+import { ComponentsModule } from 'src/app/shared/components/components.module';
 
 @NgModule({
   imports: [
@@ -20,11 +20,11 @@ import { RemainingCountPipe } from '../pipes/remaining-count.pipe';
     FormsModule,
     IonicModule,
     SearchResultsPageRoutingModule,
-    SharedModule,
     MaterialModule,
     ReactiveFormsModule,
     NgxMatSelectSearchModule,
-    NgxSliderModule
+    NgxSliderModule,
+    ComponentsModule
   ],
   declarations: [SearchResultsPage,ReplaceSquareBracketsPipe,RemainingCountPipe]
 })

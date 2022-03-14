@@ -1,6 +1,6 @@
 <ion-header >
   <ion-grid class="ion-no-padding" class="result-search-grid">
-    <app-search-suggestion [entityControl]="entityControl" (searchClickEvent)="searchHandler($event)" [searchTerm]="solrSearchConfig.searchTerm"></app-search-suggestion> 
+    <app-search-suggestion [pageType]="'solr-resultpage'" [entityControl]="entityControl" (searchClickEvent)="searchHandler($event)" [searchTerm]="solrSearchConfig.searchTerm"></app-search-suggestion> 
   </ion-grid>
 </ion-header>
 
@@ -1178,7 +1178,7 @@
       <mat-expansion-panel-header>
         <!-- <mat-panel-title> -->
          <div class="list-header align-flex-center">
-          <div (click)="$event.stopPropagation();openDetails('OpenTenant',item.propcoId)" class="left-side">
+          <div (click)="$event.stopPropagation();openDetails('OpenApplicant',item.propcoId)" class="left-side">
             <i class="propcoicon propcoicon-applicant-let no-background"></i>
             <span class="title-wrapper">
               <p class="title" [title]="item?.fullName">{{item?.fullName}}&nbsp;&nbsp;
@@ -1268,7 +1268,7 @@
       <mat-expansion-panel-header>
         <!-- <mat-panel-title> -->
          <div class="list-header align-flex-center">
-          <div (click)="$event.stopPropagation();openDetails('OpenTenant',item.propcoId)" class="left-side">
+          <div (click)="$event.stopPropagation();openDetails('OpenContractor',item.propcoId)" class="left-side">
             <i class="propcoicon propcoicon-contractor no-background"></i>
             <span class="title-wrapper">
               <p class="title" [title]="item?.fullName">{{item?.fullName}}</p>
