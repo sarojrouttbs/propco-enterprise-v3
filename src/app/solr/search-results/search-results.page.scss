@@ -31,8 +31,8 @@ h1.example-app-name {
 }
 
 .solr-filter-sidenav {
-  background-color: var(--ion-color-step-1700);
-  width: 28%;
+  background-color: var(--ion-color-step-2000);
+  width: 24%;
   max-width: 333px;
 }
 
@@ -510,7 +510,7 @@ ion-item {
 }
 
 .solr-pagginater-container {
-  background-color: var(--ion-color-step-1700);
+  background-color: var(--ion-color-step-2000);
 
   .paginator-grid {
     display: flex;
@@ -540,11 +540,11 @@ ion-item {
   .mat-expansion-panel {
     margin-top: 0;
     box-shadow: none;
-    background-color: var(--ion-color-step-1700);
+    background-color: var(--ion-color-step-2000);
   }
 
   .mat-expansion-panel-header {
-    border: 1px solid var(--ion-color-step-1800);
+    border: 1px solid var(--ion-color-step-2000);
     border-right: none;
   }
 }
@@ -554,12 +554,16 @@ ion-item {
 
   mat-expansion-panel {
     color: var(--ion-color-step-250);
-    background-color: var(--ion-color-step-1900);
+    background-color:  var(--ion-clor-solr-list);
     box-shadow: none;
   }
 
   .mat-expansion-panel:is(.mat-expanded):not([aria-disabled=true]) {
-    background: var(--ion-color-medium-contrast);
+    background-color: var(--ion-clor-solr-list);
+  }
+
+  .mat-expansion-panel:not(.mat-expanded):not([aria-disabled=true]) .mat-expansion-panel-header:hover{
+    background-color: var(--ion-clor-solr-list);
   }
 
   .mat-expansion-panel-header {
@@ -755,7 +759,7 @@ ion-item {
   }
 
   ion-list {
-    background-color: var(--ion-color-step-1700);
+    background-color: var(--ion-color-step-2000);
 
     ion-item {
       padding-left: 16px;
