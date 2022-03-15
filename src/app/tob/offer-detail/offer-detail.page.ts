@@ -150,6 +150,8 @@ export class OfferDetailPage implements OnInit {
     this.getPropertyDetails(this.propertyId);
     this.getPropertyClauses(this.propertyId);
     this.getPropertyRestrictions(this.propertyId);
+    this.isOffersDetailsAvailable = true;
+    this.isApplicantDetailsAvailable = true;
   }
 
   async initViewApiCalls() {
