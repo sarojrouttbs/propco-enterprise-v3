@@ -500,7 +500,6 @@ export class SearchResultsPage implements OnInit {
   }
 
   private prepareSearchParams() {
-    console.log(this.solrSearchConfig.searchTerm,'this.solrSearchConfig.searchTerm')
     let params: any = {};
     params.limit = this.pageSize;
     params.page = this.pageIndex + 1;
