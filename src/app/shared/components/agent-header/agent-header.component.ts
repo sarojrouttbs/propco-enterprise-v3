@@ -20,5 +20,8 @@ export class AgentHeaderComponent implements OnInit {
   goToHome() {
     this.router.navigate(['/', 'agent']);
   }
+  goToWorkSpace() {
+    this.router.navigate(['agent/entity/property/dashboard']);
+  }
 
 }
