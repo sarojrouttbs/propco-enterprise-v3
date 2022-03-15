@@ -1,8 +1,9 @@
-<ion-header >
+<!-- <ion-header >
   <ion-grid class="ion-no-padding" class="result-search-grid">
     <app-search-suggestion [pageType]="'solr-resultpage'" [entityControl]="entityControl" (searchClickEvent)="searchHandler($event)" [searchTerm]="solrSearchConfig.searchTerm"></app-search-suggestion> 
   </ion-grid>
-</ion-header>
+</ion-header> -->
+
 
 <ion-content id="solr-search-result" class="main-container">
   <mat-drawer-container class="drawer-container">
@@ -1042,7 +1043,7 @@
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
-                      <span class="text">Phone Number</span>
+                      <span class="text">Phone</span>
                     <br />
                     <span class="text-value">{{item?.phoneNumber || 'N/A'}}</span>
                     </p>
@@ -1057,7 +1058,7 @@
                 <ion-row class="fault-data-row">
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
-                      <span class="text">Number of Properties owned</span>
+                      <span class="text">Number Of Properties Owned</span>
                     <br />
                     <span class="text-value">{{(item?.landlordFirstPropertyReference) ? item?.landlordOtherPropertiesCount + 1 : 0}}</span>
                     </p>
@@ -1240,7 +1241,7 @@
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
-                      <span class="text">Bed Range</span>
+                      <span class="text">Minimum number of beds</span>
                     <br />
                     <span class="text-value">{{item?.bedRange || 'N/A'}}</span>
                     </p>

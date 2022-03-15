@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-agent-header',
@@ -8,11 +9,16 @@ import { FormControl } from '@angular/forms';
 })
 export class AgentHeaderComponent implements OnInit {
   entityControl = new FormControl(['Property']);
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {}
 
   searchHandler(term) {
+    // console.log('dsadsad')
+  }
+
+  goToHome() {
+    this.router.navigate(['/', 'agent']);
   }
 
 }
