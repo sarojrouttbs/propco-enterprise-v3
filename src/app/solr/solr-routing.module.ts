@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { MaterialModule } from "../material.module";
-import { AuthGuard } from "../shared/authguard";
 
 import { SolrPage } from "./solr.page";
 

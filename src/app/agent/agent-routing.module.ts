@@ -18,7 +18,14 @@ const routes: Routes = [
       {
         path: "dashboard",
         loadChildren: () => import("./dashboard/dashboard.module").then((m) => m.DashboardPageModule)
-      }
+      },
+      {
+        path: "solr/search-results",
+        loadChildren: () =>
+          import("../solr/search-results/search-results.module").then(
+            (m) => m.SearchResultsPageModule
+          ),
+      },
     ]
   }
 ];

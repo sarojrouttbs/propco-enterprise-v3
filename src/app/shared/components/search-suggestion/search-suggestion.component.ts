@@ -6,6 +6,7 @@ import { PROPCO } from "src/app/shared/constants";
 import { CommonService } from "src/app/shared/services/common.service";
 import { EventEmitter } from "@angular/core";
 import { SolrService } from "../../../solr/solr.service";
+import { SolrSearchHandlerService } from "../../services/solr-search-handler.service";
 declare function openScreen(key: string, value: any): any;
 
 @Component({
@@ -48,7 +49,8 @@ export class SearchSuggestionComponent implements OnInit {
   constructor(
     private solrService: SolrService,
     private commonService: CommonService,
-    private router: Router
+    private router: Router,
+    private solrSearchService: SolrSearchHandlerService
   ) {}
 
   getItems(ev: any) {
@@ -137,14 +139,42 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   goToPage() {
-    this.router.navigate(["/solr/search-results"], {
-      queryParams: {
-        searchTerm: this.searchTermControl.value,
-        type: this.entityControl.value,
-      },
-    });
-    if (this.pageType !== "dashboard") {
-      this.searchClickEvent.emit(this.searchTermControl.value);
+    
+    if(this.router.url.includes('/solr/dashboard')) {
+      this.router.navigate(["/solr/search-results"], {
+        queryParams: {
+          searchTerm: this.searchTermControl.value,
+          type: this.entityControl.value,
+        },replaceUrl:true
+      },);
+    }
+    if(this.router.url.includes('/agent/dashboard')) {
+      this.router.navigate(["/agent/solr/search-results"], {
+        queryParams: {
+          searchTerm: this.searchTermControl.value,
+          type: this.entityControl.value,
+        },
+        replaceUrl:true
+      });
+    }
+    if ((this.pageType === 'solr-resultpage') && this.router.url.includes('/solr/search-result') || this.router.url.includes('/agent/solr/search-result')) {
+      if(this.pageType === 'solr-resultpage' && this.router.url.includes('/solr/search-result')){
+        this.router.navigate(["/solr/search-results"], {
+          queryParams: {
+            searchTerm: this.searchTermControl.value,
+            type: this.entityControl.value,
+          },
+        });
+      }
+      if(this.router.url.includes('/agent/solr/search-result')){
+        this.router.navigate(["/agent/solr/search-results"], {
+          queryParams: {
+            searchTerm: this.searchTermControl.value,
+            type: this.entityControl.value,
+          },
+        });
+      }
+      this.solrSearchService.search(this.entityControl.value,this.searchTermControl.value);
     }
   }
 }

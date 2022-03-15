@@ -6,7 +6,7 @@ import { SearchResultsPage } from './search-results.page';
 const routes: Routes = [
   {
     path: '',
-    component: SearchResultsPage
+    component: SearchResultsPage,
   }
 ];
 

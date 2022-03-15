@@ -53,10 +53,14 @@
 }
 
 #solr-dashboard {
-  --padding-top: var(--ion-padding-top);
-  --padding-end: var(--ion-padding-end);
-  --padding-bottom: var(--ion-padding-bottom);
-  --padding-start: var(--ion-padding-start);
+  ion-chip {
+    margin-top: 10px;
+    position: absolute;
+  }
+
+  .divider {
+    margin-top: 2%;
+  }
 
   i.search-icon:hover {
     cursor: pointer;
