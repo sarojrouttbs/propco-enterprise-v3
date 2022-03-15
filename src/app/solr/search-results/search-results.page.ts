@@ -8,6 +8,7 @@ import { CommonService } from "src/app/shared/services/common.service";
 import { SolrService } from "../solr.service";
 declare function openScreen(key: string, value: any): any;
 import { Options, LabelType } from "@angular-slider/ngx-slider";
+import { SolrSearchHandlerService } from "src/app/shared/services/solr-search-handler.service";
 
 @Component({
   selector: "app-search-results",
@@ -151,7 +152,8 @@ export class SearchResultsPage implements OnInit {
     private solrService: SolrService,
     private fb: FormBuilder,
     private commonService: CommonService,
-    private el: ElementRef<HTMLElement>
+    private el: ElementRef<HTMLElement>,
+    private solrSearchService: SolrSearchHandlerService
   ) {
     this.currentDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
   }
@@ -160,6 +162,9 @@ export class SearchResultsPage implements OnInit {
     this.initResults();
     this.initFilterForm();
     this.multiSearchFilterHandler();
+    this.solrSearchService.getSearch().subscribe((data)=>{
+      this.searchHandler(data.entity,data.searchTerm);
+    });
   }
 
   private async initResults() {
@@ -692,7 +697,8 @@ export class SearchResultsPage implements OnInit {
     }
   }
 
-  searchHandler(term) {
+  searchHandler(entity,term) {
+    this.entityControl.setValue(entity);
     this.solrSearchConfig.searchTerm = term ? term : "";
     this.initResults();
   }

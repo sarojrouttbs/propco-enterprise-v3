@@ -1,9 +1,3 @@
-<ion-header >
-  <ion-grid class="ion-no-padding" class="result-search-grid">
-    <app-search-suggestion [pageType]="'solr-resultpage'" [entityControl]="entityControl" (searchClickEvent)="searchHandler($event)" [searchTerm]="solrSearchConfig.searchTerm"></app-search-suggestion> 
-  </ion-grid>
-</ion-header>
-
 <ion-content id="solr-search-result" class="main-container">
   <mat-drawer-container class="drawer-container">
       <mat-drawer #drawer class="solr-filter-sidenav" mode="side" [(opened)]="opened" >
@@ -26,7 +20,7 @@
               [formControl]="propertyCheck"
                 (click)="$event.stopPropagation();onChangeEntity('property')" 
                 (keydown)="$event.stopPropagation()">
-                PROPERTY
+                Property
               </mat-checkbox>
             </mat-expansion-panel-header>
             <form [formGroup]="propertyFilter">
@@ -179,7 +173,7 @@
               [formControl]="landlordCheck"
                 (click)="$event.stopPropagation();onChangeEntity('landlord')" 
                 (keydown)="$event.stopPropagation()">
-                LANDLORD
+                Landlord
               </mat-checkbox>
             </mat-expansion-panel-header>
             <form [formGroup]="landlordFilter">
@@ -234,7 +228,7 @@
                 [formControl]="tenantCheck"
                 (click)="$event.stopPropagation();onChangeEntity('tenant')" 
                 (keydown)="$event.stopPropagation()">
-                TENANT
+                Tenant
               </mat-checkbox>
             </mat-expansion-panel-header>
             <form [formGroup]="tenantFilter">
@@ -290,7 +284,7 @@
               <mat-checkbox [formControl]="applicantCheck" color="primary" 
                 (click)="$event.stopPropagation();onChangeEntity('applicant')" 
                 (keydown)="$event.stopPropagation()">
-                APPLICANT
+                Applicant
               </mat-checkbox>
             </mat-expansion-panel-header>
             <form [formGroup]="applicantFilter">
@@ -339,7 +333,7 @@
               <mat-checkbox [formControl]="agentCheck" color="primary" 
                 (click)="$event.stopPropagation();onChangeEntity('agent')" 
                 (keydown)="$event.stopPropagation()">
-                AGENT
+                Agent
               </mat-checkbox>
             </mat-expansion-panel-header>
             <form [formGroup]="agentFilter">
@@ -386,7 +380,7 @@
             <mat-checkbox [formControl]="contractorCheck" color="primary" 
               (click)="$event.stopPropagation();onChangeEntity('contractor')" 
               (keydown)="$event.stopPropagation()">
-              CONTRACTOR
+              Contractor
             </mat-checkbox>
           </mat-expansion-panel-header>
           <form [formGroup]="contractorFilter">
@@ -1042,7 +1036,7 @@
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
-                      <span class="text">Phone Number</span>
+                      <span class="text">Phone</span>
                     <br />
                     <span class="text-value">{{item?.phoneNumber || 'N/A'}}</span>
                     </p>
@@ -1057,7 +1051,7 @@
                 <ion-row class="fault-data-row">
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
-                      <span class="text">Number of Properties owned</span>
+                      <span class="text">Number Of Properties Owned</span>
                     <br />
                     <span class="text-value">{{(item?.landlordFirstPropertyReference) ? item?.landlordOtherPropertiesCount + 1 : 0}}</span>
                     </p>
@@ -1240,7 +1234,7 @@
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
-                      <span class="text">Bed Range</span>
+                      <span class="text">Minimum number of beds</span>
                     <br />
                     <span class="text-value">{{item?.bedRange || 'N/A'}}</span>
                     </p>
