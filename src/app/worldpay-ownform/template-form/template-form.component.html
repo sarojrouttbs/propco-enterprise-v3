@@ -1,0 +1,84 @@
+<form [action]="PAYMENT_URL" #paymentForm method="post" id="worldpay-form" [formGroup]="addressForm">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <span #paymentErrors></span>
+      </ion-col>
+      <ion-col size="100">
+        <h2 class="title">Please enter payment details below:</h2>
+      </ion-col>
+      <ion-col size="100" class="border-bottom"></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="100">
+        <h2 class="sub-heading ion-text-center"> Holding Deposit: {{_worldPayInternalData?.amount | currency: 'GBP'}}
+        </h2>
+      </ion-col>
+
+      <ion-col size-xs="100" size-sm="50">
+        <ion-row>
+          <ion-col size-xs="100">
+            <mat-form-field>
+              <mat-label>Address Line1 *</mat-label>
+              <input matInput value="" formControlName="addressLine1">
+              <mat-error align="start" *ngIf="addressForm.get('addressLine1').hasError('required')">
+                This field is required.
+              </mat-error>
+            </mat-form-field>
+          </ion-col>
+          <ion-col size-xs="100">
+            <mat-form-field>
+              <mat-label>Address Line2 *</mat-label>
+              <input matInput formControlName="addressLine2">
+              <mat-error align="start" *ngIf="addressForm.get('addressLine2').hasError('required')">
+                This field is required.
+              </mat-error>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50">
+        <ion-row>
+          <ion-col size-xs="100">
+            <mat-form-field>
+              <mat-label>Name on Card *</mat-label>
+              <input matInput data-worldpay="name" placeholder="name" value="" formControlName="name">
+            </mat-form-field>
+          </ion-col>
+          <ion-col size-xs="100">
+            <mat-form-field>
+              <mat-label>Card Number *</mat-label>
+              <input matInput data-worldpay="number" size="20">
+            </mat-form-field>
+          </ion-col>
+          <ion-col size-xs="50" size-sm="50">
+            <mat-form-field>
+              <mat-label>Expiry (MM) *</mat-label>
+              <input matInput data-worldpay="exp-month" size="2">
+            </mat-form-field>
+          </ion-col>
+          <ion-col size-xs="50" size-sm="50">
+            <mat-form-field>
+              <mat-label>Expiry (YYYY) *</mat-label>
+              <input matInput data-worldpay="exp-year" size="4">
+            </mat-form-field>
+          </ion-col>
+          <ion-col size-xs="100">
+            <mat-form-field>
+              <mat-label>CVV *</mat-label>
+              <input matInput data-worldpay="cvc" size="4">
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-align-items-center">
+          <ion-col size-xs="100" size-sm="50">
+            <img src="assets/images/Worldpay-logo.png" class="worldpay-icon" alt="">
+          </ion-col>
+          <ion-col size-xs="100" size-sm="50" style="text-align: right;">
+            <input type="submit" class="pay-btn" value="pay" [disabled]="!addressForm.valid">
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</form>

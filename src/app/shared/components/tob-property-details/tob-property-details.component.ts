@@ -10,6 +10,7 @@ import { CommonService } from '../../services/common.service';
 export class TobPropertyDetailsComponent implements OnInit {
   @Input() propertyDetails;
   @Input() rentFrequencyTypes;
+  @Input() isTobPropertyCardReady;
   
   constructor(public commonService: CommonService) { }
 

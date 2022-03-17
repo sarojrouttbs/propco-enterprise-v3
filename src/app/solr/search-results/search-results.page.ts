@@ -8,6 +8,7 @@ import { CommonService } from "src/app/shared/services/common.service";
 import { SolrService } from "../solr.service";
 declare function openScreen(key: string, value: any): any;
 import { Options, LabelType } from "@angular-slider/ngx-slider";
+import { SolrSearchHandlerService } from "src/app/shared/services/solr-search-handler.service";
 
 @Component({
   selector: "app-search-results",
@@ -84,6 +85,7 @@ export class SearchResultsPage implements OnInit {
   propertyStatuses;
   propertyStatusesFiltered;
   officeCodes;
+  officeCodesMap = new Map();
   officeCodesFiltered;
   landlordStatuses;
   landlordStatusesFiltered;
@@ -143,19 +145,26 @@ export class SearchResultsPage implements OnInit {
   };
 
   viewType: string = "LIST";
+  currentDate;
 
   constructor(
     private route: ActivatedRoute,
     private solrService: SolrService,
     private fb: FormBuilder,
     private commonService: CommonService,
-    private el: ElementRef<HTMLElement>
-  ) {}
+    private el: ElementRef<HTMLElement>,
+    private solrSearchService: SolrSearchHandlerService
+  ) {
+    this.currentDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
+  }
 
   ngOnInit() {
     this.initResults();
     this.initFilterForm();
     this.multiSearchFilterHandler();
+    this.solrSearchService.getSearch().subscribe((data)=>{
+      this.searchHandler(data.entity,data.searchTerm);
+    });
   }
 
   private async initResults() {
@@ -335,6 +344,7 @@ export class SearchResultsPage implements OnInit {
     this.propertyStatuses = this.propertyStatusesFiltered =
       data.propertyStatuses;
     this.officeCodes = this.officeCodesFiltered = data.officeCodes;
+    this.setOfficeCodeMap();
     this.landlordStatuses = this.landlordStatusesFiltered =
       data.landlordStatuses;
     this.applicantStatuses = this.applicantStatusesFiltered =
@@ -344,6 +354,12 @@ export class SearchResultsPage implements OnInit {
       data.contractorSkills;
     this.contractorStatuses = this.contractorStatusesFiltered =
       data.contractorStatuses;
+  }
+
+  private setOfficeCodeMap() {
+    this.officeCodes.map((code, index) => {
+      this.officeCodesMap.set(code.index, code.value);
+    });
   }
 
   private getQueryParams() {
@@ -466,6 +482,14 @@ export class SearchResultsPage implements OnInit {
       .entitySearch(this.prepareSearchParams())
       .subscribe((res) => {
         this.results = res && res.data ? res.data : [];
+        this.results.map((x) => {
+          if (x.officeCode) {
+            let newValues = x.officeCode.map((code) => {
+              return this.officeCodesMap.get(code);
+            });
+            x.officeCode = newValues;
+          }
+        });
         this.length = res && res.count ? res.count : 0;
         // this.opened = true;
         this.loaded = true;
@@ -529,7 +553,6 @@ export class SearchResultsPage implements OnInit {
         delete ccFilter.approvedByAgent;
       }
       params.contractorFilter = ccFilter;
-      
     }
     if (this.entityControl.value.indexOf("Applicant") !== -1) {
       let apFilter = Object.assign(this.applicantFilter.value, {});
@@ -554,14 +577,6 @@ export class SearchResultsPage implements OnInit {
     this.pageSize = e.pageSize;
     this.getSearchResults();
     return e;
-  }
-
-  public isAgentApproved(agentApproved) {
-    let value = "";
-    if (agentApproved === true) {
-      value = "Agency Approved";
-    }
-    return value;
   }
 
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -682,7 +697,8 @@ export class SearchResultsPage implements OnInit {
     }
   }
 
-  searchHandler(term) {
+  searchHandler(entity,term) {
+    this.entityControl.setValue(entity);
     this.solrSearchConfig.searchTerm = term ? term : "";
     this.initResults();
   }

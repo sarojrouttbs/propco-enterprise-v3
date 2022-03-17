@@ -20,6 +20,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatCardModule} from '@angular/material/card';
+import {MatMenuModule} from '@angular/material/menu';
 
 export const MY_FORMATS = {
   parse: {
@@ -60,6 +61,7 @@ export const MY_FORMATS = {
     MatExpansionModule,
     MatCheckboxModule,
     MatCardModule,
+    MatMenuModule
   ],
   providers: [
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }

@@ -675,4 +675,33 @@ export class CommonService {
       window.open(url);
     }
   }
+
+  customizePaginator(paginatorClassName: string): void {
+    setTimeout(() => {
+      const lastBtn = document.querySelector(`.${paginatorClassName} .mat-paginator-navigation-last`);
+      if (lastBtn) {
+        lastBtn.innerHTML = "Last";
+      }
+      const firstBtn = document.querySelector(`.${paginatorClassName} .mat-paginator-navigation-first`);
+      if (firstBtn) {
+        firstBtn.innerHTML = "First";
+      }
+      const perPage = document.querySelector(`.${paginatorClassName} .mat-paginator-page-size-label`);
+      if (perPage) {
+        perPage.innerHTML = "Per page";
+      }
+    }, 100);
+  }
+
+  getPaymentUrl(config): string {
+    let url: string;
+    let payment_method = environment.PAYMENT_METHOD;
+    let payment_config = config[payment_method];
+    if (environment.PAYMENT_PROD) {
+      url = payment_config.PROD.URL;
+    } else {
+      url = payment_config.TEST.URL;
+    }
+    return url;
+  }
 }

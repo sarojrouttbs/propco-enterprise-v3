@@ -1,6 +1,6 @@
 <ion-content>
   <ion-grid class="offer-details">
-    <app-tob-property-details [propertyDetails]="propertyDetails" [rentFrequencyTypes]="rentFrequencyTypes">
+    <app-tob-property-details [propertyDetails]="propertyDetails" [rentFrequencyTypes]="rentFrequencyTypes" [isTobPropertyCardReady]="isTobPropertyCardReady">
     </app-tob-property-details>
     <ion-grid id="application-stepper"> 
       <ion-row>
@@ -124,7 +124,125 @@
 
 <ng-template #occupants>
   <ion-grid id="occupant-details">
-    <ion-row>
+    <ion-row *ngIf="!isApplicantDetailsAvailable">
+      <ion-col size="100" class="list-section">
+        <ion-grid class="header">
+          <ion-row class="">
+            <ion-col size="10">
+              <ion-text> <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></ion-text>
+            </ion-col>
+            <ion-col size="15">
+              <ion-text> <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></ion-text>
+            </ion-col>
+            <ion-col size="15">
+              <ion-text> <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></ion-text>
+            </ion-col>
+            <ion-col size="20">
+              <ion-text> <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></ion-text>
+            </ion-col>
+            <ion-col size="22">
+              <ion-text> <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></ion-text>
+            </ion-col>
+            <ion-col size="8">
+              <ion-text> <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></ion-text>
+            </ion-col>
+            <ion-col size="10">
+              <ion-text> <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></ion-text>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+          <ion-grid class="content">
+              <ion-row >
+                <ng-container>
+                  <ion-grid class="list-content">
+                    <ion-row *ngFor="let number of [0,1]">
+                      <ion-col size="10">
+                        <ion-text>
+                          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                        </ion-text>
+                      </ion-col>
+                      <ion-col size="15">
+                        <ion-text>
+                          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                        </ion-text>
+                      </ion-col>
+                      <ion-col size="15">
+                        <ion-text>
+                          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                        </ion-text>
+                      </ion-col>
+                      <ion-col size="20">
+                        <ion-text>
+                          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                        </ion-text>
+                      </ion-col>
+                      <ion-col size="22">
+                        <ion-text>
+                          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                        </ion-text>
+                      </ion-col>
+                      <ion-col size="8">
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                      </ion-col>
+                      <ion-col size="10">
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ng-container>
+              </ion-row>
+              <ion-row>
+                <ng-container>
+                  <ion-col size="10">
+                    <ion-item lines="none">
+                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="15">
+                    <ion-item lines="none">
+                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="15">
+                    <ion-item lines="none">
+                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="20">
+                    <ion-item lines="none">
+                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="25">
+                    <ion-item lines="none">
+                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </ion-item>
+                  </ion-col>
+
+                  <ion-col style="padding-top: 5px" size="15">
+                    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                  </ion-col>
+                </ng-container>
+              </ion-row>
+              <ion-row>
+                <ng-container>
+                  <ion-grid>
+                    <ion-row class="ion-justify-content-end search-row">
+                      <ion-col size-sm="50" size-xl="35" id="tob-applicant-search">
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                      </ion-col>
+                      <ion-col size="4" class="ion-no-padding">
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text> 
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ng-container>
+              </ion-row>
+          </ion-grid>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="isApplicantDetailsAvailable">
       <ion-col size="100" class="list-section">
         <ion-grid class="header">
           <ion-row class="">
@@ -1174,31 +1292,10 @@
     </ion-row>
   </ion-grid>
 </ng-template>
-<ng-template #payment>
-  <!-- <ion-grid>
-    <ion-row>
-      <ion-col class="ion-text-center">
-        <h2 class="payment-heading">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
-        <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-        <ion-button>Pay</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid> -->
-<!-- </ng-template>
-<ng-template #payment> -->
+<ng-template #payment>  
   <ng-container *ngIf="PAYMENT_METHOD == 'WORLDPAY_REDIRECT'" >
   <!--payment method 1 starts -->
     <ion-grid class="ion-no-padding" [hidden]="showWorldpayIframe" id="payment-detail">
-      <!-- <ion-row [hidden]="hidePaymentForm" class="ion-justify-content-between">
-        <ion-col size="100" [hidden]="showWorldpayIframe">
-          <div class="page-heading">Payment Details</div>
-        </ion-col>
-        <ion-col size="100" class="ion-text-center holding-deposit" style="margin-top:200px;">
-          <div class="heading">Holding Deposit: &nbsp;&nbsp;&nbsp;<ion-text class="value">
-              {{applicationDetails?.depositAmount | currency: 'GBP'}}</ion-text>
-          </div>
-        </ion-col>
-      </ion-row> -->
       <ion-row [hidden]="hidePaymentForm" class="ion-justify-content-between">
         <ion-col size="100" [hidden]="showWorldpayIframe" class="ion-text-center">
           <h2 class="payment-heading">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
@@ -1243,44 +1340,34 @@
     <!--payment method 1 ends -->
   </ng-container>
 
-  <!-- <ng-container *ngIf="PAYMENT_METHOD === 'WORLDPAY_OWNFORM'">
-    <ion-grid class="ion-no-padding" *ngIf="!showworldpayInternalForm" id="payment-detail">
-      <ion-row class="ion-justify-content-between">
-        <ion-col size="100" [hidden]="showworldpayInternalForm">
-          <div class="page-heading">Payment Details</div>
-        </ion-col>
-        <ion-col size="100" class="ion-text-center holding-deposit" style="margin-top:200px;">
-          <div class="heading">Holding Deposit: &nbsp;&nbsp;&nbsp;<ion-text class="value">
-              {{applicationDetails?.depositAmount | currency: 'GBP'}}</ion-text>
-          </div>
+  <ng-container *ngIf="PAYMENT_METHOD === 'WORLDPAY_OWNFORM'">
+    <!--payment method 2 start -->
+    <ion-grid class="ion-no-padding" *ngIf="!showWorldpayInternalForm" id="payment-detail">
+      <ion-row [hidden]="hidePaymentForm" class="ion-justify-content-between">
+        <ion-col size="100" [hidden]="showWorldpayIframe" class="ion-text-center">
+          <h2 class="payment-heading">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
         </ion-col>
       </ion-row>
     </ion-grid>
-    <div style="padding:10px 4px;" *ngIf="!showworldpayInternalForm" >
+    <div style="padding:10px 4px;" *ngIf="!showWorldpayInternalForm" >
       <ion-button [hidden]="true" id="worldpayResponse" (click)="paymentDone()">Payment Done</ion-button>
       <iframe name="worldpay-iframe" id="worldpay-iframe" [hidden]="!showWorldpayIframe"></iframe>
-      <form  target="worldpay-iframe"
-        class="payment-form">
-        <ion-button type="submit" color="success" [disabled]="!applicationDetails?.depositAmount" [hidden]="showworldpayInternalForm" (click)="showworldpayInternalForm = true;">
-          Pay</ion-button>
+      <form target="worldpay-iframe" class="payment-form">
+        <ion-button color="danger" [hidden]="showWorldpayInternalForm" (click)=onCancel()>Cancel</ion-button>&nbsp;
+        <ion-button type="submit" color="success" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayInternalForm" (click)="showWorldpayInternalForm = true;">Pay</ion-button>
       </form>
     </div>
-    <app-template-form *ngIf="showworldpayInternalForm" [worldPayInternalData]="worldPayInternalData" (successPayment)='onInternalWorldpaySuccess($event)'></app-template-form>
-  </ng-container> -->
+    <app-template-form *ngIf="showWorldpayInternalForm" [worldPayInternalData]="worldPayInternalData" (successPayment)='onInternalWorldpaySuccess($event)'></app-template-form>
+    <!--payment method 2 ends -->
+  </ng-container>
 
   <ng-container *ngIf="PAYMENT_METHOD == 'BARCLAYCARD_REDIRECT'" >
-    <!--payment method 3 starts -->
+    <!--payment method 3 start -->
     <ion-grid class="ion-no-padding" [hidden]="showWorldpayIframe" id="payment-detail">
       <ion-row [hidden]="hidePaymentForm" class="ion-justify-content-between">
         <ion-col size="100" [hidden]="showWorldpayIframe" class="ion-text-center">
           <h2 class="payment-heading">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
-          <!-- <div class="page-heading">Payment Details</div> -->
         </ion-col>
-        <!-- <ion-col size="100" class="ion-text-center holding-deposit" style="margin-top:200px;">
-          <div class="heading">Holding Deposit: &nbsp;&nbsp;&nbsp;<ion-text class="value">
-              {{applicationDetails?.depositAmount | currency: 'GBP'}}</ion-text>
-          </div>
-        </ion-col> -->
       </ion-row>
       <ion-row [hidden]="!hidePaymentForm" class="ion-text-center">
         <ion-col size="100">
@@ -1307,29 +1394,10 @@
         <input type="hidden" name="LANGUAGE" value="en_US">
         <input type="hidden" name="ORDERID" [value]="paymentDetails?.orderId">
         <input type="hidden" name="PSPID" [value]="paymentDetails?.PSPID">  
-          <!-- <input type="hidden" name="CN" value=""> -->
-          
-          <!--<input type="hidden" name="OWNERZIP" [value]="">
-          <input type="hidden" name="OWNERADDRESS" [value]="">
-          <input type="hidden" name="OWNERCTY" [value]="">
-          <input type="hidden" name="OWNERTOWN" [value]="">
-          <input type="hidden" name="OWNERTELNO" value=""> -->
-          
-          <!-- <input type="hidden" name="TITLE" value="">
-          <input type="hidden" name="BGCOLOR" value="">
-          <input type="hidden" name="TXTCOLOR" value="">
-          <input type="hidden" name="TBLBGCOLOR" value="">
-          <input type="hidden" name="TBLTXTCOLOR" value="">
-          <input type="hidden" name="BUTTONBGCOLOR" value="">
-          <input type="hidden" name="BUTTONTXTCOLOR" value="">
-          <input type="hidden" name="LOGO" value="">
-          <input type="hidden" name="FONTTYPE" value=""> -->
-          
-          <ion-button color="danger" [hidden]="showWorldpayIframe" (click)=onCancel()>Cancel</ion-button>&nbsp;
-          <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="showWorldpayIframe = true;">
-            Pay</ion-button>
+        <ion-button color="danger" [hidden]="showWorldpayIframe" (click)=onCancel()>Cancel</ion-button>&nbsp;
+        <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="showWorldpayIframe = true;">Pay</ion-button>
       </form>
     </div>
-    <!--payment method 1 ends -->
+    <!--payment method 3 ends -->
   </ng-container>
 </ng-template>

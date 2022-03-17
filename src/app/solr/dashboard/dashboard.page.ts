@@ -5,6 +5,11 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from "@angular/router";
 import { PROPCO } from "src/app/shared/constants";
 import { CommonService } from "src/app/shared/services/common.service";
 import { SolrService } from "../solr.service";
+import { GuidedTourService } from "ngx-guided-tour";
+import {
+  GuidedTour,
+  Orientation,
+} from "../../shared/interface/guided-tour.model";
 declare function openScreen(key: string, value: any): any;
 
 @Component({
@@ -20,11 +25,53 @@ export class DashboardPage implements OnInit {
   hideSuggestion: boolean = false;
   entityControl = new FormControl(["Property"]);
   loaded: boolean = false;
+  dashboardTour: GuidedTour = {
+    tourId: "solr-tour",
+    useOrb: false,
+    steps: [
+      {
+        title: "Welcome to the New Dashboard",
+        content:
+          "Just getting started? Let's take a look at the new user interface",
+      },
+      {
+        title: "Step 1",
+        selector: ".tour-1",
+        content: "Select Entities",
+        orientation: Orientation.Bottom,
+      },
+      {
+        title: "Step 2",
+        selector: ".tour-2",
+        content: "Type anything to get suggestions",
+        orientation: Orientation.Bottom,
+      },
+      {
+        title: "Step 3",
+        selector: ".tour-3",
+        content: "Click this button to search result(s)",
+        orientation: Orientation.Bottom,
+      },
+      {
+        title: "Step 4",
+        selector: ".tour-4",
+        content: "Click this card(s) to open the details",
+        orientation: Orientation.Right,
+      },
+    ],
+    skipCallback: (stepSkippedOn: number) => {
+      this.disableWelcomeTour();
+    },
+    completeCallback: () => {
+      this.disableWelcomeTour();
+    },
+  };
 
   constructor(
     private solrService: SolrService,
     private route: ActivatedRoute,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private guidedTourService: GuidedTourService
   ) {}
 
   ngOnInit() {
@@ -40,6 +87,11 @@ export class DashboardPage implements OnInit {
     if (isAuthSuccess) {
       this.loggedInUserData = await this.getUserDetails();
       this.loaded = true;
+      if (!this.commonService.getItem("disableTour")) {
+        setTimeout(() => {
+          this.guidedTourService.startTour(this.dashboardTour);
+        }, 300);
+      }
     }
   }
 
@@ -82,5 +134,9 @@ export class DashboardPage implements OnInit {
 
   openHomeCategory(key: string, value = null) {
     openScreen(key, value);
+  }
+
+  private disableWelcomeTour() {
+    this.commonService.setItem("disableTour", true);
   }
 }

@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { ERROR_MESSAGE, FAULT_STATUSES, NOTES_TYPE, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES } from './../../shared/constants';
+import { ERROR_MESSAGE, FAULT_STATUSES, NOTES_TYPE, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES,MAINT_SOURCE_TYPES, DEFAULT_MESSAGES } from './../../shared/constants';
 import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
 import { Router } from '@angular/router';
@@ -46,7 +46,6 @@ export class DashboardPage implements OnInit {
   isStatusFilter = false;
   isAssignToFilter = false;
   filterForm: FormGroup;
-  // invoiceArr = [{ key: 8, value: 'Invoice Submitted' }, { key: 9, value: 'Paid' }];
   accessibleOffices: any
   faultParams: any = new HttpParams();
   fs: number[] = [];
@@ -91,6 +90,8 @@ export class DashboardPage implements OnInit {
   minDate;
   futureDate;
   currentDate;
+  maintSourceTypes = MAINT_SOURCE_TYPES;
+  DEFAULT_MESSAGES = DEFAULT_MESSAGES;
 
   constructor(
     private commonService: CommonService,
@@ -213,7 +214,6 @@ export class DashboardPage implements OnInit {
   }
 
   ionViewDidEnter() {
-    // this.faultParams = this.faultParams.set('fpm', this.FULLY_MANAGED_PROPERTY_TYPES.toString());
     if (this.loadTable) {
       this.rerenderFaults(true);
       this.bucketCount();
@@ -283,8 +283,6 @@ export class DashboardPage implements OnInit {
       if (e.faultId === data.faultId) this.faultList[i].isSelected = true;
       else this.faultList[i].isSelected = false;
     });
-    // this.faultList.map(x => x.isSelected = false);
-    // this.faultList.find(x => x.faultId === data.faultId).isSelected = true;
 
   }
 
@@ -362,7 +360,6 @@ export class DashboardPage implements OnInit {
           this.hideMenu('', 'divOverlay');
           this.bucketCount();
         }, error => {
-          // this.commonService.showMessage();
         });
       }
     })
@@ -395,7 +392,6 @@ export class DashboardPage implements OnInit {
     const check = await this.commonService.showConfirm('Start Progress', 'This will change the fault status, Do you want to continue?');
     if (check) {
       this.faultsService.startProgress(this.selectedData.faultId).subscribe(data => {
-        // this.rerenderFaults(false);
         this.router.navigate([`faults/${this.selectedData.faultId}/details`]);
       }, error => {
         this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Start Progress', 'Error');
@@ -600,7 +596,6 @@ export class DashboardPage implements OnInit {
     this.isStatusFilter = false;
     this.isAssignToFilter = false;
     this.isSnoozeFilter = false;
-    // this.fpm = [17,18,20,24,27,32,35,36];
     this.fpm = this.FULLY_MANAGED_PROPERTY_TYPES;
     this.faultParams = new HttpParams().set('limit', '5').set('page', '1').set('fpm', this.fpm.toString());
     this.rerenderFaults();
@@ -635,7 +630,6 @@ export class DashboardPage implements OnInit {
       this.faultParams = this.faultParams.delete('fpm');
       this.fpm = this.bucketFpm;
       if (this.filterForm.get('repairCheckbox').value) {
-        // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
         let statusArray = Object.values(FAULT_STATUSES);
         this.fs = statusArray.filter(status => status != FAULT_STATUSES.CANCELLED && status != FAULT_STATUSES.CLOSED);
         this.showEscalated = 'false';
@@ -647,14 +641,12 @@ export class DashboardPage implements OnInit {
       }
 
       if (this.filterForm.get('emergency').value) {
-        // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
         this.fs.push(FAULT_STATUSES.REPORTED);
         this.fus.push(URGENCY_TYPES.EMERGENCY);
         this.showEscalated = 'false';
       }
 
       if (this.filterForm.get('urgent').value) {
-        // this.fs.push(1);
         this.fs.push(FAULT_STATUSES.REPORTED);
         this.fus.push(URGENCY_TYPES.URGENT);
         this.showEscalated = 'false';
@@ -667,13 +659,11 @@ export class DashboardPage implements OnInit {
       }
 
       if (this.filterForm.get('assessment').value) {
-        // this.fs.push(2, 13);
         this.fs.push(FAULT_STATUSES.IN_ASSESSMENT, FAULT_STATUSES.CHECKING_LANDLORD_INSTRUCTIONS);
         this.showEscalated = 'false';
       }
 
       if (this.filterForm.get('automation').value) {
-        // this.fs.push(3, 4, 5, 6, 7, 14, 15, 16, 17, 18, 19, 20, 21, 22);
         this.fs.push(FAULT_STATUSES.QUOTE_REQUESTED, FAULT_STATUSES.QUOTE_RECEIVED, FAULT_STATUSES.QUOTE_PENDING, FAULT_STATUSES.QUOTE_APPROVED, FAULT_STATUSES.QUOTE_REJECTED,
           FAULT_STATUSES.WORKSORDER_PENDING, FAULT_STATUSES.AWAITING_JOB_COMPLETION,
           FAULT_STATUSES.WORKSORDER_RAISED, FAULT_STATUSES.AWAITING_RESPONSE_CONTRACTOR, FAULT_STATUSES.WORK_INPROGRESS, FAULT_STATUSES.WORK_COMPLETED, FAULT_STATUSES.AWAITING_RESPONSE_LANDLORD, FAULT_STATUSES.AWAITING_RESPONSE_TENANT, FAULT_STATUSES.AWAITING_RESPONSE_THIRD_PARTY);
@@ -681,13 +671,6 @@ export class DashboardPage implements OnInit {
       }
 
       if (this.filterForm.get('invoice').value) {
-        // let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancel', this.createInputs());
-        // if (response && response.length > 0) {
-        //   this.fs.push(response);
-        // } else {
-        //   this.filterForm.get('invoice').setValue(false)
-        //   return;
-        // }
         this.fs.push(FAULT_STATUSES.INVOICE_SUBMITTED, FAULT_STATUSES.INVOICE_APPROVED);
         this.showEscalated = 'false';
       }
@@ -810,32 +793,12 @@ export class DashboardPage implements OnInit {
     this.bucketCount();
   }
 
-  // createInputs() {
-  //   const theNewInputs = [];
-  //   for (let i = 0; i < this.invoiceArr.length; i++) {
-  //     theNewInputs.push(
-  //       {
-  //         type: 'checkbox',
-  //         label: this.invoiceArr[i].value,
-  //         value: '' + this.invoiceArr[i].key,
-  //         checked: false
-  //       }
-  //     );
-  //   }
-  //   return theNewInputs;
-  // }
-
   getMoreUsers(event: {
     component: IonicSelectableComponent,
     text: string
   }) {
     if (event) {
       let text = (event.text || '').trim().toLowerCase();
-
-      // if (this.page > 3) {
-      //   event.component.disableInfiniteScroll();
-      //   return;
-      // }
 
       this.getUsersAsync(this.page, 10).subscribe(users => {
         users = event.component.items.concat(users);

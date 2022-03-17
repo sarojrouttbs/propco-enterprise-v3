@@ -1,0 +1,41 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
+ion-content{
+    --ion-background-color: var(--ion-color-step-1650);
+}
+
+.block {
+    background-color: var(--ion-color-step-1900);
+    padding: 10px;
+    text-align: center;
+    border-radius: 6px;
+    min-height: 160px;
+    height: 160px;
+    width: 200px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 10px;
+
+    i.propcoicon {
+      margin-bottom: 5px;
+      padding: 10px 15px 5px;
+      @include set-text-style(80px, 86px);
+      background-color: transparent;
+      display: inline-table;
+    }
+
+    p {
+      text-align: center;
+      margin-top: auto;
+      @include set-text-style(14px, 18px);
+    }
+}
+
+.block:hover {
+    background-color: #FFF !important;
+    transform: scale(1.04);
+}

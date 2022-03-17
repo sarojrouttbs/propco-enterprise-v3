@@ -1,6 +1,6 @@
 import { ModalController, PopoverController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP, MAX_DOC_UPLOAD_SIZE, ERROR_CODE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STAGES_ACTIONS } from './../../shared/constants';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP, MAX_DOC_UPLOAD_SIZE, ERROR_CODE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STAGES_ACTIONS, MAINT_SOURCE_TYPES } from './../../shared/constants';
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,7 +15,6 @@ import { ContractorDetailsModalPage } from 'src/app/shared/modals/contractor-det
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 import { DOCUMENT } from '@angular/common';
 import { JobCompletionModalPage } from 'src/app/shared/modals/job-completion-modal/job-completion-modal.page';
-import { saveAs } from 'file-saver';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.page';
 import { SnoozeFaultModalPage } from 'src/app/shared/modals/snooze-fault-modal/snooze-fault-modal.page';
@@ -173,12 +172,6 @@ export class DetailsPage implements OnInit {
   displayFn(subject) {
     return subject ? subject.fullName + ',' + ' ' + subject.reference : undefined;
   }
-
-  // onSelectionChange(data) {
-  //   if (data) {
-  //     this.contractorEntityId = data.option.value.entityId;
-  //   }
-  // }
 
   private getLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -342,10 +335,6 @@ export class DetailsPage implements OnInit {
           let contractorDetails: any = await this.getContractorDetails(this.contractorEntityId);
           if (contractorDetails) {
             contractorDetails.fullName = contractorDetails.name;
-            // this.landlordInstFrom.patchValue({
-            //   contractor: contractorDetails
-            // });
-
             this.contractorSelected(contractorDetails);
           }
         }
@@ -356,7 +345,6 @@ export class DetailsPage implements OnInit {
       this.faultDetails.status = 1;
       this.faultDetails.stageIndex = -1
     }
-    // this.commonService.showLoader();
     forkJoin([
       this.getPropertyById(),
       this.getFaultAdditionalInfo(),
@@ -366,7 +354,6 @@ export class DetailsPage implements OnInit {
     ]).subscribe(async (values) => {
       this.checkIfPropertyCheckedIn();      
       if (this.faultId) {
-        // this.commonService.hideLoader();
         this.initPatching();
         this.setValidatorsForReportedBy();
         this.getUserDetails();
@@ -425,7 +412,6 @@ export class DetailsPage implements OnInit {
           break;
         }
         case FAULT_STAGES.LANDLORD_INSTRUCTION: {
-          // this.initLandlordInstructions(this.faultId);
           details.stageIndex = 2;
           break;
         }
@@ -469,7 +455,6 @@ export class DetailsPage implements OnInit {
         break;
       }
       case FAULT_STAGES.LANDLORD_INSTRUCTION: {
-        // this.initLandlordInstructions(this.faultId);
         this.changeStep(FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION);
         break;
       }
@@ -493,6 +478,10 @@ export class DetailsPage implements OnInit {
   }
 
   private initPatching(): void {
+    if(this.faultDetails.sourceType === MAINT_SOURCE_TYPES.FIXFLO){
+      this.describeFaultForm.controls['category'].clearValidators();
+      this.describeFaultForm.controls['category'].updateValueAndValidity();
+    }
     this.describeFaultForm.patchValue({
       title: this.faultDetails.title,
       category: this.faultDetails.category
@@ -518,7 +507,6 @@ export class DetailsPage implements OnInit {
     });
     /*Landlord Instructions*/
     this.landlordInstFrom.patchValue({
-      // contractor: this.faultDetails.contractorId,
       confirmedEstimate: this.faultDetails.confirmedEstimate,
       userSelectedAction: this.faultDetails.userSelectedAction,
       estimationNotes: this.faultDetails.estimationNotes,
@@ -965,19 +953,6 @@ export class DetailsPage implements OnInit {
     this.prepareDocumentsList();
   }
 
-  // downloadFaultDocument(documentId, name) {
-  //   let fileName = name.split('.')[1];
-  //   this.faultsService.downloadDocument(documentId).subscribe(response => {
-  //     if (response) {
-  //       this.commonService.downloadDocument(response, fileName);
-  //     }
-  //   })
-  // }
-
-  // downloadFaultDocumentByUrl(url) {
-  //   this.commonService.downloadDocumentByUrl(url);
-  // }
-
   //MAT METHODS//
   caseDeatil(): void {
     this.isCaseDetailSubmit = true;
@@ -1164,9 +1139,6 @@ export class DetailsPage implements OnInit {
         });
         this.allGuarantors = [];
         if (agreement && agreement.tenants) {
-          // agreement.tenants.forEach(tenant => {
-          //   this.getTenantsGuarantors(tenant.tenantId);
-          // });
 
           let apiObservableArray = [];
           agreement.tenants.forEach(tenant => {
@@ -1224,11 +1196,6 @@ export class DetailsPage implements OnInit {
       this.commonService.showMessage('Please fill all required fields.', 'Log a Fault', 'error');
       return;
     }
-    // if (!this.files.length) {
-    //   this.commonService.showMessage('At least one fault image is required', 'Log a Fault', 'error');
-    //   return;
-    // }
-    // this.commonService.showLoader();
     this.submitting = true;
     let faultRequestObj = this.createFaultFormValues();
     if (this.faultId) {
@@ -1236,15 +1203,11 @@ export class DetailsPage implements OnInit {
     } else {
       this.faultsService.createFault(faultRequestObj).subscribe(
         res => {
-          // this.commonService.hideLoader();
           this.commonService.showMessage('Fault has been logged successfully.', 'Log a Fault', 'success');
           this.uploadFiles(res.faultId);
         },
         error => {
           this.submitting = false;
-          // this.commonService.hideLoader();
-          // this.commonService.showMessage('Something went wrong on server, please try again.', 'Log a Fault', 'Error');
-          // console.log(error);
         }
       );
     }
@@ -1474,10 +1437,6 @@ export class DetailsPage implements OnInit {
   }
 
   setUserAction(index) {
-    // if (this.cliNotification && !this.cliNotification.responseReceived) {
-    //   this.commonService.showAlert('Landlord Instructions', 'Please select response before proceeding with other action.');
-    //   return;
-    // }
     this.isUserActionChange = true;
     this.isAuthorizationfields = false;
     this.userSelectedActionControl.setValue(index);
@@ -1491,12 +1450,8 @@ export class DetailsPage implements OnInit {
   }
 
   private async checkForLLSuggestedAction() {
-    // if (this.faultDetails.status === 2 || this.faultDetails.status === 13) { //In Assessment" or " Checking Landlord's Instructions "
     this.suggestedAction = '';
     let confirmedEstimate = this.faultDetails.confirmedEstimate;
-    // if (this.faultDetails.urgencyStatus === URGENCY_TYPES.EMERGENCY || this.faultDetails.urgencyStatus === URGENCY_TYPES.URGENT) {
-    //   this.suggestedAction = LL_INSTRUCTION_TYPES[5].index;
-    // } else
     if (this.landlordDetails.doesOwnRepairs) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[0].index;
     }
@@ -1518,15 +1473,9 @@ export class DetailsPage implements OnInit {
     this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, this.faultDetails.userSelectedAction);
     
     this.getPendingHours();
-    // if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index) {
-    //   if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
-    //     this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
-    //   }
-    // } else 
     if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
       if (this.cliNotification && this.cliNotification.responseReceived) {
         if (this.cliNotification.responseReceived.isAccepted) {
-          // this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
         } else {
           this.isUserActionChange = true;
           this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
@@ -1960,15 +1909,6 @@ export class DetailsPage implements OnInit {
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
           this.getPendingHours();
-          // const CHECKING_LANDLORD_INSTRUCTIONS = 13;
-          // this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS).then(async data => {
-          //   this.refreshDetailsAndStage();
-          //   await this.checkFaultNotifications(this.faultId);
-          //   this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
-          //   if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
-          //     this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
-          //   }
-          // });
         }
       });
     }
@@ -2069,12 +2009,6 @@ export class DetailsPage implements OnInit {
       );
     });
     return promise;
-  }
-
-  async showRefreshPopup(val) {
-    // if (val != '' && this.landlordInstFrom.get('confirmedEstimate').valid && val !== this.faultDetails.confirmedEstimate) {
-    //   var response = await this.commonService.showAlert('Landlord Instructions', 'Please click Refresh to check if the Suggested Action has changed based on the estimate you have entered');
-    // }
   }
 
   onSearchChange(event: any) {
@@ -2188,11 +2122,6 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  // private getDocs() {
-  //   const uniqueSet = this.files.map(data => data.folderName);
-  //   this.folderNames = uniqueSet.filter(this.onlyUnique);
-  // }
-
   filterByGroupName(folderName) {
     this.filteredDocuments = this.files.filter(data => data.folderName === folderName).filter(data => !data.isDraft);
     this.mediaType = 'documents';
@@ -2225,14 +2154,6 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  // getFileType(name): boolean {
-  //   if (name != null) {
-  //     let data = name.split('.')[1] === 'pdf';
-  //     if (data) {
-  //       return true;
-  //     }
-  //   }
-  // }
   private prepareDocumentsList() {
     if (this.files.length > 0) {
       this.files.forEach((e, i) => {
@@ -2257,12 +2178,6 @@ export class DetailsPage implements OnInit {
 
   downloadDocumentByURl(document) {
     this.commonService.downloadDocumentByUrl(document.documentUrl, document.name);
-    // this.faultsService.downloadFaultDocument(document.documentId).subscribe(res => {
-    //   // saveAs(res, document.name);
-    //   this.commonService.downloadDocument(res, document.name);
-    //  }, (error) => {
-    //    console.log(error);
-    //  });
   }
 
 
@@ -2542,7 +2457,6 @@ export class DetailsPage implements OnInit {
 
   removeValidation() {
     this.isAuthorizationfields = false;
-    // this.landlordInstFrom.reset();
     this.landlordInstFrom.clearValidators();
     this.landlordInstFrom.updateValueAndValidity()
     this.landlordInstFrom.patchValue({
@@ -2621,12 +2535,7 @@ export class DetailsPage implements OnInit {
         },
         error => {
           if (error.error && error.error.hasOwnProperty('errorCode')) {
-            // this.commonService.showMessage(error.error ? error.error.message : 'Something went wrong', 'Landlord Instructions', 'error');
-            // if (error.error.errorCode === ERROR_CODE.PAYMENT_RULES_CHECKING_FAILED && actionType !== WORKSORDER_RAISE_TYPE.AUTO) {
-            //   resolve('saveWorksorder');
-            // } else {
             resolve(null);
-            // }
           } else {
             resolve(null);
           }
@@ -2666,9 +2575,6 @@ export class DetailsPage implements OnInit {
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
         }
       }
-      //  else {
-      //   this.refreshDetailsAndStage();
-      // }
     });
 
   }

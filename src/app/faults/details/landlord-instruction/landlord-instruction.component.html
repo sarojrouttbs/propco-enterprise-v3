@@ -1,6 +1,5 @@
 <ion-grid>
   <ion-row *ngIf="!showSkeleton">
-    <!-- <ion-col offset-xl="25" size-xl="50" offset ="0" size="100">  -->
     <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
       <div class="landlord-instructions">
         <app-close-fault *ngIf="faultDetails?.isClosed" [notificationData]="cliNotification" [faultDetails]="faultDetails" [action]="getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes)? getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes):'Landlord Instructions'"></app-close-fault>
@@ -44,8 +43,8 @@
               <b>{{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}</b>
             </div>
             <h2 class="banner-heading" >
-              {{cliNotification && cliNotification?.responseReceived ? 'Response Received': 
-              (cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?'No response':'Awaiting response')}}
+              {{cliNotification && cliNotification?.responseReceived ? notificationState.RESPONSE_RECEIVED: 
+              (cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE)}}
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
@@ -61,7 +60,7 @@
               <h6 class="banner-title"
                 [ngClass]="cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?'no-response':'awaiting-response'"
               >
-                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?'No response':'Awaiting response'}} received from Landlord</h6>
+                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE}} received from Landlord</h6>
               <h6 class="banner-title" *ngIf="!faultDetails?.isEscalated" >{{cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone?'Escalation due': cliNotification.chase === cliNotification.allowedNumberOfChases ? 'Last chase due('+cliNotification.chase+')' : 'Next chase due('+cliNotification.chase+')'}}:
                 {{cliNotification ? (cliNotification.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
               </h6>
@@ -182,12 +181,6 @@
             <ion-grid>
               <ion-row>
                 <ion-col size="50">
-                  <!-- <ion-item>
-                    <ion-label position="floating">Select Contractor</ion-label>
-                    <ion-select interface="popover" formControlName="contractorId">
-                      <ion-select-option>Choose</ion-select-option>
-                    </ion-select>
-                  </ion-item> -->
                   <ion-item>
                     <ion-label position="floating">Select Contractor</ion-label>
                     <ion-input type="text" debounce="1000" (ionInput)="onSearchChange($event)"

@@ -7,7 +7,7 @@ import { IonicModule } from "@ionic/angular";
 import { SolrPageRoutingModule } from "./solr-routing.module";
 
 import { SolrPage } from "./solr.page";
-import { MaterialModule } from "../material.module";
+import { ComponentsModule } from "../shared/components/components.module";
 
 @NgModule({
   imports: [
@@ -15,6 +15,7 @@ import { MaterialModule } from "../material.module";
     FormsModule,
     IonicModule,
     SolrPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [SolrPage],
 })

@@ -87,6 +87,19 @@ export class ApplicationDetailPage implements OnInit {
   paymentDetails: any = {};
   showWorldpayIframe: boolean = false;
   hidePaymentForm: boolean = false;
+  isTobPropertyCardReady: boolean = false;
+  showWorldpayInternalForm: boolean = false;
+  worldPayInternalData: {
+    applicationId?: string,
+    startDate?: string,
+    expiryDate?: string,
+    transactionId?: number,
+    propertyId?: string,
+    amount?: number,
+    entityType?: string,
+    entityId?:string
+  } = {};
+  isApplicantDetailsAvailable: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -212,6 +225,9 @@ export class ApplicationDetailPage implements OnInit {
     const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
     await this.setApplicationApplicants(applicants);
     await this.setLeadApplicantDetails();
+    if(this.PAYMENT_METHOD === PAYMENT_TYPES.WORLDPAY_OWNFORM) {
+      await this.setWorldpayInternalData();
+    }
     if (this.applicationStatus === 'Accepted') {
       this.currentStepperIndex = 10;
       this.showPayment = true;
@@ -262,7 +278,6 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private submitApplication(): void {
-    // this.showLoader = true;
     let data: any = {};
     data.submittedBy = ENTITY_TYPE.AGENT;
     data.submittedById = '';
@@ -272,14 +287,11 @@ export class ApplicationDetailPage implements OnInit {
         if (this.isStudentProperty) {
           this.showPayment = true;
           this.currentStepperIndex = 10;
-          // this.radioTabModel = 'payment';
         } else {
           this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
         }
-        // this.showLoader = false;
       },
       error => {
-        // this.showLoader = false;
         const errorMessage = error.error ? error.error.message : error.message;
         this.commonService.showMessage((errorMessage || 'Internal server error') + ', Please contact support.', 'Application', 'error');
       }
@@ -295,7 +307,6 @@ export class ApplicationDetailPage implements OnInit {
     if (nextIndex > previousIndex) {
       /*call API only in next step*/
       this.savePreviousStep(event);
-      // this.findInvalidControls();
       if (this.applicantDetailsForm.invalid) {
         this.applicantDetailsForm.markAllAsTouched();
       }
@@ -323,7 +334,6 @@ export class ApplicationDetailPage implements OnInit {
     }
     let previouslySelectedIndex = event.previouslySelectedIndex;
     this.savePreviouslySelectedData(previouslySelectedIndex);
-
   }
 
   private savePreviouslySelectedData(index: number) {
@@ -474,11 +484,6 @@ export class ApplicationDetailPage implements OnInit {
       this.applicationDetails.applicationClauses = res.applicationClauses ? res.applicationClauses : []
       this.applicationDetails.applicationRestrictions = res.applicationRestrictions ? res.applicationRestrictions : [];
       this.applicationStatus = this.commonService.getLookupValue(this.applicationDetails.status, this.applicationStatuses);
-      // if (this.applicationStatus === 'Accepted') {
-      //   this.currentStepperIndex = 10;
-      //   this.showPayment = true;
-      //   this.initPaymentConfiguration();
-      // }
       this.applicationDetails.applicationRestrictions = this.applicationDetails.applicationRestrictions.filter(restrict => restrict.value);
       this.applicationDetails.applicationRestrictions.map(
         restrict =>
@@ -496,6 +501,7 @@ export class ApplicationDetailPage implements OnInit {
     return new Promise((resolve, reject) => {
       this._tobService.getApplicationApplicants(applicationId).subscribe(
         res => {
+          this.isApplicantDetailsAvailable = true;
           resolve(res);
         },
         error => {
@@ -560,6 +566,7 @@ export class ApplicationDetailPage implements OnInit {
               this.isStudentGuarantor();
             }
             this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
+            this.isTobPropertyCardReady = true;
             resolve(true);
           }
         },
@@ -681,10 +688,6 @@ export class ApplicationDetailPage implements OnInit {
       guarantorType: ['', { disabled: false }],
       currentPosition: ''
     });
-  }
-
-  private setRequired() {
-    return [Validators.required];
   }
 
   async onCancel() {
@@ -1008,9 +1011,6 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private updateApplicationDetails() {
-    // if (this.selectionType == 'saveForLater') {
-    //   this.saveDataLoader = true;
-    // }
     let requestObj = JSON.parse(JSON.stringify(this.applicationDetails));
     requestObj.applicationRestrictions.map(restrict => { delete restrict.restrictionName; }
     );
@@ -1026,16 +1026,13 @@ export class ApplicationDetailPage implements OnInit {
     requestObj.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
     this._tobService.updateApplicationDetails(requestObj, this.applicationId).subscribe(
       res => {
-        // this.saveDataLoader = false;
         if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
           this.onSave();
         }
         this.applicationDetails.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
         this.tenancyDetailForm.reset(this.tenancyDetailForm.value);
       },
-      error => {
-        // this.saveDataLoader = false;
-      }
+      error => {}
     );
   }
 
@@ -1100,9 +1097,6 @@ export class ApplicationDetailPage implements OnInit {
     let apiObservableArray = [];
     let applicantQuestions = this.applicantQuestionForm.controls.questions.value;
     if (this.checkFormDirty(this.applicantQuestionForm)) {
-      // if (this.selectionType == 'saveForLater') {
-      //   this.saveDataLoader = true;
-      // }
       applicantQuestions.forEach(question => {
         let questionDetails: any = {};
         questionDetails.toggle = question.toggle;
@@ -1112,7 +1106,6 @@ export class ApplicationDetailPage implements OnInit {
       });
     }
     forkJoin(apiObservableArray).subscribe(() => {
-      // this.saveDataLoader = false;
       this.applicantQuestionForm.reset(this.applicantQuestionForm.value);
       if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
         this.onSave();
@@ -1195,7 +1188,6 @@ export class ApplicationDetailPage implements OnInit {
     });
   }
 
-
   private getTenantBankDetails(applicantId: string) {
     return new Promise((resolve, reject) => {
       this._tobService.getTenantBankDetails(applicantId).subscribe(
@@ -1231,20 +1223,11 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private updateBankDetails(bankDetails: any) {
-    // if (this.selectionType == 'saveForLater') {
-    //   this.saveDataLoader = true;
-    // }
     this._tobService.updateBankDetails(this.applicantId, bankDetails).subscribe(
       res => {
-        // this.saveDataLoader = false;
-        // if (this.selectionType == 'saveForLater') {
-        //   this.onSave();
-        // }
         this.bankDetailsForm.reset(this.bankDetailsForm.value);
       },
-      error => {
-        // this.saveDataLoader = false;
-      }
+      error => {}
     );
   }
 
@@ -1360,34 +1343,24 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private updateGuarantorDetails(guarantorDetails: any) {
-    // if (this.selectionType == 'saveForLater') {
-    //   this.saveDataLoader = true;
-    // }
     guarantorDetails = this.commonService.replaceEmptyStringWithNull(guarantorDetails);
     let guarantorId = guarantorDetails.guarantorId;
     delete guarantorDetails.guarantorId;
     this._tobService.updateGuarantorDetails(guarantorDetails, guarantorId).subscribe(
       res => {
-        // this.saveDataLoader = false;
         if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
           this.onSave();
         }
         this.guarantorForm.reset(this.guarantorForm.value);
       },
-      error => {
-        // this.saveDataLoader = false;
-      }
+      error => {}
     );
   }
 
   private createGuarantor(guarantorDetails: any): void {
-    // if (this.selectionType == 'saveForLater') {
-    //   this.saveDataLoader = true;
-    // }
     guarantorDetails = this.commonService.replaceEmptyStringWithNull(guarantorDetails);
     this._tobService.createGuarantor(guarantorDetails, this.applicantId).subscribe(
       res => {
-        // this.saveDataLoader = false;
         if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
           this.onSave();
         }
@@ -1396,9 +1369,7 @@ export class ApplicationDetailPage implements OnInit {
           this.guarantorForm.controls['guarantorId'].setValue(res.guarantorId);
         }
       },
-      error => {
-        // this.saveDataLoader = false;
-      }
+      error => {}
     );
   }
 
@@ -1468,7 +1439,7 @@ export class ApplicationDetailPage implements OnInit {
     this.paymentDetails.town = this.addressDetailsForm.controls.address['controls'].town.value;
     this.paymentDetails.county = this.addressDetailsForm.controls.address['controls'].county.value;
     this.paymentDetails.country = 'GB';
-}
+  }
 
   showWorldpayIframeAction() {
     if (this.PAYMENT_METHOD === PAYMENT_TYPES.WORLDPAY_REDIRECT && !this.PAYMENT_PROD && this.applicationDetails.depositAmount > 500) {
@@ -1491,7 +1462,6 @@ export class ApplicationDetailPage implements OnInit {
     this.paymentDetails.orderId = 'TBS' + Math.random();
     this.paymentDetails.PSPID = PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.PSPID;
     this.paymentDetails.SHASIGN = this.createSHASIGN();
-    // console.log('Payment Details', this.paymentDetails);
 }
 
 
@@ -1507,11 +1477,9 @@ export class ApplicationDetailPage implements OnInit {
     var DECLINE_URL = 'DECLINEURL=' + this.paymentDetails.declineUrl + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
     var EXCEPTION_URL = 'EXCEPTIONURL=' + this.paymentDetails.exceptionUrl + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
     var shaSignature = ACCEPT_URL + AMOUNT + CANCEL_URL + CURRENCY + DECLINE_URL + EMAIL + EXCEPTION_URL + LANGUAGE + ORDER_ID + PSPID;
-    // console.log('shaSignature', shaSignature);
     return CryptoJS.SHA512(shaSignature).toString(CryptoJS.enc.hex).toUpperCase();
 
   }
-
 
   initPaymentConfiguration() {
     switch (this.PAYMENT_METHOD) {
@@ -1530,7 +1498,6 @@ export class ApplicationDetailPage implements OnInit {
       case PAYMENT_TYPES.WORLDPAY_REDIRECT:
         paymentResponse = this.commonService.getItem('worldpay_response', true);
         this.commonService.removeItem('worldpay_response');
-        //this.libraryObject.destroy();
         this.handleWorldpayResponse(paymentResponse);
         break;
       case PAYMENT_TYPES.BARCLAYCARD_REDIRECT:
@@ -1545,8 +1512,6 @@ export class ApplicationDetailPage implements OnInit {
     this.showWorldpayIframe = false;
     if (response && response.transaction) {
       this.hidePaymentForm = true;
-      // this.showConfirmation = true;
-      // this.radioTabModel = 'confirmation';
       let transactionId = response.transaction;
       let depositAmountPaid = this.applicationDetails.depositAmount;
       this.processPayment(transactionId, depositAmountPaid);
@@ -1560,8 +1525,6 @@ export class ApplicationDetailPage implements OnInit {
     this.showWorldpayIframe = false;
     if (response && response.STATUS == '5') {
       this.hidePaymentForm = true;
-      // this.showConfirmation = true;
-      // this.radioTabModel = 'confirmation';
       this.processPayment(response.PAYID, this.applicationDetails.depositAmount);
     } else {
       this.initBarclayCardPaymentDetails();
@@ -1578,7 +1541,6 @@ export class ApplicationDetailPage implements OnInit {
     }
   }
 
-
   processPayment(transactionId, depositAmountPaid) {
     this.commonService.showLoader();
     let paymentDetails: any = {};
@@ -1594,7 +1556,6 @@ export class ApplicationDetailPage implements OnInit {
     }, error => {
       this.commonService.hideLoader();
       this.commonService.showMessage('Something went wrong on server, please contact us.', 'Process Payment', 'error');
-      // this.router.navigate(['applicant/applications'], { replaceUrl: true });
       this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
     });
   }
@@ -1630,4 +1591,37 @@ export class ApplicationDetailPage implements OnInit {
     console.log('result callback', result);
   }
 
+  onInternalWorldpaySuccess(event) {
+    if (event) {
+      this.openPaymentConfirmation();
+    }
+  }
+
+  async openPaymentConfirmation() {
+    let message = '<h1> Congratulations! </h1>' + '<h5>Tenancy has been proposed successfully on the property.</h5>';
+    const simpleModal = await this.modalController.create({
+      component: SimpleModalPage,
+      backdropDismiss: false,
+      componentProps: {
+        data: message,
+        heading: 'Tenancy',
+        button: 'Ok',
+      }
+    });
+
+    simpleModal.onDidDismiss().then(res => {
+      this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+    });
+    await simpleModal.present();
+  }
+
+  private setWorldpayInternalData() {
+    this.worldPayInternalData.applicationId = this.applicationId;
+    this.worldPayInternalData.startDate = this.applicationDetails.moveInDate;
+    this.worldPayInternalData.expiryDate = this.applicationDetails.preferredTenancyEndDate;
+    this.worldPayInternalData.propertyId = this.propertyId;
+    this.worldPayInternalData.entityType = ENTITY_TYPE.LET_APPLICANT;
+    this.worldPayInternalData.entityId = this.applicantId;
+    this.worldPayInternalData.amount = this.applicationDetails.depositAmount;
+  }
 }

@@ -1,9 +1,8 @@
 <ion-content>
   <ion-grid class="offer-details">
-    <app-tob-property-details [propertyDetails]="propertyDetails" [rentFrequencyTypes]="rentFrequencyTypes">
+    <app-tob-property-details [propertyDetails]="propertyDetails" [rentFrequencyTypes]="rentFrequencyTypes" [isTobPropertyCardReady]="isTobPropertyCardReady">
     </app-tob-property-details>
-    <ion-grid class="applicant-detail no-padding-top">
-    
+    <ion-grid class="applicant-detail no-padding-top" *ngIf="isApplicantDetailsAvailable">
       <ion-row>
         <ion-col>
           <h5  class="no-margin-bottom" color="medium">Applicant(s) Details</h5>
@@ -40,18 +39,17 @@
           </table>
         </ion-col>
       </ion-row>
+
       <ion-row class="ion-justify-content-end search-row" [formGroup]="searchApplicantForm">
         <ion-col size-sm="50" size-xl="35" id="tob-applicant-search">
-          <ion-item>
-            <ion-label position="floating">Start Typing to Search Applicants</ion-label>
-            <ion-input type="text" debounce="300" (ionInput)="onSearch($event)" [disabled]="disableSearchApplicant"
-              formControlName='searchApplicant'>
-            </ion-input>
-            <ion-icon class="input-close" (click)="resetSearch()"
-              *ngIf="searchApplicantForm.controls.searchApplicant.value.length > 2 && !applicantDetail" color="medium"
-              name="close-circle"></ion-icon>
-          </ion-item>
-
+          <ion-searchbar 
+            placeholder="Start Typing to Search Applicants" 
+            class="applicantSearchbarCustom" 
+            debounce="300"
+            [disabled]="disableSearchApplicant"
+            (ionInput)="onSearch($event)"
+            formControlName="searchApplicant"
+          ></ion-searchbar>
           <ion-list class="applicant-list" *ngIf="resultsAvailable">
             <ion-item *ngFor="let result of (applicantList | async)?.data" button
               (click)="getApplicantDetails(result?.entityId)" button>
@@ -66,8 +64,55 @@
             </ion-item>
           </ion-list>
         </ion-col>
+        <ion-col size="4" class="ion-no-padding">
+          <ion-buttons end class="search-button">
+            <i class="propcoicon propcoicon-search no-background"></i>
+          </ion-buttons>     
+        </ion-col>
       </ion-row>
     </ion-grid>
+
+    <!-- Skeleton -->
+    <ion-grid class="applicant-detail no-padding-top" *ngIf="!isApplicantDetailsAvailable">
+      <ion-row>
+        <ion-col>
+          <h5 class="no-margin-bottom">
+            <ion-skeleton-text animated style="width: 25%;"></ion-skeleton-text>  
+          </h5>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="no-padding-bottom">
+          <table>
+            <thead>
+              <tr>
+                <th><ion-skeleton-text animated></ion-skeleton-text></th>
+                <th><ion-skeleton-text animated></ion-skeleton-text></th>
+                <th><ion-skeleton-text animated></ion-skeleton-text></th>
+                <th><ion-skeleton-text animated></ion-skeleton-text></th>
+                <th><ion-skeleton-text animated></ion-skeleton-text></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><ion-skeleton-text animated></ion-skeleton-text></td>
+                <td><ion-skeleton-text animated></ion-skeleton-text></td>
+                <td><ion-skeleton-text animated></ion-skeleton-text></td>
+                <td><ion-skeleton-text animated></ion-skeleton-text></td>
+                <td><ion-skeleton-text animated></ion-skeleton-text></td>
+              </tr>
+            </tbody>
+          </table>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-justify-content-end search-row">
+        <ion-col size-sm="50" size-xl="35">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <!-- Skeleton -->
+
     <ion-grid>
       <ion-row>
         <ion-col size="100">
@@ -125,9 +170,8 @@
 </ion-content>
 
 <ng-template #offerDetails>
-  <form [formGroup]="makeAnOfferForm" id="makeAnOfferForm">
+  <form [formGroup]="makeAnOfferForm" id="makeAnOfferForm" *ngIf="isOffersDetailsAvailable">
     <ion-grid>
-
       <ion-row class=" ion-justify-content-center">
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
@@ -268,6 +312,86 @@
       </ion-row>
     </ion-grid>
   </form>
+  
+  <!-- skeleton -->
+  <ion-grid *ngIf="!isOffersDetailsAvailable">
+    <ion-row class=" ion-justify-content-center">
+      <ion-col size-xs="100" size-sm="33.3">
+        <ion-item lines="none">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size-xs="100" size-sm="33.3">
+        <ion-item lines="none">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size-xs="100" size-sm="33.3">
+        <ion-item lines="none">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size-xs="100" size-sm="33.3">
+        <ion-item lines="none">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size-xs="100" size-sm="33.3">
+        <ion-item lines="none">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size-xs="100" size-sm="33.3">
+        <ion-item lines="none">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size-xs="100" size-sm="33.3">
+        <ion-item lines="none">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size-xs="100" size-sm="33.3">
+        <ion-item lines="none">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size-xs="100" size-sm="33.3">
+        <ion-item lines="none">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size-xs="100" size-sm="33.3">
+        <ion-item lines="none">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size-xs="100" size-sm="33.3">
+        <ion-item lines="none">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size-xs="100" size-sm="33.3">
+        <ion-item lines="none">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- skeleton -->
 </ng-template>
 
 <ng-template #restriction>

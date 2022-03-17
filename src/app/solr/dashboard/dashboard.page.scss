@@ -1,3 +1,40 @@
+.tour-guide {
+  .tour-title {
+    font-size: 22px !important;
+  }
+
+  .next-button {
+    background-color: var(--ion-color-primary) !important;
+  }
+
+  .back-button {
+    display: none;
+  }
+
+  .tour-step.tour-right .tour-arrow::before {
+    border-right-color: var(--ion-color-step-1750) !important;
+  }
+
+  .tour-step.tour-bottom .tour-arrow::before,
+  ngx-guided-tour .tour-step.tour-bottom-right .tour-arrow::before,
+  ngx-guided-tour .tour-step.tour-bottom-left .tour-arrow::before {
+    border-bottom-color: var(--ion-color-step-1750) !important;
+  }
+
+  .tour-block {
+    background-color: var(--ion-color-step-1750) !important;
+    padding: 8px 16px !important;
+    border-radius: 7px;
+  }
+
+  .tour-step .tour-content {
+    min-height: 48px !important;
+  }
+}
+
+@import '../../../../node_modules/ngx-guided-tour/scss/guided-tour-base-theme.scss';
+
+
 @mixin set-text-style($size, $lheight) {
   font-size: $size;
   line-height: $lheight;
@@ -16,10 +53,14 @@
 }
 
 #solr-dashboard {
-  --padding-top: var(--ion-padding-top);
-  --padding-end: var(--ion-padding-end);
-  --padding-bottom: var(--ion-padding-bottom);
-  --padding-start: var(--ion-padding-start);
+  ion-chip {
+    margin-top: 10px;
+    position: absolute;
+  }
+
+  .divider {
+    margin-top: 2%;
+  }
 
   i.search-icon:hover {
     cursor: pointer;

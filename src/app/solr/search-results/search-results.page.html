@@ -1,9 +1,3 @@
-<ion-header >
-  <ion-grid class="ion-no-padding" class="result-search-grid">
-    <app-search-suggestion [entityControl]="entityControl" (searchClickEvent)="searchHandler($event)" [searchTerm]="solrSearchConfig.searchTerm"></app-search-suggestion> 
-  </ion-grid>
-</ion-header>
-
 <ion-content id="solr-search-result" class="main-container">
   <mat-drawer-container class="drawer-container">
       <mat-drawer #drawer class="solr-filter-sidenav" mode="side" [(opened)]="opened" >
@@ -26,7 +20,7 @@
               [formControl]="propertyCheck"
                 (click)="$event.stopPropagation();onChangeEntity('property')" 
                 (keydown)="$event.stopPropagation()">
-                PROPERTY
+                Property
               </mat-checkbox>
             </mat-expansion-panel-header>
             <form [formGroup]="propertyFilter">
@@ -179,7 +173,7 @@
               [formControl]="landlordCheck"
                 (click)="$event.stopPropagation();onChangeEntity('landlord')" 
                 (keydown)="$event.stopPropagation()">
-                LANDLORD
+                Landlord
               </mat-checkbox>
             </mat-expansion-panel-header>
             <form [formGroup]="landlordFilter">
@@ -234,7 +228,7 @@
                 [formControl]="tenantCheck"
                 (click)="$event.stopPropagation();onChangeEntity('tenant')" 
                 (keydown)="$event.stopPropagation()">
-                TENANT
+                Tenant
               </mat-checkbox>
             </mat-expansion-panel-header>
             <form [formGroup]="tenantFilter">
@@ -290,7 +284,7 @@
               <mat-checkbox [formControl]="applicantCheck" color="primary" 
                 (click)="$event.stopPropagation();onChangeEntity('applicant')" 
                 (keydown)="$event.stopPropagation()">
-                APPLICANT
+                Applicant
               </mat-checkbox>
             </mat-expansion-panel-header>
             <form [formGroup]="applicantFilter">
@@ -339,7 +333,7 @@
               <mat-checkbox [formControl]="agentCheck" color="primary" 
                 (click)="$event.stopPropagation();onChangeEntity('agent')" 
                 (keydown)="$event.stopPropagation()">
-                AGENT
+                Agent
               </mat-checkbox>
             </mat-expansion-panel-header>
             <form [formGroup]="agentFilter">
@@ -386,7 +380,7 @@
             <mat-checkbox [formControl]="contractorCheck" color="primary" 
               (click)="$event.stopPropagation();onChangeEntity('contractor')" 
               (keydown)="$event.stopPropagation()">
-              CONTRACTOR
+              Contractor
             </mat-checkbox>
           </mat-expansion-panel-header>
           <form [formGroup]="contractorFilter">
@@ -478,19 +472,19 @@
             <ng-container [ngTemplateOutlet]="propertySuggestionListView"  *ngIf="item?.entityType === 'PROPERTY'"
             [ngTemplateOutletContext]="{item:item}">
             </ng-container>
-            <ng-container [ngTemplateOutlet]="landlordSuggestion"  *ngIf="item?.entityType === 'LANDLORD'"
+            <ng-container [ngTemplateOutlet]="landlordSuggestionListView"  *ngIf="item?.entityType === 'LANDLORD'"
                   [ngTemplateOutletContext]="{item:item}">
             </ng-container>
-            <ng-container [ngTemplateOutlet]="tenantSuggestion"  *ngIf="item?.entityType === 'TENANT'"
+            <ng-container [ngTemplateOutlet]="tenantSuggestionListView"  *ngIf="item?.entityType === 'TENANT'"
                   [ngTemplateOutletContext]="{item:item}">
             </ng-container>
-            <ng-container [ngTemplateOutlet]="contractorSuggestion"  *ngIf="item?.entityType === 'CONTRACTOR'"
+            <ng-container [ngTemplateOutlet]="contractorSuggestionListView"  *ngIf="item?.entityType === 'CONTRACTOR'"
                   [ngTemplateOutletContext]="{item:item}">
             </ng-container>
-            <ng-container [ngTemplateOutlet]="agentSuggestion"  *ngIf="item?.entityType === 'AGENT'"
+            <ng-container [ngTemplateOutlet]="agentSuggestionListView"  *ngIf="item?.entityType === 'AGENT'"
                   [ngTemplateOutletContext]="{item:item}">
             </ng-container>
-            <ng-container [ngTemplateOutlet]="applicantSuggestion"  *ngIf="item?.entityType === 'APPLICANT'"
+            <ng-container [ngTemplateOutlet]="applicantSuggestionListView"  *ngIf="item?.entityType === 'APPLICANT'"
                   [ngTemplateOutletContext]="{item:item}">
             </ng-container>
           </ng-container>
@@ -506,7 +500,7 @@
 
 
 <ng-template #propertySuggestion  let-item="item">
-  <ion-card-content id="details" (click)="openDetails('OpenProperty',item.entityId)">
+  <ion-card-content id="details" (click)="openDetails('OpenProperty',item.propcoId)">
     <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="17" size="30">
@@ -607,7 +601,7 @@
   </ion-card-content>
 </ng-template>
 <ng-template #landlordSuggestion  let-item="item">
-  <ion-card-content id="details" class="landlord" (click)="openDetails('OpenLanlord',item.entityId)">
+  <ion-card-content id="details" class="landlord" (click)="openDetails('OpenLanlord',item.propcoId)">
     <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
@@ -648,7 +642,7 @@
   </ion-card-content>
 </ng-template>
 <ng-template #tenantSuggestion  let-item="item">
-  <ion-card-content id="details" class="tenant" (click)="openDetails('OpenTenant',item.entityId)">
+  <ion-card-content id="details" class="tenant" (click)="openDetails('OpenTenant',item.propcoId)">
     <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
@@ -678,7 +672,7 @@
   </ion-card-content>
 </ng-template>
 <ng-template #contractorSuggestion  let-item="item">
-  <ion-card-content id="details" class="contractor" (click)="openDetails('OpenContractor',item.entityId)">
+  <ion-card-content id="details" class="contractor" (click)="openDetails('OpenContractor',item.propcoId)">
     <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
@@ -696,7 +690,7 @@
                   <p class="name">{{item.company}}</p>
                   <p class="address">{{item.address ? item.address + ', ': ''}} {{item.postcode}}</p>
                   <p class="skill-set">{{item.occupation}}</p>
-                  <p class="agent-approved">{{isAgentApproved(item.isAgentContractorApproved)}}</p>
+                  <p class="agent-approved">{{item.isAgentContractorApproved}}</p>
                 </div>
               </ion-col>
               <ion-col class="no-padding-top col2 ion-text-end" size="25">
@@ -711,7 +705,7 @@
   </ion-card-content>
 </ng-template>
 <ng-template #agentSuggestion  let-item="item">
-  <ion-card-content id="details" class="agent" (click)="openDetails('OpenAgent',item.entityId)">
+  <ion-card-content id="details" class="agent" (click)="openDetails('OpenAgent',item.propcoId)">
     <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
@@ -736,7 +730,7 @@
   </ion-card-content>
 </ng-template>
 <ng-template #applicantSuggestion  let-item="item">
-  <ion-card-content id="details" class="contractor" (click)="openDetails('OpenApplicant',item.entityId)">
+  <ion-card-content id="details" class="contractor" (click)="openDetails('OpenApplicant',item.propcoId)">
     <ion-grid >
       <ion-row class="main-row">
         <ion-col class="ion-no-padding" size-xl="10" size="15">
@@ -773,7 +767,7 @@
                   <mat-expansion-panel-header>
                     <!-- <mat-panel-title> -->
                      <div class="list-header">
-                      <div (click)="$event.stopPropagation();openDetails('OpenProperty',item.entityId)" style="width: 60%;">
+                      <div (click)="$event.stopPropagation();openDetails('OpenProperty',item.propcoId)" style="width: 60%;">
                         <p class="title text-ellipsis" [title]="item?.address">{{item?.address}}</p>
                         <span style="display: flex;">
                           <p class="emenities-wrapper">
@@ -811,7 +805,7 @@
                      </div>
                   </mat-expansion-panel-header>
                   <ion-card-content id="details">
-                    <ion-grid (click)="openDetails('OpenProperty',item.entityId)" class="ion-no-padding">
+                    <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
                       <ion-row class="main-row">
                         <ion-col class="ion-no-padding" size-xl="17" size="25">
                           <img [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.png';">
@@ -850,7 +844,7 @@
                                 <p>
                                   <span class="text">Type</span>
                                 <br />
-                                <span class="text-value">{{item?.entityType || 'N/A'}}</span>
+                                <span class="text-value">{{item?.houseType || 'N/A'}}</span>
                                 </p>
                               </ion-col>
                               <ion-col size-xl="35" size-lg="35" size-md="35">
@@ -873,7 +867,7 @@
                                 <p>
                                   <span class="text">Style</span>
                                 <br />
-                                <span class="text-value">{{item?.property_style || 'N/A'}}</span>
+                                <span class="text-value">{{item?.propertyStyle || 'N/A'}}</span>
                                 </p>
                               </ion-col>
                               <ion-col size-xl="35" size-lg="35" size-md="35">
@@ -902,6 +896,448 @@
                 </mat-expansion-panel>
 
               </mat-accordion>
+</ng-template>
+
+<ng-template #agentSuggestionListView  let-item="item">
+  <mat-accordion class="list-view-accordian" multi>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <!-- <mat-panel-title> -->
+         <div class="list-header align-flex-center">
+          <div (click)="$event.stopPropagation();openDetails('OpenAgent',item.propcoId)" class="left-side">
+            <i class="propcoicon propcoicon-agent no-background"></i>
+            <span class="title-wrapper">
+              <p class="title text-ellipsis" [title]="item?.fullName">{{item?.reference}}&nbsp;{{item?.fullName}}</p>
+              <p>
+                <span *ngIf="item?.address" [title]="item?.address">{{item?.address}}&nbsp;</span>
+                <span  class="verticalLine" *ngIf="item?.address && item?.isVatRegistered">&nbsp;</span>
+                <span class="vat" *ngIf="item?.isVatRegistered">VAT Registered&nbsp;</span>
+                <span  class="verticalLine" *ngIf="item?.isPartPayment">&nbsp;</span>
+                <span class="vat" *ngIf="item?.isPartPayment">Part payment&nbsp;</span>
+                <span  class="verticalLine" *ngIf="item?.isJournalExcluded">&nbsp;</span>
+                <span class="vat" *ngIf="item?.isJournalExcluded">Journal Excluded&nbsp;</span>
+                <span  class="verticalLine" *ngIf="item?.isReconcile">&nbsp;</span>
+                <span class="vat" *ngIf="item?.isReconcile">Reconcile</span>
+              </p>
+            </span>
+          </div>
+          <div class="ref-header">
+            <p class="ref">Status</p>
+            <p class="status">{{item?.status}}</p>
+          </div>
+         </div>
+      </mat-expansion-panel-header>
+      <ion-card-content id="details" class="padding-left">
+        <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
+          <ion-row class="main-row">
+            <ion-col class="ion-no-padding" size-xl="77 " size="100">
+              <ion-grid class="no-padding-top ion-no-padding">
+                <ion-row class="fault-data-row">
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">PropCo ID</span>
+                    <br />
+                    <span class="text-value">
+                      {{item?.propcoId || 'N/A'}}
+                    </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Legacy Ref</span>
+                    <br />
+                    <span class="text-value">
+                      {{item?.legacyReference || 'N/A'}}
+                    </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Default Bank</span>
+                    <br />
+                    <span class="text-value">{{item?.defaultBank || 'N/A'}}</span>
+                    </p>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</ng-template>
+
+<ng-template #landlordSuggestionListView  let-item="item">
+  <mat-accordion class="list-view-accordian" multi>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <!-- <mat-panel-title> -->
+         <div class="list-header align-flex-center">
+          <div (click)="$event.stopPropagation();openDetails('OpenLandlord',item.propcoId)" class="left-side">
+            <i class="propcoicon propcoicon-landlord no-background"></i>
+            <span class="title-wrapper">
+              <p class="title" [title]="item?.fullName">{{item?.fullName}}</p>
+              <p class="address-ref-wrapper">
+                <span *ngIf="item?.address" class="text-ellipsis address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
+                <span  class="verticalLine" *ngIf="item?.address">&nbsp;</span>
+                <span class="ref" [title]="item?.reference">Ref&nbsp;&nbsp;<span class="reftag">{{(item?.reference | RemainingCountPipe:'onlyString') || 'N/A'}}&nbsp;</span></span>
+                <span  class="verticalLine" *ngIf="item?.isOverseas">&nbsp;</span>
+                <span class="vat" *ngIf="item?.isOverseas">Overseas&nbsp;</span>
+              </p>
+            </span>
+          </div>
+          <div class="ref-header">
+            <p class="ref">Status</p>
+            <p class="status">{{item?.status ? item?.status : 'unknown'}}</p>
+          </div>
+         </div>
+      </mat-expansion-panel-header>
+      <ion-card-content id="details" class="padding-left">
+        <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
+          <ion-row class="main-row">
+            <ion-col class="ion-no-padding" size-xl="77 " size="100">
+              <ion-grid class="no-padding-top ion-no-padding">
+                <ion-row class="fault-data-row">
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">PropCo ID</span>
+                    <br />
+                    <span class="text-value">
+                      {{item?.propcoId || 'N/A'}}
+                    </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Office</span>
+                    <br />
+                    <span class="text-value">
+                      {{item?.officeCode || 'N/A'}}
+                    </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Type</span>
+                    <br />
+                    <span class="text-value">{{item?.type || 'N/A'}}</span>
+                    </p>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="fault-data-row">
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Email</span>
+                    <br />
+                    <span class="text-value">{{item?.email || 'N/A'}}</span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Phone</span>
+                    <br />
+                    <span class="text-value">{{item?.phoneNumber || 'N/A'}}</span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Landlord Reg Number</span>
+                    <br />
+                    <span class="text-value">{{item?.landlordRegNumber || 'N/A'}}</span>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="fault-data-row">
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Number Of Properties Owned</span>
+                    <br />
+                    <span class="text-value">{{(item?.landlordFirstPropertyReference) ? item?.landlordOtherPropertiesCount + 1 : 0}}</span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="67" size-lg="67" size-md="67">
+                    <p>
+                      <span class="text">Property Ref</span>
+                    <br />
+                    <span class="text-value">
+                      <span *ngIf="item?.landlordFirstPropertyReference">{{item?.landlordFirstPropertyReference}}&nbsp;</span>
+                      <span  class="verticalLine" *ngIf="item?.landlordFirstPropertyReference && item?.landlordFirstPropertyAddress">&nbsp;</span>
+                      <span *ngIf="item?.landlordFirstPropertyAddress">{{item?.landlordFirstPropertyAddress}}</span>
+                      <span *ngIf="!item?.landlordFirstPropertyReference && !item?.landlordFirstPropertyAddress">N/A</span>
+                    </span>
+                    </p>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</ng-template>
+
+<ng-template #tenantSuggestionListView  let-item="item">
+  <mat-accordion class="list-view-accordian" multi>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <!-- <mat-panel-title> -->
+         <div class="list-header align-flex-center">
+          <div (click)="$event.stopPropagation();openDetails('OpenTenant',item.propcoId)" class="left-side">
+            <i class="propcoicon propcoicon-tenant no-background"></i>
+            <span class="title-wrapper">
+              <p class="title" [title]="item?.fullName">{{item?.fullName}}</p>
+              <p class="address-ref-wrapper">
+                <span *ngIf="item?.address" class="text-ellipsis address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
+                <span  class="verticalLine" *ngIf="item?.address">&nbsp;</span>
+                <span class="ref">Ref&nbsp;&nbsp;<span class="reftag">{{(item?.reference ) || 0}}</span></span>
+              </p>
+            </span>
+          </div>
+          <div class="ref-header">
+            <p class="ref">Status</p>
+            <p class="status">{{item?.status}}</p>
+          </div>
+         </div>
+      </mat-expansion-panel-header>
+      <ion-card-content id="details" class="padding-left">
+        <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
+          <ion-row class="main-row">
+            <ion-col class="ion-no-padding" size-xl="77" size="70">
+              <ion-grid class="no-padding-top ion-no-padding">
+                <ion-row class="detail-row">
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">PropCo ID</span>
+                    <br />
+                    <span class="text-value">
+                      {{item?.propcoId || 'N/A'}}
+                    </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Office</span>
+                    <br />
+                    <span class="text-value">
+                      {{item?.officeCode || 'N/A'}}
+                    </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Type</span>
+                    <br />
+                    <span class="text-value">{{item?.type || 'N/A'}}</span>
+                    </p>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="detail-row">
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Guarantor Name</span>
+                    <br />
+                    <span class="text-value" [title]="item?.guarantor || 'N/A'">{{(item?.guarantor | RemainingCountPipe) || 'N/A'}}</span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Co-Tenant Name</span>
+                    <br />
+                    <span class="text-value" [title]="item?.coTenant || 'N/A'">{{(item?.coTenant | RemainingCountPipe) || 'N/A'}}</span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Right to rent - Expiry date</span>
+                    <br />
+                    <span class="text-value">{{(item?.rightToRentExpiryDate | date: 'dd/MM/yyyy') || 'N/A'}}</span>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</ng-template>
+
+<ng-template #applicantSuggestionListView  let-item="item">
+  <mat-accordion class="list-view-accordian" multi>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <!-- <mat-panel-title> -->
+         <div class="list-header align-flex-center">
+          <div (click)="$event.stopPropagation();openDetails('OpenApplicant',item.propcoId)" class="left-side">
+            <i class="propcoicon propcoicon-applicant-let no-background"></i>
+            <span class="title-wrapper">
+              <p class="title" [title]="item?.fullName">{{item?.fullName}}&nbsp;&nbsp;
+                <span title="Hot" *ngIf="item?.isHot"><ion-icon color="danger" name="flame-outline"></ion-icon></span>
+                <span title="Student" *ngIf="item?.isStudent"><ion-icon color="danger"name="person-circle-outline"></ion-icon></span>
+              </p>
+              <p class="address-ref-wrapper">
+                <span *ngIf="item?.address" class="text-ellipsis address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
+                <span  class="verticalLine" *ngIf="item?.address">&nbsp;</span>
+                <span class="ref">Ref&nbsp;&nbsp;<span class="reftag">{{(item?.reference ) || 0}}</span></span>
+              </p>
+            </span>
+          </div>
+          <div class="ref-header">
+            <p class="ref">Status</p>
+            <p class="status">{{item?.status}}</p>
+          </div>
+         </div>
+      </mat-expansion-panel-header>
+      <ion-card-content id="details" class="padding-left">
+        <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
+          <ion-row class="main-row">
+            <ion-col class="ion-no-padding" size-xl="77 " size="100">
+              <ion-grid class="no-padding-top ion-no-padding">
+                <ion-row class="detail-row">
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">PropCo ID</span>
+                    <br />
+                    <span class="text-value">
+                      {{item?.propcoId || 'N/A'}}
+                    </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Office</span>
+                    <br />
+                    <span class="text-value">
+                      {{item?.officeCode || 'N/A'}}
+                    </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Negotiator</span>
+                    <br />
+                    <span class="text-value">{{item?.negotiator || 'N/A'}}</span>
+                    </p>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="detail-row">
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Price Range</span>
+                    <br />
+                    <span class="text-value">{{item?.priceRange || 'N/A'}}</span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Minimum number of beds</span>
+                    <br />
+                    <span class="text-value">{{item?.bedRange || 'N/A'}}</span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">How soon looking to move?</span>
+                    <br />
+                    <span class="text-value">{{(item?.howSoonLookingToMove | date: 'dd/MM/yyyy') || 'N/A'}}</span>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</ng-template>
+
+<ng-template #contractorSuggestionListView  let-item="item">
+  <mat-accordion class="list-view-accordian" multi>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <!-- <mat-panel-title> -->
+         <div class="list-header align-flex-center">
+          <div (click)="$event.stopPropagation();openDetails('OpenContractor',item.propcoId)" class="left-side">
+            <i class="propcoicon propcoicon-contractor no-background"></i>
+            <span class="title-wrapper">
+              <p class="title" [title]="item?.fullName">{{item?.fullName}}</p>
+              <p class="address-ref-wrapper">
+                <span *ngIf="item?.address" class="text-ellipsis address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
+                <span  class="verticalLine" *ngIf="item?.address">&nbsp;</span>
+                <span class="ref">Ref&nbsp;&nbsp;<span class="reftag">{{(item?.reference ) || 0}}&nbsp;</span></span>
+                <span  class="verticalLine" *ngIf="item?.isAgentContractorApproved">&nbsp;</span>
+                <span class="vat" *ngIf="item?.isAgentContractorApproved">Agency Approved&nbsp;</span>
+                <span  class="verticalLine" *ngIf="item?.isVatRegistered">&nbsp;</span>
+                <span class="vat" *ngIf="item?.isVatRegistered">VAT  Registered</span>
+              </p>
+            </span>
+          </div>
+          <div class="ref-header">
+            <p class="ref">Status</p>
+            <p class="status">{{item?.status}}</p>
+          </div>
+         </div>
+      </mat-expansion-panel-header>
+      <ion-card-content id="details" class="padding-left">
+        <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
+          <ion-row class="main-row">
+            <ion-col class="ion-no-padding" size-xl="77 " size="100">
+              <ion-grid class="no-padding-top ion-no-padding">
+                <ion-row class="detail-row">
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">PropCo ID</span>
+                    <br />
+                    <span class="text-value">
+                      {{item?.propcoId || 'N/A'}}
+                    </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="60" size-lg="60" size-md="60">
+                    <p>
+                      <span class="text">Occupation/Service</span>
+                    <br />
+                    <span class="text-value" >{{(item?.occupation) || 'N/A'}}</span>
+                    </p>
+                  </ion-col>
+                  <ion-col ></ion-col>
+                </ion-row>
+                <ion-row class="detail-row">
+                  
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Phone Number</span>
+                    <br />
+                    <span class="text-value">{{item?.phoneNumber || 'N/A'}}</span>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Email</span>
+                    <br />
+                    <span class="text-value">{{item?.email || 'N/A'}}</span>
+                  </ion-col>
+                  <ion-col size-xl="33" size-lg="33" size-md="33">
+                    <p>
+                      <span class="text">Expiry date</span>
+                    <br />
+                    <span class="text-value" [ngClass]="{'expired' : item?.supplierLiabilityExpiryDate < currentDate}">{{(item?.supplierLiabilityExpiryDate | date: 'dd/MM/yyyy') || 'N/A'}}</span>
+                    </p>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </mat-expansion-panel>
+
+  </mat-accordion>
 </ng-template>
 <!--List view ends-->
 

@@ -15,8 +15,8 @@
                 }}</b>
             </div>
             <h2 class="banner-heading">
-              {{iacNotification && iacNotification?.responseReceived ? 'Response Received': 
-              (iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response')}}
+              {{iacNotification && iacNotification?.responseReceived ? notificationState.RESPONSE_RECEIVED: 
+              (iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE)}}
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
@@ -26,9 +26,9 @@
             <ng-container *ngIf="iacNotification && iacNotification?.responseReceived">
               <h6 class="banner-title response-recived">
                 <ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from 
-                <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
-                <span *ngIf="iacNotification?.recipientType === 11">Contractor</span>
-                <span *ngIf="iacNotification?.recipientType === 1">Tenant</span>
+                <span *ngIf="iacNotification?.recipientType === 8">{{recipientTypes.LANDLORD}}</span>
+                <span *ngIf="iacNotification?.recipientType === 11">{{recipientTypes.CONTRACTOR}}</span>
+                <span *ngIf="iacNotification?.recipientType === 1">{{recipientTypes.TENANT}}</span>
                 {{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}
               </h6>
             </ng-container>
@@ -36,10 +36,10 @@
               <h6 class="banner-title"
               [ngClass]="iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'no-response':'awaiting-response'"
               >
-                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response'}} from the  
-                  <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
-                  <span *ngIf="iacNotification?.recipientType == 11">Contractor</span>
-                  <span *ngIf="iacNotification?.recipientType == 1">Tenant</span>
+                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE}} from the  
+                  <span *ngIf="iacNotification?.recipientType === 8">{{recipientTypes.LANDLORD}}</span>
+                  <span *ngIf="iacNotification?.recipientType == 11">{{recipientTypes.CONTRACTOR}}</span>
+                  <span *ngIf="iacNotification?.recipientType == 1">{{recipientTypes.TENANT}}</span>
               </h6>
               <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt" >{{iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone?'Escalation due': iacNotification.chase === iacNotification.allowedNumberOfChases ? 'Last chase due('+iacNotification.chase+')' : 'Next chase due('+iacNotification.chase+')'}}:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
@@ -161,15 +161,6 @@
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
               <ion-row class="ion-justify-content-center">
-                <!-- <ng-container *ngFor="let instruction of otherStageActions">
-                    <ion-button color="success" expand="block" class="action-btn"
-                      fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
-                      (click)="setUserAction(instruction.index)">
-                      {{instruction.value}}
-                      <ion-icon name="checkmark-circle-outline" class="check-icon"
-                        *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
-                    </ion-button>
-                </ng-container> -->
                 <ion-button color="success" expand="block" class="action-btn" fill="{{faultDetails?.isClosed ? 'solid' : 'outline'}}" (click)="closeFault()">
                     Close Fault</ion-button>
                 <ion-button color="success" expand="block" class="action-btn" fill="outline" (click)="resendNotification()" 
@@ -191,24 +182,14 @@
       </ion-col>
     </ion-row>
     <ion-grid style="margin: 20px 0" *ngIf="quoteDocuments?.length && !showSkeleton">
-      <!-- <ion-grid style="margin: 20px 0" *ngIf="quoteDocuments?.length != 0 && (iacNotification?.templateCode === 'CF-T-E' || faultDetails?.status === 8)"> -->
       <ion-row>
         <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
           <h2>Invoice / Documents</h2>
-          <!-- <div class="border-bottom"></div> -->
           <ion-row>
             <ion-col size-xl="25" size="25" *ngFor="let file of quoteDocuments; let i=index;">
               <div class="delete-icon-wrapper">
                 <ion-grid>
                   <ion-row>
-                    <!-- <ion-col size="100" *ngIf="getFileType(file.name)">
-                      <img src="/assets/images/default.jpg" (click)="downloadDocumentByURl(file.documentUrl)"
-                        title="Click To Download PDF">
-                    </ion-col>
-                    <ion-col size="100" *ngIf="!getFileType(file.name)">
-                      <img [src]="file.documentUrl ? file.documentUrl : '/assets/images/default.jpg'"
-                        (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download">
-                    </ion-col> -->
                     <ion-col size="100">
                       <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file?.documentUrl, file?.name)" title="Click To Download">
                     </ion-col>    
@@ -353,7 +334,6 @@
         <ion-item>
           <ion-label position="stacked">Repair Cost <ion-text class="mandatory">*</ion-text>
           </ion-label>
-          <!-- <ion-input formControlName="repairCost"></ion-input> -->
           <input currencyMask formControlName="repairCost" (blur)="onBlurCurrency(workOrderForm.controls.repairCost.value, workOrderForm)"/>
         </ion-item>
         <app-validation-message [control]="workOrderForm.controls.repairCost"></app-validation-message>
