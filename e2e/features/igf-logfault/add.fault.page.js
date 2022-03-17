@@ -82,7 +82,7 @@ var Fault = function (faultDetails) {
     
     this.actionBtn = element(by.xpath("//table[@id='faultListTable']/tbody/tr[1]//i"));
     this.viewBtn = element(by.xpath("//ion-button[contains(text(), 'View')]"));  
-    
+    this.faultTitle = element(by.xpath("//ion-text[@color='success']/../../following-sibling::ion-col/h2"));
 
     this.createFault = function(faultAttrib){ 
         commonFunction.waitForElementToBeVisible(this.addFaultBtn, "Add Fault button");          
@@ -129,6 +129,7 @@ var Fault = function (faultDetails) {
         commonFunction.selectFromDropDown(this.reporterList, this.reporterName, "Reporter list", faultAttrib.reporterName);
         commonFunction.clickOnElement(this.nextBtn, "Next button");        
         if(faultAttrib.accessInfo){
+          commonFunction.waitForElementToBeVisible(this.accessInfoList, "Access Information list");
           commonFunction.selectFromDropDown(this.accessInfoList, this.accessInfo, "Access Information list", faultAttrib.accessInfo);
         }        
         if(faultAttrib.isOccupierVulnerable){
@@ -203,12 +204,11 @@ var Fault = function (faultDetails) {
         commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first fault"); 
         commonFunction.clickOnElement(this.actionBtn, "Action button");
         commonFunction.clickOnElement(this.viewBtn, "View button"); 
-        commonFunction.waitForElementToBeVisible(this.faultDetailsTab, "Fault Details tab");
+        commonFunction.waitForSpecificElementToBeVisible(by.xpath("//app-fault-title//h2"), "last", "Fault title");       
     }
 
     this.checkFaultDocument = function(docList, conditionResult, msg){
         let expCondition = protractor.ExpectedConditions; 
-        //this.viewFault();
         commonFunction.clickOnElement(this.mediaDocumentsTab, "Media Documents tab");
         commonFunction.scrollToElement(this.cancelBtn);
         commonFunction.clickOnElement(this.initialIssueFolder, "Initial Issue folder"); 
@@ -245,8 +245,6 @@ var Fault = function (faultDetails) {
          let coTenant = element(by.xpath("//ion-label[contains(text(), '" + mtProperty.reporterName1 + "')]"));
          let tenant2 = commonFunction.updateVerificationObject(coTenant, "Co-tenant Name"); 
          expect(tenant2).toContainData(mtProperty.reporterName1);
-        // commonFunction.clickOnElement(this.cancelBtn, "Cancel button");
-        // this.checkFaultInformationInTable(mtProperty);
     }
 
     this.checkFaultDetailsValiadation = function(faultValidation){
@@ -304,6 +302,7 @@ var Fault = function (faultDetails) {
           commonFunction.selectFromDropDown(this.reporterList, this.reporterName, "Reporter list", faultValidation.reporterName);
           commonFunction.scrollToElement(this.nextBtn);
           commonFunction.clickOnElement(this.nextBtn, "Next button");
+          commonFunction.waitForElementToBeVisible(this.accessInfoList, "Access Information list");
           commonFunction.selectFromDropDown(this.accessInfoList, this.accessInfo, "Access Information list", faultValidation.accessInfo);
           commonFunction.scrollToElement(this.nextBtn);
           commonFunction.clickOnElement(this.nextBtn, "Next button");
@@ -351,6 +350,7 @@ var Fault = function (faultDetails) {
       commonFunction.selectFromDropDown(this.reporterList, this.reporterName, "Reporter list", faultSaveLater.reporterName);
       commonFunction.scrollToElement(this.nextBtn);
       commonFunction.clickOnElement(this.nextBtn, "Next button");
+      commonFunction.waitForElementToBeVisible(this.accessInfoList, "Access Information list");
       commonFunction.selectFromDropDown(this.accessInfoList, this.accessInfo, "Access Information list", faultSaveLater.accessInfo);
       commonFunction.scrollToElement(this.nextBtn);
       commonFunction.clickOnElement(this.nextBtn, "Next button");

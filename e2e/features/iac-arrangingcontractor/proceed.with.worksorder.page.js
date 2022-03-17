@@ -60,7 +60,6 @@ var WorksOrder = function (faultDetails) {
     this.displayedReason = element(by.xpath("//app-close-fault//h5"));
     
     this.completeWorksorder = function(faultReported){
-        let addFault = new fault(faultReported);
         let fSummary = new faultSummary(faultReported);
         let merge = new mergeFault(faultReported);
         commonFunction.waitForElementToBeVisible(this.faultTitle, "Fault title");

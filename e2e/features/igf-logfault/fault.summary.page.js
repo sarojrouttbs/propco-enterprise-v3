@@ -82,7 +82,7 @@ var FaultSummary = function (faultDetails) {
         let addFault = new fault(faultDetails);
         commonFunction.scrollToElement(addFault.reviewTab);
         commonFunction.clickOnElement(addFault.reviewTab, "Review tab");
-        commonFunction.scrollToElement(addFault.cancelBtn);
+        commonFunction.scrollToElement(commonFunction.getElementByCssContainingText('ion-button', 'Cancel'));
         if(faultDetails.reviewCategory){
            let reviewCategory = commonFunction.updateVerificationObject(this.reviewFaultCategory, "Review Fault Category"); 
            expect(reviewCategory).toContainData(faultDetails.reviewCategory);   
@@ -186,17 +186,12 @@ var FaultSummary = function (faultDetails) {
     }
 
     this.checkFaultSummary = function(faultDetails){
-        //let addFault = new fault(faultDetails);      
-        //addFault.viewFault();
         this.checkPropertyDetails(faultDetails);
-       // commonFunction.clickOnElement(addFault.reviewTab, "Review Tab");
-       // commonFunction.scrollToElement(addFault.cancelBtn);
         this.checkReviewDetails(faultDetails);
     }
 
     this.editFaultDetails = function(originalFault){
         let addFault = new fault(faultDetails);        
-       // addFault.viewFault();
         commonFunction.scrollToElement(addFault.cancelBtn);
         if(originalFault.editTitle){
            commonFunction.clickOnElement(this.titleEditButton, "Edit Title button");
@@ -227,6 +222,7 @@ var FaultSummary = function (faultDetails) {
         }
         commonFunction.clickOnElement(addFault.accessInfoTab, "Access Information tab");  
         if(originalFault.editAccessInfo){
+           commonFunction.waitForElementToBeVisible(addFault.accessInfoList, "Access Information list"); 
            commonFunction.selectFromDropDown(addFault.accessInfoList, this.editAccessInfo, "Access Information list", originalFault.editAccessInfo);
         }        
         if(originalFault.editIsOccupierVulnerable){
@@ -242,15 +238,9 @@ var FaultSummary = function (faultDetails) {
         }
         if(originalFault.cancelChanges){ 
            commonFunction.scrollToElement(addFault.cancelBtn);            
-           commonFunction.clickOnElement(addFault.cancelBtn, "Cancel button"); 
-          // addFault.viewFault();
-          // commonFunction.clickOnElement(addFault.reviewTab, "Review tab");
-          // this.checkReviewDetails(originalFault);
+           commonFunction.clickOnElement(addFault.cancelBtn, "Cancel button");        
         }         
         if(originalFault.submitChanges){
-          // commonFunction.scrollToElement(addFault.reviewTab); 
-          // commonFunction.clickOnElement(addFault.reviewTab, "Review tab");
-          // this.checkReviewDetails(originalFault);
            commonFunction.scrollToElement(addFault.saveForLaterBtn);  
            commonFunction.clickOnElement(addFault.saveForLaterBtn, "Save For Later button");           
         }
@@ -258,7 +248,6 @@ var FaultSummary = function (faultDetails) {
 
     this.deleteFaultDocument = function(faultReported){
         let addFault = new fault(faultReported); 
-       // addFault.viewFault();
         commonFunction.clickOnElement(addFault.mediaDocumentsTab, "Media Documents tab");
         commonFunction.scrollToElement(addFault.cancelBtn);
         commonFunction.clickOnElement(addFault.initialIssueFolder, "Initial Issue folder");

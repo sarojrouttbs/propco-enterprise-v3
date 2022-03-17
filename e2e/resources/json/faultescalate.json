@@ -59,7 +59,7 @@
         },
         "deEscalateFault": {
             "deEscalateWindowTitle": "De-Escalate Fault",
-            "confirmationMessage": "Are you sure, you want to de-escalate the fault?",
+            "confirmationMessage": "Are you sure you want to de-escalate the fault?",
             "deEscalateAction": "Y", 
             "messageTitle": "De-Escalate Fault",
             "message": "Fault has been de-escalated to the property manager",
@@ -77,7 +77,7 @@
         },
         "cancelDeEscalateFault": {
             "deEscalateWindowTitle": "De-Escalate Fault",
-            "confirmationMessage": "Are you sure, you want to de-escalate the fault?",
+            "confirmationMessage": "Are you sure you want to de-escalate the fault?",
             "deEscalateAction": "",            
             "faultUpdate": "escalated",
             "tableFaultStatus": "Escalation"                                    

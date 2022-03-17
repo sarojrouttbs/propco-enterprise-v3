@@ -69,7 +69,6 @@ var FaultEscalate = function () {
 
     this.checkEscalationDetails = function(faultReported){
         let addFault = new fault(faultReported); 
-       // let fSummary = new faultSummary(faultReported);
         commonFunction.waitForElementToBeVisible(addFault.actionBtn, "Action button for first fault");
         commonFunction.clickOnElement(addFault.categoryTbl, "Fault Table Category of first row");
         if(("escalateAction" in faultReported && faultReported.escalateAction) || ("deEscalateAction" in faultReported && !faultReported.deEscalateAction)){
