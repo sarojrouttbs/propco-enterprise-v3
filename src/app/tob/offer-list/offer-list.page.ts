@@ -280,7 +280,7 @@ export class OfferListPage implements OnInit {
     const noteData = this.selectedNotesRow;
     const modal = await this.modalController.create({
       component: NotesModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container offer-notes-modal-height',
       componentProps: {
         noteData: this.isAddNote ? {} : noteData,
         notesType: NOTES_TYPE.OFFER,

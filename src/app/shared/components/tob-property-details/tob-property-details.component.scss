@@ -5,6 +5,7 @@ ion-card {
       background-color: var(--ion-color-step-1750);
       img {
           height: 100%;
+          width: 100%;
       }
     }
 }
@@ -35,4 +36,9 @@ ion-card {
 
 .amount-alignment {
     margin-top: 30px;
+}
+
+.property-img {
+    width: 100%;
+    height: 210px;
 }
