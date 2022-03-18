@@ -6,9 +6,10 @@
       <ion-grid class="ion-no-padding">
         <ion-row class="main-row">
           <ion-col size="25">
-            <img height="100%"
-              [src]=" propertyDetails?.propertyImageUrl ? commonService.getResizedImageUrl(propertyDetails?.propertyImageUrl) : 'assets/images/default.jpg'"
+            <div style="width: 100%; height: 210px;">
+              <img [src]=" propertyDetails?.propertyImageUrl ? commonService.getResizedImageUrl(propertyDetails?.propertyImageUrl) : 'assets/images/default.jpg'"
               onerror="this.src='assets/images/default.jpg'">
+            </div>
           </ion-col>
           <ion-col class="property-details" size="75">
             <ion-grid style="height:100%;" class="no-padding">
@@ -64,8 +65,8 @@
       <ion-grid class="ion-no-padding">
         <ion-row class="main-row">
           <ion-col size="25">
-              <div>
-                <ion-skeleton-text animated style="width: 100%; height: 170px;"></ion-skeleton-text>
+              <div style="width: 100%; height: 198px;">
+                <ion-skeleton-text animated style="width: 100%; height: 98%;"></ion-skeleton-text>
               </div>
           </ion-col>
           <ion-col class="property-details" size="75">
@@ -76,12 +77,12 @@
               <ion-row class="description">
                 <ion-skeleton-text animated></ion-skeleton-text>
               </ion-row>
-              <ion-row style="margin-top: 50px;">
-                <ion-col>
-                  <ion-skeleton-text animated style="width: 50%;"></ion-skeleton-text>
+              <ion-row>
+                <ion-col class="amount">
+                  <ion-skeleton-text animated style="width:20%;" class="ion-text-start fs-18 bottom-align"></ion-skeleton-text>
                 </ion-col>
-                <ion-col class="ion-text-end">
-                  <ion-skeleton-text animated style="width: 50%; float: right;"></ion-skeleton-text>
+                <ion-col class="amount">
+                  <ion-skeleton-text animated style="width:20%;" class="fs-18 bottom-align right-align"></ion-skeleton-text>
                 </ion-col>
               </ion-row>
             </ion-grid>
