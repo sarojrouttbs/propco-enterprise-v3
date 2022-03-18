@@ -302,9 +302,7 @@ export class OfferDetailPage implements OnInit {
       }
       else {
         this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
-        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true }).then(() => {
-          location.reload();
-        });
+        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
       }
     })
   }

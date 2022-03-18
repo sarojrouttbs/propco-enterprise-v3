@@ -6,7 +6,7 @@
       <ion-grid class="ion-no-padding">
         <ion-row class="main-row">
           <ion-col size="25">
-            <div style="width: 100%; height: 210px;">
+            <div class="property-img">
               <img [src]=" propertyDetails?.propertyImageUrl ? commonService.getResizedImageUrl(propertyDetails?.propertyImageUrl) : 'assets/images/default.jpg'"
               onerror="this.src='assets/images/default.jpg'">
             </div>
@@ -65,8 +65,8 @@
       <ion-grid class="ion-no-padding">
         <ion-row class="main-row">
           <ion-col size="25">
-              <div style="width: 100%; height: 198px;">
-                <ion-skeleton-text animated style="width: 100%; height: 98%;"></ion-skeleton-text>
+              <div class="property-img">
+                <ion-skeleton-text animated class="property-img"></ion-skeleton-text>
               </div>
           </ion-col>
           <ion-col class="property-details" size="75">
