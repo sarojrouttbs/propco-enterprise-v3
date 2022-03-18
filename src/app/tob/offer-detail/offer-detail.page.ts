@@ -313,7 +313,9 @@ export class OfferDetailPage implements OnInit {
     requestObj.entityType = 'AGENT',
       this._tobService.updateOfferStatus(this.offerId, status, requestObj).subscribe(response => {
         this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
-        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
+        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true }).then(() => {
+          location.reload();
+        });
       })
   }
 

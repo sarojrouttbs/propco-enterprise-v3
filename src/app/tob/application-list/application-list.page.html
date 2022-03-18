@@ -68,22 +68,22 @@
         <ion-card-content>
           <ion-grid>
             <ion-row class="main-row">
-              <ion-col size-xl="15" size="20">
+              <ion-col size-xl="15" size="20" class="no-padding">
                 <div>
                   <ion-skeleton-text animated style="width: 90%; height: 132px;"></ion-skeleton-text>
                 </div>
               </ion-col>
-              <ion-col size-xl="85" size="80" style="position: static;">
+              <ion-col size-xl="85" size="80" style="position: static;" class="no-padding">
                 <ion-grid style="height:100%;" class="no-padding-top">
                   <ion-row class="application-title fs-18">
-                    <ion-col class="no-padding-top col1" size="60">
+                    <ion-col class="no-padding-top no-padding-bottom col1" size="60">
                       <ion-text class="fs-20">    
                         <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
                       </ion-text> <br />
                     </ion-col>
-                    <ion-col class="no-padding-top col2 ion-text-end" size="40">
+                    <ion-col class="no-padding-top no-padding-bottom col2 ion-text-end" size="40">
                       <ion-text class="" >
-                        <ion-skeleton-text animated style="width: 15%; float: right;"></ion-skeleton-text>
+                        <ion-skeleton-text animated style="width: 25%; float: right;"></ion-skeleton-text>
                       </ion-text>
                     </ion-col>
                   </ion-row>
@@ -91,29 +91,29 @@
                     <ion-col class="no-padding-top col1" size="75">
                       <ion-grid class="no-padding-left">
                         <ion-row>
-                          <ion-col class="no-padding-left col2" size="33">
+                          <ion-col class="no-padding-left no-padding-bottom no-padding-top col2" size="33">
                           <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
                           <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
                           </ion-col>
-                          <ion-col class="no-padding-left col3" size="33">
+                          <ion-col class="no-padding-left no-padding-bottom no-padding-top col3" size="33">
                             <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
                             <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
                           </ion-col>
-                          <ion-col class="no-padding-left col1" size="33">
+                          <ion-col class="no-padding-left no-padding-bottom no-padding-top col1" size="33">
                             <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
                             <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
                           </ion-col>
                         </ion-row>
-                        <ion-row class="details">
-                          <ion-col class="no-padding-left col1" size="33">
+                        <ion-row style="padding-top: 20px; margin-bottom: -10px;">
+                          <ion-col class="no-padding-left no-padding-bottom no-padding-top col1" size="33">
                             <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
                             <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
                           </ion-col>
-                          <ion-col class="no-padding-left col2" size="33">
+                          <ion-col class="no-padding-left no-padding-bottom no-padding-top col2" size="33">
                             <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
                             <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
                           </ion-col>
-                          <ion-col class="no-padding-left col3" size="33">
+                          <ion-col class="no-padding-left no-padding-bottom no-padding-top col3" size="33">
                             <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
                             <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
                           </ion-col>
@@ -138,19 +138,19 @@
         <ion-card-content>
           <ion-grid>
             <ion-row class="main-row">
-              <ion-col size-xl="15" size="20">
+              <ion-col size-xl="15" size="20" class="no-padding">
                 <div>
                   <img class="applicant-img" [src]="item.numberOfCoApplicants > 0 ? 'assets/images/tob/multi-user.svg' : 'assets/images/tob/single-user.svg'">
                 </div>
               </ion-col>
-              <ion-col size-xl="85" size="80" style="position: static;">
+              <ion-col size-xl="85" size="80" style="position: static;" class="no-padding">
                 <ion-grid style="height:100%;" class="no-padding">
                   <ion-row class="application-title fs-18">
-                    <ion-col class="no-padding-top col1" size="60">
+                    <ion-col class="no-padding-top no-padding-bottom col1" size="60">
                       <ion-text class="fs-20"> {{ item?.rent | currency: 'GBP' }} {{ (applicationsDetails?.frequencyType | lookup: rentFrequencyTypes) || '-' }}
                       </ion-text> <br />
                     </ion-col>
-                    <ion-col class="no-padding-top col2 ion-text-end" size="40">
+                    <ion-col class="no-padding-top no-padding-bottom col2 ion-text-end" size="40">
                       <ion-text class="application-status" [color]="getStatusColor(item?.status)">
                         {{ (item?.status | lookup: applicationStatusTypes) || '-' }}
                       </ion-text>
@@ -160,29 +160,29 @@
                     <ion-col class="no-padding-top col1" size="75">
                       <ion-grid class="no-padding-left">
                         <ion-row>
-                          <ion-col class="no-padding-left col2" size="33">
+                          <ion-col class="no-padding-left no-padding-bottom no-padding-top col2" size="33">
                             <ion-text color="medium">Applicant Name</ion-text><br />
                             <ion-text>{{ item?.forename }} {{ item?.surname }}</ion-text><br />
                           </ion-col>
-                          <ion-col class="no-padding-left col3" size="33">
+                          <ion-col class="no-padding-left no-padding-bottom no-padding-top col3" size="33">
                             <ion-text color="medium">No. of Co-applicant(s)</ion-text><br />
                             <ion-text>{{ item?.numberOfCoApplicants ? item?.numberOfCoApplicants : 0 }}</ion-text><br />
                           </ion-col>
-                          <ion-col class="no-padding-left col1" size="33">
+                          <ion-col class="no-padding-left no-padding-bottom no-padding-top col1" size="33">
                             <ion-text color="medium">Holding Deposit</ion-text><br />
                             <ion-text>{{ item?.holdingDeposit | currency: 'GBP' }}</ion-text><br />
                           </ion-col>
                         </ion-row>
                         <ion-row class="details">
-                          <ion-col class="no-padding-left col1" size="33">
+                          <ion-col class="no-padding-left no-padding-bottom no-padding-top col1" size="33">
                             <ion-text color="medium">Security Deposit</ion-text><br />
                             <ion-text>{{ applicationsDetails?.securityDeposit | currency: 'GBP' }}</ion-text><br />
                           </ion-col>
-                          <ion-col class="no-padding-left col2" size="33">
+                          <ion-col class="no-padding-left no-padding-bottom no-padding-top col2" size="33">
                             <ion-text color="medium">Tenancy Start</ion-text><br />
                             <ion-text>{{ item?.moveInDate ? (item?.moveInDate | date: 'dd/MM/yyyy') : 'N/A'}}</ion-text><br />
                           </ion-col>
-                          <ion-col class="no-padding-left col3" size="33">
+                          <ion-col class="no-padding-left no-padding-bottom no-padding-top col3" size="33">
                             <ion-text color="medium">Tenancy End</ion-text><br />
                             <ion-text>{{ item?.preferredTenancyEndDate ? (item?.preferredTenancyEndDate | date: 'dd/MM/yyyy') : 'N/A' }}</ion-text><br />
                           </ion-col>
