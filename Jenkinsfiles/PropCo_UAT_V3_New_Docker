@@ -18,13 +18,12 @@ tools {
             }
           }
  
-
-    
     stage('Checkout Scm') {
       steps {
         git(credentialsId: 'dbc0e816-daf4-4270-8cfb-ffb85299211f', url: 'git@gitlab.techblue.co.uk:propco/propco-enterprise-v3.git',branch: 'staging')
       }
     }
+
     stage('Npm build') {
       steps {
         nodejs('Node 10.16.3') {
@@ -56,9 +55,8 @@ tools {
                 }  
             }
           }
-         
 
-         stage('Execute Shell') {
+    stage('Execute Shell') {
          steps {
         sh '''npm i
         #ionic build -- --base-href /propco-v3/
