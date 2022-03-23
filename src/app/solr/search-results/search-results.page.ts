@@ -608,8 +608,6 @@ export class SearchResultsPage implements OnInit {
     this.applicantFilter.reset();
     this.agentFilter.reset();
     this.contractorFilter.reset();
-    // this.deselectAll();
-    // this.solrSearchConfig.searchTerm = '';
     this.getSearchResults();
   }
 
