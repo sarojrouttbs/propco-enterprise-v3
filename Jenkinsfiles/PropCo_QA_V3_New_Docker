@@ -3,6 +3,7 @@ pipeline {
 
  options {
     buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+    disableConcurrentBuilds(abortPrevious: true)    
   }
 
   stages {
@@ -60,4 +61,17 @@ stage('SonarQube analysis') {
          }
 
 }
+
+  post {
+      always {
+	emailext body: '${SCRIPT,template="groovy-html.template"}',to: 'webteam@techblue.co.uk' , subject: currentBuild.currentResult + " : " + currentBuild.fullDisplayName
+      }
+      failure {
+        updateGitlabCommitStatus name: 'Jenkins job', state: 'failed'
+      }
+      success {
+        updateGitlabCommitStatus name: 'Jenkins job', state: 'success'
+      }
+  }
+
 }
