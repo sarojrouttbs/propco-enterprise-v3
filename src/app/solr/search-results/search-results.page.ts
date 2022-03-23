@@ -565,6 +565,7 @@ export class SearchResultsPage implements OnInit {
       }
       params.applicantFilter = apFilter;
     }
+    this.commonService.dataChanged({entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm});
     return params;
   }
 
@@ -607,6 +608,9 @@ export class SearchResultsPage implements OnInit {
     this.applicantFilter.reset();
     this.agentFilter.reset();
     this.contractorFilter.reset();
+    // this.deselectAll();
+    // this.solrSearchConfig.searchTerm = '';
+    this.getSearchResults();
   }
 
   selectAll() {
@@ -684,6 +688,7 @@ export class SearchResultsPage implements OnInit {
         break;
     }
     this.entityControl.setValue(tmpArray);
+    this.commonService.dataChanged({entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm});
   }
 
   private renderEntity() {}

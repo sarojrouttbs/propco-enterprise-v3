@@ -308,9 +308,12 @@ export class OfferDetailPage implements OnInit {
   }
 
   private async updateOfferStatus(counterOfferStatus) {
+    const confirmationForm = this.confirmationForm.value;
     const status = counterOfferStatus ? counterOfferStatus : this.makeAnOfferForm.controls.status.value;
     const requestObj: any = {};
-    requestObj.entityType = 'AGENT',
+    requestObj.entityType = 'AGENT';
+    requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord;
+    requestObj.sendEmailToApplicant = confirmationForm.sendEmailToApplicant;
       this._tobService.updateOfferStatus(this.offerId, status, requestObj).subscribe(response => {
         this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
         this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
