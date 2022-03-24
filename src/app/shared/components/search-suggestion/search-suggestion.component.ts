@@ -60,6 +60,7 @@ export class SearchSuggestionComponent implements OnInit {
 
     // set val to the value of the searchbar
     const searchText = ev.target.value;
+    this.updateQueryParams(searchText, this.entityControl.value);
 
     // if the value is an empty string don't filter the items
     if (searchText && searchText.trim() !== "" && searchText.length > 3) {
@@ -180,17 +181,32 @@ export class SearchSuggestionComponent implements OnInit {
           },
         });
       }
-      this.solrSearchService.search(this.entityControl.value,this.searchTermControl.value);
+      this.solrSearchService.search({entity: this.entityControl.value, term:this.searchTermControl.value, isSearchResult: true});
     }
   }
 
   private getQueryParams() {
     const promise = new Promise((resolve, reject) => {
       this.route.queryParams.subscribe((params) => {
+        const entityParams = params["type"] ? params["type"] : "Property";
+        const types: string[] = Array.isArray(entityParams) ? entityParams : [entityParams];
+        this.entityControl.setValue(types);
         this.searchTerm = params["searchTerm"];
         resolve(true);
       });
     });
     return promise;
+  }
+
+  onChangeEntity() {
+    this.updateQueryParams(this.searchTermControl.value, this.entityControl.value);
+  }
+
+  private updateQueryParams(searchTerm, entity) {
+    this.router.navigate([], { relativeTo: this.route, queryParams: {
+      searchTerm: searchTerm,
+      type: entity
+    }});
+    this.solrSearchService.search({entity: this.entityControl.value, term:this.searchTermControl.value, isSearchResult: false});
   }
 }
