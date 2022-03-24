@@ -26,13 +26,15 @@
       debounce="500" 
       (ionChange)="getItems($event)"
       [formControl]="searchTermControl"
+      (ionBlur) = "isItemAvailable = false"
+      (ionFocus) = "suggestions.length > 0 ? isItemAvailable = true : false"
       >
       <!-- (ionBlur) = "isItemAvailable = false"
       (ionFocus) = "suggestions.length > 0 ? isItemAvailable = true : false" -->
       </ion-searchbar>
       <ion-progress-bar color="danger" [type]="'indeterminate'" *ngIf="showLoader" style="position: absolute;"></ion-progress-bar>
       <ion-list *ngIf="isItemAvailable" class="solrSuggestionList" 
-      [class.agent-list] = "pageType === 'agent-header'">
+      [class.solr-dashboard] = "pageType === 'dashboard'">
         <ion-item *ngFor="let item of suggestions" class="solrSuggestionListItem">
           <ng-container [ngTemplateOutlet]="propertySuggestion"  *ngIf="item?.entityType === 'PROPERTY'"
               [ngTemplateOutletContext]="{item:item}">

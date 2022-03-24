@@ -2,7 +2,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
+import { ENTITY_TYPE, OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { switchMap, debounceTime } from 'rxjs/operators';
@@ -308,9 +308,12 @@ export class OfferDetailPage implements OnInit {
   }
 
   private async updateOfferStatus(counterOfferStatus) {
+    const confirmationForm = this.confirmationForm.value;
     const status = counterOfferStatus ? counterOfferStatus : this.makeAnOfferForm.controls.status.value;
     const requestObj: any = {};
-    requestObj.entityType = 'AGENT',
+    requestObj.entityType = ENTITY_TYPE.AGENT;
+    requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord;
+    requestObj.sendEmailToApplicant = confirmationForm.sendEmailToApplicant;
       this._tobService.updateOfferStatus(this.offerId, status, requestObj).subscribe(response => {
         this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
         this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
@@ -321,7 +324,7 @@ export class OfferDetailPage implements OnInit {
     const offerFormValues = this.makeAnOfferForm.value;
     const confirmationForm = this.confirmationForm.value;
     const requestObj: any = {};
-    requestObj.entityType = 'AGENT';
+    requestObj.entityType = ENTITY_TYPE.AGENT;
     requestObj.amount = offerFormValues.amount;
     requestObj.moveInDate = this.commonService.getFormatedDate(offerFormValues.moveInDate);
     requestObj.rentingTime = offerFormValues.rentingTime;
@@ -375,7 +378,7 @@ export class OfferDetailPage implements OnInit {
     const offerFormValues = this.makeAnOfferForm.value;
     const confirmationForm = this.confirmationForm.value;
     const requestObj: any = {};
-    requestObj.entityType = 'AGENT';
+    requestObj.entityType = ENTITY_TYPE.AGENT;
     requestObj.applicantId = this.applicantId;
     requestObj.status = 0; //create default status is 0 = unknown
     requestObj.propertyId = this.propertyId;

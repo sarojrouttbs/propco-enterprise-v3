@@ -1,7 +1,7 @@
 import { HttpParams } from "@angular/common/http";
 import { Component, Input, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { PROPCO } from "src/app/shared/constants";
 import { CommonService } from "src/app/shared/services/common.service";
 import { EventEmitter } from "@angular/core";
@@ -50,7 +50,8 @@ export class SearchSuggestionComponent implements OnInit {
     private solrService: SolrService,
     private commonService: CommonService,
     private router: Router,
-    private solrSearchService: SolrSearchHandlerService
+    private solrSearchService: SolrSearchHandlerService,
+    private route: ActivatedRoute
   ) {}
 
   getItems(ev: any) {
@@ -87,12 +88,18 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.getQueryParams();
     if (changes.isAuthSuccess && changes.isAuthSuccess.currentValue) {
       this.initDashboard();
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.commonService.dataChanged$.subscribe((data)=>{
+      this.entityControl.setValue(data.entity);
+      this.searchTermControl.setValue(data.term);
+    });
+  }
 
   private initDashboard() {
     this.getLookupData();
@@ -139,7 +146,6 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   goToPage() {
-    
     if(this.router.url.includes('/solr/dashboard')) {
       this.router.navigate(["/solr/search-results"], {
         queryParams: {
@@ -176,5 +182,15 @@ export class SearchSuggestionComponent implements OnInit {
       }
       this.solrSearchService.search(this.entityControl.value,this.searchTermControl.value);
     }
+  }
+
+  private getQueryParams() {
+    const promise = new Promise((resolve, reject) => {
+      this.route.queryParams.subscribe((params) => {
+        this.searchTerm = params["searchTerm"];
+        resolve(true);
+      });
+    });
+    return promise;
   }
 }
