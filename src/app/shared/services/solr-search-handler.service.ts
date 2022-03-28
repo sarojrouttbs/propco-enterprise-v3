@@ -7,8 +7,8 @@ import { Observable, Subject } from "rxjs";
 export class SolrSearchHandlerService {
   private subject = new Subject<any>();
 
-  search(entity, searchTerm) {
-    this.subject.next({ entity: entity, searchTerm: searchTerm });
+  search(data) {
+    this.subject.next(data);
   }
 
   getSearch(): Observable<any> {
