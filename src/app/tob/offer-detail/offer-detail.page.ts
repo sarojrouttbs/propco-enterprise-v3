@@ -52,6 +52,7 @@ export class OfferDetailPage implements OnInit {
   isTobPropertyCardReady: boolean = false;
   isApplicantDetailsAvailable: boolean = false;
   isOffersDetailsAvailable: boolean = false;
+  updatedFormValues: any = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -104,7 +105,7 @@ export class OfferDetailPage implements OnInit {
       })
   }
 
-  private patchApplicantDetail(){
+  private patchApplicantDetail() {
     this.makeAnOfferForm.patchValue({
       moveInDate: this.applicantDetail.moveInDate,
       rentingTime: this.applicantDetail.rentingTime,
@@ -286,25 +287,33 @@ export class OfferDetailPage implements OnInit {
   }
 
   private updateOfferDetails() {
-    this._tobService.updateOffer(this.prepareUpdateOffer(), this.offerId).subscribe(response => {
-      // if (this.offerDetails.status !== this.makeAnOfferForm.controls.status.value) {
-      //   this.updateOfferStatus();;
-      // }
+    let isStatusUpdated = false;
+    let isStatusAndFormBothUpdated = false;
+    let isOnlyFormUpdated = false;
+    this.getUpdatedValues()
+
+    if (this.updatedFormValues.length > 1 && this.updatedFormValues.includes('status')) {
+      isStatusAndFormBothUpdated = true;
+    } else if (this.updatedFormValues.length === 1 && this.updatedFormValues.includes('status')) {
+      isStatusUpdated = true;
+    } else {
+      isOnlyFormUpdated = true;
+    }
+
+    if (isStatusUpdated) {
       let counterOfferStatus = this.makeAnOfferForm.controls.status.value;
-      if (this.offerDetails.amount !== Number(this.makeAnOfferForm.controls.amount.value)) {
-        counterOfferStatus = OFFER_STATUSES.COUNTER_OFFER_BY_LL_AGENT;
-      }
-      if (this.offerDetails.status !== this.makeAnOfferForm.controls.status.value) {
-        counterOfferStatus = this.makeAnOfferForm.controls.status.value;
-      }
       if (this.offerDetails.status !== counterOfferStatus) {
         this.updateOfferStatus(counterOfferStatus);
       }
-      else {
-        this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
-        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
-      }
-    })
+    }
+
+    if (isStatusAndFormBothUpdated) {
+      this.updateOfferWithStatus();
+    }
+
+    if (isOnlyFormUpdated) {
+      this.updateOfferOnly();
+    }
   }
 
   private async updateOfferStatus(counterOfferStatus) {
@@ -314,10 +323,10 @@ export class OfferDetailPage implements OnInit {
     requestObj.entityType = ENTITY_TYPE.AGENT;
     requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord;
     requestObj.sendEmailToApplicant = confirmationForm.sendEmailToApplicant;
-      this._tobService.updateOfferStatus(this.offerId, status, requestObj).subscribe(response => {
-        this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
-        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
-      })
+    this._tobService.updateOfferStatus(this.offerId, status, requestObj).subscribe(response => {
+      this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
+      this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
+    })
   }
 
   private prepareUpdateOffer(): object {
@@ -615,6 +624,41 @@ export class OfferDetailPage implements OnInit {
         }
       });
     }
+  }
+
+  private updateOfferWithStatus() {
+    this._tobService.updateOffer(this.prepareUpdateOffer(), this.offerId).subscribe(response => {
+      let counterOfferStatus = this.makeAnOfferForm.controls.status.value;
+      if (this.offerDetails.amount !== Number(this.makeAnOfferForm.controls.amount.value)) {
+        counterOfferStatus = OFFER_STATUSES.COUNTER_OFFER_BY_LL_AGENT;
+      }
+      if (this.offerDetails.status !== this.makeAnOfferForm.controls.status.value) {
+        counterOfferStatus = this.makeAnOfferForm.controls.status.value;
+      }
+      if (this.offerDetails.status !== counterOfferStatus) {
+        this.updateOfferStatus(counterOfferStatus);
+      }
+      else {
+        this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
+        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
+      }
+    })
+  }
+
+  private updateOfferOnly() {
+    this._tobService.updateOffer(this.prepareUpdateOffer(), this.offerId).subscribe(response => {
+      this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
+      this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
+    })
+  }
+
+  private getUpdatedValues() {
+    this.updatedFormValues = [];
+    this.makeAnOfferForm['_forEachChild']((control, name) => {
+      if (control.dirty) {
+        this.updatedFormValues.push(name);
+      }
+    });
   }
 
 }
