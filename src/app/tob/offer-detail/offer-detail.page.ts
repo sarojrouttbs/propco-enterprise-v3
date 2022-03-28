@@ -52,7 +52,7 @@ export class OfferDetailPage implements OnInit {
   isTobPropertyCardReady: boolean = false;
   isApplicantDetailsAvailable: boolean = false;
   isOffersDetailsAvailable: boolean = false;
-  updatedFormValues = [];
+  updatedFormValues: any = [];
 
   constructor(
     private route: ActivatedRoute,
