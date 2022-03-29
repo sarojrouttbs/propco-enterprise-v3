@@ -164,7 +164,7 @@ export class SearchResultsPage implements OnInit {
     this.initFilterForm();
     this.multiSearchFilterHandler();
     this.solrSearchService.getSearch().subscribe((data)=>{
-      this.searchHandler(data.entity,data.searchTerm);
+      this.searchHandler(data);
     });
   }
 
@@ -368,7 +368,7 @@ export class SearchResultsPage implements OnInit {
       this.route.queryParams.subscribe((params) => {
         this.solrSearchConfig.types = params["type"]
           ? params["type"]
-          : "PROPERTY";
+          : "Property";
         this.solrSearchConfig.searchTerm = params["searchTerm"]
           ? params["searchTerm"]
           : "";
@@ -566,6 +566,7 @@ export class SearchResultsPage implements OnInit {
       }
       params.applicantFilter = apFilter;
     }
+    this.commonService.dataChanged({entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm});
     return params;
   }
 
@@ -608,6 +609,7 @@ export class SearchResultsPage implements OnInit {
     this.applicantFilter.reset();
     this.agentFilter.reset();
     this.contractorFilter.reset();
+    this.getSearchResults();
   }
 
   selectAll() {
@@ -620,6 +622,7 @@ export class SearchResultsPage implements OnInit {
     this.agentCheck.setValue(true);
     this.entityControl.setValue([]);
     this.entityControl.setValue(this.entityList);
+    this.commonService.dataChanged({entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm});
   }
 
   deselectAll() {
@@ -631,6 +634,7 @@ export class SearchResultsPage implements OnInit {
     this.contractorCheck.setValue(false);
     this.agentCheck.setValue(false);
     this.entityControl.setValue([]);
+    this.commonService.dataChanged({entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm});
   }
 
   refresh(type: string) {
@@ -685,6 +689,7 @@ export class SearchResultsPage implements OnInit {
         break;
     }
     this.entityControl.setValue(tmpArray);
+    this.commonService.dataChanged({entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm});
   }
 
   private renderEntity() {}
@@ -698,9 +703,14 @@ export class SearchResultsPage implements OnInit {
     }
   }
 
-  searchHandler(entity,term) {
-    this.entityControl.setValue(entity);
-    this.solrSearchConfig.searchTerm = term ? term : "";
-    this.initResults();
+  async searchHandler(data) {
+    this.entityControl.setValue(data.entity);
+    this.solrSearchConfig.searchTerm = data.term ? data.term : "";
+    if(data.isSearchResult) {
+      this.initResults();
+    } else {
+      await this.getQueryParams();
+      this.initFilter();
+    }
   }
 }

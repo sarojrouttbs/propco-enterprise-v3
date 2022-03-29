@@ -2,7 +2,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DEFAULTS, OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
+import { ENTITY_TYPE, OFFER_STATUSES, PROPCO, DEFAULTS} from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { switchMap, debounceTime } from 'rxjs/operators';
@@ -53,6 +53,7 @@ export class OfferDetailPage implements OnInit {
   isApplicantDetailsAvailable: boolean = false;
   isOffersDetailsAvailable: boolean = false;
   DEFAULTS = DEFAULTS;
+  updatedFormValues: any = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -105,7 +106,7 @@ export class OfferDetailPage implements OnInit {
       })
   }
 
-  private patchApplicantDetail(){
+  private patchApplicantDetail() {
     this.makeAnOfferForm.patchValue({
       moveInDate: this.applicantDetail.moveInDate,
       rentingTime: this.applicantDetail.rentingTime,
@@ -287,42 +288,53 @@ export class OfferDetailPage implements OnInit {
   }
 
   private updateOfferDetails() {
-    this._tobService.updateOffer(this.prepareUpdateOffer(), this.offerId).subscribe(response => {
-      // if (this.offerDetails.status !== this.makeAnOfferForm.controls.status.value) {
-      //   this.updateOfferStatus();;
-      // }
+    let isStatusUpdated = false;
+    let isStatusAndFormBothUpdated = false;
+    let isOnlyFormUpdated = false;
+    this.getUpdatedValues()
+
+    if (this.updatedFormValues.length > 1 && this.updatedFormValues.includes('status')) {
+      isStatusAndFormBothUpdated = true;
+    } else if (this.updatedFormValues.length === 1 && this.updatedFormValues.includes('status')) {
+      isStatusUpdated = true;
+    } else {
+      isOnlyFormUpdated = true;
+    }
+
+    if (isStatusUpdated) {
       let counterOfferStatus = this.makeAnOfferForm.controls.status.value;
-      if (this.offerDetails.amount !== Number(this.makeAnOfferForm.controls.amount.value)) {
-        counterOfferStatus = OFFER_STATUSES.COUNTER_OFFER_BY_LL_AGENT;
-      }
-      if (this.offerDetails.status !== this.makeAnOfferForm.controls.status.value) {
-        counterOfferStatus = this.makeAnOfferForm.controls.status.value;
-      }
       if (this.offerDetails.status !== counterOfferStatus) {
         this.updateOfferStatus(counterOfferStatus);
       }
-      else {
-        this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
-        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
-      }
-    })
+    }
+
+    if (isStatusAndFormBothUpdated) {
+      this.updateOfferWithStatus();
+    }
+
+    if (isOnlyFormUpdated) {
+      this.updateOfferOnly();
+    }
   }
 
   private async updateOfferStatus(counterOfferStatus) {
+    const confirmationForm = this.confirmationForm.value;
     const status = counterOfferStatus ? counterOfferStatus : this.makeAnOfferForm.controls.status.value;
     const requestObj: any = {};
-    requestObj.entityType = 'AGENT',
-      this._tobService.updateOfferStatus(this.offerId, status, requestObj).subscribe(response => {
-        this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
-        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
-      })
+    requestObj.entityType = ENTITY_TYPE.AGENT;
+    requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord;
+    requestObj.sendEmailToApplicant = confirmationForm.sendEmailToApplicant;
+    this._tobService.updateOfferStatus(this.offerId, status, requestObj).subscribe(response => {
+      this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
+      this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
+    })
   }
 
   private prepareUpdateOffer(): object {
     const offerFormValues = this.makeAnOfferForm.value;
     const confirmationForm = this.confirmationForm.value;
     const requestObj: any = {};
-    requestObj.entityType = 'AGENT';
+    requestObj.entityType = ENTITY_TYPE.AGENT;
     requestObj.amount = offerFormValues.amount;
     requestObj.moveInDate = this.commonService.getFormatedDate(offerFormValues.moveInDate);
     requestObj.rentingTime = offerFormValues.rentingTime;
@@ -376,7 +388,7 @@ export class OfferDetailPage implements OnInit {
     const offerFormValues = this.makeAnOfferForm.value;
     const confirmationForm = this.confirmationForm.value;
     const requestObj: any = {};
-    requestObj.entityType = 'AGENT';
+    requestObj.entityType = ENTITY_TYPE.AGENT;
     requestObj.applicantId = this.applicantId;
     requestObj.status = 0; //create default status is 0 = unknown
     requestObj.propertyId = this.propertyId;
@@ -613,6 +625,41 @@ export class OfferDetailPage implements OnInit {
         }
       });
     }
+  }
+
+  private updateOfferWithStatus() {
+    this._tobService.updateOffer(this.prepareUpdateOffer(), this.offerId).subscribe(response => {
+      let counterOfferStatus = this.makeAnOfferForm.controls.status.value;
+      if (this.offerDetails.amount !== Number(this.makeAnOfferForm.controls.amount.value)) {
+        counterOfferStatus = OFFER_STATUSES.COUNTER_OFFER_BY_LL_AGENT;
+      }
+      if (this.offerDetails.status !== this.makeAnOfferForm.controls.status.value) {
+        counterOfferStatus = this.makeAnOfferForm.controls.status.value;
+      }
+      if (this.offerDetails.status !== counterOfferStatus) {
+        this.updateOfferStatus(counterOfferStatus);
+      }
+      else {
+        this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
+        this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
+      }
+    })
+  }
+
+  private updateOfferOnly() {
+    this._tobService.updateOffer(this.prepareUpdateOffer(), this.offerId).subscribe(response => {
+      this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
+      this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
+    })
+  }
+
+  private getUpdatedValues() {
+    this.updatedFormValues = [];
+    this.makeAnOfferForm['_forEachChild']((control, name) => {
+      if (control.dirty) {
+        this.updatedFormValues.push(name);
+      }
+    });
   }
 
 }

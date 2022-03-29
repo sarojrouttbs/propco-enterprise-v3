@@ -295,6 +295,10 @@ ion-select-popover {
   ion-list ion-item.item-radio-checked {
     --background: var(--ion-color-step-1650);
   }
+
+  &.popover-viewport.sc-ion-popover-md {
+    overflow: auto !important;
+  }
 }
 
 ion-alert.common-alert-box {
@@ -458,3 +462,7 @@ ion-alert.common-alert-box {
   }
   }
 }
+
+// .sc-ion-select-popover-h ion-list.sc-ion-select-popover {
+//   background-color: red !important;
+// }
