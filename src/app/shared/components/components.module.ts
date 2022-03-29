@@ -32,8 +32,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     imports: [
         CommonModule,
         FormsModule,
-        ReactiveFormsModule,
         IonicModule,
+        ReactiveFormsModule,
         MaterialModule,
         IonicSelectableModule,
         CurrencyMaskModule,

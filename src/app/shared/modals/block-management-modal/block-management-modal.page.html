@@ -13,27 +13,27 @@
     <ion-row>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Company Name</ion-text><br />
-        <ion-text class="content">{{blockManagement?.managementCompany?.name || 'N/A'}}</ion-text>
+        <ion-text class="content">{{blockManagement?.managementCompany?.name || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Contact Name</ion-text><br />
-        <ion-text class="content">{{blockManagement?.managementCompany?.contact || 'N/A'}}</ion-text>
+        <ion-text class="content">{{blockManagement?.managementCompany?.contact || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Phone</ion-text><br />
-        <ion-text class="content">{{blockManagement?.managementCompany?.phone || 'N/A'}}</ion-text>
+        <ion-text class="content">{{blockManagement?.managementCompany?.phone || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Fax</ion-text><br />
-        <ion-text class="content">{{blockManagement?.managementCompany?.fax || 'N/A'}}</ion-text>
+        <ion-text class="content">{{blockManagement?.managementCompany?.fax || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Email</ion-text><br />
-        <ion-text class="content">{{blockManagement?.managementCompany?.email || 'N/A'}}</ion-text>
+        <ion-text class="content">{{blockManagement?.managementCompany?.email || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Reference</ion-text><br />
-        <ion-text class="content">{{blockManagement?.managementCompany?.reference || 'N/A'}}</ion-text>
+        <ion-text class="content">{{blockManagement?.managementCompany?.reference || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
 
       <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -42,7 +42,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Who to obtain communal door keys from?</ion-text><br />
-        <ion-text class="content">{{blockManagement?.doorKeysFrom || 'N/A'}}</ion-text>
+        <ion-text class="content">{{blockManagement?.doorKeysFrom || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Cost of communal door keys</ion-text><br />
@@ -74,11 +74,11 @@
       </ion-col>
       <ion-col size-xs="100" class="header-content">
         <ion-text class="header">Notes</ion-text><br />
-        <ion-text class="content">{{blockManagement?.managementCompany?.notes || 'N/A'}}</ion-text>
+        <ion-text class="content">{{blockManagement?.managementCompany?.notes || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" class="header-content">
         <ion-text class="header">What does Block Management Cover?</ion-text><br />
-        <ion-text class="content">{{managementResponsibilities || 'N/A'}}
+        <ion-text class="content">{{managementResponsibilities || DEFAULTS.NOT_AVAILABLE}}
         </ion-text>
       </ion-col>
     </ion-row>

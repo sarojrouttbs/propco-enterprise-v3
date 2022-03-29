@@ -3,7 +3,7 @@ import { NavParams, ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { ReferencingService } from 'src/app/referencing/referencing.service';
-import { PROPCO, REFERENCING } from '../../constants';
+import { DEFAULTS, PROPCO, REFERENCING } from '../../constants';
 import { CommonService } from '../../services/common.service';
 import { HttpParams } from '@angular/common/http';
 
@@ -34,6 +34,7 @@ export class TenantListModalPage implements OnInit {
 
   @Input() paramPropertyId: string;
   isTableReady: boolean  = false;
+  DEFAULTS = DEFAULTS;
 
   constructor(
     private referencingService: ReferencingService,

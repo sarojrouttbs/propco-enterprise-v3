@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { PROPCO, REFERENCING } from 'src/app/shared/constants';
+import { DEFAULTS, PROPCO, REFERENCING } from 'src/app/shared/constants';
 import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { ModalController } from '@ionic/angular';
@@ -27,6 +27,7 @@ export class DashboardPage implements OnInit {
   referencingProductList: any;
   referencingCaseProductList: any[] = [];
   referencingApplicationProductList: any[] = [];
+  DEFAULTS = DEFAULTS;
 
   constructor(
     private commonService: CommonService,
@@ -146,7 +147,7 @@ export class DashboardPage implements OnInit {
       backdropDismiss: false,
       componentProps: {
         data: `<div class='status-block'><b>Application Status - </b>${this.getLookupValue(this.applicationStatus.status, this.referencingApplicantStatusTypes)}
-        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes) : 'N/A' }
+        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes) : DEFAULTS.NOT_AVAILABLE }
         </div>`,
         heading: 'Status',
         buttonList: [

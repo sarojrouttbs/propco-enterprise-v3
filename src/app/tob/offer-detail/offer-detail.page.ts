@@ -2,7 +2,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
+import { DEFAULTS, OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { switchMap, debounceTime } from 'rxjs/operators';
@@ -52,6 +52,7 @@ export class OfferDetailPage implements OnInit {
   isTobPropertyCardReady: boolean = false;
   isApplicantDetailsAvailable: boolean = false;
   isOffersDetailsAvailable: boolean = false;
+  DEFAULTS = DEFAULTS;
 
   constructor(
     private route: ActivatedRoute,

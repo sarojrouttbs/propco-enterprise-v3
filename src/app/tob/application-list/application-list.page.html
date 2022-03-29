@@ -180,11 +180,11 @@
                           </ion-col>
                           <ion-col class="no-padding-left col2" size="33">
                             <ion-text color="medium">Tenancy Start</ion-text><br />
-                            <ion-text>{{ item?.moveInDate ? (item?.moveInDate | date: 'dd/MM/yyyy') : 'N/A'}}</ion-text><br />
+                            <ion-text>{{ item?.moveInDate ? (item?.moveInDate | date: 'dd/MM/yyyy') : DEFAULTS.NOT_AVAILABLE}}</ion-text><br />
                           </ion-col>
                           <ion-col class="no-padding-left col3" size="33">
                             <ion-text color="medium">Tenancy End</ion-text><br />
-                            <ion-text>{{ item?.preferredTenancyEndDate ? (item?.preferredTenancyEndDate | date: 'dd/MM/yyyy') : 'N/A' }}</ion-text><br />
+                            <ion-text>{{ item?.preferredTenancyEndDate ? (item?.preferredTenancyEndDate | date: 'dd/MM/yyyy') : DEFAULTS.NOT_AVAILABLE }}</ion-text><br />
                           </ion-col>
                         </ion-row>
                       </ion-grid>

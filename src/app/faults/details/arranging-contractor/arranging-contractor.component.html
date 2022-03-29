@@ -75,7 +75,7 @@
               iacNotification?.responseReceived?.isAccepted === false &&
               filteredCCDetails.rejectionReason && 
               (iacNotification?.templateCode === 'QC-L-E' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
-                {{filteredCCDetails.rejectionReason || 'N/A'}}
+                {{filteredCCDetails.rejectionReason || DEFAULTS.NOT_AVAILABLE}}
                 <div *ngIf="filteredCCDetails?.isLandlordWantAnotherQuote">Landlord wants another Quote</div>
               </ion-text>
                 <div class="border-bottom"></div>
@@ -320,11 +320,11 @@
                       <ion-col size="30">
                         <ion-text  style="padding-bottom: 3px;" class="sq-label">Company Name </ion-text>
                         <span *ngIf="item.get('isPreferred').value" class="prefered-cc" matTooltip="Preferred Contractor"><ion-icon name="checkmark-circle-outline"> </ion-icon></span>
-                        <ion-text>{{item.get('company').value ? item.get('company').value : 'N/A'}}</ion-text>
+                        <ion-text>{{item.get('company').value ? item.get('company').value : DEFAULTS.NOT_AVAILABLE}}</ion-text>
                       </ion-col>
                       <ion-col size="20" size-xl="17">
                         <ion-text  class="sq-label">Mobile</ion-text>
-                        <ion-text >{{item.get('mobile').value ? item.get('mobile').value : 'N/A'}}</ion-text>
+                        <ion-text >{{item.get('mobile').value ? item.get('mobile').value : DEFAULTS.NOT_AVAILABLE}}</ion-text>
                       </ion-col>
             
                       <ion-col size="20" class="skills">
@@ -334,13 +334,13 @@
                             {{ item.get('reference').value?.substring(0,15)+"..." }}
                           </span>
                           <span *ngIf="item.get('reference').value?.length <= 15">
-                            {{ item.get('reference').value || 'N/A' }}
+                            {{ item.get('reference').value || DEFAULTS.NOT_AVAILABLE }}
                           </span>
                         </ion-text>
                       </ion-col>
                       <ion-col size="20">
                         <ion-text  class="sq-label">Quote Status</ion-text>
-                        <ion-text><strong>{{ item.get('status').value ? item.get('status').value : 'N/A'}}</strong></ion-text>
+                        <ion-text><strong>{{ item.get('status').value ? item.get('status').value : DEFAULTS.NOT_AVAILABLE}}</strong></ion-text>
                       </ion-col>
                       <ion-col size="10" size-xl="13">
                         <div class="action-btn-container">
