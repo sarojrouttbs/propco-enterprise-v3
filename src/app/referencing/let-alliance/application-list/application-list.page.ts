@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, QueryList, OnDestroy } from '@angular/core';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { DEFAULT_MESSAGES, PROPCO, REFERENCING } from 'src/app/shared/constants';
+import { DEFAULTS, DEFAULT_MESSAGES, PROPCO, REFERENCING } from 'src/app/shared/constants';
 import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -48,6 +48,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   error: any = { isError: false, errorMessage: "" };
   errorTo: any = { isError: false, errorMessage: "" };
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
+  DEFAULTS = DEFAULTS;
 
   constructor(
     public commonService: CommonService,
@@ -353,7 +354,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       backdropDismiss: false,
       componentProps: {
         data: `<div class='status-block'><b>Application Status - </b>${this.getLookupValue(this.applicationStatus.status, this.referencingApplicantStatusTypes)}
-        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes) : 'N/A'}
+        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes) : DEFAULTS.NOT_AVAILABLE}
         </div>`,
         heading: 'Status',
         buttonList: [

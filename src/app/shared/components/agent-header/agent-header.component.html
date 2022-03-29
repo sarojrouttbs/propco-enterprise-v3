@@ -1,17 +1,17 @@
 <div id="agent-header">
-  <header >
+  <header color="'primary'">
       <nav class="navbar navbar-default">
           <div class="nav-sub">
             <div class="collapse navbar-collapse menu left-menu" id="propco-navbar-collapse">
               <a class="pull-left">
                   <img (click)="goToHome()" alt="PropCo Enterprise" title="PropCo Enterprise" src="assets/images/agent/propco-button.png" />
               </a>
-              <a class="pull-left" style="margin-top: 6px;" title="Go to the workspace" >
+              <a class="pull-left" title="Go to the workspace" (click)="goToWorkSpace()">
                   <i class="propcoicon propcoicon-folder workspace-icon"></i>
               </a>
               <span (mouseover)="createPlanmenuTrigger.openMenu()" 
               >
-                <button mat-button #createPlanmenuTrigger="matMenuTrigger" [matMenuTriggerFor]="marketing" class="color-black">Marketing</button>
+                <button mat-button #createPlanmenuTrigger="matMenuTrigger" [matMenuTriggerFor]="marketing" class="text-color">Marketing</button>
               <mat-menu #marketing="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="property">Property</button>
                 <button mat-menu-item [matMenuTriggerFor]="applicant">Applicant</button>
@@ -38,7 +38,7 @@
               </mat-menu>
               </span>
               <span (mouseover)="maintTrigger.openMenu()" (mouseout)="maintTrigger.openMenu()">
-                <button mat-button #maintTrigger="matMenuTrigger" [matMenuTriggerFor]="maintenance" class="color-black">Maintenance</button>
+                <button mat-button #maintTrigger="matMenuTrigger" [matMenuTriggerFor]="maintenance" class="text-color">Maintenance</button>
               <mat-menu #maintenance="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="contractor">Contractor</button>
               </mat-menu>
@@ -52,7 +52,17 @@
               <app-search-suggestion [pageType]="'agent-header'" [entityControl]="entityControl" (searchClickEvent)="searchHandler($event)" [searchTerm]="''"></app-search-suggestion>  
           </div>
             <div id="userInfo" layout="row">
-              <span class="circle name">SR</span>
+              <span class="circle name" [matMenuTriggerFor]="userMenu">SR
+              </span>
+              <mat-menu #userMenu="matMenu" >
+                <span mat-menu-item [disableRipple]="true" (click)="$event.stopPropagation()" style="display: flex;align-items: center;">
+                  <ion-icon name="sunny-sharp"></ion-icon>&nbsp;
+                  <ion-label>Light</ion-label>
+                  <ion-toggle color="primary" [(ngModel)]="enableDarkMode" (ionChange)="switchToDarkMode()"></ion-toggle>
+                  <ion-icon name="contrast-sharp"></ion-icon>&nbsp;
+                  <ion-label>Dark</ion-label>
+                </span>
+              </mat-menu>
               <span class="flex"></span>
               <ion-icon name="power" class="fa-power-off" size="small"></ion-icon>
             </div>

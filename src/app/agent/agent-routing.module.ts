@@ -26,8 +26,15 @@ const routes: Routes = [
             (m) => m.SearchResultsPageModule
           ),
       },
+      {
+        path: "entity/property/dashboard",
+        loadChildren: () =>
+          import("./workspace/workspace.module").then(
+            (m) => m.WorkspacePageModule
+          ),
+      },
     ]
-  }
+  },
 ];
 
 @NgModule({

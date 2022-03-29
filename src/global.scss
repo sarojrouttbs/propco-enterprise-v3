@@ -810,3 +810,20 @@ mat-form-field {
 .offer-notes-modal-height .modal-wrapper{
   min-height: 350px;
 }
+.mat-expansion-panel-header-description, .mat-expansion-indicator::after{
+  color: var(--ion-color-matexpanstionpanel-arrow-color);
+}
+
+.ngx-slider .ngx-slider-bubble{
+  color: var(--ion-color-ngxslider-bubble-color)!important;
+}
+
+.mat-select-panel{
+  background-color: var(--ion-color-matselectpanal-bg)!important;
+}
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled),.mat-option-text{
+  color: var(--ion-color-matoption-color)!important;
+}
+.mat-primary .mat-pseudo-checkbox-checked, .mat-primary .mat-pseudo-checkbox-indeterminate{
+  background-color: var(--ion-color-primary)!important;
+}
