@@ -31,7 +31,7 @@ h1.example-app-name {
 }
 
 .solr-filter-sidenav {
-  background-color: var(--ion-color-step-1700);
+  background-color: var(--ion-color-solr-resultpage-bg);
   width: 24%;
   max-width: 278px;
 }
@@ -82,9 +82,12 @@ h1.example-app-name {
 }
 
 .list {
-  background-color: var(--ion-color-step-1900);
+  background-color: var(--ion-color-ion-list-bg);
   padding-left: 13px;
   padding-right: 13px;
+  ion-list-header,ion-item ion-label,mat-select{
+    color: var(--ion-color-list-color)!important;
+  }
 }
 
 .dual-range {
@@ -137,6 +140,7 @@ ion-item {
     h1 {
       margin: 0;
       font-size: 19px;
+      color: var(--ion-color-text-color);
     }
   }
 }
@@ -510,7 +514,7 @@ ion-item {
 }
 
 .solr-pagginater-container {
-  background-color: var(--ion-color-step-1700);
+  background-color: var(--ion-color-solr-resultpage-bg);
 
   .paginator-grid {
     display: flex;
@@ -523,6 +527,7 @@ ion-item {
 
     ion-icon {
       font-size: 28px;
+      color: var(--ion-color-text-color);
     }
 
     .filter-icon-wrapper {
@@ -532,6 +537,7 @@ ion-item {
 
     .result-wrapper {
       flex-grow: 1;
+      color: var(--ion-color-text-color);
     }
   }
 }
@@ -540,12 +546,13 @@ ion-item {
   .mat-expansion-panel {
     margin-top: 0;
     box-shadow: none;
-    background-color: var(--ion-color-step-1700);
+    background-color: var(--ion-color-solr-resultpage-bg);
   }
 
   .mat-expansion-panel-header {
-    border: 1px solid var(--ion-color-step-1800);
+    border: 1px solid var(--ion-color-solr-ex-panal-border-color);
     border-right: none;
+    color: var(--ion-color-text-color);
   }
 }
 
@@ -554,12 +561,12 @@ ion-item {
 
   mat-expansion-panel {
     color: var(--ion-color-step-250);
-    background-color:  var(--ion-color-step-1900);
+    background-color:  var(--ion-color-block);
     box-shadow: none;
   }
 
   .mat-expansion-panel:is(.mat-expanded):not([aria-disabled=true]) {
-    background-color: var(--ion-color-medium-contrast);
+    background-color: var(--ion-color-block);
   }
 
   // .mat-expansion-panel:not(.mat-expanded):not([aria-disabled=true]) .mat-expansion-panel-header:hover{
@@ -577,7 +584,7 @@ ion-item {
 
   .address {
     @include set-text-style(20px, 25px);
-    color: var(--ion-color-step-850);
+    color: var(--ion-color-address-color);
   }
 
   .text-ellipsis {
@@ -595,19 +602,19 @@ ion-item {
 
   .ref {
     @include set-text-style(14px, 21px);
-    color: var(--ion-color-step-1000);
+    color: var(--ion-color-block-label-color);
     text-transform: capitalize;
   }
 
   .pricetag {
     @include set-text-style(19px, 21px);
     font-weight: bold;
-    color: var(--ion-color-step-150);
+    color: var(--ion-color-text-color);
   }
 
   .reftag {
     @include set-text-style(14px, 21px);
-    color: var(--ion-color-step-250);
+    color: var(--ion-color-text-color);
   }
 
   .verticalLine {
@@ -617,6 +624,7 @@ ion-item {
 
   .title {
     @include set-text-style(20px, 21px);
+    color: var(--ion-color-address-color);
     ion-icon {
       pointer-events: none;
     }
@@ -642,7 +650,7 @@ ion-item {
         font-size: 54px;
         text-align: left;
         line-height: 34px;
-        color: var(--ion-color-step-800);
+        color: var(--ion-color-text-color);
       }
 
       .title-wrapper {
@@ -687,6 +695,8 @@ ion-item {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: flex-end;
+    margin-right: 14px;
   }
 
   .emenities-wrapper {
@@ -695,6 +705,7 @@ ion-item {
     justify-content: flex-end;
     align-items: center;
     font-size: 12px;
+    color: var(--ion-color-text-color);
 
     i {
       font-size: 19px;
@@ -723,15 +734,16 @@ ion-item {
 
 .text {
   @include set-text-style(12px, 14px);
-  color: var(--ion-color-step-1000);
+  color: var(--ion-color-block-label-color);
 }
 
 .text-value {
   @include set-text-style(14px, 18px);
+  color: var(--ion-color-text-color);
 }
 
 .mat-drawer-side {
-  border-right: solid 1px var(--ion-color-step-1800);
+  border-right: 1px solid var(--ion-color-solr-ex-panal-border-color);
 }
 
 .ion-align-self-end {

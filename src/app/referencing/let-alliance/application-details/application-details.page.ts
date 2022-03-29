@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PROPCO, REFERENCING, REFERENCING_TENANT_TYPE } from 'src/app/shared/constants';
+import { DEFAULTS, PROPCO, REFERENCING, REFERENCING_TENANT_TYPE } from 'src/app/shared/constants';
 import { AddressModalPage } from 'src/app/shared/modals/address-modal/address-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -67,6 +67,7 @@ export class ApplicationDetailsPage implements OnInit {
   titleIndex: any;
   selectedTenancyObj: any = {}
   officeList: string;
+  DEFAULTS = DEFAULTS;
 
   constructor(
     private fb: FormBuilder,

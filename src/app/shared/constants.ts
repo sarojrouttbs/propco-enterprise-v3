@@ -610,3 +610,7 @@ export const FAULT_NOTIFICATION_STATE = {
   AWAITING_PAYMENT: 'Awaiting Payment',
   INVOICE_PAID: 'Invoice paid',
 };
+
+export const DEFAULTS = {
+  NOT_AVAILABLE: '-'
+}

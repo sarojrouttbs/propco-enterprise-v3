@@ -566,28 +566,28 @@
                 <p>
                   <span class="text">Agreement Dates</span>
                 <br />
-                {{item?.propertyAgreementDate || 'N/A'}}
+                {{item?.propertyAgreementDate || DEFAULTS.NOT_AVAILABLE}}
                 </p>
               </ion-col>
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <p>
                   <span class="text">Tenant Name(s)</span>
                 <br />
-                {{item?.propertyTenant || 'N/A'}}
+                {{item?.propertyTenant || DEFAULTS.NOT_AVAILABLE}}
                 </p>
               </ion-col>
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <p>
                   <span class="text">Manager</span>
                 <br />
-                {{item?.propertyManager || 'N/A'}}
+                {{item?.propertyManager || DEFAULTS.NOT_AVAILABLE}}
                 </p>
               </ion-col>
               <ion-col size-xl="25" size-lg="34" size-md="34">
                 <p>
                   <span class="text">Negotiator</span>
                 <br />
-                {{item?.propertyNegotiator || 'N/A'}}
+                {{item?.propertyNegotiator || DEFAULTS.NOT_AVAILABLE}}
                 </p>
               </ion-col>
             </ion-row>
@@ -750,7 +750,7 @@
               </ion-col>
               <ion-col class="no-padding-top col2 ion-text-end" size="25">
                 <p class="status">Legacy Reference</p>
-                <p class="ref">{{item?.legacyReference || 'N/A'}}</p>
+                <p class="ref">{{item?.legacyReference || DEFAULTS.NOT_AVAILABLE}}</p>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -818,7 +818,7 @@
                                   <span class="text">PropCo ID</span>
                                 <br />
                                 <span class="text-value">
-                                  {{item?.propcoId || 'N/A'}}
+                                  {{item?.propcoId || DEFAULTS.NOT_AVAILABLE}}
                                 </span>
                                 </p>
                               </ion-col>
@@ -827,7 +827,7 @@
                                   <span class="text">Tenant Name(s)</span>
                                 <br />
                                 <span class="text-value" [title]="item?.propertyTenant">
-                                  {{item?.propertyTenant || 'N/A'}}
+                                  {{item?.propertyTenant || DEFAULTS.NOT_AVAILABLE}}
                                 </span>
                                 </p>
                               </ion-col>
@@ -835,7 +835,7 @@
                                 <p>
                                   <span class="text">Agreement Dates</span>
                                 <br />
-                                <span class="text-value">{{item?.propertyAgreementDate || 'N/A'}}</span>
+                                <span class="text-value">{{item?.propertyAgreementDate || DEFAULTS.NOT_AVAILABLE}}</span>
                                 </p>
                               </ion-col>
                             </ion-row>
@@ -844,21 +844,21 @@
                                 <p>
                                   <span class="text">Type</span>
                                 <br />
-                                <span class="text-value">{{item?.houseType || 'N/A'}}</span>
+                                <span class="text-value">{{item?.houseType || DEFAULTS.NOT_AVAILABLE}}</span>
                                 </p>
                               </ion-col>
                               <ion-col size-xl="35" size-lg="35" size-md="35">
                                 <p>
                                   <span class="text">Office</span>
                                 <br />
-                                <span class="text-value">{{item?.officeCode || 'N/A'}}</span>
+                                <span class="text-value">{{item?.officeCode || DEFAULTS.NOT_AVAILABLE}}</span>
                                 </p>
                               </ion-col>
                               <ion-col size-xl="37" size-lg="37" size-md="37">
                                 <p>
                                   <span class="text">Management Type</span>
                                 <br />
-                                <span class="text-value">{{item?.managementType || 'N/A'}}</span>
+                                <span class="text-value">{{item?.managementType || DEFAULTS.NOT_AVAILABLE}}</span>
                                 </p>
                               </ion-col>
                             </ion-row>
@@ -867,21 +867,21 @@
                                 <p>
                                   <span class="text">Style</span>
                                 <br />
-                                <span class="text-value">{{item?.propertyStyle || 'N/A'}}</span>
+                                <span class="text-value">{{item?.propertyStyle || DEFAULTS.NOT_AVAILABLE}}</span>
                                 </p>
                               </ion-col>
                               <ion-col size-xl="35" size-lg="35" size-md="35">
                                 <p>
                                   <span class="text">Manager</span>
                                 <br />
-                                <span class="text-value">{{item?.propertyManager || 'N/A'}}</span>
+                                <span class="text-value">{{item?.propertyManager || DEFAULTS.NOT_AVAILABLE}}</span>
                                 </p>
                               </ion-col>
                               <ion-col size-xl="37" size-lg="37" size-md="37">
                                 <p>
                                   <span class="text">Negotiator</span>
                                 <br />
-                                <span class="text-value">{{item?.propertyNegotiator || 'N/A'}}</span>
+                                <span class="text-value">{{item?.propertyNegotiator || DEFAULTS.NOT_AVAILABLE}}</span>
                                 </p>
                               </ion-col>
                             </ion-row>
@@ -938,7 +938,7 @@
                       <span class="text">PropCo ID</span>
                     <br />
                     <span class="text-value">
-                      {{item?.propcoId || 'N/A'}}
+                      {{item?.propcoId || DEFAULTS.NOT_AVAILABLE}}
                     </span>
                     </p>
                   </ion-col>
@@ -947,7 +947,7 @@
                       <span class="text">Legacy Ref</span>
                     <br />
                     <span class="text-value">
-                      {{item?.legacyReference || 'N/A'}}
+                      {{item?.legacyReference || DEFAULTS.NOT_AVAILABLE}}
                     </span>
                     </p>
                   </ion-col>
@@ -955,7 +955,7 @@
                     <p>
                       <span class="text">Default Bank</span>
                     <br />
-                    <span class="text-value">{{item?.defaultBank || 'N/A'}}</span>
+                    <span class="text-value">{{item?.defaultBank || DEFAULTS.NOT_AVAILABLE}}</span>
                     </p>
                   </ion-col>
                 </ion-row>
@@ -982,7 +982,7 @@
               <p class="address-ref-wrapper">
                 <span *ngIf="item?.address" class="text-ellipsis address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
                 <span  class="verticalLine" *ngIf="item?.address">&nbsp;</span>
-                <span class="ref" [title]="item?.reference">Ref&nbsp;&nbsp;<span class="reftag">{{(item?.reference | RemainingCountPipe:'onlyString') || 'N/A'}}&nbsp;</span></span>
+                <span class="ref" [title]="item?.reference">Ref&nbsp;&nbsp;<span class="reftag">{{(item?.reference | RemainingCountPipe:'onlyString') || DEFAULTS.NOT_AVAILABLE}}&nbsp;</span></span>
                 <span  class="verticalLine" *ngIf="item?.isOverseas">&nbsp;</span>
                 <span class="vat" *ngIf="item?.isOverseas">Overseas&nbsp;</span>
               </p>
@@ -1005,7 +1005,7 @@
                       <span class="text">PropCo ID</span>
                     <br />
                     <span class="text-value">
-                      {{item?.propcoId || 'N/A'}}
+                      {{item?.propcoId || DEFAULTS.NOT_AVAILABLE}}
                     </span>
                     </p>
                   </ion-col>
@@ -1014,7 +1014,7 @@
                       <span class="text">Office</span>
                     <br />
                     <span class="text-value">
-                      {{item?.officeCode || 'N/A'}}
+                      {{item?.officeCode || DEFAULTS.NOT_AVAILABLE}}
                     </span>
                     </p>
                   </ion-col>
@@ -1022,7 +1022,7 @@
                     <p>
                       <span class="text">Type</span>
                     <br />
-                    <span class="text-value">{{item?.type || 'N/A'}}</span>
+                    <span class="text-value">{{item?.type || DEFAULTS.NOT_AVAILABLE}}</span>
                     </p>
                   </ion-col>
                 </ion-row>
@@ -1031,21 +1031,21 @@
                     <p>
                       <span class="text">Email</span>
                     <br />
-                    <span class="text-value">{{item?.email || 'N/A'}}</span>
+                    <span class="text-value">{{item?.email || DEFAULTS.NOT_AVAILABLE}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
                       <span class="text">Phone</span>
                     <br />
-                    <span class="text-value">{{item?.phoneNumber || 'N/A'}}</span>
+                    <span class="text-value">{{item?.phoneNumber || DEFAULTS.NOT_AVAILABLE}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
                       <span class="text">Landlord Reg Number</span>
                     <br />
-                    <span class="text-value">{{item?.landlordRegNumber || 'N/A'}}</span>
+                    <span class="text-value">{{item?.landlordRegNumber || DEFAULTS.NOT_AVAILABLE}}</span>
                   </ion-col>
                 </ion-row>
                 <ion-row class="fault-data-row">
@@ -1064,7 +1064,7 @@
                       <span *ngIf="item?.landlordFirstPropertyReference">{{item?.landlordFirstPropertyReference}}&nbsp;</span>
                       <span  class="verticalLine" *ngIf="item?.landlordFirstPropertyReference && item?.landlordFirstPropertyAddress">&nbsp;</span>
                       <span *ngIf="item?.landlordFirstPropertyAddress">{{item?.landlordFirstPropertyAddress}}</span>
-                      <span *ngIf="!item?.landlordFirstPropertyReference && !item?.landlordFirstPropertyAddress">N/A</span>
+                      <span *ngIf="!item?.landlordFirstPropertyReference && !item?.landlordFirstPropertyAddress">{{DEFAULTS.NOT_AVAILABLE}}</span>
                     </span>
                     </p>
                   </ion-col>
@@ -1113,7 +1113,7 @@
                       <span class="text">PropCo ID</span>
                     <br />
                     <span class="text-value">
-                      {{item?.propcoId || 'N/A'}}
+                      {{item?.propcoId || DEFAULTS.NOT_AVAILABLE}}
                     </span>
                     </p>
                   </ion-col>
@@ -1122,7 +1122,7 @@
                       <span class="text">Office</span>
                     <br />
                     <span class="text-value">
-                      {{item?.officeCode || 'N/A'}}
+                      {{item?.officeCode || DEFAULTS.NOT_AVAILABLE}}
                     </span>
                     </p>
                   </ion-col>
@@ -1130,7 +1130,7 @@
                     <p>
                       <span class="text">Type</span>
                     <br />
-                    <span class="text-value">{{item?.type || 'N/A'}}</span>
+                    <span class="text-value">{{item?.type || DEFAULTS.NOT_AVAILABLE}}</span>
                     </p>
                   </ion-col>
                 </ion-row>
@@ -1139,21 +1139,21 @@
                     <p>
                       <span class="text">Guarantor Name</span>
                     <br />
-                    <span class="text-value" [title]="item?.guarantor || 'N/A'">{{(item?.guarantor | RemainingCountPipe) || 'N/A'}}</span>
+                    <span class="text-value" [title]="item?.guarantor || DEFAULTS.NOT_AVAILABLE">{{(item?.guarantor | RemainingCountPipe) || DEFAULTS.NOT_AVAILABLE}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
                       <span class="text">Co-Tenant Name</span>
                     <br />
-                    <span class="text-value" [title]="item?.coTenant || 'N/A'">{{(item?.coTenant | RemainingCountPipe) || 'N/A'}}</span>
+                    <span class="text-value" [title]="item?.coTenant || DEFAULTS.NOT_AVAILABLE">{{(item?.coTenant | RemainingCountPipe) || DEFAULTS.NOT_AVAILABLE}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
                       <span class="text">Right to rent - Expiry date</span>
                     <br />
-                    <span class="text-value">{{(item?.rightToRentExpiryDate | date: 'dd/MM/yyyy') || 'N/A'}}</span>
+                    <span class="text-value">{{(item?.rightToRentExpiryDate | date: 'dd/MM/yyyy') || DEFAULTS.NOT_AVAILABLE}}</span>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -1203,7 +1203,7 @@
                       <span class="text">PropCo ID</span>
                     <br />
                     <span class="text-value">
-                      {{item?.propcoId || 'N/A'}}
+                      {{item?.propcoId || DEFAULTS.NOT_AVAILABLE}}
                     </span>
                     </p>
                   </ion-col>
@@ -1212,7 +1212,7 @@
                       <span class="text">Office</span>
                     <br />
                     <span class="text-value">
-                      {{item?.officeCode || 'N/A'}}
+                      {{item?.officeCode || DEFAULTS.NOT_AVAILABLE}}
                     </span>
                     </p>
                   </ion-col>
@@ -1220,7 +1220,7 @@
                     <p>
                       <span class="text">Negotiator</span>
                     <br />
-                    <span class="text-value">{{item?.negotiator || 'N/A'}}</span>
+                    <span class="text-value">{{item?.negotiator || DEFAULTS.NOT_AVAILABLE}}</span>
                     </p>
                   </ion-col>
                 </ion-row>
@@ -1229,21 +1229,21 @@
                     <p>
                       <span class="text">Price Range</span>
                     <br />
-                    <span class="text-value">{{item?.priceRange || 'N/A'}}</span>
+                    <span class="text-value">{{item?.priceRange || DEFAULTS.NOT_AVAILABLE}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
                       <span class="text">Minimum number of beds</span>
                     <br />
-                    <span class="text-value">{{item?.bedRange || 'N/A'}}</span>
+                    <span class="text-value">{{item?.bedRange || DEFAULTS.NOT_AVAILABLE}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
                       <span class="text">How soon looking to move?</span>
                     <br />
-                    <span class="text-value">{{(item?.howSoonLookingToMove | date: 'dd/MM/yyyy') || 'N/A'}}</span>
+                    <span class="text-value">{{(item?.howSoonLookingToMove | date: 'dd/MM/yyyy') || DEFAULTS.NOT_AVAILABLE}}</span>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -1294,7 +1294,7 @@
                       <span class="text">PropCo ID</span>
                     <br />
                     <span class="text-value">
-                      {{item?.propcoId || 'N/A'}}
+                      {{item?.propcoId || DEFAULTS.NOT_AVAILABLE}}
                     </span>
                     </p>
                   </ion-col>
@@ -1302,7 +1302,7 @@
                     <p>
                       <span class="text">Occupation/Service</span>
                     <br />
-                    <span class="text-value" >{{(item?.occupation) || 'N/A'}}</span>
+                    <span class="text-value" >{{(item?.occupation) || DEFAULTS.NOT_AVAILABLE}}</span>
                     </p>
                   </ion-col>
                   <ion-col ></ion-col>
@@ -1313,20 +1313,20 @@
                     <p>
                       <span class="text">Phone Number</span>
                     <br />
-                    <span class="text-value">{{item?.phoneNumber || 'N/A'}}</span>
+                    <span class="text-value">{{item?.phoneNumber || DEFAULTS.NOT_AVAILABLE}}</span>
                     </p>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
                       <span class="text">Email</span>
                     <br />
-                    <span class="text-value">{{item?.email || 'N/A'}}</span>
+                    <span class="text-value">{{item?.email || DEFAULTS.NOT_AVAILABLE}}</span>
                   </ion-col>
                   <ion-col size-xl="33" size-lg="33" size-md="33">
                     <p>
                       <span class="text">Expiry date</span>
                     <br />
-                    <span class="text-value" [ngClass]="{'expired' : item?.supplierLiabilityExpiryDate < currentDate}">{{(item?.supplierLiabilityExpiryDate | date: 'dd/MM/yyyy') || 'N/A'}}</span>
+                    <span class="text-value" [ngClass]="{'expired' : item?.supplierLiabilityExpiryDate < currentDate}">{{(item?.supplierLiabilityExpiryDate | date: 'dd/MM/yyyy') || DEFAULTS.NOT_AVAILABLE}}</span>
                     </p>
                   </ion-col>
                 </ion-row>
