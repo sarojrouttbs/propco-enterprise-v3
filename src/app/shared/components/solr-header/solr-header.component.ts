@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
+import { ThemeService } from "../../services/theme.service";
 
 @Component({
   selector: "app-solr-header",
@@ -8,7 +9,9 @@ import { FormControl } from "@angular/forms";
 })
 export class SolrHeaderComponent implements OnInit {
   entityControl = new FormControl(["Property"]);
-  constructor() {}
+  constructor(private theme: ThemeService) {
+    this.theme.activeTheme("light-theme");
+  }
 
   ngOnInit() {}
 
