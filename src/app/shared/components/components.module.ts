@@ -17,6 +17,7 @@ import { AgentHeaderComponent } from './agent-header/agent-header.component';
 import { SearchSuggestionComponent } from './search-suggestion/search-suggestion.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { SolrHeaderComponent } from './solr-header/solr-header.component';
+import { PropertyDashboardComponent } from './property-dashboard/property-dashboard.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "left",
@@ -31,15 +32,15 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     imports: [
         CommonModule,
         FormsModule,
-        ReactiveFormsModule,
         IonicModule,
+        ReactiveFormsModule,
         MaterialModule,
         IonicSelectableModule,
         CurrencyMaskModule,
         PipesModule
     ],
-    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent],
-    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent],
+    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent,PropertyDashboardComponent],
+    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent,PropertyDashboardComponent],
     providers: [CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
 })
 

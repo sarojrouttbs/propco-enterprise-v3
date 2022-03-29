@@ -239,7 +239,7 @@
         <div class="border-bottom"></div>
         <div>Is there any further work to Quote for ? : <b>Yes</b></div>
         <div>Estimate : <b>{{faultDetails?.additionalEstimate || 0 | currency : "£"}}</b></div>
-        <div>Additional Details : <b>{{faultDetails?.additionalWorkDetail || 'N/A'}}</b></div>
+        <div>Additional Details : <b>{{faultDetails?.additionalWorkDetail || DEFAULTS.NOT_AVAILABLE}}</b></div>
       </ion-col>
     </ion-row>
   </ion-grid>

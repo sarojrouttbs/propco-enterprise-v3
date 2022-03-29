@@ -1,0 +1,16 @@
+<ion-content>
+  <mat-tab-group>
+    <ng-container *ngFor="let tab of tabs; let index = index">
+      <mat-tab *ngIf="closedTabs.indexOf(index) < 0">
+        <ng-template mat-tab-label>
+          <div class="col" style="margin-left: 20px;">{{tab.entityTitle}}</div>
+          <ion-icon name="close-outline" (click)="closeTab(index)" size="large"></ion-icon>
+      </ng-template>
+      
+      <span [ngSwitch]="tab.tabType">
+        <app-property-dashboard></app-property-dashboard>
+      </span>
+    </mat-tab>
+    </ng-container>
+  </mat-tab-group>
+</ion-content>

@@ -351,20 +351,20 @@
     <ion-row class="ion-justify-content-between">
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Last Repair</ion-text><br />
-        <ion-text class="content">{{faultHistory?.description || 'N/A'}}</ion-text>
+        <ion-text class="content">{{faultHistory?.description || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Last Repair Date</ion-text><br />
         <ion-text class="content">
-          {{faultHistory?.lastRepairDate ? (faultHistory?.lastRepairDate | date: 'dd/MM/yyyy HH:mm') : 'N/A'}}</ion-text>
+          {{faultHistory?.lastRepairDate ? (faultHistory?.lastRepairDate | date: 'dd/MM/yyyy HH:mm') : DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Type</ion-text><br />
-        <ion-text class="content">{{faultHistory?.maintType || 'N/A'}}</ion-text>
+        <ion-text class="content">{{faultHistory?.maintType || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Contractor Name</ion-text><br />
-        <ion-text class="content">{{faultHistory?.contractorName || 'N/A'}}</ion-text>
+        <ion-text class="content">{{faultHistory?.contractorName || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -386,20 +386,20 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Fault Category</ion-text><br />
-        <ion-text class="content">{{getCategoryName() || faultDetails?.fixfloCategory || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getCategoryName() || faultDetails?.fixfloCategory || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Urgency Status</ion-text><br />
         <ion-text class="content">
-          {{getLookupValue(faultDetailsForm.controls.urgencyStatus.value, faultUrgencyStatuses) || 'N/A'}}</ion-text>
+          {{getLookupValue(faultDetailsForm.controls.urgencyStatus.value, faultUrgencyStatuses) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Title</ion-text><br />
-        <ion-text class="content">{{describeFaultForm.controls.title.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{describeFaultForm.controls.title.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Fault Description</ion-text><br />
-        <ion-text class="content">{{faultDetailsForm.controls.notes.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{faultDetailsForm.controls.notes.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ng-container *ngFor="let item of additionalInfoControls; let i = index;">
         <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -417,39 +417,39 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Who reported the fault?</ion-text><br />
-        <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}
+        <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || DEFAULTS.NOT_AVAILABLE}}
         </ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ng-container *ngIf="reportedByForm.controls.reportedBy.value =='THIRD_PARTY'" >
-          <ion-text class="header ion-text-capitalize">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}
+          <ion-text class="header ion-text-capitalize">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || DEFAULTS.NOT_AVAILABLE}}
           </ion-text><br />
-          <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedById.value, faultReportedByThirdParty) || 'N/A'}}</ion-text>
+          <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedById.value, faultReportedByThirdParty) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
         </ng-container>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Title</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.title.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{reportedByForm.controls.title.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Forename</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.forename.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{reportedByForm.controls.forename.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Surname</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.surname.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{reportedByForm.controls.surname.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">E-mail</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.email.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{reportedByForm.controls.email.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Mobile</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.mobile.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{reportedByForm.controls.mobile.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Telephone</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.alternativeNo.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{reportedByForm.controls.alternativeNo.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size="100" class="border-bottom"></ion-col>
       <ion-col size="100">
@@ -458,17 +458,17 @@
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Access Information</ion-text><br />
         <ion-text class="content">
-          {{(accessInfoForm.controls.isTenantPresenceRequired.value?accessInfoList[0].title:accessInfoList[1].title) || 'N/A'}}
+          {{(accessInfoForm.controls.isTenantPresenceRequired.value?accessInfoList[0].title:accessInfoList[1].title) || DEFAULTS.NOT_AVAILABLE}}
         </ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Is there a vulnerable occupier at this property?</ion-text><br />
-        <ion-text class="content">{{accessInfoForm.controls.areOccupiersVulnerable.value?'YES':'NO' || 'N/A'}}
+        <ion-text class="content">{{accessInfoForm.controls.areOccupiersVulnerable.value?'YES':'NO' || DEFAULTS.NOT_AVAILABLE}}
         </ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Useful Instruction</ion-text><br />
-        <ion-text class="content">{{accessInfoForm.controls.tenantNotes.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{accessInfoForm.controls.tenantNotes.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size="100" class="border-bottom"></ion-col>
     </ion-row>
