@@ -113,3 +113,16 @@
     transform: scale(1.04);
   }
 }
+
+.swap-icon {
+  display: flex;
+  justify-content: flex-end;
+  margin: 15px;
+
+  img {
+      background-color: var(--ion-color-step-1700);
+      border-radius: 5px;
+      padding: 4px;
+      cursor: pointer;
+  }
+}

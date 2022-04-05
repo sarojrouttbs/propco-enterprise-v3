@@ -14,14 +14,21 @@
           
         </div>
         <mat-accordion id="filter-details-accordian" class="result-headers-align">
-          <mat-expansion-panel  (opened)="setStep(0)">
+          <mat-expansion-panel (opened)="setStep(0)" #propertyFilterPanel hideToggle>
             <mat-expansion-panel-header>
-              <mat-checkbox  
-              [formControl]="propertyCheck"
-                (click)="$event.stopPropagation();onChangeEntity('property')" 
-                (keydown)="$event.stopPropagation()">
-                Property
-              </mat-checkbox>
+              <mat-panel-title>
+                <mat-checkbox [formControl]="propertyCheck"
+                  (click)="$event.stopPropagation();onChangeEntity('property')" 
+                  (keydown)="$event.stopPropagation()">
+                  Property
+                </mat-checkbox>
+              </mat-panel-title>
+              <mat-panel-description class="ion-justify-content-end no-margin">
+                <div>
+                  <img height="30" width="30" *ngIf="!propertyFilterPanel.expanded" src="assets/images/plus.png">
+                  <img height="30" width="30" *ngIf="propertyFilterPanel.expanded" src="assets/images/minus.png">
+                </div>
+              </mat-panel-description>
             </mat-expansion-panel-header>
             <form [formGroup]="propertyFilter">
             <ion-list class="list">
@@ -167,14 +174,22 @@
             </mat-action-row>
           </mat-expansion-panel>
         
-          <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
+          <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" #landlordFilterPanel hideToggle>
             <mat-expansion-panel-header>
-              <mat-checkbox  color="primary" 
-              [formControl]="landlordCheck"
-                (click)="$event.stopPropagation();onChangeEntity('landlord')" 
-                (keydown)="$event.stopPropagation()">
-                Landlord
-              </mat-checkbox>
+              <mat-panel-title>
+                <mat-checkbox  color="primary" 
+                [formControl]="landlordCheck"
+                  (click)="$event.stopPropagation();onChangeEntity('landlord')" 
+                  (keydown)="$event.stopPropagation()">
+                  Landlord
+                </mat-checkbox>
+              </mat-panel-title>
+              <mat-panel-description class="ion-justify-content-end no-margin">
+                <div>
+                  <img height="30" width="30" *ngIf="!landlordFilterPanel.expanded" src="assets/images/plus.png">
+                  <img height="30" width="30" *ngIf="landlordFilterPanel.expanded" src="assets/images/minus.png">
+                </div>
+              </mat-panel-description>
             </mat-expansion-panel-header>
             <form [formGroup]="landlordFilter">
             <ion-list class="list">
@@ -222,14 +237,22 @@
             </mat-action-row>
           </mat-expansion-panel>
         
-          <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
+          <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" #tenantFilterPanel hideToggle>
             <mat-expansion-panel-header>
-              <mat-checkbox  color="primary" 
-                [formControl]="tenantCheck"
-                (click)="$event.stopPropagation();onChangeEntity('tenant')" 
-                (keydown)="$event.stopPropagation()">
-                Tenant
-              </mat-checkbox>
+              <mat-panel-title>
+                <mat-checkbox  color="primary" 
+                  [formControl]="tenantCheck"
+                  (click)="$event.stopPropagation();onChangeEntity('tenant')" 
+                  (keydown)="$event.stopPropagation()">
+                  Tenant
+                </mat-checkbox>
+              </mat-panel-title>
+              <mat-panel-description class="ion-justify-content-end no-margin">
+                <div>
+                  <img height="30" width="30" *ngIf="!tenantFilterPanel.expanded" src="assets/images/plus.png">
+                  <img height="30" width="30" *ngIf="tenantFilterPanel.expanded" src="assets/images/minus.png">
+                </div>
+              </mat-panel-description>
             </mat-expansion-panel-header>
             <form [formGroup]="tenantFilter">
             <ion-list class="list">
@@ -279,13 +302,21 @@
               </mat-action-row>
           </mat-expansion-panel>
   
-          <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)">
+          <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" #applicantFilterPanel hideToggle>
             <mat-expansion-panel-header>
-              <mat-checkbox [formControl]="applicantCheck" color="primary" 
-                (click)="$event.stopPropagation();onChangeEntity('applicant')" 
-                (keydown)="$event.stopPropagation()">
-                Applicant
-              </mat-checkbox>
+              <mat-panel-title>
+                <mat-checkbox [formControl]="applicantCheck" color="primary" 
+                  (click)="$event.stopPropagation();onChangeEntity('applicant')" 
+                  (keydown)="$event.stopPropagation()">
+                  Applicant
+                </mat-checkbox>
+              </mat-panel-title>
+              <mat-panel-description class="ion-justify-content-end no-margin">
+                <div>
+                  <img height="30" width="30" *ngIf="!applicantFilterPanel.expanded" src="assets/images/plus.png">
+                  <img height="30" width="30" *ngIf="applicantFilterPanel.expanded" src="assets/images/minus.png">
+                </div>
+              </mat-panel-description>
             </mat-expansion-panel-header>
             <form [formGroup]="applicantFilter">
             <ion-list class="list">
@@ -328,13 +359,21 @@
             </mat-action-row>
           </mat-expansion-panel>
   
-          <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)">
+          <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)" #agentFilterPanel hideToggle>
             <mat-expansion-panel-header>
-              <mat-checkbox [formControl]="agentCheck" color="primary" 
-                (click)="$event.stopPropagation();onChangeEntity('agent')" 
-                (keydown)="$event.stopPropagation()">
-                Agent
-              </mat-checkbox>
+              <mat-panel-title>
+                <mat-checkbox [formControl]="agentCheck" color="primary" 
+                  (click)="$event.stopPropagation();onChangeEntity('agent')" 
+                  (keydown)="$event.stopPropagation()">
+                  Agent
+                </mat-checkbox>
+              </mat-panel-title>
+              <mat-panel-description class="ion-justify-content-end no-margin">
+                <div>
+                  <img height="30" width="30" *ngIf="!agentFilterPanel.expanded" src="assets/images/plus.png">
+                  <img height="30" width="30" *ngIf="agentFilterPanel.expanded" src="assets/images/minus.png">
+                </div>
+              </mat-panel-description>
             </mat-expansion-panel-header>
             <form [formGroup]="agentFilter">
             <ion-list class="list">
@@ -375,13 +414,21 @@
               </mat-action-row>
           </mat-expansion-panel>
         
-        <mat-expansion-panel [expanded]="step === 5" (opened)="setStep(5)">
+        <mat-expansion-panel [expanded]="step === 5" (opened)="setStep(5)" #contractorFilterPanel hideToggle>
           <mat-expansion-panel-header>
-            <mat-checkbox [formControl]="contractorCheck" color="primary" 
-              (click)="$event.stopPropagation();onChangeEntity('contractor')" 
-              (keydown)="$event.stopPropagation()">
-              Contractor
-            </mat-checkbox>
+            <mat-panel-title>
+              <mat-checkbox [formControl]="contractorCheck" color="primary" 
+                (click)="$event.stopPropagation();onChangeEntity('contractor')" 
+                (keydown)="$event.stopPropagation()">
+                Contractor
+              </mat-checkbox>
+            </mat-panel-title>
+            <mat-panel-description class="ion-justify-content-end no-margin">
+              <div>
+                <img height="30" width="30" *ngIf="!contractorFilterPanel.expanded" src="assets/images/plus.png">
+                <img height="30" width="30" *ngIf="contractorFilterPanel.expanded" src="assets/images/minus.png">
+              </div>
+            </mat-panel-description>
           </mat-expansion-panel-header>
           <form [formGroup]="contractorFilter">
           <ion-list class="list">
@@ -763,11 +810,11 @@
 <!--List views-->
 <ng-template #propertySuggestionListView  let-item="item">
               <mat-accordion class="list-view-accordian" multi>
-                <mat-expansion-panel>
+                <mat-expansion-panel #propertySuggestionPanel hideToggle>
                   <mat-expansion-panel-header>
                     <!-- <mat-panel-title> -->
                      <div class="list-header">
-                      <div (click)="$event.stopPropagation();openDetails('OpenProperty',item.propcoId)" style="width: 60%;">
+                      <div style="width: 60%;">
                         <p class="title text-ellipsis" [title]="item?.address">{{item?.address}}</p>
                         <span style="display: flex;">
                           <p class="emenities-wrapper">
@@ -802,13 +849,31 @@
                         <p class="ref">Status</p>
                         <p class="status">{{item?.status}}</p>
                       </div>
-                     </div>
+                      <div class="contextual-action">
+                        <div style="margin: -40px 45px 0px 0px;">
+                          <ion-fab class="cc-list-button" (click)="$event.stopPropagation();">
+                            <ion-fab-button class="expand-btn">      
+                               <i class="propcoicon propcoicon-actions-on action-btn"></i>
+                            </ion-fab-button>
+                            <ion-fab-list side="start">
+                              <ion-button (click)="$event.stopPropagation();openDetails('OpenProperty',item)"> View </ion-button>
+                            </ion-fab-list>
+                          </ion-fab>
+                        </div>
+                        <div>
+                          <img height="30" width="30" *ngIf="!propertySuggestionPanel.expanded" src="assets/images/plus.png">
+                          <img height="30" width="30" *ngIf="propertySuggestionPanel.expanded" src="assets/images/minus.png">
+                        </div>
+                      </div>
+                    </div>
                   </mat-expansion-panel-header>
                   <ion-card-content id="details">
-                    <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
+                    <ion-grid class="ion-no-padding">
                       <ion-row class="main-row">
                         <ion-col class="ion-no-padding" size-xl="17" size="25">
-                          <img [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.png';">
+                          <div class="property-img">
+                            <img [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.png';">
+                          </div>
                         </ion-col>
                         <ion-col class="ion-no-padding" size-xl="77" size="70">
                           <ion-grid class="no-padding-top ion-no-padding">
@@ -900,11 +965,11 @@
 
 <ng-template #agentSuggestionListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel>
+    <mat-expansion-panel #agentSuggestionPanel hideToggle>
       <mat-expansion-panel-header>
         <!-- <mat-panel-title> -->
          <div class="list-header align-flex-center">
-          <div (click)="$event.stopPropagation();openDetails('OpenAgent',item.propcoId)" class="left-side">
+          <div class="left-side">
             <i class="propcoicon propcoicon-agent no-background"></i>
             <span class="title-wrapper">
               <p class="title text-ellipsis" [title]="item?.fullName">{{item?.reference}}&nbsp;{{item?.fullName}}</p>
@@ -925,10 +990,26 @@
             <p class="ref">Status</p>
             <p class="status">{{item?.status}}</p>
           </div>
-         </div>
+          <div class="contextual-action">
+            <div style="margin: -40px 45px 0px 0px;">
+              <ion-fab class="cc-list-button" (click)="$event.stopPropagation();">
+                <ion-fab-button class="expand-btn">      
+                   <i class="propcoicon propcoicon-actions-on action-btn"></i>
+                </ion-fab-button>
+                <ion-fab-list side="start">
+                  <ion-button (click)="$event.stopPropagation();openDetails('OpenAgent',item)" > View </ion-button>
+                </ion-fab-list>
+              </ion-fab>
+            </div>
+            <div>
+              <img height="30" width="30" *ngIf="!agentSuggestionPanel.expanded" src="assets/images/plus.png">
+              <img height="30" width="30" *ngIf="agentSuggestionPanel.expanded" src="assets/images/minus.png">
+            </div>
+          </div>
+        </div>
       </mat-expansion-panel-header>
       <ion-card-content id="details" class="padding-left">
-        <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
+        <ion-grid class="ion-no-padding">
           <ion-row class="main-row">
             <ion-col class="ion-no-padding" size-xl="77 " size="100">
               <ion-grid class="no-padding-top ion-no-padding">
@@ -971,11 +1052,11 @@
 
 <ng-template #landlordSuggestionListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel>
+    <mat-expansion-panel #landlordSuggestionPanel hideToggle>
       <mat-expansion-panel-header>
         <!-- <mat-panel-title> -->
          <div class="list-header align-flex-center">
-          <div (click)="$event.stopPropagation();openDetails('OpenLandlord',item.propcoId)" class="left-side">
+          <div class="left-side">
             <i class="propcoicon propcoicon-landlord no-background"></i>
             <span class="title-wrapper">
               <p class="title" [title]="item?.fullName">{{item?.fullName}}</p>
@@ -992,10 +1073,26 @@
             <p class="ref">Status</p>
             <p class="status">{{item?.status ? item?.status : 'unknown'}}</p>
           </div>
-         </div>
+          <div class="contextual-action">
+            <div style="margin: -40px 45px 0px 0px;">
+              <ion-fab class="cc-list-button" (click)="$event.stopPropagation();">
+                <ion-fab-button class="expand-btn">      
+                   <i class="propcoicon propcoicon-actions-on action-btn"></i>
+                </ion-fab-button>
+                <ion-fab-list side="start">
+                  <ion-button (click)="$event.stopPropagation();openDetails('OpenLandlord',item)"> View </ion-button>
+                </ion-fab-list>
+              </ion-fab>
+            </div>
+            <div>
+              <img height="30" width="30" *ngIf="!landlordSuggestionPanel.expanded" src="assets/images/plus.png">
+              <img height="30" width="30" *ngIf="landlordSuggestionPanel.expanded" src="assets/images/minus.png">
+            </div>
+          </div>
+        </div>
       </mat-expansion-panel-header>
       <ion-card-content id="details" class="padding-left">
-        <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
+        <ion-grid class="ion-no-padding">
           <ion-row class="main-row">
             <ion-col class="ion-no-padding" size-xl="77 " size="100">
               <ion-grid class="no-padding-top ion-no-padding">
@@ -1081,11 +1178,11 @@
 
 <ng-template #tenantSuggestionListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel>
+    <mat-expansion-panel #tenantSuggestionPanel hideToggle>
       <mat-expansion-panel-header>
         <!-- <mat-panel-title> -->
          <div class="list-header align-flex-center">
-          <div (click)="$event.stopPropagation();openDetails('OpenTenant',item.propcoId)" class="left-side">
+          <div class="left-side">
             <i class="propcoicon propcoicon-tenant no-background"></i>
             <span class="title-wrapper">
               <p class="title" [title]="item?.fullName">{{item?.fullName}}</p>
@@ -1100,10 +1197,26 @@
             <p class="ref">Status</p>
             <p class="status">{{item?.status}}</p>
           </div>
-         </div>
+          <div class="contextual-action">
+            <div style="margin: -40px 45px 0px 0px;">
+              <ion-fab class="cc-list-button" (click)="$event.stopPropagation();">
+                <ion-fab-button class="expand-btn">      
+                   <i class="propcoicon propcoicon-actions-on action-btn"></i>
+                </ion-fab-button>
+                <ion-fab-list side="start">
+                  <ion-button (click)="$event.stopPropagation();openDetails('OpenTenant',item)"> View </ion-button>
+                </ion-fab-list>
+              </ion-fab>
+            </div>
+            <div>
+              <img height="30" width="30" *ngIf="!tenantSuggestionPanel.expanded" src="assets/images/plus.png">
+              <img height="30" width="30" *ngIf="tenantSuggestionPanel.expanded" src="assets/images/minus.png">
+            </div>
+          </div>
+        </div>
       </mat-expansion-panel-header>
       <ion-card-content id="details" class="padding-left">
-        <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
+        <ion-grid class="ion-no-padding">
           <ion-row class="main-row">
             <ion-col class="ion-no-padding" size-xl="77" size="70">
               <ion-grid class="no-padding-top ion-no-padding">
@@ -1168,11 +1281,11 @@
 
 <ng-template #applicantSuggestionListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel>
+    <mat-expansion-panel #applicantSuggestionPanel hideToggle>
       <mat-expansion-panel-header>
         <!-- <mat-panel-title> -->
          <div class="list-header align-flex-center">
-          <div (click)="$event.stopPropagation();openDetails('OpenApplicant',item.propcoId)" class="left-side">
+          <div class="left-side">
             <i class="propcoicon propcoicon-applicant-let no-background"></i>
             <span class="title-wrapper">
               <p class="title" [title]="item?.fullName">{{item?.fullName}}&nbsp;&nbsp;
@@ -1190,10 +1303,26 @@
             <p class="ref">Status</p>
             <p class="status">{{item?.status}}</p>
           </div>
-         </div>
+          <div class="contextual-action">
+            <div style="margin: -40px 45px 0px 0px;">
+              <ion-fab class="cc-list-button" (click)="$event.stopPropagation();">
+                <ion-fab-button class="expand-btn">      
+                   <i class="propcoicon propcoicon-actions-on action-btn"></i>
+                </ion-fab-button>
+                <ion-fab-list side="start">
+                  <ion-button (click)="$event.stopPropagation();openDetails('OpenApplicant',item)"> View </ion-button>
+                </ion-fab-list>
+              </ion-fab>
+            </div>
+            <div>
+              <img height="30" width="30" *ngIf="!applicantSuggestionPanel.expanded" src="assets/images/plus.png">
+              <img height="30" width="30" *ngIf="applicantSuggestionPanel.expanded" src="assets/images/minus.png">
+            </div>
+          </div>
+        </div>
       </mat-expansion-panel-header>
       <ion-card-content id="details" class="padding-left">
-        <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
+        <ion-grid class="ion-no-padding">
           <ion-row class="main-row">
             <ion-col class="ion-no-padding" size-xl="77 " size="100">
               <ion-grid class="no-padding-top ion-no-padding">
@@ -1258,11 +1387,11 @@
 
 <ng-template #contractorSuggestionListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel>
+    <mat-expansion-panel #contractorSuggestionPanel hideToggle>
       <mat-expansion-panel-header>
         <!-- <mat-panel-title> -->
          <div class="list-header align-flex-center">
-          <div (click)="$event.stopPropagation();openDetails('OpenContractor',item.propcoId)" class="left-side">
+          <div class="left-side">
             <i class="propcoicon propcoicon-contractor no-background"></i>
             <span class="title-wrapper">
               <p class="title" [title]="item?.fullName">{{item?.fullName}}</p>
@@ -1281,10 +1410,26 @@
             <p class="ref">Status</p>
             <p class="status">{{item?.status}}</p>
           </div>
-         </div>
+          <div class="contextual-action">
+            <div style="margin: -40px 45px 0px 0px;">
+              <ion-fab class="cc-list-button" (click)="$event.stopPropagation();">
+                <ion-fab-button class="expand-btn">      
+                   <i class="propcoicon propcoicon-actions-on action-btn"></i>
+                </ion-fab-button>
+                <ion-fab-list side="start">
+                  <ion-button (click)="$event.stopPropagation();openDetails('OpenContractor',item)"> View </ion-button>
+                </ion-fab-list>
+              </ion-fab>
+            </div>
+            <div>
+              <img height="30" width="30" *ngIf="!contractorSuggestionPanel.expanded" src="assets/images/plus.png">
+              <img height="30" width="30" *ngIf="contractorSuggestionPanel.expanded" src="assets/images/minus.png">
+            </div>
+          </div>
+        </div>
       </mat-expansion-panel-header>
       <ion-card-content id="details" class="padding-left">
-        <ion-grid (click)="openDetails('OpenProperty',item.propcoId)" class="ion-no-padding">
+        <ion-grid class="ion-no-padding">
           <ion-row class="main-row">
             <ion-col class="ion-no-padding" size-xl="77 " size="100">
               <ion-grid class="no-padding-top ion-no-padding">

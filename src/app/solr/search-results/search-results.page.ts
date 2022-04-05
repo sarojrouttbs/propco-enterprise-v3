@@ -589,7 +589,7 @@ export class SearchResultsPage implements OnInit {
   }
 
   openDetails(key: string, value = null) {
-    openScreen(key, value);
+    openScreen(key, value.propcoId);
   }
 
   refreshAll() {
