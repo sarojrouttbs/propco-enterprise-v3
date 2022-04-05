@@ -155,7 +155,7 @@ export class SearchSuggestionComponent implements OnInit {
         },replaceUrl:true
       },);
     }
-    if(this.router.url.includes('/agent/dashboard')) {
+    if(this.router.url.includes('/agent/')) {
       this.router.navigate(["/agent/solr/search-results"], {
         queryParams: {
           searchTerm: this.searchTermControl.value,

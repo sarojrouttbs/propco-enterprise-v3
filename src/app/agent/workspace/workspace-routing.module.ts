@@ -6,8 +6,12 @@ import { WorkspacePage } from './workspace.page';
 const routes: Routes = [
   {
     path: '',
-    component: WorkspacePage
+    component: WorkspacePage,
+    children: [
+      { path: 'property/:pid', loadChildren: () => import(`./property-dashboard/property-dashboard.module`).then(m => m.PropertyDashboardPageModule) },
+    ]
   }
+  
 ];
 
 @NgModule({
