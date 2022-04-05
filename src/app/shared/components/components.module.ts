@@ -18,6 +18,8 @@ import { SearchSuggestionComponent } from './search-suggestion/search-suggestion
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { SolrHeaderComponent } from './solr-header/solr-header.component';
 import { PropertyDashboardComponent } from './property-dashboard/property-dashboard.component';
+import { PropertyDetailsCardComponent } from './property-details-card/property-details-card.component';
+import { PropertyRightPanelComponent } from './property-right-panel/property-right-panel.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "left",
@@ -39,8 +41,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         CurrencyMaskModule,
         PipesModule
     ],
-    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent,PropertyDashboardComponent],
-    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent,PropertyDashboardComponent],
+    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent,PropertyDashboardComponent, PropertyDetailsCardComponent, PropertyRightPanelComponent],
+    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent,PropertyDashboardComponent, PropertyDetailsCardComponent, PropertyRightPanelComponent],
     providers: [CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
 })
 
