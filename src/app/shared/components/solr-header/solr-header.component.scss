@@ -28,11 +28,25 @@ header {
             flex-direction: row;
             padding: 0;
             justify-content: flex-end;
-            margin-right: 18px;
+            margin-right: 15px;
         }
     }
 
     .menu {
        position: relative;
-     }
+    }
+
+    .swap-icon {
+        display: flex;
+        align-items: center;
+        margin-right: 30px;
+        margin-top: -3px;
+
+        img {
+            background-color: var(--ion-color-step-1700);
+            border-radius: 5px;
+            padding: 4px;
+            cursor: pointer;
+        }
+    }
 }

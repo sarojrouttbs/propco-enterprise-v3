@@ -1,9 +1,13 @@
 <div id="solr-header">
-  <header >
-      <nav class="navbar navbar-default">
-        <div class="ion-no-padding" class="result-search-grid">
-          <app-search-suggestion [pageType]="'solr-resultpage'" [entityControl]="entityControl" (searchClickEvent)="searchHandler($event)" [searchTerm]="''"></app-search-suggestion>  
+  <header>
+    <nav class="navbar navbar-default ion-justify-content-end" style="display: flex;">
+      <div class="ion-no-padding" class="result-search-grid">
+        <app-search-suggestion [pageType]="'solr-resultpage'" [entityControl]="entityControl"
+          (searchClickEvent)="searchHandler($event)" [searchTerm]="''"></app-search-suggestion>
       </div>
-      </nav>
+      <div class="swap-icon">
+        <img height="35" width="35" src="assets/images/swap.svg" title="Switch to old dashboard" (click)="openHomeCategory('OpenPropcoDashBoard')">
+      </div>
+    </nav>
   </header>
 </div>

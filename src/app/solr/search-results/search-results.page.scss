@@ -189,7 +189,7 @@ ion-item {
 
 #details {
   color: var(--ion-color-step-250);
-
+  font-family: var(--ion-font-family);
   .main-row {
     display: flex;
     flex-direction: row;
@@ -198,10 +198,16 @@ ion-item {
     align-items: center;
   }
 
+  .property-img {
+    height: 120px;
+    min-width: 160px;
+    justify-content: center;
+    display: flex;
+  }
+
   img {
-    max-height: 170px;
-    min-height: 125px;
-    width: 90%;
+    height: 100%;
+    min-width: 160px;
   }
 
   .heading {
@@ -537,7 +543,8 @@ ion-item {
 
     .result-wrapper {
       flex-grow: 1;
-      color: var(--ion-color-text-color);
+      color: var(--ion-color-address-color);
+      @include set-text-style(18px, 20px);
     }
   }
 }
@@ -554,6 +561,11 @@ ion-item {
     border-right: none;
     color: var(--ion-color-text-color);
   }
+
+  mat-checkbox {
+    @include set-text-style(14px, 24px);
+    color: var(--ion-color-mat-checkbox-label);
+  }
 }
 
 .list-view-accordian {
@@ -561,12 +573,12 @@ ion-item {
 
   mat-expansion-panel {
     color: var(--ion-color-step-250);
-    background-color:  var(--ion-color-block);
+    background-color:  var(--ion-color-matexpanstionpanel-bg);
     box-shadow: none;
   }
 
   .mat-expansion-panel:is(.mat-expanded):not([aria-disabled=true]) {
-    background-color: var(--ion-color-block);
+    background-color: var(--ion-color-matexpanstionpanel-bg);
   }
 
   // .mat-expansion-panel:not(.mat-expanded):not([aria-disabled=true]) .mat-expansion-panel-header:hover{
@@ -576,6 +588,7 @@ ion-item {
   .mat-expansion-panel-header {
     height: 69px;
     padding: 0 10px;
+    font-family: var(--ion-font-family);
 
     span.mat-content {
       height: 100%
@@ -596,25 +609,25 @@ ion-item {
 
   .status {
     color: var(--ion-color-success-shade);
-    @include set-text-style(17px, 24px);
+    @include set-text-style(14px, 21px);
     font-weight: bold;
   }
 
   .ref {
-    @include set-text-style(14px, 21px);
-    color: var(--ion-color-block-label-color);
+    @include set-text-style(12px, 17px);
+    color: var(--ion-color-step-1200);
     text-transform: capitalize;
   }
 
   .pricetag {
-    @include set-text-style(19px, 21px);
+    @include set-text-style(16px, 20px);
     font-weight: bold;
-    color: var(--ion-color-text-color);
+    color: var(--ion-color-address-color);
   }
 
   .reftag {
-    @include set-text-style(14px, 21px);
-    color: var(--ion-color-text-color);
+    @include set-text-style(13px, 17px);
+    color: var(--ion-color-address-color);
   }
 
   .verticalLine {
@@ -623,7 +636,7 @@ ion-item {
   }
 
   .title {
-    @include set-text-style(20px, 21px);
+    @include set-text-style(17px, 21px);
     color: var(--ion-color-address-color);
     ion-icon {
       pointer-events: none;
@@ -690,13 +703,23 @@ ion-item {
   }
 
   .ref-header {
-    width: 25%;
+    width: 15%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-end;
+    align-items: flex-start;
     margin-right: 14px;
+  }
+
+  .contextual-action {
+    width: 10%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 5px;
+    justify-content: end;
   }
 
   .emenities-wrapper {
@@ -718,6 +741,8 @@ ion-item {
 
     span {
       padding-right: 8px;
+      @include set-text-style(13px, 17px);
+      color: var(--ion-color-address-color);
     }
   }
 
@@ -734,7 +759,7 @@ ion-item {
 
 .text {
   @include set-text-style(12px, 14px);
-  color: var(--ion-color-block-label-color);
+  color: var(--ion-color-step-1200);
 }
 
 .text-value {
@@ -803,4 +828,40 @@ ion-item {
 
 .expired {
   color:  var(--ion-color-danger);
+}
+
+.cc-list-button {
+  .expand-btn {
+    height: 36px;
+    width: 36px;
+    --color: var(--ion-color-step-2000);
+    --background: var(--ion-color-warning);
+    .propcoicon {
+      line-height: 1.7;
+      font-size: 22px;
+      background: var(--ion-color-warning);
+    }
+  }
+  ion-fab-list {
+    margin-inline: 40px;
+    margin-top: -9px;
+    ion-fab-button {
+      height: 36px;
+      width: 36px;
+      span {
+        padding-top: 5px;
+        ion-icon {
+          pointer-events: none;
+        }
+      }
+    }
+    .close-button {
+      --background: var(--ion-color-danger);
+      --color: var(--ion-color-step-2000);
+    }
+    .check-button {
+      --background: var(--ion-color-success);
+      --color: var(--ion-color-step-2000);
+    }
+  }
 }
