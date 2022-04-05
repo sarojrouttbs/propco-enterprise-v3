@@ -36,6 +36,7 @@
         font-size: 16px;
         opacity: 1;
         margin: 0 2px !important;
+        font-family: var(--ion-font-family);
 
         .mat-tab-label-content {
           width: 100%;
@@ -134,4 +135,8 @@
             margin: 0;
         }
     }
+}
+
+.mat-button, .mat-menu-item, .mat-select, .mat-option-text, .mat-checkbox{
+  font-family: var(--ion-font-family) !important;
 }
