@@ -40,7 +40,7 @@ export class AgentHeaderComponent implements OnInit {
     this.router.navigate(["/", "agent"]);
   }
   goToWorkSpace() {
-    this.router.navigate(["agent/entity/property/dashboard"]);
+    this.router.navigate(["agent/workspace"],{ replaceUrl: true });
   }
 
   switchToDarkMode() {

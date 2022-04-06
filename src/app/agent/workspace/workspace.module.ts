@@ -9,6 +9,7 @@ import { WorkspacePageRoutingModule } from './workspace-routing.module';
 import { WorkspacePage } from './workspace.page';
 import { MaterialModule } from 'src/app/material.module';
 import { ComponentsModule } from 'src/app/shared/components/components.module';
+import { PropertyDashboardPageModule } from './property-dashboard/property-dashboard.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { ComponentsModule } from 'src/app/shared/components/components.module';
     IonicModule,
     WorkspacePageRoutingModule,
     MaterialModule,
-    ComponentsModule
+    ComponentsModule,
+    PropertyDashboardPageModule
   ],
   declarations: [WorkspacePage]
 })

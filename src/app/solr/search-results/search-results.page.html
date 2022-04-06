@@ -11,7 +11,6 @@
             <ion-button size="small" color="medium" (click)="!isAllselected?selectAll():deselectAll()">{{!isAllselected?'Select All':'Select None'}}</ion-button>
             <ion-button size="small" color="medium" (click)="refreshAll()">Apply</ion-button>
           </section>
-          
         </div>
         <mat-accordion id="filter-details-accordian" class="result-headers-align">
           <mat-expansion-panel (opened)="setStep(0)" #propertyFilterPanel hideToggle>

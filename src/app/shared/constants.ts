@@ -601,6 +601,9 @@ export const REFERENCING_TYPES = {
 export const DEFAULT_MESSAGES = {
   NO_DATA_FOUND: 'No data found!',
   NO_DETAILS_AVAILABLE: 'No details available',
+  errors: {
+    SOMETHING_WENT_WRONG:'Something went wrong'
+  }
 };
 
 export const FAULT_NOTIFICATION_STATE = {
@@ -614,3 +617,7 @@ export const FAULT_NOTIFICATION_STATE = {
 export const DEFAULTS = {
   NOT_AVAILABLE: '-'
 }
+
+export const AGENT_WORKSPACE_CONFIGS = {
+  localStorageName: 'entity_tabs_menu'
+};
