@@ -1,0 +1,47 @@
+p {
+  font-family: Lato;
+}
+agm-map {
+      height: 300px;
+      position: relative;
+    }
+
+  .address{
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    background: #0ef4f0;
+    width: 40%;
+    opacity: 0.5;
+  }
+
+
+  
+
+
+  .address:hover {
+    opacity: 1.0;
+  }
+
+  .wrapper{
+    position: relative;
+     width: 50%;
+margin: auto;
+  }
+
+
+
+
+  .map {
+    position: relative;
+  }
+  
+  .map-center-overlay {
+    margin: 0;
+    position: absolute;
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  
