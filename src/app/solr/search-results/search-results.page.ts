@@ -2,13 +2,14 @@ import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatDrawer } from "@angular/material/sidenav";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { DEFAULTS, PROPCO } from "src/app/shared/constants";
 import { CommonService } from "src/app/shared/services/common.service";
 import { SolrService } from "../solr.service";
 declare function openScreen(key: string, value: any): any;
 import { Options, LabelType } from "@angular-slider/ngx-slider";
 import { SolrSearchHandlerService } from "src/app/shared/services/solr-search-handler.service";
+import { WorkspaceService } from "src/app/agent/workspace/workspace.service";
 
 @Component({
   selector: "app-search-results",
@@ -154,7 +155,9 @@ export class SearchResultsPage implements OnInit {
     private fb: FormBuilder,
     private commonService: CommonService,
     private el: ElementRef<HTMLElement>,
-    private solrSearchService: SolrSearchHandlerService
+    private solrSearchService: SolrSearchHandlerService,
+    private workspaceService: WorkspaceService,
+    private router: Router
   ) {
     this.currentDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
   }
@@ -589,8 +592,15 @@ export class SearchResultsPage implements OnInit {
   }
 
   openDetails(key: string, value = null) {
-    openScreen(key, value);
+    if (this.router.url.includes('/agent/')) {
+      this.workspaceService.addItemToWorkSpace(value);
+      return;  
+    }
+    /*Navigate to java fx page (If solr loads inside v2)*/
+    openScreen(key, value.propcoId);
   }
+
+  
 
   refreshAll() {
     this.getSearchResults();
