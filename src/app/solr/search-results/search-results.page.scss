@@ -55,6 +55,7 @@ h1.example-app-name {
 .result-headers-align .mat-expansion-panel-header-title,
 .result-headers-align .mat-expansion-panel-header-description {
   flex-basis: 0;
+  align-items: center;
 }
 
 .result-headers-align .mat-expansion-panel-header-description {
@@ -716,6 +717,9 @@ ion-item {
     align-items: center;
     margin-right: 5px;
     justify-content: end;
+    .fab-icon {
+      margin: -32px 40px 0px 0px;
+    }
   }
 
   .emenities-wrapper {
@@ -828,8 +832,8 @@ ion-item {
 
 .cc-list-button {
   .expand-btn {
-    height: 36px;
-    width: 36px;
+    height: 30px;
+    width: 30px;
     --color: var(--ion-color-step-2000);
     --background: var(--ion-color-warning);
     .propcoicon {

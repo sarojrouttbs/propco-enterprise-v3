@@ -827,3 +827,8 @@ mat-form-field {
 .mat-primary .mat-pseudo-checkbox-checked, .mat-primary .mat-pseudo-checkbox-indeterminate{
   background-color: var(--ion-color-primary)!important;
 }
+
+.accordian-icon {
+  font-size: 37px;
+  color: var(--ion-color-accordian-icon);
+}
