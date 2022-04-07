@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { BUILD_DETAILS, LOGIN_PAGE_TEXT_MESSAGES } from '../shared/constants';
 import { ForgotPasswordModalPage } from '../shared/modals/forgot-password-modal/forgot-password-modal.page';
 
 @Component({
@@ -12,6 +13,25 @@ import { ForgotPasswordModalPage } from '../shared/modals/forgot-password-modal/
 export class LoginPage implements OnInit {
   loginForm: FormGroup;
   showLoader: boolean = false;
+  domainList: any[] = [
+    {
+      index: 1,
+      value: 'Live'
+    },
+    {
+      index: 2,
+      value: 'Test'
+    }
+  ];
+
+  slideOpts: any = {
+    initialSlide: 1,
+    speed: 600,
+    autoplay: true
+  };
+
+  sliderMsgList = LOGIN_PAGE_TEXT_MESSAGES;
+  buildDetails = BUILD_DETAILS;
 
   constructor(private _formBuilder: FormBuilder, private modalController: ModalController, private router: Router) {}
 
@@ -22,7 +42,8 @@ export class LoginPage implements OnInit {
   initForm() {
     this.loginForm = this._formBuilder.group({
       username: ['', Validators.required],
-      password: ['', Validators.required]      
+      password: ['', Validators.required],
+      domain: ['', Validators.required], 
     });
   }
 
