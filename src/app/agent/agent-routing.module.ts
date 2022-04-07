@@ -32,7 +32,7 @@ const routes: Routes = [
           ),
       },
       {
-        path: "entity/property/dashboard",
+        path: "workspace",
         loadChildren: () =>
           import("./workspace/workspace.module").then(
             (m) => m.WorkspacePageModule

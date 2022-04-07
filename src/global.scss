@@ -702,13 +702,13 @@ mat-form-field {
 		// 	opacity: 0;
 		// }
     .mat-select-arrow-wrapper {
-      padding-top: 14px;
+      padding-top: 18px;
     }
     .mat-form-field-infix {
       padding: 0.25em 0 0.25em 0;
       height: 33px;
       border: none;
-      padding-top: 8px;
+      padding-top: 6px;
       margin-top: 4px;
       font-size: 14px;
     }
@@ -826,4 +826,9 @@ mat-form-field {
 }
 .mat-primary .mat-pseudo-checkbox-checked, .mat-primary .mat-pseudo-checkbox-indeterminate{
   background-color: var(--ion-color-primary)!important;
+}
+
+.accordian-icon {
+  font-size: 37px;
+  color: var(--ion-color-accordian-icon);
 }

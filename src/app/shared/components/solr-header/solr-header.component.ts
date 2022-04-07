@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { ThemeService } from "../../services/theme.service";
-
+declare function openScreen(key: string, value: any): any;
 @Component({
   selector: "app-solr-header",
   templateUrl: "./solr-header.component.html",
@@ -16,5 +16,9 @@ export class SolrHeaderComponent implements OnInit {
   ngOnInit() {}
 
   searchHandler(term) {
+  }
+
+  openHomeCategory(key: string, value = null) {
+    openScreen(key, value);
   }
 }

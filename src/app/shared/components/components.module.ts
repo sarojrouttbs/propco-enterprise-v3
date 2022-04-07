@@ -17,10 +17,8 @@ import { AgentHeaderComponent } from './agent-header/agent-header.component';
 import { SearchSuggestionComponent } from './search-suggestion/search-suggestion.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { SolrHeaderComponent } from './solr-header/solr-header.component';
-import { PropertyDashboardComponent } from './property-dashboard/property-dashboard.component';
 import { GoogleMapComponent } from './google-map/google-map.component';
 import { AgmCoreModule } from '@agm/core';
-
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "left",
@@ -47,8 +45,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
 		      libraries: ['places','geometry']
 		})
     ],
-    declarations: [GoogleMapComponent,ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent,PropertyDashboardComponent],
-    exports: [GoogleMapComponent,ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent,PropertyDashboardComponent],
+    declarations: [GoogleMapComponent,ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent],
+    exports: [GoogleMapComponent,ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent],
     providers: [CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
 })
 
