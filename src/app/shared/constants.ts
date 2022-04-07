@@ -621,3 +621,8 @@ export const DEFAULTS = {
 export const AGENT_WORKSPACE_CONFIGS = {
   localStorageName: 'entity_tabs_menu'
 };
+
+export const LOGIN_PAGE_TEXT_MESSAGES = {  
+  SLIDE_1: 'Whether you’re an established nationwide agent or you’re looking for best in class tools and platforms, PropCo Online Property Management Software has everything you need.',
+  SLIDE_2: 'Cloud-based Lettings, Management, and Client Accounting System, which embraces the latest technology with ease of use and customer satisfaction.'
+}
