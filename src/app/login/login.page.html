@@ -29,8 +29,7 @@
                           <ion-item>
                             <ion-label position="floating"> Domain <ion-text class="mandatory">*</ion-text>
                             </ion-label>
-                            <ion-select interface="popover" [interfaceOptions]="userPopoverOptions"
-                              formControlName="domain">
+                            <ion-select interface="popover" formControlName="domain">
                               <ion-select-option [value]="item?.index" *ngFor="let item of domainList">
                                 {{ item?.value }}
                               </ion-select-option>
