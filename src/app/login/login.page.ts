@@ -30,7 +30,7 @@ export class LoginPage implements OnInit {
     autoplay: true
   };
 
-  sliderMsg = LOGIN_PAGE_TEXT_MESSAGES;
+  sliderMsgList = LOGIN_PAGE_TEXT_MESSAGES;
   buildDetails = BUILD_DETAILS;
 
   constructor(private _formBuilder: FormBuilder, private modalController: ModalController, private router: Router) {}
