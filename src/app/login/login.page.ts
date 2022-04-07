@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { LOGIN_PAGE_TEXT_MESSAGES } from '../shared/constants';
+import { BUILD_DETAILS, LOGIN_PAGE_TEXT_MESSAGES } from '../shared/constants';
 import { ForgotPasswordModalPage } from '../shared/modals/forgot-password-modal/forgot-password-modal.page';
 
 @Component({
@@ -31,6 +31,7 @@ export class LoginPage implements OnInit {
   };
 
   sliderMsg = LOGIN_PAGE_TEXT_MESSAGES;
+  buildDetails = BUILD_DETAILS;
 
   constructor(private _formBuilder: FormBuilder, private modalController: ModalController, private router: Router) {}
 
