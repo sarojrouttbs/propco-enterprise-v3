@@ -6,7 +6,14 @@ import { WorkspacePage } from './workspace.page';
 const routes: Routes = [
   {
     path: '',
-    component: WorkspacePage
+    component: WorkspacePage,
+    children: [
+      {
+        path: 'property/:pid',
+        loadChildren: () => import(`./property/property.module`)
+        .then(m => m.PropertyPageModule)
+      }
+    ]
   }
 ];
 
@@ -14,4 +21,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class WorkspacePageRoutingModule {}
+export class WorkspacePageRoutingModule { }

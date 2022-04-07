@@ -149,7 +149,7 @@
     --ion-color-body:#d3d3d3;
     --ion-color-block:#f2f2f2;
     --ion-color-block-hover:#fff;
-    --ion-color-text-color:#000;
+    --ion-color-text-color:#2e2e2e;
     --ion-color-userinfo-bg:#d3d3d3;
     --ion-color-autocomplete-suggestion-bg:#efefef;
     --ion-color-solr-resultpage-bg:#d3d3d3;
@@ -158,8 +158,8 @@
     --ion-color-list-color:rgba(var(--ion-color-dark-rgb), 0.6);
     --ion-color-matexpanstionpanel-arrow-color:#666666;
     --ion-color-ngxslider-bubble-color:#55637d;
-    --ion-color-address-color:#000000;
-    --ion-color-block-label-color:#808080;
+    --ion-color-address-color:#4f4a4d;
+    --ion-color-block-label-color:#999999;
     --ion-color-matselectpanal-bg:#fff;
     --ion-color-matoption-color:#000000;
     --ion-color-furnishing-text: #ca4117;
@@ -167,13 +167,15 @@
     --ion-color-agent-query-text: #666666;
     --ion-color-amenity-bg: #ffffff;
     --ion-color-amenity-icon: #5ea3ed;
-    --ion-color-property-status-bg: #33cc00;
+    --ion-color-property-status-bg: #2db400;
     --ion-color-property-status-text: #ffffff;
     --ion-color-property-info-value: rgb(66, 63, 63);
     --ion-color-landlord-tenant-selection: #ffffff;
     --ion-color-landlord-tenant-rent-details: #ffffff;
     --ion-color-landlord-tenant-fab-btn: #262626cf;
     --ion-color-landlord-tenant-fab-text: #ffffff;
+    --ion-color-matexpanstionpanel-bg:#f0f0f0;
+    --ion-color-mat-checkbox-label:#505050;
   }
 
   .dark-theme {
@@ -197,21 +199,23 @@
     --ion-color-matexpanstionpanel-arrow-color:#e6e6e6;
     --ion-color-ngxslider-bubble-color:#fff;
     --ion-color-address-color:#fff;
-    --ion-color-block-label-color:#B0B0B0;
+    --ion-color-block-label-color:#999999;
     --ion-color-matselectpanal-bg:#666;
     --ion-color-matoption-color:#fff;
     --ion-color-furnishing-text: #ca4117;
     --ion-color-service-type-text: #5ea3ed;
     --ion-color-agent-query-text: #666666;
-    --ion-color-amenity-bg: #4d4d4d;
+    --ion-color-amenity-bg: #4d4d4de3;
     --ion-color-amenity-icon: #5ea3ed;
-    --ion-color-property-status-bg: #33cc00;
+    --ion-color-property-status-bg: #2db400;
     --ion-color-property-status-text: #ffffff;
     --ion-color-property-info-value: #ffffff;
     --ion-color-landlord-tenant-selection: #666666;
     --ion-color-landlord-tenant-rent-details: #4d4d4d;
     --ion-color-landlord-tenant-fab-btn: #B0B0B0;
     --ion-color-landlord-tenant-fab-text: #000000;
+    --ion-color-matexpanstionpanel-bg:#333;
+    --ion-color-mat-checkbox-label:#ffffff;
   }
 }
 

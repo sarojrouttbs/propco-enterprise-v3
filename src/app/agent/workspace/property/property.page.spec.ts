@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { PropertyDashboardComponent } from './property-dashboard.component';
+import { PropertyPage } from './property.page';
 
-describe('PropertyDashboardComponent', () => {
-  let component: PropertyDashboardComponent;
-  let fixture: ComponentFixture<PropertyDashboardComponent>;
+describe('PropertyDashboardPage', () => {
+  let component: PropertyPage;
+  let fixture: ComponentFixture<PropertyPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PropertyDashboardComponent ],
+      declarations: [ PropertyPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PropertyDashboardComponent);
+    fixture = TestBed.createComponent(PropertyPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
