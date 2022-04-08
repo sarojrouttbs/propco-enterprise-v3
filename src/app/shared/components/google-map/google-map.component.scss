@@ -1,17 +1,19 @@
 p {
   font-family: Lato;
 }
-agm-map {
+  agm-map {
       height: 300px;
       position: relative;
     }
 
   .address{
     position: absolute;
-    bottom: 0px;
+    top: 0px;
     left: 0;
     background: #0ef4f0;
-    width: 40%;
+    width: 27%;
+    font-size: 20px;
+    line-height: 33px;
     opacity: 0.5;
   }
 
@@ -25,8 +27,7 @@ agm-map {
 
   .wrapper{
     position: relative;
-     width: 50%;
-margin: auto;
+    margin: auto;
   }
 
 

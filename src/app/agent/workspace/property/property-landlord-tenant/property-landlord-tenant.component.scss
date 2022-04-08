@@ -1,0 +1,70 @@
+ion-grid{
+    padding: 0;
+}
+.landlord-tenant-count {
+    ion-col {
+        display: flex;
+        align-items: center;
+        font-size: 15px;
+        & > ion-fab-button {
+            --background: var(--ion-color-landlord-tenant-fab-btn);
+            color: var(--ion-color-landlord-tenant-fab-text);
+            width: 25px;
+            height: 25px;
+            --box-shadow: none;
+            span {
+                color: var(--ion-color-landlord-tenant-fab-text);
+            }
+        }
+        ion-text {
+            color: var(--ion-color-text-color);
+        }
+    }
+}
+
+.landlord-tenant-dropdown {
+    ion-select {
+        font-size: 13px;
+        background: var(--ion-color-landlord-tenant-selection);
+        padding-top: 5px;
+        --padding-end: 0;
+        --padding-bottom: 5px;
+        --padding-start: 5px;
+        border-radius: 3px;
+    }
+}
+
+.landlord-tenant-details{
+    color: var(--ion-color-text-color); 
+}
+
+.rent-history-block {
+    margin-bottom: 5px;
+    ion-label {
+        color: var(--ion-color-block-label-color);
+        font-size: 11px;
+    }
+
+    ion-text {
+        color: var(--ion-color-text-color); 
+        font-size: 13px;
+    }
+}
+
+.rent-detail-block {
+    text-align: center;
+    ion-label {
+        color: var(--ion-color-block-label-color);
+        font-size: 11px;
+    }
+
+    ion-text {
+        color: var(--ion-color-text-color); 
+        font-size: 15px;
+    }
+    ion-col {
+        height: 55px;
+        background: var(--ion-color-landlord-tenant-rent-details);
+        // margin-right: 2px;
+    }
+}

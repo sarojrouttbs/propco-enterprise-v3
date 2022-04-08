@@ -17,6 +17,7 @@ import {
 import { AGENT_WORKSPACE_CONFIGS } from "src/app/shared/constants";
 import { CommonService } from "src/app/shared/services/common.service";
 import { AgentService } from "../agent.service";
+import { MenuController } from "@ionic/angular";
 
 @Component({
   selector: "app-workspace",
@@ -41,8 +42,11 @@ export class WorkspacePage implements OnInit {
     private commonService: CommonService,
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private menu: MenuController
   ) {
+    this.openFirst();
+    this.openCustom();
     route.params.subscribe((val) => {
       this.initWorkspace();
     });
@@ -122,5 +126,19 @@ export class WorkspacePage implements OnInit {
       default:
         break;
     }
+  }
+
+  openFirst() {
+    this.menu.enable(true, 'first');
+    this.menu.open('first');
+  }
+
+  openEnd() {
+    this.menu.open('end');
+  }
+
+  openCustom() {
+    this.menu.enable(true, 'custom');
+    this.menu.open('custom');
   }
 }
