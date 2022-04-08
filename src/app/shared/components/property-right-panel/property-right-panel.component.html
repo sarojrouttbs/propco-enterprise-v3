@@ -1,0 +1,108 @@
+<div class="property-right-card">
+  <ion-grid class="property-details">
+    <ion-row class="property-status">
+      <ion-col>
+        <div>OCCUPIED</div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="property-info">
+      <ion-col>
+        <ion-text class="label">Available From</ion-text><br>
+        <ion-text class="value">{{propertyData?.propertyInfo?.availableFrom || '-'}}</ion-text>
+      </ion-col>
+      <ion-col>
+        <ion-text class="label">Branch PMC</ion-text>
+        <br>
+        <ion-text class="value">Manish Sharma</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="property-info">
+      <ion-col>
+        <ion-text class="label">Available To</ion-text>
+        <br>
+        <ion-text class="value">{{propertyData?.propertyInfo?.availableTo || '-'}}</ion-text>
+      </ion-col>
+      <ion-col>
+        <ion-text class="label">Booking Office</ion-text>
+        <br>
+        <ion-text class="value">{{propertyData?.propertyInfo?.bookingOfficeCode || '-'}}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="property-info">
+      <ion-col>
+        <ion-text class="label">Appraised</ion-text>
+        <br>
+        <ion-text class="value">{{propertyData?.propertyDetails?.appraisedDate || '-'}}</ion-text>
+      </ion-col>
+      <ion-col>
+        <ion-text class="label">Portfolio Source</ion-text>
+        <br>
+        <ion-text class="value">{{propertyData?.propertyInfo?.portfolioSource || '-'}}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="property-info">
+      <ion-col>
+        <ion-text class="label">Instructed</ion-text><br>
+        <ion-text class="value">{{propertyData?.propertyDetails?.instructedDate || '-'}}</ion-text>
+      </ion-col>
+      <ion-col>
+        <ion-text class="label">Property Type</ion-text><br>
+        <ion-text class="value">{{propertyData?.propertyDetails?.houseType || '-'}}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="property-info" style="margin-bottom:15px;">
+      <ion-col>
+        <ion-text class="label">Acquisiosn Office</ion-text><br>
+        <ion-text class="value">{{propertyData?.propertyInfo?.acquisitionOffice || '-'}}</ion-text>
+      </ion-col>
+      <ion-col>
+        <ion-text class="label">Category</ion-text><br>
+        <ion-text class="value">{{propertyData?.propertyDetails?.propertyCategory || '-'}}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="property-certificates">
+        <ion-text class="sucess">{{propertyData?.propertyInfo?.webVisitCount || '0'}} </ion-text>&nbsp;&nbsp;&nbsp;
+        <ion-text>
+          Property Visits from web</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="property-certificates">
+        <ion-icon name="checkmark-circle" class="sucess"></ion-icon>&nbsp;&nbsp;
+        <ion-text>
+          <!-- propertyData?.propertyDetails?.hasElectricalIndemnitySigned -->
+          Covered by Rent Indemnity
+        </ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="property-certificates">
+        <ion-icon name="checkmark-circle" class="sucess"></ion-icon>&nbsp;&nbsp;
+        <ion-text>
+          <!-- {{propertyData?.propertyRentInfo?.emergencyResponseService?.isERSEnabled || '-'}} -->
+          Covered by Emergency Response
+        </ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="property-certificates" style="margin-bottom: 37px !important;">
+        <ion-icon name="close-circle" class="danger"></ion-icon>&nbsp;&nbsp;
+        <ion-text>
+          <!-- {{propertyData?.propertyDetails?.hasGas || '-'}}  -->
+          Gas Safety certificate not required
+        </ion-text>
+      </ion-col>
+    </ion-row>
+
+
+  </ion-grid>
+</div>
