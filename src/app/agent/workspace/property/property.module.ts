@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -41,7 +41,8 @@ const routes: Routes = [
     MaterialModule,
     ComponentsModule,
     ImagePageModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ReactiveFormsModule
   ],
   declarations: [PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent],
   // exports:[PropertyPage]
