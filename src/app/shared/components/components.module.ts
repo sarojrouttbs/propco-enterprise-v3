@@ -19,8 +19,6 @@ import { SearchResultsComponent } from './search-results/search-results.componen
 import { SolrHeaderComponent } from './solr-header/solr-header.component';
 import { PropertyDetailsCardComponent } from './property-details-card/property-details-card.component';
 import { PropertyRightPanelComponent } from './property-right-panel/property-right-panel.component';
-import { GoogleMapComponent } from './google-map/google-map.component';
-import { AgmCoreModule } from '@agm/core';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     align: "left",
@@ -41,14 +39,10 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         IonicSelectableModule,
         CurrencyMaskModule,
         PipesModule,
-        AgmCoreModule.forRoot({
-		      apiKey: 'AIzaSyDCUgtEwcER2glTnnY9WqdWkKECQKJ_gto',
-		      language: "en",
-		      libraries: ['places','geometry']
-		})
+        
     ],
-    declarations: [GoogleMapComponent,ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent, PropertyDetailsCardComponent, PropertyRightPanelComponent],
-    exports: [GoogleMapComponent,ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent, PropertyDetailsCardComponent, PropertyRightPanelComponent],
+    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent, PropertyDetailsCardComponent, PropertyRightPanelComponent],
+    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent, PropertyDetailsCardComponent, PropertyRightPanelComponent],
     providers: [CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
 })
 

@@ -17,9 +17,13 @@
     <img src="../../../../assets/images/agent/marker.gif" width="30" height="30">
   </div>
 </div>
-<div class="address">
-  CELEMENS STREET,
-  LEAMINGTON SPA,
-  CV31 2DW
+<div class="address" *ngIf="propertyAddress">
+  {{propertyAddress.addressLine1}},
+  {{propertyAddress.addressLine2}},
+  {{propertyAddress.addressLine3}},
+  {{propertyAddress.buildingName}} {{propertyAddress.buildingNumber}} ,
+  {{propertyAddress.county}},
+   {{propertyAddress.postcode}}, {{propertyAddress.country}}.
+ 
 </div>
 </div>

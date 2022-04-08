@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../shared/authguard';
-
 import { AgentPage } from './agent.page';
-import { GoogleMapComponent } from 'src/app/shared/components/google-map/google-map.component';
 
 const routes: Routes = [
   {
@@ -19,10 +17,6 @@ const routes: Routes = [
       {
         path: "dashboard",
         loadChildren: () => import("./dashboard/dashboard.module").then((m) => m.DashboardPageModule)
-      },
-      {
-        path: 'map',
-        component: GoogleMapComponent
       },
       {
         path: "solr/search-results",
