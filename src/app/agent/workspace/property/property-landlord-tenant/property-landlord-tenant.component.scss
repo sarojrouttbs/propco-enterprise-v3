@@ -1,5 +1,9 @@
-ion-grid{
+ion-grid {
+    background: var(--ion-property-details-bg);
     padding: 0;
+}
+.landlord-block {
+    border-right: solid 2px var(--ion-color-amenity-bg);
 }
 .landlord-tenant-count {
     ion-col {
@@ -34,8 +38,15 @@ ion-grid{
     }
 }
 
-.landlord-tenant-details{
-    color: var(--ion-color-text-color); 
+.landlord-tenant-details {
+    ion-icon{
+        font-size: 10px;
+    }
+    a {
+        color: var(--ion-color-text-color);
+        text-decoration: none;
+    }
+    color: var(--ion-color-text-color);
 }
 
 .rent-history-block {
@@ -46,7 +57,7 @@ ion-grid{
     }
 
     ion-text {
-        color: var(--ion-color-text-color); 
+        color: var(--ion-color-text-color);
         font-size: 13px;
     }
 }
@@ -59,12 +70,16 @@ ion-grid{
     }
 
     ion-text {
-        color: var(--ion-color-text-color); 
+        color: var(--ion-color-text-color);
         font-size: 15px;
     }
     ion-col {
         height: 55px;
-        background: var(--ion-color-landlord-tenant-rent-details);
-        // margin-right: 2px;
+        background: var(--ion-propert-rent-block-bg);
+        border-top: solid 1px var(--ion-color-body);
+    }
+    .middle-block {
+        border-left: solid 1px var(--ion-color-body);
+        border-right: solid 1px var(--ion-color-body);
     }
 }

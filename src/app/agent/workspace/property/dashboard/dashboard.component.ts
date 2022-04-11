@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
       cssClass: 'transparent-modal',
       componentProps: {
         imgList: this.propertyDetails.media,
-        index: index,
+        selectedIndex: index,
         baseUrl: this.options
       }
     });
@@ -85,7 +85,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
     const promise = new Promise((resolve, reject) => {
       this.agentService.getPropertyById(propertyId, params).subscribe(
         (res) => {
-          this.propertyData = res && res.data ? res.data : '';
+          this.propertyData = res && res.data ? res.data : '';          
           resolve(res.data);
         },
         (error) => {
@@ -161,7 +161,6 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
     });
     return promise;
   }
-
 }
 
 

@@ -1,4 +1,4 @@
-<ion-grid *ngIf="type == 'landlord' && landlordList">
+<ion-grid *ngIf="type == 'landlord' && landlordList" class="landlord-block">
   <ion-row class="landlord-tenant-count">
     <ion-col>
       <ion-fab-button>
@@ -20,17 +20,19 @@
   </ion-row>
   <ion-row class="landlord-tenant-details">
     <ion-col size="20">
-      <ion-icon name="arrow-dropright"></ion-icon>
+        <ion-icon name="play" color="primary"></ion-icon>
       <ion-text> view </ion-text>
     </ion-col>
     <ion-col size="25">
-      <ion-icon name="arrow-dropright"></ion-icon>
-      <ion-text> Email </ion-text>
+        <ion-icon name="play" color="primary"></ion-icon>
+      <ion-text><a href="mailto:{{selectedLandlord?.email || '-'}}"> Email </a> </ion-text>
     </ion-col>
     <ion-col size="55">
-      <ion-icon name="arrow-dropright"></ion-icon>
-      <ion-text> {{selectedLandlord?.mobile || selectedLandlord?.businessTelephoneNo ||
-        selectedLandlord?.homeTelephoneNo || '-'}} </ion-text>
+        <ion-icon name="play" color="primary"></ion-icon>
+      <ion-text> <a href="tel:{{selectedLandlord?.mobile || selectedLandlord?.businessTelephoneNo ||
+        selectedLandlord?.homeTelephoneNo || '-'}}"> {{selectedLandlord?.mobile || selectedLandlord?.businessTelephoneNo
+          ||
+          selectedLandlord?.homeTelephoneNo || '-'}} </a></ion-text>
     </ion-col>
   </ion-row>
 
@@ -54,7 +56,7 @@
       <ion-label>Current Rent</ion-label><br>
       <ion-text> - </ion-text>
     </ion-col>
-    <ion-col>
+    <ion-col class="middle-block">
       <ion-label>Reserve</ion-label><br>
       <ion-text> - </ion-text>
     </ion-col>
@@ -87,17 +89,19 @@
   </ion-row>
   <ion-row class="landlord-tenant-details">
     <ion-col size="20">
-      <ion-icon name="arrow-dropright"></ion-icon>
+        <ion-icon name="play" color="primary"></ion-icon>
       <ion-text> view </ion-text>
     </ion-col>
     <ion-col size="25">
-      <ion-icon name="arrow-dropright"></ion-icon>
-      <ion-text> Email </ion-text>
+        <ion-icon name="play" color="primary"></ion-icon>
+      <ion-text><a href="mailto:{{selectedTenant?.email || '-'}}"> Email </a> </ion-text>
     </ion-col>
     <ion-col size="55">
-      <ion-icon name="arrow-dropright"></ion-icon>
-      <ion-text> {{selectedTenant?.mobile || selectedTenant?.businessTelephoneNo || selectedTenant?.homeTelephoneNo ||
-        '-'}} </ion-text>
+        <ion-icon name="play" color="primary"></ion-icon>
+      <ion-text> <a href="tel:{{selectedTenant?.mobile || selectedTenant?.businessTelephoneNo || selectedTenant?.homeTelephoneNo ||
+        '-'}}">
+           {{selectedTenant?.mobile || selectedTenant?.businessTelephoneNo || selectedTenant?.homeTelephoneNo ||
+          '-'}} </a> </ion-text>
     </ion-col>
   </ion-row>
 
@@ -121,7 +125,7 @@
       <ion-label>Current Rent</ion-label><br>
       <ion-text> - </ion-text>
     </ion-col>
-    <ion-col>
+    <ion-col class="middle-block">
       <ion-label>Reserve</ion-label><br>
       <ion-text> - </ion-text>
     </ion-col>

@@ -11,11 +11,10 @@
     <div class="homescreen-content">
       <div style="width: 33.33% !important;">
         <ion-slides pager style="height: 260px;" *ngIf="propertyDetails?.media">
-          <ion-slide *ngFor="let data of propertyDetails?.media; let i = index">
+          <ion-slide *ngFor="let data of propertyDetails?.media; let index = index" (click)="openPreview(index)">
             <div class="swiper-zoom-container">
-              <img [src]="options + data?.fileName" tappable (click)="openPreview(i)">
+              <img [src]="options + data?.fileName" tappable>
             </div>
-
           </ion-slide>
         </ion-slides>
 

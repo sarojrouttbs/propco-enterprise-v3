@@ -38,7 +38,6 @@ export class PropertyPage implements OnInit {
   }
 
   ngOnInit() {
-    console.log('side-nav')
   }
 
   // ngOnDestroy(): void {
@@ -60,8 +59,6 @@ export class PropertyPage implements OnInit {
   }
 
   changePage(pageName) {
-    console.log("pageName", pageName);
-
     switch (pageName) {
       case 'dashboard':
         this.router.navigate(['agent/workspace/property/438d2a62-aca0-11ea-8ddb-02420aff051f/dashboard']);

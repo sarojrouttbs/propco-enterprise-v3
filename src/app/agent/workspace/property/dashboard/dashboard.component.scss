@@ -1,7 +1,6 @@
 .dashboard {
-    --ion-background-color: var(--ion-color-body);
+    background-color: var(--ion-color-amenity-bg);
     color: var(--ion-color-text-color);
-    
     .header {
         display: flex;
         align-items: center;
@@ -16,14 +15,11 @@
         height: 100%;
     }
 }
-
-.preview-slides {
-    margin-top: 20%;
-    background: #e6e6e6;
-
-    img {
-        padding-top: 20px;
-        padding-bottom: 20px;
+// display: list-item;
+ion-slide{
+    div{
+     display: list-item;
+   
     }
 }
 

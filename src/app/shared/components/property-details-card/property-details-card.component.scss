@@ -1,10 +1,8 @@
 .property-center-card {
-    background-color: var(--ion-color-amenity-bg);
-
     .amenity-content {
         padding: 0;
         .amenity-row > ion-col {
-            border: solid 1px var(--ion-color-solr-ex-panal-border-color);
+            border: solid 1px var(--ion-property-details-bg);
         }
 
         .amenity-wrapper {

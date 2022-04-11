@@ -75,9 +75,13 @@
 
     <ion-row>
       <ion-col class="property-certificates">
-        <ion-icon name="checkmark-circle" class="sucess"></ion-icon>&nbsp;&nbsp;
+        <ion-icon
+          [name]="propertyData?.propertyDetails?.hasElectricalIndemnitySigned?'checkmark-circle': 'close-circle'"
+          [ngClass]="propertyData?.propertyDetails?.hasElectricalIndemnitySigned?'sucess': 'danger'">
+        </ion-icon>
+        &nbsp;&nbsp;
+
         <ion-text>
-          <!-- propertyData?.propertyDetails?.hasElectricalIndemnitySigned -->
           Covered by Rent Indemnity
         </ion-text>
       </ion-col>
@@ -85,9 +89,12 @@
 
     <ion-row>
       <ion-col class="property-certificates">
-        <ion-icon name="checkmark-circle" class="sucess"></ion-icon>&nbsp;&nbsp;
+        <ion-icon
+          [name]="propertyData?.propertyRentInfo?.emergencyResponseService?.isERSEnabled?'checkmark-circle': 'close-circle'"
+          [ngClass]="propertyData?.propertyRentInfo?.emergencyResponseService?.isERSEnabled?'sucess': 'danger'">
+        </ion-icon>
+        &nbsp;&nbsp;
         <ion-text>
-          <!-- {{propertyData?.propertyRentInfo?.emergencyResponseService?.isERSEnabled || '-'}} -->
           Covered by Emergency Response
         </ion-text>
       </ion-col>
@@ -95,9 +102,10 @@
 
     <ion-row>
       <ion-col class="property-certificates" style="margin-bottom: 37px !important;">
-        <ion-icon name="close-circle" class="danger"></ion-icon>&nbsp;&nbsp;
+        <ion-icon [name]="propertyData?.propertyDetails?.hasGas?'checkmark-circle': 'close-circle'"
+          [ngClass]="propertyData?.propertyDetails?.hasGas?'sucess': 'medium'">
+        </ion-icon>&nbsp;&nbsp;
         <ion-text>
-          <!-- {{propertyData?.propertyDetails?.hasGas || '-'}}  -->
           Gas Safety certificate not required
         </ion-text>
       </ion-col>
