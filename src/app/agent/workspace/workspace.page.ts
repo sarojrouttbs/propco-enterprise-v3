@@ -6,7 +6,7 @@ import {
   ViewChild,
   ViewChildren,
 } from "@angular/core";
-import { Location } from '@angular/common';
+import { Location } from "@angular/common";
 import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import {
   ActivatedRoute,
@@ -14,9 +14,14 @@ import {
   Router,
   RouterOutlet,
 } from "@angular/router";
-import { AGENT_WORKSPACE_CONFIGS } from "src/app/shared/constants";
+import {
+  AGENT_WORKSPACE_CONFIGS,
+  DEFAULT_MESSAGES,
+} from "src/app/shared/constants";
 import { CommonService } from "src/app/shared/services/common.service";
 import { AgentService } from "../agent.service";
+import { MenuController } from "@ionic/angular";
+import { WorkspaceService } from "./workspace.service";
 
 @Component({
   selector: "app-workspace",
@@ -35,13 +40,16 @@ export class WorkspacePage implements OnInit {
   activeLinkIndex = -1;
   @ViewChild(RouterOutlet) outlet: RouterOutlet;
   activeLink;
+  DEFAULT_MESSAGES = DEFAULT_MESSAGES;
 
   constructor(
     private agentService: AgentService,
     private commonService: CommonService,
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private menu: MenuController,
+    private workspaceService: WorkspaceService
   ) {
     route.params.subscribe((val) => {
       this.initWorkspace();
@@ -52,8 +60,12 @@ export class WorkspacePage implements OnInit {
   private async initWorkspace() {
     this.skeleton = true;
     this.localStorageItems = this.fetchItems();
-    this.selectedEntityDetails = this.getActiveTabEntityInfo();
-    await this.getEntityFullDetails();
+    if (this.localStorageItems && this.localStorageItems.length > 0) {
+      this.selectedEntityDetails = this.getActiveTabEntityInfo();
+      await this.getEntityFullDetails();
+    } else {
+      this.router.navigate(["/agent"], { replaceUrl: true });
+    }
     this.skeleton = false;
   }
 
@@ -68,7 +80,7 @@ export class WorkspacePage implements OnInit {
 
   private getActiveTabEntityInfo() {
     let item = this.localStorageItems.filter((x) => x.isSelected);
-    if (item) {
+    if (item && item.length > 0) {
       this.router.navigate([
         `agent/workspace/property/${item[0].entityId}/dashboard`,
       ]);
@@ -93,9 +105,17 @@ export class WorkspacePage implements OnInit {
     }
   }
 
-  closeTab(index: number) {
+  async closeTab(index: number) {
     this.closedTabs.push(index);
-    this.tabGroup.selectedIndex = this.tabNodes.length - 1;
+    await this.workspaceService.removeItemByIndex(index);
+    if (!this.workspaceService.isWorkspaceItemAvailable()) {
+      this.router.navigate(["agent/dashboard"], { replaceUrl: true });
+    } else {
+      await this.workspaceService.activeNextTabOnDelete();
+      this.router.navigate(["agent/workspace"]).then(()=>{
+        window.location.reload();
+      });
+    }
   }
 
   getPropertyById(id) {
@@ -113,12 +133,11 @@ export class WorkspacePage implements OnInit {
     return promise;
   }
   onSwitch(item) {
-    console.log(item)
     switch (item.entity) {
-      case 'PROPERTY':
+      case "PROPERTY":
         this.location.replaceState(item.state);
         break;
-    
+
       default:
         break;
     }

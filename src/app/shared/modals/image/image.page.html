@@ -1,0 +1,35 @@
+<ion-content>
+  <ion-slides [options]="sliderOpts">
+    <ng-container *ngFor="let data of imgList; let i = index">
+      <ion-slide pager>
+        <div class="swiper-zoom-container">
+          <img [src]="baseUrl + data?.fileName" [title]="data?.label">
+        </div>
+      </ion-slide>
+    </ng-container>
+   
+  </ion-slides>
+</ion-content>
+ 
+<ion-footer>
+  <ion-row style="display: block;">
+    <ion-col size="4" class="ion-text-center">
+      <ion-button (click)="zoom(false)" fill="clear" color="light">
+        <ion-icon name="remove" slot="start"></ion-icon>
+        Zoom Out
+      </ion-button>
+    </ion-col>
+    <ion-col size="4" class="ion-text-center">
+      <ion-button (click)="close()" fill="clear" color="light">
+        <ion-icon name="close" slot="start"></ion-icon>
+        Close
+      </ion-button>
+    </ion-col>
+    <ion-col size="4" class="ion-text-center">
+      <ion-button (click)="zoom(true)" fill="clear" color="light">
+        <ion-icon name="add" slot="start"></ion-icon>
+        Zoom In
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

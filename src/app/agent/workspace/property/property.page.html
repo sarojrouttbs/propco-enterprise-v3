@@ -1,0 +1,50 @@
+<!-- <div
+  class="example-container"
+  [class.example-is-mobile]="mobileQuery.matches"
+  *ngIf="shouldRun"
+> -->
+<!-- <mat-toolbar color="primary" class="example-toolbar">
+
+  <button mat-icon-button (click)="snav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+</mat-toolbar> -->
+
+<mat-sidenav-container class="example-sidenav-container">
+  <mat-sidenav #snav [mode]="'side'" [opened]="open"
+   fixedTopGap="56" class="sidenav-block">
+    <div class="property-lettings">
+      <span>Property (Lettings)</span>
+    </div>
+    <mat-nav-list class="sidenav-block-list">
+      <a mat-list-item (click)="changePage('dashboard');">Dashboard</a>
+      <!-- <a mat-list-item (click)="changePage('details');">Details</a> -->
+      <!-- <a mat-list-item (click)="changePage('dashboard');">Dashboard2</a> -->
+
+      <mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">
+        <span class="full-width" *ngIf="isExpanded || isShowing">Marketing</span>
+        <ion-icon name="chevron-down-outline" class="menu-button" [ngClass]="{'rotated' : showSubmenu}"
+          *ngIf="isExpanded || isShowing"></ion-icon>
+      </mat-list-item>
+      <div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
+        <a mat-list-item (click)="changePage('details');">Property Details</a>
+        <a mat-list-item >Perticulars</a>
+      </div>
+
+      <!-- <mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">
+        <span class="full-width" *ngIf="isExpanded || isShowing">Marketing</span>
+        <ion-icon name="chevron-down-outline" class="menu-button" [ngClass]="{'rotated' : showSubmenu}"
+          *ngIf="isExpanded || isShowing"></ion-icon>
+      </mat-list-item>
+      <div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
+        <a mat-list-item [routerLink]="['details']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">Property Details</a>
+        <a mat-list-item href="...">Perticulars</a>
+      </div> -->
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <ion-router-outlet></ion-router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+<!-- </div> -->

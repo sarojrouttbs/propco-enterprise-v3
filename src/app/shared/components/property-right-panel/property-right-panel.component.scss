@@ -1,0 +1,48 @@
+.property-right-card {
+    .property-details {
+        padding: 0;
+        .property-status {
+            background: var(--ion-color-property-status-bg);
+            color: var(--ion-color-property-status-text);
+            padding-left: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            ion-col {
+                height: 47px;
+            }
+            div {
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+        }
+        .property-info {
+            padding-left: 10px;
+            ion-col {
+                .label {
+                    color: var(--ion-color-block-label-color);
+                    font-size: 12px;
+                }
+                .value {
+                    color: var(--ion-color-property-info-value);
+                }
+            }
+        }
+       
+        .sucess {
+            color: var(--ion-color-success);
+        }
+        .danger {
+            color: var(--ion-color-danger);
+        }
+        .property-certificates {
+            color: var(--ion-color-text-color);
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+    }
+}
