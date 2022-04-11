@@ -10,7 +10,7 @@ export class ImagePage implements OnInit, ViewDidEnter {
   @ViewChild(IonSlides, { static: false }) slides: IonSlides;
 
   @Input() imgList: any;
-  @Input() index;
+  @Input() selectedIndex: number;
   @Input() baseUrl;
 
   sliderOpts = {
@@ -24,8 +24,7 @@ export class ImagePage implements OnInit, ViewDidEnter {
   }
 
   ionViewDidEnter() {
-    this.slides.slideTo(this.index);
-    this.slides.update();
+    this.slides.slideTo(this.selectedIndex + 1);
   }
 
   async zoom(zoomIn: boolean) {

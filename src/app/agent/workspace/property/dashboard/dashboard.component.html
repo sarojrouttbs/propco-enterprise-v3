@@ -11,11 +11,10 @@
     <div class="homescreen-content">
       <div style="width: 33.33% !important;">
         <ion-slides pager style="height: 260px;" *ngIf="propertyDetails?.media">
-          <ion-slide *ngFor="let data of propertyDetails?.media; let i = index">
+          <ion-slide *ngFor="let data of propertyDetails?.media; let index = index" (click)="openPreview(index)">
             <div class="swiper-zoom-container">
-              <img [src]="options + data?.fileName" tappable (click)="openPreview(i)">
+              <img [src]="options + data?.fileName" [title]="data?.label" tappable>
             </div>
-
           </ion-slide>
         </ion-slides>
 
@@ -26,11 +25,11 @@
         <app-property-landlord-tenant [type]="'landlord'" [propertyLandlords]="propertyLandlords"></app-property-landlord-tenant>
       </div>
       <div style="width: 33.33% !important;">
-        <app-property-details-card [propertyData]="propertyData.data"></app-property-details-card>
+        <app-property-details-card [propertyData]="propertyData"></app-property-details-card>
         <app-property-landlord-tenant [type]="'tenant'" [propertyTenants]="propertyTenants"></app-property-landlord-tenant>
       </div>
-      <div style="width: 33.33% !important;">
-        <app-property-right-panel [propertyData]="propertyData.data"></app-property-right-panel>
+      <div style="width: 33.33% !important;" class="right-panel-block">
+        <app-property-right-panel [propertyData]="propertyDetails"></app-property-right-panel>
       </div>
     </div>
     <div *ngIf="propertyData">

@@ -129,9 +129,10 @@ export class CommonService {
     listOfArray = listOfArray && listOfArray.length ? listOfArray : [];
     listOfArray.find((obj) => {
       if (obj.index === id) {
-        propertyStatus = obj.value;
+        propertyStatus = obj.value;        
       }
     })
+
     return propertyStatus;
   }
 

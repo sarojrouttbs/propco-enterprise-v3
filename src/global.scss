@@ -833,9 +833,17 @@ mat-form-field {
 }
 
 .transparent-modal {
-    .modal-wrapper {
-        --background: rgba(44, 39, 45, 0.2);
+  --background:  var(--ion-color-body);
+  ion-content{
+    --background:  var(--ion-color-body) !important;
+  }
+  ion-footer{
+    ion-button{
+      --ion-color-base: var(--ion-color-text-color) !important;
+
     }
+
+  }
 }
 .accordian-icon {
   font-size: 37px;
