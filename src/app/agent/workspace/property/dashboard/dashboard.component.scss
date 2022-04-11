@@ -21,6 +21,7 @@
     margin-top: 20%;
     background: #e6e6e6;
 
+
     img {
         padding-top: 20px;
         padding-bottom: 20px;
@@ -29,9 +30,9 @@
 
 .map-headeing{
     height: 60px;
-    background-color: #fab03b;
+    background: var(--ion-color-warning-tint);
     text-transform: uppercase;
-    color: #fff;
+    color: var(--ion-color-step-2000);
     font-size: 20px;
     text-align: center;
     position: relative;
@@ -45,7 +46,7 @@
     width: 40px;
     position: absolute;
     display: inline-block;
-    color: #e6e6e6;
+    color: var(--ion-color-step-1800);
     margin-left: -5%;
     margin-top: 11px;
 }
