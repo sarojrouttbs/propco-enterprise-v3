@@ -10,16 +10,16 @@
     </div>
     <div class="homescreen-content">
       <div style="width: 33.33% !important;">
-        <ion-slides [options]="sliderOpts" pager style="height: 260px;" *ngIf="propertyDetails?.media">
-          <ion-slide *ngFor="let data of propertyDetails?.media">
+        <ion-slides pager style="height: 260px;" *ngIf="propertyDetails?.media">
+          <ion-slide *ngFor="let data of propertyDetails?.media; let i = index">
             <div class="swiper-zoom-container">
-              <img [src]="options + data?.fileName" tappable (click)="openPreview(data)">
+              <img [src]="options + data?.fileName" tappable (click)="openPreview(i)">
             </div>
 
           </ion-slide>
         </ion-slides>
 
-        <div class="no-slider-img">
+        <div class="no-slider-img" *ngIf="!propertyDetails?.media">
           <img src="assets/images/solr/placeholder.png" >
         </div>
 

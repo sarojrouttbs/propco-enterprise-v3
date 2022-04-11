@@ -1,9 +1,9 @@
 <ion-content>
   <ion-slides [options]="sliderOpts">
-    <ng-container *ngFor="let data of images; let i = index">
+    <ng-container *ngFor="let data of imgList; let i = index">
       <ion-slide >
         <div class="swiper-zoom-container">
-          <img [src]="data">
+          <img [src]="baseUrl + data?.fileName">
         </div>
       </ion-slide>
     </ng-container>
