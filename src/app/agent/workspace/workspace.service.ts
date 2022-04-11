@@ -31,9 +31,7 @@ export class WorkspaceService {
   }
 
   private goToPropertyDashboard(item): void {
-    this.router.navigate([
-      `agent/workspace/property/${item.entityId}`,
-    ]);
+    this.router.navigate([`agent/workspace/property/${item.entityId}`]);
   }
 
   prepareTabData(item) {
@@ -93,6 +91,49 @@ export class WorkspaceService {
       if (obj.entityId !== itemToSkip) {
         obj[keyToUpdate] = false;
       }
+    }
+  }
+
+  isWorkspaceItemAvailable(): boolean {
+    let item: boolean = false;
+    let itemsInStorage = this.commonService.getItem(
+      AGENT_WORKSPACE_CONFIGS.localStorageName,
+      true
+    );
+    if (itemsInStorage && itemsInStorage.length > 0) {
+      item = true;
+    }
+    return item;
+  }
+
+  async removeItemByIndex(index) {
+    let itemsInStorage = this.commonService.getItem(
+      AGENT_WORKSPACE_CONFIGS.localStorageName,
+      true
+    );
+    if (itemsInStorage) {
+      this.commonService.removeItem(AGENT_WORKSPACE_CONFIGS.localStorageName);
+      itemsInStorage.splice(index, 1);
+      this.commonService.setItem(
+        AGENT_WORKSPACE_CONFIGS.localStorageName,
+        itemsInStorage
+      );
+      return;
+    }
+  }
+
+  async activeNextTabOnDelete() {
+    let itemsInStorage = this.commonService.getItem(
+      AGENT_WORKSPACE_CONFIGS.localStorageName,
+      true
+    );
+    if (itemsInStorage) {
+      itemsInStorage[0].isSelected = true;
+      this.commonService.setItem(
+        AGENT_WORKSPACE_CONFIGS.localStorageName,
+        itemsInStorage
+      );
+      return;
     }
   }
 }
