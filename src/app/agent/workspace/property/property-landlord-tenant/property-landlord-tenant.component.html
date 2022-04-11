@@ -10,10 +10,10 @@
   <ion-row class="landlord-tenant-dropdown">
     <ion-col>
       <ion-select interface="popover" class="more-filters" [formControl]="landlordListCtrl"
-        (ionChange)="onListChange(list.value)">
+        (ionChange)="onLandlordChange();">
         <ion-select-option [value]="item.landlordId" *ngFor="let item of landlordList">
           {{item.name}}
-          <span>({{item.rentPercentage}}%)</span>
+          <span>({{item?.rentPercentage + '%'}})</span>
         </ion-select-option>
       </ion-select>
     </ion-col>
@@ -29,7 +29,8 @@
     </ion-col>
     <ion-col size="55">
       <ion-icon name="arrow-dropright"></ion-icon>
-      <ion-text> {{selectedLandlord}} </ion-text>
+      <ion-text> {{selectedLandlord?.mobile || selectedLandlord?.businessTelephoneNo ||
+        selectedLandlord?.homeTelephoneNo || '-'}} </ion-text>
     </ion-col>
   </ion-row>
 
@@ -62,8 +63,6 @@
       <ion-text> - </ion-text>
     </ion-col>
   </ion-row>
-
-
 </ion-grid>
 
 
@@ -79,10 +78,9 @@
   <ion-row class="landlord-tenant-dropdown">
     <ion-col>
       <ion-select interface="popover" class="more-filters" [formControl]="tenantListCtrl"
-        (ionChange)="onListChange(list.value)">
-        <ion-select-option [value]="item.landlordId" *ngFor="let item of landlordList">
-          {{item.name}}
-          <span>({{item.rentPercentage}}%)</span>
+        (ionChange)="onTenantChange();">
+        <ion-select-option [value]="item.tenantId" *ngFor="let item of tenantList">
+          {{item.name || item.title +' '+ item.forename}}
         </ion-select-option>
       </ion-select>
     </ion-col>
@@ -98,21 +96,22 @@
     </ion-col>
     <ion-col size="55">
       <ion-icon name="arrow-dropright"></ion-icon>
-      <ion-text> {{selectedLandlord}} </ion-text>
+      <ion-text> {{selectedTenant?.mobile || selectedTenant?.businessTelephoneNo || selectedTenant?.homeTelephoneNo ||
+        '-'}} </ion-text>
     </ion-col>
   </ion-row>
 
   <ion-row class="rent-history-block">
     <ion-col size="25">
-      <ion-label>Last Paid</ion-label><br>
+      <ion-label>Tenancy Start</ion-label><br>
       <ion-text> - </ion-text>
     </ion-col>
     <ion-col size="25">
-      <ion-label>Outstanding Fee</ion-label><br>
+      <ion-label>Tenancy End</ion-label><br>
       <ion-text> - </ion-text>
     </ion-col>
     <ion-col size="50">
-      <ion-label>Property Outstanding Fee</ion-label><br>
+      <ion-label>Term</ion-label><br>
       <ion-text> - </ion-text>
     </ion-col>
   </ion-row>
@@ -127,7 +126,7 @@
       <ion-text> - </ion-text>
     </ion-col>
     <ion-col>
-      <ion-label>Tax</ion-label><br>
+      <ion-label>Deposit</ion-label><br>
       <ion-text> - </ion-text>
     </ion-col>
   </ion-row>
