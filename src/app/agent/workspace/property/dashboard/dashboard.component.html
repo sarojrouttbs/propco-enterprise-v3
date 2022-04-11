@@ -33,5 +33,13 @@
         <app-property-right-panel [propertyData]="propertyData.data"></app-property-right-panel>
       </div>
     </div>
+    <div *ngIf="propertyData">
+      <div class="map-headeing" >
+        <img class="map-icon" src="assets/images/agent/map.png" alt="">  
+       <span class="map-title">         MAP
+        </span>
+      </div>
+      <app-google-map  [propertyData]="propertyData" ></app-google-map>
+    </div>
   </div>
 </ion-content>
