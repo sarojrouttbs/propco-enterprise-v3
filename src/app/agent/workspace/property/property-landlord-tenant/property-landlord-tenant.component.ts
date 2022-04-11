@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-property-landlord-tenant',
@@ -7,33 +8,40 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PropertyLandlordTenantComponent implements OnInit {
 
-  landlordList: any = [{ "status": 1, 
-  "address": {
-     "addressLine1": "11 Sutcliffe Drive", "addressLine2": "Harbury", "addressLine3": null, "county": "Warwickshire", "country": "United Kingdom", "street": null, "buildingName": null, "buildingNumber": null, "postcode": "CV33 9LT", "latitude": null, "longitude": null, "locality": null, "town": "Leamington Spa", "pafReference": "5997865.00" },
-      "name": "Mr Shane Gillis", 
-      "addressee": "Mr Gillis", 
-      "homeTelephoneNo": "07809123311", 
-      "businessTelephoneNo": "33432423",
-       "alternativeEmail": "sakshi.singla@techblue.co.uk",
-        "dateOfBirth": "1989-08-31", 
-        "email": "ali.rollason@techblue.co.uk", 
-        "mobile": "07805553123", 
-        "createdAt": "2021-10-20 14:34:10",
-         "modifiedAt": "2022-03-08 11:12:34", 
-         "reference": null, 
-         "legacyReference": null, 
-         "rentPercentage": 100, 
-         "propertyLinkStatus": "Current",
-          "title": "Mr", 
-          "forename": "Shane",
-           "middlename": "Garret", 
-           "surname": "Gillis", 
-           "fullName": "Mr Shane Gillis", 
-           "isLead": true, "propcoId": "2075", "landlordId": "0b6c4fba-7c67-4247-851f-c8d3e5bce413" }];
+  landlordListCtrl = new FormControl('');
+  tenantListCtrl = new FormControl('');
+  @Input() type;
+  @Input() propertyLandlords;
+  @Input() propertyTenants;
+  landlordList: any = [];
+  selectedLandlord: any;
+  tenantList: any = [];
+  selectedTenant: any;
+
   constructor() { }
 
-  ngOnInit() { 
-    
+  ngOnInit() { }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.propertyLandlords && !changes.propertyLandlords.firstChange) {
+      this.landlordList = this.propertyLandlords;
+      this.landlordListCtrl.patchValue(this.landlordList[0].landlordId);
+    }
+
+    if (changes.propertyTenants && !changes.propertyTenants.firstChange) {
+      this.tenantList = this.propertyTenants;
+      this.tenantListCtrl.patchValue(this.tenantList[0].tenantId);
+    }
+  }
+
+  onLandlordChange() {
+    let landlord = this.propertyLandlords.filter(x => x.landlordId == this.landlordListCtrl.value);
+    this.selectedLandlord = landlord[0];
+  }
+
+  onTenantChange() {
+    let tenant = this.propertyTenants.filter(x => x.tenantId == this.tenantListCtrl.value);
+    this.selectedTenant = tenant[0];
   }
 
 }

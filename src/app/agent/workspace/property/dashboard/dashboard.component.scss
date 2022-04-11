@@ -1,9 +1,11 @@
 .dashboard {
     --ion-background-color: var(--ion-color-body);
     color: var(--ion-color-text-color);
+    
     .header {
         display: flex;
         align-items: center;
+        height: 60px;
         ion-text {
             font-size: 22px;
         }
@@ -22,5 +24,12 @@
     img {
         padding-top: 20px;
         padding-bottom: 20px;
+    }
+}
+
+.no-slider-img {
+    img {
+        height: 260px;
+        width: 100%;
     }
 }

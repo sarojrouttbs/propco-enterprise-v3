@@ -47,9 +47,8 @@ h1.example-app-name {
       text-transform: uppercase;
       color: #fff;
       font-size: 20px;
-      text-align: center;
+      padding-left: 15px;
       span {
-        display: inline;
         vertical-align: middle;
       }
     }
@@ -95,10 +94,11 @@ h1.example-app-name {
   transform: scaleY(1);
 }
 
-.active, .active:hover {
+.active,
+.active:hover {
   background: var(--ion-color-property-status-bg);
   color: var(--ion-color-property-status-text);
 }
-.mat-list-base{
+.mat-list-base {
   padding-top: 0;
 }
