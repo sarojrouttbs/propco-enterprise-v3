@@ -39,7 +39,7 @@ export class PropertyLandlordTenantComponent implements OnInit {
     this.selectedLandlord = landlord[0];
   }
 
-  ontenantChange() {
+  onTenantChange() {
     let tenant = this.propertyTenants.filter(x => x.tenantId == this.tenantListCtrl.value);
     this.selectedTenant = tenant[0];
   }

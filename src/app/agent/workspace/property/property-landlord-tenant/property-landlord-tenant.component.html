@@ -13,7 +13,7 @@
         (ionChange)="onLandlordChange();">
         <ion-select-option [value]="item.landlordId" *ngFor="let item of landlordList">
           {{item.name}}
-          <span>({{item.rentPercentage}}%)</span>
+          <span>({{item?.rentPercentage + '%'}})</span>
         </ion-select-option>
       </ion-select>
     </ion-col>
@@ -80,7 +80,7 @@
       <ion-select interface="popover" class="more-filters" [formControl]="tenantListCtrl"
         (ionChange)="onTenantChange();">
         <ion-select-option [value]="item.tenantId" *ngFor="let item of tenantList">
-          {{item.name || item.title + item.forename}}
+          {{item.name || item.title +' '+ item.forename}}
         </ion-select-option>
       </ion-select>
     </ion-col>

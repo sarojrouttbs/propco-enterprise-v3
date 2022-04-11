@@ -15,12 +15,6 @@ import { CommonService } from 'src/app/shared/services/common.service';
 export class DashboardComponent implements OnInit, ViewDidEnter {
 
   propertyData: any = '';
-  sliderOpts = {
-    zoom: false,
-    slidesPerView: 1.5,
-    spaceBetween: 20,
-    centeredSlides: true
-  };
   localStorageItems: any = [];
   selectedEntityDetails: any = null;
   activeLink;
