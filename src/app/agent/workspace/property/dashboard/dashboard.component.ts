@@ -13,11 +13,8 @@ import { CommonService } from 'src/app/shared/services/common.service';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, ViewDidEnter {
-  // @ViewChild(IonSlides, { static: false }) slider: IonSlides;
 
   propertyData: any = '';
-
-  public images: any = ['assets/images/agent/propco-button.png', 'assets/images/agent/propco-button.png', 'assets/images/agent/propco-button.png', 'assets/images/agent/propco-button.png', 'assets/images/agent/propco-button.png'];
   sliderOpts = {
     zoom: false,
     slidesPerView: 1.5,
@@ -40,14 +37,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
   ) { }
 
   ngOnInit() {
-
-    // this.activatedRoute.queryParams.subscribe(params => {
-    //   // const userId = params['pid'];
-    //   console.log(params);
-    // });
     this.initApi();
-
-
   }
 
   async initApi() {
@@ -80,19 +70,17 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
     }
   }
 
-
-
   ionViewDidEnter() {
-    // this.slider.update();
   }
 
-
-  async openPreview(img) {
+  async openPreview(index) {
     const modal = await this.modalCtrl.create({
       component: ImagePage,
       cssClass: 'transparent-modal',
       componentProps: {
-        img
+        imgList: this.propertyDetails.media,
+        index: index,
+        baseUrl: this.options
       }
     });
     modal.present();
@@ -152,9 +140,6 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
           this.propertyDetails = res && res.data ? res.data : '';
-
-          console.log("this.getPropertyDetails", this.propertyDetails.media);
-
           resolve(res.data);
         },
         (error) => {
@@ -172,11 +157,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
     const promise = new Promise((resolve, reject) => {
       this.agentService.getSyatemOptions(params).subscribe(
         (res) => {
-          console.log("this.getOptions", res);
-
-          this.options = res ? res : '';
-
-
+          this.options = res ? res.WEB_IMAGE_URL : '';
           resolve(res.data);
         },
         (error) => {
