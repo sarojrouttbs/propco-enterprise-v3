@@ -3,7 +3,7 @@
     <ng-container *ngFor="let data of imgList; let i = index">
       <ion-slide pager>
         <div class="swiper-zoom-container">
-          <img [src]="baseUrl + data?.fileName">
+          <img [src]="baseUrl + data?.fileName" [title]="data?.label">
         </div>
       </ion-slide>
     </ng-container>

@@ -133,7 +133,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
     const promise = new Promise((resolve, reject) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
-          this.propertyDetails = res && res.data ? res.data : '';
+          this.propertyDetails = res && res.data ? res.data : '';          
           resolve(res.data);
         },
         (error) => {

@@ -2,7 +2,7 @@
   <ion-grid class="property-details">
     <ion-row class="property-status">
       <ion-col>
-        <div>OCCUPIED</div>
+        <div>{{getLookupValue(propertyData?.propertyInfo?.status, propertyStatuses) || '-'}}</div>
       </ion-col>
     </ion-row>
     <ion-row class="property-info">
@@ -26,7 +26,7 @@
       <ion-col>
         <ion-text class="label">Booking Office</ion-text>
         <br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.bookingOfficeCode || '-'}}</ion-text>
+        <ion-text class="value">{{getLookupValue(propertyData?.propertyInfo?.bookingOfficeCode, officeCodes) || '-'}}</ion-text>
       </ion-col>
     </ion-row>
 
@@ -101,7 +101,7 @@
     </ion-row>
 
     <ion-row>
-      <ion-col class="property-certificates" style="margin-bottom: 37px !important;">
+      <ion-col class="property-certificates">
         <ion-icon [name]="propertyData?.propertyDetails?.hasGas?'checkmark-circle': 'close-circle'"
           [ngClass]="propertyData?.propertyDetails?.hasGas?'sucess': 'medium'">
         </ion-icon>&nbsp;&nbsp;
