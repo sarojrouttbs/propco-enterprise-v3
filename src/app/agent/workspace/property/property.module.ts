@@ -14,6 +14,8 @@ import { DetailsComponent } from './details/details.component';
 import { PropertyLandlordTenantComponent } from './property-landlord-tenant/property-landlord-tenant.component';
 import { ImagePageModule } from 'src/app/shared/modals/image/image.module';
 import { RouterModule, Routes } from '@angular/router';
+import { GoogleMapComponent } from './google-map/google-map.component';
+import { AgmCoreModule } from '@agm/core';
 
 const routes: Routes = [
   {
@@ -42,9 +44,14 @@ const routes: Routes = [
     ComponentsModule,
     ImagePageModule,
     RouterModule.forChild(routes),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDCUgtEwcER2glTnnY9WqdWkKECQKJ_gto',
+      language: "en",
+      libraries: ['places','geometry']
+})
   ],
-  declarations: [PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent],
+  declarations: [GoogleMapComponent,PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent],
   // exports:[PropertyPage]
 })
 export class PropertyPageModule {}

@@ -1,6 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
+import { ModalController } from "@ionic/angular";
+import { WorkspaceService } from "src/app/agent/workspace/workspace.service";
+import { DEFAULTS, DEFAULT_MESSAGES } from "../../constants";
+import { SimpleModalPage } from "../../modals/simple-modal/simple-modal.page";
 import { CommonService } from "../../services/common.service";
 import { ThemeService } from "../../services/theme.service";
 
@@ -20,10 +24,12 @@ export class AgentHeaderComponent implements OnInit {
   constructor(
     private router: Router,
     private theme: ThemeService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private workSpaceService: WorkspaceService,
+    private modalController: ModalController
   ) {
     if (this.commonService.getItem("theme-mode")) {
-      if(this.commonService.getItem("theme-mode") === 'dark-theme'){
+      if (this.commonService.getItem("theme-mode") === "dark-theme") {
         this.enableDarkMode = true;
       }
       this.theme.activeTheme(this.commonService.getItem("theme-mode"));
@@ -40,7 +46,31 @@ export class AgentHeaderComponent implements OnInit {
     this.router.navigate(["/", "agent"]);
   }
   goToWorkSpace() {
-    this.router.navigate(["agent/workspace"],{ replaceUrl: true });
+    if (!this.workSpaceService.isWorkspaceItemAvailable()) {
+      this.openWorkspaceItemNotFoundModal();
+      return;
+    }
+    this.router.navigate(["agent/workspace"], { replaceUrl: true });
+  }
+
+  async openWorkspaceItemNotFoundModal() {
+    const modal = await this.modalController.create({
+      component: SimpleModalPage,
+      cssClass: "modal-container alert-prompt",
+      backdropDismiss: false,
+      componentProps: {
+        data: `${DEFAULT_MESSAGES.NO_DATA_FOUND}`,
+        heading: "Workspace",
+        buttonList: [
+          {
+            text: "OK",
+            value: false,
+          },
+        ],
+      },
+    });
+
+    await modal.present();
   }
 
   switchToDarkMode() {

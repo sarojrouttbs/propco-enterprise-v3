@@ -38,7 +38,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
         MaterialModule,
         IonicSelectableModule,
         CurrencyMaskModule,
-        PipesModule
+        PipesModule,
+        
     ],
     declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent, PropertyDetailsCardComponent, PropertyRightPanelComponent],
     exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent, PropertyDetailsCardComponent, PropertyRightPanelComponent],

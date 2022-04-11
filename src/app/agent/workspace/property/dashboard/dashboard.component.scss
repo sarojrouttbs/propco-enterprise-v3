@@ -15,14 +15,35 @@
         height: 100%;
     }
 }
-// display: list-item;
+
 ion-slide{
     div{
      display: list-item;
-   
     }
 }
 
+.map-headeing{
+    height: 60px;
+    background: var(--ion-color-warning-tint);
+    text-transform: uppercase;
+    color: var(--ion-color-step-2000);
+    font-size: 20px;
+    text-align: center;
+    position: relative;
+}
+.map-title{
+    margin: auto;
+    position: absolute;
+    top: 20px;
+}
+.map-icon{
+    width: 40px;
+    position: absolute;
+    display: inline-block;
+    color: var(--ion-color-step-1800);
+    margin-left: -5%;
+    margin-top: 11px;
+}
 .no-slider-img {
     img {
         height: 260px;
