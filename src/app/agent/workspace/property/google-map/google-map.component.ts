@@ -33,7 +33,7 @@ export class GoogleMapComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     if(this.propertyData?.address){
       this.propertyAddress = this.propertyData?.address;
       this.setCurrentPosition();
@@ -43,9 +43,9 @@ export class GoogleMapComponent implements OnInit {
   private setCurrentPosition() {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(position => {
-        this.lat = this.propertyAddress.latitude;
-        this.lng = this.propertyAddress.longitude;
-        this.map_zoom = 12;
+        this.lat = Number(this.propertyAddress.latitude) ;
+        this.lng = Number(this.propertyAddress.longitude) ;
+        this.map_zoom = 15;
       });
     }
   }
