@@ -1,18 +1,18 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { IonSlides, ModalController, ViewDidEnter } from '@ionic/angular';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS } from 'src/app/shared/constants';
 import { ImagePage } from 'src/app/shared/modals/image/image.page';
 import { CommonService } from 'src/app/shared/services/common.service';
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, ViewDidEnter {
+  @ViewChild(IonSlides, { static: false }) slides: IonSlides;
 
   propertyData: any = '';
   localStorageItems: any = [];
@@ -85,7 +85,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
     const promise = new Promise((resolve, reject) => {
       this.agentService.getPropertyById(propertyId, params).subscribe(
         (res) => {
-          this.propertyData = res && res.data ? res.data : '';          
+          this.propertyData = res && res.data ? res.data : '';
           resolve(res.data);
         },
         (error) => {
@@ -133,7 +133,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
     const promise = new Promise((resolve, reject) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
-          this.propertyDetails = res && res.data ? res.data : '';          
+          this.propertyDetails = res && res.data ? res.data : '';
           resolve(res.data);
         },
         (error) => {
@@ -160,6 +160,14 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
       );
     });
     return promise;
+  }
+
+  next() {
+    this.slides.slideNext();
+  }
+
+  prev() {
+    this.slides.slidePrev();
   }
 }
 
