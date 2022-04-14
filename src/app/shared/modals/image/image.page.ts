@@ -14,7 +14,6 @@ export class ImagePage implements OnInit, ViewDidEnter {
   @Input() baseUrl;
 
   sliderOpts = {
-    loop: true,
     zoom: true
   };
 
