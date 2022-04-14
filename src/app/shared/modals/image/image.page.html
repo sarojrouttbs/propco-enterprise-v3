@@ -4,10 +4,10 @@
       <div class="swiper-zoom-container">
         <img [src]="baseUrl + data?.fileName" [title]="data?.label">
       </div>
-      <button type="submit" ion-button color="light" class="swiper-button-prev swiper-button-black" (click)="prev()">
+      <button type="submit" ion-button color="light" class="swiper-button-prev swiper-button-black" (click)="prev()" *ngIf="imgList.length > 1">
         <ion-icon name="chevron-back-outline"></ion-icon>
       </button>
-      <button type="submit" ion-button color="light" class="swiper-button-next swiper-button-black" (click)="next()">
+      <button type="submit" ion-button color="light" class="swiper-button-next swiper-button-black" (click)="next()" *ngIf="imgList.length > 1">
         <ion-icon name="chevron-forward-outline"></ion-icon>
       </button>
     </ion-slide>
