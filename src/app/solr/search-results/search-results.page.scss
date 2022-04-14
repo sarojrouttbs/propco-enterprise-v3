@@ -319,6 +319,24 @@ ion-item {
   }
 }
 
+.property-expandable, .landlord-expandable, .tenant-expandable, .applicant-expandable, .contractor-expandable, .agent-expandable{
+  p{     
+    display: grid;
+  }
+}
+
+.property-expandable, .landlord-expandable{
+  ion-row:nth-child(1), ion-row:nth-child(2){
+    margin-bottom: 12px;
+  }
+}
+
+.tenant-expandable, .applicant-expandable, .contractor-expandable{
+  ion-row:nth-child(1){
+    margin-bottom: 12px;
+  }
+}
+
 .tenant,
 .applicant,
 .agent,

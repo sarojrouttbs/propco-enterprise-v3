@@ -5,6 +5,8 @@
 
   .next-button {
     background-color: var(--ion-color-primary) !important;
+    padding: 5px 10px !important;
+    font-size: 14px !important;
   }
 
   .back-button {
@@ -31,6 +33,8 @@
     min-height: 48px !important;
   }
 }
+
+
 
 @import '../../../../node_modules/ngx-guided-tour/scss/guided-tour-base-theme.scss';
 
