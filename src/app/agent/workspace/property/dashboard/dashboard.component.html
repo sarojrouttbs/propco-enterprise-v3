@@ -13,11 +13,11 @@
               <img [src]="options + data?.fileName" [title]="data?.label" tappable (click)="openPreview(index)">
             </div>
             <button type="submit" ion-button color="light" class="swiper-button-prev swiper-button-black"
-              (click)="prev()">
+              (click)="prev()" *ngIf="propertyDetails?.media.length > 1">
               <ion-icon name="chevron-back-outline"></ion-icon>
             </button>
             <button type="submit" ion-button color="light" class="swiper-button-next swiper-button-black"
-              (click)="next()">
+              (click)="next()" *ngIf="propertyDetails?.media.length > 1">
               <ion-icon name="chevron-forward-outline"></ion-icon>
             </button>
           </ion-slide>
