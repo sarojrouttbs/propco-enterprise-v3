@@ -1,12 +1,9 @@
 import {
   Component,
   OnInit,
-  NgZone,
   Input
 } from "@angular/core";
-import { MouseEvent, LatLngLiteral } from "@agm/core";
-import { BehaviorSubject } from "rxjs";
-import { FormControl } from "@angular/forms";
+
 
 @Component({
   selector: 'app-google-map',
@@ -15,71 +12,44 @@ import { FormControl } from "@angular/forms";
 })
 export class GoogleMapComponent implements OnInit {
 
-  @Input() propertyData;
-    propertyAddress:any;
-    map_zoom: number = 4;
-    clulster_max_zoom = 4;
+lat:Number;
+lng:Number;
+centerLongitude;
+centerLatitude;
+@Input() propertyData;
+propertyAddress:any;
 
-  // initial center position for the map
-  lat: number = 51.673858;
-  lng: number = 7.815982;
-  minClusterSize = 2;
-  openedWindow: number = -1;
-  centerLatitude = this.lat;
-  centerLongitude = this.lng;
 
-  public markers = new BehaviorSubject<any[]>(null);
-  public searchControl: FormControl;
+markers: marker[] = [
+];
 
-  constructor() {}
-
-  ngOnInit(): void {    
-    if(this.propertyData?.address){
-      this.propertyAddress = this.propertyData?.address;
-      this.setCurrentPosition();
-    }
+ngOnInit(): void {    
+  if(this.propertyData?.address){
+    this.propertyAddress = this.propertyData?.address;
+    console.log(' this.propertyAddress', this.propertyAddress);
+    this.setCurrentPosition();
   }
+}
+
 
   private setCurrentPosition() {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.lat = Number(this.propertyAddress.latitude) ;
-        this.lng = Number(this.propertyAddress.longitude) ;
-        this.map_zoom = 15;
-      });
-    }
-  }
-
-  centerChange(coords: LatLngLiteral) {
-    this.centerLatitude = coords.lat;
-    this.centerLongitude = coords.lng;
-  }
-
-  clickedMarker(label: string, index: number) {
-    this.openedWindow = index;
-    console.log(`clicked the marker: ${label || index}`);
-  }
-
-  markerDragEnd(m: marker, $event: MouseEvent) {
-    console.log("dragEnd", m, $event);
-  }
-
-public centerChanged(coords: LatLngLiteral) {
-    this.centerLatitude = coords.lat;
-    this.centerLongitude = coords.lng;
-  }
-
-public mapReady(map) {
-  map.addListener("dragend", () => {
-    console.log(this.centerLatitude, this.centerLongitude)
-    });
+    this.lat = Number(this.propertyAddress.latitude);
+    this.lng = Number(this.propertyAddress.longitude);
+    this.markers.push({
+      lat: Number(this.propertyAddress.latitude) ,
+      lng: Number(this.propertyAddress.longitude),
+      label: "A",
+      draggable: true,
+      content: "InfoWindow content"
+    })
   }
 }
 
 // just an interface for type safety.
 interface marker {
-  lat: number;
-  lng: number;
-  label?: string;
-  draggable: boolean;
+lat: number;
+lng: number;
+label?: string;
+draggable: boolean;
+content: string;
 }
