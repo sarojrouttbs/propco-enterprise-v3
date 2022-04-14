@@ -1,9 +1,6 @@
 <ion-content>
 
   <div class="dashboard">
-    <!-- <ion-content padding> -->
-
-    <!-- </ion-content> -->
     <div class="header">
       <ion-icon name="menu-outline" size="large"></ion-icon>
       <ion-text> Dashboard </ion-text>
@@ -11,34 +8,44 @@
     <div class="homescreen-content">
       <div style="width: 33.33% !important;">
         <ion-slides pager style="height: 260px;" *ngIf="propertyDetails?.media">
-          <ion-slide *ngFor="let data of propertyDetails?.media; let index = index" (click)="openPreview(index)">
+          <ion-slide *ngFor="let data of propertyDetails?.media; let index = index">
             <div class="swiper-zoom-container">
-              <img [src]="options + data?.fileName" [title]="data?.label" tappable>
+              <img [src]="options + data?.fileName" [title]="data?.label" tappable (click)="openPreview(index)">
             </div>
+            <button type="submit" ion-button color="light" class="swiper-button-prev swiper-button-black"
+              (click)="prev()">
+              <ion-icon name="chevron-back-outline"></ion-icon>
+            </button>
+            <button type="submit" ion-button color="light" class="swiper-button-next swiper-button-black"
+              (click)="next()">
+              <ion-icon name="chevron-forward-outline"></ion-icon>
+            </button>
           </ion-slide>
         </ion-slides>
 
         <div class="no-slider-img" *ngIf="!propertyDetails?.media">
-          <img src="assets/images/solr/placeholder.png" >
+          <img src="assets/images/solr/placeholder.png">
         </div>
 
-        <app-property-landlord-tenant [type]="'landlord'" [propertyLandlords]="propertyLandlords"></app-property-landlord-tenant>
+        <app-property-landlord-tenant [type]="'landlord'" [propertyLandlords]="propertyLandlords">
+        </app-property-landlord-tenant>
       </div>
       <div style="width: 33.33% !important;">
         <app-property-details-card [propertyData]="propertyData"></app-property-details-card>
-        <app-property-landlord-tenant [type]="'tenant'" [propertyTenants]="propertyTenants"></app-property-landlord-tenant>
+        <app-property-landlord-tenant [type]="'tenant'" [propertyTenants]="propertyTenants">
+        </app-property-landlord-tenant>
       </div>
       <div style="width: 33.33% !important;" class="right-panel-block">
         <app-property-right-panel [propertyData]="propertyDetails"></app-property-right-panel>
       </div>
     </div>
     <div *ngIf="propertyData">
-      <div class="map-headeing" >
-        <img class="map-icon" src="assets/images/agent/map.png" alt="">  
-       <span class="map-title">         MAP
+      <div class="map-headeing">
+        <img class="map-icon" src="assets/images/agent/map.png" alt="">
+        <span class="map-title"> MAP
         </span>
       </div>
-      <app-google-map  [propertyData]="propertyData" ></app-google-map>
+      <app-google-map [propertyData]="propertyData"></app-google-map>
     </div>
   </div>
 </ion-content>
