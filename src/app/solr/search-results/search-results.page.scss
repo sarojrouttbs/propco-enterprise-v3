@@ -319,19 +319,19 @@ ion-item {
   }
 }
 
-.propertyExpandable, .landlordExpandable, .tenantExpandable, .applicantExpandable, .contractorExpandable, .agentExpandable{
+.property-expandable, .landlord-expandable, .tenant-expandable, .applicant-expandable, .contractor-expandable, .agent-expandable{
   p{     
     display: grid;
   }
 }
 
-.propertyExpandable, .landlordExpandable{
+.property-expandable, .landlord-expandable{
   ion-row:nth-child(1), ion-row:nth-child(2){
     margin-bottom: 12px;
   }
 }
 
-.tenantExpandable, .applicantExpandable, .contractorExpandable{
+.tenant-expandable, .applicant-expandable, .contractor-expandable{
   ion-row:nth-child(1){
     margin-bottom: 12px;
   }
