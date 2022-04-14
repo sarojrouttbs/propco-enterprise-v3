@@ -33,6 +33,14 @@ export class ImagePage implements OnInit, ViewDidEnter {
     zoomIn ? zoom.in() : zoom.out();
   }
 
+  next() {
+    this.slides.slideNext();
+  }
+
+  prev() {
+    this.slides.slidePrev();
+  }
+  
   close() {
     this.modalController.dismiss();
   }
