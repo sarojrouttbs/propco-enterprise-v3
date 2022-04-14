@@ -876,11 +876,11 @@
                         </ion-col>
                         <ion-col class="ion-no-padding" size-xl="77" size="70">
                           <ion-grid class="no-padding-top ion-no-padding">
-                            <ion-row class="fault-data-row">
+                            <ion-row class="fault-data-row" style="margin-bottom: 12px;">
                               <ion-col size-xl="25" size-lg="25" size-md="25">
                                 <p>
                                   <span class="text">PropCo ID</span>
-                                <br />
+                                
                                 <span class="text-value">
                                   {{item?.propcoId || DEFAULTS.NOT_AVAILABLE}}
                                 </span>
@@ -889,7 +889,7 @@
                               <ion-col size-xl="35" size-lg="35" size-md="35">
                                 <p>
                                   <span class="text">Tenant Name(s)</span>
-                                <br />
+                                
                                 <span class="text-value" [title]="item?.propertyTenant">
                                   {{item?.propertyTenant || DEFAULTS.NOT_AVAILABLE}}
                                 </span>
@@ -898,30 +898,30 @@
                               <ion-col size-xl="37" size-lg="37" size-md="37">
                                 <p>
                                   <span class="text">Agreement Dates</span>
-                                <br />
+                                
                                 <span class="text-value">{{item?.propertyAgreementDate || DEFAULTS.NOT_AVAILABLE}}</span>
                                 </p>
                               </ion-col>
                             </ion-row>
-                            <ion-row class="fault-data-row">
+                            <ion-row class="fault-data-row" style="margin-bottom: 12px;">
                               <ion-col size-xl="25" size-lg="25" size-md="25">
                                 <p>
                                   <span class="text">Type</span>
-                                <br />
+                                
                                 <span class="text-value">{{item?.houseType || DEFAULTS.NOT_AVAILABLE}}</span>
                                 </p>
                               </ion-col>
                               <ion-col size-xl="35" size-lg="35" size-md="35">
                                 <p>
                                   <span class="text">Office</span>
-                                <br />
+                                
                                 <span class="text-value">{{item?.officeCode || DEFAULTS.NOT_AVAILABLE}}</span>
                                 </p>
                               </ion-col>
                               <ion-col size-xl="37" size-lg="37" size-md="37">
                                 <p>
                                   <span class="text">Management Type</span>
-                                <br />
+                                
                                 <span class="text-value">{{item?.managementType || DEFAULTS.NOT_AVAILABLE}}</span>
                                 </p>
                               </ion-col>
@@ -930,28 +930,26 @@
                               <ion-col size-xl="25" size-lg="25" size-md="25">
                                 <p>
                                   <span class="text">Style</span>
-                                <br />
+                                
                                 <span class="text-value">{{item?.propertyStyle || DEFAULTS.NOT_AVAILABLE}}</span>
                                 </p>
                               </ion-col>
                               <ion-col size-xl="35" size-lg="35" size-md="35">
                                 <p>
                                   <span class="text">Manager</span>
-                                <br />
+                                
                                 <span class="text-value">{{item?.propertyManager || DEFAULTS.NOT_AVAILABLE}}</span>
                                 </p>
                               </ion-col>
                               <ion-col size-xl="37" size-lg="37" size-md="37">
                                 <p>
                                   <span class="text">Negotiator</span>
-                                <br />
+                                
                                 <span class="text-value">{{item?.propertyNegotiator || DEFAULTS.NOT_AVAILABLE}}</span>
                                 </p>
                               </ion-col>
                             </ion-row>
-                            <ion-row class="fault-meter-row">
-                              
-                            </ion-row>
+                           
                           </ion-grid>
                         </ion-col>
                       </ion-row>
