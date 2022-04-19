@@ -1,9 +1,8 @@
 
-<div *ngIf="!propertyAddress?.latitude && !propertyAddress?.longitude">
+<div *ngIf="!lat && !lng" class="msg-div">
   <h5 class="msg">Unable to locate this property for you at the moment</h5>
 </div>
-
-<div class="wrapper" *ngIf="propertyAddress.latitude && propertyAddress.longitude">
+<div class="wrapper" *ngIf="lat && lng">
 
 <div class="map">
 

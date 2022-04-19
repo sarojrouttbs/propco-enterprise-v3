@@ -35,13 +35,15 @@ ngOnInit(): void {
   private setCurrentPosition() {
     this.lat = Number(this.propertyAddress.latitude);
     this.lng = Number(this.propertyAddress.longitude);
-    this.markers.push({
-      lat: Number(this.propertyAddress.latitude) ,
-      lng: Number(this.propertyAddress.longitude),
-      label: "A",
-      draggable: true,
-      content: "InfoWindow content"
-    })
+      this.markers.push({
+        lat: Number(this.propertyAddress.latitude) ,
+        lng: Number(this.propertyAddress.longitude),
+        label: "A",
+        draggable: true,
+        content: "InfoWindow content"
+      })
+    
+   
   }
 }
 
