@@ -26,7 +26,6 @@ markers: marker[] = [
 ngOnInit(): void {    
   if(this.propertyData?.address){
     this.propertyAddress = this.propertyData?.address;
-    console.log(' this.propertyAddress', this.propertyAddress);
     this.setCurrentPosition();
   }
 }
