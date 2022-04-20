@@ -1,3 +1,10 @@
-<p>
-  details works!
-</p>
+<ion-content class="property-details">
+  <div class="header">
+    <ion-icon name="menu-outline" size="large"></ion-icon>
+    <ion-text> Property Details </ion-text>
+  </div>
+
+  <app-lettings-details [group]="this.propertyDetailsForm.controls['lettingsDetailsForm']"></app-lettings-details>
+  <app-let-board [group]="this.propertyDetailsForm.controls['letBoardForm']"></app-let-board>
+  <app-history [group]="this.propertyDetailsForm.controls['history']"></app-history>
+</ion-content>

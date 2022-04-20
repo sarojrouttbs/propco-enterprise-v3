@@ -14,6 +14,7 @@ export const PROPCO = {
   TOB_LOOKUP_DATA: 'tob_lookup_data',
   TERMS_AND_CONDITIONS: 'terms_and_conditions',
   REFERENCING_INFO: 'referencing_info',
+  PROPERTY_LOOKUP_DATA: 'property_lookup_data'
 };
 
 export const USER_TYPES = {

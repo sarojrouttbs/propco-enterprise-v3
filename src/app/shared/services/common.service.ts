@@ -705,4 +705,8 @@ export class CommonService {
     }
     return url;
   }
+
+  getPropertyLookup(params): Observable<Lookupdata> {
+    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup/property', { params, responseType: 'json' });
+  }
 }
