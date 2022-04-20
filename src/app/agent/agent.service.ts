@@ -38,4 +38,10 @@ export class AgentService {
       environment.API_BASE_URL + `options`, { params }
     );
   }
+
+  getPropertyNotes(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/notes`, { params }
+    );
+  }
 }

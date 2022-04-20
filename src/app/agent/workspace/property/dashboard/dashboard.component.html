@@ -47,5 +47,48 @@
       </div>
       <app-google-map [propertyData]="propertyData"></app-google-map>
     </div>
+
+    <div class="table-block">
+      <ion-row>
+        <ion-col size="100">
+          <p class="label">Notes</p>
+          <div class="overlay-container" style="position: relative">
+            <table datatable [dtOptions]="dtOptions"  class="row-border hover"
+              style="width: 100%; position: relative" id="propertyNotesTable">
+              <thead>
+                <tr>
+                  <th style="width:15%">Date</th>
+                  <th style="width:15%">Time</th>
+                  <th style="width:15%">Type</th>
+                  <th style="width:15%">Complaint</th>
+                  <th style="width:15%">Category</th>
+                  <th>User</th>
+                  <th style="width:40px">Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of notes" class="table-row">
+                  <td>{{data.postedAt | date: 'dd/MM/yyyy' || notAvailable}}</td>
+                  <td>{{data.postedAt | date: 'HH:mm' || notAvailable}}</td>
+                  <td>{{getLookupValue(data.type, notesTypes) || notAvailable}}</td>
+                  <td>{{getLookupValue(data.complaint, notesComplaints) || notAvailable}}</td>
+                  <td>{{getLookupValue(data.category, notesCategories) || notAvailable}}</td>
+                  <td>{{data.userName || notAvailable}}</td>
+                  <td><i (click)="showNoteDescription(data.notes);"
+                      class="propcoicon propcoicon-property-description"></i></td>
+                </tr>
+                <tr *ngIf="notes?.length == 0">
+                  <td colspan="7" class="no-data-available" style="text-align: center;"><b>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</b></td>
+                </tr>
+              </tbody>
+            </table>
+            <div id="divOverlay">
+              <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+    
   </div>
 </ion-content>
