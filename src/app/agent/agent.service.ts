@@ -7,11 +7,41 @@ import { environment } from "src/environments/environment";
   providedIn: "root",
 })
 export class AgentService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
-  getPropertyById(propertyId: string,params): Observable<any> {
+  getPropertyById(propertyId: string, params): Observable<any> {
     return this.httpClient.get(
-      environment.API_BASE_URL + `properties/${propertyId}/tob`,{params}
+      environment.API_BASE_URL + `properties/${propertyId}/tob`, { params }
+    );
+  }
+
+  getPropertyLandlords(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/landlords`, { params }
+    );
+  }
+
+  getPropertyTenants(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/tenants`, { params }
+    );
+  }
+
+  getPropertyDetails(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/details`, { params }
+    );
+  }
+
+  getSyatemOptions(params): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `options`, { params }
+    );
+  }
+
+  logout(): Observable<any> {
+    return this.httpClient.post(
+      environment.API_BASE_URL + `agents/user/logout`,{}
     );
   }
 }

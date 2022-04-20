@@ -3,18 +3,13 @@ import { Routes, RouterModule } from "@angular/router";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DetailsComponent } from "./details/details.component";
 
-import { PropertyDashboardPage } from "./property-dashboard.page";
+import { PropertyPage } from "./property.page";
 
 const routes: Routes = [
   {
     path: "",
-    component: PropertyDashboardPage,
+    component: PropertyPage,
     children: [
-      {
-        path: "",
-        redirectTo: "dashboard",
-        pathMatch: "full",
-      },
       {
         path: "dashboard",
         component: DashboardComponent,
@@ -22,13 +17,13 @@ const routes: Routes = [
       {
         path: "details",
         component: DetailsComponent,
-      },
-    ],
-  },
+      }
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class PropertyDashboardPageRoutingModule {}
+export class PropertyPageRoutingModule {}

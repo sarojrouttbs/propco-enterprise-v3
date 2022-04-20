@@ -55,6 +55,7 @@ h1.example-app-name {
 .result-headers-align .mat-expansion-panel-header-title,
 .result-headers-align .mat-expansion-panel-header-description {
   flex-basis: 0;
+  align-items: center;
 }
 
 .result-headers-align .mat-expansion-panel-header-description {
@@ -201,7 +202,7 @@ ion-item {
   .property-img {
     height: 120px;
     min-width: 160px;
-    justify-content: center;
+    justify-content: left;
     display: flex;
   }
 
@@ -315,6 +316,24 @@ ion-item {
   .agent-approved {
     color: #ff9335;
     font-size: 18px;
+  }
+}
+
+.property-expandable, .landlord-expandable, .tenant-expandable, .applicant-expandable, .contractor-expandable, .agent-expandable{
+  p{     
+    display: grid;
+  }
+}
+
+.property-expandable, .landlord-expandable{
+  ion-row:nth-child(1), ion-row:nth-child(2){
+    margin-bottom: 12px;
+  }
+}
+
+.tenant-expandable, .applicant-expandable, .contractor-expandable{
+  ion-row:nth-child(1){
+    margin-bottom: 12px;
   }
 }
 
@@ -716,6 +735,9 @@ ion-item {
     align-items: center;
     margin-right: 5px;
     justify-content: end;
+    .fab-icon {
+      margin: -28px 40px 0px 0px;
+    }
   }
 
   .emenities-wrapper {
@@ -828,8 +850,9 @@ ion-item {
 
 .cc-list-button {
   .expand-btn {
-    height: 36px;
-    width: 36px;
+    --box-shadow: none;
+    height: 30px;
+    width: 30px;
     --color: var(--ion-color-step-2000);
     --background: var(--ion-color-warning);
     .propcoicon {
@@ -840,7 +863,7 @@ ion-item {
   }
   ion-fab-list {
     margin-inline: 40px;
-    margin-top: -9px;
+    margin-top: -13px;
     ion-fab-button {
       height: 36px;
       width: 36px;
@@ -860,4 +883,8 @@ ion-item {
       --color: var(--ion-color-step-2000);
     }
   }
+}
+
+ion-item{
+  color: var(--ion-color-text-color);
 }

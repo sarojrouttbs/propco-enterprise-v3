@@ -1,81 +1,34 @@
-<ion-content>
-  <!-- <mat-tab-group>
-    <ng-container *ngFor="let tab of tabs; let index = index">
-      <mat-tab *ngIf="closedTabs.indexOf(index) < 0">
-        <ng-template mat-tab-label>
-          <div class="col" style="margin-left: 20px;">{{tab.entityTitle}}</div>
-          <ion-icon name="close-outline" (click)="closeTab(index)" size="large"></ion-icon>
-        </ng-template> -->
-        <!--Lazy loaded tabs content-->
-        <!-- <ng-template matTabContent>
-          <app-property-dashboard></app-property-dashboard>
-        </ng-template>
-    </mat-tab>
-    </ng-container>
-  </mat-tab-group> -->
-  <!-- <nav mat-tab-nav-bar [backgroundColor]="background">
-    <a mat-tab-link *ngFor="let link of links"
-       (click)="activeLink = link"
-       [active]="activeLink == link"> {{link}} </a>
-    <a mat-tab-link disabled>Disabled Link</a>
-  </nav>
-  
-  <button mat-raised-button class="example-action-button" (click)="toggleBackground()">
-    Toggle background
-  </button>
-  <button mat-raised-button class="example-action-button" (click)="addLink()">
-    Add link
-  </button> -->
-<div id="workspace-container">
-  <div *ngIf="!skeleton">
-    <!-- <nav mat-tab-nav-bar>
-         <a mat-tab-link 
-         *ngFor="let item of localStorageItems;let i = index;"
-         [routerLink]="item?.state"
-         (click)="activeLink = item.entityId"
-         [active]="activeLink == item.entityId"
-         >
+<ion-content class="workspace">
+  <div id="workspace-container">
+    <div *ngIf="!skeleton && localStorageItems && localStorageItems.length > 0">
+      <nav mat-tab-nav-bar>
+        <a mat-tab-link *ngFor="let item of localStorageItems;let i = index;" [routerLink]="item?.state"
+          (click)="activeLink = item.entityId" [active]="activeLink == item.entityId">
           <div class="record">
             <div><i class="propcoicon no-background propcoicon-property"></i></div>
             <div class="flex">
               <div class="number">{{item?.reference}}</div>
               <div class="name">{{item?.entityTitle}}</div>
             </div>
-            <div  (click)="closeTab(i)">
+            <div (click)="closeTab(i)">
               <i class="propcoicon propcoicon-close no-background propcoicon-small"></i>
             </div>
           </div>
-         </a>
-   </nav>  -->
-   <mat-tab-group>
-    <ng-container *ngFor="let tab of localStorageItems; let index = index">
-      <mat-tab *ngIf="closedTabs.indexOf(index) < 0">
-        <ng-template mat-tab-label>
-          <span (click)="onSwitch(tab)">
-            <div class="col" style="margin-left: 20px;">{{tab.entityTitle}}</div>
-            <ion-icon name="close-outline" (click)="closeTab(index)" size="large"></ion-icon>
-          </span>
-        </ng-template> -->
-        <!--Lazy loaded tabs content-->
-        <ng-template matTabContent>
-          <router-outlet></router-outlet>
-        </ng-template>
-    </mat-tab>
+        </a>
+      </nav>
+
+      <ion-router-outlet style="margin: 61px 0px 0px 0px;"></ion-router-outlet>
+    </div>
+    <div *ngIf="!localStorageItems || localStorageItems.length === 0">
+      {{DEFAULT_MESSAGES.NO_DATA_FOUND}}
+    </div>
+    <ng-container *ngIf="skeleton">
+      <ng-container [ngTemplateOutlet]="dashboardSkeleton">
+      </ng-container>
     </ng-container>
-  </mat-tab-group>
-   
   </div>
-  <ng-container >
-    <!-- <router-outlet></router-outlet> -->
-  </ng-container>
-   <ng-container *ngIf="skeleton">
-    <ng-container [ngTemplateOutlet]="dashboardSkeleton">
-    </ng-container>
-  </ng-container>
-</div>
 </ion-content>
 
-<!--skeleton-->
 <ng-template #dashboardSkeleton>
   <div class="list-skeleton">
     <ion-list>
@@ -95,4 +48,3 @@
     </ion-list>
   </div>
 </ng-template>
-<!--Ends-->

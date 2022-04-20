@@ -1,0 +1,62 @@
+p {
+  font-family: Lato;
+}
+  agm-map {
+      height: 300px;
+      position: relative;
+    }
+
+  .address{
+    position: absolute;
+    top: 0px;
+    left: 0;
+    background: #0ef4f0;
+    width: 27%;
+    font-size: 20px;
+    line-height: 33px;
+    opacity: 0.5;
+  }
+
+  .span-block{
+    display: block;
+  }
+  .msg{
+    margin-left: 20%;
+  }
+
+  .address:hover {
+    opacity: 1.0;
+  }
+
+  .wrapper{
+    position: relative;
+    margin: auto;
+  }
+
+  .map {
+    position: relative;
+  }
+  
+  .map-center-overlay {
+    margin: 0;
+    position: absolute;
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  
+  .agm-map-container { height: 300px; }
+
+  agm-map {
+    height: 300px;
+  }
+  
+  .msg-div{
+    display: flex;
+    align-items: center;
+  }
+  .msg{
+    margin: auto;
+
+  }
