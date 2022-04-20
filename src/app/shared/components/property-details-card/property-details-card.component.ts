@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { PROPCO } from '../../constants';
+import { DEFAULTS, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -13,6 +13,9 @@ export class PropertyDetailsCardComponent implements OnInit, OnChanges {
   lookupdata: any;
   furnishingTypes: any;
   officeCodes: any;
+  managementTypes: any;
+  advertisementRentFrequencies: any;
+  notAvailable = DEFAULTS.NOT_AVAILABLE
 
   constructor(
     private commonService: CommonService
@@ -24,7 +27,7 @@ export class PropertyDetailsCardComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.propertyData && !changes.propertyData.firstChange) {
-      this.propertyData = this.propertyData      
+      this.propertyData = this.propertyData;
     }
   }
 
@@ -45,11 +48,17 @@ export class PropertyDetailsCardComponent implements OnInit, OnChanges {
   private setLookupData(data) {
     this.furnishingTypes = data.furnishingTypes;
     this.officeCodes = data.officeCodes;
+    this.managementTypes = data.managementTypes;
+    this.advertisementRentFrequencies = data.advertisementRentFrequencies
   }
 
   getLookupValue(index: string, lookup) {
     if (index)
       return this.commonService.getLookupValue(index.toString(), lookup);
+  }
+
+  getAdvLookupValue(index, lookup) {
+    return this.commonService.getLookupValue(index, lookup);
   }
 
 }

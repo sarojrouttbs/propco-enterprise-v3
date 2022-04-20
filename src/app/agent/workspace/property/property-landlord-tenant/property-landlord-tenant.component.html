@@ -1,139 +1,155 @@
-<ion-grid *ngIf="type == 'landlord' && landlordList" class="landlord-block">
-  <ion-row class="landlord-tenant-count">
-    <ion-col>
-      <ion-fab-button>
-        <span>TT</span>
-      </ion-fab-button>
-      <ion-text> &nbsp;Current Landlords ({{landlordList.length}}) </ion-text>
-    </ion-col>
-  </ion-row>
-  <ion-row class="landlord-tenant-dropdown">
-    <ion-col>
-      <ion-select interface="popover" class="more-filters" [formControl]="landlordListCtrl"
-        (ionChange)="onLandlordChange();">
-        <ion-select-option [value]="item.landlordId" *ngFor="let item of landlordList">
-          {{item.name}}
-          <span>({{item?.rentPercentage + '%'}})</span>
-        </ion-select-option>
-      </ion-select>
-    </ion-col>
-  </ion-row>
-  <ion-row class="landlord-tenant-details">
-    <ion-col size="20">
-        <ion-icon name="play" color="primary"></ion-icon>
-      <ion-text> view </ion-text>
-    </ion-col>
-    <ion-col size="25">
-        <ion-icon name="play" color="primary"></ion-icon>
-      <ion-text><a href="mailto:{{selectedLandlord?.email || '-'}}"> Email </a> </ion-text>
-    </ion-col>
-    <ion-col size="55">
-        <ion-icon name="play" color="primary"></ion-icon>
-      <ion-text> <a href="tel:{{selectedLandlord?.mobile || selectedLandlord?.businessTelephoneNo ||
-        selectedLandlord?.homeTelephoneNo || '-'}}"> {{selectedLandlord?.mobile || selectedLandlord?.businessTelephoneNo
-          ||
-          selectedLandlord?.homeTelephoneNo || '-'}} </a></ion-text>
-    </ion-col>
-  </ion-row>
+<ng-container *ngIf="type == 'landlord'">
+  <ion-grid class="landlord-block">
+    <ion-row class="landlord-tenant-count">
+      <ion-col>
+        <ion-fab-button>
+          <span>TT</span>
+        </ion-fab-button>
+        <ion-text> &nbsp;Current Landlords ({{landlordList.length}}) </ion-text>
+      </ion-col>
+    </ion-row>
+    <ng-container *ngIf="landlordList.length>0; then ifBlock else elseBlock"></ng-container>
+    <ng-template #ifBlock>
+      <ion-row class="landlord-tenant-dropdown">
+        <ion-col>
+          <ion-select interface="popover" class="more-filters" [formControl]="landlordListCtrl"
+            (ionChange)="onLandlordChange();">
+            <ion-select-option [value]="item.landlordId" *ngFor="let item of landlordList">
+              {{item.name}}
+              <span>({{item?.rentPercentage + '%'}})</span>
+            </ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+      <ion-row class="landlord-tenant-details">
+        <ion-col size="20">
+          <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
+          <ion-text> View </ion-text>
+        </ion-col>
+        <ion-col size="25">
+          <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
+          <ion-text><a href="mailto:{{selectedLandlord?.email || notAvailable}}"> Email </a> </ion-text>
+        </ion-col>
+        <ion-col size="55">
+          <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
+          <ion-text> <a href="tel:{{selectedLandlord?.mobile || selectedLandlord?.businessTelephoneNo ||
+            selectedLandlord?.homeTelephoneNo || notAvailable}}"> {{selectedLandlord?.mobile ||
+              selectedLandlord?.businessTelephoneNo
+              ||
+              selectedLandlord?.homeTelephoneNo || notAvailable}} </a></ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row class="rent-history-block">
+        <ion-col size="25">
+          <ion-label>Last Paid</ion-label><br>
+          <ion-text> - </ion-text>
+        </ion-col>
+        <ion-col size="25">
+          <ion-label>Outstanding Fee</ion-label><br>
+          <ion-text> - </ion-text>
+        </ion-col>
+        <ion-col size="50">
+          <ion-label>Property Outstanding Fee</ion-label><br>
+          <ion-text> - </ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row class="rent-detail-block">
+        <ion-col>
+          <ion-label>Current Rent</ion-label><br>
+          <ion-text> - </ion-text>
+        </ion-col>
+        <ion-col class="middle-block">
+          <ion-label>Reserve</ion-label><br>
+          <ion-text> - </ion-text>
+        </ion-col>
+        <ion-col>
+          <ion-label>Tax</ion-label><br>
+          <ion-text> - </ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-template>
+    <ng-template #elseBlock>
+      <ion-row class="no-data">
+        There is no data to be shown
+      </ion-row>
+    </ng-template>
+  </ion-grid>
+</ng-container>
 
-  <ion-row class="rent-history-block">
-    <ion-col size="25">
-      <ion-label>Last Paid</ion-label><br>
-      <ion-text> - </ion-text>
-    </ion-col>
-    <ion-col size="25">
-      <ion-label>Outstanding Fee</ion-label><br>
-      <ion-text> - </ion-text>
-    </ion-col>
-    <ion-col size="50">
-      <ion-label>Property Outstanding Fee</ion-label><br>
-      <ion-text> - </ion-text>
-    </ion-col>
-  </ion-row>
+<ng-container *ngIf="type == 'tenant'">
+  <ion-grid>
+    <ion-row class="landlord-tenant-count">
+      <ion-col>
+        <ion-fab-button>
+          <span>TT</span>
+        </ion-fab-button>
+        <ion-text> &nbsp;Current Tenants ({{tenantList.length}}) </ion-text>
+      </ion-col>
+    </ion-row>
+    <ng-container *ngIf="tenantList.length>0; then ifBlock else elseBlock"></ng-container>
+    <ng-template #ifBlock>
+      <ion-row class="landlord-tenant-dropdown">
+        <ion-col>
+          <ion-select interface="popover" class="more-filters" [formControl]="tenantListCtrl"
+            (ionChange)="onTenantChange();">
+            <ion-select-option [value]="item.tenantId" *ngFor="let item of tenantList">
+              {{item.name || item.title +' '+ item.forename}}
+            </ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+      <ion-row class="landlord-tenant-details">
+        <ion-col size="20">
+          <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
+          <ion-text> View </ion-text>
+        </ion-col>
+        <ion-col size="25">
+          <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
+          <ion-text><a href="mailto:{{selectedTenant?.email || notAvailable}}"> Email </a> </ion-text>
+        </ion-col>
+        <ion-col size="55">
+          <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
+          <ion-text> <a href="tel:{{selectedTenant?.mobile || selectedTenant?.businessTelephoneNo || selectedTenant?.homeTelephoneNo ||
+            notAvailable}}">
+              {{selectedTenant?.mobile || selectedTenant?.businessTelephoneNo || selectedTenant?.homeTelephoneNo ||
+              notAvailable}} </a> </ion-text>
+        </ion-col>
+      </ion-row>
 
-  <ion-row class="rent-detail-block">
-    <ion-col>
-      <ion-label>Current Rent</ion-label><br>
-      <ion-text> - </ion-text>
-    </ion-col>
-    <ion-col class="middle-block">
-      <ion-label>Reserve</ion-label><br>
-      <ion-text> - </ion-text>
-    </ion-col>
-    <ion-col>
-      <ion-label>Tax</ion-label><br>
-      <ion-text> - </ion-text>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+      <ion-row class="rent-history-block">
+        <ion-col size="25">
+          <ion-label>Tenancy Start</ion-label><br>
+          <ion-text> - </ion-text>
+        </ion-col>
+        <ion-col size="25">
+          <ion-label>Tenancy End</ion-label><br>
+          <ion-text> - </ion-text>
+        </ion-col>
+        <ion-col size="50">
+          <ion-label>Term</ion-label><br>
+          <ion-text> - </ion-text>
+        </ion-col>
+      </ion-row>
 
-
-<ion-grid *ngIf="type == 'tenant' && tenantList">
-  <ion-row class="landlord-tenant-count">
-    <ion-col>
-      <ion-fab-button>
-        <span>TT</span>
-      </ion-fab-button>
-      <ion-text> &nbsp;Current Tenants ({{tenantList.length}}) </ion-text>
-    </ion-col>
-  </ion-row>
-  <ion-row class="landlord-tenant-dropdown">
-    <ion-col>
-      <ion-select interface="popover" class="more-filters" [formControl]="tenantListCtrl"
-        (ionChange)="onTenantChange();">
-        <ion-select-option [value]="item.tenantId" *ngFor="let item of tenantList">
-          {{item.name || item.title +' '+ item.forename}}
-        </ion-select-option>
-      </ion-select>
-    </ion-col>
-  </ion-row>
-  <ion-row class="landlord-tenant-details">
-    <ion-col size="20">
-        <ion-icon name="play" color="primary"></ion-icon>
-      <ion-text> view </ion-text>
-    </ion-col>
-    <ion-col size="25">
-        <ion-icon name="play" color="primary"></ion-icon>
-      <ion-text><a href="mailto:{{selectedTenant?.email || '-'}}"> Email </a> </ion-text>
-    </ion-col>
-    <ion-col size="55">
-        <ion-icon name="play" color="primary"></ion-icon>
-      <ion-text> <a href="tel:{{selectedTenant?.mobile || selectedTenant?.businessTelephoneNo || selectedTenant?.homeTelephoneNo ||
-        '-'}}">
-           {{selectedTenant?.mobile || selectedTenant?.businessTelephoneNo || selectedTenant?.homeTelephoneNo ||
-          '-'}} </a> </ion-text>
-    </ion-col>
-  </ion-row>
-
-  <ion-row class="rent-history-block">
-    <ion-col size="25">
-      <ion-label>Tenancy Start</ion-label><br>
-      <ion-text> - </ion-text>
-    </ion-col>
-    <ion-col size="25">
-      <ion-label>Tenancy End</ion-label><br>
-      <ion-text> - </ion-text>
-    </ion-col>
-    <ion-col size="50">
-      <ion-label>Term</ion-label><br>
-      <ion-text> - </ion-text>
-    </ion-col>
-  </ion-row>
-
-  <ion-row class="rent-detail-block">
-    <ion-col>
-      <ion-label>Current Rent</ion-label><br>
-      <ion-text> - </ion-text>
-    </ion-col>
-    <ion-col class="middle-block">
-      <ion-label>Reserve</ion-label><br>
-      <ion-text> - </ion-text>
-    </ion-col>
-    <ion-col>
-      <ion-label>Deposit</ion-label><br>
-      <ion-text> - </ion-text>
-    </ion-col>
-  </ion-row>
-
-
-</ion-grid>
+      <ion-row class="rent-detail-block">
+        <ion-col>
+          <ion-label>Current Rent</ion-label><br>
+          <ion-text> - </ion-text>
+        </ion-col>
+        <ion-col class="middle-block">
+          <ion-label>Outstanding</ion-label><br>
+          <ion-text> - </ion-text>
+        </ion-col>
+        <ion-col>
+          <ion-label>Deposit</ion-label><br>
+          <ion-text> - </ion-text>
+        </ion-col>
+      </ion-row>
+    </ng-template>
+    <ng-template #elseBlock>
+      <ion-row class="no-data">
+        There is no data to be shown
+      </ion-row>
+    </ng-template>
+  </ion-grid>
+</ng-container>

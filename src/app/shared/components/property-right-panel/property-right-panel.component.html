@@ -2,13 +2,13 @@
   <ion-grid class="property-details">
     <ion-row class="property-status">
       <ion-col>
-        <div>{{getLookupValue(propertyData?.propertyInfo?.status, propertyStatuses) || '-'}}</div>
+        <div>{{getLookupValue(propertyData?.propertyInfo?.status, propertyStatuses) || notAvailable}}</div>
       </ion-col>
     </ion-row>
     <ion-row class="property-info">
       <ion-col>
         <ion-text class="label">Available From</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.availableFrom || '-'}}</ion-text>
+        <ion-text class="value">{{propertyData?.propertyInfo?.availableFrom || notAvailable}}</ion-text>
       </ion-col>
       <ion-col>
         <ion-text class="label">Branch PMC</ion-text>
@@ -21,12 +21,13 @@
       <ion-col>
         <ion-text class="label">Available To</ion-text>
         <br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.availableTo || '-'}}</ion-text>
+        <ion-text class="value">{{propertyData?.propertyInfo?.availableTo || notAvailable}}</ion-text>
       </ion-col>
       <ion-col>
         <ion-text class="label">Booking Office</ion-text>
         <br>
-        <ion-text class="value">{{getLookupValue(propertyData?.propertyInfo?.bookingOfficeCode, officeCodes) || '-'}}</ion-text>
+        <ion-text class="value">{{getLookupValue(propertyData?.propertyInfo?.bookingOfficeCode, officeCodes) || notAvailable}}
+        </ion-text>
       </ion-col>
     </ion-row>
 
@@ -34,34 +35,41 @@
       <ion-col>
         <ion-text class="label">Appraised</ion-text>
         <br>
-        <ion-text class="value">{{propertyData?.propertyDetails?.appraisedDate || '-'}}</ion-text>
+        <ion-text class="value">{{propertyData?.propertyDetails?.appraisedDate || notAvailable}}</ion-text>
       </ion-col>
       <ion-col>
         <ion-text class="label">Portfolio Source</ion-text>
         <br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.portfolioSource || '-'}}</ion-text>
+        <ion-text class="value">
+          {{getHouseTypeLookupValue(propertyData?.propertyInfo?.portfolioSource, houseTypes) || notAvailable}}
+        </ion-text>
       </ion-col>
     </ion-row>
 
     <ion-row class="property-info">
       <ion-col>
         <ion-text class="label">Instructed</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyDetails?.instructedDate || '-'}}</ion-text>
+        <ion-text class="value">{{propertyData?.propertyDetails?.instructedDate || notAvailable}}</ion-text>
       </ion-col>
       <ion-col>
         <ion-text class="label">Property Type</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyDetails?.houseType || '-'}}</ion-text>
+        <ion-text class="value">{{getHouseTypeLookupValue(propertyData?.propertyDetails?.houseType, houseTypes) || notAvailable}}
+        </ion-text>
       </ion-col>
     </ion-row>
 
     <ion-row class="property-info" style="margin-bottom:15px;">
       <ion-col>
-        <ion-text class="label">Acquisiosn Office</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.acquisitionOffice || '-'}}</ion-text>
+        <ion-text class="label">Acquisition Office</ion-text><br>
+        <ion-text class="value">{{getHouseTypeLookupValue(propertyData?.propertyInfo?.acquisitionOffice,
+          acqisitionOffices) || notAvailable}}
+        </ion-text>
       </ion-col>
       <ion-col>
         <ion-text class="label">Category</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyDetails?.propertyCategory || '-'}}</ion-text>
+        <ion-text class="value">{{getHouseTypeLookupValue(propertyData?.propertyDetails?.propertyCategory,
+          propertyCategories) || notAvailable}}
+        </ion-text>
       </ion-col>
     </ion-row>
 
@@ -110,7 +118,5 @@
         </ion-text>
       </ion-col>
     </ion-row>
-
-
   </ion-grid>
 </div>
