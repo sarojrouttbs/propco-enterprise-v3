@@ -1,5 +1,5 @@
 <mat-accordion class="list-view-accordian" multi>
-  <mat-expansion-panel #letBoardDetails hideToggle style="margin-bottom: 10px;">
+  <mat-expansion-panel #letBoardDetails hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
         Let Board
@@ -46,7 +46,7 @@
                 <mat-datepicker #picker3></mat-datepicker>
               </mat-form-field>
             </ion-col>
-            <ion-col size="20" class="no-padding-top no-padding-bottom" style="margin-top: -30px;">
+            <ion-col size="20" class="no-padding-top no-padding-bottom toggle-btn-top-spacing">
               <ion-item>
                 <ion-label position="floating"> Board Ref </ion-label>
                 <ion-input formControlName="boardRef" [disabled]="!group.get('isBoardAllowed').value"></ion-input>
