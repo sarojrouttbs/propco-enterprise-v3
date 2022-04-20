@@ -38,4 +38,12 @@ export class AgentService {
       environment.API_BASE_URL + `options`, { params }
     );
   }
+
+  getOfficeLocations(officeCode: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `offices/${officeCode}/locations`);
+  }
+
+  getPropertyLocationsByPropertyId(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/locations`, { params });
+  }
 }
