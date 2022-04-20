@@ -38,4 +38,10 @@ export class AgentService {
       environment.API_BASE_URL + `options`, { params }
     );
   }
+
+  logout(): Observable<any> {
+    return this.httpClient.post(
+      environment.API_BASE_URL + `agents/user/logout`,{}
+    );
+  }
 }
