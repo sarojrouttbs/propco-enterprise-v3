@@ -16,6 +16,7 @@ import { ImagePageModule } from 'src/app/shared/modals/image/image.module';
 import { RouterModule, Routes } from '@angular/router';
 import { GoogleMapComponent } from './google-map/google-map.component';
 import { AgmCoreModule } from '@agm/core';
+import { DataTablesModule } from 'angular-datatables';
 
 const routes: Routes = [
   {
@@ -45,6 +46,7 @@ const routes: Routes = [
     ImagePageModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
+    DataTablesModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDCUgtEwcER2glTnnY9WqdWkKECQKJ_gto',
       language: "en",
