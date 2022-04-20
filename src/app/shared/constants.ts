@@ -14,6 +14,7 @@ export const PROPCO = {
   TOB_LOOKUP_DATA: 'tob_lookup_data',
   TERMS_AND_CONDITIONS: 'terms_and_conditions',
   REFERENCING_INFO: 'referencing_info',
+  PROPERTY_LOOKUP_DATA: 'property_lookup_data'
 };
 
 export const USER_TYPES = {
@@ -600,6 +601,7 @@ export const REFERENCING_TYPES = {
 
 export const DEFAULT_MESSAGES = {
   NO_DATA_FOUND: 'No data found!',
+  NO_RECORD_FOUND: 'No record found!',
   NO_DETAILS_AVAILABLE: 'No details available',
   errors: {
     SOMETHING_WENT_WRONG:'Something went wrong'

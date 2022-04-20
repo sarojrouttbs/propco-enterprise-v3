@@ -17,6 +17,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { GoogleMapComponent } from './google-map/google-map.component';
 import { AgmCoreModule } from '@agm/core';
 import { DataTablesModule } from 'angular-datatables';
+import { LettingsDetailsComponent } from './details/lettings-details/lettings-details.component';
+import { LetBoardComponent } from './details/let-board/let-board.component';
+import { HistoryComponent } from './details/history/history.component';
 import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
 import { AgmOverlays } from 'agm-overlays';
 
@@ -57,7 +60,7 @@ const routes: Routes = [
       libraries: ['places','geometry']
 }),
   ],
-  declarations: [GoogleMapComponent,PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent],
+  declarations: [GoogleMapComponent,PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent, LettingsDetailsComponent, LetBoardComponent, HistoryComponent],
   // exports:[PropertyPage]
 })
 export class PropertyPageModule {}
