@@ -16,6 +16,8 @@ import { ImagePageModule } from 'src/app/shared/modals/image/image.module';
 import { RouterModule, Routes } from '@angular/router';
 import { GoogleMapComponent } from './google-map/google-map.component';
 import { AgmCoreModule } from '@agm/core';
+import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
+import { AgmOverlays } from 'agm-overlays';
 
 const routes: Routes = [
   {
@@ -36,7 +38,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    CommonModule,
+  CommonModule,
     FormsModule,
     IonicModule,
     // PropertyPageRoutingModule,
@@ -45,11 +47,13 @@ const routes: Routes = [
     ImagePageModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
+    AgmJsMarkerClustererModule,
+    AgmOverlays,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDCUgtEwcER2glTnnY9WqdWkKECQKJ_gto',
       language: "en",
       libraries: ['places','geometry']
-})
+}),
   ],
   declarations: [GoogleMapComponent,PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent],
   // exports:[PropertyPage]
