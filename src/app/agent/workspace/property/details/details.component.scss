@@ -1,0 +1,13 @@
+.property-details {
+    overflow: auto;
+    .header {
+        display: flex;
+        align-items: center;
+        height: 60px;
+        ion-text {
+            font-size: 22px;
+        }
+        color: var(--ion-color-text-color);
+    }
+}
+
