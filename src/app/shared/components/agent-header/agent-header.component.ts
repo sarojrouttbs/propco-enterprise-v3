@@ -2,8 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ModalController } from "@ionic/angular";
+import { AgentService } from "src/app/agent/agent.service";
 import { WorkspaceService } from "src/app/agent/workspace/workspace.service";
-import { DEFAULTS, DEFAULT_MESSAGES } from "../../constants";
+import { DEFAULTS, DEFAULT_MESSAGES, ERROR_MESSAGE } from "../../constants";
 import { SimpleModalPage } from "../../modals/simple-modal/simple-modal.page";
 import { CommonService } from "../../services/common.service";
 import { ThemeService } from "../../services/theme.service";
@@ -26,7 +27,8 @@ export class AgentHeaderComponent implements OnInit {
     private theme: ThemeService,
     private commonService: CommonService,
     private workSpaceService: WorkspaceService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private agentService: AgentService
   ) {
     if (this.commonService.getItem("theme-mode")) {
       if (this.commonService.getItem("theme-mode") === "dark-theme") {
@@ -59,7 +61,7 @@ export class AgentHeaderComponent implements OnInit {
       cssClass: "modal-container alert-prompt",
       backdropDismiss: false,
       componentProps: {
-        data: `${DEFAULT_MESSAGES.NO_DATA_FOUND}`,
+        data: `${DEFAULT_MESSAGES.NO_RECORD_FOUND}`,
         heading: "Workspace",
         buttonList: [
           {
@@ -81,5 +83,24 @@ export class AgentHeaderComponent implements OnInit {
       this.commonService.setItem("theme-mode", "light-theme");
       this.theme.activeTheme("light-theme");
     }
+  }
+
+  async logout() {
+    const response = await this.commonService.showConfirm('Logout', 'Are you sure you want to logout?', '', 'YES', 'NO');
+    if (response) {
+      this.logoutAgent();
+    }
+  }
+
+  logoutAgent() {
+      this.agentService.logout().subscribe(
+        (res) => {
+          this.commonService.resetLocalStorage();
+          this.router.navigate(['/login'], { replaceUrl: true });
+        },
+        (error) => {
+          this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Logout', 'Error');
+        }
+      );
   }
 }

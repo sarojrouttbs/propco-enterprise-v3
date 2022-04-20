@@ -46,4 +46,10 @@ export class AgentService {
   getPropertyLocationsByPropertyId(propertyId: string, params): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/locations`, { params });
   }
+  
+  logout(): Observable<any> {
+    return this.httpClient.post(
+      environment.API_BASE_URL + `agents/user/logout`,{}
+    );
+  }
 }

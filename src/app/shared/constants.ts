@@ -601,6 +601,7 @@ export const REFERENCING_TYPES = {
 
 export const DEFAULT_MESSAGES = {
   NO_DATA_FOUND: 'No data found!',
+  NO_RECORD_FOUND: 'No record found!',
   NO_DETAILS_AVAILABLE: 'No details available',
   errors: {
     SOMETHING_WENT_WRONG:'Something went wrong'
