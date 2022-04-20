@@ -21,7 +21,7 @@
     <div>
       <ion-searchbar 
       [(ngModel)]="searchTerm" 
-      [placeholder]="'Start typing to search ' + (entityControl.value.length ? '('+ entityControl.value + ')':'')" 
+      [placeholder]="'Start typing to search ' + (entityControl.value.length ? '('+ (entityControl.value.join(', ')) + ')':'')" 
       class="searchbarCustom" 
       debounce="500" 
       (ionChange)="getItems($event)"

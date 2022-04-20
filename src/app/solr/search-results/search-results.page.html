@@ -24,8 +24,12 @@
               </mat-panel-title>
               <mat-panel-description class="ion-justify-content-end no-margin">
                 <div>
-                  <ion-icon class="accordian-icon" *ngIf="!propertyFilterPanel.expanded" name="add-circle"></ion-icon>
-                  <ion-icon class="accordian-icon" *ngIf="propertyFilterPanel.expanded" name="remove-circle"></ion-icon>
+                  <span *ngIf="!propertyFilterPanel.expanded" class="accordian-icon" title="Expand">
+                    <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+                  </span>
+                  <span *ngIf="propertyFilterPanel.expanded" class="accordian-icon" title="Collapse">
+                    <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+                  </span>                  
                 </div>
               </mat-panel-description>
             </mat-expansion-panel-header>
@@ -185,8 +189,12 @@
               </mat-panel-title>
               <mat-panel-description class="ion-justify-content-end no-margin">
                 <div>
-                  <ion-icon class="accordian-icon" *ngIf="!landlordFilterPanel.expanded" name="add-circle"></ion-icon>
-                  <ion-icon class="accordian-icon" *ngIf="landlordFilterPanel.expanded" name="remove-circle"></ion-icon>
+                  <span *ngIf="!landlordFilterPanel.expanded" class="accordian-icon" title="Expand">
+                    <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+                  </span>
+                  <span *ngIf="landlordFilterPanel.expanded" class="accordian-icon" title="Collapse">
+                    <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+                  </span>                  
                 </div>
               </mat-panel-description>
             </mat-expansion-panel-header>
@@ -248,8 +256,12 @@
               </mat-panel-title>
               <mat-panel-description class="ion-justify-content-end no-margin">
                 <div>
-                  <ion-icon class="accordian-icon" *ngIf="!tenantFilterPanel.expanded" name="add-circle"></ion-icon>
-                  <ion-icon class="accordian-icon" *ngIf="tenantFilterPanel.expanded" name="remove-circle"></ion-icon>
+                  <span *ngIf="!tenantFilterPanel.expanded" class="accordian-icon" title="Expand">
+                    <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+                  </span>
+                  <span *ngIf="tenantFilterPanel.expanded" class="accordian-icon" title="Collapse">
+                    <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+                  </span>                  
                 </div>
               </mat-panel-description>
             </mat-expansion-panel-header>
@@ -312,8 +324,12 @@
               </mat-panel-title>
               <mat-panel-description class="ion-justify-content-end no-margin">
                 <div>
-                 <ion-icon class="accordian-icon" *ngIf="!applicantFilterPanel.expanded" name="add-circle"></ion-icon>
-                  <ion-icon class="accordian-icon" *ngIf="applicantFilterPanel.expanded" name="remove-circle"></ion-icon>
+                  <span *ngIf="!applicantFilterPanel.expanded" class="accordian-icon" title="Expand">
+                    <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+                  </span>
+                  <span *ngIf="applicantFilterPanel.expanded" class="accordian-icon" title="Collapse">
+                    <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+                  </span>                  
                 </div>
               </mat-panel-description>
             </mat-expansion-panel-header>
@@ -369,8 +385,12 @@
               </mat-panel-title>
               <mat-panel-description class="ion-justify-content-end no-margin">
                 <div>
-                  <ion-icon class="accordian-icon" *ngIf="!agentFilterPanel.expanded" name="add-circle"></ion-icon>
-                  <ion-icon class="accordian-icon" *ngIf="agentFilterPanel.expanded" name="remove-circle"></ion-icon>
+                  <span *ngIf="!agentFilterPanel.expanded" class="accordian-icon" title="Expand">
+                    <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+                  </span>
+                  <span *ngIf="agentFilterPanel.expanded" class="accordian-icon" title="Collapse">
+                    <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+                  </span>                  
                 </div>
               </mat-panel-description>
             </mat-expansion-panel-header>
@@ -424,8 +444,12 @@
             </mat-panel-title>
             <mat-panel-description class="ion-justify-content-end no-margin">
               <div>
-                <ion-icon class="accordian-icon" *ngIf="!contractorFilterPanel.expanded" name="add-circle"></ion-icon>
-                <ion-icon class="accordian-icon" *ngIf="contractorFilterPanel.expanded" name="remove-circle"></ion-icon>
+                <span *ngIf="!contractorFilterPanel.expanded" class="accordian-icon" title="Expand">
+                  <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+                </span>
+                <span *ngIf="contractorFilterPanel.expanded" class="accordian-icon" title="Collapse">
+                  <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+                </span>                  
               </div>
             </mat-panel-description>
           </mat-expansion-panel-header>
@@ -860,8 +884,12 @@
                           </ion-fab>
                         </div>
                         <div>
-                          <ion-icon class="accordian-icon" *ngIf="!propertySuggestionPanel.expanded" name="add-circle"></ion-icon>
-                          <ion-icon class="accordian-icon" *ngIf="propertySuggestionPanel.expanded" name="remove-circle"></ion-icon>
+                          <span *ngIf="!propertySuggestionPanel.expanded" class="accordian-icon" title="Expand">
+                            <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+                          </span>
+                          <span *ngIf="propertySuggestionPanel.expanded" class="accordian-icon" title="Collapse">
+                            <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+                          </span>                  
                         </div>
                       </div>
                     </div>
@@ -999,8 +1027,12 @@
               </ion-fab>
             </div>
             <div>
-              <ion-icon class="accordian-icon" *ngIf="!agentSuggestionPanel.expanded" name="add-circle"></ion-icon>
-              <ion-icon class="accordian-icon" *ngIf="agentSuggestionPanel.expanded" name="remove-circle"></ion-icon>
+              <span *ngIf="!agentSuggestionPanel.expanded" class="accordian-icon" title="Expand">
+                <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+              </span>
+              <span *ngIf="agentSuggestionPanel.expanded" class="accordian-icon" title="Collapse">
+                <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+              </span>                  
             </div>
           </div>
         </div>
@@ -1079,8 +1111,12 @@
               </ion-fab>
             </div>
             <div>
-              <ion-icon class="accordian-icon" *ngIf="!landlordSuggestionPanel.expanded" name="add-circle"></ion-icon>
-              <ion-icon class="accordian-icon" *ngIf="landlordSuggestionPanel.expanded" name="remove-circle"></ion-icon>
+              <span *ngIf="!landlordSuggestionPanel.expanded" class="accordian-icon" title="Expand">
+                <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+              </span>
+              <span *ngIf="landlordSuggestionPanel.expanded" class="accordian-icon" title="Collapse">
+                <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+              </span>                  
             </div>
           </div>
         </div>
@@ -1203,8 +1239,12 @@
               </ion-fab>
             </div>
             <div>
-              <ion-icon class="accordian-icon" *ngIf="!tenantSuggestionPanel.expanded" name="add-circle"></ion-icon>
-              <ion-icon class="accordian-icon" *ngIf="tenantSuggestionPanel.expanded" name="remove-circle"></ion-icon>
+              <span *ngIf="!tenantSuggestionPanel.expanded" class="accordian-icon" title="Expand">
+                <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+              </span>
+              <span *ngIf="tenantSuggestionPanel.expanded" class="accordian-icon" title="Collapse">
+                <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+              </span>                  
             </div>
           </div>
         </div>
@@ -1303,8 +1343,12 @@
               </ion-fab>
             </div>
             <div>
-              <ion-icon class="accordian-icon" *ngIf="!applicantSuggestionPanel.expanded" name="add-circle"></ion-icon>
-              <ion-icon class="accordian-icon" *ngIf="applicantSuggestionPanel.expanded" name="remove-circle"></ion-icon>
+              <span *ngIf="!applicantSuggestionPanel.expanded" class="accordian-icon" title="Expand">
+                <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+              </span>
+              <span *ngIf="applicantSuggestionPanel.expanded" class="accordian-icon" title="Collapse">
+                <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+              </span>                  
             </div>
           </div>
         </div>
@@ -1404,8 +1448,12 @@
               </ion-fab>
             </div>
             <div>
-              <ion-icon class="accordian-icon" *ngIf="!contractorSuggestionPanel.expanded" name="add-circle"></ion-icon>
-              <ion-icon class="accordian-icon" *ngIf="contractorSuggestionPanel.expanded" name="remove-circle"></ion-icon>
+              <span *ngIf="!contractorSuggestionPanel.expanded" class="accordian-icon" title="Expand">
+                <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+              </span>
+              <span *ngIf="contractorSuggestionPanel.expanded" class="accordian-icon" title="Collapse">
+                <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+              </span>                  
             </div>
           </div>
         </div>

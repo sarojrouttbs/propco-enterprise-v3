@@ -202,7 +202,7 @@ ion-item {
   .property-img {
     height: 120px;
     min-width: 160px;
-    justify-content: center;
+    justify-content: left;
     display: flex;
   }
 
@@ -736,7 +736,7 @@ ion-item {
     margin-right: 5px;
     justify-content: end;
     .fab-icon {
-      margin: -32px 40px 0px 0px;
+      margin: -28px 40px 0px 0px;
     }
   }
 
@@ -850,6 +850,7 @@ ion-item {
 
 .cc-list-button {
   .expand-btn {
+    --box-shadow: none;
     height: 30px;
     width: 30px;
     --color: var(--ion-color-step-2000);
@@ -862,7 +863,7 @@ ion-item {
   }
   ion-fab-list {
     margin-inline: 40px;
-    margin-top: -12px;
+    margin-top: -13px;
     ion-fab-button {
       height: 36px;
       width: 36px;
