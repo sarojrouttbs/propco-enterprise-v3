@@ -20,6 +20,10 @@
     }
 
     .table-block {
+        table{
+            width: 100%; 
+            position: relative
+        }
         ion-col {
             background: var(--ion-property-details-bg);
             .label {

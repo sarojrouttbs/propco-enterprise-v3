@@ -55,7 +55,6 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
       autoWidth: true,
       responsive: true,
       ajax: (tableParams: any, callback) => {
-        this.commonService.showLoader();
         let params = new HttpParams()
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
