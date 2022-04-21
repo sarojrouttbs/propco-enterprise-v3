@@ -22,6 +22,7 @@ import { LetBoardComponent } from './details/let-board/let-board.component';
 import { HistoryComponent } from './details/history/history.component';
 import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
 import { AgmOverlays } from 'agm-overlays';
+import  {PropertyChecksComponent} from './details/property-checks/property-checks.component';
 
 const routes: Routes = [
   {
@@ -60,7 +61,7 @@ const routes: Routes = [
       libraries: ['places','geometry']
 }),
   ],
-  declarations: [GoogleMapComponent,PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent, LettingsDetailsComponent, LetBoardComponent, HistoryComponent],
+  declarations: [GoogleMapComponent,PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent, LettingsDetailsComponent, LetBoardComponent, HistoryComponent,PropertyChecksComponent],
   // exports:[PropertyPage]
 })
 export class PropertyPageModule {}
