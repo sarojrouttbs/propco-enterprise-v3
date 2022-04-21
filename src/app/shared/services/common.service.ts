@@ -128,7 +128,7 @@ export class CommonService {
     let propertyStatus;
     listOfArray = listOfArray && listOfArray.length ? listOfArray : [];
     listOfArray.find((obj) => {
-      if (obj.index === id) {
+      if (obj.index === id) {        
         propertyStatus = obj.value;        
       }
     })
@@ -709,4 +709,5 @@ export class CommonService {
   getPropertyLookup(params): Observable<Lookupdata> {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup/property', { params, responseType: 'json' });
   }
+
 }

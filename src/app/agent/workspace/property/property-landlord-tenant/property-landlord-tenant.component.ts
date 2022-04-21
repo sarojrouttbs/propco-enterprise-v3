@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { DEFAULTS } from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-property-landlord-tenant',
@@ -17,6 +18,7 @@ export class PropertyLandlordTenantComponent implements OnInit {
   selectedLandlord: any;
   tenantList: any = [];
   selectedTenant: any;
+  notAvailable = DEFAULTS.NOT_AVAILABLE
 
   constructor() { }
 
@@ -25,23 +27,26 @@ export class PropertyLandlordTenantComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.propertyLandlords && !changes.propertyLandlords.firstChange) {
       this.landlordList = this.propertyLandlords;
-      this.landlordListCtrl.patchValue(this.landlordList[0].landlordId);
+      if (this.landlordList)
+        this.landlordListCtrl.patchValue(this.landlordList[0].landlordId);
     }
 
     if (changes.propertyTenants && !changes.propertyTenants.firstChange) {
       this.tenantList = this.propertyTenants;
-      this.tenantListCtrl.patchValue(this.tenantList[0].tenantId);
+      if (this.tenantList)
+        this.tenantListCtrl.patchValue(this.tenantList[0].tenantId);
     }
   }
 
   onLandlordChange() {
     let landlord = this.propertyLandlords.filter(x => x.landlordId == this.landlordListCtrl.value);
-    this.selectedLandlord = landlord[0];    
+    this.selectedLandlord = landlord[0];
   }
 
   onTenantChange() {
     let tenant = this.propertyTenants.filter(x => x.tenantId == this.tenantListCtrl.value);
     this.selectedTenant = tenant[0];
+
   }
 
 }
