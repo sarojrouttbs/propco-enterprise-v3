@@ -39,8 +39,12 @@ ion-grid {
 }
 
 .landlord-tenant-details {
-    ion-icon{
-        font-size: 10px;
+    ion-col {
+        display: flex;
+        align-items: center;
+    }
+    ion-icon {
+        font-size: 13px;
     }
     a {
         color: var(--ion-color-text-color);
@@ -81,5 +85,18 @@ ion-grid {
     .middle-block {
         border-left: solid 1px var(--ion-color-body);
         border-right: solid 1px var(--ion-color-body);
+    }
+}
+
+.no-data {
+    justify-content: center;
+    align-items: center;
+    height: 176px;
+    font-size: 15px;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .no-data {
+        height: 195px;
     }
 }

@@ -39,6 +39,11 @@ export class AgentService {
     );
   }
 
+  getPropertyNotes(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/notes`, { params });
+  }
+  
   getOfficeLocations(officeCode: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `offices/${officeCode}/locations`);
   }
@@ -46,10 +51,10 @@ export class AgentService {
   getPropertyLocationsByPropertyId(propertyId: string, params): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/locations`, { params });
   }
-  
+
   logout(): Observable<any> {
     return this.httpClient.post(
-      environment.API_BASE_URL + `agents/user/logout`,{}
+      environment.API_BASE_URL + `agents/user/logout`, {}
     );
   }
 }
