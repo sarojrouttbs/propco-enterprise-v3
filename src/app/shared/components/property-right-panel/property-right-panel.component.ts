@@ -1,5 +1,6 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { PROPCO } from '../../constants';
+import { DEFAULTS, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -13,6 +14,12 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
   lookupdata: any;
   propertyStatuses: any;
   officeCodes: any;
+  houseTypes: any;
+  propertylookupdata: any;
+  acqisitionOffices: any;
+  propertyCategories: any;
+  portfolioSources: any;
+  notAvailable = DEFAULTS.NOT_AVAILABLE
 
   constructor(
     private commonService: CommonService
@@ -20,11 +27,13 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.getLookupData();
+    this.getPropertyLookupData();
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.propertyData && !changes.propertyData.firstChange) {
-      this.propertyData = this.propertyData
+      this.propertyData = this.propertyData;
     }
   }
 
@@ -45,10 +54,37 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
   private setLookupData(data) {
     this.propertyStatuses = data.propertyStatuses;
     this.officeCodes = data.officeCodes;
+    this.houseTypes = data.houseTypes;
   }
 
-  getLookupValue(index: string, lookup) {
+  getLookupValue(index, lookup) {
     if (index)
       return this.commonService.getLookupValue(index.toString(), lookup);
+  }
+
+  getHouseTypeLookupValue(index, lookup) {
+    if (index)
+      return this.commonService.getLookupValue(index, lookup);
+  }
+
+  private getPropertyLookupData() {
+    this.propertylookupdata = this.commonService.getItem(PROPCO.PROPERTY_LOOKUP_DATA, true);
+    if (this.propertylookupdata) {
+      this.setPropertyLookupData();
+    }
+    else {
+      let params = new HttpParams().set("hideLoader", "true");
+      this.commonService.getPropertyLookup(params).subscribe(data => {
+        this.commonService.setItem(PROPCO.PROPERTY_LOOKUP_DATA, data);
+        this.setPropertyLookupData();
+      });
+    }
+  }
+
+  private setPropertyLookupData(): void {
+    this.propertylookupdata = this.commonService.getItem(PROPCO.PROPERTY_LOOKUP_DATA, true);
+    this.acqisitionOffices = this.propertylookupdata.acqisitionOffices;
+    this.propertyCategories = this.propertylookupdata.propertyCategories;
+    this.portfolioSources = this.propertylookupdata.portfolioSources;
   }
 }

@@ -16,6 +16,7 @@ import { ImagePageModule } from 'src/app/shared/modals/image/image.module';
 import { RouterModule, Routes } from '@angular/router';
 import { GoogleMapComponent } from './google-map/google-map.component';
 import { AgmCoreModule } from '@agm/core';
+import { DataTablesModule } from 'angular-datatables';
 import { LettingsDetailsComponent } from './details/lettings-details/lettings-details.component';
 import { LetBoardComponent } from './details/let-board/let-board.component';
 import { HistoryComponent } from './details/history/history.component';
@@ -51,6 +52,7 @@ const routes: Routes = [
     ImagePageModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
+    DataTablesModule,
     AgmJsMarkerClustererModule,
     AgmOverlays,
     AgmCoreModule.forRoot({
