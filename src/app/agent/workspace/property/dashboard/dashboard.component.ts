@@ -1,9 +1,10 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonSlides, ModalController, ViewDidEnter } from '@ionic/angular';
+import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, PROPCO, DEFAULT_MESSAGES, DEFAULTS } from 'src/app/shared/constants';
 import { ImagePage } from 'src/app/shared/modals/image/image.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 @Component({
@@ -22,6 +23,15 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
   propertyTenants: any;
   propertyDetails: any;
   options: any;
+  notes: any;
+  dtOptions: any = {};
+  @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
+  notesCategories: any;
+  notesComplaints: any;
+  notesTypes: any;
+  lookupdata: any;
+  DEFAULT_MESSAGES = DEFAULT_MESSAGES;
+  notAvailable = DEFAULTS.NOT_AVAILABLE
 
   constructor(
     private modalCtrl: ModalController,
@@ -32,9 +42,40 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
 
   ngOnInit() {
     this.initApi();
+    const that = this;
+    this.dtOptions = {
+      paging: true,
+      pagingType: 'full_numbers',
+      serverSide: true,
+      processing: true,
+      searching: false,
+      ordering: false,
+      pageLength: 5,
+      lengthMenu: [5, 10, 15],
+      autoWidth: true,
+      responsive: true,
+      ajax: (tableParams: any, callback) => {
+        let params = new HttpParams()
+          .set('limit', tableParams.length)
+          .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
+          .set("hideLoader", "true");
+        that.agentService.getPropertyNotes(this.selectedEntityDetails.entityId, params).subscribe(res => {
+          this.notes = res && res.data ? res.data : [];
+          callback({
+            recordsTotal: res ? res.count : 0,
+            recordsFiltered: res ? res.count : 0,
+            data: []
+          });
+        })
+      },
+      language: {
+        processing: 'Loading...'
+      }
+    };
   }
 
   async initApi() {
+    this.getLookupData();
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
     this.getOptions();
@@ -42,6 +83,30 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
     this.getPropertyById(this.selectedEntityDetails.entityId);
     this.getPropertyLandlords(this.selectedEntityDetails.entityId);
     this.getPropertyTenant(this.selectedEntityDetails.entityId);
+  }
+
+  private getLookupData() {
+    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
+    if (this.lookupdata) {
+      this.setLookupData(this.lookupdata);
+    } else {
+      this.commonService.getLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
+        this.lookupdata = data;
+        this.setLookupData(data);
+      });
+    }
+  }
+
+  private setLookupData(data) {
+    this.notesCategories = data.notesCategories;
+    this.notesComplaints = data.notesComplaint;
+    this.notesTypes = data.notesType;
+  }
+
+  getLookupValue(index, lookup, type?) {
+    index = (type == 'category' && index) ? Number(index) : index;
+    return this.commonService.getLookupValue(index, lookup);
   }
 
   private fetchItems() {
@@ -86,7 +151,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
       this.agentService.getPropertyById(propertyId, params).subscribe(
         (res) => {
           this.propertyData = res && res.data ? res.data : '';
-          resolve(res.data);
+          resolve(true);
         },
         (error) => {
           resolve(false);
@@ -102,7 +167,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
       this.agentService.getPropertyLandlords(propertyId, params).subscribe(
         (res) => {
           this.propertyLandlords = res && res.data ? res.data : '';
-          resolve(res.data);
+          resolve(true);
         },
         (error) => {
           resolve(false);
@@ -118,7 +183,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
       this.agentService.getPropertyTenants(propertyId, params).subscribe(
         (res) => {
           this.propertyTenants = res && res.data ? res.data : '';
-          resolve(res.data);
+          resolve(true);
         },
         (error) => {
           resolve(false);
@@ -152,7 +217,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
       this.agentService.getSyatemOptions(params).subscribe(
         (res) => {
           this.options = res ? res.WEB_IMAGE_URL : '';
-          resolve(res.data);
+          resolve(true);
         },
         (error) => {
           resolve(false);
@@ -168,6 +233,12 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
 
   prev() {
     this.slides.slidePrev();
+  }
+
+  showNoteDescription(noteText): void {
+    if (noteText) {
+      this.commonService.showAlert('Notes', noteText, '', 'notes-alert');
+    }
   }
 }
 

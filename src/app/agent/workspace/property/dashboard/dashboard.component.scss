@@ -18,6 +18,21 @@
     .right-panel-block {
         border: solid 1px var(--ion-property-details-bg);
     }
+
+    .table-block {
+        table {
+            width: 100%;
+            position: relative;
+        }
+        ion-col {
+            background: var(--ion-property-details-bg);
+            .label {
+                color: var(--ion-color-property-status-bg);
+                font-size: 20px;
+                font-weight: 600;
+            }
+        }
+    }
 }
 
 ion-slide {
@@ -70,10 +85,24 @@ ion-slide {
     }
 }
 
-.swiper-slide img{
+.swiper-slide img {
     width: 100% !important;
     max-width: 100% !important;
     height: 100% !important;
     max-height: 100% !important;
     object-fit: fill !important;
+}
+
+.dataTables_wrapper {
+    #propertyNotesTable_length {
+        color: white !important;
+    }
+}
+table.dataTable tbody tr {
+    background: var(--ion-propert-rent-block-bg);
+    color: var(--ion-color-text-color);
+    i {
+        background: var(--ion-color-notes-icon-bg);
+        color: var(--ion-color-notes-icon);
+    }
 }

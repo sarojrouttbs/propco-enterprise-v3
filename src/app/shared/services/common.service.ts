@@ -128,7 +128,7 @@ export class CommonService {
     let propertyStatus;
     listOfArray = listOfArray && listOfArray.length ? listOfArray : [];
     listOfArray.find((obj) => {
-      if (obj.index === id) {
+      if (obj.index === id) {        
         propertyStatus = obj.value;        
       }
     })
@@ -200,14 +200,14 @@ export class CommonService {
     }
   }
 
-  async showAlert(title: string, displayText: string, subtitle?: string) {
+  async showAlert(title: string, displayText: string, subtitle?: string, customeClass?) {
     return new Promise((resolve, reject) => {
       let alertPopup: any;
       this.alertCtrl.create({
         header: title,
         subHeader: subtitle ? subtitle : undefined,
         message: displayText,
-        cssClass: 'common-alert-box',
+        cssClass: customeClass? customeClass :'common-alert-box',
         buttons: [{
           text: 'OK',
           handler: () => {
@@ -705,4 +705,9 @@ export class CommonService {
     }
     return url;
   }
+
+  getPropertyLookup(params): Observable<Lookupdata> {
+    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup/property', { params, responseType: 'json' });
+  }
+
 }
