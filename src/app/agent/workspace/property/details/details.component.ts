@@ -29,10 +29,11 @@ export class DetailsComponent implements OnInit {
     this.createForm();
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
-    this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);
+    this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);    
     await this.patchLettingsDetails();
     await this.patchLetBoardDetails();
     await this.patchPropertyHistory();
+    await this.patchPropertyChecks();
     await this.patchPropertyAddressDetails();
     this.getPropertyLocationsByPropertyId(this.selectedEntityDetails.entityId);
   }
@@ -92,13 +93,27 @@ export class DetailsComponent implements OnInit {
         slipOrderedOn: [''],
         boardRef: ['']
       }),
-      history: this._formBuilder.group({
+      history: this._formBuilder.group({  
         createdAt: [''],
         createdBy: [''], //* - pending
         statusChangedOn: [''],
         statusChangedBy: [''], //* - pending
         maStatusChangedOn: [''],
         maStatusChangedBy: [''] //* - pending
+      }),
+      propertyChecksForm:  this._formBuilder.group({
+        hasLetBefore: [''],
+        hasGas: [''],
+        hasPat: [''],
+        hasOil: [''],
+        hasSolidFuel: [''],
+        smokeDetectors: [''], //* - pending
+        numberOfSmokeAlarms: [''],//* - pending
+        landlordSigned: [''],//* - pending
+        carbonDetectors: [''],//* - pending
+        NocarbonDetectors: [''],//* - pending
+        NoFireBlankets: [''],//* - pending
+        NoFireExtinguishers: ['']//* - pending
       }),
       propertyAddressForm : this._formBuilder.group({
         postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
@@ -120,6 +135,7 @@ export class DetailsComponent implements OnInit {
         floor:[''],
         block:['']
       })
+
     })
   }
 
@@ -187,6 +203,25 @@ export class DetailsComponent implements OnInit {
       statusChangedBy: '', //* - pending
       maStatusChangedOn: this.propertyDetails?.propertyInfo?.maStatusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.maStatusChangedOn, 'dd/MM/yyyy') : '-',
       maStatusChangedBy: '' //* - pending
+    });
+  }
+
+
+  private patchPropertyChecks() {
+    const control = this.propertyDetailsForm.controls['propertyChecksForm'];
+    control.patchValue({
+      hasLetBefore: this.propertyDetails?.propertyDetails?.hasLetBefore ? this.propertyDetails?.propertyDetails?.hasLetBefore : false,
+      hasGas: this.propertyDetails?.propertyDetails?.hasGas ? this.propertyDetails?.propertyDetails?.hasGas : false,
+      hasPat: this.propertyDetails?.propertyDetails?.hasPat ? this.propertyDetails?.propertyDetails?.hasPat : false,
+      hasOil: this.propertyDetails?.propertyDetails?.hasOil ? this.propertyDetails?.propertyDetails?.hasOil : false,
+      hasSolidFuel: this.propertyDetails?.propertyDetails?.hasSolidFuel ? this.propertyDetails?.propertyDetails?.hasSolidFuel : false,
+      smokeDetectors: '', //* - pending
+      numberOfSmokeAlarms: '', //* - pending
+      landlordSigned: '', //* - pending
+      carbonDetectors: '', //* - pending
+      NocarbonDetectors: '', //* - pending
+      NoFireBlankets: '', //* - pending
+      NoFireExtinguishers: '', //* - pending
     });
   }
 

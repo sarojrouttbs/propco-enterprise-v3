@@ -190,3 +190,9 @@ table.dataTable.dtr-inline.collapsed
     cursor: pointer;
   }
 }
+
+#propertyNotesTable_wrapper{
+  .dataTables_length, .dataTables_info, .dataTables_paginate{
+    color: var(--ion-color-text-color);
+  }
+}

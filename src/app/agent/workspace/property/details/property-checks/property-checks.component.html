@@ -1,0 +1,108 @@
+
+<mat-accordion class="list-view-accordian" multi>
+  <mat-expansion-panel #propertyChecksDetails hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Checks
+            </mat-panel-title>
+      <mat-panel-description class="ion-justify-content-end no-margin">
+        <div>
+          <ion-icon class="accordian-icon" *ngIf="!propertyChecksDetails.expanded" name="add-circle"></ion-icon>
+          <ion-icon class="accordian-icon" *ngIf="propertyChecksDetails.expanded" name="remove-circle"></ion-icon>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <ion-card-content id="details">
+      <form [formGroup]="group">
+        <ion-row>
+          <ion-col size="35">
+            <ion-row>
+              <ion-col>
+                <ion-item lines="none" class="mt-7">
+                  <ion-toggle formControlName="hasLetBefore" color="primary">
+                  </ion-toggle>
+                  <ion-label>Has property been let before?</ion-label>
+                </ion-item>
+                <ion-item lines="none" class="mt-7">
+                  <ion-toggle formControlName="hasGas" color="primary">
+                  </ion-toggle>
+                  <ion-label>Does property have gas?</ion-label>
+                </ion-item>
+                <ion-item lines="none" class="mt-7">
+                  <ion-toggle formControlName="hasPat" color="primary">
+                  </ion-toggle>
+                  <ion-label>Does property have PAT?</ion-label>
+                </ion-item>
+                <ion-item lines="none" class="mt-7">
+                  <ion-toggle formControlName="landlordSigned" color="primary">
+                  </ion-toggle>
+                  <ion-label>Electrical indemnity signed by landlord?</ion-label>
+                </ion-item>
+                <ion-item lines="none" class="mt-7">
+                  <ion-toggle formControlName="hasOil" color="primary">
+                  </ion-toggle>
+                  <ion-label>Does property have oil?</ion-label>
+                </ion-item>
+                <ion-item lines="none" class="mt-7">
+                  <ion-toggle formControlName="hasSolidFuel" color="primary">
+                  </ion-toggle>
+                  <ion-label>Does property have solid fuel?</ion-label>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col size="32.5">
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Smoke Detectors
+                    <ion-text class="mandatory">*
+                    </ion-text>
+                  </ion-label>
+                  <ion-select interface="popover" formControlName="smokeDetectors">
+                    <ion-select-option [value]="item.index" *ngFor="let item of smokeDetectors">
+                      {{item.value}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Number Of Smoke Alarms</ion-label>
+                  <ion-input formControlName="numberOfSmokeAlarms"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Carbon Monoxide Detectors
+                    <ion-text class="mandatory">*
+                    </ion-text>
+                  </ion-label>
+                  <ion-select interface="popover" formControlName="carbonDetectors">
+                    <ion-select-option [value]="item.index" *ngFor="let item of carbonMonoxideDetectors">
+                      {{item.value}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col size="32.5">
+            <ion-row class="row-margin">
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Number of Carbon Monoxide Detectors</ion-label>
+                  <ion-input formControlName="NocarbonDetectors"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Number of Fire Blankets</ion-label>
+                  <ion-input formControlName="NoFireBlankets"></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Number Of Fire Extinguishers</ion-label>
+                  <ion-input formControlName="NoFireExtinguishers"></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </form>
+    </ion-card-content>
+  </mat-expansion-panel>
+</mat-accordion>
