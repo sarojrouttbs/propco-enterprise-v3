@@ -605,7 +605,8 @@ export const DEFAULT_MESSAGES = {
   NO_DETAILS_AVAILABLE: 'No details available',
   errors: {
     SOMETHING_WENT_WRONG:'Something went wrong'
-  }
+  },
+  NOT_AVAILABLE_TEXT : 'Not Available'
 };
 
 export const FAULT_NOTIFICATION_STATE = {

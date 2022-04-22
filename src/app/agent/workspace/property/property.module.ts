@@ -22,7 +22,8 @@ import { LetBoardComponent } from './details/let-board/let-board.component';
 import { HistoryComponent } from './details/history/history.component';
 import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
 import { AgmOverlays } from 'agm-overlays';
-import { PropertyChecksComponent } from './details/property-checks/property-checks.component';
+import  {PropertyChecksComponent} from './details/property-checks/property-checks.component';
+import { CallInfoModalPageModule } from 'src/app/shared/modals/call-info-modal/call-info-modal.module';
 
 const routes: Routes = [
   {
@@ -43,7 +44,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    CommonModule,
+  CommonModule,
     FormsModule,
     IonicModule,
     // PropertyPageRoutingModule,
@@ -58,9 +59,11 @@ const routes: Routes = [
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDCUgtEwcER2glTnnY9WqdWkKECQKJ_gto',
       language: "en",
-      libraries: ['places', 'geometry']
-    })
+      libraries: ['places','geometry']
+    }),
+    CallInfoModalPageModule
   ],
-  declarations: [GoogleMapComponent, PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent, LettingsDetailsComponent, LetBoardComponent, HistoryComponent, PropertyChecksComponent],
+  declarations: [GoogleMapComponent,PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent, LettingsDetailsComponent, LetBoardComponent, HistoryComponent,PropertyChecksComponent],
+  // exports:[PropertyPage]
 })
-export class PropertyPageModule { }
+export class PropertyPageModule {}

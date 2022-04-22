@@ -1,7 +1,7 @@
 <ng-container *ngIf="type == 'landlord'">
   <ion-grid class="landlord-block">
-    <ion-row class="landlord-tenant-count">
-      <ion-col>
+    <ion-row>
+      <ion-col class="landlord-tenant-count">
         <ion-fab-button>
           <span>TT</span>
         </ion-fab-button>
@@ -16,13 +16,13 @@
             (ionChange)="onLandlordChange();">
             <ion-select-option [value]="item.landlordId" *ngFor="let item of landlordList">
               {{item.name}}
-              <span>({{item?.rentPercentage + '%'}})</span>
+              <span *ngIf="item?.rentPercentage">({{item?.rentPercentage + '%'}})</span>
             </ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
       <ion-row class="landlord-tenant-details">
-        <ion-col size="20">
+        <ion-col size="25">
           <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
           <ion-text> View </ion-text>
         </ion-col>
@@ -30,13 +30,14 @@
           <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
           <ion-text><a href="mailto:{{selectedLandlord?.email || notAvailable}}"> Email </a> </ion-text>
         </ion-col>
-        <ion-col size="55">
+        <ion-col size="25">
           <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
-          <ion-text> <a href="tel:{{selectedLandlord?.mobile || selectedLandlord?.businessTelephoneNo ||
-            selectedLandlord?.homeTelephoneNo || notAvailable}}"> {{selectedLandlord?.mobile ||
-              selectedLandlord?.businessTelephoneNo
-              ||
-              selectedLandlord?.homeTelephoneNo || notAvailable}} </a></ion-text>
+          <ion-text (click)="openCallInfo(selectedLandlord, 'tel')"> Tel </ion-text>
+        </ion-col>
+
+        <ion-col size="25">
+          <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
+          <ion-text (click)="openCallInfo(selectedLandlord, 'mobile')"> Mobile </ion-text>
         </ion-col>
       </ion-row>
       <ion-row class="rent-history-block">
@@ -78,13 +79,14 @@
 
 <ng-container *ngIf="type == 'tenant'">
   <ion-grid>
-    <ion-row class="landlord-tenant-count">
-      <ion-col>
+    <ion-row>
+      <ion-col class="landlord-tenant-count">
         <ion-fab-button>
           <span>TT</span>
         </ion-fab-button>
         <ion-text> &nbsp;Current Tenants ({{tenantList.length}}) </ion-text>
       </ion-col>
+      <ion-col class="tenant-status"><span>{{getLookupValue(selectedTenant?.status, tenantStatuses)}}</span></ion-col>
     </ion-row>
     <ng-container *ngIf="tenantList.length>0; then ifBlock else elseBlock"></ng-container>
     <ng-template #ifBlock>
@@ -99,7 +101,7 @@
         </ion-col>
       </ion-row>
       <ion-row class="landlord-tenant-details">
-        <ion-col size="20">
+        <ion-col size="25">
           <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
           <ion-text> View </ion-text>
         </ion-col>
@@ -107,12 +109,13 @@
           <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
           <ion-text><a href="mailto:{{selectedTenant?.email || notAvailable}}"> Email </a> </ion-text>
         </ion-col>
-        <ion-col size="55">
+        <ion-col size="25">
           <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
-          <ion-text> <a href="tel:{{selectedTenant?.mobile || selectedTenant?.businessTelephoneNo || selectedTenant?.homeTelephoneNo ||
-            notAvailable}}">
-              {{selectedTenant?.mobile || selectedTenant?.businessTelephoneNo || selectedTenant?.homeTelephoneNo ||
-              notAvailable}} </a> </ion-text>
+          <ion-text (click)="openCallInfo(selectedTenant, 'tel')"> Tel </ion-text>
+        </ion-col>
+        <ion-col size="25">
+          <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
+          <ion-text (click)="openCallInfo(selectedTenant, 'mobile')"> Mobile </ion-text>
         </ion-col>
       </ion-row>
 
