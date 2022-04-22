@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
           .set("hideLoader", "true");
         that.agentService.getPropertyNotes(this.selectedEntityDetails.entityId, params).subscribe(res => {
-          this.notes = res && res.data ? res.data : [];          
+          this.notes = res && res.data ? res.data : [];
           callback({
             recordsTotal: res ? res.count : 0,
             recordsFiltered: res ? res.count : 0,
@@ -237,7 +237,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
 
   showNoteDescription(noteText): void {
     if (noteText) {
-      this.commonService.showAlert('Notes', noteText);
+      this.commonService.showAlert('Notes', noteText, '', 'notes-alert');
     }
   }
 }
