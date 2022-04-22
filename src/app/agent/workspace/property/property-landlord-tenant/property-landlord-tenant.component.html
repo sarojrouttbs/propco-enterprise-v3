@@ -96,6 +96,7 @@
             (ionChange)="onTenantChange();">
             <ion-select-option [value]="item.tenantId" *ngFor="let item of tenantList">
               {{item.name || item.title +' '+ item.forename}}
+              <span *ngIf="item?.isLead"> - {{item?.isLead ? 'Primary' : 'Co-Tenant' }}</span>
             </ion-select-option>
           </ion-select>
         </ion-col>
