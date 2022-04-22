@@ -34,7 +34,7 @@
                   <ion-label>Does property have PAT?</ion-label>
                 </ion-item>
                 <ion-item lines="none" class="mt-7">
-                  <ion-toggle formControlName="landlordSigned" color="primary">
+                  <ion-toggle formControlName="hasElectricalIndemnitySigned" color="primary">
                   </ion-toggle>
                   <ion-label>Electrical indemnity signed by landlord?</ion-label>
                 </ion-item>
@@ -67,14 +67,14 @@
                 </ion-item>
                 <ion-item>
                   <ion-label position="floating">Number Of Smoke Alarms</ion-label>
-                  <ion-input formControlName="numberOfSmokeAlarms"></ion-input>
+                  <ion-input formControlName="smokeAlarmNo"></ion-input>
                 </ion-item>
                 <ion-item>
                   <ion-label position="floating">Carbon Monoxide Detectors
                     <ion-text class="mandatory">*
                     </ion-text>
                   </ion-label>
-                  <ion-select interface="popover" formControlName="carbonDetectors">
+                  <ion-select interface="popover" formControlName="carbonMonoxideDetectors">
                     <ion-select-option [value]="item.index" *ngFor="let item of carbonMonoxideDetectors">
                       {{item.value}}
                     </ion-select-option>
@@ -92,11 +92,11 @@
                 </ion-item>
                 <ion-item>
                   <ion-label position="floating">Number of Fire Blankets</ion-label>
-                  <ion-input formControlName="NoFireBlankets"></ion-input>
+                  <ion-input formControlName="numberOfFireBlankets"></ion-input>
                 </ion-item>
                 <ion-item>
                   <ion-label position="floating">Number Of Fire Extinguishers</ion-label>
-                  <ion-input formControlName="NoFireExtinguishers"></ion-input>
+                  <ion-input formControlName="numberOfFireExtinguishers"></ion-input>
                 </ion-item>
               </ion-col>
             </ion-row>
