@@ -1,62 +1,66 @@
 p {
   font-family: Lato;
 }
-  agm-map {
-      height: 300px;
-      position: relative;
-    }
 
-  .address{
-    position: absolute;
-    top: 0px;
-    left: 0;
-    background: #0ef4f0;
-    width: 27%;
-    font-size: 20px;
-    line-height: 33px;
-    opacity: 0.5;
-  }
+agm-map {
+  height: 300px;
+  position: relative;
+}
 
-  .span-block{
-    display: block;
-  }
-  .msg{
-    margin-left: 20%;
-  }
+.address {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  background: var(--ion-color-medium);
+  width: auto;
+  font-size: 15px;
+  line-height: 24px;
+  opacity: 0.5;
+  padding: 10px;
+}
 
-  .address:hover {
-    opacity: 1.0;
-  }
+.span-block {
+  display: block;
+}
 
-  .wrapper{
-    position: relative;
-    margin: auto;
-  }
+.msg {
+  margin: auto;
+  font-size: 20px;
+}
 
-  .map {
-    position: relative;
-  }
-  
-  .map-center-overlay {
-    margin: 0;
-    position: absolute;
-    top: 50%; 
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-  
-  .agm-map-container { height: 300px; }
+.address:hover {
+  opacity: 1.0;
+}
 
-  agm-map {
-    height: 300px;
-  }
-  
-  .msg-div{
-    display: flex;
-    align-items: center;
-  }
-  .msg{
-    margin: auto;
+.wrapper {
+  position: relative;
+  margin: auto;
+}
 
-  }
+.map {
+  position: relative;
+}
+
+.map-center-overlay {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.agm-map-container {
+  height: 300px;
+}
+
+agm-map {
+  height: 300px;
+}
+
+.msg-div {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  font-size: 25px
+}
