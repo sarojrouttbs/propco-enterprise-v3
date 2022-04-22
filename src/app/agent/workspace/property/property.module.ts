@@ -4,8 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { PropertyPageRoutingModule } from './property-routing.module';
-
 import { PropertyPage } from './property.page';
 import { MaterialModule } from 'src/app/material.module';
 import { ComponentsModule } from 'src/app/shared/components/components.module';
@@ -24,6 +22,7 @@ import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
 import { AgmOverlays } from 'agm-overlays';
 import  {PropertyChecksComponent} from './details/property-checks/property-checks.component';
 import { CallInfoModalPageModule } from 'src/app/shared/modals/call-info-modal/call-info-modal.module';
+import { PropertyAddressComponent } from './details/property-address/property-address.component';
 
 const routes: Routes = [
   {
@@ -63,7 +62,6 @@ const routes: Routes = [
     }),
     CallInfoModalPageModule
   ],
-  declarations: [GoogleMapComponent,PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent, LettingsDetailsComponent, LetBoardComponent, HistoryComponent,PropertyChecksComponent],
-  // exports:[PropertyPage]
+  declarations: [GoogleMapComponent, PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent, LettingsDetailsComponent, LetBoardComponent, HistoryComponent, PropertyChecksComponent,PropertyAddressComponent],
 })
 export class PropertyPageModule {}
