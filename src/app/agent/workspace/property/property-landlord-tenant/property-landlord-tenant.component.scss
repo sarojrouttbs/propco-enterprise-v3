@@ -6,24 +6,27 @@ ion-grid {
     border-right: solid 2px var(--ion-color-amenity-bg);
 }
 .landlord-tenant-count {
-    ion-col {
-        display: flex;
-        align-items: center;
-        font-size: 15px;
-        & > ion-fab-button {
-            --background: var(--ion-color-landlord-tenant-fab-btn);
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    & > ion-fab-button {
+        --background: var(--ion-color-landlord-tenant-fab-btn);
+        color: var(--ion-color-landlord-tenant-fab-text);
+        width: 25px;
+        height: 25px;
+        --box-shadow: none;
+        span {
             color: var(--ion-color-landlord-tenant-fab-text);
-            width: 25px;
-            height: 25px;
-            --box-shadow: none;
-            span {
-                color: var(--ion-color-landlord-tenant-fab-text);
-            }
-        }
-        ion-text {
-            color: var(--ion-color-text-color);
         }
     }
+    ion-text {
+        color: var(--ion-color-text-color);
+    }
+}
+
+.tenant-status {
+    text-align: end;
+    color: var(--ion-color-property-status-bg);
 }
 
 .landlord-tenant-dropdown {
@@ -42,9 +45,12 @@ ion-grid {
     ion-col {
         display: flex;
         align-items: center;
-    }
-    ion-icon {
-        font-size: 13px;
+        ion-icon {
+            font-size: 13px;
+        }
+        ion-text{
+            cursor: pointer;
+        }
     }
     a {
         color: var(--ion-color-text-color);
