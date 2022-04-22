@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { ValidationService } from 'src/app/shared/services/validation.service';
 
 @Component({
   selector: 'app-details',
@@ -33,6 +34,7 @@ export class DetailsComponent implements OnInit {
     await this.patchLetBoardDetails();
     await this.patchPropertyHistory();
     await this.patchPropertyChecks();
+    await this.patchPropertyAddressDetails();
     this.getPropertyLocationsByPropertyId(this.selectedEntityDetails.entityId);
   }
 
@@ -113,6 +115,26 @@ export class DetailsComponent implements OnInit {
         numberOfFireBlankets: [''],
         numberOfFireExtinguishers: ['']
       }),
+      propertyAddressForm : this._formBuilder.group({
+        postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
+        addressdetails: [''],
+        buildingNumber: [''],
+        buildingName: [''],
+        street: [''],
+        addressLine1: ['', Validators.required],
+        addressLine2: ['', Validators.required],
+        addressLine3: [''],
+        locality: [''],
+        town: ['', Validators.required],
+        county: [''],
+        country: [''],
+        latitude: [''],
+        longitude: [''],
+        pafref:[''],
+        organisationName:[''],
+        floor:[''],
+        block:['']
+      })
 
     })
   }
@@ -206,6 +228,29 @@ export class DetailsComponent implements OnInit {
     });
   }
 
+  private patchPropertyAddressDetails() {
+    const control = this.propertyDetailsForm.controls['propertyAddressForm'];
+    control.patchValue({
+      postcode: this.propertyDetails?.propertyInfo?.address.postcode,
+      addressdetails: [''],
+      buildingNumber: this.propertyDetails?.propertyInfo?.address.buildingNumber,
+      buildingName: this.propertyDetails?.propertyInfo?.address.buildingName,
+      street: this.propertyDetails?.propertyInfo?.address.street,
+      addressLine1: this.propertyDetails?.propertyInfo?.address.addressLine1,
+      addressLine2: this.propertyDetails?.propertyInfo?.address.addressLine2,
+      addressLine3: this.propertyDetails?.propertyInfo?.address.addressLine3,
+      locality: this.propertyDetails?.propertyInfo?.address.locality,
+      town: this.propertyDetails?.propertyInfo?.address.town,
+      county: this.propertyDetails?.propertyInfo?.address.county,
+      country: this.propertyDetails?.propertyInfo?.address.country,
+      latitude: this.propertyDetails?.propertyInfo?.address.latitude,
+      longitude: this.propertyDetails?.propertyInfo?.address.longitude,
+      pafref:this.propertyDetails?.propertyInfo?.address.pafReference,
+      organisationName: this.propertyDetails?.propertyInfo?.address.organisationName,
+      floor: this.propertyDetails?.propertyDetails?.floor,
+      block: this.propertyDetails?.propertyInfo?.block,
+    });
+  }
 
   private getPropertyLocationsByPropertyId(propertyId: string) {
     let params = new HttpParams().set("hideLoader", "true");
