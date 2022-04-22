@@ -4,19 +4,19 @@
     <ion-row class="amenity-row">
       <ion-col>
         <div class="amenity-wrapper">
-          <i class="propcoicon propcoicon-beds no-background"></i> {{propertyData?.propertyDetails?.numberOfBedroom ||
+          <i class="propcoicon propcoicon-beds no-background"></i> {{propertyData?.numberOfBedroom ||
           '0'}}
         </div>
       </ion-col>
       <ion-col>
         <div class="amenity-wrapper">
-          <i class="propcoicon propcoicon-bathrooms no-background"></i>{{propertyData?.propertyDetails?.numberOfBathroom
+          <i class="propcoicon propcoicon-bathrooms no-background"></i>{{propertyData?.numberOfBathroom
           || '0'}}
         </div>
       </ion-col>
       <ion-col>
         <div class="amenity-wrapper">
-          <i class="propcoicon propcoicon-lounge no-background"></i>{{propertyData?.propertyDetails?.numberOfReception
+          <i class="propcoicon propcoicon-lounge no-background"></i>{{propertyData?.numberOfReception
           || '0'}}
         </div>
       </ion-col>
@@ -32,27 +32,28 @@
         <ion-text class="rent">RENT</ion-text>
       </ion-col>
       <ion-col>
-        <ion-text class="rent-frequency">{{propertyData?.propertyDetails?.advertisementRent || '0'}} </ion-text>
-        <ion-text class="frequency">PER WEEK</ion-text>
+        <ion-text class="rent-frequency">{{propertyData?.advertisementRent || notAvailable}} </ion-text>
+        <ion-text class="frequency">{{getAdvLookupValue(propertyData?.advertisementRentFrequency, advertisementRentFrequencies) || notAvailable}}
+         </ion-text>
       </ion-col>
       <ion-col class="furnishing">
         <ion-text>
-          {{getLookupValue(propertyData?.propertyDetails?.furnishingType, furnishingTypes) || '-'}}
+          {{getLookupValue(propertyData?.furnishingType, furnishingTypes) || notAvailable}}
         </ion-text><br>
-        <ion-text>MANAGED</ion-text>
+        <ion-text> {{getLookupValue(propertyData?.managementType, managementTypes) || notAvailable}}</ion-text>
       </ion-col>
       <ion-col>
 
       </ion-col>
 
       <ion-col class="booking-office">
-        <ion-text>{{getLookupValue(propertyData?.propertyInfo?.officeCode, officeCodes) || '-'}}
+        <ion-text>{{getLookupValue(propertyData?.propertyInfo?.officeCode, officeCodes) || notAvailable}}
         </ion-text>
       </ion-col>
 
       <ion-col class="agent">
         <ion-text class="query">Other Agents?</ion-text>
-        <ion-text>&nbsp; {{propertyData?.propertyInfo?.isOnWithOtherAgent || '-'}}</ion-text>
+        <ion-text>&nbsp; {{propertyData?.propertyInfo?.isOnWithOtherAgent || notAvailable}}</ion-text>
       </ion-col>
     </ion-row>
   </ion-grid>
