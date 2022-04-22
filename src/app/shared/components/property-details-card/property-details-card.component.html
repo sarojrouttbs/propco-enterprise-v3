@@ -4,25 +4,26 @@
     <ion-row class="amenity-row">
       <ion-col>
         <div class="amenity-wrapper">
-          <i class="propcoicon propcoicon-beds no-background"></i> {{propertyData?.numberOfBedroom ||
+          <i class="propcoicon propcoicon-beds no-background"></i> {{propertyData?.propertyDetails?.numberOfBedroom ||
           '0'}}
         </div>
       </ion-col>
       <ion-col>
         <div class="amenity-wrapper">
-          <i class="propcoicon propcoicon-bathrooms no-background"></i>{{propertyData?.numberOfBathroom
+          <i class="propcoicon propcoicon-bathrooms no-background"></i>{{propertyData?.propertyDetails?.numberOfBathroom
           || '0'}}
         </div>
       </ion-col>
       <ion-col>
         <div class="amenity-wrapper">
-          <i class="propcoicon propcoicon-lounge no-background"></i>{{propertyData?.numberOfReception
+          <i class="propcoicon propcoicon-lounge no-background"></i>{{propertyData?.propertyDetails?.numberOfReception
           || '0'}}
         </div>
       </ion-col>
       <ion-col>
         <div class="amenity-wrapper">
-          <i class="propcoicon propcoicon-garage no-background"></i>4
+          <i class="propcoicon propcoicon-garage no-background"></i>{{getLookupValuebb(propertyData?.propertyDetails?.parking, parkingTypes)
+            || '0'}}
         </div>
       </ion-col>
     </ion-row>
@@ -32,33 +33,32 @@
         <ion-text class="rent">RENT</ion-text>
       </ion-col>
       <ion-col>
-        <ion-text class="rent-frequency">{{propertyData?.advertisementRent || notAvailable}} </ion-text>
-        <ion-text class="frequency">{{getAdvLookupValue(propertyData?.advertisementRentFrequency, advertisementRentFrequencies) || notAvailable}}
+        <ion-text class="rent-frequency">{{propertyData?.propertyDetails?.advertisementRent || notAvailable}} </ion-text>
+        <ion-text class="frequency" *ngIf="propertyData?.propertyDetails?.advertisementRent">{{getAdvLookupValue(propertyData?.propertyDetails?.advertisementRentFrequency, advertisementRentFrequencies)}}
          </ion-text>
       </ion-col>
       <ion-col class="furnishing">
         <ion-text>
-          {{getLookupValue(propertyData?.furnishingType, furnishingTypes) || notAvailable}}
+          {{getLookupValue(propertyData?.propertyDetails?.furnishingType, furnishingTypes) || notAvailable}}
         </ion-text><br>
-        <ion-text> {{getLookupValue(propertyData?.managementType, managementTypes) || notAvailable}}</ion-text>
-      </ion-col>
-      <ion-col>
-
+        <ion-text> {{getLookupValue(propertyData?.propertyInfo?.managementType, managementTypes) || notAvailable}}</ion-text>
       </ion-col>
 
       <ion-col class="booking-office">
-        <ion-text>{{getLookupValue(propertyData?.propertyInfo?.officeCode, officeCodes) || notAvailable}}
+        <ion-text>{{getLookupValue(propertyData?.propertyInfo?.bookingOfficeCode, officeCodes) || notAvailable}}
         </ion-text>
       </ion-col>
 
       <ion-col class="agent">
         <ion-text class="query">Other Agents?</ion-text>
-        <ion-text>&nbsp; {{propertyData?.propertyInfo?.isOnWithOtherAgent || notAvailable}}</ion-text>
+        <ion-text>&nbsp; {{propertyData?.propertyInfo?.isOnWithOtherAgent ?'Yes':'No' || notAvailable}} </ion-text>
+      </ion-col>
+
+      <ion-col class="agent">
+        <ion-text class="query">Agent Name</ion-text>
+        <ion-text>&nbsp; {{propertyData?.propertyInfo?.agentName || notAvailable}} </ion-text>
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-grid>
-
-
-  </ion-grid>
+  
 </div>
