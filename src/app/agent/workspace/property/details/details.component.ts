@@ -29,7 +29,7 @@ export class DetailsComponent implements OnInit {
     this.createForm();
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
-    this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);    
+    this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);   
     await this.patchLettingsDetails();
     await this.patchLetBoardDetails();
     await this.patchPropertyHistory();
@@ -82,7 +82,7 @@ export class DetailsComponent implements OnInit {
         floorArea: [''],
         phoneOne: [''],
         phoneTwo: [''],
-        internalNotes: [''], //* - pending
+        internalNote: [''],
         fileNumber: [''],
         azReference: ['']
       }),
@@ -107,13 +107,13 @@ export class DetailsComponent implements OnInit {
         hasPat: [''],
         hasOil: [''],
         hasSolidFuel: [''],
-        smokeDetectors: [''], //* - pending
-        numberOfSmokeAlarms: [''],//* - pending
-        landlordSigned: [''],//* - pending
-        carbonDetectors: [''],//* - pending
+        smokeDetectors: [''], 
+        smokeAlarmNo: [''],
+        hasElectricalIndemnitySigned: [''],
+        carbonMonoxideDetectors: [''],
         NocarbonDetectors: [''],//* - pending
-        NoFireBlankets: [''],//* - pending
-        NoFireExtinguishers: ['']//* - pending
+        numberOfFireBlankets: [''],
+        numberOfFireExtinguishers: ['']
       }),
       propertyAddressForm : this._formBuilder.group({
         postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
@@ -177,11 +177,14 @@ export class DetailsComponent implements OnInit {
       floorArea: this.propertyDetails?.propertyDetails?.floorArea ? this.propertyDetails?.propertyDetails?.floorArea : '',
       phoneOne: this.propertyDetails?.propertyDetails?.phoneOne ? this.propertyDetails?.propertyDetails?.phoneOne : '',
       phoneTwo: this.propertyDetails?.propertyDetails?.phoneTwo ? this.propertyDetails?.propertyDetails?.phoneTwo : '',
-      internalNotes:  '', // pending
+      internalNote:  this.propertyDetails?.propertyDescription?.internalNote ? this.propertyDetails?.propertyDescription?.internalNote:'',
       fileNumber: this.propertyDetails?.propertyInfo?.fileNumber ? this.propertyDetails?.propertyInfo?.fileNumber : '',
       azReference: this.propertyDetails?.propertyWebInfo?.azReference ? this.propertyDetails?.propertyWebInfo?.azReference : '',
     });
   }
+
+
+  
 
   private patchLetBoardDetails() {
     const control = this.propertyDetailsForm.controls['letBoardForm'];
@@ -215,13 +218,13 @@ export class DetailsComponent implements OnInit {
       hasPat: this.propertyDetails?.propertyDetails?.hasPat ? this.propertyDetails?.propertyDetails?.hasPat : false,
       hasOil: this.propertyDetails?.propertyDetails?.hasOil ? this.propertyDetails?.propertyDetails?.hasOil : false,
       hasSolidFuel: this.propertyDetails?.propertyDetails?.hasSolidFuel ? this.propertyDetails?.propertyDetails?.hasSolidFuel : false,
-      smokeDetectors: '', //* - pending
-      numberOfSmokeAlarms: '', //* - pending
-      landlordSigned: '', //* - pending
-      carbonDetectors: '', //* - pending
+      smokeDetectors: this.propertyDetails?.smokeDetectors ? this.propertyDetails?.smokeDetectors : '',
+      smokeAlarmNo: this.propertyDetails?.smokeAlarmNo ? this.propertyDetails?.smokeAlarmNo : '',
+      hasElectricalIndemnitySigned: this.propertyDetails?.propertyDetails?.hasElectricalIndemnitySigned ? this.propertyDetails?.propertyDetails?.hasElectricalIndemnitySigned : false,
+      carbonMonoxideDetectors: this.propertyDetails?.carbonMonoxideDetectors ? this.propertyDetails?.carbonMonoxideDetectors : '',
       NocarbonDetectors: '', //* - pending
-      NoFireBlankets: '', //* - pending
-      NoFireExtinguishers: '', //* - pending
+      numberOfFireBlankets: this.propertyDetails?.numberOfFireBlankets ? this.propertyDetails?.numberOfFireBlankets : '',
+      numberOfFireExtinguishers: this.propertyDetails?.numberOfFireExtinguishers ? this.propertyDetails?.numberOfFireExtinguishers : '',
     });
   }
 
