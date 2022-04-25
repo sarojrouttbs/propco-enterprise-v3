@@ -652,6 +652,7 @@ mat-form-field {
 }
 
 .searchbarCustom {
+  --background: transparent;
     padding: 0;
     .searchbar-input {
       line-height: 27px;
@@ -694,8 +695,11 @@ mat-form-field {
       border-bottom-right-radius: 0;
       padding-left: 6px;
       font-size: 15px;
-      background-color: var(--ion-color-step-1750);
+      background-color: var(--ion-color-primary);
 		}
+    .mat-select-value{
+      color: var(--ion-color-primary-contrast);
+    }
 		// .mat-select-arrow {
 		// 	color: rgb(197 51 44);
 		// 	border-left: 8px solid transparent;
@@ -707,6 +711,9 @@ mat-form-field {
 		// }
     .mat-select-arrow-wrapper {
       padding-top: 18px;
+      .mat-select-arrow{
+        color: var(--ion-color-primary-contrast);
+      }
     }
     .mat-form-field-infix {
       padding: 0.25em 0 0.25em 0;
