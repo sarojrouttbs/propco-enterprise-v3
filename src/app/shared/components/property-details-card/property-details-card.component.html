@@ -33,13 +33,13 @@
         <ion-text class="rent">RENT</ion-text>
       </ion-col>
       <ion-col>
-        <ion-text class="rent-frequency">{{propertyData?.propertyDetails?.advertisementRent || notAvailable}} </ion-text>
+        <ion-text class="rent-frequency">{{propertyData?.propertyDetails?.advertisementRent | currency: '£' || notAvailable}} </ion-text>
         <ion-text class="frequency" *ngIf="propertyData?.propertyDetails?.advertisementRent">{{getAdvLookupValue(propertyData?.propertyDetails?.advertisementRentFrequency, advertisementRentFrequencies)}}
          </ion-text>
       </ion-col>
       <ion-col class="furnishing">
         <ion-text>
-          {{getLookupValue(propertyData?.propertyDetails?.furnishingType, furnishingTypes) || notAvailable}}
+          {{getAdvLookupValue(propertyData?.propertyDetails?.furnishingType, furnishingTypes) || notAvailable}}
         </ion-text><br>
         <ion-text> {{getLookupValue(propertyData?.propertyInfo?.managementType, managementTypes) || notAvailable}}</ion-text>
       </ion-col>
