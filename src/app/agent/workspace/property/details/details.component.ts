@@ -190,9 +190,9 @@ export class DetailsComponent implements OnInit {
     const control = this.propertyDetailsForm.controls['letBoardForm'];
     control.patchValue({
       isBoardAllowed: this.propertyDetails?.propertyInfo?.isBoardAllowed,
-      boardOrderedOn: this.propertyDetails?.propertyInfo?.boardOrderedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.boardOrderedOn , 'dd/MM/yyyy') : '-',
-      boardRemovedOn: this.propertyDetails?.propertyInfo?.boardRemovedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.boardRemovedOn, 'dd/MM/yyyy') : '-',
-      slipOrderedOn: this.propertyDetails?.propertyInfo?.slipOrderedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.slipOrderedOn, 'dd/MM/yyyy') : '-',
+      boardOrderedOn: this.propertyDetails?.propertyInfo?.boardOrderedOn ? this.propertyDetails.propertyInfo.boardOrderedOn : '-',
+      boardRemovedOn: this.propertyDetails?.propertyInfo?.boardRemovedOn ? this.propertyDetails.propertyInfo.boardRemovedOn : '-',
+      slipOrderedOn: this.propertyDetails?.propertyInfo?.slipOrderedOn ? this.propertyDetails.propertyInfo.slipOrderedOn : '-',
       boardRef: this.propertyDetails?.propertyInfo?.boardRef ? this.propertyDetails?.propertyInfo?.boardRef : '-'
     });
   }
