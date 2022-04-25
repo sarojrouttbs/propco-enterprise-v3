@@ -592,16 +592,14 @@ export class SearchResultsPage implements OnInit {
     }
   }
 
-  openDetails(key: string) {
+  openDetails(key: string, value?) {
     if (this.router.url.includes('/agent/')) {
-      this.workspaceService.addItemToWorkSpace(this.selectedItem);
+      this.workspaceService.addItemToWorkSpace(value ? value : this.selectedItem);
       return;  
     }
     /*Navigate to java fx page (If solr loads inside v2)*/
-    openScreen(key, this.selectedItem.propcoId);
+    openScreen(key, value ? value.propcoId : this.selectedItem?.propcoId);
   }
-
-  
 
   refreshAll() {
     this.getSearchResults();
