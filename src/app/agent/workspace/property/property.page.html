@@ -17,19 +17,31 @@
       <span>Property (Lettings)</span>
     </div>
     <mat-nav-list class="sidenav-block-list">
-      <a mat-list-item (click)="changePage('dashboard');">Dashboard</a>
+      <a mat-list-item (click)="changePage('dashboard');" class="menu active">Dashboard</a>
       <!-- <a mat-list-item (click)="changePage('details');">Details</a> -->
       <!-- <a mat-list-item (click)="changePage('dashboard');">Dashboard2</a> -->
 
-      <mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">
+      <mat-list-item (click)="showSubmenu = !showSubmenu" class="menu">
         <span class="full-width" *ngIf="isExpanded || isShowing">Marketing</span>
         <ion-icon name="chevron-down-outline" class="menu-button" [ngClass]="{'rotated' : showSubmenu}"
           *ngIf="isExpanded || isShowing"></ion-icon>
       </mat-list-item>
       <div class="submenu" [ngClass]="{'expanded' : showSubmenu}" *ngIf="isShowing || isExpanded">
         <a mat-list-item (click)="changePage('details');">Property Details</a>
-        <a mat-list-item >Perticulars</a>
+        <a mat-list-item>Particulars</a>
       </div>
+
+      <!-- <mat-nav-list>
+        <a mat-list-item (click)="changePage('dashboard');">Dashboard</a>
+        <mat-list-item>
+          <span>Marketing</span>
+          <mat-nav-list>
+            <a mat-list-item (click)="changePage('details');">Property Details</a>
+            <a mat-list-item >Particulars</a>
+          </mat-nav-list>
+        </mat-list-item>
+  
+      </mat-nav-list> -->
 
       <!-- <mat-list-item (click)="showSubmenu = !showSubmenu" class="parent">
         <span class="full-width" *ngIf="isExpanded || isShowing">Marketing</span>

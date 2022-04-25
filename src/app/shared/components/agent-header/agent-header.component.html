@@ -9,8 +9,8 @@
               <a class="pull-left" title="Go to the workspace" (click)="goToWorkSpace()">
                   <i class="propcoicon propcoicon-folder workspace-icon"></i>
               </a>
-              <span (mouseover)="createPlanmenuTrigger.openMenu()" 
-              >
+              &nbsp;
+              <span (mouseover)="createPlanmenuTrigger.openMenu()">
                 <button mat-button #createPlanmenuTrigger="matMenuTrigger" [matMenuTriggerFor]="marketing" class="text-color">Marketing</button>
               <mat-menu #marketing="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="property">Property</button>
