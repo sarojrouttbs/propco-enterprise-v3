@@ -26,7 +26,7 @@
       debounce="500" 
       (ionChange)="getItems($event)"
       [formControl]="searchTermControl"
-      (ionBlur) = "isItemAvailable = false"
+      (ionBlur) = "hideSuggestion()"
       (ionFocus) = "suggestions.length > 0 ? isItemAvailable = true : false"
       >
       <!-- (ionBlur) = "isItemAvailable = false"
@@ -66,7 +66,7 @@
 </ion-row>
 
 <ng-template #propertySuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenProperty',item.propcoId)">
+  <div (click)="openHomeCategory('OpenProperty',item)">
     <span>
       <i class="propcoicon no-background propcoicon-property red-icon"></i>
     </span>
@@ -79,7 +79,7 @@
 </ng-template>
 
 <ng-template #landlordSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenLandlord',item.propcoId)">
+  <div (click)="openHomeCategory('OpenLandlord',item)">
     <span>
       <i class="propcoicon no-background propcoicon-landlord red-icon"></i>
     </span>
@@ -94,7 +94,7 @@
 </ng-template>
 
 <ng-template #applicantSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenApplicant',item.propcoId)">
+  <div (click)="openHomeCategory('OpenApplicant',item)">
     <span>
       <i class="propcoicon no-background propcoicon-applicant-let red-icon"></i>
     </span>
@@ -109,7 +109,7 @@
 </ng-template>
 
 <ng-template #tenantSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenTenant',item.propcoId)">
+  <div (click)="openHomeCategory('OpenTenant',item)">
     <span>
       <i class="propcoicon no-background propcoicon-tenant red-icon"></i>
     </span>
@@ -123,7 +123,7 @@
 </ng-template>
 
 <ng-template #contractorSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenContractor',item.propcoId)">
+  <div (click)="openHomeCategory('OpenContractor',item)">
     <span>
       <i class="propcoicon no-background propcoicon-contractor red-icon"></i>
     </span>
@@ -137,7 +137,7 @@
 </ng-template>
 
 <ng-template #agentSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenAgent',item.propcoId)">
+  <div (click)="openHomeCategory('OpenAgent',item)">
     <span>
       <i class="propcoicon no-background propcoicon-agent red-icon"></i>
     </span>

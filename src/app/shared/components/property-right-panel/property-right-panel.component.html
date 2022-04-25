@@ -8,7 +8,7 @@
     <ion-row class="property-info">
       <ion-col>
         <ion-text class="label">Available From</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.availableFrom || notAvailable}}</ion-text>
+        <ion-text class="value">{{propertyData?.propertyInfo?.availableFrom | date: 'dd MMM yyyy' || notAvailable}}</ion-text>
       </ion-col>
       <ion-col>
         <ion-text class="label">Branch PMC</ion-text>
@@ -21,7 +21,7 @@
       <ion-col>
         <ion-text class="label">Available To</ion-text>
         <br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.availableTo || notAvailable}}</ion-text>
+        <ion-text class="value">{{propertyData?.propertyInfo?.availableTo | date: 'dd MMM yyyy' || notAvailable}}</ion-text>
       </ion-col>
       <ion-col>
         <ion-text class="label">Booking Office</ion-text>
@@ -35,13 +35,13 @@
       <ion-col>
         <ion-text class="label">Appraised</ion-text>
         <br>
-        <ion-text class="value">{{propertyData?.propertyDetails?.appraisedDate || notAvailable}}</ion-text>
+        <ion-text class="value">{{propertyData?.propertyDetails?.appraisedDate | date: 'dd MMM yyyy' || notAvailable}}</ion-text>
       </ion-col>
       <ion-col>
         <ion-text class="label">Portfolio Source</ion-text>
         <br>
         <ion-text class="value">
-          {{getHouseTypeLookupValue(propertyData?.propertyInfo?.portfolioSource, houseTypes) || notAvailable}}
+          {{getHouseTypeLookupValue(propertyData?.propertyInfo?.portfolioSource, portfolioSources) || notAvailable}}
         </ion-text>
       </ion-col>
     </ion-row>
@@ -49,7 +49,7 @@
     <ion-row class="property-info">
       <ion-col>
         <ion-text class="label">Instructed</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyDetails?.instructedDate || notAvailable}}</ion-text>
+        <ion-text class="value">{{propertyData?.propertyDetails?.instructedDate | date: 'dd MMM yyyy' || notAvailable}}</ion-text>
       </ion-col>
       <ion-col>
         <ion-text class="label">Property Type</ion-text><br>

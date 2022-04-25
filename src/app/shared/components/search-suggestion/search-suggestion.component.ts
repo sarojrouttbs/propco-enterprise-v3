@@ -7,6 +7,7 @@ import { CommonService } from "src/app/shared/services/common.service";
 import { EventEmitter } from "@angular/core";
 import { SolrService } from "../../../solr/solr.service";
 import { SolrSearchHandlerService } from "../../services/solr-search-handler.service";
+import { WorkspaceService } from "src/app/agent/workspace/workspace.service";
 declare function openScreen(key: string, value: any): any;
 
 @Component({
@@ -51,7 +52,8 @@ export class SearchSuggestionComponent implements OnInit {
     private commonService: CommonService,
     private router: Router,
     private solrSearchService: SolrSearchHandlerService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private workspaceService: WorkspaceService,
   ) {}
 
   getItems(ev: any) {
@@ -143,7 +145,12 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   openHomeCategory(key: string, value = null) {
-    openScreen(key, value);
+    if (this.router.url.includes('/agent/')) {
+      this.workspaceService.addItemToWorkSpace(value);
+      return;  
+    }
+    /*Navigate to java fx page (If solr loads inside v2)*/
+    openScreen(key, value.propcoId);
   }
 
   goToPage() {
@@ -183,6 +190,12 @@ export class SearchSuggestionComponent implements OnInit {
       }
       this.solrSearchService.search({entity: this.entityControl.value, term:this.searchTermControl.value, isSearchResult: true});
     }
+  }
+
+  hideSuggestion(){
+    setTimeout(()=>{
+      this.isItemAvailable = false;
+    },200);
   }
 
   private getQueryParams() {

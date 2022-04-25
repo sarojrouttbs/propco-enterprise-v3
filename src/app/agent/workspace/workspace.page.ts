@@ -55,7 +55,6 @@ export class WorkspacePage implements OnInit {
       this.initWorkspace();
     });
   }
-
   ngOnInit() {}
   private async initWorkspace() {
     this.skeleton = true;
