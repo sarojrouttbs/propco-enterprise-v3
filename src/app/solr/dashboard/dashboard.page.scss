@@ -22,6 +22,11 @@
   ngx-guided-tour .tour-step.tour-bottom-left .tour-arrow::before {
     border-bottom-color: var(--ion-color-step-1750) !important;
   }
+  .tour-step.tour-top .tour-arrow::before, 
+  ngx-guided-tour .tour-step.tour-top-right .tour-arrow::before, 
+  ngx-guided-tour .tour-step.tour-top-left .tour-arrow::before{
+    border-top-color: var(--ion-color-step-1750) !important;
+  }
 
   .tour-block {
     background-color: var(--ion-color-step-1750) !important;
