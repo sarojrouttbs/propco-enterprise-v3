@@ -16,6 +16,7 @@ export class PropertyDetailsCardComponent implements OnInit, OnChanges {
   managementTypes: any;
   advertisementRentFrequencies: any;
   notAvailable = DEFAULTS.NOT_AVAILABLE
+  parkingTypes: any;
 
   constructor(
     private commonService: CommonService
@@ -27,7 +28,7 @@ export class PropertyDetailsCardComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.propertyData && !changes.propertyData.firstChange) {
-      this.propertyData = this.propertyData;
+      this.propertyData = this.propertyData;      
     }
   }
 
@@ -50,6 +51,7 @@ export class PropertyDetailsCardComponent implements OnInit, OnChanges {
     this.officeCodes = data.officeCodes;
     this.managementTypes = data.managementTypes;
     this.advertisementRentFrequencies = data.advertisementRentFrequencies
+    this.parkingTypes = data.parkingTypes
   }
 
   getLookupValue(index: string, lookup) {
@@ -60,5 +62,8 @@ export class PropertyDetailsCardComponent implements OnInit, OnChanges {
   getAdvLookupValue(index, lookup) {
     return this.commonService.getLookupValue(index, lookup);
   }
-
+  getLookupValuebb(index, lookup) {
+    if (index !=null)
+      return this.commonService.getLookupValue(+index, lookup);
+  }
 }
