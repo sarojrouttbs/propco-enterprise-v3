@@ -31,9 +31,11 @@ export class WorkspaceService {
   }
 
   private goToPropertyDashboard(item): void {
-    this.router.navigate([`agent/workspace/property/${item.entityId}/dashboard`]).then(()=>{
-      location.reload()
-    });
+    this.router
+      .navigate([`agent/workspace/property/${item.entityId}/dashboard`])
+      .then(() => {
+        location.reload();
+      });
   }
 
   prepareTabData(item) {
@@ -137,5 +139,24 @@ export class WorkspaceService {
       );
       return;
     }
+  }
+
+  async makeItemActive(entityId: string) {
+    let itemsInStorage = this.commonService.getItem(
+      AGENT_WORKSPACE_CONFIGS.localStorageName,
+      true
+    );
+    for (const obj of itemsInStorage) {
+      if (obj.entityId !== entityId) {
+        obj["isSelected"] = false;
+      } else {
+        obj["isSelected"] = true;
+      }
+    }
+    this.commonService.setItem(
+      AGENT_WORKSPACE_CONFIGS.localStorageName,
+      itemsInStorage
+    );
+    return;
   }
 }
