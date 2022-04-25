@@ -3,7 +3,11 @@
     .header {
         display: flex;
         align-items: center;
-        height: 60px;
+        height: 64px;
+        padding: 10px;
+        ion-icon{
+            margin: 10px;
+        }
         ion-text {
             font-size: 22px;
         }
