@@ -14,8 +14,9 @@
   @include set-text-style(15px, 19px);
 }
 
-.mat-form-field-label mat-label{
-  font-family: "Lato", san-serif, verdana;
+.mat-form-field-label mat-label, .mat-list-item{
+  font-family: var(--ion-font-family);
+
 }
 
 .mat-tab-group {

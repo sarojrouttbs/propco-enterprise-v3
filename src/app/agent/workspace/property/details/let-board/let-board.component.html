@@ -6,8 +6,12 @@
       </mat-panel-title>
       <mat-panel-description class="ion-justify-content-end no-margin">
         <div>
-          <ion-icon class="accordian-icon" *ngIf="!letBoardDetails.expanded" name="add-circle"></ion-icon>
-          <ion-icon class="accordian-icon" *ngIf="letBoardDetails.expanded" name="remove-circle"></ion-icon>
+          <span *ngIf="!letBoardDetails.expanded"  class="accordian-icon" title="Expand">
+            <ion-icon style="pointer-events:none"  name="add-circle"></ion-icon>
+          </span>
+          <span *ngIf="letBoardDetails.expanded" class="accordian-icon" title="Collapse">
+            <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+            </span>
         </div>
       </mat-panel-description>
     </mat-expansion-panel-header>

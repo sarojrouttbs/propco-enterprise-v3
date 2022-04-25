@@ -31,7 +31,7 @@
         </app-property-landlord-tenant>
       </div>
       <div style="width: 33.33% !important;">
-        <app-property-details-card [propertyData]="propertyData"></app-property-details-card>
+        <app-property-details-card [propertyData]="propertyDetails"></app-property-details-card>
         <app-property-landlord-tenant [type]="'tenant'" [propertyTenants]="propertyTenants">
         </app-property-landlord-tenant>
       </div>
@@ -77,7 +77,7 @@
                       class="propcoicon propcoicon-property-description"></i></td>
                 </tr>
                 <tr *ngIf="notes?.length == 0">
-                  <td colspan="7" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</b></td>
+                  <td colspan="7" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b></td>
                 </tr>
               </tbody>
             </table>
