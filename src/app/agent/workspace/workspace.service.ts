@@ -31,7 +31,9 @@ export class WorkspaceService {
   }
 
   private goToPropertyDashboard(item): void {
-    this.router.navigate([`agent/workspace/property/${item.entityId}`]);
+    this.router.navigate([`agent/workspace/property/${item.entityId}/dashboard`]).then(()=>{
+      location.reload()
+    });
   }
 
   prepareTabData(item) {
