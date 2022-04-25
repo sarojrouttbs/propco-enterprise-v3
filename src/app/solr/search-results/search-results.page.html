@@ -536,7 +536,7 @@
               <h3>No Result(s) found</h3>
             </ng-container>
         </div>
-       <div class="list-container">
+       <div class="list-container overlay-container" style="position: relative;">
         <ng-container *ngIf="!showSkeleton">
           <ng-container *ngFor="let item of results">
             <ng-container [ngTemplateOutlet]="propertySuggestionListView"  *ngIf="item?.entityType === 'PROPERTY'"
@@ -563,6 +563,10 @@
           <ng-container [ngTemplateOutlet]="listskeleton">
           </ng-container>
         </ng-container>
+        <div id="divOverlay">
+          <ion-button color="success" (click)="$event.stopPropagation();openDetails('OpenProperty')">View</ion-button>
+          <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on action-btn"></i>
+        </div>
        </div>
       </mat-drawer-content>
   </mat-drawer-container>
@@ -833,8 +837,8 @@
 <!--List views-->
 <ng-template #propertySuggestionListView  let-item="item">
               <mat-accordion class="list-view-accordian" multi>
-                <mat-expansion-panel #propertySuggestionPanel hideToggle>
-                  <mat-expansion-panel-header>
+                <mat-expansion-panel #propertySuggestionPanel hideToggle style="position: static;">
+                  <mat-expansion-panel-header class="property-panel">
                     <!-- <mat-panel-title> -->
                      <div class="list-header">
                       <div style="width: 60%;">
@@ -872,17 +876,18 @@
                         <p class="ref">Status</p>
                         <p class="status">{{item?.status}}</p>
                       </div>
-                      <div class="contextual-action">
-                        <div class="fab-icon">
+                      <div class="contextual-action action-icon">
+                        <div style="margin-right: 10px;">
+                          <i (click)="showMenu($event, 'divOverlay', item, 'property-panel', false)"
+                            class="propcoicon propcoicon-actions-on action-btn pointer"></i>
+                        </div>
+                        <!-- <div class="fab-icon">
                           <ion-fab class="cc-list-button" (click)="$event.stopPropagation();">
                             <ion-fab-button class="expand-btn">      
-                               <i class="propcoicon propcoicon-actions-on action-btn"></i>
+                               <i (click)="showMenu($event, 'divOverlay', item, 'property-panel', false)" class="propcoicon propcoicon-actions-on action-btn"></i>
                             </ion-fab-button>
-                            <ion-fab-list side="start">
-                              <ion-button (click)="$event.stopPropagation();openDetails('OpenProperty',item)"> View </ion-button>
-                            </ion-fab-list>
                           </ion-fab>
-                        </div>
+                        </div> -->
                         <div>
                           <span *ngIf="!propertySuggestionPanel.expanded" class="accordian-icon" title="Expand">
                             <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>

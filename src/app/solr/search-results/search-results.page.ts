@@ -22,6 +22,7 @@ import { WorkspaceService } from "src/app/agent/workspace/workspace.service";
 export class SearchResultsPage implements OnInit {
   showFiller = true;
   step = 0;
+  selectedItem: any;
 
   setStep(index: number) {
     this.step = index;
@@ -591,13 +592,13 @@ export class SearchResultsPage implements OnInit {
     }
   }
 
-  openDetails(key: string, value = null) {
+  openDetails(key: string) {
     if (this.router.url.includes('/agent/')) {
-      this.workspaceService.addItemToWorkSpace(value);
+      this.workspaceService.addItemToWorkSpace(this.selectedItem);
       return;  
     }
     /*Navigate to java fx page (If solr loads inside v2)*/
-    openScreen(key, value.propcoId);
+    openScreen(key, this.selectedItem.propcoId);
   }
 
   
@@ -721,6 +722,66 @@ export class SearchResultsPage implements OnInit {
     } else {
       await this.getQueryParams();
       this.initFilter();
+    }
+  }
+
+  showMenu(event, id, data, className, isCard?) {
+    this.selectedItem = data;
+    const baseContainer = $(event.target).parents('.' + className);
+    const divOverlay = $('#' + id);
+    const baseContainerWidth = baseContainer.outerWidth(true) - 52;
+    const baseContainerHeight = baseContainer.outerHeight(true);
+    const baseContainerPosition = baseContainer.position();
+    const baseContainerTop = baseContainerPosition.top;
+    const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
+    const divOverlayHeight = divOverlay.height();
+    const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
+    const divOverlayLeft = overlayContainerLeftPadding;
+
+    let origDivOverlayHeight;
+    let origDivOverlayTop;
+    let divOverlayTopBottomPadding = 0;
+    if (baseContainerHeight > 49) {
+      divOverlayTopBottomPadding = (baseContainerHeight - 48) / 2;
+    }
+
+    if (baseContainerHeight > divOverlayHeight) {
+      origDivOverlayHeight = baseContainerHeight;
+      origDivOverlayTop = baseContainerTop;
+    } else {
+      origDivOverlayHeight = divOverlayHeight + (divOverlayTopBottomPadding * 2);
+      const extraHeight = divOverlayHeight - baseContainerHeight;
+      origDivOverlayTop = baseContainerTop - extraHeight - (divOverlayTopBottomPadding * 2);
+    }
+
+    divOverlay.css({
+      position: 'absolute',
+      top: origDivOverlayTop,
+      right: '5px',
+      width: baseContainerWidth,
+      height: origDivOverlayHeight,
+      left: divOverlayLeft,
+      paddingTop: divOverlayTopBottomPadding,
+      paddingBottom: divOverlayTopBottomPadding,
+      borderRadius: '4px'
+    });
+
+    const gridDivOverlay = $('#grid-divoverlay');
+
+    gridDivOverlay.css({
+      width: divOverlay.width(),
+      height: divOverlayHeight
+    });
+
+    divOverlay.delay(200).slideDown('fast');
+    event.stopPropagation();
+  }
+
+  hideMenu(event?, id?) {
+    const $divOverlay = $('#' + id);
+    $divOverlay.delay(200).slideUp('fast');
+    if (event) {
+      event.stopPropagation();
     }
   }
 }
