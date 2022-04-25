@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, PROPCO } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, PROPCO,DEFAULTS } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ValidationService } from 'src/app/shared/services/validation.service';
 
@@ -190,21 +190,21 @@ export class DetailsComponent implements OnInit {
     const control = this.propertyDetailsForm.controls['letBoardForm'];
     control.patchValue({
       isBoardAllowed: this.propertyDetails?.propertyInfo?.isBoardAllowed,
-      boardOrderedOn: this.propertyDetails?.propertyInfo?.boardOrderedOn ? this.propertyDetails.propertyInfo.boardOrderedOn : 'NOT_AVAILABLE',
-      boardRemovedOn: this.propertyDetails?.propertyInfo?.boardRemovedOn ? this.propertyDetails.propertyInfo.boardRemovedOn : 'NOT_AVAILABLE',
-      slipOrderedOn: this.propertyDetails?.propertyInfo?.slipOrderedOn ? this.propertyDetails.propertyInfo.slipOrderedOn : 'NOT_AVAILABLE',
-      boardRef: this.propertyDetails?.propertyInfo?.boardRef ? this.propertyDetails?.propertyInfo?.boardRef : 'NOT_AVAILABLE'
+      boardOrderedOn: this.propertyDetails?.propertyInfo?.boardOrderedOn ? this.propertyDetails.propertyInfo.boardOrderedOn : DEFAULTS.NOT_AVAILABLE,
+      boardRemovedOn: this.propertyDetails?.propertyInfo?.boardRemovedOn ? this.propertyDetails.propertyInfo.boardRemovedOn : DEFAULTS.NOT_AVAILABLE,
+      slipOrderedOn: this.propertyDetails?.propertyInfo?.slipOrderedOn ? this.propertyDetails.propertyInfo.slipOrderedOn : DEFAULTS.NOT_AVAILABLE,
+      boardRef: this.propertyDetails?.propertyInfo?.boardRef ? this.propertyDetails?.propertyInfo?.boardRef : DEFAULTS.NOT_AVAILABLE
     });
   }
 
   private patchPropertyHistory() {
     const control = this.propertyDetailsForm.controls['history'];
     control.patchValue({
-      createdAt: this.propertyDetails?.createdAt ? this.commonService.getFormatedDate(this.propertyDetails.createdAt, 'dd/MM/yyyy') : 'NOT_AVAILABLE',
+      createdAt: this.propertyDetails?.createdAt ? this.commonService.getFormatedDate(this.propertyDetails.createdAt, 'dd/MM/yyyy') : DEFAULTS.NOT_AVAILABLE,
       createdBy: '', //* - pending
-      statusChangedOn: this.propertyDetails?.propertyInfo?.statusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.statusChangedOn, 'dd/MM/yyyy') : 'NOT_AVAILABLE',
+      statusChangedOn: this.propertyDetails?.propertyInfo?.statusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.statusChangedOn, 'dd/MM/yyyy') : DEFAULTS.NOT_AVAILABLE,
       statusChangedBy: '', //* - pending
-      maStatusChangedOn: this.propertyDetails?.propertyInfo?.maStatusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.maStatusChangedOn, 'dd/MM/yyyy') : 'NOT_AVAILABLE',
+      maStatusChangedOn: this.propertyDetails?.propertyInfo?.maStatusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.maStatusChangedOn, 'dd/MM/yyyy') : DEFAULTS.NOT_AVAILABLE,
       maStatusChangedBy: '' //* - pending
     });
   }
