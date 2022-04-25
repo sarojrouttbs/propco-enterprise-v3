@@ -829,6 +829,35 @@ ion-item {
 .list-container {
   display: flex;
   flex-direction: column;
+
+  .contextual-action{
+    .propcoicon-actions-on{
+      background: var(--ion-color-warning);
+      color: var(--ion-color-primary-contrast);
+    }
+
+    .propcoicon{
+      border-radius: 16px;
+      font-size: 21px;
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+
+div#divOverlay{
+  .propcoicon{
+    border-radius: 16px;
+    font-size: 21px;
+    width: 30px;
+    height: 30px;
+    background: var(--ion-color-warning);
+    color: var(--ion-color-primary-contrast);
+  }
+
+  .propcoicon-actions-on{
+    margin: 9px 0px 5px 6px;
+  }
 }
 
 .cdk-overlay-container {
