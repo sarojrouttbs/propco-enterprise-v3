@@ -190,21 +190,21 @@ export class DetailsComponent implements OnInit {
     const control = this.propertyDetailsForm.controls['letBoardForm'];
     control.patchValue({
       isBoardAllowed: this.propertyDetails?.propertyInfo?.isBoardAllowed,
-      boardOrderedOn: this.propertyDetails?.propertyInfo?.boardOrderedOn ? this.propertyDetails.propertyInfo.boardOrderedOn : '-',
-      boardRemovedOn: this.propertyDetails?.propertyInfo?.boardRemovedOn ? this.propertyDetails.propertyInfo.boardRemovedOn : '-',
-      slipOrderedOn: this.propertyDetails?.propertyInfo?.slipOrderedOn ? this.propertyDetails.propertyInfo.slipOrderedOn : '-',
-      boardRef: this.propertyDetails?.propertyInfo?.boardRef ? this.propertyDetails?.propertyInfo?.boardRef : '-'
+      boardOrderedOn: this.propertyDetails?.propertyInfo?.boardOrderedOn ? this.propertyDetails.propertyInfo.boardOrderedOn : 'NOT_AVAILABLE',
+      boardRemovedOn: this.propertyDetails?.propertyInfo?.boardRemovedOn ? this.propertyDetails.propertyInfo.boardRemovedOn : 'NOT_AVAILABLE',
+      slipOrderedOn: this.propertyDetails?.propertyInfo?.slipOrderedOn ? this.propertyDetails.propertyInfo.slipOrderedOn : 'NOT_AVAILABLE',
+      boardRef: this.propertyDetails?.propertyInfo?.boardRef ? this.propertyDetails?.propertyInfo?.boardRef : 'NOT_AVAILABLE'
     });
   }
 
   private patchPropertyHistory() {
     const control = this.propertyDetailsForm.controls['history'];
     control.patchValue({
-      createdAt: this.propertyDetails?.createdAt ? this.commonService.getFormatedDate(this.propertyDetails.createdAt, 'dd/MM/yyyy') : '-',
+      createdAt: this.propertyDetails?.createdAt ? this.commonService.getFormatedDate(this.propertyDetails.createdAt, 'dd/MM/yyyy') : 'NOT_AVAILABLE',
       createdBy: '', //* - pending
-      statusChangedOn: this.propertyDetails?.propertyInfo?.statusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.statusChangedOn, 'dd/MM/yyyy') : '-',
+      statusChangedOn: this.propertyDetails?.propertyInfo?.statusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.statusChangedOn, 'dd/MM/yyyy') : 'NOT_AVAILABLE',
       statusChangedBy: '', //* - pending
-      maStatusChangedOn: this.propertyDetails?.propertyInfo?.maStatusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.maStatusChangedOn, 'dd/MM/yyyy') : '-',
+      maStatusChangedOn: this.propertyDetails?.propertyInfo?.maStatusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.maStatusChangedOn, 'dd/MM/yyyy') : 'NOT_AVAILABLE',
       maStatusChangedBy: '' //* - pending
     });
   }
