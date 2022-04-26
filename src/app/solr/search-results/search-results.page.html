@@ -572,268 +572,6 @@
   </mat-drawer-container>
 </ion-content>
 
-
-<ng-template #propertySuggestion  let-item="item">
-  <ion-card-content id="details" (click)="openDetails('OpenProperty',item.propcoId)">
-    <ion-grid >
-      <ion-row class="main-row">
-        <ion-col class="ion-no-padding" size-xl="17" size="30">
-          <ion-grid >
-            <ion-row>
-              <ion-col size="80">
-                <div style="display: block;"><img style="min-height: 130px;" [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.jpg';"></div>
-              </ion-col>
-              <ion-col size="20" class="ion-no-padding">
-                <ion-grid class="ion-no-padding ion-align-items-center">
-                  <ion-row class="ion-align-items-center ion-justify-content-center">
-                    <ion-col>
-                      <i class="propcoicon propcoicon-beds no-background"></i>
-                    </ion-col>
-                    <ion-col>
-                      <span >&nbsp;6</span>
-                    </ion-col>
-                  </ion-row>
-                  <ion-row class="ion-align-items-center ion-justify-content-center">
-                    <ion-col>
-                      <i class="propcoicon propcoicon-bathrooms no-background"></i>
-                    </ion-col>
-                    <ion-col>
-                      <span >&nbsp;6</span>
-                    </ion-col>
-                  </ion-row>
-                  <ion-row class="ion-align-items-center ion-justify-content-center">
-                    <ion-col>
-                      <i class="propcoicon propcoicon-lounge no-background"></i>
-                    </ion-col>
-                    <ion-col>
-                      <span >&nbsp;6</span>
-                    </ion-col>
-                  </ion-row>
-                  <ion-row class="ion-align-items-center ion-justify-content-center">
-                    <ion-col>
-                      <i class="propcoicon propcoicon-garage no-background"></i>
-                    </ion-col>
-                    <ion-col>
-                      <span >&nbsp;6</span>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-col>
-        <ion-col  size-xl="77" size="70">
-          <ion-grid class="no-padding-top">
-            <ion-row class="property-details-row">
-              <ion-col class="no-padding-top col1" size="75">
-                <div>
-                  <p class="title text-ellipsis">{{item?.address}}</p>
-                </div>
-              </ion-col>
-              <ion-col class="no-padding-top col2 ion-text-end" size="25">
-                <p class="status">{{item?.status}}</p>
-                <p class="ref">{{item?.status}}</p>
-              </ion-col>
-            </ion-row>
-            <ion-row class="fault-data-row">
-              <ion-col size-xl="25" size-lg="22" size-md="22">
-                <p>
-                  <span class="text">Agreement Dates</span>
-                <br />
-                {{item?.propertyAgreementDate || DEFAULTS.NOT_AVAILABLE}}
-                </p>
-              </ion-col>
-              <ion-col size-xl="25" size-lg="22" size-md="22">
-                <p>
-                  <span class="text">Tenant Name(s)</span>
-                <br />
-                {{item?.propertyTenant || DEFAULTS.NOT_AVAILABLE}}
-                </p>
-              </ion-col>
-              <ion-col size-xl="25" size-lg="22" size-md="22">
-                <p>
-                  <span class="text">Manager</span>
-                <br />
-                {{item?.propertyManager || DEFAULTS.NOT_AVAILABLE}}
-                </p>
-              </ion-col>
-              <ion-col size-xl="25" size-lg="34" size-md="34">
-                <p>
-                  <span class="text">Negotiator</span>
-                <br />
-                {{item?.propertyNegotiator || DEFAULTS.NOT_AVAILABLE}}
-                </p>
-              </ion-col>
-            </ion-row>
-            <ion-row class="fault-meter-row">
-              
-            </ion-row>
-          </ion-grid>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card-content>
-</ng-template>
-<ng-template #landlordSuggestion  let-item="item">
-  <ion-card-content id="details" class="landlord" (click)="openDetails('OpenLanlord',item.propcoId)">
-    <ion-grid >
-      <ion-row class="main-row">
-        <ion-col class="ion-no-padding" size-xl="10" size="15">
-          <p class="uppercase">Landlord</p>
-          <br>
-          <i class="propcoicon propcoicon-landlord no-background"></i>
-        </ion-col>
-        <ion-col  size-xl="75" size="85">
-          <ion-grid class="no-padding-top">
-            <ion-row class="property-details-row">
-              <ion-col class="no-padding-top col1" size="75">
-                <div>
-                  <!-- <p class="office">{{result.officeName[0]}}</p> -->
-                  <p class="name">{{item?.fullName}}</p>
-                  <p class="address">{{item?.address}}</p>
-                </div>
-              </ion-col>
-              <ion-col class="no-padding-top col2 ion-text-end" size="25">
-                <p class="status">{{item?.status}}</p>
-                <p class="ref">{{item?.reference}}</p>
-              </ion-col>
-            </ion-row>
-            <ion-row class="fault-data-row">
-              <ion-col size="75">
-                <div >
-                  <p *ngIf="item.landlordFirstPropertyReference">
-                      <span class="text">Property ref</span> <br />{{item?.landlordFirstPropertyReference || '-'}}&nbsp;&nbsp;&nbsp;&nbsp;
-                      {{item?.landlordFirstPropertyAddress}}
-                  </p>
-                  <p class="other-property" *ngIf="item?.landlordOtherPropertiesCount>0">+{{item?.landlordOtherPropertiesCount}} other properties</p>
-                </div>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card-content>
-</ng-template>
-<ng-template #tenantSuggestion  let-item="item">
-  <ion-card-content id="details" class="tenant" (click)="openDetails('OpenTenant',item.propcoId)">
-    <ion-grid >
-      <ion-row class="main-row">
-        <ion-col class="ion-no-padding" size-xl="10" size="15">
-          <p class="uppercase">Tenant</p>
-          <br>
-          <i class="propcoicon propcoicon-tenant"></i>
-        </ion-col>
-        <ion-col  size-xl="75" size="85">
-          <ion-grid class="no-padding-top">
-            <ion-row class="property-details-row">
-              <ion-col class="no-padding-top col1" size="75">
-                <div>
-                  <!-- <p class="office">{{result.officeName[0]}}</p> -->
-                  <p class="name">{{item?.fullName}}</p>
-                  <p class="address">{{item?.address || '-'}}</p>
-                </div>
-              </ion-col>
-              <ion-col class="no-padding-top col2 ion-text-end" size="25">
-                <p class="status">{{item?.status}}</p>
-                <p class="ref">{{item?.reference}}</p>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card-content>
-</ng-template>
-<ng-template #contractorSuggestion  let-item="item">
-  <ion-card-content id="details" class="contractor" (click)="openDetails('OpenContractor',item.propcoId)">
-    <ion-grid >
-      <ion-row class="main-row">
-        <ion-col class="ion-no-padding" size-xl="10" size="15">
-          <p class="uppercase">Contractor</p>
-          <br>
-          <i class="propcoicon propcoicon-contractor no-background"></i>
-        </ion-col>
-        <ion-col  size-xl="75" size="85">
-          <ion-grid class="no-padding-top">
-            <ion-row class="property-details-row">
-              <ion-col class="no-padding-top col1" size="75">
-                <div>
-                  <!-- <p class="office">{{result.officeName[0]}}</p> -->
-                  <p class="name">{{item.fullName}}</p>
-                  <p class="name">{{item.company}}</p>
-                  <p class="address">{{item.address ? item.address + ', ': ''}} {{item.postcode}}</p>
-                  <p class="skill-set">{{item.occupation}}</p>
-                  <p class="agent-approved">{{item.isAgentContractorApproved}}</p>
-                </div>
-              </ion-col>
-              <ion-col class="no-padding-top col2 ion-text-end" size="25">
-                <p class="status">{{item?.status}}</p>
-                <p class="ref">{{item?.reference}}</p>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card-content>
-</ng-template>
-<ng-template #agentSuggestion  let-item="item">
-  <ion-card-content id="details" class="agent" (click)="openDetails('OpenAgent',item.propcoId)">
-    <ion-grid >
-      <ion-row class="main-row">
-        <ion-col class="ion-no-padding" size-xl="10" size="15">
-          <p class="uppercase">Agent</p>
-          <br>
-          <i class="propcoicon propcoicon-agent no-background"></i>
-        </ion-col>
-        <ion-col  size-xl="75" size="85">
-          <ion-grid class="no-padding-top">
-            <ion-row class="property-details-row">
-              <ion-col class="no-padding-top col2 ion-text-end" size="70">
-              </ion-col>
-              <ion-col class="no-padding-top col2 ion-text-end" size="25">
-                <p class="status">{{item?.status}}</p>
-                <p class="ref">{{item?.reference}}</p>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card-content>
-</ng-template>
-<ng-template #applicantSuggestion  let-item="item">
-  <ion-card-content id="details" class="contractor" (click)="openDetails('OpenApplicant',item.propcoId)">
-    <ion-grid >
-      <ion-row class="main-row">
-        <ion-col class="ion-no-padding" size-xl="10" size="15">
-          <p class="uppercase">Applicant</p>
-          <br>
-          <i class="propcoicon propcoicon-applicant-let no-background"></i>
-        </ion-col>
-        <ion-col  size-xl="75" size="85">
-          <ion-grid class="no-padding-top">
-            <ion-row class="property-details-row">
-              <ion-col class="no-padding-top col1" size="75">
-                <div>
-                  <!-- <p class="office">{{result.officeName[0]}}</p> -->
-                  <p class="name">{{item.fullName}}</p>
-                  <p class="address">{{item.address ? item.address + ', ': ''}} {{item.postcode}}</p>
-                </div>
-              </ion-col>
-              <ion-col class="no-padding-top col2 ion-text-end" size="25">
-                <p class="status">Legacy Reference</p>
-                <p class="ref">{{item?.legacyReference || DEFAULTS.NOT_AVAILABLE}}</p>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card-content>
-</ng-template>
-
 <!--List views-->
 <ng-template #propertySuggestionListView  let-item="item">
               <mat-accordion class="list-view-accordian" multi>
@@ -995,8 +733,8 @@
 
 <ng-template #agentSuggestionListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel #agentSuggestionPanel hideToggle>
-      <mat-expansion-panel-header>
+    <mat-expansion-panel #agentSuggestionPanel hideToggle style="position: static;">
+      <mat-expansion-panel-header class="agent-panel">
         <!-- <mat-panel-title> -->
          <div class="list-header align-flex-center">
           <div class="left-side">
@@ -1020,8 +758,12 @@
             <p class="ref">Status</p>
             <p class="status">{{item?.status}}</p>
           </div>
-          <div class="contextual-action">
-            <div class="fab-icon">
+          <div class="contextual-action action-icon">
+            <div style="margin-right: 10px;">
+              <i (click)="showMenu($event, 'divOverlay', item, 'agent-panel', false)"
+                class="propcoicon propcoicon-actions-on action-btn pointer"></i>
+            </div>
+            <!-- <div class="fab-icon">
               <ion-fab class="cc-list-button" (click)="$event.stopPropagation();">
                 <ion-fab-button class="expand-btn">      
                    <i class="propcoicon propcoicon-actions-on action-btn"></i>
@@ -1030,7 +772,7 @@
                   <ion-button (click)="$event.stopPropagation();openDetails('OpenAgent',item)" > View </ion-button>
                 </ion-fab-list>
               </ion-fab>
-            </div>
+            </div> -->
             <div>
               <span *ngIf="!agentSuggestionPanel.expanded" class="accordian-icon" title="Expand">
                 <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
@@ -1083,8 +825,8 @@
 
 <ng-template #landlordSuggestionListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel #landlordSuggestionPanel hideToggle>
-      <mat-expansion-panel-header>
+    <mat-expansion-panel #landlordSuggestionPanel hideToggle style="position: static;">
+      <mat-expansion-panel-header class="landlord-panel">
         <!-- <mat-panel-title> -->
          <div class="list-header align-flex-center">
           <div class="left-side">
@@ -1104,8 +846,12 @@
             <p class="ref">Status</p>
             <p class="status">{{item?.status ? item?.status : 'unknown'}}</p>
           </div>
-          <div class="contextual-action">
-            <div class="fab-icon">
+          <div class="contextual-action action-icon">
+            <div style="margin-right: 10px;">
+              <i (click)="showMenu($event, 'divOverlay', item, 'landlord-panel', false)"
+                class="propcoicon propcoicon-actions-on action-btn pointer"></i>
+            </div>
+            <!-- <div class="fab-icon">
               <ion-fab class="cc-list-button" (click)="$event.stopPropagation();">
                 <ion-fab-button class="expand-btn">      
                    <i class="propcoicon propcoicon-actions-on action-btn"></i>
@@ -1114,7 +860,7 @@
                   <ion-button (click)="$event.stopPropagation();openDetails('OpenLandlord',item)"> View </ion-button>
                 </ion-fab-list>
               </ion-fab>
-            </div>
+            </div> -->
             <div>
               <span *ngIf="!landlordSuggestionPanel.expanded" class="accordian-icon" title="Expand">
                 <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
@@ -1213,8 +959,8 @@
 
 <ng-template #tenantSuggestionListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel #tenantSuggestionPanel hideToggle>
-      <mat-expansion-panel-header>
+    <mat-expansion-panel #tenantSuggestionPanel hideToggle style="position: static;">
+      <mat-expansion-panel-header class="tenant-panel">
         <!-- <mat-panel-title> -->
          <div class="list-header align-flex-center">
           <div class="left-side">
@@ -1232,8 +978,12 @@
             <p class="ref">Status</p>
             <p class="status">{{item?.status}}</p>
           </div>
-          <div class="contextual-action">
-            <div class="fab-icon">
+          <div class="contextual-action action-icon">
+            <div style="margin-right: 10px;">
+              <i (click)="showMenu($event, 'divOverlay', item, 'tenant-panel', false)"
+                class="propcoicon propcoicon-actions-on action-btn pointer"></i>
+            </div>
+            <!-- <div class="fab-icon">
               <ion-fab class="cc-list-button" (click)="$event.stopPropagation();">
                 <ion-fab-button class="expand-btn">      
                    <i class="propcoicon propcoicon-actions-on action-btn"></i>
@@ -1242,7 +992,7 @@
                   <ion-button (click)="$event.stopPropagation();openDetails('OpenTenant',item)"> View </ion-button>
                 </ion-fab-list>
               </ion-fab>
-            </div>
+            </div> -->
             <div>
               <span *ngIf="!tenantSuggestionPanel.expanded" class="accordian-icon" title="Expand">
                 <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
@@ -1314,8 +1064,8 @@
 
 <ng-template #applicantSuggestionListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel #applicantSuggestionPanel hideToggle>
-      <mat-expansion-panel-header>
+    <mat-expansion-panel #applicantSuggestionPanel hideToggle style="position: static;">
+      <mat-expansion-panel-header class="applicant-panel">
         <!-- <mat-panel-title> -->
          <div class="list-header align-flex-center">
           <div class="left-side">
@@ -1336,8 +1086,12 @@
             <p class="ref">Status</p>
             <p class="status">{{item?.status}}</p>
           </div>
-          <div class="contextual-action">
-            <div class="fab-icon">
+          <div class="contextual-action action-icon">
+            <div style="margin-right: 10px;">
+              <i (click)="showMenu($event, 'divOverlay', item, 'applicant-panel', false)"
+                class="propcoicon propcoicon-actions-on action-btn pointer"></i>
+            </div>
+            <!-- <div class="fab-icon">
               <ion-fab class="cc-list-button" (click)="$event.stopPropagation();">
                 <ion-fab-button class="expand-btn">      
                    <i class="propcoicon propcoicon-actions-on action-btn"></i>
@@ -1346,7 +1100,7 @@
                   <ion-button (click)="$event.stopPropagation();openDetails('OpenApplicant',item)"> View </ion-button>
                 </ion-fab-list>
               </ion-fab>
-            </div>
+            </div> -->
             <div>
               <span *ngIf="!applicantSuggestionPanel.expanded" class="accordian-icon" title="Expand">
                 <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
@@ -1418,8 +1172,8 @@
 
 <ng-template #contractorSuggestionListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel #contractorSuggestionPanel hideToggle>
-      <mat-expansion-panel-header>
+    <mat-expansion-panel #contractorSuggestionPanel hideToggle style="position: static;">
+      <mat-expansion-panel-header class="contractor-panel">
         <!-- <mat-panel-title> -->
          <div class="list-header align-flex-center">
           <div class="left-side">
@@ -1441,8 +1195,12 @@
             <p class="ref">Status</p>
             <p class="status">{{item?.status}}</p>
           </div>
-          <div class="contextual-action">
-            <div class="fab-icon">
+          <div class="contextual-action action-icon">
+            <div style="margin-right: 10px;">
+              <i (click)="showMenu($event, 'divOverlay', item, 'contractor-panel', false)"
+                class="propcoicon propcoicon-actions-on action-btn pointer"></i>
+            </div>
+            <!-- <div class="fab-icon">
               <ion-fab class="cc-list-button" (click)="$event.stopPropagation();">
                 <ion-fab-button class="expand-btn">      
                    <i class="propcoicon propcoicon-actions-on action-btn"></i>
@@ -1451,7 +1209,7 @@
                   <ion-button (click)="$event.stopPropagation();openDetails('OpenContractor',item)"> View </ion-button>
                 </ion-fab-list>
               </ion-fab>
-            </div>
+            </div> -->
             <div>
               <span *ngIf="!contractorSuggestionPanel.expanded" class="accordian-icon" title="Expand">
                 <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>

@@ -52,16 +52,18 @@
 
         .furnishing {
             color: var(--ion-color-furnishing-text);
-            font-size: 15px;
+            font-size: 14px;
+            text-transform: uppercase;
         }
 
         .booking-office {
             color: var(--ion-color-service-type-text);
-            font-size: 15px;
+            font-size: 14px;
+            text-transform: uppercase;
         }
 
         .agent {
-            font-size: 15px;
+            font-size: 16px;
             .query {
                 color: var(--ion-color-block-label-color);
                 font-size: 13px;
