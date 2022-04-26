@@ -6,7 +6,49 @@
       <ion-text> Dashboard </ion-text>
     </div>
     <div class="homescreen-content">
-      <div style="width: 33.33% !important;">
+      <ion-row>
+        <ion-col size="70" class="ion-no-padding">
+          <ion-row>
+            <ion-col size="50" class="ion-no-padding">
+              <ion-slides pager *ngIf="propertyDetails?.media">
+                <ion-slide *ngFor="let data of propertyDetails?.media; let index = index">
+                  <div class="swiper-zoom-container">
+                    <img [src]="options + data?.fileName" [title]="data?.label" tappable (click)="openPreview(index)">
+                  </div>
+                  <button type="submit" ion-button color="light" class="swiper-button-prev swiper-button-black"
+                    (click)="prev()" *ngIf="propertyDetails?.media.length > 1">
+                    <ion-icon name="chevron-back-outline"></ion-icon>
+                  </button>
+                  <button type="submit" ion-button color="light" class="swiper-button-next swiper-button-black"
+                    (click)="next()" *ngIf="propertyDetails?.media.length > 1">
+                    <ion-icon name="chevron-forward-outline"></ion-icon>
+                  </button>
+                </ion-slide>
+              </ion-slides>
+              <div class="no-slider-img" *ngIf="!propertyDetails?.media">
+                <img src="assets/images/upload-image.jpg">
+              </div>
+            </ion-col>            
+            <ion-col size="50" class="ion-no-padding" >
+              <app-property-details-card [propertyData]="propertyDetails"></app-property-details-card>
+            </ion-col>            
+          </ion-row>
+          <ion-row>
+            <ion-col size="50" class="ion-no-padding">
+              <app-property-landlord-tenant [type]="'landlord'" [propertyLandlords]="propertyLandlords">
+              </app-property-landlord-tenant>
+            </ion-col>
+            <ion-col size="50" class="ion-no-padding">
+              <app-property-landlord-tenant [type]="'tenant'" [propertyTenants]="propertyTenants">
+              </app-property-landlord-tenant>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <ion-col size="30" class="right-panel-block ion-no-padding" >          
+          <app-property-right-panel [propertyData]="propertyDetails"></app-property-right-panel>
+        </ion-col>
+      </ion-row>
+      <!-- <div style="width: 33.33% !important;">
         <ion-slides pager style="height: 260px;" *ngIf="propertyDetails?.media">
           <ion-slide *ngFor="let data of propertyDetails?.media; let index = index">
             <div class="swiper-zoom-container">
@@ -37,7 +79,7 @@
       </div>
       <div style="width: 33.33% !important;" class="right-panel-block">
         <app-property-right-panel [propertyData]="propertyDetails"></app-property-right-panel>
-      </div>
+      </div> -->
     </div>
     <div *ngIf="propertyData">
       <div class="map-headeing">

@@ -22,8 +22,8 @@
       </ion-col>
       <ion-col>
         <div class="amenity-wrapper">
-          <i class="propcoicon propcoicon-garage no-background"></i>{{getLookupValuebb(propertyData?.propertyDetails?.parking, parkingTypes)
-            || '0'}}
+          <i class="propcoicon propcoicon-garage no-background"></i>
+          <span [ngClass]="{'garage-ellipse' : propertyData?.propertyDetails?.parking}" title="{{getLookupValuebb(propertyData?.propertyDetails?.parking, parkingTypes)}}">{{getLookupValuebb(propertyData?.propertyDetails?.parking, parkingTypes)  || '0'}}</span>
         </div>
       </ion-col>
     </ion-row>

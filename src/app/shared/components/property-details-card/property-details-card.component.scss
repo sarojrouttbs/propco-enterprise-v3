@@ -22,6 +22,13 @@
                 line-height: 35px;
                 color: var(--ion-color-amenity-icon);
             }
+
+            .garage-ellipse {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                width: 63px;
+            }
         }
     }
 
@@ -45,19 +52,19 @@
 
         .furnishing {
             color: var(--ion-color-furnishing-text);
-            font-size: 13px;
+            font-size: 15px;
         }
 
         .booking-office {
             color: var(--ion-color-service-type-text);
-            font-size: 13px;
+            font-size: 15px;
         }
 
         .agent {
             font-size: 15px;
             .query {
                 color: var(--ion-color-block-label-color);
-                font-size: 10px;
+                font-size: 13px;
             }
             :last-child{
                 color: var(--ion-color-text-color);
