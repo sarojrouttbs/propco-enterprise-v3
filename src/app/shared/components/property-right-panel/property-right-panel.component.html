@@ -74,7 +74,7 @@
     </ion-row>
 
     <ion-row>
-      <ion-col class="property-certificates ion-padding">
+      <ion-col class="property-certificates ion-padding-start">
         <ion-text class="sucess">{{propertyData?.propertyInfo?.webVisitCount || '0'}} </ion-text>&nbsp;&nbsp;
         <ion-text>
           Property Visits from web</ion-text>
@@ -82,7 +82,7 @@
     </ion-row>
 
     <ion-row>
-      <ion-col class="property-certificates ion-padding">
+      <ion-col class="property-certificates ion-padding-start">
         <ion-icon
           [name]="propertyData?.propertyDetails?.hasElectricalIndemnitySigned?'checkmark-circle': 'close-circle'"
           [ngClass]="propertyData?.propertyDetails?.hasElectricalIndemnitySigned?'sucess': 'danger'">
@@ -96,7 +96,7 @@
     </ion-row>
 
     <ion-row>
-      <ion-col class="property-certificates ion-padding">
+      <ion-col class="property-certificates ion-padding-start">
         <ion-icon
           [name]="propertyData?.propertyRentInfo?.emergencyResponseService?.isERSEnabled?'checkmark-circle': 'close-circle'"
           [ngClass]="propertyData?.propertyRentInfo?.emergencyResponseService?.isERSEnabled?'sucess': 'danger'">
@@ -109,7 +109,7 @@
     </ion-row>
 
     <ion-row> 
-      <ion-col class="property-certificates ion-padding">
+      <ion-col class="property-certificates ion-padding-start">
         <ion-icon [name]="propertyData?.propertyDetails?.hasGas?'checkmark-circle': 'close-circle'"
           [ngClass]="propertyData?.propertyDetails?.hasGas?'sucess': 'medium'">
         </ion-icon>&nbsp;&nbsp;
