@@ -66,6 +66,18 @@ tools {
       }
     }
 
+   stage("Run Test Cases") {
+       when {
+           expression {
+               return null
+           }
+       }
+       steps {
+           echo "Dummy step!"
+        }
+   }
+
+
       stage('Trigger UAT Nginx Docker build') {
        steps {
         build job: "PropCo_UAT_nginx_Docker", wait: false     
