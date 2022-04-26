@@ -54,6 +54,16 @@ stage('SonarQube analysis') {
       }
     }
 
+   stage("Run Test Cases") {
+       when {
+           expression {
+               return null
+           }
+       }
+       steps {
+           echo "Dummy step!"
+        }
+   }
       stage('Trigger QA Nginx Docker build') {
        steps {
         build job: "PropCo_QA_nginx_Docker", wait: false     
