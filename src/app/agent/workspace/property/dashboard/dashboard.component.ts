@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonSlides, ModalController, ViewDidEnter } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
@@ -37,7 +37,8 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
     private modalCtrl: ModalController,
     private agentService: AgentService,
     private commonService: CommonService,
-    private router: Router
+    private router: Router,
+    private route:ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -121,10 +122,6 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
   private getActiveTabEntityInfo() {
     let item = this.localStorageItems.filter((x) => x.isSelected);
     if (item) {
-      this.router.navigate([
-        `agent/workspace/property/${item[0].entityId}/dashboard`,
-      ]);
-      this.activeLink = item[0].entityId;
       return item[0];
     }
   }
