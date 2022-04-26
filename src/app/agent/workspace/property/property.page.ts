@@ -26,9 +26,7 @@ export class PropertyPage implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-     this.proptertyId = params["pid"]
-    });
+    this.proptertyId = this.route.snapshot.params['pid'];
   }
 
   mouseenter() {

@@ -83,9 +83,16 @@ export class WorkspacePage implements OnInit {
       this.router.navigate([
         `agent/workspace/property/${item[0].entityId}/dashboard`,
       ]);
-      this.activeLink = item[0].entityId;
+      this.activeLink = item[0].reference;
       return item[0];
     }
+  }
+
+  async navigate(item){
+    await this.workspaceService.makeItemActive(item.entityId);
+    this.router.navigate([
+      item.state,
+    ]);
   }
 
   private async getEntityFullDetails() {
