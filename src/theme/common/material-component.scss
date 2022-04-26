@@ -14,11 +14,17 @@
   @include set-text-style(15px, 19px);
 }
 
-.mat-form-field-label mat-label, .mat-list-item{
+.mat-form-field, .mat-form-field-label mat-label, .mat-list-item, .mat-form-field .mat-form-field-label, .mat-select-value{
   font-family: var(--ion-font-family);
+  color: var(--ion-text-color);
 
 }
-
+.mat-form-field-appearance-legacy .mat-form-field-underline{
+  background-color: rgba(var(--ion-text-color-rgb), 0.5);
+}
+.mat-select-arrow{
+  color: rgba(var(--ion-text-color-rgb), 0.5);
+}
 .mat-tab-group {
   font-family: var(--ion-font-family);
   .mat-tab-header {
