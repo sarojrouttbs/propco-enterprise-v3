@@ -68,7 +68,7 @@
   }
 
   .divider {
-    margin-top: 2%;
+    margin-top: 7px;
   }
 
   i.search-icon:hover {
@@ -124,9 +124,9 @@
 }
 
 .swap-icon {
-  display: flex;
-  justify-content: flex-start;
-  margin: 7px 15px;
+  position: absolute;
+    left: 7px;
+    top: 7px;
 
   img {
       background-color: var(--ion-color-step-1700);

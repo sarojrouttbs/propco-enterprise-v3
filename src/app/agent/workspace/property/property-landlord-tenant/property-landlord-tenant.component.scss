@@ -1,9 +1,11 @@
 ion-grid {
-    background: var(--ion-property-details-bg);
+    background: var(--ion-background-color);
     padding: 0;
+    border-top: solid 1px var(--ion-property-details-bg);
+    border-bottom: solid 1px var(--ion-property-details-bg);
 }
 .landlord-block {
-    border-right: solid 2px var(--ion-color-amenity-bg);
+    border: solid 1px var(--ion-property-details-bg);
 }
 .landlord-tenant-count {
     display: flex;
@@ -63,7 +65,7 @@ ion-grid {
     margin-bottom: 5px;
     ion-label {
         color: var(--ion-color-block-label-color);
-        font-size: 11px;
+        font-size: 12px;
     }
 
     ion-text {
@@ -76,7 +78,7 @@ ion-grid {
     text-align: center;
     ion-label {
         color: var(--ion-color-block-label-color);
-        font-size: 11px;
+        font-size: 13px;
     }
 
     ion-text {
