@@ -715,6 +715,14 @@ ion-item {
     }
   }
 
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+    .list-header {
+      .property-wrapper{
+        width: 73%;
+      }
+    }
+}
+
   .align-flex-center {
     align-items: center;
   }
