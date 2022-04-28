@@ -26,6 +26,7 @@ export class LoginPage implements OnInit {
 
   sliderMsgList = LOGIN_PAGE_TEXT_MESSAGES;
   buildDetails = BUILD_DETAILS;
+  currentDate: number = Date.now();
 
   constructor(private _formBuilder: FormBuilder, 
     private modalController: ModalController, 

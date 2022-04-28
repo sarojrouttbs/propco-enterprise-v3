@@ -463,6 +463,44 @@ ion-alert.common-alert-box {
   }
 }
 
+#propertyDashboardTabs{
+    z-index: 1000;
+    padding-bottom: 10px;
+    ion-segment-button{
+      border: solid 1px var(--ion-color-body);
+      border-top: none;
+      color: var(--ion-color-text-color);
+      max-width: inherit;
+      --color-hover:var(--ion-color-text-color);
+      --background-hover: var(--ion-color-header);
+      --background: var(--ion-color-header);
+      z-index: 1000;
+  }
+  
+  .segment-button-checked{
+    --background-checked: var(--ion-background-color);
+    --indicator-height: none;
+    --color-checked: var(--ion-color-text-color);
+  }
+  
+  .segment-button-checked:before{
+    content: "";
+    vertical-align: middle;
+    margin: auto;
+    position: absolute;
+    display: block;
+    left: 0;
+    right: 0;
+    bottom: -8px;
+    width: 14px;
+    height: 14px;
+    transform: rotate(225deg);
+    border: 1px solid;
+    border-color: #ccc transparent transparent #ccc;
+    background-color: white;
+  }
+}
+
 // .sc-ion-select-popover-h ion-list.sc-ion-select-popover {
 //   background-color: red !important;
 // }
