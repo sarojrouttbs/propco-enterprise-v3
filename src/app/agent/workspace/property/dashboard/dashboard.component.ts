@@ -32,13 +32,12 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
   lookupdata: any;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   notAvailable = DEFAULTS.NOT_AVAILABLE
+  type = 'viewings';
 
   constructor(
     private modalCtrl: ModalController,
     private agentService: AgentService,
-    private commonService: CommonService,
-    private router: Router,
-    private route:ActivatedRoute
+    private commonService: CommonService
   ) { }
 
   ngOnInit() {
