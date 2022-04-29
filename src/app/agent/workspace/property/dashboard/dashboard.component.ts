@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
   lookupdata: any;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   notAvailable = DEFAULTS.NOT_AVAILABLE
-  type: string = 'viewings';
+  type = 'viewings';
 
   constructor(
     private modalCtrl: ModalController,
