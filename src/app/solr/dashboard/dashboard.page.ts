@@ -87,6 +87,12 @@ export class DashboardPage implements OnInit {
   }
 
   private async initApiCalls() {
+    const accessToken = this.commonService.getItem(PROPCO.ACCESS_TOKEN);
+    const webKey = this.commonService.getItem(PROPCO.WEB_KEY);
+    if(accessToken && webKey){
+      this.loaded = true;
+      return;
+    }
     let isAuthSuccess = await this.authenticateSso();
     if (isAuthSuccess) {
       this.loggedInUserData = await this.getUserDetails();

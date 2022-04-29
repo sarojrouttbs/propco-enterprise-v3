@@ -54,7 +54,8 @@ export class SearchSuggestionComponent implements OnInit {
     private solrSearchService: SolrSearchHandlerService,
     private route: ActivatedRoute,
     private workspaceService: WorkspaceService,
-  ) {}
+  ) {
+  }
 
   getItems(ev: any) {
     // Reset items back to all of the items
@@ -92,12 +93,10 @@ export class SearchSuggestionComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     this.getQueryParams();
-    if (changes.isAuthSuccess && changes.isAuthSuccess.currentValue) {
-      this.initDashboard();
-    }
   }
 
   ngOnInit() {
+    this.initDashboard();
     this.commonService.dataChanged$.subscribe((data)=>{
       this.entityControl.setValue(data.entity);
       this.searchTermControl.setValue(data.term);
