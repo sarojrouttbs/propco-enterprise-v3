@@ -21,19 +21,15 @@ export class GoogleMapComponent implements OnInit {
   @Input() propertyData: { address: any };
   propertyAddress: any;
 
-  markers: marker[] = [];
+  markers: Marker[] = [];
 
-  constructor(private _zone: NgZone, private mapLoader: MapsAPILoader) {}
+  constructor(private mapLoader: MapsAPILoader) {}
 
   ngOnInit(): void {
     this.propertyAddress = this.propertyData?.address;
-    let lat = Number(this.propertyAddress.latitude);
-    let lang =Number(this.propertyAddress.longitude);
-
-    if (
-      lat  &&
-      lang
-    ) {
+    const lat = Number(this.propertyAddress.latitude);
+    const lang = Number(this.propertyAddress.longitude);
+    if (lat && lang) {
       this.setCurrentPosition(
         lat,
         lang
@@ -41,15 +37,15 @@ export class GoogleMapComponent implements OnInit {
     } else {
       const addressStr =
         this.propertyAddress?.addressLine1 +
-        " " +
+        ' ' +
         this.propertyAddress?.addressLine1 +
-        " " +
+        ' ' +
         this.propertyAddress?.addressLine3 +
-        " " +
+        ' ' +
         this.propertyAddress?.town +
-        " " +
+        ' ' +
         this.propertyAddress?.county +
-        " " +
+        ' ' +
         this.propertyAddress?.postcode;
       this.addressToCoordinates(addressStr);
     }
@@ -74,7 +70,7 @@ export class GoogleMapComponent implements OnInit {
       switchMap(() => {
         return new Observable((observer) => {
           this.geocoder.geocode({ address: location }, (results, status) => {
-            if (status == google.maps.GeocoderStatus.OK) {
+            if (status === google.maps.GeocoderStatus.OK) {
               observer.next({
                 lat: results[0].geometry.location.lat(),
                 lng: results[0].geometry.location.lng(),
@@ -90,30 +86,25 @@ export class GoogleMapComponent implements OnInit {
   }
 
   addressToCoordinates(address: string) {
-    console.log('address',address);
-    
     this.geocodeAddress(address).subscribe((location: any) => {
-
       this.lat = location.lat;
       this.lng = location.lng;
-      console.log('lat', this.lat, this.lng);
-
       this.setCurrentPosition(this.lat, this.lng);
     });
   }
 
-  private setCurrentPosition(lat, lng) {
-    this.lat = lat;
-    this.lng = lng;
+  private setCurrentPosition(latitude, longitude) {
+    this.lat = latitude;
+    this.lng = longitude;
     this.markers.push({
-      lat: lat,
-      lng: lng,
+      lat: latitude,
+      lng: longitude,
       draggable: false,
     });
   }
 }
 
-interface marker {
+interface Marker {
   lat: number;
   lng: number;
   draggable: boolean;
