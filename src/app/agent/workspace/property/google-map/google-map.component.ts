@@ -7,9 +7,9 @@ import { from, of } from "rxjs";
 declare var google: any;
 
 @Component({
-  selector: "app-google-map",
-  templateUrl: "./google-map.component.html",
-  styleUrls: ["./google-map.component.scss"],
+  selector: 'app-google-map',
+  templateUrl: './google-map.component.html',
+  styleUrls: ['./google-map.component.scss'],
 })
 export class GoogleMapComponent implements OnInit {
   private geocoder: any;
