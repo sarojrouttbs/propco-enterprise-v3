@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, NgZone } from "@angular/core";
-import { Observable } from "rxjs";
-import { MapsAPILoader } from "@agm/core";
-import { tap, map, switchMap } from "rxjs/operators";
-import { from, of } from "rxjs";
+import { Component, OnInit, Input, NgZone } from '@angular/core';
+import { Observable } from 'rxjs';
+import { MapsAPILoader } from '@agm/core';
+import { tap, map, switchMap } from 'rxjs/operators';
+import { from, of } from 'rxjs';
 
 declare var google: any;
 
