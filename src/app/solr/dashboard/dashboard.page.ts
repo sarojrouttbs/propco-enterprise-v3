@@ -33,7 +33,7 @@ export class DashboardPage implements OnInit {
       {
         title: "Welcome to the New Dashboard",
         content:
-          "Just getting started? Let's take a look at the new user interface",
+          "Just getting started? Let's take a look at the new user interface.",
       },
       {
         title: "New & Improved Search",
@@ -56,7 +56,7 @@ export class DashboardPage implements OnInit {
       {
         title: "Quick Links",
         selector: ".tour-4",
-        content: "Click on these shortcuts to open frequently used functions",
+        content: "Click on these shortcuts to open frequently used functions.",
         orientation: Orientation.Top,
       },
     ],
