@@ -1,5 +1,5 @@
-import { NgModule } from "@angular/core";
-import { LookupPipe } from "./lookup-pipe";
+import { NgModule } from '@angular/core';
+import { LookupPipe } from './lookup-pipe';
 import { AddressPipe } from './address-string-pipe.pipe';
 
 @NgModule({
@@ -7,4 +7,4 @@ import { AddressPipe } from './address-string-pipe.pipe';
 	imports: [],
 	exports: [LookupPipe, AddressPipe]
 })
-export class PipesModule {}
+export class PipesModule { }
