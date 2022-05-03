@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class ReplaceSquareBracketsPipe implements PipeTransform {
 
   transform(value: string): string {
-    if(value){
+    if (value) {
       return value.replace(/[\[\]']+/g, '');
     }
   }
