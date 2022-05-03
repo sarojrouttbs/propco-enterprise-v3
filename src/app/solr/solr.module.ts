@@ -1,13 +1,13 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IonicModule } from "@ionic/angular";
+import { IonicModule } from '@ionic/angular';
 
-import { SolrPageRoutingModule } from "./solr-routing.module";
+import { SolrPageRoutingModule } from './solr-routing.module';
 
-import { SolrPage } from "./solr.page";
-import { ComponentsModule } from "../shared/components/components.module";
+import { SolrPage } from './solr.page';
+import { ComponentsModule } from '../shared/components/components.module';
 
 @NgModule({
   imports: [
