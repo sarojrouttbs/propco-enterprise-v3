@@ -35,6 +35,7 @@ agm-map {
 .wrapper {
   position: relative;
   margin: auto;
+  margin-top: -10px;
 }
 
 .map {
@@ -62,5 +63,5 @@ agm-map {
   display: flex;
   align-items: center;
   padding: 20px;
-  font-size: 25px
+  font-size: 25px;
 }

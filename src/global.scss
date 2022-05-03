@@ -751,6 +751,9 @@ mat-form-field {
   .mat-select-value {
     color: var(--ion-color-step-2000);
   }
+  .mat-form-field-infix{
+    border-bottom: 1px solid var(--ion-color-step-2000) !important;
+  }
   .mat-select-arrow{
     color: var(--ion-color-step-2000);
   }
