@@ -39,15 +39,15 @@ export class GoogleMapComponent implements OnInit {
     } else {
       const addressStr =
         this.propertyAddress?.addressLine1 +
-        " " +
+        ' ' +
         this.propertyAddress?.addressLine1 +
-        " " +
+        ' ' +
         this.propertyAddress?.addressLine3 +
-        " " +
+        ' ' +
         this.propertyAddress?.town +
-        " " +
+        ' ' +
         this.propertyAddress?.county +
-        " " +
+        ' ' +
         this.propertyAddress?.postcode;
       this.addressToCoordinates(addressStr);
     }
@@ -89,8 +89,8 @@ export class GoogleMapComponent implements OnInit {
 
   addressToCoordinates(address) {
     this.geocodeAddress(address).subscribe((location: Location) => {
-      this.lat = location["lat"];
-      this.lng = location["lng"];
+      this.lat = location['lat'];
+      this.lng = location['lng'];
       this.setCurrentPosition(this.lat, this.lng);
     });
   }
