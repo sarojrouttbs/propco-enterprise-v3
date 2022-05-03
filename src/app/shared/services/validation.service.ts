@@ -9,7 +9,7 @@ export class ValidationService {
   constructor() { }
 
   static getValidatorErrorMessage(validatorName: string, validatorValue?: any) {
-    let config = {
+    const config = {
       required: 'This field is required.',
       invalidCreditCard: 'Is invalid credit card number',
       invalidPostcode: 'Please enter valid postcode.',
@@ -26,7 +26,7 @@ export class ValidationService {
       equalTo: 'Confirm password does not match the password',
       invalidSpecialCharacter: 'Special character not allowed',
       invalidAlphabet: 'Only alphabets are allowed',
-      invalidAlphabetWithPunctuation: "Only alphabets with punctuation(',-) are allowed",
+      invalidAlphabetWithPunctuation: `Only alphabets with punctuation(',-) are allowed`,
       invalidBankCode: 'Please enter valid sort code',
       whitespace: 'Please enter valid data',
       commonPassword: 'Password is too easy to guess',
@@ -104,9 +104,9 @@ export class ValidationService {
   static amountValidator(control) {
     if (typeof control !== 'undefined' && control.value) {
       if (control.value.match(/^(£\d*|[1-9]\d*)(,\d+)?(.\d{1,2})?$/)) {
-        return null; 
+        return null;
       } else {
-        return { invalidAmount: true }; 
+        return { invalidAmount: true };
       }
     }
   }
@@ -196,21 +196,21 @@ export class ValidationService {
     return isValid ? null : { 'whitespace': true };
   }
 
-  static futureDateSelectValidator(control){
+  static futureDateSelectValidator(control) {
     if (typeof control !== 'undefined' && control.value) {
-     const futureDate = new Date();
-     futureDate.setDate(futureDate.getDate() + 60);
-     const todayDate = new Date();
-     todayDate.setHours(0, 0, 0, 0);
-     let currentDate = new Date(control.value);
-     if(currentDate.toISOString() < todayDate.toISOString() || currentDate.toISOString() > futureDate.toISOString()){
-      return {invalidFutureDate: true};
-     }
-     else{
-      return null;
-     }
+      const futureDate = new Date();
+      futureDate.setDate(futureDate.getDate() + 60);
+      const todayDate = new Date();
+      todayDate.setHours(0, 0, 0, 0);
+      let currentDate = new Date(control.value);
+      if (currentDate.toISOString() < todayDate.toISOString() || currentDate.toISOString() > futureDate.toISOString()) {
+        return { invalidFutureDate: true };
+      }
+      else {
+        return null;
+      }
     }
-  } 
+  }
 
   static dateRangeValidator(dGroup: FormGroup) {
     let toDate = new Date(dGroup.controls["toDate"].value);
