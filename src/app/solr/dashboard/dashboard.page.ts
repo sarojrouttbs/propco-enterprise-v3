@@ -1,62 +1,62 @@
-import { HttpParams } from "@angular/common/http";
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { ActivatedRoute, ActivatedRouteSnapshot } from "@angular/router";
-import { PROPCO } from "src/app/shared/constants";
-import { CommonService } from "src/app/shared/services/common.service";
-import { SolrService } from "../solr.service";
-import { GuidedTourService } from "ngx-guided-tour";
+import { HttpParams } from '@angular/common/http';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { PROPCO } from 'src/app/shared/constants';
+import { CommonService } from 'src/app/shared/services/common.service';
+import { SolrService } from '../solr.service';
+import { GuidedTourService } from 'ngx-guided-tour';
 import {
   GuidedTour,
   Orientation,
-} from "../../shared/interface/guided-tour.model";
-import { ThemeService } from "src/app/shared/services/theme.service";
+} from '../../shared/interface/guided-tour.model';
+import { ThemeService } from 'src/app/shared/services/theme.service';
 declare function openScreen(key: string, value: any): any;
 
 @Component({
-  selector: "app-dashboard",
-  templateUrl: "./dashboard.page.html",
-  styleUrls: ["./dashboard.page.scss"],
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.page.html',
+  styleUrls: ['./dashboard.page.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class DashboardPage implements OnInit {
   loggedInUserData;
-  isAuthSuccess: boolean = false;
+  isAuthSuccess = false;
 
-  hideSuggestion: boolean = false;
-  entityControl = new FormControl(["Property"]);
-  loaded: boolean = false;
+  hideSuggestion = false;
+  entityControl = new FormControl(['Property']);
+  loaded = false;
   dashboardTour: GuidedTour = {
-    tourId: "solr-tour",
+    tourId: 'solr-tour',
     useOrb: false,
     steps: [
       {
-        title: "Welcome to the New Dashboard",
+        title: 'Welcome to the New Dashboard',
         content:
-          "Just getting started? Let's take a look at the new user interface.",
+          'Just getting started? Let\'s take a look at the new user interface.',
       },
       {
-        title: "New & Improved Search",
-        selector: ".tour-1",
-        content: "Please select entities here.",
+        title: 'New & Improved Search',
+        selector: '.tour-1',
+        content: 'Please select entities here.',
         orientation: Orientation.Bottom,
       },
       {
-        title: "New & Improved Search",
-        selector: ".tour-2",
-        content: "Please type to search an entity.",
+        title: 'New & Improved Search',
+        selector: '.tour-2',
+        content: 'Please type to search an entity.',
         orientation: Orientation.Bottom,
       },
       {
-        title: "New & Improved Search",
-        selector: ".tour-3",
-        content: "Click on this button to fetch the result(s).",
+        title: 'New & Improved Search',
+        selector: '.tour-3',
+        content: 'Click on this button to fetch the result(s).',
         orientation: Orientation.Bottom,
       },
       {
-        title: "Quick Links",
-        selector: ".tour-4",
-        content: "Click on these shortcuts to open frequently used functions.",
+        title: 'Quick Links',
+        selector: '.tour-4',
+        content: 'Click on these shortcuts to open frequently used functions.',
         orientation: Orientation.Top,
       },
     ],
@@ -75,7 +75,7 @@ export class DashboardPage implements OnInit {
     private guidedTourService: GuidedTourService,
     private theme: ThemeService
   ) {
-    this.theme.activeTheme("light-theme");
+    this.theme.activeTheme('light-theme');
   }
 
   ngOnInit() {
@@ -97,7 +97,7 @@ export class DashboardPage implements OnInit {
     if (isAuthSuccess) {
       this.loggedInUserData = await this.getUserDetails();
       this.loaded = true;
-      if (!this.commonService.getItem("disableTour")) {
+      if (!this.commonService.getItem('disableTour')) {
         setTimeout(() => {
           this.guidedTourService.startTour(this.dashboardTour);
         }, 300);
@@ -106,11 +106,11 @@ export class DashboardPage implements OnInit {
   }
 
   private getUserDetails() {
-    let params = new HttpParams().set("hideLoader", "true");
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve, reject) => {
       this.solrService.getUserDetails(params).subscribe(
         (res) => {
-          resolve(res ? res.data[0] : "");
+          resolve(res ? res.data[0] : '');
         },
         (error) => {
           resolve(null);
@@ -120,8 +120,8 @@ export class DashboardPage implements OnInit {
   }
 
   private authenticateSso() {
-    var snapshot = this.route.snapshot;
-    let ssoKey = encodeURIComponent(snapshot.queryParams.ssoKey);
+    const snapshot = this.route.snapshot;
+    const ssoKey = encodeURIComponent(snapshot.queryParams.ssoKey);
     return new Promise((resolve, reject) => {
       this.solrService
         .authenticateSsoToken(ssoKey)
@@ -147,6 +147,6 @@ export class DashboardPage implements OnInit {
   }
 
   private disableWelcomeTour() {
-    this.commonService.setItem("disableTour", true);
+    this.commonService.setItem('disableTour', true);
   }
 }
