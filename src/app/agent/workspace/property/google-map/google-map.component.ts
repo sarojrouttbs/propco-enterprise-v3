@@ -27,14 +27,16 @@ export class GoogleMapComponent implements OnInit {
 
   ngOnInit(): void {
     this.propertyAddress = this.propertyData?.address;
+    let lat = Number(this.propertyAddress.latitude);
+    let lang =Number(this.propertyAddress.longitude);
 
     if (
-      Number(this.propertyAddress.latitude) &&
-      Number(this.propertyAddress.longitude)
+      lat  &&
+      lang
     ) {
       this.setCurrentPosition(
-        Number(this.propertyAddress.latitude),
-        Number(this.propertyAddress.longitude)
+        lat,
+        lang
       );
     } else {
       const addressStr =
@@ -88,9 +90,14 @@ export class GoogleMapComponent implements OnInit {
   }
 
   addressToCoordinates(address: string) {
+    console.log('address',address);
+    
     this.geocodeAddress(address).subscribe((location: any) => {
+
       this.lat = location.lat;
       this.lng = location.lng;
+      console.log('lat', this.lat, this.lng);
+
       this.setCurrentPosition(this.lat, this.lng);
     });
   }
