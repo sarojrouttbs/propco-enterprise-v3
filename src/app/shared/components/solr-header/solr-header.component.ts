@@ -1,16 +1,16 @@
-import { Component, OnInit } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { ThemeService } from "../../services/theme.service";
+import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { ThemeService } from '../../services/theme.service';
 declare function openScreen(key: string, value: any): any;
 @Component({
-  selector: "app-solr-header",
-  templateUrl: "./solr-header.component.html",
-  styleUrls: ["./solr-header.component.scss"],
+  selector: 'app-solr-header',
+  templateUrl: './solr-header.component.html',
+  styleUrls: ['./solr-header.component.scss'],
 })
 export class SolrHeaderComponent implements OnInit {
-  entityControl = new FormControl(["Property"]);
+  entityControl = new FormControl(['Property']);
   constructor(private theme: ThemeService) {
-    this.theme.activeTheme("light-theme");
+    this.theme.activeTheme('light-theme');
   }
 
   ngOnInit() {}
