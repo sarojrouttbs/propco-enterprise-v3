@@ -14,8 +14,8 @@ declare var google: any;
 export class GoogleMapComponent implements OnInit {
   private geocoder: any;
 
-  lat: Number;
-  lng: Number;
+  lat: number;
+  lng: number;
   centerLongitude: any;
   centerLatitude: any;
   @Input() propertyData: { address: any };
@@ -39,15 +39,15 @@ export class GoogleMapComponent implements OnInit {
     } else {
       const addressStr =
         this.propertyAddress?.addressLine1 +
-        ' ' +
+        " " +
         this.propertyAddress?.addressLine1 +
-        ' ' +
+        " " +
         this.propertyAddress?.addressLine3 +
-        ' ' +
+        " " +
         this.propertyAddress?.town +
-        ' ' +
+        " " +
         this.propertyAddress?.county +
-        ' ' +
+        " " +
         this.propertyAddress?.postcode;
       this.addressToCoordinates(addressStr);
     }
@@ -87,10 +87,10 @@ export class GoogleMapComponent implements OnInit {
     );
   }
 
-  addressToCoordinates(address) {
-    this.geocodeAddress(address).subscribe((location: Location) => {
-      this.lat = location['lat'];
-      this.lng = location['lng'];
+  addressToCoordinates(address: string) {
+    this.geocodeAddress(address).subscribe((location: any) => {
+      this.lat = location.lat;
+      this.lng = location.lng;
       this.setCurrentPosition(this.lat, this.lng);
     });
   }
@@ -102,14 +102,12 @@ export class GoogleMapComponent implements OnInit {
       lat: lat,
       lng: lng,
       draggable: false,
-      
     });
   }
 }
 
-// just an interface for type safety.
 interface marker {
   lat: number;
   lng: number;
-  draggable: boolean
+  draggable: boolean;
 }
