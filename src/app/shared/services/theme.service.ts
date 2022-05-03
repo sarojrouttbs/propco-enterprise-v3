@@ -5,8 +5,6 @@ import { Inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
   providedIn: 'root'
 })
 export class ThemeService {
-
-  
   public renderer: Renderer2;
   public currentTheme;
 
