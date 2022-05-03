@@ -26,6 +26,6 @@ import { ComponentsModule } from 'src/app/shared/components/components.module';
     NgxSliderModule,
     ComponentsModule
   ],
-  declarations: [SearchResultsPage,ReplaceSquareBracketsPipe,RemainingCountPipe]
+  declarations: [SearchResultsPage, ReplaceSquareBracketsPipe, RemainingCountPipe]
 })
-export class SearchResultsPageModule {}
+export class SearchResultsPageModule { }

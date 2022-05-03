@@ -1,12 +1,12 @@
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: "RemainingCountPipe",
+  name: 'RemainingCountPipe',
 })
 export class RemainingCountPipe implements PipeTransform {
   transform(value: any, type: string = ''): string {
     if (value) {
-      if(type === 'onlyString'){
+      if (type === 'onlyString') {
         value = value.split(',');
       }
       if (value.length === 1) {

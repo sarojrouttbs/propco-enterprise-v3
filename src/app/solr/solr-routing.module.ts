@@ -1,30 +1,30 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-import { MaterialModule } from "../material.module";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { MaterialModule } from '../material.module';
 
-import { SolrPage } from "./solr.page";
+import { SolrPage } from './solr.page';
 
 const routes: Routes = [
   {
-    path: "",
+    path: '',
     component: SolrPage,
     children: [
       {
-        path: "",
-        redirectTo: "dashboard",
-        pathMatch: "full",
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
       },
       {
-        path: "dashboard",
+        path: 'dashboard',
         loadChildren: () =>
-          import("./dashboard/dashboard.module").then(
+          import('./dashboard/dashboard.module').then(
             (m) => m.DashboardPageModule
           ),
       },
       {
-        path: "search-results",
+        path: 'search-results',
         loadChildren: () =>
-          import("./search-results/search-results.module").then(
+          import('./search-results/search-results.module').then(
             (m) => m.SearchResultsPageModule
           ),
       },
