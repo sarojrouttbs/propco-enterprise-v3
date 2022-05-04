@@ -116,7 +116,7 @@ export const FAULT_STAGES_INDEX = {
 };
 
 export const LL_INSTRUCTION_TYPES = [
-  //Don't change the Sequence of values it will alter the CLI functionality
+  /** Don't change the Sequence of values it will alter the CLI functionality */
   {
     index: 'DOES_OWN_REPAIRS',
     value: 'Landlord does their own repairs',
@@ -262,7 +262,7 @@ export const PAYMENT_METHOD_TYPES = [
 ];
 
 export const PAYMENT_WARNINGS = {
-  hasSufficientReserveBalance: "Insufficient funds in Landlord's reserve.",
+  hasSufficientReserveBalance: `Insufficient funds in Landlord's reserve.`,
   isFaultEstimateLessThanHalfRentOrThresHoldValue:
     'The Works Order is over half months rent or £250.',
   hasRentArrears: 'The Tenant has rent arrears.',
@@ -281,7 +281,7 @@ export const CLOSE_REASON = [
   },
   {
     index: 'TENANTS_RESPONSIBILITY',
-    value: "Tenant's responsibility",
+    value: `Tenant's responsibility`,
   },
   {
     index: 'APPOINTMENT_NOT_BOOKED',
@@ -327,7 +327,7 @@ export const FAULT_QUALIFICATION_ACTIONS = [
   },
   {
     index: 'LANDLORD_INSTRUCTION',
-    value: "Check Landlord's Instructions",
+    value: `Check Landlord's Instructions`,
   },
   {
     index: 'REQUEST_MORE_INFO',
@@ -604,9 +604,10 @@ export const DEFAULT_MESSAGES = {
   NO_RECORD_FOUND: 'No record found!',
   NO_DETAILS_AVAILABLE: 'No details available',
   errors: {
-    SOMETHING_WENT_WRONG:'Something went wrong'
+    SOMETHING_WENT_WRONG: 'Something went wrong'
   },
-  NOT_AVAILABLE_TEXT : 'Not Available'
+  NOT_AVAILABLE_TEXT : 'Not Available',
+  AVAILABLE_SOON: 'Available Soon'
 };
 
 export const FAULT_NOTIFICATION_STATE = {
@@ -619,7 +620,7 @@ export const FAULT_NOTIFICATION_STATE = {
 
 export const DEFAULTS = {
   NOT_AVAILABLE: '-'
-}
+};
 
 export const AGENT_WORKSPACE_CONFIGS = {
   localStorageName: 'entity_tabs_menu'
@@ -633,4 +634,4 @@ export const LOGIN_PAGE_TEXT_MESSAGES = [
 export const BUILD_DETAILS = {
   BUILD_NUMBER: 'Build 45.0',
   BUILD_MONTH_YEAR: 'February 2022'
-}
+};

@@ -1,16 +1,15 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { environment } from "src/environments/environment";
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class SolrService {
   constructor(private httpClient: HttpClient) {}
 
   getUserDetails(params: HttpParams): Observable<any> {
-    // let params = new HttpParams().set("hideLoader", "true");
     return this.httpClient.get(environment.API_BASE_URL + `user/logged-in`, {
       params,
     });
@@ -26,7 +25,7 @@ export class SolrService {
   }
 
   entitySearch(body: object): Observable<any> {
-    let params = new HttpParams().set("hideLoader", "true");
+    const params = new HttpParams().set('hideLoader', 'true');
     return this.httpClient.post(
       environment.API_BASE_URL + `entities/search`,
       body,
@@ -35,14 +34,14 @@ export class SolrService {
   }
 
   authenticateSsoToken(encodedString: string): Observable<any> {
-    const requestObj = { env: "saas-cw-uat" };
-    let params = new HttpParams().set("hideLoader", "true");
+    const requestObj = { env: 'saas-cw-uat' };
+    const params = new HttpParams().set('hideLoader', 'true');
     return this.httpClient.post(
-      environment.API_BASE_URL + "authentication/sso/token",
+      environment.API_BASE_URL + 'authentication/sso/token',
       requestObj,
       {
         headers: {
-          Authorization: "Basic " + encodedString,
+          Authorization: 'Basic ' + encodedString,
         },
         params,
       }
