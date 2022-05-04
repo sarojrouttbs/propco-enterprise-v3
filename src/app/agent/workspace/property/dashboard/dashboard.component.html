@@ -28,10 +28,10 @@
               <div class="no-slider-img" *ngIf="!propertyDetails?.media">
                 <img src="assets/images/upload-image.jpg">
               </div>
-            </ion-col>            
-            <ion-col size="50" class="ion-no-padding" >
+            </ion-col>
+            <ion-col size="50" class="ion-no-padding">
               <app-property-details-card [propertyData]="propertyDetails"></app-property-details-card>
-            </ion-col>            
+            </ion-col>
           </ion-row>
           <ion-row>
             <ion-col size="50" class="ion-no-padding">
@@ -44,7 +44,7 @@
             </ion-col>
           </ion-row>
         </ion-col>
-        <ion-col size="30" class="right-panel-block ion-no-padding" >          
+        <ion-col size="30" class="right-panel-block ion-no-padding">
           <app-property-right-panel [propertyData]="propertyDetails"></app-property-right-panel>
         </ion-col>
       </ion-row>
@@ -82,54 +82,83 @@
       </div> -->
     </div>
     <div *ngIf="propertyData">
-      <div class="map-headeing">
-        <img class="map-icon" src="assets/images/agent/map.png" alt="">
-        <span class="map-title"> MAP
-        </span>
+      <ion-segment [(ngModel)]="type" class="segment-card" id="propertyDashboardTabs">
+        <ion-segment-button value="viewings" checked>
+          <div class="viewings-segment">
+            <span>0</span>
+            <ion-label>Viewings</ion-label>
+          </div>
+        </ion-segment-button>
+        <ion-segment-button value="map">
+          <div class="map-segment">
+             <i class="propcoicon propcoicon-location no-background"></i>
+            <ion-label>Map</ion-label>
+          </div>
+        </ion-segment-button>
+        <ion-segment-button value="notes">
+          <div class="notes-segment">
+            <i class="propcoicon propcoicon-property-notes no-background"></i>
+            <ion-label>Notes</ion-label>
+          </div>
+        </ion-segment-button>
+       
+      </ion-segment>
+      <div [hidden]="type != 'viewings'" class="ion-text-center">
+        <p>{{DEFAULT_MESSAGES.AVAILABLE_SOON}}</p>
       </div>
-      <app-google-map [propertyData]="propertyData"></app-google-map>
+      
+      <div [hidden]="type != 'map'">
+        <app-google-map [propertyData]="propertyData"></app-google-map>
+      </div>
+      <div [hidden]="type != 'notes'">
+        <div class="table-block">
+          <ion-row>
+            <ion-col size="100">
+              <!-- <p class="label">Notes</p> -->
+              <div class="overlay-container">
+                <table datatable [dtOptions]="dtOptions" class="row-border hover" id="propertyNotesTable" width="100%">
+                  <thead>
+                    <tr>
+                      <th style="width:15%">Date</th>
+                      <th style="width:15%">Time</th>
+                      <th style="width:15%">Type</th>
+                      <th style="width:15%">Complaint</th>
+                      <th style="width:15%">Category</th>
+                      <th>User</th>
+                      <th style="width:40px">Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of notes" class="table-row">
+                      <td>{{data.postedAt | date: 'dd/MM/yyyy' || notAvailable}}</td>
+                      <td>{{data.postedAt | date: 'HH:mm' || notAvailable}}</td>
+                      <td>{{getLookupValue(data.type, notesTypes) || notAvailable}}</td>
+                      <td>{{getLookupValue(data.complaint, notesComplaints) || notAvailable}}</td>
+                      <td>{{getLookupValue(data.category, notesCategories) || notAvailable}}</td>
+                      <td>{{data.userName || notAvailable}}</td>
+                      <td><i (click)="showNoteDescription(data.notes);"
+                          class="propcoicon propcoicon-property-description"></i></td>
+                    </tr>
+                    <tr *ngIf="notes?.length == 0">
+                      <td colspan="7" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div id="divOverlay">
+                  <i class="propcoicon propcoicon-actions-on"></i>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+     
+
+     
     </div>
 
-    <div class="table-block">
-      <ion-row>
-        <ion-col size="100">
-          <p class="label">Notes</p>
-          <div class="overlay-container">
-            <table datatable [dtOptions]="dtOptions"  class="row-border hover" id="propertyNotesTable">
-              <thead>
-                <tr>
-                  <th style="width:15%">Date</th>
-                  <th style="width:15%">Time</th>
-                  <th style="width:15%">Type</th>
-                  <th style="width:15%">Complaint</th>
-                  <th style="width:15%">Category</th>
-                  <th>User</th>
-                  <th style="width:40px">Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let data of notes" class="table-row">
-                  <td>{{data.postedAt | date: 'dd/MM/yyyy' || notAvailable}}</td>
-                  <td>{{data.postedAt | date: 'HH:mm' || notAvailable}}</td>
-                  <td>{{getLookupValue(data.type, notesTypes) || notAvailable}}</td>
-                  <td>{{getLookupValue(data.complaint, notesComplaints) || notAvailable}}</td>
-                  <td>{{getLookupValue(data.category, notesCategories) || notAvailable}}</td>
-                  <td>{{data.userName || notAvailable}}</td>
-                  <td><i (click)="showNoteDescription(data.notes);"
-                      class="propcoicon propcoicon-property-description"></i></td>
-                </tr>
-                <tr *ngIf="notes?.length == 0">
-                  <td colspan="7" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b></td>
-                </tr>
-              </tbody>
-            </table>
-            <div id="divOverlay">
-              <i class="propcoicon propcoicon-actions-on"></i>
-            </div>
-          </div>
-        </ion-col>
-      </ion-row>
-    </div>
-    
+  
+
   </div>
 </ion-content>
