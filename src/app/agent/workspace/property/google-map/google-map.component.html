@@ -5,10 +5,10 @@
 
   <div class="map">
 
-    <agm-map [latitude]="lat" [longitude]="lng" [zoom]="15" [disableDefaultUI]="true" [zoomControl]="true"
-      [fullscreenControl]="true" [usePanning]="true">
+    <agm-map [latitude]="lat" [longitude]="lng" [zoom]="15" [usePanning]="true" [disableDefaultUI]="true" [zoomControl]="true"
+      [fullscreenControl]="true" [usePanning]="true" [streetViewControl]="true">
       <agm-marker *ngFor="let m of markers; let i = index" [latitude]="m.lat" [longitude]="m.lng" [label]="m.label"
-        [iconUrl]="m.iconUrl" [animation]="'BOUNCE'">
+        [iconUrl]="m.iconUrl">
         <agm-overlay [visible]="false" [draggable]="true" [latitude]="m.lat" [longitude]="m.lng">
           <i class="fas fa-map-marker-alt" [style.color]="m.color" style="font-size: 25px"></i>
         </agm-overlay>

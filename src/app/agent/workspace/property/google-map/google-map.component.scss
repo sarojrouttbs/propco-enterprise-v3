@@ -15,7 +15,7 @@ agm-map {
   width: auto;
   font-size: 15px;
   line-height: 24px;
-  opacity: 0.5;
+  opacity: 1.0;
   padding: 10px;
 }
 
@@ -26,10 +26,6 @@ agm-map {
 .msg {
   margin: auto;
   font-size: 20px;
-}
-
-.address:hover {
-  opacity: 1.0;
 }
 
 .wrapper {
