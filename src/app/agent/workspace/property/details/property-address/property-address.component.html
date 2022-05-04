@@ -28,12 +28,12 @@
                   </ion-item>
                   <app-validation-message [control]="group.controls.postcode"></app-validation-message>
                 </ion-col>
-                <ion-col class="flex">
+                <ion-col class="flex" size="30">
                   <ion-button (click)="getAddressList()" style="float: right;">Lookup</ion-button>
                 </ion-col>
               </ion-row>
               <ion-row *ngIf="addressList">
-                <ion-col>
+                <ion-col size="100">
                   <ion-item>
                     <ion-label position="floating">Select Address</ion-label>
                     <ion-select interface="popover" [disabled]="!addressList" formControlName="addressdetails" (ionChange)="getAddressDetails(selectedAddress.value)" #selectedAddress>
@@ -45,7 +45,7 @@
                 </ion-col>
               </ion-row>
               <ion-row>
-                <ion-col>
+                <ion-col size="100">
                   <ion-item>
                     <ion-label position="floating">Organization Name</ion-label>
                     <ion-input formControlName="organisationName"></ion-input>
@@ -53,7 +53,7 @@
                 </ion-col>
               </ion-row>
               <ion-row>
-                <ion-col>
+                <ion-col size="100">
                   <ion-item>
                     <ion-label position="floating">TDS Building</ion-label>
                     <ion-input formControlName="buildingName"></ion-input>
@@ -61,7 +61,7 @@
                 </ion-col>
               </ion-row>
               <ion-row>
-                <ion-col>
+                <ion-col size="100">
                   <ion-item>
                     <ion-label position="floating">TDS Street</ion-label>
                     <ion-input formControlName="street"></ion-input>
@@ -71,13 +71,13 @@
             </ion-col>
              <ion-col size="33">
               <ion-row>
-                <ion-col>
+                <ion-col size="50">
                   <ion-item>
                     <ion-label position="floating">Block</ion-label>
                     <ion-input formControlName="block"></ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col>
+                <ion-col size="50">
                   <ion-item>
                     <ion-label position="floating">Floor</ion-label>
                     <ion-input formControlName="floor"></ion-input>
@@ -85,7 +85,7 @@
                 </ion-col>
               </ion-row>
               <ion-row>
-                <ion-col>
+                <ion-col size="100">
                   <ion-item>
                     <ion-label position="floating">Address 1*</ion-label>
                     <ion-input formControlName="addressLine1"></ion-input>
@@ -94,7 +94,7 @@
                 </ion-col>
               </ion-row>
               <ion-row>
-                <ion-col>
+                <ion-col size="100">
                   <ion-item>
                     <ion-label position="floating">Address 2*</ion-label>
                     <ion-input formControlName="addressLine2"></ion-input>
@@ -103,7 +103,7 @@
                 </ion-col>
               </ion-row>
               <ion-row>
-                <ion-col>
+                <ion-col size="100">
                   <ion-item>
                     <ion-label position="floating">Address 3</ion-label>
                     <ion-input formControlName="addressLine3"></ion-input>
@@ -113,13 +113,13 @@
             </ion-col>
             <ion-col size="33">
               <ion-row>
-                <ion-col>
+                <ion-col size="50">
                   <ion-item>
                     <ion-label position="floating">Locality</ion-label>
                     <ion-input formControlName="locality"></ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col>
+                <ion-col size="50">
                   <ion-item>
                     <ion-label position="floating">Town*</ion-label>
                     <ion-input formControlName="town"></ion-input>
@@ -128,13 +128,13 @@
                 </ion-col>
               </ion-row>
               <ion-row>
-                <ion-col>
+                <ion-col size="50">
                   <ion-item>
                     <ion-label position="floating">County</ion-label>
                     <ion-input formControlName="county"></ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col>
+                <ion-col size="50">
                   <ion-item>
                     <ion-label position="floating">Country</ion-label>
                     <ion-input formControlName="country"></ion-input>
@@ -142,19 +142,19 @@
                 </ion-col>
               </ion-row>
               <ion-row>
-                <ion-col>
+                <ion-col size="33.33">
                   <ion-item>
                     <ion-label position="floating">Latitude</ion-label>
                     <ion-input formControlName="latitude"></ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col>
+                <ion-col size="33.33">
                   <ion-item>
                     <ion-label position="floating">Longitude</ion-label>
                     <ion-input formControlName="longitude"></ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col>
+                <ion-col size="33.33">
                   <ion-item>
                     <ion-label position="floating">Paf. Ref.</ion-label>
                     <ion-input formControlName="pafref"></ion-input>

@@ -17,9 +17,9 @@
     </mat-expansion-panel-header>
     <ion-card-content id="details">
       <form [formGroup]="group">
-        <ion-grid class="no-padding">
+        <ion-grid id="paropertyLettingDetails">
           <ion-row>
-            <ion-col size="33.33" class="no-padding-top no-padding-bottom">
+            <ion-col size="33.33">
               <ion-row>
                 <ion-col size="50">
                   <ion-item>
@@ -43,7 +43,7 @@
                 </ion-col>
               </ion-row>
             </ion-col>
-            <ion-col size="33.33" class="no-padding-top no-padding-bottom">
+            <ion-col size="33.33">
               <ion-row>
                 <ion-col size="50">
                   <ion-item>
@@ -68,9 +68,9 @@
                 </ion-col>
               </ion-row>
             </ion-col>
-            <ion-col size="33.33" class="no-padding-top no-padding-bottom">
+            <ion-col size="33.33">
               <ion-row>
-                <ion-col size="70" class="col-top-spacing">
+                <ion-col size="70">
                   <ion-item>
                     <ion-label position="floating">HMO Property Ref</ion-label>
                     <ion-input formControlName="hmoPropertyRef" [disabled]="!group.get('isHmoProperty').value"></ion-input>
@@ -83,7 +83,7 @@
                 </ion-col>
               </ion-row>
             </ion-col>
-            <ion-col size="33.33" class="no-padding-top no-padding-bottom">
+            <ion-col size="33.33">
               <ion-row>
                 <ion-col size="50">
                   <ion-item>
@@ -109,7 +109,7 @@
                 </ion-col>
               </ion-row>
             </ion-col>
-            <ion-col size="33.33" class="no-padding-top no-padding-bottom">
+            <ion-col size="33.33">
               <ion-row>
                 <ion-col size="50">
                   <ion-item>
@@ -133,7 +133,7 @@
                 </ion-col>
               </ion-row>
             </ion-col>
-            <ion-col size="33.33" class="no-padding-top no-padding-bottom col-top-spacing">
+            <ion-col size="33.33">
               <ion-row>
                 <ion-col size="50">
                   <ion-item>
@@ -149,7 +149,7 @@
                 </ion-col>
               </ion-row>
             </ion-col>
-            <ion-col size="33.33" class="no-padding-top no-padding-bottom">
+            <ion-col size="33.33">
               <ion-row>
                 <ion-col size="50">
                   <ion-item>
@@ -173,7 +173,7 @@
                 </ion-col>
               </ion-row>
             </ion-col>
-            <ion-col size="33.33" class="no-padding-top no-padding-bottom">
+            <ion-col size="33.33">
               <ion-row>
                 <ion-col size="50" class="no-padding toggle-btn-stop-spacing">
                   <ion-item lines="none" class="mt-7">
@@ -182,7 +182,7 @@
                     <ion-text class="toggle-btn-text">On with another agent?</ion-text>
                   </ion-item>
                 </ion-col>
-                <ion-col size="50" class="col-top-spacing">
+                <ion-col size="50">
                   <ion-item>
                     <ion-label position="floating"> Agent Name</ion-label>
                     <ion-input formControlName="agentName"></ion-input>
@@ -190,8 +190,8 @@
                 </ion-col>
               </ion-row>
             </ion-col>
-
-            <ion-col size="33.33" class="no-padding-top no-padding-bottom mat-date-picker">
+            <!-- class="no-padding-top no-padding-bottom mat-date-picker" -->
+            <ion-col size="33.33">
               <ion-row>
                 <ion-col size="50">
                   <mat-form-field appearance="fill">
@@ -212,9 +212,9 @@
               </ion-row>
             </ion-col>
 
-            <ion-col size="33.33" class="no-padding-top no-padding-bottom">
+            <ion-col size="33.33">
               <ion-row>
-                <ion-col size="100" class="no-padding-top no-padding-bottom">
+                <ion-col size="100">
                   <ion-item>
                     <ion-label position="floating">Area</ion-label>
                     <ion-select formControlName="floorArea" interface="popover">
@@ -227,15 +227,15 @@
               </ion-row>
             </ion-col>
 
-            <ion-col size="33.33" class="no-padding-top no-padding-bottom col-top-spacing">
+            <ion-col size="33.33">
               <ion-row>
-                <ion-col size="50" class="no-padding-top no-padding-bottom">
+                <ion-col size="50">
                   <ion-item>
                     <ion-label position="floating"> Phone (1) </ion-label>
                     <ion-input formControlName="phoneOne"></ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col size="50" class="no-padding-top no-padding-bottom">
+                <ion-col size="50">
                   <ion-item>
                     <ion-label position="floating"> Phone (2) </ion-label>
                     <ion-input formControlName="phoneTwo"></ion-input>
@@ -246,7 +246,7 @@
           </ion-row>
 
           <ion-row>
-            <ion-col size="33.33" style="margin-top: -12px;">
+            <ion-col size="33.33">
               <ion-row>
                 <ion-col size="100">
                   <ion-item>
