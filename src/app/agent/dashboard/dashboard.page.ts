@@ -15,7 +15,7 @@ export class DashboardPage implements OnInit {
   ngOnInit() {
   }
 
-  redirect(type){
+  redirect(type: string){
     switch (type) {
       case 'let-alliance':
         this.router.navigate([`agent/let-alliance`]);

@@ -315,14 +315,17 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   
       const data = modal.onDidDismiss().then(res => {
         if (res.data.userInput) {
-          this.router.navigate(['../add-guarantor'], { relativeTo: this.route,
+          this.router.navigate(['../add-guarantor'], { 
+            relativeTo: this.route,
             queryParams: { 
               pId: this.selectedData.propertyDetail.propertyId,
               tId: this.selectedData.applicantDetail.applicantId,
               appId: this.selectedData.applicationId,
               appRef: this.selectedData.referenceNumber,
               tType: this.selectedData.applicantDetail.itemType
-             }, replaceUrl: true });
+            }, 
+            replaceUrl: true 
+          });
         } else {
         }
       });
