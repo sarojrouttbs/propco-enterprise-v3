@@ -601,7 +601,7 @@
                           </p>
                           <p class="emenities-wrapper">
                             <i class="propcoicon propcoicon-garage no-background"></i>
-                            <span >{{item?.propertyParkings || 0}}</span>
+                            <span [ngClass]="{'garage-ellipse' : item?.propertyParkings}" title="{{item?.propertyParkings}}">{{item?.propertyParkings || 0}}</span>
                           </p>
                           <p class="emenities-wrapper">
                             <span>
