@@ -222,7 +222,7 @@ export class GuarantorDetailsPage implements OnInit {
 
     if(isRedirectDashboard){
       const data = modal.onDidDismiss().then(res => {
-        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       });
     }
 
@@ -424,9 +424,10 @@ export class GuarantorDetailsPage implements OnInit {
         this.commonService.hideLoader();
         this.commonService.showMessage('Application has been created successfully.', 'Create an Application', 'success');
         setTimeout(() => {
-          this.router.navigate(['/let-alliance/dashboard']).then(() => {
+
+          this.router.navigate(['../dashboard'], { relativeTo: this.route}).then(() => {
             location.reload();
-          });
+          });   
         }, 5000);
       },
       error => {
@@ -515,7 +516,7 @@ export class GuarantorDetailsPage implements OnInit {
 
     const data = modal.onDidDismiss().then(res => {
       if (res.data.userInput) {
-        this.router.navigate(['/let-alliance/dashboard'], {replaceUrl: true });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       } 
     });
 
