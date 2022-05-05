@@ -65,13 +65,21 @@ export class WorkspaceService {
       ]);
       return;
     } else {
-      this.changeSelected(itemsInStorage, "isSelected", item.entityId);
+      let updatedList = await this.changeSelected(itemsInStorage, "isSelected", item.entityId);
       if (!this.checkIfEntityExistsInWS(item.entityId)) {
         this.commonService.removeItem(AGENT_WORKSPACE_CONFIGS.localStorageName);
         itemsInStorage.push(this.prepareTabData(item));
         this.commonService.setItem(
           AGENT_WORKSPACE_CONFIGS.localStorageName,
           itemsInStorage
+        );
+        return;
+      } else {
+        /** Select the existing */
+        this.commonService.removeItem(AGENT_WORKSPACE_CONFIGS.localStorageName);
+        this.commonService.setItem(
+          AGENT_WORKSPACE_CONFIGS.localStorageName,
+          updatedList
         );
         return;
       }
@@ -90,12 +98,16 @@ export class WorkspaceService {
     return found;
   }
 
-  private changeSelected(arr, keyToUpdate, itemToSkip) {
+  private async changeSelected(arr, keyToUpdate, itemToSkip) {
     for (const obj of arr) {
       if (obj.entityId !== itemToSkip) {
         obj[keyToUpdate] = false;
       }
+      if (obj.entityId === itemToSkip) {
+        obj[keyToUpdate] = true;
+      }
     }
+    return arr;
   }
 
   isWorkspaceItemAvailable(): boolean {
