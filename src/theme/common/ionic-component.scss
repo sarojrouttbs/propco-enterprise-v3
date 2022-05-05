@@ -501,6 +501,21 @@ ion-alert.common-alert-box {
   }
 }
 
+#paropertyLettingDetails{
+  ion-select{
+    height: 40px;
+  }
+
+  ion-textarea{
+    .textarea-wrapper{
+      height: 32px;
+      textarea{
+        padding-top: 0px;
+      }
+    }
+  }
+}
+
 // .sc-ion-select-popover-h ion-list.sc-ion-select-popover {
 //   background-color: red !important;
 // }

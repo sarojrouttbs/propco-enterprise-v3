@@ -251,13 +251,14 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   }
 
   goToGuarantorDetails(){
-    this.router.navigate(['/let-alliance/add-guarantor'], { queryParams: { 
+    this.router.navigate(['../add-guarantor'], { relativeTo: this.route,queryParams: { 
       pId: this.propertyId,
       tId: this.applicantId,
       appId: this.applicationId,
       appRef: this.referenceNumber,
       tType: this.applicantType
-     }, replaceUrl: true });
+      }, replaceUrl: true
+    }); 
   }
 
   showMenu(event: any, id: any, data: any, className: any) {

@@ -30,7 +30,7 @@
     }
 
     .toggle-btn-text {
-      @include set-text-style(16px, 18px);
+      @include set-text-style(15px, 18px);
     }
 
     .toggle-btn-stop-spacing, .mat-date-picker {
@@ -61,7 +61,8 @@ ion-item {
 // material date picker css - dark / light theme
 
 :host ::ng-deep .mat-form-field-wrapper {
-  margin-bottom: -20px;
+  margin-bottom: 0;
+  padding-bottom: 27px;
 }
 
 :host ::ng-deep .mat-datepicker-toggle .mat-icon-button {
@@ -73,5 +74,13 @@ ion-item {
 }
 
 :host ::ng-deep .mat-form-field-label {
+  margin-top: 5px;
+  font-size: 16px;
   color: var(--ion-color-ion-label) !important;
+}
+
+:host ::ng-deep .mat-form-field-infix{
+  input{
+    margin-top: 22px;
+  }
 }
