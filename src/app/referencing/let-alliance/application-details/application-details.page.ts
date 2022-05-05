@@ -131,7 +131,7 @@ export class ApplicationDetailsPage implements OnInit {
         this.propertyId = res.data.propertyId;
         this.selectTenant();
       } else {
-        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       }
     });
     await modal.present();
@@ -157,7 +157,7 @@ export class ApplicationDetailsPage implements OnInit {
           this.initiateApplication();
         }
       } else {
-        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       }
     });
     await modal.present();
@@ -182,7 +182,7 @@ export class ApplicationDetailsPage implements OnInit {
     });
 
     const data = modal.onDidDismiss().then(res => {
-      this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+      this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
     });
 
     await modal.present();
@@ -615,9 +615,9 @@ export class ApplicationDetailsPage implements OnInit {
         this.commonService.hideLoader();
         this.commonService.showMessage('Application has been created successfully.', 'Create an Application', 'success');
         setTimeout(() => {
-          this.router.navigate(['/let-alliance/dashboard']).then(() => {
+          this.router.navigate(['../dashboard'], { relativeTo: this.route }).then(() => {
             location.reload();
-          });
+          });     
         }, 5000);
       },
       error => {
@@ -742,7 +742,7 @@ export class ApplicationDetailsPage implements OnInit {
 
     const data = modal.onDidDismiss().then(res => {
       if (res.data.userInput) {
-        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       }
     });
 
