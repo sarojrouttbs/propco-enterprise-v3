@@ -131,7 +131,7 @@ export class ApplicationDetailsPage implements OnInit {
         this.propertyId = res.data.propertyId;
         this.selectTenant();
       } else {
-        this.router.navigate(['../dashboard'], { relativeTo: this.route });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       }
     });
     await modal.present();
@@ -157,7 +157,7 @@ export class ApplicationDetailsPage implements OnInit {
           this.initiateApplication();
         }
       } else {
-        this.router.navigate(['../dashboard'], { relativeTo: this.route });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       }
     });
     await modal.present();
@@ -182,7 +182,7 @@ export class ApplicationDetailsPage implements OnInit {
     });
 
     const data = modal.onDidDismiss().then(res => {
-      this.router.navigate(['../dashboard'], { relativeTo: this.route });
+      this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
     });
 
     await modal.present();
@@ -742,7 +742,7 @@ export class ApplicationDetailsPage implements OnInit {
 
     const data = modal.onDidDismiss().then(res => {
       if (res.data.userInput) {
-        this.router.navigate(['../dashboard'], { relativeTo: this.route });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       }
     });
 

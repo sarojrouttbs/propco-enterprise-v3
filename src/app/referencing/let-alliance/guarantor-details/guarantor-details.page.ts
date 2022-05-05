@@ -222,7 +222,7 @@ export class GuarantorDetailsPage implements OnInit {
 
     if(isRedirectDashboard){
       const data = modal.onDidDismiss().then(res => {
-        this.router.navigate(['../dashboard'], { relativeTo: this.route });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       });
     }
 
@@ -516,7 +516,7 @@ export class GuarantorDetailsPage implements OnInit {
 
     const data = modal.onDidDismiss().then(res => {
       if (res.data.userInput) {
-        this.router.navigate(['../dashboard'], { relativeTo: this.route });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       } 
     });
 
