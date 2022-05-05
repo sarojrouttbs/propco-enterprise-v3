@@ -715,7 +715,7 @@ ion-item {
     }
   }
 
-  @media screen and (min-width: 768px) and (max-width: 1024px) {
+  @media screen and (min-width: 768px) and (max-width: 1272px) {
     .list-header {
       .property-wrapper{
         width: 70%;
@@ -778,6 +778,20 @@ ion-item {
       padding-right: 8px;
       @include set-text-style(13px, 17px);
       color: var(--ion-color-address-color);
+    }
+    .garage-ellipse {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: auto;
+    }
+  }
+
+  @media screen and (max-width: 1024px) {
+    .emenities-wrapper {
+      .garage-ellipse {
+          width: 52px;
+      }
     }
   }
 
