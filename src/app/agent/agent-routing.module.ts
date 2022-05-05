@@ -32,6 +32,13 @@ const routes: Routes = [
             (m) => m.WorkspacePageModule
           ),
       },
+      {
+        path: "let-alliance",
+        loadChildren: () =>
+          import("../referencing/let-alliance/let-alliance.module").then(
+            (m) => m.LetAlliancePageModule
+          ),
+      },
     ]
   },
 ];
