@@ -27,9 +27,9 @@ export class ApplicationListPage implements OnInit {
   @ViewChild('paginator') paginator: MatPaginator;
   obsApplicationList: Observable<any>;
   filteredApplicationList: MatTableDataSource<ApplicationData> = new MatTableDataSource<ApplicationData>([]);
-  isApplicationSelected: boolean = false;
+  isApplicationSelected = false;
   selectedApplicationRow: any;
-  isHideRejected: boolean = false;
+  isHideRejected = false;
   propertyId: string;
   propertyDetails;
   applicationsDetails;
@@ -43,9 +43,9 @@ export class ApplicationListPage implements OnInit {
   toDate = new FormControl('', []);
   referencingInfodata: any;
   referencingInfo: any;
-  isRecordsAvailable: boolean = true;
-  isPropertyDetailsAvailable: boolean = false;
-  isApplicationListAvailable: boolean = false;
+  isRecordsAvailable = true;
+  isPropertyDetailsAvailable = false;
+  isApplicationListAvailable = false;
   DEFAULTS = DEFAULTS;
 
   constructor(private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
@@ -91,7 +91,7 @@ export class ApplicationListPage implements OnInit {
             resolve([]);
           }
         }
-      )
+      );
     });
   }
 
@@ -149,7 +149,7 @@ export class ApplicationListPage implements OnInit {
   private setTobLookupData(): void {
     this.toblookupdata = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
     this.applicationStatusTypes = this.toblookupdata.applicationStatuses;
-    this.offlinePaymentTypes = this.toblookupdata.offlinePaymentTypes
+    this.offlinePaymentTypes = this.toblookupdata.offlinePaymentTypes;
   }
   
   getStatusColor(status) {
@@ -271,7 +271,7 @@ export class ApplicationListPage implements OnInit {
           const requestObj: any = {
             applicationId: applicationId
           };
-          this.tobService.rejectAllApplication(requestObj).subscribe((response) => {
+          this.tobService.rejectAllApplication(requestObj).subscribe((res) => {
             this.commonService.showAlert('Reject All Application', 'All applications have been rejected successfully.').then(response => {
               if(response) {
                 this.initApiCalls();
@@ -311,7 +311,7 @@ export class ApplicationListPage implements OnInit {
   rejectApplication() {
     this.commonService.showConfirm('Reject Application', 'Are you sure, you want to reject this application?', '', 'YES', 'NO').then(response => {
       if (response) {
-        this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.REJECTED, {}).subscribe((response) => {
+        this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.REJECTED, {}).subscribe((res) => {
           this.commonService.showAlert('Reject Application', 'Application has been rejected successfully.').then(response => {
             if(response) {
               this.initApiCalls();
@@ -321,14 +321,14 @@ export class ApplicationListPage implements OnInit {
         (error) => {
           
         });
-      }
+      };
     });
   }
 
   holdApplication() {
     this.commonService.showConfirm('On Hold Application', 'Are you sure, you want to on hold this application?', '', 'YES', 'NO').then(response => {
       if (response) {
-        this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.ON_HOLD, {}).subscribe((response) => {
+        this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.ON_HOLD, {}).subscribe((res) => {
           this.commonService.showAlert('On Hold Application', 'Application status has been changed to on hold successfully.').then(response => {
             if(response) {
               this.initApiCalls();
@@ -338,7 +338,7 @@ export class ApplicationListPage implements OnInit {
         (error) => {
           
         });
-      }
+      };
     });
   }
 
@@ -398,7 +398,7 @@ export class ApplicationListPage implements OnInit {
   private async selectReferecingType() {
     const radioInput = [];
     this.referencingInfo.forEach(element => {
-      radioInput.push({label: element.label, type: "radio", value: element.url});
+      radioInput.push({label: element.label, type: 'radio', value: element.url});
     });
 
     this.commonService.showConfirm('Referencing', 'Please select referencing partner', '', '', '', radioInput).then(result => {
