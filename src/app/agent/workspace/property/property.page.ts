@@ -76,6 +76,11 @@ export class PropertyPage implements OnInit {
           `agent/workspace/property/${this.proptertyId}/details`,
         ]);
         break;
+      case 'applications':
+        this.router.navigate([
+          `agent/workspace/property/${this.proptertyId}/${pageName}`,
+        ]);
+        break;
 
       default:
         break;

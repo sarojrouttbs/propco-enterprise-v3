@@ -29,6 +29,14 @@
         },
         {
           "index": 2,
+          "key": "applications",
+          "name": "Applications",
+          "state": "propco.agent.entity.property.applications",
+          "isActive": false,
+          "route": "applications"
+        },
+        {
+          "index": 3,
           "key": "particulars",
           "name": "Particulars",
           "state": "propco.agent.entity.property.propertyparticulars",
