@@ -17,7 +17,8 @@
       <span>Property (Lettings)</span>
     </div>
     <mat-nav-list class="sidenav-block-list" *ngFor="let item of menuItems" >
-      <a mat-list-item (click)="changePage(item.route,item,false);" *ngIf="!item?.subMenu?.length"  [ngClass]="item.isActive ? 'menu active' : '' ">{{item.name}}</a>
+      <a mat-list-item  *ngIf="!item?.subMenu?.length"
+       [routerLink]="'/agent/workspace/property/'+proptertyId+'/'+item.route" routerLinkActive="menu active">{{item.name}}</a>
       <ng-container *ngIf="item?.subMenu?.length">
      
         <mat-list-item (click)="item.showSubmenu = !item.showSubmenu" class="menu">
@@ -29,7 +30,9 @@
 
         <div class="submenu" [ngClass]="{'expanded' : item.showSubmenu}" *ngIf="isShowing || isExpanded" >
           <ng-container *ngFor="let value of item?.subMenu">
-            <a mat-list-item (click)="changePage( value.route,item,value);" [ngClass]="value.isActive ? 'menu active' : 'inactive' ">{{value.name}}</a>
+            <a mat-list-item 
+              [routerLink]="'/agent/workspace/property/'+proptertyId+'/'+value.route" 
+              routerLinkActive="menu active">{{value.name}}</a>
           </ng-container>
         </div>
 
