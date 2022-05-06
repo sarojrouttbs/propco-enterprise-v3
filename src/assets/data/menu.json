@@ -29,6 +29,14 @@
         },
         {
           "index": 2,
+          "key": "Offers",
+          "name": "Offers",
+          "state": "propco.agent.entity.property.propertyparticulars",
+          "isActive": false,
+          "route": "offers"
+        },
+        {
+          "index": 3,
           "key": "applications",
           "name": "Applications",
           "state": "propco.agent.entity.property.applications",
@@ -36,7 +44,7 @@
           "route": "applications"
         },
         {
-          "index": 3,
+          "index": 4,
           "key": "particulars",
           "name": "Particulars",
           "state": "propco.agent.entity.property.propertyparticulars",
