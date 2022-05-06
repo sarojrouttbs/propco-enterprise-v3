@@ -17,6 +17,10 @@ const routes: Routes = [
       {
         path: "details",
         component: DetailsComponent,
+      },
+      {
+        path: "applications",
+        loadChildren: () => import('../../../tob/application-list/application-list.module').then( m => m.ApplicationListPageModule)
       }
     ]
   }

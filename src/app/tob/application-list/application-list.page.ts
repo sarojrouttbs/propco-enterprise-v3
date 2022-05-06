@@ -61,6 +61,9 @@ export class ApplicationListPage implements OnInit {
 
   private initData() {
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
+    if(!this.propertyId) {
+      this.propertyId = this.route.snapshot.parent.parent.paramMap.get('propertyId');
+    }
     this.initApiCalls();
   }
 
