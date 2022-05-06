@@ -11,7 +11,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DetailsComponent } from './details/details.component';
 import { PropertyLandlordTenantComponent } from './property-landlord-tenant/property-landlord-tenant.component';
 import { ImagePageModule } from 'src/app/shared/modals/image/image.module';
-import { RouterModule, Routes } from '@angular/router';
 import { GoogleMapComponent } from './google-map/google-map.component';
 import { AgmCoreModule } from '@agm/core';
 import { DataTablesModule } from 'angular-datatables';
@@ -23,55 +22,17 @@ import { AgmOverlays } from 'agm-overlays';
 import  {PropertyChecksComponent} from './details/property-checks/property-checks.component';
 import { CallInfoModalPageModule } from 'src/app/shared/modals/call-info-modal/call-info-modal.module';
 import { PropertyAddressComponent } from './details/property-address/property-address.component';
-
-const routes: Routes = [
-  {
-    path: ":propertyId",
-    component: PropertyPage,
-    children: [
-      {
-        path: "dashboard",
-        component: DashboardComponent,
-      },
-      {
-        path: "details",
-        component: DetailsComponent,
-      },
-      {
-        path: "create-offer",
-        loadChildren: () =>
-          import("../../../tob/offer-detail/offer-detail.module").then(
-            (m) => m.OfferDetailPageModule
-          ),
-      },
-      {
-        path: "offers",
-        loadChildren: () =>
-        import("../../../tob/offer-list/offer-list.module").then(
-          (m) => m.OfferListPageModule
-          ),
-      },
-      // {
-      //   path: "Offers-view",
-      //   loadChildren: () =>
-      //     import("../../../tob/offer-detail/offer-detail.module").then(
-      //       (m) => m.OfferDetailPageModule
-      //     ),
-      // }
-    ]
-  }
-];
+import { PropertyPageRoutingModule } from './property-routing.module';
 
 @NgModule({
   imports: [
   CommonModule,
     FormsModule,
     IonicModule,
-  // PropertyPageRoutingModule,
+    PropertyPageRoutingModule,
     MaterialModule,
     ComponentsModule,
     ImagePageModule,
-    RouterModule.forChild(routes),
     ReactiveFormsModule,
     DataTablesModule,
     AgmJsMarkerClustererModule,
