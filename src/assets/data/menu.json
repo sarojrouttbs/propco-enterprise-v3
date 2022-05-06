@@ -1,0 +1,49 @@
+{
+  "agents": [
+    {
+      "index": 1,
+      "key": "dashboard",
+      "name": "Dashboard",
+      "state": "propco.agent.entity.property.dashboard",
+      "subMenu": [],
+      "isActive": false,
+      "route": "dashboard",
+      "showSubmenu": false
+    },
+
+    {
+      "index": 2,
+      "name": "Marketing",
+      "key": "marketing",
+      "isActive": false,
+      "showSubmenu": false,
+
+      "subMenu": [
+        {
+          "index": 1,
+          "key": "property_details",
+          "name": "Property Details",
+          "state": "propco.agent.entity.property.propertydetails",
+          "isActive": false,
+          "route": "details"
+        },
+        {
+          "index": 2,
+          "key": "applications",
+          "name": "Applications",
+          "state": "propco.agent.entity.property.applications",
+          "isActive": false,
+          "route": "applications"
+        },
+        {
+          "index": 3,
+          "key": "particulars",
+          "name": "Particulars",
+          "state": "propco.agent.entity.property.propertyparticulars",
+          "isActive": false,
+          "route": "paticulars"
+        }
+      ]
+    }
+  ]
+}

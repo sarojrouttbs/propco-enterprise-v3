@@ -97,7 +97,7 @@ export class ApplicationDetailPage implements OnInit {
     propertyId?: string,
     amount?: number,
     entityType?: string,
-    entityId?:string
+    entityId?: string
   } = {};
   isApplicantDetailsAvailable: boolean = false;
 
@@ -113,7 +113,13 @@ export class ApplicationDetailPage implements OnInit {
 
   ngOnInit() {
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
+    if (!this.propertyId) {
+      this.propertyId = this.route.snapshot.parent.parent.paramMap.get('propertyId');
+    }
     this.applicationId = this.route.snapshot.paramMap.get('applicationId');
+    if (!this.applicationId) {
+      this.applicationId = this.route.snapshot.parent.parent.paramMap.get('applicationId');
+    }
     if (typeof this.applicationId !== 'undefined' && this.applicationId !== null) {
       this.initViewApiCalls();
     }
@@ -225,7 +231,7 @@ export class ApplicationDetailPage implements OnInit {
     const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
     await this.setApplicationApplicants(applicants);
     await this.setLeadApplicantDetails();
-    if(this.PAYMENT_METHOD === PAYMENT_TYPES.WORLDPAY_OWNFORM) {
+    if (this.PAYMENT_METHOD === PAYMENT_TYPES.WORLDPAY_OWNFORM) {
       await this.setWorldpayInternalData();
     }
     if (this.applicationStatus === 'Accepted') {
@@ -288,7 +294,7 @@ export class ApplicationDetailPage implements OnInit {
           this.showPayment = true;
           this.currentStepperIndex = 10;
         } else {
-          this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+          this.router.navigate([`../../applications`], { replaceUrl: true, relativeTo: this.route });
         }
       },
       error => {
@@ -397,7 +403,7 @@ export class ApplicationDetailPage implements OnInit {
     let message = 'Your application has been saved. Please complete your application within 14 days in order to guarantee a reservation.'
     this.commonService.showAlert(title, message, '').then(res => {
       if (res) {
-        this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+        this.router.navigate([`../../applications`], { replaceUrl: true, relativeTo: this.route });
       }
     })
   }
@@ -547,7 +553,7 @@ export class ApplicationDetailPage implements OnInit {
     requestObj.applicationClauses = this.propertyClauses;
     this._tobService.createApplication(requestObj).subscribe(
       res => {
-        this.router.navigate([`tob/${this.propertyId}/application/${res.applicationId}`], { replaceUrl: true });
+        this.router.navigate([`../application/${res.applicationId}`], { relativeTo: this.route });
       },
       error => {
       }
@@ -693,7 +699,7 @@ export class ApplicationDetailPage implements OnInit {
   async onCancel() {
     const isCancel: boolean = await this.commonService.showConfirm('Cancel', 'Are you sure, you want to cancel this operation?', '', 'Yes', 'No') as boolean;
     if (isCancel) {
-      this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+      this.router.navigate([`../../applications`], { replaceUrl: true, relativeTo: this.route });
     }
   }
 
@@ -1032,7 +1038,7 @@ export class ApplicationDetailPage implements OnInit {
         this.applicationDetails.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
         this.tenancyDetailForm.reset(this.tenancyDetailForm.value);
       },
-      error => {}
+      error => { }
     );
   }
 
@@ -1227,7 +1233,7 @@ export class ApplicationDetailPage implements OnInit {
       res => {
         this.bankDetailsForm.reset(this.bankDetailsForm.value);
       },
-      error => {}
+      error => { }
     );
   }
 
@@ -1353,7 +1359,7 @@ export class ApplicationDetailPage implements OnInit {
         }
         this.guarantorForm.reset(this.guarantorForm.value);
       },
-      error => {}
+      error => { }
     );
   }
 
@@ -1369,7 +1375,7 @@ export class ApplicationDetailPage implements OnInit {
           this.guarantorForm.controls['guarantorId'].setValue(res.guarantorId);
         }
       },
-      error => {}
+      error => { }
     );
   }
 
@@ -1422,7 +1428,7 @@ export class ApplicationDetailPage implements OnInit {
   private initWorldpayPaymentDetails() {
     var orderCode = 'PROPCOTESTM1TBS' + Math.random();
     this.paymentDetails = {};
-    var paymentConfigUrl = this.PAYMENT_PROD ? PAYMENT_CONFIG.WORLDPAY_REDIRECT.PROD_URL: PAYMENT_CONFIG.WORLDPAY_REDIRECT.TEST_URL;
+    var paymentConfigUrl = this.PAYMENT_PROD ? PAYMENT_CONFIG.WORLDPAY_REDIRECT.PROD_URL : PAYMENT_CONFIG.WORLDPAY_REDIRECT.TEST_URL;
     this.paymentDetails.actionUrl = paymentConfigUrl;
     this.paymentDetails.cartId = orderCode;
     this.paymentDetails.desc = 'Online Reservation - PropCo Web';
@@ -1451,7 +1457,7 @@ export class ApplicationDetailPage implements OnInit {
 
   private initBarclayCardPaymentDetails() {
     var barclayResponseUrl = window.location.origin + window.location.pathname + '#/barclaycard';
-    var paymentConfigUrl = this.PAYMENT_PROD ? PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.PROD_URL: PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.TEST_URL;
+    var paymentConfigUrl = this.PAYMENT_PROD ? PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.PROD_URL : PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.TEST_URL;
     this.paymentDetails = {};
     this.paymentDetails.actionUrl = paymentConfigUrl;
     this.paymentDetails.acceptUrl = barclayResponseUrl;
@@ -1462,7 +1468,7 @@ export class ApplicationDetailPage implements OnInit {
     this.paymentDetails.orderId = 'TBS' + Math.random();
     this.paymentDetails.PSPID = PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.PSPID;
     this.paymentDetails.SHASIGN = this.createSHASIGN();
-}
+  }
 
 
   private createSHASIGN() {
@@ -1556,7 +1562,8 @@ export class ApplicationDetailPage implements OnInit {
     }, error => {
       this.commonService.hideLoader();
       this.commonService.showMessage('Something went wrong on server, please contact us.', 'Process Payment', 'error');
-      this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+      this.router.navigate([`../../applications`], { replaceUrl: true, relativeTo: this.route });
+
     });
   }
 
@@ -1575,11 +1582,11 @@ export class ApplicationDetailPage implements OnInit {
       this.commonService.showAlert('Tenancy', 'Tenancy has been proposed successfully on the property.').then(function (resp) {
         window.history.back();
       });
-      
+
     }, error => {
       this.commonService.hideLoader();
       this.commonService.showMessage('Something went wrong on server, please try again.', 'Propose Tenancy', 'error');
-      this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+      this.router.navigate([`../../applications`], { replaceUrl: true, relativeTo: this.route });
     });
   }
 
@@ -1610,7 +1617,7 @@ export class ApplicationDetailPage implements OnInit {
     });
 
     simpleModal.onDidDismiss().then(res => {
-      this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+      this.router.navigate([`../../applications`], { replaceUrl: true, relativeTo: this.route });
     });
     await simpleModal.present();
   }
