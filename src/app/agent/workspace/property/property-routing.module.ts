@@ -19,6 +19,20 @@ const routes: Routes = [
         component: DetailsComponent,
       },
       {
+        path: "create-offer",
+        loadChildren: () =>
+          import("../../../tob/offer-detail/offer-detail.module").then(
+            (m) => m.OfferDetailPageModule
+          ),
+      },
+      {
+        path: "offers",
+        loadChildren: () =>
+        import("../../../tob/offer-list/offer-list.module").then(
+          (m) => m.OfferListPageModule
+          ),
+      },
+      {
         path: "applications",
         loadChildren: () => import('../../../tob/application-list/application-list.module').then( m => m.ApplicationListPageModule)
       },
