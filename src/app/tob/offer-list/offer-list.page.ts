@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router  } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { NOTES_TYPE, OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
@@ -10,6 +10,7 @@ import { NotesModalPage } from 'src/app/shared/modals/notes-modal/notes-modal.pa
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { OfferData, OfferNotesData } from './offer-list.model';
+
 @Component({
   selector: 'app-offer-list',
   templateUrl: './offer-list.page.html',
@@ -24,10 +25,10 @@ export class OfferListPage implements OnInit {
   obsOfferNotesList: Observable<any>;
   filteredOfferList: MatTableDataSource<OfferData> = new MatTableDataSource<OfferData>([]);
   filteredNotesList: MatTableDataSource<OfferNotesData> = new MatTableDataSource<OfferNotesData>([]);
-  isOfferSelected: boolean = false;
+  isOfferSelected = false;
   selectedOfferRow: any;
   selectedNotesRow: any;
-  isHideRejected: boolean = false;
+  isHideRejected = false;
   sortKey = null;
   fromDate = new FormControl('', []);
   toDate = new FormControl('', []);
@@ -55,10 +56,10 @@ export class OfferListPage implements OnInit {
   notesCategories: any;
   notesComplaints: any;
   notesTypes: any;
-  isAddNote: boolean = false;
-  isRecordsAvailable: boolean = true;
-  isPropertyDetailsAvailable: boolean = false;
-  isOffersListAvailable: boolean = false;
+  isAddNote = false;
+  isRecordsAvailable = true;
+  isPropertyDetailsAvailable = false;
+  isOffersListAvailable = false;
 
   constructor(private router: Router, private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private tobService: TobService) {
     this.getTobLookupData();
@@ -73,6 +74,10 @@ export class OfferListPage implements OnInit {
 
   private initData() {
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
+
+    if(!this.propertyId && this.router.url.startsWith('/agent')){
+      this.propertyId = this.router.url.split('/')[4];
+    }    
     this.initApiCalls();
   }
 
@@ -94,25 +99,24 @@ export class OfferListPage implements OnInit {
 
   sortResult() {
     const dataToSort = this.filteredOfferList.data;
-    let key = this.sortKey;
+    const key = this.sortKey;
     switch (key) {
       case '1': {
         dataToSort.sort((val1, val2) => {
-          return +new Date(val2.offerAt) - +new
-            Date(val1.offerAt)
-        })
+          return +new Date(val2.offerAt) - +new Date(val1.offerAt);
+        });
         break;
       }
       case '2': {
-        dataToSort.sort((val1, val2) => { return val2.amount - val1.amount })
+        dataToSort.sort((val1, val2) => val2.amount - val1.amount );
         break;
       }
       case '3': {
-        dataToSort.sort((val1, val2) => { return val1.amount - val2.amount })
+        dataToSort.sort((val1, val2) => val1.amount - val2.amount );
         break;
       }
       case '4': {
-        dataToSort.sort((val1, val2) => { return val1.status - val2.status });
+        dataToSort.sort((val1, val2) => val1.status - val2.status );
         break;
       }
     }
@@ -158,7 +162,7 @@ export class OfferListPage implements OnInit {
     const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    const divOverlayLeft = (divOverlay.parent('.overlay-container').innerWidth() - baseContainerWidth - (id == 'divOverlayChild' ? 0 : 25));
+    const divOverlayLeft = (divOverlay.parent('.overlay-container').innerWidth() - baseContainerWidth - (id === 'divOverlayChild' ? 0 : 25));
 
     let origDivOverlayHeight;
     let origDivOverlayTop;
@@ -251,13 +255,13 @@ export class OfferListPage implements OnInit {
       this.tobService.getOfferList(this.propertyId).subscribe(
         (res) => {
           this.isOffersListAvailable = true;
-          if (res && res.data) {            
+          if (res && res.data) {
             resolve(res.data);
           } else {
             resolve([]);
           }
         }
-      )
+      );
     });
   }
 
@@ -271,7 +275,7 @@ export class OfferListPage implements OnInit {
             resolve({});
           }
         }
-      )
+      );
     });
   }
 
@@ -299,20 +303,20 @@ export class OfferListPage implements OnInit {
   }
 
   getStatusColor(status) {
-    var colorName = "";
+    let colorName = '';
     switch (status) {
-      case 0: //New
-      case 6: //Counter Offer By LL/Agent
-      case 7: //Counter Offer By Applicant
+      case 0: // New
+      case 6: // Counter Offer By LL/Agent
+      case 7: // Counter Offer By Applicant
         colorName = 'tertiary';
         break;
-      case 1: //Accepted
-      case 5: //Agreed in Principle
+      case 1: // Accepted
+      case 5: // Agreed in Principle
         colorName = 'success';
         break;
-      case 2: //Rejected
-      case 3: //Withdrawn by Applicant
-      case 4: //Withdrawn by Landlord
+      case 2: // Rejected
+      case 3: // Withdrawn by Applicant
+      case 4: // Withdrawn by Landlord
         colorName = 'danger';
         break;
     }
@@ -324,7 +328,7 @@ export class OfferListPage implements OnInit {
     const noteId = this.selectedNotesRow?.noteId;
     const response = await this.commonService.showConfirm('Offer', 'Are you sure, you want to remove this note ?', '', 'YES', 'NO');
     if (response) {
-      this.commonService.deleteNote(noteId).subscribe(response => {
+      this.commonService.deleteNote(noteId).subscribe(res => {
         this.getOfferNotes(offerId);
       });
     }
@@ -389,7 +393,7 @@ export class OfferListPage implements OnInit {
             resolve([]);
           }
         }
-      )
+      );
     });
   }
 

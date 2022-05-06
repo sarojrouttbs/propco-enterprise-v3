@@ -29,11 +29,29 @@
         },
         {
           "index": 2,
-          "key": "particulars",
-          "name": "Particulars",
+          "key": "Offers_list",
+          "name": "Offers List",
           "state": "propco.agent.entity.property.propertyparticulars",
           "isActive": false,
-          "route": ""
+          "route": "Offers-List"
+        },
+
+        {
+          "index": 1,
+          "key": "Offers_Details",
+          "name": "Offers Details",
+          "state": "propco.agent.entity.property.propertydetails",
+          "isActive": false,
+          "route": "Offers-Details"
+        },
+        
+        {
+          "index": 1,
+          "key": "Offers_view",
+          "name": "Offers View",
+          "state": "propco.agent.entity.property.propertydetails",
+          "isActive": false,
+          "route": "Offers-view"
         }
       ]
     }

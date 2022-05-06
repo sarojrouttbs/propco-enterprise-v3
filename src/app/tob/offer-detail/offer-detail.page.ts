@@ -44,29 +44,32 @@ export class OfferDetailPage implements OnInit {
   searchApplicantForm: FormGroup;
   applicantList: Observable<OfferModels.IApplicantLisResponse>;
   applicantDetail: OfferModels.IApplicantDetails;
-  disableSearchApplicant: boolean = false;
+  disableSearchApplicant = false;
   applicantId: string;
-  resultsAvailable: boolean = null;
+  resultsAvailable = null;
   rentFrequencyTypes: OfferModels.ILookupResponse[];
   offerDetails: OfferModels.IOfferResponse;
-  isTobPropertyCardReady: boolean = false;
-  isApplicantDetailsAvailable: boolean = false;
-  isOffersDetailsAvailable: boolean = false;
+  isTobPropertyCardReady = false;
+  isApplicantDetailsAvailable = false;
+  isOffersDetailsAvailable = false;
   DEFAULTS = DEFAULTS;
   updatedFormValues: any = [];
 
   constructor(
     private route: ActivatedRoute,
     private commonService: CommonService,
-    private _formBuilder: FormBuilder,
-    private _tobService: TobService,
+    private formBuilder: FormBuilder,
+    private tobService: TobService,
     private modalController: ModalController,
     private router: Router
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
+
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
+    if(! this.propertyId && this.router.url.startsWith('/agent')){
+      this.propertyId = this.router.url.split('/')[4];
+    }
     this.offerId = this.route.snapshot.paramMap.get('offerId');
     if (typeof this.offerId !== 'undefined' && this.offerId != null) {
       this.initViewApiCalls();
@@ -90,7 +93,7 @@ export class OfferDetailPage implements OnInit {
 
   async getApplicantDetails(applicantId: string) {
     this.applicantId = applicantId;
-    this._tobService.getApplicantDetails(applicantId).subscribe(res => {
+    this.tobService.getApplicantDetails(applicantId).subscribe(res => {
       if (res) {
         this.applicantDetail = res;
         this.isApplicantDetailsAvailable = true;
@@ -103,7 +106,7 @@ export class OfferDetailPage implements OnInit {
       }
     },
       error => {
-      })
+      });
   }
 
   private patchApplicantDetail() {
@@ -136,7 +139,7 @@ export class OfferDetailPage implements OnInit {
   }
 
   private searchApplicant(applicantId: string): Observable<any> {
-    let response = this._tobService.searchApplicant(applicantId);
+    const response = this.tobService.searchApplicant(applicantId);
     return response;
   }
 
@@ -166,7 +169,7 @@ export class OfferDetailPage implements OnInit {
 
   private async getOfferDetails(offerId): Promise<any> {
     const promise = new Promise((resolve, reject) => {
-      this._tobService.getOfferDetails(offerId).subscribe(
+      this.tobService.getOfferDetails(offerId).subscribe(
         res => {
           this.offerDetails = res;
           if (this.offerDetails) {
@@ -176,7 +179,7 @@ export class OfferDetailPage implements OnInit {
           resolve(true);
         },
         error => {
-          reject(error)
+          reject(error);
         }
       );
     });
@@ -189,7 +192,7 @@ export class OfferDetailPage implements OnInit {
       applicantConfirmedDate: this.offerDetails.applicantConfirmedDate,
       isLandlordConfirmed: this.offerDetails.isLandlordConfirmed,
       landlordConfirmedDate: this.offerDetails.landlordConfirmedDate,
-    })
+    });
     this.isEnable('applicant');
     this.isEnable('landlord');
     this.makeAnOfferForm.patchValue({
@@ -213,7 +216,7 @@ export class OfferDetailPage implements OnInit {
   }
 
   private getPropertyDetails(propertyId) {
-    this._tobService.getPropertyDetails(propertyId).subscribe(res => {
+    this.tobService.getPropertyDetails(propertyId).subscribe(res => {
       this.propertyDetails = res.data;
       this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
       this.getNoDeposit();
@@ -234,7 +237,7 @@ export class OfferDetailPage implements OnInit {
   }
 
   private getNoDeposit() {
-    this._tobService.getNoDepositScheme().subscribe(res => {
+    this.tobService.getNoDepositScheme().subscribe(res => {
       if (res) {
         this.propertyDetails.noDepositScheme = res.noDepositScheme;
       }
@@ -244,7 +247,7 @@ export class OfferDetailPage implements OnInit {
 
 
   private getPropertyClauses(propertyId) {
-    this._tobService.getPropertyClauses(propertyId).subscribe(res => {
+    this.tobService.getPropertyClauses(propertyId).subscribe(res => {
       this.propertyClauses = (res && res.data) ? res.data : [];
       this.negotiatableClauses = this.propertyClauses.filter(result => result.isNegotiable);
     }, (error) => {
@@ -252,7 +255,7 @@ export class OfferDetailPage implements OnInit {
   }
 
   private getPropertyRestrictions(propertyId) {
-    this._tobService.getPropertyRestrictions(propertyId).subscribe(res => {
+    this.tobService.getPropertyRestrictions(propertyId).subscribe(res => {
       this.propertyRestrictions = res && res.data ? res.data.filter(result => result.value) : [];
       this.negotiatableRestrictions = this.propertyRestrictions.filter(result => result.isNegotiable);
       this.propertyRestrictions.map(restrict => restrict.restrictionName = this.commonService.camelize(restrict.key.replace(/_/g, ' ')));
@@ -282,7 +285,7 @@ export class OfferDetailPage implements OnInit {
   private updateOffer() {
     if (!this.checkForOfferAgreedCondition()) {
       return;
-    };
+    }
     this.updateApplicantDetails();
     this.updateOfferDetails();
   }
@@ -291,7 +294,7 @@ export class OfferDetailPage implements OnInit {
     let isStatusUpdated = false;
     let isStatusAndFormBothUpdated = false;
     let isOnlyFormUpdated = false;
-    this.getUpdatedValues()
+    this.getUpdatedValues();
 
     if (this.updatedFormValues.length > 1 && this.updatedFormValues.includes('status')) {
       isStatusAndFormBothUpdated = true;
@@ -302,7 +305,7 @@ export class OfferDetailPage implements OnInit {
     }
 
     if (isStatusUpdated) {
-      let counterOfferStatus = this.makeAnOfferForm.controls.status.value;
+      const counterOfferStatus = this.makeAnOfferForm.controls.status.value;
       if (this.offerDetails.status !== counterOfferStatus) {
         this.updateOfferStatus(counterOfferStatus);
       }
@@ -324,10 +327,10 @@ export class OfferDetailPage implements OnInit {
     requestObj.entityType = ENTITY_TYPE.AGENT;
     requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord;
     requestObj.sendEmailToApplicant = confirmationForm.sendEmailToApplicant;
-    this._tobService.updateOfferStatus(this.offerId, status, requestObj).subscribe(response => {
+    this.tobService.updateOfferStatus(this.offerId, status, requestObj).subscribe(response => {
       this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
       this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
-    })
+    });
   }
 
   private prepareUpdateOffer(): object {
@@ -340,7 +343,7 @@ export class OfferDetailPage implements OnInit {
     requestObj.rentingTime = offerFormValues.rentingTime;
     requestObj.numberOfAdults = offerFormValues.numberOfAdults;
     requestObj.numberOfChildren = offerFormValues.numberOfChildren;
-    requestObj.comments = offerFormValues.comments
+    requestObj.comments = offerFormValues.comments;
     requestObj.isApplicantConfirmed = confirmationForm.isApplicantConfirmed;
     requestObj.applicantConfirmedDate = requestObj.isApplicantConfirmed ? this.commonService.getFormatedDate(confirmationForm.applicantConfirmedDate) : null;
     requestObj.isLandlordConfirmed = confirmationForm.isLandlordConfirmed;
@@ -352,7 +355,7 @@ export class OfferDetailPage implements OnInit {
 
   private checkForOfferAgreedCondition() {
     const STATUS_ACCEPTED = 1;
-    if (this.offerDetails.status == STATUS_ACCEPTED && (!this.confirmationForm.controls.isApplicantConfirmed.value || !this.confirmationForm.controls.isLandlordConfirmed.value)) {
+    if (this.offerDetails.status === STATUS_ACCEPTED && (!this.confirmationForm.controls.isApplicantConfirmed.value || !this.confirmationForm.controls.isLandlordConfirmed.value)) {
       this.commonService.showAlert('Offer', 'This offer is not confirmed by Landlord or Applicant. Please confirm the offer before marking it as Accepted.');
       return false;
     } else {
@@ -363,13 +366,13 @@ export class OfferDetailPage implements OnInit {
   private submitOffer() {
     if (this.makeAnOfferForm.valid) {
       this.updateApplicantDetails();
-      this._tobService.createOffer(this.prepareCreateOffer()).subscribe(res => {
-        let applicantName = this.applicantDetail.fullName || (this.applicantDetail.title + ' ' + this.applicantDetail.forename + ' ' + this.applicantDetail.surname)
+      this.tobService.createOffer(this.prepareCreateOffer()).subscribe(res => {
+        const applicantName = this.applicantDetail.fullName || (this.applicantDetail.title + ' ' + this.applicantDetail.forename + ' ' + this.applicantDetail.surname)
         this.commonService.showAlert('Offer Created', 'Congratulations! You have successfully created an offer on behalf of Applicant ' + applicantName).then(res => {
           if (res) {
             this.router.navigate([`tob/${this.propertyId}/offers`], { replaceUrl: true });
           }
-        })
+        });
       }, error => {
         // this.commonService.showMessage(error.error ? error.error.message : error.message, 'Offer', 'error');
       });
@@ -390,7 +393,7 @@ export class OfferDetailPage implements OnInit {
     const requestObj: any = {};
     requestObj.entityType = ENTITY_TYPE.AGENT;
     requestObj.applicantId = this.applicantId;
-    requestObj.status = 0; //create default status is 0 = unknown
+    requestObj.status = 0; // create default status is 0 = unknown
     requestObj.propertyId = this.propertyId;
     requestObj.amount = offerFormValues.amount;
     requestObj.moveInDate = this.commonService.getFormatedDate(offerFormValues.moveInDate);
@@ -402,7 +405,7 @@ export class OfferDetailPage implements OnInit {
     requestObj.isLandlordConfirmed = confirmationForm.isLandlordConfirmed;
     requestObj.landlordConfirmedDate = this.commonService.getFormatedDate(confirmationForm.landlordConfirmedDate);
     requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord;
-    requestObj.comments = offerFormValues.comments
+    requestObj.comments = offerFormValues.comments;
     requestObj.offerClauses = this.propertyClauses;
     requestObj.offerClauses.forEach(element => {
       if (element.negotiations && element.negotiations.length > 0) {
@@ -426,7 +429,7 @@ export class OfferDetailPage implements OnInit {
   private updateApplicantDetails() {
     const requestObj = this.makeAnOfferForm.value;
     requestObj.moveInDate = this.commonService.getFormatedDate(requestObj.moveInDate);
-    this._tobService.updateApplicantDetails(this.applicantId, requestObj).subscribe(res => {
+    this.tobService.updateApplicantDetails(this.applicantId, requestObj).subscribe(res => {
     }, error => {
     });
   }
@@ -471,13 +474,13 @@ export class OfferDetailPage implements OnInit {
   }
 
   private initSearchForm(): void {
-    this.searchApplicantForm = this._formBuilder.group({
+    this.searchApplicantForm = this.formBuilder.group({
       searchApplicant: ''
     });
   }
 
   private initMakeAnOfferForm(): void {
-    this.makeAnOfferForm = this._formBuilder.group({
+    this.makeAnOfferForm = this.formBuilder.group({
       amount: ['', Validators.required],
       status: [0],
       moveInDate: ['', Validators.required],
@@ -495,7 +498,7 @@ export class OfferDetailPage implements OnInit {
   }
 
   private initConfirmationForm(): void {
-    this.confirmationForm = this._formBuilder.group({
+    this.confirmationForm = this.formBuilder.group({
       isApplicantConfirmed: false,
       applicantConfirmedDate: [{ value: '', disabled: true }],
       isLandlordConfirmed: false,
@@ -559,7 +562,7 @@ export class OfferDetailPage implements OnInit {
   }
 
   async presentModal(obj, type) {
-    let headingText = (type === 'CLAUSE') ? 'Clause - ' + obj.clauseName : 'Restriction - ' + obj.restrictionName;
+    const headingText = (type === 'CLAUSE') ? 'Clause - ' + obj.clauseName : 'Restriction - ' + obj.restrictionName;
     obj.negotiations = obj.negotiations ? obj.negotiations : [];
     const modal = await this.modalController.create({
       component: NegotiateModalPage,
@@ -585,9 +588,9 @@ export class OfferDetailPage implements OnInit {
   }
 
   private getOfferStatusList(offerStatus) {
-    if (typeof offerStatus != undefined && offerStatus !== '') {
+    if (typeof offerStatus !== undefined && offerStatus !== '') {
       let statusArray = [];
-      let offerStatusesLookup: OfferModels.ILookupResponse[] = this.offerStatuses;
+      const offerStatusesLookup: OfferModels.ILookupResponse[] = this.offerStatuses;
       this.offerStatuses = [];
       switch (offerStatus) {
         case OFFER_STATUSES.NEW:
@@ -628,7 +631,7 @@ export class OfferDetailPage implements OnInit {
   }
 
   private updateOfferWithStatus() {
-    this._tobService.updateOffer(this.prepareUpdateOffer(), this.offerId).subscribe(response => {
+    this.tobService.updateOffer(this.prepareUpdateOffer(), this.offerId).subscribe(response => {
       let counterOfferStatus = this.makeAnOfferForm.controls.status.value;
       if (this.offerDetails.amount !== Number(this.makeAnOfferForm.controls.amount.value)) {
         counterOfferStatus = OFFER_STATUSES.COUNTER_OFFER_BY_LL_AGENT;
@@ -643,14 +646,14 @@ export class OfferDetailPage implements OnInit {
         this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
         this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
       }
-    })
+    });
   }
 
   private updateOfferOnly() {
-    this._tobService.updateOffer(this.prepareUpdateOffer(), this.offerId).subscribe(response => {
+    this.tobService.updateOffer(this.prepareUpdateOffer(), this.offerId).subscribe(response => {
       this.commonService.showMessage('Offer details have been updated.', 'Update Offer', 'success');
       this.router.navigate([`tob/${this.offerDetails.propertyId}/offers`], { replaceUrl: true });
-    })
+    });
   }
 
   private getUpdatedValues() {

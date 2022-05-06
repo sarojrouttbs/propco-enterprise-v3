@@ -1,24 +1,27 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
 
-import { WorkspacePage } from './workspace.page';
+import { WorkspacePage } from "./workspace.page";
 
 const routes: Routes = [
   {
-    path: '',
+    path: "",
     component: WorkspacePage,
     children: [
       {
-        path: 'property/:pid',
-        loadChildren: () => import(`./property/property.module`)
-        .then(m => m.PropertyPageModule)
-      }
-    ]
-  }
+        path: "property/:propertyId",
+        loadChildren: () =>
+          import(`./property/property.module`).then(
+            (m) => m.PropertyPageModule
+          ),
+      },
+      
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class WorkspacePageRoutingModule { }
+export class WorkspacePageRoutingModule {}

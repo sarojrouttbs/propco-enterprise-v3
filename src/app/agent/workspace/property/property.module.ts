@@ -36,6 +36,27 @@ const routes: Routes = [
       {
         path: "details",
         component: DetailsComponent,
+      },
+      {
+        path: "Offers-Details",
+        loadChildren: () =>
+          import("../../../tob/offer-detail/offer-detail.module").then(
+            (m) => m.OfferDetailPageModule
+          ),
+      },
+      {
+        path: "Offers-List",
+        loadChildren: () =>
+        import("../../../tob/offer-list/offer-list.module").then(
+          (m) => m.OfferListPageModule
+          ),
+      },
+      {
+        path: "Offers-view",
+        loadChildren: () =>
+          import("../../../tob/offer-detail/offer-detail.module").then(
+            (m) => m.OfferDetailPageModule
+          ),
       }
     ]
   }
@@ -46,7 +67,7 @@ const routes: Routes = [
   CommonModule,
     FormsModule,
     IonicModule,
-    // PropertyPageRoutingModule,
+  // PropertyPageRoutingModule,
     MaterialModule,
     ComponentsModule,
     ImagePageModule,
