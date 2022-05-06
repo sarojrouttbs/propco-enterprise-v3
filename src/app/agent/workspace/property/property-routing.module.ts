@@ -7,7 +7,7 @@ import { PropertyPage } from "./property.page";
 
 const routes: Routes = [
   {
-    path: "",
+    path: ":propertyId",
     component: PropertyPage,
     children: [
       {
@@ -21,6 +21,14 @@ const routes: Routes = [
       {
         path: "applications",
         loadChildren: () => import('../../../tob/application-list/application-list.module').then( m => m.ApplicationListPageModule)
+      },
+      {
+        path: 'create-application',
+        loadChildren: () => import('../../../tob/application-detail/application-detail.module').then( m => m.ApplicationDetailPageModule)
+      },
+      {
+        path: 'application/:applicationId',
+        loadChildren: () => import('../../../tob/application-detail/application-detail.module').then( m => m.ApplicationDetailPageModule)
       }
     ]
   }
