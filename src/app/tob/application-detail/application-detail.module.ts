@@ -6,7 +6,7 @@ import { ApplicationDetailPageRoutingModule } from './application-detail-routing
 import { ApplicationDetailPage } from './application-detail.page';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { ComponentsModule } from 'src/app/shared/components/components.module';
-import { MaterialModule } from 'src/app/material.module'
+import { MaterialModule } from 'src/app/material.module';
 import { TemplateFormModule } from 'src/app/worldpay-ownform/template-form/template-form.module';
 
 @NgModule({

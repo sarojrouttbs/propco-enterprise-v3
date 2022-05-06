@@ -12,13 +12,13 @@ import { MaterialModule } from 'src/app/material.module';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
-  align: "left",
+  align: 'left',
   allowNegative: false,
-  decimal: ".",
+  decimal: '.',
   precision: 2,
-  prefix: "£ ",
-  suffix: "",
-  thousands: ","
+  prefix: '£ ',
+  suffix: '',
+  thousands: ','
 };
 
 @NgModule({
@@ -26,7 +26,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     CommonModule,
     FormsModule,
     IonicModule,
-    OfferDetailPageRoutingModule,  
+    OfferDetailPageRoutingModule,
     MaterialModule,
     ComponentsModule,
     ReactiveFormsModule,
@@ -34,6 +34,6 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     CurrencyMaskModule
   ],
   declarations: [OfferDetailPage],
-  providers:[CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
+  providers: [CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
 })
 export class OfferDetailPageModule {}

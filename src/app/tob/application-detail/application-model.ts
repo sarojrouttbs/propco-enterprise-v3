@@ -10,9 +10,9 @@ declare namespace ApplicationModels {
         clauseName?: string;
         clauseText?: string;
         isNegotiable?: boolean;
-        clauseScope?: string
-        clauseNumber?: string
-        clauseHeadingId?: string
+        clauseScope?: string;
+        clauseNumber?: string;
+        clauseHeadingId?: string;
     }
 
     export interface IApplicationRequest {

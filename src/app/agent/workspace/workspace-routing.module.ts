@@ -9,7 +9,7 @@ const routes: Routes = [
     component: WorkspacePage,
     children: [
       {
-        path: 'property/:pid',
+        path: 'property',
         loadChildren: () => import(`./property/property.module`)
         .then(m => m.PropertyPageModule)
       }

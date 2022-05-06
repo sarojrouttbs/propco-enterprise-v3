@@ -11,12 +11,12 @@ export interface OfferData {
     isArchived: boolean;
     isLandlordConfirmed: boolean;
     isPropertyAvailable: boolean;
-    landlordConfirmedDate: string
+    landlordConfirmedDate: string;
     negotiatorId;
     numberOfCoApplicants;
     offerAt: string;
     offerId: string;
-    status: number
+    status: number;
     surname: string;
     title: string;
 }
@@ -27,7 +27,7 @@ export interface OfferNotesData {
     complaint: number;
     notes: string;
     postedAt: string;
-    type: number
+    type: number;
     userEmail: string;
     userId: string;
     userName: string;
