@@ -9,13 +9,12 @@ const routes: Routes = [
     component: WorkspacePage,
     children: [
       {
-        path: "property/:propertyId",
+        path: "property",
         loadChildren: () =>
           import(`./property/property.module`).then(
             (m) => m.PropertyPageModule
           ),
       },
-      
     ],
   },
 ];

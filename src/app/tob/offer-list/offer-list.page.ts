@@ -75,8 +75,8 @@ export class OfferListPage implements OnInit {
   private initData() {
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
 
-    if(!this.propertyId && this.router.url.startsWith('/agent')){
-      this.propertyId = this.router.url.split('/')[4];
+    if(!this.propertyId){
+      this.propertyId = this.route.snapshot.parent.parent.paramMap.get('propertyId');
     }    
     this.initApiCalls();
   }
@@ -406,7 +406,7 @@ export class OfferListPage implements OnInit {
   }
 
   makeAnOffer() {
-    this.router.navigate([`tob/${this.propertyId}/create-offer`], { replaceUrl: true });
+    this.router.navigate([`../create-offer`], { replaceUrl: true, relativeTo: this.route });
   }
 
   onPaginateChange(isNotes) {

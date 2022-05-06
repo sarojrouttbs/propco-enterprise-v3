@@ -26,7 +26,7 @@ import { PropertyAddressComponent } from './details/property-address/property-ad
 
 const routes: Routes = [
   {
-    path: "",
+    path: ":propertyId",
     component: PropertyPage,
     children: [
       {
@@ -38,26 +38,26 @@ const routes: Routes = [
         component: DetailsComponent,
       },
       {
-        path: "Offers-Details",
+        path: "create-offer",
         loadChildren: () =>
           import("../../../tob/offer-detail/offer-detail.module").then(
             (m) => m.OfferDetailPageModule
           ),
       },
       {
-        path: "Offers-List",
+        path: "offers",
         loadChildren: () =>
         import("../../../tob/offer-list/offer-list.module").then(
           (m) => m.OfferListPageModule
           ),
       },
-      {
-        path: "Offers-view",
-        loadChildren: () =>
-          import("../../../tob/offer-detail/offer-detail.module").then(
-            (m) => m.OfferDetailPageModule
-          ),
-      }
+      // {
+      //   path: "Offers-view",
+      //   loadChildren: () =>
+      //     import("../../../tob/offer-detail/offer-detail.module").then(
+      //       (m) => m.OfferDetailPageModule
+      //     ),
+      // }
     ]
   }
 ];
