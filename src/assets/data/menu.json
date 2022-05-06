@@ -41,7 +41,7 @@
           "name": "Particulars",
           "state": "propco.agent.entity.property.propertyparticulars",
           "isActive": false,
-          "route": ""
+          "route": "paticulars"
         }
       ]
     }
