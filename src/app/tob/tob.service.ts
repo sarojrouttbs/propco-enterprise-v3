@@ -47,7 +47,7 @@ export class TobService {
   }
 
   addApplicantToApplication(applicationId: string, body: any, isLeadApplicant: any) {
-    let params = new HttpParams().set('isLeadApplicant', isLeadApplicant);
+    const params = new HttpParams().set('isLeadApplicant', isLeadApplicant);
     return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants`, body,  {params}).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
@@ -64,7 +64,7 @@ export class TobService {
   }
 
   linkApplicantToApplication(applicationId: string, body: any, applicantId, isLeadApplicant: any) {
-    let params = new HttpParams().set('isLeadApplicant', isLeadApplicant);
+    const params = new HttpParams().set('isLeadApplicant', isLeadApplicant);
     return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body , {params}).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
@@ -118,9 +118,7 @@ export class TobService {
   }
 
   searchApplicant(text: string): Observable<any> {
-    let params = new HttpParams()
-      .set('text', text)
-      .set('types', 'APPLICANT')
+    const params = new HttpParams().set('text', text).set('types', 'APPLICANT');
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 

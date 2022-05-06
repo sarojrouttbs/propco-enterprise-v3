@@ -27,9 +27,9 @@ export class ApplicationListPage implements OnInit {
   @ViewChild('paginator') paginator: MatPaginator;
   obsApplicationList: Observable<any>;
   filteredApplicationList: MatTableDataSource<ApplicationData> = new MatTableDataSource<ApplicationData>([]);
-  isApplicationSelected: boolean = false;
+  isApplicationSelected = false;
   selectedApplicationRow: any;
-  isHideRejected: boolean = false;
+  isHideRejected = false;
   propertyId: string;
   propertyDetails;
   applicationsDetails;
@@ -43,9 +43,9 @@ export class ApplicationListPage implements OnInit {
   toDate = new FormControl('', []);
   referencingInfodata: any;
   referencingInfo: any;
-  isRecordsAvailable: boolean = true;
-  isPropertyDetailsAvailable: boolean = false;
-  isApplicationListAvailable: boolean = false;
+  isRecordsAvailable = true;
+  isPropertyDetailsAvailable = false;
+  isApplicationListAvailable = false;
   DEFAULTS = DEFAULTS;
 
   constructor(private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
@@ -61,6 +61,9 @@ export class ApplicationListPage implements OnInit {
 
   private initData() {
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
+    if (!this.propertyId) {
+      this.propertyId = this.route.snapshot.parent.parent.paramMap.get('propertyId');
+    }
     this.initApiCalls();
   }
 
@@ -91,7 +94,7 @@ export class ApplicationListPage implements OnInit {
             resolve([]);
           }
         }
-      )
+      );
     });
   }
 
@@ -130,7 +133,7 @@ export class ApplicationListPage implements OnInit {
 
   private setLookupData(): void {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
-    this.rentFrequencyTypes = this.lookupdata.advertisementRentFrequencies;    
+    this.rentFrequencyTypes = this.lookupdata.advertisementRentFrequencies;
   }
 
   private getTobLookupData() {
@@ -149,9 +152,9 @@ export class ApplicationListPage implements OnInit {
   private setTobLookupData(): void {
     this.toblookupdata = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
     this.applicationStatusTypes = this.toblookupdata.applicationStatuses;
-    this.offlinePaymentTypes = this.toblookupdata.offlinePaymentTypes
+    this.offlinePaymentTypes = this.toblookupdata.offlinePaymentTypes;
   }
-  
+
   getStatusColor(status) {
     var colorName = "";
     switch (status) {
@@ -181,7 +184,7 @@ export class ApplicationListPage implements OnInit {
     const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    const divOverlayLeft = (divOverlay.parent('.overlay-container').innerWidth() -  baseContainerWidth - 25);
+    const divOverlayLeft = (divOverlay.parent('.overlay-container').innerWidth() - baseContainerWidth - 25);
 
     let origDivOverlayHeight;
     let origDivOverlayTop;
@@ -258,7 +261,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   createApplication() {
-    this.router.navigate([`tob/${this.propertyId}/create-application`], { replaceUrl: true });
+    this.router.navigate([`../create-application`], { replaceUrl: true, relativeTo: this.route });
   }
 
   rejectAllApplications() {
@@ -271,14 +274,14 @@ export class ApplicationListPage implements OnInit {
           const requestObj: any = {
             applicationId: applicationId
           };
-          this.tobService.rejectAllApplication(requestObj).subscribe((response) => {
+          this.tobService.rejectAllApplication(requestObj).subscribe((res) => {
             this.commonService.showAlert('Reject All Application', 'All applications have been rejected successfully.').then(response => {
-              if(response) {
+              if (response) {
                 this.initApiCalls();
               }
             });
           },
-          (error) => {});
+            (error) => { });
         } else {
           this.commonService.showAlert('Reject All Application', 'Only Applications except Accept status are rejected as all.');
         }
@@ -288,21 +291,21 @@ export class ApplicationListPage implements OnInit {
 
   acceptApplication() {
     var isAccepted = this.applicationList.find((application) => application.status == APPLICATION_STATUSES.ACCEPTED);
-    if(isAccepted) {
+    if (isAccepted) {
       this.commonService.showAlert('Accept Application', 'One application is already accepted, Please reject them first then accept this application.');
     } else {
       this.commonService.showConfirm('Accept Application', 'Are you sure, you want to accept this application?', '', 'YES', 'NO').then(response => {
         if (response) {
           this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.ACCEPTED, {}).subscribe((response) => {
             this.commonService.showAlert('Accept Application', 'Application has been accepted successfully.').then(response => {
-              if(response) {
+              if (response) {
                 this.initApiCalls();
               }
             });
           },
-          (error) => {
+            (error) => {
 
-          });
+            });
         }
       });
     }
@@ -311,34 +314,34 @@ export class ApplicationListPage implements OnInit {
   rejectApplication() {
     this.commonService.showConfirm('Reject Application', 'Are you sure, you want to reject this application?', '', 'YES', 'NO').then(response => {
       if (response) {
-        this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.REJECTED, {}).subscribe((response) => {
+        this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.REJECTED, {}).subscribe((res) => {
           this.commonService.showAlert('Reject Application', 'Application has been rejected successfully.').then(response => {
-            if(response) {
+            if (response) {
               this.initApiCalls();
             }
           });
         },
-        (error) => {
-          
-        });
-      }
+          (error) => {
+
+          });
+      };
     });
   }
 
   holdApplication() {
     this.commonService.showConfirm('On Hold Application', 'Are you sure, you want to on hold this application?', '', 'YES', 'NO').then(response => {
       if (response) {
-        this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.ON_HOLD, {}).subscribe((response) => {
+        this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.ON_HOLD, {}).subscribe((res) => {
           this.commonService.showAlert('On Hold Application', 'Application status has been changed to on hold successfully.').then(response => {
-            if(response) {
+            if (response) {
               this.initApiCalls();
             }
           });
         },
-        (error) => {
-          
-        });
-      }
+          (error) => {
+
+          });
+      };
     });
   }
 
@@ -356,7 +359,7 @@ export class ApplicationListPage implements OnInit {
     });
 
     const data = modal.onDidDismiss().then(res => {
-      if(res?.data?.holdingDepositePaid) {
+      if (res?.data?.holdingDepositePaid) {
         this.initApiCalls();
       }
     });
@@ -366,7 +369,7 @@ export class ApplicationListPage implements OnInit {
   startReferencing() {
     if (this.referencingInfo.length === 1) {
       this.commonService.redirectUrl(this.referencingInfo[0].url);
-    } else if (this.referencingInfo.length > 1) { 
+    } else if (this.referencingInfo.length > 1) {
       this.selectReferecingType();
     } else {
       this.commonService.showAlert('Referencing', 'There is no referencing partner configured for this domain. Please contact support or an administrator.');
@@ -374,7 +377,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   viewDetails(applicantId: string) {
-    this.router.navigate([`tob/${this.propertyId}/application/${applicantId}`]);
+    this.router.navigate([`../application/${applicantId}`], { relativeTo: this.route });
   }
 
   private getReferancingInfo() {
@@ -391,14 +394,14 @@ export class ApplicationListPage implements OnInit {
 
   private setReferancingInfoData() {
     this.referencingInfodata = this.commonService.getItem(PROPCO.REFERENCING_INFO, true);
-    this.referencingInfo =  this.referencingInfodata.referencingPartners;
+    this.referencingInfo = this.referencingInfodata.referencingPartners;
     this.prepareReferencingInfoData();
   }
 
   private async selectReferecingType() {
     const radioInput = [];
     this.referencingInfo.forEach(element => {
-      radioInput.push({label: element.label, type: "radio", value: element.url});
+      radioInput.push({ label: element.label, type: 'radio', value: element.url });
     });
 
     this.commonService.showConfirm('Referencing', 'Please select referencing partner', '', '', '', radioInput).then(result => {
@@ -412,10 +415,10 @@ export class ApplicationListPage implements OnInit {
     this.referencingInfo.forEach(element => {
       switch (element) {
         case REFERENCING_TYPES.HOMELET:
-          prepareReferencingInfoData.push({name: element, label: 'Homelet', url: ''});
+          prepareReferencingInfoData.push({ name: element, label: 'Homelet', url: '' });
           break;
         case REFERENCING_TYPES.LETTINGS_HUB:
-          prepareReferencingInfoData.push({name: element, label: 'Lettings Hub', url: ''});
+          prepareReferencingInfoData.push({ name: element, label: 'Lettings Hub', url: '' });
           break;
       }
     });
@@ -423,7 +426,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   onPaginateChange() {
-    this.hideMenu('', 'divOverlay');    
+    this.hideMenu('', 'divOverlay');
   }
 
   private checkApplicationsAvailable() {
