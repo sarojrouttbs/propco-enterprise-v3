@@ -21,7 +21,6 @@ export class PropertyPage implements OnInit {
   showSubSubMenu = false;
   proptertyId: string;
   menuItems;
-  screenHeight;
   screenWidth;
   showMenu = false;
   constructor(
@@ -29,7 +28,7 @@ export class PropertyPage implements OnInit {
     private route: ActivatedRoute,
     private common: CommonService
   ) {
-    this.get_page_width_height();
+    this.getPageWidthHeight();
   }
 
   ngOnInit() {
@@ -39,8 +38,7 @@ export class PropertyPage implements OnInit {
   }
   
 
-  get_page_width_height(event?) {
-    this.screenHeight = window.innerHeight;
+  getPageWidthHeight() {
     this.screenWidth = window.innerWidth;
   }
 
