@@ -330,7 +330,7 @@ export class DashboardPage implements OnInit {
   }
 
   async escalateFault() {
-    const headingText = 'Escalate Fault';
+    const headingText = 'Escalate Repair';
     const modal = await this.modalController.create({
       component: EscalateModalPage,
       cssClass: 'modal-container',
@@ -342,7 +342,7 @@ export class DashboardPage implements OnInit {
 
     modal.onDidDismiss().then(res => {
       if (res.data == 'success') {
-        this.commonService.showAlert('Escalate Fault', 'Fault has been escalated to the property manager.');
+        this.commonService.showAlert('Escalate Repair', 'Repair has been escalated to the property manager.');
         this.rerenderFaults(false);
         this.getFaultNotes(this.selectedData.faultId);
         this.hideMenu('', 'divOverlay');
@@ -353,10 +353,10 @@ export class DashboardPage implements OnInit {
   }
 
   async deEscalateFault() {
-    this.commonService.showConfirm('De-Escalate Fault', 'Are you sure you want to de-escalate the fault?', '', 'Yes', 'No').then(res => {
+    this.commonService.showConfirm('De-Escalate Repair', 'Are you sure you want to de-escalate the repair?', '', 'Yes', 'No').then(res => {
       if (res) {
         this.faultsService.deEscalateFault(this.selectedData.faultId, {}).subscribe(res => {
-          this.commonService.showAlert('De-Escalate Fault', 'Fault has been de-escalated to the property manager.');
+          this.commonService.showAlert('De-Escalate Repair', 'Repair has been de-escalated to the property manager.');
           this.rerenderFaults(false);
           this.hideMenu('', 'divOverlay');
           this.bucketCount();
@@ -379,7 +379,7 @@ export class DashboardPage implements OnInit {
 
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
-        this.commonService.showMessage('Fault has been closed successfully.', 'Close Fault', 'success');
+        this.commonService.showMessage('Repair has been closed successfully.', 'Close Repair', 'success');
         this.rerenderFaults(false);
         this.bucketCount();
         return;
@@ -390,7 +390,7 @@ export class DashboardPage implements OnInit {
   }
 
   async startProgress() {
-    const check = await this.commonService.showConfirm('Start Progress', 'This will change the fault status, Do you want to continue?');
+    const check = await this.commonService.showConfirm('Start Progress', 'This will change the repair status, Do you want to continue?');
     if (check) {
       this.faultsService.startProgress(this.selectedData.faultId).subscribe(data => {
         this.router.navigate([`../${this.selectedData.faultId}/details`], { relativeTo: this.route });
@@ -929,11 +929,11 @@ export class DashboardPage implements OnInit {
   validateFaults(faultDetail) {
     let valid = true;
     if (faultDetail.status === FAULT_STATUSES.CLOSED) {
-      this.commonService.showAlert('Fault Closed', 'Fault status is closed, Please select another fault.', '');
+      this.commonService.showAlert('Repair Closed', 'Repair status is closed, Please select another repair.', '');
       return valid = false;
     }
     if (this.selectedFaultList.length === 3) {
-      this.commonService.showAlert('Maximum Limit', 'Maximum allowed limit to merge fault is 3.', '');
+      this.commonService.showAlert('Maximum Limit', 'Maximum allowed limit to merge repair is 3.', '');
       return valid = false;
     }
     if (this.selectedFaultList.length > 0) {
@@ -953,7 +953,7 @@ export class DashboardPage implements OnInit {
       event.target.checked = false;
       faultDetail.isChecked = false;
       event.stopPropagation();
-      this.commonService.showAlert('Quote/Works Order Raised', 'There is active maintenance linked with this fault, cannot be selected to merge.', '');
+      this.commonService.showAlert('Quote/Works Order Raised', 'There is active maintenance linked with this repair, cannot be selected to merge.', '');
       return valid = false;
     }
     return valid;
@@ -968,7 +968,7 @@ export class DashboardPage implements OnInit {
   }
 
   async mergeFault(data) {
-    const isConfirm = await this.commonService.showConfirm('Merge Repairs', `You have selected ${this.selectedFaultList?.length} repairs to merge. Information from all the repairs will be copied into the Fault ${data?.reference} and the remaining repairs will be marked as Closed. Any communications sent out from the repairs being closed will be voided. Are you sure?`)
+    const isConfirm = await this.commonService.showConfirm('Merge Repairs', `You have selected ${this.selectedFaultList?.length} repairs to merge. Information from all the repairs will be copied into the Repair ${data?.reference} and the remaining repairs will be marked as Closed. Any communications sent out from the repairs being closed will be voided. Are you sure?`)
     if (isConfirm && data) {
       let childFaults = this.selectedFaultList.filter(x => x.faultId != data.faultId);
       let requestObj: any = {};
