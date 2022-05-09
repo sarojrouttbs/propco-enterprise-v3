@@ -564,26 +564,7 @@ export class OfferDetailPage implements OnInit {
         });
       }
     });
-
-    const check = {
-      amount: 200,
-      applicantId: "ac1137a8-71c8-16d3-8171-c82746075149",
-      comments: "",
-      entityType: "AGENT",
-      isApplicantConfirmed: false,
-      isLandlordConfirmed: true,
-      landlordConfirmedDate: "2022-05-06",
-      moveInDate: "2022-05-06",
-      numberOfAdults: 1,
-      numberOfChildren: 0,
-      offerClauses: [],
-      offerRestrictions: [],
-      propertyId: "20051a39-7f23-471e-a841-75d3d25e7b17",
-      rentingTime: 320,
-      sendEmailToLandlord: false,
-      status: 0,
-    };
-    return check;
+    return requestObj;
   }
 
   private updateApplicantDetails() {
