@@ -10,15 +10,19 @@ export class DashboardPage implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
   }
 
-  redirect(type: string){
+  redirect(type: string) {
     switch (type) {
       case 'let-alliance':
-        this.router.navigate([`agent/let-alliance`]);
+        this.router.navigate([`../let-alliance`], { relativeTo : this.route});
+        break;
+      case 'maintenance':
+        this.router.navigate([`../maintenance`], { relativeTo : this.route});
         break;
       default:
         break;
