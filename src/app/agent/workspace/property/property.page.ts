@@ -34,7 +34,7 @@ export class PropertyPage implements OnInit {
   ) {
     setTimeout(() => {
       this.open = true;
-    }, 2000);
+    }, 200);
     this.onResize();
   }
 
