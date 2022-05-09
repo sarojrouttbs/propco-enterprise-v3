@@ -1,7 +1,7 @@
 <ion-grid>
   <ion-row *ngIf="faultDetails?.isClosed">
     <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
-      <app-close-fault  [notificationData]="iqfNotification" [faultDetails]="faultDetails" [action]="getLookupValue(iqfNotification?.faultStageAction, iqfStageActions)?getLookupValue(iqfNotification?.faultStageAction, iqfStageActions) :'Fault Qualification'"></app-close-fault>
+      <app-close-fault  [notificationData]="iqfNotification" [faultDetails]="faultDetails" [action]="getLookupValue(iqfNotification?.faultStageAction, iqfStageActions)?getLookupValue(iqfNotification?.faultStageAction, iqfStageActions) :'Repair Qualification'"></app-close-fault>
     </ion-col>
   </ion-row>
 
@@ -75,7 +75,7 @@
           <h4 claas="ion-text-center">Next Step:</h4>
           <h6 *ngIf="iqfNotification?.templateCode !== 'FI-T-E-1'">
             <ion-text color="danger">Please note: </ion-text>
-            <span>The Fault will be <i>escalated</i> automatically if  
+            <span>The Repair will be <i>escalated</i> automatically if  
               <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === actionList.UNDER_WARRANTY">Guarantee Management Company</span> 
               <span *ngIf="iqfNotification?.recipientType === 58 && iqfNotification?.faultStageAction === actionList.UNDER_SERVICE_CONTRACT">Service Contract Company</span>
               <span *ngIf="iqfNotification?.recipientType === 148">Block Management/Factors Company</span> does not respond within {{iqfNotification?.hoursLeft}}.
@@ -83,13 +83,13 @@
           </h6>
           <h6 *ngIf="iqfNotification?.templateCode === 'FI-T-E-1' && (faultDetails.urgencyStatus === 1 || faultDetails.urgencyStatus === 2)">
             <ion-text color="danger">Please note: </ion-text>
-            <span>The Fault will be <i>escalated</i> automatically if  
+            <span>The Repair will be <i>escalated</i> automatically if  
               Tenant does not respond within {{iqfNotification?.hoursLeft}}.
             </span>
           </h6>
           <h6 *ngIf="iqfNotification?.templateCode === 'FI-T-E-1' && faultDetails.urgencyStatus === 3">
             <ion-text color="danger">Please note: </ion-text>
-            <span>The Fault will be <i>closed</i> automatically if  
+            <span>The Repair will be <i>closed</i> automatically if  
               Tenant does not respond within {{iqfNotification?.hoursLeft}}.
             </span>
           </h6>
@@ -101,15 +101,15 @@
           <h4 claas="ion-text-center">Next Step:</h4>
 
           <h6 *ngIf="iqfNotification?.templateCode !== 'FI-T-E-1'">
-            <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
+            <ion-text color="danger">Please note: </ion-text>Repair Escalated - PM to decide the next steps
           </h6>
 
           <h6 *ngIf="iqfNotification?.templateCode === 'FI-T-E-1' && (faultDetails.urgencyStatus === 1 || faultDetails.urgencyStatus === 2)">
-            <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
+            <ion-text color="danger">Please note: </ion-text>Repair Escalated - PM to decide the next steps
           </h6>
 
           <h6 *ngIf="iqfNotification?.templateCode === 'FI-T-E-1' && faultDetails.urgencyStatus === 3">
-            <ion-text color="danger">Please note: </ion-text>Fault Closed
+            <ion-text color="danger">Please note: </ion-text>Repair Closed
           </h6>
           <div class="border-bottom"></div>
         </div>
@@ -129,7 +129,7 @@
                 </div>
               </ng-container>
               <ion-button *ngIf="faultDetails?.isEscalated"  color="success" expand="block" class="action-btn" fill="outline" (click)="snoozeFault()">
-                Snooze Fault</ion-button>
+                Snooze Repair</ion-button>
             </ion-row>
           </ion-grid>
           <div class="border-bottom" *ngIf="iqfNotification?.templateCode === 'FI-T-E-1'"></div>
@@ -142,7 +142,7 @@
               <ion-row class="ion-justify-content-center">
                 <ion-col size="40" class="card" *ngIf="iqfNotification?.templateCode === 'BM-E'">
                   <h3>Block Management</h3>
-                  <h5>The fault is Block Management Company's responsibility. </h5>
+                  <h5>The repair is Block Management Company's responsibility. </h5>
                   <ion-row>
                     <ion-col size="100">
                       <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
@@ -152,7 +152,7 @@
                 </ion-col>
                 <ion-col size="40" class="card" *ngIf="iqfNotification?.templateCode === 'GA-E'">
                   <h3>Guarantee / Warranty</h3>
-                  <h5>The fault is covered by a Guarantee / Warranty. </h5>
+                  <h5>The repair is covered by a Guarantee / Warranty. </h5>
                   <ion-row>
                     <ion-col size="100">
                       <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
@@ -162,7 +162,7 @@
                 </ion-col>
                 <ion-col size="40" class="card" *ngIf="iqfNotification?.templateCode === 'SM-E'">
                   <h3>Service Contract/ Appliance Cover</h3>
-                  <h5>The fault is covered by a Service Contract/ Appliance Cover.</h5>
+                  <h5>The repair is covered by a Service Contract/ Appliance Cover.</h5>
                   <ion-row>
                     <ion-col size="100">
                       <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
@@ -248,7 +248,7 @@
 
       <ion-col class="card">
         <h3>Block Management</h3>
-        <h5>Is the fault Block Management Company's responsibility? </h5>
+        <h5>Is the repair Block Management Company's responsibility? </h5>
         <ion-row>
           <ion-col size="70">
             <ion-radio-group formControlName="isUnderBlockManagement">
@@ -281,7 +281,7 @@
     <ion-row>
       <ion-col class="card">
         <h3>Guarantee / Warranty</h3>
-        <h5>Is the fault covered by a Guarantee / Warranty? </h5>
+        <h5>Is the repair covered by a Guarantee / Warranty? </h5>
         <ion-row>
           <ion-col size="70">
             <ion-radio-group formControlName="isUnderWarranty">
@@ -314,7 +314,7 @@
       </ion-col>
       <ion-col class="card">
         <h3>Service Contract/ Appliance Cover</h3>
-        <h5>Is the fault covered by a Service Contract/ Appliance Cover?</h5>
+        <h5>Is the repair covered by a Service Contract/ Appliance Cover?</h5>
         <ion-row>
           <ion-col size="70">
             <ion-radio-group formControlName="isUnderServiceContract">
@@ -353,7 +353,7 @@
 <div class="action-btn-group">
   <ion-button (click)="moreInfo();" class="save-button ion-float-left" [disabled]="faultDetails?.status === 10 || (iqfNotification && !iqfNotification?.responseReceived && iqfNotification?.templateCode === 'FI-T-E-1') || faultDetails?.isClosed">Request More Info</ion-button>
   <ion-button (click)="closeFault();" class="cancel-button ion-float-left" [disabled]="faultDetails?.status===10 || faultDetails?.isClosed">Close
-    Fault
+    Repair
   </ion-button>
   <ion-button (click)="_btnHandler('cancel')" class="cancel-button" [disabled]="saving || proceeding">Cancel</ion-button>
   <ion-button (click)="_btnHandler('back')" [disabled]="saving || proceeding">Back</ion-button>
