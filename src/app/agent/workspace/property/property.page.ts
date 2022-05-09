@@ -29,7 +29,7 @@ export class PropertyPage implements OnInit {
     private route: ActivatedRoute,
     private common: CommonService
   ) {
-    this.onResize();
+    this.get_page_width_height();
   }
 
   ngOnInit() {
@@ -39,7 +39,7 @@ export class PropertyPage implements OnInit {
   }
   
 
-  onResize(event?) {
+  get_page_width_height(event?) {
     this.screenHeight = window.innerHeight;
     this.screenWidth = window.innerWidth;
   }
