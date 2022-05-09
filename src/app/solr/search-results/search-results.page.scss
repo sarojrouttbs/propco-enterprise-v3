@@ -688,12 +688,7 @@ ion-item {
       }
 
       .title-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 86%;
-        flex-wrap: wrap;
-
+        width: 80%;
         .address-ref-wrapper {
           display: flex;
           flex-direction: row;
@@ -701,7 +696,7 @@ ion-item {
           align-items: baseline;
 
           .address {
-            width: 50%;
+            width: auto;
             @include set-text-style(15px, 21px);
           }
         }
@@ -787,7 +782,7 @@ ion-item {
     }
   }
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1170px) {
     .emenities-wrapper {
       .garage-ellipse {
           width: 52px;
