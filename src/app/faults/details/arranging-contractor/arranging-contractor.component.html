@@ -114,13 +114,13 @@
                 <h4 class="ion-text-center">Next Step:</h4> 
                 <h6 *ngIf="iacNotification?.chaseTemplateCode!='LNP-L-E'">  
                   <ion-text color="danger">Please note: </ion-text>
-                  <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1? recipientTypes.TENANT :(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} doesn't respond within
+                  <span>The repair will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1? recipientTypes.TENANT :(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} doesn't respond within
                     {{iacNotification?.hoursLeft}}.
                   </span>
                 </h6>
                 <h6 *ngIf="iacNotification?.chaseTemplateCode=='LNP-L-E'">  
                   <ion-text color="danger">Please note: </ion-text>
-                  <span>Fault will be <i>escalated</i> to PM in {{iacNotification?.hoursLeft}}.
+                  <span>Repair will be <i>escalated</i> to PM in {{iacNotification?.hoursLeft}}.
                   </span>
                 </h6>
                 <div class="border-bottom"></div>
@@ -140,7 +140,7 @@
                   </span>
 
                   <span>
-                    The next step is for the {{iacNotification?.recipientType == 1?recipientTypes.TENANT:(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} to upload the Quote and photos.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?recipientTypes.TENANT:(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} doesn't respond within
+                    The next step is for the {{iacNotification?.recipientType == 1?recipientTypes.TENANT:(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} to upload the Quote and photos.<br>Repair will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?recipientTypes.TENANT:(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} doesn't respond within
                     {{iacNotification?.hoursLeft}}.
                   </span>
                 </h6>
@@ -154,7 +154,7 @@
                   <span *ngIf="faultDetails?.contractorWoPropertyVisitSlot">The appointment for carrying out the work was on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }}.</span>
                   
                   <span>
-                    The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to confirm the Completion of Job.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
+                    The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to confirm the Completion of Job.<br>Repair will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
                     {{iacNotification?.hoursLeft}}.
                   </span>
                 </h6>
@@ -166,7 +166,7 @@
             && !filteredCCDetails?.isLandlordWantAnotherQuote">
               <h6>
                 <ion-text color="danger">Please note: </ion-text>
-                <span *ngIf="faultDetails.isEscalated">Fault Escalated - PM to decide the next steps</span>
+                <span *ngIf="faultDetails.isEscalated">Repair Escalated - PM to decide the next steps</span>
               </h6>
               <div class="border-bottom"></div>
             </div>
@@ -188,7 +188,7 @@
             <h4 claas="ion-text-center">Next Step:</h4>
             <h6>
               <ion-text color="danger">Please note: </ion-text>
-              <span>This Fault is escalated as Landlord Override communication option is activated. 
+              <span>This Repair is escalated as Landlord Override communication option is activated. 
                 Please respond yourself or forward to Landlord for them to take an action by clicking here</span>
             </h6>
             <ion-button color="success" class="action-btn" fill="solid" (click)="viewNotification(); $event.stopPropagation();">
@@ -228,7 +228,7 @@
                           *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
                       </ion-button>
                     <h6 class="ownRepair" *ngIf="(instruction.index == 'DOES_OWN_REPAIRS' && isMatch === false )">
-                      Landlord owned Repair Category does not match the Fault Category</h6>
+                      Landlord owned Repair Category does not match the Repair Category</h6>
                     </div>
                   </ng-container>
                 </ng-container>
@@ -255,9 +255,9 @@
                 </ng-container>
                 <ion-button color="success" *ngIf="iacNotification && iacNotification?.templateCode === 'CWO-C-E'"  
                 expand="block" class="action-btn" fill="{{faultDetails?.isClosed ? 'solid' : 'outline'}}" (click)="closeFault()">
-                  Close Fault</ion-button>
+                  Close Repair</ion-button>
                   <ion-button *ngIf="faultDetails?.isEscalated"  color="success" expand="block" class="action-btn" fill="outline" (click)="snoozeFault()">
-                  Snooze Fault</ion-button>
+                  Snooze Repair</ion-button>
               </ion-row>
             </ion-grid>
           </div>
