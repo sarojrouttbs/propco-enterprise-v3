@@ -470,7 +470,7 @@ ion-alert.common-alert-box {
       border: solid 1px var(--ion-color-body);
       border-top: none;
       color: var(--ion-color-text-color);
-      max-width: 380px;
+      max-width: 785px;
       --color-hover:var(--ion-color-text-color);
       --background-hover: var(--ion-color-header);
       --background: var(--ion-color-header);
@@ -501,14 +501,14 @@ ion-alert.common-alert-box {
   }
 }
 
-#paropertyLettingDetails{
+#paropertyLettingDetails, #propertyCheckGrid{
   ion-select{
     height: 40px;
   }
 
   ion-textarea{
     .textarea-wrapper{
-      height: 32px;
+      height: 32px !important;
       textarea{
         padding-top: 0px;
       }
