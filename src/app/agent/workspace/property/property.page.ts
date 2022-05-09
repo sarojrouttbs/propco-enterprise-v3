@@ -1,18 +1,18 @@
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MenuController } from "@ionic/angular";
-import * as menuList from "../../../../assets/data/menu.json";
-import { HostListener } from "@angular/core";
-import { CommonService } from "src/app/shared/services/common.service";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
+import * as menuList from '../../../../assets/data/menu.json';
+import { HostListener } from '@angular/core';
+import { CommonService } from 'src/app/shared/services/common.service';
 import { async } from '@angular/core/testing';
 
 @Component({
-  selector: "app-property",
-  templateUrl: "./property.page.html",
-  styleUrls: ["./property.page.scss"],
+  selector: 'app-property',
+  templateUrl: './property.page.html',
+  styleUrls: ['./property.page.scss'],
 })
 export class PropertyPage implements OnInit {
-  @HostListener("window:resize", ["$event"])
+  @HostListener('window:resize', ['$event'])
 
   showFiller = false;
   open = false;
@@ -40,7 +40,7 @@ export class PropertyPage implements OnInit {
 
  async ngOnInit() {
     this.menuItems = menuList.agents;
-    this.proptertyId = this.route.snapshot.params["propertyId"];
+    this.proptertyId = this.route.snapshot.params['propertyId'];
    await this.getMenutoggleFlag();
   }
   
@@ -88,17 +88,17 @@ export class PropertyPage implements OnInit {
     }
 
     switch (pageName) {
-      case "dashboard":
+      case 'dashboard':
         this.router.navigate([
           `agent/workspace/property/${this.proptertyId}/dashboard`,
         ]);
         break;
-      case "details":
+      case 'details':
         this.router.navigate([
           `agent/workspace/property/${this.proptertyId}/details`,
         ]);
         break;
-      case "applications":
+      case 'applications':
         this.router.navigate([
           `agent/workspace/property/${this.proptertyId}/${pageName}`,
         ]);
