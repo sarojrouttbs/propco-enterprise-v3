@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router  } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { NOTES_TYPE, OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
@@ -75,9 +75,9 @@ export class OfferListPage implements OnInit {
   private initData() {
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
 
-    if(!this.propertyId){
+    if (!this.propertyId) {
       this.propertyId = this.route.snapshot.parent.parent.paramMap.get('propertyId');
-    }    
+    }
     this.initApiCalls();
   }
 
@@ -108,15 +108,15 @@ export class OfferListPage implements OnInit {
         break;
       }
       case '2': {
-        dataToSort.sort((val1, val2) => val2.amount - val1.amount );
+        dataToSort.sort((val1, val2) => val2.amount - val1.amount);
         break;
       }
       case '3': {
-        dataToSort.sort((val1, val2) => val1.amount - val2.amount );
+        dataToSort.sort((val1, val2) => val1.amount - val2.amount);
         break;
       }
       case '4': {
-        dataToSort.sort((val1, val2) => val1.status - val2.status );
+        dataToSort.sort((val1, val2) => val1.status - val2.status);
         break;
       }
     }
@@ -399,9 +399,9 @@ export class OfferListPage implements OnInit {
 
   viewDetails(offerId?) {
     if (offerId !== undefined && offerId !== null) {
-      this.router.navigate([`tob/${offerId}/view`], { replaceUrl: true });
+      this.router.navigate([`../offer/${offerId}/view`], { replaceUrl: true, relativeTo: this.route });
     } else if (this.selectedOfferRow?.offerId !== undefined && this.selectedOfferRow?.offerId !== null) {
-      this.router.navigate([`tob/${this.selectedOfferRow.offerId}/view`], { replaceUrl: true });
+      this.router.navigate([`../offer/${this.selectedOfferRow.offerId}`], { replaceUrl: true, relativeTo: this.route });
     }
   }
 
