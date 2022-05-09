@@ -10,8 +10,8 @@
   </button>
 </mat-toolbar> -->
 
-<mat-sidenav-container class="example-sidenav-container" [hasBackdrop] = "false">
-  <mat-sidenav #snav [mode]="'side'" [opened]="open"
+<mat-sidenav-container  class="example-sidenav-container" [hasBackdrop] = "screenWidth < 1024 ? true : false">
+  <mat-sidenav #snav [mode]="'side'" [opened]="showMenu"
    fixedTopGap="56" class="sidenav-block">
     <div class="property-lettings">
       <span>Property (Lettings)</span>
@@ -40,7 +40,7 @@
     </mat-nav-list>
   </mat-sidenav>
 
-  <mat-sidenav-content>
+  <mat-sidenav-content >
     <ion-router-outlet></ion-router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

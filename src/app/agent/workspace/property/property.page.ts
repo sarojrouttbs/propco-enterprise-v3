@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MenuController } from '@ionic/angular';
 import * as menuList from '../../../../assets/data/menu.json';
+import { HostListener } from '@angular/core';
+import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-property',
@@ -9,6 +10,8 @@ import * as menuList from '../../../../assets/data/menu.json';
   styleUrls: ['./property.page.scss'],
 })
 export class PropertyPage implements OnInit {
+  @HostListener('window:resize', ['$event'])
+
   showFiller = false;
   open = false;
   mobileQuery: MediaQueryList;
@@ -18,20 +21,31 @@ export class PropertyPage implements OnInit {
   showSubSubMenu = false;
   proptertyId: string;
   menuItems;
-
+  screenWidth;
+  showMenu = false;
   constructor(
-    private menu: MenuController,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private common: CommonService
   ) {
-    setTimeout(() => {
-      this.open = true;
-    }, 200);
+    this.getPageWidthHeight();
   }
 
   ngOnInit() {
     this.menuItems = menuList.agents;
     this.proptertyId = this.route.snapshot.params['propertyId'];
+    this.getMenutoggleFlag();
+  }
+  
+
+  getPageWidthHeight() {
+    this.screenWidth = window.innerWidth;
+  }
+
+  getMenutoggleFlag() {
+    this.common.toggleMenuChange.subscribe((data: any) => {
+      this.showMenu = data;
+    });
   }
 
   mouseenter() {
