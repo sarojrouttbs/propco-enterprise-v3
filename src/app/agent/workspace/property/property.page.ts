@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MenuController } from '@ionic/angular';
 import * as menuList from '../../../../assets/data/menu.json';
 import { HostListener } from '@angular/core';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-property',
@@ -27,21 +25,17 @@ export class PropertyPage implements OnInit {
   screenWidth;
   showMenu = false;
   constructor(
-    private menu: MenuController,
     private router: Router,
     private route: ActivatedRoute,
     private common: CommonService
   ) {
-    setTimeout(() => {
-      this.open = true;
-    }, 200);
     this.onResize();
   }
 
- async ngOnInit() {
+  ngOnInit() {
     this.menuItems = menuList.agents;
     this.proptertyId = this.route.snapshot.params['propertyId'];
-   await this.getMenutoggleFlag();
+    this.getMenutoggleFlag();
   }
   
 
