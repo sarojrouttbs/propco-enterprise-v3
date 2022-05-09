@@ -130,6 +130,10 @@ export class CommonService {
     return this.httpClient.get(environment.API_BASE_URL + `postcode/${addressId}/retrieve`);
   }
 
+  getUserDetails(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `user/logged-in`);
+  }
+
 
   getLookupValue(id, listOfArray): string {
     let propertyStatus;
