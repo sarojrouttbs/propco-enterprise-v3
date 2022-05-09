@@ -571,7 +571,6 @@ export class OfferDetailPage implements OnInit {
         });
       }
     });
-
     return requestObj;
   }
 

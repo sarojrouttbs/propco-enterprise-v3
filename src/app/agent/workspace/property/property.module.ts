@@ -24,6 +24,7 @@ import { CallInfoModalPageModule } from 'src/app/shared/modals/call-info-modal/c
 import { PropertyAddressComponent } from './details/property-address/property-address.component';
 import { PropertyPageRoutingModule } from './property-routing.module';
 import { NegotiateModalPageModule } from 'src/app/shared/modals/negotiate-modal/negotiate-modal.module';
+import { AgentService } from '../../agent.service';
 
 @NgModule({
   imports: [
@@ -47,6 +48,6 @@ import { NegotiateModalPageModule } from 'src/app/shared/modals/negotiate-modal/
     NegotiateModalPageModule
   ],
   declarations: [GoogleMapComponent, PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent, LettingsDetailsComponent, LetBoardComponent, HistoryComponent, PropertyChecksComponent, PropertyAddressComponent],
-  providers: []
+  providers:[AgentService],
 })
 export class PropertyPageModule { }
