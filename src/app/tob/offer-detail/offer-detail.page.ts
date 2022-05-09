@@ -73,7 +73,7 @@ export class OfferDetailPage implements OnInit {
     private tobService: TobService,
     private modalController: ModalController,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.propertyId = this.route.snapshot.paramMap.get("propertyId");
@@ -128,7 +128,7 @@ export class OfferDetailPage implements OnInit {
           this.isEnable("pets");
         }
       },
-      (error) => {}
+      (error) => { }
     );
   }
 
@@ -249,7 +249,7 @@ export class OfferDetailPage implements OnInit {
           restrict.key.replace(/_/g, " ")
         );
       });
-    } catch (e) {}
+    } catch (e) { }
     this.isOffersDetailsAvailable = true;
   }
 
@@ -273,7 +273,7 @@ export class OfferDetailPage implements OnInit {
         this.makeAnOfferForm.get("amount").updateValueAndValidity();
         this.isTobPropertyCardReady = true;
       },
-      (error) => {}
+      (error) => { }
     );
   }
 
@@ -284,7 +284,7 @@ export class OfferDetailPage implements OnInit {
           this.propertyDetails.noDepositScheme = res.noDepositScheme;
         }
       },
-      (error) => {}
+      (error) => { }
     );
   }
 
@@ -296,7 +296,7 @@ export class OfferDetailPage implements OnInit {
           (result) => result.isNegotiable
         );
       },
-      (error) => {}
+      (error) => { }
     );
   }
 
@@ -310,12 +310,12 @@ export class OfferDetailPage implements OnInit {
         );
         this.propertyRestrictions.map(
           (restrict) =>
-            (restrict.restrictionName = this.commonService.camelize(
-              restrict.key.replace(/_/g, " ")
-            ))
+          (restrict.restrictionName = this.commonService.camelize(
+            restrict.key.replace(/_/g, " ")
+          ))
         );
       },
-      (error) => {}
+      (error) => { }
     );
   }
 
@@ -415,10 +415,17 @@ export class OfferDetailPage implements OnInit {
           "Update Offer",
           "success"
         );
-        this.router.navigate([`../offers`], {
-          replaceUrl: true,
-          relativeTo: this.route,
-        });
+        if (!this.offerId) {
+          this.router.navigate([`../offers`], {
+            replaceUrl: true,
+            relativeTo: this.route,
+          });
+        } else {
+          this.router.navigate([`../../offers`], {
+            replaceUrl: true,
+            relativeTo: this.route,
+          });
+        }
       });
   }
 
@@ -438,14 +445,14 @@ export class OfferDetailPage implements OnInit {
     requestObj.isApplicantConfirmed = confirmationForm.isApplicantConfirmed;
     requestObj.applicantConfirmedDate = requestObj.isApplicantConfirmed
       ? this.commonService.getFormatedDate(
-          confirmationForm.applicantConfirmedDate
-        )
+        confirmationForm.applicantConfirmedDate
+      )
       : null;
     requestObj.isLandlordConfirmed = confirmationForm.isLandlordConfirmed;
     requestObj.landlordConfirmedDate = confirmationForm.isLandlordConfirmed
       ? this.commonService.getFormatedDate(
-          confirmationForm.landlordConfirmedDate
-        )
+        confirmationForm.landlordConfirmedDate
+      )
       : null;
     requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord;
     requestObj.sendEmailToApplicant = confirmationForm.sendEmailToApplicant;
@@ -477,15 +484,15 @@ export class OfferDetailPage implements OnInit {
           const applicantName =
             this.applicantDetail.fullName ||
             this.applicantDetail.title +
-              " " +
-              this.applicantDetail.forename +
-              " " +
-              this.applicantDetail.surname;
+            " " +
+            this.applicantDetail.forename +
+            " " +
+            this.applicantDetail.surname;
           this.commonService
             .showAlert(
               "Offer Created",
               "Congratulations! You have successfully created an offer on behalf of Applicant " +
-                applicantName
+              applicantName
             )
             .then((res) => {
               if (res) {
@@ -575,8 +582,8 @@ export class OfferDetailPage implements OnInit {
     this.tobService
       .updateApplicantDetails(this.applicantId, requestObj)
       .subscribe(
-        (res) => {},
-        (error) => {}
+        (res) => { },
+        (error) => { }
       );
   }
 
@@ -590,7 +597,7 @@ export class OfferDetailPage implements OnInit {
           this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
           this.setLookupData();
         },
-        (error) => {}
+        (error) => { }
       );
     }
   }
@@ -608,7 +615,7 @@ export class OfferDetailPage implements OnInit {
           this.commonService.setItem(PROPCO.TOB_LOOKUP_DATA, data);
           this.setTobLookupData();
         },
-        (error) => {}
+        (error) => { }
       );
     }
   }
@@ -744,7 +751,7 @@ export class OfferDetailPage implements OnInit {
       backdropDismiss: false,
     });
 
-    const data = modal.onDidDismiss().then((res) => {});
+    const data = modal.onDidDismiss().then((res) => { });
     await modal.present();
   }
 
@@ -760,10 +767,17 @@ export class OfferDetailPage implements OnInit {
       const propertyId = this.offerId
         ? this.offerDetails.propertyId
         : this.propertyId;
-      this.router.navigate([`../offers`], {
-        replaceUrl: true,
-        relativeTo: this.route,
-      });
+      if (!this.offerId) {
+        this.router.navigate([`../offers`], {
+          replaceUrl: true,
+          relativeTo: this.route,
+        });
+      } else {
+        this.router.navigate([`../../offers`], {
+          replaceUrl: true,
+          relativeTo: this.route,
+        });
+      }
     }
   }
 
@@ -851,10 +865,17 @@ export class OfferDetailPage implements OnInit {
             "success"
           );
 
-          this.router.navigate([`../offers`], {
-            replaceUrl: true,
-            relativeTo: this.route,
-          });
+          if (!this.offerId) {
+            this.router.navigate([`../offers`], {
+              replaceUrl: true,
+              relativeTo: this.route,
+            });
+          } else {
+            this.router.navigate([`../../offers`], {
+              replaceUrl: true,
+              relativeTo: this.route,
+            });
+          }
         }
       });
   }
@@ -868,10 +889,17 @@ export class OfferDetailPage implements OnInit {
           "Update Offer",
           "success"
         );
-        this.router.navigate([`../offers`], {
-          replaceUrl: true,
-          relativeTo: this.route,
-        });
+        if (!this.offerId) {
+          this.router.navigate([`../offers`], {
+            replaceUrl: true,
+            relativeTo: this.route,
+          });
+        } else {
+          this.router.navigate([`../../offers`], {
+            replaceUrl: true,
+            relativeTo: this.route,
+          });
+        }
       });
   }
 
