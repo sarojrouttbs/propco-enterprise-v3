@@ -1,5 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AgentService } from 'src/app/agent/agent.service';
 import { DEFAULTS, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
@@ -20,20 +21,24 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
   propertyCategories: any;
   portfolioSources: any;
   notAvailable = DEFAULTS.NOT_AVAILABLE
+  propertyInspection: any;
+  currentDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
+
 
   constructor(
-    private commonService: CommonService
+    private commonService: CommonService,
+    private agentService: AgentService
   ) { }
 
   ngOnInit() {
     this.getLookupData();
     this.getPropertyLookupData();
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.propertyData && !changes.propertyData.firstChange) {
       this.propertyData = this.propertyData;
+      this.getInspection(this.propertyData.propertyId);    
     }
   }
 
@@ -86,5 +91,21 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
     this.acqisitionOffices = this.propertylookupdata.acqisitionOffices;
     this.propertyCategories = this.propertylookupdata.propertyCategories;
     this.portfolioSources = this.propertylookupdata.portfolioSources;
+  }
+
+  getInspection(propertyId){
+    let params = new HttpParams().set("hideLoader", "true");
+    const promise = new Promise((resolve, reject) => {
+      this.agentService.getInspection(propertyId, params).subscribe(
+        (res) => {
+          this.propertyInspection = res && res.data ? res.data[0] : '';
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
   }
 }
