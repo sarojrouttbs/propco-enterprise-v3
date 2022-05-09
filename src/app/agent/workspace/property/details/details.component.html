@@ -1,6 +1,6 @@
 <ion-content class="property-details">
   <div class="header">
-    <ion-icon name="menu-outline" size="large"></ion-icon>
+    <ion-icon (click)="toggleMenu()"  name="menu-outline" size="large"></ion-icon>
     <ion-text> Property Details </ion-text>
   </div>
   <app-property-address [group]="this.propertyDetailsForm.controls['propertyAddressForm']"></app-property-address>

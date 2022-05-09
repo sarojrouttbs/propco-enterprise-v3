@@ -18,7 +18,7 @@ export class DetailsComponent implements OnInit {
   localStorageItems: any = [];
   selectedEntityDetails: any = null;
   activeLink: any;
-
+  isMenuShown = true;
   constructor(private router: Router, private agentService: AgentService, private commonService: CommonService, private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -56,6 +56,11 @@ export class DetailsComponent implements OnInit {
       this.activeLink = item[0].entityId;
       return item[0];
     }
+  }
+
+  toggleMenu(){
+     this.isMenuShown = !this.isMenuShown;
+     this.commonService.menuChanges(this.isMenuShown)
   }
 
   private createForm() {

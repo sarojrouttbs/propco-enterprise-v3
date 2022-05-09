@@ -45,6 +45,13 @@ export class CommonService {
     this.dataChange.next(data);
   }
 
+  private toggleMenu = new Subject<any>();
+  toggleMenuChange = this.toggleMenu.asObservable();
+
+  menuChanges(data) {
+    this.toggleMenu.next(data);
+  }
+
   // isCordovaDevice(){
   //     return (this._platform.platforms().indexOf('cordova')!= -1) ? true : false;
   // }
@@ -121,6 +128,10 @@ export class CommonService {
 
   getPostcodeAddressDetails(addressId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `postcode/${addressId}/retrieve`);
+  }
+
+  getUserDetails(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `user/logged-in`);
   }
 
 

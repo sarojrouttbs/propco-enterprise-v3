@@ -33,6 +33,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   notAvailable = DEFAULTS.NOT_AVAILABLE
   type = 'viewings';
+  isMenuShown = true;
 
   constructor(
     private modalCtrl: ModalController,
@@ -123,6 +124,11 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
     if (item) {
       return item[0];
     }
+  }
+
+  toggleMenu(){
+    this.isMenuShown = !this.isMenuShown;
+     this.commonService.menuChanges(this.isMenuShown)
   }
 
   ionViewDidEnter() {
