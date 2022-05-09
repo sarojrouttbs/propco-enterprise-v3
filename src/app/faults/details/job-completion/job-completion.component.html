@@ -79,7 +79,7 @@
               <h4>Next Step:</h4> 
               <h6>  
                 <ion-text color="danger">Please note: </ion-text>
-                <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
+                <span>The repair will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
                   {{iacNotification?.hoursLeft}}.
                 </span>
               </h6>
@@ -88,7 +88,7 @@
 
             <div class="question-answer ion-text-center" *ngIf="(iacNotification?.responseReceived?.isAccepted === false || faultDetails.isEscalated)">
               <h6>
-                <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
+                <ion-text color="danger">Please note: </ion-text>Repair Escalated - PM to decide the next steps
               </h6>
               <div class="border-bottom"></div>
             </div>
@@ -149,7 +149,7 @@
             <h4 claas="ion-text-center">Next Step:</h4>
             <h6>
               <ion-text color="danger">Please note: </ion-text>
-              <span>This Fault is escalated as Landlord Override communication option is activated. 
+              <span>This Repair is escalated as Landlord Override communication option is activated. 
                 Please respond yourself or forward to Landlord for them to take an action by clicking here</span>
             </h6>
             <ion-button color="success" class="action-btn" fill="solid" (click)="viewNotification(); $event.stopPropagation();">
@@ -162,7 +162,7 @@
             <ion-grid>
               <ion-row class="ion-justify-content-center">
                 <ion-button color="success" expand="block" class="action-btn" fill="{{faultDetails?.isClosed ? 'solid' : 'outline'}}" (click)="closeFault()">
-                    Close Fault</ion-button>
+                    Close Repair</ion-button>
                 <ion-button color="success" expand="block" class="action-btn" fill="outline" (click)="resendNotification()" 
                 *ngIf="iacNotification 
                 && (iacNotification?.templateCode === 'GNR-T-E' || 
@@ -174,7 +174,7 @@
                 && !faultDetails?.isClosed" >
                       Resend Notification</ion-button>
                 <ion-button *ngIf="faultDetails?.isEscalated"  color="success" expand="block" class="action-btn" fill="outline" (click)="snoozeFault()">
-                   Snooze Fault</ion-button>
+                   Snooze Repair</ion-button>
               </ion-row>
             </ion-grid>
           </div>
@@ -454,7 +454,7 @@
       <ion-row class="ion-justify-content-center">
         <ion-col size="40" class="card" *ngIf="iacNotification?.templateCode === 'BMF-T-E'">
           <h3>Block Management</h3>
-          <h5>The fault is Block Management Company's responsibility. </h5>
+          <h5>The repair is Block Management Company's responsibility. </h5>
           <ion-row>
             <ion-col size="100">
               <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
@@ -464,7 +464,7 @@
         </ion-col>
         <ion-col size="40" class="card" *ngIf="iacNotification?.templateCode === 'GNR-T-E'">
           <h3>Guarantee / Warranty</h3>
-          <h5>The fault is covered by a Guarantee / Warranty. </h5>
+          <h5>The repair is covered by a Guarantee / Warranty. </h5>
           <ion-row>
             <ion-col size="100">
               <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
@@ -474,7 +474,7 @@
         </ion-col>
         <ion-col size="40" class="card" *ngIf="iacNotification?.templateCode === 'SMF-T-E'">
           <h3>Service Contract/ Appliance Cover</h3>
-          <h5>The fault is covered by a Service Contract/ Appliance Cover.</h5>
+          <h5>The repair is covered by a Service Contract/ Appliance Cover.</h5>
           <ion-row>
             <ion-col size="100">
               <ion-button color="success" class="action-btn popup-view-btn" fill="solid"

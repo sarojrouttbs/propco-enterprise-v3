@@ -39,6 +39,10 @@ const routes: Routes = [
             (m) => m.LetAlliancePageModule
           ),
       },
+      {
+        path: 'maintenance',
+        loadChildren: () => import('../faults/faults.module').then(m => m.FaultsPageModule)
+      }
     ]
   },
 ];
@@ -47,4 +51,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class AgentPageRoutingModule {}
+export class AgentPageRoutingModule { }

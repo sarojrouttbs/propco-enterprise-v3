@@ -1,8 +1,8 @@
 import { HttpParams } from '@angular/common/http';
-import { ERROR_MESSAGE, FAULT_STATUSES, NOTES_TYPE, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES,MAINT_SOURCE_TYPES, DEFAULT_MESSAGES } from './../../shared/constants';
+import { ERROR_MESSAGE, FAULT_STATUSES, NOTES_TYPE, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES, MAINT_SOURCE_TYPES, DEFAULT_MESSAGES } from './../../shared/constants';
 import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
@@ -100,6 +100,7 @@ export class DashboardPage implements OnInit {
     private faultsService: FaultsService,
     private fb: FormBuilder,
     public datepipe: DatePipe,
+    private route: ActivatedRoute
   ) {
     this.getLookupData();
   }
@@ -195,20 +196,20 @@ export class DashboardPage implements OnInit {
     });
 
     this.filterForm.get('fromDate').valueChanges.subscribe(value => {
-      if(value){
+      if (value) {
         this.onDateChange();
       }
     });
     this.filterForm.get('toDate').valueChanges.subscribe(value => {
-      if(value){
+      if (value) {
         this.onDateChange();
       }
     });
     this.filterForm.get('snoozeUntil').valueChanges.subscribe(value => {
-      if(value){
-        setTimeout(()=>{
+      if (value) {
+        setTimeout(() => {
           this.filterList();
-        },300)
+        }, 300)
       }
     });
   }
@@ -305,7 +306,7 @@ export class DashboardPage implements OnInit {
   }
 
   public addFault() {
-    this.router.navigate(['faults/add']);
+    this.router.navigate(['../add'], { relativeTo: this.route });
   }
 
   async notesModal() {
@@ -329,7 +330,7 @@ export class DashboardPage implements OnInit {
   }
 
   async escalateFault() {
-    const headingText = 'Escalate Fault';
+    const headingText = 'Escalate Repair';
     const modal = await this.modalController.create({
       component: EscalateModalPage,
       cssClass: 'modal-container',
@@ -341,7 +342,7 @@ export class DashboardPage implements OnInit {
 
     modal.onDidDismiss().then(res => {
       if (res.data == 'success') {
-        this.commonService.showAlert('Escalate Fault', 'Fault has been escalated to the property manager.');
+        this.commonService.showAlert('Escalate Repair', 'Repair has been escalated to the property manager.');
         this.rerenderFaults(false);
         this.getFaultNotes(this.selectedData.faultId);
         this.hideMenu('', 'divOverlay');
@@ -352,10 +353,10 @@ export class DashboardPage implements OnInit {
   }
 
   async deEscalateFault() {
-    this.commonService.showConfirm('De-Escalate Fault', 'Are you sure you want to de-escalate the fault?', '', 'Yes', 'No').then(res => {
+    this.commonService.showConfirm('De-Escalate Repair', 'Are you sure you want to de-escalate the repair?', '', 'Yes', 'No').then(res => {
       if (res) {
         this.faultsService.deEscalateFault(this.selectedData.faultId, {}).subscribe(res => {
-          this.commonService.showAlert('De-Escalate Fault', 'Fault has been de-escalated to the property manager.');
+          this.commonService.showAlert('De-Escalate Repair', 'Repair has been de-escalated to the property manager.');
           this.rerenderFaults(false);
           this.hideMenu('', 'divOverlay');
           this.bucketCount();
@@ -378,7 +379,7 @@ export class DashboardPage implements OnInit {
 
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
-        this.commonService.showMessage('Fault has been closed successfully.', 'Close Fault', 'success');
+        this.commonService.showMessage('Repair has been closed successfully.', 'Close Repair', 'success');
         this.rerenderFaults(false);
         this.bucketCount();
         return;
@@ -389,10 +390,10 @@ export class DashboardPage implements OnInit {
   }
 
   async startProgress() {
-    const check = await this.commonService.showConfirm('Start Progress', 'This will change the fault status, Do you want to continue?');
+    const check = await this.commonService.showConfirm('Start Progress', 'This will change the repair status, Do you want to continue?');
     if (check) {
       this.faultsService.startProgress(this.selectedData.faultId).subscribe(data => {
-        this.router.navigate([`faults/${this.selectedData.faultId}/details`]);
+        this.router.navigate([`../${this.selectedData.faultId}/details`], { relativeTo: this.route });
       }, error => {
         this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Start Progress', 'Error');
 
@@ -488,7 +489,7 @@ export class DashboardPage implements OnInit {
   }
 
   goToFaultDetails() {
-    this.router.navigate([`faults/${this.selectedData.faultId}/details`]);
+    this.router.navigate([`../${this.selectedData.faultId}/details`], { relativeTo: this.route });
   }
 
   getaccessibleOffices() {
@@ -536,12 +537,12 @@ export class DashboardPage implements OnInit {
     }
 
     if (this.filterValue == 2) {
-      if(this.isBucketActive) return;
+      if (this.isBucketActive) return;
       this.isManagementFilter = true;
     }
 
     if (this.filterValue == 3) {
-      if(this.isBucketActive) return;
+      if (this.isBucketActive) return;
       this.isStatusFilter = true;
     }
 
@@ -928,17 +929,17 @@ export class DashboardPage implements OnInit {
   validateFaults(faultDetail) {
     let valid = true;
     if (faultDetail.status === FAULT_STATUSES.CLOSED) {
-      this.commonService.showAlert('Fault Closed', 'Fault status is closed, Please select another fault.', '');
+      this.commonService.showAlert('Repair Closed', 'Repair status is closed, Please select another repair.', '');
       return valid = false;
     }
     if (this.selectedFaultList.length === 3) {
-      this.commonService.showAlert('Maximum Limit', 'Maximum allowed limit to merge fault is 3.', '');
+      this.commonService.showAlert('Maximum Limit', 'Maximum allowed limit to merge repair is 3.', '');
       return valid = false;
     }
     if (this.selectedFaultList.length > 0) {
       let matchedProperty = this.selectedFaultList.filter(data => data.propertyId === faultDetail.propertyId);
       if (matchedProperty.length === 0) {
-        this.commonService.showAlert('Property not matched', 'You can only merge faults that are reported for the same property.', '');
+        this.commonService.showAlert('Property not matched', 'You can only merge repairs that are reported for the same property.', '');
         return valid = false;
       }
     }
@@ -952,7 +953,7 @@ export class DashboardPage implements OnInit {
       event.target.checked = false;
       faultDetail.isChecked = false;
       event.stopPropagation();
-      this.commonService.showAlert('Quote/Works Order Raised', 'There is active maintenance linked with this fault, cannot be selected to merge.', '');
+      this.commonService.showAlert('Quote/Works Order Raised', 'There is active maintenance linked with this repair, cannot be selected to merge.', '');
       return valid = false;
     }
     return valid;
@@ -967,7 +968,7 @@ export class DashboardPage implements OnInit {
   }
 
   async mergeFault(data) {
-    const isConfirm = await this.commonService.showConfirm('Merge Faults', `You have selected ${this.selectedFaultList?.length} faults to merge. Information from all the faults will be copied into the Fault ${data?.reference} and the remaining faults will be marked as Closed. Any communications sent out from the faults being closed will be voided. Are you sure?`)
+    const isConfirm = await this.commonService.showConfirm('Merge Repairs', `You have selected ${this.selectedFaultList?.length} repairs to merge. Information from all the repairs will be copied into the Repair ${data?.reference} and the remaining repairs will be marked as Closed. Any communications sent out from the repairs being closed will be voided. Are you sure?`)
     if (isConfirm && data) {
       let childFaults = this.selectedFaultList.filter(x => x.faultId != data.faultId);
       let requestObj: any = {};
@@ -1012,15 +1013,15 @@ export class DashboardPage implements OnInit {
     let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
-      faultCountParams = faultCountParams.delete('fus');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('fus');
     this.activeRepairLoader = true;
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
-        this.activeRepairLoader = false;       
+        this.activeRepairLoader = false;
         this.activeRepairCount = res ? res.count : 0;
         resolve(true);
       }, error => {
@@ -1036,10 +1037,10 @@ export class DashboardPage implements OnInit {
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.EMERGENCY.toString())
       .set('showEscalated', 'false')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
     this.emergencyLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1058,10 +1059,10 @@ export class DashboardPage implements OnInit {
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.URGENT.toString())
       .set('showEscalated', 'false')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
     this.urgentLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1080,10 +1081,10 @@ export class DashboardPage implements OnInit {
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.NON_URGENT.toString())
       .set('showEscalated', 'false')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
     this.nonUrgentLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1102,11 +1103,11 @@ export class DashboardPage implements OnInit {
     let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
-      faultCountParams = faultCountParams.delete('fus');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('fus');
     this.assismentLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1127,11 +1128,11 @@ export class DashboardPage implements OnInit {
     let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
-      faultCountParams = faultCountParams.delete('fus');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('fus');
     this.automationLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1150,11 +1151,11 @@ export class DashboardPage implements OnInit {
     let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
-      faultCountParams = faultCountParams.delete('fus');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('fus');
     this.invoiceLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1168,15 +1169,15 @@ export class DashboardPage implements OnInit {
     });
   }
 
-  getEscalationCount() {    
+  getEscalationCount() {
     let faultCountParams: any = this.faultParams
       .set('showEscalated', 'true')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('fs');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
-      faultCountParams = faultCountParams.delete('fus');
+    faultCountParams = faultCountParams.delete('fs');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('fus');
     this.escalationLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1190,7 +1191,7 @@ export class DashboardPage implements OnInit {
     });
   }
 
-  setSnoozeMinMaxDate(){
+  setSnoozeMinMaxDate() {
     const currentDate = new Date();
     this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 1), 'yyyy-MM-dd');
     this.futureDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 29), 'yyyy-MM-dd');
