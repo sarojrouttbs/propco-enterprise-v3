@@ -23,6 +23,7 @@ import  {PropertyChecksComponent} from './details/property-checks/property-check
 import { CallInfoModalPageModule } from 'src/app/shared/modals/call-info-modal/call-info-modal.module';
 import { PropertyAddressComponent } from './details/property-address/property-address.component';
 import { PropertyPageRoutingModule } from './property-routing.module';
+import { AgentService } from '../../agent.service';
 
 @NgModule({
   imports: [
@@ -44,6 +45,7 @@ import { PropertyPageRoutingModule } from './property-routing.module';
     }),
     CallInfoModalPageModule
   ],
+  providers:[AgentService],
   declarations: [GoogleMapComponent, PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent, LettingsDetailsComponent, LetBoardComponent, HistoryComponent, PropertyChecksComponent,PropertyAddressComponent],
 })
 export class PropertyPageModule {}
