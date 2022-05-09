@@ -55,7 +55,7 @@ export class JobCompletionModalPage implements OnInit {
           resolve(true);
         },
         error => {
-          this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Fault Close', 'error');
+          this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Repair Close', 'error');
           this.showLoader = false;
           resolve(false)
         }

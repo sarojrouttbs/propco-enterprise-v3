@@ -832,7 +832,7 @@ export class ArrangingContractorComponent implements OnInit {
           resolve(true);
         }, error => {
           resolve(false);
-          this.commonService.showMessage('Something went wrong', 'Update Fault', 'error');
+          this.commonService.showMessage('Something went wrong', 'Update Repair', 'error');
         });
     });
     return promise;
@@ -1463,7 +1463,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.quoteUploadModal();
     }
     else {
-      this.commonService.showConfirm(data.text, `You have selected 'No, couldn't carry out the Quote'. The fault will be escalated for manual intervention. Do you want to proceed?`, '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, `You have selected 'No, couldn't carry out the Quote'. The repair will be escalated for manual intervention. Do you want to proceed?`, '', 'Yes', 'No').then(async res => {
         if (res) {
           const submit = await this.submitQuoteAmout();
           if (submit) {
@@ -1555,7 +1555,7 @@ export class ArrangingContractorComponent implements OnInit {
     if (data.value) {
       this.openWOJobCompletionModal();
     } else {
-      this.commonService.showConfirm(data.text, `You have selected 'No, Couldn't Complete the Job'. The fault will be escalated for manual intervention. Do you want to proceed?`, '', 'YES', 'NO').then(async res => {
+      this.commonService.showConfirm(data.text, `You have selected 'No, Couldn't Complete the Job'. The repair will be escalated for manual intervention. Do you want to proceed?`, '', 'YES', 'NO').then(async res => {
         if (res) {
           const submit = await this.submitJobCompletion();
           if (submit) {
@@ -2399,7 +2399,7 @@ export class ArrangingContractorComponent implements OnInit {
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
         this._btnHandler('refresh');
-        this.commonService.showMessage('Fault has been closed successfully.', 'Close a Fault', 'success');
+        this.commonService.showMessage('Repair has been closed successfully.', 'Close a Repair', 'success');
         return;
       }
     });

@@ -2,10 +2,10 @@
     <ion-grid>
       <ion-row class="heading-block">
         <ion-col class="ion-text-left">
-          <h1 class="title">Fault Dashboard</h1>
+          <h1 class="title">Repair Dashboard</h1>
         </ion-col>
         <ion-col class="ion-text-right">
-          <ion-button class="no-margin" (click)="addFault()" fill="solid" color="success">Add Fault</ion-button>
+          <ion-button class="no-margin" (click)="addFault()" fill="solid" color="success">Add Repair</ion-button>
         </ion-col>
       </ion-row>
   
@@ -130,7 +130,7 @@
                 <ion-select-option value="1">Branch(es) </ion-select-option>
                 <ion-select-option value="2" [disabled]="isBucketActive">Management Service Type</ion-select-option>
                 <ion-select-option value="3" [disabled]="isBucketActive">Status</ion-select-option>
-                <ion-select-option value="5" >Snoozed Faults</ion-select-option>
+                <ion-select-option value="5" >Snoozed Repairs</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-col>
@@ -399,7 +399,7 @@
                   <th style="width:13%">Job Title</th>
                   <th style="width:10%">Reported By</th>
                   <th style="width:40px">Merge</th>
-                  <th style="width:10%">Fault Status</th>
+                  <th style="width:10%">Repair Status</th>
                   <th style="width:36px"></th>
                 </tr>
               </thead>
@@ -463,7 +463,7 @@
   
       <ion-row>
         <ion-col size="100">
-          <h4>Fault Notes:</h4>
+          <h4>Repair Notes:</h4>
           <div class="overlay-container" style="position: relative">
             <table datatable [dtOptions]="notesDtOption" [dtTrigger]="notesDtTrigger" class="row-border hover"
               style="width: 100%; position: relative" #faultNotesTable>

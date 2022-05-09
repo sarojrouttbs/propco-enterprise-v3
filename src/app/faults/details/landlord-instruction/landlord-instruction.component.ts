@@ -716,7 +716,7 @@ export class LandlordInstructionComponent implements OnInit {
     this.faultsService.updateFault(this.faultDetails.faultId, faultRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
-        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
+        this.commonService.showMessage('Repair details have been updated successfully.', 'Repair Summary', 'success');
         this._btnHandler('cancel');
       },
       error => {
@@ -745,7 +745,7 @@ export class LandlordInstructionComponent implements OnInit {
           resolve(true);
         }, error => {
           resolve(false);
-          this.commonService.showMessage('Something went wrong', 'Update Fault', 'error');
+          this.commonService.showMessage('Something went wrong', 'Update Repair', 'error');
         });
     });
     return promise;
@@ -914,7 +914,7 @@ export class LandlordInstructionComponent implements OnInit {
 
   private questionActionDoesOwnRepair(data) {
     if (!data.value) {
-      this.commonService.showConfirm(data.text, 'The fault status will change to "Escalation". </br> Are you sure?', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, 'The repair status will change to "Escalation". </br> Are you sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
           this.commonService.showLoader();
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
