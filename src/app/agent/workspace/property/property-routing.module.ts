@@ -33,6 +33,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: "offer/:offerId",
+        loadChildren: () =>
+          import("../../../tob/offer-detail/offer-detail.module").then(
+            (m) => m.OfferDetailPageModule
+          ),
+      },
+      {
         path: "applications",
         loadChildren: () => import('../../../tob/application-list/application-list.module').then( m => m.ApplicationListPageModule)
       },
