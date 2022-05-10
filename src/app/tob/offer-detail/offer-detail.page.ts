@@ -832,7 +832,7 @@ export class OfferDetailPage implements OnInit {
       }
       statusArray.push(offerStatus);
       offerStatusesLookup.forEach((lookupObj) => {
-        if (statusArray.indexOf(lookupObj.index) != -1) {
+        if (statusArray.indexOf(lookupObj.index) !== -1) {
           this.offerStatuses.push(lookupObj);
         }
       });

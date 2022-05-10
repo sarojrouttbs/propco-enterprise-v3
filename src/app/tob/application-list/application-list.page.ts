@@ -267,7 +267,7 @@ export class ApplicationListPage implements OnInit {
   rejectAllApplications() {
     this.commonService.showConfirm('Reject All Application', 'Are you sure, you want to reject all application?', '', 'YES', 'NO').then(response => {
       if (response) {
-        let applicationId = this.applicationList.map(function (application) {
+        const applicationId = this.applicationList.map(function(application) {
           return application.applicationId;
         });
         if (applicationId.length > 0) {
@@ -290,7 +290,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   acceptApplication() {
-    var isAccepted = this.applicationList.find((application) => application.status === APPLICATION_STATUSES.ACCEPTED);
+    const isAccepted = this.applicationList.find((application) => application.status === APPLICATION_STATUSES.ACCEPTED);
     if (isAccepted) {
       this.commonService.showAlert('Accept Application', 'One application is already accepted, Please reject them first then accept this application.');
     } else {
