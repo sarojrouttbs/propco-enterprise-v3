@@ -1510,7 +1510,11 @@ export class DetailsPage implements OnInit {
   }
 
   goTolistPage() {
-    this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
+    if(this.faultId) {
+      this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
+    } else {
+      this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
+    }
   }
 
   private changeStep(index: number) {
