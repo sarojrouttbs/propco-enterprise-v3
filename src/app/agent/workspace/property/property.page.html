@@ -1,17 +1,5 @@
-<!-- <div
-  class="example-container"
-  [class.example-is-mobile]="mobileQuery.matches"
-  *ngIf="shouldRun"
-> -->
-<!-- <mat-toolbar color="primary" class="example-toolbar">
-
-  <button mat-icon-button (click)="snav.toggle()">
-    <mat-icon>menu</mat-icon>
-  </button>
-</mat-toolbar> -->
-
-<mat-sidenav-container  class="example-sidenav-container" [hasBackdrop] = "screenWidth < 1024 ? true : false">
-  <mat-sidenav #snav [mode]="'side'" [opened]="showMenu"
+<mat-sidenav-container  class="example-sidenav-container" (window:resize)="onResize($event)">
+  <mat-sidenav #snav [mode]="mode" [opened]="showMenu"
    fixedTopGap="56" class="sidenav-block">
     <div class="property-lettings">
       <span>Property (Lettings)</span>
@@ -40,7 +28,7 @@
     </mat-nav-list>
   </mat-sidenav>
 
-  <mat-sidenav-content [ngClass]="showMenu ? 'side-content':''" >
+  <mat-sidenav-content>
     <div class="header">
       <ion-icon class="pointer"  (click)="toggleMenu()" name="menu-outline" size="large"></ion-icon>
       <ion-text> {{label}} </ion-text>
