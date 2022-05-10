@@ -1,26 +1,26 @@
-import { STEPPER_GLOBAL_OPTIONS } from "@angular/cdk/stepper";
-import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   ENTITY_TYPE,
   OFFER_STATUSES,
   PROPCO,
   DEFAULTS,
-} from "src/app/shared/constants";
-import { CommonService } from "src/app/shared/services/common.service";
-import { TobService } from "../tob.service";
-import { switchMap, debounceTime } from "rxjs/operators";
-import { Observable } from "rxjs";
-import { ModalController } from "@ionic/angular";
-import { NegotiateModalPage } from "src/app/shared/modals/negotiate-modal/negotiate-modal.page";
+} from 'src/app/shared/constants';
+import { CommonService } from 'src/app/shared/services/common.service';
+import { TobService } from '../tob.service';
+import { switchMap, debounceTime } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { ModalController } from '@ionic/angular';
+import { NegotiateModalPage } from 'src/app/shared/modals/negotiate-modal/negotiate-modal.page';
 
 @Component({
-  selector: "app-offer-detail",
-  templateUrl: "./offer-detail.page.html",
+  selector: 'app-offer-detail',
+  templateUrl: './offer-detail.page.html',
   styleUrls: [
-    "./offer-detail.page.scss",
-    "../common-css/offer-application-detail.scss",
+    './offer-detail.page.scss',
+    '../common-css/offer-application-detail.scss',
   ],
   providers: [
     {
@@ -76,17 +76,17 @@ export class OfferDetailPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.propertyId = this.route.snapshot.paramMap.get("propertyId");
+    this.propertyId = this.route.snapshot.paramMap.get('propertyId');
     if (!this.propertyId) {
       this.propertyId =
-        this.route.snapshot.parent.parent.paramMap.get("propertyId");
+        this.route.snapshot.parent.parent.paramMap.get('propertyId');
     }
 
-    this.offerId = this.route.snapshot.paramMap.get("offerId");
-    if (typeof this.offerId !== "undefined" && this.offerId != null) {
+    this.offerId = this.route.snapshot.paramMap.get('offerId');
+    if (typeof this.offerId !== 'undefined' && this.offerId != null) {
       this.initViewApiCalls();
     } else if (
-      typeof this.propertyId !== "undefined" &&
+      typeof this.propertyId !== 'undefined' &&
       this.propertyId != null
     ) {
       this.initCreateApiCalls();
@@ -102,7 +102,7 @@ export class OfferDetailPage implements OnInit {
       this.resultsAvailable = false;
     }
     this.applicantList = this.searchApplicantForm
-      .get("searchApplicant")
+      .get('searchApplicant')
       .valueChanges.pipe(
         debounceTime(300),
         switchMap((value: string) =>
@@ -122,10 +122,10 @@ export class OfferDetailPage implements OnInit {
           this.isApplicantDetailsAvailable = true;
           this.disableSearchApplicant = true;
           this.resultsAvailable = false;
-          this.searchApplicantForm.get("searchApplicant").setValue("");
+          this.searchApplicantForm.get('searchApplicant').setValue('');
           this.patchApplicantDetail();
-          this.isEnable("guarantor");
-          this.isEnable("pets");
+          this.isEnable('guarantor');
+          this.isEnable('pets');
         }
       },
       (error) => { }
@@ -153,21 +153,21 @@ export class OfferDetailPage implements OnInit {
 
   async deleteApplicant() {
     const isAgree: boolean = (await this.commonService.showConfirm(
-      "Delete Applicant",
-      "Are you sure, you want to remove this applicant ?",
-      "",
-      "Yes",
-      "No"
+      'Delete Applicant',
+      'Are you sure, you want to remove this applicant ?',
+      '',
+      'Yes',
+      'No'
     )) as boolean;
     if (isAgree) {
       this.applicantDetail = null;
-      this.searchApplicantForm.get("searchApplicant").setValue("");
+      this.searchApplicantForm.get('searchApplicant').setValue('');
       this.disableSearchApplicant = false;
     }
   }
 
   resetSearch() {
-    this.searchApplicantForm.get("searchApplicant").setValue("");
+    this.searchApplicantForm.get('searchApplicant').setValue('');
     this.resultsAvailable = false;
   }
 
@@ -226,8 +226,8 @@ export class OfferDetailPage implements OnInit {
       isLandlordConfirmed: this.offerDetails.isLandlordConfirmed,
       landlordConfirmedDate: this.offerDetails.landlordConfirmedDate,
     });
-    this.isEnable("applicant");
-    this.isEnable("landlord");
+    this.isEnable('applicant');
+    this.isEnable('landlord');
     this.makeAnOfferForm.patchValue({
       status: this.offerDetails.status,
       amount: this.offerDetails.amount,
@@ -246,7 +246,7 @@ export class OfferDetailPage implements OnInit {
     try {
       this.propertyRestrictions.map((restrict) => {
         restrict.restrictionName = this.commonService.camelize(
-          restrict.key.replace(/_/g, " ")
+          restrict.key.replace(/_/g, ' ')
         );
       });
     } catch (e) { }
@@ -265,12 +265,12 @@ export class OfferDetailPage implements OnInit {
             amount: this.propertyDetails.advertisementRent,
           });
         }
-        this.makeAnOfferForm.controls["amount"].setValidators([
+        this.makeAnOfferForm.controls['amount'].setValidators([
           Validators.required,
           Validators.min(this.propertyDetails.minRent),
           Validators.max(this.propertyDetails.maxRent),
         ]);
-        this.makeAnOfferForm.get("amount").updateValueAndValidity();
+        this.makeAnOfferForm.get('amount').updateValueAndValidity();
         this.isTobPropertyCardReady = true;
       },
       (error) => { }
@@ -311,7 +311,7 @@ export class OfferDetailPage implements OnInit {
         this.propertyRestrictions.map(
           (restrict) =>
           (restrict.restrictionName = this.commonService.camelize(
-            restrict.key.replace(/_/g, " ")
+            restrict.key.replace(/_/g, ' ')
           ))
         );
       },
@@ -322,15 +322,15 @@ export class OfferDetailPage implements OnInit {
   async onSubmit() {
     if (!this.applicantDetail) {
       this.commonService.showAlert(
-        "Applicant Not Added",
-        "Please search an applicant from the search box."
+        'Applicant Not Added',
+        'Please search an applicant from the search box.'
       );
       return;
     }
     if (this.makeAnOfferForm.invalid || this.confirmationForm.invalid) {
       this.commonService.showAlert(
-        "Offer Details",
-        "Please fill all required fields"
+        'Offer Details',
+        'Please fill all required fields'
       );
       this.makeAnOfferForm.markAllAsTouched();
       this.confirmationForm.markAllAsTouched();
@@ -342,11 +342,11 @@ export class OfferDetailPage implements OnInit {
       this.applicantDetail
     ) {
       const isConfirm: boolean = (await this.commonService.showConfirm(
-        "Submit Offer",
-        "Are you sure, you want to submit this offer?",
-        "",
-        "Yes",
-        "No"
+        'Submit Offer',
+        'Are you sure, you want to submit this offer?',
+        '',
+        'Yes',
+        'No'
       )) as boolean;
       if (isConfirm) {
         this.offerId ? this.updateOffer() : this.submitOffer();
@@ -370,12 +370,12 @@ export class OfferDetailPage implements OnInit {
 
     if (
       this.updatedFormValues.length > 1 &&
-      this.updatedFormValues.includes("status")
+      this.updatedFormValues.includes('status')
     ) {
       isStatusAndFormBothUpdated = true;
     } else if (
       this.updatedFormValues.length === 1 &&
-      this.updatedFormValues.includes("status")
+      this.updatedFormValues.includes('status')
     ) {
       isStatusUpdated = true;
     } else {
@@ -411,9 +411,9 @@ export class OfferDetailPage implements OnInit {
       .updateOfferStatus(this.offerId, status, requestObj)
       .subscribe((response) => {
         this.commonService.showMessage(
-          "Offer details have been updated.",
-          "Update Offer",
-          "success"
+          'Offer details have been updated.',
+          'Update Offer',
+          'success'
         );
         if (!this.offerId) {
           this.router.navigate([`../offers`], {
@@ -467,8 +467,8 @@ export class OfferDetailPage implements OnInit {
         !this.confirmationForm.controls.isLandlordConfirmed.value)
     ) {
       this.commonService.showAlert(
-        "Offer",
-        "This offer is not confirmed by Landlord or Applicant. Please confirm the offer before marking it as Accepted."
+        'Offer',
+        'This offer is not confirmed by Landlord or Applicant. Please confirm the offer before marking it as Accepted.'
       );
       return false;
     } else {
@@ -484,14 +484,14 @@ export class OfferDetailPage implements OnInit {
           const applicantName =
             this.applicantDetail.fullName ||
             this.applicantDetail.title +
-            " " +
+            ' ' +
             this.applicantDetail.forename +
-            " " +
+            ' ' +
             this.applicantDetail.surname;
           this.commonService
             .showAlert(
-              "Offer Created",
-              "Congratulations! You have successfully created an offer on behalf of Applicant " +
+              'Offer Created',
+              'Congratulations! You have successfully created an offer on behalf of Applicant ' +
               applicantName
             )
             .then((res) => {
@@ -506,8 +506,8 @@ export class OfferDetailPage implements OnInit {
         (error) => {
           this.commonService.showMessage(
             error.error ? error.error.message : error.message,
-            "Offer",
-            "error"
+            'Offer',
+            'error'
           );
         }
       );
@@ -518,9 +518,9 @@ export class OfferDetailPage implements OnInit {
           relativeTo: this.route,
         });
         this.commonService.showMessage(
-          "Please fill all the required fields.",
-          "Offer Details",
-          "error"
+          'Please fill all the required fields.',
+          'Offer Details',
+          'error'
         );
         if (this.makeAnOfferForm.invalid) {
           this.makeAnOfferForm.markAllAsTouched();
@@ -638,34 +638,34 @@ export class OfferDetailPage implements OnInit {
 
   private initSearchForm(): void {
     this.searchApplicantForm = this.formBuilder.group({
-      searchApplicant: "",
+      searchApplicant: '',
     });
   }
 
   private initMakeAnOfferForm(): void {
     this.makeAnOfferForm = this.formBuilder.group({
-      amount: ["", Validators.required],
+      amount: ['', Validators.required],
       status: [0],
-      moveInDate: ["", Validators.required],
-      rentingTime: ["", Validators.required],
+      moveInDate: ['', Validators.required],
+      rentingTime: ['', Validators.required],
       numberOfAdults: [1],
       numberOfChildren: [0, Validators.required],
-      currentPosition: [""],
-      occupation: [""],
+      currentPosition: [''],
+      occupation: [''],
       hasGuarantor: false,
-      guarantorType: [{ value: "", disabled: true }],
+      guarantorType: [{ value: '', disabled: true }],
       hasPets: [false],
-      petsInfo: [{ value: "", disabled: true }],
-      comments: [""],
+      petsInfo: [{ value: '', disabled: true }],
+      comments: [''],
     });
   }
 
   private initConfirmationForm(): void {
     this.confirmationForm = this.formBuilder.group({
       isApplicantConfirmed: false,
-      applicantConfirmedDate: [{ value: "", disabled: true }],
+      applicantConfirmedDate: [{ value: '', disabled: true }],
       isLandlordConfirmed: false,
-      landlordConfirmedDate: [{ value: "", disabled: true }],
+      landlordConfirmedDate: [{ value: '', disabled: true }],
       sendEmailToApplicant: false,
       sendEmailToLandlord: false,
     });
@@ -677,7 +677,7 @@ export class OfferDetailPage implements OnInit {
 
   isEnable(type) {
     switch (type) {
-      case "guarantor":
+      case 'guarantor':
         if (this.makeAnOfferForm.value.hasGuarantor) {
           this.makeAnOfferForm.controls.guarantorType.setValidators(
             this.setRequired()
@@ -685,47 +685,47 @@ export class OfferDetailPage implements OnInit {
           this.makeAnOfferForm.controls.guarantorType.enable();
         } else {
           this.makeAnOfferForm.controls.guarantorType.clearValidators();
-          this.makeAnOfferForm.get("guarantorType").updateValueAndValidity();
+          this.makeAnOfferForm.get('guarantorType').updateValueAndValidity();
           this.makeAnOfferForm.controls.guarantorType.disable();
         }
         break;
-      case "applicant":
+      case 'applicant':
         if (this.confirmationForm.value.isApplicantConfirmed) {
           this.confirmationForm.controls.applicantConfirmedDate.setValidators(
             this.setRequired()
           );
           this.confirmationForm.controls.applicantConfirmedDate.enable();
           this.confirmationForm
-            .get("applicantConfirmedDate")
+            .get('applicantConfirmedDate')
             .setValue(new Date());
         } else {
           this.confirmationForm.controls.applicantConfirmedDate.clearValidators();
           this.confirmationForm
-            .get("applicantConfirmedDate")
+            .get('applicantConfirmedDate')
             .updateValueAndValidity();
           this.confirmationForm.controls.applicantConfirmedDate.disable();
-          this.confirmationForm.get("applicantConfirmedDate").setValue("");
+          this.confirmationForm.get('applicantConfirmedDate').setValue('');
         }
         break;
-      case "landlord":
+      case 'landlord':
         if (this.confirmationForm.value.isLandlordConfirmed) {
           this.confirmationForm.controls.landlordConfirmedDate.setValidators(
             this.setRequired()
           );
           this.confirmationForm.controls.landlordConfirmedDate.enable();
           this.confirmationForm
-            .get("landlordConfirmedDate")
+            .get('landlordConfirmedDate')
             .setValue(new Date());
         } else {
           this.confirmationForm.controls.landlordConfirmedDate.clearValidators();
           this.confirmationForm
-            .get("landlordConfirmedDate")
+            .get('landlordConfirmedDate')
             .updateValueAndValidity();
           this.confirmationForm.controls.landlordConfirmedDate.disable();
-          this.confirmationForm.get("landlordConfirmedDate").setValue("");
+          this.confirmationForm.get('landlordConfirmedDate').setValue('');
         }
         break;
-      case "pets":
+      case 'pets':
         if (this.makeAnOfferForm.value.hasPets) {
           this.makeAnOfferForm.controls.petsInfo.enable();
         } else {
@@ -737,13 +737,13 @@ export class OfferDetailPage implements OnInit {
 
   async presentModal(obj, type) {
     const headingText =
-      type === "CLAUSE"
-        ? "Clause - " + obj.clauseName
-        : "Restriction - " + obj.restrictionName;
+      type === 'CLAUSE'
+        ? 'Clause - ' + obj.clauseName
+        : 'Restriction - ' + obj.restrictionName;
     obj.negotiations = obj.negotiations ? obj.negotiations : [];
     const modal = await this.modalController.create({
       component: NegotiateModalPage,
-      cssClass: "modal-container",
+      cssClass: 'modal-container',
       componentProps: {
         data: obj,
         heading: headingText,
@@ -757,11 +757,11 @@ export class OfferDetailPage implements OnInit {
 
   async onCancel() {
     const isCancel: boolean = (await this.commonService.showConfirm(
-      "Cancel",
-      "Are you sure, you want to cancel this operation?",
-      "",
-      "Yes",
-      "No"
+      'Cancel',
+      'Are you sure, you want to cancel this operation?',
+      '',
+      'Yes',
+      'No'
     )) as boolean;
     if (isCancel) {
       const propertyId = this.offerId
@@ -782,7 +782,7 @@ export class OfferDetailPage implements OnInit {
   }
 
   private getOfferStatusList(offerStatus) {
-    if (typeof offerStatus !== undefined && offerStatus !== "") {
+    if (typeof offerStatus !== undefined && offerStatus !== '') {
       let statusArray = [];
       const offerStatusesLookup: OfferModels.ILookupResponse[] =
         this.offerStatuses;
@@ -860,9 +860,9 @@ export class OfferDetailPage implements OnInit {
           this.updateOfferStatus(counterOfferStatus);
         } else {
           this.commonService.showMessage(
-            "Offer details have been updated.",
-            "Update Offer",
-            "success"
+            'Offer details have been updated.',
+            'Update Offer',
+            'success'
           );
 
           if (!this.offerId) {
@@ -885,9 +885,9 @@ export class OfferDetailPage implements OnInit {
       .updateOffer(this.prepareUpdateOffer(), this.offerId)
       .subscribe((response) => {
         this.commonService.showMessage(
-          "Offer details have been updated.",
-          "Update Offer",
-          "success"
+          'Offer details have been updated.',
+          'Update Offer',
+          'success'
         );
         if (!this.offerId) {
           this.router.navigate([`../offers`], {
@@ -905,7 +905,7 @@ export class OfferDetailPage implements OnInit {
 
   private getUpdatedValues() {
     this.updatedFormValues = [];
-    this.makeAnOfferForm["_forEachChild"]((control, name) => {
+    this.makeAnOfferForm['_forEachChild']((control, name) => {
       if (control.dirty) {
         this.updatedFormValues.push(name);
       }
