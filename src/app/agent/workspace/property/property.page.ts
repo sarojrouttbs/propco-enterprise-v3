@@ -65,8 +65,7 @@ export class PropertyPage implements OnInit {
   }
 
 
-  getLabel(name){
-    console.log('name',name)
+  setLabel(name){
     this.label = name;
   }
 
