@@ -39,7 +39,7 @@ export class PropertyPage implements OnInit {
   }
   
   toggleMenu(){
-    this.showMenu  = !this.showMenu 
+    this.showMenu  = !this.showMenu;
   }
 
   getPageWidthHeight() {
@@ -65,7 +65,7 @@ export class PropertyPage implements OnInit {
   }
 
 
-  setLabel(name){
+  setLabel(name:string){
     this.label = name;
   }
 
