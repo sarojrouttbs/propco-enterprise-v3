@@ -83,9 +83,9 @@
   }
 
   .non-urgent-btn {
-    --background: rgba(var(--ion-color-primary-rgb), 0.35);
+    --background: rgba(var(--ion-color-success-rgb), 0.35);
     &.urgency-selected {
-      --background: var(--ion-color-primary);
+      --background: var(--ion-color-success);
     }
   }
 
