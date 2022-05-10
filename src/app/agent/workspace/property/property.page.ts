@@ -22,7 +22,8 @@ export class PropertyPage implements OnInit {
   proptertyId: string;
   menuItems;
   screenWidth;
-  showMenu = false;
+  showMenu = true;
+  label = 'Dashboard';
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -37,6 +38,9 @@ export class PropertyPage implements OnInit {
     this.getMenutoggleFlag();
   }
   
+  toggleMenu(){
+    this.showMenu  = !this.showMenu 
+  }
 
   getPageWidthHeight() {
     this.screenWidth = window.innerWidth;
@@ -60,44 +64,10 @@ export class PropertyPage implements OnInit {
     }
   }
 
-  changePage(pageName, item, submenu) {
-    this.menuItems.forEach((element) => {
-      element.isActive = false;
-      if (element.subMenu.length) {
-        element.subMenu.forEach((element) => {
-          element.isActive = false;
-        });
-      }
-    });
 
-    if (item && submenu) {
-      submenu.isActive = true;
-      item.isActive = true;
-    }
-
-    if (item && !submenu) {
-      item.isActive = true;
-    }
-
-    switch (pageName) {
-      case 'dashboard':
-        this.router.navigate([
-          `agent/workspace/property/${this.proptertyId}/dashboard`,
-        ]);
-        break;
-      case 'details':
-        this.router.navigate([
-          `agent/workspace/property/${this.proptertyId}/details`,
-        ]);
-        break;
-      case 'applications':
-        this.router.navigate([
-          `agent/workspace/property/${this.proptertyId}/${pageName}`,
-        ]);
-        break;
-
-      default:
-        break;
-    }
+  getLabel(name){
+    console.log('name',name)
+    this.label = name;
   }
+
 }
