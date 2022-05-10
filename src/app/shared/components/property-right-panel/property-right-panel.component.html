@@ -126,7 +126,9 @@
           </ion-text>
         </ng-container>
 
-        <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && propertyInspection?.expiryDate < currentDate && !propertyInspection?.isDocumentExist">
+        <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && 
+        (propertyInspection?.expiryDate < currentDate || !propertyInspection?.isDocumentExist) && 
+        (propertyInspection?.status != 1 && propertyInspection?.status !=3)">
           <ion-icon name="close-circle" class="danger">
           </ion-icon>&nbsp;&nbsp;
           <ion-text>
