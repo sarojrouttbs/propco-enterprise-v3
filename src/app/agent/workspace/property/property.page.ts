@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import * as menuList from '../../../../assets/data/menu.json';
-import { HostListener } from '@angular/core';
-import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-property',
@@ -10,8 +8,6 @@ import { CommonService } from 'src/app/shared/services/common.service';
   styleUrls: ['./property.page.scss'],
 })
 export class PropertyPage implements OnInit {
-  @HostListener('window:resize', ['$event'])
-
   showFiller = false;
   open = false;
   mobileQuery: MediaQueryList;
@@ -22,12 +18,11 @@ export class PropertyPage implements OnInit {
   proptertyId: string;
   menuItems;
   screenWidth;
-  showMenu = true;
+  showMenu = false;
   label = 'Dashboard';
+  mode: string = 'side';
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
-    private common: CommonService
   ) {
     this.getPageWidthHeight();
   }
@@ -35,38 +30,37 @@ export class PropertyPage implements OnInit {
   ngOnInit() {
     this.menuItems = menuList.agents;
     this.proptertyId = this.route.snapshot.params['propertyId'];
-    this.getMenutoggleFlag();
+    if (this.screenWidth > 1024) {
+      setTimeout(() => {
+        /** added timeout to open sidenav, On page load we will see a better way to do it */
+        this.showMenu = true;
+      }), 50;
+    } else {
+      this.mode = 'over';
+    }
   }
-  
-  toggleMenu(){
-    this.showMenu  = !this.showMenu;
+
+  toggleMenu() {
+    this.showMenu = !this.showMenu;
   }
 
   getPageWidthHeight() {
     this.screenWidth = window.innerWidth;
   }
 
-  getMenutoggleFlag() {
-    this.common.toggleMenuChange.subscribe((data: any) => {
-      this.showMenu = data;
-    });
-  }
-
-  mouseenter() {
-    if (!this.isExpanded) {
-      this.isShowing = true;
-    }
-  }
-
-  mouseleave() {
-    if (!this.isExpanded) {
-      this.isShowing = false;
-    }
-  }
-
-
-  setLabel(name:string){
+  setLabel(name: string) {
     this.label = name;
   }
 
+  onResize(event) {
+    this.screenWidth = event.target.innerWidth;
+    if (this.screenWidth > 1024) {
+      this.mode = 'side';
+      this.showMenu = true;
+    } else {
+      this.mode = 'over';
+      this.showMenu = false;
+    }
+  }
 }
+
