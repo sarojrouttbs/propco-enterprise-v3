@@ -45,13 +45,6 @@ export class CommonService {
     this.dataChange.next(data);
   }
 
-  private toggleMenu = new Subject<any>();
-  toggleMenuChange = this.toggleMenu.asObservable();
-
-  menuChanges(data) {
-    this.toggleMenu.next(data);
-  }
-
   // isCordovaDevice(){
   //     return (this._platform.platforms().indexOf('cordova')!= -1) ? true : false;
   // }
