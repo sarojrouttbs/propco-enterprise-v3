@@ -34,7 +34,7 @@ export class PropertyPage implements OnInit {
       setTimeout(() => {
         /** added timeout to open sidenav, On page load we will see a better way to do it */
         this.showMenu = true;
-      }), 50;
+      },10);
     } else {
       this.mode = 'over';
     }
