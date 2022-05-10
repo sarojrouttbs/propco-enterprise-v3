@@ -126,10 +126,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
     }
   }
 
-  toggleMenu(){
-    this.isMenuShown = !this.isMenuShown;
-     this.commonService.menuChanges(this.isMenuShown)
-  }
+
 
   ionViewDidEnter() {
   }

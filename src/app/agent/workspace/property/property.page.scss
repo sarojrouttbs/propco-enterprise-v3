@@ -14,6 +14,31 @@
 .example-sidenav {
   padding: 20px;
 }
+.pointer {
+  cursor: pointer;
+}
+.margin-content{
+  margin-top: 57px;
+}
+
+.side-content{
+  margin-left: 207px;
+}
+
+.header {
+  background-color: var(--ion-background-color);
+  color: var(--ion-color-text-color);
+  display: flex;
+  align-items: center;
+  height: 64px;
+  padding: 10px;
+  ion-icon{
+      margin: 10px;
+  }
+  ion-text {
+      font-size: 22px;
+  }
+}
 
 .example-container {
   display: flex;

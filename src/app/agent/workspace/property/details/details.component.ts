@@ -58,11 +58,6 @@ export class DetailsComponent implements OnInit {
     }
   }
 
-  toggleMenu(){
-     this.isMenuShown = !this.isMenuShown;
-     this.commonService.menuChanges(this.isMenuShown)
-  }
-
   private createForm() {
     this.propertyDetailsForm = this._formBuilder.group({
       lettingsDetailsForm: this._formBuilder.group({
