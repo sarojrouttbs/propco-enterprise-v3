@@ -156,7 +156,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   getStatusColor(status) {
-    var colorName = "";
+    let colorName = '';
     switch (status) {
       case 0:
       case 1:
@@ -267,7 +267,7 @@ export class ApplicationListPage implements OnInit {
   rejectAllApplications() {
     this.commonService.showConfirm('Reject All Application', 'Are you sure, you want to reject all application?', '', 'YES', 'NO').then(response => {
       if (response) {
-        var applicationId = this.applicationList.map(function (application) {
+        let applicationId = this.applicationList.map(function (application) {
           return application.applicationId;
         });
         if (applicationId.length > 0) {
@@ -290,7 +290,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   acceptApplication() {
-    var isAccepted = this.applicationList.find((application) => application.status == APPLICATION_STATUSES.ACCEPTED);
+    var isAccepted = this.applicationList.find((application) => application.status === APPLICATION_STATUSES.ACCEPTED);
     if (isAccepted) {
       this.commonService.showAlert('Accept Application', 'One application is already accepted, Please reject them first then accept this application.');
     } else {
@@ -324,7 +324,7 @@ export class ApplicationListPage implements OnInit {
           (error) => {
 
           });
-      };
+      }
     });
   }
 
@@ -341,7 +341,7 @@ export class ApplicationListPage implements OnInit {
           (error) => {
 
           });
-      };
+      }
     });
   }
 
