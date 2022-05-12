@@ -277,7 +277,7 @@ export const PAYMENT_WARNINGS = {
 export const CLOSE_REASON = [
   {
     index: 'FAULT_DOES_NOT_EXIST_ANYMORE',
-    value: 'Fault does not exist anymore',
+    value: 'Repair does not exist anymore',
   },
   {
     index: 'TENANTS_RESPONSIBILITY',
@@ -423,17 +423,17 @@ export const LL_PAYMENT_CONFIG = {
 export const FAULT_EVENT_TYPES = [
   {
     'Major Events': [
-      'Fault Logged',
+      'Repair Logged',
       'Progress Started',
       'CLI action selected',
       'Quote Obtained',
       'Converted To WO',
       'WO Raised',
-      'Fault Closed',
+      'Repair Closed',
     ],
   },
   {
-    Escalations: ['Escalated', 'De Escalated', 'Fault Snoozed'],
+    Escalations: ['Escalated', 'De Escalated', 'Repair Snoozed'],
   },
   {
     'Stage Changed': ['Stage Changed'],

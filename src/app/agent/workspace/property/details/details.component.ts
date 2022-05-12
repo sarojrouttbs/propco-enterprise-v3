@@ -18,7 +18,7 @@ export class DetailsComponent implements OnInit {
   localStorageItems: any = [];
   selectedEntityDetails: any = null;
   activeLink: any;
-
+  isMenuShown = true;
   constructor(private router: Router, private agentService: AgentService, private commonService: CommonService, private _formBuilder: FormBuilder) { }
 
   ngOnInit() {

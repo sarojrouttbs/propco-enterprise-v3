@@ -20,7 +20,6 @@ export class NegotiateModalPage implements OnInit {
   clauseObj: any;
 
   constructor(
-    private faultsService: FaultsService,
     private navParams: NavParams,
     private modalController: ModalController,
     private formBuilder: FormBuilder,
@@ -122,7 +121,7 @@ export class NegotiateModalPage implements OnInit {
 
   private getUserDetails() {
     return new Promise((resolve, reject) => {
-      this.faultsService.getUserDetails().subscribe((res) => {
+      this.commonService.getUserDetails().subscribe((res) => {
         if(res) {
           resolve(res.data[0]);
         } else {

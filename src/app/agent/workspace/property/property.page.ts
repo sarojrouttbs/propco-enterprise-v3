@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MenuController } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
 import * as menuList from '../../../../assets/data/menu.json';
 
 @Component({
@@ -18,72 +17,50 @@ export class PropertyPage implements OnInit {
   showSubSubMenu = false;
   proptertyId: string;
   menuItems;
-
+  screenWidth;
+  showMenu = false;
+  label = 'Dashboard';
+  mode: string = 'side';
   constructor(
-    private menu: MenuController,
-    private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
-    setTimeout(() => {
-      this.open = true;
-    }, 200);
+    this.getPageWidthHeight();
   }
 
   ngOnInit() {
     this.menuItems = menuList.agents;
     this.proptertyId = this.route.snapshot.params['propertyId'];
-  }
-
-  mouseenter() {
-    if (!this.isExpanded) {
-      this.isShowing = true;
+    if (this.screenWidth > 1024) {
+      setTimeout(() => {
+        /** added timeout to open sidenav, On page load we will see a better way to do it */
+        this.showMenu = true;
+      },10);
+    } else {
+      this.mode = 'over';
     }
   }
 
-  mouseleave() {
-    if (!this.isExpanded) {
-      this.isShowing = false;
-    }
+  toggleMenu() {
+    this.showMenu = !this.showMenu;
   }
 
-  changePage(pageName, item, submenu) {
-    this.menuItems.forEach((element) => {
-      element.isActive = false;
-      if (element.subMenu.length) {
-        element.subMenu.forEach((element) => {
-          element.isActive = false;
-        });
-      }
-    });
+  getPageWidthHeight() {
+    this.screenWidth = window.innerWidth;
+  }
 
-    if (item && submenu) {
-      submenu.isActive = true;
-      item.isActive = true;
-    }
+  setLabel(name: string) {
+    this.label = name;
+  }
 
-    if (item && !submenu) {
-      item.isActive = true;
-    }
-
-    switch (pageName) {
-      case 'dashboard':
-        this.router.navigate([
-          `agent/workspace/property/${this.proptertyId}/dashboard`,
-        ]);
-        break;
-      case 'details':
-        this.router.navigate([
-          `agent/workspace/property/${this.proptertyId}/details`,
-        ]);
-        break;
-      case 'applications':
-        this.router.navigate([
-          `agent/workspace/property/${this.proptertyId}/${pageName}`,
-        ]);
-        break;
-
-      default:
-        break;
+  onResize(event) {
+    this.screenWidth = event.target.innerWidth;
+    if (this.screenWidth > 1024) {
+      this.mode = 'side';
+      this.showMenu = true;
+    } else {
+      this.mode = 'over';
+      this.showMenu = false;
     }
   }
 }
+
