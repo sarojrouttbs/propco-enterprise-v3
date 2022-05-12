@@ -10,7 +10,6 @@ import { Location } from "@angular/common";
 import { MatTab, MatTabGroup } from "@angular/material/tabs";
 import {
   ActivatedRoute,
-  ActivationStart,
   Router,
   RouterOutlet,
 } from "@angular/router";
@@ -20,7 +19,6 @@ import {
 } from "src/app/shared/constants";
 import { CommonService } from "src/app/shared/services/common.service";
 import { AgentService } from "../agent.service";
-import { MenuController } from "@ionic/angular";
 import { WorkspaceService } from "./workspace.service";
 
 @Component({
@@ -41,21 +39,22 @@ export class WorkspacePage implements OnInit {
   @ViewChild(RouterOutlet) outlet: RouterOutlet;
   activeLink;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
-
   constructor(
     private agentService: AgentService,
     private commonService: CommonService,
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
-    private menu: MenuController,
     private workspaceService: WorkspaceService
   ) {
     route.params.subscribe((val) => {
       this.initWorkspace();
     });
+    workspaceService.updatedWSItems$.subscribe(val => {
+      this.localStorageItems = val;
+    });
   }
-  ngOnInit() {}
+  ngOnInit() { }
   private async initWorkspace() {
     this.skeleton = true;
     this.localStorageItems = this.fetchItems();
@@ -68,7 +67,7 @@ export class WorkspacePage implements OnInit {
     this.skeleton = false;
   }
 
-  private fetchItems() {
+  private  fetchItems() {
     return (
       this.commonService.getItem(
         AGENT_WORKSPACE_CONFIGS.localStorageName,
@@ -81,14 +80,14 @@ export class WorkspacePage implements OnInit {
     let item = this.localStorageItems.filter((x) => x.isSelected);
     if (item && item.length > 0) {
       this.router.navigate([
-        `agent/workspace/property/${item[0].entityId}/dashboard`,
+        `${item[0].state}`,
       ]);
       this.activeLink = item[0].reference;
       return item[0];
     }
   }
 
-  async navigate(item){
+  async navigate(item) {
     await this.workspaceService.makeItemActive(item.entityId);
     this.router.navigate([
       item.state,
@@ -118,7 +117,7 @@ export class WorkspacePage implements OnInit {
       this.router.navigate(["agent/dashboard"], { replaceUrl: true });
     } else {
       await this.workspaceService.activeNextTabOnDelete();
-      this.router.navigate(["agent/workspace"]).then(()=>{
+      this.router.navigate(["agent/workspace"]).then(() => {
         window.location.reload();
       });
     }
@@ -138,6 +137,7 @@ export class WorkspacePage implements OnInit {
     });
     return promise;
   }
+
   onSwitch(item) {
     switch (item.entity) {
       case "PROPERTY":
