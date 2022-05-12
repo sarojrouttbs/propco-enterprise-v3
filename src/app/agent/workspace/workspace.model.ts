@@ -15,4 +15,5 @@ export interface Property {
   entityTitle: string;
   reference: string;
   isSelected: boolean;
+  pageRef: string;
 }

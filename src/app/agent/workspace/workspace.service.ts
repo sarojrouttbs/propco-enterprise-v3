@@ -1,21 +1,24 @@
-import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 import {
   AGENT_WORKSPACE_CONFIGS,
   DEFAULT_MESSAGES,
-} from "src/app/shared/constants";
-import { CommonService } from "src/app/shared/services/common.service";
-import { Property } from "./workspace.model";
+} from 'src/app/shared/constants';
+import { CommonService } from 'src/app/shared/services/common.service';
+import { Property } from './workspace.model';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class WorkspaceService {
-  constructor(private commonService: CommonService, private router: Router) {}
+  updatedWSItems$ = new BehaviorSubject('');
+  getActiveWSItem$ = new BehaviorSubject(this.getActiveWSItem());
+  constructor(private commonService: CommonService, private router: Router) { }
 
   async addItemToWorkSpace(item: any) {
     switch (item.entityType) {
-      case "PROPERTY":
+      case 'PROPERTY':
         await this.setItemInWS(item);
         this.goToPropertyDashboard(item);
         break;
@@ -23,8 +26,8 @@ export class WorkspaceService {
       default:
         this.commonService.showMessage(
           DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG,
-          "Error",
-          "error"
+          'Error',
+          'error'
         );
         break;
     }
@@ -40,13 +43,14 @@ export class WorkspaceService {
 
   prepareTabData(item) {
     switch (item.entityType) {
-      case "PROPERTY":
+      case 'PROPERTY':
         let propData: Property = {} as Property;
         propData.entity = item.entityType;
         propData.entityId = item.entityId;
         propData.entityTitle = item.address;
         propData.reference = item.reference;
-        propData.state = `/agent/workspace/property/${item.entityId}/dashboard`;
+        propData.state = `agent/workspace/property/${item.entityId}/dashboard`;
+        propData.pageRef = AGENT_WORKSPACE_CONFIGS.property.pageTitleMap.dashboard;
         propData.isSelected = true;
         return propData;
       default:
@@ -65,7 +69,7 @@ export class WorkspaceService {
       ]);
       return;
     } else {
-      let updatedList = await this.changeSelected(itemsInStorage, "isSelected", item.entityId);
+      let updatedList = await this.changeSelected(itemsInStorage, 'isSelected', item.entityId);
       if (!this.checkIfEntityExistsInWS(item.entityId)) {
         this.commonService.removeItem(AGENT_WORKSPACE_CONFIGS.localStorageName);
         itemsInStorage.push(this.prepareTabData(item));
@@ -160,15 +164,57 @@ export class WorkspaceService {
     );
     for (const obj of itemsInStorage) {
       if (obj.entityId !== entityId) {
-        obj["isSelected"] = false;
+        obj['isSelected'] = false;
       } else {
-        obj["isSelected"] = true;
+        obj['isSelected'] = true;
       }
     }
     this.commonService.setItem(
       AGENT_WORKSPACE_CONFIGS.localStorageName,
       itemsInStorage
     );
+    this.getActiveWSItem$.next(this.getActiveWSItem());
     return;
+  }
+
+  async updateItemState(entityId: string, newState: string) {
+    let itemsInStorage = this.commonService.getItem(
+      AGENT_WORKSPACE_CONFIGS.localStorageName,
+      true
+    );
+    for (const obj of itemsInStorage) {
+      if (obj.entityId === entityId) {
+        obj.state = `agent/workspace/property/${entityId}/${newState}`;
+        obj.pageRef = AGENT_WORKSPACE_CONFIGS.property.pageTitleMap[newState];
+      }
+    }
+    this.commonService.setItem(
+      AGENT_WORKSPACE_CONFIGS.localStorageName,
+      itemsInStorage
+    );
+    this.setUpdatedWSItems();
+    return;
+  }
+
+  private setUpdatedWSItems() {
+    let itemsInStorage = this.commonService.getItem(
+      AGENT_WORKSPACE_CONFIGS.localStorageName,
+      true
+    );
+    this.updatedWSItems$.next(itemsInStorage);
+    this.getActiveWSItem$.next(this.getActiveWSItem());
+  }
+
+  private getActiveWSItem() {
+    let itemsInStorage = this.commonService.getItem(
+      AGENT_WORKSPACE_CONFIGS.localStorageName,
+      true
+    );
+    if (itemsInStorage && itemsInStorage.length > 0) {
+      const item = itemsInStorage.filter((x) => x.isSelected);
+      if (item && item.length > 0) {
+        return item[0];
+      }
+    }
   }
 }
