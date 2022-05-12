@@ -19,11 +19,15 @@ export class DashboardPage implements OnInit {
   redirect(type: string) {
     switch (type) {
       case 'let-alliance':
-        this.router.navigate([`../let-alliance`], { relativeTo : this.route});
+        this.router.navigate([`../let-alliance`], { relativeTo: this.route });
         break;
       case 'maintenance':
-        this.router.navigate([`../maintenance`], { relativeTo : this.route});
+        this.router.navigate([`../maintenance`], { relativeTo: this.route });
         break;
+      case 'market-appraisal':
+        this.router.navigate([`../market-appraisal`], { relativeTo: this.route });
+        break;
+
       default:
         break;
     }

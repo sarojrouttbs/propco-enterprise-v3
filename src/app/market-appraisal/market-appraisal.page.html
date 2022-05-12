@@ -1,0 +1,18 @@
+<ion-content id="la-dashboard">
+  <ion-segment [(ngModel)]="type" class="segment-card" id="marketAppraisalTabs">
+    <ion-segment-button value="maContact" checked>
+      <ion-label>MA Contact</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="property">
+      <ion-label>Property</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  
+  <div [hidden]="type != 'maContact'">
+    <app-ma-contact></app-ma-contact>
+  </div>
+  
+  <div [hidden]="type != 'property'">
+  </div>
+</ion-content>
+ 

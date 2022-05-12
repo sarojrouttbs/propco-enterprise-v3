@@ -1,0 +1,63 @@
+<mat-accordion class="list-view-accordian" multi>
+  <mat-expansion-panel #propertyDetails hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Marketing Details
+      </mat-panel-title>
+      <mat-panel-description class="ion-justify-content-end no-margin">
+        <div>
+          <span *ngIf="!propertyDetails.expanded" class="accordian-icon" title="Expand">
+            <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+          </span>
+          <span *ngIf="propertyDetails.expanded" class="accordian-icon" title="Collapse">
+            <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+          </span>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <ion-card-content id="details">
+
+    </ion-card-content>
+  </mat-expansion-panel>
+  <mat-expansion-panel #propertyDetails hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Contact Name and Address
+      </mat-panel-title>
+      <mat-panel-description class="ion-justify-content-end no-margin">
+        <div>
+          <span *ngIf="!propertyDetails.expanded" class="accordian-icon" title="Expand">
+            <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+          </span>
+          <span *ngIf="propertyDetails.expanded" class="accordian-icon" title="Collapse">
+            <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+          </span>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <ion-card-content id="details">
+
+    </ion-card-content>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel #propertyDetails hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Contact Details
+      </mat-panel-title>
+      <mat-panel-description class="ion-justify-content-end no-margin">
+        <div>
+          <span *ngIf="!propertyDetails.expanded" class="accordian-icon" title="Expand">
+            <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+          </span>
+          <span *ngIf="propertyDetails.expanded" class="accordian-icon" title="Collapse">
+            <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+          </span>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <ion-card-content id="details">
+
+    </ion-card-content>
+  </mat-expansion-panel>
+</mat-accordion>

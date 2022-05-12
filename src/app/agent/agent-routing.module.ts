@@ -42,6 +42,10 @@ const routes: Routes = [
       {
         path: 'maintenance',
         loadChildren: () => import('../faults/faults.module').then(m => m.FaultsPageModule)
+      },
+      {
+        path: 'market-appraisal',
+        loadChildren: () => import('../market-appraisal/market-appraisal.module').then(m => m.MarketAppraisalPageModule)
       }
     ]
   },

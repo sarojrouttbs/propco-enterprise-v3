@@ -516,6 +516,26 @@ ion-alert.common-alert-box {
   }
 }
 
+#marketAppraisalTabs{
+  ion-segment-button{
+    border: solid 1px var(--ion-color-body);
+    color: var(--ion-color-text-color);
+    --color-hover:var(--ion-color-text-color);
+    --background-hover: var(--ion-color-header);
+    --background: var(--ion-color-header);
+    z-index: 1000;
+    font-size: 18px;
+    text-transform: uppercase;
+    max-width: 100%!important;
+  }
+  .segment-button-checked{
+    --background-checked: var(--ion-background-color);
+    --indicator-height: none;
+    --color-checked: var(--ion-color-text-color);
+  }
+  
+}
+
 // .sc-ion-select-popover-h ion-list.sc-ion-select-popover {
 //   background-color: red !important;
 // }
