@@ -606,7 +606,7 @@ export const DEFAULT_MESSAGES = {
   errors: {
     SOMETHING_WENT_WRONG: 'Something went wrong'
   },
-  NOT_AVAILABLE_TEXT : 'Not Available',
+  NOT_AVAILABLE_TEXT: 'Not Available',
   AVAILABLE_SOON: 'Available Soon'
 };
 
@@ -623,7 +623,15 @@ export const DEFAULTS = {
 };
 
 export const AGENT_WORKSPACE_CONFIGS = {
-  localStorageName: 'entity_tabs_menu'
+  localStorageName: 'entity_tabs_menu',
+  property: {
+    pageTitleMap: {
+      dashboard: 'Dashboard',
+      details: 'Property Details',
+      offers: 'Offers',
+      applications: 'Applications'
+    }
+  }
 };
 
 export const LOGIN_PAGE_TEXT_MESSAGES = [

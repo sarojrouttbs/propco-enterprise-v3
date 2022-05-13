@@ -63,6 +63,8 @@ export class PropertyAddressComponent implements OnInit {
         this.group.get('country').setValue(res.countryName);
         this.group.get('latitude').setValue(res.latitude);
         this.group.get('longitude').setValue(res.longitude);
+        this.group.get('organisationName').setValue(res.company);
+        this.group.get('pafref').setValue(res.domesticId);
       }
     }, error => {
       this.selectedAddress = {};
