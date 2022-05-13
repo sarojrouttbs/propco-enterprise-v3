@@ -20,7 +20,7 @@ declare function openScreen(key: string, value: any): any;
   encapsulation: ViewEncapsulation.None,
 })
 export class DashboardPage implements OnInit {
-  loggedInUserData;
+  loggedInUserData = null;
   isAuthSuccess = false;
 
   hideSuggestion = false;
@@ -68,6 +68,7 @@ export class DashboardPage implements OnInit {
     },
   };
 
+
   constructor(
     private solrService: SolrService,
     private route: ActivatedRoute,
@@ -87,9 +88,11 @@ export class DashboardPage implements OnInit {
   }
 
   private async initApiCalls() {
+    this.setDefaultHome(true);
     const accessToken = this.commonService.getItem(PROPCO.ACCESS_TOKEN);
     const webKey = this.commonService.getItem(PROPCO.WEB_KEY);
     if (accessToken && webKey) {
+      this.loggedInUserData = this.commonService.getItem(PROPCO.USER_DETAILS, true);
       this.loaded = true;
       return;
     }
@@ -110,13 +113,35 @@ export class DashboardPage implements OnInit {
     return new Promise((resolve, reject) => {
       this.solrService.getUserDetails(params).subscribe(
         (res) => {
-          resolve(res ? res.data[0] : '');
+          if (res) {
+            this.commonService.setItem(PROPCO.USER_DETAILS, res.data[0])
+            resolve(res ? res.data[0] : null);
+          }
         },
         (error) => {
           resolve(null);
         }
       );
     });
+  }
+
+  private updateUserDetail(body: object) {
+    return new Promise((resolve, reject) => {
+      this.solrService.updateUserDetails(body).subscribe(
+        (res) => {
+          if (res) {
+            resolve(true);
+          }
+        },
+        (error) => {
+          resolve(null);
+        }
+      );
+    });
+  }
+
+  async setDefaultHome(enableNewHomeScreen: boolean) {
+    await this.updateUserDetail({ enableNewHomeScreen });
   }
 
   private authenticateSso() {
