@@ -27,8 +27,10 @@ ion-grid {
 }
 
 .tenant-status {
-    text-align: end;
     color: var(--ion-color-property-status-bg);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 .landlord-tenant-dropdown {
@@ -107,4 +109,8 @@ ion-grid {
     .no-data {
         height: 195px;
     }
+}
+
+.landlord-tenant-header {
+    padding: 10px 0px;
 }

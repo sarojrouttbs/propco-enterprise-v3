@@ -501,7 +501,7 @@ ion-alert.common-alert-box {
   }
 }
 
-#paropertyLettingDetails, #propertyCheckGrid{
+#propertyAddressDetails, #propertyLettingDetails, #propertyCheckGrid, #propertyLetBoardDetails, #propertyHistoryDetails {
   ion-select{
     height: 40px;
   }
@@ -512,6 +512,18 @@ ion-alert.common-alert-box {
       textarea{
         padding-top: 0px;
       }
+    }
+  }
+
+  // ionic form field - dark / light theme css
+  ion-item {
+    --border-color: var(--ion-color-ion-select) !important;
+    ion-label, ion-text {
+      color: var(--ion-color-ion-label) !important;
+    }
+
+    ion-select, ion-input {
+      color: var(--ion-color-ion-select) !important;
     }
   }
 }
@@ -534,6 +546,10 @@ ion-alert.common-alert-box {
     --color-checked: var(--ion-color-text-color);
   }
   
+}
+
+.address-selection {
+  --width: auto;
 }
 
 // .sc-ion-select-popover-h ion-list.sc-ion-select-popover {

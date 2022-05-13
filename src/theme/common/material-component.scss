@@ -213,3 +213,34 @@
     }
   }
 }
+
+#propertyLettingDetails, #propertyLetBoardDetails {
+  // material date picker css - dark / light theme
+
+  .mat-form-field-wrapper {
+    margin-bottom: 0;
+    padding-bottom: 27px;
+  }
+
+  .mat-datepicker-toggle .mat-icon-button {
+    color: var(--ion-color-primary);
+  }
+
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    color: var(--ion-color-ion-select) !important;
+  }
+
+  .mat-form-field-label {
+    margin-top: 12px;
+    font-size: 16px;
+    mat-label {
+      color: var(--ion-color-ion-label) !important;
+    }
+  }
+
+  .mat-form-field-infix{
+    input{
+      margin-top: 22px;
+    }
+  }
+}

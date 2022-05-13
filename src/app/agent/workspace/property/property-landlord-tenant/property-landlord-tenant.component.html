@@ -1,6 +1,6 @@
 <ng-container *ngIf="type == 'landlord'">
   <ion-grid class="landlord-block">
-    <ion-row>
+    <ion-row class="landlord-tenant-header">
       <ion-col class="landlord-tenant-count">
         <ion-fab-button>
           <span>LL</span>
@@ -79,7 +79,7 @@
 
 <ng-container *ngIf="type == 'tenant'">
   <ion-grid>
-    <ion-row>
+    <ion-row class="landlord-tenant-header">
       <ion-col class="landlord-tenant-count">
         <ion-fab-button>
           <span>TT</span>
