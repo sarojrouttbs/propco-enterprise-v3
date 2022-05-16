@@ -12,6 +12,9 @@ export class PropertyAddressComponent implements OnInit {
   lookupLoader = false;
   addressList: any[];
   selectedAddress: any;
+  addressPopoverOptions: any = {
+    cssClass: 'address-selection'
+  };
   constructor(private commonService: CommonService) { }
 
   ngOnInit() {}

@@ -501,21 +501,6 @@ ion-alert.common-alert-box {
   }
 }
 
-#paropertyLettingDetails, #propertyCheckGrid{
-  ion-select{
-    height: 40px;
-  }
-
-  ion-textarea{
-    .textarea-wrapper{
-      height: 32px !important;
-      textarea{
-        padding-top: 0px;
-      }
-    }
-  }
-}
-
 #marketAppraisalTabs{
   ion-segment-button{
     border: solid 1px var(--ion-color-body);
@@ -579,6 +564,39 @@ ion-alert.common-alert-box {
     }
   }
 }
+.address-selection {
+  --width: auto;
+}
+
 // .sc-ion-select-popover-h ion-list.sc-ion-select-popover {
 //   background-color: red !important;
 // }
+
+#agent-portal { 
+  #propertyAddressDetails, #propertyLettingDetails, #propertyCheckGrid, #propertyLetBoardDetails, #propertyHistoryDetails {
+    ion-select{
+      height: 40px;
+    }
+  
+    ion-textarea{
+      .textarea-wrapper{
+        height: 32px !important;
+        textarea{
+          padding-top: 0px;
+        }
+      }
+    }
+  
+    // ionic form field - dark / light theme css
+    ion-item {
+      --border-color: var(--ion-color-one) !important;
+      ion-label, ion-text {
+        color: var(--ion-color-three) !important;
+      }
+  
+      ion-select, ion-input {
+        color: var(--ion-color-one) !important;
+      }
+    }
+  }
+}

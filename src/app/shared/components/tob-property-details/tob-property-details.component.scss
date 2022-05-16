@@ -4,7 +4,6 @@ ion-card {
     ion-card-content {
       background-color: var(--ion-color-step-1750);
       img {
-          height: 100%;
           width: 100%;
       }
     }
@@ -41,4 +40,6 @@ ion-card {
 .property-img {
     width: 100%;
     height: 210px;
+    display: flex;
+    align-items: center;
 }
