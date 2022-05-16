@@ -15,6 +15,7 @@ export class AddressModalPage implements OnInit {
   lookupLoader = false;
   addressList: any[];
   selectedAddress: any;
+  type: any;
 
   @Input() paramAddress: string;
 
@@ -24,7 +25,7 @@ export class AddressModalPage implements OnInit {
     private navParams: NavParams,
     private commonService: CommonService
   ) {
-   }
+  }
 
   ngOnInit() {
     this.address = this.navParams.get('paramAddress');
@@ -32,9 +33,12 @@ export class AddressModalPage implements OnInit {
     this.setAddress();
   }
 
-  initiateAddressForm(){
+  initiateAddressForm() {
+    console.log("ttttttt", this.type);
+    
     this.addressDetailsForm = this.fb.group({
       postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
+      organisationName: [''],
       addressdetails: [''],
       buildingNumber: [''],
       buildingName: [''],
@@ -45,28 +49,32 @@ export class AddressModalPage implements OnInit {
       locality: [''],
       town: ['', Validators.required],
       county: [''],
+      block: [''],
+      pafref: [''],
       country: ['', Validators.required],
       latitude: [''],
       longitude: [''],
     });
   }
 
-  setAddress(){
-    this.addressDetailsForm.patchValue({
-     postcode: this.address.postcode,
-     buildingNumber: this.address.buildingNumber,
-     buildingName: this.address.buildingName,
-     street: this.address.street,
-     addressLine1: this.address.addressLine1,
-     addressLine2: this.address.addressLine2,
-     addressLine3: this.address.addressLine3,
-     locality: this.address.locality,
-     town: this.address.town,
-     county: this.address.county,
-     country: this.address.country,
-     latitude: this.address.latitude,
-     longitude: this.address.longitude,
-   });
+  setAddress() {
+    if (this.address) {
+      this.addressDetailsForm.patchValue({
+        postcode: this.address.postcode,
+        buildingNumber: this.address.buildingNumber,
+        buildingName: this.address.buildingName,
+        street: this.address.street,
+        addressLine1: this.address.addressLine1,
+        addressLine2: this.address.addressLine2,
+        addressLine3: this.address.addressLine3,
+        locality: this.address.locality,
+        town: this.address.town,
+        county: this.address.county,
+        country: this.address.country,
+        latitude: this.address.latitude,
+        longitude: this.address.longitude,
+      });
+    }
   }
 
   getAddressList() {
@@ -128,8 +136,12 @@ export class AddressModalPage implements OnInit {
   }
 
   saveAddress() {
+    if (this.addressDetailsForm.invalid) {
+      this.addressDetailsForm.markAllAsTouched();
+      return;
+    }
     this.modalController.dismiss({
-      address : this.addressDetailsForm.value
+      address: this.addressDetailsForm.value
     });
   }
 }
