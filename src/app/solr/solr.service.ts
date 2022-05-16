@@ -47,4 +47,14 @@ export class SolrService {
       }
     );
   }
+
+  updateUserDetails(body: object): Observable<any> {
+    const params = new HttpParams().set('hideLoader', 'true');
+    return this.httpClient.put(
+      environment.API_BASE_URL + `user`,
+      body,
+      {params}
+    );
+  }
+
 }

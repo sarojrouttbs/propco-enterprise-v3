@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AGENT_WORKSPACE_CONFIGS } from 'src/app/shared/constants';
 import * as menuList from '../../../../assets/data/menu.json';
+import { WorkspaceService } from '../workspace.service';
 
 @Component({
   selector: 'app-property',
@@ -19,12 +21,18 @@ export class PropertyPage implements OnInit {
   menuItems;
   screenWidth;
   showMenu = false;
-  label = 'Dashboard';
+  label = AGENT_WORKSPACE_CONFIGS.property.pageTitleMap.dashboard;
   mode: string = 'side';
   constructor(
     private route: ActivatedRoute,
+    private workspaceService: WorkspaceService
   ) {
     this.getPageWidthHeight();
+    workspaceService.getActiveWSItem$.subscribe(val => {
+      if (val) {
+        this.label = val.pageRef;
+      }
+    });
   }
 
   ngOnInit() {
@@ -34,7 +42,7 @@ export class PropertyPage implements OnInit {
       setTimeout(() => {
         /** added timeout to open sidenav, On page load we will see a better way to do it */
         this.showMenu = true;
-      },10);
+      }, 10);
     } else {
       this.mode = 'over';
     }
@@ -61,6 +69,10 @@ export class PropertyPage implements OnInit {
       this.mode = 'over';
       this.showMenu = false;
     }
+  }
+
+  workspaceSetActiveLink(route: string) {
+    this.workspaceService.updateItemState(this.proptertyId, route);
   }
 }
 
