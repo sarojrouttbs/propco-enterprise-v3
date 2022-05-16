@@ -730,7 +730,7 @@ export class SearchResultsPage implements OnInit {
     this.selectedItem = data;
     const baseContainer = $(event.target).parents('.' + className);
     const divOverlay = $('#' + id);
-    const baseContainerWidth = baseContainer.outerWidth(true) - 52;
+    const baseContainerWidth = baseContainer.outerWidth(true) - 45;
     const baseContainerHeight = baseContainer.outerHeight(true);
     const baseContainerPosition = baseContainer.position();
     const baseContainerTop = baseContainerPosition.top;
