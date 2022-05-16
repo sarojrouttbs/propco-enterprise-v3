@@ -302,7 +302,7 @@ ion-select-popover {
 }
 
 ion-alert.common-alert-box {
-  --background: var(--ion-color-step-1800);
+  --background: var(--ion-color-six);
   --max-width: 400px;
 
   .alert-head {
@@ -315,8 +315,8 @@ ion-alert.common-alert-box {
   }
 
   .alert-message {
-    background: var(--ion-color-step-1800);
-    color: var(--ion-color-step-200);
+    background: var(--ion-color-six);
+    color: var(--ion-color-text-color);
     padding-top: 10px !important;
     padding-bottom: 20px;
     padding-left: 10px;
@@ -551,9 +551,7 @@ ion-alert.common-alert-box {
           height: 40px;
         }
       }
-    }
-    
-    
+    }    
   }
 }
 
@@ -564,6 +562,23 @@ ion-alert.common-alert-box {
   }
 }
 
+//agnet portal > market appraisal form modals
+.ma-modal-container{
+  .modal-wrapper {
+    ion-content {
+      --background: var(--ion-color-six);
+      ion-item {
+        --border-color: var(--ion-color-ion-select);
+        ion-label {
+          color: var(--ion-color-ion-label) !important;
+        }
+      }
+    }
+    ion-footer{
+      background: var(--ion-color-six);
+    }
+  }
+}
 // .sc-ion-select-popover-h ion-list.sc-ion-select-popover {
 //   background-color: red !important;
 // }

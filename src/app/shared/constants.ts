@@ -659,3 +659,8 @@ export const TITLES = [
   { index: 11, value: 'Rt.hon' },
   { index: 12, value: 'Lt.Sqd' },
 ];
+
+export const OWNERSHIP = [
+  { index: 'jointly', value: 'Jointly' },
+  { index: 'solely', value: 'Solely' }
+];
