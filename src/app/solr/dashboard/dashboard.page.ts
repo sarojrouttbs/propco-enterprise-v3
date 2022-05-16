@@ -88,7 +88,6 @@ export class DashboardPage implements OnInit {
   }
 
   private async initApiCalls() {
-    this.setDefaultHome(true);
     const accessToken = this.commonService.getItem(PROPCO.ACCESS_TOKEN);
     const webKey = this.commonService.getItem(PROPCO.WEB_KEY);
     if (accessToken && webKey) {
@@ -98,6 +97,7 @@ export class DashboardPage implements OnInit {
     }
     const isAuthSuccess = await this.authenticateSso();
     if (isAuthSuccess) {
+      this.setDefaultHome(true);
       this.loggedInUserData = await this.getUserDetails();
       this.loaded = true;
       if (!this.commonService.getItem('disableTour')) {
