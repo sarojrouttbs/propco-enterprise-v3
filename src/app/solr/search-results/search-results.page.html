@@ -4,7 +4,7 @@
       <ion-grid class="filter-heading-wrapper">
         <ion-row>
           <ion-col size="100">
-            <span title="Collapse" class="status-pointer"><ion-icon name="arrow-back-outline" (click)="drawer.toggle();"></ion-icon></span>
+            <span title="Collapse" class="status-pointer"><ion-icon name="arrow-back-outline" (click)="drawer.toggle();toggleSideMenu();"></ion-icon></span>
             <h1>Filter your search</h1>
           </ion-col>
           <ion-col size="100">
@@ -475,7 +475,7 @@
         <ng-container *ngIf="length > 0">
           <div [ngClass]="!drawer.opened ? 'paginator-grid' : 'paginator-grid sidenav-opened'">
             <div *ngIf="!drawer.opened">
-              <ion-buttons (click)="drawer.toggle();" style="cursor: pointer;">
+              <ion-buttons (click)="drawer.toggle();toggleSideMenu();" style="cursor: pointer;">
                 <ion-icon name="options-outline"></ion-icon>
               </ion-buttons>
             </div>

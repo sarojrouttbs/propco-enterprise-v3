@@ -3,7 +3,7 @@ p {
 }
 
 agm-map {
-  height: 300px;
+  height: 500px;
   position: relative;
 }
 
@@ -30,8 +30,8 @@ agm-map {
 
 .wrapper {
   position: relative;
-  margin: auto;
-  margin-top: -10px;
+  margin: -10px 0px 10px 0px;
+  border: 1px solid var(--ion-color-step-1650);
 }
 
 .map {
@@ -48,11 +48,7 @@ agm-map {
 }
 
 .agm-map-container {
-  height: 300px;
-}
-
-agm-map {
-  height: 300px;
+  height: 500px;
 }
 
 .msg-div {

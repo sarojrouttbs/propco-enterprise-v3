@@ -100,6 +100,9 @@ export class ApplicationDetailPage implements OnInit {
     entityId?: string
   } = {};
   isApplicantDetailsAvailable = false;
+  addressPopoverOptions: any = {
+    cssClass: 'address-selection'
+  };
 
   constructor(
     private route: ActivatedRoute,
