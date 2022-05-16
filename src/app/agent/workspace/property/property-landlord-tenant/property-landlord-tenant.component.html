@@ -1,18 +1,20 @@
 <ng-container *ngIf="type == 'landlord'">
-  <ion-grid class="landlord-block">
+  <ion-grid class="main-block landlord-block">
     <ion-row>
-      <ion-col class="landlord-tenant-count">
-        <ion-fab-button>
-          <span>LL</span>
-        </ion-fab-button>
-        <ion-text> &nbsp;Current Landlords ({{landlordList.length}}) </ion-text>
+      <ion-col>
+        <div class="landlord-tenant-header">
+          <ion-fab-button>
+            <span>LL</span>
+          </ion-fab-button>
+          <ion-text> &nbsp;Current Landlords ({{landlordList.length}}) </ion-text>
+        </div>
       </ion-col>
     </ion-row>
     <ng-container *ngIf="landlordList.length>0; then ifBlock else elseBlock"></ng-container>
     <ng-template #ifBlock>
-      <ion-row class="landlord-tenant-dropdown">
+      <ion-row>
         <ion-col>
-          <ion-select interface="popover" class="more-filters" [formControl]="landlordListCtrl"
+          <ion-select interface="popover" class="landlord-tenant-dropdown" [formControl]="landlordListCtrl"
             (ionChange)="onLandlordChange();">
             <ion-select-option [value]="item.landlordId" *ngFor="let item of landlordList">
               {{item.name}}
@@ -55,15 +57,15 @@
         </ion-col>
       </ion-row>
       <ion-row class="rent-detail-block">
-        <ion-col>
+        <ion-col size="33.3">
           <ion-label>Current Rent</ion-label><br>
           <ion-text> - </ion-text>
         </ion-col>
-        <ion-col class="middle-block">
+        <ion-col size="33.3" class="middle-block">
           <ion-label>Reserve</ion-label><br>
           <ion-text> - </ion-text>
         </ion-col>
-        <ion-col>
+        <ion-col size="33.3">
           <ion-label>Tax</ion-label><br>
           <ion-text> - </ion-text>
         </ion-col>
@@ -78,21 +80,25 @@
 </ng-container>
 
 <ng-container *ngIf="type == 'tenant'">
-  <ion-grid>
+  <ion-grid class="main-block">
     <ion-row>
-      <ion-col class="landlord-tenant-count">
-        <ion-fab-button>
-          <span>TT</span>
-        </ion-fab-button>
-        <ion-text> &nbsp;Current Tenants ({{tenantList.length}}) </ion-text>
+      <ion-col>
+        <div class="landlord-tenant-header">
+          <ion-fab-button>
+            <span>TT</span>
+          </ion-fab-button>
+          <ion-text> &nbsp;Current Tenants ({{tenantList.length}}) </ion-text>
+        </div>
       </ion-col>
-      <ion-col class="tenant-status"><span>{{getLookupValue(selectedTenant?.status, tenantStatuses)}}</span></ion-col>
+      <ion-col class="ion-text-right ion-align-self-center">
+        <span class="tenant-status">{{getLookupValue(selectedTenant?.status, tenantStatuses)}}</span>
+      </ion-col>
     </ion-row>
     <ng-container *ngIf="tenantList.length>0; then ifBlock else elseBlock"></ng-container>
     <ng-template #ifBlock>
-      <ion-row class="landlord-tenant-dropdown">
-        <ion-col>
-          <ion-select interface="popover" class="more-filters" [formControl]="tenantListCtrl"
+      <ion-row>
+        <ion-col size="100">
+          <ion-select interface="popover" class="landlord-tenant-dropdown" [formControl]="tenantListCtrl"
             (ionChange)="onTenantChange();">
             <ion-select-option [value]="item.tenantId" *ngFor="let item of tenantList">
               {{item.name || item.title +' '+ item.forename}}
@@ -136,15 +142,15 @@
       </ion-row>
 
       <ion-row class="rent-detail-block">
-        <ion-col>
+        <ion-col size="33.3">
           <ion-label>Current Rent</ion-label><br>
           <ion-text> - </ion-text>
-        </ion-col>
-        <ion-col class="middle-block">
+        </ion-col >
+        <ion-col size="33.3" class="middle-block">
           <ion-label>Outstanding</ion-label><br>
           <ion-text> - </ion-text>
         </ion-col>
-        <ion-col>
+        <ion-col size="33.3">
           <ion-label>Deposit</ion-label><br>
           <ion-text> - </ion-text>
         </ion-col>

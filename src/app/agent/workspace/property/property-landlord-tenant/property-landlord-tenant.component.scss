@@ -1,38 +1,32 @@
-ion-grid {
+ion-grid.main-block {
     background: var(--ion-background-color);
     padding: 0;
     border-top: solid 1px var(--ion-property-details-bg);
     border-bottom: solid 1px var(--ion-property-details-bg);
-}
-.landlord-block {
-    border: solid 1px var(--ion-property-details-bg);
-}
-.landlord-tenant-count {
-    display: flex;
-    align-items: center;
-    font-size: 15px;
-    & > ion-fab-button {
-        --background: var(--ion-color-landlord-tenant-fab-btn);
-        color: var(--ion-color-landlord-tenant-fab-text);
-        width: 25px;
-        height: 25px;
-        --box-shadow: none;
-        span {
+    
+    .landlord-tenant-header {
+        display: flex;
+        align-items: center;
+        font-size: 15px;
+        padding: 10px 0px;
+        & > ion-fab-button {
+            --background: var(--ion-color-landlord-tenant-fab-btn);
             color: var(--ion-color-landlord-tenant-fab-text);
+            width: 25px;
+            height: 25px;
+            --box-shadow: none;
+            span {
+                color: var(--ion-color-landlord-tenant-fab-text);
+            }
+        }
+        ion-text {
+            color: var(--ion-color-text-color);
         }
     }
-    ion-text {
-        color: var(--ion-color-text-color);
+    .tenant-status {
+        color: var(--ion-color-success);
     }
-}
-
-.tenant-status {
-    text-align: end;
-    color: var(--ion-color-property-status-bg);
-}
-
-.landlord-tenant-dropdown {
-    ion-select {
+    ion-select.landlord-tenant-dropdown {
         font-size: 13px;
         background: var(--ion-color-landlord-tenant-selection);
         padding-top: 5px;
@@ -41,70 +35,69 @@ ion-grid {
         --padding-start: 5px;
         border-radius: 3px;
     }
-}
-
-.landlord-tenant-details {
-    ion-col {
-        display: flex;
-        align-items: center;
+    .landlord-tenant-details {
         ion-icon {
             font-size: 13px;
         }
         ion-text{
             cursor: pointer;
         }
-    }
-    a {
+        a {
+            color: var(--ion-color-text-color);
+            text-decoration: none;
+        }
         color: var(--ion-color-text-color);
-        text-decoration: none;
     }
-    color: var(--ion-color-text-color);
-}
-
-.rent-history-block {
-    margin-bottom: 5px;
-    ion-label {
-        color: var(--ion-color-block-label-color);
-        font-size: 12px;
+    
+    .rent-history-block {
+        margin-bottom: 5px;
+        ion-label {
+            color: var(--ion-color-block-label-color);
+            font-size: 12px;
+        }
+    
+        ion-text {
+            color: var(--ion-color-text-color);
+            font-size: 13px;
+        }
     }
-
-    ion-text {
-        color: var(--ion-color-text-color);
-        font-size: 13px;
+    
+    .rent-detail-block {
+        text-align: center;
+        ion-label {
+            color: var(--ion-color-block-label-color);
+            font-size: 13px;
+        }
+    
+        ion-text {
+            color: var(--ion-color-text-color);
+            font-size: 15px;
+        }
+        ion-col {
+            height: 55px;
+            background: var(--ion-propert-rent-block-bg);
+            border-top: solid 1px var(--ion-color-body);
+        }
+        .middle-block {
+            border-left: solid 1px var(--ion-color-body);
+            border-right: solid 1px var(--ion-color-body);
+        }
     }
-}
-
-.rent-detail-block {
-    text-align: center;
-    ion-label {
-        color: var(--ion-color-block-label-color);
-        font-size: 13px;
-    }
-
-    ion-text {
-        color: var(--ion-color-text-color);
+    
+    .no-data {
+        justify-content: center;
+        align-items: center;
+        height: 173px;
         font-size: 15px;
     }
-    ion-col {
-        height: 55px;
-        background: var(--ion-propert-rent-block-bg);
-        border-top: solid 1px var(--ion-color-body);
-    }
-    .middle-block {
-        border-left: solid 1px var(--ion-color-body);
-        border-right: solid 1px var(--ion-color-body);
+    
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+        .no-data {
+            height: 195px;
+        }
     }
 }
 
-.no-data {
-    justify-content: center;
-    align-items: center;
-    height: 173px;
-    font-size: 15px;
-}
-
-@media screen and (min-width: 768px) and (max-width: 1024px) {
-    .no-data {
-        height: 195px;
-    }
+ion-grid.landlord-block {
+    border: solid 1px var(--ion-property-details-bg);
 }

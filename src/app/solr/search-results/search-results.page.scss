@@ -274,7 +274,6 @@
           .status {
             color: var(--ion-color-success-shade);
             @include set-text-style(14px, 21px);
-            font-weight: bold;
             text-align: left;
           }
 
