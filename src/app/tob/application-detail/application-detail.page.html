@@ -531,7 +531,7 @@
             </ion-label>
             <ion-input type="text" formControlName="postcode"></ion-input>
             <ion-button color="success" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
-              (click)="getAddressList('personal')">Lookup
+              (click)="getAddressList('personal')">Find
               <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
             </ion-button>
           </ion-item>
@@ -565,7 +565,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
             <ion-label position="floating">Select address</ion-label>
-            <ion-select interface="popover" formControlName="addressdetails"
+            <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" formControlName="addressdetails"
               (ionChange)="getAddressDetails(selectedAddress.value, 'personal')" [disabled]="!addressList"
               #selectedAddress>
               <ion-select-option [value]="address?.id" *ngFor="let address of addressList">{{ address?.text }}
@@ -604,7 +604,7 @@
               </ion-label>
               <ion-input type="text" formControlName="postcode"></ion-input>
               <ion-button class="postcode-search" [disabled]="showAddressLoader || applicationDetails?.isSubmitted" color="success"
-                (click)="getAddressList('correspondence-address')"> Lookup
+                (click)="getAddressList('correspondence-address')"> Find
                 <ion-icon *ngIf="showAddressLoader" name="refresh" class="rotating submit-loader"></ion-icon>
               </ion-button>
             </ion-item>
@@ -639,7 +639,7 @@
           <ion-col size-xs="100" size-sm="33.3">
             <ion-item>
               <ion-label position="floating">Select address</ion-label>
-              <ion-select interface="popover" formControlName="addressdetails"
+              <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" formControlName="addressdetails"
                 (ionChange)="getAddressDetails(forwardingAddress.value, 'correspondence-address')"
                 [disabled]="!forwardingAddressList" #forwardingAddress>
                 <ion-select-option [value]="address?.id" *ngFor="let address of forwardingAddressList">
@@ -972,7 +972,7 @@
               </ion-label>
               <ion-input type="text" formControlName="postcode"></ion-input>
               <ion-button color="success" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
-                (click)="getAddressList('guarantor')">Lookup
+                (click)="getAddressList('guarantor')">Find
                 <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
               </ion-button>
             </ion-item>
@@ -1007,7 +1007,7 @@
           <ion-col size-xs="100" size-sm="33.3">
             <ion-item>
               <ion-label position="floating">Select address</ion-label>
-              <ion-select interface="popover" formControlName="addressdetails"
+              <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" formControlName="addressdetails"
                 (ionChange)="getAddressDetails(selectedGuarantorAddress.value, 'guarantor')"
                 [disabled]="!guarantorAddressList" #selectedGuarantorAddress>
                 <ion-select-option [value]="address?.id" *ngFor="let address of guarantorAddressList">{{ address?.text

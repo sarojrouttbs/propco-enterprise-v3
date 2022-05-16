@@ -46,10 +46,6 @@ const routes: Routes = [
   {
     path: 'agent',
     loadChildren: () => import('./agent/agent.module').then( m => m.AgentPageModule)
-  },
-  {
-    path: 'market-appraisal',
-    loadChildren: () => import('./market-appraisal/market-appraisal.module').then( m => m.MarketAppraisalPageModule)
   }
 ];
 

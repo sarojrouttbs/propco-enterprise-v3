@@ -2,7 +2,7 @@
   <ion-grid class="property-details">
     <ion-row class="property-status">
       <ion-col>
-        <div>{{getLookupValue(propertyData?.propertyInfo?.status, propertyStatuses) || notAvailable}}</div>
+        {{getLookupValue(propertyData?.propertyInfo?.status, propertyStatuses) || notAvailable}}
       </ion-col>
     </ion-row>
     <ion-row class="property-info">

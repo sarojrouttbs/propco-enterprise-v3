@@ -643,3 +643,19 @@ export const BUILD_DETAILS = {
   BUILD_NUMBER: 'Build 45.0',
   BUILD_MONTH_YEAR: 'February 2022'
 };
+
+export const TITLES = [
+  { index: 0, value: 'Mr' },
+  { index: 1, value: 'Mrs' },
+  { index: 2, value: 'Ms' },
+  { index: 3, value: 'Lady' },
+  { index: 4, value: 'Dr' },
+  { index: 5, value: 'Lord' },
+  { index: 6, value: 'Mr & Mrs' },
+  { index: 7, value: 'Mr & Ms' },
+  { index: 8, value: 'Mr & Miss' },
+  { index: 9, value: 'Miss' },
+  { index: 10, value: 'Prof' },
+  { index: 11, value: 'Rt.hon' },
+  { index: 12, value: 'Lt.Sqd' },
+];

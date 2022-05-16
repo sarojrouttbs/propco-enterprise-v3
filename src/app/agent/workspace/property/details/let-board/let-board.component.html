@@ -17,16 +17,16 @@
     </mat-expansion-panel-header>
     <ion-card-content id="details">
       <form [formGroup]="group">
-        <ion-grid class="no-padding">
+        <ion-grid class="no-padding" id="propertyLetBoardDetails">
           <ion-row>
-            <ion-col size="20" class="no-padding-top no-padding-bottom">
+            <ion-col size="20" class="no-padding-top-bottom toggle-btn-top-margin">
               <ion-item lines="none" class="mt-7">
-                <ion-toggle formControlName="isBoardAllowed" color="success">
+                <ion-toggle formControlName="isBoardAllowed" color="primary">
                 </ion-toggle>
                 <ion-text>Board Allowed</ion-text>
               </ion-item>
             </ion-col>
-            <ion-col size="20" class="no-padding-top no-padding-bottom">
+            <ion-col size="20" class="no-padding-top-bottom">
               <mat-form-field appearance="fill">
                 <mat-label> Board Ordered On </mat-label>
                 <input matInput [matDatepicker]="picker1" formControlName="boardOrderedOn" [disabled]="!group.get('isBoardAllowed').value"  readonly>
@@ -34,7 +34,7 @@
                 <mat-datepicker #picker1></mat-datepicker>
               </mat-form-field>
             </ion-col>
-            <ion-col size="20" class="no-padding-top no-padding-bottom">
+            <ion-col size="20" class="no-padding-top-bottom">
               <mat-form-field appearance="fill">
                 <mat-label> Board Removed On </mat-label>
                 <input matInput [matDatepicker]="picker2" formControlName="boardRemovedOn" [disabled]="!group.get('isBoardAllowed').value" readonly>
@@ -42,7 +42,7 @@
                 <mat-datepicker #picker2></mat-datepicker>
               </mat-form-field>
             </ion-col>
-            <ion-col size="20" class="no-padding-top no-padding-bottom">
+            <ion-col size="20" class="no-padding-top-bottom">
               <mat-form-field appearance="fill">
                 <mat-label> Let Agreed Slip Ordered On </mat-label>
                 <input matInput [matDatepicker]="picker3" formControlName="slipOrderedOn" [disabled]="!group.get('isBoardAllowed').value" readonly>
@@ -50,7 +50,7 @@
                 <mat-datepicker #picker3></mat-datepicker>
               </mat-form-field>
             </ion-col>
-            <ion-col size="20" class="no-padding-top no-padding-bottom toggle-btn-top-spacing">
+            <ion-col size="20" class="no-padding-top-bottom">
               <ion-item>
                 <ion-label position="floating"> Board Ref </ion-label>
                 <ion-input formControlName="boardRef" [disabled]="!group.get('isBoardAllowed').value"></ion-input>
