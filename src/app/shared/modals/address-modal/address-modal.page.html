@@ -15,18 +15,25 @@
             <ion-label position="floating">PostCode</ion-label>
             <ion-input formControlName="postcode"></ion-input>
           </ion-item>
+          <app-validation-message [control]="addressDetailsForm.controls.postcode"></app-validation-message>
         </ion-col>
         <ion-col size="30">
-          <ion-button (click)="getAddressList()" style="float: right;">Lookup</ion-button>
+          <ion-button (click)="getAddressList()" style="float: right;" color="success">Lookup</ion-button>
         </ion-col>
         <ion-col size="100" *ngIf="addressList">
           <ion-item>
             <ion-label position="floating">Select Address</ion-label>
-            <ion-select interface="popover" [disabled]="!addressList" formControlName="addressdetails" (ionChange)="getAddressDetails(selectedAddress.value)" #selectedAddress>
+            <ion-select interface="popover" [disabled]="!addressList" formControlName="addressdetails" (ionChange)="getAddressDetails(selectedAddress.value)" #selectedAddress [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="address?.id" *ngFor="let address of addressList">
                 {{ address?.text }}
               </ion-select-option>
             </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100" *ngIf="type=='market-appraisal'">
+          <ion-item>
+            <ion-label position="floating">Organisation Name</ion-label>
+            <ion-input formControlName="company"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="100">
@@ -52,6 +59,7 @@
             <ion-label position="floating">Address Line 1</ion-label>
             <ion-input formControlName="addressLine1"></ion-input>
           </ion-item>
+          <app-validation-message [control]="addressDetailsForm.controls.addressLine1"></app-validation-message>
         </ion-col>
         <ion-col size="100">
           <ion-item>
@@ -76,6 +84,7 @@
             <ion-label position="floating">Town</ion-label>
             <ion-input formControlName="town"></ion-input>
           </ion-item>
+          <app-validation-message [control]="addressDetailsForm.controls.town"></app-validation-message>
         </ion-col>
         <ion-col size="100">
           <ion-item>
@@ -87,6 +96,18 @@
           <ion-item>
             <ion-label position="floating">Country</ion-label>
             <ion-input formControlName="country"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100" *ngIf="type=='market-appraisal'">
+          <ion-item>
+            <ion-label position="floating">Block</ion-label>
+            <ion-input formControlName="block"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100" *ngIf="type=='market-appraisal'">
+          <ion-item>
+            <ion-label position="floating">Pafref</ion-label>
+            <ion-input formControlName="domesticId"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="100">
@@ -109,7 +130,7 @@
   <ion-grid>
     <ion-row>
       <ion-col class="ion-text-end">
-        <ion-button (click)="saveAddress()">Save</ion-button>
+        <ion-button (click)="saveAddress()" color="success">Save</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

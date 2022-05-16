@@ -91,6 +91,7 @@ export class DashboardPage implements OnInit {
     const accessToken = this.commonService.getItem(PROPCO.ACCESS_TOKEN);
     const webKey = this.commonService.getItem(PROPCO.WEB_KEY);
     if (accessToken && webKey) {
+      this.setDefaultHome(true);
       this.loggedInUserData = this.commonService.getItem(PROPCO.USER_DETAILS, true);
       this.loaded = true;
       return;

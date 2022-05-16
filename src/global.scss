@@ -711,6 +711,7 @@ mat-form-field {
 		// }
     .mat-select-arrow-wrapper {
       padding-top: 18px;
+      padding-right: 5px;
       .mat-select-arrow{
         color: var(--ion-color-primary-contrast);
       }
@@ -904,5 +905,12 @@ mat-form-field {
         color: var(--ion-color-property-status-text);
       }
     }    
+  }
+}
+
+#agent-portal {
+  .postcode-find-btn {
+    margin-right: 0px;
+    margin-bottom: 0px;
   }
 }

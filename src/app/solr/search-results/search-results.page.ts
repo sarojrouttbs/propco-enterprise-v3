@@ -484,6 +484,7 @@ export class SearchResultsPage implements OnInit {
   }
 
   getSearchResults() {
+    this.hideMenu('', 'divOverlay');
     this.showSkeleton = true;
     this.solrService
       .entitySearch(this.prepareSearchParams())
@@ -785,5 +786,9 @@ export class SearchResultsPage implements OnInit {
     if (event) {
       event.stopPropagation();
     }
+  }
+
+  toggleSideMenu() {
+    this.hideMenu('', 'divOverlay');
   }
 }
