@@ -1,5 +1,5 @@
 <ion-content id="solr-dashboard">
-  <div class="swap-icon">
+  <div class="swap-icon" (click)="setDefaultHome(false)">
     <img height="35" width="35" src="assets/images/swap.svg" title="Switch back to the old dashboard" (click)="openHomeCategory('OpenPropcoDashBoard')">
   </div>
   <div class="divider"></div>
@@ -15,10 +15,8 @@
         <ion-skeleton-text class="welcome-skeleton" animated *ngIf="!loaded"></ion-skeleton-text>
       </ion-col>
     </ion-row>
-    <!-- <ion-row class="ion-align-items-center ion-justify-content-center ion-margin-vertical"> -->
       <app-search-suggestion [isAuthSuccess]="isAuthSuccess" [entityControl]="entityControl" [pageType]="'dashboard'" *ngIf="loaded"></app-search-suggestion>
       <ion-skeleton-text class="searchbar-skeleton" animated *ngIf="!loaded"></ion-skeleton-text>
-    <!-- </ion-row> -->
     <ion-row class="ion-align-items-center ion-justify-content-center tour-4">
       <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
         <div class="block" (click)="openHomeCategory('OpenApplicantCard')">
