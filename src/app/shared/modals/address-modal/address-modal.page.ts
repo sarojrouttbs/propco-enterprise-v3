@@ -16,19 +16,19 @@ export class AddressModalPage implements OnInit {
   addressList: any[];
   selectedAddress: any;
   type: any;
-
-  @Input() paramAddress: string;
+  paramAddress: any;
+  popoverOptions: any = {
+    cssClass: 'market-apprisal-ion-select'
+  };
 
   constructor(
     private fb: FormBuilder,
     private modalController: ModalController,
-    private navParams: NavParams,
     private commonService: CommonService
   ) {
   }
 
   ngOnInit() {
-    this.address = this.navParams.get('paramAddress');
     this.initiateAddressForm();
     this.setAddress();
   }
@@ -36,7 +36,7 @@ export class AddressModalPage implements OnInit {
   initiateAddressForm() {    
     this.addressDetailsForm = this.fb.group({
       postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
-      organisationName: [''],
+      company: [''],
       addressdetails: [''],
       buildingNumber: [''],
       buildingName: [''],
@@ -48,7 +48,7 @@ export class AddressModalPage implements OnInit {
       town: ['', Validators.required],
       county: [''],
       block: [''],
-      pafref: [''],
+      domesticId: [''],
       country: ['', Validators.required],
       latitude: [''],
       longitude: [''],
@@ -56,21 +56,23 @@ export class AddressModalPage implements OnInit {
   }
 
   setAddress() {
-    if (this.address) {
+    if (this.paramAddress) {
       this.addressDetailsForm.patchValue({
-        postcode: this.address.postcode,
-        buildingNumber: this.address.buildingNumber,
-        buildingName: this.address.buildingName,
-        street: this.address.street,
-        addressLine1: this.address.addressLine1,
-        addressLine2: this.address.addressLine2,
-        addressLine3: this.address.addressLine3,
-        locality: this.address.locality,
-        town: this.address.town,
-        county: this.address.county,
-        country: this.address.country,
-        latitude: this.address.latitude,
-        longitude: this.address.longitude,
+        postcode: this.paramAddress.postcode,
+        buildingNumber: this.paramAddress.buildingNumber,
+        buildingName: this.paramAddress.buildingName,
+        street: this.paramAddress.street,
+        addressLine1: this.paramAddress.addressLine1,
+        addressLine2: this.paramAddress.addressLine2,
+        addressLine3: this.paramAddress.addressLine3,
+        locality: this.paramAddress.locality,
+        town: this.paramAddress.town,
+        county: this.paramAddress.county,
+        country: this.paramAddress.country,
+        latitude: this.paramAddress.latitude,
+        longitude: this.paramAddress.longitude,
+        company: this.paramAddress?.company,
+        domesticId: this.paramAddress?.domesticId,
       });
     }
   }
