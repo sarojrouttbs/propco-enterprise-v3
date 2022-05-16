@@ -33,9 +33,7 @@ export class AddressModalPage implements OnInit {
     this.setAddress();
   }
 
-  initiateAddressForm() {
-    console.log("ttttttt", this.type);
-    
+  initiateAddressForm() {    
     this.addressDetailsForm = this.fb.group({
       postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
       organisationName: [''],
