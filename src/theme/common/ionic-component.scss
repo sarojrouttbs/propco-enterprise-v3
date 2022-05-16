@@ -520,6 +520,34 @@ ion-alert.common-alert-box {
   }
   
 }
+#agent-portal {
+  #market-appraisal{
+    ion-segment{
+      margin-bottom: 10px;
+    }
+    ion-card-content{
+      padding-top: 0;
+      ion-item {
+        --border-color: var(--ion-color-ion-select);
+        ion-label {
+          color: var(--ion-color-ion-label) !important;
+        }
+        ion-select {
+          height: 40px;
+        }
+      }
+    }
+    
+    
+  }
+}
+
+.market-apprisal-ion-select{
+  --width: auto;
+  .sc-ion-select-popover{
+    color: var(--ion-color-ion-label) !important
+  }
+}
 
 .address-selection {
   --width: auto;
