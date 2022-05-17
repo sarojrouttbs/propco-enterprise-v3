@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { PROPCO } from 'src/app/shared/constants';
+import { OWNERSHIP, PROPCO } from 'src/app/shared/constants';
 import { AddressModalPage } from 'src/app/shared/modals/address-modal/address-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { DisplayAsModalPage } from 'src/app/shared/modals/display-as-modal/display-as-modal.page';
@@ -24,6 +24,7 @@ export class MaContactComponent implements OnInit {
   @Input('group') set _(value: any) {
     this.contactForm = value as FormGroup;
   }
+  ownership = OWNERSHIP;
 
   constructor(
     private modalController: ModalController,
@@ -60,19 +61,19 @@ export class MaContactComponent implements OnInit {
   async opneDisplayAsModal() {
     const modal = await this.modalController.create({
       component: DisplayAsModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container ma-modal-container',
       componentProps: {
         displayAs: this.contactForm.value.displayAs,
       },
       backdropDismiss: false
     });
 
-    modal.onDidDismiss().then(async res => { 
-      if(res.data?.llInfo.displayAs){
+    modal.onDidDismiss().then(async res => {
+      if (res.data?.llInfo.displayAs) {
         this.contactForm.get('displayAs').patchValue(res.data?.llInfo.displayAs);
         this.contactForm.patchValue(res.data?.llInfo);
       }
-      
+
     });
     await modal.present();
   }
@@ -80,16 +81,16 @@ export class MaContactComponent implements OnInit {
   async openAddressModal() {
     const modal = await this.modalController.create({
       component: AddressModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container ma-modal-container',
       componentProps: {
-        address: this.address,
+        paramAddress: this.address,
         type: 'market-appraisal'
       },
       backdropDismiss: false
     });
 
     modal.onDidDismiss().then(async res => {
-      if(res.data?.address.addressLine1){
+      if (res.data?.address.addressLine1) {
         this.address = res.data.address;
         this.contactForm.get('address').patchValue(res.data.address);
       }
@@ -97,4 +98,10 @@ export class MaContactComponent implements OnInit {
     await modal.present();
   }
 
+  onOwnershipChange(e) {
+    this.contactForm.get('owners').disable()
+    if (e.detail.value == 'jointly') {
+      this.contactForm.get('owners').enable()
+    }
+  }
 }

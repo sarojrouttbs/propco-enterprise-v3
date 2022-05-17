@@ -1,6 +1,6 @@
 <ion-content id="market-appraisal">
   <ion-segment [(ngModel)]="type" class="segment-card" id="marketAppraisalTabs">
-    <ion-segment-button value="maContact" checked>
+    <ion-segment-button value="contact" checked>
       <ion-label>MA Contact</ion-label>
     </ion-segment-button>
     <ion-segment-button value="property">
@@ -8,7 +8,7 @@
     </ion-segment-button>
   </ion-segment>
 
-  <div [hidden]="type != 'maContact'">
+  <div [hidden]="type != 'contact'">
     <app-ma-contact [group]="maForm.controls['contactForm']"></app-ma-contact>
   </div>
 
@@ -18,9 +18,9 @@
   <div class="button-block">
     <ion-row>
       <ion-col class="ion-text-end">
-        <ion-button (click)="cancel()" color="danger">Cancel</ion-button>
-        <ion-button color="success">Go To Property</ion-button>
-        <ion-button (click)="saveWithoutBooking()" color="success" [disabled]="maForm.get('contactForm').invalid">Save
+        <ion-button color="danger" (click)="cancel()">Cancel</ion-button>
+        <ion-button color="success" (click)="changeSegment()">{{type==='contact'? 'Go To Property' : 'Go To Contact'}}</ion-button>
+        <ion-button color="success" (click)="saveWithoutBooking()" [disabled]="maForm.get('contactForm').invalid">Save
           Without Booking</ion-button>
         <ion-button color="success" [disabled]="maForm.get('contactForm').invalid">Book MA</ion-button>
       </ion-col>
