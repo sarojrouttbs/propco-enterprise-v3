@@ -13,7 +13,10 @@ export class DisplayAsModalPage implements OnInit {
   landlordDetailsForm: FormGroup;
   titles = TITLES;
   displayAs;
-
+  popoverOptions: any = {
+    cssClass: 'market-apprisal-ion-select'
+  };
+  
   constructor(
     private modalController: ModalController,
     private fb: FormBuilder

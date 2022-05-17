@@ -33,10 +33,9 @@ export class AddressModalPage implements OnInit {
     this.setAddress();
   }
 
-  initiateAddressForm() {    
+  initiateAddressForm() {
     this.addressDetailsForm = this.fb.group({
       postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
-      company: [''],
       addressdetails: [''],
       buildingNumber: [''],
       buildingName: [''],
@@ -47,7 +46,6 @@ export class AddressModalPage implements OnInit {
       locality: [''],
       town: ['', Validators.required],
       county: [''],
-      block: [''],
       domesticId: [''],
       country: ['', Validators.required],
       latitude: [''],
@@ -71,7 +69,6 @@ export class AddressModalPage implements OnInit {
         country: this.paramAddress.country,
         latitude: this.paramAddress.latitude,
         longitude: this.paramAddress.longitude,
-        company: this.paramAddress?.company,
         domesticId: this.paramAddress?.domesticId,
       });
     }
@@ -121,6 +118,7 @@ export class AddressModalPage implements OnInit {
         this.addressDetailsForm.get('country').setValue(res.countryName);
         this.addressDetailsForm.get('latitude').setValue(res.latitude);
         this.addressDetailsForm.get('longitude').setValue(res.longitude);
+       this.addressDetailsForm.get('domesticId').setValue(res.domesticId);
       }
     }, error => {
       this.selectedAddress = {};

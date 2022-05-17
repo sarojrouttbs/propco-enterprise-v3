@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { DisplayAsModalPage } from './display-as-modal.page';
 import { Routes, RouterModule } from '@angular/router';
+import { ComponentsModule } from '../../components/components.module';
 
 const routes: Routes = [
   {
@@ -13,14 +14,14 @@ const routes: Routes = [
   }
 ];
 
-
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ComponentsModule
   ],
   declarations: [DisplayAsModalPage],
   exports: [DisplayAsModalPage]
