@@ -540,7 +540,7 @@ ion-alert.common-alert-box {
   }
 }
 
-.market-apprisal-ion-select{
+.market-apprisal-ion-select, .fault-ion-select{
   --width: auto;
   .sc-ion-select-popover{
     color: var(--ion-color-ion-label) !important
@@ -553,9 +553,9 @@ ion-alert.common-alert-box {
     ion-content {
       --background: var(--ion-color-six);
       ion-item {
-        --border-color: var(--ion-color-ion-select);
+        --border-color: var(--ion-color-one);
         ion-label {
-          color: var(--ion-color-ion-label) !important;
+          color: var(--ion-color-three) !important;
         }
       }
     }
