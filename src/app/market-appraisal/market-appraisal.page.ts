@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonService } from '../shared/services/common.service';
+import { ValidationService } from '../shared/services/validation.service';
 import { MarketAppraisalService } from './market-appraisal.service';
 @Component({
   selector: 'app-market-appraisal',
@@ -10,7 +11,7 @@ import { MarketAppraisalService } from './market-appraisal.service';
 })
 export class MarketAppraisalPage implements OnInit {
 
-  type = 'maContact';
+  type = 'contact';
   maForm: FormGroup;
   constructor(
     private commonService: CommonService,
@@ -30,10 +31,10 @@ export class MarketAppraisalPage implements OnInit {
         officeCode: ['', Validators.required],
         enquiryNotes: [''],
         landlordStatus: [''],
-        mobile: [''],
-        homeTelephone: [''],
-        businessTelephone: [''],
-        email: [''],
+        mobile: ['', [Validators.required, ValidationService.numberValidator]],
+        homeTelephone: ['', [Validators.required]],
+        businessTelephone: ['', [Validators.required]],
+        email: ['', [Validators.required, ValidationService.emailValidator]],
         title: [''],
         forename: [''],
         middleName: [''],
@@ -48,14 +49,16 @@ export class MarketAppraisalPage implements OnInit {
           country: [''],
           county: [''],
           locality: [''],
-          pafReference: [''],
-          town: ['']
+          town: [''],
+          domesticId: ['']
         }),
-        displayAs: ['', Validators.required]
+        displayAs: ['', Validators.required],
+        owners: [{ value: '', disabled: true }],
+        ownership: [''],
+        addressee: [''],
+        salutation: ['']
       })
     });
-
-
   }
 
   cancel() {
@@ -66,6 +69,14 @@ export class MarketAppraisalPage implements OnInit {
     });
   }
 
+  changeSegment() {
+    if (this.type === 'contact') {
+      this.type = 'property'
+    } else {
+      this.type = 'contact'
+    }
+  }
+
   saveWithoutBooking() {
     //Scenario 5 : New Landlord - No Property
     //here need to add condition in && for invalid property form
@@ -74,13 +85,14 @@ export class MarketAppraisalPage implements OnInit {
       this.commonService.showConfirm('Market Appraisal', 'Do you wish to continue without creating a property? If No, please fill all the mandatory fields.', '', 'Yes', 'No').then(res => {
         if (res) {
           this.createLandlord();
+        }else{
+          this.type = 'property'
         }
       });
     }
 
     // Scenario 1 : New Landlord - New Property
     // condition: this.maForm.get('contactForm').valid && this.maForm.get('propertyForm').valid
-    // Conformation msg will be: The Contact and/or the Property and their association has been created/modified successfully.
 
   }
 
@@ -89,7 +101,11 @@ export class MarketAppraisalPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.maService.createLandlord(params).subscribe(
         (res) => {
-          resolve(true);
+          this.commonService.showAlert('Notes', 'Contact ' + this.maForm.get('contactForm').value.displayAs + ' has been created successfully', '', 'notes-alert').then(res => {
+            if (res) {
+              this.router.navigate(['agent/dashboard'], { replaceUrl: true });
+            }
+          });
         },
         (error) => {
           resolve(false);
