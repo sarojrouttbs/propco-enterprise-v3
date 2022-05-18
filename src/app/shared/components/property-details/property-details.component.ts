@@ -129,7 +129,7 @@ export class PropertyDetailsComponent implements OnInit {
   async contactDetailModal() {
     const modal = await this.modalController.create({
       component: ContactDetailsModalPage,
-      cssClass: 'modal-container contact-details-modal',
+      cssClass: 'modal-container contact-details-modal fault-modal-container',
       componentProps: {
         landlordDetails: this.landlordDetails,
         tenantId: this.leadTenantId,

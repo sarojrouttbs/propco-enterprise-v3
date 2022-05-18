@@ -240,5 +240,25 @@
       }
     }
   }
+
+
+
+  .mat-tab-group {  
+    .mat-tab-header {
+      .mat-tab-label-container { 
+        .mat-tab-label {
+          background-color: var(--ion-color-four);
+          color: var(--ion-color-one);
+        }
+        .mat-tab-label-active {
+          background-color: var(--ion-color-success);
+        }
+      }
+    }
+  }
 }
 
+.mat-autocomplete-panel {
+  background-color: var(--ion-color-five) !important;
+  color: var(--ion-color-one) !important;
+}

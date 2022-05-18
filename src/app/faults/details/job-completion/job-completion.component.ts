@@ -673,7 +673,7 @@ export class JobCompletionComponent implements OnInit {
   async rejectInvoice() {
     const modal = await this.modalController.create({
       component: RejectInvoiceComponent,
-      cssClass: 'modal-container reject-invoice-modal',
+      cssClass: 'modal-container reject-invoice-modal fault-modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId,
         title: "Reject the Invoice",
@@ -758,7 +758,7 @@ export class JobCompletionComponent implements OnInit {
   async closeFault() {
     const modal = await this.modalController.create({
       component: CloseFaultModalPage,
-      cssClass: 'modal-container close-fault-modal',
+      cssClass: 'modal-container close-fault-modal fault-modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId,
         maitenanceId: this.isMaintenanceDetails ? this.faultMaintenanceDetails.maintenanceId : null
@@ -800,7 +800,7 @@ export class JobCompletionComponent implements OnInit {
   async notificationModal() {
     const modal = await this.modalController.create({
       component: PendingNotificationModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         notificationHistoryId: this.pendingNotification ? this.pendingNotification.notificationHistoryId : '',
         notificationSubject: this.pendingNotification ? this.pendingNotification.subject : '',
@@ -922,7 +922,7 @@ export class JobCompletionComponent implements OnInit {
   async viewBlockManagement() {
     const modal = await this.modalController.create({
       component: BlockManagementModalPage,
-      cssClass: 'modal-container upload-container',
+      cssClass: 'modal-container upload-container fault-modal-container',
       componentProps: {
         blockManagement: this.blockManagement,
         faultCategories: this.faultCategories
@@ -945,7 +945,7 @@ export class JobCompletionComponent implements OnInit {
     }
     const modal = await this.modalController.create({
       component: PropertyCertificateModalPage,
-      cssClass: 'modal-container property-certificates-view',
+      cssClass: 'modal-container property-certificates-view fault-modal-container',
       componentProps: {
         propertyCertificate: category === CERTIFICATES_CATEGORY[0] ? this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0]) : mergedServiceContractAndApplicance,
         certificateId: category === CERTIFICATES_CATEGORY[0] ? this.faultDetails.warrantyCertificateId : this.faultDetails.serviceContractCertificateId,
