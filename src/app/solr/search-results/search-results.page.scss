@@ -105,7 +105,7 @@
         }
 
         &.sidenav-opened{
-          grid-template-columns: 1fr 460px;
+          grid-template-columns: 1fr 500px;
         }
 
         .mat-paginator {
@@ -273,7 +273,7 @@
 
           .status {
             color: var(--ion-color-success-shade);
-            @include set-text-style(14px, 21px);
+            @include set-text-style(14px, 18px);
             text-align: left;
           }
 
@@ -383,4 +383,24 @@
 
 ion-item {
   color: var(--ion-color-text-color);
+}
+
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+  #solr-search-result.main-container {
+    .drawer-container {
+      .solr-pagginater-container {
+        .list-container {
+          .list-view-accordian {
+            .mat-expansion-panel {
+              .mat-expansion-panel-header {
+                .status-action {
+                  grid-template-columns: 120px 32px 37px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
