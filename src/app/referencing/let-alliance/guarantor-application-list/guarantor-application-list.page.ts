@@ -184,7 +184,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   async resendLink() {
     const modal = await this.modalController.create({
       component: ResendLinkModalPage,
-      cssClass: 'modal-container resend-link',
+      cssClass: 'modal-container resend-link la-modal-container',
       backdropDismiss: false,
       componentProps: {
         paramApplicantId: this.selectedData.applicantDetail.applicantId,
@@ -200,7 +200,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
     this.applicationStatus = await this.getApplicationStatus();
     const modal = await this.modalController.create({
       component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: `<div class='status-block'><b>Application Status - </b>${this.getLookupValue(this.applicationStatus.status, this.referencingApplicantStatusTypes)}

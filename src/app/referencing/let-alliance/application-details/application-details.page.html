@@ -5,7 +5,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Property Product Type</ion-label>
-            <ion-select interface="popover" formControlName="productId">
+            <ion-select interface="popover" formControlName="productId" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.productId" *ngFor="let item of referencingCaseProductList">
                 {{ item.productName }}
               </ion-select-option>
@@ -82,7 +82,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Management Type <ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-select interface="popover" formControlName="managementStatus">
+            <ion-select interface="popover" formControlName="managementStatus" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of managementStatusTypes">
                 {{ item.value }}
               </ion-select-option>
@@ -109,7 +109,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Completion Method</ion-label>
-            <ion-select interface="popover" formControlName="completeMethod">
+            <ion-select interface="popover" formControlName="completeMethod" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of completionMethods">
                 {{ item.value }}
               </ion-select-option>
@@ -120,7 +120,7 @@
           <ion-item>
             <ion-label position="floating">Product Type  <ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-select interface="popover" formControlName="productId">
+            <ion-select interface="popover" formControlName="productId" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.productId" *ngFor="let item of referencingApplicationProductList">
                 {{ item.productName }}
               </ion-select-option>
@@ -131,7 +131,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Tenant Type <ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-select interface="popover" formControlName="tenantTypeId" (ionChange)="setValidatorsForForms()">
+            <ion-select interface="popover" formControlName="tenantTypeId" (ionChange)="setValidatorsForForms()" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of tenantTypes">
                 {{ item.value }}
               </ion-select-option>
@@ -150,7 +150,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Title <ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-select interface="popover" (ionChange)='resetOtherTitle()' formControlName="title">
+            <ion-select interface="popover" (ionChange)='resetOtherTitle()' formControlName="title" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of titleTypes">
                 {{ item.value }}
               </ion-select-option>
@@ -204,7 +204,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Marital Status</ion-label>
-            <ion-select interface="popover" formControlName="maritalStatus">
+            <ion-select interface="popover" formControlName="maritalStatus" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of maritalStatusTypes">
                 {{ item.value }}
               </ion-select-option>
@@ -214,7 +214,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Nationality</ion-label>
-            <ion-select interface="popover" formControlName="nationality">
+            <ion-select interface="popover" formControlName="nationality" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of referencingNationalities">
                 {{ item.value }}
               </ion-select-option>
@@ -250,7 +250,7 @@
           <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
             <ion-item>
               <ion-label position="floating">Title</ion-label>
-              <ion-select interface="popover" formControlName="title">
+              <ion-select interface="popover" formControlName="title" [interfaceOptions]="popoverOptions">
                 <ion-select-option [value]="item.index" *ngFor="let item of titleTypes">
                   {{ item.value }}
                 </ion-select-option>
@@ -444,6 +444,7 @@
                 <div class="label-text" [class.success-border]='isPropertyTabDetailSubmit && propertyDetailsForm.valid && tenancyDetailsForm.valid'
                 [class.error-border]='(isPropertyTabDetailSubmit) && (!propertyDetailsForm.valid || !tenancyDetailsForm.valid)'>Property/ Rental Details</div>
               </ng-template>
+              <div class="space-break"></div>
               <div class="accordion-container">
                 <div class="accordion-header" (click)="tenancyDetailsAccordion.expanded = !tenancyDetailsAccordion.expanded">
                   <ion-grid class="ion-no-padding">
@@ -491,6 +492,7 @@
                 <div class="label-text" [class.success-border]='isTenantTabDetailSubmit && tenantDetailsForm.valid'
                 [class.error-border]='isTenantTabDetailSubmit && !tenantDetailsForm.valid'>Tenant Details</div>
               </ng-template>
+              <div class="space-break"></div>
               <div class="accordion-container">
                 <div class="accordion-header" (click)="tenantDetailsAccordion.expanded = !tenantDetailsAccordion.expanded">
                   <ion-grid class="ion-no-padding">
@@ -520,6 +522,7 @@
               <ng-template mat-tab-label>
                 <div class="label-text">Review</div>
               </ng-template>
+              <div class="space-break"></div>
               <div class="accordion-container">
                 <app-accordion-list [expanded]="true">
                     <ng-container *ngTemplateOutlet="finalView"></ng-container>
