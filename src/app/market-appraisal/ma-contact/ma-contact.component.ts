@@ -16,7 +16,7 @@ export class MaContactComponent implements OnInit {
   propertyHeardSources: any;
   officeCodes: any;
   landlordStatuses: any;
-   landlordData;
+  landlordData;
   popoverOptions: any = {
     cssClass: 'market-apprisal-ion-select'
   };
@@ -35,49 +35,48 @@ export class MaContactComponent implements OnInit {
 
   ngOnInit() {
     this.getLookupData();
-    this.marketAppraisalService.landlordChange$.subscribe(data =>{
+    this.marketAppraisalService.landlordChange$.subscribe(data => {
       this.landlordData = data;
-      if(this.landlordData)     this.getLandlordData();
+      if (this.landlordData) this.getLandlordData();
     })
-
   }
 
-  getLandlordData(){
-    if(this.landlordData==='reset'){
+  getLandlordData() {
+    if (this.landlordData === 'reset') {
       this.contactForm.reset();
-      this.landlordData =  '';
+      this.landlordData = '';
       this.address = '';
-    }else{
+    } else {
       this.setData(this.landlordData);
     }
   }
 
-  setData(data){
-     this.address = data.address;
-     this.contactForm.patchValue({
-      displayAs: data.displayAs ? data.displayAs :'',
-      mobile: data.mobile? data.mobile :'',
-      landlordStatus : data.status? data.status :'',
-      email:data.email? data.email :'',
-      homeTelephone:data.homeTelephone? data.homeTelephone :'',
-      businessTelephone : data.businessTelephone? data.businessTelephone :'',
-      enquiryNotes : data.enquiryNotes? data.enquiryNotes :'',
-      owners : data.owners? data.owners :'',
-      heardReason : data.heardReason? this.getIndex(data.heardReason, this.propertyHeardSources):'',
-      officeCode : data.associatedOfficeCode? data.associatedOfficeCode : '',
-      ownership : data.ownership? this.getIndex(data.ownership, this.ownership):''
+  setData(data) {
+    this.address = data.address;
+    this.contactForm.patchValue({
+      displayAs: data.displayAs ? data.displayAs : '',
+      mobile: data.mobile ? data.mobile : '',
+      landlordStatus: data.status ? data.status : '',
+      email: data.email ? data.email : '',
+      homeTelephone: data.homeTelephone ? data.homeTelephone : '',
+      businessTelephone: data.businessTelephone ? data.businessTelephone : '',
+      enquiryNotes: data.enquiryNotes ? data.enquiryNotes : '',
+      owners: data.owners ? data.owners : '',
+      heardReason: data.heardReason ? this.getIndex(data.heardReason, this.propertyHeardSources) : '',
+      officeCode: data.associatedOfficeCode ? data.associatedOfficeCode : '',
+      ownership: data.ownership ? this.getIndex(data.ownership, this.ownership) : ''
     });
   }
 
-  getIndex(value,lookUp){
-   let index ;
-   lookUp.forEach((item:any) => {
-    if(item.value === value) {
-      index= item.index
-    }
-   })
-   return index;
-}
+  getIndex(value, lookUp) {
+    let index;
+    lookUp.forEach((item: any) => {
+      if (item.value === value) {
+        index = item.index
+      }
+    })
+    return index;
+  }
 
   private getLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -108,7 +107,7 @@ export class MaContactComponent implements OnInit {
       cssClass: 'modal-container ma-modal-container',
       componentProps: {
         displayAs: this.contactForm.value.displayAs,
-        landlordData:this.landlordData
+        landlordData: this.landlordData
       },
       backdropDismiss: false
     });
@@ -144,7 +143,7 @@ export class MaContactComponent implements OnInit {
   }
 
   onOwnershipChange(e) {
-    if(this.contactForm){
+    if (this.contactForm) {
       this.contactForm.get('owners').disable()
       if (e.detail.value == 'jointly') {
         this.contactForm.get('owners').enable()
