@@ -93,7 +93,7 @@ export class MarketAppraisalPage implements OnInit {
           maximum: ['', [Validators.required, ValidationService.rentRaneToVal]],
           minimum: ['', Validators.required],
         }),
-        status: ['', Validators.required],
+        status: [null, Validators.required],
         agentName: '',
         advertisementRentFrequency: '',
         numberOfBedroom: ''
@@ -127,6 +127,7 @@ export class MarketAppraisalPage implements OnInit {
       if (landlordCreated) {
         const payload = Object.assign({}, this.maForm.get('propertyForm').value);
         payload.landlordId = landlordCreated.landlordId;
+        payload.status = parseInt(payload.status);
         if (payload.availableFromDate) {
           payload.availableFromDate = this.commonService.getFormatedDate(payload.availableFromDate, 'yyyy-MM-dd');
         }
@@ -138,7 +139,7 @@ export class MarketAppraisalPage implements OnInit {
         }
         const propertyCreated = await this.createProperty(payload);
         if (propertyCreated) {
-          this.commonService.showAlert('Market Appraisal', 'The Contact and/or the Property and their association has been created/modified successfully', '', 'notes-alert').then(res => {
+          this.commonService.showAlert('Market Appraisal', 'The Contact and/or the Property and their association has been created/modified successfully').then(res => {
             if (res) {
               this.router.navigate(['agent/dashboard'], { replaceUrl: true });
             }
@@ -153,7 +154,7 @@ export class MarketAppraisalPage implements OnInit {
       if (confirm) {
         const landlordCreated = await this.createLandlord();
         if (landlordCreated) {
-          this.commonService.showAlert('Notes', 'Contact ' + this.maForm.get('contactForm').value.displayAs + ' has been created successfully', '', 'notes-alert').then(res => {
+          this.commonService.showAlert('Notes', 'Contact ' + this.maForm.get('contactForm').value.displayAs + ' has been created successfully').then(res => {
             if (res) {
               this.router.navigate(['agent/dashboard'], { replaceUrl: true });
             }
