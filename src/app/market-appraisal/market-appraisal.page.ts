@@ -138,7 +138,7 @@ export class MarketAppraisalPage implements OnInit {
         }
         const propertyCreated = await this.createProperty(payload);
         if (propertyCreated) {
-          this.commonService.showAlert('Market Appraisal', 'The Contact and/or the Property and their association has been created/modified successfully', '', 'notes-alert').then(res => {
+          this.commonService.showAlert('Market Appraisal', 'The Contact and/or the Property and their association has been created/modified successfully').then(res => {
             if (res) {
               this.router.navigate(['agent/dashboard'], { replaceUrl: true });
             }
