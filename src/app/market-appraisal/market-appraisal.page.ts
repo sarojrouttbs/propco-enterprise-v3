@@ -101,7 +101,7 @@ export class MarketAppraisalPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.maService.createLandlord(params).subscribe(
         (res) => {
-          this.commonService.showAlert('Notes', 'Contact ' + this.maForm.get('contactForm').value.displayAs + ' has been created successfully', '', 'notes-alert').then(res => {
+          this.commonService.showAlert('Notes', 'Contact ' + this.maForm.get('contactForm').value.displayAs + ' has been created successfully').then(res => {
             if (res) {
               this.router.navigate(['agent/dashboard'], { replaceUrl: true });
             }
