@@ -1,0 +1,424 @@
+<form [formGroup]="propertyForm">
+  <mat-accordion class="list-view-accordian" multi>
+    <mat-expansion-panel #propertyAddress hideToggle [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Property Address
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!propertyAddress.expanded" class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="propertyAddress.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+            </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <ion-card-content id="maPropertyAddress">
+        <ion-grid>
+          <ion-row class="no-padding">
+            <ion-col class="no-padding" size-xs="100" size-sm= "100" size-md="33">
+              <ion-row class="register-address-row">
+                <ion-col size="80"><h2 class="heading">Registered Address</h2></ion-col>
+                <ion-col size="20">
+                  <ion-button (click)="openAddressModal()" color="success">{{address?.addressLine1 ? 'Edit' :
+                    'Add'}}</ion-button>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <div>
+                    <div>{{this.address?.addressLine1}}</div>
+                    <div>{{this.address?.addressLine2}}</div>
+                    <div>{{this.address?.addressLine3}}</div>
+                    <div>{{this.address?.county}}</div>
+                    <div>{{this.address?.locality}}</div>
+                    <div>{{this.address?.town}}</div>
+                    <div>{{this.address?.postcode}}</div>
+                    <div>{{this.address?.country}}</div>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col class="no-padding">
+                  <ion-button (click)="setContactAddress()" color="success" *ngIf="contactGroup.get('address').value.addressLine1">Copy Contact's Address</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col size-xs="100" size-sm= "100" size-md="33">
+              <ion-row class="ion-align-items-end">
+                <ion-col>
+                  <ion-item>
+                  <ion-label position="floating"> Bedrooms</ion-label>
+                  <ion-input formControlName="numberOfBedroom"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-toggle color="primary" formControlName="isStudio"></ion-toggle>
+                    Studio
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Type
+                    </ion-label>
+                    <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="houseType">
+                      <ion-select-option [value]="data?.index" *ngFor="let data of houseTypes">
+                        {{ data?.value }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Style</ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="propertyStyle">
+                    <ion-select-option [value]="data?.index" *ngFor="let data of propertyStyles">
+                      {{ data?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col size-xs="100" size-sm= "100" size-md="33">
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Property Age</ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="propertyAge">
+                    <ion-select-option [value]="data?.index" *ngFor="let data of propertyAges">
+                      {{ data?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Parking</ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="parking">
+                    <ion-select-option [value]="data?.index" *ngFor="let data of parkingTypes">
+                      {{ data?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col class="no-padding">
+                  <ion-item>
+                    <ion-label position="floating">Directions</ion-label>
+                  <ion-textarea rows="1" formControlName="direction"></ion-textarea>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </mat-expansion-panel>
+    <mat-expansion-panel #lettingDetails hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Letting Details
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!lettingDetails.expanded" class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="lettingDetails.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+            </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <ion-card-content id="maLettings">
+        <ion-grid class="no-padding">
+          <ion-row>
+            <ion-col size-xs="100" size-sm= "100" size-md="33" class="no-padding">
+              <ion-row>
+               <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Status <ion-text class="mandatory">*</ion-text>
+                  </ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="status">
+                    <ion-select-option [value]="data?.index" *ngFor="let data of propertyStatuses">
+                      {{ data?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <app-validation-message [control]="propertyForm.controls.status"></app-validation-message>
+               </ion-col>
+               <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Rent Frequency
+                  </ion-label>
+                  <ion-select interface="popover" formControlName="advertisementRentFrequency"  [interfaceOptions]="popoverOptions">
+                    <ion-select-option [value]="data?.index" *ngFor="let data of advertisementRentFrequencies">
+                      {{data?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Office <ion-text class="mandatory">*</ion-text>
+                    </ion-label>
+                    <ion-select interface="popover" [interfaceOptions]="popoverOptions" #office (ionChange)="onOfficeChange(office.value)"
+                    formControlName="office">
+                      <ion-select-option [value]="data?.officeCode" *ngFor="let data of accessibleOffices">
+                        {{ data?.officeName }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                  <app-validation-message [control]="propertyForm.controls.office"></app-validation-message>
+                </ion-col>
+                <ion-col size="50">
+                  <ion-item>
+                    <ion-label position="floating">Marketing Locations
+                    </ion-label>
+                    <ion-select multiple="true" formControlName="propertyLocations"  [interfaceOptions]="popoverOptions">
+                      <ion-select-option [value]="data?.locationId" *ngFor="let data of marketLocations">
+                        {{ data?.locationDisplayAs }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ng-container formGroupName="rentRange">
+                  <ion-col>
+                    <ion-item>
+                      <ion-label position="stacked">Rent Range From <ion-text class="mandatory">*</ion-text>
+                      </ion-label>
+                      <input class="currency-input" currencyMask formControlName="minimum">
+                    </ion-item>
+                    <app-validation-message [control]="propertyForm.controls['rentRange'].get('minimum')"></app-validation-message>
+                  </ion-col>
+                  <ion-col>
+                    <ion-item>
+                      <ion-label position="stacked">Rent Range To <ion-text class="mandatory">*</ion-text>
+                      </ion-label>
+                      <input class="currency-input" currencyMask formControlName="maximum">
+                    </ion-item>
+                    <app-validation-message [control]="propertyForm.controls['rentRange'].get('maximum')"></app-validation-message>
+                  </ion-col>
+                </ng-container>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Furnishing
+                    </ion-label>
+                    <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="furnishingType">
+                      <ion-select-option [value]="data?.index" *ngFor="let data of furnishingTypes">
+                        {{ data?.value }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Reason to Let
+                    </ion-label>
+                    <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="lettingReason">
+                      <ion-select-option [value]="data?.index" *ngFor="let data of propertyLetReasons">
+                        {{ data?.value }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row class="mat-date-picker-row">
+                <ion-col>
+                  <mat-form-field appearance="fill">
+                    <mat-label> Available From <ion-text class="mandatory">*</ion-text></mat-label>
+                    <input matInput [matDatepicker]="frompicker" formControlName="availableFromDate" (dateChange)="calculateTotalDuration()" 
+                    [max]="propertyForm.controls.availableToDate.value" readonly>
+                    <mat-datepicker-toggle matPrefix [for]="frompicker"></mat-datepicker-toggle>
+                    <mat-datepicker #frompicker></mat-datepicker>
+                  </mat-form-field>
+                  <app-validation-message [control]="propertyForm.controls.availableFromDate"></app-validation-message>
+                </ion-col>
+                <ion-col>
+                  <mat-form-field appearance="fill">
+                    <mat-label> Available To </mat-label>
+                    <input matInput [matDatepicker]="topicker" formControlName="availableToDate" (dateChange)="calculateTotalDuration()" 
+                    [min]="propertyForm.controls.availableFromDate.value" readonly>
+                    <mat-datepicker-toggle matPrefix [for]="topicker"></mat-datepicker-toggle>
+                    <mat-datepicker #topicker></mat-datepicker>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <div class="lettingsDetailsDuration">
+                    <div class="totalDuration">Total Duration</div>
+                    <div class="duration">
+                        <span class="countDuration">{{duration.totalYears}}</span>
+                        <span class="durationHeading">YY</span>
+                        <span class="countDuration">{{duration.totalMonths}}</span>
+                        <span class="durationHeading">MM</span>
+                        <span class="countDuration">{{duration.totalDays}}</span>
+                        <span class="durationHeading">DD</span>
+                    </div>
+                </div>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col size-xs="100" size-sm= "100" size-md="33" class="no-padding">
+              <ion-row class="ion-align-items-end">
+                <ion-col size-xs="100" size-sm= "100" size-md="60">
+                  <ion-item lines="none">
+                    <ion-toggle color="primary" formControlName="onWithOtherAgent"></ion-toggle>
+                    On with another Agent?
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">
+                      Agent Name
+                    </ion-label>
+                    <ion-input formControlName="agentName" [value]="!propertyForm.get('onWithOtherAgent').value? '':propertyForm.get('agentName').value" [disabled]="!propertyForm.get('onWithOtherAgent').value"></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row class="ion-align-items-end" style="margin-top: 4px;">
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-toggle color="primary" formControlName="hasLetBefore"></ion-toggle>
+                    Been Let before?
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-label position="floating"></ion-label>
+                    <ion-input hidden></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">How Long Looking to Let?  <ion-text class="mandatory">*</ion-text>
+                    </ion-label>
+                    <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="lettingDuration">
+                      <ion-select-option [value]="data?.index" *ngFor="let data of letDurations">
+                        {{ data?.value }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                  <app-validation-message [control]="propertyForm.controls.lettingDuration"></app-validation-message>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating"> General Notes</ion-label>
+                    <ion-input formControlName="propertyNotes"></ion-input>
+                    </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </mat-expansion-panel>
+    <mat-expansion-panel #hmoDetails hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          HMO Details
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!hmoDetails.expanded" class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="hmoDetails.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+            </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <ion-card-content id="hmoDetails">
+        <ion-grid class="no-padding">
+          <ion-row>
+            <ion-col size-xs="100" size-sm= "100" size-md="33">
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">No of Bathrooms
+                    </ion-label>
+                    <ion-select interface="popover"  [interfaceOptions]="popoverOptions">
+                      <ion-select-option>
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">No of Kitchens
+                    </ion-label>
+                    <ion-select interface="popover"  [interfaceOptions]="popoverOptions">
+                      <ion-select-option>
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Max. Persons
+                    </ion-label>
+                    <ion-select interface="popover"  [interfaceOptions]="popoverOptions">
+                      <ion-select-option>
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Max. Households
+                    </ion-label>
+                    <ion-select interface="popover"  [interfaceOptions]="popoverOptions">
+                      <ion-select-option>
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row class="ion-align-items-end">
+                <ion-col class="no-padding">
+                  <ion-item lines="none">
+                    <ion-toggle color="primary"></ion-toggle>
+                    Shared Facilities
+                  </ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item lines="none">
+                    <ion-label position="floating"></ion-label>
+                    <ion-input hidden></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col class="no-padding">
+                  <ion-button color="success">Check HMO License</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </mat-expansion-panel>
+  </mat-accordion>
+</form>
