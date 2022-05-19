@@ -45,7 +45,6 @@ export class LandlordSearchComponent implements OnInit {
   }
 
   SelectProperty(item){
-
     this.marketAppraisalService.propertyChangeEvent(item);
     this.searchTerm = '';
     this.isPropertyItemAvailable = false;
@@ -63,30 +62,49 @@ export class LandlordSearchComponent implements OnInit {
 
   reset(){
     this.searchTerm = '';
-    this.marketAppraisalService.landlordValueChange('reset');
+    if(this.type === 'contact'){
+      this.marketAppraisalService.landlordValueChange('reset');
+    }
+    if(this.type === 'property'){
+      this.marketAppraisalService.propertyChangeEvent('reset');
+    }
   }
 
  getItems(ev: any) {
-  this.initializeItems();
-  const searchText = ev.target.value;
-  if (searchText && searchText.trim() !== '' && searchText.length > 3) {
-    this.getSuggestions(this.prepareSearchParams(searchText));
-  } else {
-    this.isItemAvailable = false;
+
+  if(this.type === 'contact'){
+    this.initializeItems();
+    const searchText = ev.target.value;
+    if (searchText && searchText.trim() !== '' && searchText.length > 3) {
+      this.getSuggestions(this.prepareSearchParams(searchText,'LANDLORD'));
+    } else {
+      this.isItemAvailable = false;
+    }
+  }
+ 
+  if(this.type === 'property'){
+    this.initializePropertyItems();
+    const searchText = ev.target.value;
+    if (searchText && searchText.trim() !== '' && searchText.length > 3) {
+      this.getSuggestions(this.prepareSearchParams(searchText,'PROPERTY'));
+    } else {
+      this.isPropertyItemAvailable = false;
+    }
   }
 }
 
 
 serchItem(){
   const searchText = this.searchTermControl.value;
-  if (searchText && searchText.trim() !== '' && searchText.length > 3) {
-    this.getSuggestions(this.prepareSearchParams(searchText));
-  } else {
-    this.isItemAvailable = false;
-  }
+  if (this.type === 'contact' && searchText && searchText.trim() !== '' && searchText.length > 3) {
+    this.getSuggestions(this.prepareSearchParams(searchText,'LANDLORD'));
+  } 
+
+  if (this.type === 'property' && searchText && searchText.trim() !== '' && searchText.length > 3) {
+    this.getSuggestions(this.prepareSearchParams(searchText,'PROPERTY'));
+  } 
+  
 }
-
-
 
 private getLandlordDetails(landlordId) {
   const promise = new Promise((resolve, reject) => {
@@ -118,33 +136,36 @@ private getLandlordProperties(landlordId) {
   return promise;
 }
 
-
-
-
-
 private getSuggestions(params: HttpParams) {
   this.showLoader = true;
   this.solrService.entityGetSuggestion(params).subscribe((res) => {
-    this.suggestions = res ? res : [];
-    if (this.suggestions.length > 0) {
-      this.isItemAvailable = true;
-    }
+
+
+if (this.type === 'property'){
+  this.propertySuggestion = res ? res : [];
+  if (this.propertySuggestion.length > 0) {
+    this.isPropertyItemAvailable = true;
+  }
+}else{
+  this.suggestions = res ? res : [];
+  if (this.suggestions.length > 0) {
+    this.isItemAvailable = true;
+  }
+}
     this.showLoader = false;
   });
 }
 
 
-
-private prepareSearchParams(searchText: string) {
+private prepareSearchParams(searchText: string,searchTypes) {
   return (
     new HttpParams()
       .set('searchTerm', searchText)
-      .set('searchTypes', 'LANDLORD')
+      .set('searchTypes',searchTypes )
       .set('searchSwitch', 'true')
       .set('hideLoader', 'true')
   );
 }
-
 
 hideSuggestion() {
   setTimeout(() => {
