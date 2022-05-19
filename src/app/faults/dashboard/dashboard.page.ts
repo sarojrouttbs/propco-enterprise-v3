@@ -92,6 +92,9 @@ export class DashboardPage implements OnInit {
   currentDate;
   maintSourceTypes = MAINT_SOURCE_TYPES;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
+  popoverOptions: any = {
+    cssClass: 'fault-modal-container'
+  };
 
   constructor(
     private commonService: CommonService,
@@ -312,7 +315,7 @@ export class DashboardPage implements OnInit {
   async notesModal() {
     const modal = await this.modalController.create({
       component: NotesModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         notesType: NOTES_TYPE.FAULT,
         notesTypeId: this.selectedData.faultId,
@@ -333,7 +336,7 @@ export class DashboardPage implements OnInit {
     const headingText = 'Escalate Repair';
     const modal = await this.modalController.create({
       component: EscalateModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         heading: headingText,
         faultId: this.selectedData.faultId
@@ -369,7 +372,7 @@ export class DashboardPage implements OnInit {
   async closeFault() {
     const modal = await this.modalController.create({
       component: CloseFaultModalPage,
-      cssClass: 'modal-container close-fault-modal',
+      cssClass: 'modal-container close-fault-modal fault-modal-container',
       componentProps: {
         faultId: this.selectedData.faultId,
         maintenanceId: this.selectedData.maintenanceId
