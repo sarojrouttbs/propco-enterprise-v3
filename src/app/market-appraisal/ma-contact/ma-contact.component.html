@@ -156,21 +156,15 @@
               </ion-row>
             </ion-col>
             <ion-col size="50"></ion-col>
-            <ion-col size="50">
-             <ion-row *ngIf="this.address?.addressLine1">
-                <!-- <ion-col size="100"> -->
-                  <div>
-                    <div>{{this.address?.addressLine1}}</div>
-                    <div>{{this.address?.addressLine2}}</div>
-                    <div>{{this.address?.addressLine3}}</div>
-                    <div>{{this.address?.country}}</div>
-                    <div>{{this.address?.county}}</div>
-                    <div>{{this.address?.locality}}</div>
-                    <div>{{this.address?.town}}</div>
-                    <div>{{this.address?.postcode}}</div>
-                  </div>
-                <!-- </ion-col> -->
-              </ion-row>
+            <ion-col size="50" class="address-details-block" *ngIf="this.address?.addressLine1">
+              <div>{{this.address?.addressLine1}}</div>
+              <div>{{this.address?.addressLine2}}</div>
+              <div>{{this.address?.addressLine3}}</div>
+              <div>{{this.address?.county}}</div>
+              <div>{{this.address?.locality}}</div>
+              <div>{{this.address?.town}}</div>
+              <div>{{this.address?.country}}</div>
+              <div>{{this.address?.postcode}}</div>
             </ion-col>
           </ion-row>
         </ion-grid>
