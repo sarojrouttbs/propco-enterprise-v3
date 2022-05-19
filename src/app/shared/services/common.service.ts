@@ -38,19 +38,13 @@ export class CommonService {
     // this.alertPresented = false;
   }
 
+
+
   private dataChange = new Subject<any>();
   dataChanged$ = this.dataChange.asObservable();
 
   dataChanged(data) {
     this.dataChange.next(data);
-  }
-
-
-  private lanlordChange = new Subject<any>();
-  lanlordChange$ = this.lanlordChange.asObservable();
-
-  lanlordValueChange(data) {
-    this.lanlordChange.next(data);
   }
 
 

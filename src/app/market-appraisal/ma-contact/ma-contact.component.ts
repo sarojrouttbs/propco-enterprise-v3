@@ -5,6 +5,7 @@ import { OWNERSHIP, PROPCO } from 'src/app/shared/constants';
 import { AddressModalPage } from 'src/app/shared/modals/address-modal/address-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { DisplayAsModalPage } from 'src/app/shared/modals/display-as-modal/display-as-modal.page';
+import { MarketAppraisalService } from 'src/app/market-appraisal/market-appraisal.service';
 @Component({
   selector: 'app-ma-contact',
   templateUrl: './ma-contact.component.html',
@@ -29,11 +30,12 @@ export class MaContactComponent implements OnInit {
   constructor(
     private modalController: ModalController,
     private commonService: CommonService,
+    private marketAppraisalService: MarketAppraisalService
   ) { }
 
   ngOnInit() {
     this.getLookupData();
-    this.commonService.lanlordChange$.subscribe(data =>{
+    this.marketAppraisalService.landlordChange$.subscribe(data =>{
       this.landlordData = data;
       if(this.landlordData)     this.getLandlordData();
     })
