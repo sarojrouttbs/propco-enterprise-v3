@@ -51,7 +51,9 @@ export class GuarantorDetailsPage implements OnInit {
   tenantTypes: any[] = [];
 
   adultDate = this.datepipe.transform(new Date().setDate(new Date().getDay() - (18 * 365)), 'yyyy-MM-dd');
-
+  popoverOptions: any = {
+    cssClass: 'let-alliance-ion-select'
+  };
   constructor(
     private fb: FormBuilder,
     private modalController: ModalController,
@@ -205,7 +207,7 @@ export class GuarantorDetailsPage implements OnInit {
   private async applicationAlert(isRedirectDashboard?: boolean) {
     const modal = await this.modalController.create({
       component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: `<div class='status-block'>There is an application in process for this guarantor. You cannot start another application until the processing of existing application has been completed.
@@ -495,7 +497,7 @@ export class GuarantorDetailsPage implements OnInit {
   async cancelApplication(){
     const modal = await this.modalController.create({
       component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: `<div class="center-block">The data entered has not been saved, do you want to exit the Application?

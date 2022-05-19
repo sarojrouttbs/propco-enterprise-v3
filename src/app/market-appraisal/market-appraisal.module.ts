@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
@@ -13,6 +13,18 @@ import { AddressModalPageModule } from '../shared/modals/address-modal/address-m
 import { LandlordSearchComponent } from './landlord-search/landlord-search.component';
 import { FaultsService } from 'src/app/faults/faults.service';
 
+import { MaPropertyComponent } from './ma-property/ma-property.component';
+import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+import { PipesModule } from '../shared/pipes/pipes.module';
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  decimal: ".",
+  precision: 2,
+  prefix: "£ ",
+  suffix: "",
+  thousands: ","
+};
 @NgModule({
   imports: [
 CommonModule,
@@ -23,9 +35,11 @@ CommonModule,
     ReactiveFormsModule,
     MarketAppraisalPageRoutingModule,
     DisplayAsModalPageModule,
-    AddressModalPageModule
+    AddressModalPageModule,
+    CurrencyMaskModule,
+    PipesModule
   ],
-  declarations: [MarketAppraisalPage, MaContactComponent,LandlordSearchComponent],
-  providers:[FaultsService]
+  declarations: [MarketAppraisalPage, MaContactComponent, MaPropertyComponent,LandlordSearchComponent],
+  providers: [FaultsService,CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
 })
 export class MarketAppraisalPageModule { }

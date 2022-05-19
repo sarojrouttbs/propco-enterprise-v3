@@ -2111,7 +2111,7 @@ export class DetailsPage implements OnInit {
   async snoozeFault() {
     const modal = await this.modalController.create({
       component: SnoozeFaultModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId,
       },
@@ -2204,7 +2204,7 @@ export class DetailsPage implements OnInit {
       this.isContractorModal = true;
       const modal = await this.modalController.create({
         component: ContractorDetailsModalPage,
-        cssClass: 'modal-container ll-contractor-modal',
+        cssClass: 'modal-container ll-contractor-modal fault-modal-container',
         componentProps: {
           faultId: this.faultId,
           landlordId: this.landlordDetails.landlordId,
@@ -2265,7 +2265,7 @@ export class DetailsPage implements OnInit {
   async notificationModal() {
     const modal = await this.modalController.create({
       component: PendingNotificationModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         notificationHistoryId: this.pendingNotification ? this.pendingNotification.notificationHistoryId : '',
         notificationSubject: this.pendingNotification ? this.pendingNotification.subject : '',
@@ -2316,7 +2316,7 @@ export class DetailsPage implements OnInit {
   async openJobCompletionModal(title) {
     const modal = await this.modalController.create({
       component: JobCompletionModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         faultNotificationId: this.cliNotification.faultNotificationId,
         heading: 'Mark the Job Complete',
@@ -2576,7 +2576,7 @@ export class DetailsPage implements OnInit {
   private async paymentRequestModal(data) {
     const modal = await this.modalController.create({
       component: PaymentRequestModalPage,
-      cssClass: 'modal-container payment-request-modal',
+      cssClass: 'modal-container payment-request-modal fault-modal-container',
       componentProps: data,
       backdropDismiss: false
     });

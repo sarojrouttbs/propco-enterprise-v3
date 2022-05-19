@@ -216,7 +216,7 @@ export class FaultQualificationComponent implements OnInit {
   async openModal(data) {
     const modal = await this.modalController.create({
       component: BranchDetailsModalPage,
-      cssClass: 'modal-container fault-qualification-modal',
+      cssClass: 'modal-container fault-qualification-modal fault-modal-container',
       componentProps: {
         branchDetails: data
       },
@@ -430,7 +430,7 @@ export class FaultQualificationComponent implements OnInit {
   async closeFault() {
     const modal = await this.modalController.create({
       component: CloseFaultModalPage,
-      cssClass: 'modal-container close-fault-modal',
+      cssClass: 'modal-container close-fault-modal fault-modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId
       },
@@ -451,7 +451,7 @@ export class FaultQualificationComponent implements OnInit {
   async viewTenancyClause() {
     const modal = await this.modalController.create({
       component: TenancyClauseModalPage,
-      cssClass: 'modal-container tenancy-clause-modal',
+      cssClass: 'modal-container tenancy-clause-modal fault-modal-container',
       componentProps: {
         tenancyClauses: this.tenancyClauses
       },
@@ -495,7 +495,7 @@ export class FaultQualificationComponent implements OnInit {
     }
     const modal = await this.modalController.create({
       component: PropertyCertificateModalPage,
-      cssClass: 'modal-container property-certificates-list',
+      cssClass: 'modal-container property-certificates-list fault-modal-container',
       componentProps: {
         propertyCertificate: category === CERTIFICATES_CATEGORY[0] ? this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0]) : mergedServiceContractAndApplicance,
         certificateId: category === CERTIFICATES_CATEGORY[0] ?
@@ -676,7 +676,7 @@ export class FaultQualificationComponent implements OnInit {
   async viewBlockManagement() {
     const modal = await this.modalController.create({
       component: BlockManagementModalPage,
-      cssClass: 'modal-container upload-container',
+      cssClass: 'modal-container upload-container fault-modal-container',
       componentProps: {
         blockManagement: this.blockManagement,
         faultCategories: this.faultCategories
@@ -781,7 +781,7 @@ export class FaultQualificationComponent implements OnInit {
   async openJobCompletionModal(title) {
     const modal = await this.modalController.create({
       component: JobCompletionModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         faultNotificationId: this.iqfNotification.faultNotificationId,
         heading: 'Mark the Job Complete',

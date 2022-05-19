@@ -15,6 +15,7 @@
   </div>
 
   <div [hidden]="type != 'property'">
+    <app-ma-property [group]="maForm.controls['propertyForm']" [contactGroup]="maForm.controls['contactForm']"></app-ma-property>
   </div>
 
   <div class="button-block">

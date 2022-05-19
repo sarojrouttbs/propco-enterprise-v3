@@ -294,7 +294,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     else{
       const modal = await this.modalController.create({
         component: SimpleModalPage,
-        cssClass: 'modal-container alert-prompt',
+        cssClass: 'modal-container alert-prompt la-modal-container',
         backdropDismiss: false,
         componentProps: {
           data: `<div class="status-block">There are no guarantors with this application. Do you wish to add one now?
@@ -338,7 +338,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     if(this.selectedData.applicationStatus == 0){
       const modal = await this.modalController.create({
         component: ResendLinkModalPage,
-        cssClass: 'modal-container resend-link',
+        cssClass: 'modal-container resend-link la-modal-container',
         backdropDismiss: false,
         componentProps: {
           paramApplicantId: this.selectedData.applicantDetail.applicantId,
@@ -355,7 +355,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     this.applicationStatus = await this.getApplicationStatus();
     const modal = await this.modalController.create({
       component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: `<div class='status-block'><b>Application Status - </b>${this.getLookupValue(this.applicationStatus.status, this.referencingApplicantStatusTypes)}

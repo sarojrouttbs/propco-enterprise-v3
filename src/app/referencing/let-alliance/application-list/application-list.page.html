@@ -65,7 +65,7 @@
                 <ion-input formControlName="searchTerm"></ion-input>
               </ion-item>
           </ion-col>
-          <ion-col size-xl="21" size-lg="23" size-md="38" size-sm="50" size-xs="100" style="padding-top:21px">
+          <ion-col size-xl="21" size-lg="23" size-md="38" size-sm="50" size-xs="100">
             <mat-form-field appearance="fill">
               <mat-label>Date of Submission From</mat-label>
               <input matInput [matDatepicker]="picker" [max]="currentDate" formControlName="fromDate" readonly>
@@ -76,7 +76,7 @@
               Please enter From
            </div>
           </ion-col>
-          <ion-col size-xl="21" size-lg="23" size-md="38" size-sm="50" size-xs="100" style="padding-top:21px">
+          <ion-col size-xl="21" size-lg="23" size-md="38" size-sm="50" size-xs="100">
             <mat-form-field appearance="fill">
               <mat-label>Date of Submission To</mat-label>
               <input matInput [matDatepicker]="picker1" [max]="currentDate" formControlName="toDate" readonly>
@@ -87,7 +87,7 @@
               To cannot be before and equal to From
            </div>
           </ion-col>
-          <ion-col class="ion-text-end ion-align-self-end" size-xl="16" size-lg="19" size-md="24" size-sm="100" size-xs="100">
+          <ion-col class="ion-text-end ion-align-self-center" size-xl="16" size-lg="19" size-md="24" size-sm="100" size-xs="100">
             <ion-button class="submit-button" style="margin: 0px 5px;" (click)="getApplicationList()" [disabled]="!this.applicationFilterForm.valid">Submit</ion-button>
             <ion-button class="reset-button no-margin-right" (click)="resetFilter()" style="margin-left: 5px;">Reset</ion-button>
           </ion-col>

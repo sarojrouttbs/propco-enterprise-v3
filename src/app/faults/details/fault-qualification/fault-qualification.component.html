@@ -6,7 +6,7 @@
   </ion-row>
 
   <ion-row *ngIf="iqfNotification && !showSkeleton && !faultDetails?.isClosed">
-    <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+    <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background border-top-radious border-bottom-radious">
       <div class="fault-qualification">
         <div class="banner">
           <ion-row>
@@ -181,7 +181,7 @@
 <ion-grid *ngIf="(!iqfNotification || iqfNotification?.templateCode === 'FI-T-E-1') && !showSkeleton">
   <form [formGroup]="faultQualificationForm">
     <ion-row>
-      <ion-col class="card">
+      <ion-col class="card secondary-background">
         <h3>Management Keys</h3>
         <h5>Does branch hold Management Keys?</h5>
         <ion-row>
@@ -212,7 +212,7 @@
         <ion-text color="danger" *ngIf="faultDetails.isTenantPresenceRequired === true">Tenant presence required</ion-text>
       </ion-col>
 
-      <ion-col class="card">
+      <ion-col class="card secondary-background">
         <h3>Tenancy Clause</h3>
         <h5>Are there any maintenance specific tenancy clauses?</h5>
         <ion-row>
@@ -246,7 +246,7 @@
         <ion-text color="danger" *ngIf="!tenancyClauses">{{DEFAULT_MESSAGES.NO_DETAILS_AVAILABLE}}</ion-text>
       </ion-col>
 
-      <ion-col class="card">
+      <ion-col class="card secondary-background">
         <h3>Block Management</h3>
         <h5>Is the repair Block Management Company's responsibility? </h5>
         <ion-row>
@@ -279,7 +279,7 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col class="card">
+      <ion-col class="card secondary-background">
         <h3>Guarantee / Warranty</h3>
         <h5>Is the repair covered by a Guarantee / Warranty? </h5>
         <ion-row>
@@ -312,7 +312,7 @@
         </ion-row>
         <ion-text color="danger" *ngIf="!certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0])?.length">{{DEFAULT_MESSAGES.NO_DETAILS_AVAILABLE}}</ion-text>
       </ion-col>
-      <ion-col class="card">
+      <ion-col class="card secondary-background">
         <h3>Service Contract/ Appliance Cover</h3>
         <h5>Is the repair covered by a Service Contract/ Appliance Cover?</h5>
         <ion-row>
