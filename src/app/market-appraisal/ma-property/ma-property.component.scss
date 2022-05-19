@@ -1,4 +1,4 @@
-#maPropertyAddress {
+#ma-property-address {
     .heading {
         color: var(--ion-color-one);
     }
@@ -8,18 +8,18 @@
     }
 }
 
-#maLettings {
+#ma-lettings {
     .mat-date-picker-row {
         margin-top: 24px;
     }
 
-    .lettingsDetailsDuration {
+    .lettings-details-duration {
         background-color: var(--ion-color-two);
         border-radius: 10px;
         padding-top: 10px;
         padding-bottom: 10px;
 
-        .totalDuration {
+        .total-duration {
             color: var(--ion-color-success);
             text-align: center;
         }
@@ -27,13 +27,13 @@
         .duration {
             text-align: center;
 
-            .countDuration {
+            .count-duration {
                 color: var(--ion-color-four);
                 font-size: 20px;
                 padding-right: 3%;
             }
 
-            .durationHeading {
+            .duration-heading {
                 color: var(--ion-color-three);
                 padding-right: 5%;
             }
