@@ -204,14 +204,14 @@ export class CommonService {
     }
   }
 
-  async showAlert(title: string, displayText: string, subtitle?: string, customeClass?) {
+  async showAlert(title: string, displayText: string, subtitle?: string) {
     return new Promise((resolve, reject) => {
       let alertPopup: any;
       this.alertCtrl.create({
         header: title,
         subHeader: subtitle ? subtitle : undefined,
         message: displayText,
-        cssClass: customeClass ? customeClass : 'common-alert-box',
+        cssClass: 'common-alert-box',
         buttons: [{
           text: 'OK',
           handler: () => {

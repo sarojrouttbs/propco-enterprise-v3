@@ -236,7 +236,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
 
   showNoteDescription(noteText): void {
     if (noteText) {
-      this.commonService.showAlert('Notes', noteText, '', 'notes-alert');
+      this.commonService.showAlert('Notes', noteText);
     }
   }
 }
