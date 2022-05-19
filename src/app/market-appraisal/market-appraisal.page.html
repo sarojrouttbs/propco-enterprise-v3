@@ -8,6 +8,8 @@
     </ion-segment-button>
   </ion-segment>
 
+  <app-landlord-search [type]="type"></app-landlord-search>
+
   <div [hidden]="type != 'contact'">
     <app-ma-contact [group]="maForm.controls['contactForm']"></app-ma-contact>
   </div>
