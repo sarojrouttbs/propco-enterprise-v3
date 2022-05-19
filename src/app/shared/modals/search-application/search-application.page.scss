@@ -7,7 +7,7 @@ ion-content {
 }
 
 .search-option {
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid var(--ion-color-three);
   display: inline-block;
   .ref-number {
     color: var(--ion-color-success);
