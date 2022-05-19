@@ -128,7 +128,7 @@ export class DashboardPage implements OnInit {
   async quickSearch(){
     const modal = await this.modalController.create({
       component: SearchApplicationPage,
-      cssClass: 'modal-container la-application-search',
+      cssClass: 'modal-container la-application-search la-modal-container',
       backdropDismiss: false
     });
     const data = modal.onDidDismiss().then(res => {
@@ -144,7 +144,7 @@ export class DashboardPage implements OnInit {
     this.applicationStatus = await this.getApplicationStatus();
     const modal = await this.modalController.create({
       component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: `<div class='status-block'><b>Application Status - </b>${this.getLookupValue(this.applicationStatus.status, this.referencingApplicantStatusTypes)}
