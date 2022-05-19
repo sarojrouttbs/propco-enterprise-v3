@@ -93,7 +93,7 @@ export class MarketAppraisalPage implements OnInit {
           maximum: ['', [Validators.required, ValidationService.rentRaneToVal]],
           minimum: ['', Validators.required],
         }),
-        status: ['', Validators.required],
+        status: [null, Validators.required],
         agentName: '',
         advertisementRentFrequency: '',
         numberOfBedroom: ''
@@ -127,6 +127,7 @@ export class MarketAppraisalPage implements OnInit {
       if (landlordCreated) {
         const payload = Object.assign({}, this.maForm.get('propertyForm').value);
         payload.landlordId = landlordCreated.landlordId;
+        payload.status = parseInt(payload.status);
         if (payload.availableFromDate) {
           payload.availableFromDate = this.commonService.getFormatedDate(payload.availableFromDate, 'yyyy-MM-dd');
         }
