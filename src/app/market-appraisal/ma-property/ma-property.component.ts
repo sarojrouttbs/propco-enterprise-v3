@@ -6,6 +6,7 @@ import { PROPCO } from 'src/app/shared/constants';
 import { AddressModalPage } from 'src/app/shared/modals/address-modal/address-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { MarketAppraisalService } from '../market-appraisal.service';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-ma-property',
@@ -36,6 +37,8 @@ export class MaPropertyComponent implements OnInit {
   advertisementRentFrequencies: any;
   accessibleOffices: any;
   marketLocations: any;
+  propertyData;
+  propertyDetails;
   duration = {
     totalYears: '00',
     totalMonths: '00',
@@ -49,6 +52,7 @@ export class MaPropertyComponent implements OnInit {
   ngOnInit() {
     this.getLookupData();
     this.initApiCalls();
+    this.getPropertyData();
   }
 
   private getLookupData() {
@@ -64,12 +68,46 @@ export class MaPropertyComponent implements OnInit {
     }
   }
 
+  getPropertyData(){
+    this.maService.propertyChange$.subscribe(res =>{
+      console.log('res received',res);
+      this.propertyData = res;
+      this.setPropertyData(this.propertyData)
+    })
+  }
+
+  setPropertyData(data){
+    this.address = data.propertyAddress
+    this.propertyForm.patchValue({
+
+    })
+  }
+
   private async initApiCalls() {
     const offices = await this.getAccessibleOffices();
+    const propertyDetails = await this.getPropertyDetails('438d2a62-aca0-11ea-8ddb-02420aff051f');
+    console.log('propertyDetails',propertyDetails)
     if (offices) {
       this.accessibleOffices = offices;
     }
   }
+
+  getPropertyDetails(propertyId) {
+    let params = new HttpParams().set("hideLoader", "true");
+    const promise = new Promise((resolve, reject) => {
+      this.maService.getPropertyDetails(propertyId, params).subscribe(
+        (res) => {
+          resolve(res.data);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+ 
 
   private setLookupData(data) {
     this.propertyStyles = data.propertyStyles;
