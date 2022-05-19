@@ -31,9 +31,11 @@ export class LandlordSearchComponent implements OnInit {
   constructor(private commonService:CommonService,private solrService:SolrService, private faultsService:FaultsService, private agentService:AgentService) { }
 
   ngOnInit() {
+
   }
 
-  async SelectLandlord(item){
+   SelectLandlord(item){
+     this.searchTerm = '';
     this.getLandlordDetails(item.entityId);
     this.getLandlordProperties(item.entityId);
     this.isItemAvailable = false;
@@ -41,18 +43,19 @@ export class LandlordSearchComponent implements OnInit {
 
   }
 
+  SelectProperty(item){
+    this.searchTerm = '';
+    this.isPropertyItemAvailable = false;
+    this.initializePropertyItems();
+  }
+
   onFocus(){
     if(this.type === 'contact' && this.suggestions.length ){
         this.isItemAvailable = true;
-    }else{
-      this.isItemAvailable = false;
     }
-
     if(this.type === 'property' && this.propertySuggestion.length ){
       this.isPropertyItemAvailable = true;
-  }else{
-    this.isPropertyItemAvailable = false;
-  }
+     }
   }
 
   reset(){
@@ -63,6 +66,16 @@ export class LandlordSearchComponent implements OnInit {
  getItems(ev: any) {
   this.initializeItems();
   const searchText = ev.target.value;
+  if (searchText && searchText.trim() !== '' && searchText.length > 3) {
+    this.getSuggestions(this.prepareSearchParams(searchText));
+  } else {
+    this.isItemAvailable = false;
+  }
+}
+
+
+serchItem(){
+  const searchText = this.searchTermControl.value;
   if (searchText && searchText.trim() !== '' && searchText.length > 3) {
     this.getSuggestions(this.prepareSearchParams(searchText));
   } else {
@@ -94,9 +107,6 @@ private getLandlordProperties(landlordId) {
     this.faultsService.getLandlordProperties(landlordId).subscribe(
       res => {
         this.propertySuggestion = res ? res.data : [];
-        if (this.propertySuggestion.length > 0) {
-          this.isPropertyItemAvailable = true;
-        }
       },
       error => {
         reject(null);
@@ -143,6 +153,7 @@ hideSuggestion() {
 initializeItems() {
   this.suggestions = [];
 }
-
-
+initializePropertyItems() {
+  this.propertySuggestion = [];
+}
 }

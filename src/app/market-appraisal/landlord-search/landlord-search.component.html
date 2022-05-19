@@ -11,7 +11,7 @@
   </ion-col>
 
   <ion-col class="ion-no-padding tour-3 pointer" size=5>
-    <ion-buttons color="success" end (click)="goToPage()">
+    <ion-buttons color="success" end (click)="serchItem()">
       <i class="propcoicon propcoicon-search no-background green-icon search-icon"></i>
     </ion-buttons>
   </ion-col>
@@ -36,7 +36,7 @@
 
       <ng-container *ngIf="type === 'property' && isPropertyItemAvailable">
         <ion-item *ngFor="let item of propertySuggestion" class="solrSuggestionListItem">
-          <div (click)="SelectLandlord(item)">
+          <div (click)="SelectProperty(item)">
             <span>
               <i class="propcoicon no-background propcoicon-landlord red-icon"></i>
             </span>
