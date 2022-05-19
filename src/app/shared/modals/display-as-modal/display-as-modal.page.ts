@@ -13,6 +13,7 @@ export class DisplayAsModalPage implements OnInit {
   landlordDetailsForm: FormGroup;
   titles = TITLES;
   displayAs;
+  landlordData;
   popoverOptions: any = {
     cssClass: 'market-apprisal-ion-select'
   };
@@ -28,15 +29,26 @@ export class DisplayAsModalPage implements OnInit {
 
   initLandlordForm() {
     this.landlordDetailsForm = this.fb.group({
-      title: ['', [Validators.required]],
-      initials: [''],
-      forename: ['', [Validators.required]],
-      middleName: [''],
-      surname: ['', [Validators.required]],
-      addressee: [''],
-      salutation: [''],
-      displayAs: [this.displayAs ? this.displayAs : '', Validators.required]
+      title: [this.landlordData.title ? this.getIndex(this.landlordData.title) : '', [Validators.required]],
+      initials: [this.landlordData.initials ? this.landlordData.initials : ''],
+      forename: [this.landlordData.foreName ? this.landlordData.foreName : '', [Validators.required]],
+      middleName: [this.landlordData.middleName ? this.landlordData.middleName : ''],
+      surname: [this.landlordData.surName ? this.landlordData.surName : '', [Validators.required]],
+      addressee: [this.landlordData.addressee ? this.landlordData.addressee : ''],
+      salutation: [this.landlordData.salutation ? this.landlordData.salutation : ''],
+      displayAs: [this.landlordData.displayAs ? this.landlordData.displayAs : '', Validators.required]
     });
+  }
+
+  getIndex(value){
+        let index ;
+       this.titles.forEach((item:any) => {
+        if(item.value === value) {
+          index= item.index
+        }
+
+       })
+       return index;
   }
 
   dismiss() {

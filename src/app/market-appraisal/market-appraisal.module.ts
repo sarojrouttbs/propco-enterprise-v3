@@ -10,6 +10,7 @@ import { MaterialModule } from '../material.module';
 import { ComponentsModule } from '../shared/components/components.module';
 import { DisplayAsModalPageModule } from '../shared/modals/display-as-modal/display-as-modal.module';
 import { AddressModalPageModule } from '../shared/modals/address-modal/address-modal.module';
+import { LandlordSearchComponent } from './landlord-search/landlord-search.component';
 import { MaPropertyComponent } from './ma-property/ma-property.component';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
 import { PipesModule } from '../shared/pipes/pipes.module';
@@ -24,7 +25,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
 };
 @NgModule({
   imports: [
-    CommonModule,
+CommonModule,
     FormsModule,
     IonicModule,
     MaterialModule,
@@ -36,8 +37,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     CurrencyMaskModule,
     PipesModule
   ],
-  declarations: [MarketAppraisalPage, MaContactComponent, MaPropertyComponent],
+  declarations: [MarketAppraisalPage, MaContactComponent, MaPropertyComponent,LandlordSearchComponent],
   providers: [CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
-
 })
 export class MarketAppraisalPageModule { }

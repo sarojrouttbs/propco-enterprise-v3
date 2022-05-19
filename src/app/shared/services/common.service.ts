@@ -38,12 +38,15 @@ export class CommonService {
     // this.alertPresented = false;
   }
 
+
+
   private dataChange = new Subject<any>();
   dataChanged$ = this.dataChange.asObservable();
 
   dataChanged(data) {
     this.dataChange.next(data);
   }
+
 
   // isCordovaDevice(){
   //     return (this._platform.platforms().indexOf('cordova')!= -1) ? true : false;

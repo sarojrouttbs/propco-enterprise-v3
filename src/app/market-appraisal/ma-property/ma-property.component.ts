@@ -36,6 +36,8 @@ export class MaPropertyComponent implements OnInit {
   advertisementRentFrequencies: any;
   accessibleOffices: any;
   marketLocations: any;
+  propertyData;
+  propertyDetails;
   duration = {
     totalYears: '00',
     totalMonths: '00',

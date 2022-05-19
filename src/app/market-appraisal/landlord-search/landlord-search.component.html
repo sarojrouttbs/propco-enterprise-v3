@@ -1,0 +1,53 @@
+<ion-row class="ion-align-items-center ion-justify-content-center ion-margin-vertical">
+  <ion-col size=60></ion-col>
+
+  <ion-col size=25 style="padding-right: 0;" class="ion-no-padding tour-2">
+    <ion-searchbar [(ngModel)]="searchTerm" [placeholder]="'Start typing to search contacts'" class="searchbar-custom"
+      debounce="500" (ionChange)="getItems($event)" [formControl]="searchTermControl" (ionBlur)="hideSuggestion()"
+      (ionFocus)="onFocus()">
+    </ion-searchbar>
+    <ion-progress-bar color="danger" [type]="'indeterminate'" *ngIf="showLoader" style="position: absolute;">
+    </ion-progress-bar>
+  </ion-col>
+
+  <ion-col class="ion-no-padding tour-3 pointer" size=5>
+    <ion-buttons color="success" end (click)="serchItem()">
+      <i class="propcoicon propcoicon-search no-background green-icon search-icon"></i>
+    </ion-buttons>
+  </ion-col>
+  <ion-col size="5">
+    <ion-button color="success" style="float: right;" (click)="reset()">Reset</ion-button>
+  </ion-col>
+
+  <ion-row>
+    <ion-list class="solr-suggestionList">
+      <ng-container *ngIf="type === 'contact' && isItemAvailable">
+        <ion-item *ngFor="let item of suggestions" class="solr-suggestion-list-item">
+          <div (click)="SelectLandlord(item)">
+            <span>
+              <i class="propcoicon no-background propcoicon-landlord red-icon"></i>
+            </span>
+            <span>{{item.name}}</span>&nbsp;
+            <span>{{item.reference}}</span>&nbsp;
+            <span class="text-color-lightgreen">{{item.status}}</span>
+          </div>
+        </ion-item>
+      </ng-container>
+
+      <ng-container *ngIf="type === 'property' && isPropertyItemAvailable">
+        <ion-item *ngFor="let item of propertySuggestion" class="solr-suggestion-list-item">
+          <div (click)="SelectProperty(item)">
+            <span>
+              <i class="propcoicon no-background propcoicon-landlord red-icon"></i>
+            </span>
+            <span>{{item.name}}</span>&nbsp;
+            <span>{{item.reference}}</span>&nbsp;
+            <span>{{item.propertyAddress.addressLine1 | slice:0:30}}, {{item.propertyAddress.postcode}}</span>&nbsp;
+            <span class="text-color-lightgreen">{{item.status}}</span>
+          </div>
+        </ion-item>
+      </ng-container>
+
+    </ion-list>
+  </ion-row>
+</ion-row>
