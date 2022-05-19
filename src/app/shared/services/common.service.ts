@@ -718,4 +718,13 @@ export class CommonService {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup/property', { params, responseType: 'json' });
   }
 
+  removeEmpty(obj:any) {
+    for (const key in obj) {
+      if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
+        delete obj[key];
+      }
+    }
+    return obj;
+  }
+
 }
