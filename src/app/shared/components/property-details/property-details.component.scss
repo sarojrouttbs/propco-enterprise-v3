@@ -13,11 +13,15 @@
 #property-details {
   min-height: 96px;
   padding: 0;
-  color: var(--ion-color-step-250);
-  background-color: var(--ion-color-step-2000);
+  color: var(--ion-color-one);
+  background-color: var(--ion-color-six);
   height: 100%;
   padding: 15px;
 
+  .property-details-grid{
+    border-radius: 5px;
+    border: solid 1px var(--ion-color-four);
+  }
   .heading {
     @include set-text-style(22px, 26px);
   }
@@ -28,11 +32,17 @@
     object-fit: cover;
   }
 
+
   ion-row.property-details-row {
     margin-bottom: 10px;
-
+    ion-list{
+      label{
+        color: var(--ion-color-one);
+        padding-right: 5px;
+      }
+    }
     .non-urgent {
-      color: var(--ion-color-primary);
+      color: var(--ion-color-success);
       @include set-text-style(22px, 26px);
     }
 
@@ -96,7 +106,7 @@
   min-height: 96px;
   padding: 0;
   color: var(--ion-color-step-250);
-  background-color: var(--ion-color-step-2000);
+  background-color: var(--ion-color-six);
   height: 100%;
   padding: 15px;
 
@@ -131,4 +141,8 @@
         height: 18px;
       }
   }
+}
+
+.contact-btn{
+  --ion-color-base: var(--ion-color-one) !important;
 }

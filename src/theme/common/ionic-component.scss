@@ -12,6 +12,7 @@
 
 ion-card {
   --background: var(--ion-color-step-2000);
+  // background: var(--ion-color-five);
   box-shadow: unset !important;
 
   ion-card-content {
@@ -235,6 +236,19 @@ ion-item {
     min-height: 200px;
     width: 550px;
 
+    ion-content {
+      --background: var(--ion-color-six);
+      ion-item {
+        --border-color: var(--ion-color-one);
+        ion-label {
+          color: var(--ion-color-three) !important;
+        }
+      }
+    }
+    ion-footer{
+      background: var(--ion-color-six);
+    }
+    
     .mat-form-field-appearance-legacy .mat-form-field-infix{
       padding: .5em 0 !important;
     }
@@ -521,6 +535,16 @@ ion-alert.common-alert-box {
   
 }
 #agent-portal {
+  ion-card {
+    background: var(--ion-background-color);
+    color: var(--ion-color-one);
+  }
+  ion-item {
+    --border-color: var(--ion-color-one);
+    ion-label {
+      color: var(--ion-color-three) !important;
+    }
+  }
   #market-appraisal{
     ion-segment{
       margin-bottom: 10px;
@@ -528,52 +552,56 @@ ion-alert.common-alert-box {
     ion-card-content{
       padding-top: 0;
       ion-item {
-        --border-color: var(--ion-color-ion-select);
-        ion-label {
-          color: var(--ion-color-ion-label) !important;
-        }
         ion-select {
           height: 40px;
         }
       }
     }    
   }
-}
-
-.market-apprisal-ion-select, .fault-ion-select{
-  --width: auto;
-  .sc-ion-select-popover{
-    color: var(--ion-color-ion-label) !important
-  }
-}
-
-//agnet portal > market appraisal form modals
-.ma-modal-container{
-  .modal-wrapper {
-    ion-content {
-      --background: var(--ion-color-six);
-      ion-item {
-        --border-color: var(--ion-color-one);
-        ion-label {
-          color: var(--ion-color-three) !important;
-        }
-      }
-    }
-    ion-footer{
-      background: var(--ion-color-six);
+  #fault-list{
+    .filter-grid-active:before {
+      content: "";
+      vertical-align: middle;
+      margin: auto;
+      position: absolute;
+      display: block;
+      left: 0;
+      right: 0;
+      bottom: -8px;
+      width: 12px;
+      height: 12px;
+      transform: rotate(225deg);
+      border-color: var(--ion-color-body) transparent transparent var(--ion-color-body);
+      background-color: var(--ion-color-six);
     }
   }
-}
-.address-selection {
-  --width: auto;
-}
 
-// .sc-ion-select-popover-h ion-list.sc-ion-select-popover {
-//   background-color: red !important;
-// }
+  .drop-zone {
+    background-color: var(--ion-color-six) !important;
+    border: 2px solid var(--ion-color-three) !important;
+  }
 
-#agent-portal { 
-  #propertyAddressDetails, #propertyLettingDetails, #propertyCheckGrid, #propertyLetBoardDetails, #propertyHistoryDetails {
+  .secondary-background{
+    background: var(--ion-color-five);
+  }
+
+  .border-top-radious{
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+  }
+  .border-bottom-radious{
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  #property-address-details,
+  #property-letting-details,
+  #property-check-grid,
+  #property-let-board-details,
+  #property-history-details,
+  #la-application-list,
+  #la-application-details,
+  #la-guarantor-details {
     ion-select{
       height: 40px;
     }
@@ -597,6 +625,102 @@ ion-alert.common-alert-box {
       ion-select, ion-input {
         color: var(--ion-color-one) !important;
       }
+    }
+  }
+}
+
+.market-apprisal-ion-select, .fault-ion-select, .let-alliance-ion-select {
+  --width: auto;
+  .sc-ion-select-popover{
+    color: var(--ion-color-ion-label) !important
+  }
+  ion-list ion-item.item-radio-checked {
+    --background: var(--ion-color-four);
+  }
+}
+
+//agnet portal > market appraisal form modals
+.ma-modal-container, .la-modal-container{
+  .modal-wrapper {
+    ion-content {
+      --background: var(--ion-color-six);
+      h4, h5, h6, p, small, div {
+        color: var(--ion-color-one);;
+      }
+      ion-item {
+        --border-color: var(--ion-color-one);
+        ion-label {
+          color: var(--ion-color-three) !important;
+        }
+      }
+
+      .dataTables_wrapper {
+        table.dataTable {
+          border: 1px solid var(--ion-color-four);
+          thead {
+            background-color: var(--ion-color-three);
+            color: var(--ion-color-step-2000);
+          }
+          
+          tbody {
+            color: var(--ion-color-two);
+            tr:hover {
+              box-shadow: inset 0 0 0 9999px var(--ion-color-five);
+            }
+            tr {
+              background-color: var(--ion-color-six);
+            }
+  
+            td, th .row-border {
+              border-top: 1px solid var(--ion-color-four);
+            }
+          }
+        }
+      }
+    }
+    ion-footer{
+      background: var(--ion-color-six);
+    }
+    .drop-zone{
+      background-color: var(--ion-color-five)
+    }
+  } 
+}
+
+.address-selection {
+  --width: auto;
+}
+
+.ionic-selectable-modal{
+  ion-header{
+    .toolbar-searchbar{
+      ion-searchbar{
+        input{
+          --placeholder-color: var(--ion-color-one);
+        }
+        ion-icon{
+          color: var(--ion-color-one);
+        }
+      }
+    }
+  }
+  ion-content{
+    ion-list{
+      ion-item{
+        --border-color: var(--ion-color-one);
+        ion-label{
+          color: var(--ion-color-three) !important;
+        }
+      }
+    }
+  }
+}
+
+ion-list{
+  ion-item{
+    --border-color: var(--ion-color-one);
+    ion-label{
+      color: var(--ion-color-three) !important;
     }
   }
 }

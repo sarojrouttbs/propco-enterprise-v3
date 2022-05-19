@@ -14,7 +14,7 @@
                         <ion-text class="mandatory">*
                         </ion-text>
                     </ion-label>
-                    <ion-select interface="popover" formControlName="closedReason" (ionChange)="onReasonChange()" class="reason-dropdown" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
+                    <ion-select interface="popover" formControlName="closedReason" (ionChange)="onReasonChange()" class="reason-dropdown" [interfaceOptions]="{'cssClass': 'ion-select-popover-content fault-ion-select'}">
                         <ion-select-option [value]="reason.index" *ngFor="let reason of reasons">
                             {{ reason.value }}
                         </ion-select-option>

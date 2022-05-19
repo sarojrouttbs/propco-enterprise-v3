@@ -32,7 +32,8 @@ export class ValidationService {
       commonPassword: 'Password is too easy to guess',
       invalidFutureDate: 'Please enter date between today until next 60 days.',
       invalidFormDate: 'From cannot be after To',
-      invalidEndDate: 'To cannot be before and equal to From'
+      invalidEndDate: 'To cannot be before and equal to From',
+      rentRangeTo: 'Rent range to should be greater than Rent range from'
     };
 
     return config[validatorName];
@@ -166,6 +167,18 @@ export class ValidationService {
         equalTo: true
       };
     };
+  }
+
+  static rentRaneToVal(control) {
+    if (!control.parent) { return null; }
+    if (!control.parent.get('minimum')) {
+      throw new TypeError('Form Control ' + 'minimum' + ' does not exists.');
+    }
+
+    const controlMatch = control.parent.get('minimum');
+    return (controlMatch.value >= control.value) ? {
+      rentRangeTo: true
+    } : null;
   }
 
   // ^(?!(?:00:00:00))(?:\d\d:\d\d:\d\d)$

@@ -7,7 +7,7 @@
    
 
     <ion-row *ngIf="iacNotification && !showSkeleton && !faultDetails?.isClosed && isContractorSelected">
-      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background border-top-radious">
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
@@ -298,7 +298,7 @@
     </ion-grid>
     <ion-row *ngIf="isFormsReady && !showSkeleton">
 
-        <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+        <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background">
           <ng-container *ngIf="!isWorksOrder">
             <div class="quote-request-banner" *ngIf="!isContractorSelected && faultNotifications.length">
               <ion-text>You have requested multiple quotes.</ion-text>
@@ -363,11 +363,11 @@
                     </ion-row>
                   </div>
       
-                  <ion-row id="addCCform" class="row-banner" [formGroup]="addContractorForm" *ngIf="!addMoreCCrestrictAction">
+                  <ion-row id="addCCform" class="row-banner secondary-background" [formGroup]="addContractorForm" *ngIf="!addMoreCCrestrictAction">
                     <ion-col size="45">
                       <ion-item>
                         <ion-label position="floating">Skill Set</ion-label>
-                        <ion-select interface="popover" formControlName="skillSet" class="ion-select-options">
+                        <ion-select interface="popover" formControlName="skillSet" class="ion-select-options" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
                           <ion-select-option value="">Please Select</ion-select-option>
                           <ion-select-option [value]="item.value" *ngFor="let item of contractorSkill">
                             {{ item.value }}
@@ -390,11 +390,9 @@
                           <span>
                             <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
                           </span>&nbsp;
-                          <label style="color: var(--ion-color-step-200); padding-right: 5px;">{{result.fullName}}&nbsp;
-                            <span
-                              style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-                            <span class="text-color-lightgreen"
-                              style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
+                          <label>{{result.fullName}}&nbsp;
+                            <span class="ref">{{result.reference}}</span>&nbsp;
+                            <span class="text-color-lightgreen status">{{result.status}}</span>&nbsp;
                           </label>
       
                         </ion-item>
@@ -453,7 +451,7 @@
         <ion-item>
           <ion-label position="floating">Category <ion-text class="mandatory">*</ion-text>
           </ion-label>
-          <ion-select interface="popover" formControlName="quoteCategory">
+          <ion-select interface="popover" formControlName="quoteCategory" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
             <ion-select-option [value]="item.value" *ngFor="let item of faultCategories">{{ item.value }}
             </ion-select-option>
           </ion-select>
@@ -505,7 +503,7 @@
       <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Quote Status</ion-label>
-          <ion-select interface="popover" formControlName="quoteStatus">
+          <ion-select interface="popover" formControlName="quoteStatus" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
             <ion-select-option [value]="item.index" *ngFor="let item of quoteStatuses">{{ item.value }}
             </ion-select-option>
           </ion-select>
@@ -563,7 +561,7 @@
       <ion-col size="33.33">
         <ion-item>
           <ion-label position="floating">Job Type</ion-label>
-          <ion-select interface="popover" formControlName="jobType">
+          <ion-select interface="popover" formControlName="jobType" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
             <ion-select-option [value]="item.index" *ngFor="let item of maintenanceJobTypes">{{ item.value }}
             </ion-select-option>
           </ion-select>
@@ -572,7 +570,7 @@
       <ion-col size="33.33">
         <ion-item>
           <ion-label position="floating">Repair Source</ion-label>
-          <ion-select interface="popover" formControlName="repairSource">
+          <ion-select interface="popover" formControlName="repairSource" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
             <ion-select-option [value]="item.index" *ngFor="let item of maintenanceRepairSources">{{ item.value }}
             </ion-select-option>
           </ion-select>
@@ -581,7 +579,7 @@
       <ion-col size="33.33" *ngIf="raiseQuoteForm.controls.repairSource.value === maintenanceRepairSourcesMap.get('third party')">
         <ion-item>
           <ion-label position="floating">Third Party</ion-label>
-            <ion-select interface="popover" formControlName="thirdPartySource">
+            <ion-select interface="popover" formControlName="thirdPartySource" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.index" *ngFor="let item of faultReportedByThirdParty">{{item.value}}
               </ion-select-option>
             </ion-select>
@@ -592,7 +590,7 @@
 </ng-template>
 <ng-template #worksOrderDetails>
   <form [formGroup]="workOrderForm">
-    <ion-row class="row-banner">
+    <ion-row class="row-banner secondary-background">
       <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Contractor <ion-text class="mandatory">*</ion-text>
@@ -608,10 +606,9 @@
             <span>
               <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
             </span>&nbsp;
-            <label style="color: var(--ion-color-step-200); padding-right: 5px;">{{result.fullName}}&nbsp;
-              <span style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-              <span class="text-color-lightgreen"
-                style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
+            <label>{{result.fullName}}&nbsp;
+              <span class="ref">{{result.reference}}</span>&nbsp;
+              <span class="text-color-lightgreen status">{{result.status}}</span>&nbsp;
             </label>
           </ion-item>
         </ion-list>
@@ -644,7 +641,7 @@
         </ion-item>
       </ion-col>
     </ion-row>
-    <ion-row class="row-banner">
+    <ion-row class="row-banner secondary-background border-bottom-radious">
         <ion-col size="50">
           <ion-item>
             <ion-label position="floating">Reference </ion-label>
@@ -678,7 +675,7 @@
         <ion-item>
           <ion-label position="stacked">Repair Cost <ion-text class="mandatory">*</ion-text>
           </ion-label>
-          <input currencyMask formControlName="repairCost" (blur)="onBlurCurrency(workOrderForm.controls.repairCost.value, workOrderForm)"/>
+          <input currencyMask formControlName="repairCost" class="currency-mask" (blur)="onBlurCurrency(workOrderForm.controls.repairCost.value, workOrderForm)"/>
 
         </ion-item>
         <app-validation-message [control]="workOrderForm.controls.repairCost"></app-validation-message>
@@ -795,7 +792,7 @@
       <ion-col size="33.33">
         <ion-item>
           <ion-label position="floating">Job Type</ion-label>
-          <ion-select interface="popover" formControlName="jobType">
+          <ion-select interface="popover" formControlName="jobType" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
             <ion-select-option [value]="item.index" *ngFor="let item of maintenanceJobTypes">{{ item.value }}
             </ion-select-option>
           </ion-select>
@@ -804,7 +801,7 @@
       <ion-col size="33.33">
         <ion-item>
           <ion-label position="floating">Repair Source</ion-label>
-          <ion-select interface="popover" formControlName="repairSource">
+          <ion-select interface="popover" formControlName="repairSource" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
             <ion-select-option [value]="item.index" *ngFor="let item of maintenanceRepairSources">{{ item.value }}
             </ion-select-option>
           </ion-select>
@@ -813,7 +810,7 @@
       <ion-col size="33.33" *ngIf="workOrderForm.controls.repairSource.value === maintenanceRepairSourcesMap.get('third party')">
         <ion-item>
           <ion-label position="floating">Third Party</ion-label>
-            <ion-select interface="popover" formControlName="thirdPartySource">
+            <ion-select interface="popover" formControlName="thirdPartySource" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.index" *ngFor="let item of faultReportedByThirdParty">{{item.value}}
               </ion-select-option>
             </ion-select>

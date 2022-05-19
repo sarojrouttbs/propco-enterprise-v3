@@ -1,6 +1,6 @@
 <ion-grid>
   <ion-row *ngIf="!showSkeleton">
-    <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+    <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background border-top-radious border-bottom-radious">
       <div class="landlord-instructions">
         <app-close-fault *ngIf="faultDetails?.isClosed" [notificationData]="cliNotification" [faultDetails]="faultDetails" [action]="getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes)? getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes):'Landlord Instructions'"></app-close-fault>
 
@@ -199,9 +199,9 @@
                         <i class="propcoicon no-background propcoicon-contractor"
                           style="background: transparent;"></i>
                       </span>&nbsp;
-                      <label style="color: var(--ion-color-step-200);padding-right: 5px;">{{result.fullName}}&nbsp;
-                        <span style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-                        <span class="text-color-lightgreen" style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;  
+                      <label>{{result.fullName}}&nbsp;
+                        <span class="ref">{{result.reference}}</span>&nbsp;
+                        <span class="text-color-lightgreen status">{{result.status}}</span>&nbsp;  
                       </label>                        
                     </ion-item>
                   </ion-list>
@@ -212,7 +212,7 @@
                 <ion-col size="50">
                   <ion-item>
                     <ion-label position="stacked">Confirmed Estimate</ion-label>
-                    <input currencyMask formControlName="confirmedEstimate"
+                    <input currencyMask formControlName="confirmedEstimate" class="currency-mask"
                       [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' 
                       || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION'
                       || userSelectedActionControl.value == 'AGENT_OF_NECESSITY'

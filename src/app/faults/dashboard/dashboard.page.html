@@ -125,7 +125,7 @@
             <ion-item>
               <ion-label position="floating">More Filters</ion-label>
               <ion-select interface="popover" (ionChange)="onFiletrChange($event)" formControlName="filterType"
-                class="more-filters">
+                class="more-filters" [interfaceOptions]="popoverOptions">
                 <ion-select-option value="4">Assigned To </ion-select-option>
                 <ion-select-option value="1">Branch(es) </ion-select-option>
                 <ion-select-option value="2" [disabled]="isBucketActive">Management Service Type</ion-select-option>

@@ -69,6 +69,9 @@ export class ApplicationDetailsPage implements OnInit {
   officeList: string;
   DEFAULTS = DEFAULTS;
 
+  popoverOptions: any = {
+    cssClass: 'let-alliance-ion-select'
+  };
   constructor(
     private fb: FormBuilder,
     private modalController: ModalController,
@@ -117,7 +120,7 @@ export class ApplicationDetailsPage implements OnInit {
   private async searchProperty() {
     const modal = await this.modalController.create({
       component: SearchPropertyPage,
-      cssClass: 'modal-container la-property-search',
+      cssClass: 'modal-container la-property-search la-modal-container',
       backdropDismiss: false,
       componentProps: {
         isFAF: false,
@@ -140,7 +143,7 @@ export class ApplicationDetailsPage implements OnInit {
   private async selectTenant() {
     const modal = await this.modalController.create({
       component: TenantListModalPage,
-      cssClass: 'modal-container tenant-list',
+      cssClass: 'modal-container tenant-list la-modal-container',
       backdropDismiss: false,
       componentProps: {
         paramPropertyId: this.propertyId,
@@ -166,7 +169,7 @@ export class ApplicationDetailsPage implements OnInit {
   private async applicationAlert() {
     const modal = await this.modalController.create({
       component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: `<div class='status-block'>There is an application in process for this tenant. You cannot start another application until the processing of existing application has been completed.
@@ -542,7 +545,7 @@ export class ApplicationDetailsPage implements OnInit {
   async editAddress() {
     const modal = await this.modalController.create({
       component: AddressModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container la-modal-container',
       backdropDismiss: false,
       componentProps: {
         paramAddress: this.address
@@ -721,7 +724,7 @@ export class ApplicationDetailsPage implements OnInit {
   async cancelApplication() {
     const modal = await this.modalController.create({
       component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: `<div class="center-block">The data entered has not been saved, do you want to exit the Application?
