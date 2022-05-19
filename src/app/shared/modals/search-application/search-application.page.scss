@@ -5,3 +5,25 @@ ion-content {
     font-family: var(--ion-font-family);
   }
 }
+
+.search-option {
+  border-bottom: 1px solid var(--ion-color-three);
+  display: inline-block;
+  .ref-number {
+    color: var(--ion-color-success);
+  }
+  .case-ref-number {
+    color: var(--ion-color-secondary);
+  }
+  .addressee {
+    color: var(--ion-color-one);
+  }
+
+  .address {
+    color: var(--ion-color-one);
+  }
+
+  .product-type {
+    color: var(--ion-color-two);
+  }
+}
