@@ -2,9 +2,9 @@ import { Component, Input, OnInit,Output,EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { HttpParams } from '@angular/common/http';
 import { SolrService } from 'src/app/solr/solr.service';
-import { FaultsService } from 'src/app/faults/faults.service';
 import { AgentService } from 'src/app/agent/agent.service';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { MarketAppraisalService } from 'src/app/market-appraisal/market-appraisal.service';
 @Component({
   selector: 'app-landlord-search',
   templateUrl: './landlord-search.component.html',
@@ -28,7 +28,9 @@ export class LandlordSearchComponent implements OnInit {
   propertyData;
   isPropertyItemAvailable=false;
   entityControl = new FormControl(['Property']);
-  constructor(private commonService:CommonService,private solrService:SolrService, private faultsService:FaultsService, private agentService:AgentService) { }
+  propertySuggestion ;
+
+  constructor(private marketAppraisalService:MarketAppraisalService,private commonService:CommonService,private solrService:SolrService, private agentService:AgentService) { }
 
   ngOnInit() {
 
@@ -87,7 +89,7 @@ serchItem(){
 
 private getLandlordDetails(landlordId) {
   const promise = new Promise((resolve, reject) => {
-    this.faultsService.getLandlordDetails(landlordId).subscribe(
+    this.marketAppraisalService.getLandlordDetails(landlordId).subscribe(
       res => {
         this.landlordDetails = res ? res : [];
         this.commonService.lanlordValueChange(this.landlordDetails);
@@ -101,10 +103,9 @@ private getLandlordDetails(landlordId) {
   return promise;
 }
 
-propertySuggestion ;
 private getLandlordProperties(landlordId) {
   const promise = new Promise((resolve, reject) => {
-    this.faultsService.getLandlordProperties(landlordId).subscribe(
+    this.marketAppraisalService.getLandlordProperties(landlordId).subscribe(
       res => {
         this.propertySuggestion = res ? res.data : [];
       },

@@ -52,17 +52,19 @@ export class MaContactComponent implements OnInit {
 
   setData(data){
      this.address = data.address;
-    this.contactForm.get('displayAs').patchValue(data.displayAs ? data.displayAs :'');
-    this.contactForm.get('mobile').patchValue(data.mobile? data.mobile :'');
-    this.contactForm.get('landlordStatus').patchValue(data.status? data.status :'');
-    this.contactForm.get('email').patchValue(data.email? data.email :'');
-    this.contactForm.get('homeTelephone').patchValue(data.homeTelephone? data.homeTelephone :'');
-    this.contactForm.get('businessTelephone').patchValue(data.businessTelephone? data.businessTelephone :'');
-    this.contactForm.get('enquiryNotes').patchValue(data.enquiryNotes? data.enquiryNotes :'');
-    this.contactForm.get('owners').patchValue(data.owners? data.owners :'');
-    this.contactForm.get('heardReason').patchValue(data.heardReason? this.getIndex(data.heardReason, this.propertyHeardSources):'');
-    this.contactForm.get('officeCode').patchValue(data.officeCode? this.getIndex(data.officeCode, this.officeCodes):'');
-    this.contactForm.get('ownership').patchValue(data.ownership? this.getIndex(data.ownership, this.ownership):'');
+     this.contactForm.patchValue({
+      displayAs: data.displayAs ? data.displayAs :'',
+      mobile: data.mobile? data.mobile :'',
+      landlordStatus : data.status? data.status :'',
+      email:data.email? data.email :'',
+      homeTelephone:data.homeTelephone? data.homeTelephone :'',
+      businessTelephone : data.businessTelephone? data.businessTelephone :'',
+      enquiryNotes : data.enquiryNotes? data.enquiryNotes :'',
+      owners : data.owners? data.owners :'',
+      heardReason : data.heardReason? this.getIndex(data.heardReason, this.propertyHeardSources):'',
+      officeCode : data.associatedOfficeCode? data.associatedOfficeCode : '',
+      ownership : data.ownership? this.getIndex(data.ownership, this.ownership):''
+    });
   }
 
   getIndex(value,lookUp){
@@ -104,13 +106,7 @@ export class MaContactComponent implements OnInit {
       cssClass: 'modal-container ma-modal-container',
       componentProps: {
         displayAs: this.contactForm.value.displayAs,
-        salutation:this.landlordData.salutation ? this.landlordData.salutation :'',
-        addressee:this.landlordData.addressee ? this.landlordData.addressee :'',
-        surName:this.landlordData.surName ? this.landlordData.surName : '',
-        middleName:this.landlordData.middleName ? this.landlordData.middleName : '',
-        foreName:this.landlordData.foreName ? this.landlordData.foreName :'',
-        initials:this.landlordData.initials ? this.landlordData.initials :'',
-        title:this.landlordData.title ? this.landlordData.title :'',
+        landlordData:this.landlordData
       },
       backdropDismiss: false
     });
