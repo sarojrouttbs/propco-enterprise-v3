@@ -17,7 +17,7 @@
     }
     .banner {
       text-align: center;
-      background: var(--ion-background-color);
+      // background: var(--ion-background-color);
       border-radius: 8px;
       padding: 30px 30px;
       margin-bottom: 20px;
@@ -57,11 +57,11 @@
       table {
         border-collapse: collapse;
         width: 100%;
-        border: 1px solid var(--ion-color-step-1600);
+        border: 1px solid var(--ion-color-four);
       }
   
       th {
-        background-color: var(--ion-color-step-1400);
+        background-color: var(--ion-color-three);
       }
       td,
       th {
@@ -69,13 +69,13 @@
         padding: 15px;
       }
       tr:nth-child(even) {
-        background-color: var(--ion-color-step-1800);
+        background-color: var(--ion-color-five);
       }
       tr:nth-child(odd) {
-        background-color: var(--ion-color-step-1600);
+        background-color: var(--ion-color-four);
       }
       td {
-        color: var(--ion-color-step-200);
+        color: var(--ion-color-one);
       }
     }
   }
@@ -121,16 +121,7 @@
     position: absolute !important;
     width: 100%;
   }
-  
-  .contractor-list {
-    width: 100%;
-    max-height: 200px;
-    overflow-y: scroll;
-    position: absolute !important;
-    z-index: 5 !important;
-    cursor: pointer;
-  }
-  
+
   .back-button {
     cursor: pointer;
     font-size: 20px;

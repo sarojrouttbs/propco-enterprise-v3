@@ -4,7 +4,7 @@
       <ion-grid class="filter-heading-wrapper">
         <ion-row>
           <ion-col size="100">
-            <span title="Collapse" class="status-pointer"><ion-icon name="arrow-back-outline" (click)="drawer.toggle();"></ion-icon></span>
+            <span title="Collapse" class="status-pointer"><ion-icon name="arrow-back-outline" (click)="drawer.toggle();toggleSideMenu();"></ion-icon></span>
             <h1>Filter your search</h1>
           </ion-col>
           <ion-col size="100">
@@ -475,7 +475,7 @@
         <ng-container *ngIf="length > 0">
           <div [ngClass]="!drawer.opened ? 'paginator-grid' : 'paginator-grid sidenav-opened'">
             <div *ngIf="!drawer.opened">
-              <ion-buttons (click)="drawer.toggle();" style="cursor: pointer;">
+              <ion-buttons (click)="drawer.toggle();toggleSideMenu();" style="cursor: pointer;">
                 <ion-icon name="options-outline"></ion-icon>
               </ion-buttons>
             </div>
@@ -544,9 +544,9 @@
   <mat-accordion class="list-view-accordian" multi>
     <mat-expansion-panel #propertySuggestionPanel hideToggle style="position: static;">
       <mat-expansion-panel-header class="property-header-panel">
-        <ion-grid>
+        <ion-grid style="width: 100%;">
           <ion-row>
-            <ion-col size="70">
+            <ion-col size-xl="70" size-lg="70" size-md="60" size-sm="60" size-xs="50">
               <ion-grid class="ion-no-padding">
                 <ion-row>
                   <ion-col size="100" class="ion-no-padding" style="margin-bottom: 8px;">
@@ -584,7 +584,7 @@
                 </ion-row>
               </ion-grid>
             </ion-col>
-            <ion-col size="30">
+            <ion-col size-xl="30" size-lg="30" size-md="40" size-sm="40" size-xs="50">
               <div class="status-action" >
                 <div>
                   <p class="ref">Status</p>
@@ -659,9 +659,9 @@
   <mat-accordion class="list-view-accordian" multi>
     <mat-expansion-panel #agentSuggestionPanel hideToggle style="position: static;">
       <mat-expansion-panel-header class="agent-header-panel">
-        <ion-grid>
+        <ion-grid style="width: 100%;">
           <ion-row>
-            <ion-col size="70">
+            <ion-col size-xl="70" size-lg="70" size-md="60" size-sm="60" size-xs="50">
               <div class="ag-left-side">
                 <div>
                   <i class="propcoicon propcoicon-agent no-background"></i>
@@ -678,7 +678,7 @@
                 </div>
               </div>
             </ion-col>
-            <ion-col size="30">
+            <ion-col size-xl="30" size-lg="30" size-md="40" size-sm="40" size-xs="50">
               <div class="status-action" >
                 <div>
                   <p class="ref">Status</p>
@@ -733,9 +733,9 @@
   <mat-accordion class="list-view-accordian" multi>
     <mat-expansion-panel #landlordSuggestionPanel hideToggle style="position: static;">
       <mat-expansion-panel-header class="landlord-header-panel">
-        <ion-grid>
+        <ion-grid style="width: 100%;">
           <ion-row>
-            <ion-col size="70">
+            <ion-col size-xl="70" size-lg="70" size-md="60" size-sm="60" size-xs="50">
               <div class="ag-left-side">
                 <div>
                   <i class="propcoicon propcoicon-landlord no-background"></i>
@@ -751,7 +751,7 @@
                 </div>
               </div>
             </ion-col>
-            <ion-col size="30">
+            <ion-col size-xl="30" size-lg="30" size-md="40" size-sm="40" size-xs="50">
               <div class="status-action" >
                 <div>
                   <p class="ref">Status</p>
@@ -831,9 +831,9 @@
   <mat-accordion class="list-view-accordian" multi>
     <mat-expansion-panel #tenantSuggestionPanel hideToggle style="position: static;">
       <mat-expansion-panel-header class="tenant-header-panel">
-        <ion-grid>
+        <ion-grid style="width: 100%;">
           <ion-row>
-            <ion-col size="70">
+            <ion-col size-xl="70" size-lg="70" size-md="60" size-sm="60" size-xs="50">
               <div class="ag-left-side">
                 <div>
                   <i class="propcoicon propcoicon-tenant no-background"></i>
@@ -848,7 +848,7 @@
                 </div>
               </div>
             </ion-col>
-            <ion-col size="30">
+            <ion-col size-xl="30" size-lg="30" size-md="40" size-sm="40" size-xs="50">
               <div class="status-action" >
                 <div>
                   <p class="ref">Status</p>
@@ -914,9 +914,9 @@
   <mat-accordion class="list-view-accordian" multi>
     <mat-expansion-panel #applicantSuggestionPanel hideToggle style="position: static;">
       <mat-expansion-panel-header class="applicant-header-panel">
-        <ion-grid>
+        <ion-grid style="width: 100%;">
           <ion-row>
-            <ion-col size="70">
+            <ion-col size-xl="70" size-lg="70" size-md="60" size-sm="60" size-xs="50">
               <div class="ag-left-side">
                 <div>
                   <i class="propcoicon propcoicon-applicant-let no-background"></i>
@@ -935,7 +935,7 @@
                 </div>
               </div>
             </ion-col>
-            <ion-col size="30">
+            <ion-col size-xl="30" size-lg="30" size-md="40" size-sm="40" size-xs="50">
               <div class="status-action" >
                 <div>
                   <p class="ref">Status</p>
@@ -1002,9 +1002,9 @@
     <mat-expansion-panel #contractorSuggestionPanel hideToggle style="position: static;">
 
       <mat-expansion-panel-header class="contractor-header-panel">
-        <ion-grid>
+        <ion-grid style="width: 100%;">
           <ion-row>
-            <ion-col size="70">
+            <ion-col size-xl="70" size-lg="70" size-md="60" size-sm="60" size-xs="50">
               <div class="ag-left-side">
                 <div>
                   <i class="propcoicon propcoicon-contractor no-background"></i>
@@ -1021,7 +1021,7 @@
                 </div>
               </div>
             </ion-col>
-            <ion-col size="30">
+            <ion-col size-xl="30" size-lg="30" size-md="40" size-sm="40" size-xs="50">
               <div class="status-action" >
                 <div>
                   <p class="ref">Status</p>

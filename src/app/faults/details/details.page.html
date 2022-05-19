@@ -5,7 +5,7 @@
         <ion-col size="25" *ngIf="faultId">
           <ion-item>
             <ion-label position="floating">Urgency Status</ion-label>
-            <ion-select interface="popover" formControlName="urgencyStatus">
+            <ion-select interface="popover" formControlName="urgencyStatus" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.index" *ngFor="let item of faultUrgencyStatuses">
                 {{ item.value }}
               </ion-select-option>
@@ -36,7 +36,7 @@
                 <ion-item>
                   <ion-label position="floating">Type</ion-label>
 
-                  <ion-select interface="popover" formControlName="label" [interfaceOptions]="{'cssClass': 'select-options-content-wrap'}" >
+                  <ion-select interface="popover" formControlName="label" [interfaceOptions]="{'cssClass': 'select-options-content-wrap fault-ion-select'}" >
                     <ion-select-option text-wrap [value]="item" *ngFor="let item of addtionalInfo">{{ item }}
                     </ion-select-option>
                   </ion-select>
@@ -69,7 +69,7 @@
                 <ion-col size="40">
                   <ion-item>
                     <ion-label position="floating">Type</ion-label>
-                    <ion-select interface="popover" formControlName="label" [interfaceOptions]="{'cssClass': 'select-options-content-wrap'}">
+                    <ion-select interface="popover" formControlName="label" [interfaceOptions]="{'cssClass': 'select-options-content-wrap fault-ion-select'}">
                       <ion-select-option [value]="item" *ngFor="let item of addtionalInfo">{{ item }}
                       </ion-select-option>
                     </ion-select>
@@ -101,7 +101,7 @@
           <ion-item>
             <ion-label position="floating">Who reported the Repair?<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-select interface="popover" formControlName="reportedBy" (ionChange)="onSelectReportedByType()">
+            <ion-select interface="popover" formControlName="reportedBy" (ionChange)="onSelectReportedByType()" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.index" *ngFor="let item of reportedByTypes">{{ item.value }}
               </ion-select-option>
             </ion-select>
@@ -113,7 +113,7 @@
             <ion-label position="floating">Select agreement<ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select formControlName="agreementId" interface="popover" (ionChange)="onSelectAgreement()"
-              [disabled]="reportedByForm.controls.reportedBy.value != 'TENANT' && reportedByForm.controls.reportedBy.value != 'GUARANTOR'" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
+              [disabled]="reportedByForm.controls.reportedBy.value != 'TENANT' && reportedByForm.controls.reportedBy.value != 'GUARANTOR'" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.agreementId" *ngFor="let item of propertyTenancyList">
                 {{getLookupValue(item.status, agreementStatuses)}} {{item.tenancyStartDate | date:'dd/MM/yyyy'}} -
                 {{item.tenancyEndDate| date:'dd/MM/yyyy'}}
@@ -128,7 +128,7 @@
             <ion-label position="floating">Select Landlord<ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select interface="popover" formControlName="selectedEntity"
-              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
+              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item" *ngFor="let item of landlordsOfproperty">{{item.addressee || item.name}}
               </ion-select-option>
             </ion-select>
@@ -141,7 +141,7 @@
             <ion-label position="floating">Select Tenant<ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select interface="popover" formControlName="selectedEntity"
-              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
+              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item" *ngFor="let item of propertyTenants">{{item.addressee || item.name}}
               </ion-select-option>
             </ion-select>
@@ -154,7 +154,7 @@
             <ion-label position="floating">Select Guarantor<ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select interface="popover" formControlName="selectedEntity"
-              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
+              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item" *ngFor="let item of allGuarantors">
                 {{item.displayAs}}
               </ion-select-option>
@@ -167,7 +167,7 @@
           <ion-item>
             <ion-label position="floating">Select Third Party<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-select interface="popover" formControlName="reportedById">
+            <ion-select interface="popover" formControlName="reportedById" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.index" *ngFor="let item of faultReportedByThirdParty">{{item.value}}
               </ion-select-option>
             </ion-select>
@@ -229,7 +229,7 @@
           <ion-item>
             <ion-label position="floating">Access information<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-select interface="popover" formControlName="isTenantPresenceRequired" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
+            <ion-select interface="popover" formControlName="isTenantPresenceRequired" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.value" *ngFor="let item of accessInfoList">{{ item.title }}
               </ion-select-option>
             </ion-select>

@@ -1,5 +1,5 @@
 <mat-accordion class="list-view-accordian" multi>
-  <mat-expansion-panel #propertyDetails hideToggle>
+  <mat-expansion-panel #propertyDetails hideToggle expanded>
     <mat-expansion-panel-header>
       <mat-panel-title>
         Property Address
@@ -16,27 +16,27 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
     <ion-card-content id="details">
-      <form [formGroup]="group">
+      <form [formGroup]="group" id="property-address-details">
         <ion-grid>
           <ion-row>
             <ion-col size="33">
               <ion-row>
-                <ion-col size="70">
+                <ion-col>
                   <ion-item>
-                    <ion-label position="floating">PostCode*</ion-label>
+                    <ion-label position="floating">PostCode <ion-text class="mandatory">*</ion-text></ion-label>
                     <ion-input formControlName="postcode"></ion-input>
                   </ion-item>
                   <app-validation-message [control]="group.controls.postcode"></app-validation-message>
                 </ion-col>
-                <ion-col class="flex" size="30">
-                  <ion-button (click)="getAddressList()" style="float: right;">Lookup</ion-button>
+                <ion-col class="ion-align-self-end" size="auto">
+                  <ion-button class="postcode-find-btn" (click)="getAddressList()">Find</ion-button>
                 </ion-col>
               </ion-row>
               <ion-row *ngIf="addressList">
                 <ion-col size="100">
                   <ion-item>
                     <ion-label position="floating">Select Address</ion-label>
-                    <ion-select interface="popover" [disabled]="!addressList" formControlName="addressdetails" (ionChange)="getAddressDetails(selectedAddress.value)" #selectedAddress>
+                    <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" [disabled]="!addressList" formControlName="addressdetails" (ionChange)="getAddressDetails(selectedAddress.value)" #selectedAddress>
                       <ion-select-option [value]="address?.id" *ngFor="let address of addressList">
                         {{ address?.text }}
                       </ion-select-option>
@@ -87,7 +87,7 @@
               <ion-row>
                 <ion-col size="100">
                   <ion-item>
-                    <ion-label position="floating">Address 1*</ion-label>
+                    <ion-label position="floating">Address 1 <ion-text class="mandatory">*</ion-text></ion-label>
                     <ion-input formControlName="addressLine1"></ion-input>
                   </ion-item>
                   <app-validation-message [control]="group.controls.addressLine1"></app-validation-message>
@@ -96,7 +96,7 @@
               <ion-row>
                 <ion-col size="100">
                   <ion-item>
-                    <ion-label position="floating">Address 2*</ion-label>
+                    <ion-label position="floating">Address 2 <ion-text class="mandatory">*</ion-text></ion-label>
                     <ion-input formControlName="addressLine2"></ion-input>
                   </ion-item>
                   <app-validation-message [control]="group.controls.addressLine2"></app-validation-message>
@@ -121,7 +121,7 @@
                 </ion-col>
                 <ion-col size="50">
                   <ion-item>
-                    <ion-label position="floating">Town*</ion-label>
+                    <ion-label position="floating">Town <ion-text class="mandatory">*</ion-text></ion-label>
                     <ion-input formControlName="town"></ion-input>
                   </ion-item>
                   <app-validation-message [control]="group.controls.town"></app-validation-message>

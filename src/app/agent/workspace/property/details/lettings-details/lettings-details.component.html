@@ -17,7 +17,7 @@
     </mat-expansion-panel-header>
     <ion-card-content id="details">
       <form [formGroup]="group">
-        <ion-grid id="paropertyLettingDetails">
+        <ion-grid id="property-letting-details">
           <ion-row>
             <ion-col size="33.33">
               <ion-row>
@@ -78,7 +78,7 @@
                 </ion-col>
                 <ion-col size="30" style="margin-top: 18px;">
                   <ion-item lines="none">
-                    <ion-toggle formControlName="isHmoProperty" color="success"></ion-toggle>
+                    <ion-toggle formControlName="isHmoProperty" color="primary"></ion-toggle>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -177,7 +177,7 @@
               <ion-row>
                 <ion-col size="50" class="no-padding toggle-btn-stop-spacing">
                   <ion-item lines="none" class="mt-7">
-                    <ion-toggle formControlName="isOnWithOtherAgent" color="success" class="toggle-btn">
+                    <ion-toggle formControlName="isOnWithOtherAgent" color="primary" class="toggle-btn">
                     </ion-toggle>
                     <ion-text class="toggle-btn-text">On with another agent?</ion-text>
                   </ion-item>
@@ -192,7 +192,7 @@
             </ion-col>
             <!-- class="no-padding-top no-padding-bottom mat-date-picker" -->
             <ion-col size="33.33">
-              <ion-row>
+              <ion-row style="padding-top: 10px;">
                 <ion-col size="50">
                   <mat-form-field appearance="fill">
                     <mat-label> Appraised </mat-label>

@@ -711,6 +711,7 @@ mat-form-field {
 		// }
     .mat-select-arrow-wrapper {
       padding-top: 18px;
+      padding-right: 5px;
       .mat-select-arrow{
         color: var(--ion-color-primary-contrast);
       }
@@ -904,5 +905,39 @@ mat-form-field {
         color: var(--ion-color-property-status-text);
       }
     }    
+  }
+}
+
+#agent-portal {
+  .postcode-find-btn {
+    margin-right: 0px;
+    margin-bottom: 0px;
+  }
+
+  .currency-mask{
+    background: inherit;
+  }
+
+  .contractor-list{
+    width: 100%;
+    max-height: 200px;
+    overflow-y: scroll;
+    position: absolute !important;
+    z-index: 5 !important;
+    cursor: pointer;
+    ion-item{
+      label{
+        padding-right: 5px;
+        color: var(--ion-color-one);
+        .ref{
+          padding-right: 5px;
+          color: var(--ion-color-step-1000);
+        }
+        .status{
+          padding-right: 5px;
+          color: var(--ion-color-success);
+        }
+      }
+    }
   }
 }

@@ -18,9 +18,9 @@
                   <i class="propcoicon no-background propcoicon-contractor"
                     style="background: transparent;"></i>
                 </span>&nbsp;
-                <label style="color: var(--ion-color-step-200);padding-right: 5px;">{{result.fullName}}&nbsp;
-                  <span style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-                  <span class="text-color-lightgreen" style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;  
+                <label>{{result.fullName}}&nbsp;
+                  <span class="ref">{{result.reference}}</span>&nbsp;
+                  <span class="text-color-lightgreen status">{{result.status}}</span>&nbsp;  
                 </label>                        
               </ion-item>
             </ion-list>
@@ -31,7 +31,7 @@
           <ion-col size="50">
             <ion-item>
               <ion-label position="stacked">Confirmed Estimate<ion-text class="mandatory">*</ion-text></ion-label>
-              <input currencyMask formControlName="confirmedEstimate"
+              <input currencyMask formControlName="confirmedEstimate" class="currency-mask"
                 #estimate/>
             </ion-item>
             <app-validation-message [control]="userActionForms.controls.confirmedEstimate"></app-validation-message>

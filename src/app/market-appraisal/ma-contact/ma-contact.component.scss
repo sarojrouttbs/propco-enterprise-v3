@@ -1,0 +1,14 @@
+.display-as-block,
+.address-block {
+    align-items: end;
+    ion-label {
+        color: var(--ion-color-three);
+        font-size: 18px;
+    }
+}
+
+.address-details-block {
+    div {
+        color: var(--ion-color-three) !important;
+    }
+}

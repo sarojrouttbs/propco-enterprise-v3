@@ -28,20 +28,8 @@
 .row-margin{
   margin-top: -5px;
 }
-// ionic form field - dark / light theme css
 
-ion-item {
-  --border-color: var(--ion-color-ion-select) !important;
-  ion-label {
-    color: var(--ion-color-ion-label) !important;
-  }
-
-  ion-select, ion-text, ion-input {
-    color: var(--ion-color-ion-select) !important;
-  }
-}
-
-#propertyCheckGrid{
+#property-check-grid{
   .switch-block {
     ion-item{
       margin-bottom: 21px;

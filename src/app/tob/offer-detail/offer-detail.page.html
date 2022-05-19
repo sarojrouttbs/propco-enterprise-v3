@@ -175,7 +175,7 @@
       <ion-row class=" ion-justify-content-center">
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
-            <ion-label position="stacked">Offer Amount<ion-text class="mandatory">*</ion-text>
+            <ion-label position="stacked">Offer Amount <ion-text class="mandatory">*</ion-text>
             </ion-label>
             <input class="currency-input" currencyMask formControlName="amount" />
           </ion-item>
@@ -227,7 +227,7 @@
 
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
-            <ion-label position="floating">For How Long?<ion-text class="mandatory">*</ion-text>
+            <ion-label position="floating">For How Long? <ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select formControlName="rentingTime" interface="popover">
               <ion-select-option [value]="item.index" *ngFor="let item of letDurations">{{ item.value }}
@@ -249,7 +249,7 @@
 
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
-            <ion-label position="floating">No. of Children<ion-text class="mandatory">*</ion-text>
+            <ion-label position="floating">No. of Children <ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select formControlName="numberOfChildren" interface="popover">
               <ion-select-option [value]="item" *ngFor="let item of childrens">{{item}}</ion-select-option>
