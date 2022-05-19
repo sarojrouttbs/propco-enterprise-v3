@@ -38,12 +38,15 @@ export class CommonService {
     // this.alertPresented = false;
   }
 
+
+
   private dataChange = new Subject<any>();
   dataChanged$ = this.dataChange.asObservable();
 
   dataChanged(data) {
     this.dataChange.next(data);
   }
+
 
   // isCordovaDevice(){
   //     return (this._platform.platforms().indexOf('cordova')!= -1) ? true : false;
@@ -716,6 +719,15 @@ export class CommonService {
 
   getPropertyLookup(params): Observable<Lookupdata> {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup/property', { params, responseType: 'json' });
+  }
+
+  removeEmpty(obj:any) {
+    for (const key in obj) {
+      if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
+        delete obj[key];
+      }
+    }
+    return obj;
   }
 
 }
