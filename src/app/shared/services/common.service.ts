@@ -45,6 +45,15 @@ export class CommonService {
     this.dataChange.next(data);
   }
 
+
+  private lanlordChange = new Subject<any>();
+  lanlordChange$ = this.lanlordChange.asObservable();
+
+  lanlordValueChange(data) {
+    this.lanlordChange.next(data);
+  }
+
+
   // isCordovaDevice(){
   //     return (this._platform.platforms().indexOf('cordova')!= -1) ? true : false;
   // }

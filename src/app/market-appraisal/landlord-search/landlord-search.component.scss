@@ -1,0 +1,81 @@
+@mixin set-text-style($size, $lheight) {
+  font-size: $size;
+  line-height: $lheight;
+}
+
+.searchbarCustom {
+  --background: transparent;
+  border: 1px solid #ccc;
+  padding: 0;
+    .searchbar-input {
+      line-height: 27px;
+    }
+    .searchbar-search-icon {
+      display:none; 
+      width:0; 
+      height:0;
+    }
+    
+    .searchbar-input-container{
+      border: 1px solid #ccc;
+      box-shadow: none;
+      border-left: 0;
+      .searchbar-input {
+        box-shadow: none;
+        padding-top: 4px;
+        padding-left: 10px;
+        border: 1px solid #ccc;
+
+      }
+    }
+}
+
+.green-icon{
+  color: var(--ion-color-secondary-contrast);
+  background-color: var(--ion-color-success);
+  font-size: 24px;
+  padding: 7px;
+  width: 40px;
+  height: 40px;
+}
+
+
+.solrSuggestionList {
+  margin-top: 26px;
+  position: absolute;
+  z-index: 100;
+  list-style: none;
+  padding: 0;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 25%);
+  right: 13%;
+    width: auto;
+  background-color: var(--ion-color-autocomplete-suggestion-bg);
+
+  .solrSuggestionListItem:hover{
+      background-color: var(--ion-color-solr-ex-panal-border-color);
+  }
+
+  .solrSuggestionListItem {
+      color: var(--ion-color-text-color);
+      cursor: pointer;
+      @include set-text-style(14px, 48px);
+      overflow: hidden;
+      padding: 0 2px;
+      height: 48px;
+      margin: 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
+      i.propcoicon {
+          display: inline-table;
+          vertical-align: sub;
+      }
+
+      .text-color-lightgreen {
+          color: #21b573 !important;
+      }
+      .no-background {
+          background-color: transparent;
+      }
+  }
+}

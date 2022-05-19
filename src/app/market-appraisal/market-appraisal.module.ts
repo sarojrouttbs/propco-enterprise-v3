@@ -10,9 +10,12 @@ import { MaterialModule } from '../material.module';
 import { ComponentsModule } from '../shared/components/components.module';
 import { DisplayAsModalPageModule } from '../shared/modals/display-as-modal/display-as-modal.module';
 import { AddressModalPageModule } from '../shared/modals/address-modal/address-modal.module';
+import { LandlordSearchComponent } from './landlord-search/landlord-search.component';
+import { FaultsService } from 'src/app/faults/faults.service';
+
 @NgModule({
   imports: [
-    CommonModule,
+CommonModule,
     FormsModule,
     IonicModule,
     MaterialModule,
@@ -22,6 +25,7 @@ import { AddressModalPageModule } from '../shared/modals/address-modal/address-m
     DisplayAsModalPageModule,
     AddressModalPageModule
   ],
-  declarations: [MarketAppraisalPage, MaContactComponent]
+  declarations: [MarketAppraisalPage, MaContactComponent,LandlordSearchComponent],
+  providers:[FaultsService]
 })
 export class MarketAppraisalPageModule { }
