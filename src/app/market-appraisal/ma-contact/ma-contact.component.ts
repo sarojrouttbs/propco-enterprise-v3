@@ -99,9 +99,11 @@ export class MaContactComponent implements OnInit {
   }
 
   onOwnershipChange(e) {
-    this.contactForm.get('owners').disable()
-    if (e.detail.value == 'jointly') {
-      this.contactForm.get('owners').enable()
+    if(this.contactForm){
+      this.contactForm.get('owners').disable()
+      if (e.detail.value == 'jointly') {
+        this.contactForm.get('owners').enable()
+      }
     }
   }
 }

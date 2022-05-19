@@ -7,7 +7,7 @@
     </ion-row>
 
     <ion-row *ngIf="iacNotification && !showSkeleton && !faultDetails?.isClosed">
-      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background border-top-radious">
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
@@ -183,7 +183,7 @@
     </ion-row>
     <ion-grid style="margin: 20px 0" *ngIf="quoteDocuments?.length && !showSkeleton">
       <ion-row>
-        <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+        <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background">
           <h2>Invoice / Documents</h2>
           <ion-row>
             <ion-col size-xl="25" size="25" *ngFor="let file of quoteDocuments; let i=index;">
@@ -214,7 +214,7 @@
     </ion-grid>
     <ion-row *ngIf="isFormsReady && !showSkeleton">
       
-        <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+        <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background">
           <ng-container *ngIf="isWorksOrder">
             <form [formGroup]="workOrderForm">
               <ion-grid>
@@ -226,7 +226,7 @@
       
     </ion-row>
     <ion-row *ngIf="showSkeleton">
-      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background">
       <div><ng-container *ngTemplateOutlet="notificationSkeleton"></ng-container></div>
       <div *ngIf="isWorksOrder" ><ng-container *ngTemplateOutlet="worksOrderFormSkeleton"></ng-container></div>
     </ion-col>
@@ -234,7 +234,7 @@
     <ion-grid style="margin: 20px 0"
     *ngIf="isFormsReady && faultDetails?.isAnyFurtherWork && !showSkeleton">
     <ion-row>
-      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background">
         <h2>Further Job(s) Required</h2>
         <div class="border-bottom"></div>
         <div>Is there any further work to Quote for ? : <b>Yes</b></div>
@@ -255,7 +255,7 @@
   </ion-grid>
 <ng-template #worksOrderDetails>
   <form [formGroup]="workOrderForm">
-    <ion-row class="row-banner">
+    <ion-row class="row-banner" class="secondary-background">
       <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Contractor <ion-text class="mandatory">*</ion-text>
@@ -271,10 +271,9 @@
             <span>
               <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
             </span>&nbsp;
-            <label style="color: var(--ion-color-step-200); padding-right: 5px;">{{result.fullName}}&nbsp;
-              <span style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-              <span class="text-color-lightgreen"
-                style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
+            <label>{{result.fullName}}&nbsp;
+              <span class="ref">{{result.reference}}</span>&nbsp;
+              <span class="text-color-lightgreen status">{{result.status}}</span>&nbsp;
             </label>
           </ion-item>
 
@@ -306,7 +305,7 @@
         </ion-item>
       </ion-col>
     </ion-row>
-    <ion-row class="row-banner">
+    <ion-row class="row-banner" class="secondary-background border-bottom-radious">
       <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Reference </ion-label>
@@ -334,7 +333,7 @@
         <ion-item>
           <ion-label position="stacked">Repair Cost <ion-text class="mandatory">*</ion-text>
           </ion-label>
-          <input currencyMask formControlName="repairCost" (blur)="onBlurCurrency(workOrderForm.controls.repairCost.value, workOrderForm)"/>
+          <input currencyMask formControlName="repairCost" class="currency-mask" (blur)="onBlurCurrency(workOrderForm.controls.repairCost.value, workOrderForm)"/>
         </ion-item>
         <app-validation-message [control]="workOrderForm.controls.repairCost"></app-validation-message>
       </ion-col>
