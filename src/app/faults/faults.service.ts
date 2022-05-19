@@ -131,7 +131,7 @@ export class FaultsService {
 
   getLandlordDetails(landlordId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `landlords/${landlordId}`);
-  }
+  } 
 
   getLandlordDppDetails(landlordId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `landlords/${landlordId}/preference/dpp`);
