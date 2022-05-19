@@ -150,20 +150,20 @@ export class ValidationService {
     }
   }
 
-  static equalTo(minControlName) {
+  static equalTo(equalControlName) {
 
     return (control): {
       [key: string]: any
     } => {
       if (!control['_parent']) { return null; }
 
-      if (!control['_parent'].controls[minControlName]) {
-        throw new TypeError('Form Control ' + minControlName + ' does not exists.');
+      if (!control['_parent'].controls[equalControlName]) {
+        throw new TypeError('Form Control ' + equalControlName + ' does not exists.');
       }
 
-      const controlMatch = control['_parent'].controls[minControlName];
+      const controlMatch = control['_parent'].controls[equalControlName];
 
-      return controlMatch.value < control.value ? null : {
+      return controlMatch.value == control.value ? null : {
         equalTo: true
       };
     };
