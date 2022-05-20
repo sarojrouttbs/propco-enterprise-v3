@@ -58,7 +58,7 @@ export class DisplayAsModalPage implements OnInit {
     });
   }
 
-  onValueChange(e){    
+  onValueChange(){    
     this.landlordDetailsForm.get('addressee').patchValue(this.landlordDetailsForm.value.title + ' ' + this.landlordDetailsForm.value.initials + ' ' + this.landlordDetailsForm.value.surName);
     this.landlordDetailsForm.get('salutation').patchValue(this.landlordDetailsForm.value.title + ' ' + this.landlordDetailsForm.value.surName);
     this.landlordDetailsForm.get('displayAs').patchValue(this.landlordDetailsForm.value.title + ' ' + this.landlordDetailsForm.value.foreName + ' ' + this.landlordDetailsForm.value.surName);
