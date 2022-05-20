@@ -162,7 +162,8 @@ export class OfferListPage implements OnInit {
     const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    const divOverlayLeft = (divOverlay.parent('.overlay-container').innerWidth() - baseContainerWidth - (id === 'divOverlayChild' ? 0 : 25));
+    // const divOverlayLeft = (divOverlay.parent('.overlay-container').innerWidth() - baseContainerWidth - (id === 'divOverlayChild' ? 0 : 25));
+    const divOverlayLeft = baseContainerPosition.left;
 
     let origDivOverlayHeight;
     let origDivOverlayTop;
@@ -284,7 +285,7 @@ export class OfferListPage implements OnInit {
     const noteData = this.selectedNotesRow;
     const modal = await this.modalController.create({
       component: NotesModalPage,
-      cssClass: 'modal-container offer-notes-modal-height',
+      cssClass: 'modal-container offer-notes-modal-height tob-modal-container',
       componentProps: {
         noteData: this.isAddNote ? {} : noteData,
         notesType: NOTES_TYPE.OFFER,

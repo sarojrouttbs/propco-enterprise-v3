@@ -374,5 +374,12 @@
       }
     }
   }
+
+  #offer-stepper{
+    .stepper-next, .stepper-back{
+      color: var(--ion-color-primary-contrast);
+      background-color: var(--ion-color-success);
+    }
+  }
 }
 
