@@ -49,14 +49,14 @@
   box-shadow: 0 2px 5px rgb(0 0 0 / 25%);
   right: 13%;
     width: auto;
-  background-color: var(--ion-color-autocomplete-suggestion-bg);
+  background-color: var(--ion-color-five);
 
   .solr-suggestion-list-item:hover{
-      background-color: var(--ion-color-solr-ex-panal-border-color);
+      background-color: var(--ion-color-five);
   }
 
   .solr-suggestion-list-item {
-      color: var(--ion-color-text-color);
+      color: var(--ion-text-color);
       cursor: pointer;
       @include set-text-style(14px, 48px);
       overflow: hidden;

@@ -1,8 +1,8 @@
 <ion-row class="ion-align-items-center ion-justify-content-center ion-margin-vertical">
   <ion-col size=60></ion-col>
 
-  <ion-col size=25 style="padding-right: 0;" class="ion-no-padding tour-2">
-    <ion-searchbar [(ngModel)]="searchTerm" [placeholder]="'Start typing to search contacts'" class="searchbar-custom"
+  <ion-col size=30 style="padding-right: 0;" class="ion-no-padding tour-2">
+    <ion-searchbar [(ngModel)]="searchTerm" [placeholder]="type === 'contact' ? 'Start typing to search contacts' : 'Start typing to search Properties'" class="searchbar-custom"
       debounce="500" (ionChange)="getItems($event)" [formControl]="searchTermControl" (ionBlur)="hideSuggestion()"
       (ionFocus)="onFocus()">
     </ion-searchbar>
@@ -40,10 +40,11 @@
             <span>
               <i class="propcoicon no-background propcoicon-landlord red-icon"></i>
             </span>
-            <span>{{item.name}}</span>&nbsp;
-            <span>{{item.reference}}</span>&nbsp;
-            <span>{{item.propertyAddress.addressLine1 | slice:0:30}}, {{item.propertyAddress.postcode}}</span>&nbsp;
-            <span class="text-color-lightgreen">{{item.status}}</span>
+            <span>{{item?.name}}</span>&nbsp;
+            <span>{{item?.reference}}</span>&nbsp;
+            <span>{{item?.address}} {{item?.postcode}}</span>&nbsp;
+            <span>{{item?.propertyAddress?.addressLine1 | slice:0:30}}, {{item?.propertyAddress?.postcode}}</span>&nbsp;
+            <span class="text-color-lightgreen">{{item?.status}}</span>
           </div>
         </ion-item>
       </ng-container>

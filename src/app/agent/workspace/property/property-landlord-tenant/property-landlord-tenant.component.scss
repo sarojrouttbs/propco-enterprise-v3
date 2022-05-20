@@ -1,8 +1,8 @@
 ion-grid.main-block {
     background: var(--ion-background-color);
     padding: 0;
-    border-top: solid 1px var(--ion-property-details-bg);
-    border-bottom: solid 1px var(--ion-property-details-bg);
+    border-top: solid 1px var(--ion-color-four);
+    border-bottom: solid 1px var(--ion-color-four);
     
     .landlord-tenant-header {
         display: flex;
@@ -11,16 +11,16 @@ ion-grid.main-block {
         padding: 10px 0px;
         & > ion-fab-button {
             --background: var(--ion-color-landlord-tenant-fab-btn);
-            color: var(--ion-color-landlord-tenant-fab-text);
+            color: var(--ion-color-six);
             width: 25px;
             height: 25px;
             --box-shadow: none;
             span {
-                color: var(--ion-color-landlord-tenant-fab-text);
+                color: var(--ion-color-six);
             }
         }
         ion-text {
-            color: var(--ion-color-text-color);
+            color: var(--ion-text-color);
         }
     }
     .tenant-status {
@@ -28,7 +28,7 @@ ion-grid.main-block {
     }
     ion-select.landlord-tenant-dropdown {
         font-size: 13px;
-        background: var(--ion-color-landlord-tenant-selection);
+        background: var(--ion-color-five);
         padding-top: 5px;
         --padding-end: 0;
         --padding-bottom: 5px;
@@ -43,21 +43,21 @@ ion-grid.main-block {
             cursor: pointer;
         }
         a {
-            color: var(--ion-color-text-color);
+            color: var(--ion-text-color);
             text-decoration: none;
         }
-        color: var(--ion-color-text-color);
+        color: var(--ion-text-color);
     }
     
     .rent-history-block {
         margin-bottom: 5px;
         ion-label {
-            color: var(--ion-color-block-label-color);
+            color: var(--ion-label-color);
             font-size: 12px;
         }
     
         ion-text {
-            color: var(--ion-color-text-color);
+            color: var(--ion-text-color);
             font-size: 13px;
         }
     }
@@ -65,22 +65,22 @@ ion-grid.main-block {
     .rent-detail-block {
         text-align: center;
         ion-label {
-            color: var(--ion-color-block-label-color);
+            color: var(--ion-label-color);
             font-size: 13px;
         }
     
         ion-text {
-            color: var(--ion-color-text-color);
+            color: var(--ion-text-color);
             font-size: 15px;
         }
         ion-col {
             height: 55px;
-            background: var(--ion-propert-rent-block-bg);
-            border-top: solid 1px var(--ion-color-body);
+            background: var(--ion-color-six);
+            border-top: solid 1px var(--ion-color-four);
         }
         .middle-block {
-            border-left: solid 1px var(--ion-color-body);
-            border-right: solid 1px var(--ion-color-body);
+            border-left: solid 1px var(--ion-color-four);
+            border-right: solid 1px var(--ion-color-four);
         }
     }
     
@@ -99,5 +99,5 @@ ion-grid.main-block {
 }
 
 ion-grid.landlord-block {
-    border: solid 1px var(--ion-property-details-bg);
+    border: solid 1px var(--ion-color-four);
 }
