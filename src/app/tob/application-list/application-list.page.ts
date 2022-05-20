@@ -184,7 +184,7 @@ export class ApplicationListPage implements OnInit {
     const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    const divOverlayLeft = (divOverlay.parent('.overlay-container').innerWidth() - baseContainerWidth - 25);
+    const divOverlayLeft = baseContainerPosition.left;
 
     let origDivOverlayHeight;
     let origDivOverlayTop;
@@ -348,7 +348,7 @@ export class ApplicationListPage implements OnInit {
   async markHoldingDepositPaid() {
     const modal = await this.modalController.create({
       component: HoldingDepositePaidModalPage,
-      cssClass: 'modal-container modal-width',
+      cssClass: 'modal-container modal-width tob-modal-container',
       componentProps: {
         heading: 'Holding Deposit Already Paid',
         offlinePaymentTypes: this.offlinePaymentTypes,
@@ -377,6 +377,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   viewDetails(applicantId: string) {
+    this.hideMenu('', 'divOverlay2');
     this.router.navigate([`../application/${applicantId}`], { relativeTo: this.route });
   }
 
@@ -426,7 +427,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   onPaginateChange() {
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'divOverlay2');
   }
 
   private checkApplicationsAvailable() {

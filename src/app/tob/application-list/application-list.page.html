@@ -2,10 +2,10 @@
   <ion-title></ion-title>
 </ion-header>
 
-<ion-content>
+<ion-content id="tob-application-list">
   <ng-container>
     <div class="property-details">
-      <ion-grid>
+      <ion-grid class="ion-padding">
         <ion-row class="address">
           <ion-col class="ion-no-padding" *ngIf="isPropertyDetailsAvailable">
             <h1 *ngIf="propertyDetails?.publishedAddress" class="ion-no-margin">{{ propertyDetails?.publishedAddress }}
@@ -19,7 +19,7 @@
           </ion-col>
         </ion-row>
         <ion-row class="filters">
-          <ion-col size-xl="10">
+          <ion-col size-xl="10" class="ion-no-padding">
             <ion-button color="danger" (click)="rejectAllApplications()"> Reject All </ion-button>
           </ion-col>
 
@@ -47,13 +47,13 @@
             </mat-form-field>
           </ion-col>
 
-          <ion-col class="ion-text-end no-padding-right" size-xl="15" size-sm="25">
+          <ion-col class="ion-text-end no-padding-right" size-xl="20" size-sm="25">
             <ion-button class="btn-filter" color="success" [disabled]="fromDate.value && toDate.value ? false : true"
               (click)="filterByDate()" expand="block">Filter</ion-button>
             <ion-button class="btn-filter" color="danger" (click)="resetFilters()" expand="block">Reset</ion-button>
           </ion-col>
 
-          <ion-col class="ion-no-padding ion-text-end btn-top-space" size-xl="30">
+          <ion-col class="ion-no-padding ion-text-end btn-top-space" size-xl="25">
             <ion-button (click)="createApplication()" [disabled]="!propertyDetails?.isAvailable"> Create Application </ion-button>
             <ion-button (click)="hideRecords()"> {{ isHideRejected ? "Show Rejected" : "Hide Rejected"}} </ion-button>
           </ion-col>
@@ -64,9 +64,9 @@
 
   <ng-container>
     <div *ngIf="!isApplicationListAvailable">
-      <ion-card *ngFor="let number of [0,1,2,3,4]">
+      <ion-card *ngFor="let number of [0,1,2,3,4]" class="ion-padding no-padding-top-bottom">
         <ion-card-content>
-          <ion-grid>
+          <ion-grid class="ion-padding">
             <ion-row class="main-row">
               <ion-col size-xl="15" size="20" class="no-padding">
                 <div>
@@ -134,9 +134,9 @@
       </ion-card>
     </div>
     <div style="position: relative;" class="overlay-container" *ngIf="isApplicationListAvailable">
-      <ion-card *ngFor="let item of obsApplicationList | async;">
+      <ion-card *ngFor="let item of obsApplicationList | async;" class="ion-padding no-padding-top-bottom">
         <ion-card-content>
-          <ion-grid>
+          <ion-grid class="ion-padding">
             <ion-row class="main-row">
               <ion-col size-xl="15" size="20" class="no-padding">
                 <div>
@@ -219,7 +219,7 @@
         <i (click)="hideMenu($event,'divOverlay2')" class="propcoicon propcoicon-actions-on"></i>
       </div>
     </div>
-    <div class="tob-pagination">
+    <div class="tob-pagination ion-padding">
       <mat-paginator [hidden]="!filteredApplicationList.data.length" class="paginator" #paginator
         [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
         [length]="filteredApplicationList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
