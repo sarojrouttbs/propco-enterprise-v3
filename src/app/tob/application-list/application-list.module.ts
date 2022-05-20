@@ -10,8 +10,6 @@ import { ApplicationListPage } from './application-list.page';
 import { MaterialModule } from 'src/app/material.module';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { HoldingDepositePaidModalPageModule } from 'src/app/shared/modals/holding-deposite-paid-modal/holding-deposite-paid-modal.module';
-import { NegotiateModalPageModule } from 'src/app/shared/modals/negotiate-modal/negotiate-modal.module';
-import { TermsAndConditionModalPageModule } from 'src/app/shared/modals/terms-and-condition-modal/terms-and-condition-modal.module';
 
 @NgModule({
   imports: [
@@ -22,9 +20,7 @@ import { TermsAndConditionModalPageModule } from 'src/app/shared/modals/terms-an
     MaterialModule,
     ReactiveFormsModule,
     PipesModule,
-    HoldingDepositePaidModalPageModule,
-    NegotiateModalPageModule,
-    TermsAndConditionModalPageModule
+    HoldingDepositePaidModalPageModule
   ],
   declarations: [ApplicationListPage]
 })
