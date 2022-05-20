@@ -21,7 +21,7 @@
           <ion-row class="no-padding">
             <ion-col class="no-padding" size-xs="100" size-sm= "100" size-md="33">
               <ion-row class="register-address-row">
-                <ion-col size="80"><h2 class="heading">Registered Address</h2></ion-col>
+                <ion-col size="80"><h2 class="heading">Registered Address <ion-text class="mandatory">*</ion-text></h2></ion-col>
                 <ion-col size="20">
                   <ion-button (click)="openAddressModal()" color="success">{{address?.addressLine1 ? 'Edit' :
                     'Add'}}</ion-button>
@@ -52,7 +52,12 @@
                 <ion-col>
                   <ion-item>
                   <ion-label position="floating"> Bedrooms</ion-label>
-                  <ion-input formControlName="numberOfBedroom"></ion-input>
+                  <ion-select interface="popover"  formControlName="numberOfBedroom" 
+                  [value]="propertyForm.get('isStudio').value? '':propertyForm.get('numberOfBedroom').value" [disabled]="propertyForm.get('isStudio').value">
+                    <ion-select-option [value]="number" *ngFor="let number of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]">
+                      {{ number }}
+                    </ion-select-option>
+                  </ion-select>
                   </ion-item>
                 </ion-col>
                 <ion-col>
@@ -268,7 +273,7 @@
                         <span class="count-duration">{{duration.totalMonths}}</span>
                         <span class="duration-heading">MM</span>
                         <span class="count-duration">{{duration.totalDays}}</span>
-                        <span class="durationHeading">DD</span>
+                        <span class="duration-heading">DD</span>
                     </div>
                 </div>
                 </ion-col>
