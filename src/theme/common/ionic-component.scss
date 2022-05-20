@@ -627,6 +627,20 @@ ion-alert.common-alert-box {
       }
     }
   }
+
+  #tob-application-stepper {
+    // ionic form field - dark / light theme css
+    ion-item {
+      --border-color: var(--ion-color-one) !important;
+      ion-label, ion-text {
+        color: var(--ion-color-three) !important;
+      }
+  
+      ion-select, ion-input {
+        color: var(--ion-color-one) !important;
+      }
+    }
+  }
 }
 
 .market-apprisal-ion-select, .fault-ion-select, .let-alliance-ion-select {
@@ -680,6 +694,12 @@ ion-alert.common-alert-box {
     }
     ion-footer{
       background: var(--ion-color-six);
+      ion-item {
+        --border-color: var(--ion-color-one);
+        ion-label {
+          color: var(--ion-color-three) !important;
+        }
+      }
     }
     .drop-zone{
       background-color: var(--ion-color-five)
