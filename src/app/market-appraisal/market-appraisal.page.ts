@@ -125,7 +125,7 @@ export class MarketAppraisalPage implements OnInit {
       /**Scenario 1 : New Landlord - New Property**/
       const landlordCreated = await this.createLandlord() as any;
       if (landlordCreated) {
-        const payload = Object.assign({}, this.maForm.get('propertyForm').value);
+        const payload = this.commonService.removeEmpty(Object.assign({}, this.maForm.get('propertyForm').value));
         payload.landlordId = landlordCreated.landlordId;
         payload.status = parseInt(payload.status);
         if (payload.availableFromDate) {
@@ -133,9 +133,6 @@ export class MarketAppraisalPage implements OnInit {
         }
         if (payload.availableToDate) {
           payload.availableToDate = this.commonService.getFormatedDate(payload.availableToDate, 'yyyy-MM-dd');
-        }
-        else {
-          delete payload.availableToDate;
         }
         const propertyCreated = await this.createProperty(payload);
         if (propertyCreated) {

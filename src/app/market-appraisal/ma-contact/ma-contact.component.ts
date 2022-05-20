@@ -5,6 +5,7 @@ import { OWNERSHIP, PROPCO } from 'src/app/shared/constants';
 import { AddressModalPage } from 'src/app/shared/modals/address-modal/address-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { DisplayAsModalPage } from 'src/app/shared/modals/display-as-modal/display-as-modal.page';
+import { MarketAppraisalService } from 'src/app/market-appraisal/market-appraisal.service';
 @Component({
   selector: 'app-ma-contact',
   templateUrl: './ma-contact.component.html',
@@ -15,6 +16,7 @@ export class MaContactComponent implements OnInit {
   propertyHeardSources: any;
   officeCodes: any;
   landlordStatuses: any;
+  landlordData;
   popoverOptions: any = {
     cssClass: 'market-apprisal-ion-select'
   };
@@ -25,14 +27,55 @@ export class MaContactComponent implements OnInit {
     this.contactForm = value as FormGroup;
   }
   ownership = OWNERSHIP;
-
   constructor(
     private modalController: ModalController,
     private commonService: CommonService,
+    private marketAppraisalService: MarketAppraisalService
   ) { }
 
   ngOnInit() {
     this.getLookupData();
+    this.marketAppraisalService.landlordChange$.subscribe(data => {
+      this.landlordData = data;
+      if (this.landlordData) this.getLandlordData();
+    })
+  }
+
+  getLandlordData() {
+    if (this.landlordData === 'reset') {
+      this.contactForm.reset();
+      this.landlordData = '';
+      this.address = '';
+    } else {
+      this.setData(this.landlordData);
+    }
+  }
+
+  setData(data) {
+    this.address = data.address;
+    this.contactForm.patchValue({
+      displayAs: data.displayAs ? data.displayAs : '',
+      mobile: data.mobile ? data.mobile : '',
+      landlordStatus: data.status ? data.status : '',
+      email: data.email ? data.email : '',
+      homeTelephone: data.homeTelephone ? data.homeTelephone : '',
+      businessTelephone: data.businessTelephone ? data.businessTelephone : '',
+      enquiryNotes: data.enquiryNotes ? data.enquiryNotes : '',
+      owners: data.owners ? data.owners : '',
+      heardReason: data.heardReason ? this.getIndex(data.heardReason, this.propertyHeardSources) : '',
+      officeCode: data.associatedOfficeCode ? data.associatedOfficeCode : '',
+      ownership: data.ownership ? this.getIndex(data.ownership, this.ownership) : ''
+    });
+  }
+
+  getIndex(value, lookUp) {
+    let index;
+    lookUp.forEach((item: any) => {
+      if (item.value === value) {
+        index = item.index
+      }
+    })
+    return index;
   }
 
   private getLookupData() {
@@ -64,6 +107,7 @@ export class MaContactComponent implements OnInit {
       cssClass: 'modal-container ma-modal-container',
       componentProps: {
         displayAs: this.contactForm.value.displayAs,
+        landlordData: this.landlordData
       },
       backdropDismiss: false
     });
@@ -99,7 +143,7 @@ export class MaContactComponent implements OnInit {
   }
 
   onOwnershipChange(e) {
-    if(this.contactForm){
+    if (this.contactForm) {
       this.contactForm.get('owners').disable()
       if (e.detail.value == 'jointly') {
         this.contactForm.get('owners').enable()

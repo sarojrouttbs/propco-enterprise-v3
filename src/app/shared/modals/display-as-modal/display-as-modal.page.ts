@@ -13,10 +13,11 @@ export class DisplayAsModalPage implements OnInit {
   landlordDetailsForm: FormGroup;
   titles = TITLES;
   displayAs;
+  landlordData;
   popoverOptions: any = {
     cssClass: 'market-apprisal-ion-select'
   };
-  
+
   constructor(
     private modalController: ModalController,
     private fb: FormBuilder
@@ -28,15 +29,26 @@ export class DisplayAsModalPage implements OnInit {
 
   initLandlordForm() {
     this.landlordDetailsForm = this.fb.group({
-      title: ['', [Validators.required]],
-      initials: [''],
-      forename: ['', [Validators.required]],
-      middleName: [''],
-      surname: ['', [Validators.required]],
-      addressee: [''],
-      salutation: [''],
-      displayAs: [this.displayAs ? this.displayAs : '', Validators.required]
+      title: [this.landlordData && this.landlordData.title ? this.getIndex(this.landlordData.title) : '', [Validators.required]],
+      initials: [this.landlordData && this.landlordData.initials ? this.landlordData.initials : ''],
+      forename: [this.landlordData && this.landlordData.foreName ? this.landlordData.foreName : '', [Validators.required]],
+      middleName: [this.landlordData && this.landlordData.middleName ? this.landlordData.middleName : ''],
+      surname: [this.landlordData && this.landlordData.surName ? this.landlordData.surName : '', [Validators.required]],
+      addressee: [this.landlordData && this.landlordData.addressee ? this.landlordData.addressee : ''],
+      salutation: [this.landlordData && this.landlordData.salutation ? this.landlordData.salutation : ''],
+      displayAs: [this.landlordData && this.landlordData.displayAs ? this.landlordData.displayAs : '', Validators.required]
     });
+  }
+
+  getIndex(value) {
+    let index;
+    this.titles.forEach((item: any) => {
+      if (item.value === value) {
+        index = item.index
+      }
+
+    })
+    return index;
   }
 
   dismiss() {
