@@ -84,6 +84,7 @@ export class MaPropertyComponent implements OnInit {
 
   async setPropertyData(id){
       const property:any = await this.getPropertyDetails(id);
+      this.getPropertyLocationsByPropertyId(id);
       this.address = property.address
       this.propertyForm.patchValue({
       numberOfBedroom: property.numberOfBedroom ? property.numberOfBedroom : '',
@@ -94,8 +95,8 @@ export class MaPropertyComponent implements OnInit {
       propertyAge: property.propertyAge ? property.propertyAge : '',
       lettingReason: property.lettingReason ? property.lettingReason : '',
       onWithOtherAgent: property.onWithOtherAgent ? property.onWithOtherAgent : '',
-      propertyNotes: property.internalNote ? property.internalNote : '',
-      direction: property.directionToProperty ? property.directionToProperty : '',
+      propertyNotes: property.propertyDescription ? property.propertyDescription : '',
+      direction: property.direction ? property.direction : '',
       // till here
       parking: property.parking ? Number(property.parking)  : '',
       advertisementRentFrequency: property.advertisementRentFrequency ? property.advertisementRentFrequency : '',
@@ -107,7 +108,7 @@ export class MaPropertyComponent implements OnInit {
       minimum: property.minimumRent ? property.minimumRent : '',
       maximum: property.maximumRent ? property.maximumRent : '',
       availableFromDate: property.availableFromDate ? property.availableFromDate : '',
-      availableToDate: property.availableToDate ? property.availableToDate : '',
+      availableToDate: property.availableToDate ? property.availableToDate : ''
     })
   }
   
@@ -132,6 +133,31 @@ export class MaPropertyComponent implements OnInit {
     });
     return promise;
   }
+
+
+ 
+
+  private getPropertyLocationsByPropertyId(propertyId: string) {
+    let params = new HttpParams().set("hideLoader", "true");
+    this.maService.getPropertyLocationsByPropertyId(propertyId, params).subscribe(
+      res => {
+        const propertylocationIds: any = [];
+        if(res && res.data) {
+          res.data.forEach(element => {
+            propertylocationIds.push(element.locationId)
+          });
+
+        /// This api is responsing array response and we have single field to bind.
+
+          // this.propertyForm.patchValue({
+          //   propertyLocations : propertylocationIds
+          // })
+        }
+      }
+    );
+  }
+
+
 
  
 
