@@ -406,7 +406,7 @@
             <ion-grid>
               <ion-row class="ion-align-items-center ion-justify-content-between">
                 <ion-col class="ion-text-start" size="55">
-                  <ion-text color="dark" class="res-clause-title">{{res.restrictionName}}</ion-text>
+                  <ion-text class="res-clause-title">{{res.restrictionName}}</ion-text>
                 </ion-col>
                 <ion-col class="ion-text-end" size="45">
                   <ion-button class="negotiate" [disabled]="!res.isNegotiable"
@@ -438,7 +438,7 @@
             <ion-grid>
               <ion-row class="ion-align-items-start ion-justify-content-between">
                 <ion-col class="ion-text-start" [size]="clause.isNegotiable? 80 : 100">
-                  <ion-text color="dark" class="res-clause-title">{{clause.clauseName}} </ion-text><br />
+                  <ion-text class="res-clause-title">{{clause.clauseName}} </ion-text><br />
                   <ion-text color="medium" class="fs-16">{{clause.clauseText}}</ion-text>
                 </ion-col>
                 <ion-col class="ion-text-end" size-xs="100" size-sm="100" size-md="20" *ngIf="clause.isNegotiable">

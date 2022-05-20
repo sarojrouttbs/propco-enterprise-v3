@@ -601,7 +601,8 @@ ion-alert.common-alert-box {
   #property-history-details,
   #la-application-list,
   #la-application-details,
-  #la-guarantor-details {
+  #la-guarantor-details,
+  #tob-application-stepper {
     ion-select{
       height: 40px;
     }
@@ -640,7 +641,7 @@ ion-alert.common-alert-box {
 }
 
 //agnet portal > market appraisal form modals
-.ma-modal-container, .la-modal-container{
+.ma-modal-container, .la-modal-container, .tob-modal-container{
   .modal-wrapper {
     ion-content {
       --background: var(--ion-color-six);
