@@ -664,3 +664,13 @@ export const OWNERSHIP = [
   { index: 'jointly', value: 'Jointly' },
   { index: 'solely', value: 'Solely' }
 ];
+
+export const market_appraisal = {
+  contact_type: 'contact',
+  property_type: 'property',
+}
+
+export const search_Text = {
+  lanlord: 'LANDLORD',
+  property: 'PROPERTY',
+}
