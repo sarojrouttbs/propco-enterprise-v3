@@ -7,7 +7,7 @@ import { CommonService } from '../services/common.service';
 @Injectable({
   providedIn: 'root'
 })
-export class IsLoginGuardGuard implements CanActivate {
+export class LoginGuard implements CanActivate {
 
   constructor(
     private router: Router,
