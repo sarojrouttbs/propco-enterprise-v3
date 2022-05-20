@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { NoPreloading, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './shared/authguard';
+import { LoginGuard } from './shared/guard/login.guard';
 
 const routes: Routes = [
   {
@@ -13,19 +15,18 @@ const routes: Routes = [
   },
   {
     path: 'faults',
-    loadChildren: () => import('./faults/faults.module').then( m => m.FaultsPageModule)
+    loadChildren: () => import('./faults/faults.module').then( m => m.FaultsPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'let-alliance',
-    loadChildren: () => import('./referencing/let-alliance/let-alliance.module').then( m => m.LetAlliancePageModule)
-  },
-  {
-    path: 'chronological-history',
-    loadChildren: () => import('./shared/modals/chronological-history/chronological-history.module').then( m => m.ChronologicalHistoryPageModule)
+    loadChildren: () => import('./referencing/let-alliance/let-alliance.module').then( m => m.LetAlliancePageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'tob',
-    loadChildren: () => import('./tob/tob.module').then( m => m.TobPageModule)
+    loadChildren: () => import('./tob/tob.module').then( m => m.TobPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'solr',
@@ -41,11 +42,13 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule),
+    canActivate: [LoginGuard]
   },
   {
     path: 'agent',
-    loadChildren: () => import('./agent/agent.module').then( m => m.AgentPageModule)
+    loadChildren: () => import('./agent/agent.module').then( m => m.AgentPageModule),
+    canActivate: [AuthGuard]
   }
 ];
 

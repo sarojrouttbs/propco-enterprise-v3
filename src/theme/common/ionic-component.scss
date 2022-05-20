@@ -330,7 +330,7 @@ ion-alert.common-alert-box {
 
   .alert-message {
     background: var(--ion-color-six);
-    color: var(--ion-color-text-color);
+    color: var(--ion-text-color);
     padding-top: 10px !important;
     padding-bottom: 20px;
     padding-left: 10px;
@@ -481,20 +481,20 @@ ion-alert.common-alert-box {
     z-index: 1000;
     padding-bottom: 10px;
     ion-segment-button{
-      border: solid 1px var(--ion-color-body);
+      border: solid 1px var(--ion-color-four);
       border-top: none;
-      color: var(--ion-color-text-color);
+      color: var(--ion-text-color);
       max-width: 785px;
-      --color-hover:var(--ion-color-text-color);
-      --background-hover: var(--ion-color-header);
-      --background: var(--ion-color-header);
+      --color-hover:var(--ion-text-color);
+      --background-hover: var(--ion-color-five);
+      --background: var(--ion-color-five);
       z-index: 1000;
   }
   
   .segment-button-checked{
     --background-checked: var(--ion-background-color);
     --indicator-height: none;
-    --color-checked: var(--ion-color-text-color);
+    --color-checked: var(--ion-text-color);
   }
   
   .segment-button-checked:before{
@@ -510,18 +510,18 @@ ion-alert.common-alert-box {
     height: 14px;
     transform: rotate(225deg);
     border: 1px solid;
-    border-color: var(--ion-color-body) transparent transparent var(--ion-color-body);
+    border-color: var(--ion-color-four) transparent transparent var(--ion-color-four);
     background-color: var(--ion-color-six);
   }
 }
 
 #marketAppraisalTabs{
   ion-segment-button{
-    border: solid 1px var(--ion-color-body);
-    color: var(--ion-color-text-color);
-    --color-hover:var(--ion-color-text-color);
-    --background-hover: var(--ion-color-header);
-    --background: var(--ion-color-header);
+    border: solid 1px var(--ion-color-four);
+    color: var(--ion-text-color);
+    --color-hover:var(--ion-text-color);
+    --background-hover: var(--ion-color-five);
+    --background: var(--ion-color-five);
     z-index: 1000;
     font-size: 18px;
     text-transform: uppercase;
@@ -530,7 +530,7 @@ ion-alert.common-alert-box {
   .segment-button-checked{
     --background-checked: var(--ion-background-color);
     --indicator-height: none;
-    --color-checked: var(--ion-color-text-color);
+    --color-checked: var(--ion-text-color);
   }
   
 }
@@ -571,7 +571,7 @@ ion-alert.common-alert-box {
       width: 12px;
       height: 12px;
       transform: rotate(225deg);
-      border-color: var(--ion-color-body) transparent transparent var(--ion-color-body);
+      border-color: var(--ion-color-four) transparent transparent var(--ion-color-four);
       background-color: var(--ion-color-six);
     }
   }
@@ -646,7 +646,7 @@ ion-alert.common-alert-box {
 .market-apprisal-ion-select, .fault-ion-select, .let-alliance-ion-select {
   --width: auto;
   .sc-ion-select-popover{
-    color: var(--ion-color-ion-label) !important
+    color: var(--ion-color-three) !important
   }
   ion-list ion-item.item-radio-checked {
     --background: var(--ion-color-four);
