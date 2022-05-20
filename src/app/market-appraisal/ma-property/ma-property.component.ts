@@ -2,11 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { off } from 'process';
-import { PROPCO } from 'src/app/shared/constants';
+import { PROPCO ,market_appraisal} from 'src/app/shared/constants';
 import { AddressModalPage } from 'src/app/shared/modals/address-modal/address-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { MarketAppraisalService } from '../market-appraisal.service';
 import { HttpParams } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-ma-property',
@@ -83,34 +84,30 @@ export class MaPropertyComponent implements OnInit {
 
   async setPropertyData(id){
       const property:any = await this.getPropertyDetails(id);
-      const propertyDetails = property.propertyDetails;
-      const propertyInfo = property.propertyInfo;
-      const propertyDescription = property.propertyDescription
-      this.address = propertyInfo.address
+      this.address = property.address
       this.propertyForm.patchValue({
-
-      numberOfBedroom: propertyDetails.numberOfBathroom ? propertyDetails.numberOfBathroom : '',
-      isStudio: propertyDetails.isStudio ? propertyDetails.isStudio : '',
-      houseType: propertyDetails.houseType ? propertyDetails.houseType : '',
-      propertyStyle: propertyDetails.propertyStyle ? propertyDetails.propertyStyle : '',
-      propertyAge: propertyDetails.propertyAge ? propertyDetails.propertyAge : '',
-      parking: propertyDetails.parking ? Number(propertyDetails.parking)  : '',
-      advertisementRentFrequency: propertyDetails.advertisementRentFrequency ? propertyDetails.advertisementRentFrequency : '',
-      furnishingType: propertyDetails.furnishingType ? propertyDetails.furnishingType : '',
-      lettingReason: propertyDetails.lettingReason ? propertyDetails.lettingReason : '',
-      hasLetBefore: propertyDetails.hasLetBefore ? propertyDetails.hasLetBefore : '',
-      status: propertyInfo.status ? propertyInfo.status : '',
-      office: propertyInfo.officeCode ? propertyInfo.officeCode : '',
-      agentName: propertyInfo.agentName ? propertyInfo.agentName : '',
-      onWithOtherAgent: propertyInfo.onWithOtherAgent ? propertyInfo.onWithOtherAgent : '',
-      direction: propertyDescription.directionToProperty ? propertyDescription.directionToProperty : '',
-      propertyNotes: propertyDescription.internalNote ? propertyDescription.internalNote : '',
-      //lettingDuration  -  field not found in property details
-     //  propertyLocations -   field not found in property details
-       //minimum -  field not found in property details
-     // maximum -  field not found in property details
-      //availableFromDate -  field not found in property details
-     //availableToDate -  field not found in property details
+      numberOfBedroom: property.numberOfBedroom ? property.numberOfBedroom : '',
+      houseType: property.houseType ? property.houseType : '',
+      isStudio: property.isStudio ? property.isStudio : '',
+      // below Property will received in tob details
+      propertyStyle: property.propertyStyle ? property.propertyStyle : '',
+      propertyAge: property.propertyAge ? property.propertyAge : '',
+      lettingReason: property.lettingReason ? property.lettingReason : '',
+      onWithOtherAgent: property.onWithOtherAgent ? property.onWithOtherAgent : '',
+      propertyNotes: property.internalNote ? property.internalNote : '',
+      direction: property.directionToProperty ? property.directionToProperty : '',
+      // till here
+      parking: property.parking ? Number(property.parking)  : '',
+      advertisementRentFrequency: property.advertisementRentFrequency ? property.advertisementRentFrequency : '',
+      furnishingType: property.furnishingType ? property.furnishingType : '',
+      hasLetBefore: property.hasLetBefore ? property.hasLetBefore : '',
+      status: property.status ? property.status : '',
+      office: property.officeCode ? property.officeCode : '',
+      agentName: property.agentName ? property.agentName : '',
+      minimum: property.minimumRent ? property.minimumRent : '',
+      maximum: property.maximumRent ? property.maximumRent : '',
+      availableFromDate: property.availableFromDate ? property.availableFromDate : '',
+      availableToDate: property.availableToDate ? property.availableToDate : '',
     })
   }
   
