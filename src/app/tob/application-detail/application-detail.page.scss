@@ -62,13 +62,13 @@
 }
 
 .header {
-    color: var(--ion-color-step-900);
+    color: var(--ion-color-three);
 }
 
 .content {
     font-size: 20px;
     // font-weight: 700;
-    color: var(--ion-color-step-800);
+    color: var(--ion-color-one);
 }
 
 .term-time {
@@ -77,7 +77,7 @@
 }
 
 .payment-heading {
-    color: var(--ion-color-step-900);
+    color: var(--ion-color-one);
     margin-bottom: 40px;
 }
 
@@ -86,7 +86,7 @@
     min-height: 700px;
     border: 0;
     width: 100%;
-    background: var(--ion-color-step-2000);
+    background: var(--ion-color-six);
 }
 #worldpay-iframe {
     border-radius: 6px;

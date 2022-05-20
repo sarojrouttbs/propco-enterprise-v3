@@ -245,7 +245,7 @@
     }
   }
 
-  #la-application-details, #la-guarantor-details, #tob-application-list, #tob-application-stepper{
+  #la-application-details, #la-guarantor-details, #tob-application-list, #tob-application-stepper, #offer-stepper, #tob-offer-list {
     .mat-form-field-underline::before {
       background-color: var(--ion-color-one) !important;
     }

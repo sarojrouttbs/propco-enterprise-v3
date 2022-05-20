@@ -279,7 +279,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item lines="full" class="mt-7">
             <ion-label>Do you have a guarantor?</ion-label>
-            <ion-toggle (ionChange)="isEnable('guarantor')" formControlName="hasGuarantor" color="success">
+            <ion-toggle (ionChange)="isEnable('guarantor')" formControlName="hasGuarantor" color="primary">
             </ion-toggle>
           </ion-item>
         </ion-col>
@@ -297,7 +297,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item lines="full" class="mt-7">
             <ion-label>Any pets?</ion-label>
-            <ion-toggle (ionChange)="isEnable('pets')" formControlName="hasPets" color="success"></ion-toggle>
+            <ion-toggle (ionChange)="isEnable('pets')" formControlName="hasPets" color="primary"></ion-toggle>
           </ion-item>
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
@@ -471,7 +471,7 @@
       <ion-row>
         <ion-col size-sm="50" size-md="30" size-xl="25">
           <ion-item lines="none" class="mt-7">
-            <ion-toggle (ionChange)="isEnable('applicant')" formControlName="isApplicantConfirmed" color="success">
+            <ion-toggle (ionChange)="isEnable('applicant')" formControlName="isApplicantConfirmed" color="primary">
             </ion-toggle>
             <ion-label>Confirmed By Applicant</ion-label>
           </ion-item>
@@ -493,7 +493,7 @@
 
         <ion-col size-sm="50" size-md="30" size-xl="25">
           <ion-item lines="none" class="mt-7">
-            <ion-toggle (ionChange)="isEnable('landlord')" formControlName="isLandlordConfirmed" color="success">
+            <ion-toggle (ionChange)="isEnable('landlord')" formControlName="isLandlordConfirmed" color="primary">
             </ion-toggle>
             <ion-label>Confirmed By Landlord</ion-label>
           </ion-item>
@@ -513,13 +513,13 @@
         </ion-col>
         <ion-col size-sm="50" size-md="29" size-xl="24">
           <ion-item lines="none" class="mt-7">
-            <ion-toggle formControlName="sendEmailToApplicant" color="success"></ion-toggle>
+            <ion-toggle formControlName="sendEmailToApplicant" color="primary"></ion-toggle>
             <ion-label>Email Applicant</ion-label>
           </ion-item>
         </ion-col>
         <ion-col size-sm="50" size-md="30" size-xl="25" class="no-padding-left">
           <ion-item lines="none" class="mt-7">
-            <ion-toggle formControlName="sendEmailToLandlord" color="success"></ion-toggle>
+            <ion-toggle formControlName="sendEmailToLandlord" color="primary"></ion-toggle>
             <ion-label>Email Landlord</ion-label>
           </ion-item>
         </ion-col>
