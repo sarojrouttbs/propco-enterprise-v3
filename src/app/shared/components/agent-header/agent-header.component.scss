@@ -12,8 +12,8 @@ header {
         width: 0%;
     }
     #userInfo {
-        //background-color: var(--ion-color-header);
-        color: var(--ion-color-text-color);
+        //background-color: var(--ion-color-five);
+        color: var(--ion-text-color);
         font-size: 22px;
         height: 45px;
         text-align: right;
@@ -33,7 +33,7 @@ header {
 		.circle{
 		    width: 36px;
 			height: 36px;
-			background-color: var(--ion-color-userinfo-bg);
+			background-color: var(--ion-color-four);
 			-moz-border-radius: 50px;
 			-webkit-border-radius: 50px;
 			border-radius: 50px;
@@ -60,10 +60,10 @@ header {
         min-height: 42px;
         height: auto;
         background-color: var(--ion-color-five);
-        // border: 0px solid var(--ion-color-header);  
+        // border: 0px solid var(--ion-color-five);  
 
         .mat-menu-trigger[aria-expanded="true"]{
-            background-color: var(--ion-color-mat-menu-panel-bg);
+            background-color: var(--ion-color-six);
         }
         .nav-sub {
             display: flex;
@@ -90,10 +90,10 @@ header {
      }
 }
 .workspace-icon {
-    background-color: var(--ion-color-block-hover);
+    background-color: var(--ion-color-six);
     width: 35px;
     height: 33px;
-    color: var(--ion-color-text-color);
+    color: var(--ion-text-color);
 }
 .workspace-icon:hover {
    color: var(--ion-color-solr);
@@ -107,7 +107,7 @@ header {
 }
 
 .text-color {
-    color: var(--ion-color-text-color);
+    color: var(--ion-text-color);
 }
 
 .logout-img{
