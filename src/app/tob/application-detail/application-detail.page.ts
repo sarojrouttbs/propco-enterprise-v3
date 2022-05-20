@@ -1404,7 +1404,7 @@ export class ApplicationDetailPage implements OnInit {
     const termsAndCondition = this.termsAndConditionData?.application?.termsAndCondition;
     const modal = await this.modalController.create({
       component: TermsAndConditionModalPage,
-      cssClass: 'modal-container modal-width',
+      cssClass: 'modal-container modal-width tob-modal-container',
       componentProps: {
         data: termsAndCondition,
         heading: 'Terms and Conditions'
@@ -1610,7 +1610,8 @@ export class ApplicationDetailPage implements OnInit {
   async openPaymentConfirmation() {
     const message = '<h1> Congratulations! </h1>' + '<h5>Tenancy has been proposed successfully on the property.</h5>';
     const simpleModal = await this.modalController.create({
-      component: SimpleModalPage,
+      component: SimpleModalPage, 
+      cssClass: 'tob-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: message,

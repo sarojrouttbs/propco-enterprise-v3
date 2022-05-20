@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding ion-margin">
+<ion-content class="ion-padding ion-margin" id="holding-deposite-paid-modal">
   <div class="warning-msg">
     <img src="assets/images/tob/icon-not-negotiable.svg">
     By submitting these details, property will be reserved for the Applicant and property will also go off market.
@@ -36,7 +36,7 @@
           <app-validation-message [control]="holdingDepositForm.controls.offlinePaymentReference"></app-validation-message>
         </ion-col>
 
-        <ion-col size-xs="100" size-sm="50" style="margin-top: 45px;">
+        <ion-col size-xs="100" size-sm="50" style="margin-top: 20px;">
           <mat-form-field appearance="fill">
             <mat-label> Payment Date <ion-text class="mandatory">*</ion-text></mat-label>
             <input matInput [matDatepicker]="picker" formControlName="offlinePaymentDate" readonly>

@@ -2,10 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { off } from 'process';
-import { PROPCO } from 'src/app/shared/constants';
+import { PROPCO ,market_appraisal} from 'src/app/shared/constants';
 import { AddressModalPage } from 'src/app/shared/modals/address-modal/address-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { MarketAppraisalService } from '../market-appraisal.service';
+import { HttpParams } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-ma-property',
@@ -51,6 +53,7 @@ export class MaPropertyComponent implements OnInit {
   ngOnInit() {
     this.getLookupData();
     this.initApiCalls();
+    this.getPropertyData();
   }
 
   private getLookupData() {
@@ -66,12 +69,71 @@ export class MaPropertyComponent implements OnInit {
     }
   }
 
+    getPropertyData(){
+    this.maService.propertyChange$.subscribe(res =>{
+      if(res === 'reset'){
+        this.address = '';
+        this.propertyForm.reset();
+      }else{
+        this.propertyData = res;
+        const id = this.propertyData.propertyId ?  this.propertyData.propertyId :  this.propertyData.entityId
+        this.setPropertyData(id )
+      }
+    })
+  }
+
+  async setPropertyData(id){
+      const property:any = await this.getPropertyDetails(id);
+      this.address = property.address
+      this.propertyForm.patchValue({
+      numberOfBedroom: property.numberOfBedroom ? property.numberOfBedroom : '',
+      houseType: property.houseType ? property.houseType : '',
+      isStudio: property.isStudio ? property.isStudio : '',
+      // below Property will received in tob details
+      propertyStyle: property.propertyStyle ? property.propertyStyle : '',
+      propertyAge: property.propertyAge ? property.propertyAge : '',
+      lettingReason: property.lettingReason ? property.lettingReason : '',
+      onWithOtherAgent: property.onWithOtherAgent ? property.onWithOtherAgent : '',
+      propertyNotes: property.internalNote ? property.internalNote : '',
+      direction: property.directionToProperty ? property.directionToProperty : '',
+      // till here
+      parking: property.parking ? Number(property.parking)  : '',
+      advertisementRentFrequency: property.advertisementRentFrequency ? property.advertisementRentFrequency : '',
+      furnishingType: property.furnishingType ? property.furnishingType : '',
+      hasLetBefore: property.hasLetBefore ? property.hasLetBefore : '',
+      status: property.status ? property.status : '',
+      office: property.officeCode ? property.officeCode : '',
+      agentName: property.agentName ? property.agentName : '',
+      minimum: property.minimumRent ? property.minimumRent : '',
+      maximum: property.maximumRent ? property.maximumRent : '',
+      availableFromDate: property.availableFromDate ? property.availableFromDate : '',
+      availableToDate: property.availableToDate ? property.availableToDate : '',
+    })
+  }
+  
   private async initApiCalls() {
     const offices = await this.getAccessibleOffices();
     if (offices) {
       this.accessibleOffices = offices;
     }
   }
+
+  getPropertyDetails(propertyId) {
+    let params = new HttpParams().set("hideLoader", "true");
+    const promise = new Promise((resolve, reject) => {
+      this.maService.getPropertyDetails(propertyId, params).subscribe(
+        (res) => {
+          resolve(res.data);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+ 
 
   private setLookupData(data) {
     this.propertyStyles = data.propertyStyles;

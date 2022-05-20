@@ -743,7 +743,7 @@ export class OfferDetailPage implements OnInit {
     obj.negotiations = obj.negotiations ? obj.negotiations : [];
     const modal = await this.modalController.create({
       component: NegotiateModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container tob-modal-container',
       componentProps: {
         data: obj,
         heading: headingText,
