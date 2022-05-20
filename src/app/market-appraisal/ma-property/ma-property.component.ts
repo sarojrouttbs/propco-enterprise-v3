@@ -104,16 +104,16 @@ export class MaPropertyComponent implements OnInit {
       agentName: propertyInfo.agentName ? propertyInfo.agentName : '',
       onWithOtherAgent: propertyInfo.onWithOtherAgent ? propertyInfo.onWithOtherAgent : '',
       direction: propertyDescription.directionToProperty ? propertyDescription.directionToProperty : '',
-      //propertyNotes
-      //lettingDuration
-    //  propertyLocations
-    //minimum
-   // maximum
-   //availableFromDate
-   //availableToDate
+      propertyNotes: propertyDescription.internalNote ? propertyDescription.internalNote : '',
+      //lettingDuration  -  field not found in property details
+     //  propertyLocations -   field not found in property details
+       //minimum -  field not found in property details
+     // maximum -  field not found in property details
+      //availableFromDate -  field not found in property details
+     //availableToDate -  field not found in property details
     })
   }
-
+  
   private async initApiCalls() {
     const offices = await this.getAccessibleOffices();
     if (offices) {
