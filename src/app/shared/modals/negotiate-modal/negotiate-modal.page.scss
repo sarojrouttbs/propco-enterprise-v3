@@ -4,9 +4,12 @@
   }
   
   #negotiate-modal {
-    ion-card-content {
-      padding: 5px 10px;
-      background: var(--ion-color-step-1700) !important;
+    ion-card {
+      --background: transparent !important;
+      ion-card-content {
+        padding: 5px 10px;
+        background: var(--ion-color-five) !important;
+      }
     }
     .name {
       margin-bottom: 2px;
