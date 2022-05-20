@@ -165,7 +165,7 @@
 }
 
 .mat-menu-panel {
-  background-color: var(--ion-color-mat-menu-panel-bg) !important;
+  background-color: var(--ion-color-six) !important;
 
   .mat-menu-item {
     color: var(--ion-color-button-mat-menu-item) !important;
@@ -174,7 +174,7 @@
   }
 
   .mat-menu-item:hover {
-    background-color: var(--ion-color-solr-ex-panal-border-color) !important;
+    background-color: var(--ion-color-five) !important;
   }
 
   .mat-menu-item .mat-icon-no-color,
@@ -289,9 +289,17 @@
       }
     }
   }
+
+  #offer-stepper{
+    ion-grid {
+      background-color: var(--ion-color-five);
+      border-radius: 5px;
+    }
+  }
 }
 
 .mat-autocomplete-panel {
   background-color: var(--ion-color-five) !important;
   color: var(--ion-color-one) !important;
 }
+

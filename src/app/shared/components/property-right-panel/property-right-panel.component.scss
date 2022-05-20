@@ -3,7 +3,7 @@
         padding: 0;
         .property-status {
             background: var(--ion-color-property-status-bg);
-            color: var(--ion-color-property-status-text);
+            color: var(--ion-color-six);
             padding-left: 10px;
             margin-bottom: 10px;
             font-size: 20px;
@@ -19,7 +19,7 @@
             padding-left: 10px;
             ion-col {
                 .label {
-                    color: var(--ion-color-block-label-color);
+                    color: var(--ion-label-color);
                     font-size: 12px;
                 }
                 .value {
@@ -35,7 +35,7 @@
             color: var(--ion-color-danger);
         }
         .property-certificates {
-            color: var(--ion-color-text-color);
+            color: var(--ion-text-color);
             display: flex;
             align-items: center;
             // padding: 7px;

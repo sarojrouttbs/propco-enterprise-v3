@@ -5,7 +5,7 @@
 <ion-content>
   <ng-container>
     <div class="property-details">
-      <ion-grid>
+      <ion-grid class="ion-padding">
         <ion-row class="address">
           <ion-col class="ion-no-padding" size="80" *ngIf="isPropertyDetailsAvailable">
             <h1 *ngIf="propertyDetails?.publishedAddress" class="ion-no-margin">{{ propertyDetails?.publishedAddress }}
@@ -63,13 +63,13 @@
             </mat-form-field>
           </ion-col>
 
-          <ion-col class="ion-text-end no-padding-right" size-xl="15" size-sm="25">
+          <ion-col class="ion-text-end no-padding-right" size-xl="20" size-sm="25">
             <ion-button class="btn-filter" color="success" [disabled]="fromDate.value && toDate.value ? false : true"
               (click)="filterByDate()" expand="block">Filter</ion-button>
             <ion-button class="btn-filter" color="danger" (click)="resetFilters()" expand="block">Reset</ion-button>
           </ion-col>
 
-          <ion-col class="ion-no-padding ion-text-end" size-xl="20">
+          <ion-col class="ion-no-padding ion-text-end" size-xl="15">
             <ion-button (click)="hideRecords()"> {{ isHideRejected ? "Show Rejected Offers" : "Hide Rejected Offers"}}
             </ion-button>
           </ion-col>
@@ -81,7 +81,7 @@
   <ng-container>
     <!-- skeleton -->
     <div *ngIf="!isOffersListAvailable">
-      <ion-card *ngFor="let number of [0,1,2,3,4]">
+      <ion-card class="ion-padding no-padding-top-bottom"  *ngFor="let number of [0,1,2,3,4]">
         <ion-card-content>
           <ion-grid>
             <ion-row class="main-row">
@@ -157,7 +157,7 @@
     <!-- skeleton -->
 
     <div style="position: relative;" class="overlay-container" *ngIf="isOffersListAvailable">
-      <ion-card *ngFor="let item of obsOfferList | async; let i = index;" (click)="onOfferClick(item)">
+      <ion-card class="ion-padding no-padding-top-bottom" *ngFor="let item of obsOfferList | async; let i = index;" (click)="onOfferClick(item)">
         <ion-card-content>
           <ion-grid>
             <ion-row class="main-row">
@@ -261,7 +261,7 @@
         <i (click)="hideMenu($event,'divOverlay3')" class="propcoicon propcoicon-actions-on"></i>
       </div>
     </div>
-    <div class="tob-pagination">
+    <div class="tob-pagination ion-padding">
       <mat-paginator [hidden]="!filteredOfferList.data.length" class="paginator" #paginator
         [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
         [length]="filteredOfferList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
@@ -271,7 +271,7 @@
   </ng-container>
 
   <ng-container *ngIf="filteredOfferList.data.length > 0">
-    <ion-grid>
+    <ion-grid class="ion-padding">
       <ion-row class="offer-notes">
         <ion-col size="100">
           <h4>Offer Notes:</h4>

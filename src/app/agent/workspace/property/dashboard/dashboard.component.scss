@@ -1,6 +1,6 @@
 .dashboard {
     background-color: var(--ion-background-color);
-    color: var(--ion-color-text-color);
+    color: var(--ion-text-color);
     .header {
         display: flex;
         align-items: center;
@@ -15,7 +15,7 @@
     }
 
     .right-panel-block {
-        border: solid 1px var(--ion-property-details-bg);
+        border: solid 1px var(--ion-color-four);
     }
 
     .table-block {
@@ -112,11 +112,11 @@
     }
 }
 table.dataTable tbody tr {
-    background: var(--ion-propert-rent-block-bg);
-    color: var(--ion-color-text-color);
+    background: var(--ion-color-six);
+    color: var(--ion-text-color);
     i {
-        background: var(--ion-color-notes-icon-bg);
-        color: var(--ion-color-notes-icon);
+        background: var(--ion-color-five);
+        color: var(--ion-color-one);
     }
 }
 
