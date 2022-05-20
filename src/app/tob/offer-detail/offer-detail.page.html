@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content id="offer-deatils">
   <ion-grid class="offer-details">
     <app-tob-property-details [propertyDetails]="propertyDetails" [rentFrequencyTypes]="rentFrequencyTypes" [isTobPropertyCardReady]="isTobPropertyCardReady">
     </app-tob-property-details>
@@ -9,7 +9,7 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col class="no-padding-bottom">
+        <ion-col class="no-padding-bottom" class="table-block">
           <table>
             <thead>
               <tr>
@@ -39,7 +39,6 @@
           </table>
         </ion-col>
       </ion-row>
-
       <ion-row class="ion-justify-content-end search-row" [formGroup]="searchApplicantForm">
         <ion-col size-sm="50" size-xl="35" id="tob-applicant-search">
           <ion-searchbar 
@@ -123,7 +122,7 @@
               <ng-template matStepLabel>Offer Details</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-                <button mat-button matStepperNext class="stepper-next">Next</button>
+                <button color="success" mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
             <mat-step>
@@ -171,7 +170,7 @@
 
 <ng-template #offerDetails>
   <form [formGroup]="makeAnOfferForm" id="makeAnOfferForm" *ngIf="isOffersDetailsAvailable">
-    <ion-grid>
+    <ion-grid class="ion-padding">
       <ion-row class=" ion-justify-content-center">
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
@@ -314,7 +313,7 @@
   </form>
   
   <!-- skeleton -->
-  <ion-grid *ngIf="!isOffersDetailsAvailable">
+  <ion-grid *ngIf="!isOffersDetailsAvailable" >
     <ion-row class=" ion-justify-content-center">
       <ion-col size-xs="100" size-sm="33.3">
         <ion-item lines="none">
@@ -395,7 +394,7 @@
 </ng-template>
 
 <ng-template #restriction>
-  <ion-grid class="ion-no-padding restriction-section">
+  <ion-grid class="ion-padding restriction-section">
     <ion-row class="">
       <ion-col size="100" *ngIf="!propertyRestrictions?.length">
         <div class="no-data">No restrictions found!</div>
@@ -425,7 +424,7 @@
 </ng-template>
 
 <ng-template #clauses>
-  <ion-grid class="clause-section">
+  <ion-grid class="clause-section ion-padding">
     <ion-row>
       <ion-col size="100" *ngIf="!propertyClauses?.length">
         <div class="no-data">No special conditions & clauses found!</div>
@@ -468,7 +467,7 @@
 
 <ng-template #confirmation>
   <form [formGroup]="confirmationForm">
-    <ion-grid>
+    <ion-grid class="ion-padding">
       <ion-row>
         <ion-col size-sm="50" size-md="30" size-xl="25">
           <ion-item lines="none" class="mt-7">
@@ -530,7 +529,7 @@
 </ng-template>
 
 <ng-template #FinalView>
-  <ion-grid>
+  <ion-grid class="ion-padding">
     <ion-row>
       <ion-col size="100" size-md="60" offset-md="20">
         <ion-grid id="final-view">
