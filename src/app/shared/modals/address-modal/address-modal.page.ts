@@ -114,11 +114,11 @@ export class AddressModalPage implements OnInit {
         this.addressDetailsForm.get('addressLine3').setValue(res.line3);
         this.addressDetailsForm.get('locality').setValue(res.line4);
         this.addressDetailsForm.get('town').setValue(res.line5);
-        this.addressDetailsForm.get('county').setValue(res.county);
+        this.addressDetailsForm.get('county').setValue(res.province ? res.province : res.provinceName);
         this.addressDetailsForm.get('country').setValue(res.countryName);
         this.addressDetailsForm.get('latitude').setValue(res.latitude);
         this.addressDetailsForm.get('longitude').setValue(res.longitude);
-       this.addressDetailsForm.get('domesticId').setValue(res.domesticId);
+        this.addressDetailsForm.get('domesticId').setValue(res.domesticId);
       }
     }, error => {
       this.selectedAddress = {};
