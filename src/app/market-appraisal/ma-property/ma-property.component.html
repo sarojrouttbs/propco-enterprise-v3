@@ -16,7 +16,7 @@
           </div>
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <ion-card-content id="ma-property-address">
+      <ion-card-content id="market-appraisal-property-address">
         <ion-grid>
           <ion-row class="no-padding">
             <ion-col class="no-padding" size-xs="100" size-sm= "100" size-md="33">
@@ -29,7 +29,7 @@
               </ion-row>
               <ion-row>
                 <ion-col>
-                  <div>
+                  <div class="address-details-block">
                     <div>{{this.address?.addressLine1}}</div>
                     <div>{{this.address?.addressLine2}}</div>
                     <div>{{this.address?.addressLine3}}</div>
@@ -48,8 +48,8 @@
               </ion-row>
             </ion-col>
             <ion-col size-xs="100" size-sm= "100" size-md="33">
-              <ion-row class="ion-align-items-end">
-                <ion-col>
+              <ion-row>
+                <ion-col size="50">
                   <ion-item>
                   <ion-label position="floating"> Bedrooms</ion-label>
                   <ion-select interface="popover"  formControlName="numberOfBedroom" 
@@ -60,10 +60,10 @@
                   </ion-select>
                   </ion-item>
                 </ion-col>
-                <ion-col>
+                <ion-col class="toggle-btn-stop-spacing" size="50">
                   <ion-item lines="none">
-                    <ion-toggle color="primary" formControlName="isStudio"></ion-toggle>
-                    Studio
+                    <ion-toggle color="primary" formControlName="isStudio" class="toggle-btn"></ion-toggle>
+                    <ion-text class="toggle-btn-text">Studio</ion-text>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -96,29 +96,30 @@
                 <ion-col>
                   <ion-item>
                     <ion-label position="floating">Property Age</ion-label>
-                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="propertyAge">
-                    <ion-select-option [value]="data?.index" *ngFor="let data of propertyAges">
-                      {{ data?.value }}
-                    </ion-select-option>
-                  </ion-select>
+                    <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="propertyAge">
+                      <ion-select-option [value]="data?.index" *ngFor="let data of propertyAges">
+                        {{ data?.value }}
+                      </ion-select-option>
+                    </ion-select>
                   </ion-item>
                 </ion-col>
                 <ion-col>
                   <ion-item>
                     <ion-label position="floating">Parking</ion-label>
-                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="parking">
-                    <ion-select-option [value]="data?.index" *ngFor="let data of parkingTypes">
-                      {{ data?.value }}
-                    </ion-select-option>
-                  </ion-select>
+                    <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="parking">
+                      <ion-select-option [value]="data?.index" *ngFor="let data of parkingTypes">
+                        {{ data?.value }}
+                      </ion-select-option>
+                    </ion-select>
                   </ion-item>
                 </ion-col>
               </ion-row>
-              <ion-row>
-                <ion-col class="no-padding">
+              <ion-row class="no-padding">
+                <ion-col size="100">
                   <ion-item>
                     <ion-label position="floating">Directions</ion-label>
-                  <ion-textarea rows="1" formControlName="direction"></ion-textarea>
+                    <ion-textarea rows="1" formControlName="direction" auto-grow="true">
+                    </ion-textarea>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -143,8 +144,8 @@
           </div>
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <ion-card-content id="ma-lettings">
-        <ion-grid class="no-padding">
+      <ion-card-content>
+        <ion-grid class="no-padding" id="market-appraisal-lettings">
           <ion-row>
             <ion-col size-xs="100" size-sm= "100" size-md="33" class="no-padding">
               <ion-row>
@@ -200,7 +201,7 @@
               </ion-row>
               <ion-row>
                 <ng-container formGroupName="rentRange">
-                  <ion-col>
+                  <ion-col size="50">
                     <ion-item>
                       <ion-label position="stacked">Rent Range From <ion-text class="mandatory">*</ion-text>
                       </ion-label>
@@ -208,7 +209,7 @@
                     </ion-item>
                     <app-validation-message [control]="propertyForm.controls['rentRange'].get('minimum')"></app-validation-message>
                   </ion-col>
-                  <ion-col>
+                  <ion-col size="50">
                     <ion-item>
                       <ion-label position="stacked">Rent Range To <ion-text class="mandatory">*</ion-text>
                       </ion-label>
@@ -243,22 +244,22 @@
                 </ion-col>
               </ion-row>
               <ion-row class="mat-date-picker-row">
-                <ion-col>
+                <ion-col size="50">
                   <mat-form-field appearance="fill">
                     <mat-label> Available From <ion-text class="mandatory">*</ion-text></mat-label>
-                    <input matInput [matDatepicker]="frompicker" formControlName="availableFromDate" (dateChange)="calculateTotalDuration()" 
-                    [max]="propertyForm.controls.availableToDate.value" readonly>
-                    <mat-datepicker-toggle matPrefix [for]="frompicker"></mat-datepicker-toggle>
-                    <mat-datepicker #frompicker></mat-datepicker>
+                    <input matInput [matDatepicker]="picker1" formControlName="availableFromDate" readonly (dateChange)="calculateTotalDuration()"
+                    [max]="propertyForm.controls.availableToDate.value">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
                   </mat-form-field>
                   <app-validation-message [control]="propertyForm.controls.availableFromDate"></app-validation-message>
                 </ion-col>
-                <ion-col>
+                <ion-col size="50">
                   <mat-form-field appearance="fill">
                     <mat-label> Available To </mat-label>
-                    <input matInput [matDatepicker]="topicker" formControlName="availableToDate" (dateChange)="calculateTotalDuration()" 
+                    <input matInput [matDatepicker]="topicker" formControlName="availableToDate"  (dateChange)="calculateTotalDuration()"
                     [min]="propertyForm.controls.availableFromDate.value" readonly>
-                    <mat-datepicker-toggle matPrefix [for]="topicker"></mat-datepicker-toggle>
+                    <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
                     <mat-datepicker #topicker></mat-datepicker>
                   </mat-form-field>
                 </ion-col>
@@ -280,11 +281,11 @@
               </ion-row>
             </ion-col>
             <ion-col size-xs="100" size-sm= "100" size-md="33" class="no-padding">
-              <ion-row class="ion-align-items-end">
-                <ion-col size-xs="100" size-sm= "100" size-md="60">
+              <ion-row>
+                <ion-col size-xs="100" size-sm= "100" size-md="60" class="toggle-btn-stop-spacing">
                   <ion-item lines="none">
-                    <ion-toggle color="primary" formControlName="onWithOtherAgent"></ion-toggle>
-                    On with another Agent?
+                    <ion-toggle color="primary" formControlName="onWithOtherAgent" class="toggle-btn"></ion-toggle>
+                    <ion-text class="toggle-btn-text">On with another agent?</ion-text>
                   </ion-item>
                 </ion-col>
                 <ion-col>
@@ -296,11 +297,11 @@
                   </ion-item>
                 </ion-col>
               </ion-row>
-              <ion-row class="ion-align-items-end" style="margin-top: 4px;">
-                <ion-col>
+              <ion-row>
+                <ion-col class="toggle-btn-stop-spacing">
                   <ion-item lines="none">
-                    <ion-toggle color="primary" formControlName="hasLetBefore"></ion-toggle>
-                    Been Let before?
+                    <ion-toggle color="primary" formControlName="hasLetBefore" class="toggle-btn"></ion-toggle>
+                    <ion-text class="toggle-btn-text">Been Let before?</ion-text>
                   </ion-item>
                 </ion-col>
                 <ion-col>

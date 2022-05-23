@@ -54,16 +54,16 @@ export class MaContactComponent implements OnInit {
   setData(data) {
     this.address = data.address;
     this.contactForm.patchValue({
-      displayAs: data.displayAs ? data.displayAs : '',
+      displayAs: data.name ? data.name : '',
       mobile: data.mobile ? data.mobile : '',
       landlordStatus: data.status ? data.status : '',
       email: data.email ? data.email : '',
-      homeTelephone: data.homeTelephone ? data.homeTelephone : '',
-      businessTelephone: data.businessTelephone ? data.businessTelephone : '',
-      enquiryNotes: data.enquiryNotes ? data.enquiryNotes : '',
+      homeTelephone: data.evening ? data.evening : '',
+      businessTelephone: data.dayTime ? data.dayTime : '',
+      enquiryNotes: data.landlordEnquiryNotes ? data.landlordEnquiryNotes : '',
       owners: data.owners ? data.owners : '',
       heardReason: data.heardReason ? this.getIndex(data.heardReason, this.propertyHeardSources) : '',
-      officeCode: data.associatedOfficeCode ? data.associatedOfficeCode : '',
+      officeCode: data.associatedOffice ? data.associatedOffice : '',
       ownership: data.ownership ? this.getIndex(data.ownership, this.ownership) : ''
     });
   }
@@ -71,10 +71,10 @@ export class MaContactComponent implements OnInit {
   getIndex(value, lookUp) {
     let index;
     lookUp.forEach((item: any) => {
-      if (item.value === value) {
-        index = item.index
+      if (item.index === value) {
+        index = item.index;
       }
-    })
+    });
     return index;
   }
 
@@ -116,6 +116,7 @@ export class MaContactComponent implements OnInit {
       if (res.data?.llInfo.displayAs) {
         this.contactForm.get('displayAs').patchValue(res.data?.llInfo.displayAs);
         this.contactForm.patchValue(res.data?.llInfo);
+        this.landlordData = res.data?.llInfo;
       }
 
     });

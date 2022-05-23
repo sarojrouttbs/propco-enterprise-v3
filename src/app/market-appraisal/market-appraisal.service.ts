@@ -43,7 +43,7 @@ export class MarketAppraisalService {
   }
 
   getLandlordDetails(landlordId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `landlords/${landlordId}`);
+    return this.httpClient.get(environment.API_BASE_URL + `landlords/${landlordId}/node`);
   }
 
   getLandlordProperties(landlordId: string): Observable<any> {
@@ -58,5 +58,21 @@ export class MarketAppraisalService {
     return this.httpClient.get(
       environment.API_BASE_URL + `properties/${propertyId}/tob`, { params }
     );
+  }
+  
+  getPropertyLocationsByPropertyId(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/locations`, { params });
+  }
+
+  createMarketAppraisal(params): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `appointments/ma`, params);
+  }
+
+  getAssignedUsers(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `accessible-users`, { });
+  }
+
+  getAvailableSlots(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `appointments/available-slots`, { });
   }
 }

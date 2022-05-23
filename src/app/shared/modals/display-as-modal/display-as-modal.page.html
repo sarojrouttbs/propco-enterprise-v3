@@ -13,7 +13,7 @@
       <ion-col size="100">
         <ion-item>
           <ion-label position="floating">Title <ion-text class="mandatory">*</ion-text></ion-label>
-          <ion-select interface="popover" formControlName="title" [interfaceOptions]="popoverOptions">
+          <ion-select interface="popover" formControlName="title" [interfaceOptions]="popoverOptions" (ionChange)="onValueChange()">
             <ion-select-option [value]="title?.value" *ngFor="let title of titles">
               {{ title?.value }}
             </ion-select-option>
@@ -24,13 +24,13 @@
       <ion-col size="100">
         <ion-item>
           <ion-label position="floating">Initials</ion-label>
-          <ion-input formControlName="initials"></ion-input>
+          <ion-input formControlName="initials" (change)="onValueChange()"></ion-input>
         </ion-item>
       </ion-col>
       <ion-col size="100">
         <ion-item>
           <ion-label position="floating">Forename <ion-text class="mandatory">*</ion-text></ion-label>
-          <ion-input formControlName="forename"></ion-input>
+          <ion-input formControlName="forename" (change)="onValueChange()"></ion-input>
         </ion-item>
         <app-validation-message [control]="landlordDetailsForm.controls.forename"></app-validation-message>
       </ion-col>
@@ -43,7 +43,7 @@
       <ion-col size="100">
         <ion-item>
           <ion-label position="floating">Surname <ion-text class="mandatory">*</ion-text></ion-label>
-          <ion-input formControlName="surname"></ion-input>
+          <ion-input formControlName="surname" (change)="onValueChange()"></ion-input>
         </ion-item>
         <app-validation-message [control]="landlordDetailsForm.controls.surname"></app-validation-message>
       </ion-col>

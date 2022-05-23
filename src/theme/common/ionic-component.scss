@@ -601,7 +601,9 @@ ion-alert.common-alert-box {
   #property-history-details,
   #la-application-list,
   #la-application-details,
-  #la-guarantor-details {
+  #la-guarantor-details,
+  #market-appraisal-lettings,
+  #market-appraisal-property-address {
     ion-select{
       height: 40px;
     }
@@ -741,6 +743,31 @@ ion-list{
     --border-color: var(--ion-color-one);
     ion-label{
       color: var(--ion-color-three) !important;
+    }
+  }
+}
+
+#ma-search {
+  .searchbar-custom {
+    .searchbar-input {
+      line-height: 27px;
+    }
+
+    .searchbar-search-icon {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    .searchbar-input-container {
+      box-shadow: none;
+      border-left: 0;
+      .searchbar-input {
+        box-shadow: none;
+        padding-top: 4px;
+        padding-left: 10px;
+
+      }
     }
   }
 }

@@ -1,4 +1,4 @@
-#ma-property-address {
+#market-appraisal-property-address {
     .heading {
         color: var(--ion-color-one);
     }
@@ -6,15 +6,21 @@
     .register-address-row {
         margin-top: 24px;
     }
+
+    .address-details-block {
+        div {
+            color: var(--ion-color-three);
+        }
+    }
 }
 
-#ma-lettings {
+#market-appraisal-lettings {
     .mat-date-picker-row {
         margin-top: 24px;
     }
 
     .lettings-details-duration {
-        background-color: var(--ion-color-two);
+        background-color: var(--ion-color-three);
         border-radius: 10px;
         padding-top: 10px;
         padding-bottom: 10px;
@@ -34,7 +40,7 @@
             }
 
             .duration-heading {
-                color: var(--ion-color-three);
+                color: var(--ion-color-one);
                 padding-right: 5%;
             }
 
@@ -47,4 +53,14 @@
     outline: 0;
     padding: 5px 0;
     background: transparent;
+}
+
+.toggle-btn {
+    padding-left: 0px;
+    width: 56px;
+    height: 14px;
+}
+
+.toggle-btn-stop-spacing {
+    margin-top: 11px;
 }

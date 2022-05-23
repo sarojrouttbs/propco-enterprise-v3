@@ -18,6 +18,10 @@ export class DisplayAsModalPage implements OnInit {
     cssClass: 'market-apprisal-ion-select'
   };
 
+  addressee;
+  salutation;
+  display;
+
   constructor(
     private modalController: ModalController,
     private fb: FormBuilder
@@ -29,7 +33,7 @@ export class DisplayAsModalPage implements OnInit {
 
   initLandlordForm() {
     this.landlordDetailsForm = this.fb.group({
-      title: [this.landlordData && this.landlordData.title ? this.getIndex(this.landlordData.title) : '', [Validators.required]],
+      title: [this.landlordData && this.landlordData.title ? this.landlordData.title : '', [Validators.required]],
       initials: [this.landlordData && this.landlordData.initials ? this.landlordData.initials : ''],
       forename: [this.landlordData && this.landlordData.foreName ? this.landlordData.foreName : '', [Validators.required]],
       middleName: [this.landlordData && this.landlordData.middleName ? this.landlordData.middleName : ''],
@@ -38,17 +42,6 @@ export class DisplayAsModalPage implements OnInit {
       salutation: [this.landlordData && this.landlordData.salutation ? this.landlordData.salutation : ''],
       displayAs: [this.landlordData && this.landlordData.displayAs ? this.landlordData.displayAs : '', Validators.required]
     });
-  }
-
-  getIndex(value) {
-    let index;
-    this.titles.forEach((item: any) => {
-      if (item.value === value) {
-        index = item.index
-      }
-
-    })
-    return index;
   }
 
   dismiss() {
@@ -63,5 +56,11 @@ export class DisplayAsModalPage implements OnInit {
     this.modalController.dismiss({
       llInfo: this.landlordDetailsForm.value
     });
+  }
+
+  onValueChange(){    
+    this.landlordDetailsForm.get('addressee').patchValue(this.landlordDetailsForm.value.title + ' ' + this.landlordDetailsForm.value.initials + ' ' + this.landlordDetailsForm.value.surname);
+    this.landlordDetailsForm.get('salutation').patchValue(this.landlordDetailsForm.value.title + ' ' + this.landlordDetailsForm.value.surname);
+    this.landlordDetailsForm.get('displayAs').patchValue(this.landlordDetailsForm.value.title + ' ' + this.landlordDetailsForm.value.forename + ' ' + this.landlordDetailsForm.value.surname);
   }
 }
