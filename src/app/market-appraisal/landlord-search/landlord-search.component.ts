@@ -67,7 +67,7 @@ export class LandlordSearchComponent implements OnInit {
   }
 
   async reset() {
-    const confirm = await this.commonService.showConfirm('Market Appraisal', 'Are you sure you want to clear the form?.', '', 'Yes', 'No');
+    const confirm = await this.commonService.showConfirm('Market Appraisal', 'Are you sure you want to reset the form data?.', '', 'Yes', 'No');
     if (confirm) {
       this.searchTerm = '';
       if (this.type === market_appraisal.contact_type) {
