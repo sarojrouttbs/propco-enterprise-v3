@@ -23,7 +23,7 @@
     <ion-list class="solr-suggestionList">
       <ng-container *ngIf="type === 'contact' && isItemAvailable">
         <ion-item *ngFor="let item of suggestions" class="solr-suggestion-list-item">
-          <div (click)="SelectLandlord(item)">
+          <div (click)="selectLandlord(item)">
             <span>
               <i class="propcoicon no-background propcoicon-landlord red-icon"></i>
             </span>
