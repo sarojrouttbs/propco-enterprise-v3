@@ -746,3 +746,28 @@ ion-list{
     }
   }
 }
+
+#ma-search {
+  .searchbar-custom {
+    .searchbar-input {
+      line-height: 27px;
+    }
+
+    .searchbar-search-icon {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    .searchbar-input-container {
+      box-shadow: none;
+      border-left: 0;
+      .searchbar-input {
+        box-shadow: none;
+        padding-top: 4px;
+        padding-left: 10px;
+
+      }
+    }
+  }
+}
