@@ -6,6 +6,12 @@
     .register-address-row {
         margin-top: 24px;
     }
+
+    .address-details-block {
+        div {
+            color: var(--ion-color-three);
+        }
+    }
 }
 
 #market-appraisal-lettings {
