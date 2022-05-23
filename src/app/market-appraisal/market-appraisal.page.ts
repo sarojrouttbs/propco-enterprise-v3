@@ -52,7 +52,7 @@ export class MarketAppraisalPage implements OnInit {
           town: [''],
           domesticId: ['']
         }),
-        displayAs: ['', Validators.required],
+        displayAs: [{value: '', disabled: true}, Validators.required],
         owners: [{ value: '', disabled: true }],
         ownership: [''],
         addressee: [''],
