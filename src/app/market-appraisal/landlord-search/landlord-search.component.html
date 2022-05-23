@@ -1,8 +1,8 @@
-<ion-row class="ion-align-items-center ion-justify-content-center ion-margin-vertical">
+<ion-row class="ion-align-items-center ion-justify-content-center ion-margin-vertical" id="ma-search">
   <ion-col size=60></ion-col>
 
   <ion-col size=30 style="padding-right: 0;" class="ion-no-padding tour-2">
-    <ion-searchbar [(ngModel)]="searchTerm" [placeholder]="type === 'contact' ? 'Start typing to search contacts' : 'Start typing to search Properties'" class="searchbar-custom"
+    <ion-searchbar [(ngModel)]="searchTerm" [placeholder]="type === 'contact' ? 'Start typing to search Contacts' : 'Start typing to search Properties'" class="searchbar-custom"
       debounce="500" (ionChange)="getItems($event)" [formControl]="searchTermControl" (ionBlur)="hideSuggestion()"
       (ionFocus)="onFocus()">
     </ion-searchbar>
@@ -12,7 +12,7 @@
 
   <ion-col class="ion-no-padding tour-3 pointer" size=5>
     <ion-buttons color="success" end (click)="serchItem()">
-      <i class="propcoicon propcoicon-search no-background green-icon search-icon"></i>
+      <i class="propcoicon propcoicon-search no-background search-icon"></i>
     </ion-buttons>
   </ion-col>
   <ion-col size="5">
@@ -23,7 +23,7 @@
     <ion-list class="solr-suggestionList">
       <ng-container *ngIf="type === 'contact' && isItemAvailable">
         <ion-item *ngFor="let item of suggestions" class="solr-suggestion-list-item">
-          <div (click)="SelectLandlord(item)">
+          <div (click)="selectLandlord(item)">
             <span>
               <i class="propcoicon no-background propcoicon-landlord red-icon"></i>
             </span>
