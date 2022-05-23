@@ -116,6 +116,7 @@ export class MaContactComponent implements OnInit {
       if (res.data?.llInfo.displayAs) {
         this.contactForm.get('displayAs').patchValue(res.data?.llInfo.displayAs);
         this.contactForm.patchValue(res.data?.llInfo);
+        this.landlordData = res.data?.llInfo;
       }
 
     });
