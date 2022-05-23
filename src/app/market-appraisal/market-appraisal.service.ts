@@ -59,4 +59,8 @@ export class MarketAppraisalService {
       environment.API_BASE_URL + `properties/${propertyId}/tob`, { params }
     );
   }
+  
+  getPropertyLocationsByPropertyId(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/locations`, { params });
+  }
 }
