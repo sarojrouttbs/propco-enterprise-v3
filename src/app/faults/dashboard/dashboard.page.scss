@@ -18,7 +18,7 @@
 
   table.dataTable {
     tbody tr.escalated {
-      background-color: rgba(var(--ion-color-danger-rgb), 0.5);
+      background-color: rgba(var(--ion-color-danger-rgb), 0.5) !important;
       color: var(--ion-color-step-2000);
     }
   }

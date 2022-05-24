@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { BookMaModalPage } from '../shared/modals/book-ma-modal/book-ma-modal.page';
 import { MARKET_APPRAISAL } from '../shared/constants';
 import { CommonService } from '../shared/services/common.service';
 import { ValidationService } from '../shared/services/validation.service';
@@ -19,7 +20,8 @@ export class MarketAppraisalPage implements OnInit {
     private commonService: CommonService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private maService: MarketAppraisalService
+    private maService: MarketAppraisalService,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
@@ -334,4 +336,22 @@ export class MarketAppraisalPage implements OnInit {
     });
     return promise;
   }
+
+  async bookMa() {
+    const modal = await this.modalController.create({
+      component: BookMaModalPage,
+      cssClass: 'modal-container ma-modal-container',
+      componentProps: {
+        title: 'Book MA',
+        type: 'book-ma'
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+
+    });
+    await modal.present();
+  }
+
 }
