@@ -106,7 +106,7 @@ export class MarketAppraisalPage implements OnInit {
   }
 
   cancel() {
-    this.commonService.showConfirm('Market Appraisal', 'Are you sure, you want to cancel?', '', 'Yes', 'No').then(async res => {
+    this.commonService.showConfirm('Market Appraisal', 'Are you sure you want to cancel?', '', 'Yes', 'No').then(async res => {
       if (res) {
         this.router.navigate(['agent/dashboard'], { replaceUrl: true });
       }
