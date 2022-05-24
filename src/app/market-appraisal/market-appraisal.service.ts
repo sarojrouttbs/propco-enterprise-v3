@@ -30,6 +30,14 @@ export class MarketAppraisalService {
     return this.httpClient.post(environment.API_BASE_URL + `landlords`, params);
   }
 
+  updateLandlord(params, landloardId: string): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `landlords/${landloardId}`, params);
+  }
+
+  updateProperty(params, propertyId: string): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `properties/${propertyId}`, params);
+  }
+
   getaccessibleOffices(): Observable<any> {
     return this.httpClient.get(
       environment.API_BASE_URL + `accessible-offices`, {}
@@ -54,14 +62,14 @@ export class MarketAppraisalService {
     return this.httpClient.post(environment.API_BASE_URL + `properties`, payload);
   }
 
-  getPropertyDetails(propertyId: string, params): Observable<any> {
+  getPropertyDetails(propertyId: string): Observable<any> {
     return this.httpClient.get(
-      environment.API_BASE_URL + `properties/${propertyId}/tob`, { params }
+      environment.API_BASE_URL + `properties/${propertyId}/tob`
     );
   }
 
-  getPropertyLocationsByPropertyId(propertyId: string, params): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/locations`, { params });
+  getPropertyLocationsByPropertyId(propertyId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/locations`);
   }
 
   getAssignedUsers(): Observable<any> {

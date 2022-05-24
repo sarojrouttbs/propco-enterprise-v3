@@ -2,11 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { off } from 'process';
-import { PROPCO ,market_appraisal} from 'src/app/shared/constants';
+import { PROPCO } from 'src/app/shared/constants';
 import { AddressModalPage } from 'src/app/shared/modals/address-modal/address-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { MarketAppraisalService } from '../market-appraisal.service';
 import { HttpParams } from '@angular/common/http';
+import { error } from 'protractor';
 
 
 @Component({
@@ -69,49 +70,6 @@ export class MaPropertyComponent implements OnInit {
     }
   }
 
-    getPropertyData(){
-    this.maService.propertyChange$.subscribe(res =>{
-      if(res === 'reset'){
-        this.address = '';
-        this.propertyForm.reset();
-      }else{
-        this.propertyData = res;
-        const id = this.propertyData.propertyId ?  this.propertyData.propertyId :  this.propertyData.entityId
-        this.setPropertyData(id )
-      }
-    })
-  }
-
-  async setPropertyData(id){
-      const property:any = await this.getPropertyDetails(id);
-      this.getPropertyLocationsByPropertyId(id);
-      this.address = property.address
-      this.propertyForm.patchValue({
-      numberOfBedroom: property.numberOfBedroom ? property.numberOfBedroom : '',
-      houseType: property.houseType ? property.houseType : '',
-      isStudio: property.isStudio ? property.isStudio : '',
-      // below Property will received in tob details
-      propertyStyle: property.propertyStyle ? property.propertyStyle : '',
-      propertyAge: property.propertyAge ? property.propertyAge : '',
-      lettingReason: property.lettingReason ? property.lettingReason : '',
-      onWithOtherAgent: property.onWithOtherAgent ? property.onWithOtherAgent : '',
-      propertyNotes: property.propertyDescription ? property.propertyDescription : '',
-      direction: property.direction ? property.direction : '',
-      // till here
-      parking: property.parking ? Number(property.parking)  : '',
-      advertisementRentFrequency: property.advertisementRentFrequency ? property.advertisementRentFrequency : '',
-      furnishingType: property.furnishingType ? property.furnishingType : '',
-      hasLetBefore: property.hasLetBefore ? property.hasLetBefore : '',
-      status: property.status ? property.status : '',
-      office: property.officeCode ? property.officeCode : '',
-      agentName: property.agentName ? property.agentName : '',
-      minimum: property.minimumRent ? property.minimumRent : '',
-      maximum: property.maximumRent ? property.maximumRent : '',
-      availableFromDate: property.availableFromDate ? property.availableFromDate : '',
-      availableToDate: property.availableToDate ? property.availableToDate : ''
-    })
-  }
-  
   private async initApiCalls() {
     const offices = await this.getAccessibleOffices();
     if (offices) {
@@ -119,47 +77,67 @@ export class MaPropertyComponent implements OnInit {
     }
   }
 
-  getPropertyDetails(propertyId) {
-    let params = new HttpParams().set("hideLoader", "true");
-    const promise = new Promise((resolve, reject) => {
-      this.maService.getPropertyDetails(propertyId, params).subscribe(
-        (res) => {
-          resolve(res.data);
-        },
-        (error) => {
-          resolve(false);
-        }
-      );
-    });
-    return promise;
-  }
-
-
- 
-
-  private getPropertyLocationsByPropertyId(propertyId: string) {
-    let params = new HttpParams().set("hideLoader", "true");
-    this.maService.getPropertyLocationsByPropertyId(propertyId, params).subscribe(
-      res => {
-        const propertylocationIds: any = [];
-        if(res && res.data) {
-          res.data.forEach(element => {
-            propertylocationIds.push(element.locationId)
-          });
-
-        /// This api is responsing array response and we have single field to bind.
-
-          // this.propertyForm.patchValue({
-          //   propertyLocations : propertylocationIds
-          // })
-        }
+  getPropertyData() {
+    this.maService.propertyChange$.subscribe(res => {
+      if (res === 'reset') {
+        this.address = '';
+        this.propertyForm.reset();
+      } else {
+        this.propertyData = res;
+        const id = this.propertyData.propertyId ? this.propertyData.propertyId : this.propertyData.entityId
+        this.setPropertyData(id)
       }
-    );
+    })
   }
 
-
-
- 
+  async setPropertyData(id) {
+    const property: any = await this.getPropertyDetails(id);
+    const propertyLocaltions = this.getPropertyLocationsByPropertyId(id);
+    this.marketLocations = [];
+    this.propertyForm.controls['propertyLocations'].setValue([])
+    const locations = await this.getLocationByOffice(property.office);
+    if (locations) {
+      this.marketLocations = locations;
+    }
+    this.address = property.address
+    this.propertyForm.patchValue({
+      propertyId: property.propertyId,
+      propertyLocations: propertyLocaltions,
+      numberOfBedroom: property.numberOfBedroom ? property.numberOfBedroom : '',
+      houseType: property.houseType ? property.houseType : '',
+      isStudio: property.isStudio,
+      propertyStyle: property.propertyStyle ? property.propertyStyle : '',
+      propertyAge: property.propertyAge ? property.propertyAge : '',
+      lettingReason: property.lettingReason ? property.lettingReason : '',
+      onWithOtherAgent: property.onWithOtherAgent,
+      propertyNotes: property.propertyDescription ? property.propertyDescription : '',
+      direction: property.direction ? property.direction : '',
+      parking: property.parking ? Number(property.parking) : '',
+      advertisementRentFrequency: property.advertisementRentFrequency ? property.advertisementRentFrequency : '',
+      furnishingType: property.furnishingType ? (property.furnishingType === '0' ? null : property.furnishingType) : '',
+      hasLetBefore: property.hasLetBefore,
+      status: property.status ? property.status : '',
+      office: property.office ? property.office : '',
+      agentName: property.agentName ? property.agentName : '',
+      minimum: property.minimumRent ? property.minimumRent : '',
+      maximum: property.maximumRent ? property.maximumRent : '',
+      availableFromDate: property.availableFromDate ? property.availableFromDate : '',
+      availableToDate: property.availableToDate ? property.availableToDate : '',
+      address: {
+        postcode: property.address ? property.address.postcode : null,
+        addressLine1: property.address ? property.address.addressLine1 : null,
+        addressLine2: property.address ? property.address.addressLine2 : null,
+        addressLine3: property.address ? property.address.addressLine3 : null,
+        buildingName: property.address ? property.address.buildingName : null,
+        buildingNumber: property.address ? property.address.buildingNumber : null,
+        country: property.address ? property.address.country : null,
+        county: property.address ? property.address.county : null,
+        locality: property.address ? property.address.locality : null,
+        town: property.address ? property.address.town : null,
+        domesticId: property.address ? property.address.pafReference : null
+      },
+    });
+  }
 
   private setLookupData(data) {
     this.propertyStyles = data.propertyStyles;
@@ -291,6 +269,42 @@ export class MaPropertyComponent implements OnInit {
         },
         (error) => {
           resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+  private getPropertyDetails(propertyId: string) {
+    const promise = new Promise((resolve, reject) => {
+      this.maService.getPropertyDetails(propertyId).subscribe(
+        (res) => {
+          resolve(res.data);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+
+
+
+  private getPropertyLocationsByPropertyId(propertyId: string) {
+    const promise = new Promise((resolve, reject) => {
+      this.maService.getPropertyLocationsByPropertyId(propertyId).subscribe(
+        res => {
+          const propertylocationIds: any = [];
+          if (res && res.data) {
+            res.data.forEach(element => {
+              propertylocationIds.push(element.locationId)
+            });
+            resolve(propertylocationIds);
+          }
+        }, error => {
+          resolve([]);
         }
       );
     });
