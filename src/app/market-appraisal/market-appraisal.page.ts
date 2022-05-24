@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 import { CommonService } from '../shared/services/common.service';
 import { ValidationService } from '../shared/services/validation.service';
 import { MarketAppraisalService } from './market-appraisal.service';
@@ -17,7 +18,7 @@ export class MarketAppraisalPage implements OnInit {
     private commonService: CommonService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private maService: MarketAppraisalService,
+    private maService: MarketAppraisalService
   ) { }
 
   ngOnInit() {
@@ -52,7 +53,7 @@ export class MarketAppraisalPage implements OnInit {
           town: [''],
           domesticId: ['']
         }),
-        displayAs: [{value: '', disabled: true}, Validators.required],
+        displayAs: [{ value: '', disabled: true }, Validators.required],
         owners: [{ value: '', disabled: true }],
         ownership: [''],
         addressee: [''],
@@ -151,7 +152,7 @@ export class MarketAppraisalPage implements OnInit {
       if (confirm) {
         const landlordCreated = await this.createLandlord();
         if (landlordCreated) {
-          this.commonService.showAlert('Notes', 'Contact ' + this.maForm.get('contactForm').value.displayAs + ' has been created successfully').then(res => {
+          this.commonService.showAlert('Notes', 'Contact ' + this.maForm.getRawValue().contactForm.displayAs + ' has been created successfully').then(res => {
             if (res) {
               this.router.navigate(['agent/dashboard'], { replaceUrl: true });
             }
