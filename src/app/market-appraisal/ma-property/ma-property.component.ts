@@ -181,7 +181,7 @@ export class MaPropertyComponent implements OnInit {
   async openAddressModal() {
     const modal = await this.modalController.create({
       component: AddressModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container ma-modal-container',
       componentProps: {
         paramAddress: this.address,
         type: 'market-appraisal'

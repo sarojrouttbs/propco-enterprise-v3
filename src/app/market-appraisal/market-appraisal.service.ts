@@ -43,7 +43,7 @@ export class MarketAppraisalService {
   }
 
   getLandlordDetails(landlordId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `landlords/${landlordId}`);
+    return this.httpClient.get(environment.API_BASE_URL + `landlords/${landlordId}/node`);
   }
 
   getLandlordProperties(landlordId: string): Observable<any> {
