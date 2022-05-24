@@ -100,7 +100,7 @@
         }
 
         .result-wrapper {
-          color: var(--ion-color-address-color);
+          color: var(--ion-text-color);
           @include set-text-style(18px, 20px);
         }
 
@@ -172,7 +172,7 @@
                     span {
                       padding-right: 8px;
                       @include set-text-style(13px, 17px);
-                      color: var(--ion-color-address-color);
+                      color: var(--ion-text-color);
                     }
                     .garage-ellipse {
                       overflow: hidden;
@@ -188,7 +188,7 @@
                     .pricetag {
                       @include set-text-style(16px, 20px);
                       font-weight: bold;
-                      color: var(--ion-color-address-color);
+                      color: var(--ion-text-color);
                     }
                   }
                 }
@@ -226,7 +226,7 @@
               justify-content: start;
               grid-template-columns: 180px 4fr;
               gap: 15px;
-              padding: 0 10px 10px;
+              padding: 0 4px 4px;
 
               .header-content {
                 .header {
@@ -243,7 +243,7 @@
             .agent-content-panel, .landlord-content-panel, .tenant-content-panel, .applicant-content-panel, .contractor-content-panel  {
               display: grid;
               justify-content: start;
-              grid-template-columns: 52px 1fr;
+              grid-template-columns: 45px 1fr;
               gap: 15px;
               padding: 0 10px 10px;
 
@@ -290,7 +290,7 @@
 
           .reftag {
             @include set-text-style(13px, 17px);
-            color: var(--ion-color-address-color);
+            color: var(--ion-text-color);
           }
 
           .verticalLine {
@@ -300,7 +300,7 @@
 
           .title {
             @include set-text-style(17px, 21px);
-            color: var(--ion-color-address-color);
+            color: var(--ion-text-color);
             ion-icon {
               pointer-events: none;
             }
