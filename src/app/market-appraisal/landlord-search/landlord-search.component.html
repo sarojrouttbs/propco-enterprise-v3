@@ -1,7 +1,5 @@
-<ion-row class="ion-align-items-center ion-justify-content-center ion-margin-vertical" id="ma-search">
-  <ion-col size=60></ion-col>
-
-  <ion-col size=30 style="padding-right: 0;" class="ion-no-padding tour-2">
+<ion-row class="ion-align-items-center ion-justify-content-end ion-margin-vertical" id="ma-search">
+  <ion-col size="30" style="padding-right: 0;" class="ion-no-padding tour-2">
     <ion-searchbar [(ngModel)]="searchTerm" [placeholder]="type === 'contact' ? 'Start typing to search Contacts' : 'Start typing to search Properties'" class="searchbar-custom"
       debounce="500" (ionChange)="getItems($event)" [formControl]="searchTermControl" (ionBlur)="hideSuggestion()"
       (ionFocus)="onFocus()">
@@ -10,13 +8,13 @@
     </ion-progress-bar>
   </ion-col>
 
-  <ion-col class="ion-no-padding tour-3 pointer" size=5>
+  <ion-col class="ion-no-padding tour-3 pointer" size="auto">
     <ion-buttons color="success" end (click)="serchItem()">
       <i class="propcoicon propcoicon-search no-background search-icon"></i>
     </ion-buttons>
   </ion-col>
   <ion-col size="5">
-    <ion-button color="success" style="float: right;" (click)="reset()">Reset</ion-button>
+    <ion-button color="success" (click)="reset()">Reset</ion-button>
   </ion-col>
 
   <ion-row>
