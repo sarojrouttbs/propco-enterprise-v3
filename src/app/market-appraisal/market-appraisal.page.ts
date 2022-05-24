@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { MARKET_APPRAISAL } from '../shared/constants';
 import { CommonService } from '../shared/services/common.service';
 import { ValidationService } from '../shared/services/validation.service';
 import { MarketAppraisalService } from './market-appraisal.service';
@@ -12,7 +13,7 @@ import { MarketAppraisalService } from './market-appraisal.service';
 })
 export class MarketAppraisalPage implements OnInit {
 
-  type = 'contact';
+  type = MARKET_APPRAISAL.contact_type;
   maForm: FormGroup;
   constructor(
     private commonService: CommonService,
@@ -113,10 +114,10 @@ export class MarketAppraisalPage implements OnInit {
   }
 
   changeSegment() {
-    if (this.type === 'contact') {
-      this.type = 'property'
+    if (this.type ===  MARKET_APPRAISAL.contact_type) {
+      this.type = MARKET_APPRAISAL.property_type;
     } else {
-      this.type = 'contact'
+      this.type = MARKET_APPRAISAL.contact_type;
     }
   }
 
@@ -137,7 +138,7 @@ export class MarketAppraisalPage implements OnInit {
           }
         }
         else {
-          this.type = 'property'
+          this.type = MARKET_APPRAISAL.property_type;
         }
         return;
       }
@@ -182,7 +183,7 @@ export class MarketAppraisalPage implements OnInit {
           }
         }
         else {
-          this.type = 'property'
+          this.type = MARKET_APPRAISAL.property_type;
         }
         return;
       }
@@ -224,7 +225,7 @@ export class MarketAppraisalPage implements OnInit {
           }
         }
         else {
-          this.type = 'property'
+          this.type = MARKET_APPRAISAL.property_type;
         }
         return;
       }
@@ -267,7 +268,7 @@ export class MarketAppraisalPage implements OnInit {
         }
       }
       else {
-        this.type = 'property'
+        this.type = MARKET_APPRAISAL.property_type
       }
       return;
     }
