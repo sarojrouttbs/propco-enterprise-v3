@@ -72,15 +72,16 @@ export class MarketAppraisalService {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/locations`);
   }
 
-  createMarketAppraisal(params): Observable<any> {
-    return this.httpClient.post(environment.API_BASE_URL + `appointments/ma`, params);
-  }
-
   getAssignedUsers(): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `accessible-users`, {});
   }
 
-  getAvailableSlots(): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `appointments/available-slots`, {});
+  getAvailableSlots(params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `appointments/available-slots`, { params });
   }
+
+  createMarketAppraisal(params): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `appointments/ma`, params);
+  }
+
 }

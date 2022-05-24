@@ -29,19 +29,28 @@ export class DisplayAsModalPage implements OnInit {
 
   ngOnInit() {
     this.initLandlordForm();
+    this.patchData();
   }
 
   initLandlordForm() {
     this.landlordDetailsForm = this.fb.group({
-      title: [this.landlordData && this.landlordData.title ? this.landlordData.title : '', [Validators.required]],
-      initials: [this.landlordData && this.landlordData.initials ? this.landlordData.initials : ''],
-      forename: [this.landlordData && this.landlordData.foreName ? this.landlordData.foreName : '', [Validators.required]],
-      middleName: [this.landlordData && this.landlordData.middleName ? this.landlordData.middleName : ''],
-      surname: [this.landlordData && this.landlordData.surName ? this.landlordData.surName : '', [Validators.required]],
-      addressee: [this.landlordData && this.landlordData.addressee ? this.landlordData.addressee : ''],
-      salutation: [this.landlordData && this.landlordData.salutation ? this.landlordData.salutation : ''],
-      displayAs: [this.landlordData && this.landlordData.displayAs ? this.landlordData.displayAs : '', Validators.required]
+      title: ['', [Validators.required]],
+      initials: [''],
+      forename: ['', [Validators.required]],
+      middleName: [''],
+      surname: ['', [Validators.required]],
+      addressee: [''],
+      salutation: [''],
+      displayAs: ['', Validators.required]
     });
+  }
+
+  patchData(){
+    if(this.landlordData){      
+      this.landlordDetailsForm.patchValue(this.landlordData);
+    }
+    
+    
   }
 
   dismiss() {
@@ -58,7 +67,7 @@ export class DisplayAsModalPage implements OnInit {
     });
   }
 
-  onValueChange(){    
+  onValueChange() {
     this.landlordDetailsForm.get('addressee').patchValue(this.landlordDetailsForm.value.title + ' ' + this.landlordDetailsForm.value.initials + ' ' + this.landlordDetailsForm.value.surname);
     this.landlordDetailsForm.get('salutation').patchValue(this.landlordDetailsForm.value.title + ' ' + this.landlordDetailsForm.value.surname);
     this.landlordDetailsForm.get('displayAs').patchValue(this.landlordDetailsForm.value.title + ' ' + this.landlordDetailsForm.value.forename + ' ' + this.landlordDetailsForm.value.surname);
