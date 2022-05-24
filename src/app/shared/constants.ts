@@ -665,7 +665,7 @@ export const OWNERSHIP = [
   { index: 'solely', value: 'Solely' }
 ];
 
-export const market_appraisal = {
+export const MARKET_APPRAISAL = {
   contact_type: 'contact',
   property_type: 'property',
 }

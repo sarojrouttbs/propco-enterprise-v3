@@ -28,6 +28,7 @@ export class MarketAppraisalPage implements OnInit {
   initForm() {
     this.maForm = this.formBuilder.group({
       contactForm: this.formBuilder.group({
+        landlordUuid: null,
         heardReason: ['', Validators.required],
         officeCode: ['', Validators.required],
         enquiryNotes: [''],
@@ -60,6 +61,7 @@ export class MarketAppraisalPage implements OnInit {
         salutation: ['']
       }),
       propertyForm: this.formBuilder.group({
+        propertyId: null,
         address: this.formBuilder.group({
           postcode: ['', Validators.required],
           addressLine1: [''],
@@ -119,11 +121,116 @@ export class MarketAppraisalPage implements OnInit {
   }
 
   async saveWithoutBooking() {
-    //Scenario 5 : New Landlord - No Property
-    //here need to add condition in && for invalid property form
-    //condition: this.maForm.get('contactForm').valid && this.maForm.get('propertyForm').invalid
+    /**Existing Landloard**/
+    if (this.maForm.get('contactForm').value.landlordUuid && !this.maForm.get('propertyForm').value.propertyId) {
+      /**Scenario 4 : Existing LL - No Property**/
+      if (this.maForm.get('contactForm').valid && !this.maForm.get('propertyForm').valid) {
+        const confirm = await this.commonService.showConfirm('Market Appraisal', 'Do you wish to continue without creating a property? If No, please fill all the mandatory fields.', '', 'Yes', 'No');
+        if (confirm) {
+          const landlordUpdate = await this.updateLandlord();
+          if (landlordUpdate) {
+            this.commonService.showAlert('Market Appraisal', 'Contact ' + this.maForm.getRawValue().contactForm.displayAs + ' has been updated successfully').then(res => {
+              if (res) {
+                this.router.navigate(['agent/dashboard'], { replaceUrl: true });
+              }
+            });
+          }
+        }
+        else {
+          this.type = 'property'
+        }
+        return;
+      }
+      /**Scenario 2 : Existing LL - New Property**/
+      if (this.maForm.get('contactForm').valid && this.maForm.get('propertyForm').valid) {
+        const landlordUpdated = await this.updateLandlord() as any;
+        if (landlordUpdated) {
+          const payload = this.commonService.removeEmpty(Object.assign({}, this.maForm.get('propertyForm').value));
+          payload.landlordId = this.maForm.get('contactForm').value.landlordUuid;
+          payload.status = parseInt(payload.status);
+          if (payload.availableFromDate) {
+            payload.availableFromDate = this.commonService.getFormatedDate(payload.availableFromDate, 'yyyy-MM-dd');
+          }
+          if (payload.availableToDate) {
+            payload.availableToDate = this.commonService.getFormatedDate(payload.availableToDate, 'yyyy-MM-dd');
+          }
+          const propertyCreated = await this.createProperty(payload);
+          if (propertyCreated) {
+            this.commonService.showAlert('Market Appraisal', 'The Contact and/or the Property and their association has been created/modified successfully').then(res => {
+              if (res) {
+                this.router.navigate(['agent/dashboard'], { replaceUrl: true });
+              }
+            });
+          }
+        }
+        return;
+      }
+    }
+    /**Existing Landlord & Property*/
+    if (this.maForm.get('contactForm').value.landlordUuid && this.maForm.get('propertyForm').value.propertyId) {
+      /**Scenario 4 : Existing LL - No Property**/
+      if (this.maForm.get('contactForm').valid && !this.maForm.get('propertyForm').valid) {
+        const confirm = await this.commonService.showConfirm('Market Appraisal', 'Do you wish to continue without creating a property? If No, please fill all the mandatory fields.', '', 'Yes', 'No');
+        if (confirm) {
+          const landlordUpdate = await this.updateLandlord();
+          if (landlordUpdate) {
+            this.commonService.showAlert('Market Appraisal', 'Contact ' + this.maForm.getRawValue().contactForm.displayAs + ' has been updated successfully').then(res => {
+              if (res) {
+                this.router.navigate(['agent/dashboard'], { replaceUrl: true });
+              }
+            });
+          }
+        }
+        else {
+          this.type = 'property'
+        }
+        return;
+      }
+      /**Scenatio 3: Existing Landlord & Existing Property*/
+      if (this.maForm.get('contactForm').valid && this.maForm.get('propertyForm').valid) {
+        const landlordUpdated = await this.updateLandlord() as any;
+        if (landlordUpdated) {
+          const payload = this.commonService.removeEmpty(Object.assign({}, this.maForm.get('propertyForm').value));
+          payload.landlordId = this.maForm.get('contactForm').value.landlordUuid;
+          payload.status = parseInt(payload.status);
+          if (payload.availableFromDate) {
+            payload.availableFromDate = this.commonService.getFormatedDate(payload.availableFromDate, 'yyyy-MM-dd');
+          }
+          if (payload.availableToDate) {
+            payload.availableToDate = this.commonService.getFormatedDate(payload.availableToDate, 'yyyy-MM-dd');
+          }
+          const propertyUpdated = await this.updateProperty(payload);
+          if (propertyUpdated) {
+            this.commonService.showAlert('Market Appraisal', 'The Contact and/or the Property and their association has been created/modified successfully').then(res => {
+              if (res) {
+                this.router.navigate(['agent/dashboard'], { replaceUrl: true });
+              }
+            });
+          }
+        }
+        return;
+      }
+      /**Scenario 4 : Existing LL - No Property**/
+      if (this.maForm.get('contactForm').valid && this.maForm.get('propertyForm').valid) {
+        const confirm = await this.commonService.showConfirm('Market Appraisal', 'Do you wish to continue without creating a property? If No, please fill all the mandatory fields.', '', 'Yes', 'No');
+        if (confirm) {
+          const landlordUpdate = await this.updateLandlord();
+          if (landlordUpdate) {
+            this.commonService.showAlert('Market Appraisal', 'Contact ' + this.maForm.getRawValue().contactForm.displayAs + ' has been updated successfully').then(res => {
+              if (res) {
+                this.router.navigate(['agent/dashboard'], { replaceUrl: true });
+              }
+            });
+          }
+        }
+        else {
+          this.type = 'property'
+        }
+        return;
+      }
+    }
+    /**Scenario 1 : New Landlord - New Property**/
     if (this.maForm.get('contactForm').valid && this.maForm.get('propertyForm').valid) {
-      /**Scenario 1 : New Landlord - New Property**/
       const landlordCreated = await this.createLandlord() as any;
       if (landlordCreated) {
         const payload = this.commonService.removeEmpty(Object.assign({}, this.maForm.get('propertyForm').value));
@@ -146,13 +253,13 @@ export class MarketAppraisalPage implements OnInit {
       }
       return;
     }
-
-    if (this.maForm.get('contactForm').valid) {
+    /**Scenario 5 : New Landlord - No Property**/
+    if (this.maForm.get('contactForm').valid && !this.maForm.get('propertyForm').valid) {
       const confirm = await this.commonService.showConfirm('Market Appraisal', 'Do you wish to continue without creating a property? If No, please fill all the mandatory fields.', '', 'Yes', 'No');
       if (confirm) {
         const landlordCreated = await this.createLandlord();
         if (landlordCreated) {
-          this.commonService.showAlert('Notes', 'Contact ' + this.maForm.getRawValue().contactForm.displayAs + ' has been created successfully').then(res => {
+          this.commonService.showAlert('Market Appraisal', 'Contact ' + this.maForm.getRawValue().contactForm.displayAs + ' has been created successfully').then(res => {
             if (res) {
               this.router.navigate(['agent/dashboard'], { replaceUrl: true });
             }
@@ -172,6 +279,38 @@ export class MarketAppraisalPage implements OnInit {
       this.maService.createLandlord(params).subscribe(
         (res) => {
           resolve(res);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+  updateLandlord() {
+    const params = this.maForm.get('contactForm').value;
+    const llId = params.landlordUuid;
+    const promise = new Promise((resolve, reject) => {
+      this.maService.updateLandlord(params, llId).subscribe(
+        (res) => {
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
+  }
+
+  updateProperty(payload) {
+    const params = payload;
+    const propertyId = params.propertyId;
+    const promise = new Promise((resolve, reject) => {
+      this.maService.updateProperty(params, propertyId).subscribe(
+        (res) => {
+          resolve(true);
         },
         (error) => {
           resolve(false);
