@@ -37,7 +37,7 @@
   .block {
     @include border-radius(5px);
     background-color: var(--ion-color-five);
-    color: var(--ion-color-one);
+    color: var(--ion-text-color);
     @include set-text-style(20px, 24px);
     text-align: center;
     min-height: 170px;
