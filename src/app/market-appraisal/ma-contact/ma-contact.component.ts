@@ -64,7 +64,21 @@ export class MaContactComponent implements OnInit {
       owners: data.owners ? data.owners : '',
       heardReason: data.heardReason ? this.getIndex(data.heardReason, this.propertyHeardSources) : '',
       officeCode: data.associatedOffice ? data.associatedOffice : '',
-      ownership: data.ownership ? this.getIndex(data.ownership, this.ownership) : ''
+      ownership: data.ownership ? this.getIndex(data.ownership, this.ownership) : '',
+      landlordUuid: data.landlordUuid ? data.landlordUuid : null,
+      address: {
+        postcode: data.address ? data.address.postcode : null,
+        addressLine1: data.address ? data.address.addressLine1 : null,
+        addressLine2: data.address ? data.address.addressLine2 : null,
+        addressLine3: data.address ? data.address.addressLine3 : null,
+        buildingName:data.address ? data.address.buildingName : null,
+        buildingNumber:data.address ? data.address.buildingNumber : null,
+        country: data.address ? data.address.country : null,
+        county: data.address ? data.address.county : null,
+        locality: data.address ? data.address.locality : null,
+        town: data.address ? data.address.town : null,
+        domesticId: data.address ? data.address.pafReference : null
+      },
     });
   }
 

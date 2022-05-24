@@ -4,41 +4,86 @@
 }
 
 ion-content {
-    --ion-background-color: var(--ion-color-four);
-    p {
-      color: var(--ion-text-color);
+    background-color: var(--ion-background-color);
+
+    .main-block{
+      width: 1440px;
+      margin: 0 auto;
+    }
+    
+    .block {
+        background-color: var(--ion-color-five);
+        padding: 10px;
+        text-align: center;
+        border-radius: 6px;
+        min-height: 160px;
+        height: 160px;
+        width: 200px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin: 10px;
+        
+        i.propcoicon {
+          margin-bottom: 5px;
+          padding: 10px 15px 5px;
+          @include set-text-style(80px, 86px);
+          background-color: transparent;
+          display: inline-table;
+        }
+        
+        p {
+          text-align: center;
+          margin-top: auto;
+          @include set-text-style(14px, 18px);
+          color: var(--ion-text-color);
+        }
+    }
+    
+    .block:hover {
+        background-color: var(--ion-color-four);
+        transform: scale(1.04);
     }
 }
 
-.block {
-    background-color: var(--ion-color-five);
-    padding: 10px;
-    text-align: center;
-    border-radius: 6px;
-    min-height: 160px;
-    height: 160px;
-    width: 200px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin: 10px;
-
-    i.propcoicon {
-      margin-bottom: 5px;
-      padding: 10px 15px 5px;
-      @include set-text-style(80px, 86px);
-      background-color: transparent;
-      display: inline-table;
+@media screen and (min-width: 1201px) and (max-width: 1500px) {
+  ion-content {
+    .main-block{
+      width: 1200px;
     }
-
-    p {
-      text-align: center;
-      margin-top: auto;
-      @include set-text-style(14px, 18px);
-    }
+  }
 }
 
-.block:hover {
-    background-color: var(--ion-color-six) !important;
-    transform: scale(1.04);
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+  ion-content {
+    .main-block{
+      width: 980px;
+    }
+  }
 }
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  ion-content {
+    .main-block{
+      width: 760px;
+    }
+  }
+}
+
+@media screen and (min-width: 576px) and (max-width: 767px) {
+  ion-content {
+    .main-block{
+      width: 510px;
+    }
+  }
+}
+
+@media screen and (min-width: 0) and (max-width: 575px) {
+  ion-content {
+    .main-block{
+      width: 260px;
+    }
+  }
+}
+
+

@@ -39,13 +39,13 @@
       </ion-col>
       <ion-col class="furnishing">
         <ion-text>
-          {{getAdvLookupValue(propertyData?.propertyDetails?.furnishingType, furnishingTypes) || notAvailable}}
+          {{getAdvLookupValue(propertyData?.propertyDetails?.furnishingType, furnishingTypes)}}
         </ion-text><br>
-        <ion-text> {{getLookupValue(propertyData?.propertyInfo?.managementType, managementTypes) || notAvailable}}</ion-text>
+        <ion-text> {{getLookupValue(propertyData?.propertyInfo?.managementType, managementTypes)}}</ion-text>
       </ion-col>
 
       <ion-col class="booking-office">
-        <ion-text>{{getLookupValue(propertyData?.propertyInfo?.bookingOfficeCode, officeCodes) || notAvailable}}
+        <ion-text>{{getLookupValue(propertyData?.propertyInfo?.bookingOfficeCode, officeCodes)}}
         </ion-text>
       </ion-col>
 
@@ -54,9 +54,9 @@
         <ion-text>&nbsp; {{propertyData?.propertyInfo?.isOnWithOtherAgent ?'Yes':'No' || notAvailable}} </ion-text>
       </ion-col>
 
-      <ion-col class="agent">
+      <ion-col class="agent" *ngIf="propertyData?.propertyInfo?.agentName">
         <ion-text class="query">Agent Name</ion-text>
-        <ion-text>&nbsp; {{propertyData?.propertyInfo?.agentName || notAvailable}} </ion-text>
+        <ion-text>&nbsp; {{propertyData?.propertyInfo?.agentName}} </ion-text>
       </ion-col>
     </ion-row>
   </ion-grid>

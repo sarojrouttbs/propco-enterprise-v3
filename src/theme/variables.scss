@@ -186,10 +186,12 @@ body.light-theme{
 
   --ion-label-color: #919191;
 
-  --ion-color-header:#efefef;
+
+ /*  --ion-color-header:#efefef;
   --ion-color-body:#d3d3d3;
   --ion-color-block:#f2f2f2;
   --ion-color-block-hover:#fff;
+  --ion-color-block-label-color:#999999;
   --ion-color-text-color:#2e2e2e;
   --ion-color-userinfo-bg:#d3d3d3;
   --ion-color-autocomplete-suggestion-bg:#efefef;
@@ -197,36 +199,39 @@ body.light-theme{
   --ion-color-solr-ex-panal-border-color:#e6e6e6;
   --ion-color-ion-list-bg:#f2f2f2;
   --ion-color-list-color:rgba(var(--ion-color-dark-rgb), 0.6);
-  --ion-color-matexpanstionpanel-arrow-color:#666666;
-  --ion-color-ngxslider-bubble-color:#55637d;
   --ion-color-address-color:#4f4a4d;
-  --ion-color-block-label-color:#999999;
   --ion-color-matselectpanal-bg:#fff;
-  --ion-color-matoption-color:#000000;
   --ion-color-furnishing-text: #ca4117;
   --ion-color-service-type-text: #5ea3ed;
   --ion-color-agent-query-text: #666666;
   --ion-color-amenity-bg: #ffffff;
   --ion-color-amenity-icon: #5ea3ed;
-  --ion-color-property-status-bg: #2db400;
   --ion-color-property-status-text: #ffffff;
-  --ion-color-property-info-value: rgb(66, 63, 63);
   --ion-color-landlord-tenant-selection: #EFEFEF;
   --ion-color-landlord-tenant-rent-details: #ffffff;
-  --ion-color-landlord-tenant-fab-btn: #262626cf;
   --ion-color-landlord-tenant-fab-text: #ffffff;
   --ion-color-matexpanstionpanel-bg:#f0f0f0;
-  --ion-color-mat-checkbox-label:#505050;
-  --ion-color-accordian-icon: #878787;
   --ion-property-details-bg: #d3d3d3;
   --ion-propert-rent-block-bg: #ffffff;
-  --ion-color-button-mat-menu-item:#000000;
   --ion-color-mat-menu-panel-bg:#fff;
-  --ion-color-mat-menu-item-submenu-trigger:#000000;
   --ion-color-ion-select: #212121;
   --ion-color-ion-label: #767575;
   --ion-color-notes-icon-bg: #efefef;
-  --ion-color-notes-icon: #2e2e2e;
+  --ion-color-notes-icon: #2e2e2e; */
+
+
+  --ion-color-matexpanstionpanel-arrow-color:#666666;
+  --ion-color-ngxslider-bubble-color:#55637d;
+  --ion-color-matoption-color:#000000;
+  --ion-color-property-status-bg: #2db400;
+  --ion-color-property-info-value: rgb(66, 63, 63);
+  --ion-color-landlord-tenant-fab-btn: #262626cf;
+  --ion-color-mat-checkbox-label:#505050;
+  --ion-color-accordian-icon: #878787;
+  --ion-color-button-mat-menu-item:#000000;
+  --ion-color-mat-menu-item-submenu-trigger:#000000;
+
+  
 }
 
 body.dark-theme {
