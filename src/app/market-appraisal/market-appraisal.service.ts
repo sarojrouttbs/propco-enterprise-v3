@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable,Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { environment } from "src/environments/environment";
 
 @Injectable({
@@ -59,20 +59,21 @@ export class MarketAppraisalService {
       environment.API_BASE_URL + `properties/${propertyId}/tob`, { params }
     );
   }
-  
+
   getPropertyLocationsByPropertyId(propertyId: string, params): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/locations`, { params });
+  }
+
+  getAssignedUsers(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `accessible-users`, {});
+  }
+
+  getAvailableSlots(params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `appointments/available-slots`, { params });
   }
 
   createMarketAppraisal(params): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `appointments/ma`, params);
   }
 
-  getAssignedUsers(): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `accessible-users`, { });
-  }
-
-  getAvailableSlots(): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `appointments/available-slots`, { });
-  }
 }

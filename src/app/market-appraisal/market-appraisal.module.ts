@@ -14,6 +14,7 @@ import { LandlordSearchComponent } from './landlord-search/landlord-search.compo
 import { MaPropertyComponent } from './ma-property/ma-property.component';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
 import { PipesModule } from '../shared/pipes/pipes.module';
+import { BookMaModalPageModule } from '../shared/modals/book-ma-modal/book-ma-modal.module';
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
   allowNegative: false,
@@ -35,7 +36,8 @@ CommonModule,
     DisplayAsModalPageModule,
     AddressModalPageModule,
     CurrencyMaskModule,
-    PipesModule
+    PipesModule,
+    BookMaModalPageModule
   ],
   declarations: [MarketAppraisalPage, MaContactComponent, MaPropertyComponent,LandlordSearchComponent],
   providers: [CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
