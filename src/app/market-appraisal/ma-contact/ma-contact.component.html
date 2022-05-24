@@ -138,7 +138,8 @@
                   <app-validation-message [control]="contactForm.controls.displayAs"></app-validation-message>
                 </ion-col>
                 <ion-col size="auto">
-                  <ion-button (click)="opneDisplayAsModal()" color="success">{{contactForm.value.displayAs ? 'Edit' :
+                  
+                  <ion-button (click)="opneDisplayAsModal()" color="success">{{contactForm.getRawValue().displayAs ? 'Edit' :
                     'Add'}}
                   </ion-button>
                 </ion-col>
