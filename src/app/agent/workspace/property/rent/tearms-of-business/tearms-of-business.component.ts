@@ -42,8 +42,6 @@ export class TearmsOfBusinessComponent implements OnInit {
       this.agentService.getTobVersionList(params).subscribe(
         (res) => {
           this.versionList = res && res.data ? res.data.filter((x) => !(x.withdrawnDate != null && x.withdrawnDate < this.currentDate)) : '';
-          console.log("list", this.versionList);
-          console.log(res);
           resolve(true);
         },
         (error) => {
