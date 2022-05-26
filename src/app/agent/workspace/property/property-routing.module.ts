@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
+import { TenancyComponent } from "./admin/tenancy/tenancy.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DetailsComponent } from "./details/details.component";
 
@@ -17,6 +18,10 @@ const routes: Routes = [
       {
         path: "details",
         component: DetailsComponent,
+      },
+      {
+        path: "tenancy",
+        component: TenancyComponent,
       },
       {
         path: "create-offer",

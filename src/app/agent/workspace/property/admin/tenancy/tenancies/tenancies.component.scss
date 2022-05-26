@@ -1,0 +1,16 @@
+#tenancy-details {
+    .table-block {
+        table {
+            width: 100%;
+            position: relative;
+        }
+
+        ion-col {
+            .label {
+                color: var(--ion-color-property-status-bg);
+                font-size: 20px;
+                font-weight: 600;
+            }
+        }
+    }
+}

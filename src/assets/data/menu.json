@@ -56,6 +56,24 @@
         }
         
       ]
+    },
+    {
+      "index": 2,
+      "name": "Admin",
+      "key": "admin",
+      "isActive": false,
+      "showSubmenu": false,
+
+      "subMenu": [
+        {
+          "index": 1,
+          "key": "tenancy",
+          "name": "Tenancies",
+          "state": "propco.agent.entity.property.tenancy",
+          "isActive": false,
+          "route": "tenancy"
+        }
+      ]
     }
   ]
 }
