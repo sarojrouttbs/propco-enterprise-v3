@@ -4,6 +4,7 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DetailsComponent } from "./details/details.component";
 
 import { PropertyPage } from "./property.page";
+import { RentComponent } from "./rent/rent.component";
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
       {
         path: "details",
         component: DetailsComponent,
+      },
+      {
+        path: "rent",
+        component: RentComponent,
       },
       {
         path: "create-offer",
