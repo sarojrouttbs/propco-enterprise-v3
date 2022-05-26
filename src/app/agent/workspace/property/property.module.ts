@@ -26,7 +26,7 @@ import { PropertyPageRoutingModule } from './property-routing.module';
 import { NegotiateModalPageModule } from 'src/app/shared/modals/negotiate-modal/negotiate-modal.module';
 import { AgentService } from '../../agent.service';
 import { RentComponent } from './rent/rent.component';
-import { TearmsOfBusinessComponent } from './rent/tearms-of-business/tearms-of-business.component';
+import { TermsOfBusinessComponent } from './rent/terms-of-business/terms-of-business.component';
 
 @NgModule({
   imports: [
@@ -61,7 +61,7 @@ import { TearmsOfBusinessComponent } from './rent/tearms-of-business/tearms-of-b
     PropertyChecksComponent,
     PropertyAddressComponent,
     RentComponent,
-    TearmsOfBusinessComponent
+    TermsOfBusinessComponent
   ],
   providers: [AgentService],
 })

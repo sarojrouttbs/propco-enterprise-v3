@@ -34,7 +34,7 @@ export class RentComponent implements OnInit {
     this.initForm();
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
-    this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);    
+    this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);
   }
 
   initForm() {
@@ -64,7 +64,7 @@ export class RentComponent implements OnInit {
     }
   }
 
-  getPropertyDetails(propertyId) {
+  getPropertyDetails(propertyId: string) {
     let params = new HttpParams().set("hideLoader", "true");
     const promise = new Promise((resolve, reject) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(

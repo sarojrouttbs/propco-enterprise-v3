@@ -4,11 +4,11 @@ import { AgentService } from 'src/app/agent/agent.service';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
-  selector: 'app-tearms-of-business',
-  templateUrl: './tearms-of-business.component.html',
-  styleUrls: ['./tearms-of-business.component.scss'],
+  selector: 'app-terms-of-business',
+  templateUrl: './terms-of-business.component.html',
+  styleUrls: ['./terms-of-business.component.scss'],
 })
-export class TearmsOfBusinessComponent implements OnInit {
+export class TermsOfBusinessComponent implements OnInit {
 
   @Input() group;
   @Input() propertyDetails;
@@ -36,7 +36,7 @@ export class TearmsOfBusinessComponent implements OnInit {
     this.getTobVersionList();
   }
 
-  getTobVersionList() {
+  private getTobVersionList() {
     let params = new HttpParams().set("hideLoader", "true");
     const promise = new Promise((resolve, reject) => {
       this.agentService.getTobVersionList(params).subscribe(
@@ -52,14 +52,14 @@ export class TearmsOfBusinessComponent implements OnInit {
     return promise;
   }
 
-  getVersionHistory(propertyId) {
+  private getVersionHistory(propertyId: string) {
     let params = new HttpParams().set("hideLoader", "true");
     const promise = new Promise((resolve, reject) => {
       this.agentService.getVersionHistory(propertyId, params).subscribe(
         (res) => {
           this.versionHistoryList = res && res.data ? res.data : '';
           if (this.propertyDetails.propertyInfo?.currentTOB) {
-            this.group.get('version').patchValue(this.propertyDetails.propertyInfo?.currentTOB)
+            this.group.get('version').setValue(this.propertyDetails.propertyInfo?.currentTOB);
           }
           resolve(true);
         },
