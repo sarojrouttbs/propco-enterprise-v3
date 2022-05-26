@@ -629,7 +629,8 @@ export const AGENT_WORKSPACE_CONFIGS = {
       dashboard: 'Dashboard',
       details: 'Property Details',
       offers: 'Offers',
-      applications: 'Applications'
+      applications: 'Applications',
+      rent: 'Rent'
     }
   }
 };

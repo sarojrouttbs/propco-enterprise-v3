@@ -20,6 +20,7 @@ export class BookMaModalPage implements OnInit {
   popoverOptions: any = {
     cssClass: 'market-apprisal-ion-select'
   };
+  
   constructor(
     private formBuilder: FormBuilder,
     private modalController: ModalController,
