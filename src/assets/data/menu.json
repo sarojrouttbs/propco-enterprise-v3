@@ -26,6 +26,14 @@
           "state": "propco.agent.entity.property.propertydetails",
           "isActive": false,
           "route": "details"
+        },
+        {
+          "index": 2,
+          "key": "rent",
+          "name": "Rent",
+          "state": "propco.agent.entity.property.rent",
+          "isActive": false,
+          "route": "rent"
         }
       ]
     },

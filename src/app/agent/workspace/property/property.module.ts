@@ -25,8 +25,10 @@ import { PropertyAddressComponent } from './details/property-address/property-ad
 import { PropertyPageRoutingModule } from './property-routing.module';
 import { NegotiateModalPageModule } from 'src/app/shared/modals/negotiate-modal/negotiate-modal.module';
 import { AgentService } from '../../agent.service';
-import { TenanciesComponent } from './admin/tenancy/tenancies/tenancies.component';
+import { RentComponent } from './rent/rent.component';
+import { TermsOfBusinessComponent } from './rent/terms-of-business/terms-of-business.component';
 import { TenancyComponent } from './admin/tenancy/tenancy.component';
+import { TenanciesComponent } from './admin/tenancy/tenancies/tenancies.component';
 
 @NgModule({
   imports: [
@@ -49,8 +51,22 @@ import { TenancyComponent } from './admin/tenancy/tenancy.component';
     CallInfoModalPageModule,
     NegotiateModalPageModule
   ],
-  declarations: [GoogleMapComponent, PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent, LettingsDetailsComponent, LetBoardComponent, HistoryComponent, PropertyChecksComponent, PropertyAddressComponent, TenanciesComponent, TenancyComponent],
-
+  declarations: [
+    GoogleMapComponent,
+    PropertyPage,
+    DashboardComponent,
+    DetailsComponent,
+    PropertyLandlordTenantComponent,
+    LettingsDetailsComponent,
+    LetBoardComponent,
+    HistoryComponent,
+    PropertyChecksComponent,
+    PropertyAddressComponent,
+    RentComponent,
+    TermsOfBusinessComponent,
+    TenanciesComponent,
+    TenancyComponent
+  ],
   providers: [AgentService],
 })
 export class PropertyPageModule { }

@@ -631,7 +631,8 @@ export const AGENT_WORKSPACE_CONFIGS = {
       details: 'Property Details',
       offers: 'Offers',
       applications: 'Applications',
-      tenancy: 'Tenancies'
+      tenancy: 'Tenancies',
+      rent: 'Rent'
     }
   }
 };
