@@ -57,6 +57,8 @@ export class TenanciesComponent implements OnInit {
         this.agentService.getPropertyTenancies(this.selectedEntityDetails.entityId, params).subscribe(res => {
           let tenancies = res && res.data ? res.data : [];
           tenancies.map((data) => {
+            data.contractType = data.contractType.toString();
+            data.lapseToContract = data.lapseToContract.toString();
             const leadTenant = data?.tenants.filter(x => x.isLead);
             if (Array.isArray(leadTenant) && leadTenant.length > 0) {
               data.tenants = leadTenant[0];
@@ -109,12 +111,5 @@ export class TenanciesComponent implements OnInit {
     this.officeLookup = data.officeCodes;
     this.contractTypeLookup = data.contractTypes;
     this.agreementStatusesLookup = data.agreementStatuses;
-  }
-
-  getLookupValue(index: any, lookup: any, typeCaste: boolean = false) {
-    if (typeCaste) {
-      index = index.toString();
-    }
-    return this.commonService.getLookupValue(index, lookup);
   }
 }

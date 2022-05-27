@@ -29,6 +29,7 @@ import { RentComponent } from './rent/rent.component';
 import { TermsOfBusinessComponent } from './rent/terms-of-business/terms-of-business.component';
 import { TenancyComponent } from './admin/tenancy/tenancy.component';
 import { TenanciesComponent } from './admin/tenancy/tenancies/tenancies.component';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -49,7 +50,8 @@ import { TenanciesComponent } from './admin/tenancy/tenancies/tenancies.componen
       libraries: ['places', 'geometry']
     }),
     CallInfoModalPageModule,
-    NegotiateModalPageModule
+    NegotiateModalPageModule,
+    PipesModule
   ],
   declarations: [
     GoogleMapComponent,
