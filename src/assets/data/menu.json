@@ -53,8 +53,15 @@
           "state": "propco.agent.entity.property.applications",
           "isActive": false,
           "route": "applications"
+        },
+        {
+          "index": 3,
+          "key": "marketing_activity",
+          "name": "Marketing Activity",
+          "state": "propco.agent.entity.property.marketingactivity",
+          "isActive": false,
+          "route": "marketing-activity"
         }
-        
       ]
     }
   ]

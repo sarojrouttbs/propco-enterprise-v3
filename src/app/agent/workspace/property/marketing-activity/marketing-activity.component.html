@@ -1,0 +1,58 @@
+<ion-content id="marketing-activity">
+  <mat-accordion class="list-view-accordian" multi>
+    <mat-expansion-panel #marketingActivity hideToggle expanded>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Marketing Activity
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!marketingActivity.expanded" class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="marketingActivity.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+            </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="overlay-container">
+        <table datatable [dtOptions]="dtOption" [dtTrigger]="dtTrigger" class="row-border hover" width="100%">
+          <thead>
+            <tr>
+              <th style="width:23%">Applicant</th>
+              <th style="width:13%">Viewing Booked</th>
+              <th style="width:13%">Email</th>
+              <th style="width:13%">Sms</th>
+              <th style="width:13%">Mailshot</th>
+              <th style="width:25%">N/I Reson</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of marketActivityListing" class="table-row">
+              <td> {{ data.applicantName }} </td>
+              <td> {{ data.viewing_booked }} </td>
+              <td> {{ data.email }} </td>
+              <td> {{ data.sms }} </td>
+              <td> {{ data.mailshot }} </td>
+              <td> {{ data.reason || '-' }} </td>
+            </tr>
+            <tr class="table-row total-row" *ngIf="marketActivityListing?.length > 0">
+              <td> OVERALL TOTALS </td>
+              <td> {{ viewingBookedCountTotal }} </td>
+              <td> {{ emailCountTotal }} </td>
+              <td> {{ smsCountTotal }} </td>
+              <td> {{ mailshotCountTotal }} </td>
+              <td> - </td>
+            </tr>
+            <tr *ngIf="marketActivityListing?.length == 0">
+              <td colspan="7" class="no-data-available ion-text-center">
+                <b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</ion-content>

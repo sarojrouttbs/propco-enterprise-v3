@@ -63,4 +63,8 @@ export class AgentService {
       environment.API_BASE_URL + `agents/user/logout`, {}
     );
   }
+
+  getMarketingActivityPropertyId(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/marketing-activity`, { params });
+  }
 }
