@@ -331,7 +331,7 @@ body {
   }
 }
 
-#faultListTable, #la-application-list, #la-guarantor-application-list, #tenant-list-modal, #propertyNotesTable {
+#faultListTable, #la-application-list, #la-guarantor-application-list, #tenant-list-modal, #propertyNotesTable, #propertyTenancyTable {
   tr.odd {
     td.dataTables_empty {
       display: none;
