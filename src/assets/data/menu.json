@@ -26,6 +26,14 @@
           "state": "propco.agent.entity.property.propertydetails",
           "isActive": false,
           "route": "details"
+        },
+        {
+          "index": 2,
+          "key": "rent",
+          "name": "Rent",
+          "state": "propco.agent.entity.property.rent",
+          "isActive": false,
+          "route": "rent"
         }
       ]
     },
@@ -55,6 +63,24 @@
           "route": "applications"
         }
         
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Admin",
+      "key": "admin",
+      "isActive": false,
+      "showSubmenu": false,
+
+      "subMenu": [
+        {
+          "index": 1,
+          "key": "tenancy",
+          "name": "Tenancies",
+          "state": "propco.agent.entity.property.tenancy",
+          "isActive": false,
+          "route": "tenancy"
+        }
       ]
     }
   ]

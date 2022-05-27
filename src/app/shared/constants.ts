@@ -603,6 +603,7 @@ export const DEFAULT_MESSAGES = {
   NO_DATA_FOUND: 'No data found!',
   NO_RECORD_FOUND: 'No record found!',
   NO_DETAILS_AVAILABLE: 'No details available',
+  NO_TENANCY_AVAILABLE: 'No Tenancies associated with this property',
   errors: {
     SOMETHING_WENT_WRONG: 'Something went wrong'
   },
@@ -629,7 +630,9 @@ export const AGENT_WORKSPACE_CONFIGS = {
       dashboard: 'Dashboard',
       details: 'Property Details',
       offers: 'Offers',
-      applications: 'Applications'
+      applications: 'Applications',
+      tenancy: 'Tenancies',
+      rent: 'Rent'
     }
   }
 };

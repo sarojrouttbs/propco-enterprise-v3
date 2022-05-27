@@ -25,6 +25,11 @@ import { PropertyAddressComponent } from './details/property-address/property-ad
 import { PropertyPageRoutingModule } from './property-routing.module';
 import { NegotiateModalPageModule } from 'src/app/shared/modals/negotiate-modal/negotiate-modal.module';
 import { AgentService } from '../../agent.service';
+import { RentComponent } from './rent/rent.component';
+import { TermsOfBusinessComponent } from './rent/terms-of-business/terms-of-business.component';
+import { TenancyComponent } from './admin/tenancy/tenancy.component';
+import { TenanciesComponent } from './admin/tenancy/tenancies/tenancies.component';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -45,9 +50,25 @@ import { AgentService } from '../../agent.service';
       libraries: ['places', 'geometry']
     }),
     CallInfoModalPageModule,
-    NegotiateModalPageModule
+    NegotiateModalPageModule,
+    PipesModule
   ],
-  declarations: [GoogleMapComponent, PropertyPage, DashboardComponent, DetailsComponent, PropertyLandlordTenantComponent, LettingsDetailsComponent, LetBoardComponent, HistoryComponent, PropertyChecksComponent, PropertyAddressComponent],
-  providers:[AgentService],
+  declarations: [
+    GoogleMapComponent,
+    PropertyPage,
+    DashboardComponent,
+    DetailsComponent,
+    PropertyLandlordTenantComponent,
+    LettingsDetailsComponent,
+    LetBoardComponent,
+    HistoryComponent,
+    PropertyChecksComponent,
+    PropertyAddressComponent,
+    RentComponent,
+    TermsOfBusinessComponent,
+    TenanciesComponent,
+    TenancyComponent
+  ],
+  providers: [AgentService],
 })
 export class PropertyPageModule { }
