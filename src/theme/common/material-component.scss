@@ -204,7 +204,9 @@
           @include set-text-style(18px, 20px);
         }
       }
-
+      .mat-expansion-panel-body {
+        padding: 0 16px 16px;
+      }
     }
     .mat-expansion-panel:is(.mat-expanded):not([aria-disabled=true]) {
       background-color: var(--ion-color-five);

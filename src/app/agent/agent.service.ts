@@ -58,6 +58,12 @@ export class AgentService {
     );
   }
 
+  getPropertyTenancies(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/tenancies`, { params }
+    );
+  }
+
   getTobVersionList(params): Observable<any> {
     return this.httpClient.get(
       environment.API_BASE_URL + `terms-of-business`, { params }

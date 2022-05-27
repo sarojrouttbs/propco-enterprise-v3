@@ -27,6 +27,9 @@ import { NegotiateModalPageModule } from 'src/app/shared/modals/negotiate-modal/
 import { AgentService } from '../../agent.service';
 import { RentComponent } from './rent/rent.component';
 import { TermsOfBusinessComponent } from './rent/terms-of-business/terms-of-business.component';
+import { TenancyComponent } from './admin/tenancy/tenancy.component';
+import { TenanciesComponent } from './admin/tenancy/tenancies/tenancies.component';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -47,7 +50,8 @@ import { TermsOfBusinessComponent } from './rent/terms-of-business/terms-of-busi
       libraries: ['places', 'geometry']
     }),
     CallInfoModalPageModule,
-    NegotiateModalPageModule
+    NegotiateModalPageModule,
+    PipesModule
   ],
   declarations: [
     GoogleMapComponent,
@@ -61,7 +65,9 @@ import { TermsOfBusinessComponent } from './rent/terms-of-business/terms-of-busi
     PropertyChecksComponent,
     PropertyAddressComponent,
     RentComponent,
-    TermsOfBusinessComponent
+    TermsOfBusinessComponent,
+    TenanciesComponent,
+    TenancyComponent
   ],
   providers: [AgentService],
 })
