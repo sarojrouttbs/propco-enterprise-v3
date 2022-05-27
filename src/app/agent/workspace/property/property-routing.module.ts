@@ -3,7 +3,6 @@ import { Routes, RouterModule } from "@angular/router";
 import { TenancyComponent } from "./admin/tenancy/tenancy.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DetailsComponent } from "./details/details.component";
-
 import { PropertyPage } from "./property.page";
 import { RentComponent } from "./rent/rent.component";
 
