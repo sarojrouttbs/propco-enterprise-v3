@@ -40,10 +40,10 @@ export class MarketAppraisalPage implements OnInit {
         homeTelephone: ['', [Validators.required]],
         businessTelephone: ['', [Validators.required]],
         email: ['', [Validators.required, ValidationService.emailValidator]],
-        title: [''],
-        forename: [''],
+        title: ['', [Validators.required]],
+        forename: ['', [Validators.required]],
         middleName: [''],
-        surname: [''],
+        surname: ['', [Validators.required]],
         address: this.formBuilder.group({
           postcode: ['', Validators.required],
           addressLine1: [''],
@@ -61,7 +61,8 @@ export class MarketAppraisalPage implements OnInit {
         owners: [{ value: '', disabled: true }],
         ownership: [''],
         addressee: [''],
-        salutation: ['']
+        salutation: [''],
+        initials: ['']
       }),
       propertyForm: this.formBuilder.group({
         propertyId: null,
@@ -116,7 +117,7 @@ export class MarketAppraisalPage implements OnInit {
   }
 
   changeSegment() {
-    if (this.type ===  MARKET_APPRAISAL.contact_type) {
+    if (this.type === MARKET_APPRAISAL.contact_type) {
       this.type = MARKET_APPRAISAL.property_type;
     } else {
       this.type = MARKET_APPRAISAL.contact_type;
@@ -277,7 +278,7 @@ export class MarketAppraisalPage implements OnInit {
   }
 
   createLandlord() {
-    const params = this.maForm.get('contactForm').value;
+    const params = this.maForm.getRawValue().contactForm;
     const promise = new Promise((resolve, reject) => {
       this.maService.createLandlord(params).subscribe(
         (res) => {
@@ -292,7 +293,7 @@ export class MarketAppraisalPage implements OnInit {
   }
 
   updateLandlord() {
-    const params = this.maForm.get('contactForm').value;
+    const params = this.maForm.getRawValue().contactForm;
     const llId = params.landlordUuid;
     const promise = new Promise((resolve, reject) => {
       this.maService.updateLandlord(params, llId).subscribe(
