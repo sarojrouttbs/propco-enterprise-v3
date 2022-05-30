@@ -45,7 +45,7 @@
               <td> {{ mailshotCountTotal }} </td>
               <td> - </td>
             </tr>
-            <tr *ngIf="marketActivityListing?.length == 0">
+            <tr *ngIf="marketActivityListing?.length === 0">
               <td colspan="7" class="no-data-available ion-text-center">
                 <b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
               </td>

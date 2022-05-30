@@ -679,7 +679,7 @@ export const search_Text = {
   property: 'PROPERTY',
 }
 
-export const MARKETING_ACTIVITY_VALUE_TYPE = {
+export const MARKETING_ACTIVITY_TYPES = {
   EMAIL: 'email',
   SMS: 'sms',
   MAILSHOT: 'mailshot',

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, DEFAULT_MESSAGES, MARKETING_ACTIVITY_VALUE_TYPE } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, DEFAULT_MESSAGES, MARKETING_ACTIVITY_TYPES } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -52,7 +52,7 @@ export class MarketingActivityComponent implements OnInit {
     };
   }
 
-  private rerenderData(): void {
+  private reRenderData(): void {
     if (this.dtElements && this.dtElements.last.dtInstance) {
       this.dtElements.last.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.destroy();
@@ -88,10 +88,10 @@ export class MarketingActivityComponent implements OnInit {
     }
   }
 
-  private getMarketingActivityDetails(propertyId) {
+  private getMarketingActivityDetails(propertyId: string) {
     let params = new HttpParams().set("hideLoader", "true");
     const promise = new Promise((resolve, reject) => {
-      this.agentService.getMarketingActivityPropertyId(propertyId, params).subscribe(
+      this.agentService.getMarketingActivity(propertyId, params).subscribe(
         (res) => {
           resolve(res ? res : []);
         },
@@ -108,11 +108,11 @@ export class MarketingActivityComponent implements OnInit {
       const groupedApplicantObj = this.groupArrayOfObjects(this.marketingActivityDetails, "applicantId");
       const groupedApplicantArr = Object.values(groupedApplicantObj);
       this.marketActivityListing = await this.marketActivityListingData(groupedApplicantArr);
-      this.rerenderData();
+      this.reRenderData();
     }
   }
 
-  private marketActivityListingData(groupedApplicantArr) {
+  private marketActivityListingData(groupedApplicantArr: Array<any>) {
     const finalGroupedArr = [];
     let emailCount: number = 0;
     let smsCount: number = 0;
@@ -123,27 +123,27 @@ export class MarketingActivityComponent implements OnInit {
     this.smsCountTotal = 0;
     this.mailshotCountTotal = 0;
     this.viewingBookedCountTotal = 0;
-    groupedApplicantArr.forEach((elementByApplicant: any[]) => {
+    groupedApplicantArr.forEach((elementByApplicant: Array<any>) => {
       emailCount = 0;
       smsCount = 0;
       mailshotCount = 0;
       viewingBookedCount = 0;
       elementByApplicant.forEach(element => {
-        switch (element['valueType']) {
-          case MARKETING_ACTIVITY_VALUE_TYPE.EMAIL:
+        switch (element.valueType) {
+          case MARKETING_ACTIVITY_TYPES.EMAIL:
             emailCount = emailCount + element['valueTypeCount'];
             this.emailCountTotal = this.emailCountTotal + element['valueTypeCount'];
             break;
-          case MARKETING_ACTIVITY_VALUE_TYPE.SMS:
+          case MARKETING_ACTIVITY_TYPES.SMS:
             smsCount = smsCount + element['valueTypeCount'];
             this.smsCountTotal = this.smsCountTotal + element['valueTypeCount'];
             break;
-          case MARKETING_ACTIVITY_VALUE_TYPE.MAILSHOT:
+          case MARKETING_ACTIVITY_TYPES.MAILSHOT:
             mailshotCount = mailshotCount + element['valueTypeCount'];
             this.mailshotCountTotal = this.mailshotCountTotal + element['valueTypeCount'];
             break;
-          case MARKETING_ACTIVITY_VALUE_TYPE.VIEWED:
-          case MARKETING_ACTIVITY_VALUE_TYPE.BOOKED:
+          case MARKETING_ACTIVITY_TYPES.VIEWED:
+          case MARKETING_ACTIVITY_TYPES.BOOKED:
             viewingBookedCount = viewingBookedCount + element['valueTypeCount'];
             this.viewingBookedCountTotal = this.viewingBookedCountTotal + element['valueTypeCount'];
             break;
@@ -162,7 +162,7 @@ export class MarketingActivityComponent implements OnInit {
     return finalGroupedArr;
   }
 
-  private groupArrayOfObjects(list, key) {
+  private groupArrayOfObjects(list: Array<any>, key: string) {
     // grouping by applicantId
     return list.reduce((rv, x) => {
       (rv[x[key]] = rv[x[key]] || []).push(x);

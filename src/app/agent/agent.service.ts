@@ -82,7 +82,7 @@ export class AgentService {
     );
   }
 
-  getMarketingActivityPropertyId(propertyId: string, params): Observable<any> {
+  getMarketingActivity(propertyId: string, params): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/marketing-activity`, { params });
   }
 }
