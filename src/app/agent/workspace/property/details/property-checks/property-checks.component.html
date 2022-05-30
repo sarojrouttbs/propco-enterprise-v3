@@ -1,5 +1,5 @@
 
-<mat-accordion class="list-view-accordian" multi>
+<mat-accordion class="form-view-accordian" multi>
   <mat-expansion-panel #propertyChecksDetails hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -16,7 +16,6 @@
         </div>
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <ion-card-content id="details">
       <form [formGroup]="group">
         <ion-grid id="property-check-grid">
           <ion-row>
@@ -109,6 +108,5 @@
           </ion-row>
         </ion-grid>
       </form>
-    </ion-card-content>
   </mat-expansion-panel>
 </mat-accordion>

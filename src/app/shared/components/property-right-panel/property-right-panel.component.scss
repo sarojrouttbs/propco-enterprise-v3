@@ -2,17 +2,22 @@
     .property-details {
         padding: 0;
         .property-status {
-            background: var(--ion-color-property-status-bg);
+            background: var(--ion-color-success);
             color: var(--ion-color-six);
             padding-left: 10px;
             margin-bottom: 10px;
-            font-size: 20px;
+            font-size: 18px;
             text-transform: uppercase;
             ion-col {
-                min-height: 47px;
+                height: 47px;
                 display: flex;
                 flex-direction: row;
                 align-items: center;
+                ion-text {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                }
             }
         }
         .property-info {

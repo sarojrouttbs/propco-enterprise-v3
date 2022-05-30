@@ -93,12 +93,18 @@
       background: var(--ion-color-step-750);
       color: var(--ion-color-step-2000);
 
-      .sorting_asc{
-        background-image: url(../../assets/images/sort_asc.png);
+      .sorting:after,
+      .sorting:before,
+      .sorting_asc:after,
+      .sorting_desc:after {
+        opacity: 0.4;
       }
 
-      .sorting_desc{
-        background-image: url(../../assets/images/sort_desc.png);
+      & > tr > th.sorting_asc:before, 
+      & > tr > th.sorting_desc:after,
+      & > tr > td.sorting_asc:before,
+      & > tr > td.sorting_desc:after {
+        opacity: 1;
       }
 
       tr {

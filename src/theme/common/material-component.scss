@@ -213,6 +213,28 @@
     }
   }
 
+  .mat-accordion.list-view-accordian {
+    .mat-expansion-panel {
+      .mat-expansion-panel-header {
+        .mat-content {
+          height: 100%
+        }
+      }
+      .mat-expansion-panel-body{
+        padding: 0 6px 6px;
+      }
+    }
+  }
+
+  // use "form-view-accordian" class to show form
+  .mat-accordion.form-view-accordian {
+    .mat-expansion-panel {
+      .mat-expansion-panel-body{
+        padding: 0 6px 16px;
+      }
+    }
+  }
+
   #property-letting-details, #property-let-board-details, #la-application-list, #market-appraisal-lettings {
     // material date picker css - dark / light theme
   
