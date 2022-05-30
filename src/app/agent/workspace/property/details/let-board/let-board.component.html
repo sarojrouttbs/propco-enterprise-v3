@@ -1,4 +1,4 @@
-<mat-accordion class="list-view-accordian" multi>
+<mat-accordion class="form-view-accordian" multi>
   <mat-expansion-panel #letBoardDetails hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -15,7 +15,6 @@
         </div>
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <ion-card-content id="details">
       <form [formGroup]="group">
         <ion-grid class="no-padding" id="property-let-board-details">
           <ion-row>
@@ -59,6 +58,5 @@
           </ion-row>
         </ion-grid>
       </form>
-    </ion-card-content>
   </mat-expansion-panel>
 </mat-accordion>
