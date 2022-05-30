@@ -24,7 +24,7 @@
                 <th style="width:15%">Tenant</th>
                 <th style="width:15%">Start</th>
                 <th style="width:15%">End</th>
-                <th style="width:15%">Branch</th>
+                <!-- <th style="width:15%">Branch</th> -->
                 <th style="width:15%">Type</th>
                 <th style="width:15%">Lapse To</th>
               </tr>
@@ -35,14 +35,14 @@
                 <td>{{((data?.tenants?.displayAs) ? data?.tenants?.displayAs : (data?.tenants?.forename +' '+data?.tenants?.surname)) || notAvailable}}</td>
                 <td>{{data?.originalStartDate | date: 'dd/MM/yyyy' || notAvailable}}</td>
                 <td>{{data?.originalEndDate | date: 'dd/MM/yyyy' || notAvailable}}</td>
-                <td>{{data?.officeCode | lookup: officeLookup}}</td>
+                <!-- <td>{{data?.officeCode | lookup: officeLookup}}</td> -->
                 <td>{{data?.contractType | lookup: contractTypeLookup}}</td>
                 <td>{{data?.lapseToContract | lookup: contractTypeLookup}}</td>
               </tr>
             </tbody>
           </table>
         </div>
-      <div *ngIf="tenancies?.length === 0" ><b>{{DEFAULT_MESSAGES.NO_TENANCY_AVAILABLE}}</b>
+      <div *ngIf="tenancies?.length === 0" class="no-tenancy"><b>{{DEFAULT_MESSAGES.NO_TENANCY_AVAILABLE}}</b>
       </div>
     </div>
   </mat-expansion-panel>

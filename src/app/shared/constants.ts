@@ -627,12 +627,13 @@ export const AGENT_WORKSPACE_CONFIGS = {
   localStorageName: 'entity_tabs_menu',
   property: {
     pageTitleMap: {
-      dashboard: 'Dashboard',
-      details: 'Property Details',
-      offers: 'Offers',
-      applications: 'Applications',
-      tenancy: 'Tenancies',
-      rent: 'Rent'
+      'dashboard': 'Dashboard',
+      'details': 'Property Details',
+      'offers': 'Offers',
+      'applications': 'Applications',
+      'marketing-activity': 'Marketing Activity',
+      'tenancy': 'Tenancies',
+      'rent': 'Rent'
     }
   }
 };
@@ -676,4 +677,12 @@ export const MARKET_APPRAISAL = {
 export const search_Text = {
   lanlord: 'LANDLORD',
   property: 'PROPERTY',
+}
+
+export const MARKETING_ACTIVITY_TYPES = {
+  EMAIL: 'email',
+  SMS: 'sms',
+  MAILSHOT: 'mailshot',
+  VIEWED: 'viewed',
+  BOOKED: 'booked'
 }

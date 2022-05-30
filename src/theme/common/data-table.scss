@@ -93,12 +93,18 @@
       background: var(--ion-color-step-750);
       color: var(--ion-color-step-2000);
 
-      .sorting_asc{
-        background-image: url(../../assets/images/sort_asc.png);
+      .sorting:after,
+      .sorting:before,
+      .sorting_asc:after,
+      .sorting_desc:after {
+        opacity: 0.4;
       }
 
-      .sorting_desc{
-        background-image: url(../../assets/images/sort_desc.png);
+      & > tr > th.sorting_asc:before, 
+      & > tr > th.sorting_desc:after,
+      & > tr > td.sorting_asc:before,
+      & > tr > td.sorting_desc:after {
+        opacity: 1;
       }
 
       tr {
@@ -196,6 +202,7 @@ table.dataTable.dtr-inline.collapsed
   #la-application-list, 
   #la-guarantor-application-list, 
   #property-dashboard,
+  #marketing-activity,
   #tenancy-details,
   #fault-list {
     .dataTables_wrapper {
@@ -205,6 +212,15 @@ table.dataTable.dtr-inline.collapsed
       .dataTables_processing,
       .dataTables_paginate {
         color: var(--ion-color-one);
+      }
+
+      .dataTables_length {
+        select {
+          option {
+            color: var(--ion-color-one);
+            background-color: var(--ion-color-six);
+          }
+        }
       }
 
       .dataTables_paginate {
@@ -247,9 +263,27 @@ table.dataTable.dtr-inline.collapsed
 
           td, th .row-border {
             border-top: 1px solid var(--ion-color-four);
+          }          
+        }
+      }
+    }
+  }
+
+  #marketing-activity {
+    .dataTables_wrapper {
+      table.dataTable {
+        tbody {
+          tr.total-row {
+            background: var(--ion-color-four) !important;
+          }
+          tr {
+            td {
+              padding: 10px 10px;
+            }
           }
         }
       }
     }
   }
 }
+

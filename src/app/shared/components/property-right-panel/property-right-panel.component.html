@@ -1,8 +1,10 @@
 <div class="property-right-card">
   <ion-grid class="property-details">
     <ion-row class="property-status">
-      <ion-col>
-        {{getLookupValue(propertyData?.propertyInfo?.status, propertyStatuses) || notAvailable}}
+      <ion-col matTooltip="{{ (getLookupValue(propertyData?.propertyInfo?.status, propertyStatuses) || notAvailable) | uppercase }}" matTooltipPosition="above">
+        <ion-text>
+          {{getLookupValue(propertyData?.propertyInfo?.status, propertyStatuses) || notAvailable}}
+        </ion-text>
       </ion-col>
     </ion-row>
     <ion-row class="property-info">
