@@ -30,6 +30,7 @@ import { TermsOfBusinessComponent } from './rent/terms-of-business/terms-of-busi
 import { TenancyComponent } from './admin/tenancy/tenancy.component';
 import { TenanciesComponent } from './admin/tenancy/tenancies/tenancies.component';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
+import { MarketingActivityComponent } from './marketing-activity/marketing-activity.component';
 
 @NgModule({
   imports: [
@@ -67,7 +68,8 @@ import { PipesModule } from 'src/app/shared/pipes/pipes.module';
     RentComponent,
     TermsOfBusinessComponent,
     TenanciesComponent,
-    TenancyComponent
+    TenancyComponent,
+    MarketingActivityComponent
   ],
   providers: [AgentService],
 })
