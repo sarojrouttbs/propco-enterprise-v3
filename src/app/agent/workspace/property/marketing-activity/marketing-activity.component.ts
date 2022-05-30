@@ -131,32 +131,32 @@ export class MarketingActivityComponent implements OnInit {
       elementByApplicant.forEach(element => {
         switch (element.valueType) {
           case MARKETING_ACTIVITY_TYPES.EMAIL:
-            emailCount = emailCount + element['valueTypeCount'];
-            this.emailCountTotal = this.emailCountTotal + element['valueTypeCount'];
+            emailCount = emailCount + element.valueTypeCount;
+            this.emailCountTotal = this.emailCountTotal + element.valueTypeCount;
             break;
           case MARKETING_ACTIVITY_TYPES.SMS:
-            smsCount = smsCount + element['valueTypeCount'];
-            this.smsCountTotal = this.smsCountTotal + element['valueTypeCount'];
+            smsCount = smsCount + element.valueTypeCount;
+            this.smsCountTotal = this.smsCountTotal + element.valueTypeCount;
             break;
           case MARKETING_ACTIVITY_TYPES.MAILSHOT:
-            mailshotCount = mailshotCount + element['valueTypeCount'];
-            this.mailshotCountTotal = this.mailshotCountTotal + element['valueTypeCount'];
+            mailshotCount = mailshotCount + element.valueTypeCount;
+            this.mailshotCountTotal = this.mailshotCountTotal + element.valueTypeCount;
             break;
           case MARKETING_ACTIVITY_TYPES.VIEWED:
           case MARKETING_ACTIVITY_TYPES.BOOKED:
-            viewingBookedCount = viewingBookedCount + element['valueTypeCount'];
-            this.viewingBookedCountTotal = this.viewingBookedCountTotal + element['valueTypeCount'];
+            viewingBookedCount = viewingBookedCount + element.valueTypeCount;
+            this.viewingBookedCountTotal = this.viewingBookedCountTotal + element.valueTypeCount;
             break;
         }
       });
-      let applicantObj = {};
-      applicantObj['applicantId'] = elementByApplicant[0]['applicantId'];
-      applicantObj['applicantName'] = elementByApplicant[0]['applicantName'];
-      applicantObj['email'] = emailCount;
-      applicantObj['sms'] = smsCount;
-      applicantObj['mailshot'] = mailshotCount;
-      applicantObj['viewing_booked'] = viewingBookedCount;
-      applicantObj['reason'] = elementByApplicant[0]['reason'];
+      let applicantObj = {} as any;
+      applicantObj.applicantId = elementByApplicant[0].applicantId;
+      applicantObj.applicantName = elementByApplicant[0].applicantName;
+      applicantObj.email = emailCount;
+      applicantObj.sms = smsCount;
+      applicantObj.mailshot = mailshotCount;
+      applicantObj.viewing_booked = viewingBookedCount;
+      applicantObj.reason = elementByApplicant[0].reason;
       finalGroupedArr.push(applicantObj);
     });
     return finalGroupedArr;
