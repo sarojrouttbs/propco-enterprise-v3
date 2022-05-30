@@ -27,6 +27,10 @@
   border-radius: $radius;
 }
 
+h1, h2, h3, h4, h5, h6, p, a, ul, li{
+  font-family: var(--ion-font-family);
+}
+
 #tob-applicant-search{
   .mat-form-field-appearance-legacy .mat-form-field-infix {
     padding-left: 0 !important;
@@ -331,7 +335,7 @@ body {
   }
 }
 
-#faultListTable, #la-application-list, #la-guarantor-application-list, #tenant-list-modal, #propertyNotesTable {
+#faultListTable, #la-application-list, #la-guarantor-application-list, #tenant-list-modal, #propertyNotesTable, #peroidic-visit-table {
   tr.odd {
     td.dataTables_empty {
       display: none;

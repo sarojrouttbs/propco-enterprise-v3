@@ -49,6 +49,10 @@ const routes: Routes = [
     path: 'agent',
     loadChildren: () => import('./agent/agent.module').then( m => m.AgentPageModule),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'periodic-visit-modal',
+    loadChildren: () => import('./shared/modals/periodic-visit-modal/periodic-visit-modal.module').then( m => m.PeriodicVisitModalPageModule)
   }
 ];
 

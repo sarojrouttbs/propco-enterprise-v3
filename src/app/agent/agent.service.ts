@@ -70,6 +70,24 @@ export class AgentService {
     );
   }
 
+  getVisitList(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/visits`, { params }
+    );
+  }
+
+  getVisitNotes(propertyId: string, visitId: string) {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/visits/${visitId}/notes`, { }
+    );
+  }
+
+  getHmoLicence(propertyId: string) {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/visits/hmo-licence`, { }
+    );
+  }
+
   logout(): Observable<any> {
     return this.httpClient.post(
       environment.API_BASE_URL + `agents/user/logout`, {}

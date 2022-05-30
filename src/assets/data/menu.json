@@ -61,6 +61,14 @@
           "state": "propco.agent.entity.property.applications",
           "isActive": false,
           "route": "applications"
+        },
+        {
+          "index": 3,
+          "key": "periodic_visit",
+          "name": "Periodic Visit",
+          "state": "propco.agent.entity.property.periodicVisit",
+          "isActive": false,
+          "route": "periodic-visit"
         }
         
       ]

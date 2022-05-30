@@ -630,7 +630,8 @@ export const AGENT_WORKSPACE_CONFIGS = {
       details: 'Property Details',
       offers: 'Offers',
       applications: 'Applications',
-      rent: 'Rent'
+      rent: 'Rent',
+      'periodic-visit': 'Periodic Visit'
     }
   }
 };

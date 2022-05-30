@@ -2,6 +2,8 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DetailsComponent } from "./details/details.component";
+import { PeriodicVisitComponent } from "./periodic-visit/periodic-visit.component";
+
 import { PropertyPage } from "./property.page";
 import { RentComponent } from "./rent/rent.component";
 
@@ -21,6 +23,10 @@ const routes: Routes = [
       {
         path: "rent",
         component: RentComponent,
+      },
+      {
+        path: "periodic-visit",
+        component: PeriodicVisitComponent,
       },
       {
         path: "create-offer",
