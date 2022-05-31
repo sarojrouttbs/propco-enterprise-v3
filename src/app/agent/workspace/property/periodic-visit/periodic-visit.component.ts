@@ -170,10 +170,10 @@ export class PeriodicVisitComponent implements OnInit {
   initForm() {
     this.requirementForm = this.formBuilder.group({
       visitsPerAnnum: [''],
-      visitsPerAnnumHMO: [''],
+      visitsPerAnnumHMO: [{ value: '', disabled: true }],
       visitSequenceStartDate: [''],
-      visitIntervalInMonths: [''],
-      visitIntervalInMonthsHMO: ['']
+      visitIntervalInMonths: [{ value: '', disabled: true }],
+      visitIntervalInMonthsHMO: [{ value: '', disabled: true }]
     });
   }
 
