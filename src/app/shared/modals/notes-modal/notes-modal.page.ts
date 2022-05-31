@@ -50,7 +50,7 @@ export class NotesModalPage implements OnInit {
     }
   }
 
-  private async getDefaultCategory(key): Promise<any> {
+  private async getDefaultCategory(key: any): Promise<any> {
     const promise = new Promise((resolve, reject) => {
       this.commonService.getSystemConfig(key).subscribe(res => {
         let category = this.notesCategories.filter(x => { return x.value.toLowerCase() == res[key] });

@@ -189,7 +189,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
     };
   }
 
-  onClickRow(data) {
+  onClickRow(data: any) {
     this.getVisitNotes(this.propertyDetails?.propertyId, data.visitId);
     this.visitList.forEach((e, i) => {
       if (e.visitId === data.visitId) { this.visitList[i].isSelected = true; }
@@ -197,7 +197,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
     });
   }
 
-  private getVisitNotes(propertyId, visitId) {
+  private getVisitNotes(propertyId: string, visitId: string) {
     this.agentService.getVisitNotes(propertyId, visitId).subscribe(res => {
       this.visitNotes = res ? res : [];
       this.rerenderNotes();
