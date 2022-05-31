@@ -1,0 +1,14 @@
+#peroidic-visit {
+    h5 {
+        color: var(--ion-color-primary);
+    }
+    .row-selected {
+        opacity: 0.7;
+    }
+    .add-visit-block {
+        margin-bottom: 15px;
+        ion-button{
+            margin-left: 0;
+        }
+    }
+}
