@@ -6,8 +6,9 @@
         opacity: 0.7;
     }
     .add-visit-block {
-        ion-grid {
-            margin-bottom: 15px;
+        margin-bottom: 15px;
+        ion-button{
+            margin-left: 0;
         }
     }
 }

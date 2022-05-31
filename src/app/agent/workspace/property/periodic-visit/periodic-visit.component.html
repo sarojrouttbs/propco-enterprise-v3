@@ -1,5 +1,5 @@
 <ion-content id="peroidic-visit">
-  <mat-accordion multi>
+  <mat-accordion multi class="form-table-view-accordian">
     <mat-expansion-panel #peroidicVisit hideToggle expanded>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -17,7 +17,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div class="add-visit-block">
-        <ion-grid class="ion-no-padding">
+        <ion-grid>
           <ion-row>
             <ion-col>
               <ion-button class="postcode-find-btn" color="success" (click)="openVisitModal()">Add</ion-button>
@@ -26,7 +26,8 @@
         </ion-grid>
       </div>
       <div class="overlay-container" style="position: relative">
-        <table datatable [dtOptions]="dtOptions" class="row-border hover" width="100%" id="peroidic-visit-table" style="position: relative">
+        <table datatable [dtOptions]="dtOptions" class="row-border hover" width="100%" id="peroidic-visit-table"
+          style="position: relative">
           <thead>
             <tr>
               <th>Type</th>
@@ -63,50 +64,53 @@
         </div>
       </div>
 
-      <div>
-        <h5>Periodic Visit Requirements :</h5>
-        <ion-grid id="periodic-visit-req-block">
-          <form [formGroup]="requirementForm">
-          <ion-row>
-            <ion-col size="33.3">
-              <ion-item>
-                <ion-label position="floating">No. Of Visits Per Annum (TOB)</ion-label>
-                <ion-input formControlName="visitsPerAnnum"></ion-input>
-              </ion-item>
-            </ion-col>
-            <ion-col size="33.3">
-              <ion-item>
-                <ion-label position="floating">No. Of Visits Per Annum (HMO Licence)</ion-label>
-                <ion-input formControlName="visitsPerAnnumHMO"></ion-input>
-              </ion-item>
-            </ion-col>
-            <ion-col size="33.3" style="padding-top: 8px;">
-              <mat-form-field appearance="fill">
-                <mat-label>Visit Sequence Start Date </mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="visitSequenceStartDate" readonly>
-                <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
-            </ion-col>
-            <ion-col size="33.3">
-              <ion-item>
-                <ion-label position="floating">Visit Interval In Months(TOB)</ion-label>
-                <ion-input formControlName="visitIntervalInMonths"></ion-input>
-              </ion-item>
-            </ion-col>
-            <ion-col size="33.3">
-              <ion-item>
-                <ion-label position="floating">Visit Interval In Months(HMO Licence)</ion-label>
-                <ion-input formControlName="visitIntervalInMonthsHMO"></ion-input>
-              </ion-item>
-            </ion-col>
-          </ion-row>
-          </form>
-        </ion-grid>
+      <div class="form-block">
+        <form [formGroup]="requirementForm">
+          <ion-grid id="periodic-visit-req-block">
+            <ion-row>
+              <ion-col size="100">
+                <h5>Periodic Visit Requirements :</h5>
+              </ion-col>
+              <ion-col size="33.3">
+                <ion-item>
+                  <ion-label position="floating">No. Of Visits Per Annum (TOB)</ion-label>
+                  <ion-input formControlName="visitsPerAnnum"></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="33.3">
+                <ion-item>
+                  <ion-label position="floating">No. Of Visits Per Annum (HMO Licence)</ion-label>
+                  <ion-input formControlName="visitsPerAnnumHMO"></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="33.3" style="padding-top: 8px;">
+                <mat-form-field appearance="fill">
+                  <mat-label>Visit Sequence Start Date </mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="visitSequenceStartDate" readonly>
+                  <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </ion-col>
+              <ion-col size="33.3">
+                <ion-item>
+                  <ion-label position="floating">Visit Interval In Months(TOB)</ion-label>
+                  <ion-input formControlName="visitIntervalInMonths"></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="33.3">
+                <ion-item>
+                  <ion-label position="floating">Visit Interval In Months(HMO Licence)</ion-label>
+                  <ion-input formControlName="visitIntervalInMonthsHMO"></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </form>
       </div>
 
-      <h5>Periodic Visit Notes :</h5>
+
       <div class="overlay-container" style="position: relative">
+        <h5>Periodic Visit Notes :</h5>
         <table datatable [dtOptions]="notesDtOption" [dtTrigger]="notesDtTrigger" class="row-border hover"
           style="width: 100%; position: relative" #faultNotesTable>
           <thead>
