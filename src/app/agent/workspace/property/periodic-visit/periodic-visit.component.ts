@@ -57,11 +57,11 @@ export class PeriodicVisitComponent implements OnInit {
     this.initForm();
   }
 
-  async getvisitTableDtOption(): Promise<DataTables.Settings> {
+  private async getvisitTableDtOption(): Promise<DataTables.Settings> {
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
     this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);
-    await this.getHmoLicence(this.selectedEntityDetails.entityId);
+    await this.getVisitHmoLicence(this.selectedEntityDetails.entityId);
 
     const that = this;
     let tableOption = {
@@ -121,7 +121,7 @@ export class PeriodicVisitComponent implements OnInit {
     }
   }
 
-  getPropertyDetails(propertyId: string) {
+  private getPropertyDetails(propertyId: string) {
     let params = new HttpParams().set("hideLoader", "true");
     const promise = new Promise((resolve, reject) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
@@ -292,10 +292,10 @@ export class PeriodicVisitComponent implements OnInit {
     }
   }
 
-  getHmoLicence(propertyId: string) {
+  getVisitHmoLicence(propertyId: string) {
     let params = new HttpParams().set("hideLoader", "true");
     const promise = new Promise((resolve, reject) => {
-      this.agentService.getHmoLicence(propertyId, params).subscribe(
+      this.agentService.getVisitHmoLicence(propertyId, params).subscribe(
         (res) => {
           if (res && res.data) {
             this.requirementForm.get('visitsPerAnnumHMO').setValue(res.data?.visitsPerAnnumHMO);

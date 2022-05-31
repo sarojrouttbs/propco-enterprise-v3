@@ -41,8 +41,8 @@
           <tbody>
             <tr *ngFor="let data of visitList" class="table-row" (click)="onClickRow(data); $event.stopPropagation();"
               [ngClass]="{'row-selected' : data.isSelected}">
-              <td>{{getLookupValue(data?.visitType, propertyVisitTypes) || notAvailable}}</td>
-              <td>{{getLookupValue(data?.status, inspectionStatuses) || notAvailable}}</td>
+              <td>{{data?.visitType| lookup: propertyVisitTypes || notAvailable}}</td>
+              <td>{{data?.status | lookup: inspectionStatuses || notAvailable}}</td>
               <td>{{data?.index || notAvailable}}</td>
               <td>{{data?.visitDate | date: 'dd-MM-yyyy' || notAvailable}}</td>
               <td>{{data.description || notAvailable}}</td>
@@ -51,7 +51,7 @@
                   class="propcoicon propcoicon-actions-on action-btn"></i>
               </td>
             </tr>
-            <tr *ngIf="visitList?.length == 0">
+            <tr *ngIf="visitList?.length === 0">
               <td colspan="7" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
               </td>
             </tr>
@@ -108,7 +108,6 @@
         </form>
       </div>
 
-
       <div class="overlay-container" style="position: relative">
         <h5>Periodic Visit Notes :</h5>
         <table datatable [dtOptions]="notesDtOption" [dtTrigger]="notesDtTrigger" class="row-border hover"
@@ -126,12 +125,12 @@
           </thead>
           <tbody>
             <tr *ngFor="let notes of visitNotes?.data" class="table-row">
-              <td>{{notes.postedAt | date: 'dd/MM/yyyy' || '-'}}</td>
-              <td>{{notes.postedAt | date: 'HH:mm' || '-'}}</td>
-              <td>{{getLookupValue(notes.type, notesTypes) || '-'}}</td>
-              <td>{{getLookupValue(notes.complaint, notesComplaints) || '-'}}</td>
-              <td>{{getLookupValue(notes.category, notesCategories) || '-'}}</td>
-              <td>{{notes.userName || '-'}}</td>
+              <td>{{notes.postedAt | date: 'dd/MM/yyyy' || notAvailable}}</td>
+              <td>{{notes.postedAt | date: 'HH:mm' || notAvailable}}</td>
+              <td>{{notes.type | lookup:notesTypes || notAvailable}}</td>
+              <td>{{notes.complaint | lookup:notesComplaints || notAvailable}}</td>
+              <td>{{notes.category | lookup:notesCategories || notAvailable}}</td>
+              <td>{{notes.userName || notAvailable}}</td>
               <td><i (click)="showNoteDescription(notes.notes);" class="propcoicon propcoicon-property-description"></i>
               </td>
             </tr>

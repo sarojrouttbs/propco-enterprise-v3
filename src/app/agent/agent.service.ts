@@ -88,7 +88,7 @@ export class AgentService {
     );
   }
 
-  getHmoLicence(propertyId: string, params): Observable<any>  {
+  getVisitHmoLicence(propertyId: string, params): Observable<any>  {
     return this.httpClient.get(
       environment.API_BASE_URL + `properties/${propertyId}/visits/hmo-licence`, { params }
     );
