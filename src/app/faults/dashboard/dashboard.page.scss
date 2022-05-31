@@ -102,6 +102,11 @@
     height: 18px;
     width: 18px;
   }
+
+  .propcoicon.propcoicon-property-description {
+    background: var(--ion-color-five);
+    color: var(--ion-color-one);
+  }
 }
 .filter-checkbox {
   border-color: var(--background-checked);
