@@ -4,7 +4,7 @@ import { HttpParams } from '@angular/common/http';
 import { SolrService } from 'src/app/solr/solr.service';
 import { AgentService } from 'src/app/agent/agent.service';
 import { MarketAppraisalService } from 'src/app/market-appraisal/market-appraisal.service';
-import { MARKET_APPRAISAL, search_Text } from 'src/app/shared/constants';
+import { MARKET_APPRAISAL, PROPCO, search_Text } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -31,14 +31,15 @@ export class LandlordSearchComponent implements OnInit {
   isPropertyItemAvailable = false;
   entityControl = new FormControl(['Property']);
   propertySuggestion;
+  officeLookup: any;
+  lookupdata: any;
 
   constructor(private marketAppraisalService: MarketAppraisalService,
     private solrService: SolrService,
-    private agentService: AgentService,
     private commonService: CommonService) { }
 
   ngOnInit() {
-
+    this.getLookupData();
   }
 
   selectLandlord(item) {
@@ -67,7 +68,7 @@ export class LandlordSearchComponent implements OnInit {
   }
 
   async reset() {
-    const confirm = await this.commonService.showConfirm('Market Appraisal', 'Are you sure you want to reset the form data?.', '', 'Yes', 'No');
+    const confirm = await this.commonService.showConfirm('Market Appraisal', 'Are you sure you want to reset the form data?', '', 'Yes', 'No');
     if (confirm) {
       this.searchTerm = '';
       if (this.type === MARKET_APPRAISAL.contact_type) {
@@ -188,5 +189,22 @@ export class LandlordSearchComponent implements OnInit {
   }
   initializePropertyItems() {
     this.propertySuggestion = [];
+  }
+
+  private getLookupData() {
+    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
+    if (this.lookupdata) {
+      this.setLookupData(this.lookupdata);
+    } else {
+      this.commonService.getLookup().subscribe((data) => {
+        this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
+        this.lookupdata = data;
+        this.setLookupData(data);
+      });
+    }
+  }
+
+  private setLookupData(data) {
+    this.officeLookup = data.officeCodes;
   }
 }
