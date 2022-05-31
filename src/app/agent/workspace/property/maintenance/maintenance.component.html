@@ -1,0 +1,54 @@
+<ion-content>
+  <mat-accordion multi>
+    <mat-expansion-panel #maintenance hideToggle expanded>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Maintenance
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!maintenance.expanded" class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="maintenance.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+            </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="overlay-container">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
+          id="propertyMaintenanceTable" width="100%">
+          <thead>
+            <tr>
+              <th style="width:10%">Put On</th>
+              <th style="width:10%">Type</th>
+              <th style="width:20%">Description</th>
+              <th style="width:7%">Works Value</th>
+              <th style="width:7%">Raised</th>
+              <th style="width:7%">Paid</th>
+              <th style="width:7%">Inv#</th>
+              <th style="width:15%">Contractor</th>
+              <th style="width:10%">Status</th>
+              <th style="width:7%">Expenditure Limit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of maintenanceList" class="table-row">
+              <td> {{ data?.postdate | date: 'dd/MM/yyyy' || notAvailable }} </td>
+              <td> {{ (data.type | titlecase)|| notAvailable }}: {{ data.worksOrderNumber || notAvailable }} </td>
+              <td> {{ data.description || notAvailable }} </td>
+              <td> {{ data.repairCost || notAvailable }} </td>
+              <td> {{ data.amount || notAvailable }} </td>
+              <td> {{ data.paidAmount || notAvailable }} </td>
+              <td> {{ data.invoiceNumber || notAvailable }} </td>
+              <td> {{ data.supplierCompany || notAvailable }} </td>
+              <td> {{ data.status || notAvailable }} </td>
+              <td> - </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</ion-content>

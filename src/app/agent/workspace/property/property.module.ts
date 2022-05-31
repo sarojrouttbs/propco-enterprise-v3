@@ -31,6 +31,7 @@ import { TenancyComponent } from './admin/tenancy/tenancy.component';
 import { TenanciesComponent } from './admin/tenancy/tenancies/tenancies.component';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { MarketingActivityComponent } from './marketing-activity/marketing-activity.component';
+import { MaintenanceComponent } from './maintenance/maintenance.component';
 
 @NgModule({
   imports: [
@@ -69,7 +70,8 @@ import { MarketingActivityComponent } from './marketing-activity/marketing-activ
     TermsOfBusinessComponent,
     TenanciesComponent,
     TenancyComponent,
-    MarketingActivityComponent
+    MarketingActivityComponent,
+    MaintenanceComponent
   ],
   providers: [AgentService],
 })

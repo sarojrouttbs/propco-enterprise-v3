@@ -69,6 +69,14 @@
           "state": "propco.agent.entity.property.marketingactivity",
           "isActive": false,
           "route": "marketing-activity"
+        },
+        {
+          "index": 4,
+          "key": "maintenance",
+          "name": "Maintenance",
+          "state": "propco.agent.entity.property.maintenance",
+          "isActive": false,
+          "route": "maintenance"
         }
       ]
     },
