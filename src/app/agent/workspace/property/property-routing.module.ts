@@ -3,6 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { TenancyComponent } from "./admin/tenancy/tenancy.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DetailsComponent } from "./details/details.component";
+import { PeriodicVisitComponent } from "./periodic-visit/periodic-visit.component";
 import { MarketingActivityComponent } from "./marketing-activity/marketing-activity.component";
 
 import { PropertyPage } from "./property.page";
@@ -28,6 +29,10 @@ const routes: Routes = [
       {
         path: "rent",
         component: RentComponent,
+      },
+      {
+        path: "periodic-visit",
+        component: PeriodicVisitComponent,
       },
       {
         path: "create-offer",

@@ -1,5 +1,5 @@
-<mat-accordion class="list-view-accordian" multi>
-  <mat-expansion-panel #termsOfBusiness hideToggle>
+<mat-accordion multi class="form-table-view-accordian">
+  <mat-expansion-panel #termsOfBusiness hideToggle expanded>
     <mat-expansion-panel-header>
       <mat-panel-title>
         Terms Of Business (TOB)
@@ -15,55 +15,50 @@
         </div>
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <ion-card-content id="details">
-      <form [formGroup]="group">
-        <ion-grid class="no-padding" id="terms-of-business">
-          <ion-row>
-            <ion-col size="30">
-              <ion-item>
-                <ion-label position="floating">TOB Version</ion-label>
-                <!-- versionList -->
-
-                <ion-select formControlName="version" interface="popover">
-                  <ion-select-option [value]="item?.termsOfBusinessId" *ngFor="let item of versionList">
-                    {{item?.description}} {{item?.version}}
-                  </ion-select-option>
-                </ion-select>
-              </ion-item>
-            </ion-col>
-            <ion-col size="30" class="ion-align-self-end">
-              <ion-button color="success">Update TOB To Current Version</ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-        <hr>
-        <ion-grid class="version-history">
-          <ion-row>
-            <ion-col>
-              <h5 color="medium" class="no-margin-bottom">TOB Version History</h5>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col class="no-padding-bottom" class="table-block">
-              <table>
-                <tr>
-                  <th>Created At</th>
-                  <th>Description</th>
-                  <th>Version</th>
-                </tr>
-                <tr *ngFor="let history of versionHistoryList" class="table-row">
-                  <td>{{history?.createdAt || '-'}}</td>
-                  <td>{{history?.description || '-'}}</td>
-                  <td>{{history?.version || '-'}}</td>
-                </tr>
-                <tr *ngIf="!versionHistoryList?.length">
-                  <td colspan="12" class="ion-text-center">No data to display</td>
-                </tr>
-              </table>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </form>
-    </ion-card-content>
+    <form [formGroup]="group">
+      <ion-grid id="terms-of-business">
+        <ion-row>
+          <ion-col size="33.3">
+            <ion-item>
+              <ion-label position="floating">TOB Version</ion-label>
+              <ion-select formControlName="version" interface="popover">
+                <ion-select-option [value]="item?.termsOfBusinessId" *ngFor="let item of versionList">
+                  {{item?.description}} {{item?.version}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size="33.3" class="ion-align-self-end">
+            <ion-button color="success" style="margin-bottom: 0;">Update TOB To Current Version</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+    <ion-grid class="version-history">
+      <ion-row>
+        <ion-col>
+          <h5 color="medium" class="no-margin-bottom">TOB Version History</h5>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="no-padding-bottom" class="table-block">
+          <table>
+            <tr>
+              <th>Created At</th>
+              <th>Description</th>
+              <th>Version</th>
+            </tr>
+            <tr *ngFor="let history of versionHistoryList" class="table-row">
+              <td>{{history?.createdAt | date: 'dd/MM/yyyy HH:mm'|| notAvailable}}</td>
+              <td>{{history?.description || notAvailable}}</td>
+              <td>{{history?.version || notAvailable}}</td>
+            </tr>
+            <tr *ngIf="!versionHistoryList?.length">
+              <td colspan="12" class="ion-text-center">No data to display</td>
+            </tr>
+          </table>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </mat-expansion-panel>
 </mat-accordion>
