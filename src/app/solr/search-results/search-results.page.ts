@@ -597,10 +597,10 @@ export class SearchResultsPage implements OnInit {
 
   openDetails(value?) {
     this.hideMenu('', 'divOverlay');
-    // if (this.router.url.includes('/agent/')) {
-    //   this.workspaceService.addItemToWorkSpace(value ? value : this.selectedItem);
-    //   return;
-    // }
+    if (this.router.url.includes('/agent/')) {
+      this.workspaceService.addItemToWorkSpace(value ? value : this.selectedItem);
+      return;
+    }
     /*Navigate to java fx page (If solr loads inside v2)*/
     let action;
     value ||= this.selectedItem;
