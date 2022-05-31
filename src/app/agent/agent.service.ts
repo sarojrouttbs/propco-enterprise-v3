@@ -82,15 +82,15 @@ export class AgentService {
     );
   }
 
-  getVisitNotes(propertyId: string, visitId: string) {
+  getVisitNotes(propertyId: string, visitId: string): Observable<any>  {
     return this.httpClient.get(
-      environment.API_BASE_URL + `properties/${propertyId}/visits/${visitId}/notes`, { }
+      environment.API_BASE_URL + `properties/${propertyId}/visits/${visitId}/notes`, {}
     );
   }
 
-  getHmoLicence(propertyId: string) {
+  getHmoLicence(propertyId: string, params): Observable<any>  {
     return this.httpClient.get(
-      environment.API_BASE_URL + `properties/${propertyId}/visits/hmo-licence`, { }
+      environment.API_BASE_URL + `properties/${propertyId}/visits/hmo-licence`, { params }
     );
   }
 

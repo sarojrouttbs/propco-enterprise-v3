@@ -126,6 +126,12 @@ export class PeriodicVisitComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
+          if (res && res.data) {
+            this.requirementForm.get('visitsPerAnnum').setValue(res.data?.visitsPerAnnum);
+            this.requirementForm.get('visitIntervalInMonths').setValue(res.data?.visitIntervalInMonths);
+            this.requirementForm.get('visitSequenceStartDate').setValue(res.data?.visitSequenceStartDate);
+          }
+
           resolve(res.data);
         },
         (error) => {
@@ -163,11 +169,11 @@ export class PeriodicVisitComponent implements OnInit {
 
   initForm() {
     this.requirementForm = this.formBuilder.group({
-      visits_per_annum: [''],
-      numberOfVisitPerAnnum: [''],
-      visit_sequence_start_date: [''],
-      visits_interval_in_months: [''],
-      visitIntervalInMonths: ['']
+      visitsPerAnnum: [''],
+      visitsPerAnnumHMO: [''],
+      visitSequenceStartDate: [''],
+      visitIntervalInMonths: [''],
+      visitIntervalInMonthsHMO: ['']
     });
   }
 
@@ -286,13 +292,15 @@ export class PeriodicVisitComponent implements OnInit {
     }
   }
 
-  getHmoLicence(propertyId) {
+  getHmoLicence(propertyId: string) {
     let params = new HttpParams().set("hideLoader", "true");
     const promise = new Promise((resolve, reject) => {
-      this.agentService.getHmoLicence(propertyId).subscribe(
+      this.agentService.getHmoLicence(propertyId, params).subscribe(
         (res) => {
-          console.log("getHmoLicence========", res);
-
+          if (res && res.data) {
+            this.requirementForm.get('visitsPerAnnumHMO').setValue(res.data?.visitsPerAnnumHMO);
+            this.requirementForm.get('visitIntervalInMonthsHMO').setValue(res.data?.visitIntervalInMonthsHMO);
+          }
           resolve(true);
         },
         (error) => {

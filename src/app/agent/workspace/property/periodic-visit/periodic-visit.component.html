@@ -71,19 +71,19 @@
             <ion-col size="33.3">
               <ion-item>
                 <ion-label position="floating">No. Of Visits Per Annum (TOB)</ion-label>
-                <ion-input formControlName="visits_per_annum"></ion-input>
+                <ion-input formControlName="visitsPerAnnum"></ion-input>
               </ion-item>
             </ion-col>
             <ion-col size="33.3">
               <ion-item>
                 <ion-label position="floating">No. Of Visits Per Annum (HMO Licence)</ion-label>
-                <ion-input formControlName="numberOfVisitPerAnnum"></ion-input>
+                <ion-input formControlName="visitsPerAnnumHMO"></ion-input>
               </ion-item>
             </ion-col>
             <ion-col size="33.3" style="padding-top: 8px;">
               <mat-form-field appearance="fill">
                 <mat-label>Visit Sequence Start Date </mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="visit_sequence_start_date" readonly>
+                <input matInput [matDatepicker]="picker" formControlName="visitSequenceStartDate" readonly>
                 <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
@@ -91,13 +91,13 @@
             <ion-col size="33.3">
               <ion-item>
                 <ion-label position="floating">Visit Interval In Months(TOB)</ion-label>
-                <ion-input formControlName="visits_interval_in_months"></ion-input>
+                <ion-input formControlName="visitIntervalInMonths"></ion-input>
               </ion-item>
             </ion-col>
             <ion-col size="33.3">
               <ion-item>
                 <ion-label position="floating">Visit Interval In Months(HMO Licence)</ion-label>
-                <ion-input formControlName="visitIntervalInMonths"></ion-input>
+                <ion-input formControlName="visitIntervalInMonthsHMO"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
