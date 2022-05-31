@@ -10,14 +10,12 @@
       "route": "dashboard",
       "showSubmenu": false
     },
-
     {
       "index": 2,
       "name": "Marketing",
       "key": "marketing",
       "isActive": false,
       "showSubmenu": false,
-
       "subMenu": [
         {
           "index": 1,
@@ -43,9 +41,7 @@
       "key": "property_management",
       "isActive": false,
       "showSubmenu": false,
-
       "subMenu": [
-       
         {
           "index": 1,
           "key": "Offers",
@@ -72,6 +68,14 @@
         },
         {
           "index": 4,
+          "key": "periodic_visit",
+          "name": "Periodic Visit",
+          "state": "propco.agent.entity.property.periodicVisit",
+          "isActive": false,
+          "route": "periodic-visit"
+        },
+        {
+          "index": 5,
           "key": "maintenance",
           "name": "Maintenance",
           "state": "propco.agent.entity.property.maintenance",
@@ -86,7 +90,6 @@
       "key": "admin",
       "isActive": false,
       "showSubmenu": false,
-
       "subMenu": [
         {
           "index": 1,

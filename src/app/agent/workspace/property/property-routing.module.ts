@@ -4,8 +4,8 @@ import { TenancyComponent } from "./admin/tenancy/tenancy.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DetailsComponent } from "./details/details.component";
 import { MaintenanceComponent } from "./maintenance/maintenance.component";
+import { PeriodicVisitComponent } from "./periodic-visit/periodic-visit.component";
 import { MarketingActivityComponent } from "./marketing-activity/marketing-activity.component";
-
 import { PropertyPage } from "./property.page";
 import { RentComponent } from "./rent/rent.component";
 
@@ -29,6 +29,18 @@ const routes: Routes = [
       {
         path: "rent",
         component: RentComponent,
+      },
+      {
+        path: "periodic-visit",
+        component: PeriodicVisitComponent,
+      },
+      {
+        path: 'marketing-activity',
+        component: MarketingActivityComponent
+      },
+      {
+        path: 'maintenance',
+        component: MaintenanceComponent
       },
       {
         path: "create-offer",
@@ -62,14 +74,6 @@ const routes: Routes = [
       {
         path: 'application/:applicationId',
         loadChildren: () => import('../../../tob/application-detail/application-detail.module').then( m => m.ApplicationDetailPageModule)
-      },
-      {
-        path: 'marketing-activity',
-        component: MarketingActivityComponent
-      },
-      {
-        path: 'maintenance',
-        component: MaintenanceComponent
       }
     ]
   }

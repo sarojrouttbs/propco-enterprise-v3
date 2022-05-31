@@ -27,6 +27,8 @@ import { NegotiateModalPageModule } from 'src/app/shared/modals/negotiate-modal/
 import { AgentService } from '../../agent.service';
 import { RentComponent } from './rent/rent.component';
 import { TermsOfBusinessComponent } from './rent/terms-of-business/terms-of-business.component';
+import { PeriodicVisitComponent } from './periodic-visit/periodic-visit.component';
+import { PeriodicVisitModalPageModule } from 'src/app/shared/modals/periodic-visit-modal/periodic-visit-modal.module';
 import { TenancyComponent } from './admin/tenancy/tenancy.component';
 import { TenanciesComponent } from './admin/tenancy/tenancies/tenancies.component';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
@@ -53,6 +55,7 @@ import { MaintenanceComponent } from './maintenance/maintenance.component';
     }),
     CallInfoModalPageModule,
     NegotiateModalPageModule,
+    PeriodicVisitModalPageModule,
     PipesModule
   ],
   declarations: [
@@ -68,6 +71,7 @@ import { MaintenanceComponent } from './maintenance/maintenance.component';
     PropertyAddressComponent,
     RentComponent,
     TermsOfBusinessComponent,
+    PeriodicVisitComponent,
     TenanciesComponent,
     TenancyComponent,
     MarketingActivityComponent,

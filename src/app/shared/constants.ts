@@ -634,6 +634,7 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'marketing-activity': 'Marketing Activity',
       'tenancy': 'Tenancies',
       'rent': 'Rent',
+      'periodic-visit': 'Periodic Visit',
       'maintenance': 'Maintenance'
     }
   }
