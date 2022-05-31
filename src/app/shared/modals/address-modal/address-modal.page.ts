@@ -78,6 +78,7 @@ export class AddressModalPage implements OnInit {
     if (this.addressDetailsForm.get('postcode').value == null) {
       return;
     }
+    this.addressDetailsForm.get('addressdetails').setValue('');
     const postcode = this.addressDetailsForm.get('postcode').value;
     if (postcode) {
       this.lookupLoader = true;
