@@ -29,6 +29,7 @@ export class NotesModalPage implements OnInit {
   faultNotificationDetails;
   reference;
   notesData;
+  propertyId;
 
   constructor(
     private navParams: NavParams,
@@ -44,11 +45,11 @@ export class NotesModalPage implements OnInit {
     this.getLookupData();
     this.initNotesForm();
     this.initData();
-    if(this.notesType === NOTES_TYPE.FAULT) {
+    if (this.notesType === NOTES_TYPE.FAULT) {
       this.setCategoryAndType();
     }
   }
-  
+
   private async getDefaultCategory(key): Promise<any> {
     const promise = new Promise((resolve, reject) => {
       this.commonService.getSystemConfig(key).subscribe(res => {
@@ -104,13 +105,16 @@ export class NotesModalPage implements OnInit {
       const requestObj = this.notesForm.value;
       requestObj.complaint = requestObj.complaint ? this.notesComplaints[1].index : this.notesComplaints[0].index;
       delete requestObj.date;
-      if(this.notesType === NOTES_TYPE.OFFER) {
-        if(this.isAddNote) {
+      if (this.notesType === NOTES_TYPE.OFFER) {
+        if (this.isAddNote) {
           this.createOfferNotes(requestObj);
         } else {
           this.updateNotes(requestObj);
         }
-      } else {
+      } else if (this.notesType === NOTES_TYPE.PROPERTY_VISIT) {
+        this.createPropertyVisitNotes(requestObj);
+      }
+      else {
         this.createFaultNotes(requestObj);
       }
     } else {
@@ -118,7 +122,7 @@ export class NotesModalPage implements OnInit {
       this.notesForm.markAllAsTouched();
     }
   }
-  
+
   dismiss() {
     this.modalController.dismiss({
       dismissed: true
@@ -145,7 +149,7 @@ export class NotesModalPage implements OnInit {
       this.notesTypeId = this.navParams.get('notesTypeId');
       this.notesType = this.navParams.get('notesType');
       this.notesForm.patchValue(this.notesData);
-      this.notesForm.patchValue({complaint: (this.notesData.complaint === this.notesComplaints[1].index) ? true : false });
+      this.notesForm.patchValue({ complaint: (this.notesData.complaint === this.notesComplaints[1].index) ? true : false });
     }
   }
 
@@ -195,9 +199,17 @@ export class NotesModalPage implements OnInit {
 
   private updateNotes(requestObj) {
     this.notesService.updateNotes(this.notesData.noteId, requestObj).subscribe(res => {
-      this.modalController.dismiss({noteId: this.notesData.noteId});
+      this.modalController.dismiss({ noteId: this.notesData.noteId });
     }, err => {
       this.commonService.showMessage(err.message, 'Add Note', 'error');
     });
-  }  
+  }
+
+  private createPropertyVisitNotes(requestObj) {
+    this.notesService.createPropertyVisitNotes(this.propertyId, this.notesTypeId, requestObj).subscribe(res => {
+      this.modalController.dismiss(res);
+    }, err => {
+      this.commonService.showMessage(err.message, 'Add Note', 'error');
+    });
+  }
 }
