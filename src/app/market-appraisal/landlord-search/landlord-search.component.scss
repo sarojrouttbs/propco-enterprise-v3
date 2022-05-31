@@ -25,13 +25,12 @@
 }
 
 .solr-suggestionList {
-  margin-top: 26px;
   position: absolute;
   z-index: 100;
   list-style: none;
   padding: 0;
   box-shadow: 0 2px 5px rgb(0 0 0 / 25%);
-  right: 13%;
+  right: 0;
   width: auto;
   background-color: var(--ion-color-five);
 
