@@ -46,6 +46,7 @@ export class MaPropertyComponent implements OnInit {
     totalMonths: '00',
     totalDays: '00'
   }
+  existingPropertyId: string = null;
   constructor(private modalController: ModalController,
     private commonService: CommonService,
     private maService: MarketAppraisalService) {
@@ -84,31 +85,26 @@ export class MaPropertyComponent implements OnInit {
         this.propertyForm.reset();
       } else {
         this.propertyData = res;
-        const id = this.propertyData.propertyId ? this.propertyData.propertyId : this.propertyData.entityId
-        this.setPropertyData(id)
+        const id = this.propertyData.propertyId ? this.propertyData.propertyId : this.propertyData.entityId;
+        this.existingPropertyId = id;
+        this.setPropertyData(id);
       }
     })
   }
 
   async setPropertyData(id) {
     const property: any = await this.getPropertyDetails(id);
-    const propertyLocaltions = this.getPropertyLocationsByPropertyId(id);
-    this.marketLocations = [];
-    this.propertyForm.controls['propertyLocations'].setValue([])
-    const locations = await this.getLocationByOffice(property.office);
-    if (locations) {
-      this.marketLocations = locations;
-    }
     this.address = property.address
     this.propertyForm.patchValue({
+      office: property.office ? property.office : '',
       propertyId: property.propertyId,
-      propertyLocations: propertyLocaltions,
       numberOfBedroom: property.numberOfBedroom ? property.numberOfBedroom : '',
       houseType: property.houseType ? property.houseType : '',
       isStudio: property.isStudio,
       propertyStyle: property.propertyStyle ? property.propertyStyle : '',
       propertyAge: property.propertyAge ? property.propertyAge : '',
       lettingReason: property.lettingReason ? property.lettingReason : '',
+      lettingDuration: property.lettingDuration ? property.lettingDuration : '',
       onWithOtherAgent: property.onWithOtherAgent,
       propertyNotes: property.propertyDescription ? property.propertyDescription : '',
       direction: property.direction ? property.direction : '',
@@ -116,8 +112,7 @@ export class MaPropertyComponent implements OnInit {
       advertisementRentFrequency: property.advertisementRentFrequency ? property.advertisementRentFrequency : '',
       furnishingType: property.furnishingType ? (property.furnishingType === '0' ? null : property.furnishingType) : '',
       hasLetBefore: property.hasLetBefore,
-      status: property.status ? property.status : '',
-      office: property.office ? property.office : '',
+      status: property.status ? property.status.toString() : '',
       agentName: property.agentName ? property.agentName : '',
       minimum: property.minimumRent ? property.minimumRent : '',
       maximum: property.maximumRent ? property.maximumRent : '',
@@ -182,10 +177,14 @@ export class MaPropertyComponent implements OnInit {
       return;
     }
     this.marketLocations = [];
-    this.propertyForm.controls['propertyLocations'].setValue([])
+    this.propertyForm.controls.propertyLocations.setValue([]);
     const locations = await this.getLocationByOffice(value);
     if (locations) {
       this.marketLocations = locations;
+    }
+    if (this.existingPropertyId) {
+      const propertyLocaltions = await this.getPropertyLocationsByPropertyId(this.existingPropertyId);
+      this.propertyForm.controls.propertyLocations.setValue(propertyLocaltions);
     }
   }
 

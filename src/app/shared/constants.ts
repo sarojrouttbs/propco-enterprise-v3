@@ -603,6 +603,7 @@ export const DEFAULT_MESSAGES = {
   NO_DATA_FOUND: 'No data found!',
   NO_RECORD_FOUND: 'No record found!',
   NO_DETAILS_AVAILABLE: 'No details available',
+  NO_TENANCY_AVAILABLE: 'No Tenancies associated with this property',
   errors: {
     SOMETHING_WENT_WRONG: 'Something went wrong'
   },
@@ -626,11 +627,13 @@ export const AGENT_WORKSPACE_CONFIGS = {
   localStorageName: 'entity_tabs_menu',
   property: {
     pageTitleMap: {
-      dashboard: 'Dashboard',
-      details: 'Property Details',
-      offers: 'Offers',
-      applications: 'Applications',
-      rent: 'Rent',
+      'dashboard': 'Dashboard',
+      'details': 'Property Details',
+      'offers': 'Offers',
+      'applications': 'Applications',
+      'marketing-activity': 'Marketing Activity',
+      'tenancy': 'Tenancies',
+      'rent': 'Rent',
       'periodic-visit': 'Periodic Visit'
     }
   }
@@ -675,4 +678,12 @@ export const MARKET_APPRAISAL = {
 export const search_Text = {
   lanlord: 'LANDLORD',
   property: 'PROPERTY',
+}
+
+export const MARKETING_ACTIVITY_TYPES = {
+  EMAIL: 'email',
+  SMS: 'sms',
+  MAILSHOT: 'mailshot',
+  VIEWED: 'viewed',
+  BOOKED: 'booked'
 }

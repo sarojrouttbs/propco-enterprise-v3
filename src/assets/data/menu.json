@@ -10,14 +10,12 @@
       "route": "dashboard",
       "showSubmenu": false
     },
-
     {
       "index": 2,
       "name": "Marketing",
       "key": "marketing",
       "isActive": false,
       "showSubmenu": false,
-
       "subMenu": [
         {
           "index": 1,
@@ -43,9 +41,7 @@
       "key": "property_management",
       "isActive": false,
       "showSubmenu": false,
-
       "subMenu": [
-       
         {
           "index": 1,
           "key": "Offers",
@@ -64,13 +60,37 @@
         },
         {
           "index": 3,
+          "key": "marketing_activity",
+          "name": "Marketing Activity",
+          "state": "propco.agent.entity.property.marketingactivity",
+          "isActive": false,
+          "route": "marketing-activity"
+        },
+        {
+          "index": 4,
           "key": "periodic_visit",
           "name": "Periodic Visit",
           "state": "propco.agent.entity.property.periodicVisit",
           "isActive": false,
           "route": "periodic-visit"
         }
-        
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Admin",
+      "key": "admin",
+      "isActive": false,
+      "showSubmenu": false,
+      "subMenu": [
+        {
+          "index": 1,
+          "key": "tenancy",
+          "name": "Tenancies",
+          "state": "propco.agent.entity.property.tenancy",
+          "isActive": false,
+          "route": "tenancy"
+        }
       ]
     }
   ]

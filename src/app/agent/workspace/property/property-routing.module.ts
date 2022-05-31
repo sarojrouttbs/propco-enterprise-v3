@@ -1,8 +1,10 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
+import { TenancyComponent } from "./admin/tenancy/tenancy.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DetailsComponent } from "./details/details.component";
 import { PeriodicVisitComponent } from "./periodic-visit/periodic-visit.component";
+import { MarketingActivityComponent } from "./marketing-activity/marketing-activity.component";
 
 import { PropertyPage } from "./property.page";
 import { RentComponent } from "./rent/rent.component";
@@ -19,6 +21,10 @@ const routes: Routes = [
       {
         path: "details",
         component: DetailsComponent,
+      },
+      {
+        path: "tenancy",
+        component: TenancyComponent,
       },
       {
         path: "rent",
@@ -38,8 +44,8 @@ const routes: Routes = [
       {
         path: "offers",
         loadChildren: () =>
-        import("../../../tob/offer-list/offer-list.module").then(
-          (m) => m.OfferListPageModule
+          import("../../../tob/offer-list/offer-list.module").then(
+            (m) => m.OfferListPageModule
           ),
       },
       {
@@ -51,15 +57,19 @@ const routes: Routes = [
       },
       {
         path: "applications",
-        loadChildren: () => import('../../../tob/application-list/application-list.module').then( m => m.ApplicationListPageModule)
+        loadChildren: () => import('../../../tob/application-list/application-list.module').then(m => m.ApplicationListPageModule)
       },
       {
         path: 'create-application',
-        loadChildren: () => import('../../../tob/application-detail/application-detail.module').then( m => m.ApplicationDetailPageModule)
+        loadChildren: () => import('../../../tob/application-detail/application-detail.module').then(m => m.ApplicationDetailPageModule)
       },
       {
         path: 'application/:applicationId',
         loadChildren: () => import('../../../tob/application-detail/application-detail.module').then( m => m.ApplicationDetailPageModule)
+      },
+      {
+        path: 'marketing-activity',
+        component: MarketingActivityComponent
       }
     ]
   }
@@ -69,4 +79,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class PropertyPageRoutingModule {}
+export class PropertyPageRoutingModule { }

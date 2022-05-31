@@ -1,0 +1,49 @@
+<mat-accordion multi>
+  <mat-expansion-panel #tenancyDetails hideToggle expanded>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Tenancies
+      </mat-panel-title>
+      <mat-panel-description class="ion-justify-content-end no-margin">
+        <div>
+          <span *ngIf="!tenancyDetails.expanded"  class="accordian-icon" title="Expand">
+            <ion-icon style="pointer-events:none"  name="add-circle"></ion-icon>
+          </span>
+          <span *ngIf="tenancyDetails.expanded" class="accordian-icon" title="Collapse">
+            <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+            </span>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div id="tenancy-details">
+        <div class="overlay-container" *ngIf="tenancies?.length !== 0">
+          <table datatable [dtOptions]="dtOptions" class="row-border hover" id="propertyTenancyTable" width="100%">
+            <thead>
+              <tr>
+                <th style="width:13%">Status</th>
+                <th style="width:15%">Tenant</th>
+                <th style="width:15%">Start</th>
+                <th style="width:15%">End</th>
+                <!-- <th style="width:15%">Branch</th> -->
+                <th style="width:15%">Type</th>
+                <th style="width:15%">Lapse To</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of tenancies" class="table-row">
+                <td>{{data?.status | lookup: agreementStatusesLookup}}</td>
+                <td>{{((data?.tenants?.displayAs) ? data?.tenants?.displayAs : (data?.tenants?.forename +' '+data?.tenants?.surname)) || notAvailable}}</td>
+                <td>{{data?.originalStartDate | date: 'dd/MM/yyyy' || notAvailable}}</td>
+                <td>{{data?.originalEndDate | date: 'dd/MM/yyyy' || notAvailable}}</td>
+                <!-- <td>{{data?.officeCode | lookup: officeLookup}}</td> -->
+                <td>{{data?.contractType | lookup: contractTypeLookup}}</td>
+                <td>{{data?.lapseToContract | lookup: contractTypeLookup}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      <div *ngIf="tenancies?.length === 0" class="no-tenancy"><b>{{DEFAULT_MESSAGES.NO_TENANCY_AVAILABLE}}</b>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

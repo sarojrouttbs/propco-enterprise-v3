@@ -48,7 +48,6 @@ export class PeriodicVisitComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.dtOptions = this.getvisitTableDtOption();
     this.notesDtOption = this.buildDtOptions();
     this.getLookupData();
@@ -62,6 +61,7 @@ export class PeriodicVisitComponent implements OnInit {
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
     this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);
+    await this.getHmoLicence(this.selectedEntityDetails.entityId);
 
     const that = this;
     let tableOption = {
@@ -243,10 +243,10 @@ export class PeriodicVisitComponent implements OnInit {
     let origDivOverlayHeight;
     let origDivOverlayTop;
     let divOverlayTopBottomPadding = 0;
-    if (baseContainerHeight > 49) {     
+    if (baseContainerHeight > 49) {
       divOverlayTopBottomPadding = (baseContainerHeight - 48) / 2;
     }
-    
+
     if (baseContainerHeight > divOverlayHeight) {
       origDivOverlayHeight = baseContainerHeight;
       origDivOverlayTop = baseContainerTop + $('.dataTables_length').outerHeight(true);
@@ -284,6 +284,23 @@ export class PeriodicVisitComponent implements OnInit {
     if (event) {
       event.stopPropagation();
     }
+  }
+
+  getHmoLicence(propertyId) {
+    let params = new HttpParams().set("hideLoader", "true");
+    const promise = new Promise((resolve, reject) => {
+      this.agentService.getHmoLicence(propertyId).subscribe(
+        (res) => {
+          console.log("getHmoLicence========", res);
+
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
   }
 
   ngOnDestroy() {

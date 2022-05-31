@@ -58,6 +58,12 @@ export class AgentService {
     );
   }
 
+  getPropertyTenancies(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/tenancies`, { params }
+    );
+  }
+
   getTobVersionList(params): Observable<any> {
     return this.httpClient.get(
       environment.API_BASE_URL + `terms-of-business`, { params }
@@ -92,5 +98,9 @@ export class AgentService {
     return this.httpClient.post(
       environment.API_BASE_URL + `agents/user/logout`, {}
     );
+  }
+
+  getMarketingActivity(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/marketing-activity`, { params });
   }
 }
