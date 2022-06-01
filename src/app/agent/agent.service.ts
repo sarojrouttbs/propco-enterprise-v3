@@ -76,6 +76,24 @@ export class AgentService {
     );
   }
 
+  getVisitList(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/visits`, { params }
+    );
+  }
+
+  getVisitNotes(propertyId: string, visitId: string): Observable<any>  {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/visits/${visitId}/notes`, {}
+    );
+  }
+
+  getVisitHmoLicence(propertyId: string, params): Observable<any>  {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/visits/hmo-licence`, { params }
+    );
+  }
+
   logout(): Observable<any> {
     return this.httpClient.post(
       environment.API_BASE_URL + `agents/user/logout`, {}
@@ -84,5 +102,20 @@ export class AgentService {
 
   getMarketingActivity(propertyId: string, params): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/marketing-activity`, { params });
+  }
+
+  getPropertyMaintenance(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/maintenance`, { params }
+    );
+  }
+
+  getMaintenanceNotes(maintenanceId: string): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `maintenance/${maintenanceId}/notes`);
+  }
+
+  getRentindemnityProducts(params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `rentindemnity/products`, { params });
   }
 }

@@ -506,22 +506,22 @@
       <div class="list-container overlay-container" style="position: relative;">
         <ng-container *ngIf="!showSkeleton">
           <ng-container *ngFor="let item of results">
-            <ng-container [ngTemplateOutlet]="propertySuggestionListView"  *ngIf="item?.entityType === 'PROPERTY'"
+            <ng-container [ngTemplateOutlet]="propertySearchListView"  *ngIf="item?.entityType === 'PROPERTY'"
             [ngTemplateOutletContext]="{item:item}">
             </ng-container>
-            <ng-container [ngTemplateOutlet]="landlordSuggestionListView"  *ngIf="item?.entityType === 'LANDLORD'"
+            <ng-container [ngTemplateOutlet]="landlordSearchListView"  *ngIf="item?.entityType === 'LANDLORD'"
                   [ngTemplateOutletContext]="{item:item}">
             </ng-container>
-            <ng-container [ngTemplateOutlet]="tenantSuggestionListView"  *ngIf="item?.entityType === 'TENANT'"
+            <ng-container [ngTemplateOutlet]="tenantSearchListView"  *ngIf="item?.entityType === 'TENANT'"
                   [ngTemplateOutletContext]="{item:item}">
             </ng-container>
-            <ng-container [ngTemplateOutlet]="contractorSuggestionListView"  *ngIf="item?.entityType === 'CONTRACTOR'"
+            <ng-container [ngTemplateOutlet]="contractorSearchListView"  *ngIf="item?.entityType === 'CONTRACTOR'"
                   [ngTemplateOutletContext]="{item:item}">
             </ng-container>
-            <ng-container [ngTemplateOutlet]="agentSuggestionListView"  *ngIf="item?.entityType === 'AGENT'"
+            <ng-container [ngTemplateOutlet]="agentSearchListView"  *ngIf="item?.entityType === 'AGENT'"
                   [ngTemplateOutletContext]="{item:item}">
             </ng-container>
-            <ng-container [ngTemplateOutlet]="applicantSuggestionListView"  *ngIf="item?.entityType === 'APPLICANT'"
+            <ng-container [ngTemplateOutlet]="applicantSearchListView"  *ngIf="item?.entityType === 'APPLICANT'"
                   [ngTemplateOutletContext]="{item:item}">
             </ng-container>
           </ng-container>
@@ -531,7 +531,7 @@
           </ng-container>
         </ng-container>
         <div id="divOverlay">
-          <ion-button color="success" (click)="$event.stopPropagation();openDetails('OpenProperty')">View</ion-button>
+          <ion-button color="success" (click)="$event.stopPropagation();openDetails()">View</ion-button>
           <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on action-btn"></i>
         </div>
       </div>
@@ -540,9 +540,9 @@
 </ion-content>
 
 <!--List views-->
-<ng-template #propertySuggestionListView  let-item="item">
+<ng-template #propertySearchListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel #propertySuggestionPanel hideToggle style="position: static;">
+    <mat-expansion-panel #propertySearchPanel hideToggle style="position: static;">
       <mat-expansion-panel-header class="property-header-panel">
         <ion-grid style="width: 100%;">
           <ion-row>
@@ -595,10 +595,10 @@
                     class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                 </div>
                 <div>
-                  <span class="accordian-icon" *ngIf="!propertySuggestionPanel.expanded" title="Expand">
+                  <span class="accordian-icon" *ngIf="!propertySearchPanel.expanded" title="Expand">
                     <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
                   </span>
-                  <span class="accordian-icon" *ngIf="propertySuggestionPanel.expanded" title="Collapse">
+                  <span class="accordian-icon" *ngIf="propertySearchPanel.expanded" title="Collapse">
                     <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
                   </span>                  
                 </div>
@@ -655,9 +655,9 @@
   </mat-accordion>
 </ng-template>
 
-<ng-template #agentSuggestionListView  let-item="item">
+<ng-template #agentSearchListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel #agentSuggestionPanel hideToggle style="position: static;">
+    <mat-expansion-panel #agentSearchPanel hideToggle style="position: static;">
       <mat-expansion-panel-header class="agent-header-panel">
         <ion-grid style="width: 100%;">
           <ion-row>
@@ -689,10 +689,10 @@
                     class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                 </div>
                 <div>
-                  <span *ngIf="!agentSuggestionPanel.expanded" class="accordian-icon" title="Expand">
+                  <span *ngIf="!agentSearchPanel.expanded" class="accordian-icon" title="Expand">
                     <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
                   </span>
-                  <span *ngIf="agentSuggestionPanel.expanded" class="accordian-icon" title="Collapse">
+                  <span *ngIf="agentSearchPanel.expanded" class="accordian-icon" title="Collapse">
                     <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
                   </span>                   
                 </div>
@@ -729,9 +729,9 @@
   </mat-accordion>
 </ng-template>
 
-<ng-template #landlordSuggestionListView  let-item="item">
+<ng-template #landlordSearchListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel #landlordSuggestionPanel hideToggle style="position: static;">
+    <mat-expansion-panel #landlordSearchPanel hideToggle style="position: static;">
       <mat-expansion-panel-header class="landlord-header-panel">
         <ion-grid style="width: 100%;">
           <ion-row>
@@ -762,10 +762,10 @@
                   class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                 </div>
                 <div>
-                  <span *ngIf="!landlordSuggestionPanel.expanded" class="accordian-icon" title="Expand">
+                  <span *ngIf="!landlordSearchPanel.expanded" class="accordian-icon" title="Expand">
                     <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
                   </span>
-                  <span *ngIf="landlordSuggestionPanel.expanded" class="accordian-icon" title="Collapse">
+                  <span *ngIf="landlordSearchPanel.expanded" class="accordian-icon" title="Collapse">
                     <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
                   </span>                    
                 </div>
@@ -827,9 +827,9 @@
   </mat-accordion>
 </ng-template>
 
-<ng-template #tenantSuggestionListView  let-item="item">
+<ng-template #tenantSearchListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel #tenantSuggestionPanel hideToggle style="position: static;">
+    <mat-expansion-panel #tenantSearchPanel hideToggle style="position: static;">
       <mat-expansion-panel-header class="tenant-header-panel">
         <ion-grid style="width: 100%;">
           <ion-row>
@@ -859,10 +859,10 @@
                   class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                 </div>
                 <div>
-                  <span *ngIf="!tenantSuggestionPanel.expanded" class="accordian-icon" title="Expand">
+                  <span *ngIf="!tenantSearchPanel.expanded" class="accordian-icon" title="Expand">
                     <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
                   </span>
-                  <span *ngIf="tenantSuggestionPanel.expanded" class="accordian-icon" title="Collapse">
+                  <span *ngIf="tenantSearchPanel.expanded" class="accordian-icon" title="Collapse">
                     <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
                   </span>                       
                 </div>
@@ -910,9 +910,9 @@
   </mat-accordion>
 </ng-template>
 
-<ng-template #applicantSuggestionListView  let-item="item">
+<ng-template #applicantSearchListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel #applicantSuggestionPanel hideToggle style="position: static;">
+    <mat-expansion-panel #applicantSearchPanel hideToggle style="position: static;">
       <mat-expansion-panel-header class="applicant-header-panel">
         <ion-grid style="width: 100%;">
           <ion-row>
@@ -946,10 +946,10 @@
                   class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                 </div>
                 <div>
-                  <span *ngIf="!applicantSuggestionPanel.expanded" class="accordian-icon" title="Expand">
+                  <span *ngIf="!applicantSearchPanel.expanded" class="accordian-icon" title="Expand">
                     <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
                   </span>
-                  <span *ngIf="applicantSuggestionPanel.expanded" class="accordian-icon" title="Collapse">
+                  <span *ngIf="applicantSearchPanel.expanded" class="accordian-icon" title="Collapse">
                     <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
                   </span>                       
                 </div>
@@ -997,9 +997,9 @@
   </mat-accordion>
 </ng-template>
 
-<ng-template #contractorSuggestionListView  let-item="item">
+<ng-template #contractorSearchListView  let-item="item">
   <mat-accordion class="list-view-accordian" multi>
-    <mat-expansion-panel #contractorSuggestionPanel hideToggle style="position: static;">
+    <mat-expansion-panel #contractorSearchPanel hideToggle style="position: static;">
 
       <mat-expansion-panel-header class="contractor-header-panel">
         <ion-grid style="width: 100%;">
@@ -1032,10 +1032,10 @@
                     class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                 </div>
                 <div>
-                  <span *ngIf="!contractorSuggestionPanel.expanded" class="accordian-icon" title="Expand">
+                  <span *ngIf="!contractorSearchPanel.expanded" class="accordian-icon" title="Expand">
                     <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
                   </span>
-                  <span *ngIf="contractorSuggestionPanel.expanded" class="accordian-icon" title="Collapse">
+                  <span *ngIf="contractorSearchPanel.expanded" class="accordian-icon" title="Collapse">
                     <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
                   </span>                        
                 </div>

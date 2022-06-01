@@ -169,4 +169,8 @@ export class MarketingActivityComponent implements OnInit {
       return rv;
     }, {});
   };
+
+  ngOnDestroy() {
+    this.dtTrigger.unsubscribe();
+  }
 }

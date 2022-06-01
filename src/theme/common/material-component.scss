@@ -211,31 +211,41 @@
     .mat-expansion-panel:is(.mat-expanded):not([aria-disabled=true]) {
       background-color: var(--ion-color-five);
     }
-  }
-
-  .mat-accordion.list-view-accordian {
-    .mat-expansion-panel {
-      .mat-expansion-panel-header {
-        .mat-content {
-          height: 100%
+    
+    &.list-view-accordian {
+      .mat-expansion-panel {
+        .mat-expansion-panel-header {
+          .mat-content {
+            height: 100%
+          }
+        }
+        .mat-expansion-panel-body{
+          padding: 0 6px 6px;
         }
       }
-      .mat-expansion-panel-body{
-        padding: 0 6px 6px;
+    }
+
+    &.form-view-accordian {
+      .mat-expansion-panel {
+        .mat-expansion-panel-body{
+          padding: 0 6px 16px;
+        }
+      }
+    }
+
+    &.form-table-view-accordian {
+      .mat-expansion-panel {
+        .mat-expansion-panel-body{
+          padding: 0 6px 16px;
+          .overlay-container{
+            padding: 0 10px;
+          }
+        }
       }
     }
   }
 
-  // use "form-view-accordian" class to show form
-  .mat-accordion.form-view-accordian {
-    .mat-expansion-panel {
-      .mat-expansion-panel-body{
-        padding: 0 6px 16px;
-      }
-    }
-  }
-
-  #property-letting-details, #property-let-board-details, #la-application-list, #market-appraisal-lettings {
+  #property-letting-details, #property-let-board-details, #la-application-list, #market-appraisal-lettings, #periodic-visit-req-block {
     // material date picker css - dark / light theme
   
     .mat-form-field-wrapper {

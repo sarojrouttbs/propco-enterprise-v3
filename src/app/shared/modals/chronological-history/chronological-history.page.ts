@@ -343,6 +343,7 @@ export class ChronologicalHistoryPage implements OnInit {
             orderable: false,
             targets: 0
          }],
+         order: [[1, 'asc']],
          responsive: {
             details: {
                target: 'tr',
