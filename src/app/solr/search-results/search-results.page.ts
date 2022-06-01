@@ -595,14 +595,38 @@ export class SearchResultsPage implements OnInit {
     }
   }
 
-  openDetails(key: string, value?) {
+  openDetails(value?) {
     this.hideMenu('', 'divOverlay');
     if (this.router.url.includes('/agent/')) {
       this.workspaceService.addItemToWorkSpace(value ? value : this.selectedItem);
       return;
     }
     /*Navigate to java fx page (If solr loads inside v2)*/
-    openScreen(key, value ? value.propcoId : this.selectedItem?.propcoId);
+    let action;
+    value ||= this.selectedItem;
+    switch (value?.entityType) {
+      case 'AGENT':
+        action = 'OpenAgent';
+        break;
+      case 'APPLICANT':
+        action = 'OpenApplicant';
+        break;
+      case 'CONTRACTOR':
+        action = 'OpenContractor';
+        break;
+      case 'TENANT':
+        action = 'OpenTenant';
+        break;
+      case 'PROPERTY':
+        action = 'OpenProperty';
+        break;
+      case 'LANDLORD':
+        action = 'OpenLandlord';
+        break;
+      default:
+        return;
+    }
+    openScreen(action, value ? value.propcoId : this.selectedItem?.propcoId);
   }
 
   refreshAll() {

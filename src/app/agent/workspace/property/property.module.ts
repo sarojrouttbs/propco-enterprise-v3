@@ -27,12 +27,16 @@ import { NegotiateModalPageModule } from 'src/app/shared/modals/negotiate-modal/
 import { AgentService } from '../../agent.service';
 import { RentComponent } from './rent/rent.component';
 import { TermsOfBusinessComponent } from './rent/terms-of-business/terms-of-business.component';
+import { PeriodicVisitComponent } from './periodic-visit/periodic-visit.component';
+import { PeriodicVisitModalPageModule } from 'src/app/shared/modals/periodic-visit-modal/periodic-visit-modal.module';
 import { TenancyComponent } from './admin/tenancy/tenancy.component';
 import { TenanciesComponent } from './admin/tenancy/tenancies/tenancies.component';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { MarketingActivityComponent } from './marketing-activity/marketing-activity.component';
-import { RentSalesFiguresComponent } from './rent/rent-sales-figures/rent-sales-figures.component';
+import { NotesModalPageModule } from 'src/app/shared/modals/notes-modal/notes-modal.module';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+import { RentSalesFiguresComponent } from './rent/rent-sales-figures/rent-sales-figures.component';
+
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
   allowNegative: false,
@@ -42,6 +46,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   suffix: "",
   thousands: ","
 };
+
 @NgModule({
   imports: [
     CommonModule,
@@ -62,7 +67,9 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     }),
     CallInfoModalPageModule,
     NegotiateModalPageModule,
+    PeriodicVisitModalPageModule,
     PipesModule,
+    NotesModalPageModule,
     CurrencyMaskModule
   ],
   declarations: [
@@ -78,6 +85,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     PropertyAddressComponent,
     RentComponent,
     TermsOfBusinessComponent,
+    PeriodicVisitComponent,
     TenanciesComponent,
     TenancyComponent,
     MarketingActivityComponent,
