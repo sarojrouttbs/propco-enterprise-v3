@@ -33,6 +33,7 @@ import { TenancyComponent } from './admin/tenancy/tenancy.component';
 import { TenanciesComponent } from './admin/tenancy/tenancies/tenancies.component';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { MarketingActivityComponent } from './marketing-activity/marketing-activity.component';
+import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { NotesModalPageModule } from 'src/app/shared/modals/notes-modal/notes-modal.module';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
 import { RentSalesFiguresComponent } from './rent/rent-sales-figures/rent-sales-figures.component';
@@ -89,6 +90,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     TenanciesComponent,
     TenancyComponent,
     MarketingActivityComponent,
+    MaintenanceComponent,
     RentSalesFiguresComponent
   ],
   providers: [AgentService, CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]

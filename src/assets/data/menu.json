@@ -73,6 +73,14 @@
           "state": "propco.agent.entity.property.periodicVisit",
           "isActive": false,
           "route": "periodic-visit"
+        },
+        {
+          "index": 5,
+          "key": "maintenance",
+          "name": "Maintenance",
+          "state": "propco.agent.entity.property.maintenance",
+          "isActive": false,
+          "route": "maintenance"
         }
       ]
     },
