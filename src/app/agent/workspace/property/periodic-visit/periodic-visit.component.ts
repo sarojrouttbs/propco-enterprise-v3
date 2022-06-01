@@ -1,12 +1,13 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, DEFAULTS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, DEFAULTS, DEFAULT_MESSAGES, NOTES_TYPE, PROPCO } from 'src/app/shared/constants';
+import { NotesModalPage } from 'src/app/shared/modals/notes-modal/notes-modal.page';
 import { PeriodicVisitModalPage } from 'src/app/shared/modals/periodic-visit-modal/periodic-visit-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 
@@ -15,7 +16,8 @@ import { CommonService } from 'src/app/shared/services/common.service';
   templateUrl: './periodic-visit.component.html',
   styleUrls: ['./periodic-visit.component.scss'],
 })
-export class PeriodicVisitComponent implements OnInit {
+
+export class PeriodicVisitComponent implements OnInit, OnDestroy {
 
   dtOptions: Promise<DataTables.Settings>;
   notesDtOption: DataTables.Settings;
@@ -29,7 +31,7 @@ export class PeriodicVisitComponent implements OnInit {
   activeLink: any;
   lookupdata: any;
   propertyVisitTypes: any;
-  notAvailable = DEFAULTS.NOT_AVAILABLE
+  notAvailable = DEFAULTS.NOT_AVAILABLE;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   visitNotes: any;
   notesTypes: any;
@@ -64,7 +66,7 @@ export class PeriodicVisitComponent implements OnInit {
     await this.getVisitHmoLicence(this.selectedEntityDetails.entityId);
 
     const that = this;
-    let tableOption = {
+    const tableOption = {
       paging: true,
       pagingType: 'full_numbers',
       serverSide: true,
@@ -76,10 +78,10 @@ export class PeriodicVisitComponent implements OnInit {
       autoWidth: true,
       responsive: true,
       ajax: (tableParams: any, callback) => {
-        let params = new HttpParams()
+        const params = new HttpParams()
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
-          .set("hideLoader", "true");
+          .set('hideLoader', 'true');
         this.agentService.getVisitList(this.propertyDetails?.propertyId, params).subscribe(res => {
           this.visitList = res && res.data ? res.data : [];
           callback({
@@ -96,7 +98,7 @@ export class PeriodicVisitComponent implements OnInit {
       }
     };
     const promise = new Promise(async (resolve, reject) => {
-      resolve(tableOption)
+      resolve(tableOption);
     });
     return promise;
   }
@@ -111,7 +113,7 @@ export class PeriodicVisitComponent implements OnInit {
   }
 
   private getActiveTabEntityInfo() {
-    let item = this.localStorageItems.filter((x) => x.isSelected);
+    const item = this.localStorageItems.filter((x) => x.isSelected);
     if (item) {
       this.router.navigate([
         `agent/workspace/property/${item[0].entityId}/periodic-visit`,
@@ -122,7 +124,7 @@ export class PeriodicVisitComponent implements OnInit {
   }
 
   private getPropertyDetails(propertyId: string) {
-    let params = new HttpParams().set("hideLoader", "true");
+    const params = new HttpParams().set('hideLoader', 'true');
     const promise = new Promise((resolve, reject) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
@@ -131,7 +133,6 @@ export class PeriodicVisitComponent implements OnInit {
             this.requirementForm.get('visitIntervalInMonths').setValue(res.data?.visitIntervalInMonths);
             this.requirementForm.get('visitSequenceStartDate').setValue(res.data?.visitSequenceStartDate);
           }
-
           resolve(res.data);
         },
         (error) => {
@@ -170,10 +171,10 @@ export class PeriodicVisitComponent implements OnInit {
   initForm() {
     this.requirementForm = this.formBuilder.group({
       visitsPerAnnum: [''],
-      visitsPerAnnumHMO: [''],
+      visitsPerAnnumHMO: [{ value: '', disabled: true }],
       visitSequenceStartDate: [''],
-      visitIntervalInMonths: [''],
-      visitIntervalInMonthsHMO: ['']
+      visitIntervalInMonths: [{ value: '', disabled: true }],
+      visitIntervalInMonthsHMO: [{ value: '', disabled: true }]
     });
   }
 
@@ -188,16 +189,16 @@ export class PeriodicVisitComponent implements OnInit {
     };
   }
 
-  onClickRow(data) {
-    this.getVisitNotes(data.visitId);
+  onClickRow(data: any) {
+    this.getVisitNotes(this.propertyDetails?.propertyId, data.visitId);
     this.visitList.forEach((e, i) => {
-      if (e.visitId === data.visitId) this.visitList[i].isSelected = true;
-      else this.visitList[i].isSelected = false;
+      if (e.visitId === data.visitId) { this.visitList[i].isSelected = true; }
+      else { this.visitList[i].isSelected = false; }
     });
   }
 
-  private getVisitNotes(visitId) {
-    this.agentService.getVisitNotes(this.propertyDetails?.propertyId, visitId).subscribe(res => {
+  private getVisitNotes(propertyId: string, visitId: string) {
+    this.agentService.getVisitNotes(propertyId, visitId).subscribe(res => {
       this.visitNotes = res ? res : [];
       this.rerenderNotes();
     });
@@ -293,7 +294,7 @@ export class PeriodicVisitComponent implements OnInit {
   }
 
   getVisitHmoLicence(propertyId: string) {
-    let params = new HttpParams().set("hideLoader", "true");
+    const params = new HttpParams().set('hideLoader', 'true');
     const promise = new Promise((resolve, reject) => {
       this.agentService.getVisitHmoLicence(propertyId, params).subscribe(
         (res) => {
@@ -309,6 +310,27 @@ export class PeriodicVisitComponent implements OnInit {
       );
     });
     return promise;
+  }
+
+  async addNotes() {
+    const modal = await this.modalController.create({
+      component: NotesModalPage,
+      cssClass: 'modal-container property-modal-container',
+      componentProps: {
+        notesType: NOTES_TYPE.PROPERTY_VISIT,
+        notesTypeId: this.selectedData.visitId,
+        isAddNote: true,
+        propertyId: this.propertyDetails?.propertyId
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data.noteId) {
+        this.getVisitNotes(this.propertyDetails?.propertyId, this.selectedData.visitId);
+      }
+    });
+    await modal.present();
   }
 
   ngOnDestroy() {

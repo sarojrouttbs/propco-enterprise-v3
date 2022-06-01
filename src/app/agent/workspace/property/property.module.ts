@@ -34,6 +34,7 @@ import { TenanciesComponent } from './admin/tenancy/tenancies/tenancies.componen
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { MarketingActivityComponent } from './marketing-activity/marketing-activity.component';
 import { MaintenanceComponent } from './maintenance/maintenance.component';
+import { NotesModalPageModule } from 'src/app/shared/modals/notes-modal/notes-modal.module';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { MaintenanceComponent } from './maintenance/maintenance.component';
     CallInfoModalPageModule,
     NegotiateModalPageModule,
     PeriodicVisitModalPageModule,
-    PipesModule
+    PipesModule,
+    NotesModalPageModule
   ],
   declarations: [
     GoogleMapComponent,
