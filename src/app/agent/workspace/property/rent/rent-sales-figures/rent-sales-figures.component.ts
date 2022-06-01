@@ -70,7 +70,7 @@ export class RentSalesFiguresComponent implements OnInit {
       this.setPropertyLookupData(this.propertyLookupData);
     }
     else {
-      let params = new HttpParams().set("hideLoader", "true");
+      const params = new HttpParams().set('hideLoader', 'true');
       this.commonService.getPropertyLookup(params).subscribe(data => {
         this.commonService.setItem(PROPCO.PROPERTY_LOOKUP_DATA, data);
         this.setPropertyLookupData(data);
