@@ -604,7 +604,7 @@ export const DEFAULT_MESSAGES = {
   NO_DATA_FOUND: 'No data found!',
   NO_RECORD_FOUND: 'No record found!',
   NO_DETAILS_AVAILABLE: 'No details available',
-  NO_TENANCY_AVAILABLE: 'No Tenancies associated with this property',
+  NO_TENANCY_AVAILABLE: 'No tenancies associated with this property.',
   errors: {
     SOMETHING_WENT_WRONG: 'Something went wrong'
   },
@@ -634,8 +634,9 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'applications': 'Applications',
       'marketing-activity': 'Marketing Activity',
       'tenancy': 'Tenancies',
-      'rent': 'Rent',
-      'periodic-visit': 'Periodic Visit'
+      'rent': 'Rent/Invoices',
+      'periodic-visit': 'Periodic Visit',
+      'maintenance': 'Maintenance'
     }
   }
 };

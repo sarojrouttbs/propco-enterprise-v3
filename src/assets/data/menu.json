@@ -28,7 +28,7 @@
         {
           "index": 2,
           "key": "rent",
-          "name": "Rent",
+          "name": "Rent/Invoices",
           "state": "propco.agent.entity.property.rent",
           "isActive": false,
           "route": "rent"
@@ -73,6 +73,14 @@
           "state": "propco.agent.entity.property.periodicVisit",
           "isActive": false,
           "route": "periodic-visit"
+        },
+        {
+          "index": 5,
+          "key": "maintenance",
+          "name": "Maintenance",
+          "state": "propco.agent.entity.property.maintenance",
+          "isActive": false,
+          "route": "maintenance"
         }
       ]
     },

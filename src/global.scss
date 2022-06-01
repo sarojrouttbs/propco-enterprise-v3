@@ -335,7 +335,7 @@ body {
   }
 }
 
-#faultListTable, #la-application-list, #la-guarantor-application-list, #tenant-list-modal, #propertyNotesTable, #propertyTenancyTable, #peroidic-visit-table {
+#faultListTable, #la-application-list, #la-guarantor-application-list, #tenant-list-modal, #propertyNotesTable, #propertyTenancyTable, #peroidic-visit-table, #propertyMaintenanceTable {
   tr.odd {
     td.dataTables_empty {
       display: none;
@@ -527,7 +527,7 @@ mat-form-field {
 }
 
 .mat-form-field-appearance-fill .mat-form-field-infix {
-  padding: 0.25em 0 0.25em 0;
+  padding: 0.5em 0 0.25em 0;
 }
 
 .mat-form-field.mat-form-field-invalid .mat-form-field-ripple, .mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {

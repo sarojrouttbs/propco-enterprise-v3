@@ -268,23 +268,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child:b
           }
         }
       }
-    }
-    #marketing-activity {
-      .dataTables_wrapper {
-        table.dataTable {
-          tbody {
-            tr.total-row {
-              background: var(--ion-color-four) !important;
-            }
-            tr {
-              td {
-                padding: 10px 10px;
-              }
-            }
-          }
-        }
-      }
-    }
+    }    
     .dataTables_processing {
       background: var(--ion-color-five);
       color: var(--ion-color-one);
@@ -294,6 +278,22 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child:b
     }
     .action-btn {
       color: var(--ion-color-warning, #ffc409);
+    }
+  }
+  #marketing-activity {
+    .dataTables_wrapper {
+      table.dataTable {
+        tbody {
+          tr.total-row {
+            background: var(--ion-color-four) !important;
+          }
+          tr {
+            td {
+              padding: 10px 10px;
+            }
+          }
+        }
+      }
     }
   }
 }
