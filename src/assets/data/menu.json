@@ -30,7 +30,7 @@
         {
           "index": 2,
           "key": "rent",
-          "name": "Rent",
+          "name": "Rent/Invoices",
           "state": "propco.agent.entity.property.rent",
           "isActive": false,
           "route": "rent"

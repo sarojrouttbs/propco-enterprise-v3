@@ -633,7 +633,7 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'applications': 'Applications',
       'marketing-activity': 'Marketing Activity',
       'tenancy': 'Tenancies',
-      'rent': 'Rent'
+      'rent': 'Rent/Invoices'
     }
   }
 };

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
@@ -31,7 +31,17 @@ import { TenancyComponent } from './admin/tenancy/tenancy.component';
 import { TenanciesComponent } from './admin/tenancy/tenancies/tenancies.component';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { MarketingActivityComponent } from './marketing-activity/marketing-activity.component';
-
+import { RentSalesFiguresComponent } from './rent/rent-sales-figures/rent-sales-figures.component';
+import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  decimal: ".",
+  precision: 2,
+  prefix: "£ ",
+  suffix: "",
+  thousands: ","
+};
 @NgModule({
   imports: [
     CommonModule,
@@ -52,7 +62,8 @@ import { MarketingActivityComponent } from './marketing-activity/marketing-activ
     }),
     CallInfoModalPageModule,
     NegotiateModalPageModule,
-    PipesModule
+    PipesModule,
+    CurrencyMaskModule
   ],
   declarations: [
     GoogleMapComponent,
@@ -69,8 +80,9 @@ import { MarketingActivityComponent } from './marketing-activity/marketing-activ
     TermsOfBusinessComponent,
     TenanciesComponent,
     TenancyComponent,
-    MarketingActivityComponent
+    MarketingActivityComponent,
+    RentSalesFiguresComponent
   ],
-  providers: [AgentService],
+  providers: [AgentService, CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
 })
 export class PropertyPageModule { }

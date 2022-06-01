@@ -41,6 +41,17 @@ export class RentComponent implements OnInit {
     this.rentForm = this.formBuilder.group({
       termOfBusiness: this.formBuilder.group({
         version: [''],
+      }),
+      propertyRentForm: this.formBuilder.group({
+        rentAmount: '',
+        rentFrequency: null,
+        frequencyType: null,
+        depositAmount: '',
+        depositSchemeNo: null,
+        depositScheme: null,
+        salePriceType: null,
+        salePrice: '',
+        aegisInsurance: null
       })
     });
   }
