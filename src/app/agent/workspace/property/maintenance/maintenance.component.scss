@@ -1,0 +1,18 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
+#maintenance-table {
+    .notes-header {
+        margin: 25px 0;
+        ion-text {
+            @include set-text-style(18px, 20px);
+            color: var(--ion-color-primary);
+        }
+    }
+    .propcoicon.propcoicon-property-description {
+        background: var(--ion-color-five);
+        color: var(--ion-color-one);
+    }
+}

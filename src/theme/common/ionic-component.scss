@@ -660,7 +660,7 @@ ion-alert.common-alert-box {
   .modal-wrapper {
     ion-content {
       --background: var(--ion-color-six);
-      h4, h5, h6, p, small, div {
+      h4, h5, h6, p, small, div, ion-label {
         color: var(--ion-color-one);;
       }
       ion-item {

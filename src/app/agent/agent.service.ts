@@ -109,4 +109,9 @@ export class AgentService {
       environment.API_BASE_URL + `properties/${propertyId}/maintenance`, { params }
     );
   }
+
+  getMaintenanceNotes(maintenanceId: string): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `maintenance/${maintenanceId}/notes`);
+  }
 }
