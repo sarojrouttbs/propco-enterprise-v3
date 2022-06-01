@@ -61,12 +61,8 @@
             <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
           </div>
         </div>
-        <div class="notes-header">
-          <ion-text>
-            Maintenance Notes
-          </ion-text>
-        </div>
         <div class="overlay-container" style="position: relative">
+          <h5>Maintenance Notes</h5>
           <table datatable [dtOptions]="notesDtOption" [dtTrigger]="notesDtTrigger" class="row-border hover"
             style="width: 100%; position: relative" #maintenanceNotesTable>
             <thead>

@@ -94,7 +94,7 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
     };
   }
 
-  onClickRow(data) {
+  onClickRow(data: any) {
     this.hideMenu('', 'divOverlay');
     this.selectedData = data;
     this.getFaultNotes(this.selectedData.maintenanceId);
@@ -145,7 +145,7 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setLookupData(data) {
+  private setLookupData(data: any) {
     this.notesTypes = data.notesType;
     this.notesComplaints = data.notesComplaint;
     this.notesCategories = data.notesCategories;
