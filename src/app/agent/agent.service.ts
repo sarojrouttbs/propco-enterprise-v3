@@ -114,4 +114,8 @@ export class AgentService {
     return this.httpClient.get(
       environment.API_BASE_URL + `maintenance/${maintenanceId}/notes`);
   }
+
+  getRentindemnityProducts(params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `rentindemnity/products`, { params });
+  }
 }

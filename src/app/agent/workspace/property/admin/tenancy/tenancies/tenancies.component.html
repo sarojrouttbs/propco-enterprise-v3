@@ -33,8 +33,8 @@
               <tr *ngFor="let data of tenancies" class="table-row">
                 <td>{{data?.status | lookup: agreementStatusesLookup}}</td>
                 <td>{{((data?.tenants?.displayAs) ? data?.tenants?.displayAs : (data?.tenants?.forename +' '+data?.tenants?.surname)) || notAvailable}}</td>
-                <td>{{data?.originalStartDate | date: 'dd/MM/yyyy' || notAvailable}}</td>
-                <td>{{data?.originalEndDate | date: 'dd/MM/yyyy' || notAvailable}}</td>
+                <td>{{data?.tenancyStartDate | date: 'dd/MM/yyyy' || notAvailable}}</td>
+                <td>{{data?.tenancyEndDate | date: 'dd/MM/yyyy' || notAvailable}}</td>
                 <!-- <td>{{data?.officeCode | lookup: officeLookup}}</td> -->
                 <td>{{data?.contractType | lookup: contractTypeLookup}}</td>
                 <td>{{data?.lapseToContract | lookup: contractTypeLookup}}</td>
