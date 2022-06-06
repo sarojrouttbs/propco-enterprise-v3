@@ -19,9 +19,8 @@ import { CommonService } from 'src/app/shared/services/common.service';
 
 export class PeriodicVisitComponent implements OnInit, OnDestroy {
 
-  dtOptions: Promise<DataTables.Settings>;
+  dtOptions: any = {};
   notesDtOption: DataTables.Settings;
-  dtTrigger: Subject<any> = new Subject();
   notesDtTrigger: Subject<any> = new Subject();
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
   visitList: any;
@@ -50,23 +49,29 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.dtOptions = this.getvisitTableDtOption();
+    this.initPeriodicVisit();
+  }
+
+  private async initPeriodicVisit() {
+    this.initForm();
+    this.initApi();
+    this.initDataTable();
     this.notesDtOption = this.buildDtOptions();
     this.getLookupData();
     setTimeout(() => {
       this.notesDtTrigger.next();
     }, 1000);
-    this.initForm();
   }
 
-  private async getvisitTableDtOption(): Promise<DataTables.Settings> {
+  private async initApi() {
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
     this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);
     await this.getVisitHmoLicence(this.selectedEntityDetails.entityId);
+  }
 
-    const that = this;
-    const tableOption = {
+  private initDataTable(): void {
+    this.dtOptions = {
       paging: true,
       pagingType: 'full_numbers',
       serverSide: true,
@@ -78,11 +83,11 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
       autoWidth: true,
       responsive: true,
       ajax: (tableParams: any, callback) => {
-        const params = new HttpParams()
+        let params = new HttpParams()
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
           .set('hideLoader', 'true');
-        this.agentService.getVisitList(this.propertyDetails?.propertyId, params).subscribe(res => {
+        this.agentService.getVisitList(this.selectedEntityDetails.entityId, params).subscribe(res => {
           this.visitList = res && res.data ? res.data : [];
           callback({
             recordsTotal: res ? res.count : 0,
@@ -92,15 +97,12 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
           this.visitNotes = [];
           this.rerenderNotes();
         })
+        this.hideMenu('', 'divOverlay');
       },
       language: {
         processing: 'Loading...'
       }
     };
-    const promise = new Promise(async (resolve, reject) => {
-      resolve(tableOption);
-    });
-    return promise;
   }
 
   private fetchItems() {
@@ -334,7 +336,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.dtTrigger.unsubscribe();
+    // this.dtTrigger.unsubscribe();
     this.notesDtTrigger.unsubscribe();
   }
 }
