@@ -110,12 +110,14 @@ export class MaPropertyComponent implements OnInit {
       direction: property.direction ? property.direction : '',
       parking: property.parking ? Number(property.parking) : '',
       advertisementRentFrequency: property.advertisementRentFrequency ? property.advertisementRentFrequency : '',
-      furnishingType: property.furnishingType ? (property.furnishingType === '0' ? null : property.furnishingType) : '',
+      furnishingType: property.furnishingType ? (property.furnishingType === '0' ? null : parseInt(property.furnishingType)) : '',
       hasLetBefore: property.hasLetBefore,
       status: property.status ? property.status.toString() : '',
       agentName: property.agentName ? property.agentName : '',
-      minimum: property.minimumRent ? property.minimumRent : '',
-      maximum: property.maximumRent ? property.maximumRent : '',
+      rentRange: {
+        minimum: property.minimumRent ? property.minimumRent : '',
+        maximum: property.maximumRent ? property.maximumRent : '',
+      },
       availableFromDate: property.availableFromDate ? property.availableFromDate : '',
       availableToDate: property.availableToDate ? property.availableToDate : '',
       address: {
@@ -141,10 +143,10 @@ export class MaPropertyComponent implements OnInit {
     this.parkingTypes = data.parkingTypes;
     this.propertyMarketingStatusLookup = data.propertyMarketingStatusLookup;
     this.propertyStatuses = data.propertyStatuses;
-    this.letDurations = data.letDurations
     this.furnishingTypes = data.furnishingTypes
     this.propertyLetReasons = data.propertyLetReasons
     this.advertisementRentFrequencies = data.advertisementRentFrequencies
+    this.letDurations = data.propertyLetDurations;
   }
 
   getLookupValue(index, lookup) {
