@@ -239,7 +239,7 @@ ion-item {
   }
 }
 
-.entity-search, .la-application-search, .la-property-search {
+.entity-search, .la-application-search, .la-property-search,.nett-modal-container ,.fee-charge-modal-container{
   .modal-wrapper {
     min-height: 200px;
     width: 550px;
@@ -267,7 +267,7 @@ ion-item {
   }
 }
 
-.tenant-list {
+.tenant-list,.fee-charge-modal-container {
   .modal-wrapper {
     min-height: 300px;
     min-width: 400px;
@@ -607,8 +607,7 @@ ion-alert.common-alert-box {
   #property-check-grid,
   #property-let-board-details,
   #property-history-details,
-  #property-rent-default-rates,
-  #property-rent-protection,
+  #property-rent-sales-figures,
   #la-application-list,
   #la-application-details,
   #la-guarantor-details,

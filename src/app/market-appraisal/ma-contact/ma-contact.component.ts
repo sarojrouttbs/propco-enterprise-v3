@@ -71,14 +71,17 @@ export class MaContactComponent implements OnInit {
         addressLine1: data.address ? data.address.addressLine1 : null,
         addressLine2: data.address ? data.address.addressLine2 : null,
         addressLine3: data.address ? data.address.addressLine3 : null,
-        buildingName:data.address ? data.address.buildingName : null,
-        buildingNumber:data.address ? data.address.buildingNumber : null,
+        buildingName: data.address ? data.address.buildingName : null,
+        buildingNumber: data.address ? data.address.buildingNumber : null,
         country: data.address ? data.address.country : null,
         county: data.address ? data.address.county : null,
         locality: data.address ? data.address.locality : null,
         town: data.address ? data.address.town : null,
         domesticId: data.address ? data.address.pafReference : null
       },
+      forename: data.forename ? data.forename : '',
+      surname: data.surname ? data.surname : '',
+      title: data.title ? data.title : '',
     });
   }
 

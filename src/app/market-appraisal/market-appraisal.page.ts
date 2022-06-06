@@ -311,6 +311,8 @@ export class MarketAppraisalPage implements OnInit {
   updateProperty(payload) {
     const params = payload;
     const propertyId = params.propertyId;
+    params.maximumRent = params.rentRange.maximum;
+    params.minimumRent = params.rentRange.minimum;
     const promise = new Promise((resolve, reject) => {
       this.maService.updateProperty(params, propertyId).subscribe(
         (res) => {
