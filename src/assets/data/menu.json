@@ -32,6 +32,14 @@
           "state": "propco.agent.entity.property.rent",
           "isActive": false,
           "route": "rent"
+        },
+        {
+          "index": 3,
+          "key": "marketing_activity",
+          "name": "Marketing Activity",
+          "state": "propco.agent.entity.property.marketingactivity",
+          "isActive": false,
+          "route": "marketing-activity"
         }
       ]
     },
@@ -60,14 +68,6 @@
         },
         {
           "index": 3,
-          "key": "marketing_activity",
-          "name": "Marketing Activity",
-          "state": "propco.agent.entity.property.marketingactivity",
-          "isActive": false,
-          "route": "marketing-activity"
-        },
-        {
-          "index": 4,
           "key": "periodic_visit",
           "name": "Periodic Visit",
           "state": "propco.agent.entity.property.periodicVisit",
@@ -75,7 +75,7 @@
           "route": "periodic-visit"
         },
         {
-          "index": 5,
+          "index": 4,
           "key": "maintenance",
           "name": "Maintenance",
           "state": "propco.agent.entity.property.maintenance",
