@@ -53,7 +53,7 @@ export class RentSalesFiguresComponent implements OnInit {
       frequencyType: this.propertyDetails?.propertyRentInfo?.frequencyType,
       depositAmount: this.propertyDetails?.propertyRentInfo?.depositAmount,
       depositSchemeNo: this.propertyDetails?.propertyRentInfo?.depositSchemeNo,
-      depositScheme: this.propertyDetails?.propertyRentInfo?.depositScheme,
+      depositScheme: parseInt(this.propertyDetails?.propertyRentInfo?.depositScheme),
       salePriceType: this.propertyDetails?.propertyRentInfo?.salePriceType,
       salePrice: this.propertyDetails?.propertyRentInfo?.salePrice,
       aegisInsurance: this.propertyDetails?.propertyRentInfo?.aegisInsurance,
@@ -70,11 +70,11 @@ export class RentSalesFiguresComponent implements OnInit {
       isClaimAuthorised: this.propertyDetails?.propertyRentInfo?.isClaimAuthorised,
       emergencyResponseService:
       {
-        isERSEnabled: this.propertyDetails?.propertyRentInfo?.isERSEnabled,
-        eriProduct: this.propertyDetails?.propertyRentInfo?.eriProduct,
-        inceptionDate: this.propertyDetails?.propertyRentInfo?.inceptionDate,
-        renewalDate: this.propertyDetails?.propertyRentInfo?.renewalDate,
-        cancelledDate: this.propertyDetails?.propertyRentInfo?.cancelledDate
+        isERSEnabled: this.propertyDetails?.propertyRentInfo?.emergencyResponseService?.isERSEnabled,
+        eriProduct: parseInt(this.propertyDetails?.propertyRentInfo?.emergencyResponseService?.eriProduct),
+        inceptionDate: this.propertyDetails?.propertyRentInfo?.emergencyResponseService?.inceptionDate,
+        renewalDate: this.propertyDetails?.propertyRentInfo?.emergencyResponseService?.renewalDate,
+        cancelledDate: this.propertyDetails?.propertyRentInfo?.emergencyResponseService?.cancelledDate
       },
       managementCommission: this.propertyDetails?.propertyRentInfo?.managementCommission,
       vatInclusive: this.propertyDetails?.propertyRentInfo?.vatInclusive,
@@ -199,7 +199,7 @@ export class RentSalesFiguresComponent implements OnInit {
       if (selectedProduct) {
         this.group.patchValue({
           excessThreshold: selectedProduct?.excessThreshold,
-          excessMinimum: selectedProduct?.excessMinimum ? selectedProduct?.excessMinimum: ''
+          excessMinimum: selectedProduct?.excessMinimum ? selectedProduct?.excessMinimum : ''
         });
       }
     }
