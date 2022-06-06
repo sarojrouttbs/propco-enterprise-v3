@@ -143,10 +143,10 @@ export class MaPropertyComponent implements OnInit {
     this.parkingTypes = data.parkingTypes;
     this.propertyMarketingStatusLookup = data.propertyMarketingStatusLookup;
     this.propertyStatuses = data.propertyStatuses;
-    this.letDurations = data.letDurations
     this.furnishingTypes = data.furnishingTypes
     this.propertyLetReasons = data.propertyLetReasons
     this.advertisementRentFrequencies = data.advertisementRentFrequencies
+    this.letDurations = data.propertyLetDurations;
   }
 
   getLookupValue(index, lookup) {
