@@ -1,5 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
@@ -27,6 +28,8 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
   notesTypes: any;
   notesComplaints: any;
   notesCategories: any;
+  expenditureLimit = new FormControl('');
+  propertyDetails: any;
   
   constructor(private commonService: CommonService, private agentService: AgentService) { }
 
@@ -47,6 +50,7 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
   private async initApi() {
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
+    this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);
   }
 
   private initDataTable(): void {
@@ -97,17 +101,21 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
   onClickRow(data: any) {
     this.hideMenu('', 'divOverlay');
     this.selectedData = data;
-    this.getFaultNotes(this.selectedData.maintenanceId);
+    this.getMaintenanceNotes(this.selectedData.maintenanceId);
+    this.maintenanceList.forEach((e, i) => {
+      if (e.maintenanceId === data.maintenanceId) this.maintenanceList[i].isSelected = true;
+      else this.maintenanceList[i].isSelected = false;
+    });
   }
 
-  private getFaultNotes(maintenanceId: string) {
+  private getMaintenanceNotes(maintenanceId: string) {
     this.agentService.getMaintenanceNotes(maintenanceId).subscribe(res => {
       this.maintenanceNotes = res && res.data ? res.data : [];
       this.rerenderNotes();
     });
   }
 
-  rerenderNotes(): void {
+  private rerenderNotes(): void {
     if (this.dtElements && this.dtElements.last.dtInstance) {
       this.dtElements.last.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.destroy();
@@ -151,7 +159,7 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
     this.notesCategories = data.notesCategories;
   }
 
-  showNoteDescription(noteText): void {
+  showNoteDescription(noteText: string): void {
     if (noteText) {
       this.commonService.showAlert('Notes', noteText);
     }
@@ -214,6 +222,24 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
     if (event) {
       event.stopPropagation();
     }
+  }
+
+  private getPropertyDetails(propertyId: string) {
+    const params = new HttpParams().set('hideLoader', 'true');
+    const promise = new Promise((resolve, reject) => {
+      this.agentService.getPropertyById(propertyId, params).subscribe(
+        (res) => {
+          if (res && res.data) {
+            this.expenditureLimit.setValue(res.data?.expenditureLimit);
+          }
+          resolve(res.data);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
   }
 
   ngOnDestroy() {

@@ -37,6 +37,9 @@ import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { NotesModalPageModule } from 'src/app/shared/modals/notes-modal/notes-modal.module';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
 import { RentSalesFiguresComponent } from './rent/rent-sales-figures/rent-sales-figures.component';
+import { ChangeNettPageModule } from 'src/app/shared/modals/change-nett/change-nett.module';
+import { ChangeGrossPageModule } from 'src/app/shared/modals/change-gross/change-gross.module';
+import { FeeChargePageModule } from 'src/app/shared/modals/fee-charge/fee-charge.module';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -71,7 +74,10 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     PeriodicVisitModalPageModule,
     PipesModule,
     NotesModalPageModule,
-    CurrencyMaskModule
+    CurrencyMaskModule,
+    ChangeNettPageModule,
+    ChangeGrossPageModule,
+    FeeChargePageModule
   ],
   declarations: [
     GoogleMapComponent,

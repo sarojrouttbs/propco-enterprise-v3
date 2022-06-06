@@ -13,11 +13,12 @@
 
 .header-content {
     .header {
-        color: var(--ion-color-step-800);
+        color: var(--ion-color-three);
         @include set-text-style(14px, 19px);
     }
 
     .content {
         @include set-text-style(16px, 20px);
+        color: var(--ion-color-one);
     }
 }

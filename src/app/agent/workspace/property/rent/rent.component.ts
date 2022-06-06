@@ -51,7 +51,37 @@ export class RentComponent implements OnInit {
         depositScheme: null,
         salePriceType: null,
         salePrice: '',
-        aegisInsurance: null
+        aegisInsurance: null,
+        rentIndemnityProductId: null,
+        isRentIndeminityRequired: null,
+        isRentIndeminityEnabled: null,
+        isUseRentPercentage: null,
+        premiumPercentage: null,
+        premiumAmount: '',
+        rentStartDate: null,
+        rentStopDate: null,
+        claimDefaultInDays: null,
+        manualClaim: null,
+        excessThreshold: null,
+        excessMinimum: '',
+        isClaimAuthorised: null,
+        emergencyResponseService: this.formBuilder.group(
+          {
+            isERSEnabled: null,
+            eriProduct: null,
+            inceptionDate: null,
+            renewalDate: null,
+            cancelledDate: null
+          }
+        ),
+        managementCommission: null,
+        vatInclusive: null,
+        secondLevelCommission: null,
+        narrativeForFees: null,
+        narrativeForFeesVat: null,
+        lastRentReview: null,
+        nextRentReview: null,
+        isLandlordArrearsExcluded: null
       })
     });
   }
