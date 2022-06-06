@@ -6,12 +6,14 @@ import { AgentService } from 'src/app/agent/agent.service';
 import { MarketAppraisalService } from 'src/app/market-appraisal/market-appraisal.service';
 import { MARKET_APPRAISAL, PROPCO, search_Text } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { AddressPipe } from 'src/app/shared/pipes/address-string-pipe.pipe';
+import { LookupPipe } from 'src/app/shared/pipes/lookup-pipe';
 
 @Component({
   selector: 'app-landlord-search',
   templateUrl: './landlord-search.component.html',
   styleUrls: ['./landlord-search.component.scss'],
-  providers: [AgentService]
+  providers: [AgentService, AddressPipe, LookupPipe]
 })
 export class LandlordSearchComponent implements OnInit {
 
@@ -32,11 +34,14 @@ export class LandlordSearchComponent implements OnInit {
   entityControl = new FormControl(['Property']);
   propertySuggestion;
   officeLookup: any;
+  propertyStatuses: any;
   lookupdata: any;
 
   constructor(private marketAppraisalService: MarketAppraisalService,
     private solrService: SolrService,
-    private commonService: CommonService) { }
+    private commonService: CommonService,
+    private addressPipe: AddressPipe,
+    private LookupPipe: LookupPipe) { }
 
   ngOnInit() {
     this.getLookupData();
@@ -137,6 +142,13 @@ export class LandlordSearchComponent implements OnInit {
       this.marketAppraisalService.getLandlordProperties(landlordId).subscribe(
         res => {
           this.propertySuggestion = res ? res.data : [];
+          this.propertySuggestion.map((res) => {
+            res.office = res?.officeCode;
+            res.propertyRent = res?.rentAmount;
+            res.postcode = res?.propertyAddress?.postcode;
+            res.address = this.addressPipe.transform(res?.propertyAddress);
+            res.status = this.LookupPipe.transform(res?.status.toString(), this.propertyStatuses);
+          });
         },
         error => {
           reject(null);
@@ -206,5 +218,6 @@ export class LandlordSearchComponent implements OnInit {
 
   private setLookupData(data) {
     this.officeLookup = data.officeCodes;
+    this.propertyStatuses = data.propertyStatuses;
   }
 }
