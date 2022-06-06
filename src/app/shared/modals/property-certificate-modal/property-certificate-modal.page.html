@@ -64,22 +64,22 @@
       <ion-col size="25">
         <span class="text">Appliance</span>
         <br />
-        {{warrantyDetails?.appliance || '-'}}
+        <span class="content">{{warrantyDetails?.appliance || '-'}}</span>
       </ion-col>
       <ion-col size="25">
         <span class="text">Company</span>
         <br />
-        {{warrantyDetails?.contact || '-'}}
+        <span class="content">{{warrantyDetails?.contact || '-'}}</span>
       </ion-col>
       <ion-col size="25">
         <span class="text">Warranty Type</span>
         <br />
-        {{warrantyDetails?.typeName || '-'}}
+        <span class="content">{{warrantyDetails?.typeName || '-'}}</span>
       </ion-col>
       <ion-col size="25">
         <span class="text">Warranty Number</span>
         <br />
-        {{warrantyDetails?.certificateNumber || '-'}}
+        <span class="content">{{warrantyDetails?.certificateNumber || '-'}}</span>
       </ion-col>
     </ion-row>
 
@@ -87,17 +87,17 @@
       <ion-col size="25">
         <span class="text">Serial Number</span>
         <br />
-        {{warrantyDetails?.serialNumber || '-'}}
+        <span class="content">{{warrantyDetails?.serialNumber || '-'}}</span>
       </ion-col>
       <ion-col size="25">
         <span class="text">Model</span>
         <br />
-        {{warrantyDetails?.model || '-'}}
+        <span class="content">{{warrantyDetails?.model || '-'}}</span>
       </ion-col>
       <ion-col size="25">
         <span class="text">Start Date</span>
         <br />
-        {{warrantyDetails?.startDate | date: 'dd/MM/yyyy' || '-'}}
+        <span class="content">{{warrantyDetails?.startDate | date: 'dd/MM/yyyy' || '-'}}</span>
       </ion-col>
     </ion-row>
 
@@ -105,17 +105,17 @@
       <ion-col size="25">
         <span class="text">Phone Number</span>
         <br />
-        {{warrantyDetails?.contactNumber || '-'}}
+        <span class="content">{{warrantyDetails?.contactNumber || '-'}}</span>
       </ion-col>
       <ion-col size="25">
         <span class="text">Email</span>
         <br />
-        {{warrantyDetails?.contact || '-'}}
+        <span class="content">{{warrantyDetails?.contact || '-'}}</span>
       </ion-col>
       <ion-col size="25">
         <span class="text">End Date</span>
         <br />
-        {{warrantyDetails?.expireDate | date: 'dd/MM/yyyy' || '-'}}
+        <span class="content">{{warrantyDetails?.expireDate | date: 'dd/MM/yyyy' || '-'}}</span>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -152,17 +152,17 @@
       <ion-col size="33.33">
         <span class="text">Service Agreement Type</span>
         <br />
-        {{contractDetails?.typeName || '-'}}
+        <span class="content">{{contractDetails?.typeName || '-'}}</span>
       </ion-col>
       <ion-col size="33.33">
         <span class="text">Policy Reference</span>
         <br />
-        {{contractDetails?.membershipNumber || '-'}}
+        <span class="content">{{contractDetails?.membershipNumber || '-'}}</span>
       </ion-col>
       <ion-col size="33.33">
         <span class="text">Company</span>
         <br />
-        {{contractDetails?.contact || '-'}}
+        <span class="content">{{contractDetails?.contact || '-'}}</span>
       </ion-col>
     </ion-row>
 
@@ -170,12 +170,12 @@
       <ion-col size="33.33">
         <span class="text">Email</span>
         <br />
-        {{contractDetails?.contact || '-'}}
+        <span class="content">{{contractDetails?.contact || '-'}}</span>
       </ion-col>
       <ion-col size="33.33">
         <span class="text">Start Date</span>
         <br />
-        {{contractDetails?.startDate | date: 'dd/MM/yyyy' || '-'}}
+        <span class="content">{{contractDetails?.startDate | date: 'dd/MM/yyyy' || '-'}}</span>
       </ion-col>
     </ion-row>
 
@@ -183,12 +183,12 @@
       <ion-col size="33.33">
         <span class="text">Phone Number</span>
         <br />
-        {{contractDetails?.contactNumber || '-'}}
+        <span class="content">{{contractDetails?.contactNumber || '-'}}</span>
       </ion-col>
       <ion-col size="33.33">
         <span class="text">End Date</span>
         <br />
-        {{contractDetails?.expireDate | date: 'dd/MM/yyyy' || '-'}}
+        <span class="content">{{contractDetails?.expireDate | date: 'dd/MM/yyyy' || '-'}}</span>
       </ion-col>
     </ion-row>
   </ion-grid>

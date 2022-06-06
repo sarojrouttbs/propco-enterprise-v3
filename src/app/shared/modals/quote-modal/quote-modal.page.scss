@@ -12,7 +12,7 @@
 }
 
 .border-bottom {
-    outline: 1px solid var(--ion-color-step-1050);
+    outline: 1px solid var(--ion-color-three);
 }
 
 .delete-icon{
@@ -34,7 +34,7 @@ input {
     .offer-amount-value {
       input {
         border: 0;
-        border-bottom: 1px solid var(--ion-color-step-1050);
+        border-bottom: 1px solid var(--ion-color-three);
         outline: 0;
         font-size: 16px;
       }
@@ -42,7 +42,7 @@ input {
   }
 ion-segment {
     height: 35px;
-    background: var(--ion-color-step-2000);
+    background: var(--ion-color-six);
     ion-segment-button {
         min-height: 35px;
         --background-hover: none;
@@ -51,13 +51,13 @@ ion-segment {
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        border-right: 1px solid var(--ion-color-step-1200);
+        border-right: 1px solid var(--ion-color-three);
         --indicator-height: 0px;
         --color-checked: var(--ion-color-success);
         --indicator-box-shadow: 0;
     }
     ion-segment-button:last-child {
-        border-right: 0px solid var(--ion-color-step-1200);
+        border-right: 0px solid var(--ion-color-three);
     }
 }
 
