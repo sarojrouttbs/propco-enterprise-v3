@@ -1,15 +1,7 @@
 #appointment-modal {
     .request-start-date {
         padding-bottom: 6px;
-    }
-    
-    :host ::ng-deep .picker-wrapper {
-        top: 73px !important;
-    }
-    
-    .unsaved-data-error{
-        background: #ea828247;
-    }
+    }    
     
     .error-message{
         display: inline-block;
@@ -21,7 +13,7 @@
         margin-top: 15px;
     }
     
-    .ion-radio-buttons {
+    .session-block-radio-btn {
         div {
             margin-bottom: -16px;
         }

@@ -53,7 +53,7 @@
       <ng-container *ngIf="isDateWithSession">
         <ion-col size="100" class="session-label">
           <ion-label position="floating">Select session<ion-text class="mandatory">*</ion-text></ion-label>
-          <ion-radio-group formControlName="appointmentSlot" class="ion-radio-buttons" (ionChange)="checkPastDateWithSession()">
+          <ion-radio-group formControlName="appointmentSlot" class="session-block-radio-btn" (ionChange)="checkPastDateWithSession()">
             <div *ngFor="let item of sessionSlots" matTooltip="{{ item.value.split(',')[1] }}" matTooltipPosition="above">
             <ion-item class="ion-item" lines="none" >
                 <ion-label>

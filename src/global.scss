@@ -896,3 +896,7 @@ mat-form-field {
     }
   }
 }
+
+.unsaved-data-error{
+  background: rgba(var(--ion-color-danger-rgb), 0.2);
+}
