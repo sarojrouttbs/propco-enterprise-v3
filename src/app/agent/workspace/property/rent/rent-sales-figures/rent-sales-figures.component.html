@@ -1,0 +1,140 @@
+<form [formGroup]="group">
+  <mat-accordion class="form-view-accordian" multi>
+    <mat-expansion-panel #rentSales hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Default Rates
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!rentSales.expanded"  class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none"  name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="rentSales.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none"   name="remove-circle"></ion-icon>
+              </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+          <ion-grid id="property-rent-default-rates">
+            <ion-row>
+              <ion-col size="33">
+                <ion-row>
+                  <ion-col>
+                    <ion-item>
+                      <ion-label position="stacked">Rent
+                      </ion-label>
+                      <input class="currency-input" currencyMask formControlName="rentAmount">
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="50">
+                    <ion-item>
+                      <ion-label position="floating">Every
+                      </ion-label>
+                      <ion-input formControlName="rentFrequency"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="50">
+                    <ion-item>
+                      <ion-label position="floating">Frequency
+                      </ion-label>
+                      <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="frequencyType">
+                        <ion-select-option [value]="data?.index" *ngFor="let data of frequencyTypes">
+                          {{ data?.value }}
+                        </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+              <ion-col size="33">
+                <ion-row>
+                  <ion-col>
+                    <ion-item>
+                      <ion-label position="stacked">Deposit
+                      </ion-label>
+                      <input class="currency-input" currencyMask formControlName="depositAmount">
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                    <ion-item>
+                      <ion-label position="floating">Deposit Schema No.
+                      </ion-label>
+                      <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="depositSchemeNo">
+                        <ion-select-option [value]="data?.index" *ngFor="let data of depositSchemes">
+                          {{ data?.value }}
+                        </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+              <ion-col size="33">
+                <ion-row>
+                  <ion-col>
+                    <ion-item>
+                      <ion-label position="floating">Sale Price Type
+                      </ion-label>
+                      <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="salePriceType">
+                        <ion-select-option [value]="data?.index" *ngFor="let data of salePrices">
+                          {{ data?.value }}
+                        </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                    <ion-item>
+                      <ion-label position="stacked">Sale Price
+                      </ion-label>
+                      <input class="currency-input" currencyMask formControlName="salePrice">
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+    </mat-expansion-panel>
+    <mat-expansion-panel #rentProtection hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Rent Protection & Legal Expenses
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!rentProtection.expanded"  class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none"  name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="rentProtection.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none"   name="remove-circle"></ion-icon>
+              </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+          <ion-grid id="property-rent-protection">
+            <ion-row>
+              <ion-col size="33">
+                <ion-row>
+                  <ion-col>
+                    <ion-item>
+                      <ion-label position="stacked">Aegis Insurance
+                      </ion-label>
+                       <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="frequencyType">
+                        <ion-select-option [value]="data?.index" *ngFor="let data of aegisInsurances">
+                          {{ data?.value }}
+                        </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+    </mat-expansion-panel>
+  </mat-accordion>
+</form>
