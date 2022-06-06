@@ -41,7 +41,7 @@ export class LandlordSearchComponent implements OnInit {
     private solrService: SolrService,
     private commonService: CommonService,
     private addressPipe: AddressPipe,
-    private LookupPipe: LookupPipe) { }
+    private lookupPipe: LookupPipe) { }
 
   ngOnInit() {
     this.getLookupData();
@@ -147,7 +147,7 @@ export class LandlordSearchComponent implements OnInit {
             res.propertyRent = res?.rentAmount;
             res.postcode = res?.propertyAddress?.postcode;
             res.address = this.addressPipe.transform(res?.propertyAddress);
-            res.status = this.LookupPipe.transform(res?.status.toString(), this.propertyStatuses);
+            res.status = this.lookupPipe.transform(res?.status.toString(), this.propertyStatuses);
           });
         },
         error => {
