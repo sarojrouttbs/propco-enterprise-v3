@@ -269,8 +269,8 @@
                       <ion-label position="floating">ERI Product
                       </ion-label>
                       <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="eriProduct">
-                        <ion-select-option [value]="index" *ngFor="let index of eriProducts">
-                          {{ index }}
+                        <ion-select-option [value]="item?.index" *ngFor="let item of eriProducts">
+                          {{ item?.value }}
                         </ion-select-option>
                       </ion-select>
                     </ion-item>
