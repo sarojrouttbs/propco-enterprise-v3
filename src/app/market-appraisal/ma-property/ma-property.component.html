@@ -51,8 +51,8 @@
               <ion-row>
                 <ion-col size="50">
                   <ion-item>
-                  <ion-label position="floating"> Bedrooms</ion-label>
-                  <ion-select interface="popover"  formControlName="numberOfBedroom" 
+                  <ion-label position="floating">Bedrooms</ion-label>
+                  <ion-select interface="popover" formControlName="numberOfBedroom" 
                   [value]="propertyForm.get('isStudio').value? '':propertyForm.get('numberOfBedroom').value" [disabled]="propertyForm.get('isStudio').value">
                     <ion-select-option [value]="number" *ngFor="let number of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]">
                       {{ number }}

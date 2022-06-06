@@ -653,6 +653,14 @@ ion-alert.common-alert-box {
       }
     }
   }
+  ion-textarea{
+    .textarea-wrapper {
+      .native-textarea{
+        height: unset !important;
+      }
+    }
+  }
+  
 }
 
 .market-apprisal-ion-select, .fault-ion-select, .let-alliance-ion-select {
