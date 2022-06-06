@@ -239,7 +239,7 @@ ion-item {
   }
 }
 
-.entity-search, .la-application-search, .la-property-search {
+.entity-search, .la-application-search, .la-property-search,.nett-modal-container ,.fee-charge-modal-container{
   .modal-wrapper {
     min-height: 200px;
     width: 550px;
@@ -267,7 +267,7 @@ ion-item {
   }
 }
 
-.tenant-list {
+.tenant-list,.fee-charge-modal-container {
   .modal-wrapper {
     min-height: 300px;
     min-width: 400px;
@@ -607,8 +607,7 @@ ion-alert.common-alert-box {
   #property-check-grid,
   #property-let-board-details,
   #property-history-details,
-  #property-rent-default-rates,
-  #property-rent-protection,
+  #property-rent-sales-figures,
   #la-application-list,
   #la-application-details,
   #la-guarantor-details,
@@ -653,6 +652,14 @@ ion-alert.common-alert-box {
       }
     }
   }
+  ion-textarea{
+    .textarea-wrapper {
+      .native-textarea{
+        height: unset !important;
+      }
+    }
+  }
+  
 }
 
 .market-apprisal-ion-select, .fault-ion-select, .let-alliance-ion-select {
@@ -670,7 +677,7 @@ ion-alert.common-alert-box {
   .modal-wrapper {
     ion-content {
       --background: var(--ion-color-six);
-      h4, h5, h6, p, small, div, ion-label {
+      h4, h5, h6, p, small, div, ion-label, ion-text {
         color: var(--ion-color-one);;
       }
       ion-item {
@@ -742,6 +749,20 @@ ion-alert.common-alert-box {
           padding-top: 12px;
         }
       }
+
+      .mat-tab-group {  
+        .mat-tab-header {
+          .mat-tab-label-container { 
+            .mat-tab-label {
+              background-color: var(--ion-color-four);
+              color: var(--ion-color-one);
+            }
+            .mat-tab-label-active {
+              background-color: var(--ion-color-success);
+            }
+          }
+        }
+      }
     }
     ion-footer{
       background: var(--ion-color-six);
@@ -754,6 +775,14 @@ ion-alert.common-alert-box {
     }
     .drop-zone{
       background-color: var(--ion-color-five)
+    }
+    #contractor-details-modal, #appointment-modal {
+      .session-block-radio-btn {
+        .ion-radio {
+          margin: 0px 20px -5px 0px;
+          --color: var(--ion-color-primary) !important;
+        }
+      }
     }
   } 
 }
