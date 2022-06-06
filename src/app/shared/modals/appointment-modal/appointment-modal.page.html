@@ -17,7 +17,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content id="appointment-modal">
   <form [formGroup]="appointmentForm">
     <ion-grid class="">
       <ion-row class="">
@@ -53,7 +53,7 @@
       <ng-container *ngIf="isDateWithSession">
         <ion-col size="100" class="session-label">
           <ion-label position="floating">Select session<ion-text class="mandatory">*</ion-text></ion-label>
-          <ion-radio-group formControlName="appointmentSlot" class="session-block" (ionChange)="checkPastDateWithSession()">
+          <ion-radio-group formControlName="appointmentSlot" class="ion-radio-buttons" (ionChange)="checkPastDateWithSession()">
             <div *ngFor="let item of sessionSlots" matTooltip="{{ item.value.split(',')[1] }}" matTooltipPosition="above">
             <ion-item class="ion-item" lines="none" >
                 <ion-label>
@@ -83,7 +83,7 @@
     </ion-grid>
   </form>
 </ion-content>
-<ion-footer>
+<ion-footer id="appointment-modal">
   <ion-grid [class.unsaved-data-error]="unSavedData">
     <ion-row>
       <ng-container *ngIf="unSavedData">

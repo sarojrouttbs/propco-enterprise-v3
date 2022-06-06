@@ -1,33 +1,29 @@
-.request-start-date {
-    padding-bottom: 6px;
-}
-
-:host ::ng-deep .picker-wrapper {
-    top: 73px !important;
-}
-
-.unsaved-data-error{
-    background: #ea828247;
-}
-
-.error-message{
-    display: inline-block;
-    padding-top: 10px;
-    font-size: 14px;
-}
-
-.session-label {
-    margin-top: 15px;
-}
-
-.session-block {
-    // display: flex;
-    // flex-wrap: wrap;
-    div {
-        margin-bottom: -16px;
+#appointment-modal {
+    .request-start-date {
+        padding-bottom: 6px;
     }
-    .ion-radio {
-        margin: 0px 20px -5px 0px;
-        --color: var(--ion-color-primary) !important;
+    
+    :host ::ng-deep .picker-wrapper {
+        top: 73px !important;
+    }
+    
+    .unsaved-data-error{
+        background: #ea828247;
+    }
+    
+    .error-message{
+        display: inline-block;
+        padding-top: 10px;
+        font-size: 14px;
+    }
+    
+    .session-label {
+        margin-top: 15px;
+    }
+    
+    .ion-radio-buttons {
+        div {
+            margin-bottom: -16px;
+        }
     }
 }

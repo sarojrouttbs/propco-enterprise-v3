@@ -539,37 +539,6 @@ mat-form-field {
   width: 680px !important;
 }
 
-// quill-editor css
-.ql-editor.ql-blank::before {
-  color: var(--ion-color-one);
-}
-
-.ql-toolbar.ql-snow + .ql-container.ql-snow {
-  border-top: 0px;
-  min-height: 230px;
-}
-
-.ql-toolbar.ql-snow {
-  display: flex;
-  flex-direction: row;
-}
-
-.ql-toolbar.ql-snow .ql-formats {
-  padding: 0px 10px;
-  display: flex;
-  flex-direction: row;
-  border-right: 1px solid #c1c1c1;
-  margin: 0px;
-}
-
-.ql-toolbar.ql-snow .ql-formats:last-child {
-  border-right: none;
-}
-
-.ql-editor {
-  font-size: 16px;
-}
-
 .mat-paginator {
   padding: 0 8px;
   background: var(--ion-color-step-800);

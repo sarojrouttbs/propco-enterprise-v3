@@ -79,6 +79,9 @@ export class MaContactComponent implements OnInit {
         town: data.address ? data.address.town : null,
         domesticId: data.address ? data.address.pafReference : null
       },
+      forename: data.forename ? data.forename : '',
+      surname: data.surname ? data.surname : '',
+      title: data.title ? data.title : ''
     });
   }
 
