@@ -6,9 +6,15 @@
         opacity: 0.7;
     }
     .add-visit-block {
-        margin-bottom: 15px;
-        ion-button{
+        ion-button {
             margin-left: 0;
         }
+    }
+
+    ion-checkbox{
+        margin-right: 15px;
+    }
+    ::ng-deep .mat-form-field-wrapper {
+        padding-bottom: 24px !important;
     }
 }
