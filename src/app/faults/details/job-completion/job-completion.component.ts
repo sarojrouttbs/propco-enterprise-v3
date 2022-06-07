@@ -418,7 +418,7 @@ export class JobCompletionComponent implements OnInit {
   async openWOJobCompletionModal(updateFaultStatus = false) {
     const modal = await this.modalController.create({
       component: WorksorderModalPage,
-      cssClass: 'modal-container upload-container',
+      cssClass: 'modal-container upload-container fault-modal-container',
       componentProps: {
         faultNotificationId: this.iacNotification.faultNotificationId,
         faultId: this.faultDetails.faultId,

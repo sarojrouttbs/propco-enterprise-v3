@@ -21,8 +21,8 @@
           <ion-row>
             <ion-col size="33.3">
               <ion-item>
-                <ion-label position="floating">Expenditure Limit</ion-label>
-                <ion-input [formControl]="expenditureLimit" readonly></ion-input>
+                <ion-label position="stacked">Expenditure Limit</ion-label>
+                <input currencyMask [formControl]="expenditureLimit" class="currency-input" readonly/>
               </ion-item>
             </ion-col>
           </ion-row>
