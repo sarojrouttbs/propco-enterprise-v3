@@ -1,16 +1,16 @@
-<ion-content id="peroidic-visit">
+<ion-content id="periodic-visit">
   <mat-accordion multi class="form-table-view-accordian">
-    <mat-expansion-panel #peroidicVisit hideToggle expanded>
+    <mat-expansion-panel #periodicVisit hideToggle expanded>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Peroidic Visit
+          Periodic Visit
         </mat-panel-title>
         <mat-panel-description class="ion-justify-content-end no-margin">
           <div>
-            <span *ngIf="!peroidicVisit.expanded" class="accordian-icon" title="Expand">
+            <span *ngIf="!periodicVisit.expanded" class="accordian-icon" title="Expand">
               <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
             </span>
-            <span *ngIf="peroidicVisit.expanded" class="accordian-icon" title="Collapse">
+            <span *ngIf="periodicVisit.expanded" class="accordian-icon" title="Collapse">
               <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
             </span>
           </div>
@@ -34,7 +34,7 @@
         </ion-grid>
       </div>
       <div class="overlay-container" style="position: relative">
-        <table datatable [dtOptions]="dtOptions" class="row-border hover" width="100%" id="peroidic-visit-table"
+        <table datatable [dtOptions]="dtOptions" class="row-border hover" width="100%" id="periodic-visit-table"
           style="position: relative">
           <thead>
             <tr>
@@ -95,7 +95,7 @@
                 <mat-form-field appearance="fill" style="margin-top: 6px;">
                   <mat-label>Visit Sequence Start Date </mat-label>
                   <input matInput [matDatepicker]="picker" formControlName="visitSequenceStartDate" readonly>
-                  <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
               </ion-col>
