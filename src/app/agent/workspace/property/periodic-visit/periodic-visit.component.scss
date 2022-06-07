@@ -1,4 +1,4 @@
-#peroidic-visit {
+#periodic-visit {
     h5 {
         color: var(--ion-color-primary);
     }
@@ -14,7 +14,9 @@
     ion-checkbox{
         margin-right: 15px;
     }
-    ::ng-deep .mat-form-field-wrapper {
-        padding-bottom: 24px !important;
+    ::ng-deep .mat-form-field-infix {
+        input {
+            padding-top: 6px !important;
+        }
     }
 }
