@@ -19,8 +19,16 @@
       <div class="add-visit-block">
         <ion-grid>
           <ion-row>
+            <ion-col class="ion-align-self-center">
+              <ion-button color="success" (click)="openVisitModal()">Add</ion-button>
+            </ion-col>
             <ion-col>
-              <ion-button class="postcode-find-btn" color="success" (click)="openVisitModal()">Add</ion-button>
+              <ion-item lines="none" class="ion-float-right">
+                <ion-checkbox class="ma-checkbox" color="medium" slot="start"
+                  name="repairCheckbox" [formControl]="isDisableAutoManagementInspection">
+                </ion-checkbox>
+                <ion-label>Disable automated Management Inspection for this property</ion-label>
+              </ion-item>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -93,13 +101,13 @@
               </ion-col>
               <ion-col size="33.3">
                 <ion-item>
-                  <ion-label position="floating">Visit Interval In Months(TOB)</ion-label>
+                  <ion-label position="floating">Visit Interval In Months (TOB)</ion-label>
                   <ion-input formControlName="visitIntervalInMonths"></ion-input>
                 </ion-item>
               </ion-col>
               <ion-col size="33.3">
                 <ion-item>
-                  <ion-label position="floating">Visit Interval In Months(HMO Licence)</ion-label>
+                  <ion-label position="floating">Visit Interval In Months (HMO Licence)</ion-label>
                   <ion-input formControlName="visitIntervalInMonthsHMO"></ion-input>
                 </ion-item>
               </ion-col>
