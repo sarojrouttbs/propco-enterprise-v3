@@ -11,10 +11,13 @@
         }
     }
 
-    ion-checkbox{
+    ion-checkbox {
         margin-right: 15px;
     }
-    ::ng-deep .mat-form-field-wrapper {
-        padding-bottom: 24px !important;
+
+    ::ng-deep .mat-form-field-infix {
+        input {
+            padding-top: 6px !important;
+        }
     }
 }
