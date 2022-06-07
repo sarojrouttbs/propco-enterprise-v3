@@ -283,7 +283,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child:b
       color: var(--ion-color-warning, #ffc409);
     }
   }
-  #marketing-activity {
+  #marketing-activity, #tenancy-details {
     .dataTables_wrapper {
       table.dataTable {
         tbody {
