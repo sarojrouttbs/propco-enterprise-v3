@@ -647,8 +647,8 @@ export const LOGIN_PAGE_TEXT_MESSAGES = [
 ];
 
 export const BUILD_DETAILS = {
-  BUILD_NUMBER: 'Build 45.0',
-  BUILD_MONTH_YEAR: 'February 2022'
+  BUILD_NUMBER: '1.4.1',
+  BUILD_MONTH_YEAR: 'June 2022'
 };
 
 export const TITLES = [

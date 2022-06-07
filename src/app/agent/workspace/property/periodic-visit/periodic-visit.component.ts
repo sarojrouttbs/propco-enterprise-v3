@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
@@ -39,6 +39,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
   inspectionStatuses: any;
   requirementForm: FormGroup;
   selectedData: any;
+  isDisableAutoManagementInspection = new FormControl('false');
 
   constructor(
     private agentService: AgentService,
@@ -133,7 +134,8 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
           if (res && res.data) {
             this.requirementForm.get('visitsPerAnnum').setValue(res.data?.visitsPerAnnum);
             this.requirementForm.get('visitIntervalInMonths').setValue(res.data?.visitIntervalInMonths);
-            this.requirementForm.get('visitSequenceStartDate').setValue(res.data?.visitSequenceStartDate);
+            this.requirementForm.get('visitSequenceStartDate').setValue(res.data?.visitSequenceStartDate);            
+            this.isDisableAutoManagementInspection.setValue(res.data?.propertyDetails?.isDisableAutoManagementInspection);
           }
           resolve(res.data);
         },
