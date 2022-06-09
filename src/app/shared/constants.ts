@@ -541,7 +541,8 @@ export const OFFER_STATUSES = {
 export const NOTES_TYPE = {
   OFFER: 'OFFER',
   FAULT: 'FAULT',
-  PROPERTY_VISIT: 'PROPERTY_VISIT'
+  PROPERTY_VISIT: 'PROPERTY_VISIT',
+  PROPERTY: 'PROPERTY'
 };
 
 export const APPLICATION_STATUSES = {
@@ -636,7 +637,8 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'tenancy': 'Tenancies',
       'rent': 'Rent/Invoices',
       'periodic-visit': 'Periodic Visit',
-      'maintenance': 'Maintenance'
+      'maintenance': 'Maintenance',
+      'notes': 'Notes'
     }
   }
 };

@@ -8,6 +8,7 @@ import { PeriodicVisitComponent } from "./periodic-visit/periodic-visit.componen
 import { MarketingActivityComponent } from "./marketing-activity/marketing-activity.component";
 import { PropertyPage } from "./property.page";
 import { RentComponent } from "./rent/rent.component";
+import { NotesComponent } from "./admin/notes/notes.component";
 
 const routes: Routes = [
   {
@@ -41,6 +42,10 @@ const routes: Routes = [
       {
         path: 'maintenance',
         component: MaintenanceComponent
+      },
+      {
+        path: "notes",
+        component: NotesComponent,
       },
       {
         path: "create-offer",

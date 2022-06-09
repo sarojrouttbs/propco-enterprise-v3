@@ -98,6 +98,14 @@
           "state": "propco.agent.entity.property.tenancy",
           "isActive": false,
           "route": "tenancy"
+        },
+        {
+          "index": 2,
+          "key": "notes",
+          "name": "Notes",
+          "state": "propco.agent.entity.property.notes",
+          "isActive": false,
+          "route": "notes"
         }
       ]
     }

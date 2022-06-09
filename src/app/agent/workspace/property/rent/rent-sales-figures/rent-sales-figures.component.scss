@@ -18,4 +18,15 @@
     .change-btn {
         margin-top: 25px;
     }
+
+    .remove-date {
+        cursor: pointer;
+        margin-top: 7px;
+
+        ion-icon {
+            pointer-events: none;
+            font-size: 18px;
+        }
+    }
+
 }
