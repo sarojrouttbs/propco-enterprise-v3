@@ -40,6 +40,7 @@ import { RentSalesFiguresComponent } from './rent/rent-sales-figures/rent-sales-
 import { ChangeNettPageModule } from 'src/app/shared/modals/change-nett/change-nett.module';
 import { ChangeGrossPageModule } from 'src/app/shared/modals/change-gross/change-gross.module';
 import { FeeChargePageModule } from 'src/app/shared/modals/fee-charge/fee-charge.module';
+import { NotesComponent } from './admin/notes/notes.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -97,8 +98,16 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     TenancyComponent,
     MarketingActivityComponent,
     MaintenanceComponent,
-    RentSalesFiguresComponent
+    RentSalesFiguresComponent,
+    NotesComponent
   ],
-  providers: [AgentService, CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
+  providers: [
+    AgentService,
+    CurrencyPipe,
+    {
+      provide: CURRENCY_MASK_CONFIG,
+      useValue: CustomCurrencyMaskConfig
+    }
+  ]
 })
 export class PropertyPageModule { }

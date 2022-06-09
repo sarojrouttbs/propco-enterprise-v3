@@ -17,7 +17,7 @@ export class AgentService {
 
   getPropertyLandlords(propertyId: string, params): Observable<any> {
     return this.httpClient.get(
-      environment.API_BASE_URL + `properties/${propertyId}/landlords`, { params }
+      environment.API_BASE_URL + `properties/${propertyId}/landlords/node`, { params }
     );
   }
 
@@ -39,9 +39,9 @@ export class AgentService {
     );
   }
 
-  getPropertyNotes(propertyId: string, params): Observable<any> {
+  getNotes(params): Observable<any> {
     return this.httpClient.get(
-      environment.API_BASE_URL + `properties/${propertyId}/notes`, { params });
+      environment.API_BASE_URL + `notes`, { params });
   }
 
   getOfficeLocations(officeCode: string): Observable<any> {
@@ -82,13 +82,13 @@ export class AgentService {
     );
   }
 
-  getVisitNotes(propertyId: string, visitId: string): Observable<any>  {
+  getVisitNotes(propertyId: string, visitId: string): Observable<any> {
     return this.httpClient.get(
       environment.API_BASE_URL + `properties/${propertyId}/visits/${visitId}/notes`, {}
     );
   }
 
-  getVisitHmoLicence(propertyId: string, params): Observable<any>  {
+  getVisitHmoLicence(propertyId: string, params): Observable<any> {
     return this.httpClient.get(
       environment.API_BASE_URL + `properties/${propertyId}/visits/hmo-licence`, { params }
     );
