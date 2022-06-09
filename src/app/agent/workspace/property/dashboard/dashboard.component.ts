@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IonSlides, ModalController, ViewDidEnter } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, PROPCO, DEFAULT_MESSAGES, DEFAULTS, NOTES_ENTITY_TYPE } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, PROPCO, DEFAULT_MESSAGES, DEFAULTS, NOTES_TYPE } from 'src/app/shared/constants';
 import { ImagePage } from 'src/app/shared/modals/image/image.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 @Component({
@@ -61,7 +61,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
           .set("hideLoader", "true")
           .set('entityId', this.selectedEntityDetails.entityId)
-          .set('entityType', NOTES_ENTITY_TYPE.PROPERTY);
+          .set('entityType', NOTES_TYPE.PROPERTY);
         that.agentService.getNotes(params).subscribe(res => {
           this.notes = res && res.data ? res.data : [];
           callback({

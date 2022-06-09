@@ -541,7 +541,8 @@ export const OFFER_STATUSES = {
 export const NOTES_TYPE = {
   OFFER: 'OFFER',
   FAULT: 'FAULT',
-  PROPERTY_VISIT: 'PROPERTY_VISIT'
+  PROPERTY_VISIT: 'PROPERTY_VISIT',
+  PROPERTY: 'PROPERTY'
 };
 
 export const APPLICATION_STATUSES = {
@@ -689,8 +690,4 @@ export const MARKETING_ACTIVITY_TYPES = {
   MAILSHOT: 'mailshot',
   VIEWED: 'viewed',
   BOOKED: 'booked'
-}
-
-export const NOTES_ENTITY_TYPE = {
-  PROPERTY: 'PROPERTY'
 }

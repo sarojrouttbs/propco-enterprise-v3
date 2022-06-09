@@ -3,7 +3,7 @@ import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, DEFAULTS, DEFAULT_MESSAGES, NOTES_ENTITY_TYPE, PROPCO } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, DEFAULTS, DEFAULT_MESSAGES, NOTES_TYPE, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -105,7 +105,7 @@ export class NotesComponent implements OnInit {
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
           .set('hideLoader', 'true')
           .set('entityId', this.selectedEntityDetails.entityId)
-          .set('entityType', NOTES_ENTITY_TYPE.PROPERTY);
+          .set('entityType', NOTES_TYPE.PROPERTY);
         this.agentService.getNotes(this.notesParams).subscribe(res => {
           this.notes = res && res.data ? res.data : [];
           callback({
@@ -122,14 +122,14 @@ export class NotesComponent implements OnInit {
     };
   }
 
-  addNotes() { }
+  private addNotes() { }
 
-  onCategoryChange(e) {
+  private onCategoryChange(e) {
     this.notesParams = this.notesParams.set('category', e.detail.value);
     this.rerenderNotes();
   }
 
-  rerenderNotes(resetPaging?): void {
+  private rerenderNotes(resetPaging?): void {
     if (this.dtElements && this.dtElements.first.dtInstance) {
       this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.ajax.reload((res) => { }, resetPaging);
@@ -137,13 +137,13 @@ export class NotesComponent implements OnInit {
     }
   }
 
-  showNoteDescription(noteText): void {
+  private showNoteDescription(noteText): void {
     if (noteText) {
       this.commonService.showAlert('Notes', noteText);
     }
   }
   
-  showMenu(event, id, data, className, isCard?) {
+  private showMenu(event, id, data, className, isCard?) {
     this.selectedData = data;
     const baseContainer = $(event.target).parents('.' + className);
     const divOverlay = $('#' + id);
@@ -194,7 +194,7 @@ export class NotesComponent implements OnInit {
     event.stopPropagation();
   }
 
-  hideMenu(event?, id?) {
+  private hideMenu(event?, id?) {
     const $divOverlay = $('#' + id);
     $divOverlay.delay(200).slideUp('fast');
     if (event) {
