@@ -60,15 +60,10 @@ export class NotesComponent implements OnInit {
     }
   }
 
-  private setLookupData(data) {
+  private setLookupData(data: any) {
     this.notesCategories = data.notesCategories;
     this.notesComplaints = data.notesComplaint;
     this.notesTypes = data.notesType;
-  }
-
-  getLookupValue(index, lookup, type?) {
-    index = (type == 'category' && index) ? Number(index) : index;
-    return this.commonService.getLookupValue(index, lookup);
   }
 
   private fetchItems() {
@@ -122,9 +117,9 @@ export class NotesComponent implements OnInit {
     };
   }
 
-  private addNotes() { }
+  addNotes() { }
 
-  private onCategoryChange(e) {
+  onCategoryChange(e) {
     this.notesParams = this.notesParams.set('category', e.detail.value);
     this.rerenderNotes();
   }
@@ -137,13 +132,13 @@ export class NotesComponent implements OnInit {
     }
   }
 
-  private showNoteDescription(noteText): void {
+  showNoteDescription(noteText: string): void {
     if (noteText) {
       this.commonService.showAlert('Notes', noteText);
     }
   }
-  
-  private showMenu(event, id, data, className, isCard?) {
+
+  showMenu(event, id, data, className, isCard?) {
     this.selectedData = data;
     const baseContainer = $(event.target).parents('.' + className);
     const divOverlay = $('#' + id);
@@ -194,7 +189,7 @@ export class NotesComponent implements OnInit {
     event.stopPropagation();
   }
 
-  private hideMenu(event?, id?) {
+  hideMenu(event?, id?) {
     const $divOverlay = $('#' + id);
     $divOverlay.delay(200).slideUp('fast');
     if (event) {
