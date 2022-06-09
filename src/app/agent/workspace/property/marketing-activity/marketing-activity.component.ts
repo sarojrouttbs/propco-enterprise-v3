@@ -47,7 +47,7 @@ export class MarketingActivityComponent implements OnInit {
       lengthMenu: [5, 10, 15],
       pageLength: 5,
       language: {
-        processing: 'Loading...'
+        processing: '<ion-spinner name="dots"></ion-spinner>'
       }
     };
   }

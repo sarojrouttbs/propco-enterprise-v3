@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
         })
       },
       language: {
-        processing: 'Loading...'
+        processing: '<ion-spinner name="dots"></ion-spinner>'
       }
     };
   }
