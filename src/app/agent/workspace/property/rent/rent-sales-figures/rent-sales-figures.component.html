@@ -159,6 +159,12 @@
                       <ion-text class="toggle-btn-text">Rent Indemnity</ion-text>
                     </ion-item>
                   </ion-col>
+                  <ion-col size="100" class="ion-align-self-end">
+                    <ion-item lines="none">
+                      <ion-toggle color="primary" formControlName="isClaimAuthorised" class="toggle-btn"></ion-toggle>
+                      <ion-text class="toggle-btn-text">Claims Authorised</ion-text>
+                    </ion-item>
+                  </ion-col>
                 </ion-row>
               </ion-col>
               <ion-col size="33">
@@ -234,12 +240,6 @@
                         <input class="currency-input" currencyMask formControlName="excessMinimum">
                       </ion-item>
                     </ion-col>
-                  <ion-col size="100" class="ion-align-self-end">
-                    <ion-item lines="none">
-                      <ion-toggle color="primary" formControlName="isClaimAuthorised" class="toggle-btn"></ion-toggle>
-                      <ion-text class="toggle-btn-text">Claims Authorised</ion-text>
-                    </ion-item>
-                  </ion-col>
                 </ion-row>
               </ion-col>
             </ion-row>
@@ -248,7 +248,7 @@
     <mat-expansion-panel #rentOtherPropOption hideToggle>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Other Property Option
+          Emergency Response Fees
         </mat-panel-title>
         <mat-panel-description class="ion-justify-content-end no-margin">
           <div>
@@ -264,7 +264,7 @@
           <ion-grid formGroupName="emergencyResponseService">
             <ion-row>
               <ion-col size="33">
-                <ion-row class="ion-align-items-center">
+                <ion-row>
                   <ion-col size="65"  class="ion-align-self-end">
                     <ion-item lines="none">
                       <ion-toggle color="primary" formControlName="isERSEnabled" class="toggle-btn"></ion-toggle>
@@ -282,27 +282,27 @@
                       </ion-select>
                     </ion-item>
                   </ion-col>
-                  <ion-col size="65">
-                    <mat-form-field appearance="fill" style="margin-top: 18px;">
+                  <ion-col size="90">
+                    <mat-form-field appearance="fill">
                       <mat-label>Cancelled Date</mat-label>
                       <input matInput [matDatepicker]="picker5" formControlName="cancelledDate" readonly>
                       <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
                       <mat-datepicker #picker5></mat-datepicker>
                     </mat-form-field>
                   </ion-col>
-                 <ion-col size="35">
-                  <ion-button color="success" size="small" (click)="removeDate('cancelledDate')" style="margin-top: 22px;">Remove Date</ion-button>
-                 </ion-col>
-                </ion-row>
-                <ion-row class="ion-align-items-center">
+                  <ion-col size="10" class="ion-align-self-center">
+                    <div title="Remove Date" class="remove-date" (click)="removeDate('cancelledDate')">
+                      <ion-icon name="trash-outline"></ion-icon>
+                    </div>
+                  </ion-col>
                   <ion-col size="35">
                     <ion-button color="success" size="small" (click)="opneFeeChargeModal()">Add Premium</ion-button>
                   </ion-col>
                 </ion-row>
               </ion-col>
               <ion-col size="33">
-                <ion-row class="ion-align-items-center">
-                  <ion-col size="65">
+                <ion-row>
+                  <ion-col size="90">
                     <mat-form-field appearance="fill">
                       <mat-label>Inception Date</mat-label>
                       <input matInput [matDatepicker]="picker3" formControlName="inceptionDate" readonly>
@@ -310,10 +310,12 @@
                       <mat-datepicker #picker3></mat-datepicker>
                     </mat-form-field>
                   </ion-col>
-                 <ion-col size="35">
-                  <ion-button color="success" size="small" (click)="removeDate('inceptionDate')">Remove Date</ion-button>
+                 <ion-col size="10" class="ion-align-self-center">
+                  <div title="Remove Date" class="remove-date" (click)="removeDate('inceptionDate')">
+                    <ion-icon name="trash-outline"></ion-icon>
+                  </div>
                  </ion-col>
-                 <ion-col size="65">
+                 <ion-col size="100">
                   <mat-form-field appearance="fill">
                     <mat-label>Date Changed</mat-label>
                     <input matInput [matDatepicker]="picker6" readonly>
@@ -324,8 +326,8 @@
                 </ion-row>
               </ion-col>
               <ion-col size="33">
-                <ion-row class="ion-align-items-center">
-                  <ion-col size="65">
+                <ion-row>
+                  <ion-col size="90">
                     <mat-form-field appearance="fill">
                       <mat-label>Renewal Date</mat-label>
                       <input matInput [matDatepicker]="picker4" formControlName="renewalDate" readonly>
@@ -333,9 +335,11 @@
                       <mat-datepicker #picker4></mat-datepicker>
                     </mat-form-field>
                   </ion-col>
-                 <ion-col size="35">
-                  <ion-button color="success" size="small" (click)="removeDate('renewalDate')">Remove Date</ion-button>
-                 </ion-col>
+                 <ion-col size="10" class="ion-align-self-center">
+                  <div title="Remove Date" class="remove-date" (click)="removeDate('renewalDate')">
+                    <ion-icon name="trash-outline"></ion-icon>
+                  </div>
+                </ion-col>
                 </ion-row>
               </ion-col>
             </ion-row>
