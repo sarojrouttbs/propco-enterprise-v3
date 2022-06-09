@@ -194,6 +194,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
   }
 
   onClickRow(data: any) {
+    this.hideMenu('', 'divOverlay');
     this.getVisitNotes(this.propertyDetails?.propertyId, data.visitId);
     this.visitList.forEach((e, i) => {
       if (e.visitId === data.visitId) { this.visitList[i].isSelected = true; }

@@ -17,7 +17,7 @@ export class AgentService {
 
   getPropertyLandlords(propertyId: string, params): Observable<any> {
     return this.httpClient.get(
-      environment.API_BASE_URL + `properties/${propertyId}/landlords`, { params }
+      environment.API_BASE_URL + `properties/${propertyId}/landlords/node`, { params }
     );
   }
 
