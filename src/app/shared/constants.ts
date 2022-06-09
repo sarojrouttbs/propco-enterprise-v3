@@ -636,7 +636,8 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'tenancy': 'Tenancies',
       'rent': 'Rent/Invoices',
       'periodic-visit': 'Periodic Visit',
-      'maintenance': 'Maintenance'
+      'maintenance': 'Maintenance',
+      'notes': 'Notes'
     }
   }
 };
@@ -688,4 +689,8 @@ export const MARKETING_ACTIVITY_TYPES = {
   MAILSHOT: 'mailshot',
   VIEWED: 'viewed',
   BOOKED: 'booked'
+}
+
+export const NOTES_ENTITY_TYPE = {
+  PROPERTY: 'PROPERTY'
 }
