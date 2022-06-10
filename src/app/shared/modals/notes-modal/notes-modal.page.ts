@@ -217,7 +217,7 @@ export class NotesModalPage implements OnInit {
     });
   }
 
-  createNotes(requestObj){
+  private createNotes(requestObj){
     this.notesService.createNotes(requestObj).subscribe(res => {
       this.modalController.dismiss(res);
     }, err => {
