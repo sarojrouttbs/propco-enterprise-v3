@@ -115,7 +115,7 @@ export class NotesComponent implements OnInit {
         this.hideMenu('', 'divOverlay');
       },
       language: {
-        processing: 'Loading...'
+        processing: '<ion-spinner name="dots"></ion-spinner>'
       }
     };
   }
