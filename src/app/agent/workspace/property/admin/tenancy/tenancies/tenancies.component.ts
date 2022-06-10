@@ -73,7 +73,7 @@ export class TenanciesComponent implements OnInit {
         })
       },
       language: {
-        processing: '<ion-spinner name="dots"></ion-spinner>'
+        processing: '<div class="processing-wrapper"><ion-spinner name="dots"></ion-spinner></div>'
       }
     };
   }
