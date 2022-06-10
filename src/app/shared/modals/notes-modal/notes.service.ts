@@ -23,4 +23,8 @@ export class NotesService {
   createPropertyVisitNotes(propertyId: string, visitId, requestObj: any): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `properties/${propertyId}/visits/${visitId}/notes`, requestObj);
   }
+
+  createNotes(requestObj: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `notes`, requestObj);
+  }
 }

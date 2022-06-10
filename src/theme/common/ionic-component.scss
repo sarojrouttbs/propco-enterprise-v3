@@ -685,6 +685,14 @@ ion-alert.common-alert-box {
         ion-label {
           color: var(--ion-color-three) !important;
         }
+        ion-textarea{
+          .textarea-wrapper {
+            height: unset !important;
+            .native-textarea{
+              height: unset !important;
+            }
+          }
+        }
       }
 
       .dataTables_wrapper {
