@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IonSlides, ModalController, ViewDidEnter } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, PROPCO, DEFAULT_MESSAGES, DEFAULTS } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, PROPCO, DEFAULT_MESSAGES, DEFAULTS, NOTES_TYPE } from 'src/app/shared/constants';
 import { ImagePage } from 'src/app/shared/modals/image/image.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 @Component({
@@ -59,8 +59,10 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
         let params = new HttpParams()
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
-          .set("hideLoader", "true");
-        that.agentService.getPropertyNotes(this.selectedEntityDetails.entityId, params).subscribe(res => {
+          .set("hideLoader", "true")
+          .set('entityId', this.selectedEntityDetails.entityId)
+          .set('entityType', NOTES_TYPE.PROPERTY);
+        that.agentService.getNotes(params).subscribe(res => {
           this.notes = res && res.data ? res.data : [];
           callback({
             recordsTotal: res ? res.count : 0,
@@ -70,7 +72,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
         })
       },
       language: {
-        processing: 'Loading...'
+        processing: '<ion-spinner name="dots"></ion-spinner>'
       }
     };
   }
@@ -197,7 +199,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
     const promise = new Promise((resolve, reject) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
-          this.propertyDetails = res && res.data ? res.data : '';          
+          this.propertyDetails = res && res.data ? res.data : '';
           resolve(true);
         },
         (error) => {

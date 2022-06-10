@@ -16,8 +16,8 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
     <div id="tenancy-details">
-        <div class="overlay-container" *ngIf="tenancies?.length !== 0">
-          <table datatable [dtOptions]="dtOptions" class="row-border hover" id="propertyTenancyTable" width="100%">
+        <div class="overlay-container">
+          <table datatable [dtOptions]="dtOptions" class="row-border hover" id="propertyTenancyTable" width="100%" style="position: relative;">
             <thead>
               <tr>
                 <th style="width:13%">Status</th>
@@ -39,11 +39,13 @@
                 <td>{{data?.contractType | lookup: contractTypeLookup}}</td>
                 <td>{{data?.lapseToContract | lookup: contractTypeLookup}}</td>
               </tr>
+              <tr *ngIf="tenancies?.length === 0">
+                <td colspan="6" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
-      <div *ngIf="tenancies?.length === 0" class="no-tenancy"><b>{{DEFAULT_MESSAGES.NO_TENANCY_AVAILABLE}}</b>
-      </div>
     </div>
   </mat-expansion-panel>
 </mat-accordion>
