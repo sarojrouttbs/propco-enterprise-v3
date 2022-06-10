@@ -81,9 +81,6 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
         })
         this.hideMenu('', 'divOverlay');
       },
-      language: {
-        processing: '<div class="processing-wrapper"><ion-spinner name="dots"></ion-spinner></div>'
-      }
     };
   }
 
