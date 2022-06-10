@@ -76,7 +76,6 @@ export class BookMaModalPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.maService.getAvailableSlots(params).subscribe(
         (res) => {
-          console.log(res.data);
           this.timeSlots = res && res.data ? res.data : '';
           resolve(res);
         },
