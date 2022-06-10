@@ -155,9 +155,6 @@ export class DashboardPage implements OnInit {
         })
         this.hideMenu('', 'divOverlay');
       },
-      language: {
-        processing: '<div class="processing-wrapper"><ion-spinner name="dots"></ion-spinner></div>'
-      }
     };
     const promise = new Promise(async (resolve, reject) => {
       this.LET_CATEGORY = this.commonService.getItem(PROPCO.LET_CATEGORY, true);
