@@ -134,6 +134,7 @@ export class MaPropertyComponent implements OnInit {
         domesticId: property.address ? property.address.pafReference : null
       },
     });
+    this.calculateTotalDuration();
   }
 
   private setLookupData(data) {

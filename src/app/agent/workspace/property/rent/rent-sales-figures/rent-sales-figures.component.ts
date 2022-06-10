@@ -48,14 +48,14 @@ export class RentSalesFiguresComponent implements OnInit {
 
   private patchFormData(): void {
     this.group.patchValue({
-      rentAmount: this.propertyDetails?.propertyRentInfo?.rentAmount,
+      rentAmount: this.propertyDetails?.propertyRentInfo?.rentAmount || 0,
       rentFrequency: this.propertyDetails?.propertyRentInfo?.rentFrequency,
       frequencyType: this.propertyDetails?.propertyRentInfo?.frequencyType,
-      depositAmount: this.propertyDetails?.propertyRentInfo?.depositAmount,
+      depositAmount: this.propertyDetails?.propertyRentInfo?.depositAmount || 0,
       depositSchemeNo: this.propertyDetails?.propertyRentInfo?.depositSchemeNo,
       depositScheme: parseInt(this.propertyDetails?.propertyRentInfo?.depositScheme),
       salePriceType: this.propertyDetails?.propertyRentInfo?.salePriceType,
-      salePrice: this.propertyDetails?.propertyRentInfo?.salePrice,
+      salePrice: this.propertyDetails?.propertyRentInfo?.salePrice || 0,
       aegisInsurance: this.propertyDetails?.propertyRentInfo?.aegisInsurance,
       rentIndemnityProductId: this.propertyDetails?.propertyRentInfo?.rentIndemnityProductId,
       isRentIndeminityRequired: this.propertyDetails?.propertyRentInfo?.isRentIndeminityRequired,
