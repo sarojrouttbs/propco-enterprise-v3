@@ -2,8 +2,8 @@
     .property-details {
         padding: 0;
         .property-status {
-            background: var(--ion-color-success);
-            color: var(--ion-color-six);
+            background: var(--ion-color-three);
+            color: var(--ion-color-primary-contrast);
             padding-left: 10px;
             margin-bottom: 10px;
             font-size: 18px;
@@ -17,6 +17,10 @@
                     text-overflow: ellipsis;
                     overflow: hidden;
                     white-space: nowrap;
+                    display: flex;
+                    .status {
+                        margin-left: 8px;
+                    }
                 }
             }
         }
