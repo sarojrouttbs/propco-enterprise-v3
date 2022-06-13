@@ -133,7 +133,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let notes of visitNotes?.data" class="table-row">
-              <td>{{notes.postedAt | date: 'dd/MM/YYYY' || notAvailable}}</td>
+              <td>{{notes.postedAt | date: 'dd/MM/yyyy' || notAvailable}}</td>
               <td>{{notes.postedAt | date: 'HH:mm' || notAvailable}}</td>
               <td>{{notes.type | lookup:notesTypes || notAvailable}}</td>
               <td>{{notes.complaint | lookup:notesComplaints || notAvailable}}</td>
