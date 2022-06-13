@@ -84,6 +84,14 @@
         },
         {
           "index": 4,
+          "key": "safety_device",
+          "name": "Safety Devices/Alarms",
+          "state": "propco.agent.entity.property.safetyDevice",
+          "isActive": false,
+          "route": "safety-device"
+        },
+        {
+          "index": 5,
           "key": "maintenance",
           "name": "Maintenance",
           "state": "propco.agent.entity.property.maintenance",
