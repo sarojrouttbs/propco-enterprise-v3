@@ -1,39 +1,39 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-import { TenancyComponent } from "./admin/tenancy/tenancy.component";
-import { DashboardComponent } from "./dashboard/dashboard.component";
-import { DetailsComponent } from "./details/details.component";
-import { MaintenanceComponent } from "./maintenance/maintenance.component";
-import { PeriodicVisitComponent } from "./periodic-visit/periodic-visit.component";
-import { MarketingActivityComponent } from "./marketing-activity/marketing-activity.component";
-import { PropertyPage } from "./property.page";
-import { RentComponent } from "./rent/rent.component";
-import { NotesComponent } from "./admin/notes/notes.component";
-import { ParticularsComponent } from "./particulars/particulars.component";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { TenancyComponent } from './admin/tenancy/tenancy.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { DetailsComponent } from './details/details.component';
+import { MaintenanceComponent } from './maintenance/maintenance.component';
+import { PeriodicVisitComponent } from './periodic-visit/periodic-visit.component';
+import { MarketingActivityComponent } from './marketing-activity/marketing-activity.component';
+import { PropertyPage } from './property.page';
+import { RentComponent } from './rent/rent.component';
+import { NotesComponent } from './admin/notes/notes.component';
+import { ParticularsComponent } from './particulars/particulars.component';
 
 const routes: Routes = [
   {
-    path: ":propertyId",
+    path: ':propertyId',
     component: PropertyPage,
     children: [
       {
-        path: "dashboard",
+        path: 'dashboard',
         component: DashboardComponent,
       },
       {
-        path: "details",
+        path: 'details',
         component: DetailsComponent,
       },
       {
-        path: "tenancy",
+        path: 'tenancy',
         component: TenancyComponent,
       },
       {
-        path: "rent",
+        path: 'rent',
         component: RentComponent,
       },
       {
-        path: "periodic-visit",
+        path: 'periodic-visit',
         component: PeriodicVisitComponent,
       },
       {
@@ -45,36 +45,36 @@ const routes: Routes = [
         component: MaintenanceComponent
       },
       {
-        path: "notes",
+        path: 'notes',
         component: NotesComponent,
       },
       {
-        path: "particulars",
+        path: 'particulars',
         component: ParticularsComponent,
       },
       {
-        path: "create-offer",
+        path: 'create-offer',
         loadChildren: () =>
-          import("../../../tob/offer-detail/offer-detail.module").then(
+          import('../../../tob/offer-detail/offer-detail.module').then(
             (m) => m.OfferDetailPageModule
           ),
       },
       {
-        path: "offers",
+        path: 'offers',
         loadChildren: () =>
-          import("../../../tob/offer-list/offer-list.module").then(
+          import('../../../tob/offer-list/offer-list.module').then(
             (m) => m.OfferListPageModule
           ),
       },
       {
-        path: "offer/:offerId",
+        path: 'offer/:offerId',
         loadChildren: () =>
-          import("../../../tob/offer-detail/offer-detail.module").then(
+          import('../../../tob/offer-detail/offer-detail.module').then(
             (m) => m.OfferDetailPageModule
           ),
       },
       {
-        path: "applications",
+        path: 'applications',
         loadChildren: () => import('../../../tob/application-list/application-list.module').then(m => m.ApplicationListPageModule)
       },
       {
