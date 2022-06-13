@@ -39,6 +39,7 @@
           height: 28px;
           vertical-align: bottom;
         }
+
         h1 {
           @include set-text-style(20px, 24px);
           margin: 0;
@@ -67,8 +68,10 @@
               color: var(--ion-color-mat-checkbox-label);
             }
           }
+
           form {
             background-color: var(--ion-color-five);
+
             .list {
               background-color: var(--ion-color-five);
               padding: 0 10px;
@@ -104,7 +107,7 @@
           @include set-text-style(18px, 20px);
         }
 
-        &.sidenav-opened{
+        &.sidenav-opened {
           grid-template-columns: 1fr 500px;
         }
 
@@ -174,6 +177,7 @@
                       @include set-text-style(13px, 17px);
                       color: var(--ion-text-color);
                     }
+
                     .garage-ellipse {
                       overflow: hidden;
                       text-overflow: ellipsis;
@@ -194,7 +198,11 @@
                 }
               }
 
-              &.agent-header-panel, &.landlord-header-panel, &.tenant-header-panel, &.applicant-header-panel, &.contractor-header-panel {
+              &.agent-header-panel,
+              &.landlord-header-panel,
+              &.tenant-header-panel,
+              &.applicant-header-panel,
+              &.contractor-header-panel {
                 .ag-left-side {
                   display: grid;
                   justify-content: flex-start;
@@ -233,14 +241,18 @@
                   color: var(--ion-color-step-1200);
                   @include set-text-style(12px, 14px);
                 }
-            
+
                 .content {
                   @include set-text-style(14px, 18px);
                 }
               }
             }
 
-            .agent-content-panel, .landlord-content-panel, .tenant-content-panel, .applicant-content-panel, .contractor-content-panel  {
+            .agent-content-panel,
+            .landlord-content-panel,
+            .tenant-content-panel,
+            .applicant-content-panel,
+            .contractor-content-panel {
               display: grid;
               justify-content: start;
               grid-template-columns: 45px 1fr;
@@ -252,7 +264,7 @@
                   color: var(--ion-color-step-1200);
                   @include set-text-style(12px, 14px);
                 }
-            
+
                 .content {
                   @include set-text-style(14px, 18px);
                 }
@@ -301,11 +313,12 @@
           .title {
             @include set-text-style(17px, 21px);
             color: var(--ion-text-color);
+
             ion-icon {
               pointer-events: none;
             }
           }
-          
+
           p {
             margin: 0;
           }
@@ -328,12 +341,13 @@
             background: var(--ion-color-warning);
             color: var(--ion-color-primary-contrast);
           }
-        
+
           .propcoicon-actions-on {
             margin: 9px 0px 5px 6px;
           }
         }
       }
+
       .overlay-container {
         position: relative;
       }
@@ -375,6 +389,7 @@
 
 .cdk-overlay-container {
   .mat-primary {
+
     .mat-pseudo-checkbox-checked,
     .mat-pseudo-checkbox-indeterminate {
       background-color: var(--ion-color-success) !important;

@@ -116,7 +116,7 @@
                 <ion-item>
                   <ion-label position="floating">Display As <ion-text class="mandatory">*</ion-text>
                   </ion-label>
-                  <ion-input formControlName="displayAs"></ion-input>
+                  <ion-input formControlName="displayAs" [attr.disabled]="true"></ion-input>
                 </ion-item>
                 <app-validation-message [control]="contactForm.controls.displayAs"></app-validation-message>
               </ion-col>
@@ -131,6 +131,7 @@
             <ion-row class="address-block">
               <ion-col class="ion-align-self-center">
                 <ion-label position="floating">Registered Address <ion-text class="mandatory">*</ion-text></ion-label>
+                <app-validation-message [control]="contactForm.controls.address.get('postcode')"></app-validation-message>
               </ion-col>
               <ion-col size="auto" class="ion-align-self-end">
                 <ion-button (click)="openAddressModal()" color="success">{{this.address?.addressLine1 ? 'Edit' :
