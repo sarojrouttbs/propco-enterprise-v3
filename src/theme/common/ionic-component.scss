@@ -651,15 +651,7 @@ ion-alert.common-alert-box {
         color: var(--ion-color-one) !important;
       }
     }
-  }
-  ion-textarea{
-    .textarea-wrapper {
-      .native-textarea{
-        height: unset !important;
-      }
-    }
-  }
-  
+  }  
 }
 
 .market-apprisal-ion-select, .fault-ion-select, .let-alliance-ion-select {
@@ -684,14 +676,6 @@ ion-alert.common-alert-box {
         --border-color: var(--ion-color-one);
         ion-label {
           color: var(--ion-color-three) !important;
-        }
-        ion-textarea{
-          .textarea-wrapper {
-            height: unset !important;
-            .native-textarea{
-              height: unset !important;
-            }
-          }
         }
       }
 
