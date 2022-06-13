@@ -43,7 +43,7 @@ import { FeeChargePageModule } from 'src/app/shared/modals/fee-charge/fee-charge
 import { NotesComponent } from './admin/notes/notes.component';
 import { ParticularsComponent } from './particulars/particulars.component';
 import { PreferencesComponent } from './particulars/preferences/preferences.component';
-import { SafetyDeviceComponent } from './safety-device/safety-device.component';
+// import { SafetyDeviceComponent } from './safety-device/safety-device.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -105,7 +105,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     NotesComponent,
     ParticularsComponent,
     PreferencesComponent,
-    SafetyDeviceComponent
+    // SafetyDeviceComponent
   ],
   providers: [
     AgentService,
