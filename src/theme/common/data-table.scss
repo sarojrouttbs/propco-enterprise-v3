@@ -279,9 +279,14 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child:b
       }
     }
     .dataTables_processing {
-      background: var(--ion-color-five);
-      color: var(--ion-color-one);
+      margin-top: 30px;
     }
+    .dataTables_processing > div:last-child > div {
+      width: 7px;
+      height: 7px;
+      border-radius: 54%;
+      background: var(--ion-color-three);
+  }
     .propcoicon.action-btn, .propcoicon.propcoicon-property-description {
       background-color: var(--ion-color-five);
     }
