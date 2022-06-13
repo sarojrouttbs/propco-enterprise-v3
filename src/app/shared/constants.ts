@@ -639,8 +639,7 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'periodic-visit': 'Periodic Visit',
       'maintenance': 'Maintenance',
       'notes': 'Notes',
-      'particulars': 'Particulars',
-      'safety-device': 'Safety Devices/Alarms'
+      'particulars': 'Particulars'
     }
   }
 };

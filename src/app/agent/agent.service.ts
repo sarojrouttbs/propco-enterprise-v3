@@ -118,10 +118,4 @@ export class AgentService {
   getRentindemnityProducts(params): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `rentindemnity/products`, { params });
   }
-
-  getsafetyDeviceList(propertyId: string, params): Observable<any> {
-    return this.httpClient.get(
-      environment.API_BASE_URL + `properties/${propertyId}/safety-devices`, { params }
-    );
-  }
 }
