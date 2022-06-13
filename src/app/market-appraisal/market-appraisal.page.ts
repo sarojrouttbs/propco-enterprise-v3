@@ -57,7 +57,7 @@ export class MarketAppraisalPage implements OnInit {
           town: [''],
           domesticId: ['']
         }),
-        displayAs: [{ value: '', disabled: true }, Validators.required],
+        displayAs: ['', Validators.required],
         owners: [{ value: '', disabled: true }],
         ownership: [''],
         addressee: [''],
@@ -125,6 +125,24 @@ export class MarketAppraisalPage implements OnInit {
   }
 
   async saveWithoutBooking() {
+    if (this.type === MARKET_APPRAISAL.contact_type) {
+      if (!this.maForm.get('contactForm').valid) {
+        this.maForm.get('contactForm').markAllAsTouched();
+        return;
+      }
+    }
+    if (this.type === MARKET_APPRAISAL.property_type) {
+      if (!this.maForm.get('propertyForm').valid) {
+        this.maForm.get('propertyForm').markAllAsTouched();
+        return;
+      }
+      if (!this.maForm.get('contactForm').valid) {
+        this.changeSegment();
+        this.maForm.get('contactForm').markAllAsTouched();
+        return;
+      }
+    }
+
     /**Existing Landloard**/
     if (this.maForm.get('contactForm').value.landlordUuid && !this.maForm.get('propertyForm').value.propertyId) {
       /**Scenario 4 : Existing LL - No Property**/
@@ -133,11 +151,7 @@ export class MarketAppraisalPage implements OnInit {
         if (confirm) {
           const landlordUpdate = await this.updateLandlord();
           if (landlordUpdate) {
-            this.commonService.showAlert('Market Appraisal', 'Contact ' + this.maForm.getRawValue().contactForm.displayAs + ' has been updated successfully').then(res => {
-              if (res) {
-                this.router.navigate(['agent/dashboard'], { replaceUrl: true });
-              }
-            });
+            this.router.navigate(['agent/dashboard'], { replaceUrl: true });
           }
         }
         else {
@@ -160,11 +174,7 @@ export class MarketAppraisalPage implements OnInit {
           }
           const propertyCreated = await this.createProperty(payload);
           if (propertyCreated) {
-            this.commonService.showAlert('Market Appraisal', 'The Contact and/or the Property and their association has been created/modified successfully').then(res => {
-              if (res) {
-                this.router.navigate(['agent/dashboard'], { replaceUrl: true });
-              }
-            });
+            this.router.navigate(['agent/dashboard'], { replaceUrl: true });
           }
         }
         return;
@@ -178,11 +188,7 @@ export class MarketAppraisalPage implements OnInit {
         if (confirm) {
           const landlordUpdate = await this.updateLandlord();
           if (landlordUpdate) {
-            this.commonService.showAlert('Market Appraisal', 'Contact ' + this.maForm.getRawValue().contactForm.displayAs + ' has been updated successfully').then(res => {
-              if (res) {
-                this.router.navigate(['agent/dashboard'], { replaceUrl: true });
-              }
-            });
+            this.router.navigate(['agent/dashboard'], { replaceUrl: true });
           }
         }
         else {
@@ -205,11 +211,7 @@ export class MarketAppraisalPage implements OnInit {
           }
           const propertyUpdated = await this.updateProperty(payload);
           if (propertyUpdated) {
-            this.commonService.showAlert('Market Appraisal', 'The Contact and/or the Property and their association has been created/modified successfully').then(res => {
-              if (res) {
-                this.router.navigate(['agent/dashboard'], { replaceUrl: true });
-              }
-            });
+            this.router.navigate(['agent/dashboard'], { replaceUrl: true });
           }
         }
         return;
@@ -220,11 +222,7 @@ export class MarketAppraisalPage implements OnInit {
         if (confirm) {
           const landlordUpdate = await this.updateLandlord();
           if (landlordUpdate) {
-            this.commonService.showAlert('Market Appraisal', 'Contact ' + this.maForm.getRawValue().contactForm.displayAs + ' has been updated successfully').then(res => {
-              if (res) {
-                this.router.navigate(['agent/dashboard'], { replaceUrl: true });
-              }
-            });
+            this.router.navigate(['agent/dashboard'], { replaceUrl: true });
           }
         }
         else {
@@ -248,11 +246,7 @@ export class MarketAppraisalPage implements OnInit {
         }
         const propertyCreated = await this.createProperty(payload);
         if (propertyCreated) {
-          this.commonService.showAlert('Market Appraisal', 'The Contact and/or the Property and their association has been created/modified successfully').then(res => {
-            if (res) {
-              this.router.navigate(['agent/dashboard'], { replaceUrl: true });
-            }
-          });
+          this.router.navigate(['agent/dashboard'], { replaceUrl: true });
         }
       }
       return;
@@ -263,11 +257,7 @@ export class MarketAppraisalPage implements OnInit {
       if (confirm) {
         const landlordCreated = await this.createLandlord();
         if (landlordCreated) {
-          this.commonService.showAlert('Market Appraisal', 'Contact ' + this.maForm.getRawValue().contactForm.displayAs + ' has been created successfully').then(res => {
-            if (res) {
-              this.router.navigate(['agent/dashboard'], { replaceUrl: true });
-            }
-          });
+          this.router.navigate(['agent/dashboard'], { replaceUrl: true });
         }
       }
       else {

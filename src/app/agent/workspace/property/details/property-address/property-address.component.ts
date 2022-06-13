@@ -23,6 +23,7 @@ export class PropertyAddressComponent implements OnInit {
     if (this.group.get('postcode').value == null) {
       return;
     }
+    this.group.get('addressdetails').setValue('');
     const postcode = this.group.get('postcode').value;
     if (postcode) {
       this.lookupLoader = true;
