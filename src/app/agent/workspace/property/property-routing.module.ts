@@ -9,6 +9,7 @@ import { MarketingActivityComponent } from "./marketing-activity/marketing-activ
 import { PropertyPage } from "./property.page";
 import { RentComponent } from "./rent/rent.component";
 import { NotesComponent } from "./admin/notes/notes.component";
+import { ParticularsComponent } from "./particulars/particulars.component";
 
 const routes: Routes = [
   {
@@ -46,6 +47,10 @@ const routes: Routes = [
       {
         path: "notes",
         component: NotesComponent,
+      },
+      {
+        path: "particulars",
+        component: ParticularsComponent,
       },
       {
         path: "create-offer",
