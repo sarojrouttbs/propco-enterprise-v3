@@ -638,7 +638,9 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'rent': 'Rent/Invoices',
       'periodic-visit': 'Periodic Visit',
       'maintenance': 'Maintenance',
-      'notes': 'Notes'
+      'notes': 'Notes',
+      'particulars': 'Particulars',
+      'safety-device': 'Safety Devices/Alarms'
     }
   }
 };
