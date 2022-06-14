@@ -1,10 +1,10 @@
 <div class="property-right-card">
   <ion-grid class="property-details">
     <ion-row class="property-status">
-      <ion-col matTooltip="{{ (getLookupValue(propertyData?.propertyInfo?.status, propertyStatuses) || notAvailable) | uppercase }}" matTooltipPosition="above">
+      <ion-col matTooltip="{{ (propertyData?.propertyInfo?.status | lookup:propertyStatuses  || notAvailable) | uppercase }}" matTooltipPosition="above">
         <ion-text>
           <span class="property-status-circle" [ngClass]="propertyData?.propertyInfo?.status === 1 ? 'avaialble-circle' : 'other-status-circle'"></span>
-          <span class="status">{{getLookupValue(propertyData?.propertyInfo?.status, propertyStatuses) || notAvailable}}</span>
+          <span class="status">{{propertyData?.propertyInfo?.status | lookup:propertyStatuses || notAvailable}}</span>
         </ion-text>
       </ion-col>
     </ion-row>
@@ -29,7 +29,7 @@
       <ion-col>
         <ion-text class="label">Booking Office</ion-text>
         <br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.bookingOfficeCode ? getLookupValue(propertyData?.propertyInfo?.bookingOfficeCode, officeCodes) : notAvailable}}
+        <ion-text class="value">{{propertyData?.propertyInfo?.bookingOfficeCode ? (propertyData?.propertyInfo?.bookingOfficeCode | lookup:officeCodes) : notAvailable}}
         </ion-text>
       </ion-col>
     </ion-row>
@@ -44,7 +44,7 @@
         <ion-text class="label">Portfolio Source</ion-text>
         <br>
         <ion-text class="value">
-          {{propertyData?.propertyInfo?.portfolioSource ? getHouseTypeLookupValue(propertyData?.propertyInfo?.portfolioSource, portfolioSources) : notAvailable}}
+          {{propertyData?.propertyInfo?.portfolioSource ? (propertyData?.propertyInfo?.portfolioSource | lookup:portfolioSources) : notAvailable}}
         </ion-text>
       </ion-col>
     </ion-row>
@@ -56,7 +56,7 @@
       </ion-col>
       <ion-col>
         <ion-text class="label">Property Type</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyDetails?.houseType ? getHouseTypeLookupValue(propertyData?.propertyDetails?.houseType, houseTypes) : notAvailable}}
+        <ion-text class="value">{{propertyData?.propertyDetails?.houseType ? (propertyData?.propertyDetails?.houseType | lookup:houseTypes) : notAvailable}}
         </ion-text>
       </ion-col>
     </ion-row>
@@ -64,14 +64,12 @@
     <ion-row class="property-info" style="margin-bottom:15px;">
       <ion-col>
         <ion-text class="label">Acquisition Office</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.acquisitionOffice ? getHouseTypeLookupValue(propertyData?.propertyInfo?.acquisitionOffice,
-          acqisitionOffices) : notAvailable}}
+        <ion-text class="value">{{propertyData?.propertyInfo?.acquisitionOffice ? (propertyData?.propertyInfo?.acquisitionOffice | lookup:acqisitionOffices) : notAvailable}}
         </ion-text>
       </ion-col>
       <ion-col>
         <ion-text class="label">Category</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyDetails?.propertyCategory ? getHouseTypeLookupValue(propertyData?.propertyDetails?.propertyCategory,
-          propertyCategories) : notAvailable}}
+        <ion-text class="value">{{propertyData?.propertyDetails?.propertyCategory ? (propertyData?.propertyDetails?.propertyCategory | lookup:propertyCategories) : notAvailable}}
         </ion-text>
       </ion-col>
     </ion-row>
