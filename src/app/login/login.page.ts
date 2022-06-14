@@ -21,17 +21,19 @@ export class LoginPage implements OnInit {
   slideOpts: any = {
     initialSlide: 1,
     speed: 600,
-    autoplay: true
+    autoplay: {
+      delay: 5000
+    }
   };
 
   sliderMsgList = LOGIN_PAGE_TEXT_MESSAGES;
   buildDetails = BUILD_DETAILS;
 
-  constructor(private _formBuilder: FormBuilder, 
-    private modalController: ModalController, 
+  constructor(private _formBuilder: FormBuilder,
+    private modalController: ModalController,
     private router: Router,
     private loginService: LoginService,
-    private commonService: CommonService) {}
+    private commonService: CommonService) { }
 
   ngOnInit() {
     this.initForm();
@@ -40,30 +42,30 @@ export class LoginPage implements OnInit {
 
   initForm() {
     this.loginForm = this._formBuilder.group({
-      username: ['', [Validators.required,ValidationService.noWhitespaceValidator]],
-      password: ['', [Validators.required,ValidationService.noWhitespaceValidator]],
-      domainId: ['', Validators.required], 
+      username: ['', [Validators.required, ValidationService.noWhitespaceValidator]],
+      password: ['', [Validators.required, ValidationService.noWhitespaceValidator]],
+      domainId: ['', Validators.required],
     });
   }
 
-  private initApi(){
+  private initApi() {
     this.getDomains();
   }
 
-  private getDomains(){
-    this.loginService.getDomains().subscribe((res)=>{
-      this.domainList = res && res.data? res.data : [];
-    },error=>{
+  private getDomains() {
+    this.loginService.getDomains().subscribe((res) => {
+      this.domainList = res && res.data ? res.data : [];
+    }, error => {
       this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'DOMAINS', 'Error');
     });
   }
 
   onLoginSubmit() {
-    this.loginService.authenticateUser(this.loginForm.value).subscribe((res)=>{
+    this.loginService.authenticateUser(this.loginForm.value).subscribe((res) => {
       this.commonService.setItem(PROPCO.ACCESS_TOKEN, res.loginId);
       this.commonService.setItem(PROPCO.WEB_KEY, res.webKey);
       this.router.navigate(['/agent/dashboard'], { replaceUrl: true });
-    },error=>{
+    }, error => {
       this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Login', 'Error');
     });
   }
@@ -79,7 +81,7 @@ export class LoginPage implements OnInit {
     });
 
     const data = modal.onDidDismiss().then(res => {
-      
+
     });
     await modal.present();
   }

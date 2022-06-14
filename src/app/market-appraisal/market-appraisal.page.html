@@ -23,7 +23,7 @@
       <ion-col class="ion-text-end">
         <ion-button color="danger" (click)="cancel()">Cancel</ion-button>
         <ion-button color="success" (click)="changeSegment()">{{type==='contact'? 'Go To Property' : 'Go To Contact'}}</ion-button>
-        <ion-button color="success" (click)="saveWithoutBooking()" [disabled]="maForm.get('contactForm').invalid">Save
+        <ion-button color="success" (click)="saveWithoutBooking()">Save
           Without Booking</ion-button>
         <ion-button color="success" (click)="bookMa()" [disabled]="maForm.get('contactForm').invalid || maForm.get('propertyForm').invalid">Book MA</ion-button>
       </ion-col>
