@@ -52,7 +52,7 @@
               <td>{{data?.visitType| lookup: propertyVisitTypes || notAvailable}}</td>
               <td>{{data?.status | lookup: inspectionStatuses || notAvailable}}</td>
               <td>{{data?.index || notAvailable}}</td>
-              <td>{{data?.visitDate | date: 'dd-MM-yyyy' || notAvailable}}</td>
+              <td>{{data?.visitDate | date: DATE_FORMAT.date || notAvailable}}</td>
               <td>{{data.description || notAvailable}}</td>
               <td class="resp-action-icon">
                 <i (click)="showMenu($event,'divOverlay', data, 'table-row')"
