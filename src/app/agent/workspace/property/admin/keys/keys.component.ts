@@ -19,14 +19,14 @@ export class KeysComponent implements OnInit {
   alarmCode = new FormControl('');
   keysNotes = new FormControl('');
   lookupdata: any;
-  localStorageItems: any = [];
-  selectedEntityDetails: any = null;
+  localStorageItems: any;
+  selectedEntityDetails = null;
   propertyDetails: any;
-  propertyKeySetList: any = [];
+  propertyKeySetList: any;
   keyActivities: any;
   keyStatuses: any;
-  userDetailsList: any = [];
-  logHistoryList: any = [];
+  userDetailsList: any;
+  logHistoryList: any;
   historyDtOption: DataTables.Settings;
   historyDtTrigger: Subject<any> = new Subject();
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
@@ -90,15 +90,10 @@ export class KeysComponent implements OnInit {
   }
 
   private getUsersList() {
-    const params = new HttpParams().set('hideLoader', 'true');
     const promise = new Promise((resolve, reject) => {
       this.agentService.getUsersList().subscribe(
         (res) => {
-          if (res && res.data) {
-            resolve(res.data);  
-          } else {
-            resolve([]);
-          }
+          resolve(res?.data);
         },
         (error) => {
           resolve(false);
@@ -129,14 +124,10 @@ export class KeysComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
-          if (res && res.data) {
-            this.keyCode.setValue(res.data?.keyCode);
-            this.alarmCode.setValue(res.data?.alarmCode);
-            this.keysNotes.setValue(res.data?.keysNotes);
-            resolve(res.data);
-          } else {
-            resolve({});
-          }
+          this.keyCode.setValue(res?.data?.keyCode);
+          this.alarmCode.setValue(res?.data?.alarmCode);
+          this.keysNotes.setValue(res?.data?.keysNotes);
+          resolve(res?.data);
         },
         (error) => {
           resolve(false);
@@ -150,11 +141,7 @@ export class KeysComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.agentService.getKeysListing(propertyId).subscribe(
         (res) => {
-          if (res && res.data) {
-            resolve(res.data);
-          } else {
-            resolve([]);
-          }
+          resolve(res?.data);
         },
         (error) => {
           resolve(false);
