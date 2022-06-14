@@ -46,7 +46,11 @@ const routes: Routes = [
       {
         path: 'market-appraisal',
         loadChildren: () => import('../market-appraisal/market-appraisal.module').then(m => m.MarketAppraisalPageModule)
-      }
+      },
+      {
+        path: 'hmrc',
+        loadChildren: () => import('../hmrc/hmrc.module').then( m => m.HmrcPageModule)
+      },
     ]
   },
 ];
