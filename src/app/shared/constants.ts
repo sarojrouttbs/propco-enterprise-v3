@@ -693,3 +693,9 @@ export const MARKETING_ACTIVITY_TYPES = {
   VIEWED: 'viewed',
   BOOKED: 'booked'
 }
+
+export const DATE_FORMAT = {
+  DATE: 'dd/MM/yyyy',
+  DATE_TIME: 'dd/MM/yyyy HH:mm',
+  TIME: 'HH:mm'
+}

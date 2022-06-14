@@ -4,7 +4,7 @@ import { FormControl } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, DEFAULTS, DEFAULT_MESSAGES, NOTES_TYPE, PROPCO } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, NOTES_TYPE, PROPCO } from 'src/app/shared/constants';
 import { NotesModalPage } from 'src/app/shared/modals/notes-modal/notes-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 
@@ -32,6 +32,7 @@ export class NotesComponent implements OnInit {
   };
   notesParams: any = new HttpParams();
   selectedData: any;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private agentService: AgentService,

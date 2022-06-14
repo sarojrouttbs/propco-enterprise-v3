@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { DEFAULTS, PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, PROPCO } from 'src/app/shared/constants';
 import { CallInfoModalPage } from 'src/app/shared/modals/call-info-modal/call-info-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 
@@ -24,6 +24,7 @@ export class PropertyLandlordTenantComponent implements OnInit {
   notAvailable = DEFAULTS.NOT_AVAILABLE
   lookupdata: any;
   tenantStatuses: any;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private commonService: CommonService,
