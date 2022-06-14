@@ -640,7 +640,8 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'maintenance': 'Maintenance',
       'notes': 'Notes',
       'particulars': 'Particulars',
-      'safety-device': 'Safety Devices/Alarms'
+      'safety-device': 'Safety Devices/Alarms',
+      'whitegoods' : 'Service/White Goods'
     }
   }
 };

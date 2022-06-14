@@ -51,7 +51,7 @@
               [ngClass]="{'row-selected' : data.isSelected}">
               <td>{{data?.visitType| lookup: propertyVisitTypes || notAvailable}}</td>
               <td>{{data?.status | lookup: inspectionStatuses || notAvailable}}</td>
-              <td>{{data?.index || notAvailable}}</td>
+              <td>{{data?.visitNumber || notAvailable}}</td>
               <td>{{data?.visitDate | date: DATE_FORMAT.DATE || notAvailable}}</td>
               <td>{{data.description || notAvailable}}</td>
               <td class="resp-action-icon">

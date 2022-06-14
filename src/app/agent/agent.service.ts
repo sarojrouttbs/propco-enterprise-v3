@@ -118,4 +118,10 @@ export class AgentService {
   getRentindemnityProducts(params): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `rentindemnity/products`, { params });
   }
+
+  getWhitegoodsList(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/management-services`, { params }
+    );
+  }
 }
