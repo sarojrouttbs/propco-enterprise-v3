@@ -3,7 +3,7 @@
     <ion-row class="property-status">
       <ion-col matTooltip="{{ (propertyData?.propertyInfo?.status | lookup:propertyStatuses  || notAvailable) | uppercase }}" matTooltipPosition="above">
         <ion-text>
-          <span class="property-status-circle" [ngClass]="propertyData?.propertyInfo?.status === 1 ? 'avaialble-circle' : 'other-status-circle'"></span>
+          <span class="property-status-circle" [ngClass]="propertyData?.propertyInfo?.status === '1' ? 'avaialble-circle' : 'other-status-circle'"></span>
           <span class="status">{{propertyData?.propertyInfo?.status | lookup:propertyStatuses || notAvailable}}</span>
         </ion-text>
       </ion-col>
