@@ -639,6 +639,7 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'periodic-visit': 'Periodic Visit',
       'maintenance': 'Maintenance',
       'notes': 'Notes',
+      'keys': 'Keys',
       'particulars': 'Particulars',
       'safety-device': 'Safety Devices/Alarms'
     }
