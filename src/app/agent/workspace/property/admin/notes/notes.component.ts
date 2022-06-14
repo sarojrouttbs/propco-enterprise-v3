@@ -1,9 +1,11 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, DEFAULTS, DEFAULT_MESSAGES, NOTES_TYPE, PROPCO } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, NOTES_TYPE, PROPCO } from 'src/app/shared/constants';
+import { NotesModalPage } from 'src/app/shared/modals/notes-modal/notes-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -30,10 +32,12 @@ export class NotesComponent implements OnInit {
   };
   notesParams: any = new HttpParams();
   selectedData: any;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private agentService: AgentService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
@@ -117,7 +121,25 @@ export class NotesComponent implements OnInit {
     };
   }
 
-  addNotes() { }
+  async addNotes() { 
+    const modal = await this.modalController.create({
+      component: NotesModalPage,
+      cssClass: 'modal-container property-modal-container',
+      componentProps: {
+        notesType: NOTES_TYPE.PROPERTY,
+        notesTypeId: this.selectedEntityDetails.entityId,
+        isAddNote: true,
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {      
+      if (res.data && res.data.noteId) {
+        this.rerenderNotes();
+      }
+    });
+    await modal.present();
+  }
 
   onCategoryChange(e) {
     this.notesParams = this.notesParams.set('category', e.detail.value);

@@ -6,7 +6,7 @@ import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, DEFAULTS, DEFAULT_MESSAGES, NOTES_TYPE, PROPCO } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, NOTES_TYPE, PROPCO } from 'src/app/shared/constants';
 import { NotesModalPage } from 'src/app/shared/modals/notes-modal/notes-modal.page';
 import { PeriodicVisitModalPage } from 'src/app/shared/modals/periodic-visit-modal/periodic-visit-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -40,6 +40,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
   requirementForm: FormGroup;
   selectedData: any;
   isDisableAutoManagementInspection = new FormControl('false');
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private agentService: AgentService,
@@ -100,9 +101,6 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
         })
         this.hideMenu('', 'divOverlay');
       },
-      language: {
-        processing: '<div class="processing-wrapper"><ion-spinner name="dots"></ion-spinner></div>'
-      }
     };
   }
 
@@ -134,7 +132,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
           if (res && res.data) {
             this.requirementForm.get('visitsPerAnnum').setValue(res.data?.visitsPerAnnum);
             this.requirementForm.get('visitIntervalInMonths').setValue(res.data?.visitIntervalInMonths);
-            this.requirementForm.get('visitSequenceStartDate').setValue(res.data?.visitSequenceStartDate);            
+            this.requirementForm.get('visitSequenceStartDate').setValue(res.data?.visitSequenceStartDate);
             this.isDisableAutoManagementInspection.setValue(res.data?.propertyDetails?.isDisableAutoManagementInspection);
           }
           resolve(res.data);

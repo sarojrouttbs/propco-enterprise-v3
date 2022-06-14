@@ -27,6 +27,14 @@
         },
         {
           "index": 2,
+          "key": "particulars",
+          "name": "Particulars",
+          "state": "propco.agent.entity.property.particulars",
+          "isActive": false,
+          "route": "particulars"
+        },
+        {
+          "index": 3,
           "key": "rent",
           "name": "Rent/Invoices",
           "state": "propco.agent.entity.property.rent",
@@ -34,7 +42,7 @@
           "route": "rent"
         },
         {
-          "index": 3,
+          "index": 4,
           "key": "marketing_activity",
           "name": "Marketing Activity",
           "state": "propco.agent.entity.property.marketingactivity",

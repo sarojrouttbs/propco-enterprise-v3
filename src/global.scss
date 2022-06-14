@@ -895,6 +895,18 @@ mat-form-field {
       }
     }
   }
+  .property-status-circle {
+    height: 19px;
+    width: 20px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .avaialble-circle {
+    background-color: var(--ion-color-success);
+  }
+  .other-status-circle {
+    background-color: var(--ion-color-warning);
+  }
 }
 
 .unsaved-data-error{

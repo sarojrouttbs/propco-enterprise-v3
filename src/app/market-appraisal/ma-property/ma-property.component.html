@@ -21,7 +21,9 @@
           <ion-row>
             <ion-col class="no-padding" size-xs="100" size-sm= "100" size-md="33">
               <ion-row class="register-address-row">
-                <ion-col size="80"><h2 class="heading">Registered Address <ion-text class="mandatory">*</ion-text></h2></ion-col>
+                <ion-col size="80"><h2 class="heading">Registered Address <ion-text class="mandatory">*</ion-text></h2>
+                  <app-validation-message [control]="propertyForm.controls.address.get('postcode')"></app-validation-message>
+                </ion-col>
                 <ion-col size="20">
                   <ion-button (click)="openAddressModal()" color="success">{{address?.addressLine1 ? 'Edit' :
                     'Add'}}</ion-button>
@@ -171,24 +173,28 @@
                   </ion-select>
                 </ion-item>
               </ion-col>
-              <ng-container formGroupName="rentRange">
-                <ion-col size="50">
-                  <ion-item style="margin-top: 2px;">
-                    <ion-label position="stacked">Rent Range From <ion-text class="mandatory">*</ion-text>
-                    </ion-label>
-                    <input class="currency-input" currencyMask formControlName="minimum">
-                  </ion-item>
-                  <app-validation-message [control]="propertyForm.controls['rentRange'].get('minimum')"></app-validation-message>
-                </ion-col>
-                <ion-col size="50">
-                  <ion-item style="margin-top: 2px;">
-                    <ion-label position="stacked">Rent Range To <ion-text class="mandatory">*</ion-text>
-                    </ion-label>
-                    <input class="currency-input" currencyMask formControlName="maximum">
-                  </ion-item>
-                  <app-validation-message [control]="propertyForm.controls['rentRange'].get('maximum')"></app-validation-message>
-                </ion-col>
-              </ng-container>
+              <ion-col size="50">
+                <ion-item>
+                  <ion-label position="floating">Furnishing
+                  </ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="furnishingType">
+                    <ion-select-option [value]="data?.index" *ngFor="let data of furnishingTypes">
+                      {{ data?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col size="50">
+                <ion-item>
+                  <ion-label position="floating">Reason to Let
+                  </ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="lettingReason">
+                    <ion-select-option [value]="data?.index" *ngFor="let data of propertyLetReasons">
+                      {{ data?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
               <ion-col size="50">
                 <mat-form-field appearance="fill">
                   <mat-label> Available From <ion-text class="mandatory">*</ion-text></mat-label>
@@ -249,28 +255,6 @@
                   </ion-select>
                 </ion-item>
               </ion-col>
-              <ion-col size="50">
-                <ion-item>
-                  <ion-label position="floating">Furnishing
-                  </ion-label>
-                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="furnishingType">
-                    <ion-select-option [value]="data?.index" *ngFor="let data of furnishingTypes">
-                      {{ data?.value }}
-                    </ion-select-option>
-                  </ion-select>
-                </ion-item>
-              </ion-col>
-              <ion-col size="50">
-                <ion-item>
-                  <ion-label position="floating">Reason to Let
-                  </ion-label>
-                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="lettingReason">
-                    <ion-select-option [value]="data?.index" *ngFor="let data of propertyLetReasons">
-                      {{ data?.value }}
-                    </ion-select-option>
-                  </ion-select>
-                </ion-item>
-              </ion-col>
               <ion-col size="100">
                 <ion-item>
                   <ion-label position="floating">How Long Looking to Let?  <ion-text class="mandatory">*</ion-text>
@@ -283,6 +267,24 @@
                 </ion-item>
                 <app-validation-message [control]="propertyForm.controls.lettingDuration"></app-validation-message>
               </ion-col>
+              <ng-container formGroupName="rentRange">
+                <ion-col size="50">
+                  <ion-item style="margin-top: 2px;">
+                    <ion-label position="stacked">Rent Range From <ion-text class="mandatory">*</ion-text>
+                    </ion-label>
+                    <input class="currency-input" currencyMask formControlName="minimum">
+                  </ion-item>
+                  <app-validation-message [control]="propertyForm.controls['rentRange'].get('minimum')"></app-validation-message>
+                </ion-col>
+                <ion-col size="50">
+                  <ion-item style="margin-top: 2px;">
+                    <ion-label position="stacked">Rent Range To <ion-text class="mandatory">*</ion-text>
+                    </ion-label>
+                    <input class="currency-input" currencyMask formControlName="maximum">
+                  </ion-item>
+                  <app-validation-message [control]="propertyForm.controls['rentRange'].get('maximum')"></app-validation-message>
+                </ion-col>
+              </ng-container>
             </ion-row>
           </ion-col>
           <ion-col size-xs="100" size-sm= "100" size-md="33" class="no-padding">

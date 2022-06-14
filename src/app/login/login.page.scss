@@ -87,6 +87,11 @@ ion-button {
   }
   ion-slides {
     padding: 25px 0px;
+    ion-text {
+      font-size: 13px;
+      line-height: 14px;
+      word-spacing: 1px;
+    }
   }
 }
 

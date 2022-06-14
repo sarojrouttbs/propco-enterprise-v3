@@ -113,6 +113,10 @@ export class NotesModalPage implements OnInit {
         }
       } else if (this.notesType === NOTES_TYPE.PROPERTY_VISIT) {
         this.createPropertyVisitNotes(requestObj);
+      } else if (this.notesType === NOTES_TYPE.PROPERTY) {
+        requestObj.entityId = this.notesTypeId;
+        requestObj.entityType = this.notesType;
+        this.createNotes(requestObj);
       }
       else {
         this.createFaultNotes(requestObj);
@@ -207,6 +211,14 @@ export class NotesModalPage implements OnInit {
 
   private createPropertyVisitNotes(requestObj) {
     this.notesService.createPropertyVisitNotes(this.propertyId, this.notesTypeId, requestObj).subscribe(res => {
+      this.modalController.dismiss(res);
+    }, err => {
+      this.commonService.showMessage(err.message, 'Add Note', 'error');
+    });
+  }
+
+  private createNotes(requestObj: any){
+    this.notesService.createNotes(requestObj).subscribe(res => {
       this.modalController.dismiss(res);
     }, err => {
       this.commonService.showMessage(err.message, 'Add Note', 'error');

@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { AgentService } from 'src/app/agent/agent.service';
-import { DEFAULTS } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -17,7 +17,8 @@ export class TermsOfBusinessComponent implements OnInit {
   currentDate = this.commonService.getFormatedDate(new Date());
   versionHistoryList: any;
   notAvailable = DEFAULTS.NOT_AVAILABLE
-
+  DATE_FORMAT = DATE_FORMAT;
+  
   constructor(
     private agentService: AgentService,
     private commonService: CommonService

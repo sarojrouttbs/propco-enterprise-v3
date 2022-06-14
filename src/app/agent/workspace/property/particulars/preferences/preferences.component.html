@@ -1,0 +1,142 @@
+<mat-accordion multi class="form-view-accordian">
+  <mat-expansion-panel #preferences hideToggle expanded>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Preferences
+      </mat-panel-title>
+      <mat-panel-description class="ion-justify-content-end no-margin">
+        <div>
+          <span *ngIf="!preferences.expanded" class="accordian-icon" title="Expand">
+            <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+          </span>
+          <span *ngIf="preferences.expanded" class="accordian-icon" title="Collapse">
+            <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+          </span>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <form [formGroup]="preferencesForm">
+      <ion-grid>
+        <ion-row class="general-restrictions">
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">General Restrictions</ion-label>
+              <ion-textarea rows="1" auto-grow="true" class="reason">
+              </ion-textarea>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row class="prefernce-options">
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-toggle formControlName="hasNoSmoker" color="primary">
+              </ion-toggle>
+              <ion-text>No Smokers</ion-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-toggle formControlName="hasNoPets" color="primary">
+              </ion-toggle>
+              <ion-text>No Pets</ion-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-toggle formControlName="hasNoSharers" color="primary">
+              </ion-toggle>
+              <ion-text>No Sharers</ion-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-toggle formControlName="hasNoChildren" color="primary">
+              </ion-toggle>
+              <ion-text>No Children</ion-text>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-toggle formControlName="hasNoHousingBenefits" color="primary">
+              </ion-toggle>
+              <ion-text>No Housing Benefit</ion-text>
+            </ion-item>
+          </ion-col>
+
+        </ion-row>
+        <ion-row>
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-toggle formControlName="isSmokerNegotiable" color="primary">
+              </ion-toggle>
+              <ion-text>Negotiable</ion-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-toggle formControlName="isPetsNegotiable" color="primary">
+              </ion-toggle>
+              <ion-text>Negotiable</ion-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-toggle formControlName="isSharersNegotiable" color="primary">
+              </ion-toggle>
+              <ion-text>Negotiable</ion-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-toggle formControlName="isChildrenNegotiable" color="primary">
+              </ion-toggle>
+              <ion-text>Negotiable</ion-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-toggle formControlName="isHousingBenefitNegotiable" color="primary">
+              </ion-toggle>
+              <ion-text>Negotiable</ion-text>
+            </ion-item>
+          </ion-col>
+
+        </ion-row>
+
+        <ion-row class="prefernce-options">
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-toggle formControlName="hasNoStudent" color="primary">
+              </ion-toggle>
+              <ion-text>No Student</ion-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-toggle formControlName="hasNoCorporate" color="primary">
+              </ion-toggle>
+              <ion-text>No Corporate</ion-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-toggle formControlName="isStudentNegotiable" color="primary">
+              </ion-toggle>
+              <ion-text>Negotiable</ion-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-toggle formControlName="isCorporateNegotiable" color="primary">
+              </ion-toggle>
+              <ion-text>Negotiable</ion-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </mat-expansion-panel>
+</mat-accordion>

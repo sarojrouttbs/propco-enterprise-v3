@@ -38,7 +38,8 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.propertyData && !changes.propertyData.firstChange) {
       this.propertyData = this.propertyData;
-      this.getInspection(this.propertyData.propertyId);    
+      this.propertyData.propertyInfo.status = this.propertyData?.propertyInfo?.status.toString();
+      this.getInspection(this.propertyData.propertyId);
     }
   }
 
@@ -60,16 +61,6 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
     this.propertyStatuses = data.propertyStatuses;
     this.officeCodes = data.officeCodes;
     this.houseTypes = data.houseTypes;
-  }
-
-  getLookupValue(index, lookup) {
-    if (index)
-      return this.commonService.getLookupValue(index.toString(), lookup);
-  }
-
-  getHouseTypeLookupValue(index, lookup) {
-    if (index)
-      return this.commonService.getLookupValue(index, lookup);
   }
 
   private getPropertyLookupData() {
