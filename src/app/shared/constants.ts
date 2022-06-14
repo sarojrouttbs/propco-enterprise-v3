@@ -639,7 +639,8 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'periodic-visit': 'Periodic Visit',
       'maintenance': 'Maintenance',
       'notes': 'Notes',
-      'particulars': 'Particulars'
+      'particulars': 'Particulars',
+      'safety-device': 'Safety Devices/Alarms'
     }
   }
 };
@@ -691,4 +692,10 @@ export const MARKETING_ACTIVITY_TYPES = {
   MAILSHOT: 'mailshot',
   VIEWED: 'viewed',
   BOOKED: 'booked'
+}
+
+export const DATE_FORMAT = {
+  DATE: 'dd/MM/yyyy',
+  DATE_TIME: 'dd/MM/yyyy HH:mm',
+  TIME: 'HH:mm'
 }

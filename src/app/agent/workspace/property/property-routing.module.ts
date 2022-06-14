@@ -83,7 +83,7 @@ const routes: Routes = [
       },
       {
         path: 'application/:applicationId',
-        loadChildren: () => import('../../../tob/application-detail/application-detail.module').then( m => m.ApplicationDetailPageModule)
+        loadChildren: () => import('../../../tob/application-detail/application-detail.module').then(m => m.ApplicationDetailPageModule)
       }
     ]
   }

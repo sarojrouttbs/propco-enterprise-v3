@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IonSlides, ModalController, ViewDidEnter } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, PROPCO, DEFAULT_MESSAGES, DEFAULTS, NOTES_TYPE } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, PROPCO, DEFAULT_MESSAGES, DEFAULTS, NOTES_TYPE, DATE_FORMAT } from 'src/app/shared/constants';
 import { ImagePage } from 'src/app/shared/modals/image/image.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 @Component({
@@ -34,6 +34,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
   notAvailable = DEFAULTS.NOT_AVAILABLE
   type = 'viewings';
   isMenuShown = true;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private modalCtrl: ModalController,
