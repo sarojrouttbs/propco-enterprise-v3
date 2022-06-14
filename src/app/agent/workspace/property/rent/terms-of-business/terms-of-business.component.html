@@ -49,7 +49,7 @@
               <th>Version</th>
             </tr>
             <tr *ngFor="let history of versionHistoryList" class="table-row">
-              <td>{{history?.createdAt | date: DATE_FORMAT.dateAndTime || notAvailable}}</td>
+              <td>{{history?.createdAt | date: DATE_FORMAT.DATE_TIME || notAvailable}}</td>
               <td>{{history?.description || notAvailable}}</td>
               <td>{{history?.version || notAvailable}}</td>
             </tr>

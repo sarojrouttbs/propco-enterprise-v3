@@ -695,7 +695,7 @@ export const MARKETING_ACTIVITY_TYPES = {
 }
 
 export const DATE_FORMAT = {
-  date: 'dd/MM/yyyy',
-  dateAndTime: 'dd/MM/yyyy HH:mm',
-  time: 'HH:mm'
+  DATE: 'dd/MM/yyyy',
+  DATE_TIME: 'dd/MM/yyyy HH:mm',
+  TIME: 'HH:mm'
 }

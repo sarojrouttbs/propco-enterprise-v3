@@ -52,7 +52,7 @@
               <td>{{data?.visitType| lookup: propertyVisitTypes || notAvailable}}</td>
               <td>{{data?.status | lookup: inspectionStatuses || notAvailable}}</td>
               <td>{{data?.index || notAvailable}}</td>
-              <td>{{data?.visitDate | date: DATE_FORMAT.date || notAvailable}}</td>
+              <td>{{data?.visitDate | date: DATE_FORMAT.DATE || notAvailable}}</td>
               <td>{{data.description || notAvailable}}</td>
               <td class="resp-action-icon">
                 <i (click)="showMenu($event,'divOverlay', data, 'table-row')"
@@ -133,8 +133,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let notes of visitNotes?.data" class="table-row">
-              <td>{{notes.postedAt | date: DATE_FORMAT.date || notAvailable}}</td>
-              <td>{{notes.postedAt | date: DATE_FORMAT.time || notAvailable}}</td>
+              <td>{{notes.postedAt | date: DATE_FORMAT.DATE || notAvailable}}</td>
+              <td>{{notes.postedAt | date: DATE_FORMAT.TIME || notAvailable}}</td>
               <td>{{notes.type | lookup:notesTypes || notAvailable}}</td>
               <td>{{notes.complaint | lookup:notesComplaints || notAvailable}}</td>
               <td>{{notes.category | lookup:notesCategories || notAvailable}}</td>
