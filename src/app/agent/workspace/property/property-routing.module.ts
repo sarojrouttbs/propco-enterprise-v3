@@ -10,6 +10,7 @@ import { PropertyPage } from './property.page';
 import { RentComponent } from './rent/rent.component';
 import { NotesComponent } from './admin/notes/notes.component';
 import { ParticularsComponent } from './particulars/particulars.component';
+// import { SafetyDeviceComponent } from './safety-device/safety-device.component';
 
 const routes: Routes = [
   {
@@ -52,6 +53,10 @@ const routes: Routes = [
         path: 'particulars',
         component: ParticularsComponent,
       },
+      // {
+      //   path: "safety-device",
+      //   component: SafetyDeviceComponent,
+      // },
       {
         path: 'create-offer',
         loadChildren: () =>
@@ -83,7 +88,7 @@ const routes: Routes = [
       },
       {
         path: 'application/:applicationId',
-        loadChildren: () => import('../../../tob/application-detail/application-detail.module').then( m => m.ApplicationDetailPageModule)
+        loadChildren: () => import('../../../tob/application-detail/application-detail.module').then(m => m.ApplicationDetailPageModule)
       }
     ]
   }
