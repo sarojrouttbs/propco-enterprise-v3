@@ -617,7 +617,8 @@ ion-alert.common-alert-box {
   #la-application-details,
   #la-guarantor-details,
   #market-appraisal-lettings,
-  #market-appraisal-property-address {
+  #market-appraisal-property-address,
+  #property-keys {
     ion-select{
       height: 36px;
     }
@@ -783,6 +784,14 @@ ion-alert.common-alert-box {
         .ion-radio {
           margin: 0px 20px -5px 0px;
           --color: var(--ion-color-primary) !important;
+        }
+      }
+    }
+
+    #key-activity-modal {
+      .mat-form-field-infix{
+        input{
+          padding-top: 5px !important;
         }
       }
     }

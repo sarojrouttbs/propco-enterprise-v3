@@ -117,6 +117,14 @@
         },
         {
           "index": 2,
+          "key": "keys",
+          "name": "Keys",
+          "state": "propco.agent.entity.property.keys",
+          "isActive": false,
+          "route": "keys"
+        },
+        {
+          "index": 3,
           "key": "notes",
           "name": "Notes",
           "state": "propco.agent.entity.property.notes",

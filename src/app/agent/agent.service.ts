@@ -124,4 +124,16 @@ export class AgentService {
       environment.API_BASE_URL + `properties/${propertyId}/management-services`, { params }
     );
   }
+  
+  getKeysListing(propertyId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/keys`);
+  }
+
+  getkeysetLogHistory(keySetId: number): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `keys/${keySetId}/logs`);
+  }
+
+  getUsersList(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `users-list`, {});
+  }
 }
