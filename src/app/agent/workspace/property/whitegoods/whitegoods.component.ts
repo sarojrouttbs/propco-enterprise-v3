@@ -113,7 +113,7 @@ export class WhitegoodsComponent implements OnInit {
     return promise;
   }
 
-  showMenu(event, id, data, className, isCard?) {
+  showMenu(event: Event, id: string, data: any, className: string, isCard?: boolean) {
     this.selectedData = data;
     const baseContainer = $(event.target).parents('.' + className);
     const divOverlay = $('#' + id);
@@ -164,7 +164,7 @@ export class WhitegoodsComponent implements OnInit {
     event.stopPropagation();
   }
 
-  hideMenu(event?, id?) {
+  hideMenu(event?: any, id?: any) {
     const $divOverlay = $('#' + id);
     $divOverlay.delay(200).slideUp('fast');
     if (event) {
@@ -185,7 +185,7 @@ export class WhitegoodsComponent implements OnInit {
     }
   }
 
-  private setLookupData(data) {
+  private setLookupData(data: any) {
     this.certificateTypes = data.certificateTypes;
   }
 
@@ -194,7 +194,7 @@ export class WhitegoodsComponent implements OnInit {
     this.rerenderWhitegoods();
   }
 
-  private rerenderWhitegoods(resetPaging?): void {
+  private rerenderWhitegoods(resetPaging?: any): void {
     if (this.dtElements && this.dtElements.first.dtInstance) {
       this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.ajax.reload((res) => { }, resetPaging);
