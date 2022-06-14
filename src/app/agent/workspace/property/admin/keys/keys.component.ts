@@ -5,7 +5,7 @@ import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, DEFAULTS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
 import { KeyActivityModalPage } from 'src/app/shared/modals/key-activity-modal/key-activity-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 
@@ -34,7 +34,8 @@ export class KeysComponent implements OnInit {
   selectedData: any;
   isAddKeyActivity: boolean;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
-
+  notAvailable = DEFAULTS.NOT_AVAILABLE;
+  
   constructor(private modalController: ModalController, private commonService: CommonService, private agentService: AgentService, private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
