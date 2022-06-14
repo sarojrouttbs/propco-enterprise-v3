@@ -5,7 +5,7 @@ import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, DEFAULTS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
 import { KeyActivityModalPage } from 'src/app/shared/modals/key-activity-modal/key-activity-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 
@@ -35,7 +35,9 @@ export class KeysComponent implements OnInit {
   isAddKeyActivity: boolean;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   notAvailable = DEFAULTS.NOT_AVAILABLE;
-  
+  DATE_FORMAT = DATE_FORMAT;
+  activeLink: any;
+
   constructor(private modalController: ModalController, private commonService: CommonService, private agentService: AgentService, private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -93,9 +95,10 @@ export class KeysComponent implements OnInit {
       this.agentService.getUsersList().subscribe(
         (res) => {
           if (res && res.data) {
-            
+            resolve(res.data);  
+          } else {
+            resolve([]);
           }
-          resolve(res.data);
         },
         (error) => {
           resolve(false);
@@ -116,7 +119,7 @@ export class KeysComponent implements OnInit {
 
   private getActiveTabEntityInfo() {
     let item = this.localStorageItems.filter((x) => x.isSelected);
-    if (item) {
+    if (Array.isArray(item) && item.length > 0) {
       return item[0];
     }
   }
@@ -130,8 +133,10 @@ export class KeysComponent implements OnInit {
             this.keyCode.setValue(res.data?.keyCode);
             this.alarmCode.setValue(res.data?.alarmCode);
             this.keysNotes.setValue(res.data?.keysNotes);
+            resolve(res.data);
+          } else {
+            resolve({});
           }
-          resolve(res.data);
         },
         (error) => {
           resolve(false);
@@ -279,7 +284,7 @@ export class KeysComponent implements OnInit {
     }
   }
 
-  showMenu(event, id, data, className, isCard?) {
+  showMenu(event: Event, id: string, data: any, className: string, isCard?: boolean) {
     this.selectedData = data;
     const baseContainer = $(event.target).parents('.' + className);
     const divOverlay = $('#' + id);
@@ -355,7 +360,7 @@ export class KeysComponent implements OnInit {
     this.openKeyActivityModal();
   }
 
-  async openKeyActivityModal(activityType?) {
+  async openKeyActivityModal(activityType?: number) {
     const modal = await this.modalController.create({
       component: KeyActivityModalPage,
       cssClass: 'modal-container property-modal-container',

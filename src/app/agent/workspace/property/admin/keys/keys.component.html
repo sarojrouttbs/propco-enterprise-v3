@@ -47,11 +47,11 @@
               <ion-card [formGroupName]="i">
                 <ion-card-content class="ion-no-padding">
                   <div class="header"
-                    [ngClass]="{'warning' : item.controls['status'].value===0, 'success' : item.controls['status'].value===1, 'danger' : item.controls['status'].value===2}">
+                    [ngClass]="{'warning' : item.controls.status.value === 0, 'success' : item.controls.status.value === 1, 'danger' : item.controls.status.value === 2}">
                     <ion-grid>
                       <ion-row>
                         <ion-col size="80" class="ion-align-self-center">
-                          <ion-text>{{item.controls['status'].value | lookup: keyStatuses || notAvailable}}</ion-text>
+                          <ion-text>{{item.controls.status.value | lookup: keyStatuses || notAvailable}}</ion-text>
                         </ion-col>
                         <ion-col size="10" matTooltip="History" matTooltipPosition="above"
                           (click)="onHistoryClick(item.value)">
@@ -67,7 +67,7 @@
                     <ion-grid>
                       <ion-row>
                         <ion-col>
-                          <h1>{{item.controls['name'].value || notAvailable}}</h1>
+                          <h1>{{item.controls.name.value || notAvailable}}</h1>
                         </ion-col>
                         <ion-col size="100">
                           <ion-item>
@@ -85,7 +85,7 @@
                           <mat-form-field appearance="fill" style="margin-top: 11px;">
                             <mat-label> Setup date </mat-label>
                             <input matInput [matDatepicker]="picker" formControlName="createdAt" readonly>
-                            <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                           </mat-form-field>
                         </ion-col>
@@ -113,8 +113,8 @@
                       <ion-row>
                         <ion-col size="50">
                           <ion-button color="success" (click)="addKeysetLogHistory(item.value)">
-                            {{item.controls['status'].value===0?"Check
-                            In":item.controls['status'].value===1?"Check
+                            {{item.controls.status.value === 0?"Check
+                            In":item.controls.status.value === 1?"Check
                             Out":"Check
                             In"}}</ion-button>
                         </ion-col>
@@ -147,7 +147,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of logHistoryList" class="table-row">
-              <td>{{item.postDate | date: 'dd/MM/yyyy' || notAvailable}}</td>
+              <td>{{item.postDate | date: DATE_FORMAT.DATE || notAvailable}}</td>
               <td>{{item.userName || notAvailable}}</td>
               <td>{{item.activityDescription || notAvailable}}</td>
               <td>{{item.name || notAvailable}}</td>

@@ -20,7 +20,6 @@ export class KeyActivityModalPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('data', this.activityType, this.data)
     this.initData();
   }
 
@@ -37,11 +36,11 @@ export class KeyActivityModalPage implements OnInit {
   private initForm() {
     this.keyActivityForm = this.formBuilder.group({
       activityType: [{ value: '', disabled: true }, Validators.required],
-      name: [''],
-      contact: [''],
+      name: '',
+      contact: '',
       userId: ['', Validators.required],
-      postDate: [''],
-      note: ['']
+      postDate: '',
+      note: ''
     });
   }
 
