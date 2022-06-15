@@ -20,8 +20,8 @@ export class AgentHeaderComponent implements OnInit {
     { name: 'Light', class: 'light-theme' },
     { name: 'Dark', class: 'dark-theme' },
   ];
-  defaultTheme: string = 'light-theme';
-  enableDarkMode: boolean = false;
+  defaultTheme = 'light-theme';
+  enableDarkMode = false;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
