@@ -641,7 +641,8 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'notes': 'Notes',
       'keys': 'Keys',
       'particulars': 'Particulars',
-      'safety-device': 'Safety Devices/Alarms'
+      'safety-device': 'Safety Devices/Alarms',
+      'whitegoods' : 'Service/White Goods'
     }
   }
 };
