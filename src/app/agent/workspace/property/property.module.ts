@@ -45,6 +45,7 @@ import { KeysComponent } from './admin/keys/keys.component';
 import { KeyActivityModalPageModule } from 'src/app/shared/modals/key-activity-modal/key-activity-modal.module';
 import { ParticularsComponent } from './particulars/particulars.component';
 import { PreferencesComponent } from './particulars/preferences/preferences.component';
+import { WhitegoodsComponent } from './whitegoods/whitegoods.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -107,7 +108,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     NotesComponent,
     KeysComponent,
     ParticularsComponent,
-    PreferencesComponent
+    PreferencesComponent,
+    WhitegoodsComponent
   ],
   providers: [
     AgentService,

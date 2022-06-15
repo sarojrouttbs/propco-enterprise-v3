@@ -89,6 +89,14 @@
           "state": "propco.agent.entity.property.maintenance",
           "isActive": false,
           "route": "maintenance"
+        },
+        {
+          "index": 5,
+          "key": "whitegoods",
+          "name": "Service/White Goods",
+          "state": "propco.agent.entity.property.whitegoods",
+          "isActive": false,
+          "route": "whitegoods"
         }
       ]
     },
