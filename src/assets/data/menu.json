@@ -89,6 +89,14 @@
           "state": "propco.agent.entity.property.maintenance",
           "isActive": false,
           "route": "maintenance"
+        },
+        {
+          "index": 5,
+          "key": "whitegoods",
+          "name": "Service/White Goods",
+          "state": "propco.agent.entity.property.whitegoods",
+          "isActive": false,
+          "route": "whitegoods"
         }
       ]
     },
@@ -109,6 +117,14 @@
         },
         {
           "index": 2,
+          "key": "keys",
+          "name": "Keys",
+          "state": "propco.agent.entity.property.keys",
+          "isActive": false,
+          "route": "keys"
+        },
+        {
+          "index": 3,
           "key": "notes",
           "name": "Notes",
           "state": "propco.agent.entity.property.notes",

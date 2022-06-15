@@ -245,7 +245,7 @@
     }
   }
 
-  #property-letting-details, #property-let-board-details, #la-application-list, #market-appraisal-lettings, #periodic-visit-req-block, #property-rent-sales-figures {
+  #property-letting-details, #property-let-board-details, #la-application-list, #market-appraisal-lettings, #periodic-visit-req-block, #property-rent-sales-figures, #property-keys {
     // material date picker css - dark / light theme
   
     .mat-form-field-wrapper {
@@ -276,6 +276,14 @@
     .mat-form-field-infix{
       input{
         padding-top: 12px;
+      }
+    }
+  }
+
+  #property-keys {
+    .mat-form-field-infix{
+      input{
+        padding-top: 5px !important;
       }
     }
   }
