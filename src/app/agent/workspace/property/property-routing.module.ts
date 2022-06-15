@@ -10,6 +10,8 @@ import { PropertyPage } from './property.page';
 import { RentComponent } from './rent/rent.component';
 import { NotesComponent } from './admin/notes/notes.component';
 import { ParticularsComponent } from './particulars/particulars.component';
+import { WhitegoodsComponent } from './whitegoods/whitegoods.component';
+import { KeysComponent } from './admin/keys/keys.component';
 
 const routes: Routes = [
   {
@@ -51,6 +53,14 @@ const routes: Routes = [
       {
         path: 'particulars',
         component: ParticularsComponent,
+      },
+      {
+        path: 'whitegoods',
+        component: WhitegoodsComponent,
+      },
+      {
+        path: 'keys',
+        component: KeysComponent,
       },
       {
         path: 'create-offer',
