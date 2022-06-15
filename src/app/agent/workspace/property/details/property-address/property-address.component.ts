@@ -76,4 +76,8 @@ export class PropertyAddressComponent implements OnInit {
     });
   }
 
+  toUpperCase(formControlName: string, event: any):void {
+    this.group.get(formControlName).setValue(event.target.value.toUpperCase());
+  }
+
 }
