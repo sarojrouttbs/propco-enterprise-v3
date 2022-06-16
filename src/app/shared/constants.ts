@@ -541,8 +541,8 @@ export const OFFER_STATUSES = {
 export const NOTES_TYPE = {
   OFFER: 'OFFER',
   FAULT: 'FAULT',
-  PROPERTY_VISIT: 'PROPERTY_VISIT',
-  PROPERTY: 'PROPERTY'
+  PROPERTY: 'PROPERTY',
+  MANAGEMENT_INSPECTION: 'MANAGEMENT_INSPECTION'
 };
 
 export const APPLICATION_STATUSES = {
@@ -642,7 +642,8 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'keys': 'Keys',
       'particulars': 'Particulars',
       'safety-device': 'Safety Devices/Alarms',
-      'whitegoods' : 'Service/White Goods'
+      'whitegoods' : 'Service/White Goods',
+      'safety': 'Safety Devices/Alarms'
     }
   }
 };
