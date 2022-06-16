@@ -33,12 +33,22 @@
               </ion-toggle>
               <ion-text>No Smokers</ion-text>
             </ion-item>
+            <ion-item lines="none" class="negotiable-block">
+              <ion-toggle formControlName="isSmokerNegotiable" color="primary">
+              </ion-toggle>
+              <ion-text>Negotiable</ion-text>
+            </ion-item>
           </ion-col>
           <ion-col size="20">
             <ion-item lines="none">
               <ion-toggle formControlName="hasNoPets" color="primary">
               </ion-toggle>
               <ion-text>No Pets</ion-text>
+            </ion-item>
+            <ion-item lines="none" class="negotiable-block">
+              <ion-toggle formControlName="isPetsNegotiable" color="primary">
+              </ion-toggle>
+              <ion-text>Negotiable</ion-text>
             </ion-item>
           </ion-col>
           <ion-col size="20">
@@ -47,41 +57,7 @@
               </ion-toggle>
               <ion-text>No Sharers</ion-text>
             </ion-item>
-          </ion-col>
-          <ion-col size="20">
-            <ion-item lines="none">
-              <ion-toggle formControlName="hasNoChildren" color="primary">
-              </ion-toggle>
-              <ion-text>No Children</ion-text>
-            </ion-item>
-          </ion-col>
-
-          <ion-col size="20">
-            <ion-item lines="none">
-              <ion-toggle formControlName="hasNoHousingBenefits" color="primary">
-              </ion-toggle>
-              <ion-text>No Housing Benefit</ion-text>
-            </ion-item>
-          </ion-col>
-
-        </ion-row>
-        <ion-row>
-          <ion-col size="20">
-            <ion-item lines="none">
-              <ion-toggle formControlName="isSmokerNegotiable" color="primary">
-              </ion-toggle>
-              <ion-text>Negotiable</ion-text>
-            </ion-item>
-          </ion-col>
-          <ion-col size="20">
-            <ion-item lines="none">
-              <ion-toggle formControlName="isPetsNegotiable" color="primary">
-              </ion-toggle>
-              <ion-text>Negotiable</ion-text>
-            </ion-item>
-          </ion-col>
-          <ion-col size="20">
-            <ion-item lines="none">
+            <ion-item lines="none" class="negotiable-block">
               <ion-toggle formControlName="isSharersNegotiable" color="primary">
               </ion-toggle>
               <ion-text>Negotiable</ion-text>
@@ -89,6 +65,11 @@
           </ion-col>
           <ion-col size="20">
             <ion-item lines="none">
+              <ion-toggle formControlName="hasNoChildren" color="primary">
+              </ion-toggle>
+              <ion-text>No Children</ion-text>
+            </ion-item>
+            <ion-item lines="none" class="negotiable-block">
               <ion-toggle formControlName="isChildrenNegotiable" color="primary">
               </ion-toggle>
               <ion-text>Negotiable</ion-text>
@@ -96,20 +77,26 @@
           </ion-col>
           <ion-col size="20">
             <ion-item lines="none">
+              <ion-toggle formControlName="hasNoHousingBenefits" color="primary">
+              </ion-toggle>
+              <ion-text>No Housing Benefit</ion-text>
+            </ion-item>
+            <ion-item lines="none" class="negotiable-block">
               <ion-toggle formControlName="isHousingBenefitNegotiable" color="primary">
               </ion-toggle>
               <ion-text>Negotiable</ion-text>
             </ion-item>
           </ion-col>
-
-        </ion-row>
-
-        <ion-row class="prefernce-options">
           <ion-col size="20">
             <ion-item lines="none">
               <ion-toggle formControlName="hasNoStudent" color="primary">
               </ion-toggle>
               <ion-text>No Student</ion-text>
+            </ion-item>
+            <ion-item lines="none" class="negotiable-block">
+              <ion-toggle formControlName="isStudentNegotiable" color="primary">
+              </ion-toggle>
+              <ion-text>Negotiable</ion-text>
             </ion-item>
           </ion-col>
           <ion-col size="20">
@@ -118,18 +105,7 @@
               </ion-toggle>
               <ion-text>No Corporate</ion-text>
             </ion-item>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="20">
-            <ion-item lines="none">
-              <ion-toggle formControlName="isStudentNegotiable" color="primary">
-              </ion-toggle>
-              <ion-text>Negotiable</ion-text>
-            </ion-item>
-          </ion-col>
-          <ion-col size="20">
-            <ion-item lines="none">
+            <ion-item lines="none" class="negotiable-block">
               <ion-toggle formControlName="isCorporateNegotiable" color="primary">
               </ion-toggle>
               <ion-text>Negotiable</ion-text>

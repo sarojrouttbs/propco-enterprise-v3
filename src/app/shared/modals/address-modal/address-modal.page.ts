@@ -46,7 +46,7 @@ export class AddressModalPage implements OnInit {
       locality: [''],
       town: ['', Validators.required],
       county: [''],
-      domesticId: [''],
+      pafReference: [''],
       country: ['', Validators.required],
       latitude: [''],
       longitude: [''],
@@ -69,7 +69,7 @@ export class AddressModalPage implements OnInit {
         country: this.paramAddress.country,
         latitude: this.paramAddress.latitude,
         longitude: this.paramAddress.longitude,
-        domesticId: this.paramAddress?.domesticId,
+        pafReference: this.paramAddress?.pafReference,
       });
     }
   }
@@ -119,7 +119,7 @@ export class AddressModalPage implements OnInit {
         this.addressDetailsForm.get('country').setValue(res.countryName);
         this.addressDetailsForm.get('latitude').setValue(res.latitude);
         this.addressDetailsForm.get('longitude').setValue(res.longitude);
-        this.addressDetailsForm.get('domesticId').setValue(res.domesticId);
+        this.addressDetailsForm.get('pafReference').setValue(res.pafReference);
       }
     }, error => {
       this.selectedAddress = {};
