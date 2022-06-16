@@ -136,4 +136,24 @@ export class AgentService {
   getUsersList(): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `users-list`, {});
   }
+
+  createKeyset(propertyId: string, requestObj: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `properties/${propertyId}/keys`, requestObj);
+  }
+
+  deleteKeyset(keySetId: number): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + `keys/${keySetId}`, {});
+  }
+
+  updateKeyset(keySetId: number, requestObj: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `keys/${keySetId}`, requestObj);
+  }
+
+  addKeysetActivity(keySetId: number, requestObj: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `keys/${keySetId}/logs`, requestObj);
+  }
+
+  updateKeysetActivity(keyLogId: number, requestObj: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `keys/logs/${keyLogId}`, requestObj);
+  }
 }
