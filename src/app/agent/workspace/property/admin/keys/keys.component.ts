@@ -6,6 +6,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
+import { CreateKeySetPage } from 'src/app/shared/modals/create-key-set/create-key-set.page';
 import { KeyActivityModalPage } from 'src/app/shared/modals/key-activity-modal/key-activity-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 
@@ -36,7 +37,8 @@ export class KeysComponent implements OnInit {
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   notAvailable = DEFAULTS.NOT_AVAILABLE;
   DATE_FORMAT = DATE_FORMAT;
-  activeLink: any;
+  loginUserDetails: any;
+  selectedItemForHistory: any;
 
   constructor(private modalController: ModalController, private commonService: CommonService, private agentService: AgentService, private _formBuilder: FormBuilder) { }
 
@@ -73,6 +75,7 @@ export class KeysComponent implements OnInit {
   }
 
   private async initApi() {
+    this.loginUserDetails = await this.getUserDetails();
     this.userDetailsList = await this.getUsersList();
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
@@ -81,12 +84,28 @@ export class KeysComponent implements OnInit {
   }
 
   private async initKeySetApi() {
+    this.propertyKeySetList = [];
+    this.propertyKeySetFormArray.clear();
     this.propertyKeySetList = await this.getKeysListing(this.selectedEntityDetails.entityId);
     this.setApplicationApplicants();
   }
 
   private initForm() {
     this.initPropertyKeySetForm();
+  }
+
+  private getUserDetails() {
+    return new Promise((resolve, reject) => {
+      this.commonService.getUserDetails().subscribe((res) => {
+        if (res) {
+          resolve(res?.data[0]);
+        } else {
+          resolve('');
+        }
+      }, error => {
+        reject(error)
+      });
+    });
   }
 
   private getUsersList() {
@@ -151,8 +170,6 @@ export class KeysComponent implements OnInit {
     return promise;
   }
 
-  // create form, update, delete, add
-
   private setApplicationApplicants() {
     this.updatePropertyKeySetForm(this.propertyKeySetList);
   }
@@ -163,59 +180,9 @@ export class KeysComponent implements OnInit {
     });
   }
 
-  // private createItem(): void {
-  //   this.propertyKeySetFormArray.push(this._formBuilder.group({
-  //     createdAt: [],
-  //     keyId: [],
-  //     keySetId: [],
-  //     name: [],
-  //     note: [],
-  //     status: [],
-  //     statusDescription: [],
-  //     type: [],
-  //     userId: []
-  //   }));
-  // }
-
-  get propertyKeySetFormArray() {
+  get propertyKeySetFormArray(): FormArray {
     return this.propertyKeySetForm.get('propertyKeySets') as FormArray;
   }
-
-  // addApplicant(control: FormControl, index: number) {
-  //   this.propertyKeySetFormArray.push(this._formBuilder.group({
-  //     surname: control.value.surname,
-  //     forename: control.value.forename,
-  //     email: control.value.email,
-  //     mobile: control.value.mobile,
-  //     applicationApplicantId: null,
-  //     isLead: index === 0 ? true : false,
-  //     createdById: null,
-  //     createdBy: ENTITY_TYPE.AGENT,
-  //     isAdded: true,
-  //     isDeleted: false,
-  //     title: control.value.title,
-  //     applicantId: ''
-  //   }
-  //   ));
-  //   this.propertyKeySetFormArray.removeAt(index);
-  //   this.createItem();
-  // }
-
-
-  // removeCoApplicant(item: FormGroup, index: number) {
-  //   this.commonService.showConfirm('Remove Applicant', 'Are you sure, you want to remove this applicant ?', '', 'YES', 'NO').then(response => {
-  //     if (response) {
-  //       if (item.controls['applicationApplicantId'].value) {
-  //         this._tobService.deleteApplicationApplicant(this.applicationId, item.controls['applicationApplicantId'].value, { 'deletedBy': 'AGENT' }).subscribe(async (response) => {
-  //           const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
-  //           await this.setApplicationApplicants(applicants);
-  //         });
-  //       } else {
-  //         this.propertyKeySetFormArray.removeAt(index);
-  //       }
-  //     }
-  //   });
-  // }
 
   private updatePropertyKeySetForm(keysList: any[]) {
     if (Array.isArray(keysList) && keysList.length > 0) {
@@ -238,7 +205,6 @@ export class KeysComponent implements OnInit {
     }
   }
 
-
   private buildDtOptions(): DataTables.Settings {
     return {
       paging: true,
@@ -252,6 +218,7 @@ export class KeysComponent implements OnInit {
 
   onHistoryClick(data: any) {
     this.hideMenu('', 'divOverlay');
+    this.selectedItemForHistory = data;
     this.getkeysetLogHistory(data.keySetId);
   }
 
@@ -330,16 +297,13 @@ export class KeysComponent implements OnInit {
     }
   }
 
-  addKeysetLogHistory(keysetDetails: any) {
+  addKeysetLogHistory(keysetDetails: any, keysetActivityType: number) {
     this.selectedData = {};
-    let activityType: any;
-    if (keysetDetails.status === 1) {
-      activityType = 2;
-    } else {
-      activityType = 1;
-    }
     this.isAddKeyActivity = true;
-    this.openKeyActivityModal(activityType);
+    this.selectedData.activityType = keysetActivityType;
+    this.selectedData.keySetId = keysetDetails?.keySetId;
+    this.selectedData.userId = this.loginUserDetails?.userId;
+    this.openKeyActivityModal();
   }
 
   editKeysetLogHistory() {
@@ -347,7 +311,7 @@ export class KeysComponent implements OnInit {
     this.openKeyActivityModal();
   }
 
-  async openKeyActivityModal(activityType?: number) {
+  private async openKeyActivityModal() {
     const modal = await this.modalController.create({
       component: KeyActivityModalPage,
       cssClass: 'modal-container property-modal-container',
@@ -355,16 +319,77 @@ export class KeysComponent implements OnInit {
         userDetailsList: this.userDetailsList,
         data: this.selectedData,
         keyActivities: this.keyActivities,
-        isAddKeyActivity: this.isAddKeyActivity,
-        activityType: activityType
+        isAddKeyActivity: this.isAddKeyActivity
       },
       backdropDismiss: false
     });
 
     modal.onDidDismiss().then(async res => {
       this.hideMenu('', 'divOverlay');
+      if (res.data && res.data == 'success') {
+        this.isAddKeyActivity ? this.initKeySetApi() : this.getkeysetLogHistory(this.selectedItemForHistory.keySetId);
+      }
     });
     await modal.present();
+  }
+
+  createKeyset() {
+    this.openCreateKeysetModal();
+  }
+
+  private async openCreateKeysetModal() {
+    const modal = await this.modalController.create({
+      component: CreateKeySetPage,
+      cssClass: 'modal-container property-modal-container',
+      componentProps: {
+        userDetailsList: this.userDetailsList,
+        keyStatuses: this.keyStatuses,
+        propertyId: this.selectedEntityDetails.entityId,
+        loggedInUserId: this.loginUserDetails?.userId
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        this.initKeySetApi();
+      }
+    });
+    await modal.present();
+  }
+
+  deleteKeyset(item: any) {
+    this.commonService.showConfirm('Remove key Set', 'Are you sure you want to delete this key set?', '', 'YES', 'NO').then(response => {
+      if (response) {
+        if (item?.keySetId) {
+          this.agentService.deleteKeyset(item.keySetId).subscribe(res => {
+            this.initKeySetApi();
+          });
+        }
+      }
+    });
+  }
+
+  updateKeysetDetails(item: any) {
+    if (item?.keySetId) {
+      let requestObj = {
+        name: item.name,
+        keyId: item.keyId,
+        type: item.type,
+        postDate: this.commonService.getFormatedDate(item.createdAt),
+        userId: item.userId,
+        status: item.status,
+        note: item.note
+      }
+      this.agentService.updateKeyset(item.keySetId, requestObj).subscribe(
+        res => {
+          this.initKeySetApi();
+        },
+        error => {
+          this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Update Key Set', 'error');
+        }
+      );
+    }
   }
 
   ngOnDestroy() {
