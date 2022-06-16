@@ -122,7 +122,7 @@ export class DetailsComponent implements OnInit {
         buildingName: [''],
         street: [''],
         addressLine1: ['', Validators.required],
-        addressLine2: ['', Validators.required],
+        addressLine2: [''],
         addressLine3: [''],
         locality: [''],
         town: ['', Validators.required],

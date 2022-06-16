@@ -111,9 +111,7 @@ export class NotesModalPage implements OnInit {
         } else {
           this.updateNotes(requestObj);
         }
-      } else if (this.notesType === NOTES_TYPE.PROPERTY_VISIT) {
-        this.createPropertyVisitNotes(requestObj);
-      } else if (this.notesType === NOTES_TYPE.PROPERTY) {
+      } else if (this.notesType === NOTES_TYPE.PROPERTY || this.notesType === NOTES_TYPE.MANAGEMENT_INSPECTION) {
         requestObj.entityId = this.notesTypeId;
         requestObj.entityType = this.notesType;
         this.createNotes(requestObj);
@@ -217,7 +215,7 @@ export class NotesModalPage implements OnInit {
     });
   }
 
-  private createNotes(requestObj: any){
+  private createNotes(requestObj: any) {
     this.notesService.createNotes(requestObj).subscribe(res => {
       this.modalController.dismiss(res);
     }, err => {
