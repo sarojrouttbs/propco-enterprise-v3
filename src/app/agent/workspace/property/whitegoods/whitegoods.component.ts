@@ -190,7 +190,12 @@ export class WhitegoodsComponent implements OnInit {
   }
 
   checkboxClick() {
-    this.whitegoodsParams = this.whitegoodsParams.set('isArchived', this.isArchived.value);
+    this.whitegoodsParams.delete('isArchived');
+    if (this.isArchived.value == true) {
+      this.whitegoodsParams = this.whitegoodsParams.set('isArchived', this.isArchived.value);
+    } else {
+      this.whitegoodsParams = this.whitegoodsParams.set('isArchived', '');
+    }
     this.rerenderWhitegoods();
   }
 
