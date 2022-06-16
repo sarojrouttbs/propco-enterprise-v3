@@ -45,6 +45,7 @@ import { KeysComponent } from './admin/keys/keys.component';
 import { KeyActivityModalPageModule } from 'src/app/shared/modals/key-activity-modal/key-activity-modal.module';
 import { ParticularsComponent } from './particulars/particulars.component';
 import { PreferencesComponent } from './particulars/preferences/preferences.component';
+import { CreateKeySetPageModule } from 'src/app/shared/modals/create-key-set/create-key-set.module';
 import { WhitegoodsComponent } from './whitegoods/whitegoods.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -84,7 +85,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ChangeNettPageModule,
     ChangeGrossPageModule,
     FeeChargePageModule,
-    KeyActivityModalPageModule
+    KeyActivityModalPageModule,
+    CreateKeySetPageModule
   ],
   declarations: [
     GoogleMapComponent,

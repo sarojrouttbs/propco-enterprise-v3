@@ -18,31 +18,33 @@
       </mat-expansion-panel-header>
       <ion-grid class="common-field-block">
         <ion-row>
-          <ion-col size="60" class="ion-align-self-end">
-            <ion-button color="success">Add</ion-button>
+          <ion-col size-xl="60" size-lg="60" size-md="50" size-sm="50" class="ion-align-self-end">
+            <ion-button color="success" (click)="createKeyset()">Add</ion-button>
           </ion-col>
-          <ion-col size="20">
+          <ion-col size-xl="20" size-lg="20" size-md="25" size-sm="25">
             <ion-item>
               <ion-label position="floating">Key Code</ion-label>
               <ion-input [formControl]="keyCode" readonly></ion-input>
             </ion-item>
           </ion-col>
-          <ion-col size="20">
+          <ion-col size-xl="20" size-lg="20" size-md="25" size-sm="25">
             <ion-item>
               <ion-label position="floating">Alarm Code</ion-label>
               <ion-input [formControl]="alarmCode" readonly></ion-input>
             </ion-item>
-          </ion-col>          
+          </ion-col>
         </ion-row>
       </ion-grid>
 
       <form [formGroup]="propertyKeySetForm">
         <ion-grid class="ion-no-padding">
           <ion-row class="ion-justify-content-start" formArrayName="propertyKeySets">
-            <ion-col size="100" *ngIf="propertyKeySetForm.get('propertyKeySets')['controls'].length === 0" class="no-record-msg">
+            <ion-col size="100" *ngIf="propertyKeySetForm.get('propertyKeySets')['controls'].length === 0"
+              class="no-record-msg">
               <ion-text>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</ion-text>
             </ion-col>
-            <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100" class="property-card-set ion-no-padding"
+            <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100"
+              class="property-card-set ion-no-padding"
               *ngFor="let item of propertyKeySetForm.get('propertyKeySets')['controls']; let i=index">
               <ion-card [formGroupName]="i">
                 <ion-card-content class="ion-no-padding">
@@ -57,7 +59,8 @@
                           (click)="onHistoryClick(item.value)">
                           <i class="propcoicon propcoicon-log-history pointer"></i>
                         </ion-col>
-                        <ion-col size="10" matTooltip="Remove" matTooltipPosition="above">
+                        <ion-col size="10" matTooltip="Remove" matTooltipPosition="above"
+                          (click)="deleteKeyset(item.value)">
                           <i class="propcoicon propcoicon-cancel pointer"></i>
                         </ion-col>
                       </ion-row>
@@ -67,7 +70,11 @@
                     <ion-grid>
                       <ion-row>
                         <ion-col>
-                          <h1>{{item.controls.name.value || notAvailable}}</h1>
+                          <!-- <h1>{{item.controls.name.value || notAvailable}}</h1> -->
+                          <ion-item>
+                            <ion-label position="floating">Name</ion-label>
+                            <ion-input formControlName="name"></ion-input>
+                          </ion-item>
                         </ion-col>
                         <ion-col size="100">
                           <ion-item>
@@ -83,21 +90,25 @@
                         </ion-col>
                         <ion-col size="50" style="padding-right: 10px;">
                           <mat-form-field appearance="fill" style="margin-top: 11px;">
-                            <mat-label> Setup date </mat-label>
+                            <mat-label> Setup date <ion-text class="mandatory">*</ion-text>
+                            </mat-label>
                             <input matInput [matDatepicker]="picker" formControlName="createdAt" readonly>
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                           </mat-form-field>
+                          <app-validation-message [control]="item.controls.createdAt"></app-validation-message>
                         </ion-col>
                         <ion-col size="50">
                           <ion-item>
-                            <ion-label position="floating">Setup By</ion-label>
+                            <ion-label position="floating">Setup By <ion-text class="mandatory">*</ion-text>
+                            </ion-label>
                             <ion-select interface="popover" formControlName="userId">
                               <ion-select-option [value]="item.userId" *ngFor="let item of userDetailsList">
                                 {{ item?.forename }} {{ item?.surname }}
                               </ion-select-option>
                             </ion-select>
                           </ion-item>
+                          <app-validation-message [control]="item.controls.userId"></app-validation-message>
                         </ion-col>
                         <ion-col size="100">
                           <ion-item>
@@ -111,15 +122,17 @@
                   <div class="footer">
                     <ion-grid>
                       <ion-row>
-                        <ion-col size="50">
-                          <ion-button color="success" (click)="addKeysetLogHistory(item.value)">
-                            {{item.controls.status.value === 0?"Check
-                            In":item.controls.status.value === 1?"Check
-                            Out":"Check
-                            In"}}</ion-button>
+                        <ion-col size="70">
+                          <ion-button *ngIf="item.controls.status.value === 0 || item.controls.status.value === 2"
+                            color="success" (click)="addKeysetLogHistory(item.value, 1)">
+                            Check In</ion-button>
+
+                          <ion-button *ngIf="item.controls.status.value === 0 || item.controls.status.value === 1"
+                            color="success" (click)="addKeysetLogHistory(item.value, 2)">
+                            Check Out</ion-button>
                         </ion-col>
-                        <ion-col size="50" class="ion-text-right">
-                          <ion-button color="success">Update</ion-button>
+                        <ion-col size="30" class="ion-text-right">
+                          <ion-button color="success" (click)="updateKeysetDetails(item.value)">Update</ion-button>
                         </ion-col>
                       </ion-row>
                     </ion-grid>
