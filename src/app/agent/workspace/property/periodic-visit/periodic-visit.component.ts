@@ -201,7 +201,10 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
   }
 
   private getVisitNotes(propertyId: string, visitId: string) {
-    this.agentService.getVisitNotes(propertyId, visitId).subscribe(res => {
+    const params = new HttpParams()
+      .set('entityId', visitId)
+      .set('entityType', NOTES_TYPE.MANAGEMENT_INSPECTION);
+    this.agentService.getNotes(params).subscribe(res => {
       this.visitNotes = res ? res : [];
       this.rerenderNotes();
     });
@@ -320,7 +323,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
       component: NotesModalPage,
       cssClass: 'modal-container property-modal-container',
       componentProps: {
-        notesType: NOTES_TYPE.PROPERTY_VISIT,
+        notesType: NOTES_TYPE.MANAGEMENT_INSPECTION,
         notesTypeId: this.selectedData.visitId,
         isAddNote: true,
         propertyId: this.propertyDetails?.propertyId
