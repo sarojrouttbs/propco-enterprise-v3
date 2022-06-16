@@ -55,7 +55,7 @@ export class MarketAppraisalPage implements OnInit {
           county: [''],
           locality: [''],
           town: [''],
-          domesticId: ['']
+          pafReference: ['']
         }),
         displayAs: ['', Validators.required],
         owners: [{ value: '', disabled: true }],
@@ -77,7 +77,7 @@ export class MarketAppraisalPage implements OnInit {
           county: [''],
           locality: [''],
           town: [''],
-          domesticId: ['']
+          pafReference: ['']
         }),
         availableFromDate: ['', Validators.required],
         availableToDate: null,
@@ -285,6 +285,7 @@ export class MarketAppraisalPage implements OnInit {
   updateLandlord() {
     const params = this.maForm.getRawValue().contactForm;
     const llId = params.landlordUuid;
+    params.status = params.landlordStatus;
     const promise = new Promise((resolve, reject) => {
       this.maService.updateLandlord(params, llId).subscribe(
         (res) => {
@@ -303,6 +304,7 @@ export class MarketAppraisalPage implements OnInit {
     const propertyId = params.propertyId;
     params.maximumRent = params.rentRange.maximum;
     params.minimumRent = params.rentRange.minimum;
+    params.propertyDescription = params.propertyNotes;
     const promise = new Promise((resolve, reject) => {
       this.maService.updateProperty(params, propertyId).subscribe(
         (res) => {

@@ -131,7 +131,7 @@ export class MaPropertyComponent implements OnInit {
         county: property.address ? property.address.county : null,
         locality: property.address ? property.address.locality : null,
         town: property.address ? property.address.town : null,
-        domesticId: property.address ? property.address.pafReference : null
+        pafReference: property.address ? property.address.pafReference : null
       },
     });
     this.calculateTotalDuration();
