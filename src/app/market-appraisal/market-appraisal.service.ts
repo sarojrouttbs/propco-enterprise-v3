@@ -31,11 +31,11 @@ export class MarketAppraisalService {
   }
 
   updateLandlord(params, landloardId: string): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `landlords/${landloardId}`, params);
+    return this.httpClient.put(environment.API_BASE_URL + `landlords/${landloardId}/node`, params);
   }
 
   updateProperty(params, propertyId: string): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `properties/${propertyId}`, params);
+    return this.httpClient.put(environment.API_BASE_URL + `properties/${propertyId}/node`, params);
   }
 
   getaccessibleOffices(): Observable<any> {
