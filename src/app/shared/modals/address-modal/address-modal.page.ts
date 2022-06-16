@@ -144,7 +144,7 @@ export class AddressModalPage implements OnInit {
     });
   }
 
-  forceUppercaseConditionally(formControlName: string, event: any):void {
+  toUpperCase(formControlName: string, event: any):void {
     this.addressDetailsForm.get(formControlName).setValue(event.target.value.toUpperCase());
   }
 }

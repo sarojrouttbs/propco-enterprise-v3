@@ -49,7 +49,12 @@ const routes: Routes = [
     path: 'agent',
     loadChildren: () => import('./agent/agent.module').then( m => m.AgentPageModule),
     canActivate: [AuthGuard]
-  }
+  },
+  {
+    path: 'hmrc',
+    loadChildren: () => import('./hmrc/hmrc.module').then( m => m.HmrcPageModule),
+    canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({
