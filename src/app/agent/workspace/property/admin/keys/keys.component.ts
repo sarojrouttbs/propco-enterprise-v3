@@ -372,7 +372,7 @@ export class KeysComponent implements OnInit {
 
   updateKeysetDetails(item: any) {
     if (item?.keySetId) {
-      let requestObj = {
+      const requestObj = {
         name: item.name,
         keyId: item.keyId,
         type: item.type,

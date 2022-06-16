@@ -45,7 +45,7 @@ export class CreateKeySetPage implements OnInit {
 
   createNewKeyset() {
     if (this.createKeysetForm.valid) {
-      let requestObj = this.createKeysetForm.value;
+      const requestObj = this.createKeysetForm.value;
       requestObj.postDate = this.commonService.getFormatedDate(requestObj.postDate);
       this.agentService.createKeyset(this.propertyId, requestObj).subscribe(
         res => {

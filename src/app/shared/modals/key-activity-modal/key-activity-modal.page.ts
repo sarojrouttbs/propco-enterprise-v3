@@ -63,7 +63,7 @@ export class KeyActivityModalPage implements OnInit {
   private addKeysetActivity() {
     if (this.data?.keySetId) {
       if (this.keyActivityForm.valid) {
-        let requestObj = {
+        const requestObj = {
           contact: this.keyActivityForm.controls['contact'].value,
           name: this.keyActivityForm.controls['name'].value,
           note: this.keyActivityForm.controls['note'].value,
@@ -88,7 +88,7 @@ export class KeyActivityModalPage implements OnInit {
   private updateKeysetActivity() {
     if (this.data?.keyLogId) {
       if (this.keyActivityForm.valid) {
-        let requestObj = {
+        const requestObj = {
           contact: this.keyActivityForm.controls['contact'].value,
           name: this.keyActivityForm.controls['name'].value,
           note: this.keyActivityForm.controls['note'].value,
