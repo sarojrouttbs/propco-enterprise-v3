@@ -29,6 +29,7 @@ export class WhitegoodsComponent implements OnInit {
   isArchived = new FormControl(false);
   whitegoodsParams = new HttpParams();
   notAvailable = DEFAULTS.NOT_AVAILABLE;
+  isArchivedChecked: any;
 
   constructor(
     private agentService: AgentService,
@@ -65,6 +66,11 @@ export class WhitegoodsComponent implements OnInit {
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
           .set('hideLoader', 'true');
+        if (this.isArchivedChecked) {
+          this.whitegoodsParams = this.whitegoodsParams.set('isArchived', '');
+        } else {
+          this.whitegoodsParams = this.whitegoodsParams.set('isArchived', 'false');
+        }
         this.agentService.getWhitegoodsList(this.selectedEntityDetails.entityId, this.whitegoodsParams).subscribe(res => {
           this.whitegoodsList = res && res.data ? res.data : [];
           callback({
@@ -190,12 +196,7 @@ export class WhitegoodsComponent implements OnInit {
   }
 
   checkboxClick() {
-    this.whitegoodsParams.delete('isArchived');
-    if (this.isArchived.value == true) {
-      this.whitegoodsParams = this.whitegoodsParams.set('isArchived', this.isArchived.value);
-    } else {
-      this.whitegoodsParams = this.whitegoodsParams.set('isArchived', '');
-    }
+    this.isArchivedChecked = this.isArchived.value;
     this.rerenderWhitegoods();
   }
 
