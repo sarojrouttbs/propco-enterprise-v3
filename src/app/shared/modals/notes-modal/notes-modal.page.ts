@@ -207,14 +207,6 @@ export class NotesModalPage implements OnInit {
     });
   }
 
-  private createPropertyVisitNotes(requestObj) {
-    this.notesService.createPropertyVisitNotes(this.propertyId, this.notesTypeId, requestObj).subscribe(res => {
-      this.modalController.dismiss(res);
-    }, err => {
-      this.commonService.showMessage(err.message, 'Add Note', 'error');
-    });
-  }
-
   private createNotes(requestObj: any) {
     this.notesService.createNotes(requestObj).subscribe(res => {
       this.modalController.dismiss(res);
