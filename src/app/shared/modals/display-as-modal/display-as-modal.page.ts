@@ -48,6 +48,8 @@ export class DisplayAsModalPage implements OnInit {
   patchData(){
     if(this.landlordData){      
       this.landlordDetailsForm.patchValue(this.landlordData);
+      /**API key is different in every service of LL, can't change due to public vs private**/
+      this.landlordDetailsForm.controls['middleName'].setValue(this.landlordData.middlename);
     }
     
     

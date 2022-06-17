@@ -420,7 +420,6 @@ export class ApplicationListPage implements OnInit, OnDestroy {
 
   hideMenu(event: any, id: any) {
     this.commonService.hideMenu(event, id);
-    //this.selectedData = {};
   }
 
   getLookupValue(index: any, lookup: any, type?: any) {
