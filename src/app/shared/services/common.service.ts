@@ -509,10 +509,8 @@ export class CommonService {
     const baseContainerHeight = baseContainer.outerHeight(true);
     const baseContainerPosition = baseContainer.position();
     const baseContainerTop = baseContainerPosition.top;
-    // const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    // const divOverlayLeft = isCard ? baseContainerPosition.left : overlayContainerLeftPadding;
     const divOverlayLeft = overlayContainerLeftPadding;
 
     let origDivOverlayHeight;
@@ -533,20 +531,13 @@ export class CommonService {
 
     divOverlay.css({
       position: 'absolute',
-      top: origDivOverlayTop,
+      top: origDivOverlayTop + 1,
       right: '0px',
       width: baseContainerWidth,
       height: origDivOverlayHeight,
-      left: divOverlayLeft,
+      left: divOverlayLeft + 1,
       paddingTop: divOverlayTopBottomPadding,
       paddingBottom: divOverlayTopBottomPadding
-    });
-
-    const gridDivOverlay = $('#grid-divoverlay');
-
-    gridDivOverlay.css({
-      width: divOverlay.width(),
-      height: divOverlayHeight
     });
 
     divOverlay.delay(200).slideDown('fast');
