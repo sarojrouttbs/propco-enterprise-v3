@@ -267,7 +267,6 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   }
 
   hideMenu(event: any, id: any) {
-    //this.selectedData = {};
     this.commonService.hideMenu(event, id);
   }
 

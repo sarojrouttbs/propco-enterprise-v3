@@ -46,6 +46,12 @@
                 <button mat-menu-item>Add New Contractor</button>
               </mat-menu>
               </span>
+              <span (mouseover)="reportingTrigger.openMenu()" (mouseout)="reportingTrigger.openMenu()">
+                <button mat-button #reportingTrigger="matMenuTrigger" [matMenuTriggerFor]="reporting" class="text-color">Reporting</button>
+              <mat-menu #reporting="matMenu">
+                <button mat-menu-item (click)="goTo('self-assessment-form')">HMRC Self-Assessment Form</button>
+              </mat-menu>
+              </span>
             </div>
           <div class="right-menu">
             <div class="ion-no-padding" class="result-search-grid">

@@ -201,7 +201,10 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
   }
 
   private getVisitNotes(propertyId: string, visitId: string) {
-    this.agentService.getVisitNotes(propertyId, visitId).subscribe(res => {
+    const params = new HttpParams()
+      .set('entityId', visitId)
+      .set('entityType', NOTES_TYPE.MANAGEMENT_INSPECTION);
+    this.agentService.getNotes(params).subscribe(res => {
       this.visitNotes = res ? res : [];
       this.rerenderNotes();
     });
@@ -237,63 +240,13 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
     await modal.present();
   }
 
-  showMenu(event, id, data, className, isCard?) {
+  showMenu(event: any, id: any, data: any, className: any) {
     this.selectedData = data;
-    const baseContainer = $(event.target).parents('.' + className);
-    const divOverlay = $('#' + id);
-    const baseContainerWidth = baseContainer.outerWidth(true);
-    const baseContainerHeight = baseContainer.outerHeight(true);
-    const baseContainerPosition = baseContainer.position();
-    const baseContainerTop = baseContainerPosition.top;
-    const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
-    const divOverlayHeight = divOverlay.height();
-    const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    const divOverlayLeft = isCard ? baseContainerPosition.left : overlayContainerLeftPadding;
-
-    let origDivOverlayHeight;
-    let origDivOverlayTop;
-    let divOverlayTopBottomPadding = 0;
-    if (baseContainerHeight > 49) {
-      divOverlayTopBottomPadding = (baseContainerHeight - 48) / 2;
-    }
-
-    if (baseContainerHeight > divOverlayHeight) {
-      origDivOverlayHeight = baseContainerHeight;
-      origDivOverlayTop = baseContainerTop + $('.dataTables_length').outerHeight(true);
-    } else {
-      origDivOverlayHeight = divOverlayHeight + (divOverlayTopBottomPadding * 2);
-      const extraHeight = divOverlayHeight - baseContainerHeight;
-      origDivOverlayTop = baseContainerTop - extraHeight - (divOverlayTopBottomPadding * 2) + $('.dataTables_length').outerHeight(true);
-    }
-
-    divOverlay.css({
-      position: 'absolute',
-      top: origDivOverlayTop,
-      right: '0px',
-      width: baseContainerWidth,
-      height: origDivOverlayHeight,
-      left: divOverlayLeft,
-      paddingTop: divOverlayTopBottomPadding,
-      paddingBottom: divOverlayTopBottomPadding
-    });
-
-    const gridDivOverlay = $('#grid-divoverlay');
-
-    gridDivOverlay.css({
-      width: divOverlay.width(),
-      height: divOverlayHeight
-    });
-
-    divOverlay.delay(200).slideDown('fast');
-    event.stopPropagation();
+    this.commonService.showMenu(event, id, className, true);
   }
 
-  hideMenu(event?, id?) {
-    const $divOverlay = $('#' + id);
-    $divOverlay.delay(200).slideUp('fast');
-    if (event) {
-      event.stopPropagation();
-    }
+  hideMenu(event: any, id: any) {
+    this.commonService.hideMenu(event, id);
   }
 
   getVisitHmoLicence(propertyId: string) {
@@ -320,7 +273,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
       component: NotesModalPage,
       cssClass: 'modal-container property-modal-container',
       componentProps: {
-        notesType: NOTES_TYPE.PROPERTY_VISIT,
+        notesType: NOTES_TYPE.MANAGEMENT_INSPECTION,
         notesTypeId: this.selectedData.visitId,
         isAddNote: true,
         propertyId: this.propertyDetails?.propertyId

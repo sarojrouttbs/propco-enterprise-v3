@@ -41,8 +41,12 @@ import { ChangeNettPageModule } from 'src/app/shared/modals/change-nett/change-n
 import { ChangeGrossPageModule } from 'src/app/shared/modals/change-gross/change-gross.module';
 import { FeeChargePageModule } from 'src/app/shared/modals/fee-charge/fee-charge.module';
 import { NotesComponent } from './admin/notes/notes.component';
+import { KeysComponent } from './admin/keys/keys.component';
+import { KeyActivityModalPageModule } from 'src/app/shared/modals/key-activity-modal/key-activity-modal.module';
 import { ParticularsComponent } from './particulars/particulars.component';
 import { PreferencesComponent } from './particulars/preferences/preferences.component';
+import { CreateKeySetPageModule } from 'src/app/shared/modals/create-key-set/create-key-set.module';
+import { WhitegoodsComponent } from './whitegoods/whitegoods.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -80,7 +84,9 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     CurrencyMaskModule,
     ChangeNettPageModule,
     ChangeGrossPageModule,
-    FeeChargePageModule
+    FeeChargePageModule,
+    KeyActivityModalPageModule,
+    CreateKeySetPageModule
   ],
   declarations: [
     GoogleMapComponent,
@@ -102,8 +108,10 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     MaintenanceComponent,
     RentSalesFiguresComponent,
     NotesComponent,
+    KeysComponent,
     ParticularsComponent,
-    PreferencesComponent
+    PreferencesComponent,
+    WhitegoodsComponent
   ],
   providers: [
     AgentService,

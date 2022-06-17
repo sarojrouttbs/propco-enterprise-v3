@@ -111,7 +111,7 @@ export class DetailsComponent implements OnInit {
         smokeAlarmNo: [''],
         hasElectricalIndemnitySigned: [''],
         carbonMonoxideDetectors: [''],
-        NocarbonDetectors: [''],//* - pending
+        coDetectorNo: null,
         numberOfFireBlankets: [''],
         numberOfFireExtinguishers: ['']
       }),
@@ -122,7 +122,7 @@ export class DetailsComponent implements OnInit {
         buildingName: [''],
         street: [''],
         addressLine1: ['', Validators.required],
-        addressLine2: ['', Validators.required],
+        addressLine2: [''],
         addressLine3: [''],
         locality: [''],
         town: ['', Validators.required],
@@ -222,7 +222,7 @@ export class DetailsComponent implements OnInit {
       smokeAlarmNo: this.propertyDetails?.smokeAlarmNo ? this.propertyDetails?.smokeAlarmNo : '',
       hasElectricalIndemnitySigned: this.propertyDetails?.propertyDetails?.hasElectricalIndemnitySigned ? this.propertyDetails?.propertyDetails?.hasElectricalIndemnitySigned : false,
       carbonMonoxideDetectors: this.propertyDetails?.carbonMonoxideDetectors ? this.propertyDetails?.carbonMonoxideDetectors : '',
-      NocarbonDetectors: '', //* - pending
+      coDetectorNo: this.propertyDetails?.coDetectorNo ? this.propertyDetails?.coDetectorNo : '',
       numberOfFireBlankets: this.propertyDetails?.numberOfFireBlankets ? this.propertyDetails?.numberOfFireBlankets : '',
       numberOfFireExtinguishers: this.propertyDetails?.numberOfFireExtinguishers ? this.propertyDetails?.numberOfFireExtinguishers : '',
     });

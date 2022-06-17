@@ -20,6 +20,7 @@
           <table datatable [dtOptions]="dtOptions" class="row-border hover" id="propertyTenancyTable" width="100%" style="position: relative;">
             <thead>
               <tr>
+                <th style="width:5%"></th>
                 <th style="width:13%">Status</th>
                 <th style="width:15%">Tenant</th>
                 <th style="width:15%">Start</th>
@@ -31,6 +32,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let data of tenancies" class="table-row">
+                <td>{{data?.tenancyLetter || notAvailable}}</td>
                 <td>{{data?.status | lookup: agreementStatusesLookup}}</td>
                 <td>{{((data?.tenants?.displayAs) ? data?.tenants?.displayAs : (data?.tenants?.forename +' '+data?.tenants?.surname)) || notAvailable}}</td>
                 <td>{{data?.tenancyStartDate | date: 'dd/MM/yyyy' || notAvailable}}</td>
