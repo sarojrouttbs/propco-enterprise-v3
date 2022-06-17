@@ -81,6 +81,7 @@ export class MaContactComponent implements OnInit {
       },
       forename: data.forename ? data.forename : '',
       surname: data.surname ? data.surname : '',
+      middleName: data.middlename ? data.middlename : '',
       title: data.title ? data.title : ''
     });
   }

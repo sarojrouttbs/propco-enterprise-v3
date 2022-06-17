@@ -321,6 +321,8 @@ export class MarketAppraisalPage implements OnInit {
     const params = this.maForm.getRawValue().contactForm;
     const llId = params.landlordUuid;
     params.status = params.landlordStatus;
+    params.foreName = params.forename;
+    params.surName = params.surname;
     const promise = new Promise((resolve, reject) => {
       this.maService.updateLandlord(params, llId).subscribe(
         (res) => {
