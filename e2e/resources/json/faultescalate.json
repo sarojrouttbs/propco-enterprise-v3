@@ -1,5 +1,5 @@
 {
-    "fault_details": {
+    "faultDetails": {
         "faultReported": {
             "childFault": "0",
             "propertyId": "000002063",
@@ -12,7 +12,7 @@
             "typeAddition2": "",
             "additionalInfo2": "",
             "reporter": "Tenant",
-            "tenancyAgreement": "Confirmed 08/06/2021",
+            "tenancyAgreement": "Extended",
             "reporterList": "Select Tenant",
             "reporterName": "Mr D O",
             "accessInfo": "Tenant",

@@ -1,0 +1,96 @@
+<ion-content id="solr-dashboard">
+  <div class="swap-icon" (click)="setDefaultHome(false)">
+    <img height="35" width="35" src="assets/images/swap.svg" title="Switch back to the old dashboard" (click)="openHomeCategory('OpenPropcoDashBoard')">
+  </div>
+  <div class="divider"></div>
+  <ion-grid class="ion-no-padding" fixed >
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="30" class="ion-text-center ion-no-padding">
+        <img src="assets/images/solr/propcoLogo.svg" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center ion-no-padding">
+        <h4 class="ion-no-margin" *ngIf="loaded">Welcome {{loggedInUserData?.name}}</h4>
+        <ion-skeleton-text class="welcome-skeleton" animated *ngIf="!loaded"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+      <app-search-suggestion [isAuthSuccess]="isAuthSuccess" [entityControl]="entityControl" [pageType]="'dashboard'" *ngIf="loaded"></app-search-suggestion>
+      <ion-skeleton-text class="searchbar-skeleton" animated *ngIf="!loaded"></ion-skeleton-text>
+    <ion-row class="ion-align-items-center ion-justify-content-center tour-4">
+      <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenApplicantCard')">
+          <i class="propcoicon red-icon propcoicon-applicant-card"></i>
+          <p>Applicant Card</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenAvailPropertyList')">
+          <i class="propcoicon red-icon propcoicon-available-property-list"></i>
+          <p>Available Property List</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenMarketAppraisal')">
+          <i class="propcoicon red-icon propcoicon-market-apprasial"></i>
+          <p>Market Appraisal</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20" class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenApplicantManagement')">
+          <i class="propcoicon propcoicon-applicant-management red-icon"></i>
+          <p>Applicant Management</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20" style="margin-right: 15px;"   class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenReadEmail')">
+          <i class="propcoicon propcoicon-email-open red-icon"></i>
+          <p>Read Email</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenWriteEmail')">
+          <i class="propcoicon propcoicon-email red-icon"></i>
+          <p>Write Email</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenTaskManagement')">
+          <i class="propcoicon propcoicon-task-manager red-icon"></i>
+          <p>Task Management</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20" class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenReporting')">
+          <i class="propcoicon propcoicon-reports red-icon"></i>
+          <p>Reporting Suite</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20" style="margin-right: 15px;"   class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenWorkflow')">
+          <i class="propcoicon propcoicon-workflow red-icon"></i>
+          <p>Workflow suite</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20" style="margin-right: 15px;"   class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenCashRegister')">
+          <i class="propcoicon propcoicon-cash-register red-icon"></i>
+          <p>Cash Register</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20" style="margin-right: 15px;"   class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenBalanceSheet')">
+          <i class="propcoicon propcoicon-balance-sheet red-icon"></i>
+          <p>Balance Sheet</p>
+        </div>
+      </ion-col>
+      <ion-col size-xl="20" size="20" class="ion-no-padding">
+        <div class="block" (click)="openHomeCategory('OpenMiscCreditDebit')">
+          <i class="propcoicon propcoicon-misc-cr-db red-icon"></i>
+          <p>Misc Cr/Db</p>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <span class="tour-guide"><ngx-guided-tour></ngx-guided-tour></span>
+</ion-content>

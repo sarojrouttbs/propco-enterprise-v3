@@ -1,0 +1,115 @@
+ion-card {
+    --background: var(--ion-color-five);
+    position: static;
+    ion-card-content {
+        position: static;
+        background-color: var(--ion-color-five);
+        padding: 0px;
+        cursor: pointer;
+    }
+}
+
+.action-icon {
+    display: inline-flex;
+    align-items: center !important;
+    justify-content: flex-end;
+    margin: 0px 0px -6px -5px;
+}
+
+.property-details {
+    margin: 5px;
+
+    .address {
+        align-items: center;
+        margin: 20px 0px;
+        color: var(--ion-color-one);
+    }
+
+    .filters {
+        margin-bottom: 20px;
+        align-items: center;
+        .sort-offer {
+            margin-top: -20px;
+        }
+    }
+}
+
+.row-details {
+    padding-top: 10px;
+    margin-bottom: -15px;
+}
+
+.btn-filter {
+    display: inline-block;
+    width: 80px;
+}
+
+:host ::ng-deep .mat-form-field-wrapper {
+    margin-bottom: -20px;
+}
+
+:host ::ng-deep .mat-datepicker-toggle .mat-icon-button {
+    color: var(--ion-color-tertiary-tint);
+}
+
+.text-color-line-height {
+    line-height: 28px;
+}
+
+table {
+    width: 100%;
+    border: 1px solid var(--ion-color-four);
+    margin: 15px 0px;
+    th {
+        background: var(--ion-color-three) !important;
+        color:var(--ion-color-step-2000);
+    }
+    th {
+        text-align: left;
+        padding: 15px 5px;
+    }
+    tr {
+        border: 1px solid var(--ion-color-four);
+        color: var(--ion-color-two);
+        td {
+            padding: 5px 5px;
+        }
+    }
+    i.propcoicon {
+        background-color: var(--ion-color-five);
+        color: var(--ion-color-one);
+        padding-top: 5px;
+    }
+}
+
+.offer-notes {
+    color: var(--ion-color-one);
+}
+
+.offer-status {
+    margin: 5px 0px !important;
+    display: inline-block;
+    border: 2px solid;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 16px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.action-icon-notes {
+    display: flex;
+    justify-content: right;
+    margin-right: 3px;
+}
+
+.applicant-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;    
+  }
+
+i.propcoicon {
+    background-color: var(--ion-color-six);
+    color: var(--ion-color-one);
+}

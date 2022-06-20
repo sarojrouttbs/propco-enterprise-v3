@@ -38,12 +38,15 @@ export class CommonService {
     // this.alertPresented = false;
   }
 
+
+
   private dataChange = new Subject<any>();
   dataChanged$ = this.dataChange.asObservable();
 
   dataChanged(data) {
     this.dataChange.next(data);
   }
+
 
   // isCordovaDevice(){
   //     return (this._platform.platforms().indexOf('cordova')!= -1) ? true : false;
@@ -66,10 +69,10 @@ export class CommonService {
 
     for (const element of ca) {
       let c = element;
-      while (c.charAt(0) == ' ') {
+      while (c.charAt(0) === ' ') {
         c = c.substring(1);
       }
-      if (c.indexOf(name) == 0) {
+      if (c.indexOf(name) === 0) {
         return c.substring(name.length, c.length);
       }
     }
@@ -93,17 +96,21 @@ export class CommonService {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup', { responseType: 'json' });
   }
 
+  getTobLookup(): Observable<Lookupdata> {
+    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup/tob', { responseType: 'json' });
+  }
+
   getFaultsLookup(): Observable<Lookupdata> {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'lookup/faults', { responseType: 'json' });
   }
 
   getSystemConfig(key: string): Observable<any> {
-    let httpParams = new HttpParams().set('key', key);
+    const httpParams = new HttpParams().set('key', key);
     return this.httpClient.get(environment.API_BASE_URL + 'sysconfig', { params: httpParams });
   }
 
   getSystemOptions(option: string): Observable<any> {
-    let httpParams = new HttpParams().set('option', option);
+    const httpParams = new HttpParams().set('option', option);
     return this.httpClient.get(environment.API_BASE_URL + 'options', { params: httpParams });
   }
 
@@ -119,15 +126,20 @@ export class CommonService {
     return this.httpClient.get(environment.API_BASE_URL + `postcode/${addressId}/retrieve`);
   }
 
+  getUserDetails(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `user/logged-in`);
+  }
+
 
   getLookupValue(id, listOfArray): string {
     let propertyStatus;
     listOfArray = listOfArray && listOfArray.length ? listOfArray : [];
-    listOfArray.find((obj) => {
+    listOfArray.find((obj) => {      
       if (obj.index === id) {
         propertyStatus = obj.value;
       }
-    })
+    });
+
     return propertyStatus;
   }
 
@@ -221,7 +233,7 @@ export class CommonService {
     });
   }
 
-  async showConfirm(title: string, displayText: string, subtitle?: string, okText?: string, cancelText?: string) {
+  async showConfirm(title: string, displayText: string, subtitle?: string, okText?: string, cancelText?: string, inputs?: any) {
     return new Promise((resolve, reject) => {
       let alertPopup: any;
       this.alertCtrl.create({
@@ -244,15 +256,16 @@ export class CommonService {
           {
             text: okText ? okText : 'Ok',
             cssClass: 'ion-color-success',
-            handler: () => {
+            handler: (data) => {
               alertPopup.dismiss().then((res) => {
-                resolve(true);
+                data ? resolve(data) : resolve(true);
               });
               return false;
             }
           }
         ],
         backdropDismiss: false,
+        inputs: inputs
       }).then(res => {
         alertPopup = res;
         res.present();
@@ -320,10 +333,10 @@ export class CommonService {
         .set('page', '1')
         .set('text', text)
         .set('types', 'PROPERTY');
-        
-        if(letCategory){
-          params = params.set('prop.mantypeLetCat', letCategory)
-        }
+
+      if (letCategory) {
+        params = params.set('prop.mantypeLetCat', letCategory);
+      }
     }
     else {
       params = new HttpParams()
@@ -344,7 +357,9 @@ export class CommonService {
     // });
     // await this.loader.present();
     const elem = document.getElementById('loading');
-    if (elem) elem.style.display = '';
+    if (elem) {
+      elem.style.display = '';
+    }
   }
 
   hideLoader() {
@@ -353,28 +368,30 @@ export class CommonService {
     // }
     setTimeout(() => {
       const elem = document.getElementById('loading');
-      if (elem) elem.style.display = 'none';
+      if (elem) {
+        elem.style.display = 'none';
+      }
     }, 500);
   }
 
-  getResizedImageUrl(url, size?) {
-    let srcUrl = '';
-    if (url) {
-      const splitUrl = url.split('images/');
-      const mediaHost = (splitUrl.length > 0) ? splitUrl[0] : '';
-      const fileName = (splitUrl.length > 0) ? splitUrl[1] : '';
-      size = size ? size : 400;
-      srcUrl = mediaHost + 'images/resize.php/' + fileName + '?resize(' + size + ')';
-    }
-    return srcUrl;
+  getResizedImageUrl(imageName, size?) {
     // let srcUrl = '';
-    // if (imageName) {
-    //   let mediaHost = environment.MEDIA_HOST_URL;
-    //   let fileName = imageName ? imageName : '';
+    // if (url) {
+    //   const splitUrl = url.split('images/');
+    //   const mediaHost = (splitUrl.length > 0) ? splitUrl[0] : '';
+    //   const fileName = (splitUrl.length > 0) ? splitUrl[1] : '';
     //   size = size ? size : 400;
     //   srcUrl = mediaHost + 'images/resize.php/' + fileName + '?resize(' + size + ')';
     // }
     // return srcUrl;
+    let srcUrl = '';
+    if (imageName) {
+      let mediaHost = environment.MEDIA_HOST_URL;
+      let fileName = imageName ? imageName : '';
+      size = size ? size : 400;
+      srcUrl = mediaHost + 'images/resize.php/' + fileName + '?resize(' + size + ')';
+    }
+    return srcUrl;
   }
 
   getHeadMediaUrl(mediaList) {
@@ -409,10 +426,10 @@ export class CommonService {
     const fileExtension = name ? name.split('.')[1] : null;
     // if (fileExtension !== 'doc' && fileExtension !== 'odt' && fileExtension !== 'docx') {
     // } 
-    if (fileExtension == 'doc' || fileExtension == 'odt' || fileExtension == 'docx') {
+    if (fileExtension === 'doc' || fileExtension === 'odt' || fileExtension === 'docx') {
       saveAs(url, name);
     } else {
-      let a = document.createElement("a");
+      const a = document.createElement('a');
       document.body.appendChild(a);
       a.href = url;
       a.download = '';
@@ -492,10 +509,8 @@ export class CommonService {
     const baseContainerHeight = baseContainer.outerHeight(true);
     const baseContainerPosition = baseContainer.position();
     const baseContainerTop = baseContainerPosition.top;
-    //const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    //const divOverlayLeft = isCard ? baseContainerPosition.left : overlayContainerLeftPadding;
     const divOverlayLeft = overlayContainerLeftPadding;
 
     let origDivOverlayHeight;
@@ -516,20 +531,13 @@ export class CommonService {
 
     divOverlay.css({
       position: 'absolute',
-      top: origDivOverlayTop,
+      top: origDivOverlayTop + 1,
       right: '0px',
       width: baseContainerWidth,
       height: origDivOverlayHeight,
-      left: divOverlayLeft,
+      left: divOverlayLeft + 1,
       paddingTop: divOverlayTopBottomPadding,
       paddingBottom: divOverlayTopBottomPadding
-    });
-
-    const gridDivOverlay = $('#grid-divoverlay');
-
-    gridDivOverlay.css({
-      width: divOverlay.width(),
-      height: divOverlayHeight
     });
 
     divOverlay.delay(200).slideDown('fast');
@@ -620,7 +628,7 @@ export class CommonService {
 
   getPaymentWarnings(paymentRules: FaultModels.IFaultWorksorderRules, RepairEstimateThreshold?): Array<string> {
     RepairEstimateThreshold = RepairEstimateThreshold ? RepairEstimateThreshold : 250;
-    let paymentWarnings: string[] = [];
+    const paymentWarnings: string[] = [];
     if (paymentRules && paymentRules.hasOwnProperty('hasOtherInvoicesToBePaid')) {
       if (paymentRules.hasSufficientReserveBalance === false) {
         paymentWarnings.push(PAYMENT_WARNINGS.hasSufficientReserveBalance);
@@ -638,7 +646,7 @@ export class CommonService {
         paymentWarnings.push(PAYMENT_WARNINGS.hasTenantPaidRentOnTime);
       }
       if (paymentRules.isFaultEstimateLessThanHalfRentOrThresHoldValue === false) {
-        let thresoldText = PAYMENT_WARNINGS.isFaultEstimateLessThanHalfRentOrThresHoldValue.replace('£250', `£${RepairEstimateThreshold}`);
+        const thresoldText = PAYMENT_WARNINGS.isFaultEstimateLessThanHalfRentOrThresHoldValue.replace('£250', `£${RepairEstimateThreshold}`);
         paymentWarnings.push(thresoldText);
       }
       if (paymentRules.isTenancyGivenNoticeOrInLastMonth === true) {
@@ -650,11 +658,67 @@ export class CommonService {
 
   scrollToTopById(elementId) {
     const element = document.getElementById(elementId);
-    element.scrollIntoView({behavior: "smooth"});
+    element.scrollIntoView({ behavior: 'smooth' });
   }
 
   sanitizeHtml(html) {
     return this.sanitizer.bypassSecurityTrustHtml(html);
- }
+  }
+
+  deleteNote(noteId: number): Observable<any> {
+    return this.httpClient.delete(environment.API_BASE_URL + `notes/${noteId}`, {});
+  }
+
+  getReferencingInfo(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'agents/referencing/info', {});
+  }
+
+  redirectUrl(url) {
+    if (url && typeof url === 'string') {
+      window.open(url);
+    }
+  }
+
+  customizePaginator(paginatorClassName: string): void {
+    setTimeout(() => {
+      const lastBtn = document.querySelector(`.${paginatorClassName} .mat-paginator-navigation-last`);
+      if (lastBtn) {
+        lastBtn.innerHTML = 'Last';
+      }
+      const firstBtn = document.querySelector(`.${paginatorClassName} .mat-paginator-navigation-first`);
+      if (firstBtn) {
+        firstBtn.innerHTML = 'First';
+      }
+      const perPage = document.querySelector(`.${paginatorClassName} .mat-paginator-page-size-label`);
+      if (perPage) {
+        perPage.innerHTML = 'Per page';
+      }
+    }, 100);
+  }
+
+  getPaymentUrl(config): string {
+    let url: string;
+    const paymentMethod = environment.PAYMENT_METHOD;
+    const paymentConfig = config[paymentMethod];
+    if (environment.PAYMENT_PROD) {
+      url = paymentConfig.PROD.URL;
+    } else {
+      url = paymentConfig.TEST.URL;
+    }
+    return url;
+  }
+
+  getPropertyLookup(params): Observable<Lookupdata> {
+    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup/property', { params, responseType: 'json' });
+  }
+
+  removeEmpty(obj:any) {
+    for (const key in obj) {
+      if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
+        delete obj[key];
+      }
+    }
+    return obj;
+  }
 
 }

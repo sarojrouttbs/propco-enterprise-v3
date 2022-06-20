@@ -1,0 +1,123 @@
+.dashboard {
+    background-color: var(--ion-background-color);
+    color: var(--ion-text-color);
+    .header {
+        display: flex;
+        align-items: center;
+        height: 64px;
+        padding: 10px;
+        ion-icon{
+            margin: 10px;
+        }
+        ion-text {
+            font-size: 22px;
+        }
+    }
+
+    .right-panel-block {
+        border: solid 1px var(--ion-color-four);
+    }
+
+    .table-block {
+        table {
+            width: 100%;
+            position: relative;
+        }
+        ion-col {
+            .label {
+                color: var(--ion-color-property-status-bg);
+                font-size: 20px;
+                font-weight: 600;
+            }
+        }
+    }
+}
+
+.map-headeing {
+    height: 60px;
+    background: var(--ion-color-warning-tint);
+    text-transform: uppercase;
+    color: var(--ion-color-step-2000);
+    font-size: 20px;
+    text-align: center;
+    position: relative;
+}
+.map-title {
+    margin: auto;
+    position: absolute;
+    top: 20px;
+}
+.map-segment{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 15%;
+    i {
+        background-color: transparent;
+    }
+}    
+
+.viewings-segment{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10%;
+    span{
+        font-size: 30px;
+    }
+}
+
+.notes-segment{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10%;
+    i {
+        background-color: transparent;
+    }
+}
+
+.no-slider-img {
+    img {
+        width: 100%;
+    }
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    background-color: transparent;
+    background-image: none !important;
+    ion-icon {
+        color: white;
+        position: absolute;
+        height: 50%;
+        transform: translate(-30%, -50%);
+        width: 35px;
+        height: 35px;
+        display: block;
+    }
+}
+
+.swiper-slide img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    object-fit: fill !important;
+}
+
+.dataTables_wrapper {
+    #propertyNotesTable_length {
+        color: white !important;
+    }
+}
+table.dataTable tbody tr {
+    background: var(--ion-color-six);
+    color: var(--ion-text-color);
+    i {
+        background: var(--ion-color-five);
+        color: var(--ion-color-one);
+    }
+}
+
+

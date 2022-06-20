@@ -1,0 +1,229 @@
+@mixin set-text-style($size, $lheight) {
+  font-size: $size;
+  line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+ion-content {
+  --background: var(--ion-color-six);
+}
+
+.readonly-input {
+  pointer-events: none;
+}
+
+.input-close {
+  position: absolute;
+  top: 20px;
+  right: 5px;
+  cursor: pointer;
+  font-size: 26px;
+  z-index: 2;
+}
+
+.action-btn-section {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 5px;
+}
+
+.restriction-section,
+.clause-section {
+  ion-card-content {
+    .res-clause-title {
+      font-weight: 500;
+      @include set-text-style(16px, 24px);
+    }
+    padding: 3px;
+    background: var(--ion-color-four) !important;
+    ion-grid {
+      background: var(--ion-color-four) !important;
+    }
+  }
+  .no-data {
+    color: var(--ion-color-one);
+    text-align: center;
+    background: var(--ion-color-four);
+    padding: 15px;
+    font-weight: 600;
+    @include border-radius(5px);
+    @include set-text-style(16px, 26px);
+  }
+}
+
+#final-view {
+  .title {
+    color: var(--ion-color-one);
+    text-align: center;
+    margin-bottom: 15px;
+    @include set-text-style(28px, 37px);
+  }
+
+  .offer {
+    color: var(--ion-color-one);
+    margin-bottom: 10px;
+    @include set-text-style(28px, 37px);
+
+    ion-text {
+      @include set-text-style(28px, 37px);
+    }
+  }
+  .sub-heading {
+    color: var(--ion-color-three);
+    margin-top: 15px;
+    margin-bottom: 5px;
+    @include set-text-style(20px, 26px);
+  }
+
+  .header-content {
+    .header {
+      color: var(--ion-color-three);
+      @include set-text-style(14px, 19px);
+    }
+
+    .content {
+      color: var(--ion-color-one);
+      @include set-text-style(20px, 26px);
+    }
+  }
+
+  .border-radius {
+    border: 1px solid var(--ion-color-secondary);
+    @include border-radius(5px);
+  }
+
+  .border-bottom {
+    border-bottom: 1px solid var(--ion-color-one);
+    padding-left: 0;
+  }
+
+  .restriction,
+  .clause {
+    ion-card {
+      box-shadow: unset;
+      ion-card-content {
+        background-color: rgba(var(--ion-color-medium-rgb), 0.1);
+        padding: 0;
+        min-height: 64px;
+
+        .res-clause-title {
+          @include set-text-style(16px, 24px);
+        }
+      }
+    }
+  }
+
+  .res-clause-view {
+    display: flex;
+    color: var(--ion-color-one);
+    padding: 4px 0;
+    @include set-text-style(20px, 26px);
+  }
+
+  .res-clause-view.clause-view {
+    display: block;
+    @include set-text-style(16px, 22px);
+
+    .clause-text {
+      @include set-text-style(16px, 22px);
+    }
+  }
+  .tandc-text {
+    color: var(--ion-color-danger);
+    font-weight: 500;
+    margin-left: 5px;
+  }
+}
+
+.mt-7 {
+  margin-top: 7px;
+}
+
+.offer-details {
+  margin: 10px;
+  background-color: var(--ion-color-six);
+  .applicant-detail {
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th {
+      background-color: var(--ion-color-three);
+      text-align: left;
+      color: var(--ion-color-step-2000);
+      padding: 20px 10px;
+      font-weight: 100;
+      border: 1px solid var(--ion-color-three);
+    }
+
+    tbody {
+      border: 1px solid var(--ion-color-three);
+    }
+
+    td {
+      background-color: transparent;
+      padding: 12px 10px;
+    }
+
+    ion-checkbox {
+      opacity: inherit !important;
+    }
+
+    ion-icon {
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .search-row {
+      background-color: var(--ion-color-four);
+      margin: 0px 5px;
+      margin-top: -5px;
+      padding: 10px 10px 10px 0px;
+    }
+  }
+  .stepper-section {
+    background-color: var(--ion-color-six);
+  }
+}
+
+.applicant-list {
+  ion-item {
+    font-size: 13px;
+  }
+  width: 100%;
+  max-height: 200px;
+  overflow-y: scroll;
+  position: absolute !important;
+  z-index: 5 !important;
+  cursor: pointer;
+  border: 1px solid var(--ion-color-four);
+  i.propcoicon {
+    background-color: var(--ion-color-six);
+  }
+}
+
+.currency-input {
+  border: 0;
+  outline: 0;
+  padding: 5px 0;
+  background: transparent;
+}
+
+.search-button {
+  margin-left: -6px;
+  margin-top: 5px;
+}
+
+.propcoicon-search {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--ion-color-step-950);
+  color: var(--ion-color-step-2000);
+  @include set-text-style(22px, 25px);    
+}

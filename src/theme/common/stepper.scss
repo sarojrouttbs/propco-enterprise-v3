@@ -148,7 +148,7 @@
     background: none !important;
 
     .mat-horizontal-content-container {
-      background: var(--ion-color-step-2000);
+      background: var(--ion-color-five);
       @include border-radius(5px);
       position: relative;
       // margin: 20px;
@@ -310,6 +310,19 @@
   }
 }
 
+#application-stepper {
+  .mat-stepper-horizontal .mat-horizontal-stepper-header-container {
+    margin: 0px;
+  }
+  .mat-stepper-horizontal .mat-horizontal-stepper-header-container .mat-horizontal-stepper-header {
+    padding: 24px 3px;
+  }
+  .mat-stepper-horizontal .mat-horizontal-stepper-header-container .mat-horizontal-stepper-header .mat-step-label {
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+
 @media screen and (min-width: 0px) and (max-width: 960px) {
   
   #fault-details {
@@ -344,3 +357,29 @@
 @media screen and (min-width: 961px) and (max-width: 1500px) {
 
 }
+
+#agent-portal{
+  .mat-stepper-horizontal {
+    .mat-horizontal-stepper-header-container {
+      .mat-horizontal-stepper-header {
+        .mat-step-icon {
+          &.mat-step-icon-selected,
+          &.mat-step-icon-state-edit {
+            background-color: var(--ion-color-success);         
+          }       
+        }
+        .mat-step-label {
+          color: var(--ion-color-one) !important;
+        }
+      }
+    }
+  }
+
+  #offer-stepper, #tob-application-stepper {
+    .stepper-next, .stepper-back{
+      color: var(--ion-color-primary-contrast);
+      background-color: var(--ion-color-success);
+    }
+  }
+}
+

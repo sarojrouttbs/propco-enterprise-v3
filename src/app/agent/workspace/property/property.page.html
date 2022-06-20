@@ -1,0 +1,38 @@
+<mat-sidenav-container  class="example-sidenav-container" (window:resize)="onResize($event)">
+  <mat-sidenav #snav [mode]="mode" [opened]="showMenu"
+   fixedTopGap="56" class="sidenav-block">
+    <div class="property-lettings">
+      <span>Property (Lettings)</span>
+    </div>
+    <mat-nav-list class="sidenav-block-list" *ngFor="let item of menuItems" >
+      <a mat-list-item  *ngIf="!item?.subMenu?.length"
+       [routerLink]="'/agent/workspace/property/'+proptertyId+'/'+item.route" (click)="workspaceSetActiveLink(item.route);" routerLinkActive="menu active">{{item.name}}</a>
+      <ng-container *ngIf="item?.subMenu?.length">
+     
+        <mat-list-item (click)="item.showSubmenu = !item.showSubmenu" class="menu">
+          <span class="full-width" *ngIf="isExpanded || isShowing">{{item.name}}</span>
+          <ion-icon name="chevron-down-outline" class="menu-button" [ngClass]="{'rotated' : item.showSubmenu}"
+            *ngIf="isExpanded || isShowing"></ion-icon>
+        </mat-list-item>
+        
+
+        <div class="submenu" [ngClass]="{'expanded' : item.showSubmenu}" *ngIf="item.showSubmenu" >
+          <ng-container *ngFor="let value of item?.subMenu">
+            <a mat-list-item 
+              [routerLink]="'/agent/workspace/property/'+proptertyId+'/'+value.route" 
+              routerLinkActive="menu active" (click)="workspaceSetActiveLink(value.route);">{{value.name}}</a>
+          </ng-container>
+        </div>
+
+      </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="header">
+      <ion-icon class="pointer"  (click)="toggleMenu()" name="menu-outline" size="large"></ion-icon>
+      <ion-text> {{label}} </ion-text>
+    </div>    
+    <ion-router-outlet class="margin-content"></ion-router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

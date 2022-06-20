@@ -1,0 +1,25 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
+
+#property-letting-details {
+  .col-top-spacing {
+    margin-top: -6px
+  }
+
+  .toggle-btn {
+    padding-left: 0px;
+    width: 56px;
+    height: 14px;
+  }
+
+  .toggle-btn-text {
+    @include set-text-style(15px, 18px);
+  }
+
+  .toggle-btn-stop-spacing, .mat-date-picker {
+    margin-top: 23px;
+  }
+}

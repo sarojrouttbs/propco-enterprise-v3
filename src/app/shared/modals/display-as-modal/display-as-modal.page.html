@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Full Name</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="landlordDetailsForm">
+    <ion-row>
+      <ion-col size="100">
+        <ion-item>
+          <ion-label position="floating">Title <ion-text class="mandatory">*</ion-text></ion-label>
+          <ion-select interface="popover" formControlName="title" [interfaceOptions]="popoverOptions" (ionChange)="onValueChange()">
+            <ion-select-option [value]="title?.value" *ngFor="let title of titles">
+              {{ title?.value }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <app-validation-message [control]="landlordDetailsForm.controls.title"></app-validation-message>
+      </ion-col>
+      <ion-col size="100">
+        <ion-item>
+          <ion-label position="floating">Initials</ion-label>
+          <ion-input formControlName="initials" (change)="onValueChange()"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="100">
+        <ion-item>
+          <ion-label position="floating">Forename <ion-text class="mandatory">*</ion-text></ion-label>
+          <ion-input formControlName="forename" (change)="onValueChange()"></ion-input>
+        </ion-item>
+        <app-validation-message [control]="landlordDetailsForm.controls.forename"></app-validation-message>
+      </ion-col>
+      <ion-col size="100">
+        <ion-item>
+          <ion-label position="floating">Middle Name</ion-label>
+          <ion-input formControlName="middleName"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="100">
+        <ion-item>
+          <ion-label position="floating">Surname <ion-text class="mandatory">*</ion-text></ion-label>
+          <ion-input formControlName="surname" (change)="onValueChange()"></ion-input>
+        </ion-item>
+        <app-validation-message [control]="landlordDetailsForm.controls.surname"></app-validation-message>
+      </ion-col>
+      <ion-col size="100">
+        <ion-item>
+          <ion-label position="floating">Addressee</ion-label>
+          <ion-input formControlName="addressee"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="100">
+        <ion-item>
+          <ion-label position="floating">Salutation</ion-label>
+          <ion-input formControlName="salutation"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item size="100">
+          <ion-label position="floating">Display As <ion-text class="mandatory">*</ion-text></ion-label>
+          <ion-input formControlName="displayAs"></ion-input>
+        </ion-item>
+        <app-validation-message [control]="landlordDetailsForm.controls.displayAs"></app-validation-message>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-end">
+        <ion-button color="success" (click)="saveDisplayAs()">save</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

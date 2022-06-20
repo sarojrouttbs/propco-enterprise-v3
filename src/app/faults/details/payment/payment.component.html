@@ -1,11 +1,11 @@
 
   <ion-grid >
     <ion-row *ngIf="!showSkeleton" >
-      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background border-top-radious border-bottom-radious">
         <div class="arranging-contractor">
           <div class="banner">
             <h2 class="banner-heading">
-             {{faultDetails && (!faultDetails?.isWOConvertedToInvoice || !faultDetails?.isContractorPaymentDone) ? 'Awaiting Payment':'Invoice paid'}}
+             {{faultDetails && (!faultDetails?.isWOConvertedToInvoice || !faultDetails?.isContractorPaymentDone) ? notificationState.AWAITING_PAYMENT:notificationState.INVOICE_PAID}}
             </h2>
           </div>        
           <div class="question-answer ion-text-center" *ngIf="faultDetails && !faultDetails?.isWOConvertedToInvoice">

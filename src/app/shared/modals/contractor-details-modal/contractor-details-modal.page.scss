@@ -1,26 +1,11 @@
-.scheduled-on {
-    padding-bottom: 6px;
-}
-
-.permission-block{
-    margin-top: 15px;
-}
-
-.consent-text{
-    white-space: pre-wrap;
-}
-
-.unsaved-data-error{
-    background: #ea828247;
-}
-
-.session-block {
-    // display: flex;
-    // flex-wrap: wrap;
-    div {
-        margin-bottom: -16px;
+#contractor-details-modal {
+    .consent-text{
+        white-space: pre-wrap;
     }
-    .ion-radio {
-        margin: 0px 20px -5px 0px;
+        
+    .session-block-radio-btn {
+        div {
+            margin-bottom: -16px;
+        }
     }
 }

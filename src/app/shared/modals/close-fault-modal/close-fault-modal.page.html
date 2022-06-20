@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>Close Fault</ion-title>
+        <ion-title>Close Repair</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -10,11 +10,11 @@
 
             <ion-col size="100">
                 <ion-item>
-                    <ion-label position="floating">Please select a reason for closing this fault
+                    <ion-label position="floating">Please select a reason for closing this repair
                         <ion-text class="mandatory">*
                         </ion-text>
                     </ion-label>
-                    <ion-select interface="popover" formControlName="closedReason" (ionChange)="onReasonChange()" class="reason-dropdown" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
+                    <ion-select interface="popover" formControlName="closedReason" (ionChange)="onReasonChange()" class="reason-dropdown" [interfaceOptions]="{'cssClass': 'ion-select-popover-content fault-ion-select'}">
                         <ion-select-option [value]="reason.index" *ngFor="let reason of reasons">
                             {{ reason.value }}
                         </ion-select-option>

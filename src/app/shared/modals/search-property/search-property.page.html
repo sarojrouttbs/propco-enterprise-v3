@@ -21,19 +21,17 @@
           </ion-item>
      </ion-list> -->
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
-      <mat-option *ngFor="let result of (filteredProperty | async)?.data" [value]="result"
-        style="border-bottom: 1px solid gray; line-height: 16px; font-size: 14px;">
-        <!-- <span class="text-color-lightblue">{{getLookupValue(result.officeCode, officeLookupDetails)}}&nbsp;</span> -->
+      <mat-option *ngFor="let result of (filteredProperty | async)?.data" [value]="result" class="search-option">
+        <!-- <span>{{getLookupValue(result.officeCode, officeLookupDetails)}}&nbsp;</span> -->
         <span>
           <i class="propcoicon no-background propcoicon-property"
             style="background: transparent;vertical-align:middle"></i>
         </span>
-        <div style="display: inline-block;">
-          <span style="color: var(--ion-color-step-200)">{{result.address}}&nbsp;</span> <br>
-          <span style="color: var(--ion-color-step-1000)">{{result.reference}}</span>&nbsp;
-          <span ng-if="result.entityType === 'PROPERTY'"
-            style="color: var(--ion-color-step-200)">{{result.propertyAdvertisedRent | currency : "£"}}</span>&nbsp;
-          <span class="text-color-lightgreen" style="color: var(--ion-color-primary-shade)">{{result.status}}</span>&nbsp;
+        <div>
+          <span class="address">{{result.address}}&nbsp;</span> <br>
+          <span class="ref">{{result.reference}}</span>&nbsp;
+          <span ng-if="result.entityType === 'PROPERTY'" class="rent">{{result.propertyAdvertisedRent | currency : "£"}}</span>&nbsp;
+          <span class="text-color-lightgreen" class="status">{{result.status}}</span>&nbsp;
         </div>
       </mat-option>
       <mat-option *ngIf='(propertySearchForm.controls.text.value).length > 2 && isNotFound'>No record found.

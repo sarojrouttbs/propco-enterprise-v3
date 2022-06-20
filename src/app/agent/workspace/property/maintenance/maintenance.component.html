@@ -1,0 +1,106 @@
+<ion-content id="maintenance-table">
+  <mat-accordion multi class="form-table-view-accordian">
+    <mat-expansion-panel #maintenance hideToggle expanded>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Maintenance
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!maintenance.expanded" class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="maintenance.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+            </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="expenditure-limit-block">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="33.3">
+              <ion-item>
+                <ion-label position="stacked">Expenditure Limit</ion-label>
+                <input currencyMask [formControl]="expenditureLimit" class="currency-input" readonly/>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+      <div class="overlay-container" style="position: relative">
+        <table datatable [dtOptions]="dtOptions" class="row-border hover" id="propertyMaintenanceTable" width="100%" style="position: relative;">
+          <thead>
+            <tr>
+              <th style="width:10%">Put On</th>
+              <th style="width:10%">Type</th>
+              <th style="width:16%">Description</th>
+              <th style="width:9%">Works Value</th>
+              <th style="width:9%">Raised</th>
+              <th style="width:9%">Paid</th>
+              <th style="width:9%">Inv#</th>
+              <th style="width:15%">Contractor</th>
+              <th style="width:10%">Status</th>
+              <th style="width:36px"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of maintenanceList" class="table-row pointer"
+              (click)="onClickRow(data); $event.stopPropagation();" [class.data-selected]="data.isSelected">
+              <td> {{ data?.postdate | date: 'dd/MM/yyyy' || notAvailable }} </td>
+              <td> {{ (data.type | titlecase)|| notAvailable }}: {{ data.worksOrderNumber || notAvailable }} </td>
+              <td> {{ data.description || notAvailable }} </td>
+              <td> {{ (data.repairCost | currency : "GBP") || notAvailable }} </td>
+              <td> {{ (data.amount | currency : "GBP") || notAvailable }} </td>
+              <td> {{ (data.paidAmount | currency : "GBP") || notAvailable }} </td>
+              <td> {{ data.invoiceNumber || notAvailable }} </td>
+              <td> {{ data.supplierCompany || notAvailable }} </td>
+              <td> {{ data.status || notAvailable }} </td>
+              <td class="resp-action-icon">
+                <i (click)="showMenu($event,'divOverlay', data, 'table-row')"
+                  class="propcoicon propcoicon-actions-on action-btn"></i>
+              </td>
+            </tr>
+            <tr *ngIf="maintenanceList?.length === 0">
+              <td colspan="10" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="divOverlay">
+          <!-- <ion-button>Add Note</ion-button> -->
+          <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+        </div>
+      </div>
+      <div class="overlay-container" style="position: relative">
+        <h5>Maintenance Notes</h5>
+        <table datatable [dtOptions]="notesDtOption" [dtTrigger]="notesDtTrigger" class="row-border hover"
+          style="width: 100%; position: relative" #maintenanceNotesTable>
+          <thead>
+            <tr>
+              <th style="width:15%">Date</th>
+              <th style="width:15%">Time</th>
+              <th style="width:15%">Type</th>
+              <th style="width:15%">Complaint</th>
+              <th style="width:15%">Category</th>
+              <th>User</th>
+              <th style="width:40px">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let notes of maintenanceNotes" class="table-row">
+              <td>{{notes.postedAt | date: 'dd/MM/yyyy' || notAvailable}}</td>
+              <td>{{notes.postedAt | date: 'HH:mm' || notAvailable}}</td>
+              <td>{{notes.type | lookup:notesTypes || notAvailable}}</td>
+              <td>{{notes.complaint | lookup:notesComplaints || notAvailable}}</td>
+              <td>{{notes.category | lookup:notesCategories || notAvailable}}</td>
+              <td>{{notes.userName || notAvailable}}</td>
+              <td><i (click)="showNoteDescription(notes.notes);"
+                  class="propcoicon propcoicon-property-description pointer"></i></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</ion-content>

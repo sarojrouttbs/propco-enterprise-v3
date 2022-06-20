@@ -1,7 +1,6 @@
 <ion-grid>
   <ion-row *ngIf="!showSkeleton">
-    <!-- <ion-col offset-xl="25" size-xl="50" offset ="0" size="100">  -->
-    <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+    <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background border-top-radious border-bottom-radious">
       <div class="landlord-instructions">
         <app-close-fault *ngIf="faultDetails?.isClosed" [notificationData]="cliNotification" [faultDetails]="faultDetails" [action]="getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes)? getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes):'Landlord Instructions'"></app-close-fault>
 
@@ -15,7 +14,7 @@
             </ion-icon>
           </ion-button>
           <h6 class="ownRepair" *ngIf="(isMatch === false && suggestedAction == 'DOES_OWN_REPAIRS')">
-            Landlord owned Repair Category does not match the Fault Category</h6>
+            Landlord owned Repair Category does not match the Repair Category</h6>
 
           <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
           <ion-grid>
@@ -31,7 +30,7 @@
                       *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
                   </ion-button>
                   <h6 class="ownRepair" *ngIf="(instruction.index == 'DOES_OWN_REPAIRS' && isMatch === false )">
-                    Landlord owned Repair Category does not match the Fault Category</h6>
+                    Landlord owned Repair Category does not match the Repair Category</h6>
                 </div>
               </ng-container>
             </ion-row>
@@ -44,8 +43,8 @@
               <b>{{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}</b>
             </div>
             <h2 class="banner-heading" >
-              {{cliNotification && cliNotification?.responseReceived ? 'Response Received': 
-              (cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?'No response':'Awaiting response')}}
+              {{cliNotification && cliNotification?.responseReceived ? notificationState.RESPONSE_RECEIVED: 
+              (cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE)}}
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
@@ -61,7 +60,7 @@
               <h6 class="banner-title"
                 [ngClass]="cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?'no-response':'awaiting-response'"
               >
-                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?'No response':'Awaiting response'}} received from Landlord</h6>
+                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE}} received from Landlord</h6>
               <h6 class="banner-title" *ngIf="!faultDetails?.isEscalated" >{{cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone?'Escalation due': cliNotification.chase === cliNotification.allowedNumberOfChases ? 'Last chase due('+cliNotification.chase+')' : 'Next chase due('+cliNotification.chase+')'}}:
                 {{cliNotification ? (cliNotification.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
               </h6>
@@ -79,7 +78,7 @@
                   </ng-container>
                   <ng-container *ngIf="cliNotification?.templateCode === 'LR-L-E' && faultDetails?.isClosed">
                     <ion-button color="success" class="action-btn option"
-                    fill="solid">Close Fault</ion-button>
+                    fill="solid">Close Repair</ion-button>
                   </ng-container>
                 </ion-row>
               </ion-grid>
@@ -93,7 +92,7 @@
           && cliNotification?.notificationStatus !== 7 && !faultDetails?.isEscalated && faultDetails?.status !== 10 && faultDetails?.status !== 12">
             <h6>
               <ion-text color="danger">Please note:</ion-text>
-              The fault will be <i>escalated</i> automatically if the Landlord doesn't respond within {{cliNotification?.hoursLeft}}.
+              The repair will be <i>escalated</i> automatically if the Landlord doesn't respond within {{cliNotification?.hoursLeft}}.
             </h6>
             <div class="border-bottom"></div>
           </div>
@@ -105,11 +104,11 @@
             <h6 *ngIf="faultDetails?.landlordOwnContractor?.landlordOwnContractorId === null && !faultDetails?.isEscalated">
               <ion-text color="danger">Please note: </ion-text>
               <span>
-                The fault will be <i>escalated</i> if the contractor's details including the scheduled date & time of the repair have not been added in the next 6/24 hours
+                The repair will be <i>escalated</i> if the contractor's details including the scheduled date & time of the repair have not been added in the next 6/24 hours
               </span>
             </h6>
             <h6 *ngIf="faultDetails?.isEscalated" >
-              <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
+              <ion-text color="danger">Please note: </ion-text>Repair Escalated - PM to decide the next steps
             </h6>
             <div class="border-bottom"></div>
           </div>
@@ -118,10 +117,10 @@
             *ngIf="(cliNotification?.responseReceived?.isAccepted === false || faultDetails?.isEscalated) && cliNotification?.notificationStatus !== 7 && cliNotification?.responseReceived?.isAccepted != true">
             <h4 claas="ion-text-center">Next Step:</h4>
             <h6 *ngIf="faultDetails.urgencyStatus == 3 || cliNotification?.responseReceived">
-              <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
+              <ion-text color="danger">Please note: </ion-text>Repair Escalated - PM to decide the next steps
             </h6>
             <h6 *ngIf="faultDetails.urgencyStatus != 3 && cliNotification?.responseReceived == null">
-              <ion-text color="danger">Please note: </ion-text>Fault Escalated - Please proceed with the following action:
+              <ion-text color="danger">Please note: </ion-text>Repair Escalated - Please proceed with the following action:
               <ion-grid>
                 <ion-row class="ion-justify-content-center">                    
                   <ion-button color="danger" expand="block" class="action-btn"
@@ -141,7 +140,7 @@
             <h4 claas="ion-text-center">Next Step:</h4>  
             <h6>
               <ion-text color="danger">Please note: </ion-text>
-              <span>This Fault is <i>escalated</i> as Landlord Override communication option is activated. 
+              <span>This Repair is <i>escalated</i> as Landlord Override communication option is activated. 
                 Please respond yourself or forward to Landlord for them to take an action by clicking here</span>
             </h6>
             <ion-button color="success" class="action-btn" fill="solid" (click)="viewNotification(); $event.stopPropagation();">
@@ -166,12 +165,12 @@
                       *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
                     </ion-button>
                     <h6 class="ownRepair" *ngIf="(isMatch === false && instruction.index == 'DOES_OWN_REPAIRS')">
-                      Landlord owned Repair Category does not match the Fault Category</h6>
+                      Landlord owned Repair Category does not match the Repair Category</h6>
                     </div>
                   </div>
                 </ng-container>
                 <ion-button *ngIf="faultDetails?.isEscalated" color="success" expand="block" class="action-btn" fill="outline" (click)="snoozeFault()">
-                  Snooze Fault</ion-button>
+                  Snooze Repair</ion-button>
               </ion-row>
             </ion-grid>
           </div>
@@ -182,12 +181,6 @@
             <ion-grid>
               <ion-row>
                 <ion-col size="50">
-                  <!-- <ion-item>
-                    <ion-label position="floating">Select Contractor</ion-label>
-                    <ion-select interface="popover" formControlName="contractorId">
-                      <ion-select-option>Choose</ion-select-option>
-                    </ion-select>
-                  </ion-item> -->
                   <ion-item>
                     <ion-label position="floating">Select Contractor</ion-label>
                     <ion-input type="text" debounce="1000" (ionInput)="onSearchChange($event)"
@@ -206,9 +199,9 @@
                         <i class="propcoicon no-background propcoicon-contractor"
                           style="background: transparent;"></i>
                       </span>&nbsp;
-                      <label style="color: var(--ion-color-step-200);padding-right: 5px;">{{result.fullName}}&nbsp;
-                        <span style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-                        <span class="text-color-lightgreen" style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;  
+                      <label>{{result.fullName}}&nbsp;
+                        <span class="ref">{{result.reference}}</span>&nbsp;
+                        <span class="text-color-lightgreen status">{{result.status}}</span>&nbsp;  
                       </label>                        
                     </ion-item>
                   </ion-list>
@@ -219,7 +212,7 @@
                 <ion-col size="50">
                   <ion-item>
                     <ion-label position="stacked">Confirmed Estimate</ion-label>
-                    <input currencyMask formControlName="confirmedEstimate"
+                    <input currencyMask formControlName="confirmedEstimate" class="currency-mask"
                       [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' 
                       || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION'
                       || userSelectedActionControl.value == 'AGENT_OF_NECESSITY'

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { DEFAULTS } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -11,7 +12,7 @@ export class BlockManagementModalPage implements OnInit {
   blockManagement: any;
   managementResponsibilities: any = [];
   faultCategories: any;
-
+  DEFAULTS = DEFAULTS;
   constructor(private modalController: ModalController, private commonService: CommonService) {
   }
 

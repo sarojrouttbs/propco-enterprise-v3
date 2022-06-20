@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { PROPCO, REFERENCING } from 'src/app/shared/constants';
-import { Router } from '@angular/router';
+import { DEFAULTS, PROPCO, REFERENCING } from 'src/app/shared/constants';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { ModalController } from '@ionic/angular';
 import { SearchApplicationPage } from 'src/app/shared/modals/search-application/search-application.page';
@@ -27,12 +27,14 @@ export class DashboardPage implements OnInit {
   referencingProductList: any;
   referencingCaseProductList: any[] = [];
   referencingApplicationProductList: any[] = [];
+  DEFAULTS = DEFAULTS;
 
   constructor(
     private commonService: CommonService,
     private referencingService: ReferencingService,
     private router: Router,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private route: ActivatedRoute
   ) {
     this.getLookupData();
     this.getProductList();
@@ -116,17 +118,17 @@ export class DashboardPage implements OnInit {
   }
 
   goToApplicationList() {
-    this.router.navigate([`let-alliance/application-list`]);
+    this.router.navigate(['../application-list'], { relativeTo: this.route });
   }
-
+  
   startApplication() {
-    this.router.navigate([`let-alliance/add-application`]);
+    this.router.navigate(['../add-application'], { relativeTo: this.route });
   }
 
   async quickSearch(){
     const modal = await this.modalController.create({
       component: SearchApplicationPage,
-      cssClass: 'modal-container la-application-search',
+      cssClass: 'modal-container la-application-search la-modal-container',
       backdropDismiss: false
     });
     const data = modal.onDidDismiss().then(res => {
@@ -142,11 +144,11 @@ export class DashboardPage implements OnInit {
     this.applicationStatus = await this.getApplicationStatus();
     const modal = await this.modalController.create({
       component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: `<div class='status-block'><b>Application Status - </b>${this.getLookupValue(this.applicationStatus.status, this.referencingApplicantStatusTypes)}
-        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes) : 'N/A' }
+        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes) : DEFAULTS.NOT_AVAILABLE }
         </div>`,
         heading: 'Status',
         buttonList: [

@@ -1,0 +1,63 @@
+#market-appraisal-property-address {
+    .heading {
+        color: var(--ion-color-one);
+        font-size: 16px;
+        line-height: 20px;
+        margin: 2px;
+    }
+
+    .register-address-row {
+        margin-top: 24px;
+    }
+
+    .address-details-block {
+        div {
+            color: var(--ion-color-three);
+        }
+    }
+}
+
+#market-appraisal-lettings {
+    .mat-date-picker-row {
+        margin-top: 24px;
+    }
+
+    .lettings-details-duration {
+        background-color: var(--ion-color-three);
+        border-radius: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+
+        .total-duration {
+            color: var(--ion-color-success);
+            text-align: center;
+        }
+
+        .duration {
+            text-align: center;
+
+            .count-duration {
+                color: var(--ion-color-four);
+                font-size: 20px;
+                padding-right: 3%;
+            }
+
+            .duration-heading {
+                color: var(--ion-color-one);
+                padding-right: 5%;
+            }
+
+        }
+    }
+}
+
+.currency-input {
+    border: 0;
+    outline: 0;
+    padding: 5px 0;
+    background: transparent;
+}
+
+.toggle-btn-stop-spacing {
+    margin-top: 11px;
+}

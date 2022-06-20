@@ -15,24 +15,30 @@ export class AuthGuard implements CanActivate {
         const webKey = this.commonService.getItem(PROPCO.WEB_KEY);
         let ssoKey = encodeURIComponent(route.queryParams.ssoKey);
         let oldSsoKey = this.commonService.getItem(PROPCO.SSO_KEY);
-        if(accessToken && webKey && ssoKey == 'undefined'){
+        if (accessToken && webKey && ssoKey == 'undefined') {
             ssoKey = oldSsoKey;
         }
 
-        if(accessToken && webKey && (oldSsoKey && ssoKey && oldSsoKey === ssoKey)){
+        if (accessToken && webKey) {
             return true;
-        }
-        return new Promise<boolean>((resolve, reject) => {
-            this.commonService.authenticateSsoToken(ssoKey).toPromise().then(response => {
-                this.commonService.setItem(PROPCO.SSO_KEY, ssoKey);
-                this.commonService.setItem(PROPCO.ACCESS_TOKEN, response.loginId);
-                this.commonService.setItem(PROPCO.WEB_KEY, response.webKey);
-                resolve(true);
-            }, err => {
-                // resolve(true);
-                reject(false);
-            });
+        } else {
+            if (ssoKey && ssoKey !== 'undefined') {
+                return new Promise<boolean>((resolve, reject) => {
+                    this.commonService.authenticateSsoToken(ssoKey).toPromise().then(response => {
+                        this.commonService.setItem(PROPCO.SSO_KEY, ssoKey);
+                        this.commonService.setItem(PROPCO.ACCESS_TOKEN, response.loginId);
+                        this.commonService.setItem(PROPCO.WEB_KEY, response.webKey);
+                        resolve(true);
+                    }, err => {
+                        // resolve(true);
+                        reject(false);
+                    });
 
-        });
+                });
+            } else {
+                // not logged in so redirect to login page
+                this.router.navigate(['/login'], { replaceUrl: true });
+            }
+        }
     }
 }

@@ -1,0 +1,74 @@
+@mixin set-text-style($size, $lheight) {
+  font-size: $size;
+  line-height: $lheight;
+}
+
+#ma-search {
+  display: grid;
+  justify-content: flex-end;
+  align-items: center;
+  grid-template-columns: 600px 50px 75px;
+  padding: 6px 16px 16px;
+
+  .solr-suggestionList {
+    position: absolute;
+    z-index: 100;
+    list-style: none;
+    padding: 0;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 25%);
+    right: 0;
+    width: auto;
+    background-color: var(--ion-color-five);
+  
+    .solr-suggestion-list-item:hover {
+      background-color: var(--ion-color-four);
+    }
+  
+    .solr-suggestion-list-item {
+      color: var(--ion-text-color);
+      cursor: pointer;
+      @include set-text-style(14px, 48px);
+      overflow: hidden;
+      padding: 0 2px;
+      height: 48px;
+      margin: 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+  
+      i.propcoicon {
+        display: inline-table;
+        vertical-align: sub;
+      }
+  
+      .text-color-lightgreen {
+        color: #21b573 !important;
+      }
+  
+      .no-background {
+        background-color: transparent;
+      }
+    }
+  }
+
+  .search-box{
+    position: relative;
+    .searchbar-custom{
+      border: 1px solid var(--ion-color-four);
+      padding: 0;
+    }
+  }
+
+  i.search-icon {
+    font-size: 19px;
+    line-height: 40px;
+    height: 39px;
+    width: 45px;
+    border: 1px solid var(--ion-color-four);
+    border-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    font-weight: bold;
+    background-color: var(--ion-color-success);
+    color: var(--ion-color-primary-contrast);
+  }
+}

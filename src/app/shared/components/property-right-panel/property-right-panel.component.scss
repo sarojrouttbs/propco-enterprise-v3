@@ -1,0 +1,54 @@
+.property-right-card {
+    .property-details {
+        padding: 0;
+        .property-status {
+            background: var(--ion-color-three);
+            color: var(--ion-color-primary-contrast);
+            padding-left: 10px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            text-transform: uppercase;
+            ion-col {
+                height: 47px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                ion-text {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    display: flex;
+                    .status {
+                        margin-left: 8px;
+                    }
+                }
+            }
+        }
+        .property-info {
+            padding-left: 10px;
+            ion-col {
+                .label {
+                    color: var(--ion-label-color);
+                    font-size: 12px;
+                }
+                .value {
+                    color: var(--ion-color-two);
+                }
+            }
+        }
+       
+        .sucess {
+            color: var(--ion-color-success);
+        }
+        .danger {
+            color: var(--ion-color-danger);
+        }
+        .property-certificates {
+            color: var(--ion-text-color);
+            display: flex;
+            align-items: center;
+            // padding: 7px;
+            // padding-left: 13px;
+        }
+    }
+}

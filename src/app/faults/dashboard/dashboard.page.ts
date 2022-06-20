@@ -1,8 +1,8 @@
 import { HttpParams } from '@angular/common/http';
-import { ERROR_MESSAGE, FAULT_STATUSES, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES } from './../../shared/constants';
+import { ERROR_MESSAGE, FAULT_STATUSES, NOTES_TYPE, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES, MAINT_SOURCE_TYPES, DEFAULT_MESSAGES } from './../../shared/constants';
 import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
@@ -46,7 +46,6 @@ export class DashboardPage implements OnInit {
   isStatusFilter = false;
   isAssignToFilter = false;
   filterForm: FormGroup;
-  // invoiceArr = [{ key: 8, value: 'Invoice Submitted' }, { key: 9, value: 'Paid' }];
   accessibleOffices: any
   faultParams: any = new HttpParams();
   fs: number[] = [];
@@ -91,6 +90,11 @@ export class DashboardPage implements OnInit {
   minDate;
   futureDate;
   currentDate;
+  maintSourceTypes = MAINT_SOURCE_TYPES;
+  DEFAULT_MESSAGES = DEFAULT_MESSAGES;
+  popoverOptions: any = {
+    cssClass: 'fault-modal-container'
+  };
 
   constructor(
     private commonService: CommonService,
@@ -99,6 +103,7 @@ export class DashboardPage implements OnInit {
     private faultsService: FaultsService,
     private fb: FormBuilder,
     public datepipe: DatePipe,
+    private route: ActivatedRoute
   ) {
     this.getLookupData();
   }
@@ -150,9 +155,6 @@ export class DashboardPage implements OnInit {
         })
         this.hideMenu('', 'divOverlay');
       },
-      language: {
-        processing: 'Loading...'
-      }
     };
     const promise = new Promise(async (resolve, reject) => {
       this.LET_CATEGORY = this.commonService.getItem(PROPCO.LET_CATEGORY, true);
@@ -194,26 +196,25 @@ export class DashboardPage implements OnInit {
     });
 
     this.filterForm.get('fromDate').valueChanges.subscribe(value => {
-      if(value){
+      if (value) {
         this.onDateChange();
       }
     });
     this.filterForm.get('toDate').valueChanges.subscribe(value => {
-      if(value){
+      if (value) {
         this.onDateChange();
       }
     });
     this.filterForm.get('snoozeUntil').valueChanges.subscribe(value => {
-      if(value){
-        setTimeout(()=>{
+      if (value) {
+        setTimeout(() => {
           this.filterList();
-        },300)
+        }, 300)
       }
     });
   }
 
   ionViewDidEnter() {
-    // this.faultParams = this.faultParams.set('fpm', this.FULLY_MANAGED_PROPERTY_TYPES.toString());
     if (this.loadTable) {
       this.rerenderFaults(true);
       this.bucketCount();
@@ -283,8 +284,6 @@ export class DashboardPage implements OnInit {
       if (e.faultId === data.faultId) this.faultList[i].isSelected = true;
       else this.faultList[i].isSelected = false;
     });
-    // this.faultList.map(x => x.isSelected = false);
-    // this.faultList.find(x => x.faultId === data.faultId).isSelected = true;
 
   }
 
@@ -307,15 +306,15 @@ export class DashboardPage implements OnInit {
   }
 
   public addFault() {
-    this.router.navigate(['faults/add']);
+    this.router.navigate(['../add'], { relativeTo: this.route });
   }
 
   async notesModal() {
     const modal = await this.modalController.create({
       component: NotesModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
-        notesType: 'fault',
+        notesType: NOTES_TYPE.FAULT,
         notesTypeId: this.selectedData.faultId,
         isAddNote: true
       },
@@ -331,10 +330,10 @@ export class DashboardPage implements OnInit {
   }
 
   async escalateFault() {
-    const headingText = 'Escalate Fault';
+    const headingText = 'Escalate Repair';
     const modal = await this.modalController.create({
       component: EscalateModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         heading: headingText,
         faultId: this.selectedData.faultId
@@ -343,7 +342,7 @@ export class DashboardPage implements OnInit {
 
     modal.onDidDismiss().then(res => {
       if (res.data == 'success') {
-        this.commonService.showAlert('Escalate Fault', 'Fault has been escalated to the property manager.');
+        this.commonService.showAlert('Escalate Repair', 'Repair has been escalated to the property manager.');
         this.rerenderFaults(false);
         this.getFaultNotes(this.selectedData.faultId);
         this.hideMenu('', 'divOverlay');
@@ -354,15 +353,14 @@ export class DashboardPage implements OnInit {
   }
 
   async deEscalateFault() {
-    this.commonService.showConfirm('De-Escalate Fault', 'Are you sure you want to de-escalate the fault?', '', 'Yes', 'No').then(res => {
+    this.commonService.showConfirm('De-Escalate Repair', 'Are you sure you want to de-escalate the repair?', '', 'Yes', 'No').then(res => {
       if (res) {
         this.faultsService.deEscalateFault(this.selectedData.faultId, {}).subscribe(res => {
-          this.commonService.showAlert('De-Escalate Fault', 'Fault has been de-escalated to the property manager.');
+          this.commonService.showAlert('De-Escalate Repair', 'Repair has been de-escalated to the property manager.');
           this.rerenderFaults(false);
           this.hideMenu('', 'divOverlay');
           this.bucketCount();
         }, error => {
-          // this.commonService.showMessage();
         });
       }
     })
@@ -371,7 +369,7 @@ export class DashboardPage implements OnInit {
   async closeFault() {
     const modal = await this.modalController.create({
       component: CloseFaultModalPage,
-      cssClass: 'modal-container close-fault-modal',
+      cssClass: 'modal-container close-fault-modal fault-modal-container',
       componentProps: {
         faultId: this.selectedData.faultId,
         maintenanceId: this.selectedData.maintenanceId
@@ -381,7 +379,7 @@ export class DashboardPage implements OnInit {
 
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
-        this.commonService.showMessage('Fault has been closed successfully.', 'Close Fault', 'success');
+        this.commonService.showMessage('Repair has been closed successfully.', 'Close Repair', 'success');
         this.rerenderFaults(false);
         this.bucketCount();
         return;
@@ -392,11 +390,10 @@ export class DashboardPage implements OnInit {
   }
 
   async startProgress() {
-    const check = await this.commonService.showConfirm('Start Progress', 'This will change the fault status, Do you want to continue?');
+    const check = await this.commonService.showConfirm('Start Progress', 'This will change the repair status, Do you want to continue?');
     if (check) {
       this.faultsService.startProgress(this.selectedData.faultId).subscribe(data => {
-        // this.rerenderFaults(false);
-        this.router.navigate([`faults/${this.selectedData.faultId}/details`]);
+        this.router.navigate([`../${this.selectedData.faultId}/details`], { relativeTo: this.route });
       }, error => {
         this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Start Progress', 'Error');
 
@@ -404,63 +401,13 @@ export class DashboardPage implements OnInit {
     }
   }
 
-  showMenu(event, id, data, className, isCard?) {
+  showMenu(event: any, id: any, data: any, className: any) {
     this.selectedData = data;
-    const baseContainer = $(event.target).parents('.' + className);
-    const divOverlay = $('#' + id);
-    const baseContainerWidth = baseContainer.outerWidth(true);
-    const baseContainerHeight = baseContainer.outerHeight(true);
-    const baseContainerPosition = baseContainer.position();
-    const baseContainerTop = baseContainerPosition.top;
-    const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
-    const divOverlayHeight = divOverlay.height();
-    const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    const divOverlayLeft = isCard ? baseContainerPosition.left : overlayContainerLeftPadding;
-
-    let origDivOverlayHeight;
-    let origDivOverlayTop;
-    let divOverlayTopBottomPadding = 0;
-    if (baseContainerHeight > 49) {
-      divOverlayTopBottomPadding = (baseContainerHeight - 48) / 2;
-    }
-
-    if (baseContainerHeight > divOverlayHeight) {
-      origDivOverlayHeight = baseContainerHeight;
-      origDivOverlayTop = baseContainerTop + $('.dataTables_length').outerHeight(true);
-    } else {
-      origDivOverlayHeight = divOverlayHeight + (divOverlayTopBottomPadding * 2);
-      const extraHeight = divOverlayHeight - baseContainerHeight;
-      origDivOverlayTop = baseContainerTop - extraHeight - (divOverlayTopBottomPadding * 2) + $('.dataTables_length').outerHeight(true);
-    }
-
-    divOverlay.css({
-      position: 'absolute',
-      top: origDivOverlayTop,
-      right: '0px',
-      width: baseContainerWidth,
-      height: origDivOverlayHeight,
-      left: divOverlayLeft,
-      paddingTop: divOverlayTopBottomPadding,
-      paddingBottom: divOverlayTopBottomPadding
-    });
-
-    const gridDivOverlay = $('#grid-divoverlay');
-
-    gridDivOverlay.css({
-      width: divOverlay.width(),
-      height: divOverlayHeight
-    });
-
-    divOverlay.delay(200).slideDown('fast');
-    event.stopPropagation();
+    this.commonService.showMenu(event, id, className, true);
   }
 
-  hideMenu(event?, id?) {
-    const $divOverlay = $('#' + id);
-    $divOverlay.delay(200).slideUp('fast');
-    if (event) {
-      event.stopPropagation();
-    }
+  hideMenu(event: any, id: any) {
+    this.commonService.hideMenu(event, id);
   }
 
   rerenderNotes(): void {
@@ -492,7 +439,7 @@ export class DashboardPage implements OnInit {
   }
 
   goToFaultDetails() {
-    this.router.navigate([`faults/${this.selectedData.faultId}/details`]);
+    this.router.navigate([`../${this.selectedData.faultId}/details`], { relativeTo: this.route });
   }
 
   getaccessibleOffices() {
@@ -540,12 +487,12 @@ export class DashboardPage implements OnInit {
     }
 
     if (this.filterValue == 2) {
-      if(this.isBucketActive) return;
+      if (this.isBucketActive) return;
       this.isManagementFilter = true;
     }
 
     if (this.filterValue == 3) {
-      if(this.isBucketActive) return;
+      if (this.isBucketActive) return;
       this.isStatusFilter = true;
     }
 
@@ -600,7 +547,6 @@ export class DashboardPage implements OnInit {
     this.isStatusFilter = false;
     this.isAssignToFilter = false;
     this.isSnoozeFilter = false;
-    // this.fpm = [17,18,20,24,27,32,35,36];
     this.fpm = this.FULLY_MANAGED_PROPERTY_TYPES;
     this.faultParams = new HttpParams().set('limit', '5').set('page', '1').set('fpm', this.fpm.toString());
     this.rerenderFaults();
@@ -635,7 +581,6 @@ export class DashboardPage implements OnInit {
       this.faultParams = this.faultParams.delete('fpm');
       this.fpm = this.bucketFpm;
       if (this.filterForm.get('repairCheckbox').value) {
-        // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
         let statusArray = Object.values(FAULT_STATUSES);
         this.fs = statusArray.filter(status => status != FAULT_STATUSES.CANCELLED && status != FAULT_STATUSES.CLOSED);
         this.showEscalated = 'false';
@@ -647,14 +592,12 @@ export class DashboardPage implements OnInit {
       }
 
       if (this.filterForm.get('emergency').value) {
-        // this.fs.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21);
         this.fs.push(FAULT_STATUSES.REPORTED);
         this.fus.push(URGENCY_TYPES.EMERGENCY);
         this.showEscalated = 'false';
       }
 
       if (this.filterForm.get('urgent').value) {
-        // this.fs.push(1);
         this.fs.push(FAULT_STATUSES.REPORTED);
         this.fus.push(URGENCY_TYPES.URGENT);
         this.showEscalated = 'false';
@@ -667,13 +610,11 @@ export class DashboardPage implements OnInit {
       }
 
       if (this.filterForm.get('assessment').value) {
-        // this.fs.push(2, 13);
         this.fs.push(FAULT_STATUSES.IN_ASSESSMENT, FAULT_STATUSES.CHECKING_LANDLORD_INSTRUCTIONS);
         this.showEscalated = 'false';
       }
 
       if (this.filterForm.get('automation').value) {
-        // this.fs.push(3, 4, 5, 6, 7, 14, 15, 16, 17, 18, 19, 20, 21, 22);
         this.fs.push(FAULT_STATUSES.QUOTE_REQUESTED, FAULT_STATUSES.QUOTE_RECEIVED, FAULT_STATUSES.QUOTE_PENDING, FAULT_STATUSES.QUOTE_APPROVED, FAULT_STATUSES.QUOTE_REJECTED,
           FAULT_STATUSES.WORKSORDER_PENDING, FAULT_STATUSES.AWAITING_JOB_COMPLETION,
           FAULT_STATUSES.WORKSORDER_RAISED, FAULT_STATUSES.AWAITING_RESPONSE_CONTRACTOR, FAULT_STATUSES.WORK_INPROGRESS, FAULT_STATUSES.WORK_COMPLETED, FAULT_STATUSES.AWAITING_RESPONSE_LANDLORD, FAULT_STATUSES.AWAITING_RESPONSE_TENANT, FAULT_STATUSES.AWAITING_RESPONSE_THIRD_PARTY);
@@ -681,13 +622,6 @@ export class DashboardPage implements OnInit {
       }
 
       if (this.filterForm.get('invoice').value) {
-        // let response: any = await this.commonService.showCheckBoxConfirm("Invoice Type", 'Apply', 'Cancel', this.createInputs());
-        // if (response && response.length > 0) {
-        //   this.fs.push(response);
-        // } else {
-        //   this.filterForm.get('invoice').setValue(false)
-        //   return;
-        // }
         this.fs.push(FAULT_STATUSES.INVOICE_SUBMITTED, FAULT_STATUSES.INVOICE_APPROVED);
         this.showEscalated = 'false';
       }
@@ -810,32 +744,12 @@ export class DashboardPage implements OnInit {
     this.bucketCount();
   }
 
-  // createInputs() {
-  //   const theNewInputs = [];
-  //   for (let i = 0; i < this.invoiceArr.length; i++) {
-  //     theNewInputs.push(
-  //       {
-  //         type: 'checkbox',
-  //         label: this.invoiceArr[i].value,
-  //         value: '' + this.invoiceArr[i].key,
-  //         checked: false
-  //       }
-  //     );
-  //   }
-  //   return theNewInputs;
-  // }
-
   getMoreUsers(event: {
     component: IonicSelectableComponent,
     text: string
   }) {
     if (event) {
       let text = (event.text || '').trim().toLowerCase();
-
-      // if (this.page > 3) {
-      //   event.component.disableInfiniteScroll();
-      //   return;
-      // }
 
       this.getUsersAsync(this.page, 10).subscribe(users => {
         users = event.component.items.concat(users);
@@ -965,17 +879,17 @@ export class DashboardPage implements OnInit {
   validateFaults(faultDetail) {
     let valid = true;
     if (faultDetail.status === FAULT_STATUSES.CLOSED) {
-      this.commonService.showAlert('Fault Closed', 'Fault status is closed, Please select another fault.', '');
+      this.commonService.showAlert('Repair Closed', 'Repair status is closed, Please select another repair.', '');
       return valid = false;
     }
     if (this.selectedFaultList.length === 3) {
-      this.commonService.showAlert('Maximum Limit', 'Maximum allowed limit to merge fault is 3.', '');
+      this.commonService.showAlert('Maximum Limit', 'Maximum allowed limit to merge repair is 3.', '');
       return valid = false;
     }
     if (this.selectedFaultList.length > 0) {
       let matchedProperty = this.selectedFaultList.filter(data => data.propertyId === faultDetail.propertyId);
       if (matchedProperty.length === 0) {
-        this.commonService.showAlert('Property not matched', 'You can only merge faults that are reported for the same property.', '');
+        this.commonService.showAlert('Property not matched', 'You can only merge repairs that are reported for the same property.', '');
         return valid = false;
       }
     }
@@ -989,7 +903,7 @@ export class DashboardPage implements OnInit {
       event.target.checked = false;
       faultDetail.isChecked = false;
       event.stopPropagation();
-      this.commonService.showAlert('Quote/Works Order Raised', 'There is active maintenance linked with this fault, cannot be selected to merge.', '');
+      this.commonService.showAlert('Quote/Works Order Raised', 'There is active maintenance linked with this repair, cannot be selected to merge.', '');
       return valid = false;
     }
     return valid;
@@ -1004,7 +918,7 @@ export class DashboardPage implements OnInit {
   }
 
   async mergeFault(data) {
-    const isConfirm = await this.commonService.showConfirm('Merge Faults', `You have selected ${this.selectedFaultList?.length} faults to merge. Information from all the faults will be copied into the Fault ${data?.reference} and the remaining faults will be marked as Closed. Any communications sent out from the faults being closed will be voided. Are you sure?`)
+    const isConfirm = await this.commonService.showConfirm('Merge Repairs', `You have selected ${this.selectedFaultList?.length} repairs to merge. Information from all the repairs will be copied into the Repair ${data?.reference} and the remaining repairs will be marked as Closed. Any communications sent out from the repairs being closed will be voided. Are you sure?`)
     if (isConfirm && data) {
       let childFaults = this.selectedFaultList.filter(x => x.faultId != data.faultId);
       let requestObj: any = {};
@@ -1049,15 +963,15 @@ export class DashboardPage implements OnInit {
     let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
-      faultCountParams = faultCountParams.delete('fus');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('fus');
     this.activeRepairLoader = true;
     const promise = new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
-        this.activeRepairLoader = false;       
+        this.activeRepairLoader = false;
         this.activeRepairCount = res ? res.count : 0;
         resolve(true);
       }, error => {
@@ -1073,10 +987,10 @@ export class DashboardPage implements OnInit {
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.EMERGENCY.toString())
       .set('showEscalated', 'false')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
     this.emergencyLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1095,10 +1009,10 @@ export class DashboardPage implements OnInit {
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.URGENT.toString())
       .set('showEscalated', 'false')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
     this.urgentLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1117,10 +1031,10 @@ export class DashboardPage implements OnInit {
       .set('fs', FAULT_STATUSES.REPORTED.toString())
       .set('fus', URGENCY_TYPES.NON_URGENT.toString())
       .set('showEscalated', 'false')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
     this.nonUrgentLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1139,11 +1053,11 @@ export class DashboardPage implements OnInit {
     let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
-      faultCountParams = faultCountParams.delete('fus');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('fus');
     this.assismentLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1164,11 +1078,11 @@ export class DashboardPage implements OnInit {
     let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
-      faultCountParams = faultCountParams.delete('fus');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('fus');
     this.automationLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1187,11 +1101,11 @@ export class DashboardPage implements OnInit {
     let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
-      faultCountParams = faultCountParams.delete('fus');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('fus');
     this.invoiceLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1205,15 +1119,15 @@ export class DashboardPage implements OnInit {
     });
   }
 
-  getEscalationCount() {    
+  getEscalationCount() {
     let faultCountParams: any = this.faultParams
       .set('showEscalated', 'true')
-      .set('fpm',  this.fpm.toString())
+      .set('fpm', this.fpm.toString())
       .set('hideLoader', 'true');
-      faultCountParams = faultCountParams.delete('fs');
-      faultCountParams = faultCountParams.delete('page');
-      faultCountParams = faultCountParams.delete('limit');
-      faultCountParams = faultCountParams.delete('fus');
+    faultCountParams = faultCountParams.delete('fs');
+    faultCountParams = faultCountParams.delete('page');
+    faultCountParams = faultCountParams.delete('limit');
+    faultCountParams = faultCountParams.delete('fus');
     this.escalationLoader = true;
     new Promise((resolve, reject) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
@@ -1227,7 +1141,7 @@ export class DashboardPage implements OnInit {
     });
   }
 
-  setSnoozeMinMaxDate(){
+  setSnoozeMinMaxDate() {
     const currentDate = new Date();
     this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 1), 'yyyy-MM-dd');
     this.futureDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 29), 'yyyy-MM-dd');

@@ -9,14 +9,6 @@
     -moz-border-radius: $radius;
     border-radius: $radius;
   }
-  .contractor-list {
-    width: 100%;
-    max-height: 200px;
-    overflow-y: scroll;
-    position: absolute !important;
-    z-index: 5 !important;
-    cursor: pointer;
-  }
   
   .contractor-block {
     margin-top: 20px;
@@ -139,7 +131,6 @@
   }
   .defaultCommission {
     display: inline-flex;
-    // flex-wrap: wrap;
   }
   
   .defaultCommission .ion-item ,.defaultCommission .ion-label {

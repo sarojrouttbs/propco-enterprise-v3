@@ -17,7 +17,6 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { DataTablesModule } from 'angular-datatables';
-import { ScriptService } from './shared/services/script.service';
 import { AutocloseOverlaysService } from './shared/services/autoclose-overlays.service';
 
 @NgModule({
@@ -48,7 +47,6 @@ import { AutocloseOverlaysService } from './shared/services/autoclose-overlays.s
       multi: true
     },
     CommonService,
-    ScriptService,
     AutocloseOverlaysService
   ],
   bootstrap: [AppComponent]

@@ -1,0 +1,22 @@
+#periodic-visit {
+    h5 {
+        color: var(--ion-color-primary);
+    }
+    .row-selected {
+        opacity: 0.7;
+    }
+    .add-visit-block {
+        ion-button {
+            margin-left: 0;
+        }
+    }
+
+    ion-checkbox {
+        margin-right: 15px;
+    }
+    ::ng-deep .mat-form-field-infix {
+        input {
+            padding-top: 6px !important;
+        }
+    }
+}

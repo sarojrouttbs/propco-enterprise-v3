@@ -1,0 +1,225 @@
+<form [formGroup]="contactForm">
+  <mat-accordion class="list-view-accordian" multi>
+    <mat-expansion-panel #marketingDetails hideToggle [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Marketing Details
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!marketingDetails.expanded" class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="marketingDetails.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+            </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <ion-grid>
+        <ion-row>
+          <ion-col class="no-padding" size-xs="100" size-sm= "100" size-md="33">
+            <ion-row>
+              <ion-col size="100">
+                <ion-item>
+                  <ion-label position="floating">How did you find us? <ion-text class="mandatory">*</ion-text>
+                  </ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="heardReason">
+                    <ion-select-option [value]="data?.index" *ngFor="let data of propertyHeardSources">
+                      {{ data?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <app-validation-message [control]="contactForm.controls.heardReason"></app-validation-message>
+              </ion-col>
+              <ion-col size="100">
+                <ion-item>
+                  <ion-label position="floating">Enquiry Notes</ion-label>
+                  <ion-input formControlName="enquiryNotes"></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col class="no-padding" size-xs="100" size-sm= "100" size-md="33">
+            <ion-row>
+              <ion-col size="100">
+                <ion-item>
+                  <ion-label position="floating">Office <ion-text class="mandatory">*</ion-text>
+                  </ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="officeCode">
+                    <ion-select-option [value]="codes?.index" *ngFor="let codes of officeCodes">
+                      {{ codes?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <app-validation-message [control]="contactForm.controls.officeCode"></app-validation-message>
+              </ion-col>
+              <ion-col size="100">
+                <ion-item>
+                  <ion-label position="floating">Landlord Status</ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions"
+                    formControlName="landlordStatus">
+                    <ion-select-option [value]="status?.index" *ngFor="let status of landlordStatuses">
+                      {{ status?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col class="no-padding" size-xs="100" size-sm= "100" size-md="33">
+            <ion-row>
+              <ion-col size="50">
+                <ion-item>
+                  <ion-label position="floating">Ownership</ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="ownership"
+                    (ionChange)="onOwnershipChange($event)">
+                    <ion-select-option [value]="data?.index" *ngFor="let data of ownership">
+                      {{ data?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col size="50">
+                <ion-item>
+                  <ion-label position="floating">Number of Owners</ion-label>
+                  <ion-input formControlName="owners"></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel #contactAndAddress hideToggle [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Contact Name and Address
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!contactAndAddress.expanded" class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="contactAndAddress.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+            </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <ion-grid>
+        <ion-row>
+          <ion-col class="no-padding" size-xs="100" size-sm= "100" size-md="33">
+            <ion-row class="display-as-block">
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Display As <ion-text class="mandatory">*</ion-text>
+                  </ion-label>
+                  <ion-input formControlName="displayAs" [attr.disabled]="true"></ion-input>
+                </ion-item>
+                <app-validation-message [control]="contactForm.controls.displayAs"></app-validation-message>
+              </ion-col>
+              <ion-col size="auto">
+                <ion-button (click)="opneDisplayAsModal()" color="success" style="margin-bottom: 0;">{{contactForm.getRawValue().displayAs ? 'Edit' :
+                  'Add'}}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col class="no-padding ion-align-self-end" size-xs="100" size-sm= "100" size-md="33">
+            <ion-row class="address-block">
+              <ion-col class="ion-align-self-center">
+                <ion-label position="floating">Registered Address <ion-text class="mandatory">*</ion-text></ion-label>
+                <app-validation-message [control]="contactForm.controls.address.get('postcode')"></app-validation-message>
+              </ion-col>
+              <ion-col size="auto" class="ion-align-self-end">
+                <ion-button (click)="openAddressModal()" color="success">{{this.address?.addressLine1 ? 'Edit' :
+                  'Add'}}</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col size-xs="100" size-sm= "100" size-md="33"></ion-col>
+          <ion-col size-xs="100" size-sm= "100" size-md="33"></ion-col>
+          <ion-col class="no-padding ion-align-self-end" size-xs="100" size-sm= "100" size-md="33">
+            <ion-row>
+              <ion-col class="address-details-block">
+                <div>{{this.address?.addressLine1}}</div>
+                <div>{{this.address?.addressLine2}}</div>
+                <div>{{this.address?.addressLine3}}</div>
+                <div>{{this.address?.county}}</div>
+                <div>{{this.address?.locality}}</div>
+                <div>{{this.address?.town}}</div>
+                <div>{{this.address?.country}}</div>
+                <div>{{this.address?.postcode}}</div>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel #contactDetails hideToggle [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Contact Details
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!contactDetails.expanded" class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="contactDetails.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+            </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <ion-grid>
+        <ion-row>
+          <ion-col class="no-padding" size-xs="100" size-sm= "100" size-md="33">
+            <ion-row>
+              <ion-col size="50">
+                <ion-item>
+                  <ion-label position="floating">Mobile <ion-text class="mandatory">*</ion-text>
+                  </ion-label>
+                  <ion-input formControlName="mobile"></ion-input>
+                </ion-item>
+                <app-validation-message [control]="contactForm.controls.mobile"></app-validation-message>
+              </ion-col>
+              <ion-col size="50">
+                <ion-item>
+                  <ion-label position="floating">Home <ion-text class="mandatory">*</ion-text>
+                  </ion-label>
+                  <ion-input formControlName="homeTelephone"></ion-input>
+                </ion-item>
+                <app-validation-message [control]="contactForm.controls.homeTelephone"></app-validation-message>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col class="no-padding" size-xs="100" size-sm= "100" size-md="33">
+            <ion-row>
+              <ion-col size="50">
+                <ion-item>
+                  <ion-label position="floating">Work <ion-text class="mandatory">*</ion-text>
+                  </ion-label>
+                  <ion-input formControlName="businessTelephone"></ion-input>
+                </ion-item>
+                <app-validation-message [control]="contactForm.controls.businessTelephone"></app-validation-message>
+              </ion-col>
+              <ion-col size="50">
+                <ion-item>
+                  <ion-label position="floating">Email <ion-text class="mandatory">*</ion-text>
+                  </ion-label>
+                  <ion-input formControlName="email"></ion-input>
+                </ion-item>
+                <app-validation-message [control]="contactForm.controls.email"></app-validation-message>
+              </ion-col>
+
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </mat-expansion-panel>
+  </mat-accordion>
+</form>

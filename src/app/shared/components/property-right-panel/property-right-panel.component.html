@@ -1,0 +1,128 @@
+<div class="property-right-card">
+  <ion-grid class="property-details">
+    <ion-row class="property-status">
+      <ion-col matTooltip="{{ (propertyData?.propertyInfo?.status | lookup:propertyStatuses  || notAvailable) | uppercase }}" matTooltipPosition="above">
+        <ion-text>
+          <span class="property-status-circle" [ngClass]="propertyData?.propertyInfo?.status === '1' ? 'avaialble-circle' : 'other-status-circle'"></span>
+          <span class="status">{{propertyData?.propertyInfo?.status | lookup:propertyStatuses || notAvailable}}</span>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="property-info">
+      <ion-col size="50">
+        <ion-text class="label">Available From</ion-text><br>
+        <ion-text class="value">{{propertyData?.propertyInfo?.availableFrom ? (propertyData?.propertyInfo?.availableFrom | date: 'dd MMM yyyy') : notAvailable}}</ion-text>
+      </ion-col>
+      <ion-col size="50">
+        <ion-text class="label">Branch PMC</ion-text>
+        <br>
+        <ion-text class="value">{{propertyData?.branchPMC ? propertyData?.branchPMC : notAvailable}}</ion-text>
+      </ion-col>
+      <ion-col size="50">
+        <ion-text class="label">Available To</ion-text>
+        <br>
+        <ion-text class="value">{{propertyData?.propertyInfo?.availableTo ? (propertyData?.propertyInfo?.availableTo | date: 'dd MMM yyyy') : notAvailable}}</ion-text>
+      </ion-col>
+      <ion-col size="50">
+        <ion-text class="label">Booking Office</ion-text>
+        <br>
+        <ion-text class="value">{{propertyData?.propertyInfo?.bookingOfficeCode ? (propertyData?.propertyInfo?.bookingOfficeCode | lookup:officeCodes) : notAvailable}}
+        </ion-text>
+      </ion-col>
+      <ion-col size="50">
+        <ion-text class="label">Appraised</ion-text>
+        <br>
+        <ion-text class="value">{{propertyData?.propertyDetails?.appraisedDate ? (propertyData?.propertyDetails?.appraisedDate | date: 'dd MMM yyyy') : notAvailable}}</ion-text>
+      </ion-col>
+      <ion-col size="50">
+        <ion-text class="label">Portfolio Source</ion-text>
+        <br>
+        <ion-text class="value">
+          {{propertyData?.propertyInfo?.portfolioSource ? (propertyData?.propertyInfo?.portfolioSource | lookup:portfolioSources) : notAvailable}}
+        </ion-text>
+      </ion-col>
+      <ion-col size="50">
+        <ion-text class="label">Instructed</ion-text><br>
+        <ion-text class="value">{{propertyData?.propertyDetails?.instructedDate ? (propertyData?.propertyDetails?.instructedDate | date: 'dd MMM yyyy') : notAvailable}}</ion-text>
+      </ion-col>
+      <ion-col size="50">
+        <ion-text class="label">Property Type</ion-text><br>
+        <ion-text class="value">{{propertyData?.propertyDetails?.houseType ? (propertyData?.propertyDetails?.houseType | lookup:houseTypes) : notAvailable}}
+        </ion-text>
+      </ion-col>
+      <ion-col size="50">
+        <ion-text class="label">Acquisition Office</ion-text><br>
+        <ion-text class="value">{{propertyData?.propertyInfo?.acquisitionOffice ? (propertyData?.propertyInfo?.acquisitionOffice | lookup:acqisitionOffices) : notAvailable}}
+        </ion-text>
+      </ion-col>
+      <ion-col size="50">
+        <ion-text class="label">Category</ion-text><br>
+        <ion-text class="value">{{propertyData?.propertyDetails?.propertyCategory ? (propertyData?.propertyDetails?.propertyCategory | lookup:propertyCategories) : notAvailable}}
+        </ion-text>
+      </ion-col>
+      <ion-col class="property-certificates" size="100" style="margin-top: 15px;">
+        <ion-text class="sucess" style="min-width: 21px;">{{propertyData?.propertyInfo?.webVisitCount ? propertyData?.propertyInfo?.webVisitCount : '0'}} </ion-text>&nbsp;
+        <ion-text>
+          Property visits from web</ion-text>
+      </ion-col>
+      <ion-col class="property-certificates" size="100">
+        <ion-icon
+          [name]="propertyData?.propertyDetails?.hasElectricalIndemnitySigned?'checkmark-circle': 'close-circle'"
+          [ngClass]="propertyData?.propertyDetails?.hasElectricalIndemnitySigned?'sucess': 'danger'">
+        </ion-icon>
+        &nbsp;&nbsp;
+
+        <ion-text>
+          Covered by Rent Indemnity
+        </ion-text>
+      </ion-col>
+      <ion-col class="property-certificates" size="100">
+        <ion-icon
+          [name]="propertyData?.propertyRentInfo?.emergencyResponseService?.isERSEnabled?'checkmark-circle': 'close-circle'"
+          [ngClass]="propertyData?.propertyRentInfo?.emergencyResponseService?.isERSEnabled?'sucess': 'danger'">
+        </ion-icon>
+        &nbsp;&nbsp;
+        <ion-text>
+          Covered by Emergency Response
+        </ion-text>
+      </ion-col>
+      <ion-col class="property-certificates" size="100">
+        <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && propertyInspection?.expiryDate > currentDate && propertyInspection?.status == 1">
+          <ion-icon name="checkmark-circle" class="sucess">
+          </ion-icon>&nbsp;&nbsp;
+          <ion-text>
+            Has valid safety certificate
+          </ion-text>
+        </ng-container>
+
+        <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && propertyInspection?.status == 3">
+          <ion-icon name="checkmark-circle" class="sucess">
+          </ion-icon>&nbsp;&nbsp;
+          <ion-text>
+            Gas Safety certificate is not required
+          </ion-text>
+        </ng-container>
+
+        <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && 
+        (propertyInspection?.expiryDate < currentDate || !propertyInspection?.isDocumentExist) && 
+        (propertyInspection?.status != 1 && propertyInspection?.status !=3)">
+          <ion-icon name="close-circle" class="danger">
+          </ion-icon>&nbsp;&nbsp;
+          <ion-text>
+            No Valid Gas Safety Certificate
+          </ion-text>
+        </ng-container>
+
+        <ng-container *ngIf="propertyData && !propertyData?.propertyDetails?.hasGas">
+          <ion-icon name="checkmark-circle" class="sucess">
+          </ion-icon>&nbsp;&nbsp;
+          <ion-text>
+            Gas Safety certificate is not required
+          </ion-text>
+        </ng-container>
+       
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+</div>

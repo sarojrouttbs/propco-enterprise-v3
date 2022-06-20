@@ -2,7 +2,7 @@
 
 <ng-template #propDetails>
   <ion-card-content id="property-details">
-    <ion-grid class="">
+    <ion-grid class="property-details-grid">
       <ion-row class="main-row">
         <ion-col class="" size-xl="17" size="23">
           <form class="drop-zone" *ngIf="!files.length" [formGroup]="parentForm" file-drop (files)="submit($event)">
@@ -11,17 +11,6 @@
               (change)="submit($event.target.files)" accept=".png,.jpeg,.jpg,.pdf,.gif,.bmp,.text,.doc,.csv,.docx,.odt">
             <label for="files" class="browse-btn">Browse Files</label>
           </form>
-
-          <!-- <form class="drop-zone" [formGroup]="uploadDocForm" file-drop (files)="submit($event)">
-          <ion-icon class="icon" name="cloud-upload"></ion-icon>
-          <input type="file" class="custom-file-input form-control" id="files" multiple (change)="submit($event.target.files)"
-          accept="image/x-png,image/jpeg">
-          <span class="drag-text">Drag files to upload here</span> <br>
-          <label for="files" class="browse-btn">Browse Files</label>
-        </form> -->
-          <!-- <div *ngIf="files.length" class="fault-image">
-          <img [src]="files[0].documentUrl ? files[0].documentUrl : 'assets/images/default.jpg'">
-        </div> -->
           <div *ngIf="files.length" class="fault-image">
             <img [src]="getFilteredDocs(files)">
           </div>
@@ -54,7 +43,7 @@
                 <ion-list class="status-list" *ngIf="showList && faultId">
                   <ion-item *ngFor="let status of faultUrgencyStatuses" button style="font-size: 13px !important;"
                     (click)="selectedStatus(status.index)">
-                    <label style="color: var(--ion-color-step-200);padding-right: 5px;">{{status.value}}</label>&nbsp;
+                    <label>{{status.value}}</label>&nbsp;
                     <ion-icon *ngIf="urgencyStatus === status.index" name="checkmark-sharp"></ion-icon>
                   </ion-item>
                 </ion-list>
@@ -64,17 +53,17 @@
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Office</span>
                 <br />
-                {{getLookupValue(propertyDetails?.office, officeCodes) || 'N/A'}}
+                {{getLookupValue(propertyDetails?.office, officeCodes) || DEFAULTS.NOT_AVAILABLE}}
               </ion-col>
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Management Service</span>
                 <br />
-                {{propertyDetails?.managementTypeDescription || 'N/A'}}
+                {{propertyDetails?.managementTypeDescription || DEFAULTS.NOT_AVAILABLE}}
               </ion-col>
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Property Manager</span>
                 <br />
-                {{propertyDetails?.propertyManager || 'N/A'}}
+                {{propertyDetails?.propertyManager || DEFAULTS.NOT_AVAILABLE}}
               </ion-col>
               <ion-col size-xl="25" size-lg="34" size-md="34">
                 <span class="text">Occupancy Status</span>
@@ -82,25 +71,15 @@
                 {{propertyDetails?.landlordOccupancy === 1 ? 'Landlord Occupied': propertyDetails?.isPropertyCheckedIn ?
                 'Tenanted' : 'Vacant' }}
               </ion-col>
-              <!-- <ion-col size-lg="22" size="33.3">
-                <span class="text">Licence Details</span>
-                <br />
-                Has HMO Licence? {{ hmoDetails[0]?.isPropertyLicensed ? 'Yes' : 'No' }}
-              </ion-col>
-              <ion-col size-lg="22" size="33.3">
-                <span class="text">Licence Scheme</span>
-                <br />
-                {{getLookupValue(hmoDetails[0]?.licenceSchemeLookup, hmoLicenceSchemes) || 'N/A'}}
-              </ion-col> -->
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Licence Details</span>
                 <br />
-                {{ hmoDetails[0]?.isPropertyLicenced ? getLookupValue(hmoDetails[0]?.licenceSchemeLookup, hmoLicenceSchemes) : 'N/A' }}
+                {{ hmoDetails[0]?.isPropertyLicenced ? getLookupValue(hmoDetails[0]?.licenceSchemeLookup, hmoLicenceSchemes) : DEFAULTS.NOT_AVAILABLE }}
               </ion-col>
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Communication</span>
                 <br />
-                {{getLookupValue(dppRepairDetails?.lookupId, faultCommunicationPreferences) || 'N/A'}}
+                {{getLookupValue(dppRepairDetails?.lookupId, faultCommunicationPreferences) || DEFAULTS.NOT_AVAILABLE}}
               </ion-col>
 
               <ion-col size-xl="25" size-lg="22" size-md="22" *ngIf="faultId">
@@ -117,23 +96,23 @@
             <ion-row class="fault-meter-row">
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <img src="assets/images/fault-categories/info.png"
-                  matTooltip="{{propertyDetails?.electricMeterLocation || 'N/A'}}" matTooltipPosition="above" />&nbsp;
+                  matTooltip="{{propertyDetails?.electricMeterLocation || DEFAULTS.NOT_AVAILABLE}}" matTooltipPosition="above" />&nbsp;
                 Electric Meter
               </ion-col>
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <img src="assets/images/fault-categories/info.png"
-                  matTooltip="{{propertyDetails?.waterMeterLocation || 'N/A'}}" matTooltipPosition="above" />&nbsp; Water
+                  matTooltip="{{propertyDetails?.waterMeterLocation || DEFAULTS.NOT_AVAILABLE}}" matTooltipPosition="above" />&nbsp; Water
                 Meter
               </ion-col>
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <img src="assets/images/fault-categories/info.png"
-                  matTooltip="{{propertyDetails?.gasMeterLocation || 'N/A'}}" matTooltipPosition="above" />&nbsp; Gas
+                  matTooltip="{{propertyDetails?.gasMeterLocation || DEFAULTS.NOT_AVAILABLE}}" matTooltipPosition="above" />&nbsp; Gas
                 Meter
               </ion-col>
               <ion-col size-xl="25" size-lg="34" size-md="34">
                 <img src="assets/images/fault-categories/info.png"
-                  matTooltip="{{propertyDetails?.stopTapLocation || 'N/A'}}" matTooltipPosition="above" style="float: left;"/>&nbsp; Stop Tap
-                <ion-button color="dark" fill="outline" (click)="contactDetailModal()" size="small" style=" margin-top: 0px; float: right;" *ngIf="faultId">
+                  matTooltip="{{propertyDetails?.stopTapLocation || DEFAULTS.NOT_AVAILABLE}}" matTooltipPosition="above" style="float: left;"/>&nbsp; Stop Tap
+                <ion-button class="contact-btn" color="dark" fill="outline" (click)="contactDetailModal()" size="small" style=" margin-top: 0px; float: right;" *ngIf="faultId">
                   <img src="assets/images/contact.png" style="height: 25px; margin-top: 0px;" alt="">Contact &nbsp;</ion-button>
               </ion-col>
             </ion-row>

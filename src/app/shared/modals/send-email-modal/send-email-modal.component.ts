@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, OnInit, AfterViewChecked, OnDestroy } fro
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { FAULT_STATUSES, LL_INSTRUCTION_TYPES, MAINTENANCE_TYPES, PROPERTY_LINK_STATUS, RECIPIENT, RECIPIENTS, MAINTENANCE_TYPES_FOR_SEND_EMAIL, FAULT_STAGES, SYSTEM_CONFIG, NGX_QUILL_EDITOR_TOOLBAR_SETTINGS } from '../../constants';
+import { FAULT_STATUSES, LL_INSTRUCTION_TYPES, MAINTENANCE_TYPES, PROPERTY_LINK_STATUS, RECIPIENT, RECIPIENTS, MAINTENANCE_TYPES_FOR_SEND_EMAIL, FAULT_STAGES, SYSTEM_CONFIG, NGX_QUILL_EDITOR_TOOLBAR_SETTINGS, DEFAULT_MESSAGES } from '../../constants';
 import { CommonService } from '../../services/common.service';
 import { SendEmailService } from './send-email-modal.service';
 
@@ -41,6 +41,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked {
   recipient = RECIPIENT;
   faultStages = FAULT_STAGES;
   faultOverrideCommConsent;
+  DEFAULT_MESSAGES = DEFAULT_MESSAGES;
 
   constructor(
     private modalController: ModalController,

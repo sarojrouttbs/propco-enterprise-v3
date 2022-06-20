@@ -1,0 +1,150 @@
+<ion-content id="property-dashboard">
+  <div class="dashboard">
+    <div class="homescreen-content">
+      <ion-row>
+        <ion-col size="70" class="ion-no-padding">
+          <ion-row>
+            <ion-col size="50" class="ion-no-padding">
+              <ion-slides pager *ngIf="propertyDetails?.media">
+                <ion-slide *ngFor="let data of propertyDetails?.media; let index = index">
+                  <div class="swiper-zoom-container">
+                    <img [src]="options + data?.fileName" [title]="data?.label" tappable (click)="openPreview(index)">
+                  </div>
+                  <button type="submit" ion-button color="light" class="swiper-button-prev swiper-button-black"
+                    (click)="prev()" *ngIf="propertyDetails?.media.length > 1">
+                    <ion-icon name="chevron-back-outline"></ion-icon>
+                  </button>
+                  <button type="submit" ion-button color="light" class="swiper-button-next swiper-button-black"
+                    (click)="next()" *ngIf="propertyDetails?.media.length > 1">
+                    <ion-icon name="chevron-forward-outline"></ion-icon>
+                  </button>
+                </ion-slide>
+              </ion-slides>
+              <div class="no-slider-img" *ngIf="!propertyDetails?.media">
+                <img src="assets/images/upload-image.jpg">
+              </div>
+            </ion-col>
+            <ion-col size="50" class="ion-no-padding">
+              <app-property-details-card [propertyData]="propertyDetails"></app-property-details-card>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="50" class="ion-no-padding">
+              <app-property-landlord-tenant [type]="'landlord'" [propertyLandlords]="propertyLandlords">
+              </app-property-landlord-tenant>
+            </ion-col>
+            <ion-col size="50" class="ion-no-padding">
+              <app-property-landlord-tenant [type]="'tenant'" [propertyTenants]="propertyTenants">
+              </app-property-landlord-tenant>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <ion-col size="30" class="right-panel-block ion-no-padding">
+          <app-property-right-panel [propertyData]="propertyDetails"></app-property-right-panel>
+        </ion-col>
+      </ion-row>
+      <!-- <div style="width: 33.33% !important;">
+        <ion-slides pager style="height: 260px;" *ngIf="propertyDetails?.media">
+          <ion-slide *ngFor="let data of propertyDetails?.media; let index = index">
+            <div class="swiper-zoom-container">
+              <img [src]="options + data?.fileName" [title]="data?.label" tappable (click)="openPreview(index)">
+            </div>
+            <button type="submit" ion-button color="light" class="swiper-button-prev swiper-button-black"
+              (click)="prev()" *ngIf="propertyDetails?.media.length > 1">
+              <ion-icon name="chevron-back-outline"></ion-icon>
+            </button>
+            <button type="submit" ion-button color="light" class="swiper-button-next swiper-button-black"
+              (click)="next()" *ngIf="propertyDetails?.media.length > 1">
+              <ion-icon name="chevron-forward-outline"></ion-icon>
+            </button>
+          </ion-slide>
+        </ion-slides>
+
+        <div class="no-slider-img" *ngIf="!propertyDetails?.media">
+          <img src="assets/images/upload-image.jpg">
+        </div>
+
+        <app-property-landlord-tenant [type]="'landlord'" [propertyLandlords]="propertyLandlords">
+        </app-property-landlord-tenant>
+      </div>
+      <div style="width: 33.33% !important;">
+        <app-property-details-card [propertyData]="propertyDetails"></app-property-details-card>
+        <app-property-landlord-tenant [type]="'tenant'" [propertyTenants]="propertyTenants">
+        </app-property-landlord-tenant>
+      </div>
+      <div style="width: 33.33% !important;" class="right-panel-block">
+        <app-property-right-panel [propertyData]="propertyDetails"></app-property-right-panel>
+      </div> -->
+    </div>
+    <div *ngIf="propertyData">
+      <ion-segment [(ngModel)]="type" class="segment-card" id="propertyDashboardTabs">
+        <ion-segment-button value="viewings" checked>
+          <div class="viewings-segment">
+            <span>0</span>
+            <ion-label>Viewings</ion-label>
+          </div>
+        </ion-segment-button>
+        <ion-segment-button value="map">
+          <div class="map-segment">
+             <i class="propcoicon propcoicon-location no-background"></i>
+            <ion-label>Map</ion-label>
+          </div>
+        </ion-segment-button>
+        <ion-segment-button value="notes">
+          <div class="notes-segment">
+            <i class="propcoicon propcoicon-property-notes no-background"></i>
+            <ion-label>Notes</ion-label>
+          </div>
+        </ion-segment-button>
+       
+      </ion-segment>
+      <div [hidden]="type != 'viewings'" class="ion-text-center">
+        <p>{{DEFAULT_MESSAGES.AVAILABLE_SOON}}</p>
+      </div>
+      
+      <div [hidden]="type != 'map'">
+        <app-google-map [propertyData]="propertyData"></app-google-map>
+      </div>
+      <div [hidden]="type != 'notes'">
+        <div class="table-block">
+          <ion-row>
+            <ion-col size="100">
+              <!-- <p class="label">Notes</p> -->
+              <div class="overlay-container">
+                <table datatable [dtOptions]="dtOptions" class="row-border hover" id="propertyNotesTable" width="100%">
+                  <thead>
+                    <tr>
+                      <th style="width:15%">Date</th>
+                      <th style="width:15%">Time</th>
+                      <th style="width:15%">Type</th>
+                      <th style="width:15%">Complaint</th>
+                      <th style="width:15%">Category</th>
+                      <th>User</th>
+                      <th style="width:40px">Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of notes" class="table-row">
+                      <td>{{data.postedAt | date: DATE_FORMAT.DATE || notAvailable}}</td>
+                      <td>{{data.postedAt | date: DATE_FORMAT.TIME || notAvailable}}</td>
+                      <td>{{getLookupValue(data.type, notesTypes) || notAvailable}}</td>
+                      <td>{{getLookupValue(data.complaint, notesComplaints) || notAvailable}}</td>
+                      <td>{{getLookupValue(data.category, notesCategories) || notAvailable}}</td>
+                      <td>{{data.userName || notAvailable}}</td>
+                      <td><i (click)="showNoteDescription(data.notes);"
+                          class="propcoicon propcoicon-property-description"></i></td>
+                    </tr>
+                    <tr *ngIf="notes?.length == 0">
+                      <td colspan="7" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

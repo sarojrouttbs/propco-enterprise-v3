@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ScriptService } from '../shared/services/script.service';
 @Component({
   selector: 'app-faults',
   templateUrl: './faults.page.html',
@@ -7,8 +6,7 @@ import { ScriptService } from '../shared/services/script.service';
 })
 export class FaultsPage implements OnInit {
   
-  constructor(scriptService: ScriptService) {
-    // scriptService.load('jiraJquery', 'jiraIssueCollector');
+  constructor() {
   }
 
   ngOnInit() {

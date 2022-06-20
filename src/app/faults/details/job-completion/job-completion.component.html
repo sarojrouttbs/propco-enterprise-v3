@@ -7,7 +7,7 @@
     </ion-row>
 
     <ion-row *ngIf="iacNotification && !showSkeleton && !faultDetails?.isClosed">
-      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background border-top-radious">
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
@@ -15,8 +15,8 @@
                 }}</b>
             </div>
             <h2 class="banner-heading">
-              {{iacNotification && iacNotification?.responseReceived ? 'Response Received': 
-              (iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response')}}
+              {{iacNotification && iacNotification?.responseReceived ? notificationState.RESPONSE_RECEIVED: 
+              (iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE)}}
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
@@ -26,9 +26,9 @@
             <ng-container *ngIf="iacNotification && iacNotification?.responseReceived">
               <h6 class="banner-title response-recived">
                 <ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from 
-                <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
-                <span *ngIf="iacNotification?.recipientType === 11">Contractor</span>
-                <span *ngIf="iacNotification?.recipientType === 1">Tenant</span>
+                <span *ngIf="iacNotification?.recipientType === 8">{{recipientTypes.LANDLORD}}</span>
+                <span *ngIf="iacNotification?.recipientType === 11">{{recipientTypes.CONTRACTOR}}</span>
+                <span *ngIf="iacNotification?.recipientType === 1">{{recipientTypes.TENANT}}</span>
                 {{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}
               </h6>
             </ng-container>
@@ -36,10 +36,10 @@
               <h6 class="banner-title"
               [ngClass]="iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'no-response':'awaiting-response'"
               >
-                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?'No response':'Awaiting response'}} from the  
-                  <span *ngIf="iacNotification?.recipientType === 8">Landlord</span>
-                  <span *ngIf="iacNotification?.recipientType == 11">Contractor</span>
-                  <span *ngIf="iacNotification?.recipientType == 1">Tenant</span>
+                <ion-icon name="ellipse" class="response-circle"></ion-icon> {{iacNotification?.responseReceived === null && iacNotification?.allowedNumberOfChases === iacNotification?.numberOfChasesDone && !iacNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE}} from the  
+                  <span *ngIf="iacNotification?.recipientType === 8">{{recipientTypes.LANDLORD}}</span>
+                  <span *ngIf="iacNotification?.recipientType == 11">{{recipientTypes.CONTRACTOR}}</span>
+                  <span *ngIf="iacNotification?.recipientType == 1">{{recipientTypes.TENANT}}</span>
               </h6>
               <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt" >{{iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone?'Escalation due': iacNotification.chase === iacNotification.allowedNumberOfChases ? 'Last chase due('+iacNotification.chase+')' : 'Next chase due('+iacNotification.chase+')'}}:
                 {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
@@ -79,7 +79,7 @@
               <h4>Next Step:</h4> 
               <h6>  
                 <ion-text color="danger">Please note: </ion-text>
-                <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
+                <span>The repair will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
                   {{iacNotification?.hoursLeft}}.
                 </span>
               </h6>
@@ -88,7 +88,7 @@
 
             <div class="question-answer ion-text-center" *ngIf="(iacNotification?.responseReceived?.isAccepted === false || faultDetails.isEscalated)">
               <h6>
-                <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
+                <ion-text color="danger">Please note: </ion-text>Repair Escalated - PM to decide the next steps
               </h6>
               <div class="border-bottom"></div>
             </div>
@@ -149,7 +149,7 @@
             <h4 claas="ion-text-center">Next Step:</h4>
             <h6>
               <ion-text color="danger">Please note: </ion-text>
-              <span>This Fault is escalated as Landlord Override communication option is activated. 
+              <span>This Repair is escalated as Landlord Override communication option is activated. 
                 Please respond yourself or forward to Landlord for them to take an action by clicking here</span>
             </h6>
             <ion-button color="success" class="action-btn" fill="solid" (click)="viewNotification(); $event.stopPropagation();">
@@ -161,17 +161,8 @@
             <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
             <ion-grid>
               <ion-row class="ion-justify-content-center">
-                <!-- <ng-container *ngFor="let instruction of otherStageActions">
-                    <ion-button color="success" expand="block" class="action-btn"
-                      fill="{{userSelectedActionControl.value == instruction.index ? 'solid' :'outline'}}"
-                      (click)="setUserAction(instruction.index)">
-                      {{instruction.value}}
-                      <ion-icon name="checkmark-circle-outline" class="check-icon"
-                        *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
-                    </ion-button>
-                </ng-container> -->
                 <ion-button color="success" expand="block" class="action-btn" fill="{{faultDetails?.isClosed ? 'solid' : 'outline'}}" (click)="closeFault()">
-                    Close Fault</ion-button>
+                    Close Repair</ion-button>
                 <ion-button color="success" expand="block" class="action-btn" fill="outline" (click)="resendNotification()" 
                 *ngIf="iacNotification 
                 && (iacNotification?.templateCode === 'GNR-T-E' || 
@@ -183,7 +174,7 @@
                 && !faultDetails?.isClosed" >
                       Resend Notification</ion-button>
                 <ion-button *ngIf="faultDetails?.isEscalated"  color="success" expand="block" class="action-btn" fill="outline" (click)="snoozeFault()">
-                   Snooze Fault</ion-button>
+                   Snooze Repair</ion-button>
               </ion-row>
             </ion-grid>
           </div>
@@ -191,24 +182,14 @@
       </ion-col>
     </ion-row>
     <ion-grid style="margin: 20px 0" *ngIf="quoteDocuments?.length && !showSkeleton">
-      <!-- <ion-grid style="margin: 20px 0" *ngIf="quoteDocuments?.length != 0 && (iacNotification?.templateCode === 'CF-T-E' || faultDetails?.status === 8)"> -->
       <ion-row>
-        <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+        <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background">
           <h2>Invoice / Documents</h2>
-          <!-- <div class="border-bottom"></div> -->
           <ion-row>
             <ion-col size-xl="25" size="25" *ngFor="let file of quoteDocuments; let i=index;">
               <div class="delete-icon-wrapper">
                 <ion-grid>
                   <ion-row>
-                    <!-- <ion-col size="100" *ngIf="getFileType(file.name)">
-                      <img src="/assets/images/default.jpg" (click)="downloadDocumentByURl(file.documentUrl)"
-                        title="Click To Download PDF">
-                    </ion-col>
-                    <ion-col size="100" *ngIf="!getFileType(file.name)">
-                      <img [src]="file.documentUrl ? file.documentUrl : '/assets/images/default.jpg'"
-                        (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download">
-                    </ion-col> -->
                     <ion-col size="100">
                       <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file?.documentUrl, file?.name)" title="Click To Download">
                     </ion-col>    
@@ -233,7 +214,7 @@
     </ion-grid>
     <ion-row *ngIf="isFormsReady && !showSkeleton">
       
-        <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+        <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background">
           <ng-container *ngIf="isWorksOrder">
             <form [formGroup]="workOrderForm">
               <ion-grid>
@@ -245,7 +226,7 @@
       
     </ion-row>
     <ion-row *ngIf="showSkeleton">
-      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background">
       <div><ng-container *ngTemplateOutlet="notificationSkeleton"></ng-container></div>
       <div *ngIf="isWorksOrder" ><ng-container *ngTemplateOutlet="worksOrderFormSkeleton"></ng-container></div>
     </ion-col>
@@ -253,12 +234,12 @@
     <ion-grid style="margin: 20px 0"
     *ngIf="isFormsReady && faultDetails?.isAnyFurtherWork && !showSkeleton">
     <ion-row>
-      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background">
         <h2>Further Job(s) Required</h2>
         <div class="border-bottom"></div>
         <div>Is there any further work to Quote for ? : <b>Yes</b></div>
         <div>Estimate : <b>{{faultDetails?.additionalEstimate || 0 | currency : "£"}}</b></div>
-        <div>Additional Details : <b>{{faultDetails?.additionalWorkDetail || 'N/A'}}</b></div>
+        <div>Additional Details : <b>{{faultDetails?.additionalWorkDetail || DEFAULTS.NOT_AVAILABLE}}</b></div>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -274,7 +255,7 @@
   </ion-grid>
 <ng-template #worksOrderDetails>
   <form [formGroup]="workOrderForm">
-    <ion-row class="row-banner">
+    <ion-row class="row-banner" class="secondary-background">
       <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Contractor <ion-text class="mandatory">*</ion-text>
@@ -290,10 +271,9 @@
             <span>
               <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
             </span>&nbsp;
-            <label style="color: var(--ion-color-step-200); padding-right: 5px;">{{result.fullName}}&nbsp;
-              <span style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-              <span class="text-color-lightgreen"
-                style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
+            <label>{{result.fullName}}&nbsp;
+              <span class="ref">{{result.reference}}</span>&nbsp;
+              <span class="text-color-lightgreen status">{{result.status}}</span>&nbsp;
             </label>
           </ion-item>
 
@@ -325,7 +305,7 @@
         </ion-item>
       </ion-col>
     </ion-row>
-    <ion-row class="row-banner">
+    <ion-row class="row-banner" class="secondary-background border-bottom-radious">
       <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Reference </ion-label>
@@ -353,8 +333,7 @@
         <ion-item>
           <ion-label position="stacked">Repair Cost <ion-text class="mandatory">*</ion-text>
           </ion-label>
-          <!-- <ion-input formControlName="repairCost"></ion-input> -->
-          <input currencyMask formControlName="repairCost" (blur)="onBlurCurrency(workOrderForm.controls.repairCost.value, workOrderForm)"/>
+          <input currencyMask formControlName="repairCost" class="currency-mask" (blur)="onBlurCurrency(workOrderForm.controls.repairCost.value, workOrderForm)"/>
         </ion-item>
         <app-validation-message [control]="workOrderForm.controls.repairCost"></app-validation-message>
       </ion-col>
@@ -474,7 +453,7 @@
       <ion-row class="ion-justify-content-center">
         <ion-col size="40" class="card" *ngIf="iacNotification?.templateCode === 'BMF-T-E'">
           <h3>Block Management</h3>
-          <h5>The fault is Block Management Company's responsibility. </h5>
+          <h5>The repair is Block Management Company's responsibility. </h5>
           <ion-row>
             <ion-col size="100">
               <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
@@ -484,7 +463,7 @@
         </ion-col>
         <ion-col size="40" class="card" *ngIf="iacNotification?.templateCode === 'GNR-T-E'">
           <h3>Guarantee / Warranty</h3>
-          <h5>The fault is covered by a Guarantee / Warranty. </h5>
+          <h5>The repair is covered by a Guarantee / Warranty. </h5>
           <ion-row>
             <ion-col size="100">
               <ion-button color="success" class="action-btn popup-view-btn" fill="solid"
@@ -494,7 +473,7 @@
         </ion-col>
         <ion-col size="40" class="card" *ngIf="iacNotification?.templateCode === 'SMF-T-E'">
           <h3>Service Contract/ Appliance Cover</h3>
-          <h5>The fault is covered by a Service Contract/ Appliance Cover.</h5>
+          <h5>The repair is covered by a Service Contract/ Appliance Cover.</h5>
           <ion-row>
             <ion-col size="100">
               <ion-button color="success" class="action-btn popup-view-btn" fill="solid"

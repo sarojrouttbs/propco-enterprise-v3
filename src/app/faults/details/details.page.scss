@@ -31,10 +31,8 @@
 
   .block {
     @include border-radius(5px);
-    background-color: var(--ion-color-step-1900);
+    background-color: var(--ion-color-four);
     text-align: center;
-    // min-height: 225px;
-    // height: 225px;
     min-height: 130px;
     height: 130px;
     overflow: hidden;
@@ -85,9 +83,9 @@
   }
 
   .non-urgent-btn {
-    --background: rgba(var(--ion-color-primary-rgb), 0.35);
+    --background: rgba(var(--ion-color-success-rgb), 0.35);
     &.urgency-selected {
-      --background: var(--ion-color-primary);
+      --background: var(--ion-color-success);
     }
   }
 
@@ -107,7 +105,7 @@
   }
 
   .panel-block-normal {
-    background-color: var(--ion-color-step-2000);
+    background-color: var(--ion-color-five);
     @include border-radius(5px);
     width: calc(100% - 16px);
     position: relative;
@@ -118,7 +116,12 @@
 
     ion-grid {
       height: 100%;
-
+      ion-item {
+        --border-color: var(--ion-color-one);
+        ion-label {
+          color: var(--ion-color-three) !important;
+        }
+      }
       .main-row {
         display: grid;
         grid-template-rows: 1fr 1fr;
@@ -150,11 +153,15 @@
 
   .additional-info-container {
     @include border-radius(5px);
-    background-color: var(--ion-color-step-1650);
+    background-color: var(--ion-color-four);
     margin: 20px 0 0;
     padding: 20px;
+    ion-button{
+      --background: var(--ion-color-two);
+      --color: var(--ion-color-six);
+    }
   }
-
+  
   .close-circle {
     font-size: 40px;
     color: var(--ion-color-danger);
@@ -214,7 +221,7 @@
   }
   .banner {
     text-align: center;
-    background: var(--ion-background-color);
+    // background: var(--ion-background-color);
     border-radius: 8px;
     padding: 30px 30px;
     margin-bottom: 20px;
@@ -227,7 +234,7 @@
       }
     }
     ion-button {
-      background-color: white;
+      background-color: transparent;
       border-radius: 4px;
     }
     .check-icon {
@@ -249,42 +256,10 @@
       margin: 20px 0px;
     }
   }
-  .preferred-supplier {
-    margin-top: 30px;
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      border: 1px solid var(--ion-color-step-1600);
-    }
-
-    th {
-      background-color: var(--ion-color-step-1400);
-    }
-    td,
-    th {
-      text-align: left;
-      padding: 15px;
-    }
-    tr:nth-child(even) {
-      background-color: var(--ion-color-step-1800);
-    }
-    tr:nth-child(odd) {
-      background-color: var(--ion-color-step-1600);
-    }
-  }
 }
 :host ::ng-deep .mat-form-field-wrapper {
   position: absolute !important;
   width: 100%;
-}
-
-.contractor-list {
-  width: 100%;
-  max-height: 200px;
-  overflow-y: scroll;
-  position: absolute !important;
-  z-index: 5 !important;
-  cursor: pointer;
 }
 
 .back-button {
