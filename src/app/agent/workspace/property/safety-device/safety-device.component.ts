@@ -69,7 +69,7 @@ export class SafetyDeviceComponent implements OnInit {
   }
 
   private getActiveTabEntityInfo() {
-    let item = this.localStorageItems.filter((x) => x.isSelected);
+    const item = this.localStorageItems.filter((x) => x.isSelected);
     if (item) {
       return item[0];
     }
@@ -88,7 +88,7 @@ export class SafetyDeviceComponent implements OnInit {
       autoWidth: true,
       responsive: true,
       ajax: (tableParams: any, callback) => {
-        let params = new HttpParams()
+        const params = new HttpParams()
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
           .set('hideLoader', 'true');
@@ -107,55 +107,9 @@ export class SafetyDeviceComponent implements OnInit {
     };
   }
 
-  showMenu(Event: Event, id: string, data: any, className: string, isCard?: boolean) {
+  showMenu(event: any, id: string, data: any, className: string) {
     this.selectedData = data;
-    const baseContainer = $(event.target).parents('.' + className);
-    const divOverlay = $('#' + id);
-    const baseContainerWidth = baseContainer.outerWidth(true);
-    const baseContainerHeight = baseContainer.outerHeight(true);
-    const baseContainerPosition = baseContainer.position();
-    const baseContainerTop = baseContainerPosition.top;
-    const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
-    const divOverlayHeight = divOverlay.height();
-    const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    const divOverlayLeft = isCard ? baseContainerPosition.left : overlayContainerLeftPadding;
-
-    let origDivOverlayHeight;
-    let origDivOverlayTop;
-    let divOverlayTopBottomPadding = 0;
-    if (baseContainerHeight > 49) {
-      divOverlayTopBottomPadding = (baseContainerHeight - 48) / 2;
-    }
-
-    if (baseContainerHeight > divOverlayHeight) {
-      origDivOverlayHeight = baseContainerHeight;
-      origDivOverlayTop = baseContainerTop + $('.dataTables_length').outerHeight(true);
-    } else {
-      origDivOverlayHeight = divOverlayHeight + (divOverlayTopBottomPadding * 2);
-      const extraHeight = divOverlayHeight - baseContainerHeight;
-      origDivOverlayTop = baseContainerTop - extraHeight - (divOverlayTopBottomPadding * 2) + $('.dataTables_length').outerHeight(true);
-    }
-
-    divOverlay.css({
-      position: 'absolute',
-      top: origDivOverlayTop,
-      right: '0px',
-      width: baseContainerWidth,
-      height: origDivOverlayHeight,
-      left: divOverlayLeft,
-      paddingTop: divOverlayTopBottomPadding,
-      paddingBottom: divOverlayTopBottomPadding
-    });
-
-    const gridDivOverlay = $('#grid-divoverlay');
-
-    gridDivOverlay.css({
-      width: divOverlay.width(),
-      height: divOverlayHeight
-    });
-
-    divOverlay.delay(200).slideDown('fast');
-    event.stopPropagation();
+    this.commonService.showMenu(event, id, className, true);
   }
 
   hideMenu(event?: any, id?: any) {
@@ -211,7 +165,7 @@ export class SafetyDeviceComponent implements OnInit {
       this.setPropertyLookupData(this.propertylookupdata);
     }
     else {
-      const params = new HttpParams().set("hideLoader", "true");
+      const params = new HttpParams().set('hideLoader', 'true');
       this.commonService.getPropertyLookup(params).subscribe(data => {
         this.commonService.setItem(PROPCO.PROPERTY_LOOKUP_DATA, data);
         this.setPropertyLookupData(data);
@@ -224,7 +178,7 @@ export class SafetyDeviceComponent implements OnInit {
     this.smokeDetectors = data.smokeDetectors;
   }
 
-  private getSafetyDeviceNotes(safetyDeviceId: any) {
+  private getSafetyDeviceNotes(safetyDeviceId: string) {
     const params = new HttpParams()
       .set('entityId', safetyDeviceId)
       .set('entityType', NOTES_TYPE.SAFETY_INSPECTIONS);
@@ -234,7 +188,7 @@ export class SafetyDeviceComponent implements OnInit {
     });
   }
 
-  rerenderNotes(): void {
+  private rerenderNotes(): void {
     if (this.dtElements && this.dtElements.last.dtInstance) {
       this.dtElements.last.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.destroy();
