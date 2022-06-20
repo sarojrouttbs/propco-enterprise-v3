@@ -109,7 +109,7 @@ export class MaPropertyComponent implements OnInit {
       propertyNotes: property.propertyDescription ? property.propertyDescription : '',
       direction: property.direction ? property.direction : '',
       parking: property.parking ? Number(property.parking) : '',
-      advertisementRentFrequency: property.advertisementRentFrequency ? property.advertisementRentFrequency : '',
+      advertisementRentFrequency: property.advertisementRentFrequency,
       furnishingType: property.furnishingType ? (property.furnishingType === '0' ? null : parseInt(property.furnishingType)) : '',
       hasLetBefore: property.hasLetBefore,
       status: property.status ? property.status.toString() : '',
