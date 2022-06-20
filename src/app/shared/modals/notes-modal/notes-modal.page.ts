@@ -102,7 +102,7 @@ export class NotesModalPage implements OnInit {
 
   createNote() {
     if (this.notesForm.valid) {
-      const requestObj = this.notesForm.value;
+      const requestObj: any = this.notesForm.value;
       requestObj.complaint = requestObj.complaint ? this.notesComplaints[1].index : this.notesComplaints[0].index;
       delete requestObj.date;
       if (this.notesType === NOTES_TYPE.OFFER) {
@@ -111,8 +111,14 @@ export class NotesModalPage implements OnInit {
         } else {
           this.updateNotes(requestObj);
         }
-      } else if (this.notesType === NOTES_TYPE.PROPERTY || this.notesType === NOTES_TYPE.MANAGEMENT_INSPECTION) {
-        requestObj.entityId = this.notesTypeId;
+      } else if (this.notesType === NOTES_TYPE.PROPERTY ||
+        this.notesType === NOTES_TYPE.MANAGEMENT_INSPECTION ||
+        this.notesType === NOTES_TYPE.SAFETY_DEVICES) {
+        if (this.notesType === NOTES_TYPE.SAFETY_DEVICES) {
+          requestObj.propcoEntityId = this.notesTypeId;
+        } else {
+          requestObj.entityId = this.notesTypeId;
+        }
         requestObj.entityType = this.notesType;
         this.createNotes(requestObj);
       }
@@ -137,7 +143,7 @@ export class NotesModalPage implements OnInit {
       category: ['', Validators.required],
       complaint: [false, Validators.required],
       type: ['', Validators.required],
-      notes: ['', Validators.required]
+      notes: ['', Validators.required],
     });
   }
 

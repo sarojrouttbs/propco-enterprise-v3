@@ -35,7 +35,7 @@
         </ion-col> -->
         <ion-col size="50">
           <ion-item>
-            <ion-label position="floating">Category</ion-label>
+            <ion-label position="floating">Category <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="category">
               <ion-select-option [value]="category.index" *ngFor="let category of notesCategories">{{ category.value }}
               </ion-select-option>
@@ -45,7 +45,7 @@
         </ion-col>
         <ion-col size="50">
           <ion-item>
-            <ion-label position="floating">Type</ion-label>
+            <ion-label position="floating">Type <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" formControlName="type">
               <ion-select-option [value]="type.index" *ngFor="let type of notesTypes">{{ type.value }}
               </ion-select-option>
@@ -69,6 +69,7 @@
   <ion-grid>
     <ion-row>
       <ion-col class="ion-text-end">
+        <ion-button (click)="dismiss()" color="danger">Cancel</ion-button>
         <ion-button (click)="createNote()" class="submit-button">Submit</ion-button>
       </ion-col>
     </ion-row>

@@ -25,7 +25,10 @@ export class PropertyLandlordTenantComponent implements OnInit {
   lookupdata: any;
   tenantStatuses: any;
   DATE_FORMAT = DATE_FORMAT;
-
+  popoverOptions: any = {
+    cssClass: 'market-apprisal-ion-select'
+  };
+  
   constructor(
     private commonService: CommonService,
     private modalCtrl: ModalController

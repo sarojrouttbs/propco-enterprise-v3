@@ -15,7 +15,7 @@
       <ion-row>
         <ion-col>
           <ion-select interface="popover" class="landlord-tenant-dropdown" [formControl]="landlordListCtrl"
-            (ionChange)="onLandlordChange();">
+            (ionChange)="onLandlordChange();" [interfaceOptions]="popoverOptions" >
             <ion-select-option [value]="item.landlordId" *ngFor="let item of landlordList">
               {{item.name}}
               <span *ngIf="item?.rentPercentage">({{item?.rentPercentage + '%'}})</span>
