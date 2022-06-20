@@ -40,11 +40,11 @@ export class KeyActivityModalPage implements OnInit {
   private initForm() {
     this.keyActivityForm = this.formBuilder.group({
       activityType: [{ value: '', disabled: true }, Validators.required],
-      name: '',
-      contact: '',
+      name: ['', Validators.maxLength(50)],
+      contact: ['', Validators.maxLength(50)],
       userId: ['', Validators.required],
       postDate: '',
-      note: ''
+      note: ['', Validators.maxLength(255)],
     });
   }
 

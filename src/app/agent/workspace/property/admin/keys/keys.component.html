@@ -70,23 +70,25 @@
                     <ion-grid>
                       <ion-row>
                         <ion-col size="100">
-                          <!-- <h1>{{item.controls.name.value || notAvailable}}</h1> -->
                           <ion-item>
                             <ion-label position="floating">Name</ion-label>
                             <ion-input formControlName="name"></ion-input>
                           </ion-item>
+                          <app-validation-message [control]="item.controls.name"></app-validation-message>
                         </ion-col>
                         <ion-col size="100">
                           <ion-item>
                             <ion-label position="floating">key ID</ion-label>
                             <ion-input formControlName="keyId"></ion-input>
                           </ion-item>
+                          <app-validation-message [control]="item.controls.keyId"></app-validation-message>
                         </ion-col>
                         <ion-col size="100">
                           <ion-item>
                             <ion-label position="floating">Key Type</ion-label>
                             <ion-input formControlName="type"></ion-input>
                           </ion-item>
+                          <app-validation-message [control]="item.controls.type"></app-validation-message>
                         </ion-col>
                         <ion-col size="50">
                           <mat-form-field appearance="fill" style="margin-top: 11px;">
@@ -115,6 +117,7 @@
                             <ion-label position="floating">Comments</ion-label>
                             <ion-input formControlName="note"></ion-input>
                           </ion-item>
+                          <app-validation-message [control]="item.controls.note"></app-validation-message>
                         </ion-col>
                       </ion-row>
                     </ion-grid>
@@ -134,7 +137,7 @@
                           </div>
                         </ion-col>
                         <ion-col size="30" class="ion-text-right">
-                          <ion-button color="success" (click)="updateKeysetDetails(item.value)">Update</ion-button>
+                          <ion-button color="success" (click)="createRequestObjAndCheckFormStatus(item.value, item)">Update</ion-button>
                         </ion-col>
                       </ion-row>
                     </ion-grid>

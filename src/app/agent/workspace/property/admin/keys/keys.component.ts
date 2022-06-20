@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
@@ -39,6 +39,7 @@ export class KeysComponent implements OnInit {
   DATE_FORMAT = DATE_FORMAT;
   loginUserDetails: any;
   selectedItemForHistory: any;
+  selecteKeysetData: any;
 
   constructor(private modalController: ModalController, private commonService: CommonService, private agentService: AgentService, private _formBuilder: FormBuilder) { }
 
@@ -190,14 +191,14 @@ export class KeysComponent implements OnInit {
       keysList.forEach(element => {
         if (element.keySetId) {
           keySetArray.push(this._formBuilder.group({
-            createdAt: element.createdAt,
-            keyId: element.keyId,
+            createdAt: [element.createdAt, Validators.required],
+            keyId: [element.keyId, Validators.maxLength(50)],
             keySetId: element.keySetId,
-            name: element.name,
-            note: element.note,
+            name: [element.name, Validators.maxLength(50)],
+            note: [element.note, Validators.maxLength(255)],
             status: element.status,
             statusDescription: element.statusDescription,
-            type: element.type,
+            type: [element.type, Validators.maxLength(40)],
             userId: element.userId
           }));
         }
@@ -248,6 +249,7 @@ export class KeysComponent implements OnInit {
   }
 
   addKeysetLogHistory(keysetDetails: any, keysetActivityType: number) {
+    this.selecteKeysetData = keysetDetails;
     this.selectedData = {};
     this.isAddKeyActivity = true;
     this.selectedData.activityType = keysetActivityType;
@@ -277,7 +279,11 @@ export class KeysComponent implements OnInit {
     modal.onDidDismiss().then(async res => {
       this.hideMenu('', 'divOverlay');
       if (res.data && res.data == 'success') {
-        this.isAddKeyActivity ? this.initKeySetApi() : this.getkeysetLogHistory(this.selectedItemForHistory.keySetId);
+        if (this.isAddKeyActivity) {
+          this.updateKeysetStatus(this.selectedData);
+        } else {
+          this.getkeysetLogHistory(this.selectedItemForHistory.keySetId);
+        }
       }
     });
     await modal.present();
@@ -320,26 +326,45 @@ export class KeysComponent implements OnInit {
     });
   }
 
-  updateKeysetDetails(item: any) {
+  private updateKeysetStatus(item: any) {
     if (item?.keySetId) {
       const requestObj = {
-        name: item.name,
-        keyId: item.keyId,
-        type: item.type,
-        postDate: this.commonService.getFormatedDate(item.createdAt),
-        userId: item.userId,
-        status: item.status,
-        note: item.note
+        userId: this.selecteKeysetData.userId,
+        status: item.activityType,
+        postDate: this.commonService.getFormatedDate(this.selecteKeysetData.createdAt),
       }
-      this.agentService.updateKeyset(item.keySetId, requestObj).subscribe(
-        res => {
-          this.initKeySetApi();
-        },
-        error => {
-          this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Update Key Set', 'error');
-        }
-      );
+      this.updateKeySetDetails(item.keySetId, requestObj);
     }
+  }
+
+  createRequestObjAndCheckFormStatus(item: any, currentForm: FormControl) {
+    if (currentForm.valid) {
+      if (item?.keySetId) {
+        const requestObj = {
+          name: item.name,
+          keyId: item.keyId,
+          type: item.type,
+          postDate: this.commonService.getFormatedDate(item.createdAt),
+          userId: item.userId,
+          status: item.status,
+          note: item.note
+        }
+        this.updateKeySetDetails(item.keySetId, requestObj);
+      }
+    } else {
+      currentForm.markAllAsTouched();
+    }
+  }
+
+  private updateKeySetDetails(keySetId: number, requestObj: any) {
+    this.agentService.updateKeyset(keySetId, requestObj).subscribe(
+      res => {
+        this.initKeySetApi();
+      },
+      error => {
+        this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Update Key Set', 'error');
+      }
+    );
   }
 
   ngOnDestroy() {
