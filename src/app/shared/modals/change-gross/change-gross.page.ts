@@ -25,7 +25,7 @@ export class ChangeGrossPage implements OnInit {
 
   initForm() {
     this.form = this.formBuilder.group({
-      gross: ['', Validators.required],
+      gross: null,
     });
   }
 
