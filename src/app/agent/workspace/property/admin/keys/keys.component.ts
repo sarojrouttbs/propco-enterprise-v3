@@ -337,7 +337,7 @@ export class KeysComponent implements OnInit {
     }
   }
 
-  createRequestObjAndCheckFormStatus(item: any, currentForm: FormControl) {
+  onUpdateKeyset(item: any, currentForm: FormControl) {
     if (currentForm.valid) {
       if (item?.keySetId) {
         const requestObj = {
