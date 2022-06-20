@@ -1,0 +1,17 @@
+.property-details {
+    overflow: auto;
+    .header {
+        display: flex;
+        align-items: center;
+        height: 64px;
+        padding: 10px;
+        ion-icon{
+            margin: 10px;
+        }
+        ion-text {
+            font-size: 22px;
+        }
+        color: var(--ion-text-color);
+    }
+}
+

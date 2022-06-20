@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { NOTES_ORIGIN } from '../../constants';
+import { NOTES_ORIGIN, NOTES_TYPE } from '../../constants';
 import { ChronologicalHistoryPage } from '../../modals/chronological-history/chronological-history.page';
 import { NotesModalPage } from '../../modals/notes-modal/notes-modal.page';
 import { SendEmailModalPage } from '../../modals/send-email-modal/send-email-modal.component';
@@ -72,9 +72,9 @@ export class FaultTitleComponent implements OnInit {
   async notesModal() {    
     const modal = await this.modalController.create({
       component: NotesModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
-        notesType: 'fault',
+        notesType: NOTES_TYPE.FAULT,
         notesTypeId: this.faultDetails?.faultId,
         isAddNote: true,
         notesOrigin: NOTES_ORIGIN.FAULT_STAGE,
@@ -93,7 +93,7 @@ export class FaultTitleComponent implements OnInit {
   async cronologicalHistoryModal() {
     const modal = await this.modalController.create({
       component: ChronologicalHistoryPage,
-      cssClass: 'modal-container chronological-history',
+      cssClass: 'modal-container chronological-history fault-modal-container',
       componentProps: {
         faultDetails: this.faultDetails,
         propertyDetails: this.propertyDetails
@@ -110,7 +110,7 @@ export class FaultTitleComponent implements OnInit {
   async sendEmailModal() {
     const modal = await this.modalController.create({
       component: SendEmailModalPage,
-      cssClass: 'modal-container send-email-modal',
+      cssClass: 'modal-container send-email-modal fault-modal-container',
       componentProps: {
         faultDetails: this.faultDetails,
         propertyDetails: this.propertyDetails,

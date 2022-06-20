@@ -27,9 +27,29 @@
   border-radius: $radius;
 }
 
+h1, h2, h3, h4, h5, h6, p, a, ul, li{
+  font-family: var(--ion-font-family);
+}
+
+#tob-applicant-search{
+  .mat-form-field-appearance-legacy .mat-form-field-infix {
+    padding-left: 0 !important;
+  }
+  .mat-form-field-appearance-legacy .mat-form-field-infix {
+    padding-bottom: 8px !important;
+  }
+  input{
+    --placeholder-color: var(--ion-color-one);
+  }
+}
+
 body {
   font-size: 16px;
   //background-color: var(--ion-color-step-2000);
+  .fs-12 {
+    font-size: 12px !important;
+    line-height: 14px;
+  }
 
   .fs-14 {
     font-size: 14px !important;
@@ -315,7 +335,7 @@ body {
   }
 }
 
-#faultListTable, #la-application-list, #la-guarantor-application-list, #tenant-list-modal {
+#faultListTable, #la-application-list, #la-guarantor-application-list, #tenant-list-modal, #propertyNotesTable, #propertyTenancyTable, #periodic-visit-table, #propertyMaintenanceTable, #periodic-visit-notes-table, #whitegoods-table {
   tr.odd {
     td.dataTables_empty {
       display: none;
@@ -507,7 +527,7 @@ mat-form-field {
 }
 
 .mat-form-field-appearance-fill .mat-form-field-infix {
-  padding: .25em 0 .25em 0;
+  padding: 0.5em 0 0.25em 0;
 }
 
 .mat-form-field.mat-form-field-invalid .mat-form-field-ripple, .mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {
@@ -519,29 +539,390 @@ mat-form-field {
   width: 680px !important;
 }
 
-// quill-editor css
-.ql-toolbar.ql-snow + .ql-container.ql-snow {
-  border-top: 0px;
-  min-height: 230px;
+.mat-paginator {
+  padding: 0 8px;
+  background: var(--ion-color-step-800);
+  display: flex !important;
+  color: var(--ion-color-step-2000);
+  border-radius: 5px;
+  font-size: 14px;
+  height: 42px;
+  align-items: center;
 }
 
-.ql-toolbar.ql-snow {
+.tob-pagination {  
   display: flex;
   flex-direction: row;
+  margin: 0px 10px 0 auto;
+  justify-content: flex-end;
+
+  .mat-paginator-page-size-select {
+    margin: 0px 5px 15px 15px;
+    width: 54px;
+  }
+
+  .mat-select-value, .mat-select-arrow {
+    color: var(--ion-color-step-2000);
+  }
+  
+  .mat-form-field-appearance-legacy .mat-form-field-underline {
+    background-color: var(--ion-color-step-800);
+  }
+
+  .mat-paginator-outer-container {
+    height: auto;
+    width: 100%;
+  }
+
+  .mat-paginator-container {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    padding: 0 8px;
+    flex-wrap: wrap-reverse;
+    width: 100%;
+  }
 }
 
-.ql-toolbar.ql-snow .ql-formats {
-  padding: 0px 10px;
+[hidden] {
+  display: none !important;
+}
+
+#offer-stepper,
+#application-stepper {
+  .action-btn-section {
+    .mat-button {
+      // background-color: var(--ion-color-step-950);
+      margin: 4px;
+      // color: var(--ion-color-step-2000);
+    }
+    .mat-button-disabled {
+      // background-color: var(--ion-color-step-1150);
+      cursor: not-allowed;
+    }
+  }
+}
+
+.modal-width .modal-wrapper {
+  width: 650px !important;
+}
+
+.applicantSearchbarCustom {
+  padding: 0;
+  .searchbar-input {
+    line-height: 27px;
+    padding: 5px 15px;
+  }
+  .searchbar-search-icon {
+    display:none; 
+    width:0; 
+    height:0;
+  }
+  
+  .searchbar-input-container{
+    border: 1px solid -var(--ion-color-step-1600);
+    box-shadow: none;
+    border-left: 0;
+    .searchbar-input {
+      box-shadow: none;
+      padding-top: 4px;
+      padding-left: 10px;
+    }
+  }
+}
+
+.searchbarCustom {
+  --background: transparent;
+    padding: 0;
+    .searchbar-input {
+      line-height: 27px;
+    }
+    .searchbar-search-icon {
+      display:none; 
+      width:0; 
+      height:0;
+    }
+    .searchbar-search-icon {
+      background-image: url("assets/images/solr/propcoLogo.svg")!important;
+      color: transparent;
+      background-size: cover;
+    }
+    .searchbar-input-container{
+      border: 1px solid #ccc;
+      box-shadow: none;
+      border-left: 0;
+      .searchbar-input {
+        box-shadow: none;
+        padding-top: 4px;
+        padding-left: 10px;
+      }
+    }
+}
+.solrMutiSelect {
+	.mat-form-field {
+		.mat-form-field-underline {
+			display: none;
+		}
+		// .mat-form-field-infix {
+		// 	width: 0px;
+		// }
+		.mat-form-field-wrapper {
+			border: 1px solid;
+      padding-bottom: 0;
+      color: #ccc;
+      border-radius: 3px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      padding-left: 6px;
+      font-size: 15px;
+      background-color: var(--ion-color-primary);
+		}
+    .mat-select-value{
+      color: var(--ion-color-primary-contrast);
+    }
+		// .mat-select-arrow {
+		// 	color: rgb(197 51 44);
+		// 	border-left: 8px solid transparent;
+		// 	border-right: 8px solid transparent;
+		// 	border-top: 7px solid;
+		// }
+		// .mat-select-min-line {
+		// 	opacity: 0;
+		// }
+    .mat-select-arrow-wrapper {
+      padding-top: 18px;
+      padding-right: 5px;
+      .mat-select-arrow{
+        color: var(--ion-color-primary-contrast);
+      }
+    }
+    .mat-form-field-infix {
+      padding: 0.25em 0 0.25em 0;
+      height: 33px;
+      border: none;
+      padding-top: 6px;
+      margin-top: 4px;
+      font-size: 14px;
+    }
+	}
+}
+
+.result-headers-align {
+  background-color: var(--ion-color-step-1750);
+  .mat-expansion-panel-body{
+    padding: 0;
+  }
+  // overwrite the checkbox background
+  .mat-checkbox-checked .mat-checkbox-background, 
+  .mat-checkbox-indeterminate .mat-checkbox-background {
+   background-color: var(--ion-color-success) !important;
+ }
+ 
+  // overwrite the ripple overlay on hover and click
+  .mat-checkbox:not(.mat-checkbox-disabled) .mat-checkbox-ripple .mat-ripple-element {
+    background-color: var(--ion-color-success) !important;
+  }
+}
+
+.search-header {
+  background-color: var(--ion-background-color);
+}
+
+.solr-pagginater-container{
+  .mat-select-value {
+    color: var(--ion-color-step-2000);
+  }
+  .mat-form-field-infix{
+    border-bottom: 1px solid var(--ion-color-step-2000) !important;
+  }
+  .mat-select-arrow{
+    color: var(--ion-color-step-2000);
+  }
+  .mat-paginator-range-label {
+    // display: none;
+  }
+  /* .mat-paginator-outer-container{
+    height: auto;
+    width: 100%;
+  }
+  .mat-paginator-container {
+    justify-content: space-between;
+    flex-wrap: wrap-reverse;
+    padding-bottom: 3px;
+    width: 100%;
+  } */
+  .mat-form-field-appearance-legacy .mat-form-field-underline {
+    display: none;
+  }
+}
+
+#solr-search-result {
+  .ngx-slider .ngx-slider-bubble.ngx-slider-limit {
+    display: none;
+  }
+  .ngx-slider .ngx-slider-pointer{
+    width: 23px;
+    height: 23px;
+    top: -10px;
+    background-color: var(--ion-color-step-1700);
+  }
+  .ngx-slider .ngx-slider-pointer:after{
+    display: none;
+  }
+  .ngx-slider .ngx-slider-bar{
+    height: 2px;
+  }
+  .ngx-slider .ngx-slider-selection{
+    background: var(--ion-color-solr);
+  }
+}
+
+.list-view-accordian {
+  .mat-expansion-panel-header {
+    .mat-content {
+      height: 100%
+    }
+  }
+  .mat-expansion-panel-body{
+    padding: 0 6px 6px;
+  }
+}
+
+.modal-height .modal-wrapper{
+  min-height: 235px;
+}
+
+#agent-header {
+  .mat-button-focus-overlay {
+    background-color: transparent;
+  }
+}
+.mat-menu-panel {
+  overflow: hidden!important;
+  box-shadow: none!important;
+}
+
+.offer-notes-modal-height .modal-wrapper{
+  min-height: 350px;
+}
+.mat-expansion-panel-header-description, .mat-expansion-indicator::after{
+  color: var(--ion-color-matexpanstionpanel-arrow-color);
+}
+
+.ngx-slider .ngx-slider-bubble{
+  color: var(--ion-color-ngxslider-bubble-color)!important;
+}
+
+.mat-select-panel{
+  background-color: var(--ion-color-six)!important;
+}
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled),.mat-option-text{
+  color: var(--ion-color-matoption-color)!important;
+}
+.mat-primary .mat-pseudo-checkbox-checked, .mat-primary .mat-pseudo-checkbox-indeterminate{
+  background-color: var(--ion-color-primary)!important;
+}
+
+.transparent-modal {
+  --background:  var(--ion-color-four);
+  ion-content{
+    --background:  var(--ion-color-four) !important;
+  }
+  ion-footer{
+    ion-button{
+      --ion-color-base: var(--ion-text-color) !important;
+    }
+
+  }
+}
+.accordian-icon {
+  font-size: 37px;
+  color: var(--ion-color-accordian-icon);
   display: flex;
-  flex-direction: row;
-  border-right: 1px solid #c1c1c1;
-  margin: 0px;
 }
 
-.ql-toolbar.ql-snow .ql-formats:last-child {
-  border-right: none;
+.user-info-modal  {
+  --background:  var(--ion-color-four);
+
+  .modal-wrapper{
+    height: 260px;
+    width: 470px;
+  }
+  ion-toolbar{
+    --background: var(--ion-color-property-status-bg);
+    color: var(--ion-color-six);
+  }
+  ion-content{
+    color: var(--ion-color-six) !important;
+    --background:  var(--ion-color-four);
+  }
+  ion-footer{    
+    ion-button{
+      --background: var(--ion-color-property-status-bg);
+    }
+  }
 }
 
-.ql-editor {
-  font-size: 16px;
+#agent-portal {
+  .postcode-find-btn {
+    margin-right: 0px;
+    margin-bottom: 0px;
+  }
+
+  .currency-mask{
+    background: inherit;
+  }
+
+  .contractor-list{
+    width: 100%;
+    max-height: 200px;
+    overflow-y: scroll;
+    position: absolute !important;
+    z-index: 5 !important;
+    cursor: pointer;
+    ion-item{
+      label{
+        padding-right: 5px;
+        color: var(--ion-color-one);
+        .ref{
+          padding-right: 5px;
+          color: var(--ion-color-step-1000);
+        }
+        .status{
+          padding-right: 5px;
+          color: var(--ion-color-success);
+        }
+      }
+    }
+  }
+  .property-status-circle {
+    height: 19px;
+    width: 20px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .avaialble-circle {
+    background-color: var(--ion-color-success);
+  }
+  .other-status-circle {
+    background-color: var(--ion-color-warning);
+  }
+}
+
+.unsaved-data-error{
+  background: rgba(var(--ion-color-danger-rgb), 0.2);
+}
+
+.propco-btn-group {
+  ion-button{
+      margin-right: 8px;
+  }
+
+  ion-button:last-child{
+      margin-right: 0;
+  }
+}
+
+.create-keyset-modal .modal-wrapper {
+  min-height: 550px !important;
 }

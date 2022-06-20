@@ -5,8 +5,8 @@ var faultEscalateJson = require('../../resources/json/faultescalate.json');
 describe('FixAFault Module', function(){
 
     it('should allow PM to escalate a fault - IGF010_01', function(){
-        let fJson = faultEscalateJson.fault_details.faultReported; 
-        let eJson = faultEscalateJson.fault_details.escalateFault;
+        let fJson = faultEscalateJson.faultDetails.faultReported; 
+        let eJson = faultEscalateJson.faultDetails.escalateFault;
         let addFault = new fault(fJson); 
         let escalate = new faultEscalate();
         
@@ -16,9 +16,9 @@ describe('FixAFault Module', function(){
     }); 
 
     it('should allow PM to de-escalate a fault - IGF010_02', function(){
-        let fJson = faultEscalateJson.fault_details.faultReported; 
-        let eJson = faultEscalateJson.fault_details.escalateFault;
-        let dJson = faultEscalateJson.fault_details.deEscalateFault;
+        let fJson = faultEscalateJson.faultDetails.faultReported; 
+        let eJson = faultEscalateJson.faultDetails.escalateFault;
+        let dJson = faultEscalateJson.faultDetails.deEscalateFault;
         let addFault = new fault(fJson); 
         let escalate = new faultEscalate();
               
@@ -29,8 +29,8 @@ describe('FixAFault Module', function(){
     });
 
     it('should allow PM to cancel fault escalation - IGF010_03', function(){
-        let fJson = faultEscalateJson.fault_details.faultReported; 
-        let eJson = faultEscalateJson.fault_details.cancelEscalateFault;
+        let fJson = faultEscalateJson.faultDetails.faultReported; 
+        let eJson = faultEscalateJson.faultDetails.cancelEscalateFault;
         let addFault = new fault(fJson); 
         let escalate = new faultEscalate();
         
@@ -40,9 +40,9 @@ describe('FixAFault Module', function(){
     });
 
     it('should allow PM to cancel fault de-escalation - IGF010_04', function(){
-        let fJson = faultEscalateJson.fault_details.faultReported; 
-        let eJson = faultEscalateJson.fault_details.escalateFault;
-        let dJson = faultEscalateJson.fault_details.cancelDeEscalateFault;
+        let fJson = faultEscalateJson.faultDetails.faultReported; 
+        let eJson = faultEscalateJson.faultDetails.escalateFault;
+        let dJson = faultEscalateJson.faultDetails.cancelDeEscalateFault;
         let addFault = new fault(fJson); 
         let escalate = new faultEscalate();
               
@@ -53,8 +53,8 @@ describe('FixAFault Module', function(){
     }); 
 
     it('should validate mandatory fields before fault escalation - IGF009_05', function(){
-        let fJson = faultEscalateJson.fault_details.faultReported; 
-        let eJson = faultEscalateJson.fault_details.validationEscalate;
+        let fJson = faultEscalateJson.faultDetails.faultReported; 
+        let eJson = faultEscalateJson.faultDetails.validationEscalate;
         let addFault = new fault(fJson); 
         let escalate = new faultEscalate();
         

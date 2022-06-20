@@ -1,0 +1,47 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
+#property-keys {
+    h5 {
+        color: var(--ion-color-primary);
+    }
+
+    .no-record-msg {
+        color: var(--ion-color-one);
+        text-align: center;
+        padding: 15px;
+    }
+
+    .property-card-set {
+        ion-card {
+            --background: var(--ion-color-six);
+
+            ion-card-content {
+                background-color: var(--ion-color-six);
+            }
+        }
+
+        .header {
+            color: var(--ion-color-step-2000);
+            @include set-text-style(18px, 24px);
+        }
+
+        .warning {
+            background-color: var(--ion-color-warning);
+        }
+
+        .danger {
+            background-color: var(--ion-color-primary);
+        }
+
+        .success {
+            background-color: var(--ion-color-success);
+        }
+
+        .propcoicon {
+            background: transparent;
+        }
+    }
+}

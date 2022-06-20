@@ -11,7 +11,7 @@
 }
 
 .card {
-    background: var(--ion-background-color);
+    background: var(--ion-color-six);
     border-radius: 5px;
     padding: 15px 15px;
     margin-bottom: 15px;
@@ -19,7 +19,6 @@
 }
 
 .card-extra {
-    // background: var(--ion-background-color);
     border-radius: 5px;
     padding: 15px 15px;
     margin-bottom: 15px;
@@ -28,7 +27,7 @@
 
 .fault-radio-btn {
     margin-inline-end: 10px !important;
-    --color: var(--ion-color-primary);
+    --color: var(--ion-color-sucess);
     height: 25px;
     width: 25px;
 }

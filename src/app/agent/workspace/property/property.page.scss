@@ -1,0 +1,146 @@
+.example-container {
+  width: 100%;
+  height: 300px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.example-sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-sidenav {
+  padding: 20px;
+}
+.pointer {
+  cursor: pointer;
+}
+.margin-content{
+  margin-top: 63px;
+}
+
+.side-content{
+  margin-left: 207px;
+}
+
+.header {
+  background-color: var(--ion-background-color);
+  color: var(--ion-text-color);
+  display: flex;
+  align-items: center;
+  height: 64px;
+  padding: 10px;
+  ion-icon{
+      margin: 10px 10px 10px 4px;
+  }
+  ion-text {
+      font-size: 22px;
+  }
+}
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.example-is-mobile .example-toolbar {
+  position: fixed;
+  /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+  z-index: 2;
+}
+
+h1.example-app-name {
+  margin-left: 8px;
+}
+
+.example-sidenav-container {
+  flex: 1;  
+  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+       causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+       
+  .sidenav-block {
+    max-width: 210px;
+    width: 210px;
+    background: var(--ion-background-color);
+
+    .property-lettings {
+      height: 64px;
+      background-color: var(--ion-color-primary);
+      text-transform: uppercase;
+      color: var(--ion-color-primary-contrast);
+      font-size: 20px;
+      padding-left: 15px;
+      display: flex;
+      align-items: center;
+      span {
+        vertical-align: middle;
+      }
+    }
+    .sidenav-block-list {
+      padding-top: 0;
+      .menu.mat-list-item{
+        border-bottom: 1px solid var(--ion-color-four);
+      }
+
+      .full-width {
+        width: 100%;
+      }
+      .menu-button {
+        transition: 300ms ease-in-out;
+        transform: rotate(0deg);
+        &.rotated {
+          transform: rotate(180deg);
+        }
+      }
+      .submenu {
+        overflow-y: hidden;
+        transition: transform 300ms ease;
+        transform: scaleY(0);
+        transform-origin: top;
+        .mat-list-item{
+          padding-left: 5px;
+          background-color: var(--ion-color-five);
+          border-bottom: 1px solid var(--ion-background-color);
+          
+          &.active,.active:hover {
+            //background: var(--ion-color-property-status-bg);
+            //color: var(--ion-color-six);
+            background-color: var(--ion-color-four)
+          }
+        }
+
+        &.expanded {
+          transform: scaleY(1);
+        }
+      }
+      
+      .active,.active:hover {
+        //background: var(--ion-color-property-status-bg);
+        //color: var(--ion-color-six);
+        background-color: var(--ion-color-four)
+      }
+      .mat-list-base {
+        padding-top: 0;
+      }
+
+      a,span,ion-icon {
+        text-decoration: none;
+        color: var(--ion-text-color);
+      }
+    }
+  }
+
+}
+
+.example-is-mobile .example-sidenav-container {
+  /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+       `<body>` to be our scrolling element for mobile layouts. */
+  flex: 1 0 auto;
+}

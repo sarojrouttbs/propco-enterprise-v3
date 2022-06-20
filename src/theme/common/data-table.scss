@@ -19,7 +19,7 @@
     color: var(--ion-color-step-200);
   }
 
-  .dataTables_processing{
+  .dataTables_processing {
     margin-top: 20px;
     font-size: 14px;
   }
@@ -93,12 +93,18 @@
       background: var(--ion-color-step-750);
       color: var(--ion-color-step-2000);
 
-      .sorting_asc{
-        background-image: url(../../assets/images/sort_asc.png);
+      .sorting:after,
+      .sorting:before,
+      .sorting_asc:after,
+      .sorting_desc:after {
+        opacity: 0.4;
       }
 
-      .sorting_desc{
-        background-image: url(../../assets/images/sort_desc.png);
+      & > tr > th.sorting_asc:before,
+      & > tr > th.sorting_desc:after,
+      & > tr > td.sorting_asc:before,
+      & > tr > td.sorting_desc:after {
+        opacity: 1;
       }
 
       tr {
@@ -136,16 +142,16 @@
       }
     }
   }
+  .processing-wrapper {
+    position: absolute;
+    margin: 0 auto;
+    top: 14px;
+    width: 100%;
+  }
 }
 
-table.dataTable.dtr-inline.collapsed
-  > tbody
-  > tr[role="row"]
-  > td:first-child:before,
-table.dataTable.dtr-inline.collapsed
-  > tbody
-  > tr[role="row"]
-  > th:first-child:before {
+table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child:before {
   background-color: var(--ion-color-step-1000);
 }
 
@@ -160,6 +166,7 @@ table.dataTable.dtr-inline.collapsed
 #divOverlay,
 #divOverlayChild,
 #divOverlay2,
+#divOverlay3,
 #matchingOverlay,
 .card-divoverlay {
   display: none;
@@ -188,5 +195,119 @@ table.dataTable.dtr-inline.collapsed
     margin: 6px 0 5px 6px;
     color: var(--ion-color-step-2000);
     cursor: pointer;
+  }
+}
+
+#agent-portal {
+  .dataTables_wrapper {
+    .dataTables_length,
+    .dataTables_filter,
+    .dataTables_info,
+    .dataTables_processing,
+    .dataTables_paginate {
+      color: var(--ion-color-one);
+    }
+
+    .dataTables_length {
+      select {
+        option {
+          color: var(--ion-color-one);
+          background-color: var(--ion-color-six);
+        }
+      }
+    }
+    .dataTables_paginate {
+      .paginate_button,
+      .paginate_button.disabled {
+        border: 1px solid var(--ion-color-three);
+        color: var(--ion-color-one) !important;
+
+        &.disabled,
+        &.disabled:hover {
+          color: var(--ion-color-three) !important;
+          background: transparent;
+        }
+
+        &.current,
+        &:hover,
+        &.current:hover {
+          background-color: var(--ion-color-two);
+          color: var(--ion-color-six) !important;
+          border: 1px solid var(--ion-color-three);
+        }
+      }
+    }
+
+    table.dataTable {
+      border: 1px solid var(--ion-color-four);
+      thead {
+        background-color: var(--ion-color-three);
+        color: var(--ion-color-step-2000);
+      }
+
+      tbody {
+        color: var(--ion-color-two);
+        tr:hover {
+          box-shadow: inset 0 0 0 9999px var(--ion-color-five);
+        }
+        tr {
+          background-color: var(--ion-color-six);
+          &.data-selected {
+            background-color: var(--ion-color-four);  
+          }
+        }
+
+        td,
+        th .row-border {
+          border-top: 1px solid var(--ion-color-four);
+
+          tbody {
+            color: var(--ion-color-two);
+            tr:hover {
+              box-shadow: inset 0 0 0 9999px var(--ion-color-five);
+            }
+            tr {
+              background-color: var(--ion-color-six);          
+            }
+
+            td,
+            th .row-border {
+              border-top: 1px solid var(--ion-color-four);
+            }
+          }
+        }
+      }
+    }
+    .dataTables_processing {
+      margin-top: 30px;
+    }
+    .dataTables_processing > div:last-child > div {
+      width: 7px;
+      height: 7px;
+      border-radius: 54%;
+      background: var(--ion-color-three);
+  }
+    .propcoicon.action-btn, .propcoicon.propcoicon-property-description {
+      background-color: var(--ion-color-five);
+    }
+    .action-btn {
+      color: var(--ion-color-warning, #ffc409);
+    }
+  }
+  #marketing-activity, #tenancy-details {
+    .dataTables_wrapper {
+      table.dataTable {
+        tbody {
+          tr.total-row {
+            background: var(--ion-color-four) !important;
+          }
+          tr {
+            td {
+              padding: 10px 10px;
+            }
+          }
+        }
+      }
+    }
   }
 }

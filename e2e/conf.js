@@ -27,7 +27,11 @@ exports.config = {
             './features/igf-logfault/fault.summary.spec.js',
             './features/igf-logfault/merge.fault.spec.js',
             './features/igf-logfault/fault.note.spec.js', 
-            './features/igf-logfault/fault.escalate.spec.js'            
+            './features/igf-logfault/fault.escalate.spec.js', 
+            './features/cli-landlordownrepair/landlord.own.repair.spec.js', 
+            './features/iac-arrangingcontractor/obtain.quote.spec.js',
+            './features/iac-arrangingcontractor/proceed.with.worksorder.spec.js',
+            './features/iac-arrangingcontractor/proceed.agent.necessity.spec.js'              
        ]
     },
     onPrepare: () => {

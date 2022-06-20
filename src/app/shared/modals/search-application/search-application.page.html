@@ -15,17 +15,17 @@
     </mat-form-field>
 
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)" class="referencing-autocomplete">
-      <mat-option *ngFor="let result of (filteredProperty | async)?.data" [value]="result" style="border-bottom: 1px solid gray;">
-        <span style="color: var(--ion-color-primary)">{{result?.referenceNumber}}</span>&nbsp;
-        <span style="color: var(--ion-color-secondary)">{{result?.caseReferenceNumber}}</span>&nbsp;
-        <span style="color: var(--ion-color-step-400)">{{result?.applicantDetail?.displayAs ? result?.applicantDetail?.displayAs : 
+      <mat-option *ngFor="let result of (filteredProperty | async)?.data" [value]="result" class="search-option">
+        <span class="ref-number">{{result?.referenceNumber}}</span>&nbsp;
+        <span class="case-ref-number">{{result?.caseReferenceNumber}}</span>&nbsp;
+        <span class="addressee">{{result?.applicantDetail?.displayAs ? result?.applicantDetail?.displayAs : 
           (result?.applicantDetail?.addressee ? result?.applicantDetail?.addressee : result?.applicantDetail?.forename
           + ' ' + result?.applicantDetail?.surname)}}</span>&nbsp;
-        <span style="color: var(--ion-color-step-500)">
+        <span class="address">
           {{result?.propertyDetail?.address?.addressLine1 ? result?.propertyDetail?.address?.addressLine1 + ', ' : ''}}
           {{result?.propertyDetail?.address?.postcode}}
         </span>
-        <span style="color: var(--ion-color-step-600)">{{getProductType(result?.product, 'application')}}</span>
+        <span class="product-type">{{getProductType(result?.product, 'application')}}</span>
       </mat-option>
       <mat-option *ngIf='(applicationSearchForm.controls.text.value).length > 2 && isNotFound'>No application found.</mat-option>
     </mat-autocomplete>

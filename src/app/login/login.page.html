@@ -1,0 +1,94 @@
+<ion-content>
+  <ion-row style="height: 100%;">
+    <ion-col size-xl="30" size-lg="40" size-md="50" size-sm="75" size-xs="100" class="left-section">
+      <div class="login-form-section">
+        <form class="login-form propco-form" [formGroup]="loginForm" (submit)="onLoginSubmit()">
+          <ion-grid class="ion-no-padding">
+            <ion-row class="ion-justify-content-center">
+              <ion-col class="login-container">
+                <ion-row>
+                  <ion-col size="100">
+                    <div style="width: 65%;">
+                      <img class="logo" src="assets/images/propco-logo.svg" alt="PropCo" title="PropCo">
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <ion-card class="ion-no-margin">
+                  <ion-card-content>
+                    <ion-grid class="ion-no-padding">
+                      <ion-row class="align-items-flex-end">
+                        <ion-col size="100">
+                          <ion-item>
+                            <ion-label position="floating"> Username <ion-text class="mandatory">*</ion-text>
+                            </ion-label>
+                            <ion-input formControlName="username"></ion-input>
+                          </ion-item>
+                          <app-validation-message [control]="loginForm.controls.username"></app-validation-message>
+                        </ion-col>
+                        <ion-col size="100">
+                          <ion-item>
+                            <ion-label position="floating"> Domain <ion-text class="mandatory">*</ion-text>
+                            </ion-label>
+                            <ion-select interface="popover" formControlName="domainId">
+                              <ion-select-option [value]="item?.clientDomainId" *ngFor="let item of domainList">
+                                {{ item?.clientDomainName }}
+                              </ion-select-option>
+                            </ion-select>
+                          </ion-item>
+                          <app-validation-message [control]="loginForm.controls.domainId"></app-validation-message>
+                        </ion-col>
+                        <ion-col size="100">
+                          <ion-item>
+                            <ion-label position="floating"> Password <ion-text class="mandatory">*</ion-text>
+                            </ion-label>
+                            <ion-input type="password" formControlName="password"></ion-input>
+                          </ion-item>
+                          <app-validation-message [control]="loginForm.controls.password"></app-validation-message>
+                        </ion-col>
+                        <ion-col size="100">&nbsp;</ion-col>
+                        <ion-col size="50" class="forgot-password">
+                          <!-- <ion-text class="pointer" (click)="forgotPassword()">Forgotten login details?</ion-text> -->
+                          <ion-text><a>Forgotten login details?</a></ion-text>
+                        </ion-col>
+                        <ion-col size="50" class="ion-text-end">
+                          <ion-button class="no-margin-right" color="success" type="submit"
+                            [disabled]="!loginForm.valid || showLoader">
+                            Login
+                            <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+                          </ion-button>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-card-content>
+                </ion-card>
+                <ion-row class="footer">
+                  <ion-col size="50" class="ion-text-left">
+                    <ion-text>Contact PropCo Support</ion-text>
+                  </ion-col>
+                  <ion-col size="50" class="ion-text-right">
+                    <ion-text style="margin-right: 10px;">Build {{ buildDetails.BUILD_NUMBER }} </ion-text>
+                    <ion-text> {{ buildDetails.BUILD_MONTH_YEAR }} </ion-text>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </form>
+      </div>
+    </ion-col>
+    <ion-col size-xl="70" size-lg="60" size-md="50" size-sm="100" size-xs="100" class="login-right-section">
+      <div class="slider-section">
+        <div class="slider-header">
+          <ion-text>All people</ion-text><br />
+          <ion-text>All processes</ion-text><br />
+          <ion-text>One Platform</ion-text><br />
+        </div>
+        <ion-slides pager="true" [options]="slideOpts">
+          <ion-slide *ngFor="let msg of sliderMsgList">
+            <ion-text class="ion-text-left fw-700">{{ msg.MESSAGE }}</ion-text>
+          </ion-slide>
+        </ion-slides>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-content>

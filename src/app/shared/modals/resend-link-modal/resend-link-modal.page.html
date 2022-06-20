@@ -72,7 +72,7 @@
                 <ion-col>
                   <ion-item>
                     <ion-label position="floating">Notes Type <ion-text class="mandatory">*</ion-text></ion-label>
-                    <ion-select interface="popover" formControlName='notesType' >
+                    <ion-select interface="popover" formControlName='notesType' [interfaceOptions]="popoverOptions">
                       <ion-select-option [value]="item.index"  *ngFor="let item of lookupNotesType">
                         {{ item.value }}
                       </ion-select-option>
@@ -83,7 +83,7 @@
                 <ion-col>
                   <ion-item>
                     <ion-label position="floating">Notes Category<ion-text class="mandatory">*</ion-text></ion-label>
-                    <ion-select interface="popover" formControlName='notesCategory' >
+                    <ion-select interface="popover" formControlName='notesCategory' [interfaceOptions]="popoverOptions">
                       <ion-select-option [value]="item.index" *ngFor="let item of lookupNotesCategories">
                         {{ item.value }}
                       </ion-select-option>

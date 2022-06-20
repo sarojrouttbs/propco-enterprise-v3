@@ -1,6 +1,6 @@
 import { ModalController, PopoverController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP, MAX_DOC_UPLOAD_SIZE, ERROR_CODE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STAGES_ACTIONS } from './../../shared/constants';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP, MAX_DOC_UPLOAD_SIZE, ERROR_CODE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STAGES_ACTIONS, MAINT_SOURCE_TYPES, DEFAULTS } from './../../shared/constants';
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,7 +15,6 @@ import { ContractorDetailsModalPage } from 'src/app/shared/modals/contractor-det
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 import { DOCUMENT } from '@angular/common';
 import { JobCompletionModalPage } from 'src/app/shared/modals/job-completion-modal/job-completion-modal.page';
-import { saveAs } from 'file-saver';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.page';
 import { SnoozeFaultModalPage } from 'src/app/shared/modals/snooze-fault-modal/snooze-fault-modal.page';
@@ -36,7 +35,7 @@ export class DetailsPage implements OnInit {
   propertyHMODetails: any[] = [];
   faultHistory;
   addtionalInfo;
-  files : any = [];
+  files: any = [];
   describeFaultForm: FormGroup;
   faultDetailsForm: FormGroup;
   addAdditionalDetForm: FormGroup;
@@ -100,6 +99,7 @@ export class DetailsPage implements OnInit {
   MAX_DOC_UPLOAD_LIMIT;
   FAULT_STAGES = FAULT_STAGES;
   isAuthorizationfields = false;
+  DEFAULTS = DEFAULTS;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -173,12 +173,6 @@ export class DetailsPage implements OnInit {
   displayFn(subject) {
     return subject ? subject.fullName + ',' + ' ' + subject.reference : undefined;
   }
-
-  // onSelectionChange(data) {
-  //   if (data) {
-  //     this.contractorEntityId = data.option.value.entityId;
-  //   }
-  // }
 
   private getLookupData() {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -342,10 +336,6 @@ export class DetailsPage implements OnInit {
           let contractorDetails: any = await this.getContractorDetails(this.contractorEntityId);
           if (contractorDetails) {
             contractorDetails.fullName = contractorDetails.name;
-            // this.landlordInstFrom.patchValue({
-            //   contractor: contractorDetails
-            // });
-
             this.contractorSelected(contractorDetails);
           }
         }
@@ -356,7 +346,6 @@ export class DetailsPage implements OnInit {
       this.faultDetails.status = 1;
       this.faultDetails.stageIndex = -1
     }
-    // this.commonService.showLoader();
     forkJoin([
       this.getPropertyById(),
       this.getFaultAdditionalInfo(),
@@ -364,9 +353,8 @@ export class DetailsPage implements OnInit {
       this.getMaxDocUploadLimit(),
       this.getPropertyTenancies()
     ]).subscribe(async (values) => {
-      this.checkIfPropertyCheckedIn();      
+      this.checkIfPropertyCheckedIn();
       if (this.faultId) {
-        // this.commonService.hideLoader();
         this.initPatching();
         this.setValidatorsForReportedBy();
         this.getUserDetails();
@@ -425,7 +413,6 @@ export class DetailsPage implements OnInit {
           break;
         }
         case FAULT_STAGES.LANDLORD_INSTRUCTION: {
-          // this.initLandlordInstructions(this.faultId);
           details.stageIndex = 2;
           break;
         }
@@ -469,7 +456,6 @@ export class DetailsPage implements OnInit {
         break;
       }
       case FAULT_STAGES.LANDLORD_INSTRUCTION: {
-        // this.initLandlordInstructions(this.faultId);
         this.changeStep(FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION);
         break;
       }
@@ -493,7 +479,7 @@ export class DetailsPage implements OnInit {
   }
 
   private initPatching(): void {
-    if(this.faultDetails.sourceType === 'FIXFLO'){
+    if (this.faultDetails.sourceType === MAINT_SOURCE_TYPES.FIXFLO) {
       this.describeFaultForm.controls['category'].clearValidators();
       this.describeFaultForm.controls['category'].updateValueAndValidity();
     }
@@ -522,7 +508,6 @@ export class DetailsPage implements OnInit {
     });
     /*Landlord Instructions*/
     this.landlordInstFrom.patchValue({
-      // contractor: this.faultDetails.contractorId,
       confirmedEstimate: this.faultDetails.confirmedEstimate,
       userSelectedAction: this.faultDetails.userSelectedAction,
       estimationNotes: this.faultDetails.estimationNotes,
@@ -563,10 +548,10 @@ export class DetailsPage implements OnInit {
   }
 
   private getPropertyTenancies() {
-    const promise = new Promise((resolve, reject) => {      
+    const promise = new Promise((resolve, reject) => {
       this.faultsService.getPropertyTenancies(this.propertyId).subscribe(
         res => {
-          if (res && res.data) {                        
+          if (res && res.data) {
             const currentTenancyStatuses = [2, 5, 6];
             this.propertyTenancyList = res.data.filter(x => currentTenancyStatuses.indexOf(x.status) != -1);
             if (this.propertyTenancyList && this.propertyTenancyList.length) {
@@ -580,7 +565,7 @@ export class DetailsPage implements OnInit {
                   this.hasPropertyCheckedIn = this.propertyTenancyList[i].hasCheckedIn;
                 }
               }
-            }          
+            }
           }
           if (this.tenantIds && this.tenantIds.length) {
             this.getTenantArrears(this.tenantIds);
@@ -797,7 +782,7 @@ export class DetailsPage implements OnInit {
               categoryNames.push(this.commonService.getLookupValue(category, this.faultCategories));
             }
           }
-          this.landlordDetails.repairCategoriesText = categoryNames;          
+          this.landlordDetails.repairCategoriesText = categoryNames;
           resolve(this.landlordDetails);
         },
         error => {
@@ -929,16 +914,28 @@ export class DetailsPage implements OnInit {
       apiObservableArray.push(this.faultsService.uploadDocument(formData, faultId));
     });
     if (!apiObservableArray.length && reDir) {
-      this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+      if (!this.faultId) {
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
+      } else {
+        this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
+      }
     }
     setTimeout(() => {
       forkJoin(apiObservableArray).subscribe(() => {
         if (reDir) {
-          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+          if (!this.faultId) {
+            this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
+          } else {
+            this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
+          }
         }
       }, err => {
         if (reDir) {
-          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+          if (!this.faultId) {
+            this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
+          } else {
+            this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
+          }
         }
       });
     }, 1000);
@@ -950,16 +947,16 @@ export class DetailsPage implements OnInit {
         if (response) {
           resolve(response.data);
         } else {
-          resolve([]);  
+          resolve([]);
         }
-      },err =>{
+      }, err => {
         resolve([]);
       });
     });
     return promise;
   }
 
-  private  filterDocsByStage(details : FaultModels.IFaultResponse) {
+  private filterDocsByStage(details: FaultModels.IFaultResponse) {
     if (details.stage === FAULT_STAGES.JOB_COMPLETION || details.stage === FAULT_STAGES.PAYMENT) {
       this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[4]['index'] || data.folderName === FOLDER_NAMES[5]['index']).filter(data => !data.isRejected);
     }
@@ -968,19 +965,6 @@ export class DetailsPage implements OnInit {
     }
     this.prepareDocumentsList();
   }
-
-  // downloadFaultDocument(documentId, name) {
-  //   let fileName = name.split('.')[1];
-  //   this.faultsService.downloadDocument(documentId).subscribe(response => {
-  //     if (response) {
-  //       this.commonService.downloadDocument(response, fileName);
-  //     }
-  //   })
-  // }
-
-  // downloadFaultDocumentByUrl(url) {
-  //   this.commonService.downloadDocumentByUrl(url);
-  // }
 
   //MAT METHODS//
   caseDeatil(): void {
@@ -1168,9 +1152,6 @@ export class DetailsPage implements OnInit {
         });
         this.allGuarantors = [];
         if (agreement && agreement.tenants) {
-          // agreement.tenants.forEach(tenant => {
-          //   this.getTenantsGuarantors(tenant.tenantId);
-          // });
 
           let apiObservableArray = [];
           agreement.tenants.forEach(tenant => {
@@ -1225,14 +1206,9 @@ export class DetailsPage implements OnInit {
   async createAFault() {
     let isValid = await this.checkFormsValidity();
     if (!isValid) {
-      this.commonService.showMessage('Please fill all required fields.', 'Log a Fault', 'error');
+      this.commonService.showMessage('Please fill all required fields.', 'Log a Repair', 'error');
       return;
     }
-    // if (!this.files.length) {
-    //   this.commonService.showMessage('At least one fault image is required', 'Log a Fault', 'error');
-    //   return;
-    // }
-    // this.commonService.showLoader();
     this.submitting = true;
     let faultRequestObj = this.createFaultFormValues();
     if (this.faultId) {
@@ -1240,15 +1216,11 @@ export class DetailsPage implements OnInit {
     } else {
       this.faultsService.createFault(faultRequestObj).subscribe(
         res => {
-          // this.commonService.hideLoader();
-          this.commonService.showMessage('Fault has been logged successfully.', 'Log a Fault', 'success');
+          this.commonService.showMessage('Repair has been logged successfully.', 'Log a Repair', 'success');
           this.uploadFiles(res.faultId);
         },
         error => {
           this.submitting = false;
-          // this.commonService.hideLoader();
-          // this.commonService.showMessage('Something went wrong on server, please try again.', 'Log a Fault', 'Error');
-          // console.log(error);
         }
       );
     }
@@ -1261,7 +1233,7 @@ export class DetailsPage implements OnInit {
     faultRequestObj.submittedById = '';
     this.faultsService.updateFault(this.faultId, faultRequestObj).subscribe(
       res => {
-        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
+        this.commonService.showMessage('Repair details have been updated successfully.', 'Repair Summary', 'success');
         this.uploadFiles(this.faultId);
       },
       error => {
@@ -1332,7 +1304,7 @@ export class DetailsPage implements OnInit {
         this.propertyId = res.data.propertyId;
         this.initiateFault();
       } else {
-        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       }
     });
     await modal.present();
@@ -1345,7 +1317,7 @@ export class DetailsPage implements OnInit {
       faultRequestObj.isDraft = true;
       this.faultsService.createFault(faultRequestObj).subscribe(
         res => {
-          this.commonService.showMessage('Fault has been logged successfully.', 'Log a Fault', 'success');
+          this.commonService.showMessage('Repair has been logged successfully.', 'Log a Repair', 'success');
           this.uploadFiles(res.faultId);
         },
         error => {
@@ -1387,11 +1359,11 @@ export class DetailsPage implements OnInit {
     this.faultsService.updateFault(this.faultId, faultRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
-        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
+        this.commonService.showMessage('Repair details have been updated successfully.', 'Repair Summary', 'success');
         if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_LOGGED) {
           this.uploadFiles(this.faultId);
         } else {
-          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+          this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
         }
       },
       error => {
@@ -1429,7 +1401,7 @@ export class DetailsPage implements OnInit {
   }
 
   async startProgress() {
-    const check = await this.commonService.showConfirm('Start Progress', 'This will change the fault status, Do you want to continue?');
+    const check = await this.commonService.showConfirm('Start Progress', 'This will change the repair status, Do you want to continue?');
     if (check) {
       this.submitting = true;
       let faultRequestObj = this.createFaultFormValues();
@@ -1464,13 +1436,13 @@ export class DetailsPage implements OnInit {
   }
 
   reOpenFault() {
-    this.commonService.showConfirm('Re-open Fault', 'This will reopen the fault and notify the property manager.<br/> Are you sure?').then(res => {
+    this.commonService.showConfirm('Re-open Repair', 'This will reopen the repair and notify the property manager.<br/> Are you sure?').then(res => {
       if (res) {
         const UNDER_REVIEW = 2; // Under review
         this.faultsService.updateFaultStatus(this.faultId, UNDER_REVIEW).subscribe(data => {
-          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+          this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
         }, error => {
-          this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Re-open Fault', 'Error');
+          this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Re-open Repair', 'Error');
           console.log(error);
         });
       }
@@ -1478,10 +1450,6 @@ export class DetailsPage implements OnInit {
   }
 
   setUserAction(index) {
-    // if (this.cliNotification && !this.cliNotification.responseReceived) {
-    //   this.commonService.showAlert('Landlord Instructions', 'Please select response before proceeding with other action.');
-    //   return;
-    // }
     this.isUserActionChange = true;
     this.isAuthorizationfields = false;
     this.userSelectedActionControl.setValue(index);
@@ -1495,12 +1463,8 @@ export class DetailsPage implements OnInit {
   }
 
   private async checkForLLSuggestedAction() {
-    // if (this.faultDetails.status === 2 || this.faultDetails.status === 13) { //In Assessment" or " Checking Landlord's Instructions "
     this.suggestedAction = '';
     let confirmedEstimate = this.faultDetails.confirmedEstimate;
-    // if (this.faultDetails.urgencyStatus === URGENCY_TYPES.EMERGENCY || this.faultDetails.urgencyStatus === URGENCY_TYPES.URGENT) {
-    //   this.suggestedAction = LL_INSTRUCTION_TYPES[5].index;
-    // } else
     if (this.landlordDetails.doesOwnRepairs) {
       this.suggestedAction = LL_INSTRUCTION_TYPES[0].index;
     }
@@ -1520,17 +1484,11 @@ export class DetailsPage implements OnInit {
     // }
     await this.checkFaultNotifications(this.faultId);
     this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, this.faultDetails.userSelectedAction);
-    
+
     this.getPendingHours();
-    // if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[0].index) {
-    //   if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
-    //     this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
-    //   }
-    // } else 
     if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
       if (this.cliNotification && this.cliNotification.responseReceived) {
         if (this.cliNotification.responseReceived.isAccepted) {
-          // this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[1].index);
         } else {
           this.isUserActionChange = true;
           this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
@@ -1552,7 +1510,11 @@ export class DetailsPage implements OnInit {
   }
 
   goTolistPage() {
-    this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+    if(this.faultId) {
+      this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
+    } else {
+      this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
+    }
   }
 
   private changeStep(index: number) {
@@ -1898,7 +1860,7 @@ export class DetailsPage implements OnInit {
   async checkFaultNotifications(faultId) {
     return new Promise((resolve, reject) => {
       this.faultsService.getFaultNotifications(faultId).subscribe(async (response) => {
-        this.faultNotifications = response && response.data ? response.data : [];        
+        this.faultNotifications = response && response.data ? response.data : [];
         resolve(this.faultNotifications);
       }, error => {
         reject(error)
@@ -1906,12 +1868,12 @@ export class DetailsPage implements OnInit {
     });
   }
 
-  private filterNotifications(data, stage, action?) {        
+  private filterNotifications(data, stage, action?) {
     const promise = new Promise((resolve, reject) => {
       let filtereData = null;
       let currentStage = stage;
-      let currentAction = action;      
-      
+      let currentAction = action;
+
       if (data.length == 0)
         resolve(null);
       filtereData = data.filter((x => x.faultStage === currentStage)).filter((x => !x.isVoided));
@@ -1921,10 +1883,10 @@ export class DetailsPage implements OnInit {
       filtereData = filtereData.sort((a, b) => {
         return <any>new Date(b.createdAt) - <any>new Date(a.createdAt);
       });
-      filtereData[0].chase = filtereData[0].numberOfChasesDone + 1;    
+      filtereData[0].chase = filtereData[0].numberOfChasesDone + 1;
       this.faultNotificationDetails = [
-         filtereData[0].templateCode,
-         filtereData[0].chase
+        filtereData[0].templateCode,
+        filtereData[0].chase
       ];
       resolve(filtereData[0]);
       // } else {
@@ -1956,7 +1918,7 @@ export class DetailsPage implements OnInit {
 
   private questionActionDoesOwnRepair(data) {
     if (!data.value) {
-      this.commonService.showConfirm(data.text, 'The fault status will change to "Escalation". </br> Are you sure?', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, 'The repair status will change to "Escalation". </br> Are you sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
           this.commonService.showLoader();
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
@@ -1964,15 +1926,6 @@ export class DetailsPage implements OnInit {
           await this.checkFaultNotifications(this.faultId);
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
           this.getPendingHours();
-          // const CHECKING_LANDLORD_INSTRUCTIONS = 13;
-          // this.updateFaultStatus(CHECKING_LANDLORD_INSTRUCTIONS).then(async data => {
-          //   this.refreshDetailsAndStage();
-          //   await this.checkFaultNotifications(this.faultId);
-          //   this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
-          //   if (this.cliNotification && this.cliNotification.responseReceived && this.cliNotification.responseReceived.isAccepted) {
-          //     this.selectStageStepper(FAULT_STAGES.JOB_COMPLETION);
-          //   }
-          // });
         }
       });
     }
@@ -2075,12 +2028,6 @@ export class DetailsPage implements OnInit {
     return promise;
   }
 
-  async showRefreshPopup(val) {
-    // if (val != '' && this.landlordInstFrom.get('confirmedEstimate').valid && val !== this.faultDetails.confirmedEstimate) {
-    //   var response = await this.commonService.showAlert('Landlord Instructions', 'Please click Refresh to check if the Suggested Action has changed based on the estimate you have entered');
-    // }
-  }
-
   onSearchChange(event: any) {
     this.isContractorSearch = true;
     const searchString = event.target.value;
@@ -2164,7 +2111,7 @@ export class DetailsPage implements OnInit {
   async snoozeFault() {
     const modal = await this.modalController.create({
       component: SnoozeFaultModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId,
       },
@@ -2172,9 +2119,9 @@ export class DetailsPage implements OnInit {
     });
 
     modal.onDidDismiss().then(async res => {
-      if(res && res.data && res.data == 'success'){
-        this.commonService.showMessage('Fault has been snooze successfully.', 'Snooze Fault', 'success');
-        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+      if (res && res.data && res.data == 'success') {
+        this.commonService.showMessage('Repair has been snooze successfully.', 'Snooze Repair', 'success');
+        this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
       }
     });
     await modal.present();
@@ -2191,11 +2138,6 @@ export class DetailsPage implements OnInit {
       this.goTolistPage();
     }
   }
-
-  // private getDocs() {
-  //   const uniqueSet = this.files.map(data => data.folderName);
-  //   this.folderNames = uniqueSet.filter(this.onlyUnique);
-  // }
 
   filterByGroupName(folderName) {
     this.filteredDocuments = this.files.filter(data => data.folderName === folderName).filter(data => !data.isDraft);
@@ -2229,22 +2171,14 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  // getFileType(name): boolean {
-  //   if (name != null) {
-  //     let data = name.split('.')[1] === 'pdf';
-  //     if (data) {
-  //       return true;
-  //     }
-  //   }
-  // }
   private prepareDocumentsList() {
     if (this.files.length > 0) {
       this.files.forEach((e, i) => {
         if (this.files[i].folderName == null) {
           this.files[i].folderName = FOLDER_NAMES[0].index;
         }
-        if(this.files[i].folderName === FOLDER_NAMES[1].index && this.files[i].contractorCompanyName ){
-          this.files[i].folderName = e.folderName + ' - '+ e.contractorCompanyName;
+        if (this.files[i].folderName === FOLDER_NAMES[1].index && this.files[i].contractorCompanyName) {
+          this.files[i].folderName = e.folderName + ' - ' + e.contractorCompanyName;
         }
         this.files[i].folderName = e.folderName.replace(/_/g, " ");
         this.files[i].isUploaded = true;
@@ -2261,12 +2195,6 @@ export class DetailsPage implements OnInit {
 
   downloadDocumentByURl(document) {
     this.commonService.downloadDocumentByUrl(document.documentUrl, document.name);
-    // this.faultsService.downloadFaultDocument(document.documentId).subscribe(res => {
-    //   // saveAs(res, document.name);
-    //   this.commonService.downloadDocument(res, document.name);
-    //  }, (error) => {
-    //    console.log(error);
-    //  });
   }
 
 
@@ -2276,7 +2204,7 @@ export class DetailsPage implements OnInit {
       this.isContractorModal = true;
       const modal = await this.modalController.create({
         component: ContractorDetailsModalPage,
-        cssClass: 'modal-container ll-contractor-modal',
+        cssClass: 'modal-container ll-contractor-modal fault-modal-container',
         componentProps: {
           faultId: this.faultId,
           landlordId: this.landlordDetails.landlordId,
@@ -2337,7 +2265,7 @@ export class DetailsPage implements OnInit {
   async notificationModal() {
     const modal = await this.modalController.create({
       component: PendingNotificationModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         notificationHistoryId: this.pendingNotification ? this.pendingNotification.notificationHistoryId : '',
         notificationSubject: this.pendingNotification ? this.pendingNotification.subject : '',
@@ -2388,7 +2316,7 @@ export class DetailsPage implements OnInit {
   async openJobCompletionModal(title) {
     const modal = await this.modalController.create({
       component: JobCompletionModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         faultNotificationId: this.cliNotification.faultNotificationId,
         heading: 'Mark the Job Complete',
@@ -2435,7 +2363,7 @@ export class DetailsPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.saveFaultDetails(faultId, data).subscribe(
         res => {
-          this.commonService.showMessage('Title changed successfully.', 'Fault', 'success');
+          this.commonService.showMessage('Title changed successfully.', 'Repair', 'success');
           resolve(true);
         },
         error => {
@@ -2546,7 +2474,6 @@ export class DetailsPage implements OnInit {
 
   removeValidation() {
     this.isAuthorizationfields = false;
-    // this.landlordInstFrom.reset();
     this.landlordInstFrom.clearValidators();
     this.landlordInstFrom.updateValueAndValidity()
     this.landlordInstFrom.patchValue({
@@ -2625,12 +2552,7 @@ export class DetailsPage implements OnInit {
         },
         error => {
           if (error.error && error.error.hasOwnProperty('errorCode')) {
-            // this.commonService.showMessage(error.error ? error.error.message : 'Something went wrong', 'Landlord Instructions', 'error');
-            // if (error.error.errorCode === ERROR_CODE.PAYMENT_RULES_CHECKING_FAILED && actionType !== WORKSORDER_RAISE_TYPE.AUTO) {
-            //   resolve('saveWorksorder');
-            // } else {
             resolve(null);
-            // }
           } else {
             resolve(null);
           }
@@ -2654,7 +2576,7 @@ export class DetailsPage implements OnInit {
   private async paymentRequestModal(data) {
     const modal = await this.modalController.create({
       component: PaymentRequestModalPage,
-      cssClass: 'modal-container payment-request-modal',
+      cssClass: 'modal-container payment-request-modal fault-modal-container',
       componentProps: data,
       backdropDismiss: false
     });
@@ -2670,14 +2592,11 @@ export class DetailsPage implements OnInit {
           this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
         }
       }
-      //  else {
-      //   this.refreshDetailsAndStage();
-      // }
     });
 
   }
 
-  getFaultNotificationId(){    
+  getFaultNotificationId() {
     this.filterNotifications(this.faultNotifications, this.faultDetails.stage);
   }
 

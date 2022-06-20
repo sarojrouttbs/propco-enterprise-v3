@@ -1,0 +1,71 @@
+ion-card {
+    --background: var(--ion-color-five);
+    position: static;
+    ion-card-content {
+        background-color: var(--ion-color-five);
+        padding: 0px;
+        position: static;
+        border-radius: 5px;
+    }
+}
+
+.action-icon {
+    display: inline-flex;
+    align-items: center !important;
+    justify-content: flex-end;
+    margin: 0px 0px -6px -5px;
+}
+
+.property-details {
+    margin: 0px 10px;
+    .address {
+        align-items: center;
+        margin: 20px 0px;
+        color: var(--ion-color-two);
+    }
+    .filters {
+        align-items: center;
+    }
+}
+
+.details {
+    padding-top: 10px;
+    margin-bottom: -10px;
+}
+
+.btn-filter {
+    display: inline-block;
+    width: 80px;
+}
+
+:host ::ng-deep .mat-form-field-wrapper { //**
+    margin-bottom: -20px;
+}
+
+.application-status {
+    margin: 5px 0px !important;
+    display: inline-block;
+    border: 2px solid;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 16px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.applicant-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;    
+}
+
+i.propcoicon {
+    background-color: var(--ion-color-six);
+    color: var(--ion-color-one);
+}
+
+@media screen and (min-width: 750px) and (max-width: 1200px) {
+    .btn-top-space {
+      margin-top: 10px;
+    }
+  }

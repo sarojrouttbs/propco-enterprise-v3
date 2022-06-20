@@ -14,12 +14,27 @@
   @include set-text-style(15px, 19px);
 }
 
-.mat-form-field-label mat-label{
-  font-family: "Lato", san-serif, verdana;
+.mat-form-field,
+.mat-form-field-label mat-label,
+.mat-list-item,
+.mat-form-field .mat-form-field-label,
+.mat-select-value {
+  font-family: var(--ion-font-family);
+  color: var(--ion-text-color);
+
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-underline {
+  background-color: rgba(var(--ion-text-color-rgb), 0.5);
+}
+
+.mat-select-arrow {
+  color: rgba(var(--ion-text-color-rgb), 0.5);
 }
 
 .mat-tab-group {
   font-family: var(--ion-font-family);
+
   .mat-tab-header {
     margin: 0 10px;
 
@@ -36,6 +51,7 @@
         font-size: 16px;
         opacity: 1;
         margin: 0 2px !important;
+        font-family: var(--ion-font-family);
 
         .mat-tab-label-content {
           width: 100%;
@@ -77,6 +93,7 @@
     margin-top: 20px;
   }
 }
+
 // .mat-tab-body {
 .action-btn-group {
   text-align: right;
@@ -85,6 +102,7 @@
   ion-button {
     margin: 0 5px;
   }
+
   .cancel-button {
     --background: var(--ion-color-danger);
   }
@@ -97,6 +115,7 @@
     --background: var(--ion-color-success);
   }
 }
+
 // }
 // }
 
@@ -124,14 +143,237 @@
   }
 }
 
-#la-application-details, #la-guarantor-details{
-    .mat-tab-group {
-        .mat-tab-header {
-          margin: 0;
-        }
-
-        .mat-tab-body-wrapper{
-            margin: 0;
-        }
+#la-application-details,
+#la-guarantor-details {
+  .mat-tab-group {
+    .mat-tab-header {
+      margin: 0;
     }
+
+    .mat-tab-body-wrapper {
+      margin: 0;
+    }
+  }
 }
+
+.mat-button,
+.mat-menu-item,
+.mat-select,
+.mat-option-text,
+.mat-checkbox {
+  font-family: var(--ion-font-family) !important;
+}
+
+.mat-menu-panel {
+  background-color: var(--ion-color-six) !important;
+
+  .mat-menu-item {
+    color: var(--ion-color-button-mat-menu-item) !important;
+    height: 36px;
+    line-height: 36px;
+  }
+
+  .mat-menu-item:hover {
+    background-color: var(--ion-color-five) !important;
+  }
+
+  .mat-menu-item .mat-icon-no-color,
+  .mat-menu-item-submenu-trigger::after {
+    color: var(--ion-color-mat-menu-item-submenu-trigger) !important;
+  }
+}
+
+#agent-portal {
+  .mat-accordion {
+    margin-bottom: 11px;
+    .mat-expansion-panel {
+      color: var(--ion-color-step-250);
+      background-color: var(--ion-color-five);
+      box-shadow: none;
+      margin-bottom: 10px;
+
+      .mat-expansion-panel-header {
+        padding: 0 16px;
+
+        .mat-expansion-panel-header-title,
+        .mat-expansion-panel-header-description {
+          display: flex;
+          align-items: center;
+          font-family: var(--ion-font-family);
+          color: var(--ion-color-primary);
+          @include set-text-style(18px, 20px);
+        }
+      }
+      .mat-expansion-panel-body {
+        padding: 0 16px 16px;
+      }
+    }
+    .mat-expansion-panel:is(.mat-expanded):not([aria-disabled=true]) {
+      background-color: var(--ion-color-five);
+    }
+    
+    &.list-view-accordian {
+      .mat-expansion-panel {
+        .mat-expansion-panel-header {
+          .mat-content {
+            height: 100%
+          }
+        }
+        .mat-expansion-panel-body{
+          padding: 0 6px 6px;
+        }
+      }
+    }
+
+    &.form-view-accordian {
+      .mat-expansion-panel {
+        .mat-expansion-panel-body{
+          padding: 0 6px 16px;
+        }
+      }
+    }
+
+    &.form-table-view-accordian {
+      .mat-expansion-panel {
+        .mat-expansion-panel-body{
+          padding: 0 6px 16px;
+          .overlay-container{
+            padding: 0 10px;
+          }
+        }
+      }
+    }
+  }
+
+  #property-letting-details, #property-let-board-details, #la-application-list, #market-appraisal-lettings, #periodic-visit-req-block, #property-rent-sales-figures, #property-keys {
+    // material date picker css - dark / light theme
+  
+    .mat-form-field-wrapper {
+      margin-bottom: 0;
+      padding-bottom: 27px;
+    }
+  
+    .mat-form-field-underline::before {
+      background-color: var(--ion-color-one) !important;
+    }
+
+    .mat-datepicker-toggle .mat-icon-button {
+      color: var(--ion-color-primary);
+    }
+  
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+      color: var(--ion-color-one) !important;
+    }
+  
+    .mat-form-field-label {
+      padding-top: 5px;
+      font-size: 16px;
+      mat-label {
+        color: var(--ion-color-three) !important;
+      }
+    }
+  
+    .mat-form-field-infix{
+      input{
+        padding-top: 12px;
+      }
+    }
+  }
+
+  #property-keys {
+    .mat-form-field-infix{
+      input{
+        padding-top: 5px !important;
+      }
+    }
+  }
+
+  #la-application-details, #la-guarantor-details, #tob-application-list, #tob-application-stepper, #offer-stepper, #tob-offer-list {
+    .mat-form-field-underline::before {
+      background-color: var(--ion-color-one) !important;
+    }
+
+    .mat-datepicker-toggle .mat-icon-button {
+      color: var(--ion-color-primary);
+    }
+  
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+      color: var(--ion-color-one) !important;
+    }
+  
+    .mat-form-field-label {
+      font-size: 16px;
+      mat-label {
+        color: var(--ion-color-three) !important;
+      }
+    }
+
+    .mat-tab-label {
+      background-color: var(--ion-color-five);
+      color: var(--ion-color-one);
+    }
+    .mat-tab-label-active {
+      background-color: var(--ion-color-success);
+      opacity: 1;
+      color: var(--ion-color-six);
+    }
+  }
+
+  .mat-tab-group {  
+    .mat-tab-header {
+      .mat-tab-label-container { 
+        .mat-tab-label {
+          background-color: var(--ion-color-four);
+          color: var(--ion-color-one);
+        }
+        .mat-tab-label-active {
+          background-color: var(--ion-color-success);
+        }
+      }
+    }
+  }
+
+  #offer-stepper, #tob-application-stepper {
+    ion-grid {
+      background-color: var(--ion-color-five);
+      border-radius: 5px;
+    }
+  }
+}
+
+.tob-modal-container {
+  .mat-form-field-underline::before {
+    background-color: var(--ion-color-one) !important;
+  }
+
+  .mat-datepicker-toggle .mat-icon-button {
+    color: var(--ion-color-primary);
+  }
+
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    color: var(--ion-color-one) !important;
+  }
+
+  .mat-form-field-label {
+    font-size: 16px;
+    mat-label {
+      color: var(--ion-color-three) !important;
+    }
+  }
+
+  .mat-tab-label {
+    background-color: var(--ion-color-five);
+    color: var(--ion-color-one);
+  }
+  .mat-tab-label-active {
+    background-color: var(--ion-color-success);
+    opacity: 1;
+    color: var(--ion-color-six);
+  }
+}
+
+.mat-autocomplete-panel {
+  background-color: var(--ion-color-five) !important;
+  color: var(--ion-color-one) !important;
+}
+

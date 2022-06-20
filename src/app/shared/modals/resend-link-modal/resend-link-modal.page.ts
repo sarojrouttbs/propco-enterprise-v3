@@ -60,6 +60,10 @@ export class ResendLinkModalPage implements OnInit {
   @Input() paramPropertyAddress: string;
   @Input() paramIt: string;
 
+  popoverOptions: any = {
+    cssClass: 'let-alliance-ion-select'
+  };
+
   constructor(
     private router: Router,
     private referencingService: ReferencingService,

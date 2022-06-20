@@ -1,4 +1,4 @@
-import { ERROR_MESSAGE, DOCUMENTS_TYPE, PROPCO } from './../../constants';
+import { ERROR_MESSAGE, DOCUMENTS_TYPE, PROPCO, DEFAULTS } from './../../constants';
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 import { FormGroup } from '@angular/forms';
@@ -36,6 +36,7 @@ export class PropertyDetailsComponent implements OnInit {
   @Input() fixfloTenantContact;
   @Input() isPropertyCardReady;
   @Input() hasPropertyCheckedIn;
+  DEFAULTS = DEFAULTS;
 
   constructor(public commonService: CommonService, public sanitizer: DomSanitizer, public modalController: ModalController) {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
@@ -128,7 +129,7 @@ export class PropertyDetailsComponent implements OnInit {
   async contactDetailModal() {
     const modal = await this.modalController.create({
       component: ContactDetailsModalPage,
-      cssClass: 'modal-container contact-details-modal',
+      cssClass: 'modal-container contact-details-modal fault-modal-container',
       componentProps: {
         landlordDetails: this.landlordDetails,
         tenantId: this.leadTenantId,

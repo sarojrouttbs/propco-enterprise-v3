@@ -1,0 +1,71 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
+i.search-icon {
+    @include set-text-style(19px, 40px);
+    height: 39px;
+    width: 45px;
+    border: 1px solid #ccc;
+    border-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    font-weight: bold;
+    background-color: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+}
+
+.solrSuggestionList {
+    position: absolute;
+    z-index: 100;
+    margin: 0;
+    list-style: none;
+    padding: 0;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 25%);
+    right: 0;
+    width: auto;
+    background-color: var(--ion-color-five);
+
+    .solrSuggestionListItem:hover{
+        background-color: var(--ion-color-four);
+    }
+
+    .solrSuggestionListItem {
+        color: var(--ion-text-color);
+        cursor: pointer;
+        @include set-text-style(14px, 48px);
+        overflow: hidden;
+        padding: 0 2px;
+        height: 48px;
+        margin: 0;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        i.propcoicon {
+            display: inline-table;
+            vertical-align: sub;
+        }
+
+        .text-color-lightgreen {
+            color: #21b573 !important;
+        }
+        .no-background {
+            background-color: transparent;
+        }
+    }
+}
+
+.solr-dashboard {
+    width: 100%;
+}
+
+.main-row {
+    margin-top: 4px;
+    margin-bottom: 7px;
+}
+
+.agent-main-row {
+    margin: 0;
+    margin-top: 3px;
+}

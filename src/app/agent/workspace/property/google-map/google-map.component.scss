@@ -1,0 +1,59 @@
+p {
+  font-family: Lato;
+}
+
+agm-map {
+  height: 500px;
+  position: relative;
+}
+
+.address {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  background: var(--ion-color-medium);
+  width: auto;
+  font-size: 15px;
+  line-height: 24px;
+  opacity: 1.0;
+  padding: 10px;
+}
+
+.span-block {
+  display: block;
+}
+
+.msg {
+  margin: auto;
+  font-size: 20px;
+}
+
+.wrapper {
+  position: relative;
+  margin: -10px 0px 10px 0px;
+  border: 1px solid var(--ion-color-step-1650);
+}
+
+.map {
+  position: relative;
+}
+
+.map-center-overlay {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.agm-map-container {
+  height: 500px;
+}
+
+.msg-div {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  font-size: 25px;
+}

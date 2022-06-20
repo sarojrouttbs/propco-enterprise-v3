@@ -5,17 +5,16 @@
         <ion-col size="25" *ngIf="faultId">
           <ion-item>
             <ion-label position="floating">Urgency Status</ion-label>
-            <ion-select interface="popover" formControlName="urgencyStatus">
+            <ion-select interface="popover" formControlName="urgencyStatus" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.index" *ngFor="let item of faultUrgencyStatuses">
                 {{ item.value }}
               </ion-select-option>
             </ion-select>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
         </ion-col>
         <ion-col [size]="faultId? 75 : 100">
           <ion-item>
-            <ion-label position="floating">Fault description<ion-text class="mandatory">*</ion-text>
+            <ion-label position="floating">Repair description<ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-textarea formControlName="notes" rows="1" auto-grow="true" class="fault-description"></ion-textarea>
           </ion-item>
@@ -37,7 +36,7 @@
                 <ion-item>
                   <ion-label position="floating">Type</ion-label>
 
-                  <ion-select interface="popover" formControlName="label" [interfaceOptions]="{'cssClass': 'select-options-content-wrap'}" >
+                  <ion-select interface="popover" formControlName="label" [interfaceOptions]="{'cssClass': 'select-options-content-wrap fault-ion-select'}" >
                     <ion-select-option text-wrap [value]="item" *ngFor="let item of addtionalInfo">{{ item }}
                     </ion-select-option>
                   </ion-select>
@@ -70,7 +69,7 @@
                 <ion-col size="40">
                   <ion-item>
                     <ion-label position="floating">Type</ion-label>
-                    <ion-select interface="popover" formControlName="label" [interfaceOptions]="{'cssClass': 'select-options-content-wrap'}">
+                    <ion-select interface="popover" formControlName="label" [interfaceOptions]="{'cssClass': 'select-options-content-wrap fault-ion-select'}">
                       <ion-select-option [value]="item" *ngFor="let item of addtionalInfo">{{ item }}
                       </ion-select-option>
                     </ion-select>
@@ -100,9 +99,9 @@
       <ion-row>
         <ion-col size="33.3">
           <ion-item>
-            <ion-label position="floating">Who reported the fault?<ion-text class="mandatory">*</ion-text>
+            <ion-label position="floating">Who reported the Repair?<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-select interface="popover" formControlName="reportedBy" (ionChange)="onSelectReportedByType()">
+            <ion-select interface="popover" formControlName="reportedBy" (ionChange)="onSelectReportedByType()" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.index" *ngFor="let item of reportedByTypes">{{ item.value }}
               </ion-select-option>
             </ion-select>
@@ -114,7 +113,7 @@
             <ion-label position="floating">Select agreement<ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select formControlName="agreementId" interface="popover" (ionChange)="onSelectAgreement()"
-              [disabled]="reportedByForm.controls.reportedBy.value != 'TENANT' && reportedByForm.controls.reportedBy.value != 'GUARANTOR'" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
+              [disabled]="reportedByForm.controls.reportedBy.value != 'TENANT' && reportedByForm.controls.reportedBy.value != 'GUARANTOR'" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.agreementId" *ngFor="let item of propertyTenancyList">
                 {{getLookupValue(item.status, agreementStatuses)}} {{item.tenancyStartDate | date:'dd/MM/yyyy'}} -
                 {{item.tenancyEndDate| date:'dd/MM/yyyy'}}
@@ -129,7 +128,7 @@
             <ion-label position="floating">Select Landlord<ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select interface="popover" formControlName="selectedEntity"
-              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
+              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item" *ngFor="let item of landlordsOfproperty">{{item.addressee || item.name}}
               </ion-select-option>
             </ion-select>
@@ -142,7 +141,7 @@
             <ion-label position="floating">Select Tenant<ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select interface="popover" formControlName="selectedEntity"
-              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
+              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item" *ngFor="let item of propertyTenants">{{item.addressee || item.name}}
               </ion-select-option>
             </ion-select>
@@ -155,7 +154,7 @@
             <ion-label position="floating">Select Guarantor<ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select interface="popover" formControlName="selectedEntity"
-              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)">
+              (ionChange)="setEntityData(reportedByForm.controls.selectedEntity.value)" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item" *ngFor="let item of allGuarantors">
                 {{item.displayAs}}
               </ion-select-option>
@@ -168,7 +167,7 @@
           <ion-item>
             <ion-label position="floating">Select Third Party<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-select interface="popover" formControlName="reportedById">
+            <ion-select interface="popover" formControlName="reportedById" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.index" *ngFor="let item of faultReportedByThirdParty">{{item.value}}
               </ion-select-option>
             </ion-select>
@@ -180,42 +179,42 @@
             <ion-label position="floating">Title</ion-label>
             <ion-input formControlName="title"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Forename</ion-label>
             <ion-input formControlName="forename"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Surname</ion-label>
             <ion-input formControlName="surname"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">E-mail</ion-label>
             <ion-input formControlName="email"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Mobile</ion-label>
             <ion-input formControlName="mobile"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
         <ion-col size="33.3">
           <ion-item>
             <ion-label position="floating">Telephone</ion-label>
             <ion-input formControlName="alternativeNo"></ion-input>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -230,7 +229,7 @@
           <ion-item>
             <ion-label position="floating">Access information<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-select interface="popover" formControlName="isTenantPresenceRequired" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
+            <ion-select interface="popover" formControlName="isTenantPresenceRequired" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.value" *ngFor="let item of accessInfoList">{{ item.title }}
               </ion-select-option>
             </ion-select>
@@ -242,14 +241,14 @@
             <ion-label>Is there a vulnerable occupier at this property?</ion-label>
             <ion-toggle slot="start" formControlName="areOccupiersVulnerable"></ion-toggle>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
         <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Useful instructions</ion-label>
             <ion-textarea rows="1" formControlName="tenantNotes" auto-grow="true"></ion-textarea>
           </ion-item>
-          <!-- <app-validation-message [control]=""></app-validation-message> -->
+          
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -264,8 +263,6 @@
           <ion-grid>
             <ion-row>
               <ion-col size="100" class="folder-wrapper">
-                <!-- <img src="assets/images/default.jpg" (click)="filterByGroupName(file)"
-                  > -->
                   <ion-icon name="folder-open-outline" title="Click to View Documents" (click)="filterByGroupName(file)" class="folder-icon"></ion-icon>
               </ion-col>
             </ion-row>
@@ -313,7 +310,6 @@
           </div>
         </ion-col>
       </ion-row>
-      <!-- <button (click)="uploadFiles()">Upload</button> -->
     </ion-grid>
   </form>
   <ion-grid [hidden]="mediaType != 'documents'">
@@ -330,12 +326,6 @@
         <div class="delete-icon-wrapper">
           <ion-grid>
             <ion-row>
-              <!-- <ion-col size="100" *ngIf="getFileType(file.name)">
-                <img src="assets/images/default.jpg" (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download PDF">
-              </ion-col>
-              <ion-col size="100" *ngIf="!getFileType(file.name)">
-                <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file.documentUrl)" title="Click To Download">
-              </ion-col> -->
               <ion-col size="100">
                 <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file)" title="Click To Download">
               </ion-col>
@@ -359,25 +349,22 @@
 <ng-template #faultHistoryTab>
   <ion-grid class="view-details">
     <ion-row class="ion-justify-content-between">
-      <!-- <ion-col size="100">
-        <div class="title">Fault History</div>
-      </ion-col> -->
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Last Repair</ion-text><br />
-        <ion-text class="content">{{faultHistory?.description || 'N/A'}}</ion-text>
+        <ion-text class="content">{{faultHistory?.description || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Last Repair Date</ion-text><br />
         <ion-text class="content">
-          {{faultHistory?.lastRepairDate ? (faultHistory?.lastRepairDate | date: 'dd/MM/yyyy HH:mm') : 'N/A'}}</ion-text>
+          {{faultHistory?.lastRepairDate ? (faultHistory?.lastRepairDate | date: 'dd/MM/yyyy HH:mm') : DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Type</ion-text><br />
-        <ion-text class="content">{{faultHistory?.maintType || 'N/A'}}</ion-text>
+        <ion-text class="content">{{faultHistory?.maintType || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Contractor Name</ion-text><br />
-        <ion-text class="content">{{faultHistory?.contractorName || 'N/A'}}</ion-text>
+        <ion-text class="content">{{faultHistory?.contractorName || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -395,24 +382,24 @@
         <div class="title">Please review case details and Start Progress when you’re ready</div>
       </ion-col>
       <ion-col size="100">
-        <div class="sub-heading">Fault Details</div>
+        <div class="sub-heading">Repair Details</div>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Fault Category</ion-text><br />
-        <ion-text class="content">{{getCategoryName() || faultDetails?.fixfloCategory || 'N/A'}}</ion-text>
+        <ion-text class="header">Repair Category</ion-text><br />
+        <ion-text class="content">{{getCategoryName() || faultDetails?.fixfloCategory || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Urgency Status</ion-text><br />
         <ion-text class="content">
-          {{getLookupValue(faultDetailsForm.controls.urgencyStatus.value, faultUrgencyStatuses) || 'N/A'}}</ion-text>
+          {{getLookupValue(faultDetailsForm.controls.urgencyStatus.value, faultUrgencyStatuses) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Title</ion-text><br />
-        <ion-text class="content">{{describeFaultForm.controls.title.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{describeFaultForm.controls.title.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Fault Description</ion-text><br />
-        <ion-text class="content">{{faultDetailsForm.controls.notes.value || 'N/A'}}</ion-text>
+        <ion-text class="header">Repair Description</ion-text><br />
+        <ion-text class="content">{{faultDetailsForm.controls.notes.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ng-container *ngFor="let item of additionalInfoControls; let i = index;">
         <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -429,44 +416,40 @@
         <div class="sub-heading">Reported By</div>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Who reported the fault?</ion-text><br />
-        <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}
+        <ion-text class="header">Who reported the repair?</ion-text><br />
+        <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || DEFAULTS.NOT_AVAILABLE}}
         </ion-text>
       </ion-col>
-      <!--  <ion-col size-xs="100" size-sm="50" class="header-content">
-        <ion-text class="header">Agreement</ion-text><br />
-        <ion-text class="content"></ion-text>
-      </ion-col> -->
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ng-container *ngIf="reportedByForm.controls.reportedBy.value =='THIRD_PARTY'" >
-          <ion-text class="header ion-text-capitalize">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || 'N/A'}}
+          <ion-text class="header ion-text-capitalize">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || DEFAULTS.NOT_AVAILABLE}}
           </ion-text><br />
-          <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedById.value, faultReportedByThirdParty) || 'N/A'}}</ion-text>
+          <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedById.value, faultReportedByThirdParty) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
         </ng-container>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Title</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.title.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{reportedByForm.controls.title.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Forename</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.forename.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{reportedByForm.controls.forename.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Surname</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.surname.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{reportedByForm.controls.surname.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">E-mail</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.email.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{reportedByForm.controls.email.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Mobile</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.mobile.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{reportedByForm.controls.mobile.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Telephone</ion-text><br />
-        <ion-text class="content">{{reportedByForm.controls.alternativeNo.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{reportedByForm.controls.alternativeNo.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size="100" class="border-bottom"></ion-col>
       <ion-col size="100">
@@ -475,17 +458,17 @@
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Access Information</ion-text><br />
         <ion-text class="content">
-          {{(accessInfoForm.controls.isTenantPresenceRequired.value?accessInfoList[0].title:accessInfoList[1].title) || 'N/A'}}
+          {{(accessInfoForm.controls.isTenantPresenceRequired.value?accessInfoList[0].title:accessInfoList[1].title) || DEFAULTS.NOT_AVAILABLE}}
         </ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Is there a vulnerable occupier at this property?</ion-text><br />
-        <ion-text class="content">{{accessInfoForm.controls.areOccupiersVulnerable.value?'YES':'NO' || 'N/A'}}
+        <ion-text class="content">{{accessInfoForm.controls.areOccupiersVulnerable.value?'YES':'NO' || DEFAULTS.NOT_AVAILABLE}}
         </ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Useful Instruction</ion-text><br />
-        <ion-text class="content">{{accessInfoForm.controls.tenantNotes.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{accessInfoForm.controls.tenantNotes.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size="100" class="border-bottom"></ion-col>
     </ion-row>
@@ -509,7 +492,7 @@
     <mat-tab>
       <ng-template mat-tab-label>
         <div class="label-text" [class.success-border]='isCaseDetailSubmit && faultDetailsForm.valid'
-          [class.error-border]='isCaseDetailSubmit && !faultDetailsForm.valid'>Fault Details</div>
+          [class.error-border]='isCaseDetailSubmit && !faultDetailsForm.valid'>Repair Details</div>
       </ng-template>
       <ng-container *ngTemplateOutlet="caseDetails"></ng-container>
       <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
@@ -561,7 +544,7 @@
     </mat-tab>
     <mat-tab *ngIf="faultId">
       <ng-template mat-tab-label>
-        <div class="label-text">Fault History</div>
+        <div class="label-text">Repair History</div>
       </ng-template>
       <ng-container *ngTemplateOutlet="faultHistoryTab"></ng-container>
       <div class="action-btn-group">
@@ -720,7 +703,7 @@
   <ion-grid *ngIf="pageNo===1 && propertyDetails?.propertyId">
     <ion-row>
       <ion-col>
-        <h2 class="heading">Log a fault</h2>
+        <h2 class="heading">Log a repair</h2>
         <h2>
           What do you want to report in
           <b>
@@ -738,7 +721,6 @@
       <ion-col size-xl="20" size="25" *ngFor="let item of faultCategories">
         <div class="block" [class.active]="item.index == describeFaultForm?.controls?.category?.value"
           (click)="goToPage(2);setCategory(item.index)">
-          <!-- <img [src]="item.imgPath" /> -->
           <h4 class="center">{{item.value}}</h4>
         </div>
       </ion-col>
@@ -748,7 +730,7 @@
   <ion-grid *ngIf="pageNo===2">
     <ion-row>
       <ion-col>
-        <h2 class="heading">Log a fault</h2>
+        <h2 class="heading">Log a repair</h2>
         <h2>
           Describe the issue with
           <b>{{getLookupValue(describeFaultForm?.controls?.category?.value, faultCategories)}}</b> in
@@ -796,13 +778,12 @@
     <ion-grid>
       <ion-row>
         <ion-col size="50">
-          <h2 class="heading">{{faultId ? 'Fault Summary' : 'Log a fault'}}</h2>
+          <h2 class="heading">{{faultId ? 'Repair Summary' : 'Log a Repair'}}</h2>
         </ion-col>
         <ion-col size="50">
           <h2 class="heading-initial">
             <span *ngIf="!faultId">Initial Issue</span>
             <span *ngIf="faultId">
-              <!-- {{faultDetails?.isEscalated ? 'Escalation' : getLookupValue(faultDetails?.status, faultStatuses)}} &nbsp; -->
               {{faultDetails?.isClosed || (faultDetails?.isClosed && faultDetails?.isEscalated) ? 'Closed' : 
               (faultDetails?.isEscalated ? 'Escalation' : getLookupValue(faultDetails?.status, faultStatuses))  }} &nbsp;
               <img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.isEscalated" />
@@ -822,38 +803,31 @@
               [hasPropertyCheckedIn]="hasPropertyCheckedIn"
               (getStatus)="getStatus($event)">
             </app-property-details>
-            <!-- <app-property-skeleton *ngIf="!propertyDetails"></app-property-skeleton> -->
           </ion-card>
         </ion-col>
         <ion-col size="100" id="matStepperTop">
           <mat-horizontal-stepper #stepper labelPosition="bottom" [selectedIndex]="currentStepperIndex">
             <mat-step  [completed]="stepper.selectedIndex > 0">
-              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 0"> -->
               <ng-container *ngTemplateOutlet="caseLogged"></ng-container>
-              <ng-template matStepLabel>Fault Logged</ng-template>
+              <ng-template matStepLabel>Repair Logged</ng-template>
             </mat-step>
             <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 1 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 1">
-              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 1"> -->
               <ng-container *ngTemplateOutlet="caseQualification"></ng-container>
-              <ng-template matStepLabel>Fault Qualification</ng-template>
+              <ng-template matStepLabel>Repair Qualification</ng-template>
             </mat-step>
             <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 2 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 2">
-              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 2"> -->
               <ng-container *ngTemplateOutlet="landlordInstructions"></ng-container>
               <ng-template matStepLabel>Landlord Instructions</ng-template>
             </mat-step>
             <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 3 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 3">
-              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 3"> -->
               <ng-container *ngTemplateOutlet="arrangingContractor"></ng-container>
               <ng-template matStepLabel>Arranging Contractor</ng-template>
             </mat-step>
             <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 4 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 4">
-              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 4"> -->
               <ng-container *ngTemplateOutlet="jobCompletion"></ng-container>
               <ng-template matStepLabel>Job Completion</ng-template>
             </mat-step>
             <mat-step [aria-labelledby]="faultDetails && faultDetails?.stageIndex < 5 ? 'disabled_stepper_step':''" [completed]="stepper.selectedIndex > 5">
-              <!-- <mat-step aria-labelledby="disabled_stepper_step" [completed]="stepper.selectedIndex > 5"> -->
               <ng-container *ngTemplateOutlet="payment"></ng-container>
               <ng-template matStepLabel>Payment</ng-template>
             </mat-step>

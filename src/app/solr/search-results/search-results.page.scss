@@ -1,0 +1,422 @@
+@mixin set-text-style($size, $lheight) {
+  font-size: $size;
+  line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
+#solr-search-result.main-container {
+  .drawer-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    .solr-filter-sidenav {
+      background-color: var(--ion-background-color);
+      width: 24%;
+      max-width: 278px;
+      padding: 10px 0;
+
+      .filter-heading-wrapper {
+        .status-pointer {
+          cursor: pointer;
+          font-size: 28px;
+          color: var(--ion-color-step-1800);
+          background: var(--ion-color-step-1200);
+          margin-right: 10px;
+          border-radius: 5px;
+          margin-left: 0px;
+          display: inline-block;
+          height: 28px;
+          vertical-align: bottom;
+        }
+
+        h1 {
+          @include set-text-style(20px, 24px);
+          margin: 0;
+          color: var(--ion-text-color);
+          display: inline-block;
+        }
+      }
+
+      #filter-details-accordian {
+        .mat-expansion-panel {
+          background-color: var(--ion-background-color);
+
+          .mat-expansion-panel-header {
+            border-top: 1px solid var(--ion-color-five);
+            border-bottom: 1px solid var(--ion-color-five);
+            color: var(--ion-text-color);
+            padding: 0 10px;
+
+            .mat-expansion-panel-header-description {
+              justify-content: flex-end;
+              margin-right: 0;
+            }
+
+            mat-checkbox {
+              @include set-text-style(14px, 24px);
+              color: var(--ion-color-mat-checkbox-label);
+            }
+          }
+
+          form {
+            background-color: var(--ion-color-five);
+
+            .list {
+              background-color: var(--ion-color-five);
+              padding: 0 10px;
+
+              ion-list-header {
+                padding-left: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .solr-pagginater-container {
+      padding: 15px;
+      background-color: var(--ion-background-color);
+
+      .paginator-grid {
+        display: grid;
+        justify-content: start;
+        align-items: center;
+        grid-template-columns: 35px 1fr 500px;
+        gap: 6px;
+        padding-bottom: 15px;
+
+        ion-icon {
+          font-size: 28px;
+          color: var(--ion-text-color);
+        }
+
+        .result-wrapper {
+          color: var(--ion-text-color);
+          @include set-text-style(18px, 20px);
+        }
+
+        &.sidenav-opened {
+          grid-template-columns: 1fr 500px;
+        }
+
+        .mat-paginator {
+          min-width: 372px;
+          height: 42px;
+          padding: 0;
+          margin: 0;
+          width: 100% !important;
+        }
+      }
+
+      .list-container {
+        .list-view-accordian {
+          .mat-expansion-panel {
+            color: var(--ion-color-step-250);
+            background-color: var(--ion-color-five);
+            box-shadow: none;
+            margin-bottom: 20px;
+
+            .mat-expansion-panel-header {
+              height: auto;
+              font-family: var(--ion-font-family);
+              padding: 0;
+
+              .status-action {
+                display: grid;
+                justify-content: flex-end;
+                align-items: center;
+                grid-template-columns: 200px 32px 37px;
+                gap: 6px;
+                height: 100%;
+
+                i.propcoicon.propcoicon-actions-on {
+                  border-radius: 16px;
+                  font-size: 21px;
+                  width: 30px;
+                  height: 30px;
+                  background: var(--ion-color-warning);
+                  color: var(--ion-color-primary-contrast);
+                }
+              }
+
+              span.mat-content {
+                height: 100%;
+              }
+
+              &.property-header-panel {
+                .emenities-container {
+                  display: grid;
+                  justify-content: flex-start;
+                  align-items: flex-start;
+                  grid-template-columns: auto auto auto auto auto auto;
+                  gap: 2px;
+
+                  .emenities-wrapper {
+                    i.propcoicon {
+                      display: inline-block;
+                      vertical-align: baseline;
+                      font-size: 19px;
+                      height: 20px;
+                      width: 28px;
+                    }
+
+                    span {
+                      padding-right: 8px;
+                      @include set-text-style(13px, 17px);
+                      color: var(--ion-text-color);
+                    }
+
+                    .garage-ellipse {
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                      white-space: nowrap;
+                      width: auto;
+                      display: inline-block;
+                      vertical-align: bottom;
+                      width: auto;
+                      max-width: 90px;
+                    }
+
+                    .pricetag {
+                      @include set-text-style(16px, 20px);
+                      font-weight: bold;
+                      color: var(--ion-text-color);
+                    }
+                  }
+                }
+              }
+
+              &.agent-header-panel,
+              &.landlord-header-panel,
+              &.tenant-header-panel,
+              &.applicant-header-panel,
+              &.contractor-header-panel {
+                .ag-left-side {
+                  display: grid;
+                  justify-content: flex-start;
+                  align-items: center;
+                  grid-template-columns: 55px 1fr;
+                  gap: 15px;
+
+                  i.propcoicon {
+                    width: 54px;
+                    font-size: 54px;
+                    height: 54px;
+                  }
+
+                  .other-details {
+                    .vat {
+                      color: var(--ion-color-warning);
+                      font-weight: bold;
+                      @include set-text-style(14px, 16px);
+                      border-left: 1px solid var(--ion-color-step-800);
+                      padding-left: 6px;
+                    }
+                  }
+                }
+              }
+            }
+
+            .property-content-panel {
+              display: grid;
+              justify-content: start;
+              grid-template-columns: 180px 4fr;
+              gap: 15px;
+              padding: 0 4px 4px;
+
+              .header-content {
+                .header {
+                  color: var(--ion-color-step-1200);
+                  @include set-text-style(12px, 14px);
+                }
+
+                .content {
+                  @include set-text-style(14px, 18px);
+                }
+              }
+            }
+
+            .agent-content-panel,
+            .landlord-content-panel,
+            .tenant-content-panel,
+            .applicant-content-panel,
+            .contractor-content-panel {
+              display: grid;
+              justify-content: start;
+              grid-template-columns: 45px 1fr;
+              gap: 15px;
+              padding: 0 10px 10px;
+
+              .header-content {
+                .header {
+                  color: var(--ion-color-step-1200);
+                  @include set-text-style(12px, 14px);
+                }
+
+                .content {
+                  @include set-text-style(14px, 18px);
+                }
+              }
+
+              .expired {
+                color: var(--ion-color-danger);
+              }
+            }
+          }
+
+          .mat-expansion-panel:is(.mat-expanded):not([aria-disabled="true"]) {
+            background-color: var(--ion-color-five);
+          }
+
+          .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+          }
+
+          .status {
+            color: var(--ion-color-success-shade);
+            @include set-text-style(14px, 18px);
+            text-align: left;
+          }
+
+          .ref {
+            @include set-text-style(12px, 17px);
+            color: var(--ion-color-step-1200);
+            text-transform: capitalize;
+            text-align: left;
+          }
+
+          .reftag {
+            @include set-text-style(13px, 17px);
+            color: var(--ion-text-color);
+          }
+
+          .verticalLine {
+            border-left: 1px solid var(--ion-color-step-800);
+            padding: 0;
+          }
+
+          .title {
+            @include set-text-style(17px, 21px);
+            color: var(--ion-text-color);
+
+            ion-icon {
+              pointer-events: none;
+            }
+          }
+
+          p {
+            margin: 0;
+          }
+
+          @media screen and (max-width: 1170px) {
+            .emenities-wrapper {
+              .garage-ellipse {
+                width: 52px;
+              }
+            }
+          }
+        }
+
+        div#divOverlay {
+          .propcoicon {
+            border-radius: 16px;
+            font-size: 21px;
+            width: 30px;
+            height: 30px;
+            background: var(--ion-color-warning);
+            color: var(--ion-color-primary-contrast);
+          }
+
+          .propcoicon-actions-on {
+            margin: 9px 0px 5px 6px;
+          }
+        }
+      }
+
+      .overlay-container {
+        position: relative;
+      }
+    }
+  }
+}
+
+.no-background {
+  background-color: inherit;
+}
+
+.list-skeleton {
+  .filter-skeleton-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 15px;
+
+    .total-page {
+      width: 110px;
+      height: 20px;
+      margin-bottom: 13px;
+    }
+
+    .paginator {
+      width: 207px;
+      height: 20px;
+    }
+  }
+
+  ion-list {
+    ion-item {
+      padding-left: 16px;
+      display: flex;
+      margin-bottom: 19px;
+    }
+  }
+}
+
+.cdk-overlay-container {
+  .mat-primary {
+
+    .mat-pseudo-checkbox-checked,
+    .mat-pseudo-checkbox-indeterminate {
+      background-color: var(--ion-color-success) !important;
+    }
+  }
+}
+
+ion-item {
+  color: var(--ion-text-color);
+}
+
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+  #solr-search-result.main-container {
+    .drawer-container {
+      .solr-pagginater-container {
+        .list-container {
+          .list-view-accordian {
+            .mat-expansion-panel {
+              .mat-expansion-panel-header {
+                .status-action {
+                  grid-template-columns: 120px 32px 37px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

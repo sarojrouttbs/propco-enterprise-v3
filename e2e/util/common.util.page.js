@@ -1,4 +1,5 @@
 var path = require('path');
+const { compileFunction } = require('vm');
 
 var CommonFunction = function() {
     
@@ -27,8 +28,9 @@ var CommonFunction = function() {
 
     this.getAttribute = function (loc, attribute) {        
         this.waitForElement(loc);
-        loc.getAttribute(attribute).then(function(value){
+        return loc.getAttribute(attribute).then(function(value){
             console.log(value);
+            return value;
         });              
     }
 
@@ -58,14 +60,14 @@ var CommonFunction = function() {
  * Common functions for FixAFault module
  */
 
-    this.scrollToElement = function (loc){
+    this.scrollToElement = function(loc){
         console.log("Go to Element");
-        browser.controlFlow().execute(function () {
+        browser.controlFlow().execute(function(){
             browser.executeScript("arguments[0].scrollIntoView();", loc.getWebElement());
         });
     } 
 
-    this.getAttributeValueOfHiddenElement = function (loc, attrib){
+    this.getAttributeValueOfHiddenElement = function(loc, attrib){
         browser.controlFlow().execute(function () {
             browser.executeScript("arguments[0].setAttribute('type', '');", loc.getWebElement());
         });
@@ -74,13 +76,17 @@ var CommonFunction = function() {
         });
     }
 
-    this.mouseHover = function (loc){
+    this.mouseHover = function(loc){
         return loc.getWebElement().then(function(result){
             browser.actions().mouseMove(result).perform();
        });
     }
 
-    this.clickOnElement = function (loc, cName) {  
+    this.getElementByCssContainingText = function(css, value){
+        return element(by.cssContainingText(css, value));    
+    }
+
+    this.clickOnElement = function(loc, cName){  
         this.waitForElement(loc); 
         this.scrollToElement(loc);
         browser.controlFlow().execute(function(){
@@ -90,7 +96,7 @@ var CommonFunction = function() {
         console.log("element clicked " + cName);
     }
  
-    this.sendKeysInto = function (loc, value) {        
+    this.sendKeysInto = function(loc, value){        
         console.log("Entering text - " + value); 
         this.waitForElement(loc);
         this.scrollToElement(loc);      
@@ -100,16 +106,20 @@ var CommonFunction = function() {
         loc.clear().sendKeys(value);               
     }   
 
-    this.selectFromDropDown = function (locList, locValue, cList, cValue){
+    this.selectFromDropDown = function(locList, locValue, cList, cValue){
         this.clickOnElement(locList, cList);
         this.clickOnElement(locValue, cValue);    
     }
 
-    this.pressEndKey = function () {
+    this.pressEndKey = function(){
         browser.actions().sendKeys(protractor.Key.END).perform();       
     }
 
-    this.uploadImage = function (loc, fileToUpload, value){
+    this.pressKey = function(key){
+        browser.actions().sendKeys(key).perform();       
+    }
+
+    this.uploadImage = function(loc, fileToUpload, value){
         browser.controlFlow().execute(function () {
            browser.executeScript("console.log('" + value + " is uploaded');");           
         }); 
@@ -124,18 +134,79 @@ var CommonFunction = function() {
         }      
     }
 
-    this.waitForElementToBeVisible = function (loc, value){  
+    this.waitForElementToBeVisible = function(loc, value){  
         browser.controlFlow().execute(function () {
            browser.executeScript("console.log('Waiting for " + value + " to be visible');");           
         });       
         browser.wait(EC.visibilityOf(loc), 180000);
     }
 
-    this.waitForElementToBeInvisible = function (loc, value){ 
+    this.waitForElementToBeInvisible = function(loc, value){ 
         browser.controlFlow().execute(function () {
             browser.executeScript("console.log('Waiting for " + value + " to be invisible');");           
         });        
         browser.wait(EC.invisibilityOf(loc), 180000);
+    }
+
+    this.setDate = function(dValue, day, month, year, hour, minute){
+        const d = new Date();
+        let currentDay = d.getDate();
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        let currentMonth = d.getMonth();
+        let pastMonth = (d.getMonth() == 0) ? months[11] : months[d.getMonth()-1];
+        let futureMonth = (d.getMonth() == 11) ? months[0] : months[d.getMonth()+1];
+        switch(dValue){
+            case "current":
+                this.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
+                break;
+            case "past":
+                if(currentDay < 4){
+                  // this.clickOnElement(element(by.xpath("//button[contains(text(), '" + pastMonth + "')]")), pastMonth);
+                   this.clickOnElement(element(by.xpath("//ion-picker-column[2]/div/button[contains(@class, 'picker-opt-selected')]/preceding-sibling::button")));
+                   this.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
+                   break;
+                } else{
+                    //this.scrollToElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + currentDay-2 + "']")));
+                    this.clickOnElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + (currentDay-2).toString() + "']")), currentDay-1);
+                    this.clickOnElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + (currentDay-4).toString() + "']")), currentDay-3);
+                    this.clickOnElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + (currentDay-6).toString() + "']")), currentDay-5);
+                    this.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
+                    break;
+                } 
+            case "future":                
+                if(currentDay == 31){
+                   // this.clickOnElement(element(by.xpath("//button[contains(text(), '" + futureMonth + "')]")), futureMonth);
+                    this.clickOnElement(element(by.xpath("//ion-picker-column[2]/div/button[contains(@class, 'picker-opt-selected')]/following-sibling::button[1]")));
+                    this.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
+                    break;
+                } else{
+                    this.getAttribute(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + currentDay.toString() + "']")), 'class').then(function(text){
+                        let cf = new CommonFunction();
+                        if(text.includes("picker-opt-disabled")){
+                           // cf.clickOnElement(element(by.xpath("//button[contains(text(), '" + futureMonth + "')]")), futureMonth);
+                           cf.clickOnElement(element(by.xpath("//ion-picker-column[2]/div/button[contains(@class, 'picker-opt-selected')]/following-sibling::button[1]")));
+                           cf.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
+                        } else {
+                            cf.clickOnElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + currentDay.toString() + "']")), currentDay+1);
+                            cf.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
+                        }
+                    });
+                    break;
+                }     
+            default:  
+                this.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');   
+        }   
+    }
+
+    this.checkVisibleData = function(element, optList, conditionResult, msg){
+        let expCondition = protractor.ExpectedConditions; 
+        if(optList){
+          let options = optList.split(",");
+          options.forEach(option =>{
+              this.scrollToElement(this.getElementByCssContainingText(element, option));
+              expect(this.checkCondition(expCondition.visibilityOf(this.getElementByCssContainingText(element, option)))).toBeCorrect(conditionResult, msg + " - " + option);
+          });
+        }
     }
     
     /**
@@ -143,7 +214,7 @@ var CommonFunction = function() {
      * @param {Protractor function} expectCondition Protractor function that evaluates user specified expected condition
      * @returns true if expected condition is met within specifed time limit else false
      */
-    this.checkCondition = function (expectCondition){
+    this.checkCondition = function(expectCondition){
         return browser.wait(expectCondition, 30000).then(function(){
             return true;
         }, function() {

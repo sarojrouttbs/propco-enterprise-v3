@@ -4,10 +4,10 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { debounceTime, delay, min, switchMap } from 'rxjs/operators';
+import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, FAULT_NOTIFICATION_STATE } from './../../../shared/constants';
 import { ModalController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
@@ -67,6 +67,7 @@ export class PaymentComponent implements OnInit {
   showSkeleton: boolean = true;
   saving: boolean = false;
   fileIds = FILE_IDS;
+  notificationState = FAULT_NOTIFICATION_STATE;
 
   constructor(
     private fb: FormBuilder,
@@ -94,9 +95,6 @@ export class PaymentComponent implements OnInit {
       this.isWorksOrder = true;
     }
     this.showSkeleton = false
-    // this.getLookupData();
-    // this.initForms();
-    // this.initApiCalls();
   }
 
   private initForms(): void {
@@ -142,10 +140,6 @@ export class PaymentComponent implements OnInit {
 
   private getAccessDetails(tenantPresence): string {
     return (tenantPresence ? MAINT_CONTACT.CONTACT_TENANT : MAINT_CONTACT.ACCESS_VIA_KEY);
-    // if (tenantPresence != null) {
-    //   let data = this.accessInfoList.filter(data => data.value == tenantPresence);
-    //   return data && data[0] ? data[0].title : '';
-    // }
   }
 
 
@@ -238,11 +232,6 @@ export class PaymentComponent implements OnInit {
         this.setFaultsLookupData(data);
       });
     }
-    // this.faultsService.getNominalCodes().subscribe(data => {
-    //   this.nominalCodes = data ? data : [];
-    //   this.codes = this.getCodes();
-
-    // });
   }
 
   private setLookupData(data) {
@@ -312,7 +301,6 @@ export class PaymentComponent implements OnInit {
       if (data.length === 0) {
         resolve(null);
       }
-      // filtereData = data.filter((x => x.faultStage === stage)).filter((x => x.faultStageAction === action)).filter((x => x.isResponseExpected));
       filtereData = data.filter((x => x.faultStage === stage)).filter((x => !x.isVoided));
       if (filtereData.length === 0) {
         resolve(null);
@@ -367,8 +355,8 @@ export class PaymentComponent implements OnInit {
     notificationObj.isAccepted = data.value;
     notificationObj.submittedByType = 'SECUR_USER';
     if (data.value) {
-      let title = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? 'Close Fault' : data.text;
-      let message = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? `This will close the Fault. Are you sure?` : `Are you sure the Tenant is satisfied with the Job?`;
+      let title = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? 'Close Repair' : data.text;
+      let message = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? `This will close the Repair. Are you sure?` : `Are you sure the Tenant is satisfied with the Job?`;
       this.commonService.showConfirm(title, message, '', 'Yes I\'m sure', 'No').then(async res => {
         if (res) {
           this.commonService.showLoader();
@@ -396,7 +384,7 @@ export class PaymentComponent implements OnInit {
   async openWOJobCompletionModal(updateFaultStatus = false) {
     const modal = await this.modalController.create({
       component: WorksorderModalPage,
-      cssClass: 'modal-container upload-container',
+      cssClass: 'modal-container upload-container fault-modal-container',
       componentProps: {
         faultNotificationId: this.iacNotification.faultNotificationId,
         faultId: this.faultDetails.faultId,
@@ -643,7 +631,7 @@ export class PaymentComponent implements OnInit {
         faultId: this.faultDetails.faultId,
         title: "Job Completion",
         headingOne: "You have selected 'No, Reject this Invoice.'",
-        headingTwo: "This will escalate the Fault and a notification to Contractor would be sent. Are you sure?",
+        headingTwo: "This will escalate the Repair and a notification to Contractor would be sent. Are you sure?",
       },
       backdropDismiss: false
     });
@@ -723,7 +711,7 @@ export class PaymentComponent implements OnInit {
   async closeFault() {
     const modal = await this.modalController.create({
       component: CloseFaultModalPage,
-      cssClass: 'modal-container close-fault-modal',
+      cssClass: 'modal-container close-fault-modal fault-modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId,
         maitenanceId: this.isMaintenanceDetails ? this.faultMaintenanceDetails.maintenanceId : null
@@ -734,7 +722,7 @@ export class PaymentComponent implements OnInit {
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
         this._btnHandler('refresh');
-        this.commonService.showMessage('Fault has been closed successfully.', 'Close a Fault', 'success');
+        this.commonService.showMessage('Repair has been closed successfully.', 'Close a Repair', 'success');
         return;
       }
     });
@@ -765,7 +753,7 @@ export class PaymentComponent implements OnInit {
   async notificationModal() {
     const modal = await this.modalController.create({
       component: PendingNotificationModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         notificationHistoryId: this.pendingNotification ? this.pendingNotification.notificationHistoryId : '',
         notificationSubject: this.pendingNotification ? this.pendingNotification.subject : '',
@@ -788,11 +776,11 @@ export class PaymentComponent implements OnInit {
     if (!faultNotificationId) return;
     this.commonService.showLoader();
     this.faultsService.resendFaultNotification(faultNotificationId).subscribe((response) => {
-      this.commonService.showMessage('Notification resend successfull.', 'Fault Qualification', 'success');
+      this.commonService.showMessage('Notification resend successfull.', 'Repair Qualification', 'success');
       this.commonService.hideLoader();
       this._btnHandler('refresh');
     }, error => {
-      this.commonService.showMessage('Notification resend failed.', 'Fault Qualification', 'error');
+      this.commonService.showMessage('Notification resend failed.', 'Repair Qualification', 'error');
       this.commonService.hideLoader();
     });
   }

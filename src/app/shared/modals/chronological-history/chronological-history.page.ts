@@ -5,6 +5,9 @@ import { Subject } from 'rxjs';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { FAULT_EVENT_TYPES, FAULT_EVENT_TYPES_ID, LL_INSTRUCTION_TYPES, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
+import * as pdfMake from "pdfmake/build/pdfmake";
+import * as  pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs= pdfFonts.pdfMake.vfs;
 
 @Component({
    selector: 'app-chronological-history',
@@ -20,7 +23,7 @@ export class ChronologicalHistoryPage implements OnInit {
    faultEvents = [
       {
          "index": "FAULT_LOGGED",
-         "value": "Fault Logged"
+         "value": "Repair Logged"
       },
       {
          "index": "PROGRESS_STARTED",
@@ -44,7 +47,7 @@ export class ChronologicalHistoryPage implements OnInit {
       },
       {
          "index": "FAULT_CLOSED",
-         "value": "Fault Closed"
+         "value": "Repair Closed"
       },
       {
          "index": "ESCALATED",
@@ -177,11 +180,11 @@ export class ChronologicalHistoryPage implements OnInit {
                customize: (doc) => {
                   let tableBody: any = [];
                   tableBody.push([
-                     { colSpan: 3, text: `Fault Chronological History`, border: [false, false, false, false], style: 'pageTitle' },
+                     { colSpan: 3, text: `Repair Chronological History`, border: [false, false, false, false], style: 'pageTitle' },
                      { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }
                   ]);
                   tableBody.push([
-                     { colSpan: 3, text: `Fault : ${this.faultDetails.reference}`, border: [false, false, false, false], style: 'pageHeader' },
+                     { colSpan: 3, text: `Repair : ${this.faultDetails.reference}`, border: [false, false, false, false], style: 'pageHeader' },
                      { text: '', border: [false, false, false, false] }, { text: '', border: [false, false, false, false] }
                   ]);
                   tableBody.push([{
@@ -345,6 +348,7 @@ export class ChronologicalHistoryPage implements OnInit {
             orderable: false,
             targets: 0
          }],
+         order: [[1, 'asc']],
          responsive: {
             details: {
                target: 'tr',

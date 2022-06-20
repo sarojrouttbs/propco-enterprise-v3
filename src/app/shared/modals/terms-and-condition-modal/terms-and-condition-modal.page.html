@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ heading }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ion-margin">
+  <div class="modal-content" [innerHtml]="data">
+  </div>
+</ion-content>
+
+<ion-footer>
+  <div class="ion-text-end ion-padding">
+    <ion-button color="success" (click)="accept()"> Accept </ion-button>
+  </div>
+</ion-footer>

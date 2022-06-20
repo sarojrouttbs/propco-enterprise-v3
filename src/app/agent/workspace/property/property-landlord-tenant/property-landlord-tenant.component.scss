@@ -1,0 +1,103 @@
+ion-grid.main-block {
+    background: var(--ion-background-color);
+    padding: 0;
+    border-top: solid 1px var(--ion-color-four);
+    border-bottom: solid 1px var(--ion-color-four);
+    
+    .landlord-tenant-header {
+        display: flex;
+        align-items: center;
+        font-size: 15px;
+        padding: 10px 0px;
+        & > ion-fab-button {
+            --background: var(--ion-color-landlord-tenant-fab-btn);
+            color: var(--ion-color-six);
+            width: 25px;
+            height: 25px;
+            --box-shadow: none;
+            span {
+                color: var(--ion-color-six);
+            }
+        }
+        ion-text {
+            color: var(--ion-text-color);
+        }
+    }
+    .tenant-status {
+        color: var(--ion-color-success);
+    }
+    ion-select.landlord-tenant-dropdown {
+        font-size: 13px;
+        background: var(--ion-color-five);
+        padding-top: 5px;
+        --padding-end: 0;
+        --padding-bottom: 5px;
+        --padding-start: 5px;
+        border-radius: 3px;
+    }
+    .landlord-tenant-details {
+        ion-icon {
+            font-size: 13px;
+        }
+        ion-text{
+            cursor: pointer;
+        }
+        a {
+            color: var(--ion-text-color);
+            text-decoration: none;
+        }
+        color: var(--ion-text-color);
+    }
+    
+    .rent-history-block {
+        margin-bottom: 5px;
+        ion-label {
+            color: var(--ion-label-color);
+            font-size: 12px;
+        }
+    
+        ion-text {
+            color: var(--ion-text-color);
+            font-size: 13px;
+        }
+    }
+    
+    .rent-detail-block {
+        text-align: center;
+        ion-label {
+            color: var(--ion-label-color);
+            font-size: 13px;
+        }
+    
+        ion-text {
+            color: var(--ion-text-color);
+            font-size: 15px;
+        }
+        ion-col {
+            height: 55px;
+            background: var(--ion-color-six);
+            border-top: solid 1px var(--ion-color-four);
+        }
+        .middle-block {
+            border-left: solid 1px var(--ion-color-four);
+            border-right: solid 1px var(--ion-color-four);
+        }
+    }
+    
+    .no-data {
+        justify-content: center;
+        align-items: center;
+        height: 173px;
+        font-size: 15px;
+    }
+    
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+        .no-data {
+            height: 195px;
+        }
+    }
+}
+
+ion-grid.landlord-block {
+    border: solid 1px var(--ion-color-four);
+}
