@@ -107,7 +107,7 @@ export class SafetyDeviceComponent implements OnInit {
     };
   }
 
-  showMenu(Event, id: string, data: any, className: string, isCard?: boolean) {
+  showMenu(Event: Event, id: string, data: any, className: string, isCard?: boolean) {
     this.selectedData = data;
     const baseContainer = $(event.target).parents('.' + className);
     const divOverlay = $('#' + id);
@@ -224,7 +224,7 @@ export class SafetyDeviceComponent implements OnInit {
     this.smokeDetectors = data.smokeDetectors;
   }
 
-  private getSafetyDeviceNotes(safetyDeviceId) {
+  private getSafetyDeviceNotes(safetyDeviceId: any) {
     const params = new HttpParams()
       .set('entityId', safetyDeviceId)
       .set('entityType', NOTES_TYPE.SAFETY_INSPECTIONS);
