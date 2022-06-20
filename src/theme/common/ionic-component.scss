@@ -241,7 +241,7 @@ ion-item {
 
 .entity-search, .la-application-search, .la-property-search,.nett-modal-container ,.fee-charge-modal-container{
   .modal-wrapper {
-    min-height: 200px;
+    min-height: 210px;
     width: 550px;
 
     ion-content {
@@ -681,7 +681,7 @@ ion-alert.common-alert-box {
     ion-content {
       --background: var(--ion-color-six);
       h4, h5, h6, p, small, div, ion-label, ion-text {
-        color: var(--ion-color-one);;
+        color: var(--ion-color-one);
       }
       ion-item {
         --border-color: var(--ion-color-one);
