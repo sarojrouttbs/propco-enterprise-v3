@@ -47,6 +47,7 @@ import { ParticularsComponent } from './particulars/particulars.component';
 import { PreferencesComponent } from './particulars/preferences/preferences.component';
 import { CreateKeySetPageModule } from 'src/app/shared/modals/create-key-set/create-key-set.module';
 import { WhitegoodsComponent } from './whitegoods/whitegoods.component';
+import { SafetyDeviceComponent } from './safety-device/safety-device.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -111,7 +112,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     KeysComponent,
     ParticularsComponent,
     PreferencesComponent,
-    WhitegoodsComponent
+    WhitegoodsComponent,
+    SafetyDeviceComponent
   ],
   providers: [
     AgentService,
