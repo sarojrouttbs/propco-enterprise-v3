@@ -11,10 +11,13 @@
   <form [formGroup]="form">
     <ion-grid>
         <ion-row>
+          <ion-col size="100">
+            <ion-text class="title"><ion-icon name="alert-circle-outline"></ion-icon> Property Commision Percentage</ion-text>
+          </ion-col>
           <ion-col>
             <ion-item>
               <ion-label position="floating">
-                Commission rate gross (%) <ion-text class="mandatory">*</ion-text>
+                Commission rate gross (%)
               </ion-label>
               <ion-input formControlName="gross"></ion-input>
             </ion-item>

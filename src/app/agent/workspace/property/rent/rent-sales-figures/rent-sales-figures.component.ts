@@ -198,7 +198,7 @@ export class RentSalesFiguresComponent implements OnInit {
       const selectedProduct = this.rentIndemnityProducts.find(x => x.rentIndemnityProductId === value);
       if (selectedProduct) {
         this.group.patchValue({
-          excessThreshold: selectedProduct?.excessThreshold,
+          excessThreshold: selectedProduct?.excessThreshold * 100,
           excessMinimum: selectedProduct?.excessMinimum ? selectedProduct?.excessMinimum : ''
         });
       }
