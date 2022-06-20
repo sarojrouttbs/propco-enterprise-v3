@@ -912,3 +912,17 @@ mat-form-field {
 .unsaved-data-error{
   background: rgba(var(--ion-color-danger-rgb), 0.2);
 }
+
+.propco-btn-group {
+  ion-button{
+      margin-right: 8px;
+  }
+
+  ion-button:last-child{
+      margin-right: 0;
+  }
+}
+
+.create-keyset-modal .modal-wrapper {
+  min-height: 550px !important;
+}

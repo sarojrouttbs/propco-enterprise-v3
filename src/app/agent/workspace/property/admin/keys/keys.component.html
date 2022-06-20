@@ -37,7 +37,7 @@
       </ion-grid>
 
       <form [formGroup]="propertyKeySetForm">
-        <ion-grid class="ion-no-padding">
+        <ion-grid class="no-padding">
           <ion-row class="ion-justify-content-start" formArrayName="propertyKeySets">
             <ion-col size="100" *ngIf="propertyKeySetForm.get('propertyKeySets')['controls'].length === 0"
               class="no-record-msg">
@@ -51,17 +51,17 @@
                   <div class="header"
                     [ngClass]="{'warning' : item.controls.status.value === 0, 'success' : item.controls.status.value === 1, 'danger' : item.controls.status.value === 2}">
                     <ion-grid>
-                      <ion-row>
-                        <ion-col size="80" class="ion-align-self-center">
+                      <ion-row class="ion-align-items-center">
+                        <ion-col size="50">
                           <ion-text>{{item.controls.status.value | lookup: keyStatuses || notAvailable}}</ion-text>
                         </ion-col>
-                        <ion-col size="10" matTooltip="History" matTooltipPosition="above"
-                          (click)="onHistoryClick(item.value)">
-                          <i class="propcoicon propcoicon-log-history pointer"></i>
-                        </ion-col>
-                        <ion-col size="10" matTooltip="Remove" matTooltipPosition="above"
-                          (click)="deleteKeyset(item.value)">
-                          <i class="propcoicon propcoicon-cancel pointer"></i>
+                        <ion-col size="50" class="ion-text-right">
+                          <div matTooltip="History" matTooltipPosition="above" (click)="onHistoryClick(item.value)" style="display: inline-block; vertical-align: text-bottom;">
+                            <i class="propcoicon propcoicon-log-history pointer"></i>
+                          </div>
+                          <div matTooltip="Remove" matTooltipPosition="above" (click)="deleteKeyset(item.value)" style="display: inline-block; vertical-align: text-bottom;">
+                            <i class="propcoicon propcoicon-cancel pointer"></i>
+                          </div>
                         </ion-col>
                       </ion-row>
                     </ion-grid>
@@ -69,7 +69,7 @@
                   <div class="content">
                     <ion-grid>
                       <ion-row>
-                        <ion-col>
+                        <ion-col size="100">
                           <!-- <h1>{{item.controls.name.value || notAvailable}}</h1> -->
                           <ion-item>
                             <ion-label position="floating">Name</ion-label>
@@ -88,7 +88,7 @@
                             <ion-input formControlName="type"></ion-input>
                           </ion-item>
                         </ion-col>
-                        <ion-col size="50" style="padding-right: 10px;">
+                        <ion-col size="50">
                           <mat-form-field appearance="fill" style="margin-top: 11px;">
                             <mat-label> Setup date <ion-text class="mandatory">*</ion-text>
                             </mat-label>
@@ -123,13 +123,15 @@
                     <ion-grid>
                       <ion-row>
                         <ion-col size="70">
-                          <ion-button *ngIf="item.controls.status.value === 0 || item.controls.status.value === 2"
+                          <div class="propco-btn-group">
+                            <ion-button *ngIf="item.controls.status.value === 0 || item.controls.status.value === 2"
                             color="success" (click)="addKeysetLogHistory(item.value, 1)">
                             Check In</ion-button>
 
                           <ion-button *ngIf="item.controls.status.value === 0 || item.controls.status.value === 1"
                             color="success" (click)="addKeysetLogHistory(item.value, 2)">
                             Check Out</ion-button>
+                          </div>
                         </ion-col>
                         <ion-col size="30" class="ion-text-right">
                           <ion-button color="success" (click)="updateKeysetDetails(item.value)">Update</ion-button>

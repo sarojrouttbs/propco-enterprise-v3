@@ -290,7 +290,7 @@ export class KeysComponent implements OnInit {
   private async openCreateKeysetModal() {
     const modal = await this.modalController.create({
       component: CreateKeySetPage,
-      cssClass: 'modal-container property-modal-container',
+      cssClass: 'modal-container create-keyset-modal property-modal-container',
       componentProps: {
         userDetailsList: this.userDetailsList,
         keyStatuses: this.keyStatuses,
