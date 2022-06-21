@@ -562,6 +562,7 @@ export const APPLICATION_ACTION_TYPE = {
 export const ENTITY_TYPE = {
   AGENT: 'AGENT',
   LET_APPLICANT: 'LET_APPLICANT',
+  PROPERTY: 'PROPERTY'
 };
 
 export const PAYMENT_TYPES = {
