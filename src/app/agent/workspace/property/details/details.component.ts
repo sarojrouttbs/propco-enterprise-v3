@@ -279,7 +279,7 @@ export class DetailsComponent implements OnInit {
           } else if(res && fieldName === 'status') {
             this.propertyDetails.propertyInfo.statusChangedBy = res[0].changedBy; 
           }
-          resolve(res);
+          resolve(true);
         },
         (error) => {
           resolve(false);
