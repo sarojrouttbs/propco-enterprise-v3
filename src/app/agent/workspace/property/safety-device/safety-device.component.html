@@ -60,7 +60,7 @@
               </td>
             </tr>
             <tr *ngIf="safetyDeviceList?.length === 0">
-              <td colspan="7" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+              <td colspan="9" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
               </td>
             </tr>
           </tbody>
@@ -68,6 +68,7 @@
         <div id="divOverlay">
           <ion-button (click)="addNotes()">Add Note</ion-button>
           <ion-button>Edit</ion-button>
+          <ion-button>Remove</ion-button>
           <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
         </div>
       </div>
