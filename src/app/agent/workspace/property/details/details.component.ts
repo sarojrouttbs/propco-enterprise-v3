@@ -135,7 +135,6 @@ export class DetailsComponent implements OnInit {
         floor:[''],
         block:['']
       })
-
     })
   }
 
@@ -183,9 +182,6 @@ export class DetailsComponent implements OnInit {
     });
   }
 
-
-  
-
   private patchLetBoardDetails() {
     const control = this.propertyDetailsForm.controls['letBoardForm'];
     control.patchValue({
@@ -210,7 +206,6 @@ export class DetailsComponent implements OnInit {
       maStatusChangedBy: this.propertyDetails?.propertyInfo?.maStatusChangedBy ? this.propertyDetails?.propertyInfo?.maStatusChangedBy : DEFAULTS.NOT_AVAILABLE
     });
   }
-
 
   private patchPropertyChecks() {
     const control = this.propertyDetailsForm.controls['propertyChecksForm'];
