@@ -49,10 +49,10 @@
           <tbody>
             <tr *ngFor="let data of visitList" class="table-row" (click)="onClickRow(data); $event.stopPropagation();"
               [ngClass]="{'row-selected' : data.isSelected}">
-              <td>{{data?.visitType| lookup: propertyVisitTypes || notAvailable}}</td>
-              <td>{{data?.status | lookup: inspectionStatuses || notAvailable}}</td>
+              <td>{{(data?.visitType| lookup: propertyVisitTypes) || notAvailable}}</td>
+              <td>{{(data?.status | lookup: inspectionStatuses) || notAvailable}}</td>
               <td>{{data?.visitNumber || notAvailable}}</td>
-              <td>{{data?.visitDate | date: DATE_FORMAT.DATE || notAvailable}}</td>
+              <td>{{(data?.visitDate | date: DATE_FORMAT.DATE) || notAvailable}}</td>
               <td>{{data.description || notAvailable}}</td>
               <td class="resp-action-icon">
                 <i (click)="showMenu($event,'divOverlay', data, 'table-row')"
