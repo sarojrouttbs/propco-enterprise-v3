@@ -55,9 +55,9 @@
             <tr *ngFor="let data of notes" class="table-row">
               <td>{{data.postedAt | date: DATE_FORMAT.DATE || notAvailable}}</td>
               <td>{{data.postedAt | date: DATE_FORMAT.TIME || notAvailable}}</td>
-              <td>{{data.type | lookup:notesTypes || notAvailable}}</td>
-              <td>{{data.complaint | lookup:notesComplaints || notAvailable}}</td>
-              <td>{{data.category | lookup:notesCategories || notAvailable}}</td>
+              <td>{{(data.type | lookup: notesTypes) || notAvailable}} </td>
+              <td>{{(data.complaint | lookup: notesComplaints) || notAvailable}}</td>
+              <td>{{(data.category | lookup: notesCategories) || notAvailable}}</td>
               <td>{{data.userName || notAvailable}}</td>
               <td><i (click)="showNoteDescription(data.notes);" class="propcoicon propcoicon-property-description"></i>
               </td>
@@ -67,7 +67,7 @@
               </td>
             </tr>
             <tr *ngIf="notes?.length === 0">
-              <td colspan="7" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+              <td colspan="8" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
               </td>
             </tr>
           </tbody>
