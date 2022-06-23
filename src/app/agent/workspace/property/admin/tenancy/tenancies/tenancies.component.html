@@ -33,13 +33,13 @@
             <tbody>
               <tr *ngFor="let data of tenancies" class="table-row">
                 <td>{{data?.tenancyLetter || notAvailable}}</td>
-                <td>{{data?.status | lookup: agreementStatusesLookup}}</td>
+                <td>{{(data?.status | lookup: agreementStatusesLookup) || notAvailable}}</td>
                 <td>{{((data?.tenants?.displayAs) ? data?.tenants?.displayAs : (data?.tenants?.forename +' '+data?.tenants?.surname)) || notAvailable}}</td>
                 <td>{{data?.tenancyStartDate | date: 'dd/MM/yyyy' || notAvailable}}</td>
                 <td>{{data?.tenancyEndDate | date: 'dd/MM/yyyy' || notAvailable}}</td>
                 <!-- <td>{{data?.officeCode | lookup: officeLookup}}</td> -->
-                <td>{{data?.contractType | lookup: contractTypeLookup}}</td>
-                <td>{{data?.lapseToContract | lookup: contractTypeLookup}}</td>
+                <td>{{(data?.contractType | lookup: contractTypeLookup) || notAvailable}}</td>
+                <td>{{(data?.lapseToContract | lookup: contractTypeLookup) || notAvailable}}</td>
               </tr>
               <tr *ngIf="tenancies?.length === 0">
                 <td colspan="6" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
