@@ -662,7 +662,15 @@ ion-alert.common-alert-box {
         color: var(--ion-color-one) !important;
       }
     }
-  }  
+  }
+
+  #property-keys {
+    ion-textarea {
+      .textarea-wrapper {
+        height: 50px !important;
+      }
+    }
+  }
 }
 
 .market-apprisal-ion-select, .fault-ion-select, .let-alliance-ion-select {
