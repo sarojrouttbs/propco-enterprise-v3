@@ -78,7 +78,7 @@
                         </ion-col>
                         <ion-col size="100">
                           <ion-item>
-                            <ion-label position="floating">key ID</ion-label>
+                            <ion-label position="floating">Key ID</ion-label>
                             <ion-input formControlName="keyId"></ion-input>
                           </ion-item>
                           <app-validation-message [control]="item.controls.keyId"></app-validation-message>
@@ -92,7 +92,7 @@
                         </ion-col>
                         <ion-col size="50">
                           <mat-form-field appearance="fill" style="margin-top: 11px;">
-                            <mat-label> Setup date <ion-text class="mandatory">*</ion-text>
+                            <mat-label> Setup Date <ion-text class="mandatory">*</ion-text>
                             </mat-label>
                             <input matInput [matDatepicker]="picker" formControlName="createdAt" readonly>
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -115,7 +115,8 @@
                         <ion-col size="100">
                           <ion-item>
                             <ion-label position="floating">Comments</ion-label>
-                            <ion-input formControlName="note"></ion-input>
+                            <ion-textarea rows="1" formControlName="note" auto-grow="true">
+                            </ion-textarea>
                           </ion-item>
                           <app-validation-message [control]="item.controls.note"></app-validation-message>
                         </ion-col>
