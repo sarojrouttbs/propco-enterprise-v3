@@ -266,7 +266,7 @@ export class KeysComponent implements OnInit {
   private async openKeyActivityModal() {
     const modal = await this.modalController.create({
       component: KeyActivityModalPage,
-      cssClass: 'modal-container property-modal-container',
+      cssClass: 'modal-container key-activity-modal property-modal-container',
       componentProps: {
         userDetailsList: this.userDetailsList,
         data: this.selectedData,
@@ -315,7 +315,7 @@ export class KeysComponent implements OnInit {
   }
 
   deleteKeyset(item: any) {
-    this.commonService.showConfirm('Remove key Set', 'Are you sure you want to delete this key set?', '', 'YES', 'NO').then(response => {
+    this.commonService.showConfirm('Remove Key Set', 'Are you sure you want to delete this key set?', '', 'YES', 'NO').then(response => {
       if (response) {
         if (item?.keySetId) {
           this.agentService.deleteKeyset(item.keySetId).subscribe(res => {
