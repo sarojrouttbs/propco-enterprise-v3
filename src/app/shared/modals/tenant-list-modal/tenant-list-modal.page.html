@@ -25,7 +25,7 @@
             (ionChange)="selectTenant(tenant, $event)" 
             color="primary"></ion-checkbox>
           </td>
-          <td>{{tenant?.reference ? tenant?.reference : '-'}}</td>
+          <td>{{tenant?.reference ? tenant?.reference : DEFAULTS.NOT_AVAILABLE}}</td>
           <td>{{tenant?.addressee ? tenant?.addressee : ((tenant?.title? tenant?.title + ' ' : '')  + tenant?.name)}}
           </td>  
           <td>{{tenant?.isLead ? 'Lead Tenant' : 'Co-Tenant' }}</td>

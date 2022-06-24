@@ -5,7 +5,7 @@ import { forkJoin, Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FILE_IDS, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, REGEX, FAULT_NOTIFICATION_STATE } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FILE_IDS, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, REGEX, FAULT_NOTIFICATION_STATE, DATE_FORMAT } from './../../../shared/constants';
 import { ModalController, PopoverController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
@@ -101,7 +101,8 @@ export class LandlordInstructionComponent implements OnInit {
   isContractorModal = false;
   loggedInUserData: any;
   notificationState = FAULT_NOTIFICATION_STATE;
-
+  DATE_FORMAT = DATE_FORMAT;
+  
   constructor(
     private fb: FormBuilder,
     private faultsService: FaultsService,

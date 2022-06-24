@@ -47,7 +47,7 @@
           <tbody>
             <tr *ngFor="let data of maintenanceList" class="table-row pointer"
               (click)="onClickRow(data); $event.stopPropagation();" [class.data-selected]="data.isSelected">
-              <td> {{ data?.postdate | date: 'dd/MM/yyyy' || notAvailable }} </td>
+              <td> {{ (data?.postdate | date: DATE_FORMAT.DATE) || notAvailable }} </td>
               <td> {{ (data.type | titlecase)|| notAvailable }}: {{ data.worksOrderNumber || notAvailable }} </td>
               <td> {{ data.description || notAvailable }} </td>
               <td> {{ (data.repairCost | currency : "GBP") || notAvailable }} </td>
@@ -89,11 +89,11 @@
           </thead>
           <tbody>
             <tr *ngFor="let notes of maintenanceNotes" class="table-row">
-              <td>{{notes.postedAt | date: 'dd/MM/yyyy' || notAvailable}}</td>
-              <td>{{notes.postedAt | date: 'HH:mm' || notAvailable}}</td>
-              <td>{{notes.type | lookup:notesTypes || notAvailable}}</td>
-              <td>{{notes.complaint | lookup:notesComplaints || notAvailable}}</td>
-              <td>{{notes.category | lookup:notesCategories || notAvailable}}</td>
+              <td>{{(notes.postedAt | date: DATE_FORMAT.DATE) || notAvailable}}</td>
+              <td>{{(notes.postedAt | date: DATE_FORMAT.TIME) || notAvailable}}</td>
+              <td>{{(notes.type | lookup:notesTypes) || notAvailable}}</td>
+              <td>{{(notes.complaint | lookup:notesComplaints) || notAvailable}}</td>
+              <td>{{(notes.category | lookup:notesCategories) || notAvailable}}</td>
               <td>{{notes.userName || notAvailable}}</td>
               <td><i (click)="showNoteDescription(notes.notes);"
                   class="propcoicon propcoicon-property-description pointer"></i></td>

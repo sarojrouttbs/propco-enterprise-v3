@@ -166,4 +166,9 @@ export class AgentService {
   getChangeHistory(params: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `change-history`, { params });
   }
+
+  getPropertyNotes(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/notes`, { params });
+  }
 }

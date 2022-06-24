@@ -40,7 +40,7 @@
         <div *ngIf="cliNotification && !faultDetails?.isClosed">
           <div class="banner">
             <div class="ion-text-left">
-              <b>{{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}</b>
+              <b>{{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME }}</b>
             </div>
             <h2 class="banner-heading" >
               {{cliNotification && cliNotification?.responseReceived ? notificationState.RESPONSE_RECEIVED: 
@@ -53,7 +53,7 @@
             </ion-button>
             
             <ng-container *ngIf="cliNotification && cliNotification?.responseReceived && cliNotification?.recipientType === 8 ">
-              <h6 class="banner-title response-recived"><ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from Landlord {{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }} </h6>
+              <h6 class="banner-title response-recived"><ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from Landlord {{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME }} </h6>
             </ng-container>
 
             <ng-container *ngIf="cliNotification && !cliNotification?.responseReceived">
@@ -62,7 +62,7 @@
               >
                 <ion-icon name="ellipse" class="response-circle"></ion-icon> {{cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE}} received from Landlord</h6>
               <h6 class="banner-title" *ngIf="!faultDetails?.isEscalated" >{{cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone?'Escalation due': cliNotification.chase === cliNotification.allowedNumberOfChases ? 'Last chase due('+cliNotification.chase+')' : 'Next chase due('+cliNotification.chase+')'}}:
-                {{cliNotification ? (cliNotification.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
+                {{cliNotification ? (cliNotification.nextChaseDueAt | date: DATE_FORMAT.DATE_TIME) : ''}}
               </h6>
             </ng-container>
           </div>

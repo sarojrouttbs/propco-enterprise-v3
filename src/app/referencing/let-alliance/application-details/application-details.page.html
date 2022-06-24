@@ -304,7 +304,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Tenancy Start Date</ion-text><br />
-        <ion-text class="content">{{tenancyDetailsForm.controls.tenancyStartDate.value | date: 'dd/MM/yyyy' || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+        <ion-text class="content">{{(tenancyDetailsForm.controls.tenancyStartDate.value | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Term(in months)</ion-text><br />
@@ -376,7 +376,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Date of Birth</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.dateOfBirth.value | date: 'dd/MM/yyyy'  || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+        <ion-text class="content">{{(tenantDetailsForm.controls.dateOfBirth.value | date: DATE_FORMAT.DATE)  || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Marital Status</ion-text><br />

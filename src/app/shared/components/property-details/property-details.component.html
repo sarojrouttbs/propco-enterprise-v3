@@ -85,7 +85,7 @@
               <ion-col size-xl="25" size-lg="22" size-md="22" *ngIf="faultId">
                 <span class="text">Reported On</span>
                 <br />
-                {{createdAt | date: 'dd/MM/yyyy HH:mm' || '-'}}
+                {{(createdAt | date: DATE_FORMAT.DATE_TIME) || DEFAULTS.NOT_AVAILABLE}}
               </ion-col>
               <ion-col size-xl="25" size-lg="34" size-md="34">
                 <span class="text">Rent Arrears</span>

@@ -11,7 +11,7 @@
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
-              <b>{{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm'
+              <b>{{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME
                 }}</b>
             </div>
             <h2 class="banner-heading">
@@ -29,7 +29,7 @@
                 <span *ngIf="iacNotification?.recipientType === 8">{{recipientTypes.LANDLORD}}</span>
                 <span *ngIf="iacNotification?.recipientType === 11">{{recipientTypes.CONTRACTOR}}</span>
                 <span *ngIf="iacNotification?.recipientType === 1">{{recipientTypes.TENANT}}</span>
-                {{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}
+                {{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME }}
               </h6>
             </ng-container>
             <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
@@ -42,7 +42,7 @@
                   <span *ngIf="iacNotification?.recipientType == 1">{{recipientTypes.TENANT}}</span>
               </h6>
               <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt" >{{iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone?'Escalation due': iacNotification.chase === iacNotification.allowedNumberOfChases ? 'Last chase due('+iacNotification.chase+')' : 'Next chase due('+iacNotification.chase+')'}}:
-                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
+                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: DATE_FORMAT.DATE_TIME) : ''}}
               </h6>
             </ng-container>
           </div>
@@ -96,7 +96,7 @@
             <div class="question-answer ion-text-center" *ngIf="(iacNotification?.templateCode === 'CF-T-E' && iacNotification?.responseReceived?.isAccepted && faultDetails?.status !== 8 && faultDetails?.status !== 7)">
               <h4>Next Step:</h4> 
               <h6>
-                <ion-text>Contractor to visit property to carry out work on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy HH:mm'}}</ion-text>
+                <ion-text>Contractor to visit property to carry out work on {{faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.DATE_TIME}}</ion-text>
               </h6>
               <div class="border-bottom"></div>
             </div>
