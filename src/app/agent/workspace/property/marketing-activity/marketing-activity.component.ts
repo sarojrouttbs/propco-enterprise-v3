@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, DEFAULT_MESSAGES, MARKETING_ACTIVITY_TYPES } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, DEFAULTS, DEFAULT_MESSAGES, MARKETING_ACTIVITY_TYPES } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -26,6 +26,7 @@ export class MarketingActivityComponent implements OnInit {
   mailshotCountTotal: number = 0;
   viewingBookedCountTotal: number = 0;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
+  DEFAULTS = DEFAULTS;
 
   constructor(private router: Router, private agentService: AgentService, private commonService: CommonService) { }
 

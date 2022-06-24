@@ -8,11 +8,11 @@
   <ion-row style="margin-top: 20px;">
     <ion-col size="50">
       <ion-text>Branch Name</ion-text>
-      <h4>{{branchDetails?.officeName || '-'}}</h4>
+      <h4>{{branchDetails?.officeName || DEFAULTS.NOT_AVAILABLE}}</h4>
     </ion-col>
     <ion-col size="50">
       <ion-text>Branch Phone</ion-text>
-      <h4>{{branchDetails?.telephone1 || '-'}}</h4>
+      <h4>{{branchDetails?.telephone1 || DEFAULTS.NOT_AVAILABLE}}</h4>
     </ion-col>
   </ion-row>
   <div class="action-btn-group">

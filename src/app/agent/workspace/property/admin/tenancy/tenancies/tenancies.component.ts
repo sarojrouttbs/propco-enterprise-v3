@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, DEFAULTS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -22,6 +22,8 @@ export class TenanciesComponent implements OnInit {
   contractTypeLookup: any;
   agreementStatusesLookup: any;
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
+  DATE_FORMAT = DATE_FORMAT;
+
   constructor(private commonService: CommonService, private agentService: AgentService) { }
 
   ngOnInit() {

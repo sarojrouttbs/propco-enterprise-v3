@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { APPLICATION_STATUSES, DEFAULTS, PROPCO, REFERENCING_TYPES } from 'src/app/shared/constants';
+import { APPLICATION_STATUSES, DATE_FORMAT, DEFAULTS, PROPCO, REFERENCING_TYPES } from 'src/app/shared/constants';
 import { HoldingDepositePaidModalPage } from 'src/app/shared/modals/holding-deposite-paid-modal/holding-deposite-paid-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
@@ -47,6 +47,7 @@ export class ApplicationListPage implements OnInit {
   isPropertyDetailsAvailable = false;
   isApplicationListAvailable = false;
   DEFAULTS = DEFAULTS;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
     this.getTobLookupData();

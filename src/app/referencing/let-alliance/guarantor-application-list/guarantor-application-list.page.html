@@ -42,16 +42,16 @@
               </thead>
               <tbody>
                 <tr *ngFor="let application of applicationList" class="table-row">
-                  <td>{{application.referenceNumber || '-'}}</td>
+                  <td>{{application.referenceNumber || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td>{{application.applicantDetail.displayAs ? application.applicantDetail.displayAs : 
                     (application.applicantDetail.addressee ? application.applicantDetail.addressee : application.applicantDetail.forename
-                    + ' ' + application.applicantDetail.surname) || '-'}}</td>
-                  <td>{{application.office || '-'}}</td>
-                  <td>{{application.tenancyStartDate|| '-' | date : 'dd/MM/yyyy' }}</td>
+                    + ' ' + application.applicantDetail.surname) || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{application.office || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{application.tenancyStartDate|| DEFAULTS.NOT_AVAILABLE | date : 'dd/MM/yyyy' }}</td>
                   <td>{{application.rentShare || '0' | currency: '£'}}</td>
-                  <td>{{application.dateOfSubmission || '-' | date : 'dd/MM/yyyy' }}</td>
-                  <td>{{getProductType(application.product, 'application') || '-'}}</td>
-                  <td>{{getLookupValue(application.applicationStatus, referencingApplicantStatusTypes) || '-'}}</td>
+                  <td>{{application.dateOfSubmission || DEFAULTS.NOT_AVAILABLE | date : 'dd/MM/yyyy' }}</td>
+                  <td>{{getProductType(application.product, 'application') || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{(application.applicationStatus |lookup: referencingApplicantStatusTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td class="resp-action-icon">
                     <i (click)="showMenu($event, 'divOverlay', application, 'table-row')"
                       class="propcoicon propcoicon-actions-on"></i>

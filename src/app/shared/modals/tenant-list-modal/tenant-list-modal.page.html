@@ -25,14 +25,14 @@
             (ionChange)="selectTenant(tenant, $event)" 
             color="primary"></ion-checkbox>
           </td>
-          <td>{{tenant?.reference ? tenant?.reference : '-'}}</td>
-          <td>{{tenant?.addressee ? tenant?.addressee : ((tenant?.title? tenant?.title + ' ' : '')  + tenant?.name)}}
+          <td>{{tenant?.reference ? tenant?.reference : DEFAULTS.NOT_AVAILABLE}}</td>
+          <td>{{tenant?.addressee ? tenant?.addressee : ((tenant?.title ? tenant?.title + ' ' : '')  + tenant?.name)}}
           </td>  
           <td>{{tenant?.isLead ? 'Lead Tenant' : 'Co-Tenant' }}</td>
           <td>
             <ion-toggle (ionChange)="toggleReferencing(tenant, $event)" slot="start" [checked]="tenant.isReferencingRequired"></ion-toggle>
           </td>
-          <td>{{getLookupValue(tenant?.referencingApplicationStatus, referencingApplicantStatusTypes) ? getLookupValue(tenant?.referencingApplicationStatus, referencingApplicantStatusTypes) : DEFAULTS.NOT_AVAILABLE}}</td>
+          <td>{{(tenant?.referencingApplicationStatus | lookup: referencingApplicantStatusTypes) ? (tenant?.referencingApplicationStatus | lookup: referencingApplicantStatusTypes) : DEFAULTS.NOT_AVAILABLE}}</td>
         </tr>
       </tbody>
     </table>

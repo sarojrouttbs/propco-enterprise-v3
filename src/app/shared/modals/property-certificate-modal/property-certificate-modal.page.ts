@@ -1,5 +1,5 @@
 import { CommonService } from "./../../services/common.service";
-import { CERTIFICATES_CATEGORY } from "./../../constants";
+import { CERTIFICATES_CATEGORY, DATE_FORMAT, DEFAULTS } from "./../../constants";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { DataTableDirective } from "angular-datatables";
@@ -29,6 +29,8 @@ export class PropertyCertificateModalPage implements OnInit {
   contractDetails;
   CERTIFICATES_CATEGORY = CERTIFICATES_CATEGORY;
   certificateEmail;
+  DATE_FORMAT = DATE_FORMAT;
+  DEFAULTS = DEFAULTS;
 
   constructor(
     private modalController: ModalController,

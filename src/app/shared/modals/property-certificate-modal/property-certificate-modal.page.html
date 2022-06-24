@@ -45,14 +45,14 @@
             <ion-checkbox (click)="selectCertificate(certificate.value, i)" color="primary"
             formControlName="checked"  [disabled]="!certificate.get('expired').value"></ion-checkbox>
           </td>
-          <td>{{certificate.get('certificateNumber').value || '-'}}</td>
-          <td>{{certificate.get('appliance').value || '-'}}</td>
-          <td>{{certificate.get('contact').value || '-'}} </td>
-          <td>{{certificate.get('certificateNumber').value || '-'}}</td>
-          <td>{{certificate.get('model').value || '-'}} </td>
-          <td>{{certificate.get('serialNumber').value || '-'}}</td>
-          <td>{{certificate.get('startDate').value | date: 'dd/MM/yyyy' || '-'}}</td>
-          <td>{{certificate.get('expireDate').value | date: 'dd/MM/yyyy' || '-'}}</td>
+          <td>{{certificate.get('certificateNumber').value || DEFAULTS.NOT_AVAILABLE}}</td>
+          <td>{{certificate.get('appliance').value || DEFAULTS.NOT_AVAILABLE}}</td>
+          <td>{{certificate.get('contact').value || DEFAULTS.NOT_AVAILABLE}} </td>
+          <td>{{certificate.get('certificateNumber').value || DEFAULTS.NOT_AVAILABLE}}</td>
+          <td>{{certificate.get('model').value || DEFAULTS.NOT_AVAILABLE}} </td>
+          <td>{{certificate.get('serialNumber').value || DEFAULTS.NOT_AVAILABLE}}</td>
+          <td>{{(certificate.get('startDate').value | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</td>
+          <td>{{(certificate.get('expireDate').value | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</td>
         </tr>
       </tbody>
       </table>
@@ -64,22 +64,22 @@
       <ion-col size="25">
         <span class="text">Appliance</span>
         <br />
-        <span class="content">{{warrantyDetails?.appliance || '-'}}</span>
+        <span class="content">{{warrantyDetails?.appliance || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
       <ion-col size="25">
         <span class="text">Company</span>
         <br />
-        <span class="content">{{warrantyDetails?.contact || '-'}}</span>
+        <span class="content">{{warrantyDetails?.contact || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
       <ion-col size="25">
         <span class="text">Warranty Type</span>
         <br />
-        <span class="content">{{warrantyDetails?.typeName || '-'}}</span>
+        <span class="content">{{warrantyDetails?.typeName || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
       <ion-col size="25">
         <span class="text">Warranty Number</span>
         <br />
-        <span class="content">{{warrantyDetails?.certificateNumber || '-'}}</span>
+        <span class="content">{{warrantyDetails?.certificateNumber || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
     </ion-row>
 
@@ -87,17 +87,17 @@
       <ion-col size="25">
         <span class="text">Serial Number</span>
         <br />
-        <span class="content">{{warrantyDetails?.serialNumber || '-'}}</span>
+        <span class="content">{{warrantyDetails?.serialNumber || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
       <ion-col size="25">
         <span class="text">Model</span>
         <br />
-        <span class="content">{{warrantyDetails?.model || '-'}}</span>
+        <span class="content">{{warrantyDetails?.model || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
       <ion-col size="25">
         <span class="text">Start Date</span>
         <br />
-        <span class="content">{{warrantyDetails?.startDate | date: 'dd/MM/yyyy' || '-'}}</span>
+        <span class="content">{{(warrantyDetails?.startDate | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
     </ion-row>
 
@@ -105,17 +105,17 @@
       <ion-col size="25">
         <span class="text">Phone Number</span>
         <br />
-        <span class="content">{{warrantyDetails?.contactNumber || '-'}}</span>
+        <span class="content">{{warrantyDetails?.contactNumber || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
       <ion-col size="25">
         <span class="text">Email</span>
         <br />
-        <span class="content">{{warrantyDetails?.contact || '-'}}</span>
+        <span class="content">{{warrantyDetails?.contact || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
       <ion-col size="25">
         <span class="text">End Date</span>
         <br />
-        <span class="content">{{warrantyDetails?.expireDate | date: 'dd/MM/yyyy' || '-'}}</span>
+        <span class="content">{{(warrantyDetails?.expireDate | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -137,11 +137,11 @@
           <ion-checkbox (click)="selectCertificate(certificate.value, i)" color="primary"
           formControlName="checked" [disabled]="!certificate.get('expired').value"></ion-checkbox>
         </td>
-        <td>{{certificate.get('certificateNumber').value || '-'}}</td>
-        <td>{{certificate.get('membershipNumber').value || '-'}} </td>
-        <td>{{certificate.get('contact').value || '-'}}</td>
-        <td>{{certificate.get('startDate').value | date: 'dd/MM/yyyy' || '-'}}</td>
-        <td>{{certificate.get('expireDate').value | date: 'dd/MM/yyyy' || '-'}}</td>
+        <td>{{certificate.get('certificateNumber').value || DEFAULTS.NOT_AVAILABLE}}</td>
+        <td>{{certificate.get('membershipNumber').value || DEFAULTS.NOT_AVAILABLE}} </td>
+        <td>{{certificate.get('contact').value || DEFAULTS.NOT_AVAILABLE}}</td>
+        <td>{{certificate.get('startDate').value | date: DATE_FORMAT.DATE || DEFAULTS.NOT_AVAILABLE}}</td>
+        <td>{{certificate.get('expireDate').value | date: DATE_FORMAT.DATE || DEFAULTS.NOT_AVAILABLE}}</td>
       </tr>
      </tbody>
     </table>
@@ -152,17 +152,17 @@
       <ion-col size="33.33">
         <span class="text">Service Agreement Type</span>
         <br />
-        <span class="content">{{contractDetails?.typeName || '-'}}</span>
+        <span class="content">{{contractDetails?.typeName || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
       <ion-col size="33.33">
         <span class="text">Policy Reference</span>
         <br />
-        <span class="content">{{contractDetails?.membershipNumber || '-'}}</span>
+        <span class="content">{{contractDetails?.membershipNumber || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
       <ion-col size="33.33">
         <span class="text">Company</span>
         <br />
-        <span class="content">{{contractDetails?.contact || '-'}}</span>
+        <span class="content">{{contractDetails?.contact || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
     </ion-row>
 
@@ -170,12 +170,12 @@
       <ion-col size="33.33">
         <span class="text">Email</span>
         <br />
-        <span class="content">{{contractDetails?.contact || '-'}}</span>
+        <span class="content">{{contractDetails?.contact || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
       <ion-col size="33.33">
         <span class="text">Start Date</span>
         <br />
-        <span class="content">{{contractDetails?.startDate | date: 'dd/MM/yyyy' || '-'}}</span>
+        <span class="content">{{(contractDetails?.startDate | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
     </ion-row>
 
@@ -183,12 +183,12 @@
       <ion-col size="33.33">
         <span class="text">Phone Number</span>
         <br />
-        <span class="content">{{contractDetails?.contactNumber || '-'}}</span>
+        <span class="content">{{contractDetails?.contactNumber || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
       <ion-col size="33.33">
         <span class="text">End Date</span>
         <br />
-        <span class="content">{{contractDetails?.expireDate | date: 'dd/MM/yyyy' || '-'}}</span>
+        <span class="content">{{(contractDetails?.expireDate | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
     </ion-row>
   </ion-grid>
