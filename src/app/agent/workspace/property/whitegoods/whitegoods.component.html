@@ -39,8 +39,8 @@
           style="position: relative">
           <thead>
             <tr>
-              <th>Type</th>
-              <th>Notes</th>
+              <th style="width: 15%;">Type</th>
+              <th style="width: 10%;">Notes</th>
               <th>Certification Number</th>
               <th>Expires</th>
               <th>Appliance</th>
@@ -70,7 +70,7 @@
               </td>
             </tr>
             <tr *ngIf="whitegoodsList?.length === 0">
-              <td colspan="7" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+              <td colspan="9" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
               </td>
             </tr>
           </tbody>

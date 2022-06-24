@@ -124,7 +124,7 @@ export class AgentService {
       environment.API_BASE_URL + `properties/${propertyId}/management-services`, { params }
     );
   }
-  
+
   getKeysListing(propertyId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/keys`);
   }
@@ -155,5 +155,15 @@ export class AgentService {
 
   updateKeysetActivity(keyLogId: number, requestObj: any): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `keys/logs/${keyLogId}`, requestObj);
+  }
+
+  getsafetyDeviceList(propertyId: string, params: any): Observable<any> {
+    return this.httpClient.get(
+      environment.API_BASE_URL + `properties/${propertyId}/safety-devices`, { params }
+    );
+  }
+
+  getChangeHistory(params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `change-history`, { params });
   }
 }

@@ -1,0 +1,108 @@
+<ion-content id="safety-device">
+  <mat-accordion class="form-table-view-accordian">
+    <mat-expansion-panel #safetyDevice hideToggle expanded>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Safety Devices/Alarms
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!safetyDevice.expanded" class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="safetyDevice.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+            </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="action-btn-block">
+        <ion-grid>
+          <ion-row>
+            <ion-col class="ion-align-self-center">
+              <ion-button color="success">Add</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+
+      <div class="overlay-container" style="position: relative">
+        <table datatable [dtOptions]="dtOptions" class="row-border hover" width="100%" id="safety-device-table"
+          style="position: relative">
+          <thead>
+            <tr>
+              <th style="width:100px">Item</th>
+              <th>Type</th>
+              <th>Location</th>
+              <th>Serial Number</th>
+              <th>Last Tested On</th>
+              <th>Expiry Date</th>
+              <th>External Link</th>
+              <th>Notes</th>
+              <th style="width:36px"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of safetyDeviceList" class="table-row"
+              [ngClass]="{'row-selected' : data.rowSelected}" (click)="onClickRow(data);">
+              <td>{{data?.safetyDeviceType | lookup: safetyDeviceTypes || notAvailable}}</td>
+              <td>{{data?.smokeDetectorType | lookup: smokeDetectors || notAvailable}}</td>
+              <td>{{data?.location || notAvailable}}</td>
+              <td>{{data?.serialNumber || notAvailable}}</td>
+              <td>{{data.lastTestedDate | date: DATE_FORMAT.DATE || notAvailable}}</td>
+              <td>{{data.expiryDate | date: DATE_FORMAT.DATE || notAvailable}}</td>
+              <td>{{data?.externalLink || notAvailable}}</td>
+              <td>{{data?.notes || notAvailable}}</td>
+              <td class="resp-action-icon">
+                <i (click)="showMenu($event,'divOverlay', data, 'table-row')"
+                  class="propcoicon propcoicon-actions-on action-btn"></i>
+              </td>
+            </tr>
+            <tr *ngIf="safetyDeviceList?.length === 0">
+              <td colspan="9" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="divOverlay">
+          <ion-button (click)="addNotes()">Add Note</ion-button>
+          <ion-button>Edit</ion-button>
+          <ion-button>Remove</ion-button>
+          <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+        </div>
+      </div>
+
+      <div class="overlay-container" style="position: relative">
+        <h5>Safety Device Notes :</h5>
+        <table datatable [dtOptions]="notesDtOption" [dtTrigger]="notesDtTrigger" class="row-border hover"
+          style="width: 100%; position: relative" #faultNotesTable>
+          <thead>
+            <tr>
+              <th style="width:15%">Date</th>
+              <th style="width:15%">Time</th>
+              <th style="width:15%">Type</th>
+              <th style="width:15%">Complaint</th>
+              <th style="width:15%">Category</th>
+              <th>User</th>
+              <th style="width:40px">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let notes of safetyDeviceNotes?.data" class="table-row">
+              <td>{{notes.postedAt | date: DATE_FORMAT.DATE || notAvailable}}</td>
+              <td>{{notes.postedAt | date: DATE_FORMAT.TIME || notAvailable}}</td>
+              <td>{{notes.type | lookup:notesTypes || notAvailable}}</td>
+              <td>{{notes.complaint | lookup:notesComplaints || notAvailable}}</td>
+              <td>{{notes.category | lookup:notesCategories || notAvailable}}</td>
+              <td>{{notes.userName || notAvailable}}</td>
+              <td><i class="propcoicon propcoicon-property-description"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+</ion-content>

@@ -28,12 +28,14 @@
             <ion-label position="floating">To</ion-label>
             <ion-input formControlName="name"></ion-input>
           </ion-item>
+          <app-validation-message [control]="keyActivityForm.controls.name"></app-validation-message>
         </ion-col>
         <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Contact Number</ion-label>
             <ion-input formControlName="contact"></ion-input>
           </ion-item>
+          <app-validation-message [control]="keyActivityForm.controls.contact"></app-validation-message>
         </ion-col>
         <ion-col size="50">
           <ion-item>
@@ -58,8 +60,10 @@
         <ion-col size="100">
           <ion-item>
             <ion-label position="floating">Comments</ion-label>
-            <ion-input formControlName="note"></ion-input>
+            <ion-textarea rows="1" formControlName="note" auto-grow="true">
+            </ion-textarea>
           </ion-item>
+          <app-validation-message [control]="keyActivityForm.controls.note"></app-validation-message>
         </ion-col>
       </ion-row>
     </ion-grid>

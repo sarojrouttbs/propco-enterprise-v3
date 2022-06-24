@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AgentService } from 'src/app/agent/agent.service';
 import { CommonService } from '../../services/common.service';
+import { ValidationService } from '../../services/validation.service';
 
 @Component({
   selector: 'app-key-activity-modal',
@@ -40,11 +41,11 @@ export class KeyActivityModalPage implements OnInit {
   private initForm() {
     this.keyActivityForm = this.formBuilder.group({
       activityType: [{ value: '', disabled: true }, Validators.required],
-      name: '',
-      contact: '',
+      name: ['', Validators.maxLength(50)],
+      contact: ['', [Validators.maxLength(50), ValidationService.numberValidator]],
       userId: ['', Validators.required],
       postDate: '',
-      note: ''
+      note: ['', Validators.maxLength(255)],
     });
   }
 
