@@ -60,7 +60,14 @@
               "node_modules/datatables.net-buttons/js/buttons.print.js",
               "node_modules/datatables.net-colreorder/js/dataTables.colReorder.js",
               "src/lib/java-ng.js"
-            ]
+            ],
+            "aot": false,
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -90,7 +97,8 @@
             "ci": {
               "progress": false
             }
-          }
+          },
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
