@@ -1,7 +1,7 @@
   <ion-grid>
     <ion-row *ngIf="faultDetails?.isClosed">
       <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
-        <app-close-fault  [notificationData]="iacNotification" [faultDetails]="faultDetails" [action]="getLookupValue(iacNotification?.faultStageAction, iacStageActions) ? getLookupValue(iacNotification?.faultStageAction, iacStageActions) : 'Arranging Contractor'"></app-close-fault>
+        <app-close-fault  [notificationData]="iacNotification" [faultDetails]="faultDetails" [action]="(iacNotification?.faultStageAction | lookup: iacStageActions) ? (iacNotification?.faultStageAction | lookup: iacStageActions) : 'Arranging Contractor'"></app-close-fault>
       </ion-col>
     </ion-row>
    
@@ -20,7 +20,7 @@
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
-              {{getLookupValue(iacNotification?.faultStageAction, iacStageActions)}}
+              {{(iacNotification?.faultStageAction | lookup: iacStageActions)}}
               <ion-icon name="checkmark-circle-outline"></ion-icon>
             </ion-button>
             <ng-container *ngIf="iacNotification && iacNotification?.responseReceived">

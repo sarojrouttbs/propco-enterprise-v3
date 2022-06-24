@@ -51,8 +51,8 @@
           <td>{{certificate.get('certificateNumber').value || DEFAULTS.NOT_AVAILABLE}}</td>
           <td>{{certificate.get('model').value || DEFAULTS.NOT_AVAILABLE}} </td>
           <td>{{certificate.get('serialNumber').value || DEFAULTS.NOT_AVAILABLE}}</td>
-          <td>{{certificate.get('startDate').value | date: DATE_FORMAT.DATE || DEFAULTS.NOT_AVAILABLE}}</td>
-          <td>{{certificate.get('expireDate').value | date: DATE_FORMAT.DATE || DEFAULTS.NOT_AVAILABLE}}</td>
+          <td>{{(certificate.get('startDate').value | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</td>
+          <td>{{(certificate.get('expireDate').value | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</td>
         </tr>
       </tbody>
       </table>
@@ -97,7 +97,7 @@
       <ion-col size="25">
         <span class="text">Start Date</span>
         <br />
-        <span class="content">{{warrantyDetails?.startDate | date: DATE_FORMAT.DATE || DEFAULTS.NOT_AVAILABLE}}</span>
+        <span class="content">{{(warrantyDetails?.startDate | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
     </ion-row>
 
@@ -115,7 +115,7 @@
       <ion-col size="25">
         <span class="text">End Date</span>
         <br />
-        <span class="content">{{warrantyDetails?.expireDate | date: DATE_FORMAT.DATE || DEFAULTS.NOT_AVAILABLE}}</span>
+        <span class="content">{{(warrantyDetails?.expireDate | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -175,7 +175,7 @@
       <ion-col size="33.33">
         <span class="text">Start Date</span>
         <br />
-        <span class="content">{{contractDetails?.startDate | date: DATE_FORMAT.DATE || DEFAULTS.NOT_AVAILABLE}}</span>
+        <span class="content">{{(contractDetails?.startDate | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
     </ion-row>
 
@@ -188,7 +188,7 @@
       <ion-col size="33.33">
         <span class="text">End Date</span>
         <br />
-        <span class="content">{{contractDetails?.expireDate | date: DATE_FORMAT.DATE || DEFAULTS.NOT_AVAILABLE}}</span>
+        <span class="content">{{(contractDetails?.expireDate | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</span>
       </ion-col>
     </ion-row>
   </ion-grid>

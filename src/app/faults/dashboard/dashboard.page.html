@@ -412,17 +412,17 @@
                       {{fault.reference || DEFAULTS.NOT_AVAILABLE}}
                     </ion-badge>
                   </td>
-                  <td>{{fault.createdAt | date: DATE_FORMAT.DATE_TIME || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{(fault.createdAt | date: DATE_FORMAT.DATE_TIME) || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td>
                     {{(fault.sourceType === maintSourceTypes.FIXFLO) ? (fault.fixfloCategory || DEFAULTS.NOT_AVAILABLE) : (getLookupValue(fault.category,
                     faultCategories, 'category') || DEFAULTS.NOT_AVAILABLE)}}
                   </td>
                   
                   <td>{{fault.propertyReference || DEFAULTS.NOT_AVAILABLE}} <br>{{fault.propertyAddress.addressLine1}}</td>
-                  <td>{{getLookupValue(fault.propertyOfficeCode, officeCodes) || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{(fault.propertyOfficeCode | lookup: officeCodes) || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td>{{fault.propertyManagerName || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td>{{fault.title || DEFAULTS.NOT_AVAILABLE}}</td>
-                  <td>{{getLookupValue(fault.reportedBy, reportedByTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{(fault.reportedBy | lookup: reportedByTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td>
                       <ion-checkbox color="success" style="margin-bottom: 0;" 
                       (ionChange)="selectFault(fault, $event);" (click)="$event.stopPropagation();" [checked]="fault?.isChecked">
@@ -433,7 +433,7 @@
                     <span>
                       <ion-icon name="alarm" *ngIf="fault?.snoozeUntil && (fault?.snoozeUntil > currentDate)" title="snooze" style="font-size: 15px;vertical-align: text-bottom;"></ion-icon>
                       {{fault?.isClosed || (fault?.isClosed && fault?.isEscalated) ? 'Closed' : 
-                      (fault?.isEscalated ? 'Escalation' : getLookupValue(fault?.status, faultStatuses)) || DEFAULTS.NOT_AVAILABLE }}
+                      (fault?.isEscalated ? 'Escalation' : (fault?.status | lookup: faultStatuses)) || DEFAULTS.NOT_AVAILABLE }}
                     </span>
                   </td>
                   

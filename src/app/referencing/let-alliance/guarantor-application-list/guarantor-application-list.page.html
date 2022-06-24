@@ -51,7 +51,7 @@
                   <td>{{application.rentShare || '0' | currency: '£'}}</td>
                   <td>{{application.dateOfSubmission || DEFAULTS.NOT_AVAILABLE | date : 'dd/MM/yyyy' }}</td>
                   <td>{{getProductType(application.product, 'application') || DEFAULTS.NOT_AVAILABLE}}</td>
-                  <td>{{getLookupValue(application.applicationStatus, referencingApplicantStatusTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{(application.applicationStatus |lookup: referencingApplicantStatusTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td class="resp-action-icon">
                     <i (click)="showMenu($event, 'divOverlay', application, 'table-row')"
                       class="propcoicon propcoicon-actions-on"></i>

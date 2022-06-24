@@ -2,14 +2,14 @@
   <ion-row *ngIf="!showSkeleton">
     <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background border-top-radious border-bottom-radious">
       <div class="landlord-instructions">
-        <app-close-fault *ngIf="faultDetails?.isClosed" [notificationData]="cliNotification" [faultDetails]="faultDetails" [action]="getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes)? getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes):'Landlord Instructions'"></app-close-fault>
+        <app-close-fault *ngIf="faultDetails?.isClosed" [notificationData]="cliNotification" [faultDetails]="faultDetails" [action]="(cliNotification?.faultStageAction | lookup: landlordInstructionTypes) ? (cliNotification?.faultStageAction | lookup: landlordInstructionTypes):'Landlord Instructions'"></app-close-fault>
 
         <div class="banner" *ngIf="!cliNotification && !faultDetails?.isClosed">
           <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
           <ion-button color="{{(suggestedAction == 'AGENT_OF_NECESSITY') ? 'danger' : 'success'}}"
             class="icon-button" (click)="setUserAction(suggestedAction)"
             fill="{{(userSelectedActionControl.value == suggestedAction) ? 'solid' :'outline'}}">
-            {{getLookupValue(suggestedAction, landlordInstructionTypes)}}
+            {{(suggestedAction | lookup: landlordInstructionTypes)}}
             <ion-icon name="checkmark-circle-outline" *ngIf="(userSelectedActionControl.value == suggestedAction)">
             </ion-icon>
           </ion-button>
@@ -48,7 +48,7 @@
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
-              {{getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes)}}
+              {{(cliNotification?.faultStageAction | lookup: landlordInstructionTypes)}}
               <ion-icon name="checkmark-circle-outline"></ion-icon>
             </ion-button>
             
@@ -125,7 +125,7 @@
                 <ion-row class="ion-justify-content-center">                    
                   <ion-button color="danger" expand="block" class="action-btn"
                     fill="{{userSelectedActionControl.value == 'AGENT_OF_NECESSITY' ? 'solid' :'outline'}}" (click)="setUserAction('AGENT_OF_NECESSITY')">
-                    {{getLookupValue('AGENT_OF_NECESSITY', landlordInstructionTypes)}}
+                    {{('AGENT_OF_NECESSITY' | lookup: landlordInstructionTypes)}}
                     <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(userSelectedActionControl.value == 'AGENT_OF_NECESSITY')"></ion-icon>
                   </ion-button>
                 </ion-row>

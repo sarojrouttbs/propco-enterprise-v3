@@ -139,7 +139,7 @@
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.tenantTypeId"></app-validation-message>
         </ion-col>
-        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" *ngIf="getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
+        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" *ngIf="(tenantDetailsForm.controls.tenantTypeId.value | lookup: tenantTypes) == 'Company'">
           <ion-item>
             <ion-label position="floating">Company Name <ion-text class="mandatory">*</ion-text>
             </ion-label>
@@ -222,7 +222,7 @@
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.nationality"></app-validation-message>
         </ion-col>
-        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" *ngIf="getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
+        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" *ngIf="(tenantDetailsForm.controls.tenantTypeId.value | lookup: tenantTypes) == 'Company'">
           <ion-item>
             <ion-label position="floating">Registration Number <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-input formControlName="registrationNumber"></ion-input>
@@ -324,7 +324,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Management Type</ion-text><br />
-        <ion-text class="content">{{getLookupValue(propertyDetailsForm.controls.managementStatus.value, managementStatusTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+        <ion-text class="content">{{(propertyDetailsForm.controls.managementStatus.value | lookup: managementStatusTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Property Rent</ion-text><br />
@@ -336,7 +336,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Completion Method</ion-text><br />
-        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.completeMethod.value, completionMethods) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+        <ion-text class="content">{{(tenantDetailsForm.controls.completeMethod.value | lookup: completionMethods) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Product Type</ion-text><br />
@@ -344,11 +344,11 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Tenant Type</ion-text><br />
-        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+        <ion-text class="content">{{(tenantDetailsForm.controls.tenantTypeId.value | lookup: tenantTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Title</ion-text><br />
-        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.title.value, titleTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+        <ion-text class="content">{{(tenantDetailsForm.controls.title.value | lookup: titleTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Other Title</ion-text><br />
@@ -358,7 +358,7 @@
         <ion-text class="header">First Name</ion-text><br />
         <ion-text class="content">{{tenantDetailsForm.controls.forename.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
+      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="(tenantDetailsForm.controls.tenantTypeId.value | lookup: tenantTypes) == 'Company'">
         <ion-text class="header">Company Name</ion-text><br />
         <ion-text class="content">{{tenantDetailsForm.controls.companyName.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
@@ -380,13 +380,13 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Marital Status</ion-text><br />
-        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.maritalStatus.value, maritalStatusTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+        <ion-text class="content">{{(tenantDetailsForm.controls.maritalStatus.value | lookup: maritalStatusTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Nationality</ion-text><br />
-        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.nationality.value, referencingNationalities) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+        <ion-text class="content">{{(tenantDetailsForm.controls.nationality.value | lookup: referencingNationalities) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
+      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="(tenantDetailsForm.controls.tenantTypeId.value | lookup: tenantTypes) == 'Company'">
         <ion-text class="header">Registration Number</ion-text><br />
         <ion-text class="content">{{tenantDetailsForm.controls.registrationNumber.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
@@ -400,7 +400,7 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
         <ion-text class="header">Title</ion-text><br />
-        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.otherNames['controls'].title.value, titleTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+        <ion-text class="content">{{(tenantDetailsForm.controls.otherNames['controls'].title.value | lookup: titleTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
         <ion-text class="header">First Name</ion-text><br />

@@ -3,7 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { DEFAULTS, FAULT_EVENT_TYPES, FAULT_EVENT_TYPES_ID, LL_INSTRUCTION_TYPES, PROPCO } from '../../constants';
+import { DATE_FORMAT, DEFAULTS, FAULT_EVENT_TYPES, FAULT_EVENT_TYPES_ID, LL_INSTRUCTION_TYPES, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as  pdfFonts from "pdfmake/build/vfs_fonts";
@@ -194,7 +194,7 @@ export class ChronologicalHistoryPage implements OnInit {
 
                   this.eventList.forEach((element) => {
                      tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { colSpan: 2, text: 'Action', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm:ss'), style: 'subheader', border: [false, false, false, false] }, { colSpan: 2, text: `${element.eventType || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
+                     tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, DATE_FORMAT.DATE_TIME_SECONDS), style: 'subheader', border: [false, false, false, false] }, { colSpan: 2, text: `${element.eventType || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
 
                      if (FAULT_EVENT_TYPES_ID.RESPONSE_RECEIVED === element.eventTypeId) {
                         tableBody.push([
@@ -280,7 +280,7 @@ export class ChronologicalHistoryPage implements OnInit {
                         }
                         if (FAULT_EVENT_TYPES_ID.FAULT_SNOOZED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Snoozed Till', style: 'tableHeader', border: [false, false, false, false] }]);
-                           tableBody.push([{ colSpan: 3, text: `${this.commonService.getFormatedDate(element.data.snoozeUntilDate, 'dd/MM/yyyy') || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${this.commonService.getFormatedDate(element.data.snoozeUntilDate, DATE_FORMAT.DATE) || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                         if (FAULT_EVENT_TYPES_ID.DOCUMENT_ADDED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Document', style: 'tableHeader', border: [false, false, false, false] }]);

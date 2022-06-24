@@ -91,7 +91,7 @@
         </div>
       </ion-col>
       <ion-col class="ion-text-right ion-align-self-center">
-        <span class="tenant-status">{{getLookupValue(selectedTenant?.status, tenantStatuses)}}</span>
+        <span class="tenant-status">{{(selectedTenant?.status | lookup: tenantStatuses)}}</span>
       </ion-col>
     </ion-row>
     <ng-container *ngIf="tenantList.length>0; then ifBlock else elseBlock"></ng-container>

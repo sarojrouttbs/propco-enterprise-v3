@@ -208,7 +208,7 @@
                         <ion-row>
                           <ion-col class="no-padding-left no-padding-top no-padding-bottom col1" size="33">
                             <ion-text color="medium">Offer Date and Time</ion-text><br />
-                            <ion-text>{{ item?.offerAt | date: DATE_FORMAT.DATE_TIME }}</ion-text><br />
+                            <ion-text>{{ (item?.offerAt | date: DATE_FORMAT.DATE_TIME)  || DEFAULTS.NOT_AVAILABLE }}</ion-text><br />
                           </ion-col>
                           <ion-col class="no-padding-left no-padding-top no-padding-bottom col2" size="33">
                             <ion-text color="medium">Applicant Name</ion-text><br />
@@ -291,8 +291,8 @@
               </thead>
               <tbody>
                 <tr *ngFor="let notes of obsOfferNotesList | async" class="table-row">
-                  <td>{{ notes.postedAt | date: DATE_FORMAT.DATE || DEFAULTS.NOT_AVAILABLE }}</td>
-                  <td>{{ notes.postedAt | date: DATE_FORMAT.TIME_SECONDS || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{ (notes.postedAt | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{ (notes.postedAt | date: DATE_FORMAT.TIME_SECONDS) || DEFAULTS.NOT_AVAILABLE }}</td>
                   <td>{{ (notes.type | lookup: notesTypes) || DEFAULTS.NOT_AVAILABLE }}</td>
                   <td>{{ (notes.complaint | lookup: notesComplaints) || DEFAULTS.NOT_AVAILABLE }}</td>
                   <td>{{ (notes.category | lookup: notesCategories) || DEFAULTS.NOT_AVAILABLE }}</td>

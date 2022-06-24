@@ -704,5 +704,6 @@ export const DATE_FORMAT = {
   DATE: 'dd/MM/yyyy',
   DATE_TIME: 'dd/MM/yyyy HH:mm',
   TIME: 'HH:mm',
-  TIME_SECONDS: 'HH:mm:ss'
+  TIME_SECONDS: 'HH:mm:ss',
+  DATE_TIME_SECONDS : 'dd/MM/yyyy HH:mm:ss'
 }
