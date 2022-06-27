@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { NOTES_TYPE, OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, NOTES_TYPE, OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
 import { NotesModalPage } from 'src/app/shared/modals/notes-modal/notes-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
@@ -60,6 +60,8 @@ export class OfferListPage implements OnInit {
   isRecordsAvailable = true;
   isPropertyDetailsAvailable = false;
   isOffersListAvailable = false;
+  DATE_FORMAT = DATE_FORMAT;
+  DEFAULTS = DEFAULTS;
 
   constructor(private router: Router, private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private tobService: TobService) {
     this.getTobLookupData();

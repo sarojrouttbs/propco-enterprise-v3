@@ -1,4 +1,4 @@
-import { CERTIFICATES_CATEGORY, DEFAULT_MESSAGES, FAULT_NOTIFICATION_STATE, FAULT_QUALIFICATION_ACTION_LIST, FILE_IDS, PROPCO } from './../../../shared/constants';
+import { CERTIFICATES_CATEGORY, DATE_FORMAT, DEFAULT_MESSAGES, FAULT_NOTIFICATION_STATE, FAULT_QUALIFICATION_ACTION_LIST, FILE_IDS, PROPCO } from './../../../shared/constants';
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -59,7 +59,8 @@ export class FaultQualificationComponent implements OnInit {
   notificationState = FAULT_NOTIFICATION_STATE;
   actionList = FAULT_QUALIFICATION_ACTION_LIST;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
-
+  DATE_FORMAT = DATE_FORMAT;
+  
   constructor(
     private fb: FormBuilder,
     private faultsService: FaultsService,

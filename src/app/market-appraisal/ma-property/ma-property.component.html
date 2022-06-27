@@ -255,18 +255,6 @@
                   </ion-select>
                 </ion-item>
               </ion-col>
-              <ion-col size="100">
-                <ion-item>
-                  <ion-label position="floating">How Long Looking to Let?  <ion-text class="mandatory">*</ion-text>
-                  </ion-label>
-                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="lettingDuration">
-                    <ion-select-option [value]="data?.index" *ngFor="let data of letDurations">
-                      {{ data?.value }}
-                    </ion-select-option>
-                  </ion-select>
-                </ion-item>
-                <app-validation-message [control]="propertyForm.controls.lettingDuration"></app-validation-message>
-              </ion-col>
               <ng-container formGroupName="rentRange">
                 <ion-col size="50">
                   <ion-item style="margin-top: 2px;">
@@ -285,10 +273,6 @@
                   <app-validation-message [control]="propertyForm.controls['rentRange'].get('maximum')"></app-validation-message>
                 </ion-col>
               </ng-container>
-            </ion-row>
-          </ion-col>
-          <ion-col size-xs="100" size-sm= "100" size-md="33" class="no-padding">
-            <ion-row>
               <ion-col size="50" class="ion-align-self-end">
                 <ion-item lines="none">
                   <ion-toggle color="primary" formControlName="onWithOtherAgent" class="toggle-btn"></ion-toggle>
@@ -303,6 +287,10 @@
                   <ion-input formControlName="agentName" [value]="!propertyForm.get('onWithOtherAgent').value? '':propertyForm.get('agentName').value" [disabled]="!propertyForm.get('onWithOtherAgent').value"></ion-input>
                 </ion-item>
               </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col size-xs="100" size-sm= "100" size-md="33" class="no-padding">
+            <ion-row>
               <ion-col size="50" class="ion-align-self-end">
                 <ion-item lines="none">
                   <ion-toggle color="primary" formControlName="hasLetBefore" class="toggle-btn"></ion-toggle>
@@ -310,15 +298,21 @@
                 </ion-item>
               </ion-col>
               <ion-col size="50">
-                <ion-item lines="none">
-                  <ion-label position="floating"></ion-label>
-                  <ion-input hidden></ion-input>
+                <ion-item>
+                  <ion-label position="floating">How Long Looking to Let?  <ion-text class="mandatory">*</ion-text>
+                  </ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="lettingDuration">
+                    <ion-select-option [value]="data?.index" *ngFor="let data of letDurations">
+                      {{ data?.value }}
+                    </ion-select-option>
+                  </ion-select>
                 </ion-item>
+                <app-validation-message [control]="propertyForm.controls.lettingDuration"></app-validation-message>
               </ion-col>
               <ion-col size="100">
-                <ion-item style="margin-top: 2px;">
+                <ion-item style="margin-top: -2px;">
                   <ion-label position="floating"> General Notes</ion-label>
-                  <ion-input formControlName="propertyNotes"></ion-input>
+                  <ion-textarea rows="1" formControlName="propertyNotes" auto-grow="true"></ion-textarea>
                   </ion-item>
               </ion-col>
             </ion-row>

@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DEFAULTS, PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { SolrService } from '../solr.service';
 declare function openScreen(key: string, value: any): any;
@@ -139,7 +139,8 @@ export class SearchResultsPage implements OnInit {
   viewType = 'LIST';
   currentDate;
   DEFAULTS = DEFAULTS;
-
+  DATE_FORMAT = DATE_FORMAT;
+  
   constructor(
     private route: ActivatedRoute,
     private solrService: SolrService,

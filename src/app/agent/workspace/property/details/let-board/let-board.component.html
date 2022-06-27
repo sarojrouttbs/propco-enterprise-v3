@@ -29,7 +29,7 @@
               <mat-form-field appearance="fill">
                 <mat-label>Board Ordered On </mat-label>
                 <input matInput [matDatepicker]="picker1" formControlName="boardOrderedOn" [disabled]="!group.get('isBoardAllowed').value"  readonly>
-                <mat-datepicker-toggle matPrefix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                 <mat-datepicker #picker1></mat-datepicker>
               </mat-form-field>
             </ion-col>
@@ -37,7 +37,7 @@
               <mat-form-field appearance="fill">
                 <mat-label>Board Removed On </mat-label>
                 <input matInput [matDatepicker]="picker2" formControlName="boardRemovedOn" [disabled]="!group.get('isBoardAllowed').value" readonly>
-                <mat-datepicker-toggle matPrefix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                 <mat-datepicker #picker2></mat-datepicker>
               </mat-form-field>
             </ion-col>
@@ -45,7 +45,7 @@
               <mat-form-field appearance="fill">
                 <mat-label>Let Agreed Slip Ordered On </mat-label>
                 <input matInput [matDatepicker]="picker3" formControlName="slipOrderedOn" [disabled]="!group.get('isBoardAllowed').value" readonly>
-                <mat-datepicker-toggle matPrefix [for]="picker3"></mat-datepicker-toggle>
+                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                 <mat-datepicker #picker3></mat-datepicker>
               </mat-form-field>
             </ion-col>

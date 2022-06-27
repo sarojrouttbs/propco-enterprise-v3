@@ -2,14 +2,14 @@
   <ion-row *ngIf="!showSkeleton">
     <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background border-top-radious border-bottom-radious">
       <div class="landlord-instructions">
-        <app-close-fault *ngIf="faultDetails?.isClosed" [notificationData]="cliNotification" [faultDetails]="faultDetails" [action]="getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes)? getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes):'Landlord Instructions'"></app-close-fault>
+        <app-close-fault *ngIf="faultDetails?.isClosed" [notificationData]="cliNotification" [faultDetails]="faultDetails" [action]="(cliNotification?.faultStageAction | lookup: landlordInstructionTypes) ? (cliNotification?.faultStageAction | lookup: landlordInstructionTypes):'Landlord Instructions'"></app-close-fault>
 
         <div class="banner" *ngIf="!cliNotification && !faultDetails?.isClosed">
           <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
           <ion-button color="{{(suggestedAction == 'AGENT_OF_NECESSITY') ? 'danger' : 'success'}}"
             class="icon-button" (click)="setUserAction(suggestedAction)"
             fill="{{(userSelectedActionControl.value == suggestedAction) ? 'solid' :'outline'}}">
-            {{getLookupValue(suggestedAction, landlordInstructionTypes)}}
+            {{(suggestedAction | lookup: landlordInstructionTypes)}}
             <ion-icon name="checkmark-circle-outline" *ngIf="(userSelectedActionControl.value == suggestedAction)">
             </ion-icon>
           </ion-button>
@@ -40,7 +40,7 @@
         <div *ngIf="cliNotification && !faultDetails?.isClosed">
           <div class="banner">
             <div class="ion-text-left">
-              <b>{{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}</b>
+              <b>{{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME }}</b>
             </div>
             <h2 class="banner-heading" >
               {{cliNotification && cliNotification?.responseReceived ? notificationState.RESPONSE_RECEIVED: 
@@ -48,12 +48,12 @@
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
-              {{getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes)}}
+              {{(cliNotification?.faultStageAction | lookup: landlordInstructionTypes)}}
               <ion-icon name="checkmark-circle-outline"></ion-icon>
             </ion-button>
             
             <ng-container *ngIf="cliNotification && cliNotification?.responseReceived && cliNotification?.recipientType === 8 ">
-              <h6 class="banner-title response-recived"><ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from Landlord {{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }} </h6>
+              <h6 class="banner-title response-recived"><ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from Landlord {{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME }} </h6>
             </ng-container>
 
             <ng-container *ngIf="cliNotification && !cliNotification?.responseReceived">
@@ -62,7 +62,7 @@
               >
                 <ion-icon name="ellipse" class="response-circle"></ion-icon> {{cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE}} received from Landlord</h6>
               <h6 class="banner-title" *ngIf="!faultDetails?.isEscalated" >{{cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone?'Escalation due': cliNotification.chase === cliNotification.allowedNumberOfChases ? 'Last chase due('+cliNotification.chase+')' : 'Next chase due('+cliNotification.chase+')'}}:
-                {{cliNotification ? (cliNotification.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
+                {{cliNotification ? (cliNotification.nextChaseDueAt | date: DATE_FORMAT.DATE_TIME) : ''}}
               </h6>
             </ng-container>
           </div>
@@ -125,7 +125,7 @@
                 <ion-row class="ion-justify-content-center">                    
                   <ion-button color="danger" expand="block" class="action-btn"
                     fill="{{userSelectedActionControl.value == 'AGENT_OF_NECESSITY' ? 'solid' :'outline'}}" (click)="setUserAction('AGENT_OF_NECESSITY')">
-                    {{getLookupValue('AGENT_OF_NECESSITY', landlordInstructionTypes)}}
+                    {{('AGENT_OF_NECESSITY' | lookup: landlordInstructionTypes)}}
                     <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(userSelectedActionControl.value == 'AGENT_OF_NECESSITY')"></ion-icon>
                   </ion-button>
                 </ion-row>

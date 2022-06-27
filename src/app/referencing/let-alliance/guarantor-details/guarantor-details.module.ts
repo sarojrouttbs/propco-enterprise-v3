@@ -11,6 +11,7 @@ import { GuarantorDetailsPageRoutingModule } from './guarantor-details-routing.m
 
 import { GuarantorDetailsPage } from './guarantor-details.page';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -31,7 +32,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     GuarantorDetailsPageRoutingModule,
     MaterialModule,
     ComponentsModule,
-    CurrencyMaskModule
+    CurrencyMaskModule,
+    PipesModule
   ],
   declarations: [GuarantorDetailsPage],
   providers: [CurrencyPipe, {provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig}]

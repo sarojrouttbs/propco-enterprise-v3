@@ -902,7 +902,7 @@
               </ion-col>
               <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
                 <ion-text class="header">Right to rent - Expiry date</ion-text><br />
-                <ion-text class="content">{{(item?.rightToRentExpiryDate | date: 'dd/MM/yyyy') || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+                <ion-text class="content">{{(item?.rightToRentExpiryDate | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -989,7 +989,7 @@
               </ion-col>
               <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
                 <ion-text class="header">How soon looking to move?</ion-text><br />
-                <ion-text class="content">{{(item?.howSoonLookingToMove | date: 'dd/MM/yyyy') || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+                <ion-text class="content">{{(item?.howSoonLookingToMove | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -1071,7 +1071,7 @@
               </ion-col>
               <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
                 <ion-text class="header">Expiry date</ion-text><br />
-                <ion-text class="content" [ngClass]="{'expired' : item?.supplierLiabilityExpiryDate < currentDate}">{{(item?.supplierLiabilityExpiryDate | date: 'dd/MM/yyyy') || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+                <ion-text class="content" [ngClass]="{'expired' : item?.supplierLiabilityExpiryDate < currentDate}">{{(item?.supplierLiabilityExpiryDate | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
             </ion-row>
           </ion-grid>

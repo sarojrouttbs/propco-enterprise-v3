@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DEFAULTS, PROPCO, REFERENCING, REFERENCING_TENANT_TYPE } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, PROPCO, REFERENCING, REFERENCING_TENANT_TYPE } from 'src/app/shared/constants';
 import { AddressModalPage } from 'src/app/shared/modals/address-modal/address-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -72,6 +72,8 @@ export class ApplicationDetailsPage implements OnInit {
   popoverOptions: any = {
     cssClass: 'let-alliance-ion-select'
   };
+  DATE_FORMAT = DATE_FORMAT;
+
   constructor(
     private fb: FormBuilder,
     private modalController: ModalController,
@@ -79,8 +81,7 @@ export class ApplicationDetailsPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private referencingService: ReferencingService,
-    public datepipe: DatePipe,
-    private currencyPipe: CurrencyPipe
+    public datepipe: DatePipe
   ) {
   }
 

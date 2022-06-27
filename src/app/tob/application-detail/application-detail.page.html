@@ -294,7 +294,7 @@
                         </ion-col>
                         <ion-col size="20">
                           <ion-text>
-                            {{item.controls['mobile'].value || '-'}}
+                            {{item.controls['mobile'].value || DEFAULTS.NOT_AVAILABLE}}
                           </ion-text>
                         </ion-col>
                         <ion-col size="22">
@@ -1057,19 +1057,19 @@
             <ion-row style="width: 100%" *ngFor="let data of occupantForm.value.coApplicants">
               <ion-col *ngIf="data.isAdded" class="header-content" size-xs="100" size-sm="50">
                 <ion-text class="header"> Forename </ion-text><br />
-                <ion-text class="content">{{ data.forename || '-' }}</ion-text>
+                <ion-text class="content">{{ data.forename || DEFAULTS.NOT_AVAILABLE }}</ion-text>
               </ion-col>
               <ion-col *ngIf="data.isAdded" class="header-content" size-xs="100" size-sm="50">
                 <ion-text class="header"> Surname </ion-text><br />
-                <ion-text class="content">{{ data.surname || '-' }}</ion-text>
+                <ion-text class="content">{{ data.surname || DEFAULTS.NOT_AVAILABLE }}</ion-text>
               </ion-col>
               <ion-col *ngIf="data.isAdded" class="header-content" size-xs="100" size-sm="50">
                 <ion-text class="header"> Mobile </ion-text><br />
-                <ion-text class="content">{{ data.mobile || '-' }}</ion-text>
+                <ion-text class="content">{{ data.mobile || DEFAULTS.NOT_AVAILABLE }}</ion-text>
               </ion-col>
               <ion-col *ngIf="data.isAdded" class="header-content" size-xs="100" size-sm="50">
                 <ion-text class="header"> Email Address </ion-text><br />
-                <ion-text class="content">{{ data.email || '-' }}</ion-text>
+                <ion-text class="content">{{ data.email || DEFAULTS.NOT_AVAILABLE }}</ion-text>
               </ion-col>
             </ion-row>
 
@@ -1082,22 +1082,22 @@
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header"> Name </ion-text><br />
               <ion-text class="content"> {{ applicantDetailsForm.value.forename ? (applicantDetailsForm.value.forename +
-                " " + applicantDetailsForm.value.surname) : '-' }} </ion-text>
+                " " + applicantDetailsForm.value.surname) : DEFAULTS.NOT_AVAILABLE }} </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header"> Email Address </ion-text><br />
-              <ion-text class="content"> {{ applicantDetailsForm.value.email || '-' }} </ion-text>
+              <ion-text class="content"> {{ applicantDetailsForm.value.email || DEFAULTS.NOT_AVAILABLE }} </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header"> Current Position </ion-text><br />
               <ion-text class="content">
                 {{ applicantDetailsForm.value.currentPosition ? (applicantDetailsForm.value.currentPosition | lookup:
-                tenantCurrentPositionTypes) : '-' }}
+                tenantCurrentPositionTypes) : DEFAULTS.NOT_AVAILABLE }}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header"> Occupation </ion-text><br />
-              <ion-text class="content"> {{ applicantDetailsForm.value.occupation || '-' }} </ion-text>
+              <ion-text class="content"> {{ applicantDetailsForm.value.occupation || DEFAULTS.NOT_AVAILABLE }} </ion-text>
             </ion-col>
 
             <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -1108,7 +1108,7 @@
               <ion-text class="header"> Guarantor Type </ion-text><br />
               <ion-text class="content">
                 {{ applicantDetailsForm.value.guarantorType ? (applicantDetailsForm.value.guarantorType | lookup:
-                applicantGuarantorTypes) : '-' }}
+                applicantGuarantorTypes) : DEFAULTS.NOT_AVAILABLE }}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -1117,7 +1117,7 @@
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header"> Pets Info </ion-text><br />
-              <ion-text class="content"> {{ applicantDetailsForm.value.petsInfo || '-' }} </ion-text>
+              <ion-text class="content"> {{ applicantDetailsForm.value.petsInfo || DEFAULTS.NOT_AVAILABLE }} </ion-text>
             </ion-col>
 
             <ion-col size="100" class="border-bottom"></ion-col>
@@ -1175,7 +1175,7 @@
             </ion-col>
             <ion-col class="header-content" size-xs="100" size-sm="50"
               *ngFor="let data of applicantQuestionForm.value.questions">
-              <ion-text class="header">{{data.question || '-'}}</ion-text><br />
+              <ion-text class="header">{{data.question || DEFAULTS.NOT_AVAILABLE}}</ion-text><br />
               <ion-text class="content">{{data.toggle ? 'Yes' : 'No'}}</ion-text>
             </ion-col>
 
@@ -1186,21 +1186,21 @@
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">When would you like to move in?</ion-text><br />
-              <ion-text class="content">{{ (tenancyDetailForm.value.moveInDate | date : 'dd/MM/yyyy') || '-' }}
+              <ion-text class="content">{{ (tenancyDetailForm.value.moveInDate | date : 'dd/MM/yyyy') || DEFAULTS.NOT_AVAILABLE }}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Tenancy End</ion-text><br />
               <ion-text class="content">{{ (tenancyDetailForm.value.preferredTenancyEndDate | date : 'dd/MM/yyyy') ||
-                '-' }}</ion-text>
+                DEFAULTS.NOT_AVAILABLE }}</ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Preffered Rent Due Day</ion-text><br />
-              <ion-text class="content">{{ tenancyDetailForm.value.rentDueDay || '-' }}</ion-text>
+              <ion-text class="content">{{ tenancyDetailForm.value.rentDueDay || DEFAULTS.NOT_AVAILABLE }}</ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">No. of Occupants</ion-text><br />
-              <ion-text class="content">{{ tenancyDetailForm.value.numberOfHouseHolds || '-' }}</ion-text>
+              <ion-text class="content">{{ tenancyDetailForm.value.numberOfHouseHolds || DEFAULTS.NOT_AVAILABLE }}</ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">No. of Children</ion-text><br />
@@ -1208,7 +1208,7 @@
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">No. of Adults</ion-text><br />
-              <ion-text class="content">{{ tenancyDetailForm.value.numberOfAdults || '-'}}</ion-text>
+              <ion-text class="content">{{ tenancyDetailForm.value.numberOfAdults || DEFAULTS.NOT_AVAILABLE}}</ion-text>
             </ion-col>
 
             <ion-col size="100" class="border-bottom"></ion-col>
@@ -1254,15 +1254,15 @@
               </ion-col>
               <ion-col size-xs="100" size-sm="50" class="header-content">
                 <ion-text class="header">Name</ion-text><br />
-                <ion-text class="content">{{ guarantorForm.value.forename ? (guarantorForm.value.forename + ' ' + guarantorForm.value.surname) : '-' }}</ion-text>
+                <ion-text class="content">{{ guarantorForm.value.forename ? (guarantorForm.value.forename + ' ' + guarantorForm.value.surname) : DEFAULTS.NOT_AVAILABLE }}</ion-text>
               </ion-col>
               <ion-col size-xs="100" size-sm="50" class="header-content">
                 <ion-text class="header">Email Address</ion-text><br />
-                <ion-text class="content">{{ guarantorForm.value.email || '-' }}</ion-text>
+                <ion-text class="content">{{ guarantorForm.value.email || DEFAULTS.NOT_AVAILABLE }}</ion-text>
               </ion-col>
               <ion-col size-xs="100" size-sm="50" class="header-content">
                 <ion-text class="header">Phone</ion-text><br />
-                <ion-text class="content">{{ guarantorForm.value.mobile || '-' }}</ion-text>
+                <ion-text class="content">{{ guarantorForm.value.mobile || DEFAULTS.NOT_AVAILABLE }}</ion-text>
               </ion-col>
               <ion-col size-xs="100" size-sm="50" class="header-content">
                 <ion-text class="header">Address</ion-text><br />
