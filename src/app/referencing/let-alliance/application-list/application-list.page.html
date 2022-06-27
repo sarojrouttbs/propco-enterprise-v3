@@ -115,19 +115,19 @@
               </thead>
               <tbody>
                 <tr *ngFor="let application of applicationList" class="table-row">
-                  <td>{{application.referenceNumber || '-'}}</td>
-                  <td>{{application.propertyDetail.reference || '-'}}<br/>
+                  <td>{{application.referenceNumber || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{application.propertyDetail.reference || DEFAULTS.NOT_AVAILABLE}}<br/>
                     {{application.propertyDetail.address.addressLine1}} {{application.propertyDetail.address.addressLine5}} 
                     {{application.propertyDetail.address.postcode}}</td>
                   <td>{{application.applicantDetail.displayAs ? application.applicantDetail.displayAs : 
                     (application.applicantDetail.addressee ? application.applicantDetail.addressee : application.applicantDetail.forename
-                    + ' ' + application.applicantDetail.surname) || '-'}}  {{application.applicantDetail.itemType == 'G' ? ' (Guarantor)' : (application.applicantDetail.itemType == 'S' ? ' (Co-Tenant)' : ' (Tenant)')}}</td>
-                  <td>{{application.office || '-'}}</td>
-                  <td>{{application.tenancyStartDate|| '-' | date : 'dd/MM/yyyy' }}</td>
+                    + ' ' + application.applicantDetail.surname) || DEFAULTS.NOT_AVAILABLE}}  {{application.applicantDetail.itemType == 'G' ? ' (Guarantor)' : (application.applicantDetail.itemType == 'S' ? ' (Co-Tenant)' : ' (Tenant)')}}</td>
+                  <td>{{application.office || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{(application.tenancyStartDate | date : DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE }}</td>
                   <td>{{application.rentShare || '0' | currency: '£'}}</td>
-                  <td>{{application.dateOfSubmission|| '-' | date : 'dd/MM/yyyy' }}</td>
-                  <td>{{getProductType(application.product, 'application') || '-'}}</td>
-                  <td>{{getLookupValue(application.applicationStatus, referencingApplicantStatusTypes) || '-'}}</td>
+                  <td>{{(application.dateOfSubmission | date : DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{getProductType(application.product, 'application') || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{(application.applicationStatus | lookup: referencingApplicantStatusTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td class="resp-action-icon">
                     <i (click)="showMenu($event, 'divOverlay', application, 'table-row')"
                       class="propcoicon propcoicon-actions-on"></i>

@@ -38,7 +38,7 @@
               <ion-col class="no-padding-top col2 ion-text-end" size="25">
                 <h2 [class]="urgencyStatus==1 ? 'emergency' : (urgencyStatus==2? 'urgent' : 'non-urgent')"
                   (click)="toggleStatusList()" [class.status-pointer]="faultId">
-                  {{(getLookupValue(urgencyStatus, faultUrgencyStatuses)) | uppercase}}</h2>
+                  {{((urgencyStatus | lookup: faultUrgencyStatuses)) | uppercase}}</h2>
 
                 <ion-list class="status-list" *ngIf="showList && faultId">
                   <ion-item *ngFor="let status of faultUrgencyStatuses" button style="font-size: 13px !important;"
@@ -53,7 +53,7 @@
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Office</span>
                 <br />
-                {{getLookupValue(propertyDetails?.office, officeCodes) || DEFAULTS.NOT_AVAILABLE}}
+                {{(propertyDetails?.office | lookup: officeCodes) || DEFAULTS.NOT_AVAILABLE}}
               </ion-col>
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Management Service</span>
@@ -74,18 +74,18 @@
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Licence Details</span>
                 <br />
-                {{ hmoDetails[0]?.isPropertyLicenced ? getLookupValue(hmoDetails[0]?.licenceSchemeLookup, hmoLicenceSchemes) : DEFAULTS.NOT_AVAILABLE }}
+                {{ hmoDetails[0]?.isPropertyLicenced ? (hmoDetails[0]?.licenceSchemeLookup | lookup: hmoLicenceSchemes) : DEFAULTS.NOT_AVAILABLE }}
               </ion-col>
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <span class="text">Communication</span>
                 <br />
-                {{getLookupValue(dppRepairDetails?.lookupId, faultCommunicationPreferences) || DEFAULTS.NOT_AVAILABLE}}
+                {{(dppRepairDetails?.lookupId | lookup: faultCommunicationPreferences) || DEFAULTS.NOT_AVAILABLE}}
               </ion-col>
 
               <ion-col size-xl="25" size-lg="22" size-md="22" *ngIf="faultId">
                 <span class="text">Reported On</span>
                 <br />
-                {{createdAt | date: 'dd/MM/yyyy HH:mm' || '-'}}
+                {{(createdAt | date: DATE_FORMAT.DATE_TIME) || DEFAULTS.NOT_AVAILABLE}}
               </ion-col>
               <ion-col size-xl="25" size-lg="34" size-md="34">
                 <span class="text">Rent Arrears</span>

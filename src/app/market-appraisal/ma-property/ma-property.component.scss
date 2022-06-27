@@ -15,6 +15,14 @@
             color: var(--ion-color-three);
         }
     }
+
+    ion-textarea{
+        .textarea-wrapper{
+            textarea{
+                height: unset !important;
+            }
+        }
+    }
 }
 
 #market-appraisal-lettings {

@@ -133,11 +133,11 @@
           </thead>
           <tbody>
             <tr *ngFor="let notes of visitNotes?.data" class="table-row">
-              <td>{{notes.postedAt | date: DATE_FORMAT.DATE || notAvailable}}</td>
-              <td>{{notes.postedAt | date: DATE_FORMAT.TIME || notAvailable}}</td>
-              <td>{{notes.type | lookup:notesTypes || notAvailable}}</td>
-              <td>{{notes.complaint | lookup:notesComplaints || notAvailable}}</td>
-              <td>{{notes.category | lookup:notesCategories || notAvailable}}</td>
+              <td>{{(notes.postedAt | date: DATE_FORMAT.DATE) || notAvailable}}</td>
+              <td>{{(notes.postedAt | date: DATE_FORMAT.TIME) || notAvailable}}</td>
+              <td>{{(notes.type | lookup:notesTypes) || notAvailable}}</td>
+              <td>{{(notes.complaint | lookup:notesComplaints) || notAvailable}}</td>
+              <td>{{(notes.category | lookup:notesCategories) || notAvailable}}</td>
               <td>{{notes.userName || notAvailable}}</td>
               <td><i (click)="showNoteDescription(notes.notes);" class="propcoicon propcoicon-property-description"></i>
               </td>

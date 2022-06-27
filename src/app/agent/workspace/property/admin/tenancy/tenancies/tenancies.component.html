@@ -35,8 +35,8 @@
                 <td>{{data?.tenancyLetter || notAvailable}}</td>
                 <td>{{(data?.status | lookup: agreementStatusesLookup) || notAvailable}}</td>
                 <td>{{((data?.tenants?.displayAs) ? data?.tenants?.displayAs : (data?.tenants?.forename +' '+data?.tenants?.surname)) || notAvailable}}</td>
-                <td>{{data?.tenancyStartDate | date: 'dd/MM/yyyy' || notAvailable}}</td>
-                <td>{{data?.tenancyEndDate | date: 'dd/MM/yyyy' || notAvailable}}</td>
+                <td>{{data?.tenancyStartDate | date: DATE_FORMAT.DATE || notAvailable}}</td>
+                <td>{{data?.tenancyEndDate | date: DATE_FORMAT.DATE || notAvailable}}</td>
                 <!-- <td>{{data?.officeCode | lookup: officeLookup}}</td> -->
                 <td>{{(data?.contractType | lookup: contractTypeLookup) || notAvailable}}</td>
                 <td>{{(data?.lapseToContract | lookup: contractTypeLookup) || notAvailable}}</td>
