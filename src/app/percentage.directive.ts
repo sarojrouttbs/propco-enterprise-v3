@@ -2,7 +2,7 @@ import { Directive, HostListener } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
-  selector: '[appPercentage]'
+  selector: '[percentage-validator]'
 })
 export class PercentageDirective {
 

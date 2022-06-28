@@ -260,7 +260,7 @@
                   <ion-item style="margin-top: 2px;">
                     <ion-label position="floating">Rent Range From <ion-text class="mandatory">*</ion-text>
                     </ion-label>
-                    <ion-input formControlName="minimum" appCurrency></ion-input>
+                    <ion-input formControlName="minimum" currency-validator></ion-input>
                   </ion-item>
                   <app-validation-message [control]="propertyForm.controls['rentRange'].get('minimum')"></app-validation-message>
                 </ion-col>

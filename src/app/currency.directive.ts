@@ -2,7 +2,7 @@ import { Directive, HostListener } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
-  selector: '[appCurrency]'
+  selector: '[currency-validator]'
 })
 export class CurrencyDirective {
   private prefix: string;

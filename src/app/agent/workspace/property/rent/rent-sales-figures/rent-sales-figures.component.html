@@ -351,7 +351,7 @@
                       <ion-label position="floating">
                         Standard Commission (%)
                       </ion-label>
-                      <ion-input formControlName="managementCommission" appPercentage></ion-input>
+                      <ion-input formControlName="managementCommission" percentage-validator></ion-input>
                      
                     </ion-item>
                     <div *ngIf="group.get('managementCommission').hasError('invalidPattern')" class="error-message">
