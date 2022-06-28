@@ -29,5 +29,11 @@
             color: var(--ion-color-one);
         }
     }
-
+    
+    div.error-message {
+        color: var(--ion-color-danger) !important;
+        padding-top: 2px;
+        font-size: 14px;
+        line-height: 18px;
+    }
 }

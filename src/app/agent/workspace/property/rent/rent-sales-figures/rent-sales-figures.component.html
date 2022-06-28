@@ -351,8 +351,12 @@
                       <ion-label position="floating">
                         Standard Commission (%)
                       </ion-label>
-                      <ion-input formControlName="managementCommission"></ion-input>
+                      <ion-input formControlName="managementCommission" appPercentage></ion-input>
+                     
                     </ion-item>
+                    <div *ngIf="group.get('managementCommission').hasError('invalidPattern')" class="error-message">
+                      Invalid Standard Commission (%)
+                    </div>
                   </ion-col>
                   <ion-col size="35">
                     <ion-button color="success" size="small" class="change-btn" (click)="opneChangeNettModal()">&nbsp;Change Nett&nbsp;&nbsp;</ion-button>

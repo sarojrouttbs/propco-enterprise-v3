@@ -258,9 +258,9 @@
               <ng-container formGroupName="rentRange">
                 <ion-col size="50">
                   <ion-item style="margin-top: 2px;">
-                    <ion-label position="stacked">Rent Range From <ion-text class="mandatory">*</ion-text>
+                    <ion-label position="floating">Rent Range From <ion-text class="mandatory">*</ion-text>
                     </ion-label>
-                    <input class="currency-input" currencyMask formControlName="minimum">
+                    <ion-input formControlName="minimum" appCurrency></ion-input>
                   </ion-item>
                   <app-validation-message [control]="propertyForm.controls['rentRange'].get('minimum')"></app-validation-message>
                 </ion-col>
