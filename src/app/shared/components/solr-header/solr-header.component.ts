@@ -10,8 +10,7 @@ declare function openScreen(key: string, value: any): any;
 })
 export class SolrHeaderComponent implements OnInit {
   entityControl = new FormControl(['Property']);
-  constructor(private theme: ThemeService, private solrService: SolrService) {
-    this.theme.activeTheme('light-theme');
+  constructor(private solrService: SolrService) {
   }
 
   ngOnInit() { }

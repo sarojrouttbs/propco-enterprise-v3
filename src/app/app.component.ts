@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { NavigationStart, Router } from '@angular/router';
 import { AutocloseOverlaysService } from './shared/services/autoclose-overlays.service';
+import { ThemeService } from './shared/services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,8 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private router: Router,
-    private autocloseOverlaysService: AutocloseOverlaysService
+    private autocloseOverlaysService: AutocloseOverlaysService,
+    private themeService: ThemeService
   ) {
     this.initializeApp();
     this.router.events.subscribe((event: any): void => {
@@ -33,6 +35,7 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.themeService.activeTheme('light-theme');
     });
   }
 }

@@ -25,7 +25,7 @@ export class AgentHeaderComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private theme: ThemeService,
+    private themeService: ThemeService,
     private commonService: CommonService,
     private workSpaceService: WorkspaceService,
     private modalController: ModalController,
@@ -35,9 +35,9 @@ export class AgentHeaderComponent implements OnInit {
       if (this.commonService.getItem('theme-mode') === 'dark-theme') {
         this.enableDarkMode = true;
       }
-      this.theme.activeTheme(this.commonService.getItem('theme-mode'));
+      this.themeService.activeTheme(this.commonService.getItem('theme-mode'));
     } else {
-      this.theme.activeTheme(this.defaultTheme);
+      this.themeService.activeTheme(this.defaultTheme);
     }
   }
 
@@ -78,11 +78,11 @@ export class AgentHeaderComponent implements OnInit {
 
   switchToDarkMode() {
     if (this.enableDarkMode) {
-      this.theme.activeTheme('dark-theme');
+      this.themeService.activeTheme('dark-theme');
       this.commonService.setItem('theme-mode', 'dark-theme');
     } else {
       this.commonService.setItem('theme-mode', 'light-theme');
-      this.theme.activeTheme('light-theme');
+      this.themeService.activeTheme('light-theme');
     }
   }
 
