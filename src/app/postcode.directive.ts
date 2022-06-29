@@ -17,7 +17,7 @@ export class PostcodeDirective {
   }
 
   transform(value: string) {
-    if (value == undefined || value === '') {
+    if (value === undefined || value === '') {
       return null;
     }
     if (value.includes(' ')) {
