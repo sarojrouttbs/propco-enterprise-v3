@@ -13,7 +13,7 @@
         <ion-col size="70">
           <ion-item>
             <ion-label position="floating">Postcode <ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-input formControlName="postcode" (input)="toUpperCase('postcode', $event);"></ion-input>
+            <ion-input postcode-validator formControlName="postcode" (input)="toUpperCase('postcode', $event);"></ion-input>
           </ion-item>
           <app-validation-message [control]="addressDetailsForm.controls.postcode"></app-validation-message>
         </ion-col>

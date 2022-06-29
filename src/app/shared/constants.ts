@@ -181,6 +181,7 @@ export const URGENCY_TYPES = {
 
 export const REGEX = {
   DECIMAL_REGEX: '[0-9]+(.[0-9][0-9]?)?',
+  POSTCODE_VALIDATOR_REGX: '^([aA-pPrR-uUwWyYzZ0-9][aA-hHkK-yY0-9][aAeEhHmMnNpPrRtTvVxXyY0-9]?[aAbBeEhHmMnNpPrRvVwWxXyY0-9]? {1}[0-9][aAbBdD-hHjJlLnN-uUwW-zZ]{2}|gGiIrR 0aAaA)$'
 };
 
 export const COMPLETION_METHODS = [
