@@ -8,6 +8,7 @@ import { AddressModalPageRoutingModule } from './address-modal-routing.module';
 
 import { AddressModalPage } from './address-modal.page';
 import { ComponentsModule } from '../../components/components.module';
+import { PostcodeDirective } from 'src/app/postcode.directive';
 
 @NgModule({
   imports: [
@@ -18,6 +19,6 @@ import { ComponentsModule } from '../../components/components.module';
     AddressModalPageRoutingModule,
     ComponentsModule
   ],
-  declarations: [AddressModalPage]
+  declarations: [AddressModalPage, PostcodeDirective]
 })
 export class AddressModalPageModule {}
