@@ -1,5 +1,6 @@
 import { Directive, HostListener } from '@angular/core';
 import { NgControl } from '@angular/forms';
+import { REGEX } from './shared/constants';
 
 @Directive({
   selector: '[postcode-validator]'
@@ -24,9 +25,7 @@ export class PostcodeDirective {
     }
     value = value.toUpperCase();
     const newPostCode = value.replace(/^(.*)(\d)/, "$1 $2");
-    if (/^([aA-pPrR-uUwWyYzZ0-9][aA-hHkK-yY0-9][aAeEhHmMnNpPrRtTvVxXyY0-9]?[aAbBeEhHmMnNpPrRvVwWxXyY0-9]? {1}[0-9][aAbBdD-hHjJlLnN-uUwW-zZ]{2}|gGiIrR 0aAaA)$/
-      .test(value) || /^([aA-pPrR-uUwWyYzZ0-9][aA-hHkK-yY0-9][aAeEhHmMnNpPrRtTvVxXyY0-9]?[aAbBeEhHmMnNpPrRvVwWxXyY0-9]? {1}[0-9][aAbBdD-hHjJlLnN-uUwW-zZ]{2}|gGiIrR 0aAaA)$/
-        .test(newPostCode)) {
+    if (new RegExp(REGEX.POSTCODE_VALIDATOR_REGX).test(value) || new RegExp(REGEX.POSTCODE_VALIDATOR_REGX).test(newPostCode)) {
       this.ngControl.control.setValue(newPostCode);
     } else {
       this.ngControl.control.setErrors({ invalidPostcode: true });
