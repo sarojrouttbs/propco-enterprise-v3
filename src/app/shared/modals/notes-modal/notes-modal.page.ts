@@ -145,6 +145,16 @@ export class NotesModalPage implements OnInit {
       type: ['', Validators.required],
       notes: ['', Validators.required],
     });
+    if (this.notesType === NOTES_TYPE.PROPERTY ||
+      this.notesType === NOTES_TYPE.MANAGEMENT_INSPECTION ||
+      this.notesType === NOTES_TYPE.SAFETY_DEVICES) {
+        console.log("laskjdksjd");
+        
+      this.notesForm.get('category').clearValidators();
+      this.notesForm.get('type').clearValidators();
+      this.notesForm.get('category').updateValueAndValidity();
+      this.notesForm.get('type').updateValueAndValidity();
+    }
   }
 
   private initData() {
