@@ -3,7 +3,11 @@ exports.config = {
     capabilities: {
         'browserName': 'chrome',
          chromeOptions: {
+            //args: [ "--headless", "--disable-gpu", "--window-size=800,600" ]
          },
+        'moz:firefoxOptions': {
+            args: [ "--headless" ]
+        },
         'goog:loggingPrefs': {
             'performance': 'ALL',
             'browser': 'ALL'

@@ -7,9 +7,10 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "wstart": "webdriver-manager update && webdriver-manager start",
+    "test": "concurrently --kill-others \"npm run wstart\" \"delay 10 && protractor e2e/conf.js\""
   },
   "private": true,
   "dependencies": {
