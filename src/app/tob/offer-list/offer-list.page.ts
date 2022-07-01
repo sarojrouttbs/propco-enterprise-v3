@@ -127,7 +127,7 @@ export class OfferListPage implements OnInit {
 
   filterByDate() {
     this.filteredOfferList.data = this.offerList;
-    this.filteredOfferList.data = this.filteredOfferList.data.filter(e => new Date(this.commonService.getFormatedDate(e.offerAt, 'yyyy-MM-dd')) >= new Date(this.commonService.getFormatedDate(this.fromDate.value, 'yyyy-MM-dd')) && new Date(this.commonService.getFormatedDate(e.offerAt, 'yyyy-MM-dd')) <= new Date(this.commonService.getFormatedDate(this.toDate.value, 'yyyy-MM-dd')));
+    this.filteredOfferList.data = this.filteredOfferList.data.filter(e => new Date(this.commonService.getFormatedDate(e.offerAt, this.DATE_FORMAT.YEAR_DATE)) >= new Date(this.commonService.getFormatedDate(this.fromDate.value, this.DATE_FORMAT.YEAR_DATE)) && new Date(this.commonService.getFormatedDate(e.offerAt, this.DATE_FORMAT.YEAR_DATE)) <= new Date(this.commonService.getFormatedDate(this.toDate.value, this.DATE_FORMAT.YEAR_DATE)));
     this.checkOffersAvailable();
   }
 

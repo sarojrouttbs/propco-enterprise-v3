@@ -646,7 +646,7 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'keys': 'Keys',
       'particulars': 'Particulars',
       'safety-device': 'Safety Devices/Alarms',
-      'whitegoods' : 'Service/White Goods',
+      'whitegoods': 'Service/White Goods',
       'safety': 'Safety Devices/Alarms'
     }
   }
@@ -706,5 +706,14 @@ export const DATE_FORMAT = {
   DATE_TIME: 'dd/MM/yyyy HH:mm',
   TIME: 'HH:mm',
   TIME_SECONDS: 'HH:mm:ss',
-  DATE_TIME_SECONDS : 'dd/MM/yyyy HH:mm:ss'
+  DATE_TIME_SECONDS: 'dd/MM/yyyy HH:mm:ss',
+  DISPLAY_DATE: 'DD MMM YYYY',
+  DISPLAY_DATE_TIME: 'DD MMM YYYY HH:mm',
+  INPUT_DATE: 'MM/DD/YYYY',
+  INPUT_DATE_TIME: 'MM/DD/YYYY HH:mm',
+  DISPLAY_DATE_1: 'DD/MM/YYYY',
+  DISPLAY_DATE_TIME_1: 'DD/MM/YYYY HH:mm',
+  YEAR_DATE_TIME: 'yyyy-MM-dd HH:mm:ss',
+  YEAR_DATE_TIME_1: 'yyyy-MM-ddTHH:mm',
+  YEAR_DATE:'yyyy-MM-dd'
 }

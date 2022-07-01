@@ -9,7 +9,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { NotesModalPage } from '../../shared/modals/notes-modal/notes-modal.page';
 import { EscalateModalPage } from '../../shared/modals/escalate-modal/escalate-modal.page';
 import { ModalController } from '@ionic/angular';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { delay } from 'rxjs/operators';
@@ -739,7 +739,7 @@ export class DashboardPage implements OnInit {
 
     }
     if (this.filterForm.value.snoozeUntil) {
-      let date = this.datepipe.transform(this.filterForm.value.snoozeUntil, 'yyyy-MM-dd');
+      let date = this.datepipe.transform(this.filterForm.value.snoozeUntil, this.DATE_FORMAT.YEAR_DATE);
       this.faultParams = this.faultParams.set('snoozeUntil', date);
     }
     this.rerenderFaults();
@@ -835,11 +835,11 @@ export class DashboardPage implements OnInit {
 
   onDateChange() {
     if (this.filterForm.get('fromDate').value) {
-      this.fcfd = this.filterForm.get('fromDate').value ? this.datepipe.transform(this.filterForm.get('fromDate').value, 'yyyy-MM-dd') : '';
+      this.fcfd = this.filterForm.get('fromDate').value ? this.datepipe.transform(this.filterForm.get('fromDate').value, this.DATE_FORMAT.YEAR_DATE) : '';
     }
 
     if (this.filterForm.get('toDate').value) {
-      this.fctd = this.filterForm.get('toDate').value ? this.datepipe.transform(this.filterForm.get('toDate').value, 'yyyy-MM-dd') : '';
+      this.fctd = this.filterForm.get('toDate').value ? this.datepipe.transform(this.filterForm.get('toDate').value, this.DATE_FORMAT.YEAR_DATE) : '';
     }
 
     this.filterList();
@@ -1145,9 +1145,9 @@ export class DashboardPage implements OnInit {
 
   setSnoozeMinMaxDate() {
     const currentDate = new Date();
-    this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 1), 'yyyy-MM-dd');
-    this.futureDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 29), 'yyyy-MM-dd');
-    this.currentDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
+    this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 1), this.DATE_FORMAT.YEAR_DATE);
+    this.futureDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 29), this.DATE_FORMAT.YEAR_DATE);
+    this.currentDate = this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE);
   }
 }
 

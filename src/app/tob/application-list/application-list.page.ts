@@ -250,7 +250,7 @@ export class ApplicationListPage implements OnInit {
 
   filterByDate() {
     this.filteredApplicationList.data = this.applicationList;
-    this.filteredApplicationList.data = this.filteredApplicationList.data.filter(e => new Date(this.commonService.getFormatedDate(e.createdAt, 'yyyy-MM-dd')) >= new Date(this.commonService.getFormatedDate(this.fromDate.value, 'yyyy-MM-dd')) && new Date(this.commonService.getFormatedDate(e.createdAt, 'yyyy-MM-dd')) <= new Date(this.commonService.getFormatedDate(this.toDate.value, 'yyyy-MM-dd')));
+    this.filteredApplicationList.data = this.filteredApplicationList.data.filter(e => new Date(this.commonService.getFormatedDate(e.createdAt, this.DATE_FORMAT.YEAR_DATE)) >= new Date(this.commonService.getFormatedDate(this.fromDate.value, this.DATE_FORMAT.YEAR_DATE)) && new Date(this.commonService.getFormatedDate(e.createdAt, this.DATE_FORMAT.YEAR_DATE)) <= new Date(this.commonService.getFormatedDate(this.toDate.value, this.DATE_FORMAT.YEAR_DATE)));
     this.checkApplicationsAvailable();
   }
 

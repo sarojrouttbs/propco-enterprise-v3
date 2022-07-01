@@ -1186,12 +1186,12 @@
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">When would you like to move in?</ion-text><br />
-              <ion-text class="content">{{ (tenancyDetailForm.value.moveInDate | date : 'dd/MM/yyyy') || DEFAULTS.NOT_AVAILABLE }}
+              <ion-text class="content">{{ (tenancyDetailForm.value.moveInDate | date : DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE }}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Tenancy End</ion-text><br />
-              <ion-text class="content">{{ (tenancyDetailForm.value.preferredTenancyEndDate | date : 'dd/MM/yyyy') ||
+              <ion-text class="content">{{ (tenancyDetailForm.value.preferredTenancyEndDate | date : DATE_FORMAT.DATE) ||
                 DEFAULTS.NOT_AVAILABLE }}</ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">

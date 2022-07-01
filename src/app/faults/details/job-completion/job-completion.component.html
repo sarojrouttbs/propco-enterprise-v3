@@ -346,7 +346,7 @@
       <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Date </ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
+          <ion-datetime dateFormat="DATE_FORMAT.INPUT_DATE" [displayFormat]="DATE_FORMAT.DISPLAY_DATE" class="datetime-padding"
             formControlName="postdate">
           </ion-datetime>
         </ion-item>
@@ -426,7 +426,7 @@
       <ion-col size="33.33">
         <ion-item>
           <ion-label position="floating">Required Completion Date </ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
+          <ion-datetime dateFormat="DATE_FORMAT.INPUT_DATE" [displayFormat]="DATE_FORMAT.DISPLAY_DATE" class="datetime-padding"
             formControlName="requiredDate" [min]="currentDate">
           </ion-datetime>
         </ion-item>

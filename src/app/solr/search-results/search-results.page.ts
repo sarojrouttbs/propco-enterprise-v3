@@ -151,7 +151,7 @@ export class SearchResultsPage implements OnInit {
     private workspaceService: WorkspaceService,
     private router: Router
   ) {
-    this.currentDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
+    this.currentDate = this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE);
   }
 
   setStep(index: number) {

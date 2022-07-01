@@ -15,7 +15,7 @@
           <ion-item>
             <ion-label position="floating">Please add the Job Completion Date<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-datetime formControlName="dateTime" displayFormat="DD/MM/YYYY HH:mm" interface="popover"
+            <ion-datetime formControlName="dateTime" [displayFormat]="DATE_FORMAT.DISPLAY_DATE_TIME_1" interface="popover"
               class="request-start-date" [min]="minDate">
             </ion-datetime>
           </ion-item>

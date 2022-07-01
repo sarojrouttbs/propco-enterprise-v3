@@ -16,7 +16,7 @@
             <ion-label position="floating">Entered On
               <ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-datetime formControlName="date" displayFormat="DD MMM YYYY" interface="popover" readonly="true"></ion-datetime>
+            <ion-datetime formControlName="date" [displayFormat]="DATE_FORMAT.DISPLAY_DATE" interface="popover" readonly="true"></ion-datetime>
           </ion-item>
         </ion-col>
         <ion-col size="50">

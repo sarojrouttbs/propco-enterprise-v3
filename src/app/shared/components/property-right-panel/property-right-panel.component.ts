@@ -22,7 +22,7 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
   portfolioSources: any;
   notAvailable = DEFAULTS.NOT_AVAILABLE
   propertyInspection: any;
-  currentDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
+  currentDate = this.commonService.getFormatedDate(new Date(), DATE_FORMAT.YEAR_DATE);
   DATE_FORMAT = DATE_FORMAT;
 
   constructor(
