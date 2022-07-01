@@ -1060,7 +1060,7 @@ export class ApplicationDetailPage implements OnInit {
   private async getApplicantQuestions() {
     return new Promise((resolve, reject) => {
       this._tobService.getApplicantQuestions().subscribe(res => {
-        const response = (res && res.data) ? res.data : undefined;
+        const response = (res && res.data) ? res.data : [];
         resolve(response);
       }, error => {
         reject(undefined);
