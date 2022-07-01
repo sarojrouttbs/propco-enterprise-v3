@@ -84,7 +84,7 @@
             <ion-label>Viewings</ion-label>
           </div>
         </ion-segment-button>
-        <ion-segment-button value="map">
+        <ion-segment-button value="map" (click)="onMapTabClick()">
           <div class="map-segment">
              <i class="propcoicon propcoicon-location no-background"></i>
             <ion-label>Map</ion-label>
@@ -103,7 +103,8 @@
       </div>
       
       <div [hidden]="type != 'map'">
-        <app-google-map [propertyData]="propertyData"></app-google-map>
+        <!-- <app-google-map [propertyData]="propertyData"></app-google-map> -->
+        <app-open-street-map *ngIf="isMapLoad" [propertyData]="propertyData"></app-open-street-map>
       </div>
       <div [hidden]="type != 'notes'">
         <div class="table-block">
