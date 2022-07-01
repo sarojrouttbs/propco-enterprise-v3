@@ -62,7 +62,7 @@ export class OpenStreetMapComponent implements OnInit {
 }
 
 export const getOptions = (lat: number, long: number) => {
-  let options: Leaflet.MapOptions = {
+  const options: Leaflet.MapOptions = {
     layers: getLayers(lat,long),
     zoom: 17,
     center: new Leaflet.LatLng(lat,long)
