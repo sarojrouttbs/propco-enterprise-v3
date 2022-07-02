@@ -16,13 +16,13 @@ exports.config = {
     framework: 'jasmine',
     restartBrowserBetweenTests: false,
     directConnect: false,
-    allScriptsTimeout: 110000,
+    allScriptsTimeout: 11000,
     jasmineNodeOpts: {
         onComplete: null,
         isVerbose: true,
         showColors: true,
         includeStackTrace: true,
-        defaultTimeoutInterval: 110000
+        defaultTimeoutInterval: 30000
     },
     params: require('./configuration.json'),
     suites: {
