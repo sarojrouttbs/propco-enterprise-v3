@@ -191,7 +191,7 @@
                     </ion-col>
                     <ion-col class="no-padding-top col2 ion-text-end action-icon" size="25">
                       <div>
-                        <i (click)="showMenu($event, 'divOverlay2', item, 'application-details', false)"
+                        <i (click)="showMenu($event, 'tob-application-overlay', item, 'application-details', false)"
                           class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                       </div>
                     </ion-col>
@@ -209,14 +209,14 @@
           </div>
         </ion-card-content>
       </ion-card>
-      <div id="divOverlay2">
+      <div id="tob-application-overlay" class="overlay-class">
         <ion-button color="success" *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status != 1 && selectedApplicationRow?.status != 2)" (click)="acceptApplication()">Accept</ion-button>
         <ion-button color="danger" *ngIf="selectedApplicationRow?.isSubmitted && selectedApplicationRow?.status != 1 && selectedApplicationRow?.status != 3" (click)="rejectApplication()">Reject</ion-button>
         <ion-button *ngIf="selectedApplicationRow?.isSubmitted && selectedApplicationRow?.status == 2" (click)="holdApplication()">Hold</ion-button>
         <ion-button *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status == 2 && !selectedApplicationRow?.isHoldingDepositPaid)" (click)="markHoldingDepositPaid()">Holding Deposit Paid</ion-button>
         <ion-button *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status == 2 && selectedApplicationRow?.isHoldingDepositPaid)" (click)="startReferencing()">Start Referencing</ion-button>
         <ion-button (click)="viewDetails(selectedApplicationRow?.applicationId)">View Details</ion-button>
-        <i (click)="hideMenu($event,'divOverlay2')" class="propcoicon propcoicon-actions-on"></i>
+        <i (click)="hideMenu($event,'tob-application-overlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>
     </div>
     <div class="tob-pagination ion-padding">

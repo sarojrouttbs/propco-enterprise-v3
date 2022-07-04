@@ -53,7 +53,7 @@
                   <td>{{getProductType(application.product, 'application') || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td>{{(application.applicationStatus |lookup: referencingApplicantStatusTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td class="resp-action-icon">
-                    <i (click)="showMenu($event, 'divOverlay', application, 'table-row')"
+                    <i (click)="showMenu($event, 'guarantor-overlay', application, 'table-row')"
                       class="propcoicon propcoicon-actions-on"></i>
                   </td>
                 </tr>
@@ -62,10 +62,10 @@
               </tr>
               </tbody>
             </table>
-            <div id="divOverlay">
+            <div id="guarantor-overlay" class="overlay-class">
               <ion-button (click)="openApplicationStatus()">Check Status</ion-button>
               <ion-button (click)="resendLink()" *ngIf="selectedData?.applicationStatus == 0">Resend Link</ion-button>
-              <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+              <i (click)="hideMenu($event,'guarantor-overlay')" class="propcoicon propcoicon-actions-on"></i>
             </div>
           </div>
         </ion-col>
