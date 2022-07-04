@@ -55,7 +55,7 @@
               <td>{{(data?.visitDate | date: DATE_FORMAT.DATE) || notAvailable}}</td>
               <td>{{data.description || notAvailable}}</td>
               <td class="resp-action-icon">
-                <i (click)="showMenu($event,'periodic-divOverlay', data, 'table-row')"
+                <i (click)="showMenu($event,'periodic-overlay', data, 'table-row')"
                   class="propcoicon propcoicon-actions-on action-btn"></i>
               </td>
             </tr>
@@ -65,10 +65,10 @@
             </tr>
           </tbody>
         </table>
-        <div id="periodic-divOverlay" class="divOverlay-class">
+        <div id="periodic-overlay" class="overlay-class">
           <ion-button (click)="addNotes()">Add Note</ion-button>
           <ion-button>Edit</ion-button>
-          <i (click)="hideMenu($event,'periodic-divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+          <i (click)="hideMenu($event,'periodic-overlay')" class="propcoicon propcoicon-actions-on"></i>
         </div>
       </div>
 

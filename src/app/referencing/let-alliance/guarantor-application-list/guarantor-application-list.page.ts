@@ -96,7 +96,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
 
   ionViewDidEnter() {
     this.rerenderApplications(true);
-    this.commonService.hideMenu('', 'guarantor-divOverlay');
+    this.commonService.hideMenu('', 'guarantor-overlay');
   }
 
   ngOnDestroy() {

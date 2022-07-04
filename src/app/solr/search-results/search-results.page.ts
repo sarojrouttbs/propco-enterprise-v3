@@ -485,7 +485,7 @@ export class SearchResultsPage implements OnInit {
   }
 
   getSearchResults() {
-    this.hideMenu('', 'search-result-divOverlay');
+    this.hideMenu('', 'search-result-overlay');
     this.showSkeleton = true;
     this.solrService
       .entitySearch(this.prepareSearchParams())
@@ -597,7 +597,7 @@ export class SearchResultsPage implements OnInit {
   }
 
   openDetails(value?) {
-    this.hideMenu('', 'search-result-divOverlay');
+    this.hideMenu('', 'search-result-overlay');
     if (this.router.url.includes('/agent/')) {
       this.workspaceService.addItemToWorkSpace(value ? value : this.selectedItem);
       return;
@@ -807,6 +807,6 @@ export class SearchResultsPage implements OnInit {
   }
 
   toggleSideMenu() {
-    this.hideMenu('', 'search-result-divOverlay');
+    this.hideMenu('', 'search-result-overlay');
   }
 }

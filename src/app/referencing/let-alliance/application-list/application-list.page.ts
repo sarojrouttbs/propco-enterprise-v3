@@ -80,7 +80,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       /* scrollY: '435px',
       scrollCollapse: false, */
       ajax: (tableParams: any, callback) => {
-        this.hideMenu('', 'application-divOverlay');
+        this.hideMenu('', 'application-overlay');
         
         this.applicationParams = this.applicationParams
         .set('limit', tableParams.length)
@@ -168,7 +168,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
 
   ionViewDidEnter() {
     this.rerenderApplications(true);
-    this.commonService.hideMenu('', 'application-divOverlay');
+    this.commonService.hideMenu('', 'application-overlay');
   }
 
   ngOnDestroy() {

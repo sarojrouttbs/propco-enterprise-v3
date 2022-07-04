@@ -69,7 +69,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   private async initApiCalls() {
-    this.hideMenu('', 'tob-application-divOverlay');
+    this.hideMenu('', 'tob-application-overlay');
     this.propertyDetails = await this.getPropertyById();
     this.applicationsDetails = await this.getApplicationList();
     this.applicationList = (this.applicationsDetails.applications && this.applicationsDetails.applications.length > 0) ? this.applicationsDetails.applications as ApplicationData[] : [];
@@ -371,7 +371,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   viewDetails(applicantId: string) {
-    this.hideMenu('', 'tob-application-divOverlay');
+    this.hideMenu('', 'tob-application-overlay');
     this.router.navigate([`../application/${applicantId}`], { relativeTo: this.route });
   }
 
@@ -421,7 +421,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   onPaginateChange() {
-    this.hideMenu('', 'tob-application-divOverlay');
+    this.hideMenu('', 'tob-application-overlay');
   }
 
   private checkApplicationsAvailable() {

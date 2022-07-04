@@ -212,8 +212,8 @@ export class OfferListPage implements OnInit {
   }
 
   private async getOfferNotes(offerId) {
-    this.hideMenu('', 'offer-divOverlay');
-    this.hideMenu('', 'offer-notes-divOverlay');
+    this.hideMenu('', 'offer-overlay');
+    this.hideMenu('', 'offer-notes-overlay');
     this.offerNotes = await this.getNotesList(offerId) as OfferNotesData[];
     await this.initOfferNotesListData();
     this.commonService.customizePaginator('notesPaginator');
@@ -406,7 +406,7 @@ export class OfferListPage implements OnInit {
   }
 
   onPaginateChange(isNotes) {
-    isNotes ? this.hideMenu('', 'offer-notes-divOverlay') : this.hideMenu('', 'offer-divOverlay');
+    isNotes ? this.hideMenu('', 'offer-notes-overlay') : this.hideMenu('', 'offer-overlay');
   }
 
   private checkOffersAvailable() {

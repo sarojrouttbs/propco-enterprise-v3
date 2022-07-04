@@ -113,7 +113,7 @@ export class NotesComponent implements OnInit {
             data: []
           });
         })
-        this.hideMenu('', 'notes-divOverlay');
+        this.hideMenu('', 'notes-overlay');
       },
       language: {
         processing: '<ion-spinner name="dots"></ion-spinner>'

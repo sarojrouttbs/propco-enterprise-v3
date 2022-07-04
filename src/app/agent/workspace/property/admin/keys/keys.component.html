@@ -172,15 +172,15 @@
               <td>{{item.name || notAvailable}}</td>
               <td>{{item.note || notAvailable}}</td>
               <td class="resp-action-icon">
-                <i (click)="showMenu($event,'key-divOverlay', item, 'table-row')"
+                <i (click)="showMenu($event,'key-overlay', item, 'table-row')"
                   class="propcoicon propcoicon-actions-on action-btn"></i>
               </td>
             </tr>
           </tbody>
         </table>
-        <div id="key-divOverlay" class="divOverlay-class">
+        <div id="key-overlay" class="overlay-class">
           <ion-button (click)="editKeysetLogHistory()"> Edit </ion-button>
-          <i (click)="hideMenu($event,'key-divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+          <i (click)="hideMenu($event,'key-overlay')" class="propcoicon propcoicon-actions-on"></i>
         </div>
       </div>
 

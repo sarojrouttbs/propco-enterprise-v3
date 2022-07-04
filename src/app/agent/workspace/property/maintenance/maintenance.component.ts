@@ -80,7 +80,7 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
             data: []
           });
         })
-        this.hideMenu('', 'maintenance-divOverlay');
+        this.hideMenu('', 'maintenance-overlay');
       },
     };
   }
@@ -97,7 +97,7 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
   }
 
   onClickRow(data: any) {
-    this.hideMenu('', 'maintenance-divOverlay');
+    this.hideMenu('', 'maintenance-overlay');
     this.selectedData = data;
     this.getMaintenanceNotes(this.selectedData.maintenanceId);
     this.maintenanceList.forEach((e, i) => {

@@ -99,7 +99,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
           this.visitNotes = [];
           this.rerenderNotes();
         })
-        this.hideMenu('', 'periodic-divOverlay');
+        this.hideMenu('', 'periodic-overlay');
       },
     };
   }
@@ -192,7 +192,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
   }
 
   onClickRow(data: any) {
-    this.hideMenu('', 'periodic-divOverlay');
+    this.hideMenu('', 'periodic-overlay');
     this.getVisitNotes(this.propertyDetails?.propertyId, data.visitId);
     this.visitList.forEach((e, i) => {
       if (e.visitId === data.visitId) { this.visitList[i].isSelected = true; }
