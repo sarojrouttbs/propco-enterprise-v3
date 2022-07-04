@@ -1,9 +1,13 @@
 exports.config = {
-    seleniumAddress: 'http://localhost:4444/wd/hub',
+    seleniumAddress: 'http://magnus.techblue.co.uk:4444/wd/hub',
     capabilities: {
         'browserName': 'chrome',
          chromeOptions: {
+            //args: [ "--headless", "--disable-gpu", "--window-size=800,600" ]
          },
+        'moz:firefoxOptions': {
+            args: [ "--headless" ]
+        },
         'goog:loggingPrefs': {
             'performance': 'ALL',
             'browser': 'ALL'
@@ -12,13 +16,13 @@ exports.config = {
     framework: 'jasmine',
     restartBrowserBetweenTests: false,
     directConnect: false,
-    allScriptsTimeout: 300000,
+    allScriptsTimeout: 11000,
     jasmineNodeOpts: {
         onComplete: null,
         isVerbose: true,
         showColors: true,
         includeStackTrace: true,
-        defaultTimeoutInterval: 300000
+        defaultTimeoutInterval: 30000
     },
     params: require('./configuration.json'),
     suites: {
