@@ -129,7 +129,7 @@
                   <td>{{getProductType(application.product, 'application') || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td>{{(application.applicationStatus | lookup: referencingApplicantStatusTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td class="resp-action-icon">
-                    <i (click)="showMenu($event, 'divOverlay', application, 'table-row')"
+                    <i (click)="showMenu($event, 'application-divOverlay', application, 'table-row')"
                       class="propcoicon propcoicon-actions-on"></i>
                   </td>
                 </tr>
@@ -138,12 +138,12 @@
               </tr>
               </tbody>
             </table>
-            <div id="divOverlay">
+            <div id="application-divOverlay" class="divOverlay-class">
               <!-- <ion-button>Print Report</ion-button> -->  <!-- Needed in black screen -->
               <ion-button (click)="openApplicationStatus()">Check Status</ion-button>
               <ion-button (click)="resendLink()" *ngIf="selectedData?.applicationStatus == 0">Resend Link</ion-button>
               <ion-button *ngIf="selectedData?.applicantDetail?.itemType === 'M' || selectedData?.applicantDetail?.itemType === 'S'" (click)='checkApplicationGuarantor()'>Guarantor</ion-button>
-              <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+              <i (click)="hideMenu($event,'application-divOverlay')" class="propcoicon propcoicon-actions-on"></i>
             </div>
           </div>
         </ion-col>

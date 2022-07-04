@@ -79,7 +79,7 @@ export class WhitegoodsComponent implements OnInit {
             data: []
           });
         })
-        this.hideMenu('', 'divOverlay');
+        this.hideMenu('', 'whitegoods-divOverlay');
       },
     };
   }

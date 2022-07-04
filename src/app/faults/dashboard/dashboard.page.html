@@ -438,7 +438,7 @@
                   </td>
                   
                   <td class="resp-action-icon">
-                    <i (click)="showMenu($event,'divOverlay', fault, 'table-row')"
+                    <i (click)="showMenu($event,'dashboard-divOverlay', fault, 'table-row')"
                       class="propcoicon propcoicon-actions-on action-btn"></i>
                   </td>
                 </tr>
@@ -447,7 +447,7 @@
                 </tr>
               </tbody>
             </table>
-            <div id="divOverlay">
+            <div id="dashboard-divOverlay" class="divOverlay-class">
               <ion-button *ngIf="selectedData?.isChecked" (click)="mergeFault(selectedData)">Merge</ion-button>
               <ion-button *ngIf="selectedData?.status != 12 && selectedData?.status != 10 && !selectedData?.isClosed" (click)="closeFault()">Close</ion-button>
               <ion-button (click)="notesModal()">Add Note</ion-button>
@@ -455,7 +455,7 @@
               <ion-button *ngIf="selectedData?.isEscalated" (click)="deEscalateFault()">De-Escalate</ion-button>
               <ion-button class="" (click)="goToFaultDetails()">View</ion-button>
               <ion-button *ngIf="selectedData?.status == 1 && !selectedData?.isDraft && !selectedData?.isClosed" (click)="startProgress()">Start Progress</ion-button>
-              <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+              <i (click)="hideMenu($event,'dashboard-divOverlay')" class="propcoicon propcoicon-actions-on"></i>
             </div>
           </div>
         </ion-col>
@@ -494,9 +494,9 @@
                 
               </tbody>
             </table>
-            <div id="divOverlay">
+            <div id="dashboard-notes-divOverlay" class="divOverlay-class">
              
-              <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+              <i (click)="hideMenu($event,'dashboard-notes-divOverlay')" class="propcoicon propcoicon-actions-on"></i>
             </div>
           </div>
         </ion-col>

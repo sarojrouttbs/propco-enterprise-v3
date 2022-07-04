@@ -55,7 +55,7 @@
               <td>{{data?.externalLink || notAvailable}}</td>
               <td>{{data?.notes || notAvailable}}</td>
               <td class="resp-action-icon">
-                <i (click)="showMenu($event,'divOverlay', data, 'table-row')"
+                <i (click)="showMenu($event,'safety-divOverlay', data, 'table-row')"
                   class="propcoicon propcoicon-actions-on action-btn"></i>
               </td>
             </tr>
@@ -65,11 +65,11 @@
             </tr>
           </tbody>
         </table>
-        <div id="divOverlay">
+        <div id="safety-divOverlay" class="divOverlay-class">
           <ion-button (click)="addNotes()">Add Note</ion-button>
           <ion-button>Edit</ion-button>
           <ion-button>Remove</ion-button>
-          <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+          <i (click)="hideMenu($event,'safety-divOverlay')" class="propcoicon propcoicon-actions-on"></i>
         </div>
       </div>
 

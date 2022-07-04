@@ -57,7 +57,7 @@
               <td> {{ data.supplierCompany || notAvailable }} </td>
               <td> {{ data.status || notAvailable }} </td>
               <td class="resp-action-icon">
-                <i (click)="showMenu($event,'divOverlay', data, 'table-row')"
+                <i (click)="showMenu($event,'maintenance-divOverlay', data, 'table-row')"
                   class="propcoicon propcoicon-actions-on action-btn"></i>
               </td>
             </tr>
@@ -67,9 +67,9 @@
             </tr>
           </tbody>
         </table>
-        <div id="divOverlay">
+        <div id="maintenance-divOverlay" class="divOverlay-class">
           <!-- <ion-button>Add Note</ion-button> -->
-          <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+          <i (click)="hideMenu($event,'maintenance-divOverlay')" class="propcoicon propcoicon-actions-on"></i>
         </div>
       </div>
       <div class="overlay-container" style="position: relative">

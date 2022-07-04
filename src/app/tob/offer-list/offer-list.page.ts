@@ -164,7 +164,7 @@ export class OfferListPage implements OnInit {
     const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    // const divOverlayLeft = (divOverlay.parent('.overlay-container').innerWidth() - baseContainerWidth - (id === 'divOverlayChild' ? 0 : 25));
+    // const divOverlayLeft = (divOverlay.parent('.overlay-container').innerWidth() - baseContainerWidth - (id === 'offer-notes-divOverlay' ? 0 : 25));
     const divOverlayLeft = baseContainerPosition.left;
 
     let origDivOverlayHeight;
@@ -194,13 +194,6 @@ export class OfferListPage implements OnInit {
       paddingBottom: divOverlayTopBottomPadding
     });
 
-    const gridDivOverlay = $('#grid-divoverlay');
-
-    gridDivOverlay.css({
-      width: divOverlay.width(),
-      height: divOverlayHeight
-    });
-
     divOverlay.delay(200).slideDown('fast');
     event.stopPropagation();
   }
@@ -219,8 +212,8 @@ export class OfferListPage implements OnInit {
   }
 
   private async getOfferNotes(offerId) {
-    this.hideMenu('', 'divOverlay');
-    this.hideMenu('', 'divOverlayChild');
+    this.hideMenu('', 'offer-divOverlay');
+    this.hideMenu('', 'offer-notes-divOverlay');
     this.offerNotes = await this.getNotesList(offerId) as OfferNotesData[];
     await this.initOfferNotesListData();
     this.commonService.customizePaginator('notesPaginator');
@@ -413,7 +406,7 @@ export class OfferListPage implements OnInit {
   }
 
   onPaginateChange(isNotes) {
-    isNotes ? this.hideMenu('', 'divOverlayChild') : this.hideMenu('', 'divOverlay');
+    isNotes ? this.hideMenu('', 'offer-notes-divOverlay') : this.hideMenu('', 'offer-divOverlay');
   }
 
   private checkOffersAvailable() {

@@ -102,7 +102,7 @@ export class SafetyDeviceComponent implements OnInit {
           this.safetyDeviceNotes = [];
           this.rerenderNotes();
         })
-        this.hideMenu('', 'divOverlay');
+        this.hideMenu('', 'safety-divOverlay');
       },
     };
   }
@@ -132,7 +132,7 @@ export class SafetyDeviceComponent implements OnInit {
   }
 
   onClickRow(data: any) {
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'safety-divOverlay');
     // this.getSafetyDeviceNotes(data.safetyDeviceId);
     this.safetyDeviceList.forEach((e, i) => {
       if (e.safetyDeviceId === data.safetyDeviceId) { this.safetyDeviceList[i].rowSelected = true; }

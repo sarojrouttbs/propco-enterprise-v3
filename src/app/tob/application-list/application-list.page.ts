@@ -69,7 +69,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   private async initApiCalls() {
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'tob-application-divOverlay');
     this.propertyDetails = await this.getPropertyById();
     this.applicationsDetails = await this.getApplicationList();
     this.applicationList = (this.applicationsDetails.applications && this.applicationsDetails.applications.length > 0) ? this.applicationsDetails.applications as ApplicationData[] : [];
@@ -212,13 +212,6 @@ export class ApplicationListPage implements OnInit {
       left: divOverlayLeft,
       paddingTop: divOverlayTopBottomPadding,
       paddingBottom: divOverlayTopBottomPadding
-    });
-
-    const gridDivOverlay = $('#grid-divoverlay');
-
-    gridDivOverlay.css({
-      width: divOverlay.width(),
-      height: divOverlayHeight
     });
 
     divOverlay.delay(200).slideDown('fast');
@@ -378,7 +371,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   viewDetails(applicantId: string) {
-    this.hideMenu('', 'divOverlay2');
+    this.hideMenu('', 'tob-application-divOverlay');
     this.router.navigate([`../application/${applicantId}`], { relativeTo: this.route });
   }
 
@@ -428,7 +421,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   onPaginateChange() {
-    this.hideMenu('', 'divOverlay2');
+    this.hideMenu('', 'tob-application-divOverlay');
   }
 
   private checkApplicationsAvailable() {
