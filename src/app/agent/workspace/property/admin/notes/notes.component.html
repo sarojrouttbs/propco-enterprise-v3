@@ -62,7 +62,7 @@
               <td><i (click)="showNoteDescription(data.notes);" class="propcoicon propcoicon-property-description"></i>
               </td>
               <td class="resp-action-icon">
-                <i (click)="showMenu($event,'divOverlay', data, 'table-row')"
+                <i (click)="showMenu($event,'notes-overlay', data, 'table-row')"
                   class="propcoicon propcoicon-actions-on action-btn"></i>
               </td>
             </tr>
@@ -72,10 +72,10 @@
             </tr>
           </tbody>
         </table>
-        <div id="divOverlay">
+        <div id="notes-overlay" class="overlay-class">
           <ion-button>Edit</ion-button>
           <ion-button>Remove</ion-button>
-          <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+          <i (click)="hideMenu($event,'notes-overlay')" class="propcoicon propcoicon-actions-on"></i>
         </div>
       </div>
     </mat-expansion-panel>

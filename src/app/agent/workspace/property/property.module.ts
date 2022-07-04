@@ -49,6 +49,8 @@ import { CreateKeySetPageModule } from 'src/app/shared/modals/create-key-set/cre
 import { WhitegoodsComponent } from './whitegoods/whitegoods.component';
 import { SafetyDeviceComponent } from './safety-device/safety-device.component';
 import { PercentageDirective } from 'src/app/percentage.directive';
+import { OpenStreetMapComponent } from './open-street-map/open-street-map.component';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -88,7 +90,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ChangeGrossPageModule,
     FeeChargePageModule,
     KeyActivityModalPageModule,
-    CreateKeySetPageModule
+    CreateKeySetPageModule,
+    LeafletModule
   ],
   declarations: [
     GoogleMapComponent,
@@ -115,7 +118,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     PreferencesComponent,
     WhitegoodsComponent,
     SafetyDeviceComponent,
-    PercentageDirective
+    PercentageDirective,
+    OpenStreetMapComponent
   ],
   providers: [
     AgentService,
