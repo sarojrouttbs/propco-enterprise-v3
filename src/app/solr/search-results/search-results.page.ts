@@ -485,7 +485,7 @@ export class SearchResultsPage implements OnInit {
   }
 
   getSearchResults() {
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'search-result-overlay');
     this.showSkeleton = true;
     this.solrService
       .entitySearch(this.prepareSearchParams())
@@ -597,7 +597,7 @@ export class SearchResultsPage implements OnInit {
   }
 
   openDetails(value?) {
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'search-result-overlay');
     if (this.router.url.includes('/agent/')) {
       this.workspaceService.addItemToWorkSpace(value ? value : this.selectedItem);
       return;
@@ -794,13 +794,6 @@ export class SearchResultsPage implements OnInit {
       borderRadius: '4px'
     });
 
-    const gridDivOverlay = $('#grid-divoverlay');
-
-    gridDivOverlay.css({
-      width: divOverlay.width(),
-      height: divOverlayHeight
-    });
-
     divOverlay.delay(200).slideDown('fast');
     event.stopPropagation();
   }
@@ -814,6 +807,6 @@ export class SearchResultsPage implements OnInit {
   }
 
   toggleSideMenu() {
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'search-result-overlay');
   }
 }

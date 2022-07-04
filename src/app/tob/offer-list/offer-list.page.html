@@ -237,7 +237,7 @@
                     </ion-col>
                     <ion-col class="no-padding-top col2 ion-text-end action-icon" size="25">
                       <div>
-                        <i (click)="showMenu($event, 'divOverlay3', item, 'offer-details-row', false, true)"
+                        <i (click)="showMenu($event, 'offer-overlay', item, 'offer-details-row', false, true)"
                           class="propcoicon propcoicon-actions-on action-btn"></i>
                       </div>
                     </ion-col>
@@ -255,10 +255,10 @@
           </div>
         </ion-card-content>
       </ion-card>
-      <div id="divOverlay3">
+      <div id="offer-overlay" class="overlay-class">
         <ion-button (click)="addNote()">Add Note</ion-button>
         <ion-button (click)="viewDetails()">View Details</ion-button>
-        <i (click)="hideMenu($event,'divOverlay3')" class="propcoicon propcoicon-actions-on"></i>
+        <i (click)="hideMenu($event,'offer-overlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>
     </div>
     <div class="tob-pagination ion-padding">
@@ -300,17 +300,17 @@
                   <td>{{ notes.notes || DEFAULTS.NOT_AVAILABLE }}</td>
                   <td>
                     <div class="action-icon-notes">
-                      <i (click)="showMenu($event, 'divOverlayChild', notes, 'table-row', false, false)"
+                      <i (click)="showMenu($event, 'offer-notes-overlay', notes, 'table-row', false, false)"
                         class="propcoicon propcoicon-actions-on action-btn"></i>
                     </div>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <div id="divOverlayChild">
+            <div id="offer-notes-overlay" class="overlay-class">
               <ion-button (click)="editNote()"> Edit </ion-button>
               <ion-button color="danger" (click)="removeNote()"> Remove </ion-button>
-              <i (click)="hideMenu($event,'divOverlayChild')" class="propcoicon propcoicon-actions-on"></i>
+              <i (click)="hideMenu($event,'offer-notes-overlay')" class="propcoicon propcoicon-actions-on"></i>
             </div>
 
             <div *ngIf="filteredNotesList && !filteredNotesList.data.length">
