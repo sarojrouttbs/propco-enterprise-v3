@@ -4,7 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { CommonService } from '../../services/common.service';
 import { ValidationService } from 'src/app/shared/services/validation.service';
-import { DATE_TIME_TYPES, DATE_TIME_TYPES_KEYS, PROPCO } from '../../constants';
+import { DATE_FORMAT, DATE_TIME_TYPES, DATE_TIME_TYPES_KEYS, PROPCO } from '../../constants';
 @Component({
   selector: 'app-contractor-details-modal',
   templateUrl: './contractor-details-modal.page.html',
@@ -26,6 +26,7 @@ export class ContractorDetailsModalPage implements OnInit {
   sessionSlots: any;
   pastDateErrorWithSession: boolean = false;
   estimatedVisitSlot;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,

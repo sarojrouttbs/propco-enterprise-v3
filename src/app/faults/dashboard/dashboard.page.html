@@ -103,21 +103,39 @@
   
         <ion-row>
           <ion-col size=15>
-            <ion-item>
+            <ion-item id="fromDate">
               <ion-label position="floating">From</ion-label>
-              <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" formControlName="fromDate" class="datetime-padding" #fromDatePicker>
-              </ion-datetime>
-              <ion-icon ion-datetime-picker name="calendar" slot="start" class="datetime-icon" (click)="fromDatePicker.open()"></ion-icon>
+              <ion-input value="{{ filterForm.controls.fromDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+              <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+              ></ion-icon>
+              <ion-popover trigger="fromDate" show-backdrop="false">
+                <ng-template>
+                  <ion-datetime
+                    showDefaultButtons="true"
+                    presentation="date"
+                    formControlName="fromDate"
+                  >
+                  </ion-datetime>
+                </ng-template>
+              </ion-popover>
             </ion-item>
           </ion-col>
-  
           <ion-col size=15>
-            <ion-item>
+            <ion-item id="toDate">
               <ion-label position="floating">To</ion-label>
-              <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-                formControlName="toDate" #toDatePicker>
-              </ion-datetime>
-              <ion-icon name="calendar" slot="start" class="datetime-icon" (click)="toDatePicker.open()"></ion-icon>
+              <ion-input value="{{ filterForm.controls.toDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+              <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+              ></ion-icon>
+              <ion-popover trigger="toDate" show-backdrop="false">
+                <ng-template>
+                  <ion-datetime
+                    showDefaultButtons="true"
+                    presentation="date"
+                    formControlName="toDate"
+                  >
+                  </ion-datetime>
+                </ng-template>
+              </ion-popover>
             </ion-item>
           </ion-col>
   
@@ -359,11 +377,22 @@
             <ion-icon name="close-circle" class="close-btn" (click)="closeFilter(4)"> </ion-icon>
           </ion-col>
           <ion-col size=20 *ngIf="isSnoozeFilter">
-            <ion-item class="select-block">
+            <ion-item id="snoozeUntil" class="select-block">
               <ion-label position="floating">Snoozed Till</ion-label>
-              <ion-datetime formControlName="snoozeUntil" displayFormat="DD/MM/YYYY" interface="popover"
-              class="request-start-date" [min]="minDate" [max]="futureDate">
-            </ion-datetime>
+              <ion-input value="{{ filterForm.controls.snoozeUntil.value | date: DATE_FORMAT.DATE }}"></ion-input>
+              <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+              ></ion-icon>
+              <ion-popover trigger="snoozeUntil" show-backdrop="false">
+                <ng-template>
+                  <ion-datetime
+                    showDefaultButtons="true"
+                    presentation="date"
+                    formControlName="snoozeUntil"
+                    [min]="minDate" [max]="futureDate"
+                  >
+                  </ion-datetime>
+                </ng-template>
+              </ion-popover>
             </ion-item>
             <ion-icon name="close-circle" class="close-btn" (click)="closeFilter(5)"> </ion-icon>
           </ion-col>

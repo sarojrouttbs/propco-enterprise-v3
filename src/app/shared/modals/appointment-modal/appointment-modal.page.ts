@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { APPOINTMENT_MODAL_TYPE, DATE_TIME_TYPES, DATE_TIME_TYPES_KEYS, PROPCO } from '../../constants';
+import { APPOINTMENT_MODAL_TYPE, DATE_FORMAT, DATE_TIME_TYPES, DATE_TIME_TYPES_KEYS, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -32,6 +32,7 @@ export class AppointmentModalPage implements OnInit {
   isDateWithSession = false;
   sessionSlots: any;
   pastDateErrorWithSession = false;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private formBuilder: FormBuilder,

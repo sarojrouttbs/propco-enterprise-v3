@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
+import { DATE_FORMAT } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -17,6 +18,7 @@ export class JobCompletionModalPage implements OnInit {
   title;
   showLoader: boolean = null;
   unSavedData = false;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,

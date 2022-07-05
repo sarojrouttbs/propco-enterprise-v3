@@ -7,7 +7,7 @@ import { CommonService } from '../../services/common.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { forkJoin } from 'rxjs';
 import { WorksorderService } from './worksorder.service';
-import { FOLDER_NAMES } from '../../constants';
+import { DATE_FORMAT, FOLDER_NAMES } from '../../constants';
 
 
 @Component({
@@ -35,6 +35,7 @@ export class WorksorderModalPage implements OnInit {
   MAX_DOC_UPLOAD_LIMIT;
   stage;
   unSavedData = false;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private formBuilder: FormBuilder,

@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { ERROR_MESSAGE, FAULT_STATUSES, NOTES_TYPE, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES, MAINT_SOURCE_TYPES, DEFAULT_MESSAGES } from './../../shared/constants';
+import { ERROR_MESSAGE, FAULT_STATUSES, NOTES_TYPE, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES, MAINT_SOURCE_TYPES, DEFAULT_MESSAGES, DATE_FORMAT } from './../../shared/constants';
 import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -95,6 +95,7 @@ export class DashboardPage implements OnInit {
   popoverOptions: any = {
     cssClass: 'fault-modal-container'
   };
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private commonService: CommonService,

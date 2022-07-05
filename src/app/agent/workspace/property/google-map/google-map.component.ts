@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MapsAPILoader } from '@agm/core';
+// import { MapsAPILoader } from '@agm/core';
 import { tap, map, switchMap } from 'rxjs/operators';
 import { from, of } from 'rxjs';
 
@@ -23,7 +23,7 @@ export class GoogleMapComponent implements OnInit {
 
   markers: Marker[] = [];
 
-  constructor(private mapLoader: MapsAPILoader) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.propertyAddress = this.propertyData?.address;
@@ -57,10 +57,10 @@ export class GoogleMapComponent implements OnInit {
 
   waitForMapsToLoad(): Observable<boolean> {
     if (!this.geocoder) {
-      return from(this.mapLoader.load()).pipe(
-        tap(() => this.initGeocoder()),
-        map(() => true)
-      );
+      // return from(this.mapLoader.load()).pipe(
+      //   tap(() => this.initGeocoder()),
+      //   map(() => true)
+      // );
     }
     return of(true);
   }

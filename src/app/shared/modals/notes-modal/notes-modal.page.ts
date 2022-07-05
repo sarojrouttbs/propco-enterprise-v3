@@ -4,7 +4,7 @@ import { ModalController, NavParams } from '@ionic/angular';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { CommonService } from '../../services/common.service';
 import { INoteItem } from './notes-modal.model'
-import { NOTES_ORIGIN, NOTES_TYPE, PROPCO, SYSTEM_CONFIG } from '../../constants';
+import { DATE_FORMAT, NOTES_ORIGIN, NOTES_TYPE, PROPCO, SYSTEM_CONFIG } from '../../constants';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -30,6 +30,7 @@ export class NotesModalPage implements OnInit {
   reference;
   notesData;
   propertyId;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private navParams: NavParams,
