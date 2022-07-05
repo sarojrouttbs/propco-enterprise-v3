@@ -166,4 +166,8 @@ export class AgentService {
   getChangeHistory(params: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `change-history`, { params });
   }
+
+  getLatlongFromAddress(url: any, params: any): Observable<any> {
+    return this.httpClient.get(url, { params });
+  }
 }

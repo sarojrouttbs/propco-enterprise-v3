@@ -73,10 +73,8 @@ export class DashboardPage implements OnInit {
     private solrService: SolrService,
     private route: ActivatedRoute,
     private commonService: CommonService,
-    private guidedTourService: GuidedTourService,
-    private theme: ThemeService
+    private guidedTourService: GuidedTourService
   ) {
-    this.theme.activeTheme('light-theme');
   }
 
   ngOnInit() {

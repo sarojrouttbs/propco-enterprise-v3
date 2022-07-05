@@ -155,7 +155,7 @@ export class DashboardPage implements OnInit {
           this.faultNotes = [];
           this.rerenderNotes();
         })
-        this.hideMenu('', 'divOverlay');
+        this.hideMenu('', 'dashboard-overlay');
       },
     };
     const promise = new Promise(async (resolve, reject) => {
@@ -222,7 +222,7 @@ export class DashboardPage implements OnInit {
       this.bucketCount();
     }
     this.loadTable = true;
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'dashboard-overlay');
     this.commonService.removeItem('contractorId');
   }
 
@@ -280,6 +280,7 @@ export class DashboardPage implements OnInit {
   }
 
   onClickRow(data, index?) {
+    this.hideMenu('', 'dashboard-overlay');
     this.selectedData = data;
     this.getFaultNotes(this.selectedData.faultId);
     this.faultList.forEach((e, i) => {
@@ -347,7 +348,7 @@ export class DashboardPage implements OnInit {
         this.commonService.showAlert('Escalate Repair', 'Repair has been escalated to the property manager.');
         this.rerenderFaults(false);
         this.getFaultNotes(this.selectedData.faultId);
-        this.hideMenu('', 'divOverlay');
+        this.hideMenu('', 'dashboard-overlay');
         this.bucketCount();
       }
     });
@@ -360,7 +361,7 @@ export class DashboardPage implements OnInit {
         this.faultsService.deEscalateFault(this.selectedData.faultId, {}).subscribe(res => {
           this.commonService.showAlert('De-Escalate Repair', 'Repair has been de-escalated to the property manager.');
           this.rerenderFaults(false);
-          this.hideMenu('', 'divOverlay');
+          this.hideMenu('', 'dashboard-overlay');
           this.bucketCount();
         }, error => {
         });
@@ -926,7 +927,7 @@ export class DashboardPage implements OnInit {
       let requestObj: any = {};
       requestObj.childFaults = childFaults.map(x => x.faultId);
       this.faultsService.mergeFaults(requestObj, data.faultId).subscribe(response => {
-        this.hideMenu('', 'divOverlay');
+        this.hideMenu('', 'dashboard-overlay');
         this.selectedFaultList = [];
         this.filterList();
       });

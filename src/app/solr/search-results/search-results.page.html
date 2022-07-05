@@ -530,9 +530,9 @@
           <ng-container [ngTemplateOutlet]="listskeleton">
           </ng-container>
         </ng-container>
-        <div id="divOverlay">
+        <div id="search-result-overlay" class="overlay-class">
           <ion-button color="success" (click)="$event.stopPropagation();openDetails()">View</ion-button>
-          <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on action-btn"></i>
+          <i (click)="hideMenu($event,'search-result-overlay')" class="propcoicon propcoicon-actions-on action-btn"></i>
         </div>
       </div>
     </mat-drawer-content>
@@ -593,7 +593,7 @@
                   <p class="status">{{item?.status}}</p>
                 </div>
                 <div>
-                  <i (click)="showMenu($event, 'divOverlay', item, 'property-header-panel', false)"
+                  <i (click)="showMenu($event, 'search-result-overlay', item, 'property-header-panel', false)"
                     class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                 </div>
                 <div>
@@ -687,7 +687,7 @@
                   <p class="status">{{item?.status}}</p>
                 </div>
                 <div>
-                  <i (click)="showMenu($event, 'divOverlay', item, 'agent-header-panel', false)"
+                  <i (click)="showMenu($event, 'search-result-overlay', item, 'agent-header-panel', false)"
                     class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                 </div>
                 <div>
@@ -760,7 +760,7 @@
                   <p class="status">{{item?.status ? item?.status : 'unknown'}}</p>
                 </div>
                 <div>
-                  <i (click)="showMenu($event, 'divOverlay', item, 'landlord-header-panel', false)"
+                  <i (click)="showMenu($event, 'search-result-overlay', item, 'landlord-header-panel', false)"
                   class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                 </div>
                 <div>
@@ -857,7 +857,7 @@
                   <p class="status">{{item?.status ? item?.status : 'unknown'}}</p>
                 </div>
                 <div>
-                  <i (click)="showMenu($event, 'divOverlay', item, 'tenant-header-panel', false)"
+                  <i (click)="showMenu($event, 'search-result-overlay', item, 'tenant-header-panel', false)"
                   class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                 </div>
                 <div>
@@ -944,7 +944,7 @@
                   <p class="status">{{item?.status ? item?.status : 'unknown'}}</p>
                 </div>
                 <div>
-                  <i (click)="showMenu($event, 'divOverlay', item, 'applicant-header-panel', false)"
+                  <i (click)="showMenu($event, 'search-result-overlay', item, 'applicant-header-panel', false)"
                   class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                 </div>
                 <div>
@@ -1030,7 +1030,7 @@
                   <p class="status">{{item?.status ? item?.status : 'unknown'}}</p>
                 </div>
                 <div>
-                  <i (click)="showMenu($event, 'divOverlay', item, 'contractor-header-panel', false)"
+                  <i (click)="showMenu($event, 'search-result-overlay', item, 'contractor-header-panel', false)"
                     class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                 </div>
                 <div>
