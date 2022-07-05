@@ -3,7 +3,7 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { CommonService } from '../../services/common.service';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { PAYMENT_WARNINGS, SYSTEM_OPTIONS } from '../../constants';
+import { DATE_FORMAT, PAYMENT_WARNINGS, SYSTEM_OPTIONS } from '../../constants';
 @Component({
   selector: 'app-without-prepayment-modal',
   templateUrl: './without-prepayment-modal.component.html',
@@ -18,7 +18,8 @@ export class WithoutPrepaymentModalComponent implements OnInit {
   private REPAIR_ESTIMATE_QUOTE_THRESHOLD = 250;
   showLoader: boolean = false;
   unSavedData = false;
-
+  DATE_FORMAT = DATE_FORMAT;
+  
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
     private commonService: CommonService,
@@ -82,7 +83,7 @@ export class WithoutPrepaymentModalComponent implements OnInit {
     }
     this.showLoader = true;
     let reqObj = JSON.parse(JSON.stringify(this.withoutPrePaymentForm.value));
-    reqObj.proceedWithoutPaymentAt = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    reqObj.proceedWithoutPaymentAt = this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE_TIME);
 
     this.faultsService.saveProceedWithoutPrePayment(this.faultNotificationId, reqObj).subscribe(res => {
       this.showLoader = false;

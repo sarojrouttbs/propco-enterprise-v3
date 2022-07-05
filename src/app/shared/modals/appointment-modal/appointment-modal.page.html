@@ -42,7 +42,7 @@
           <ion-item>
             <ion-label position="floating">Visit Date/Time<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-datetime formControlName="dateTime" displayFormat="DD/MM/YYYY HH:mm" interface="popover" (ionChange)="checkPastDate()"
+            <ion-datetime formControlName="dateTime" [displayFormat]="DATE_FORMAT.DISPLAY_DATE_TIME_1" interface="popover" (ionChange)="checkPastDate()"
               class="request-start-date" [min]="minDate">
             </ion-datetime>
           </ion-item>
@@ -70,7 +70,7 @@
           <ion-item>
             <ion-label position="floating">Select Date<ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-datetime formControlName="dateTime" displayFormat="DD/MM/YYYY" interface="popover" (ionChange)="checkPastDateWithSession()"
+            <ion-datetime formControlName="dateTime" [displayFormat]="DATE_FORMAT.DISPLAY_DATE_1" interface="popover" (ionChange)="checkPastDateWithSession()"
               class="request-start-date" [min]="minDate">
             </ion-datetime>
           </ion-item>

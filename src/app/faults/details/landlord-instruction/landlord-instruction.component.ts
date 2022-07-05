@@ -1211,8 +1211,8 @@ export class LandlordInstructionComponent implements OnInit {
     if (this.cliNotification &&
       (this.cliNotification.responseReceived != null) && //this.cliNotification.responseReceived.isAccepted &&
       this.cliNotification.templateCode === 'CDT-C-E (WO)' && this.faultDetails.contractorWoPropertyVisitAt) {
-      const woAgreedDateTime = this.commonService.getFormatedDate(this.faultDetails.contractorWoPropertyVisitAt, 'yyyy-MM-dd');
-      const today = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
+      const woAgreedDateTime = this.commonService.getFormatedDate(this.faultDetails.contractorWoPropertyVisitAt, this.DATE_FORMAT.YEAR_DATE);
+      const today = this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE);
       if (today >= woAgreedDateTime) {
         enable = true;
       }

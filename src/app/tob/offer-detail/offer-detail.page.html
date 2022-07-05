@@ -650,7 +650,7 @@
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Confirmed On</ion-text><br />
               <ion-text class="content">{{confirmationForm.controls.applicantConfirmedDate.value ?
-                (confirmationForm.controls.applicantConfirmedDate.value | date : 'dd/MM/yyyy') : DEFAULTS.NOT_AVAILABLE}}</ion-text>
+                (confirmationForm.controls.applicantConfirmedDate.value | date : DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Confirmed by Landlord</ion-text><br />
@@ -660,7 +660,7 @@
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Confirmed On</ion-text><br />
               <ion-text class="content">{{confirmationForm.controls.landlordConfirmedDate.value ?
-                (confirmationForm.controls.landlordConfirmedDate.value | date : 'dd/MM/yyyy') : DEFAULTS.NOT_AVAILABLE}}</ion-text>
+                (confirmationForm.controls.landlordConfirmedDate.value | date : DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
 
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">

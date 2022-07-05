@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MapsAPILoader } from '@agm/core';
 import { tap, map, switchMap } from 'rxjs/operators';

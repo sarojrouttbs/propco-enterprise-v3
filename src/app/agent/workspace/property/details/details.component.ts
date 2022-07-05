@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, PROPCO,DEFAULTS, ENTITY_TYPE, DATE_FORMAT } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS,DEFAULTS, ENTITY_TYPE, DATE_FORMAT } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ValidationService } from 'src/app/shared/services/validation.service';
 
@@ -19,6 +19,8 @@ export class DetailsComponent implements OnInit {
   selectedEntityDetails: any = null;
   activeLink: any;
   isMenuShown = true;
+  DATE_FORMAT = DATE_FORMAT;
+
   constructor(private router: Router, private agentService: AgentService, private commonService: CommonService, private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -198,11 +200,11 @@ export class DetailsComponent implements OnInit {
     await this.getChangeHistory(this.selectedEntityDetails.entityId, 'status');
     const control = this.propertyDetailsForm.controls['history'];
     control.patchValue({
-      createdAt: this.propertyDetails?.createdAt ? this.commonService.getFormatedDate(this.propertyDetails.createdAt, DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE,
+      createdAt: this.propertyDetails?.createdAt ? this.commonService.getFormatedDate(this.propertyDetails.createdAt, this.DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE,
       createdBy: this.propertyDetails?.createdBy ? this.propertyDetails?.createdBy : DEFAULTS.NOT_AVAILABLE,
-      statusChangedOn: this.propertyDetails?.propertyInfo?.statusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.statusChangedOn, DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE,
+      statusChangedOn: this.propertyDetails?.propertyInfo?.statusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.statusChangedOn, this.DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE,
       statusChangedBy: this.propertyDetails?.propertyInfo?.statusChangedBy ? this.propertyDetails?.propertyInfo?.statusChangedBy : DEFAULTS.NOT_AVAILABLE,
-      maStatusChangedOn: this.propertyDetails?.propertyInfo?.maStatusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.maStatusChangedOn, DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE,
+      maStatusChangedOn: this.propertyDetails?.propertyInfo?.maStatusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.maStatusChangedOn, this.DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE,
       maStatusChangedBy: this.propertyDetails?.propertyInfo?.maStatusChangedBy ? this.propertyDetails?.propertyInfo?.maStatusChangedBy : DEFAULTS.NOT_AVAILABLE
     });
   }

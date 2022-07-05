@@ -268,7 +268,7 @@
                 <ion-col size="50" *ngIf="isAuthorizationfields">
                   <ion-item>
                     <ion-label position="floating">Required Start Date <ion-text class="mandatory">*</ion-text></ion-label>
-                    <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
+                    <ion-datetime dateFormat="DATE_FORMAT.INPUT_DATE" [displayFormat]="DATE_FORMAT.DISPLAY_DATE" class="datetime-padding"
                       formControlName="requiredStartDate" [min]="currentDate">
                     </ion-datetime>
                   </ion-item>
@@ -278,7 +278,7 @@
                 <ion-col size="50" *ngIf="isAuthorizationfields">
                   <ion-item>
                     <ion-label position="floating">Required Completion Date <ion-text class="mandatory">*</ion-text></ion-label>
-                    <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
+                    <ion-datetime dateFormat="DATE_FORMAT.INPUT_DATE" [displayFormat]="DATE_FORMAT.DISPLAY_DATE" class="datetime-padding"
                       formControlName="requiredCompletionDate" [min]="currentDate">
                     </ion-datetime>
                   </ion-item>
