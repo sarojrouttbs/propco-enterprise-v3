@@ -138,7 +138,7 @@ var CommonFunction = function() {
         browser.controlFlow().execute(function () {
            browser.executeScript("console.log('Waiting for " + value + " to be visible');");           
         });       
-        browser.wait(EC.visibilityOf(loc), 180000);
+        browser.wait(EC.visibilityOf(loc), 280000);
     }
 
     this.waitForElementToBeInvisible = function(loc, value){ 
