@@ -1,6 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { IonSlides, ModalController, ViewDidEnter } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';

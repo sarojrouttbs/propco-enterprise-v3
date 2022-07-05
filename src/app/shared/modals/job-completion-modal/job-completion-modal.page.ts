@@ -11,8 +11,9 @@ import { CommonService } from '../../services/common.service';
   styleUrls: ['./job-completion-modal.page.scss'],
 })
 export class JobCompletionModalPage implements OnInit {
+  DATE_FORMAT = DATE_FORMAT;
   jobCompletionForm: FormGroup;
-  minDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-ddTHH:mm');
+  minDate = this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE_TIME_1);
   faultNotificationId;
   heading;
   title;
@@ -35,7 +36,7 @@ export class JobCompletionModalPage implements OnInit {
     if (this.jobCompletionForm.valid) {
       this.showLoader = true;
       const requestObj = {
-        jobCompletionAt: this.commonService.getFormatedDate(this.jobCompletionForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss'),
+        jobCompletionAt: this.commonService.getFormatedDate(this.jobCompletionForm.value.dateTime, this.DATE_FORMAT.YEAR_DATE_TIME),
         isAccepted: true,
         submittedByType: 'SECUR_USER'
       }

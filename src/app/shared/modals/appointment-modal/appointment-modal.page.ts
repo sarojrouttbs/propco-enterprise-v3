@@ -48,10 +48,10 @@ export class AppointmentModalPage implements OnInit {
     }
     this.initForm();
     if ((this.contractorDetails && this.contractorDetails.contractorPropertyVisitAt) || this.contractorWoPropertyVisitAt) {
-      this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() - 30), 'yyyy-MM-ddTHH:mm');
+      this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() - 30), this.DATE_FORMAT.YEAR_DATE_TIME_1);
     }
     else {
-      this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() - 30), 'yyyy-MM-ddTHH:mm');
+      this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() - 30), this.DATE_FORMAT.YEAR_DATE_TIME_1);
     }
     this.patchValue();
   }
@@ -67,7 +67,7 @@ export class AppointmentModalPage implements OnInit {
   async save() {
     if (this.appointmentForm.valid) {
       const requestObj: any = {
-        contractorPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss'),
+        contractorPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, this.DATE_FORMAT.YEAR_DATE_TIME),
         isAccepted: true,
         submittedByType: 'SECUR_USER',
         contractorId: this.contractorDetails ? this.contractorDetails.contractorId : ''
@@ -87,7 +87,7 @@ export class AppointmentModalPage implements OnInit {
         }
       } else if (this.type === APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE) {
         const quoteRequestObj = {
-          contractorPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss'),
+          contractorPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, this.DATE_FORMAT.YEAR_DATE_TIME),
           contractorId: this.contractorDetails.contractorId,
           contractorPropertyVisitSlot: this.appointmentForm.value?.appointmentSlot ? this.appointmentForm.value.appointmentSlot.index : ''
         };
@@ -97,7 +97,7 @@ export class AppointmentModalPage implements OnInit {
         }
       } else if (this.type === APPOINTMENT_MODAL_TYPE.MODIFY_WO) {
         const quoteRequestObj = {
-          contractorWoPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, 'yyyy-MM-dd HH:mm:ss'),
+          contractorWoPropertyVisitAt: this.commonService.getFormatedDate(this.appointmentForm.value.dateTime, this.DATE_FORMAT.YEAR_DATE_TIME),
           contractorWoPropertyVisitSlot: this.appointmentForm.value?.appointmentSlot ? this.appointmentForm.value.appointmentSlot.index : ''
         };
         const updateCCVisit = await this.modifyWoContractorVisit(this.faultId, quoteRequestObj);
@@ -197,7 +197,7 @@ export class AppointmentModalPage implements OnInit {
   }
 
   checkPastDate() {
-    if (this.appointmentForm.value.dateTime <= this.commonService.getFormatedDate(new Date(), 'yyyy-MM-ddTHH:mm')) {
+    if (this.appointmentForm.value.dateTime <= this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE_TIME_1)) {
       this.pastDateError = true;
     }
     else {
@@ -211,9 +211,9 @@ export class AppointmentModalPage implements OnInit {
       const appointmentSlotEndTime = (appointmentSlotTime.split('-')[1]).split(':')
       const finalDateTime = new Date(this.appointmentForm.value.dateTime).setHours(appointmentSlotEndTime[0], appointmentSlotEndTime[1]);
       if (finalDateTime) {
-        this.appointmentForm.get('dateTime').setValue(this.commonService.getFormatedDate(finalDateTime, 'yyyy-MM-ddTHH:mm'));
+        this.appointmentForm.get('dateTime').setValue(this.commonService.getFormatedDate(finalDateTime, this.DATE_FORMAT.YEAR_DATE_TIME_1));
       }
-      if (new Date(this.appointmentForm.value.dateTime) <= new Date(this.commonService.getFormatedDate(new Date(), 'yyyy-MM-ddTHH:mm'))) {
+      if (new Date(this.appointmentForm.value.dateTime) <= new Date(this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE_TIME_1))) {
         this.pastDateErrorWithSession = true;
       } else {
         this.pastDateErrorWithSession = false;

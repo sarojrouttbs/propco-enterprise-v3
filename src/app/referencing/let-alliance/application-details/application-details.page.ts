@@ -21,6 +21,7 @@ import { HttpParams } from '@angular/common/http';
   styleUrls: ['./application-details.page.scss'],
 })
 export class ApplicationDetailsPage implements OnInit {
+  DATE_FORMAT = DATE_FORMAT;
   tenancyDetailsForm: FormGroup;
   propertyDetailsForm: FormGroup;
   tenantDetailsForm: FormGroup;
@@ -44,7 +45,7 @@ export class ApplicationDetailsPage implements OnInit {
   tenantId: any;
   futureDate: string;
   currentDate = this.commonService.getFormatedDate(new Date());
-  adultDate = this.datepipe.transform(new Date().setDate(new Date().getDay() - (18 * 365)), 'yyyy-MM-dd');
+  adultDate = this.datepipe.transform(new Date().setDate(new Date().getDay() - (18 * 365)), this.DATE_FORMAT.YEAR_DATE);
 
   managementStatusTypes: any[] = [];
   managementTypes: any[] = [];
@@ -72,7 +73,6 @@ export class ApplicationDetailsPage implements OnInit {
   popoverOptions: any = {
     cssClass: 'let-alliance-ion-select'
   };
-  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private fb: FormBuilder,
@@ -91,7 +91,7 @@ export class ApplicationDetailsPage implements OnInit {
     this.tenantDetailsAccordion.expanded = true;
     const date = new Date();
     date.setDate(date.getDate() + 60);
-    this.futureDate = this.datepipe.transform(date, 'yyyy-MM-dd');
+    this.futureDate = this.datepipe.transform(date, this.DATE_FORMAT.YEAR_DATE);
   }
 
   ionViewDidEnter() {
@@ -669,8 +669,8 @@ export class ApplicationDetailsPage implements OnInit {
       case: {
         productId: this.tenancyDetailsForm.get('productId').value,
         noOfTenantToBeReferenced: parseInt(this.tenancyDetailsForm.get('noOfTenantToBeReferenced').value),
-        tenancyStartDate: this.datepipe.transform(this.tenancyDetailsForm.get('tenancyStartDate').value, 'yyyy-MM-dd'),
-        tenancyEndDate: this.datepipe.transform(tmpDate, 'yyyy-MM-dd'),
+        tenancyStartDate: this.datepipe.transform(this.tenancyDetailsForm.get('tenancyStartDate').value, this.DATE_FORMAT.YEAR_DATE),
+        tenancyEndDate: this.datepipe.transform(tmpDate, this.DATE_FORMAT.YEAR_DATE),
         tenancyTerm: this.tenancyDetailsForm.get('tenancyTerm').value,
         paidBy: this.tenancyDetailsForm.get('paidBy').value ? 1 : 0,
         offerNds: this.tenancyDetailsForm.get('offerNds').value,
@@ -701,7 +701,7 @@ export class ApplicationDetailsPage implements OnInit {
         middlename: this.tenantDetailsForm.get('middlename').value,
         surname: this.tenantDetailsForm.get('surname').value,
         email: this.tenantDetailsForm.get('email').value,
-        dateOfBirth: this.datepipe.transform(this.tenantDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
+        dateOfBirth: this.datepipe.transform(this.tenantDetailsForm.get('dateOfBirth').value, this.DATE_FORMAT.YEAR_DATE),
         rentShare: parseFloat(this.tenantDetailsForm.get('rentShare').value),
         maritalStatus: this.tenantDetailsForm.get('maritalStatus').value,
         nationality: this.getLookupValue(this.tenantDetailsForm.get('nationality').value, this.referencingNationalities),
