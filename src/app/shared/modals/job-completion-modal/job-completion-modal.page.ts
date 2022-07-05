@@ -19,7 +19,6 @@ export class JobCompletionModalPage implements OnInit {
   title;
   showLoader: boolean = null;
   unSavedData = false;
-  DATE_FORMAT = DATE_FORMAT;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
