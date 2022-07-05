@@ -11,14 +11,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DetailsComponent } from './details/details.component';
 import { PropertyLandlordTenantComponent } from './property-landlord-tenant/property-landlord-tenant.component';
 import { ImagePageModule } from 'src/app/shared/modals/image/image.module';
-import { GoogleMapComponent } from './google-map/google-map.component';
-import { AgmCoreModule } from '@agm/core';
 import { DataTablesModule } from 'angular-datatables';
 import { LettingsDetailsComponent } from './details/lettings-details/lettings-details.component';
 import { LetBoardComponent } from './details/let-board/let-board.component';
 import { HistoryComponent } from './details/history/history.component';
-import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
-import { AgmOverlays } from 'agm-overlays';
 import { PropertyChecksComponent } from './details/property-checks/property-checks.component';
 import { CallInfoModalPageModule } from 'src/app/shared/modals/call-info-modal/call-info-modal.module';
 import { PropertyAddressComponent } from './details/property-address/property-address.component';
@@ -73,13 +69,6 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ImagePageModule,
     ReactiveFormsModule,
     DataTablesModule,
-    AgmJsMarkerClustererModule,
-    AgmOverlays,
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDCUgtEwcER2glTnnY9WqdWkKECQKJ_gto',
-      language: "en",
-      libraries: ['places', 'geometry']
-    }),
     CallInfoModalPageModule,
     NegotiateModalPageModule,
     PeriodicVisitModalPageModule,
@@ -94,7 +83,6 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     LeafletModule
   ],
   declarations: [
-    GoogleMapComponent,
     PropertyPage,
     DashboardComponent,
     DetailsComponent,

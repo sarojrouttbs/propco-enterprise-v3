@@ -27,7 +27,6 @@ export class ContractorDetailsModalPage implements OnInit {
   pastDateErrorWithSession: boolean = false;
   estimatedVisitSlot;
   DATE_FORMAT = DATE_FORMAT;
-  
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
     private commonService: CommonService,

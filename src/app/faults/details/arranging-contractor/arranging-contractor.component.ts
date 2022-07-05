@@ -114,7 +114,6 @@ export class ArrangingContractorComponent implements OnInit {
   notificationState = FAULT_NOTIFICATION_STATE;
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
-  
   constructor(
     private fb: FormBuilder,
     private faultsService: FaultsService,

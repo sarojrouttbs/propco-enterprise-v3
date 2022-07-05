@@ -102,7 +102,7 @@ export class LandlordInstructionComponent implements OnInit {
   loggedInUserData: any;
   notificationState = FAULT_NOTIFICATION_STATE;
   DATE_FORMAT = DATE_FORMAT;
-  
+
   constructor(
     private fb: FormBuilder,
     private faultsService: FaultsService,

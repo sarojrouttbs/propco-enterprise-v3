@@ -266,21 +266,43 @@
                 </ion-col>
 
                 <ion-col size="50" *ngIf="isAuthorizationfields">
-                  <ion-item>
+                  <ion-item id="requiredStartDate">
                     <ion-label position="floating">Required Start Date <ion-text class="mandatory">*</ion-text></ion-label>
-                    <ion-datetime dateFormat="DATE_FORMAT.INPUT_DATE" [displayFormat]="DATE_FORMAT.DISPLAY_DATE" class="datetime-padding"
-                      formControlName="requiredStartDate" [min]="currentDate">
-                    </ion-datetime>
+                    <ion-input value="{{ landlordInstFrom.controls.requiredStartDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                    <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+                    ></ion-icon>
+                    <ion-popover trigger="requiredStartDate" show-backdrop="false" side="top">
+                      <ng-template>
+                        <ion-datetime
+                          showDefaultButtons="true"
+                          presentation="date"
+                          formControlName="requiredStartDate"
+                          [min]="currentDate"
+                        >
+                        </ion-datetime>
+                      </ng-template>
+                    </ion-popover>
                   </ion-item>
                   <app-validation-message [control]="landlordInstFrom.controls.requiredStartDate"></app-validation-message>
                 </ion-col>
 
                 <ion-col size="50" *ngIf="isAuthorizationfields">
-                  <ion-item>
+                  <ion-item id="requiredCompletionDate">
                     <ion-label position="floating">Required Completion Date <ion-text class="mandatory">*</ion-text></ion-label>
-                    <ion-datetime dateFormat="DATE_FORMAT.INPUT_DATE" [displayFormat]="DATE_FORMAT.DISPLAY_DATE" class="datetime-padding"
-                      formControlName="requiredCompletionDate" [min]="currentDate">
-                    </ion-datetime>
+                    <ion-input value="{{ landlordInstFrom.controls.requiredCompletionDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                    <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+                    ></ion-icon>
+                    <ion-popover trigger="requiredCompletionDate" show-backdrop="false">
+                      <ng-template>
+                        <ion-datetime
+                          showDefaultButtons="true"
+                          presentation="date"
+                          formControlName="requiredCompletionDate"
+                          [min]="currentDate"
+                        >
+                        </ion-datetime>
+                      </ng-template>
+                    </ion-popover>
                   </ion-item>
                   <app-validation-message [control]="landlordInstFrom.controls.requiredCompletionDate"></app-validation-message>
                 </ion-col>
