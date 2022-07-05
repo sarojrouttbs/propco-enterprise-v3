@@ -111,7 +111,7 @@ export class MaContactComponent implements OnInit {
 
   private setLookupData(data) {
     this.propertyHeardSources = data.propertyHeardSources;
-    this.officeCodes = data.officeCodes;
+    this.officeCodes = data.officeCodes;    
     this.landlordStatuses = data.landlordStatuses
   }
 

@@ -7,6 +7,7 @@ import {
   OFFER_STATUSES,
   PROPCO,
   DEFAULTS,
+  DATE_FORMAT,
 } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
@@ -65,7 +66,8 @@ export class OfferDetailPage implements OnInit {
   isOffersDetailsAvailable = false;
   DEFAULTS = DEFAULTS;
   updatedFormValues: any = [];
-
+  DATE_FORMAT = DATE_FORMAT;
+  
   constructor(
     private route: ActivatedRoute,
     private commonService: CommonService,

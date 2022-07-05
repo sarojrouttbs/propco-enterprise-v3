@@ -1,0 +1,33 @@
+.msg-div {
+  padding: 15px;
+  font-size: 25px;
+  text-align: center;
+}
+
+.wrapper {
+  position: relative;
+  margin: -10px 0px 10px 0px;
+  border: 1px solid var(--ion-color-four);
+}
+
+.map {
+  position: sticky !important;
+  height: 500px;
+  padding: 0;
+}
+
+.address {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  background: var(--ion-color-medium);
+  width: auto;
+  font-size: 15px;
+  line-height: 24px;
+  opacity: 1.0;
+  padding: 10px;
+}
+
+:host ::ng-deep .leaflet-top {
+  top: 50px !important;
+}

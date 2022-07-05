@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { DATE_FORMAT } from '../../constants';
 
 @Component({
   selector: 'app-close-fault',
@@ -9,6 +10,8 @@ export class CloseFaultComponent implements OnInit {
 @Input() notificationData;
 @Input() faultDetails;
 @Input() action;
+DATE_FORMAT = DATE_FORMAT;
+
   constructor() { }
 
   ngOnInit() {}

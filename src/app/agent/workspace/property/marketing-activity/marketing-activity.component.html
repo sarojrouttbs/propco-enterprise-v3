@@ -35,7 +35,7 @@
               <td> {{ data.email }} </td>
               <td> {{ data.sms }} </td>
               <td> {{ data.mailshot }} </td>
-              <td> {{ data.reason || '-' }} </td>
+              <td> {{ data.reason || DEFAULTS.NOT_AVAILABLE }} </td>
             </tr>
             <tr class="table-row total-row" *ngIf="marketActivityListing?.length > 0">
               <td> OVERALL TOTALS </td>

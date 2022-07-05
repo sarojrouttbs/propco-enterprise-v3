@@ -438,20 +438,20 @@
                   
                   <td>
                     <ion-badge [color]="fault.urgencyStatus==1 ? 'danger' : (fault.urgencyStatus==2? 'warning' : 'success')">
-                      {{fault.reference || '-'}}
+                      {{fault.reference || DEFAULTS.NOT_AVAILABLE}}
                     </ion-badge>
                   </td>
-                  <td>{{fault.createdAt | date: 'dd/MM/yyyy HH:mm' || '-'}}</td>
+                  <td>{{(fault.createdAt | date: DATE_FORMAT.DATE_TIME) || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td>
-                    {{(fault.sourceType === maintSourceTypes.FIXFLO) ? (fault.fixfloCategory || '-') : (getLookupValue(fault.category,
-                    faultCategories, 'category') || '-')}}
+                    {{(fault.sourceType === maintSourceTypes.FIXFLO) ? (fault.fixfloCategory || DEFAULTS.NOT_AVAILABLE) : (getLookupValue(fault.category,
+                    faultCategories, 'category') || DEFAULTS.NOT_AVAILABLE)}}
                   </td>
                   
-                  <td>{{fault.propertyReference || '-'}} <br>{{fault.propertyAddress.addressLine1}}</td>
-                  <td>{{getLookupValue(fault.propertyOfficeCode, officeCodes) || '-'}}</td>
-                  <td>{{fault.propertyManagerName || '-'}}</td>
-                  <td>{{fault.title || '-'}}</td>
-                  <td>{{getLookupValue(fault.reportedBy, reportedByTypes) || '-'}}</td>
+                  <td>{{fault.propertyReference || DEFAULTS.NOT_AVAILABLE}} <br>{{fault.propertyAddress.addressLine1}}</td>
+                  <td>{{(fault.propertyOfficeCode | lookup: officeCodes) || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{fault.propertyManagerName || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{fault.title || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{(fault.reportedBy | lookup: reportedByTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td>
                       <ion-checkbox color="success" style="margin-bottom: 0;" 
                       (ionChange)="selectFault(fault, $event);" (click)="$event.stopPropagation();" [checked]="fault?.isChecked">
@@ -462,12 +462,12 @@
                     <span>
                       <ion-icon name="alarm" *ngIf="fault?.snoozeUntil && (fault?.snoozeUntil > currentDate)" title="snooze" style="font-size: 15px;vertical-align: text-bottom;"></ion-icon>
                       {{fault?.isClosed || (fault?.isClosed && fault?.isEscalated) ? 'Closed' : 
-                      (fault?.isEscalated ? 'Escalation' : getLookupValue(fault?.status, faultStatuses)) || '-' }}
+                      (fault?.isEscalated ? 'Escalation' : (fault?.status | lookup: faultStatuses)) || DEFAULTS.NOT_AVAILABLE }}
                     </span>
                   </td>
                   
                   <td class="resp-action-icon">
-                    <i (click)="showMenu($event,'divOverlay', fault, 'table-row')"
+                    <i (click)="showMenu($event,'dashboard-overlay', fault, 'table-row')"
                       class="propcoicon propcoicon-actions-on action-btn"></i>
                   </td>
                 </tr>
@@ -476,7 +476,7 @@
                 </tr>
               </tbody>
             </table>
-            <div id="divOverlay">
+            <div id="dashboard-overlay" class="overlay-class">
               <ion-button *ngIf="selectedData?.isChecked" (click)="mergeFault(selectedData)">Merge</ion-button>
               <ion-button *ngIf="selectedData?.status != 12 && selectedData?.status != 10 && !selectedData?.isClosed" (click)="closeFault()">Close</ion-button>
               <ion-button (click)="notesModal()">Add Note</ion-button>
@@ -484,7 +484,7 @@
               <ion-button *ngIf="selectedData?.isEscalated" (click)="deEscalateFault()">De-Escalate</ion-button>
               <ion-button class="" (click)="goToFaultDetails()">View</ion-button>
               <ion-button *ngIf="selectedData?.status == 1 && !selectedData?.isDraft && !selectedData?.isClosed" (click)="startProgress()">Start Progress</ion-button>
-              <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+              <i (click)="hideMenu($event,'dashboard-overlay')" class="propcoicon propcoicon-actions-on"></i>
             </div>
           </div>
         </ion-col>
@@ -510,12 +510,12 @@
               </thead>
               <tbody>
                 <tr *ngFor="let notes of faultNotes" class="table-row">
-                  <td>{{notes.postedAt | date: 'dd/MM/yyyy' || '-'}}</td>
-                  <td>{{notes.postedAt | date: 'HH:mm' || '-'}}</td>
-                  <td>{{getLookupValue(notes.type, notesTypes) || '-'}}</td>
-                  <td>{{getLookupValue(notes.complaint, notesComplaints) || '-'}}</td>
-                  <td>{{getLookupValue(notes.category, notesCategories) || '-'}}</td>
-                  <td>{{notes.userName || '-'}}</td>
+                  <td>{{(notes.postedAt | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{(notes.postedAt | date: DATE_FORMAT.TIME) || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{(notes.type |lookup: notesTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{(notes.complaint |lookup: notesComplaints) || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{(notes.category |lookup: notesCategories) || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{notes.userName || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td><i (click)="showNoteDescription(notes.notes);"
                       class="propcoicon propcoicon-property-description"></i></td>
                   
@@ -523,9 +523,9 @@
                 
               </tbody>
             </table>
-            <div id="divOverlay">
+            <div id="dashboard-notes-overlay" class="overlay-class">
              
-              <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+              <i (click)="hideMenu($event,'dashboard-notes-overlay')" class="propcoicon propcoicon-actions-on"></i>
             </div>
           </div>
         </ion-col>

@@ -181,6 +181,7 @@ export const URGENCY_TYPES = {
 
 export const REGEX = {
   DECIMAL_REGEX: '[0-9]+(.[0-9][0-9]?)?',
+  POSTCODE_VALIDATOR_REGX: '^([aA-pPrR-uUwWyYzZ0-9][aA-hHkK-yY0-9][aAeEhHmMnNpPrRtTvVxXyY0-9]?[aAbBeEhHmMnNpPrRvVwWxXyY0-9]? {1}[0-9][aAbBdD-hHjJlLnN-uUwW-zZ]{2}|gGiIrR 0aAaA)$'
 };
 
 export const COMPLETION_METHODS = [
@@ -703,5 +704,7 @@ export const MARKETING_ACTIVITY_TYPES = {
 export const DATE_FORMAT = {
   DATE: 'dd/MM/yyyy',
   DATE_TIME: 'dd/MM/yyyy HH:mm',
-  TIME: 'HH:mm'
+  TIME: 'HH:mm',
+  TIME_SECONDS: 'HH:mm:ss',
+  DATE_TIME_SECONDS : 'dd/MM/yyyy HH:mm:ss'
 }

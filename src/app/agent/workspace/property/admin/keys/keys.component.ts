@@ -218,7 +218,7 @@ export class KeysComponent implements OnInit {
   }
 
   onHistoryClick(data: any) {
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'key-overlay');
     this.selectedItemForHistory = data;
     this.getkeysetLogHistory(data.keySetId);
   }
@@ -277,7 +277,7 @@ export class KeysComponent implements OnInit {
     });
 
     modal.onDidDismiss().then(async res => {
-      this.hideMenu('', 'divOverlay');
+      this.hideMenu('', 'key-overlay');
       if (res.data && res.data == 'success') {
         if (this.isAddKeyActivity) {
           this.updateKeysetStatus(this.selectedData);

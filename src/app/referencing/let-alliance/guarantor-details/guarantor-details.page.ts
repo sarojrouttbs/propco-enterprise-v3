@@ -540,5 +540,4 @@ export class GuarantorDetailsPage implements OnInit {
     })
     return propertyStatus;
   }
-
 }

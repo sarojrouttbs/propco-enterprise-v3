@@ -115,8 +115,8 @@
             <ion-select formControlName="agreementId" interface="popover" (ionChange)="onSelectAgreement()"
               [disabled]="reportedByForm.controls.reportedBy.value != 'TENANT' && reportedByForm.controls.reportedBy.value != 'GUARANTOR'" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.agreementId" *ngFor="let item of propertyTenancyList">
-                {{getLookupValue(item.status, agreementStatuses)}} {{item.tenancyStartDate | date:'dd/MM/yyyy'}} -
-                {{item.tenancyEndDate| date:'dd/MM/yyyy'}}
+                {{(item.status | lookup: agreementStatuses)}} {{item.tenancyStartDate | date: DATE_FORMAT.DATE}} -
+                {{item.tenancyEndDate| date: DATE_FORMAT.DATE}}
               </ion-select-option>
             </ion-select>
           </ion-item>
@@ -356,7 +356,7 @@
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Last Repair Date</ion-text><br />
         <ion-text class="content">
-          {{faultHistory?.lastRepairDate ? (faultHistory?.lastRepairDate | date: 'dd/MM/yyyy HH:mm') : DEFAULTS.NOT_AVAILABLE}}</ion-text>
+          {{faultHistory?.lastRepairDate ? (faultHistory?.lastRepairDate | date: DATE_FORMAT.DATE_TIME) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Type</ion-text><br />
@@ -391,7 +391,7 @@
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Urgency Status</ion-text><br />
         <ion-text class="content">
-          {{getLookupValue(faultDetailsForm.controls.urgencyStatus.value, faultUrgencyStatuses) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+          {{(faultDetailsForm.controls.urgencyStatus.value | lookup: faultUrgencyStatuses) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Title</ion-text><br />
@@ -417,14 +417,14 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Who reported the repair?</ion-text><br />
-        <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || DEFAULTS.NOT_AVAILABLE}}
+        <ion-text class="content">{{(reportedByForm.controls.reportedBy.value | lookup: reportedByTypes) || DEFAULTS.NOT_AVAILABLE}}
         </ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ng-container *ngIf="reportedByForm.controls.reportedBy.value =='THIRD_PARTY'" >
-          <ion-text class="header ion-text-capitalize">{{getLookupValue(reportedByForm.controls.reportedBy.value, reportedByTypes) || DEFAULTS.NOT_AVAILABLE}}
+          <ion-text class="header ion-text-capitalize">{{(reportedByForm.controls.reportedBy.value | lookup: reportedByTypes) || DEFAULTS.NOT_AVAILABLE}}
           </ion-text><br />
-          <ion-text class="content">{{getLookupValue(reportedByForm.controls.reportedById.value, faultReportedByThirdParty) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+          <ion-text class="content">{{(reportedByForm.controls.reportedById.value | lookup: faultReportedByThirdParty) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
         </ng-container>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -733,7 +733,7 @@
         <h2 class="heading">Log a repair</h2>
         <h2>
           Describe the issue with
-          <b>{{getLookupValue(describeFaultForm?.controls?.category?.value, faultCategories)}}</b> in
+          <b>{{(describeFaultForm?.controls?.category?.value | lookup: faultCategories)}}</b> in
           <b>
             {{ propertyDetails?.address?.addressLine1 ?
             propertyDetails?.address?.addressLine1 + ',' : ''}} {{
@@ -785,7 +785,7 @@
             <span *ngIf="!faultId">Initial Issue</span>
             <span *ngIf="faultId">
               {{faultDetails?.isClosed || (faultDetails?.isClosed && faultDetails?.isEscalated) ? 'Closed' : 
-              (faultDetails?.isEscalated ? 'Escalation' : getLookupValue(faultDetails?.status, faultStatuses))  }} &nbsp;
+              (faultDetails?.isEscalated ? 'Escalation' : (faultDetails?.status | lookup: faultStatuses))  }} &nbsp;
               <img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.isEscalated" />
             </span>
           </h2>

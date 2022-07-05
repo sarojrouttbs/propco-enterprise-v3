@@ -628,6 +628,7 @@ ion-alert.common-alert-box {
         height: 32px !important;
         textarea{
           padding-top: 0px;
+          height: unset !important; 
         }
       }
     }

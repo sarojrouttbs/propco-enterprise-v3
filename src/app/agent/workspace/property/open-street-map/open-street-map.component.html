@@ -1,0 +1,18 @@
+<div *ngIf="!lat && !long" class="msg-div">
+  <h5 class="msg">Unable to locate this property for you at the moment</h5>
+</div>
+
+<div class="wrapper" *ngIf="lat && long">
+  <div class="map" leaflet [leafletOptions]="options">
+  </div>
+  <div class="address" *ngIf="propertyAddress">
+    <span>
+      {{ propertyAddress?.addressLine1 ? propertyAddress?.addressLine1 + ',' : ''}}
+      {{ propertyAddress?.addressLine2 ? propertyAddress?.addressLine2 + ',' : ''}}
+      {{ propertyAddress?.addressLine3 ? propertyAddress?.addressLine3 + ',' : ''}}
+      {{ propertyAddress?.town ? propertyAddress?.town + ',' : ''}}
+      {{ propertyAddress?.county ? propertyAddress?.county + ',' : ''}}
+      {{ propertyAddress?.postcode ? propertyAddress?.postcode + '.' : ''}}
+    </span>
+  </div>
+</div>

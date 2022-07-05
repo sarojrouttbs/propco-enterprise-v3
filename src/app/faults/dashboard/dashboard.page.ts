@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { ERROR_MESSAGE, FAULT_STATUSES, NOTES_TYPE, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES, MAINT_SOURCE_TYPES, DEFAULT_MESSAGES, DATE_FORMAT } from './../../shared/constants';
+import { ERROR_MESSAGE, FAULT_STATUSES, NOTES_TYPE, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES, MAINT_SOURCE_TYPES, DEFAULT_MESSAGES, DATE_FORMAT, DEFAULTS } from './../../shared/constants';
 import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -96,7 +96,8 @@ export class DashboardPage implements OnInit {
     cssClass: 'fault-modal-container'
   };
   DATE_FORMAT = DATE_FORMAT;
-
+  DEFAULTS = DEFAULTS;
+  
   constructor(
     private commonService: CommonService,
     private modalController: ModalController,
@@ -154,7 +155,7 @@ export class DashboardPage implements OnInit {
           this.faultNotes = [];
           this.rerenderNotes();
         })
-        this.hideMenu('', 'divOverlay');
+        this.hideMenu('', 'dashboard-overlay');
       },
     };
     const promise = new Promise(async (resolve, reject) => {
@@ -221,7 +222,7 @@ export class DashboardPage implements OnInit {
       this.bucketCount();
     }
     this.loadTable = true;
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'dashboard-overlay');
     this.commonService.removeItem('contractorId');
   }
 
@@ -279,6 +280,7 @@ export class DashboardPage implements OnInit {
   }
 
   onClickRow(data, index?) {
+    this.hideMenu('', 'dashboard-overlay');
     this.selectedData = data;
     this.getFaultNotes(this.selectedData.faultId);
     this.faultList.forEach((e, i) => {
@@ -346,7 +348,7 @@ export class DashboardPage implements OnInit {
         this.commonService.showAlert('Escalate Repair', 'Repair has been escalated to the property manager.');
         this.rerenderFaults(false);
         this.getFaultNotes(this.selectedData.faultId);
-        this.hideMenu('', 'divOverlay');
+        this.hideMenu('', 'dashboard-overlay');
         this.bucketCount();
       }
     });
@@ -359,7 +361,7 @@ export class DashboardPage implements OnInit {
         this.faultsService.deEscalateFault(this.selectedData.faultId, {}).subscribe(res => {
           this.commonService.showAlert('De-Escalate Repair', 'Repair has been de-escalated to the property manager.');
           this.rerenderFaults(false);
-          this.hideMenu('', 'divOverlay');
+          this.hideMenu('', 'dashboard-overlay');
           this.bucketCount();
         }, error => {
         });
@@ -925,7 +927,7 @@ export class DashboardPage implements OnInit {
       let requestObj: any = {};
       requestObj.childFaults = childFaults.map(x => x.faultId);
       this.faultsService.mergeFaults(requestObj, data.faultId).subscribe(response => {
-        this.hideMenu('', 'divOverlay');
+        this.hideMenu('', 'dashboard-overlay');
         this.selectedFaultList = [];
         this.filterList();
       });

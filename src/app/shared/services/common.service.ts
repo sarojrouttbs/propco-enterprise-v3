@@ -512,7 +512,6 @@ export class CommonService {
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
     const divOverlayLeft = overlayContainerLeftPadding;
-
     let origDivOverlayHeight;
     let origDivOverlayTop;
     let divOverlayTopBottomPadding = 0;
@@ -522,7 +521,7 @@ export class CommonService {
 
     if (baseContainerHeight > divOverlayHeight) {
       origDivOverlayHeight = baseContainerHeight;
-      origDivOverlayTop = ispaging ? baseContainerTop + $('.dataTables_length').outerHeight(true) : baseContainerTop;
+      origDivOverlayTop = ispaging ? baseContainerTop + 38 : baseContainerTop;
     } else {
       origDivOverlayHeight = divOverlayHeight + (divOverlayTopBottomPadding * 2);
       const extraHeight = divOverlayHeight - baseContainerHeight;

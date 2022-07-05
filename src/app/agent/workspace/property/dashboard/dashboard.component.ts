@@ -35,6 +35,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
   type = 'viewings';
   isMenuShown = true;
   DATE_FORMAT = DATE_FORMAT;
+  isMapLoad = false;
 
   constructor(
     private modalCtrl: ModalController,
@@ -242,6 +243,8 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
       this.commonService.showAlert('Notes', noteText);
     }
   }
+
+  onMapTabClick() {
+    this.isMapLoad = true;
+  }
 }
-
-

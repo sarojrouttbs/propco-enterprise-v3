@@ -11,7 +11,7 @@
     <ion-row class="property-info">
       <ion-col size="50">
         <ion-text class="label">Available From</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.availableFrom ? (propertyData?.propertyInfo?.availableFrom | date: 'dd MMM yyyy') : notAvailable}}</ion-text>
+        <ion-text class="value">{{propertyData?.propertyInfo?.availableFrom ? (propertyData?.propertyInfo?.availableFrom | date: DATE_FORMAT.DATE) : notAvailable}}</ion-text>
       </ion-col>
       <ion-col size="50">
         <ion-text class="label">Branch PMC</ion-text>
@@ -21,7 +21,7 @@
       <ion-col size="50">
         <ion-text class="label">Available To</ion-text>
         <br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.availableTo ? (propertyData?.propertyInfo?.availableTo | date: 'dd MMM yyyy') : notAvailable}}</ion-text>
+        <ion-text class="value">{{propertyData?.propertyInfo?.availableTo ? (propertyData?.propertyInfo?.availableTo | date: DATE_FORMAT.DATE) : notAvailable}}</ion-text>
       </ion-col>
       <ion-col size="50">
         <ion-text class="label">Booking Office</ion-text>
@@ -32,7 +32,7 @@
       <ion-col size="50">
         <ion-text class="label">Appraised</ion-text>
         <br>
-        <ion-text class="value">{{propertyData?.propertyDetails?.appraisedDate ? (propertyData?.propertyDetails?.appraisedDate | date: 'dd MMM yyyy') : notAvailable}}</ion-text>
+        <ion-text class="value">{{propertyData?.propertyDetails?.appraisedDate ? (propertyData?.propertyDetails?.appraisedDate | date: DATE_FORMAT.DATE) : notAvailable}}</ion-text>
       </ion-col>
       <ion-col size="50">
         <ion-text class="label">Portfolio Source</ion-text>
@@ -43,7 +43,7 @@
       </ion-col>
       <ion-col size="50">
         <ion-text class="label">Instructed</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyDetails?.instructedDate ? (propertyData?.propertyDetails?.instructedDate | date: 'dd MMM yyyy') : notAvailable}}</ion-text>
+        <ion-text class="value">{{propertyData?.propertyDetails?.instructedDate ? (propertyData?.propertyDetails?.instructedDate | date: DATE_FORMAT.DATE) : notAvailable}}</ion-text>
       </ion-col>
       <ion-col size="50">
         <ion-text class="label">Property Type</ion-text><br>

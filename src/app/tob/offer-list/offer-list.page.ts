@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { NOTES_TYPE, OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, NOTES_TYPE, OFFER_STATUSES, PROPCO } from 'src/app/shared/constants';
 import { NotesModalPage } from 'src/app/shared/modals/notes-modal/notes-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
@@ -60,6 +60,8 @@ export class OfferListPage implements OnInit {
   isRecordsAvailable = true;
   isPropertyDetailsAvailable = false;
   isOffersListAvailable = false;
+  DATE_FORMAT = DATE_FORMAT;
+  DEFAULTS = DEFAULTS;
 
   constructor(private router: Router, private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private tobService: TobService) {
     this.getTobLookupData();
@@ -162,7 +164,7 @@ export class OfferListPage implements OnInit {
     const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    // const divOverlayLeft = (divOverlay.parent('.overlay-container').innerWidth() - baseContainerWidth - (id === 'divOverlayChild' ? 0 : 25));
+    // const divOverlayLeft = (divOverlay.parent('.overlay-container').innerWidth() - baseContainerWidth - (id === 'offer-notes-divOverlay' ? 0 : 25));
     const divOverlayLeft = baseContainerPosition.left;
 
     let origDivOverlayHeight;
@@ -192,13 +194,6 @@ export class OfferListPage implements OnInit {
       paddingBottom: divOverlayTopBottomPadding
     });
 
-    const gridDivOverlay = $('#grid-divoverlay');
-
-    gridDivOverlay.css({
-      width: divOverlay.width(),
-      height: divOverlayHeight
-    });
-
     divOverlay.delay(200).slideDown('fast');
     event.stopPropagation();
   }
@@ -217,8 +212,8 @@ export class OfferListPage implements OnInit {
   }
 
   private async getOfferNotes(offerId) {
-    this.hideMenu('', 'divOverlay');
-    this.hideMenu('', 'divOverlayChild');
+    this.hideMenu('', 'offer-overlay');
+    this.hideMenu('', 'offer-notes-overlay');
     this.offerNotes = await this.getNotesList(offerId) as OfferNotesData[];
     await this.initOfferNotesListData();
     this.commonService.customizePaginator('notesPaginator');
@@ -411,7 +406,7 @@ export class OfferListPage implements OnInit {
   }
 
   onPaginateChange(isNotes) {
-    isNotes ? this.hideMenu('', 'divOverlayChild') : this.hideMenu('', 'divOverlay');
+    isNotes ? this.hideMenu('', 'offer-notes-overlay') : this.hideMenu('', 'offer-overlay');
   }
 
   private checkOffersAvailable() {
