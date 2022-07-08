@@ -55,8 +55,8 @@ export class PropertyCertificateModalPage implements OnInit {
     this.propertyCertificateList = this.propertyCertificate;
     this.propertyCertificateList.forEach((item) => {
       item.expired =
-        this.commonCervice.getFormatedDate(item.expireDate, "yyyy-MM-dd") >
-        this.commonCervice.getFormatedDate(new Date(), "yyyy-MM-dd")
+        this.commonCervice.getFormatedDate(item.expireDate, this.DATE_FORMAT.YEAR_DATE) >
+        this.commonCervice.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE)
           ? true
           : false;
       this.patchPropCrtList(item);

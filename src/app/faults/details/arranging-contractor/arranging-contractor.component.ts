@@ -114,7 +114,6 @@ export class ArrangingContractorComponent implements OnInit {
   notificationState = FAULT_NOTIFICATION_STATE;
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
-  
   constructor(
     private fb: FormBuilder,
     private faultsService: FaultsService,
@@ -2295,8 +2294,8 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.iacNotification &&
       (this.iacNotification.responseReceived != null) && 
       this.iacNotification.templateCode === 'CDT-C-E (WO)' && this.faultDetails.contractorWoPropertyVisitAt) {
-      const woAgreedDateTime = this.commonService.getFormatedDate(this.faultDetails.contractorWoPropertyVisitAt, 'yyyy-MM-dd');
-      const today = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
+      const woAgreedDateTime = this.commonService.getFormatedDate(this.faultDetails.contractorWoPropertyVisitAt, this.DATE_FORMAT.YEAR_DATE);
+      const today = this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE);
       if (today >= woAgreedDateTime) {
         enable = true;
       }

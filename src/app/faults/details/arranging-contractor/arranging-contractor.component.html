@@ -528,12 +528,21 @@
       </ion-col>
   
       <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Required By<ion-text class="mandatory">*</ion-text>
-          </ion-label>
-          <ion-datetime formControlName="requiredDate" displayFormat="DD/MM/YYYY" interface="popover"
-            class="request-start-date">
-          </ion-datetime>
+        <ion-item id="requiredDate">
+          <ion-label position="floating">Required By</ion-label>
+          <ion-input value="{{ raiseQuoteForm.controls.requiredDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="requiredDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                showDefaultButtons="true"
+                presentation="date"
+                formControlName="requiredDate"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
         <app-validation-message [control]="raiseQuoteForm.controls.requiredDate"></app-validation-message>
       </ion-col>
@@ -687,11 +696,21 @@
         </ion-item>
       </ion-col>
       <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Date </ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-            formControlName="postdate">
-          </ion-datetime>
+        <ion-item id="postdate">
+          <ion-label position="floating">Date</ion-label>
+          <ion-input value="{{ workOrderForm.controls.postdate.value | date: DATE_FORMAT.DATE }}" disabled="true"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="postdate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                showDefaultButtons="true"
+                presentation="date"
+                formControlName="postdate"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
       </ion-col>
       <ion-col size="50">
@@ -760,19 +779,41 @@
         </ion-item>
       </ion-col>
       <ion-col size="33.33">
-        <ion-item>
+        <ion-item id="requestStartDate">
           <ion-label position="floating">Required Start Date</ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-            formControlName="requestStartDate" [min]="currentDate">
-          </ion-datetime>
+          <ion-input value="{{ workOrderForm.controls.requestStartDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="requestStartDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                showDefaultButtons="true"
+                presentation="date"
+                formControlName="requestStartDate"
+                [min]="currentDate"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
       </ion-col>
       <ion-col size="33.33">
-        <ion-item>
-          <ion-label position="floating">Required Completion Date </ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-            formControlName="requiredDate" [min]="currentDate">
-          </ion-datetime>
+        <ion-item id="requiredDate">
+          <ion-label position="floating">Required Completion Date</ion-label>
+          <ion-input value="{{ workOrderForm.controls.requiredDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="requiredDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                showDefaultButtons="true"
+                presentation="date"
+                formControlName="requiredDate"
+                [min]="currentDate"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
       </ion-col>
       <ion-col size="33.33">

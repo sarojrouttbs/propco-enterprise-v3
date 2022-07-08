@@ -22,20 +22,20 @@ exports.config = {
         isVerbose: true,
         showColors: true,
         includeStackTrace: true,
-        defaultTimeoutInterval: 30000
+        defaultTimeoutInterval: 300000
     },
     params: require('./configuration.json'),
     suites: {
         fixafault: [
             './features/igf-logfault/add.fault.spec.js', 
-            './features/igf-logfault/fault.summary.spec.js',
-            './features/igf-logfault/merge.fault.spec.js',
-            './features/igf-logfault/fault.note.spec.js', 
-            './features/igf-logfault/fault.escalate.spec.js', 
-            './features/cli-landlordownrepair/landlord.own.repair.spec.js', 
-            './features/iac-arrangingcontractor/obtain.quote.spec.js',
-            './features/iac-arrangingcontractor/proceed.with.worksorder.spec.js',
-            './features/iac-arrangingcontractor/proceed.agent.necessity.spec.js'              
+           // './features/igf-logfault/fault.summary.spec.js',
+          //  './features/igf-logfault/merge.fault.spec.js',
+          //  './features/igf-logfault/fault.note.spec.js', 
+          //  './features/igf-logfault/fault.escalate.spec.js', 
+          //  './features/cli-landlordownrepair/landlord.own.repair.spec.js', 
+          //  './features/iac-arrangingcontractor/obtain.quote.spec.js',
+          //  './features/iac-arrangingcontractor/proceed.with.worksorder.spec.js',
+          //  './features/iac-arrangingcontractor/proceed.agent.necessity.spec.js'              
        ]
     },
     onPrepare: () => {

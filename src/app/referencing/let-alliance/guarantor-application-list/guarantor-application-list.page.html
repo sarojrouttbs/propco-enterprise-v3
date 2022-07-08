@@ -47,9 +47,9 @@
                     (application.applicantDetail.addressee ? application.applicantDetail.addressee : application.applicantDetail.forename
                     + ' ' + application.applicantDetail.surname) || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td>{{application.office || DEFAULTS.NOT_AVAILABLE}}</td>
-                  <td>{{application.tenancyStartDate|| DEFAULTS.NOT_AVAILABLE | date : 'dd/MM/yyyy' }}</td>
+                  <td>{{application.tenancyStartDate|| DEFAULTS.NOT_AVAILABLE | date : DATE_FORMAT.DATE }}</td>
                   <td>{{application.rentShare || '0' | currency: '£'}}</td>
-                  <td>{{application.dateOfSubmission || DEFAULTS.NOT_AVAILABLE | date : 'dd/MM/yyyy' }}</td>
+                  <td>{{application.dateOfSubmission || DEFAULTS.NOT_AVAILABLE | date : DATE_FORMAT.DATE }}</td>
                   <td>{{getProductType(application.product, 'application') || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td>{{(application.applicationStatus |lookup: referencingApplicantStatusTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td class="resp-action-icon">

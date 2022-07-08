@@ -62,7 +62,14 @@
               "node_modules/datatables.net-buttons/js/buttons.print.js",
               "node_modules/datatables.net-colreorder/js/dataTables.colReorder.js",
               "src/lib/java-ng.js"
-            ]
+            ],
+            "aot": false,
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -75,7 +82,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": false,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -92,7 +98,8 @@
             "ci": {
               "progress": false
             }
-          }
+          },
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -104,7 +111,6 @@
               "browserTarget": "app:build:production"
             },
             "ci": {
-              "progress": false
             }
           }
         },
@@ -143,17 +149,6 @@
               "progress": false,
               "watch": false
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {

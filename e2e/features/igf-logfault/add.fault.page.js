@@ -7,7 +7,7 @@ var Fault = function (faultDetails) {
      * Locators for elements used in 'Log a Fault' and 'Dashboard Fault Table' functionality  
      */
       
-    this.addFaultBtn = element(by.xpath("//ion-button[contains(text(), 'Add Fault')]"));
+    this.addFaultBtn = element(by.xpath("//ion-button[contains(text(), 'Add Repair')]"));
     this.resetFilterBtn = element(by.xpath("//ion-button[contains(text(), 'Reset Filters')]"));
     this.closeSearchBtn = element(by.xpath("//ion-button[contains(text(), 'close')]"));
     this.propSearchInput = element(by.xpath("//input[@data-placeholder='Start typing to search']"));
@@ -148,8 +148,8 @@ var Fault = function (faultDetails) {
         commonFunction.clickOnElement(this.submitBtn, "Submit button");          
     }
 
-    this.checkFaultInformationInTable = function(faultDetailsTbl){      
-       commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first fault");       
+    this.checkFaultInformationInTable = function(faultDetailsTbl){    
+        commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first fault");       
        if(faultDetailsTbl.tableUrgency){
          let tblUrgency = commonFunction.updateVerificationObjectByAttrib(this.faultUrgencyTbl, "Urgency in Fault Table", "color");
          expect(tblUrgency).toContainData(faultDetailsTbl.tableUrgency);

@@ -244,11 +244,11 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     }
 
     if(this.applicationFilterForm.get('fromDate').value){
-      this.applicationParams = this.applicationParams.set('fromDate', this.datepipe.transform(this.applicationFilterForm.get('fromDate').value, 'yyyy-MM-dd'));
+      this.applicationParams = this.applicationParams.set('fromDate', this.datepipe.transform(this.applicationFilterForm.get('fromDate').value, this.DATE_FORMAT.YEAR_DATE));
     }
 
     if(this.applicationFilterForm.get('toDate').value){
-      this.applicationParams = this.applicationParams.set('toDate', this.datepipe.transform(this.applicationFilterForm.get('toDate').value, 'yyyy-MM-dd'));
+      this.applicationParams = this.applicationParams.set('toDate', this.datepipe.transform(this.applicationFilterForm.get('toDate').value, this.DATE_FORMAT.YEAR_DATE));
     }
 
     this.rerenderApplications(true);

@@ -83,7 +83,7 @@ export class JobCompletionComponent implements OnInit {
   recipientTypes = RECIPIENTS;
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
-  
+
   constructor(
     private fb: FormBuilder,
     private faultsService: FaultsService,
