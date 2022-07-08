@@ -1,0 +1,7 @@
+<ion-item class="p-l-10">
+  <ion-checkbox class="m-t-10 m-b-10" [ngModel]="checked" [indeterminate]="indeterminate" (ngModelChange)="selectAllChange.emit($event)">
+  </ion-checkbox>
+  <ion-input class="m-l-20" placeholder="Search" clearInput [ngModel]="searchText"
+    (ngModelChange)="searchChange.emit($event)">
+  </ion-input>
+</ion-item>
