@@ -1,12 +1,12 @@
 <ion-grid>
   <form [formGroup]="group">
-  <ion-row>
-    <ion-col size="100" class="select-landlord-text">
-      <h4>Step 1: Select Landlords</h4>
-      <ion-text>Please filter & select the landlords per requirement</ion-text>
-    </ion-col>
+    <ion-row>
+      <ion-col size="100" class="select-landlord-text">
+        <h4>Step 1: Select Landlords</h4>
+        <ion-text>Please filter & select the landlords per requirement</ion-text>
+      </ion-col>
 
-    <!-- <ion-col size="15">
+      <!-- <ion-col size="15">
       <ion-item>
         <ion-label position="floating">Tax Handler</ion-label>
         <ion-select interface="popover">
@@ -15,50 +15,51 @@
         </ion-select>
       </ion-item>
     </ion-col> -->
-    <ion-col size="15">
-      <ion-item>
-        <ion-label position="floating">Office</ion-label>
-        <ion-select interface="popover">
-          <ion-select-option>
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-    </ion-col>
-    <ion-col size="15">
-      <ion-item selectSearchAllDirective>
-        <ion-label position="floating">Management</ion-label>
-        <ion-select multiple="true" formControlName="managementType" (ionChange)="onManagementChange();" >
-          <ion-select-option [value]="option.index" *ngFor="let option of managementTypes" checked="true">
-            {{option.value}}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-    </ion-col>
-    <ion-col size="15">
-      <ion-item>
-        <ion-label position="floating">Search</ion-label>
-        <ion-input></ion-input>
-      </ion-item>
-    </ion-col>
-    <ion-col size="15">
-      <ion-item>
-        <ion-label position="floating">Column</ion-label>
-        <ion-select interface="popover">
-          <ion-select-option>
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-    </ion-col>
+      <ion-col size="15">
+        <ion-item>
+          <ion-label position="floating">Office</ion-label>
+          <ion-select interface="popover">
+            <ion-select-option>
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="15">
+        <ion-item selectSearchAllDirective>
+          <ion-label position="floating">Management</ion-label>
+          <ion-select multiple="true" formControlName="managementType" (ionChange)="onManagementChange();">
+            <ion-select-option [value]="option.index" *ngFor="let option of managementTypes" checked="true">
+              {{option.value}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="15">
+        <ion-item>
+          <ion-label position="floating">Search</ion-label>
+          <ion-input></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="15">
+        <ion-item>
+          <ion-label position="floating">Column</ion-label>
+          <ion-select interface="popover">
+            <ion-select-option>
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
 
-    <ion-col size="40" class="ion-align-self-end ion-text-right">
-      <ion-button color="success" fill="outline" style="margin-right: 10px;">Apply Filters</ion-button>
-      <ion-button color="danger" fill="outline">Reset Filters</ion-button>
-    </ion-col>
-  </ion-row>
-</form>
+      <ion-col size="40" class="ion-align-self-end ion-text-right">
+        <ion-button color="success" fill="outline" style="margin-right: 10px;">Apply Filters</ion-button>
+        <ion-button color="danger" fill="outline">Reset Filters</ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
   <ion-row>
     <ion-col size="100" class="ion-text-left" style="margin-top: 10px;">
-      <ion-button color="success" fill="solid" style="margin-right: 10px;">Select All</ion-button>
+      <ion-button color="success" fill="solid" style="margin-right: 10px;">Select All
+      </ion-button>
       <ion-button color="warning" fill="solid">Select None</ion-button>
     </ion-col>
     <ion-col size="100" style="margin-top: 10px;">
@@ -79,8 +80,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of landlordList;" class="table-row" (click)="onClickRow(data);"
-              [class.data-selected]="data.isSelected">
+            <tr *ngFor="let data of landlordList;" class="table-row" [class.data-selected]="data.isSelected">
               <td>
                 <ion-checkbox color="success" style="margin-bottom: 0;">
                 </ion-checkbox>
@@ -113,10 +113,9 @@
               </td>
               <td>{{(data.propertyOffice | lookup: officeCodes) || DEFAULTS.NOT_AVAILABLE}}</td>
               <td>{{(data.propertyManagementType | lookup: managementTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
-              <td>{{(data.lastGeneratedAt  | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</td>
+              <td>{{(data.lastGeneratedAt | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</td>
               <td class="resp-action-icon">
-                <i (click)="showMenu($event,'dashboard-overlay', data, 'table-row')"
-                  class="propcoicon propcoicon-actions-on action-btn"></i>
+                <i class="propcoicon propcoicon-actions-on action-btn"></i>
               </td>
             </tr>
             <tr *ngIf="landlordList?.length == 0">
