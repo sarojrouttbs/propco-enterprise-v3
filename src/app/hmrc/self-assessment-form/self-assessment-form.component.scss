@@ -1,0 +1,25 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -ms-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+}
+
+#self-assessment-form {
+    --padding-top: var(--ion-padding-top);
+    --padding-end: var(--ion-padding-end);
+    --padding-bottom: var(--ion-padding-bottom);
+    --padding-start: var(--ion-padding-start);
+
+    div {
+        h2 {
+            color: var(--ion-color-three);
+            font-weight: 600;
+        }
+    }
+}
