@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AGENT_WORKSPACE_CONFIGS } from 'src/app/shared/constants';
-import * as menuList from '../../../../assets/data/menu.json';
+import menuList from '../../../../assets/data/menu.json';
 import { WorkspaceService } from '../workspace.service';
 
 @Component({
@@ -23,6 +23,7 @@ export class PropertyPage implements OnInit {
   showMenu = false;
   label = AGENT_WORKSPACE_CONFIGS.property.pageTitleMap.dashboard;
   mode: string = 'side';
+  agentMenu: any[] = menuList.agents;
   constructor(
     private route: ActivatedRoute,
     private workspaceService: WorkspaceService

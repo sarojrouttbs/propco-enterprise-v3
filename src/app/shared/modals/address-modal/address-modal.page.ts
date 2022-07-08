@@ -35,7 +35,7 @@ export class AddressModalPage implements OnInit {
 
   initiateAddressForm() {
     this.addressDetailsForm = this.fb.group({
-      postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
+      postcode: ['', [Validators.required]],
       addressdetails: [''],
       buildingNumber: [''],
       buildingName: [''],
@@ -119,7 +119,7 @@ export class AddressModalPage implements OnInit {
         this.addressDetailsForm.get('country').setValue(res.countryName);
         this.addressDetailsForm.get('latitude').setValue(res.latitude);
         this.addressDetailsForm.get('longitude').setValue(res.longitude);
-        this.addressDetailsForm.get('pafReference').setValue(res.pafReference);
+        this.addressDetailsForm.get('pafReference').setValue(res.domesticId);
       }
     }, error => {
       this.selectedAddress = {};

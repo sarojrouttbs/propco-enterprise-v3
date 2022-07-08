@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { GoogleMapComponent } from './google-map.component';
+import { SafetyDeviceComponent } from './safety-device.component';
 
-describe('GoogleMapComponent', () => {
-  let component: GoogleMapComponent;
-  let fixture: ComponentFixture<GoogleMapComponent>;
+describe('SafetyDeviceComponent', () => {
+  let component: SafetyDeviceComponent;
+  let fixture: ComponentFixture<SafetyDeviceComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ GoogleMapComponent ],
+      declarations: [ SafetyDeviceComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(GoogleMapComponent);
+    fixture = TestBed.createComponent(SafetyDeviceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

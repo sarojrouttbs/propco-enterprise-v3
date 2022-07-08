@@ -178,8 +178,8 @@ ion-item {
 }
 
 .modal-container {
-  .modal-wrapper {
-    @include border-radius(10px);
+  // .modal-wrapper {
+    width: 100% !important;
     --color: var(--ion-color-step-2000);
     width: 500px;
     height: auto;
@@ -209,7 +209,7 @@ ion-item {
     }
 
     ion-content {
-      --background: var(--ion-color-step-1800);
+      --background: var(--ion-color-six);
       --color: var(--ion-color-step-200);
       --padding-top: 0px;
       --padding-bottom: 0px;
@@ -218,7 +218,7 @@ ion-item {
     }
 
     ion-footer {
-      background: var(--ion-color-step-1800);
+      background: var(--ion-color-six);
     }
 
     .footer-md::before {
@@ -237,11 +237,11 @@ ion-item {
       --background: var(--ion-color-success);
     }
   }
-}
+// }
 
 .entity-search, .la-application-search, .la-property-search,.nett-modal-container ,.fee-charge-modal-container{
-  .modal-wrapper {
-    min-height: 200px;
+  // .modal-wrapper {
+    min-height: 210px;
     width: 550px;
 
     ion-content {
@@ -265,10 +265,10 @@ ion-item {
       padding: 0 10px;
     }
   }
-}
+// }
 
 .tenant-list,.fee-charge-modal-container {
-  .modal-wrapper {
+  // .modal-wrapper {
     min-height: 300px;
     min-width: 400px;
     width: 767px;
@@ -276,18 +276,18 @@ ion-item {
     .dataTables_wrapper.no-footer .dataTables_scrollBody{
       border-bottom: none;
     }
-  }
+  // }
 }
 
 .resend-link {
-  .modal-wrapper {
+  // .modal-wrapper {
     min-height: 450px;
     min-width: 750px;
-  }
+  // }
 }
 
 .alert-prompt{
-  .modal-wrapper {
+  // .modal-wrapper {
     min-height: 200px;
     min-width: 300px;
 
@@ -299,7 +299,7 @@ ion-item {
       text-align: center;
       margin-top: 25px;
     }
-  }
+  // }
 }
 
 ion-select-popover {
@@ -371,7 +371,7 @@ ion-alert.common-alert-box {
 
 
 .upload-container {
-  .modal-wrapper {
+  // .modal-wrapper {
     @include border-radius(10px);
     // --color: var(--ion-color-step-2000);
     width: 750px;
@@ -390,7 +390,7 @@ ion-alert.common-alert-box {
     //   border-top: 1px solid var(--ion-color-step-800);
     //   padding: 3px 5px;
     // }
-  }
+  // }
 }
 
 .ionic-selectable-group .ionic-selectable-item {
@@ -421,7 +421,7 @@ ion-alert.common-alert-box {
 }
 
 .property-certificates-list {
-  .modal-wrapper {
+  // .modal-wrapper {
     height: 500px;
     min-width: 400px;
     width: 800px;
@@ -429,36 +429,36 @@ ion-alert.common-alert-box {
       // border-top: 1px solid var(--ion-color-step-800);
       padding: 5px;
     }
-  }
+  // }
 }
 
 .property-certificates-view{
-  .modal-wrapper {
+  // .modal-wrapper {
     min-height: 300px;
     width: 800px;
-  }
+  // }
   ion-footer {
     padding: 5px;
   }
 }
 
 .ll-contractor-modal{
-  .modal-wrapper {
+  // .modal-wrapper {
     width: 600px;
     height: auto;
     min-height: 460px;
-  }
+  // }
 }
 
 .payment-request-modal{
-  .modal-wrapper {
+  // .modal-wrapper {
     height: auto;
     min-height: 450px;
-  }
+  // }
 }
 
 .chronological-history {
-  .modal-wrapper {
+  // .modal-wrapper {
     height: auto;
     min-width: 400px;
     width: 800px;
@@ -482,7 +482,7 @@ ion-alert.common-alert-box {
     ul {
       width: 100%;
   }
-  }
+  // }
 }
 
 #propertyDashboardTabs{
@@ -628,6 +628,7 @@ ion-alert.common-alert-box {
         height: 32px !important;
         textarea{
           padding-top: 0px;
+          height: unset !important; 
         }
       }
     }
@@ -662,7 +663,15 @@ ion-alert.common-alert-box {
         color: var(--ion-color-one) !important;
       }
     }
-  }  
+  }
+
+  #property-keys {
+    ion-textarea {
+      .textarea-wrapper {
+        height: 50px !important;
+      }
+    }
+  }
 }
 
 .market-apprisal-ion-select, .fault-ion-select, .let-alliance-ion-select {
@@ -677,11 +686,11 @@ ion-alert.common-alert-box {
 
 //agnet portal > market appraisal form modals
 .ma-modal-container,.la-modal-container, .tob-modal-container, .fault-modal-container, .property-modal-container {
-  .modal-wrapper {
-    ion-content {
+  // .modal-wrapper {
+    &::part(content) {
       --background: var(--ion-color-six);
       h4, h5, h6, p, small, div, ion-label, ion-text {
-        color: var(--ion-color-one);;
+        color: var(--ion-color-one);
       }
       ion-item {
         --border-color: var(--ion-color-one);
@@ -689,7 +698,6 @@ ion-alert.common-alert-box {
           color: var(--ion-color-three) !important;
         }
       }
-
       .dataTables_wrapper {
         .dataTables_length {
           select {
@@ -767,7 +775,7 @@ ion-alert.common-alert-box {
         }
       }
     }
-    ion-footer{
+    &::part(footer){
       background: var(--ion-color-six);
       ion-item {
         --border-color: var(--ion-color-one);
@@ -796,13 +804,13 @@ ion-alert.common-alert-box {
       }
     }
   } 
-}
+// }
 
 .ma-modal-container{
-  .modal-wrapper {
+  // .modal-wrapper {
     height: auto;
     min-height: 500px;
-  }
+  // }
 }
 
 .address-selection {
@@ -867,4 +875,15 @@ ion-list{
     }
   }
   
+}
+
+ion-datetime {
+  --background: var( --ion-color-six); 
+}
+
+.ion-date-item-icon {
+    bottom: 0;
+    position: absolute;
+    right: 0;
+    color: var( --ion-color-primary); 
 }

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, PROPCO,DEFAULTS } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS,DEFAULTS, ENTITY_TYPE, DATE_FORMAT } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ValidationService } from 'src/app/shared/services/validation.service';
 
@@ -19,6 +19,8 @@ export class DetailsComponent implements OnInit {
   selectedEntityDetails: any = null;
   activeLink: any;
   isMenuShown = true;
+  DATE_FORMAT = DATE_FORMAT;
+
   constructor(private router: Router, private agentService: AgentService, private commonService: CommonService, private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -29,7 +31,7 @@ export class DetailsComponent implements OnInit {
     this.createForm();
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
-    this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);   
+    this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);
     await this.patchLettingsDetails();
     await this.patchLetBoardDetails();
     await this.patchPropertyHistory();
@@ -95,11 +97,11 @@ export class DetailsComponent implements OnInit {
       }),
       history: this._formBuilder.group({  
         createdAt: [''],
-        createdBy: [''], //* - pending
+        createdBy: [''],
         statusChangedOn: [''],
-        statusChangedBy: [''], //* - pending
+        statusChangedBy: [''],
         maStatusChangedOn: [''],
-        maStatusChangedBy: [''] //* - pending
+        maStatusChangedBy: ['']
       }),
       propertyChecksForm:  this._formBuilder.group({
         hasLetBefore: [''],
@@ -135,7 +137,6 @@ export class DetailsComponent implements OnInit {
         floor:[''],
         block:['']
       })
-
     })
   }
 
@@ -183,9 +184,6 @@ export class DetailsComponent implements OnInit {
     });
   }
 
-
-  
-
   private patchLetBoardDetails() {
     const control = this.propertyDetailsForm.controls['letBoardForm'];
     control.patchValue({
@@ -197,18 +195,19 @@ export class DetailsComponent implements OnInit {
     });
   }
 
-  private patchPropertyHistory() {
+  private async patchPropertyHistory() {
+    await this.getChangeHistory(this.selectedEntityDetails.entityId, 'marketingStatus');
+    await this.getChangeHistory(this.selectedEntityDetails.entityId, 'status');
     const control = this.propertyDetailsForm.controls['history'];
     control.patchValue({
-      createdAt: this.propertyDetails?.createdAt ? this.commonService.getFormatedDate(this.propertyDetails.createdAt, 'dd/MM/yyyy') : DEFAULTS.NOT_AVAILABLE,
-      createdBy: '', //* - pending
-      statusChangedOn: this.propertyDetails?.propertyInfo?.statusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.statusChangedOn, 'dd/MM/yyyy') : DEFAULTS.NOT_AVAILABLE,
-      statusChangedBy: '', //* - pending
-      maStatusChangedOn: this.propertyDetails?.propertyInfo?.maStatusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.maStatusChangedOn, 'dd/MM/yyyy') : DEFAULTS.NOT_AVAILABLE,
-      maStatusChangedBy: '' //* - pending
+      createdAt: this.propertyDetails?.createdAt ? this.commonService.getFormatedDate(this.propertyDetails.createdAt, this.DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE,
+      createdBy: this.propertyDetails?.createdBy ? this.propertyDetails?.createdBy : DEFAULTS.NOT_AVAILABLE,
+      statusChangedOn: this.propertyDetails?.propertyInfo?.statusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.statusChangedOn, this.DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE,
+      statusChangedBy: this.propertyDetails?.propertyInfo?.statusChangedBy ? this.propertyDetails?.propertyInfo?.statusChangedBy : DEFAULTS.NOT_AVAILABLE,
+      maStatusChangedOn: this.propertyDetails?.propertyInfo?.maStatusChangedOn ? this.commonService.getFormatedDate(this.propertyDetails.propertyInfo.maStatusChangedOn, this.DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE,
+      maStatusChangedBy: this.propertyDetails?.propertyInfo?.maStatusChangedBy ? this.propertyDetails?.propertyInfo?.maStatusChangedBy : DEFAULTS.NOT_AVAILABLE
     });
   }
-
 
   private patchPropertyChecks() {
     const control = this.propertyDetailsForm.controls['propertyChecksForm'];
@@ -266,5 +265,29 @@ export class DetailsComponent implements OnInit {
         }
       }
     );
+  }
+
+  private getChangeHistory(propertyId: string, fieldName: string) {
+    const params = new HttpParams()
+    .set('hideLoader', 'true')
+    .set('entityId', propertyId)
+    .set('entityType', ENTITY_TYPE.PROPERTY)
+    .set('fieldName', fieldName);
+    const promise = new Promise((resolve, reject) => {
+      this.agentService.getChangeHistory(params).subscribe(
+        (res) => {
+          if(res && fieldName === 'marketingStatus') {
+            this.propertyDetails.propertyInfo.maStatusChangedBy = res[0].changedBy;
+          } else if(res && fieldName === 'status') {
+            this.propertyDetails.propertyInfo.statusChangedBy = res[0].changedBy; 
+          }
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+    return promise;
   }
 }

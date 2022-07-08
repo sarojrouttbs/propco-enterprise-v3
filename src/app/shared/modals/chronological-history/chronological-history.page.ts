@@ -3,7 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { FAULT_EVENT_TYPES, FAULT_EVENT_TYPES_ID, LL_INSTRUCTION_TYPES, PROPCO } from '../../constants';
+import { DATE_FORMAT, DEFAULTS, FAULT_EVENT_TYPES, FAULT_EVENT_TYPES_ID, LL_INSTRUCTION_TYPES, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as  pdfFonts from "pdfmake/build/vfs_fonts";
@@ -92,7 +92,9 @@ export class ChronologicalHistoryPage implements OnInit {
    propertyDetails;
    isTableReady = false;
    showAll: boolean = true;
-
+   DEFAULTS = DEFAULTS;
+   DATE_FORMAT = DATE_FORMAT;
+   
    constructor(private modalController: ModalController, private commonService: CommonService, private faultsService: FaultsService, private elementRef: ElementRef) {
       this.getLookupData();
    }
@@ -193,7 +195,7 @@ export class ChronologicalHistoryPage implements OnInit {
 
                   this.eventList.forEach((element) => {
                      tableBody.push([{ text: 'Date/Time', style: 'tableHeader', border: [false, false, false, false] }, { colSpan: 2, text: 'Action', style: 'tableHeader', border: [false, false, false, false] }]);
-                     tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, 'dd/MM/yyyy HH:mm:ss'), style: 'subheader', border: [false, false, false, false] }, { colSpan: 2, text: `${element.eventType || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                     tableBody.push([{ text: this.commonService.getFormatedDate(element.eventAt, this.DATE_FORMAT.DATE_TIME_SECONDS), style: 'subheader', border: [false, false, false, false] }, { colSpan: 2, text: `${element.eventType || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
 
                      if (FAULT_EVENT_TYPES_ID.RESPONSE_RECEIVED === element.eventTypeId) {
                         tableBody.push([
@@ -201,22 +203,22 @@ export class ChronologicalHistoryPage implements OnInit {
                            { text: 'By', style: 'tableHeader', border: [false, false, false, false] },
                            { text: 'How', style: 'tableHeader', border: [false, false, false, false] }]);
                         tableBody.push([
-                           { text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] },
-                           { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] },
-                           { text: `${element.data.how || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           { text: `${element.data.notificationTemplateCode || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] },
+                           { text: `${element.data.by || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] },
+                           { text: `${element.data.how || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
                         tableBody.push([{ colSpan: 3, text: 'Rejection Reason', style: 'tableHeader', border: [false, false, false, false] }]);
-                        tableBody.push([{ colSpan: 3, text: `${element.data.rejectionReason || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.rejectionReason || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
                         tableBody.push([{ colSpan: 3, text: 'Question', style: 'tableHeader', border: [false, false, false, false] }]);
-                        tableBody.push([{ colSpan: 3, text: `${element.data.question || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.question || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
                         tableBody.push([{ colSpan: 3, text: 'Answer', style: 'tableHeader', border: [false, false, false, false] }]);
-                        tableBody.push([{ colSpan: 3, text: `${element.data.responseOption || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.responseOption || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
 
                         tableBody.push([{ colSpan: 3, text: 'Subject', style: 'tableHeader', border: [false, false, false, false] }]);
-                        tableBody.push([{ colSpan: 3, text: `${element.data.subject || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.subject || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
 
                         if (this.isEmailRequire) {
                            tableBody.push([{ colSpan: 3, text: 'Email', style: 'tableHeader', border: [false, false, false, false] }])
-                           tableBody.push([{ colSpan: 3, style: 'emailHeader', text: `${element.data.plainBody || '-'}`, border: [false, false, false, false] }])
+                           tableBody.push([{ colSpan: 3, style: 'emailHeader', text: `${element.data.plainBody || this.DEFAULTS.NOT_AVAILABLE}`, border: [false, false, false, false] }])
                         }
 
                      }
@@ -226,68 +228,68 @@ export class ChronologicalHistoryPage implements OnInit {
                            { text: 'By', style: 'tableHeader', border: [false, false, false, false] },
                            { text: 'Recipient', style: 'tableHeader', border: [false, false, false, false] }]);
                         tableBody.push([
-                           { text: `${element.data.notificationTemplateCode || '-'}`, style: 'subheader', border: [false, false, false, false] },
-                           { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] },
-                           { text: `${element.data.recipient || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           { text: `${element.data.notificationTemplateCode || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] },
+                           { text: `${element.data.by || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] },
+                           { text: `${element.data.recipient || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
 
                         tableBody.push([
                            { colSpan: 3, text: 'From', style: 'tableHeader', border: [false, false, false, false] }
                         ]);
-                        tableBody.push([{ colSpan: 3, text: `${element.data.from || '-'}`, style: 'subheader', border: [false, false, false, false] }])
+                        tableBody.push([{ colSpan: 3, text: `${element.data.from || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }])
                         tableBody.push([
                            { colSpan: 3, text: 'To', style: 'tableHeader', border: [false, false, false, false] },
                         ]);
-                        tableBody.push([{ colSpan: 3, text: `${element.data.to || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.to || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
 
                         tableBody.push([{ colSpan: 3, text: 'Subject', style: 'tableHeader', border: [false, false, false, false] }]);
-                        tableBody.push([{ colSpan: 3, text: `${element.data.subject || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.subject || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
                         if (this.isEmailRequire) {
                            tableBody.push([{ colSpan: 3, text: 'Email', style: 'tableHeader', border: [false, false, false, false] }])
-                           tableBody.push([{ colSpan: 3, style: 'emailHeader', text: `${element.data.plainBody || '-'}`, border: [false, false, false, false] }])
+                           tableBody.push([{ colSpan: 3, style: 'emailHeader', text: `${element.data.plainBody || this.DEFAULTS.NOT_AVAILABLE}`, border: [false, false, false, false] }])
                         }
                      }
                      else if (FAULT_EVENT_TYPES_ID.NOTES_ADDED === element.eventTypeId) {
                         tableBody.push([{ text: 'Category', style: 'tableHeader', border: [false, false, false, false] },
                         { text: 'By', style: 'tableHeader', border: [false, false, false, false] },
                         { text: 'Type', style: 'tableHeader', border: [false, false, false, false] }]);
-                        tableBody.push([{ text: `${element.data.category || '-'}`, style: 'subheader', border: [false, false, false, false] },
-                        { text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] },
-                        { text: `${element.data.type || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        tableBody.push([{ text: `${element.data.category || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] },
+                        { text: `${element.data.by || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] },
+                        { text: `${element.data.type || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
 
                         tableBody.push([{ colSpan: 3, text: 'Note Description', style: 'tableHeader', border: [false, false, false, false] }]);
-                        tableBody.push([{ colSpan: 3, text: `${element.data.noteDescription.replace(/<br[^>]*>/g, "") || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.noteDescription.replace(/<br[^>]*>/g, "") || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
                      }
                      else {
                         tableBody.push([{ colSpan: 3, text: 'By', style: 'tableHeader', border: [false, false, false, false] }]);
-                        tableBody.push([{ colSpan: 3, text: `${element.data.by || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                        tableBody.push([{ colSpan: 3, text: `${element.data.by || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
                         
                         if (FAULT_EVENT_TYPES_ID.FAULT_CLOSED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Closing Reason', style: 'tableHeader', border: [false, false, false, false] }]);
-                           tableBody.push([{ colSpan: 3, text: `${element.data.closingReason || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.closingReason || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                         if (FAULT_EVENT_TYPES_ID.STAGE_CHANGED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Stage', style: 'tableHeader', border: [false, false, false, false] }]);
-                           tableBody.push([{ colSpan: 3, text: `${element.data.stage || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.stage || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                         if (FAULT_EVENT_TYPES_ID.CLI_ACTION_SELECTED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Cli Selected Action', style: 'tableHeader', border: [false, false, false, false] }]);
-                           tableBody.push([{ colSpan: 3, text: `${element.data.cliSelectedAction || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.cliSelectedAction || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                         if (FAULT_EVENT_TYPES_ID.STATUS_CHANGED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Status', style: 'tableHeader', border: [false, false, false, false] }]);
-                           tableBody.push([{ colSpan: 3, text: `${element.data.status || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.status || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                         if (FAULT_EVENT_TYPES_ID.FAULT_SNOOZED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Snoozed Till', style: 'tableHeader', border: [false, false, false, false] }]);
-                           tableBody.push([{ colSpan: 3, text: `${this.commonService.getFormatedDate(element.data.snoozeUntilDate, 'dd/MM/yyyy') || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${this.commonService.getFormatedDate(element.data.snoozeUntilDate, this.DATE_FORMAT.DATE) || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                         if (FAULT_EVENT_TYPES_ID.DOCUMENT_ADDED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Document', style: 'tableHeader', border: [false, false, false, false] }]);
-                           tableBody.push([{ colSpan: 3, text: `${element.data.document || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.document || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                         if (FAULT_EVENT_TYPES_ID.ESCALATED === element.eventTypeId) {
                            tableBody.push([{ colSpan: 3, text: 'Escalation Reason', style: 'tableHeader', border: [false, false, false, false] }]);
-                           tableBody.push([{ colSpan: 3, text: `${element.data.escalationReason || '-'}`, style: 'subheader', border: [false, false, false, false] }]);
+                           tableBody.push([{ colSpan: 3, text: `${element.data.escalationReason || this.DEFAULTS.NOT_AVAILABLE}`, style: 'subheader', border: [false, false, false, false] }]);
                         }
                      }
                      tableBody.push([{ colSpan: 3, text: '', border: [false, false, false, true], }]);

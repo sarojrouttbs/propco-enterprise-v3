@@ -335,7 +335,7 @@ body {
   }
 }
 
-#faultListTable, #la-application-list, #la-guarantor-application-list, #tenant-list-modal, #propertyNotesTable, #propertyTenancyTable, #periodic-visit-table, #propertyMaintenanceTable, #periodic-visit-notes-table, #whitegoods-table {
+#faultListTable, #la-application-list, #la-guarantor-application-list, #tenant-list-modal, #propertyNotesTable, #propertyTenancyTable, #periodic-visit-table, #propertyMaintenanceTable, #periodic-visit-notes-table, #whitegoods-table, #safety-device-table {
   tr.odd {
     td.dataTables_empty {
       display: none;
@@ -911,4 +911,22 @@ mat-form-field {
 
 .unsaved-data-error{
   background: rgba(var(--ion-color-danger-rgb), 0.2);
+}
+
+.propco-btn-group {
+  ion-button{
+      margin-right: 8px;
+  }
+
+  ion-button:last-child{
+      margin-right: 0;
+  }
+}
+
+.create-keyset-modal .modal-wrapper {
+  min-height: 550px !important;
+}
+
+.key-activity-modal .modal-wrapper {
+  min-height: 435px !important;
 }

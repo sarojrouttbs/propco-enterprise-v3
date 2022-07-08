@@ -17,37 +17,37 @@
 
           <ion-col size="50" class="header-content">
             <ion-text class="header">Email</ion-text><br />
-            <ion-text class="content">{{landlordDetails?.email || '-'}}</ion-text>
+            <ion-text class="content">{{landlordDetails?.email || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
           <ion-col size="50" class="header-content">
             <ion-text class="header">Alternate Email</ion-text><br />
-            <ion-text class="content">{{landlordDetails?.alternativeEmail || '-'}}</ion-text>
+            <ion-text class="content">{{landlordDetails?.alternativeEmail || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
           <ion-col size="50" class="header-content">
             <ion-text class="header">Emergency No</ion-text><br />
-            <ion-text class="content">{{landlordDetails?.emergencyNo || '-'}}</ion-text>
+            <ion-text class="content">{{landlordDetails?.emergencyNo || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
           <ion-col size="50" class="header-content">
             <ion-text class="header">Daytime</ion-text><br />
-            <ion-text class="content">{{landlordDetails?.businessTelephone || '-'}}</ion-text>
+            <ion-text class="content">{{landlordDetails?.businessTelephone || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
           <ion-col size="50" class="header-content">
             <ion-text class="header">Mobile</ion-text><br />
-            <ion-text class="content">{{landlordDetails?.mobile || '-'}}</ion-text>
+            <ion-text class="content">{{landlordDetails?.mobile || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
           <ion-col size="50" class="header-content">
             <ion-text class="header">Evening</ion-text><br />
-            <ion-text class="content">{{landlordDetails?.homeTelephone || '-'}}</ion-text>
+            <ion-text class="content">{{landlordDetails?.homeTelephone || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
           <ion-col size="50" class="header-content">
             <ion-text class="header">Telephone</ion-text><br />
-            <ion-text class="content">{{landlordDetails?.alternativeNo || '-'}}</ion-text>
+            <ion-text class="content">{{landlordDetails?.alternativeNo || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
         </ion-row>
@@ -63,42 +63,42 @@
         <ion-row class="ion-justify-content-start fault-title" *ngIf="hasPropertyCheckedIn">
           <ion-col size="50" class="header-content">
             <ion-text class="header">Name</ion-text><br />
-            <ion-text class="content">{{tenantDetails?.fullName || '-'}}</ion-text>
+            <ion-text class="content">{{tenantDetails?.fullName || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
           <ion-col size="50" class="header-content">
             <ion-text class="header">Email</ion-text><br />
-            <ion-text class="content">{{tenantDetails?.email || '-'}}</ion-text>
+            <ion-text class="content">{{tenantDetails?.email || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
           <ion-col size="50" class="header-content">
             <ion-text class="header">Alternate Email</ion-text><br />
-            <ion-text class="content">{{tenantDetails?.alternativeEmail || '-'}}</ion-text>
+            <ion-text class="content">{{tenantDetails?.alternativeEmail || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
           <ion-col size="50" class="header-content">
             <ion-text class="header">Emergency No</ion-text><br />
-            <ion-text class="content">{{tenantDetails?.emergencyNo || '-'}}</ion-text>
+            <ion-text class="content">{{tenantDetails?.emergencyNo || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
           <ion-col size="50" class="header-content">
             <ion-text class="header">Daytime</ion-text><br />
-            <ion-text class="content">{{tenantDetails?.businessTelephoneNo || '-'}}</ion-text>
+            <ion-text class="content">{{tenantDetails?.businessTelephoneNo || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
           <ion-col size="50" class="header-content">
             <ion-text class="header">Mobile</ion-text><br />
-            <ion-text class="content">{{tenantDetails?.mobile || '-'}}</ion-text>
+            <ion-text class="content">{{tenantDetails?.mobile || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
           <ion-col size="50" class="header-content">
             <ion-text class="header">Evening</ion-text><br />
-            <ion-text class="content">{{tenantDetails?.homeTelephoneNo || '-'}}</ion-text>
+            <ion-text class="content">{{tenantDetails?.homeTelephoneNo || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
           <ion-col size="50" class="header-content">
             <ion-text class="header">Telephone</ion-text><br />
-            <ion-text class="content">{{tenantDetails?.alternativeNo || '-'}}</ion-text>
+            <ion-text class="content">{{tenantDetails?.alternativeNo || DEFAULTS.NOT_AVAILABLE}}</ion-text>
           </ion-col>
 
         </ion-row>

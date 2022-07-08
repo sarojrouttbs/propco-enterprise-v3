@@ -49,13 +49,13 @@
           <tbody>
             <tr *ngFor="let data of visitList" class="table-row" (click)="onClickRow(data); $event.stopPropagation();"
               [ngClass]="{'row-selected' : data.isSelected}">
-              <td>{{data?.visitType| lookup: propertyVisitTypes || notAvailable}}</td>
-              <td>{{data?.status | lookup: inspectionStatuses || notAvailable}}</td>
+              <td>{{(data?.visitType| lookup: propertyVisitTypes) || notAvailable}}</td>
+              <td>{{(data?.status | lookup: inspectionStatuses) || notAvailable}}</td>
               <td>{{data?.visitNumber || notAvailable}}</td>
-              <td>{{data?.visitDate | date: DATE_FORMAT.DATE || notAvailable}}</td>
+              <td>{{(data?.visitDate | date: DATE_FORMAT.DATE) || notAvailable}}</td>
               <td>{{data.description || notAvailable}}</td>
               <td class="resp-action-icon">
-                <i (click)="showMenu($event,'divOverlay', data, 'table-row')"
+                <i (click)="showMenu($event,'periodic-overlay', data, 'table-row')"
                   class="propcoicon propcoicon-actions-on action-btn"></i>
               </td>
             </tr>
@@ -65,10 +65,10 @@
             </tr>
           </tbody>
         </table>
-        <div id="divOverlay">
+        <div id="periodic-overlay" class="overlay-class">
           <ion-button (click)="addNotes()">Add Note</ion-button>
           <ion-button>Edit</ion-button>
-          <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+          <i (click)="hideMenu($event,'periodic-overlay')" class="propcoicon propcoicon-actions-on"></i>
         </div>
       </div>
 
@@ -133,11 +133,11 @@
           </thead>
           <tbody>
             <tr *ngFor="let notes of visitNotes?.data" class="table-row">
-              <td>{{notes.postedAt | date: DATE_FORMAT.DATE || notAvailable}}</td>
-              <td>{{notes.postedAt | date: DATE_FORMAT.TIME || notAvailable}}</td>
-              <td>{{notes.type | lookup:notesTypes || notAvailable}}</td>
-              <td>{{notes.complaint | lookup:notesComplaints || notAvailable}}</td>
-              <td>{{notes.category | lookup:notesCategories || notAvailable}}</td>
+              <td>{{(notes.postedAt | date: DATE_FORMAT.DATE) || notAvailable}}</td>
+              <td>{{(notes.postedAt | date: DATE_FORMAT.TIME) || notAvailable}}</td>
+              <td>{{(notes.type | lookup:notesTypes) || notAvailable}}</td>
+              <td>{{(notes.complaint | lookup:notesComplaints) || notAvailable}}</td>
+              <td>{{(notes.category | lookup:notesCategories) || notAvailable}}</td>
               <td>{{notes.userName || notAvailable}}</td>
               <td><i (click)="showNoteDescription(notes.notes);" class="propcoicon propcoicon-property-description"></i>
               </td>

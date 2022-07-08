@@ -13,6 +13,7 @@ import { NotesModalPageModule } from '../../shared/modals/notes-modal/notes-moda
 import { EscalateModalPageModule } from '../../shared/modals/escalate-modal/escalate-modal.module';
 import { DataTablesModule } from 'angular-datatables';
 import { IonicSelectableModule } from 'ionic-selectable';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -24,7 +25,8 @@ import { IonicSelectableModule } from 'ionic-selectable';
     DataTablesModule,
     ReactiveFormsModule,
     IonicSelectableModule,
-    CloseFaultModalPageModule
+    CloseFaultModalPageModule,
+    PipesModule
     ],
   declarations: [DashboardPage]
 })

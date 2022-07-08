@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { APPLICATION_STATUSES, DEFAULTS, PROPCO, REFERENCING_TYPES } from 'src/app/shared/constants';
+import { APPLICATION_STATUSES, DATE_FORMAT, DEFAULTS, PROPCO, REFERENCING_TYPES } from 'src/app/shared/constants';
 import { HoldingDepositePaidModalPage } from 'src/app/shared/modals/holding-deposite-paid-modal/holding-deposite-paid-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
@@ -47,6 +47,7 @@ export class ApplicationListPage implements OnInit {
   isPropertyDetailsAvailable = false;
   isApplicationListAvailable = false;
   DEFAULTS = DEFAULTS;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
     this.getTobLookupData();
@@ -68,7 +69,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   private async initApiCalls() {
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'tob-application-overlay');
     this.propertyDetails = await this.getPropertyById();
     this.applicationsDetails = await this.getApplicationList();
     this.applicationList = (this.applicationsDetails.applications && this.applicationsDetails.applications.length > 0) ? this.applicationsDetails.applications as ApplicationData[] : [];
@@ -213,13 +214,6 @@ export class ApplicationListPage implements OnInit {
       paddingBottom: divOverlayTopBottomPadding
     });
 
-    const gridDivOverlay = $('#grid-divoverlay');
-
-    gridDivOverlay.css({
-      width: divOverlay.width(),
-      height: divOverlayHeight
-    });
-
     divOverlay.delay(200).slideDown('fast');
     event.stopPropagation();
   }
@@ -249,7 +243,7 @@ export class ApplicationListPage implements OnInit {
 
   filterByDate() {
     this.filteredApplicationList.data = this.applicationList;
-    this.filteredApplicationList.data = this.filteredApplicationList.data.filter(e => new Date(this.commonService.getFormatedDate(e.createdAt, 'yyyy-MM-dd')) >= new Date(this.commonService.getFormatedDate(this.fromDate.value, 'yyyy-MM-dd')) && new Date(this.commonService.getFormatedDate(e.createdAt, 'yyyy-MM-dd')) <= new Date(this.commonService.getFormatedDate(this.toDate.value, 'yyyy-MM-dd')));
+    this.filteredApplicationList.data = this.filteredApplicationList.data.filter(e => new Date(this.commonService.getFormatedDate(e.createdAt, this.DATE_FORMAT.YEAR_DATE)) >= new Date(this.commonService.getFormatedDate(this.fromDate.value, this.DATE_FORMAT.YEAR_DATE)) && new Date(this.commonService.getFormatedDate(e.createdAt, this.DATE_FORMAT.YEAR_DATE)) <= new Date(this.commonService.getFormatedDate(this.toDate.value, this.DATE_FORMAT.YEAR_DATE)));
     this.checkApplicationsAvailable();
   }
 
@@ -377,7 +371,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   viewDetails(applicantId: string) {
-    this.hideMenu('', 'divOverlay2');
+    this.hideMenu('', 'tob-application-overlay');
     this.router.navigate([`../application/${applicantId}`], { relativeTo: this.route });
   }
 
@@ -427,7 +421,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   onPaginateChange() {
-    this.hideMenu('', 'divOverlay2');
+    this.hideMenu('', 'tob-application-overlay');
   }
 
   private checkApplicationsAvailable() {

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { BookMaModalPage } from '../shared/modals/book-ma-modal/book-ma-modal.page';
-import { MARKET_APPRAISAL } from '../shared/constants';
+import { DATE_FORMAT, MARKET_APPRAISAL } from '../shared/constants';
 import { CommonService } from '../shared/services/common.service';
 import { ValidationService } from '../shared/services/validation.service';
 import { MarketAppraisalService } from './market-appraisal.service';
@@ -16,6 +16,8 @@ export class MarketAppraisalPage implements OnInit {
 
   type = MARKET_APPRAISAL.contact_type;
   maForm: FormGroup;
+  DATE_FORMAT = DATE_FORMAT;
+  
   constructor(
     private commonService: CommonService,
     private router: Router,
@@ -36,9 +38,9 @@ export class MarketAppraisalPage implements OnInit {
         officeCode: ['', Validators.required],
         enquiryNotes: [''],
         landlordStatus: [''],
-        mobile: ['', [Validators.required, ValidationService.numberValidator]],
-        homeTelephone: ['', [Validators.required]],
-        businessTelephone: ['', [Validators.required]],
+        mobile: ['', [Validators.required, Validators.maxLength(15), ValidationService.numberValidator]],
+        homeTelephone: ['', [Validators.required, Validators.maxLength(15)]],
+        businessTelephone: ['', [Validators.required, Validators.maxLength(15)]],
         email: ['', [Validators.required, ValidationService.emailValidator]],
         title: ['', [Validators.required]],
         forename: ['', [Validators.required]],
@@ -172,10 +174,10 @@ export class MarketAppraisalPage implements OnInit {
           payload.landlordId = this.maForm.get('contactForm').value.landlordUuid;
           payload.status = parseInt(payload.status);
           if (payload.availableFromDate) {
-            payload.availableFromDate = this.commonService.getFormatedDate(payload.availableFromDate, 'yyyy-MM-dd');
+            payload.availableFromDate = this.commonService.getFormatedDate(payload.availableFromDate, this.DATE_FORMAT.YEAR_DATE);
           }
           if (payload.availableToDate) {
-            payload.availableToDate = this.commonService.getFormatedDate(payload.availableToDate, 'yyyy-MM-dd');
+            payload.availableToDate = this.commonService.getFormatedDate(payload.availableToDate, this.DATE_FORMAT.YEAR_DATE);
           }
           const propertyCreated = await this.createProperty(payload);
           if (propertyCreated) {
@@ -219,10 +221,10 @@ export class MarketAppraisalPage implements OnInit {
           payload.landlordId = this.maForm.get('contactForm').value.landlordUuid;
           payload.status = parseInt(payload.status);
           if (payload.availableFromDate) {
-            payload.availableFromDate = this.commonService.getFormatedDate(payload.availableFromDate, 'yyyy-MM-dd');
+            payload.availableFromDate = this.commonService.getFormatedDate(payload.availableFromDate, this.DATE_FORMAT.YEAR_DATE);
           }
           if (payload.availableToDate) {
-            payload.availableToDate = this.commonService.getFormatedDate(payload.availableToDate, 'yyyy-MM-dd');
+            payload.availableToDate = this.commonService.getFormatedDate(payload.availableToDate, this.DATE_FORMAT.YEAR_DATE);
           }
           const propertyUpdated = await this.updateProperty(payload);
           if (propertyUpdated) {
@@ -264,10 +266,10 @@ export class MarketAppraisalPage implements OnInit {
         payload.landlordId = landlordCreated.landlordId;
         payload.status = parseInt(payload.status);
         if (payload.availableFromDate) {
-          payload.availableFromDate = this.commonService.getFormatedDate(payload.availableFromDate, 'yyyy-MM-dd');
+          payload.availableFromDate = this.commonService.getFormatedDate(payload.availableFromDate, this.DATE_FORMAT.YEAR_DATE);
         }
         if (payload.availableToDate) {
-          payload.availableToDate = this.commonService.getFormatedDate(payload.availableToDate, 'yyyy-MM-dd');
+          payload.availableToDate = this.commonService.getFormatedDate(payload.availableToDate, this.DATE_FORMAT.YEAR_DATE);
         }
         const propertyCreated = await this.createProperty(payload);
         if (propertyCreated) {

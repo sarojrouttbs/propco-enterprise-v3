@@ -24,7 +24,7 @@ export class ChangeNettPage implements OnInit {
 
   initForm() {
     this.form = this.formBuilder.group({
-      nett: ['', Validators.required],
+      nett: null,
     });
   }
 

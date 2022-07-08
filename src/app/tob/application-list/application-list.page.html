@@ -33,7 +33,7 @@
             <mat-form-field appearance="fill">
               <mat-label>Date From</mat-label>
               <input matInput [matDatepicker]="picker1" [formControl]="fromDate" [max]="maxDate">
-              <mat-datepicker-toggle matPrefix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
           </ion-col>
@@ -42,7 +42,7 @@
             <mat-form-field appearance="fill">
               <mat-label>Date To</mat-label>
               <input matInput [matDatepicker]="picker2" [formControl]="toDate" [min]="fromDate" [max]="maxDate">
-              <mat-datepicker-toggle matPrefix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
           </ion-col>
@@ -147,12 +147,12 @@
                 <ion-grid style="height:100%;" class="no-padding">
                   <ion-row class="application-title fs-18">
                     <ion-col class="no-padding-top no-padding-bottom col1" size="60">
-                      <ion-text class="fs-20"> {{ item?.rent | currency: 'GBP' }} {{ (applicationsDetails?.frequencyType | lookup: rentFrequencyTypes) || '-' }}
+                      <ion-text class="fs-20"> {{ item?.rent | currency: 'GBP' }} {{ (applicationsDetails?.frequencyType | lookup: rentFrequencyTypes) || DEFAULTS.NOT_AVAILABLE }}
                       </ion-text> <br />
                     </ion-col>
                     <ion-col class="no-padding-top no-padding-bottom col2 ion-text-end" size="40">
                       <ion-text class="application-status" [color]="getStatusColor(item?.status)">
-                        {{ (item?.status | lookup: applicationStatusTypes) || '-' }}
+                        {{ (item?.status | lookup: applicationStatusTypes) || DEFAULTS.NOT_AVAILABLE }}
                       </ion-text>
                     </ion-col>
                   </ion-row>
@@ -180,18 +180,18 @@
                           </ion-col>
                           <ion-col class="no-padding-left no-padding-bottom no-padding-top col2" size="33">
                             <ion-text color="medium">Tenancy Start</ion-text><br />
-                            <ion-text>{{ item?.moveInDate ? (item?.moveInDate | date: 'dd/MM/yyyy') : DEFAULTS.NOT_AVAILABLE}}</ion-text><br />
+                            <ion-text>{{ item?.moveInDate ? (item?.moveInDate | date: DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE}}</ion-text><br />
                           </ion-col>
                           <ion-col class="no-padding-left no-padding-bottom no-padding-top col3" size="33">
                             <ion-text color="medium">Tenancy End</ion-text><br />
-                            <ion-text>{{ item?.preferredTenancyEndDate ? (item?.preferredTenancyEndDate | date: 'dd/MM/yyyy') : DEFAULTS.NOT_AVAILABLE }}</ion-text><br />
+                            <ion-text>{{ item?.preferredTenancyEndDate ? (item?.preferredTenancyEndDate | date: DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE }}</ion-text><br />
                           </ion-col>
                         </ion-row>
                       </ion-grid>
                     </ion-col>
                     <ion-col class="no-padding-top col2 ion-text-end action-icon" size="25">
                       <div>
-                        <i (click)="showMenu($event, 'divOverlay2', item, 'application-details', false)"
+                        <i (click)="showMenu($event, 'tob-application-overlay', item, 'application-details', false)"
                           class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                       </div>
                     </ion-col>
@@ -209,14 +209,14 @@
           </div>
         </ion-card-content>
       </ion-card>
-      <div id="divOverlay2">
+      <div id="tob-application-overlay" class="overlay-class">
         <ion-button color="success" *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status != 1 && selectedApplicationRow?.status != 2)" (click)="acceptApplication()">Accept</ion-button>
         <ion-button color="danger" *ngIf="selectedApplicationRow?.isSubmitted && selectedApplicationRow?.status != 1 && selectedApplicationRow?.status != 3" (click)="rejectApplication()">Reject</ion-button>
         <ion-button *ngIf="selectedApplicationRow?.isSubmitted && selectedApplicationRow?.status == 2" (click)="holdApplication()">Hold</ion-button>
         <ion-button *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status == 2 && !selectedApplicationRow?.isHoldingDepositPaid)" (click)="markHoldingDepositPaid()">Holding Deposit Paid</ion-button>
         <ion-button *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status == 2 && selectedApplicationRow?.isHoldingDepositPaid)" (click)="startReferencing()">Start Referencing</ion-button>
         <ion-button (click)="viewDetails(selectedApplicationRow?.applicationId)">View Details</ion-button>
-        <i (click)="hideMenu($event,'divOverlay2')" class="propcoicon propcoicon-actions-on"></i>
+        <i (click)="hideMenu($event,'tob-application-overlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>
     </div>
     <div class="tob-pagination ion-padding">
