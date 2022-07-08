@@ -67,7 +67,7 @@ export class OfferDetailPage implements OnInit {
   DEFAULTS = DEFAULTS;
   updatedFormValues: any = [];
   DATE_FORMAT = DATE_FORMAT;
-  
+
   constructor(
     private route: ActivatedRoute,
     private commonService: CommonService,
@@ -239,12 +239,8 @@ export class OfferDetailPage implements OnInit {
       numberOfAdults: this.offerDetails.numberOfAdults,
       numberOfChildren: this.offerDetails.numberOfChildren,
     });
-    this.propertyClauses = this.offerDetails.offerClauses
-      ? this.offerDetails.offerClauses
-      : [];
-    this.propertyRestrictions = this.offerDetails.offerRestrictions
-      ? this.offerDetails.offerRestrictions
-      : [];
+    this.propertyClauses = this.offerDetails.offerClauses ? this.offerDetails.offerClauses : [];
+    this.propertyRestrictions = this.offerDetails.offerRestrictions ? this.offerDetails.offerRestrictions : [];
     try {
       this.propertyRestrictions.map((restrict) => {
         restrict.restrictionName = this.commonService.camelize(
@@ -259,8 +255,7 @@ export class OfferDetailPage implements OnInit {
     this.tobService.getPropertyDetails(propertyId).subscribe(
       (res) => {
         this.propertyDetails = res.data;
-        this.propertyDetails.propertyImageUrl =
-          this.commonService.getHeadMediaUrl(res.data.media || []);
+        this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
         this.getNoDeposit();
         if (!this.offerId) {
           this.makeAnOfferForm.patchValue({
@@ -370,15 +365,9 @@ export class OfferDetailPage implements OnInit {
     let isOnlyFormUpdated = false;
     this.getUpdatedValues();
 
-    if (
-      this.updatedFormValues.length > 1 &&
-      this.updatedFormValues.includes('status')
-    ) {
+    if ((this.updatedFormValues.length > 1 && this.updatedFormValues.includes('status')) || (this.updatedFormValues.includes('amount'))) {
       isStatusAndFormBothUpdated = true;
-    } else if (
-      this.updatedFormValues.length === 1 &&
-      this.updatedFormValues.includes('status')
-    ) {
+    } else if (this.updatedFormValues.length === 1 && this.updatedFormValues.includes('status')) {
       isStatusUpdated = true;
     } else {
       isOnlyFormUpdated = true;
@@ -846,16 +835,10 @@ export class OfferDetailPage implements OnInit {
       .updateOffer(this.prepareUpdateOffer(), this.offerId)
       .subscribe((response) => {
         let counterOfferStatus = this.makeAnOfferForm.controls.status.value;
-        if (
-          this.offerDetails.amount !==
-          Number(this.makeAnOfferForm.controls.amount.value)
-        ) {
+        if (this.offerDetails.amount !== Number(this.makeAnOfferForm.controls.amount.value)) {
           counterOfferStatus = OFFER_STATUSES.COUNTER_OFFER_BY_LL_AGENT;
         }
-        if (
-          this.offerDetails.status !==
-          this.makeAnOfferForm.controls.status.value
-        ) {
+        if (this.offerDetails.status !== this.makeAnOfferForm.controls.status.value) {
           counterOfferStatus = this.makeAnOfferForm.controls.status.value;
         }
         if (this.offerDetails.status !== counterOfferStatus) {
