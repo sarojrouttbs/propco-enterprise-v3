@@ -112,7 +112,7 @@
                 <span *ngIf="!data.landlordAddress"> DEFAULTS.NOT_AVAILABLE </span>
               </td>
               <td>{{(data.propertyOffice | lookup: officeCodes) || DEFAULTS.NOT_AVAILABLE}}</td>
-              <td>{{(data.propertyManagementType | lookup: managementTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
+              <td>{{(data.propertyManagementType.toString() | lookup: managementTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
               <td>{{(data.lastGeneratedAt | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</td>
               <td class="resp-action-icon">
                 <i class="propcoicon propcoicon-actions-on action-btn"></i>

@@ -8,7 +8,7 @@ export class LookupPipe implements PipeTransform {
     let value: any;
     if (lookupArray && lookupArray.length) {
       lookupArray.find((obj) => {
-        if (obj.index == index) {
+        if (obj.index === index) {
           value = obj.value;
         }
       });
