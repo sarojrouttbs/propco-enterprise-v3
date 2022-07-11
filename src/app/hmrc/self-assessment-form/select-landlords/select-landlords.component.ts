@@ -28,8 +28,9 @@ export class SelectLandlordsComponent implements OnInit {
   officeCodes: any;
   managementTypes: any;
   landlordParams: any = new HttpParams();
-  isAllChecked: any;
-  selectedLandlords: any = [];
+  checkedLandlords: number[] = [];
+  uncheckedLandlords: number[] = [];
+  gridCheckAll = false;
 
   constructor(
     private hmrcService: HmrcService,
@@ -85,14 +86,9 @@ export class SelectLandlordsComponent implements OnInit {
         this.hmrcService.getLandlords(this.landlordParams).subscribe(res => {
           this.landlordList = res && res.data ? res.data : [];
           this.landlordList.forEach(item => {
-            if (this.isAllChecked) {
-              if (this.selectedLandlords && !this.selectedLandlords.includes(item.propertyLinkId)) {
-                item.checked = true;
-              } else {
-                item.checked = false;
-              }
-            }
+            item.checked = this.isLandlordChecked(item.propertyLinkId);
           });
+
           callback({
             recordsTotal: res ? res.count : 0,
             recordsFiltered: res ? res.count : 0,
@@ -101,9 +97,6 @@ export class SelectLandlordsComponent implements OnInit {
         })
       },
     };
-    if (this.isAllChecked) {
-      this.checkAll();
-    }
   }
 
   onManagementChange() {
@@ -120,50 +113,56 @@ export class SelectLandlordsComponent implements OnInit {
   }
 
   onselectAll() {
-    this.isAllChecked = true;
-    this.checkAll();
-  }
-
-  checkAll() {
-    this.dtTrigger.next();
-    this.dtElements.first.dtInstance.then((dtInstance: any) => {
-      const elts = [];
-      $('td', dtInstance.table(0).node()).find('ion-checkbox');
-      const el = $('td', dtInstance.table(0).node()).find('ion-checkbox');
-      elts.push(el)
-      const temp = elts[0]
-      for (const elt of temp) {
-        if (!this.selectedLandlords) {
-          this.selectedLandlords.push(elt.value);
-          elt.checked = true;
-        } else if (this.selectedLandlords && !this.selectedLandlords.includes(elt.value)) {
-          elt.checked = true;
-        }
-      };
-    });
-  }
-
-  rowCheckBoxChecked(e, val) {
-    if (!e.detail.checked && this.isAllChecked) {
-      this.selectedLandlords.push(val);
-    } else {
-      this.selectedLandlords.splice(this.selectedLandlords.indexOf(val), 1)
-    }
+    this.checkedLandlords.length = 0;
+    this.gridCheckAll = true;
+    this.getRows(true);
   }
 
   unselectAll() {
-    this.isAllChecked = false;
-    this.selectedLandlords.length = 0;
+    this.uncheckedLandlords.length = 0;
+    this.gridCheckAll = false;
+    this.getRows(false);
+  }
+
+  rowCheckBoxChecked(e: any, propertyLinkId: number) {
+    if (e.currentTarget.checked) {
+      this.uncheckedLandlords.splice(this.uncheckedLandlords.indexOf(propertyLinkId), 1);
+      if (!this.gridCheckAll)
+        this.checkedLandlords.push(propertyLinkId);
+    }
+    else {
+      this.checkedLandlords.splice(this.checkedLandlords.indexOf(propertyLinkId), 1);
+      if (this.gridCheckAll)
+        this.uncheckedLandlords.push(propertyLinkId);
+    }
+  }
+
+  private isLandlordChecked(propertyLinkId: number) {
+    if (!this.gridCheckAll) {
+      return this.checkedLandlords.indexOf(propertyLinkId) >= 0 ? true : false;
+    }
+    else {
+      return this.uncheckedLandlords.indexOf(propertyLinkId) >= 0 ? false : true;
+    }
+  }
+
+  getRows(selected: boolean) {
     this.dtTrigger.next();
     this.dtElements.first.dtInstance.then((dtInstance: any) => {
-      const elts = [];
+      const elements = [];
       $('td', dtInstance.table(0).node()).find('ion-checkbox');
-      const el = $('td', dtInstance.table(0).node()).find('ion-checkbox');
-      elts.push(el)
-      const temp = elts[0]
-      for (const elt of temp) {
-        if (elt.checked) {
-          elt.checked = false;
+      const checkboxElement = $('td', dtInstance.table(0).node()).find('ion-checkbox');
+      elements.push(checkboxElement)
+      const temp = elements[0]
+      for (const item of temp) {
+        if (!selected) {
+          if (item.checked) {
+            this.uncheckedLandlords.push(item.value);
+            item.checked = false;
+          }
+        } else {
+          this.checkedLandlords.push(item.value);
+          item.checked = true;
         }
       };
     });
