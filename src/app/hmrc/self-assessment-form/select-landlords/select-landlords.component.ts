@@ -30,7 +30,7 @@ export class SelectLandlordsComponent implements OnInit {
   landlordParams: any = new HttpParams();
   checkedLandlords: number[] = [];
   uncheckedLandlords: number[] = [];
-  gridCheckAll: boolean = false;
+  gridCheckAll = false;
 
   constructor(
     private hmrcService: HmrcService,
@@ -124,7 +124,7 @@ export class SelectLandlordsComponent implements OnInit {
     this.getRows(false);
   }
 
-  rowCheckBoxChecked(e, propertyLinkId) {
+  rowCheckBoxChecked(e: any, propertyLinkId: number) {
     if (e.currentTarget.checked) {
       this.uncheckedLandlords.splice(this.uncheckedLandlords.indexOf(propertyLinkId), 1);
       if (!this.gridCheckAll)
@@ -137,7 +137,7 @@ export class SelectLandlordsComponent implements OnInit {
     }
   }
 
-  private isLandlordChecked(propertyLinkId) {
+  private isLandlordChecked(propertyLinkId: number) {
     if (!this.gridCheckAll) {
       return this.checkedLandlords.indexOf(propertyLinkId) >= 0 ? true : false;
     }
@@ -146,7 +146,7 @@ export class SelectLandlordsComponent implements OnInit {
     }
   }
 
-  getRows(selected) {
+  getRows(selected: boolean) {
     this.dtTrigger.next();
     this.dtElements.first.dtInstance.then((dtInstance: any) => {
       const elts = [];
