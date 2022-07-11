@@ -715,5 +715,30 @@ export const DATE_FORMAT = {
   DISPLAY_DATE_TIME_1: 'DD/MM/YYYY HH:mm',
   YEAR_DATE_TIME: 'yyyy-MM-dd HH:mm:ss',
   YEAR_DATE_TIME_1: 'yyyy-MM-ddTHH:mm',
-  YEAR_DATE:'yyyy-MM-dd'
+  YEAR_DATE: 'yyyy-MM-dd'
+}
+
+export const HMRC = {
+  QUICK_DATE_FILTERS: [
+    {
+      index:"2017-05-06,2018-05-05",
+      value: "2017-2018"
+    },
+    {
+      index:"2018-05-06,2019-05-05",
+      value: "2018-2019"
+    },
+    {
+      index:"2019-05-06,2020-05-05",
+      value: "2019-2020"
+    },
+    {
+      index:"2020-05-06,2021-05-05",
+      value: "2020-2021"
+    },
+    {
+      index:"2021-05-06,2022-05-05",
+      value: "2021-2022"
+    }
+  ]
 }
