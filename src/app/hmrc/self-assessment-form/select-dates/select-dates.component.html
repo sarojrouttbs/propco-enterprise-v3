@@ -1,0 +1,61 @@
+<ion-grid>
+  <form [formGroup]="group">
+    <ion-row>
+      <ion-col size="100" class="select-dates-text">
+        <h4>Step 2: Select Dates</h4>
+        <ion-text>Please select the date range for which you want to generate the report</ion-text>
+      </ion-col>
+      <ion-col size="100">
+       <ion-row>
+         <ion-col>
+          <ion-item>
+            <ion-label position="floating">Quick Filters
+            </ion-label>
+            <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="quickFilterType" #quickFilter (ionChange)="onFilterChange(quickFilter.value)">
+              <ion-select-option [value]="data?.index" *ngFor="let data of hmrcConfigs.QUICK_DATE_FILTERS">
+                {{ data?.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+         </ion-col>
+         <ion-col>
+          <ion-item id="fromDate">
+            <ion-label position="floating">To</ion-label>
+            <ion-input value="{{ group.controls.from.value | date: DATE_FORMAT.DATE }}" disabled="true"></ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+            ></ion-icon>
+            <ion-popover trigger="fromDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime
+                  showDefaultButtons="true"
+                  presentation="date"
+                  formControlName="from"
+                >
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+         </ion-col>
+         <ion-col>
+          <ion-item id="toDate">
+            <ion-label position="floating">To</ion-label>
+            <ion-input value="{{ group.controls.to.value | date: DATE_FORMAT.DATE }}" disabled="true"></ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+            ></ion-icon>
+            <ion-popover trigger="toDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime
+                  showDefaultButtons="true"
+                  presentation="date"
+                  formControlName="to"
+                >
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+         </ion-col>
+       </ion-row>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-grid>
