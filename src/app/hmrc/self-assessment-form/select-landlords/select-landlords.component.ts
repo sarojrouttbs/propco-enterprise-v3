@@ -149,20 +149,20 @@ export class SelectLandlordsComponent implements OnInit {
   getRows(selected: boolean) {
     this.dtTrigger.next();
     this.dtElements.first.dtInstance.then((dtInstance: any) => {
-      const elts = [];
+      const elements = [];
       $('td', dtInstance.table(0).node()).find('ion-checkbox');
-      const el = $('td', dtInstance.table(0).node()).find('ion-checkbox');
-      elts.push(el)
-      const temp = elts[0]
-      for (const elt of temp) {
+      const checkboxElement = $('td', dtInstance.table(0).node()).find('ion-checkbox');
+      elements.push(checkboxElement)
+      const temp = elements[0]
+      for (const item of temp) {
         if (!selected) {
-          if (elt.checked) {
-            this.uncheckedLandlords.push(elt.value);
-            elt.checked = false;
+          if (item.checked) {
+            this.uncheckedLandlords.push(item.value);
+            item.checked = false;
           }
         } else {
-          this.checkedLandlords.push(elt.value);
-          elt.checked = true;
+          this.checkedLandlords.push(item.value);
+          item.checked = true;
         }
       };
     });
