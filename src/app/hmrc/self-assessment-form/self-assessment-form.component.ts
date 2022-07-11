@@ -73,8 +73,8 @@ export class SelfAssessmentFormComponent implements OnInit {
 
   private getLandlords() {
     this.landlordParams = this.landlordParams
-      .set('from', this.selfAssessmentForm.get('from').value ? this.datepipe.transform(this.selfAssessmentForm.get('from').value, this.DATE_FORMAT.YEAR_DATE) : '')
-      .set('to', this.selfAssessmentForm.get('to').value ? this.datepipe.transform(this.selfAssessmentForm.get('to').value, this.DATE_FORMAT.YEAR_DATE) : '')
+      .set('lastGeneratedDateRange.from', this.selfAssessmentForm.get('from').value ? this.datepipe.transform(this.selfAssessmentForm.get('from').value, this.DATE_FORMAT.YEAR_DATE) : '')
+      .set('lastGeneratedDateRange.to', this.selfAssessmentForm.get('to').value ? this.datepipe.transform(this.selfAssessmentForm.get('to').value, this.DATE_FORMAT.YEAR_DATE) : '')
       .set('hideLoader', 'true');
     const promise = new Promise((resolve, reject) => {
       this.hmrcService.getLandlords(this.landlordParams).subscribe((res) => {
