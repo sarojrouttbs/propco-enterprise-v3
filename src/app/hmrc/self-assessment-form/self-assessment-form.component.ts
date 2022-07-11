@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-self-assessment-form',
@@ -7,8 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SelfAssessmentFormComponent implements OnInit {
 
-  constructor() { }
+  @ViewChild("stepper", { static: false }) stepper: MatStepper;
+  currentStepperIndex = 0;
+  selfAssessmentForm: FormGroup;
 
-  ngOnInit() {}
+  constructor(
+    private fb: FormBuilder
+  ) { }
+
+  ngOnInit() {
+    this.initForm()
+  }
+
+  initForm() {
+    this.selfAssessmentForm = this.fb.group({
+      managementType: ['']
+    });
+  }
 
 }
