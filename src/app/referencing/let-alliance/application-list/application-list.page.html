@@ -102,13 +102,14 @@
               <thead>
                 <tr>
                   <th style="width:7%; min-width: 80px;">Reference No.</th>
-                  <th >Property</th>
+                  <th style="width:7%">Enquiry ID</th>
+                  <th>Property</th>
                   <th style="width:12%">Applicant Name</th>
                   <th style="width:10%">Branch</th>
                   <th style="width:9%; min-width:80px;">Tenancy Start</th>
                   <th style="width:8%; min-width: 80px;">Rent Share</th>
                   <th style="width:9%; min-width: 80px;">Submission Date</th>
-                  <th style="width:11%">Product Type</th>
+                  <th style="width:9%">Product Type</th>
                   <th style="width:11%">Application Status</th>
                   <th style="width:36px"></th>
                 </tr>
@@ -116,6 +117,7 @@
               <tbody>
                 <tr *ngFor="let application of applicationList" class="table-row">
                   <td>{{application.referenceNumber || DEFAULTS.NOT_AVAILABLE}}</td>
+                  <td>{{application.caseReferenceNumber || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td>{{application.propertyDetail.reference || DEFAULTS.NOT_AVAILABLE}}<br/>
                     {{application.propertyDetail.address.addressLine1}} {{application.propertyDetail.address.addressLine5}} 
                     {{application.propertyDetail.address.postcode}}</td>
