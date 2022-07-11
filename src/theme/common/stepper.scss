@@ -385,8 +385,8 @@
 
   #hmrc-stepper{
     .mat-horizontal-stepper-header-container {
-      padding-right: 25% !important;
-      padding-left: 25% !important;
+      width: 600px;
+      margin: 0 auto;
     }
   }
 }
