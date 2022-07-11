@@ -14,6 +14,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { PipesModule } from '../shared/pipes/pipes.module';
 import { SelectSearchAllDirective } from '../select-all-plus-search/select-search-all.directive';
 import { SelectAllPlusSearchComponent } from '../select-all-plus-search/select-all-plus-search.component';
+import { SelectDatesComponent } from './self-assessment-form/select-dates/select-dates.component';
 
 @NgModule({
   imports: [
@@ -31,9 +32,9 @@ import { SelectAllPlusSearchComponent } from '../select-all-plus-search/select-a
     SelfAssessmentFormComponent,
     SelectLandlordsComponent,
     SelectSearchAllDirective,
-    SelectAllPlusSearchComponent
+    SelectAllPlusSearchComponent,
+    SelectDatesComponent
   ],
   entryComponents: [SelectAllPlusSearchComponent]
-
 })
 export class HmrcPageModule { }
