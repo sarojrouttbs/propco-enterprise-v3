@@ -12,15 +12,7 @@
 
 .mat-stepper-horizontal {
   font-family: var(--ion-font-family);
-  .stepper-next, .stepper-back, .stepper-submit, .stepper-save {
-    color: var(--ion-color-danger-contrast);
-    margin: 5px;
-  }
-  
-  .stepper-next, .stepper-back, .stepper-submit {
-    background-color: var(--ion-color-three);
-  }
-
+  background: transparent;
   .mat-horizontal-stepper-header-container {
     margin: 0 20px;
 
@@ -387,5 +379,14 @@
       background-color: var(--ion-color-success);
     } */
   }
+
+  #hmrc-stepper{
+    .mat-horizontal-stepper-header-container {
+      width: 600px;
+      margin: 0 auto;
+    }
+  }
 }
+
+
 
