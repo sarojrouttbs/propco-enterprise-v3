@@ -14,6 +14,7 @@ import { AddressModalPageModule } from 'src/app/shared/modals/address-modal/addr
 import { SearchPropertyPageModule } from 'src/app/shared/modals/search-property/search-property.module';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
+import { SelectTenantModalPageModule } from 'src/app/shared/modals/select-tenant-modal/select-tenant-modal.module';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -35,6 +36,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     MaterialModule,
     ComponentsModule,
     TenantListModalPageModule,
+    SelectTenantModalPageModule,
     AddressModalPageModule,
     SearchPropertyPageModule,
     CurrencyMaskModule,
