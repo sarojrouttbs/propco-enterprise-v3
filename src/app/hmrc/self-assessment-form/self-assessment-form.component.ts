@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { HmrcService } from '../hmrc.service';
 import { DatePipe } from '@angular/common';
@@ -33,9 +33,11 @@ export class SelfAssessmentFormComponent implements OnInit {
   initForm() {
     this.selfAssessmentForm = this.fb.group({
       managementType: [''],
-      from: null,
-      to: null,
-      quickFilterType: null
+      from: [null, Validators.required],
+      to: [null, Validators.required],
+      quickFilterType: null,
+      searchOnColumns: null,
+      searchText: null
     });
   }
 
@@ -72,6 +74,9 @@ export class SelfAssessmentFormComponent implements OnInit {
 
 
   private getLandlords() {
+    if (!this.selfAssessmentForm.get('from').value && !this.selfAssessmentForm.get('to').value) {
+      return;
+    }
     this.landlordParams = this.landlordParams
       .set('lastGeneratedDateRange.from', this.selfAssessmentForm.get('from').value ? this.datepipe.transform(this.selfAssessmentForm.get('from').value, this.DATE_FORMAT.YEAR_DATE) : '')
       .set('lastGeneratedDateRange.to', this.selfAssessmentForm.get('to').value ? this.datepipe.transform(this.selfAssessmentForm.get('to').value, this.DATE_FORMAT.YEAR_DATE) : '')
