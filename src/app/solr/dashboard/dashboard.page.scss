@@ -90,7 +90,7 @@
   }
 
   .block {
-    background-color: var(--ion-color-step-1750);
+    background-color: var(--ion-color-five);
     padding: 10px;
     text-align: center;
     border-radius: 4px;
@@ -118,7 +118,7 @@
   }
 
   .block:hover {
-    background-color: #FFF !important;
+    background-color: var(--ion-color-four);
     transform: scale(1.04);
   }
 }

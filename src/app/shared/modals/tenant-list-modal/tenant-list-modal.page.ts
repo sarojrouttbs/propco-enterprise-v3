@@ -33,8 +33,10 @@ export class TenantListModalPage implements OnInit {
   referencingApplicantStatusTypes: any[] = [];
 
   @Input() paramPropertyId: string;
+  @Input() paramMessage: string;
   isTableReady: boolean  = false;
   DEFAULTS = DEFAULTS;
+  tenantCaseId: any;
 
   constructor(
     private referencingService: ReferencingService,
@@ -57,7 +59,7 @@ export class TenantListModalPage implements OnInit {
       scrollCollapse: false
     };
     await this.getTenantList();
-    this.isTableReady = true
+    this.isTableReady = true;
 
   }
 
@@ -102,6 +104,10 @@ export class TenantListModalPage implements OnInit {
       this.referencingService.getPropertyTenantList(this.propertyId, params).subscribe(
         res => {
           this.laTenantList = res ? res.data : [];
+          const caseIdTenant = this.laTenantList.find(obj => obj.caseId != null);
+          if(caseIdTenant){
+            this.laTenantList.map(obj => obj.caseId = caseIdTenant.caseId);
+          }
           this.laTenantList.forEach((item) => {
             item.isRowChecked = false;
           });
@@ -146,6 +152,7 @@ export class TenantListModalPage implements OnInit {
 
     if(event.target.checked){
       this.tenantId = tenant.tenantId;
+      this.tenantCaseId = tenant.caseId;
       this.referencingApplicationStatus = tenant.referencingApplicationStatus;
       this.isSelected = true;
       this.laTenantList.forEach(
@@ -159,12 +166,14 @@ export class TenantListModalPage implements OnInit {
       const selectedRow = this.laTenantList.find(item => item.isRowChecked === true );
       if(selectedRow){
         this.tenantId = selectedRow.tenantId;
+        this.tenantCaseId = selectedRow.caseId;
         this.referencingApplicationStatus = selectedRow.referencingApplicationStatus;
         this.isSelected = true;
       }
       else{
         this.isSelected = false;
         this.tenantId = null;
+        this.tenantCaseId = null;
         this.referencingApplicationStatus = null;
       }
     }
@@ -178,6 +187,7 @@ export class TenantListModalPage implements OnInit {
     this.modalController.dismiss({
       tenantId: this.tenantId,
       referencingApplicationStatus: this.referencingApplicationStatus,
+      tenantCaseId: this.tenantCaseId,
       dismissed: true
     });
   }
