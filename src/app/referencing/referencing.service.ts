@@ -66,7 +66,7 @@ export class ReferencingService {
   }
 
   getPropertyTenantList(propertyId: string, params?: any): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenants`, { params }).pipe(tap((res: any) => { }),
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tenantList`, { params }).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
   }

@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, Injector, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { SelectAllPlusSearchComponent } from 'src/app/select-all-plus-search/select-all-plus-search.component';
-import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { HmrcService } from '../../hmrc.service';
 import { createCustomElement } from '@angular/elements';
@@ -31,6 +31,7 @@ export class SelectLandlordsComponent implements OnInit {
   checkedLandlords: number[] = [];
   uncheckedLandlords: number[] = [];
   gridCheckAll = false;
+  hmrcConfigs = HMRC;
 
   constructor(
     private hmrcService: HmrcService,
@@ -167,4 +168,7 @@ export class SelectLandlordsComponent implements OnInit {
       };
     });
   }
+
+  applyFilters() { }
+  resetFilters() { }
 }
