@@ -43,7 +43,7 @@ stage('SonarQube analysis') {
  }
      stage('Shell script') {
       steps {
-         nodejs('Node 10.16.3') {
+         nodejs('Node 14.15') {
         sh '''
         npm i
         ionic build --prod -- --base-href /v3/

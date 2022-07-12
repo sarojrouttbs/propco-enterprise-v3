@@ -48,7 +48,7 @@
               <mat-label>Date From
               </mat-label>
               <input matInput [matDatepicker]="picker1" [formControl]="fromDate" [max]="maxDate">
-              <mat-datepicker-toggle matPrefix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
           </ion-col>
@@ -58,7 +58,7 @@
               <mat-label>Date To
               </mat-label>
               <input matInput [matDatepicker]="picker2" [formControl]="toDate" [min]="fromDate" [max]="maxDate">
-              <mat-datepicker-toggle matPrefix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
           </ion-col>
@@ -198,7 +198,7 @@
                       <ion-text>{{ propertyDetails?.advertisementRent || 0 | currency : "GBP" }} {{ (propertyDetails?.advertisementRentFrequency | lookup: rentFrequencyTypes) || '' }}
                       </ion-text><br />
                       <ion-text class="offer-status" [color]="getStatusColor(item?.status)">
-                        {{ (item?.status | lookup: offerStatuses) || '-' }}
+                        {{ (item?.status | lookup: offerStatuses) || DEFAULTS.NOT_AVAILABLE }}
                       </ion-text>
                     </ion-col>
                   </ion-row>
@@ -208,7 +208,7 @@
                         <ion-row>
                           <ion-col class="no-padding-left no-padding-top no-padding-bottom col1" size="33">
                             <ion-text color="medium">Offer Date and Time</ion-text><br />
-                            <ion-text>{{ item?.offerAt | date: 'dd/MM/yyyy HH:mm' }}</ion-text><br />
+                            <ion-text>{{ (item?.offerAt | date: DATE_FORMAT.DATE_TIME)  || DEFAULTS.NOT_AVAILABLE }}</ion-text><br />
                           </ion-col>
                           <ion-col class="no-padding-left no-padding-top no-padding-bottom col2" size="33">
                             <ion-text color="medium">Applicant Name</ion-text><br />
@@ -237,7 +237,7 @@
                     </ion-col>
                     <ion-col class="no-padding-top col2 ion-text-end action-icon" size="25">
                       <div>
-                        <i (click)="showMenu($event, 'divOverlay3', item, 'offer-details-row', false, true)"
+                        <i (click)="showMenu($event, 'offer-overlay', item, 'offer-details-row', false, true)"
                           class="propcoicon propcoicon-actions-on action-btn"></i>
                       </div>
                     </ion-col>
@@ -255,10 +255,10 @@
           </div>
         </ion-card-content>
       </ion-card>
-      <div id="divOverlay3">
+      <div id="offer-overlay" class="overlay-class">
         <ion-button (click)="addNote()">Add Note</ion-button>
         <ion-button (click)="viewDetails()">View Details</ion-button>
-        <i (click)="hideMenu($event,'divOverlay3')" class="propcoicon propcoicon-actions-on"></i>
+        <i (click)="hideMenu($event,'offer-overlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>
     </div>
     <div class="tob-pagination ion-padding">
@@ -291,26 +291,26 @@
               </thead>
               <tbody>
                 <tr *ngFor="let notes of obsOfferNotesList | async" class="table-row">
-                  <td>{{ notes.postedAt | date: 'dd/MM/yyyy' || '-' }}</td>
-                  <td>{{ notes.postedAt | date: 'HH:mm:ss' || '-' }}</td>
-                  <td>{{ (notes.type | lookup: notesTypes) || '-' }}</td>
-                  <td>{{ (notes.complaint | lookup: notesComplaints) || '-' }}</td>
-                  <td>{{ (notes.category | lookup: notesCategories) || '-' }}</td>
-                  <td>{{ notes.userName || '-' }}</td>
-                  <td>{{ notes.notes || '-' }}</td>
+                  <td>{{ (notes.postedAt | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{ (notes.postedAt | date: DATE_FORMAT.TIME_SECONDS) || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{ (notes.type | lookup: notesTypes) || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{ (notes.complaint | lookup: notesComplaints) || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{ (notes.category | lookup: notesCategories) || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{ notes.userName || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{ notes.notes || DEFAULTS.NOT_AVAILABLE }}</td>
                   <td>
                     <div class="action-icon-notes">
-                      <i (click)="showMenu($event, 'divOverlayChild', notes, 'table-row', false, false)"
+                      <i (click)="showMenu($event, 'offer-notes-overlay', notes, 'table-row', false, false)"
                         class="propcoicon propcoicon-actions-on action-btn"></i>
                     </div>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <div id="divOverlayChild">
+            <div id="offer-notes-overlay" class="overlay-class">
               <ion-button (click)="editNote()"> Edit </ion-button>
               <ion-button color="danger" (click)="removeNote()"> Remove </ion-button>
-              <i (click)="hideMenu($event,'divOverlayChild')" class="propcoicon propcoicon-actions-on"></i>
+              <i (click)="hideMenu($event,'offer-notes-overlay')" class="propcoicon propcoicon-actions-on"></i>
             </div>
 
             <div *ngIf="filteredNotesList && !filteredNotesList.data.length">

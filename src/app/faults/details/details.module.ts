@@ -50,6 +50,7 @@ import { ContactDetailsModalPageModule } from 'src/app/shared/modals/contact-det
 import { ChronologicalHistoryPageModule } from 'src/app/shared/modals/chronological-history/chronological-history.module';
 import { SnoozeFaultModalPageModule } from 'src/app/shared/modals/snooze-fault-modal/snooze-fault-modal.module';
 import { SendEmailModalModule } from 'src/app/shared/modals/send-email-modal/send-email-modal.module';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -99,7 +100,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     ContactDetailsModalPageModule,
     ChronologicalHistoryPageModule,
     SnoozeFaultModalPageModule,
-    SendEmailModalModule
+    SendEmailModalModule,
+    PipesModule
   ],
   declarations: [DetailsPage, FileDirective, FileDropDirective, ArrangingContractorComponent,
     PaymentReceivedModalComponent, WithoutPrepaymentModalComponent, FaultQualificationComponent, JobCompletionComponent,

@@ -335,7 +335,7 @@ body {
   }
 }
 
-#faultListTable, #la-application-list, #la-guarantor-application-list, #tenant-list-modal, #propertyNotesTable, #propertyTenancyTable, #periodic-visit-table, #propertyMaintenanceTable, #periodic-visit-notes-table, #whitegoods-table {
+#faultListTable, #la-application-list, #la-guarantor-application-list, #tenant-list-modal, #propertyNotesTable, #propertyTenancyTable, #periodic-visit-table, #propertyMaintenanceTable, #periodic-visit-notes-table, #whitegoods-table, #safety-device-table, #hmrc-landlord-table {
   tr.odd {
     td.dataTables_empty {
       display: none;
@@ -925,4 +925,8 @@ mat-form-field {
 
 .create-keyset-modal .modal-wrapper {
   min-height: 550px !important;
+}
+
+.key-activity-modal .modal-wrapper {
+  min-height: 435px !important;
 }

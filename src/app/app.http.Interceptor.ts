@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpEvent, HttpHandler, HttpRequest, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError, empty } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { finalize, catchError } from 'rxjs/operators';
 import { PROPCO } from './shared/constants';
 import { CommonService } from './shared/services/common.service';

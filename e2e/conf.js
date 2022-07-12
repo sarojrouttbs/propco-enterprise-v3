@@ -1,9 +1,13 @@
 exports.config = {
-    seleniumAddress: 'http://localhost:4444/wd/hub',
+    seleniumAddress: 'http://magnus.techblue.co.uk:4444/wd/hub',
     capabilities: {
         'browserName': 'chrome',
          chromeOptions: {
+            //args: [ "--headless", "--disable-gpu", "--window-size=800,600" ]
          },
+        'moz:firefoxOptions': {
+            args: [ "--headless" ]
+        },
         'goog:loggingPrefs': {
             'performance': 'ALL',
             'browser': 'ALL'
@@ -12,7 +16,7 @@ exports.config = {
     framework: 'jasmine',
     restartBrowserBetweenTests: false,
     directConnect: false,
-    allScriptsTimeout: 300000,
+    allScriptsTimeout: 11000,
     jasmineNodeOpts: {
         onComplete: null,
         isVerbose: true,
@@ -24,14 +28,14 @@ exports.config = {
     suites: {
         fixafault: [
             './features/igf-logfault/add.fault.spec.js', 
-            './features/igf-logfault/fault.summary.spec.js',
-            './features/igf-logfault/merge.fault.spec.js',
-            './features/igf-logfault/fault.note.spec.js', 
-            './features/igf-logfault/fault.escalate.spec.js', 
-            './features/cli-landlordownrepair/landlord.own.repair.spec.js', 
-            './features/iac-arrangingcontractor/obtain.quote.spec.js',
-            './features/iac-arrangingcontractor/proceed.with.worksorder.spec.js',
-            './features/iac-arrangingcontractor/proceed.agent.necessity.spec.js'              
+           // './features/igf-logfault/fault.summary.spec.js',
+          //  './features/igf-logfault/merge.fault.spec.js',
+          //  './features/igf-logfault/fault.note.spec.js', 
+          //  './features/igf-logfault/fault.escalate.spec.js', 
+          //  './features/cli-landlordownrepair/landlord.own.repair.spec.js', 
+          //  './features/iac-arrangingcontractor/obtain.quote.spec.js',
+          //  './features/iac-arrangingcontractor/proceed.with.worksorder.spec.js',
+          //  './features/iac-arrangingcontractor/proceed.agent.necessity.spec.js'              
        ]
     },
     onPrepare: () => {

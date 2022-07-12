@@ -41,11 +41,11 @@
         <ion-text>
           {{getAdvLookupValue(propertyData?.propertyDetails?.furnishingType, furnishingTypes)}}
         </ion-text><br>
-        <ion-text> {{getLookupValue(propertyData?.propertyInfo?.managementType, managementTypes)}}</ion-text>
+        <ion-text> {{(propertyData?.propertyInfo?.managementType | lookup: managementTypes)}}</ion-text>
       </ion-col>
 
       <ion-col class="booking-office">
-        <ion-text>{{getLookupValue(propertyData?.propertyInfo?.bookingOfficeCode, officeCodes)}}
+        <ion-text>{{(propertyData?.propertyInfo?.bookingOfficeCode | lookup: officeCodes)}}
         </ion-text>
       </ion-col>
 

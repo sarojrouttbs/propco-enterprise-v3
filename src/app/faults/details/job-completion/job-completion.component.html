@@ -2,7 +2,7 @@
   <ion-grid>
     <ion-row *ngIf="faultDetails?.isClosed">
       <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
-        <app-close-fault  [notificationData]="iacNotification" [faultDetails]="faultDetails" [action]="getLookupValue(iacNotification?.faultStageAction, iacStageActions) || getLookupValue(faultDetails?.userSelectedAction, iacStageActions) || getLookupValue(iacNotification?.faultStageAction, faultQualificationsAction)?getLookupValue(iacNotification?.faultStageAction, iacStageActions) || getLookupValue(faultDetails?.userSelectedAction, iacStageActions) || getLookupValue(iacNotification?.faultStageAction, faultQualificationsAction): 'Job Completion'"></app-close-fault>
+        <app-close-fault  [notificationData]="iacNotification" [faultDetails]="faultDetails" [action]="(iacNotification?.faultStageAction | lookup: iacStageActions) || (faultDetails?.userSelectedAction | lookup: iacStageActions) || (iacNotification?.faultStageAction | lookup: faultQualificationsAction) ? (iacNotification?.faultStageAction | lookup: iacStageActions) || (faultDetails?.userSelectedAction | lookup: iacStageActions) || (iacNotification?.faultStageAction | lookup: faultQualificationsAction): 'Job Completion'"></app-close-fault>
       </ion-col>
     </ion-row>
 
@@ -11,7 +11,7 @@
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
-              <b>{{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm'
+              <b>{{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME
                 }}</b>
             </div>
             <h2 class="banner-heading">
@@ -20,7 +20,7 @@
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
-              {{getLookupValue(iacNotification?.faultStageAction, iacStageActions) || getLookupValue(faultDetails?.userSelectedAction, iacStageActions) || getLookupValue(iacNotification?.faultStageAction, faultQualificationsAction)}}
+              {{(iacNotification?.faultStageAction | lookup: iacStageActions) || (faultDetails?.userSelectedAction | lookup: iacStageActions) || (iacNotification?.faultStageAction | lookup: faultQualificationsAction)}}
               <ion-icon name="checkmark-circle-outline"></ion-icon>
             </ion-button>
             <ng-container *ngIf="iacNotification && iacNotification?.responseReceived">
@@ -29,7 +29,7 @@
                 <span *ngIf="iacNotification?.recipientType === 8">{{recipientTypes.LANDLORD}}</span>
                 <span *ngIf="iacNotification?.recipientType === 11">{{recipientTypes.CONTRACTOR}}</span>
                 <span *ngIf="iacNotification?.recipientType === 1">{{recipientTypes.TENANT}}</span>
-                {{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}
+                {{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME }}
               </h6>
             </ng-container>
             <ng-container *ngIf="iacNotification && !iacNotification?.responseReceived">
@@ -42,7 +42,7 @@
                   <span *ngIf="iacNotification?.recipientType == 1">{{recipientTypes.TENANT}}</span>
               </h6>
               <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt" >{{iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone?'Escalation due': iacNotification.chase === iacNotification.allowedNumberOfChases ? 'Last chase due('+iacNotification.chase+')' : 'Next chase due('+iacNotification.chase+')'}}:
-                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
+                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: DATE_FORMAT.DATE_TIME) : ''}}
               </h6>
             </ng-container>
           </div>
@@ -96,7 +96,7 @@
             <div class="question-answer ion-text-center" *ngIf="(iacNotification?.templateCode === 'CF-T-E' && iacNotification?.responseReceived?.isAccepted && faultDetails?.status !== 8 && faultDetails?.status !== 7)">
               <h4>Next Step:</h4> 
               <h6>
-                <ion-text>Contractor to visit property to carry out work on {{faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy HH:mm'}}</ion-text>
+                <ion-text>Contractor to visit property to carry out work on {{faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.DATE_TIME}}</ion-text>
               </h6>
               <div class="border-bottom"></div>
             </div>
@@ -344,11 +344,21 @@
         </ion-item>
       </ion-col>
       <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Date </ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-            formControlName="postdate">
-          </ion-datetime>
+        <ion-item id="postdate">
+          <ion-label position="floating">Date</ion-label>
+          <ion-input value="{{ workOrderForm.controls.postdate.value | date: DATE_FORMAT.DATE }}" [disabled]="iacNotification ? true : false"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="postdate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                showDefaultButtons="true"
+                presentation="date"
+                formControlName="postdate"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
       </ion-col>
       <ion-col size="50">
@@ -424,11 +434,22 @@
         <app-validation-message [control]="workOrderForm.controls.accessDetails"></app-validation-message>
       </ion-col>
       <ion-col size="33.33">
-        <ion-item>
-          <ion-label position="floating">Required Completion Date </ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-            formControlName="requiredDate" [min]="currentDate">
-          </ion-datetime>
+        <ion-item id="requiredDate">
+          <ion-label position="floating">Required Completion Date</ion-label>
+          <ion-input value="{{ workOrderForm.controls.requiredDate.value | date: DATE_FORMAT.DATE }}" [disabled]="iacNotification ? true : false"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="requiredDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                showDefaultButtons="true"
+                presentation="date"
+                formControlName="requiredDate"
+                [min]="currentDate"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
       </ion-col>
       <ion-col size="33.33">

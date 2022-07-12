@@ -10,6 +10,7 @@ import { GuarantorApplicationListPage } from './guarantor-application-list.page'
 
 import { DataTablesModule } from 'angular-datatables';
 import { ResendLinkModalPageModule } from 'src/app/shared/modals/resend-link-modal/resend-link-modal.module';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { ResendLinkModalPageModule } from 'src/app/shared/modals/resend-link-mod
     IonicModule,
     DataTablesModule,
     GuarantorApplicationListPageRoutingModule,
-    ResendLinkModalPageModule
+    ResendLinkModalPageModule,
+    PipesModule
   ],
   declarations: [GuarantorApplicationListPage]
 })

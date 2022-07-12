@@ -92,6 +92,14 @@
         },
         {
           "index": 5,
+          "key": "safety",
+          "name": "Safety Devices/Alarms",
+          "state": "propco.agent.entity.property.safety",
+          "isActive": false,
+          "route": "safety"
+        },
+        {
+          "index": 6,
           "key": "whitegoods",
           "name": "Service/White Goods",
           "state": "propco.agent.entity.property.whitegoods",

@@ -181,6 +181,7 @@ export const URGENCY_TYPES = {
 
 export const REGEX = {
   DECIMAL_REGEX: '[0-9]+(.[0-9][0-9]?)?',
+  POSTCODE_VALIDATOR_REGX: '^([aA-pPrR-uUwWyYzZ0-9][aA-hHkK-yY0-9][aAeEhHmMnNpPrRtTvVxXyY0-9]?[aAbBeEhHmMnNpPrRvVwWxXyY0-9]? {1}[0-9][aAbBdD-hHjJlLnN-uUwW-zZ]{2}|gGiIrR 0aAaA)$'
 };
 
 export const COMPLETION_METHODS = [
@@ -542,7 +543,9 @@ export const NOTES_TYPE = {
   OFFER: 'OFFER',
   FAULT: 'FAULT',
   PROPERTY: 'PROPERTY',
-  MANAGEMENT_INSPECTION: 'MANAGEMENT_INSPECTION'
+  MANAGEMENT_INSPECTION: 'MANAGEMENT_INSPECTION',
+  SAFETY_INSPECTIONS: 'SAFETY_INSPECTIONS',
+  SAFETY_DEVICES: 'SAFETY_DEVICES'
 };
 
 export const APPLICATION_STATUSES = {
@@ -560,6 +563,7 @@ export const APPLICATION_ACTION_TYPE = {
 export const ENTITY_TYPE = {
   AGENT: 'AGENT',
   LET_APPLICANT: 'LET_APPLICANT',
+  PROPERTY: 'PROPERTY'
 };
 
 export const PAYMENT_TYPES = {
@@ -642,7 +646,7 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'keys': 'Keys',
       'particulars': 'Particulars',
       'safety-device': 'Safety Devices/Alarms',
-      'whitegoods' : 'Service/White Goods',
+      'whitegoods': 'Service/White Goods',
       'safety': 'Safety Devices/Alarms'
     }
   }
@@ -700,5 +704,41 @@ export const MARKETING_ACTIVITY_TYPES = {
 export const DATE_FORMAT = {
   DATE: 'dd/MM/yyyy',
   DATE_TIME: 'dd/MM/yyyy HH:mm',
-  TIME: 'HH:mm'
+  TIME: 'HH:mm',
+  TIME_SECONDS: 'HH:mm:ss',
+  DATE_TIME_SECONDS: 'dd/MM/yyyy HH:mm:ss',
+  DISPLAY_DATE: 'DD MMM YYYY',
+  DISPLAY_DATE_TIME: 'DD MMM YYYY HH:mm',
+  INPUT_DATE: 'MM/DD/YYYY',
+  INPUT_DATE_TIME: 'MM/DD/YYYY HH:mm',
+  DISPLAY_DATE_1: 'DD/MM/YYYY',
+  DISPLAY_DATE_TIME_1: 'DD/MM/YYYY HH:mm',
+  YEAR_DATE_TIME: 'yyyy-MM-dd HH:mm:ss',
+  YEAR_DATE_TIME_1: 'yyyy-MM-ddTHH:mm',
+  YEAR_DATE: 'yyyy-MM-dd'
+}
+
+export const HMRC = {
+  QUICK_DATE_FILTERS: [
+    {
+      index:"2017-05-06,2018-05-05",
+      value: "2017-2018"
+    },
+    {
+      index:"2018-05-06,2019-05-05",
+      value: "2018-2019"
+    },
+    {
+      index:"2019-05-06,2020-05-05",
+      value: "2019-2020"
+    },
+    {
+      index:"2020-05-06,2021-05-05",
+      value: "2020-2021"
+    },
+    {
+      index:"2021-05-06,2022-05-05",
+      value: "2021-2022"
+    }
+  ]
 }

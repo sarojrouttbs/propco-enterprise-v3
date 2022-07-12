@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { FaultsService } from 'src/app/faults/faults.service';
+import { DATE_FORMAT } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -22,6 +23,7 @@ export class UseractionformsComponent implements OnInit {
   isContractorSearch = false;
   selectedContractor: Observable<FaultModels.IContractorResponse>;
   currentDate = this.commonService.getFormatedDate(new Date());
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private commonService: CommonService,

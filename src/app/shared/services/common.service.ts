@@ -3,7 +3,7 @@ import { AlertController, LoadingController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Plugins } from '@capacitor/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { PAYMENT_WARNINGS, PROPCO } from '../constants';
+import { DATE_FORMAT, PAYMENT_WARNINGS, PROPCO } from '../constants';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
@@ -469,7 +469,7 @@ export class CommonService {
 
   getFormatedDate(date, format?): string {
     if (typeof date !== 'undefined') {
-      return new DatePipe('en-UK').transform(new Date(date), format || 'yyyy-MM-dd');
+      return new DatePipe('en-UK').transform(new Date(date), format || DATE_FORMAT.YEAR_DATE);
     }
   }
 
@@ -512,7 +512,6 @@ export class CommonService {
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
     const divOverlayLeft = overlayContainerLeftPadding;
-
     let origDivOverlayHeight;
     let origDivOverlayTop;
     let divOverlayTopBottomPadding = 0;
@@ -522,7 +521,7 @@ export class CommonService {
 
     if (baseContainerHeight > divOverlayHeight) {
       origDivOverlayHeight = baseContainerHeight;
-      origDivOverlayTop = ispaging ? baseContainerTop + $('.dataTables_length').outerHeight(true) : baseContainerTop;
+      origDivOverlayTop = ispaging ? baseContainerTop + 38 : baseContainerTop;
     } else {
       origDivOverlayHeight = divOverlayHeight + (divOverlayTopBottomPadding * 2);
       const extraHeight = divOverlayHeight - baseContainerHeight;
@@ -622,7 +621,7 @@ export class CommonService {
 
   getFormatedDateTime(date, format?): string {
     if (typeof date !== 'undefined') {
-      return new DatePipe('en-UK').transform(new Date(date), format || 'yyyy-MM-dd HH:mm:ss');
+      return new DatePipe('en-UK').transform(new Date(date), format || DATE_FORMAT.YEAR_DATE_TIME);
     }
   }
 
