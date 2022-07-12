@@ -438,7 +438,7 @@
     <ion-row>
       <ion-col>
         <div class="tab-container">
-          <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #applicationTabs (selectedIndexChange)="currentSelectedTab($event)">
+          <mat-tab-group mat-stretch-tabs mat-align-tabs="start" [selectedIndex]="selectedTabIndex" #applicationTabs (selectedIndexChange)="currentSelectedTab($event)">
             <mat-tab>
               <ng-template mat-tab-label>
                 <div class="label-text" [class.success-border]='isPropertyTabDetailSubmit && propertyDetailsForm.valid && tenancyDetailsForm.valid'
