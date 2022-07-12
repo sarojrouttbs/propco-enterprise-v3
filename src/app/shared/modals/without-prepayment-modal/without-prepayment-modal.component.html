@@ -12,7 +12,7 @@
     <ion-grid class="">
       <ion-row class="payment-warning">
         <ion-col>
-          Have you checked the LL account and are you sure you want to proceed without taking pre-payment?
+          <ion-text>Have you checked the LL account and are you sure you want to proceed without taking pre-payment?</ion-text>
         </ion-col>
         <ion-col size="100" *ngIf="paymentWarnings && paymentWarnings.length">
           <h6>
@@ -50,8 +50,8 @@
       </ng-container>
       <ng-container *ngIf="!unSavedData">
         <ion-col size="100" class="ion-text-end">
-          <ion-button (click)="onCancel()" [disabled]="showLoader">Cancel</ion-button>
-          <ion-button (click)="submit()" [disabled]="showLoader">OK
+          <ion-button (click)="onCancel()" [disabled]="showLoader" color="danger">Cancel</ion-button>
+          <ion-button (click)="submit()" [disabled]="showLoader" color="success">OK
             <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
           </ion-button>
         </ion-col>

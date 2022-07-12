@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content id="contractor-details-modal">
 
   <form [formGroup]="contractorDetailForm">
     <ion-row>
@@ -56,12 +56,24 @@
       </ion-col>
 
       <ion-col size="100" *ngIf="isDateWithTime">
-        <ion-item>
-          <ion-label position="floating">Visit Date/Time
-          </ion-label>
-          <ion-datetime formControlName="estimatedVisitAt" dateFormat="MM/DD/YYYY HH:mm" displayFormat="DD MMM YYYY HH:mm" interface="popover" (ionChange)="checkPastDate()"
-            class="request-start-date" [min]="minDate">
-          </ion-datetime>
+        <ion-item id="estimatedVisitAt">
+          <ion-label position="floating">Visit Date/Time</ion-label>
+          <ion-input value="{{ contractorDetailForm.controls.estimatedVisitAt.value | date: DATE_FORMAT.DATE_TIME }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="estimatedVisitAt" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+              interface="popover"
+                showDefaultButtons="true"
+                presentation="date-time"
+                formControlName="estimatedVisitAt"
+                [min]="minDate"
+                (ionChange)="checkPastDate()"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
         <ion-text class="error-message" color="danger" *ngIf="pastDateError">The date/time you have chosen is in past, indicating your Contractor has already visited the property.</ion-text>
       </ion-col>
@@ -69,7 +81,7 @@
       <ng-container *ngIf="isDateWithSession">
         <ion-col size="100" class="session-label">
           <ion-label position="floating">Select session</ion-label>
-          <ion-radio-group formControlName="estimatedVisitSlot" class="session-block" (ionChange)="checkPastDateWithSession()">
+          <ion-radio-group formControlName="estimatedVisitSlot" class="session-block-radio-btn" (ionChange)="checkPastDateWithSession()">
             <div *ngFor="let item of sessionSlots" matTooltip="{{ item.value.split(',')[1] }}" matTooltipPosition="above">
             <ion-item class="ion-item" lines="none" >
                 <ion-label>
@@ -82,12 +94,24 @@
         </ion-col>
 
         <ion-col size="100">
-          <ion-item>
-            <ion-label position="floating">Select Date
-            </ion-label>
-            <ion-datetime formControlName="estimatedVisitAt" dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" interface="popover" (ionChange)="checkPastDateWithSession()"
-              class="request-start-date" [min]="minDate">
-            </ion-datetime>
+          <ion-item id="estimatedVisitAt">
+            <ion-label position="floating">Select Date</ion-label>
+            <ion-input value="{{ contractorDetailForm.controls.estimatedVisitAt.value | date: DATE_FORMAT.DATE }}"></ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+            ></ion-icon>
+            <ion-popover trigger="estimatedVisitAt" show-backdrop="false">
+              <ng-template>
+                <ion-datetime
+                interface="popover"
+                  showDefaultButtons="true"
+                  presentation="date"
+                  formControlName="estimatedVisitAt"
+                  [min]="minDate"
+                  (ionChange)="checkPastDateWithSession()"
+                >
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
           </ion-item>
           <ion-text class="error-message" color="danger" *ngIf="pastDateErrorWithSession">The date/time you have chosen is in past, indicating your Contractor has already visited the property.</ion-text>
         </ion-col>
@@ -113,7 +137,7 @@
     </ion-row>
   </form>
 </ion-content>
-<ion-footer>
+<ion-footer id="contractor-details-modal">
   <ion-grid [class.unsaved-data-error]="unSavedData">
     <ion-row>
       <ng-container *ngIf="unSavedData">

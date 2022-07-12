@@ -1,0 +1,64 @@
+<mat-accordion multi class="form-table-view-accordian">
+  <mat-expansion-panel #termsOfBusiness hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Terms Of Business (TOB)
+      </mat-panel-title>
+      <mat-panel-description class="ion-justify-content-end no-margin">
+        <div>
+          <span *ngIf="!termsOfBusiness.expanded" class="accordian-icon" title="Expand">
+            <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+          </span>
+          <span *ngIf="termsOfBusiness.expanded" class="accordian-icon" title="Collapse">
+            <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+          </span>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <form [formGroup]="group">
+      <ion-grid id="terms-of-business">
+        <ion-row>
+          <ion-col size="33.3">
+            <ion-item>
+              <ion-label position="floating">TOB Version</ion-label>
+              <ion-select formControlName="version" interface="popover">
+                <ion-select-option [value]="item?.termsOfBusinessId" *ngFor="let item of versionList">
+                  {{item?.description}} {{item?.version}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size="33.3" class="ion-align-self-end">
+            <ion-button color="success" style="margin-bottom: 0;">Update TOB To Current Version</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+    <ion-grid class="version-history">
+      <ion-row>
+        <ion-col>
+          <h5 color="medium" class="no-margin-bottom">TOB Version History</h5>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="no-padding-bottom" class="table-block">
+          <table>
+            <tr>
+              <th>Created At</th>
+              <th>Description</th>
+              <th>Version</th>
+            </tr>
+            <tr *ngFor="let history of versionHistoryList" class="table-row">
+              <td>{{history?.createdAt | date: DATE_FORMAT.DATE_TIME || notAvailable}}</td>
+              <td>{{history?.description || notAvailable}}</td>
+              <td>{{history?.version || notAvailable}}</td>
+            </tr>
+            <tr *ngIf="!versionHistoryList?.length">
+              <td colspan="12" class="ion-text-center">No data to display</td>
+            </tr>
+          </table>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </mat-expansion-panel>
+</mat-accordion>

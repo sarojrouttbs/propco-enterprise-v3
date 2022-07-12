@@ -1,0 +1,145 @@
+<ion-grid>
+  <form [formGroup]="group">
+    <ion-row>
+      <ion-col size="100" class="select-landlord-text">
+        <h4>Step 1: Select Landlords</h4>
+        <ion-text>Please filter & select the landlords per requirement</ion-text>
+      </ion-col>
+
+      <!-- <ion-col size="15">
+      <ion-item>
+        <ion-label position="floating">Tax Handler</ion-label>
+        <ion-select interface="popover">
+          <ion-select-option>
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-col> -->
+      <ion-col size="15">
+        <ion-item>
+          <ion-label position="floating">Office</ion-label>
+          <ion-select interface="popover">
+            <ion-select-option>
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="15">
+        <ion-item selectSearchAllDirective>
+          <ion-label position="floating">Management</ion-label>
+          <ion-select multiple="true" formControlName="managementType" (ionChange)="onManagementChange();">
+            <ion-select-option [value]="option.index" *ngFor="let option of managementTypes" checked="true">
+              {{option.value}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="15">
+        <ion-item>
+          <ion-label position="floating">Search</ion-label>
+          <ion-input formControlName="searchText"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="15">
+        <ion-item>
+          <ion-label position="floating">Column</ion-label>
+          <ion-select interface="popover" formControlName="searchOnColumns">
+            <ion-select-option [value]="item?.index" *ngFor="let item of hmrcConfigs.SEARCH_ON_COLUMNS_KEYS">
+              {{item?.value}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="40" class="ion-align-self-end ion-text-right">
+        <ion-button color="success" fill="outline" style="margin-right: 10px;">Apply Filters</ion-button>
+        <ion-button color="danger" fill="outline">Reset Filters</ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+  <ion-row>
+    <ion-col size="100" class="ion-text-left" style="margin-top: 10px;">
+      <ion-button color="success" fill="solid" style="margin-right: 10px;" (click)="onselectAll()">Select All
+      </ion-button>
+      <ion-button color="warning" fill="solid" (click)="unselectAll()">Select None</ion-button>
+    </ion-col>
+    <ion-col size="100" style="margin-top: 10px;">
+      <div class="overlay-container" style="position: relative">
+        <table datatable [dtOptions]="dtOptions" class="row-border hover" style="width: 100%; position: relative"
+          id="hmrc-landlord-table">
+          <thead>
+            <tr>
+              <th style="width:1%;">Select </th>
+              <th style="width:10%;">Property Reference</th>
+              <th style="width:20%;">Property Address</th>
+              <th style="width:10%;">Landlord/Owner Full Name</th>
+              <th>Landlord Address</th>
+              <th style="width:10%;">Office</th>
+              <th style="width:10%;">Management</th>
+              <th style="width:10%;">Last Generated On</th>
+              <th style="width:5%;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of landlordList; let i=index" class="table-row"
+              [class.data-selected]="data.isSelected">
+              <td>
+                <ion-checkbox color="success" style="margin-bottom: 0;"
+                  (ionChange)="rowCheckBoxChecked($event, data.propertyLinkId)" [checked]="data?.checked"
+                  [value]="data.propertyLinkId">
+                </ion-checkbox>
+              </td>
+              <td>{{ data.propertyReference || DEFAULTS.NOT_AVAILABLE}}</td>
+              <td>
+                <span *ngIf="data.propertyAddress">
+                  {{ data.propertyAddress?.addressLine1 ?
+                  data.propertyAddress?.addressLine1 + ',' : ''}}
+                  {{ data.propertyAddress?.addressLine2 ? data.propertyAddress?.addressLine2 + ',' : ''}}
+                  {{ data.propertyAddress?.addressLine3 ? data.propertyAddress?.addressLine3 + ',' : ''}}
+                  {{ data.propertyAddress?.town ? data.propertyAddress?.town + ',' : ''}}
+                  {{ data.propertyAddress?.county ? data.propertyAddress?.county + ',' : ''}}
+                  {{ data.propertyAddress?.postcode ? data.propertyAddress?.postcode + '.' : ''}}
+                </span>
+                <span *ngIf="!data.propertyAddress"> DEFAULTS.NOT_AVAILABLE </span>
+              </td>
+              <td>{{data.landlordFullName || DEFAULTS.NOT_AVAILABLE}} </td>
+              <td>
+                <span *ngIf="data.landlordAddress">
+                  {{ data.landlordAddress?.addressLine1 ?
+                  data.landlordAddress?.addressLine1 + ',' : ''}}
+                  {{ data.landlordAddress?.addressLine2 ? data.landlordAddress?.addressLine2 + ',' : ''}}
+                  {{ data.landlordAddress?.addressLine3 ? data.landlordAddress?.addressLine3 + ',' : ''}}
+                  {{ data.landlordAddress?.town ? data.landlordAddress?.town + ',' : ''}}
+                  {{ data.landlordAddress?.county ? data.landlordAddress?.county + ',' : ''}}
+                  {{ data.landlordAddress?.postcode ? data.landlordAddress?.postcode + '.' : ''}}
+                </span>
+                <span *ngIf="!data.landlordAddress"> DEFAULTS.NOT_AVAILABLE </span>
+              </td>
+              <td>{{(data.propertyOffice | lookup: officeCodes) || DEFAULTS.NOT_AVAILABLE}}</td>
+              <td>{{(data.propertyManagementType.toString() | lookup: managementTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
+              <td>{{(data.lastGeneratedAt | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</td>
+              <td class="resp-action-icon">
+                <i class="propcoicon propcoicon-actions-on action-btn"></i>
+              </td>
+            </tr>
+            <tr *ngIf="landlordList?.length == 0">
+              <td colspan="9" class="no-data-available" style="text-align: center;">
+                <b>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <div id="dashboard-overlay" class="overlay-class">
+          <ion-button *ngIf="selectedData?.isChecked" (click)="mergeFault(selectedData)">Merge</ion-button>
+          <ion-button *ngIf="selectedData?.status != 12 && selectedData?.status != 10 && !selectedData?.isClosed" (click)="closeFault()">Close</ion-button>
+          <ion-button (click)="notesModal()">Add Note</ion-button>
+          <ion-button *ngIf="!selectedData?.isEscalated" (click)="escalateFault()">Escalate</ion-button>
+          <ion-button *ngIf="selectedData?.isEscalated" (click)="deEscalateFault()">De-Escalate</ion-button>
+          <ion-button class="" (click)="goToFaultDetails()">View</ion-button>
+          <ion-button *ngIf="selectedData?.status == 1 && !selectedData?.isDraft && !selectedData?.isClosed" (click)="startProgress()">Start Progress</ion-button>
+          <i (click)="hideMenu($event,'dashboard-overlay')" class="propcoicon propcoicon-actions-on"></i>
+        </div> -->
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>

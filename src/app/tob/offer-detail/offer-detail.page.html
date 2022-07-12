@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content id="offer-deatils">
   <ion-grid class="offer-details">
     <app-tob-property-details [propertyDetails]="propertyDetails" [rentFrequencyTypes]="rentFrequencyTypes" [isTobPropertyCardReady]="isTobPropertyCardReady">
     </app-tob-property-details>
@@ -9,7 +9,7 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col class="no-padding-bottom">
+        <ion-col class="no-padding-bottom" class="table-block">
           <table>
             <thead>
               <tr>
@@ -17,16 +17,16 @@
                 <th>Name</th>
                 <th>Mobile</th>
                 <th>Email</th>
-                <th>lead</th>
+                <th>Lead</th>
                 <th *ngIf="!offerId"></th>
               </tr>
             </thead>
             <tbody>
               <tr *ngIf="applicantDetail">
-                <td>{{applicantDetail?.reference || '-'}}</td>
-                <td>{{applicantDetail?.fullName || '-'}}</td>
-                <td>{{applicantDetail?.mobile || '-'}}</td>
-                <td>{{applicantDetail?.email || '-'}}</td>
+                <td>{{applicantDetail?.reference || DEFAULTS.NOT_AVAILABLE}}</td>
+                <td>{{applicantDetail?.fullName || DEFAULTS.NOT_AVAILABLE}}</td>
+                <td>{{applicantDetail?.mobile || DEFAULTS.NOT_AVAILABLE}}</td>
+                <td>{{applicantDetail?.email || DEFAULTS.NOT_AVAILABLE}}</td>
                 <td>
                   <ion-checkbox color="medium" checked disabled></ion-checkbox>
                 </td>
@@ -39,7 +39,6 @@
           </table>
         </ion-col>
       </ion-row>
-
       <ion-row class="ion-justify-content-end search-row" [formGroup]="searchApplicantForm">
         <ion-col size-sm="50" size-xl="35" id="tob-applicant-search">
           <ion-searchbar 
@@ -123,7 +122,7 @@
               <ng-template matStepLabel>Offer Details</ng-template>
               <div class="action-btn-section">
                 <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-                <button mat-button matStepperNext class="stepper-next">Next</button>
+                <button color="success" mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
             <mat-step>
@@ -171,11 +170,11 @@
 
 <ng-template #offerDetails>
   <form [formGroup]="makeAnOfferForm" id="makeAnOfferForm" *ngIf="isOffersDetailsAvailable">
-    <ion-grid>
+    <ion-grid class="ion-padding">
       <ion-row class=" ion-justify-content-center">
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
-            <ion-label position="stacked">Offer Amount<ion-text class="mandatory">*</ion-text>
+            <ion-label position="stacked">Offer Amount <ion-text class="mandatory">*</ion-text>
             </ion-label>
             <input class="currency-input" currencyMask formControlName="amount" />
           </ion-item>
@@ -215,7 +214,7 @@
 
         <ion-col size-xs="100" size-sm="33.3" style="padding-top: 21px;">
           <mat-form-field appearance="fill">
-            <mat-label>When would you like to move in? *</mat-label>
+            <mat-label>When would you like to move in?</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="moveInDate" readonly>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
@@ -227,7 +226,7 @@
 
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
-            <ion-label position="floating">For How Long?<ion-text class="mandatory">*</ion-text>
+            <ion-label position="floating">For How Long? <ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select formControlName="rentingTime" interface="popover">
               <ion-select-option [value]="item.index" *ngFor="let item of letDurations">{{ item.value }}
@@ -249,7 +248,7 @@
 
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
-            <ion-label position="floating">No. of Children<ion-text class="mandatory">*</ion-text>
+            <ion-label position="floating">No. of Children <ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-select formControlName="numberOfChildren" interface="popover">
               <ion-select-option [value]="item" *ngFor="let item of childrens">{{item}}</ion-select-option>
@@ -280,7 +279,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item lines="full" class="mt-7">
             <ion-label>Do you have a guarantor?</ion-label>
-            <ion-toggle (ionChange)="isEnable('guarantor')" formControlName="hasGuarantor" color="success">
+            <ion-toggle (ionChange)="isEnable('guarantor')" formControlName="hasGuarantor" color="primary">
             </ion-toggle>
           </ion-item>
         </ion-col>
@@ -298,7 +297,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item lines="full" class="mt-7">
             <ion-label>Any pets?</ion-label>
-            <ion-toggle (ionChange)="isEnable('pets')" formControlName="hasPets" color="success"></ion-toggle>
+            <ion-toggle (ionChange)="isEnable('pets')" formControlName="hasPets" color="primary"></ion-toggle>
           </ion-item>
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
@@ -314,7 +313,7 @@
   </form>
   
   <!-- skeleton -->
-  <ion-grid *ngIf="!isOffersDetailsAvailable">
+  <ion-grid *ngIf="!isOffersDetailsAvailable" >
     <ion-row class=" ion-justify-content-center">
       <ion-col size-xs="100" size-sm="33.3">
         <ion-item lines="none">
@@ -395,7 +394,7 @@
 </ng-template>
 
 <ng-template #restriction>
-  <ion-grid class="ion-no-padding restriction-section">
+  <ion-grid class="ion-padding restriction-section">
     <ion-row class="">
       <ion-col size="100" *ngIf="!propertyRestrictions?.length">
         <div class="no-data">No restrictions found!</div>
@@ -406,7 +405,7 @@
             <ion-grid>
               <ion-row class="ion-align-items-center ion-justify-content-between">
                 <ion-col class="ion-text-start" size="55">
-                  <ion-text color="dark" class="res-clause-title">{{res.restrictionName}}</ion-text>
+                  <ion-text class="res-clause-title">{{res.restrictionName}}</ion-text>
                 </ion-col>
                 <ion-col class="ion-text-end" size="45">
                   <ion-button class="negotiate" [disabled]="!res.isNegotiable"
@@ -425,7 +424,7 @@
 </ng-template>
 
 <ng-template #clauses>
-  <ion-grid class="clause-section">
+  <ion-grid class="clause-section ion-padding">
     <ion-row>
       <ion-col size="100" *ngIf="!propertyClauses?.length">
         <div class="no-data">No special conditions & clauses found!</div>
@@ -438,7 +437,7 @@
             <ion-grid>
               <ion-row class="ion-align-items-start ion-justify-content-between">
                 <ion-col class="ion-text-start" [size]="clause.isNegotiable? 80 : 100">
-                  <ion-text color="dark" class="res-clause-title">{{clause.clauseName}} </ion-text><br />
+                  <ion-text class="res-clause-title">{{clause.clauseName}} </ion-text><br />
                   <ion-text color="medium" class="fs-16">{{clause.clauseText}}</ion-text>
                 </ion-col>
                 <ion-col class="ion-text-end" size-xs="100" size-sm="100" size-md="20" *ngIf="clause.isNegotiable">
@@ -468,11 +467,11 @@
 
 <ng-template #confirmation>
   <form [formGroup]="confirmationForm">
-    <ion-grid>
+    <ion-grid class="ion-padding">
       <ion-row>
         <ion-col size-sm="50" size-md="30" size-xl="25">
           <ion-item lines="none" class="mt-7">
-            <ion-toggle (ionChange)="isEnable('applicant')" formControlName="isApplicantConfirmed" color="success">
+            <ion-toggle (ionChange)="isEnable('applicant')" formControlName="isApplicantConfirmed" color="primary">
             </ion-toggle>
             <ion-label>Confirmed By Applicant</ion-label>
           </ion-item>
@@ -480,10 +479,9 @@
 
         <ion-col size-sm="50" size-md="20" size-xl="25" class="ion-text-end" style="padding-top: 15px;">
           <mat-form-field appearance="fill">
-            <mat-label>Confirmed On <ion-text class="mandatory">*</ion-text>
-            </mat-label>
+            <mat-label>Confirmed On</mat-label>
             <input matInput [matDatepicker]="applicantConfirmedDate" formControlName="applicantConfirmedDate" readonly>
-            <mat-datepicker-toggle matPrefix [for]="applicantConfirmedDate"></mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix [for]="applicantConfirmedDate"></mat-datepicker-toggle>
             <mat-datepicker #applicantConfirmedDate></mat-datepicker>
           </mat-form-field>
           <div style="margin-top: -20px !important;" class="ion-text-left">
@@ -494,17 +492,16 @@
 
         <ion-col size-sm="50" size-md="30" size-xl="25">
           <ion-item lines="none" class="mt-7">
-            <ion-toggle (ionChange)="isEnable('landlord')" formControlName="isLandlordConfirmed" color="success">
+            <ion-toggle (ionChange)="isEnable('landlord')" formControlName="isLandlordConfirmed" color="primary">
             </ion-toggle>
             <ion-label>Confirmed By Landlord</ion-label>
           </ion-item>
         </ion-col>
         <ion-col size-sm="50" size-md="20" size-xl="25" class="ion-text-end" style="padding-top: 15px;">
           <mat-form-field appearance="fill">
-            <mat-label>Confirmed On <ion-text class="mandatory">*</ion-text>
-            </mat-label>
+            <mat-label>Confirmed On</mat-label>
             <input matInput [matDatepicker]="landlordConfirmedDate" formControlName="landlordConfirmedDate" readonly>
-            <mat-datepicker-toggle matPrefix [for]="landlordConfirmedDate"></mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix [for]="landlordConfirmedDate"></mat-datepicker-toggle>
             <mat-datepicker #landlordConfirmedDate></mat-datepicker>
           </mat-form-field>
           <div style="margin-top: -20px !important;" class="ion-text-left">
@@ -514,13 +511,13 @@
         </ion-col>
         <ion-col size-sm="50" size-md="29" size-xl="24">
           <ion-item lines="none" class="mt-7">
-            <ion-toggle formControlName="sendEmailToApplicant" color="success"></ion-toggle>
+            <ion-toggle formControlName="sendEmailToApplicant" color="primary"></ion-toggle>
             <ion-label>Email Applicant</ion-label>
           </ion-item>
         </ion-col>
         <ion-col size-sm="50" size-md="30" size-xl="25" class="no-padding-left">
           <ion-item lines="none" class="mt-7">
-            <ion-toggle formControlName="sendEmailToLandlord" color="success"></ion-toggle>
+            <ion-toggle formControlName="sendEmailToLandlord" color="primary"></ion-toggle>
             <ion-label>Email Landlord</ion-label>
           </ion-item>
         </ion-col>
@@ -530,7 +527,7 @@
 </ng-template>
 
 <ng-template #FinalView>
-  <ion-grid>
+  <ion-grid class="ion-padding">
     <ion-row>
       <ion-col size="100" size-md="60" offset-md="20">
         <ion-grid id="final-view">
@@ -540,7 +537,7 @@
             </ion-col>
             <ion-col size="100">
               <div class="offer">Your Offer: <ion-text>{{makeAnOfferForm.controls.amount.value | currency: "GBP" ||
-                  'N/A'}}
+                  DEFAULTS.NOT_AVAILABLE}}
                 </ion-text>
               </div>
             </ion-col>
@@ -550,25 +547,25 @@
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Offer Status</ion-text><br />
-              <ion-text class="content">{{makeAnOfferForm.controls.status.value | lookup: offerStatuses || '-'}}
+              <ion-text class="content">{{makeAnOfferForm.controls.status.value | lookup: offerStatuses || DEFAULTS.NOT_AVAILABLE}}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">When would you like to move in?</ion-text><br />
               <ion-text class="content">{{ makeAnOfferForm.controls.moveInDate.value ?
-                (makeAnOfferForm.controls.moveInDate.value | date: 'dd/MM/yyyy') : '-'}}
+                (makeAnOfferForm.controls.moveInDate.value | date: DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE}}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">For how long?</ion-text><br />
               <ion-text class="content">
                 {{ makeAnOfferForm.controls.rentingTime.value ? (makeAnOfferForm.controls.rentingTime.value | lookup :
-                letDurations) : '-'}}
+                letDurations) : DEFAULTS.NOT_AVAILABLE}}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">No. of occupants</ion-text><br />
-              <ion-text class="content">{{makeAnOfferForm.controls.numberOfAdults.value || '-'}}</ion-text>
+              <ion-text class="content">{{makeAnOfferForm.controls.numberOfAdults.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">No. of children</ion-text><br />
@@ -578,12 +575,12 @@
               <ion-text class="header">Your current position</ion-text><br />
               <ion-text class="content">
                 {{ makeAnOfferForm.controls.currentPosition.value ? (makeAnOfferForm.controls.currentPosition.value |
-                lookup : tenantCurrentPositionTypes) : '-'}}
+                lookup : tenantCurrentPositionTypes) : DEFAULTS.NOT_AVAILABLE}}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Your occupation</ion-text><br />
-              <ion-text class="content">{{makeAnOfferForm.controls.occupation.value || '-'}}</ion-text>
+              <ion-text class="content">{{makeAnOfferForm.controls.occupation.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Do you have a guarantor?</ion-text><br />
@@ -593,7 +590,7 @@
               <ion-text class="header">Relationship</ion-text><br />
               <ion-text class="content">
                 {{ makeAnOfferForm.controls.guarantorType.value ? (makeAnOfferForm.controls.guarantorType.value | lookup
-                : applicantGuarantorTypes) : '-'}}
+                : applicantGuarantorTypes) : DEFAULTS.NOT_AVAILABLE}}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -603,12 +600,12 @@
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Pets description</ion-text><br />
               <ion-text class="content">
-                {{makeAnOfferForm.controls.hasPets.value ? makeAnOfferForm.controls.petsInfo.value : '-'}}
+                {{makeAnOfferForm.controls.hasPets.value ? makeAnOfferForm.controls.petsInfo.value : DEFAULTS.NOT_AVAILABLE}}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header ion-text-wrap">Addition Comments</ion-text><br />
-              <ion-text class="content">{{makeAnOfferForm.controls.comments.value || '-'}}</ion-text>
+              <ion-text class="content">{{makeAnOfferForm.controls.comments.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
             </ion-col>
             <ion-col size="100" class="border-bottom"></ion-col>
             <ion-col size="100">
@@ -651,7 +648,7 @@
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Confirmed On</ion-text><br />
               <ion-text class="content">{{confirmationForm.controls.applicantConfirmedDate.value ?
-                (confirmationForm.controls.applicantConfirmedDate.value | date : 'dd/MM/yyyy') : '-'}}</ion-text>
+                (confirmationForm.controls.applicantConfirmedDate.value | date : DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Confirmed by Landlord</ion-text><br />
@@ -661,7 +658,7 @@
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Confirmed On</ion-text><br />
               <ion-text class="content">{{confirmationForm.controls.landlordConfirmedDate.value ?
-                (confirmationForm.controls.landlordConfirmedDate.value | date : 'dd/MM/yyyy') : '-'}}</ion-text>
+                (confirmationForm.controls.landlordConfirmedDate.value | date : DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
 
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">

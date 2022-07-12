@@ -1,6 +1,6 @@
 import { ModalController, PopoverController } from '@ionic/angular';
 import { SearchPropertyPage } from './../../shared/modals/search-property/search-property.page';
-import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP, MAX_DOC_UPLOAD_SIZE, ERROR_CODE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STAGES_ACTIONS, MAINT_SOURCE_TYPES } from './../../shared/constants';
+import { REPORTED_BY_TYPES, PROPCO, FAULT_STAGES, ERROR_MESSAGE, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FAULT_STAGES_INDEX, URGENCY_TYPES, REGEX, FOLDER_NAMES, DOCUMENTS_TYPE, FILE_IDS, DPP_GROUP, MAX_DOC_UPLOAD_SIZE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STAGES_ACTIONS, MAINT_SOURCE_TYPES, DEFAULTS, DATE_FORMAT } from './../../shared/constants';
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -35,7 +35,7 @@ export class DetailsPage implements OnInit {
   propertyHMODetails: any[] = [];
   faultHistory;
   addtionalInfo;
-  files : any = [];
+  files: any = [];
   describeFaultForm: FormGroup;
   faultDetailsForm: FormGroup;
   addAdditionalDetForm: FormGroup;
@@ -99,6 +99,7 @@ export class DetailsPage implements OnInit {
   MAX_DOC_UPLOAD_LIMIT;
   FAULT_STAGES = FAULT_STAGES;
   isAuthorizationfields = false;
+  DEFAULTS = DEFAULTS;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -135,7 +136,8 @@ export class DetailsPage implements OnInit {
   isPropertyCardReady: boolean = false;
   hasPropertyCheckedIn: any;
   faultNotificationDetails: any[];
-
+  DATE_FORMAT = DATE_FORMAT;
+  
   constructor(
     private faultsService: FaultsService,
     private fb: FormBuilder,
@@ -352,7 +354,7 @@ export class DetailsPage implements OnInit {
       this.getMaxDocUploadLimit(),
       this.getPropertyTenancies()
     ]).subscribe(async (values) => {
-      this.checkIfPropertyCheckedIn();      
+      this.checkIfPropertyCheckedIn();
       if (this.faultId) {
         this.initPatching();
         this.setValidatorsForReportedBy();
@@ -478,7 +480,7 @@ export class DetailsPage implements OnInit {
   }
 
   private initPatching(): void {
-    if(this.faultDetails.sourceType === MAINT_SOURCE_TYPES.FIXFLO){
+    if (this.faultDetails.sourceType === MAINT_SOURCE_TYPES.FIXFLO) {
       this.describeFaultForm.controls['category'].clearValidators();
       this.describeFaultForm.controls['category'].updateValueAndValidity();
     }
@@ -547,10 +549,10 @@ export class DetailsPage implements OnInit {
   }
 
   private getPropertyTenancies() {
-    const promise = new Promise((resolve, reject) => {      
+    const promise = new Promise((resolve, reject) => {
       this.faultsService.getPropertyTenancies(this.propertyId).subscribe(
         res => {
-          if (res && res.data) {                        
+          if (res && res.data) {
             const currentTenancyStatuses = [2, 5, 6];
             this.propertyTenancyList = res.data.filter(x => currentTenancyStatuses.indexOf(x.status) != -1);
             if (this.propertyTenancyList && this.propertyTenancyList.length) {
@@ -564,7 +566,7 @@ export class DetailsPage implements OnInit {
                   this.hasPropertyCheckedIn = this.propertyTenancyList[i].hasCheckedIn;
                 }
               }
-            }          
+            }
           }
           if (this.tenantIds && this.tenantIds.length) {
             this.getTenantArrears(this.tenantIds);
@@ -781,7 +783,7 @@ export class DetailsPage implements OnInit {
               categoryNames.push(this.commonService.getLookupValue(category, this.faultCategories));
             }
           }
-          this.landlordDetails.repairCategoriesText = categoryNames;          
+          this.landlordDetails.repairCategoriesText = categoryNames;
           resolve(this.landlordDetails);
         },
         error => {
@@ -913,16 +915,28 @@ export class DetailsPage implements OnInit {
       apiObservableArray.push(this.faultsService.uploadDocument(formData, faultId));
     });
     if (!apiObservableArray.length && reDir) {
-      this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+      if (!this.faultId) {
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
+      } else {
+        this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
+      }
     }
     setTimeout(() => {
       forkJoin(apiObservableArray).subscribe(() => {
         if (reDir) {
-          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+          if (!this.faultId) {
+            this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
+          } else {
+            this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
+          }
         }
       }, err => {
         if (reDir) {
-          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+          if (!this.faultId) {
+            this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
+          } else {
+            this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
+          }
         }
       });
     }, 1000);
@@ -934,16 +948,16 @@ export class DetailsPage implements OnInit {
         if (response) {
           resolve(response.data);
         } else {
-          resolve([]);  
+          resolve([]);
         }
-      },err =>{
+      }, err => {
         resolve([]);
       });
     });
     return promise;
   }
 
-  private  filterDocsByStage(details : FaultModels.IFaultResponse) {
+  private filterDocsByStage(details: FaultModels.IFaultResponse) {
     if (details.stage === FAULT_STAGES.JOB_COMPLETION || details.stage === FAULT_STAGES.PAYMENT) {
       this.quoteDocuments = this.files.filter(data => data.folderName === FOLDER_NAMES[4]['index'] || data.folderName === FOLDER_NAMES[5]['index']).filter(data => !data.isRejected);
     }
@@ -1193,7 +1207,7 @@ export class DetailsPage implements OnInit {
   async createAFault() {
     let isValid = await this.checkFormsValidity();
     if (!isValid) {
-      this.commonService.showMessage('Please fill all required fields.', 'Log a Fault', 'error');
+      this.commonService.showMessage('Please fill all required fields.', 'Log a Repair', 'error');
       return;
     }
     this.submitting = true;
@@ -1203,7 +1217,7 @@ export class DetailsPage implements OnInit {
     } else {
       this.faultsService.createFault(faultRequestObj).subscribe(
         res => {
-          this.commonService.showMessage('Fault has been logged successfully.', 'Log a Fault', 'success');
+          this.commonService.showMessage('Repair has been logged successfully.', 'Log a Repair', 'success');
           this.uploadFiles(res.faultId);
         },
         error => {
@@ -1220,7 +1234,7 @@ export class DetailsPage implements OnInit {
     faultRequestObj.submittedById = '';
     this.faultsService.updateFault(this.faultId, faultRequestObj).subscribe(
       res => {
-        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
+        this.commonService.showMessage('Repair details have been updated successfully.', 'Repair Summary', 'success');
         this.uploadFiles(this.faultId);
       },
       error => {
@@ -1291,7 +1305,7 @@ export class DetailsPage implements OnInit {
         this.propertyId = res.data.propertyId;
         this.initiateFault();
       } else {
-        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       }
     });
     await modal.present();
@@ -1304,7 +1318,7 @@ export class DetailsPage implements OnInit {
       faultRequestObj.isDraft = true;
       this.faultsService.createFault(faultRequestObj).subscribe(
         res => {
-          this.commonService.showMessage('Fault has been logged successfully.', 'Log a Fault', 'success');
+          this.commonService.showMessage('Repair has been logged successfully.', 'Log a Repair', 'success');
           this.uploadFiles(res.faultId);
         },
         error => {
@@ -1346,11 +1360,11 @@ export class DetailsPage implements OnInit {
     this.faultsService.updateFault(this.faultId, faultRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
-        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
+        this.commonService.showMessage('Repair details have been updated successfully.', 'Repair Summary', 'success');
         if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.FAULT_LOGGED) {
           this.uploadFiles(this.faultId);
         } else {
-          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+          this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
         }
       },
       error => {
@@ -1388,7 +1402,7 @@ export class DetailsPage implements OnInit {
   }
 
   async startProgress() {
-    const check = await this.commonService.showConfirm('Start Progress', 'This will change the fault status, Do you want to continue?');
+    const check = await this.commonService.showConfirm('Start Progress', 'This will change the repair status, Do you want to continue?');
     if (check) {
       this.submitting = true;
       let faultRequestObj = this.createFaultFormValues();
@@ -1423,13 +1437,13 @@ export class DetailsPage implements OnInit {
   }
 
   reOpenFault() {
-    this.commonService.showConfirm('Re-open Fault', 'This will reopen the fault and notify the property manager.<br/> Are you sure?').then(res => {
+    this.commonService.showConfirm('Re-open Repair', 'This will reopen the repair and notify the property manager.<br/> Are you sure?').then(res => {
       if (res) {
         const UNDER_REVIEW = 2; // Under review
         this.faultsService.updateFaultStatus(this.faultId, UNDER_REVIEW).subscribe(data => {
-          this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+          this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
         }, error => {
-          this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Re-open Fault', 'Error');
+          this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Re-open Repair', 'Error');
           console.log(error);
         });
       }
@@ -1471,7 +1485,7 @@ export class DetailsPage implements OnInit {
     // }
     await this.checkFaultNotifications(this.faultId);
     this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, this.faultDetails.userSelectedAction);
-    
+
     this.getPendingHours();
     if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
       if (this.cliNotification && this.cliNotification.responseReceived) {
@@ -1497,7 +1511,11 @@ export class DetailsPage implements OnInit {
   }
 
   goTolistPage() {
-    this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+    if(this.faultId) {
+      this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
+    } else {
+      this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
+    }
   }
 
   private changeStep(index: number) {
@@ -1843,7 +1861,7 @@ export class DetailsPage implements OnInit {
   async checkFaultNotifications(faultId) {
     return new Promise((resolve, reject) => {
       this.faultsService.getFaultNotifications(faultId).subscribe(async (response) => {
-        this.faultNotifications = response && response.data ? response.data : [];        
+        this.faultNotifications = response && response.data ? response.data : [];
         resolve(this.faultNotifications);
       }, error => {
         reject(error)
@@ -1851,12 +1869,12 @@ export class DetailsPage implements OnInit {
     });
   }
 
-  private filterNotifications(data, stage, action?) {        
+  private filterNotifications(data, stage, action?) {
     const promise = new Promise((resolve, reject) => {
       let filtereData = null;
       let currentStage = stage;
-      let currentAction = action;      
-      
+      let currentAction = action;
+
       if (data.length == 0)
         resolve(null);
       filtereData = data.filter((x => x.faultStage === currentStage)).filter((x => !x.isVoided));
@@ -1866,10 +1884,10 @@ export class DetailsPage implements OnInit {
       filtereData = filtereData.sort((a, b) => {
         return <any>new Date(b.createdAt) - <any>new Date(a.createdAt);
       });
-      filtereData[0].chase = filtereData[0].numberOfChasesDone + 1;    
+      filtereData[0].chase = filtereData[0].numberOfChasesDone + 1;
       this.faultNotificationDetails = [
-         filtereData[0].templateCode,
-         filtereData[0].chase
+        filtereData[0].templateCode,
+        filtereData[0].chase
       ];
       resolve(filtereData[0]);
       // } else {
@@ -1901,7 +1919,7 @@ export class DetailsPage implements OnInit {
 
   private questionActionDoesOwnRepair(data) {
     if (!data.value) {
-      this.commonService.showConfirm(data.text, 'The fault status will change to "Escalation". </br> Are you sure?', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, 'The repair status will change to "Escalation". </br> Are you sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
           this.commonService.showLoader();
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
@@ -2094,7 +2112,7 @@ export class DetailsPage implements OnInit {
   async snoozeFault() {
     const modal = await this.modalController.create({
       component: SnoozeFaultModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId,
       },
@@ -2102,9 +2120,9 @@ export class DetailsPage implements OnInit {
     });
 
     modal.onDidDismiss().then(async res => {
-      if(res && res.data && res.data == 'success'){
-        this.commonService.showMessage('Fault has been snooze successfully.', 'Snooze Fault', 'success');
-        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+      if (res && res.data && res.data == 'success') {
+        this.commonService.showMessage('Repair has been snooze successfully.', 'Snooze Repair', 'success');
+        this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
       }
     });
     await modal.present();
@@ -2160,8 +2178,8 @@ export class DetailsPage implements OnInit {
         if (this.files[i].folderName == null) {
           this.files[i].folderName = FOLDER_NAMES[0].index;
         }
-        if(this.files[i].folderName === FOLDER_NAMES[1].index && this.files[i].contractorCompanyName ){
-          this.files[i].folderName = e.folderName + ' - '+ e.contractorCompanyName;
+        if (this.files[i].folderName === FOLDER_NAMES[1].index && this.files[i].contractorCompanyName) {
+          this.files[i].folderName = e.folderName + ' - ' + e.contractorCompanyName;
         }
         this.files[i].folderName = e.folderName.replace(/_/g, " ");
         this.files[i].isUploaded = true;
@@ -2187,7 +2205,7 @@ export class DetailsPage implements OnInit {
       this.isContractorModal = true;
       const modal = await this.modalController.create({
         component: ContractorDetailsModalPage,
-        cssClass: 'modal-container ll-contractor-modal',
+        cssClass: 'modal-container ll-contractor-modal fault-modal-container',
         componentProps: {
           faultId: this.faultId,
           landlordId: this.landlordDetails.landlordId,
@@ -2248,7 +2266,7 @@ export class DetailsPage implements OnInit {
   async notificationModal() {
     const modal = await this.modalController.create({
       component: PendingNotificationModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         notificationHistoryId: this.pendingNotification ? this.pendingNotification.notificationHistoryId : '',
         notificationSubject: this.pendingNotification ? this.pendingNotification.subject : '',
@@ -2299,7 +2317,7 @@ export class DetailsPage implements OnInit {
   async openJobCompletionModal(title) {
     const modal = await this.modalController.create({
       component: JobCompletionModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         faultNotificationId: this.cliNotification.faultNotificationId,
         heading: 'Mark the Job Complete',
@@ -2346,7 +2364,7 @@ export class DetailsPage implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.faultsService.saveFaultDetails(faultId, data).subscribe(
         res => {
-          this.commonService.showMessage('Title changed successfully.', 'Fault', 'success');
+          this.commonService.showMessage('Title changed successfully.', 'Repair', 'success');
           resolve(true);
         },
         error => {
@@ -2559,7 +2577,7 @@ export class DetailsPage implements OnInit {
   private async paymentRequestModal(data) {
     const modal = await this.modalController.create({
       component: PaymentRequestModalPage,
-      cssClass: 'modal-container payment-request-modal',
+      cssClass: 'modal-container payment-request-modal fault-modal-container',
       componentProps: data,
       backdropDismiss: false
     });
@@ -2579,7 +2597,7 @@ export class DetailsPage implements OnInit {
 
   }
 
-  getFaultNotificationId(){    
+  getFaultNotificationId() {
     this.filterNotifications(this.faultNotifications, this.faultDetails.stage);
   }
 

@@ -150,8 +150,8 @@ var Fault = function (faultDetails) {
         commonFunction.clickOnElement(this.submitBtn, "Submit button");          
     }
 
-    this.checkFaultInformationInTable = function(faultDetailsTbl){      
-       commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first fault");       
+    this.checkFaultInformationInTable = function(faultDetailsTbl){    
+        commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first fault");       
        if(faultDetailsTbl.tableUrgency){
          let tblUrgency = commonFunction.updateVerificationObjectByAttrib(this.faultUrgencyTbl, "Urgency in Fault Table", "color");
          expect(tblUrgency).toContainData(faultDetailsTbl.tableUrgency);

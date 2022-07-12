@@ -1,0 +1,467 @@
+
+<form [formGroup]="group">
+  <mat-accordion class="form-view-accordian" multi id="property-rent-sales-figures">
+    <mat-expansion-panel #rentSales hideToggle [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Default Rates
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!rentSales.expanded"  class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none"  name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="rentSales.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none"   name="remove-circle"></ion-icon>
+              </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="33" class="no-padding">
+                <ion-row>
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="stacked">Rent
+                      </ion-label>
+                      <input class="currency-input" currencyMask formControlName="rentAmount">
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="50">
+                    <ion-item>
+                      <ion-label position="floating">Every
+                      </ion-label>
+                      <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="rentFrequency">
+                        <ion-select-option [value]="index" *ngFor="let index of rentFrequencyDropdown">
+                          {{ index }}
+                        </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="50">
+                    <ion-item>
+                      <ion-label position="floating">Frequency
+                      </ion-label>
+                      <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="frequencyType">
+                        <ion-select-option [value]="data?.index" *ngFor="let data of frequencyTypes">
+                          {{ data?.value }}
+                        </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+              <ion-col size="33" class="no-padding">
+                <ion-row>
+                  <ion-col size="50">
+                    <ion-item style="margin-top: 2px;">
+                      <ion-label position="stacked">Deposit
+                      </ion-label>
+                      <input class="currency-input" currencyMask formControlName="depositAmount">
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="50">
+                    <ion-item >
+                      <ion-label position="floating">Deposit Scheme No
+                      </ion-label>
+                      <ion-input formControlName="depositSchemeNo"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="floating">Deposit Scheme
+                      </ion-label>
+                      <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="depositScheme">
+                        <ion-select-option [value]="data?.index" *ngFor="let data of depositSchemes">
+                          {{ data?.value }}
+                        </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+              <ion-col size="33" class="no-padding">
+                <ion-row>
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="floating">Sale Price Type
+                      </ion-label>
+                      <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="salePriceType">
+                        <ion-select-option [value]="data?.index" *ngFor="let data of salePrices">
+                          {{ data?.value }}
+                        </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="stacked">Sale Price
+                      </ion-label>
+                      <input class="currency-input" currencyMask formControlName="salePrice">
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+    </mat-expansion-panel>
+    <mat-expansion-panel #rentProtection hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Rent Protection & Legal Expenses
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!rentProtection.expanded"  class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none"  name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="rentProtection.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none"   name="remove-circle"></ion-icon>
+              </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <ion-grid>
+        <ion-row>
+              <ion-col size="33.3">
+                <ion-item>
+                  <ion-label position="floating">Aegis Insurance
+                  </ion-label>
+                    <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="frequencyType">
+                    <ion-select-option [value]="data?.index" *ngFor="let data of aegisInsurances">
+                      {{ data?.value }}
+                    </ion-select-option>
+                    </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col size="16.65" class="ion-align-self-center">
+                <ion-item lines="none">
+                  <ion-toggle color="primary" formControlName="isUseRentPercentage" class="toggle-btn"></ion-toggle>
+                  <ion-text class="toggle-btn-text">Use Rent % @</ion-text>
+                </ion-item>
+              </ion-col>
+              <ion-col size="16.65">
+                <ion-item>
+                  <ion-label position="floating"></ion-label>
+                  <ion-input formControlName="premiumPercentage"></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="33.3">
+                <ion-item>
+                  <ion-label position="floating">Excess Threshold (%)
+                  </ion-label>
+                  <ion-input formControlName="excessThreshold"></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="33.3">
+                <ion-item>
+                  <ion-label position="floating">Product
+                  </ion-label>
+                    <ion-select interface="popover" #product [interfaceOptions]="popoverOptions" formControlName="rentIndemnityProductId" (ionChange)="onProductChange(product.value)">
+                    <ion-select-option [value]="data?.rentIndemnityProductId" *ngFor="let data of rentIndemnityProducts">
+                      {{ data?.indemnityProductName }}
+                    </ion-select-option>
+                    </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col size="33.3">
+                <ion-item style="margin-top: 3px;">
+                  <ion-label position="stacked">
+                    Preminum
+                  </ion-label>
+                  <input class="currency-input" currencyMask formControlName="premiumAmount">
+                </ion-item>
+              </ion-col>
+              <ion-col size="33.3">
+                <ion-item style="margin-top: 2px;">
+                  <ion-label position="stacked">Excess Minimum
+                  </ion-label>
+                  <input class="currency-input" currencyMask formControlName="excessMinimum">
+                </ion-item>
+              </ion-col>
+              <ion-col size="33.3" class="ion-align-self-center">
+                <ion-item lines="none">
+                  <ion-toggle color="primary" formControlName="isRentIndeminityRequired" class="toggle-btn"></ion-toggle>
+                  <ion-text class="toggle-btn-text">Required</ion-text>
+                </ion-item>
+              </ion-col>
+              <ion-col size="16.6">
+                <ion-item>
+                  <ion-label position="floating">Claims</ion-label>
+                  <ion-input formControlName="claimDefaultInDays"></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="16.6">
+                <ion-item>
+                  <ion-label position="floating">Manual</ion-label>
+                  <ion-input formControlName="manualClaim"></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="33.3"></ion-col>
+              <ion-col class="ion-align-self-center" size="33.3">
+                <ion-item lines="none">
+                  <ion-toggle color="primary" formControlName="isRentIndeminityEnabled" class="toggle-btn"></ion-toggle>
+                  <ion-text class="toggle-btn-text">Rent Indemnity</ion-text>
+                </ion-item>
+              </ion-col>
+              
+              
+              
+              
+              
+              <ion-col size="16.6">
+                <mat-form-field appearance="fill">
+                  <mat-label>Valid From</mat-label>
+                  <input matInput [matDatepicker]="picker1" formControlName="rentStartDate" readonly>
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+              </ion-col>
+              <ion-col size="16.6">
+              <mat-form-field appearance="fill">
+                <mat-label>Expires</mat-label>
+                <input matInput [matDatepicker]="picker2" formControlName="rentStopDate" readonly>
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+              </ion-col>
+              <ion-col size="33.3"></ion-col>
+              <ion-col size="33.3" class="ion-align-self-center">
+                <ion-item lines="none">
+                  <ion-toggle color="primary" formControlName="isClaimAuthorised" class="toggle-btn"></ion-toggle>
+                  <ion-text class="toggle-btn-text">Claims Authorised</ion-text>
+                </ion-item>
+              </ion-col>
+                
+                
+            </ion-row>
+      </ion-grid>
+    </mat-expansion-panel>
+    <mat-expansion-panel #rentOtherPropOption hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Emergency Response Fees
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!rentOtherPropOption.expanded"  class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none"  name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="rentOtherPropOption.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none"   name="remove-circle"></ion-icon>
+              </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <ion-grid formGroupName="emergencyResponseService">
+        <ion-row>
+              <ion-col size="33.3" class="ion-align-self-center">
+                <ion-item lines="none">
+                  <ion-toggle color="primary" formControlName="isERSEnabled" class="toggle-btn"></ion-toggle>
+                  <ion-text class="toggle-btn-text">Emergency Response</ion-text>
+                </ion-item>
+              </ion-col>
+              <ion-col size="33.3">
+                <ion-item>
+                  <ion-label position="floating">ERI Product
+                  </ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="eriProduct">
+                    <ion-select-option [value]="item?.index" *ngFor="let item of eriProducts">
+                      {{ item?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col size="30">
+                <mat-form-field appearance="fill">
+                  <mat-label>Inception Date</mat-label>
+                  <input matInput [matDatepicker]="picker3" formControlName="inceptionDate" readonly>
+                  <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                  <mat-datepicker #picker3></mat-datepicker>
+                </mat-form-field>
+              </ion-col>
+              <ion-col size="3.3" class="ion-align-self-center">
+                <div title="Remove Date" class="remove-date" (click)="removeDate('inceptionDate')">
+                  <ion-icon name="trash-outline"></ion-icon>
+                </div>
+              </ion-col>
+              <ion-col size="30">
+                <mat-form-field appearance="fill">
+                  <mat-label>Renewal Date</mat-label>
+                  <input matInput [matDatepicker]="picker4" formControlName="renewalDate" readonly>
+                  <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                  <mat-datepicker #picker4></mat-datepicker>
+                </mat-form-field>
+              </ion-col>
+              <ion-col size="3.3" class="ion-align-self-center">
+                <div title="Remove Date" class="remove-date" (click)="removeDate('renewalDate')">
+                  <ion-icon name="trash-outline"></ion-icon>
+                </div>
+              </ion-col>
+              <ion-col size="30">
+                <mat-form-field appearance="fill">
+                  <mat-label>Cancelled Date</mat-label>
+                  <input matInput [matDatepicker]="picker5" formControlName="cancelledDate" readonly>
+                  <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                  <mat-datepicker #picker5></mat-datepicker>
+                </mat-form-field>
+              </ion-col>
+              <ion-col size="3.3" class="ion-align-self-center">
+                <div title="Remove Date" class="remove-date" (click)="removeDate('cancelledDate')">
+                  <ion-icon name="trash-outline"></ion-icon>
+                </div>
+              </ion-col> 
+              <ion-col size="33.3">
+                <mat-form-field appearance="fill">
+                  <mat-label>Date Changed</mat-label>
+                  <input matInput [matDatepicker]="picker6" readonly>
+                  <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                  <mat-datepicker #picker6></mat-datepicker>
+                </mat-form-field>
+              </ion-col>
+              <ion-col size="35">
+                <ion-button color="success" size="small" (click)="opneFeeChargeModal()">Add Premium</ion-button>
+              </ion-col>
+            </ion-row>
+      </ion-grid>
+    </mat-expansion-panel>
+    <mat-expansion-panel #mgntFees hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Standard Management Fees
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!mgntFees.expanded"  class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none"  name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="mgntFees.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none"   name="remove-circle"></ion-icon>
+              </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="33" class="no-padding">
+                <ion-row class="ion-align-items-center">
+                  <ion-col size="65">
+                    <ion-item>
+                      <ion-label position="floating">
+                        Standard Commission (%)
+                      </ion-label>
+                      <ion-input formControlName="managementCommission" percentage-validator></ion-input>
+                     
+                    </ion-item>
+                    <div *ngIf="group.get('managementCommission').hasError('invalidPattern')" class="error-message">
+                      Invalid Standard Commission (%)
+                    </div>
+                  </ion-col>
+                  <ion-col size="35">
+                    <ion-button color="success" size="small" class="change-btn" (click)="opneChangeNettModal()">&nbsp;Change Nett&nbsp;&nbsp;</ion-button>
+                  </ion-col>
+                  <ion-col size="65">
+                    <ion-item>
+                      <ion-label position="floating">VAT Inclusive (%)
+                      </ion-label>
+                      <ion-input formControlName="vatInclusive"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="35">
+                    <ion-button color="success" size="small" class="change-btn" (click)="opneChangeGrossModal()">Change Gross</ion-button>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="ion-align-items-center">
+                  <ion-col size="65">
+                    <div class="info-text">*Information Only</div>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+              <ion-col size="33" class="no-padding">
+                <ion-row class="ion-align-items-center">
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="floating">
+                       Second Level Commission (%) <ion-text class="mandatory">*</ion-text>
+                      </ion-label>
+                      <ion-input formControlName="secondLevelCommission"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="floating">
+                       Narrative For Fees
+                      </ion-label>
+                      <ion-input formControlName="narrativeForFees"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+              <ion-col size="33" class="no-padding">
+                <ion-row class="ion-align-items-center">
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="floating">
+                        Narrative For Fees (VAT)
+                      </ion-label>
+                      <ion-input formControlName="narrativeForFeesVat"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+    </mat-expansion-panel>
+    <mat-expansion-panel #rentReview hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Rent Review Information
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!rentReview.expanded"  class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none"  name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="rentReview.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none"   name="remove-circle"></ion-icon>
+              </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="33" class="no-padding">
+                <ion-row class="ion-align-items-center">
+                  <ion-col size="50">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Last Rent Review</mat-label>
+                      <input matInput [matDatepicker]="picker7" formControlName="lastRentReview" readonly>
+                      <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
+                      <mat-datepicker #picker7></mat-datepicker>
+                    </mat-form-field>
+                  </ion-col>
+                  <ion-col size="50">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Next Rent Review</mat-label>
+                      <input matInput [matDatepicker]="picker8" formControlName="nextRentReview" readonly>
+                      <mat-datepicker-toggle matSuffix [for]="picker8"></mat-datepicker-toggle>
+                      <mat-datepicker #picker8></mat-datepicker>
+                    </mat-form-field>
+                  </ion-col>
+                  <ion-col size="100">
+                    <ion-list-header class="fees-heading">
+                      <ion-label>Landlord Outstanding Fees</ion-label>
+                    </ion-list-header>
+                    <ion-item lines="none">
+                      <ion-toggle color="primary" formControlName="isLandlordArrearsExcluded" class="toggle-btn"></ion-toggle>
+                      <ion-text class="toggle-btn-text">Exclude from landlord arrears</ion-text>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+    </mat-expansion-panel>
+  </mat-accordion>
+</form>

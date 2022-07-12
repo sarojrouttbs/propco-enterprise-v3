@@ -10,7 +10,7 @@
   border-radius: $radius;
 }
 ion-content {
-  --background: var(--ion-color-step-1650);
+  --background: var(--ion-color-six);
 }
 
 .readonly-input {
@@ -39,16 +39,18 @@ ion-content {
       font-weight: 500;
       @include set-text-style(16px, 24px);
     }
-    padding: 5px;
-    background: var(--ion-color-step-1650);
+    padding: 3px;
+    background: var(--ion-color-four) !important;
+    ion-grid {
+      background: var(--ion-color-four) !important;
+    }
   }
   .no-data {
-    color: var(--ion-color-dark);
+    color: var(--ion-color-one);
     text-align: center;
-    background: var(--ion-color-step-1650);
+    background: var(--ion-color-four);
     padding: 15px;
     font-weight: 600;
-    // margin: 0 20px 15px;
     @include border-radius(5px);
     @include set-text-style(16px, 26px);
   }
@@ -56,14 +58,14 @@ ion-content {
 
 #final-view {
   .title {
-    color: var(--ion-color-dark);
+    color: var(--ion-color-one);
     text-align: center;
     margin-bottom: 15px;
     @include set-text-style(28px, 37px);
   }
 
   .offer {
-    color: var(--ion-color-dark);
+    color: var(--ion-color-one);
     margin-bottom: 10px;
     @include set-text-style(28px, 37px);
 
@@ -72,7 +74,7 @@ ion-content {
     }
   }
   .sub-heading {
-    color: rgba(var(--ion-color-medium), 0.85);
+    color: var(--ion-color-three);
     margin-top: 15px;
     margin-bottom: 5px;
     @include set-text-style(20px, 26px);
@@ -80,12 +82,12 @@ ion-content {
 
   .header-content {
     .header {
-      color: var(--ion-color-medium);
+      color: var(--ion-color-three);
       @include set-text-style(14px, 19px);
     }
 
     .content {
-      color: var(--ion-color-dark);
+      color: var(--ion-color-one);
       @include set-text-style(20px, 26px);
     }
   }
@@ -96,9 +98,8 @@ ion-content {
   }
 
   .border-bottom {
-    border-bottom: 1px solid var(--ion-color-primary-contrast);
+    border-bottom: 1px solid var(--ion-color-one);
     padding-left: 0;
-    // outline-offset: -6px;
   }
 
   .restriction,
@@ -119,7 +120,7 @@ ion-content {
 
   .res-clause-view {
     display: flex;
-    color: var(--ion-color-dark);
+    color: var(--ion-color-one);
     padding: 4px 0;
     @include set-text-style(20px, 26px);
   }
@@ -144,28 +145,28 @@ ion-content {
 }
 
 .offer-details {
-  margin: 15px;
-  background-color: var(--ion-color-step-1850);
+  margin: 10px;
+  background-color: var(--ion-color-six);
   .applicant-detail {
     table {
       border-collapse: collapse;
       width: 100%;
     }
     th {
-      background-color: var(--ion-color-step-800);
+      background-color: var(--ion-color-three);
       text-align: left;
       color: var(--ion-color-step-2000);
       padding: 20px 10px;
       font-weight: 100;
-      border: 1px solid var(--ion-color-step-800);
+      border: 1px solid var(--ion-color-three);
     }
 
     tbody {
-      border: 1px solid var(--ion-color-step-1650);
+      border: 1px solid var(--ion-color-three);
     }
 
     td {
-      background-color: var(--ion-color-step-1850);
+      background-color: transparent;
       padding: 12px 10px;
     }
 
@@ -179,15 +180,14 @@ ion-content {
     }
 
     .search-row {
-      background-color: var(--ion-color-step-1650);
+      background-color: var(--ion-color-four);
       margin: 0px 5px;
-      margin-top: 0;
+      margin-top: -5px;
       padding: 10px 10px 10px 0px;
     }
   }
   .stepper-section {
-    background-color: var(--ion-color-step-1850);
-    // padding: 10px 20px;
+    background-color: var(--ion-color-six);
   }
 }
 
@@ -201,7 +201,10 @@ ion-content {
   position: absolute !important;
   z-index: 5 !important;
   cursor: pointer;
-  border: 1px solid var(--ion-color-step-1650);
+  border: 1px solid var(--ion-color-four);
+  i.propcoicon {
+    background-color: var(--ion-color-six);
+  }
 }
 
 .currency-input {

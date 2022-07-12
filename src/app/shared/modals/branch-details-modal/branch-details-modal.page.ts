@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { DEFAULTS } from '../../constants';
 
 @Component({
   selector: 'app-branch-details-modal',
@@ -8,7 +9,8 @@ import { ModalController } from '@ionic/angular';
 })
 export class BranchDetailsModalPage implements OnInit {
   branchDetails;
-
+  DEFAULTS = DEFAULTS;
+  
   constructor(private modalController: ModalController) { }
 
   ngOnInit() { }

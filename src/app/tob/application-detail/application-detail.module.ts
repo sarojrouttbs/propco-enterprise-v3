@@ -6,8 +6,9 @@ import { ApplicationDetailPageRoutingModule } from './application-detail-routing
 import { ApplicationDetailPage } from './application-detail.page';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { ComponentsModule } from 'src/app/shared/components/components.module';
-import { MaterialModule } from 'src/app/material.module'
+import { MaterialModule } from 'src/app/material.module';
 import { TemplateFormModule } from 'src/app/worldpay-ownform/template-form/template-form.module';
+import { TermsAndConditionModalPageModule } from 'src/app/shared/modals/terms-and-condition-modal/terms-and-condition-modal.module';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { TemplateFormModule } from 'src/app/worldpay-ownform/template-form/templ
     PipesModule,
     ComponentsModule,
     MaterialModule,
-    TemplateFormModule
+    TemplateFormModule,
+    TermsAndConditionModalPageModule
   ],
   declarations: [ApplicationDetailPage]
 })

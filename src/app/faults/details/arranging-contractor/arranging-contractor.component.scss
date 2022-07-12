@@ -9,14 +9,6 @@
   -moz-border-radius: $radius;
   border-radius: $radius;
 }
-.contractor-list {
-  width: 100%;
-  max-height: 200px;
-  overflow-y: scroll;
-  position: absolute !important;
-  z-index: 5 !important;
-  cursor: pointer;
-}
 
 .contractor-block {
   margin-top: 20px;
@@ -108,10 +100,7 @@
   }
 }
 .mark-contractor {
-  --background: var(
-    --ion-color-success.error-message{color: var(--ion-color-danger) ; padding-top: 2px; font-size: 14px; line-height:
-      18px;}
-  );
+  --background: var(--ion-color-success);
 }
 
 .ion-select-options {

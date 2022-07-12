@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, QueryList, OnDestroy } from '@angular/core';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { DEFAULT_MESSAGES, PROPCO, REFERENCING } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, PROPCO, REFERENCING } from 'src/app/shared/constants';
 import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -48,6 +48,8 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   error: any = { isError: false, errorMessage: "" };
   errorTo: any = { isError: false, errorMessage: "" };
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
+  DEFAULTS = DEFAULTS;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     public commonService: CommonService,
@@ -55,7 +57,8 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private modalController: ModalController,
-    public datepipe: DatePipe
+    public datepipe: DatePipe,
+    private route: ActivatedRoute
     ) {
     this.getLookupData();
     this.getProductList();
@@ -77,7 +80,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       /* scrollY: '435px',
       scrollCollapse: false, */
       ajax: (tableParams: any, callback) => {
-        this.hideMenu('', 'divOverlay');
+        this.hideMenu('', 'application-overlay');
         
         this.applicationParams = this.applicationParams
         .set('limit', tableParams.length)
@@ -165,7 +168,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
 
   ionViewDidEnter() {
     this.rerenderApplications(true);
-    this.commonService.hideMenu('', 'divOverlay');
+    this.commonService.hideMenu('', 'application-overlay');
   }
 
   ngOnDestroy() {
@@ -241,11 +244,11 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     }
 
     if(this.applicationFilterForm.get('fromDate').value){
-      this.applicationParams = this.applicationParams.set('fromDate', this.datepipe.transform(this.applicationFilterForm.get('fromDate').value, 'yyyy-MM-dd'));
+      this.applicationParams = this.applicationParams.set('fromDate', this.datepipe.transform(this.applicationFilterForm.get('fromDate').value, this.DATE_FORMAT.YEAR_DATE));
     }
 
     if(this.applicationFilterForm.get('toDate').value){
-      this.applicationParams = this.applicationParams.set('toDate', this.datepipe.transform(this.applicationFilterForm.get('toDate').value, 'yyyy-MM-dd'));
+      this.applicationParams = this.applicationParams.set('toDate', this.datepipe.transform(this.applicationFilterForm.get('toDate').value, this.DATE_FORMAT.YEAR_DATE));
     }
 
     this.rerenderApplications(true);
@@ -281,18 +284,18 @@ export class ApplicationListPage implements OnInit, OnDestroy {
 
   async checkApplicationGuarantor() {
     if(this.selectedData.applicantGuarantors != null && this.selectedData.applicantGuarantors.length > 0){
-      this.router.navigate([`let-alliance/guarantor-application-list`], { queryParams: { 
+      this.router.navigate(['../guarantor-application-list'], { relativeTo: this.route, queryParams: { 
         pId: this.selectedData.propertyDetail.propertyId,
         tId: this.selectedData.applicantDetail.applicantId,
         appId: this.selectedData.applicationId,
         appRef: this.selectedData.referenceNumber,
         tType: this.selectedData.applicantDetail.itemType
-      }});
+      } })
     }
     else{
       const modal = await this.modalController.create({
         component: SimpleModalPage,
-        cssClass: 'modal-container alert-prompt',
+        cssClass: 'modal-container alert-prompt la-modal-container',
         backdropDismiss: false,
         componentProps: {
           data: `<div class="status-block">There are no guarantors with this application. Do you wish to add one now?
@@ -313,13 +316,17 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   
       const data = modal.onDidDismiss().then(res => {
         if (res.data.userInput) {
-          this.router.navigate(['/let-alliance/add-guarantor'], { queryParams: { 
-            pId: this.selectedData.propertyDetail.propertyId,
-            tId: this.selectedData.applicantDetail.applicantId,
-            appId: this.selectedData.applicationId,
-            appRef: this.selectedData.referenceNumber,
-            tType: this.selectedData.applicantDetail.itemType
-           }, replaceUrl: true });
+          this.router.navigate(['../add-guarantor'], { 
+            relativeTo: this.route,
+            queryParams: { 
+              pId: this.selectedData.propertyDetail.propertyId,
+              tId: this.selectedData.applicantDetail.applicantId,
+              appId: this.selectedData.applicationId,
+              appRef: this.selectedData.referenceNumber,
+              tType: this.selectedData.applicantDetail.itemType
+            }, 
+            replaceUrl: true 
+          });
         } else {
         }
       });
@@ -332,7 +339,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     if(this.selectedData.applicationStatus == 0){
       const modal = await this.modalController.create({
         component: ResendLinkModalPage,
-        cssClass: 'modal-container resend-link',
+        cssClass: 'modal-container resend-link la-modal-container',
         backdropDismiss: false,
         componentProps: {
           paramApplicantId: this.selectedData.applicantDetail.applicantId,
@@ -349,11 +356,11 @@ export class ApplicationListPage implements OnInit, OnDestroy {
     this.applicationStatus = await this.getApplicationStatus();
     const modal = await this.modalController.create({
       component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: `<div class='status-block'><b>Application Status - </b>${this.getLookupValue(this.applicationStatus.status, this.referencingApplicantStatusTypes)}
-        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes) : 'N/A'}
+        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes) : DEFAULTS.NOT_AVAILABLE}
         </div>`,
         heading: 'Status',
         buttonList: [
@@ -414,7 +421,6 @@ export class ApplicationListPage implements OnInit, OnDestroy {
 
   hideMenu(event: any, id: any) {
     this.commonService.hideMenu(event, id);
-    //this.selectedData = {};
   }
 
   getLookupValue(index: any, lookup: any, type?: any) {

@@ -1,66 +1,80 @@
 <ion-content>
-  <ion-grid style="padding: 25px;"> 
-    <ion-row>
-      <ion-col size="auto">
-        <div class="block">
-          <i class="propcoicon propcoicon-available-property-list  red-icon"></i>
-          <p>Market Appraisal</p>
-        </div>
-      </ion-col>
-      <ion-col size="auto">
-        <div class="block">
-          <i class="propcoicon propcoicon-applicant-card red-icon"></i>
-          <p>Applicant Card</p>
-        </div>
-      </ion-col>
-      <ion-col size="auto">
-        <div class="block">
-          <i class="propcoicon propcoicon-applicant-matching red-icon "></i>
-          <p>Applicant Matching</p>
-        </div>
-      </ion-col>
-      <ion-col size="auto">
-        <div class="block">
-          <i class="propcoicon propcoicon-property-matching red-icon"></i>
-          <p>Property Matching</p>
-        </div>
-      </ion-col>
-      <ion-col size="auto">
-        <div class="block">
-          <i class="propcoicon propcoicon-email red-icon"></i>
-          <p>Email</p>
-        </div>
-      </ion-col>
-      <ion-col size="auto">
-        <div class="block">
-          <i class="propcoicon propcoicon-calendar red-icon"></i>
-          <p>Diary</p>
-        </div>
-      </ion-col>
-      <ion-col size="auto">
-        <div class="block">
-          <i class="propcoicon propcoicon-offers red-icon"></i>
-          <p>Offers</p>
-        </div>
-      </ion-col>
-      <ion-col size="auto">
-        <div class="block">
-          <i class="propcoicon propcoicon-applications red-icon"></i>
-          <p>Applications</p>
-        </div>
-      </ion-col>
-      <ion-col size="auto">
-        <div class="block">
-          <i class="propcoicon propcoicon-referencing red-icon"></i>
-          <p>HomeLet Referencing</p>
-        </div>
-      </ion-col>
-      <ion-col size="auto">
-        <div class="block">
-          <i class="propcoicon propcoicon-referencing red-icon"></i>
-          <p>Lettings Hub Referencing</p>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <div class="main-block">
+    <ion-grid style="padding: 25px;"> 
+      <ion-row class="ion-justify-content-start">
+        <ion-col size="auto" (click)="redirect('market-appraisal')">
+          <div class="block">
+            <i class="propcoicon propcoicon-available-property-list  red-icon"></i>
+            <p>Market Appraisal</p>
+          </div>
+        </ion-col>
+        <ion-col size="auto">
+          <div class="block">
+            <i class="propcoicon propcoicon-applicant-card red-icon"></i>
+            <p>Applicant Card</p>
+          </div>
+        </ion-col>
+        <ion-col size="auto">
+          <div class="block">
+            <i class="propcoicon propcoicon-applicant-matching red-icon "></i>
+            <p>Applicant Matching</p>
+          </div>
+        </ion-col>
+        <ion-col size="auto">
+          <div class="block">
+            <i class="propcoicon propcoicon-property-matching red-icon"></i>
+            <p>Property Matching</p>
+          </div>
+        </ion-col>
+        <ion-col size="auto">
+          <div class="block">
+            <i class="propcoicon propcoicon-email red-icon"></i>
+            <p>Email</p>
+          </div>
+        </ion-col>
+        <ion-col size="auto">
+          <div class="block">
+            <i class="propcoicon propcoicon-calendar red-icon"></i>
+            <p>Diary</p>
+          </div>
+        </ion-col>
+        <ion-col size="auto">
+          <div class="block">
+            <i class="propcoicon propcoicon-offers red-icon"></i>
+            <p>Offers</p>
+          </div>
+        </ion-col>
+        <ion-col size="auto">
+          <div class="block">
+            <i class="propcoicon propcoicon-applications red-icon"></i>
+            <p>Applications</p>
+          </div>
+        </ion-col>
+        <ion-col size="auto">
+          <div class="block">
+            <i class="propcoicon propcoicon-referencing red-icon"></i>
+            <p>HomeLet Referencing</p>
+          </div>
+        </ion-col>
+        <ion-col size="auto">
+          <div class="block">
+            <i class="propcoicon propcoicon-referencing red-icon"></i>
+            <p>Lettings Hub Referencing</p>
+          </div>
+        </ion-col>
+        <ion-col size="auto" (click)="redirect('let-alliance')">
+          <div class="block">
+            <i class="propcoicon propcoicon-referencing red-icon"></i>
+            <p>Let Alliance</p>
+          </div>
+        </ion-col>
+        <ion-col size="auto" (click)="redirect('maintenance')">
+          <div class="block">
+            <i class="propcoicon propcoicon-maintenance red-icon"></i>
+            <p>Maintenance Dashboard</p>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>

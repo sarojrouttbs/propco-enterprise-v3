@@ -5,7 +5,7 @@ import { forkJoin, Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FILE_IDS, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, REGEX, FAULT_NOTIFICATION_STATE } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, LL_INSTRUCTION_TYPES, FILE_IDS, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, REGEX, FAULT_NOTIFICATION_STATE, DATE_FORMAT } from './../../../shared/constants';
 import { ModalController, PopoverController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
@@ -101,6 +101,7 @@ export class LandlordInstructionComponent implements OnInit {
   isContractorModal = false;
   loggedInUserData: any;
   notificationState = FAULT_NOTIFICATION_STATE;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private fb: FormBuilder,
@@ -716,7 +717,7 @@ export class LandlordInstructionComponent implements OnInit {
     this.faultsService.updateFault(this.faultDetails.faultId, faultRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
-        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
+        this.commonService.showMessage('Repair details have been updated successfully.', 'Repair Summary', 'success');
         this._btnHandler('cancel');
       },
       error => {
@@ -745,7 +746,7 @@ export class LandlordInstructionComponent implements OnInit {
           resolve(true);
         }, error => {
           resolve(false);
-          this.commonService.showMessage('Something went wrong', 'Update Fault', 'error');
+          this.commonService.showMessage('Something went wrong', 'Update Repair', 'error');
         });
     });
     return promise;
@@ -914,7 +915,7 @@ export class LandlordInstructionComponent implements OnInit {
 
   private questionActionDoesOwnRepair(data) {
     if (!data.value) {
-      this.commonService.showConfirm(data.text, 'The fault status will change to "Escalation". </br> Are you sure?', '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, 'The repair status will change to "Escalation". </br> Are you sure?', '', 'Yes', 'No').then(async res => {
         if (res) {
           this.commonService.showLoader();
           await this.updateFaultNotification(data.value, this.cliNotification.faultNotificationId);
@@ -994,7 +995,7 @@ export class LandlordInstructionComponent implements OnInit {
   async openJobCompletionModal(title) {
     const modal = await this.modalController.create({
       component: JobCompletionModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         faultNotificationId: this.cliNotification.faultNotificationId,
         heading: 'Mark the Job Complete',
@@ -1186,7 +1187,7 @@ export class LandlordInstructionComponent implements OnInit {
   async notificationModal() {
     const modal = await this.modalController.create({
       component: PendingNotificationModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         notificationHistoryId: this.pendingNotification ? this.pendingNotification.notificationHistoryId : '',
         notificationSubject: this.pendingNotification ? this.pendingNotification.subject : '',
@@ -1210,8 +1211,8 @@ export class LandlordInstructionComponent implements OnInit {
     if (this.cliNotification &&
       (this.cliNotification.responseReceived != null) && //this.cliNotification.responseReceived.isAccepted &&
       this.cliNotification.templateCode === 'CDT-C-E (WO)' && this.faultDetails.contractorWoPropertyVisitAt) {
-      const woAgreedDateTime = this.commonService.getFormatedDate(this.faultDetails.contractorWoPropertyVisitAt, 'yyyy-MM-dd');
-      const today = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
+      const woAgreedDateTime = this.commonService.getFormatedDate(this.faultDetails.contractorWoPropertyVisitAt, this.DATE_FORMAT.YEAR_DATE);
+      const today = this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE);
       if (today >= woAgreedDateTime) {
         enable = true;
       }
@@ -1245,7 +1246,7 @@ export class LandlordInstructionComponent implements OnInit {
   private async paymentRequestModal(data) {
     const modal = await this.modalController.create({
       component: PaymentRequestModalPage,
-      cssClass: 'modal-container payment-request-modal',
+      cssClass: 'modal-container payment-request-modal fault-modal-container',
       componentProps: data,
       backdropDismiss: false
     });
@@ -1390,7 +1391,7 @@ export class LandlordInstructionComponent implements OnInit {
       this.isContractorModal = true;
       const modal = await this.modalController.create({
         component: ContractorDetailsModalPage,
-        cssClass: 'modal-container ll-contractor-modal',
+        cssClass: 'modal-container ll-contractor-modal fault-modal-container',
         componentProps: {
           faultId: this.faultDetails.faultId,
           landlordId: this.landlordDetails.landlordId,

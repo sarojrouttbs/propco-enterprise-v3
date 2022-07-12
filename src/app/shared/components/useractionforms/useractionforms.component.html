@@ -18,9 +18,9 @@
                   <i class="propcoicon no-background propcoicon-contractor"
                     style="background: transparent;"></i>
                 </span>&nbsp;
-                <label style="color: var(--ion-color-step-200);padding-right: 5px;">{{result.fullName}}&nbsp;
-                  <span style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-                  <span class="text-color-lightgreen" style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;  
+                <label>{{result.fullName}}&nbsp;
+                  <span class="ref">{{result.reference}}</span>&nbsp;
+                  <span class="text-color-lightgreen status">{{result.status}}</span>&nbsp;  
                 </label>                        
               </ion-item>
             </ion-list>
@@ -31,7 +31,7 @@
           <ion-col size="50">
             <ion-item>
               <ion-label position="stacked">Confirmed Estimate<ion-text class="mandatory">*</ion-text></ion-label>
-              <input currencyMask formControlName="confirmedEstimate"
+              <input currencyMask formControlName="confirmedEstimate" class="currency-mask"
                 #estimate/>
             </ion-item>
             <app-validation-message [control]="userActionForms.controls.confirmedEstimate"></app-validation-message>
@@ -79,21 +79,43 @@
             <app-validation-message [control]="userActionForms.controls.nominalCode"></app-validation-message>
           </ion-col>
           <ion-col size="50" *ngIf="isAuthorizationfields">
-            <ion-item>
+            <ion-item id="requiredStartDate">
               <ion-label position="floating">Required Start Date <ion-text class="mandatory">*</ion-text></ion-label>
-              <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-                formControlName="requiredStartDate" [min]="currentDate">
-              </ion-datetime>
+              <ion-input value="{{ userActionForms.controls.requiredStartDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+              <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+              ></ion-icon>
+              <ion-popover trigger="requiredStartDate" show-backdrop="false" side="top">
+                <ng-template>
+                  <ion-datetime
+                    showDefaultButtons="true"
+                    presentation="date"
+                    formControlName="requiredStartDate"
+                    [min]="currentDate"
+                  >
+                  </ion-datetime>
+                </ng-template>
+              </ion-popover>
             </ion-item>
             <app-validation-message [control]="userActionForms.controls.requiredStartDate"></app-validation-message>
           </ion-col>
 
           <ion-col size="50" *ngIf="isAuthorizationfields">
-            <ion-item>
+            <ion-item id="requiredCompletionDate">
               <ion-label position="floating">Required Completion Date <ion-text class="mandatory">*</ion-text></ion-label>
-              <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-                formControlName="requiredCompletionDate" [min]="currentDate">
-              </ion-datetime>
+              <ion-input value="{{ userActionForms.controls.requiredCompletionDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+              <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+              ></ion-icon>
+              <ion-popover trigger="requiredCompletionDate" show-backdrop="false" side="top">
+                <ng-template>
+                  <ion-datetime
+                    showDefaultButtons="true"
+                    presentation="date"
+                    formControlName="requiredCompletionDate"
+                    [min]="currentDate"
+                  >
+                  </ion-datetime>
+                </ng-template>
+              </ion-popover>
             </ion-item>
             <app-validation-message [control]="userActionForms.controls.requiredCompletionDate"></app-validation-message>
           </ion-col>

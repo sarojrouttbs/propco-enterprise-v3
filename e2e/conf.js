@@ -1,9 +1,13 @@
 exports.config = {
-    seleniumAddress: 'http://localhost:4444/wd/hub',
+    seleniumAddress: 'http://magnus.techblue.co.uk:4444/wd/hub',
     capabilities: {
         'browserName': 'chrome',
          chromeOptions: {
+            //args: [ "--headless", "--disable-gpu", "--window-size=800,600" ]
          },
+        'moz:firefoxOptions': {
+            args: [ "--headless" ]
+        },
         'goog:loggingPrefs': {
             'performance': 'ALL',
             'browser': 'ALL'            
@@ -12,7 +16,7 @@ exports.config = {
     framework: 'jasmine',
     restartBrowserBetweenTests: false,
     directConnect: false,
-    allScriptsTimeout: 300000,
+    allScriptsTimeout: 180000,
     jasmineNodeOpts: {
         onComplete: null,
         isVerbose: true,
@@ -43,8 +47,7 @@ exports.config = {
            //'./features/iqf-faultqualification/service.contract.spec.js',
           // './features/iqf-faultqualification/appliance.cover.spec.js',
           //'./features/idb-dashboard/fault.dashboard.spec.js',
-          //'./features/ch-chronologicalhistory/chronological.history.spec.js',
-          //'./features/sendemail/send.email.spec.js'
+          //'./features/ch-chronologicalhistory/chronological.history.spec.js',          
        ]
     },
     onPrepare: () => {

@@ -1,8 +1,8 @@
-import { CERTIFICATES_CATEGORY, DEFAULT_MESSAGES, FAULT_NOTIFICATION_STATE, FAULT_QUALIFICATION_ACTION_LIST, FILE_IDS, PROPCO } from './../../../shared/constants';
+import { CERTIFICATES_CATEGORY, DATE_FORMAT, DEFAULT_MESSAGES, FAULT_NOTIFICATION_STATE, FAULT_QUALIFICATION_ACTION_LIST, FILE_IDS, PROPCO } from './../../../shared/constants';
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { FAULT_STAGES, FAULT_QUALIFICATION_ACTIONS } from 'src/app/shared/constants';
 import { PropertyCertificateModalPage } from 'src/app/shared/modals/property-certificate-modal/property-certificate-modal.page';
@@ -59,13 +59,15 @@ export class FaultQualificationComponent implements OnInit {
   notificationState = FAULT_NOTIFICATION_STATE;
   actionList = FAULT_QUALIFICATION_ACTION_LIST;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
-
+  DATE_FORMAT = DATE_FORMAT;
+  
   constructor(
     private fb: FormBuilder,
     private faultsService: FaultsService,
     private modalController: ModalController,
     private commonService: CommonService,
-    private router: Router) {
+    private router: Router,
+    private route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -215,7 +217,7 @@ export class FaultQualificationComponent implements OnInit {
   async openModal(data) {
     const modal = await this.modalController.create({
       component: BranchDetailsModalPage,
-      cssClass: 'modal-container fault-qualification-modal',
+      cssClass: 'modal-container fault-qualification-modal fault-modal-container',
       componentProps: {
         branchDetails: data
       },
@@ -251,7 +253,7 @@ export class FaultQualificationComponent implements OnInit {
     if (this.iqfNotification && (this.iqfNotification.responseReceived === null || this.iqfNotification.responseReceived?.isAccepted === null || this.iqfNotification.responseReceived?.isAccepted === false)) {
       if (this.isUserActionChange) {
         if (!this.iqfNotification.isVoided && this.iqfNotification.responseReceived?.isAccepted === null) {
-          this.commonService.showConfirm('Fault Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes, I\'m sure', 'No').then(async res => {
+          this.commonService.showConfirm('Repair Qualification', 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?', '', 'Yes, I\'m sure', 'No').then(async res => {
             if (res) {
               this.voidNotification(null);
             }
@@ -259,9 +261,9 @@ export class FaultQualificationComponent implements OnInit {
         } else {
           let confirmationText: string = 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?';
           if (this.iqfNotification.responseReceived?.isAccepted === false) {
-            confirmationText = "This will move the fault to 'Landlord Instructions' stage, are you sure?";
+            confirmationText = "This will move the repair to 'Landlord Instructions' stage, are you sure?";
           }
-          this.commonService.showConfirm('Fault Qualification', confirmationText, '', 'Yes, I\'m sure', 'No').then(async res => {
+          this.commonService.showConfirm('Repair Qualification', confirmationText, '', 'Yes, I\'m sure', 'No').then(async res => {
             if (res) {
               this.updateFault(null);
             }
@@ -304,7 +306,7 @@ export class FaultQualificationComponent implements OnInit {
           this.proceeding = false;
           return;
         }
-        let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected the Block Management option for this repair. Do you want to send an email to inform the Block Management/Factors Company?', '', 'Yes', 'No');
+        let response = await this.commonService.showConfirm('Repair Qualification', 'You have selected the Block Management option for this repair. Do you want to send an email to inform the Block Management/Factors Company?', '', 'Yes', 'No');
         if (response) {
           this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_BLOCK_MANAGEMENT');
         }
@@ -319,7 +321,7 @@ export class FaultQualificationComponent implements OnInit {
           this.commonService.showAlert('Warning', 'Please select a Guarantee/Warranty');
           return;
         }
-        let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Guarantee/Warranty option for this repair. Do you want to send an email to inform the Guarantee Management Company?', '', 'Yes', 'No');
+        let response = await this.commonService.showConfirm('Repair Qualification', 'You have selected Guarantee/Warranty option for this repair. Do you want to send an email to inform the Guarantee Management Company?', '', 'Yes', 'No');
         if (response) {
           this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_WARRANTY');
         }
@@ -336,7 +338,7 @@ export class FaultQualificationComponent implements OnInit {
           this.proceeding = false;
           return;
         }
-        let response = await this.commonService.showConfirm('Fault Qualification', 'You have selected Service Contract option for this repair. Do you want to send an email to inform the Service Contract Company?', '', 'Yes', 'No');
+        let response = await this.commonService.showConfirm('Repair Qualification', 'You have selected Service Contract option for this repair. Do you want to send an email to inform the Service Contract Company?', '', 'Yes', 'No');
         if (response) {
           this.saveQualificationDetails(FAULT_STAGES.FAULT_QUALIFICATION, 'UNDER_SERVICE_CONTRACT');
         }
@@ -352,9 +354,9 @@ export class FaultQualificationComponent implements OnInit {
   private async changeStage() {
     let confirmationText: string = 'You have not selected any of the possible options here. Would you like to proceed to the Landlord Instructions stage?';
     if (this.iqfNotification?.responseReceived?.isAccepted === true) {
-      confirmationText = "This will move the fault to 'Landlord Instructions' stage, are you sure?";
+      confirmationText = "This will move the repair to 'Landlord Instructions' stage, are you sure?";
     }
-    let response = await this.commonService.showConfirm('Fault Qualification', confirmationText, '', 'Yes, I\'m sure', 'No');
+    let response = await this.commonService.showConfirm('Repair Qualification', confirmationText, '', 'Yes, I\'m sure', 'No');
     if (response) {
       this.saveQualificationDetails(FAULT_STAGES.LANDLORD_INSTRUCTION);
     } else {
@@ -417,8 +419,8 @@ export class FaultQualificationComponent implements OnInit {
     };
     this.faultsService.updateFault(this.faultDetails.faultId, requestObj).subscribe(
       () => {
-        this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Qualification', 'success');
-        this.router.navigate(['faults/dashboard'], { replaceUrl: true });
+        this.commonService.showMessage('Repair details have been updated successfully.', 'Repair Qualification', 'success');
+        this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
       },
       error => {
         this.saving = false;
@@ -429,7 +431,7 @@ export class FaultQualificationComponent implements OnInit {
   async closeFault() {
     const modal = await this.modalController.create({
       component: CloseFaultModalPage,
-      cssClass: 'modal-container close-fault-modal',
+      cssClass: 'modal-container close-fault-modal fault-modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId
       },
@@ -439,7 +441,7 @@ export class FaultQualificationComponent implements OnInit {
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
         this._btnHandler('refresh');
-        this.commonService.showMessage('Fault has been closed successfully.', 'Close a Fault', 'success');
+        this.commonService.showMessage('Repair has been closed successfully.', 'Close a Repair', 'success');
         return;
       }
     });
@@ -450,7 +452,7 @@ export class FaultQualificationComponent implements OnInit {
   async viewTenancyClause() {
     const modal = await this.modalController.create({
       component: TenancyClauseModalPage,
-      cssClass: 'modal-container tenancy-clause-modal',
+      cssClass: 'modal-container tenancy-clause-modal fault-modal-container',
       componentProps: {
         tenancyClauses: this.tenancyClauses
       },
@@ -494,7 +496,7 @@ export class FaultQualificationComponent implements OnInit {
     }
     const modal = await this.modalController.create({
       component: PropertyCertificateModalPage,
-      cssClass: 'modal-container property-certificates-list',
+      cssClass: 'modal-container property-certificates-list fault-modal-container',
       componentProps: {
         propertyCertificate: category === CERTIFICATES_CATEGORY[0] ? this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0]) : mergedServiceContractAndApplicance,
         certificateId: category === CERTIFICATES_CATEGORY[0] ?
@@ -502,7 +504,7 @@ export class FaultQualificationComponent implements OnInit {
           this.serviceContractCertificateId ? this.serviceContractCertificateId : this.faultDetails.serviceContractCertificateId,
         category: category,
         certificateTypes: this.certificateTypes,
-        isEditable: isEditable? false: true
+        isEditable: isEditable ? false : true
       },
       backdropDismiss: false
     });
@@ -675,7 +677,7 @@ export class FaultQualificationComponent implements OnInit {
   async viewBlockManagement() {
     const modal = await this.modalController.create({
       component: BlockManagementModalPage,
-      cssClass: 'modal-container upload-container',
+      cssClass: 'modal-container upload-container fault-modal-container',
       componentProps: {
         blockManagement: this.blockManagement,
         faultCategories: this.faultCategories
@@ -757,7 +759,7 @@ export class FaultQualificationComponent implements OnInit {
       });
     } else if (!data.value) {
       if (this.faultDetails.urgencyStatus === 3) {
-        this.commonService.showConfirm('Request More Info', 'This will close the fault. Are you sure?', '', 'Yes I\'m sure', 'Cancel').then(async res => {
+        this.commonService.showConfirm('Request More Info', 'This will close the repair. Are you sure?', '', 'Yes I\'m sure', 'Cancel').then(async res => {
           if (res) {
             this.commonService.showLoader();
             await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
@@ -765,7 +767,7 @@ export class FaultQualificationComponent implements OnInit {
           }
         });
       } else if (this.faultDetails.urgencyStatus === 1 || this.faultDetails.urgencyStatus === 2) {
-        this.commonService.showConfirm('Request More Info', 'This will Escalate the fault. Are you sure?', '', 'Yes I\'m sure', 'Cancel').then(async res => {
+        this.commonService.showConfirm('Request More Info', 'This will Escalate the repair. Are you sure?', '', 'Yes I\'m sure', 'Cancel').then(async res => {
           if (res) {
             this.commonService.showLoader();
             await this.updateFaultNotification(notificationObj, this.iqfNotification.faultNotificationId);
@@ -780,7 +782,7 @@ export class FaultQualificationComponent implements OnInit {
   async openJobCompletionModal(title) {
     const modal = await this.modalController.create({
       component: JobCompletionModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         faultNotificationId: this.iqfNotification.faultNotificationId,
         heading: 'Mark the Job Complete',
@@ -798,7 +800,7 @@ export class FaultQualificationComponent implements OnInit {
     await modal.present();
   }
 
-  snoozeFault(){
+  snoozeFault() {
     this._btnHandler('snooze');
   }
 }

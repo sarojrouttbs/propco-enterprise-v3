@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, QueryList, OnDestroy } from '@angular/core';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { DEFAULT_MESSAGES, PROPCO, REFERENCING } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, PROPCO, REFERENCING } from 'src/app/shared/constants';
 import { HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -47,6 +47,8 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   selectedData: any;
   applicationFilterForm: FormGroup;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
+  DEFAULTS = DEFAULTS;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     public commonService: CommonService,
@@ -95,7 +97,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
 
   ionViewDidEnter() {
     this.rerenderApplications(true);
-    this.commonService.hideMenu('', 'divOverlay');
+    this.commonService.hideMenu('', 'guarantor-overlay');
   }
 
   ngOnDestroy() {
@@ -183,7 +185,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   async resendLink() {
     const modal = await this.modalController.create({
       component: ResendLinkModalPage,
-      cssClass: 'modal-container resend-link',
+      cssClass: 'modal-container resend-link la-modal-container',
       backdropDismiss: false,
       componentProps: {
         paramApplicantId: this.selectedData.applicantDetail.applicantId,
@@ -199,11 +201,11 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
     this.applicationStatus = await this.getApplicationStatus();
     const modal = await this.modalController.create({
       component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: `<div class='status-block'><b>Application Status - </b>${this.getLookupValue(this.applicationStatus.status, this.referencingApplicantStatusTypes)}
-        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes) : 'N/A'}
+        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes) : DEFAULTS.NOT_AVAILABLE}
         </div>`,
         heading: 'Status',
         buttonList: [
@@ -250,13 +252,14 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   }
 
   goToGuarantorDetails(){
-    this.router.navigate(['/let-alliance/add-guarantor'], { queryParams: { 
+    this.router.navigate(['../add-guarantor'], { relativeTo: this.route,queryParams: { 
       pId: this.propertyId,
       tId: this.applicantId,
       appId: this.applicationId,
       appRef: this.referenceNumber,
       tType: this.applicantType
-     }, replaceUrl: true });
+      }, replaceUrl: true
+    }); 
   }
 
   showMenu(event: any, id: any, data: any, className: any) {
@@ -265,7 +268,6 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   }
 
   hideMenu(event: any, id: any) {
-    //this.selectedData = {};
     this.commonService.hideMenu(event, id);
   }
 

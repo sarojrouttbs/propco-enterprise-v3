@@ -1,0 +1,83 @@
+<ion-content id="notes-block">
+  <mat-accordion multi class="form-table-view-accordian">
+    <mat-expansion-panel #notesSection hideToggle expanded>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Notes
+        </mat-panel-title>
+        <mat-panel-description class="ion-justify-content-end no-margin">
+          <div>
+            <span *ngIf="!notesSection.expanded" class="accordian-icon" title="Expand">
+              <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+            </span>
+            <span *ngIf="notesSection.expanded" class="accordian-icon" title="Collapse">
+              <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+            </span>
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <ion-grid class="add-notes-block">
+        <ion-row>
+          <ion-col class="ion-align-self-center">
+            <ion-button color="success" (click)="addNotes()">Add</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="filter-block">
+          <ion-col size="30">
+            <ion-item>
+              <ion-label position="floating">Category filter</ion-label>
+              <ion-select interface="popover" [interfaceOptions]="popoverOptions" [formControl]="category" multiple
+                (ionChange)="onCategoryChange($event)">
+                <ion-select-option [value]="cayegory?.index" *ngFor="let cayegory of notesCategories">
+                  {{ cayegory?.value }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <div class="overlay-container" style="position: relative">
+        <table datatable [dtOptions]="dtOptions" class="row-border hover" id="propertyNotesTable" width="100%"
+          style="position: relative">
+          <thead>
+            <tr>
+              <th style="width:15%">Date</th>
+              <th style="width:15%">Time</th>
+              <th style="width:15%">Type</th>
+              <th style="width:15%">Complaint</th>
+              <th style="width:15%">Category</th>
+              <th>User</th>
+              <th style="width:40px">Notes</th>
+              <th style="width:40px"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of notes" class="table-row">
+              <td>{{data.postedAt | date: DATE_FORMAT.DATE || notAvailable}}</td>
+              <td>{{data.postedAt | date: DATE_FORMAT.TIME || notAvailable}}</td>
+              <td>{{(data.type | lookup: notesTypes) || notAvailable}} </td>
+              <td>{{(data.complaint | lookup: notesComplaints) || notAvailable}}</td>
+              <td>{{(data.category | lookup: notesCategories) || notAvailable}}</td>
+              <td>{{data.userName || notAvailable}}</td>
+              <td><i (click)="showNoteDescription(data.notes);" class="propcoicon propcoicon-property-description"></i>
+              </td>
+              <td class="resp-action-icon">
+                <i (click)="showMenu($event,'notes-overlay', data, 'table-row')"
+                  class="propcoicon propcoicon-actions-on action-btn"></i>
+              </td>
+            </tr>
+            <tr *ngIf="notes?.length === 0">
+              <td colspan="8" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="notes-overlay" class="overlay-class">
+          <ion-button>Edit</ion-button>
+          <ion-button>Remove</ion-button>
+          <i (click)="hideMenu($event,'notes-overlay')" class="propcoicon propcoicon-actions-on"></i>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</ion-content>

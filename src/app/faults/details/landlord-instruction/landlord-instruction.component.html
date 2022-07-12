@@ -1,20 +1,20 @@
 <ion-grid>
   <ion-row *ngIf="!showSkeleton">
-    <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+    <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background border-top-radious border-bottom-radious">
       <div class="landlord-instructions">
-        <app-close-fault *ngIf="faultDetails?.isClosed" [notificationData]="cliNotification" [faultDetails]="faultDetails" [action]="getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes)? getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes):'Landlord Instructions'"></app-close-fault>
+        <app-close-fault *ngIf="faultDetails?.isClosed" [notificationData]="cliNotification" [faultDetails]="faultDetails" [action]="(cliNotification?.faultStageAction | lookup: landlordInstructionTypes) ? (cliNotification?.faultStageAction | lookup: landlordInstructionTypes):'Landlord Instructions'"></app-close-fault>
 
         <div class="banner" *ngIf="!cliNotification && !faultDetails?.isClosed">
           <h2 class="banner-heading">Based on your preferences, we suggest:</h2>
           <ion-button color="{{(suggestedAction == 'AGENT_OF_NECESSITY') ? 'danger' : 'success'}}"
             class="icon-button" (click)="setUserAction(suggestedAction)"
             fill="{{(userSelectedActionControl.value == suggestedAction) ? 'solid' :'outline'}}">
-            {{getLookupValue(suggestedAction, landlordInstructionTypes)}}
+            {{(suggestedAction | lookup: landlordInstructionTypes)}}
             <ion-icon name="checkmark-circle-outline" *ngIf="(userSelectedActionControl.value == suggestedAction)">
             </ion-icon>
           </ion-button>
           <h6 class="ownRepair" *ngIf="(isMatch === false && suggestedAction == 'DOES_OWN_REPAIRS')">
-            Landlord owned Repair Category does not match the Fault Category</h6>
+            Landlord owned Repair Category does not match the Repair Category</h6>
 
           <h6 class="banner-title">Want to proceed in a different way? Choose one of the following instead:</h6>
           <ion-grid>
@@ -30,7 +30,7 @@
                       *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
                   </ion-button>
                   <h6 class="ownRepair" *ngIf="(instruction.index == 'DOES_OWN_REPAIRS' && isMatch === false )">
-                    Landlord owned Repair Category does not match the Fault Category</h6>
+                    Landlord owned Repair Category does not match the Repair Category</h6>
                 </div>
               </ng-container>
             </ion-row>
@@ -40,7 +40,7 @@
         <div *ngIf="cliNotification && !faultDetails?.isClosed">
           <div class="banner">
             <div class="ion-text-left">
-              <b>{{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}</b>
+              <b>{{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME }}</b>
             </div>
             <h2 class="banner-heading" >
               {{cliNotification && cliNotification?.responseReceived ? notificationState.RESPONSE_RECEIVED: 
@@ -48,12 +48,12 @@
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
-              {{getLookupValue(cliNotification?.faultStageAction, landlordInstructionTypes)}}
+              {{(cliNotification?.faultStageAction | lookup: landlordInstructionTypes)}}
               <ion-icon name="checkmark-circle-outline"></ion-icon>
             </ion-button>
             
             <ng-container *ngIf="cliNotification && cliNotification?.responseReceived && cliNotification?.recipientType === 8 ">
-              <h6 class="banner-title response-recived"><ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from Landlord {{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }} </h6>
+              <h6 class="banner-title response-recived"><ion-icon name="ellipse" class="response-circle"></ion-icon> Response received from Landlord {{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME }} </h6>
             </ng-container>
 
             <ng-container *ngIf="cliNotification && !cliNotification?.responseReceived">
@@ -62,7 +62,7 @@
               >
                 <ion-icon name="ellipse" class="response-circle"></ion-icon> {{cliNotification?.responseReceived === null && cliNotification?.allowedNumberOfChases === cliNotification?.numberOfChasesDone && !cliNotification?.hoursLeft?notificationState.NO_RESPONSE:notificationState.AWAITING_RESPONSE}} received from Landlord</h6>
               <h6 class="banner-title" *ngIf="!faultDetails?.isEscalated" >{{cliNotification.allowedNumberOfChases === cliNotification.numberOfChasesDone?'Escalation due': cliNotification.chase === cliNotification.allowedNumberOfChases ? 'Last chase due('+cliNotification.chase+')' : 'Next chase due('+cliNotification.chase+')'}}:
-                {{cliNotification ? (cliNotification.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
+                {{cliNotification ? (cliNotification.nextChaseDueAt | date: DATE_FORMAT.DATE_TIME) : ''}}
               </h6>
             </ng-container>
           </div>
@@ -78,7 +78,7 @@
                   </ng-container>
                   <ng-container *ngIf="cliNotification?.templateCode === 'LR-L-E' && faultDetails?.isClosed">
                     <ion-button color="success" class="action-btn option"
-                    fill="solid">Close Fault</ion-button>
+                    fill="solid">Close Repair</ion-button>
                   </ng-container>
                 </ion-row>
               </ion-grid>
@@ -92,7 +92,7 @@
           && cliNotification?.notificationStatus !== 7 && !faultDetails?.isEscalated && faultDetails?.status !== 10 && faultDetails?.status !== 12">
             <h6>
               <ion-text color="danger">Please note:</ion-text>
-              The fault will be <i>escalated</i> automatically if the Landlord doesn't respond within {{cliNotification?.hoursLeft}}.
+              The repair will be <i>escalated</i> automatically if the Landlord doesn't respond within {{cliNotification?.hoursLeft}}.
             </h6>
             <div class="border-bottom"></div>
           </div>
@@ -104,11 +104,11 @@
             <h6 *ngIf="faultDetails?.landlordOwnContractor?.landlordOwnContractorId === null && !faultDetails?.isEscalated">
               <ion-text color="danger">Please note: </ion-text>
               <span>
-                The fault will be <i>escalated</i> if the contractor's details including the scheduled date & time of the repair have not been added in the next 6/24 hours
+                The repair will be <i>escalated</i> if the contractor's details including the scheduled date & time of the repair have not been added in the next 6/24 hours
               </span>
             </h6>
             <h6 *ngIf="faultDetails?.isEscalated" >
-              <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
+              <ion-text color="danger">Please note: </ion-text>Repair Escalated - PM to decide the next steps
             </h6>
             <div class="border-bottom"></div>
           </div>
@@ -117,15 +117,15 @@
             *ngIf="(cliNotification?.responseReceived?.isAccepted === false || faultDetails?.isEscalated) && cliNotification?.notificationStatus !== 7 && cliNotification?.responseReceived?.isAccepted != true">
             <h4 claas="ion-text-center">Next Step:</h4>
             <h6 *ngIf="faultDetails.urgencyStatus == 3 || cliNotification?.responseReceived">
-              <ion-text color="danger">Please note: </ion-text>Fault Escalated - PM to decide the next steps
+              <ion-text color="danger">Please note: </ion-text>Repair Escalated - PM to decide the next steps
             </h6>
             <h6 *ngIf="faultDetails.urgencyStatus != 3 && cliNotification?.responseReceived == null">
-              <ion-text color="danger">Please note: </ion-text>Fault Escalated - Please proceed with the following action:
+              <ion-text color="danger">Please note: </ion-text>Repair Escalated - Please proceed with the following action:
               <ion-grid>
                 <ion-row class="ion-justify-content-center">                    
                   <ion-button color="danger" expand="block" class="action-btn"
                     fill="{{userSelectedActionControl.value == 'AGENT_OF_NECESSITY' ? 'solid' :'outline'}}" (click)="setUserAction('AGENT_OF_NECESSITY')">
-                    {{getLookupValue('AGENT_OF_NECESSITY', landlordInstructionTypes)}}
+                    {{('AGENT_OF_NECESSITY' | lookup: landlordInstructionTypes)}}
                     <ion-icon name="checkmark-circle-outline" class="check-icon" *ngIf="(userSelectedActionControl.value == 'AGENT_OF_NECESSITY')"></ion-icon>
                   </ion-button>
                 </ion-row>
@@ -140,7 +140,7 @@
             <h4 claas="ion-text-center">Next Step:</h4>  
             <h6>
               <ion-text color="danger">Please note: </ion-text>
-              <span>This Fault is <i>escalated</i> as Landlord Override communication option is activated. 
+              <span>This Repair is <i>escalated</i> as Landlord Override communication option is activated. 
                 Please respond yourself or forward to Landlord for them to take an action by clicking here</span>
             </h6>
             <ion-button color="success" class="action-btn" fill="solid" (click)="viewNotification(); $event.stopPropagation();">
@@ -165,12 +165,12 @@
                       *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
                     </ion-button>
                     <h6 class="ownRepair" *ngIf="(isMatch === false && instruction.index == 'DOES_OWN_REPAIRS')">
-                      Landlord owned Repair Category does not match the Fault Category</h6>
+                      Landlord owned Repair Category does not match the Repair Category</h6>
                     </div>
                   </div>
                 </ng-container>
                 <ion-button *ngIf="faultDetails?.isEscalated" color="success" expand="block" class="action-btn" fill="outline" (click)="snoozeFault()">
-                  Snooze Fault</ion-button>
+                  Snooze Repair</ion-button>
               </ion-row>
             </ion-grid>
           </div>
@@ -199,9 +199,9 @@
                         <i class="propcoicon no-background propcoicon-contractor"
                           style="background: transparent;"></i>
                       </span>&nbsp;
-                      <label style="color: var(--ion-color-step-200);padding-right: 5px;">{{result.fullName}}&nbsp;
-                        <span style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-                        <span class="text-color-lightgreen" style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;  
+                      <label>{{result.fullName}}&nbsp;
+                        <span class="ref">{{result.reference}}</span>&nbsp;
+                        <span class="text-color-lightgreen status">{{result.status}}</span>&nbsp;  
                       </label>                        
                     </ion-item>
                   </ion-list>
@@ -212,7 +212,7 @@
                 <ion-col size="50">
                   <ion-item>
                     <ion-label position="stacked">Confirmed Estimate</ion-label>
-                    <input currencyMask formControlName="confirmedEstimate"
+                    <input currencyMask formControlName="confirmedEstimate" class="currency-mask"
                       [disabled]="!(userSelectedActionControl.value == 'GET_AN_ESTIMATE' 
                       || userSelectedActionControl.value == 'OBTAIN_AUTHORISATION'
                       || userSelectedActionControl.value == 'AGENT_OF_NECESSITY'
@@ -266,21 +266,43 @@
                 </ion-col>
 
                 <ion-col size="50" *ngIf="isAuthorizationfields">
-                  <ion-item>
+                  <ion-item id="requiredStartDate">
                     <ion-label position="floating">Required Start Date <ion-text class="mandatory">*</ion-text></ion-label>
-                    <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-                      formControlName="requiredStartDate" [min]="currentDate">
-                    </ion-datetime>
+                    <ion-input value="{{ landlordInstFrom.controls.requiredStartDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                    <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+                    ></ion-icon>
+                    <ion-popover trigger="requiredStartDate" show-backdrop="false" side="top">
+                      <ng-template>
+                        <ion-datetime
+                          showDefaultButtons="true"
+                          presentation="date"
+                          formControlName="requiredStartDate"
+                          [min]="currentDate"
+                        >
+                        </ion-datetime>
+                      </ng-template>
+                    </ion-popover>
                   </ion-item>
                   <app-validation-message [control]="landlordInstFrom.controls.requiredStartDate"></app-validation-message>
                 </ion-col>
 
                 <ion-col size="50" *ngIf="isAuthorizationfields">
-                  <ion-item>
+                  <ion-item id="requiredCompletionDate">
                     <ion-label position="floating">Required Completion Date <ion-text class="mandatory">*</ion-text></ion-label>
-                    <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-                      formControlName="requiredCompletionDate" [min]="currentDate">
-                    </ion-datetime>
+                    <ion-input value="{{ landlordInstFrom.controls.requiredCompletionDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                    <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+                    ></ion-icon>
+                    <ion-popover trigger="requiredCompletionDate" show-backdrop="false">
+                      <ng-template>
+                        <ion-datetime
+                          showDefaultButtons="true"
+                          presentation="date"
+                          formControlName="requiredCompletionDate"
+                          [min]="currentDate"
+                        >
+                        </ion-datetime>
+                      </ng-template>
+                    </ion-popover>
                   </ion-item>
                   <app-validation-message [control]="landlordInstFrom.controls.requiredCompletionDate"></app-validation-message>
                 </ion-col>

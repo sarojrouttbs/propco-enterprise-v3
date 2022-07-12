@@ -5,6 +5,8 @@
 
   .next-button {
     background-color: var(--ion-color-primary) !important;
+    padding: 5px 10px !important;
+    font-size: 14px !important;
   }
 
   .back-button {
@@ -20,6 +22,11 @@
   ngx-guided-tour .tour-step.tour-bottom-left .tour-arrow::before {
     border-bottom-color: var(--ion-color-step-1750) !important;
   }
+  .tour-step.tour-top .tour-arrow::before, 
+  ngx-guided-tour .tour-step.tour-top-right .tour-arrow::before, 
+  ngx-guided-tour .tour-step.tour-top-left .tour-arrow::before{
+    border-top-color: var(--ion-color-step-1750) !important;
+  }
 
   .tour-block {
     background-color: var(--ion-color-step-1750) !important;
@@ -31,6 +38,8 @@
     min-height: 48px !important;
   }
 }
+
+
 
 @import '../../../../node_modules/ngx-guided-tour/scss/guided-tour-base-theme.scss';
 
@@ -59,7 +68,7 @@
   }
 
   .divider {
-    margin-top: 2%;
+    margin-top: 7px;
   }
 
   i.search-icon:hover {
@@ -81,7 +90,7 @@
   }
 
   .block {
-    background-color: var(--ion-color-step-1750);
+    background-color: var(--ion-color-five);
     padding: 10px;
     text-align: center;
     border-radius: 4px;
@@ -109,7 +118,20 @@
   }
 
   .block:hover {
-    background-color: #FFF !important;
+    background-color: var(--ion-color-four);
     transform: scale(1.04);
+  }
+}
+
+.swap-icon {
+  position: absolute;
+    left: 7px;
+    top: 7px;
+
+  img {
+      background-color: var(--ion-color-step-1700);
+      border-radius: 5px;
+      padding: 4px;
+      cursor: pointer;
   }
 }

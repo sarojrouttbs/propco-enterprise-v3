@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
+import { DATE_FORMAT } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class SnoozeFaultModalPage implements OnInit {
   minDate;
   futureDate;
   showLoader: boolean = false;
-
+  DATE_FORMAT = DATE_FORMAT;
+  
   constructor(private formBuilder: FormBuilder,
     private commonService: CommonService,
     private modalController: ModalController,
@@ -23,8 +25,8 @@ export class SnoozeFaultModalPage implements OnInit {
 
   ngOnInit() {
     const currentDate = new Date();
-    this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 1), 'yyyy-MM-dd');
-    this.futureDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 29), 'yyyy-MM-dd');
+    this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 1), this.DATE_FORMAT.YEAR_DATE);
+    this.futureDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 29), this.DATE_FORMAT.YEAR_DATE);
     this.initForm();
   }
 

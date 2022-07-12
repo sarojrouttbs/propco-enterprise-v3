@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ModalController, NavParams } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
+import { DATE_FORMAT } from '../../constants';
 import { CommonService } from '../../services/common.service';
 import { CommentItem, UserDetails } from './negotiate-modal.model';
 import { NegotiateService } from './negotiate.service';
@@ -20,7 +21,6 @@ export class NegotiateModalPage implements OnInit {
   clauseObj: any;
 
   constructor(
-    private faultsService: FaultsService,
     private navParams: NavParams,
     private modalController: ModalController,
     private formBuilder: FormBuilder,
@@ -66,7 +66,7 @@ export class NegotiateModalPage implements OnInit {
     } else if (this.clauseObj.offerRestrictionId) {
       this.saveCommentsAgainstRestriction(this.clauseObj.offerRestrictionId, [this.commentObj]);
     } else {
-      this.commentObj.createdAt = this.commonService.getFormatedDate(new Date(), 'yyyy/MM/dd hh:mm');
+      this.commentObj.createdAt = this.commonService.getFormatedDate(new Date(), DATE_FORMAT.DATE_TIME);
       this.commentsArray.push(this.commentObj);
     }
   }
@@ -122,7 +122,7 @@ export class NegotiateModalPage implements OnInit {
 
   private getUserDetails() {
     return new Promise((resolve, reject) => {
-      this.faultsService.getUserDetails().subscribe((res) => {
+      this.commonService.getUserDetails().subscribe((res) => {
         if(res) {
           resolve(res.data[0]);
         } else {

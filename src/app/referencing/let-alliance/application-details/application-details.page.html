@@ -5,7 +5,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Property Product Type</ion-label>
-            <ion-select interface="popover" formControlName="productId">
+            <ion-select interface="popover" formControlName="productId" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.productId" *ngFor="let item of referencingCaseProductList">
                 {{ item.productName }}
               </ion-select-option>
@@ -82,7 +82,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Management Type <ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-select interface="popover" formControlName="managementStatus">
+            <ion-select interface="popover" formControlName="managementStatus" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of managementStatusTypes">
                 {{ item.value }}
               </ion-select-option>
@@ -109,7 +109,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Completion Method</ion-label>
-            <ion-select interface="popover" formControlName="completeMethod">
+            <ion-select interface="popover" formControlName="completeMethod" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of completionMethods">
                 {{ item.value }}
               </ion-select-option>
@@ -120,7 +120,7 @@
           <ion-item>
             <ion-label position="floating">Product Type  <ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-select interface="popover" formControlName="productId">
+            <ion-select interface="popover" formControlName="productId" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.productId" *ngFor="let item of referencingApplicationProductList">
                 {{ item.productName }}
               </ion-select-option>
@@ -131,7 +131,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Tenant Type <ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-select interface="popover" formControlName="tenantTypeId" (ionChange)="setValidatorsForForms()">
+            <ion-select interface="popover" formControlName="tenantTypeId" (ionChange)="setValidatorsForForms()" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of tenantTypes">
                 {{ item.value }}
               </ion-select-option>
@@ -139,7 +139,7 @@
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.tenantTypeId"></app-validation-message>
         </ion-col>
-        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" *ngIf="getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
+        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" *ngIf="(tenantDetailsForm.controls.tenantTypeId.value | lookup: tenantTypes) == 'Company'">
           <ion-item>
             <ion-label position="floating">Company Name <ion-text class="mandatory">*</ion-text>
             </ion-label>
@@ -150,7 +150,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Title <ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-select interface="popover" (ionChange)='resetOtherTitle()' formControlName="title">
+            <ion-select interface="popover" (ionChange)='resetOtherTitle()' formControlName="title" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of titleTypes">
                 {{ item.value }}
               </ion-select-option>
@@ -204,7 +204,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Marital Status</ion-label>
-            <ion-select interface="popover" formControlName="maritalStatus">
+            <ion-select interface="popover" formControlName="maritalStatus" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of maritalStatusTypes">
                 {{ item.value }}
               </ion-select-option>
@@ -214,7 +214,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Nationality</ion-label>
-            <ion-select interface="popover" formControlName="nationality">
+            <ion-select interface="popover" formControlName="nationality" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of referencingNationalities">
                 {{ item.value }}
               </ion-select-option>
@@ -222,7 +222,7 @@
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.nationality"></app-validation-message>
         </ion-col>
-        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" *ngIf="getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
+        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" *ngIf="(tenantDetailsForm.controls.tenantTypeId.value | lookup: tenantTypes) == 'Company'">
           <ion-item>
             <ion-label position="floating">Registration Number <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-input formControlName="registrationNumber"></ion-input>
@@ -250,7 +250,7 @@
           <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
             <ion-item>
               <ion-label position="floating">Title</ion-label>
-              <ion-select interface="popover" formControlName="title">
+              <ion-select interface="popover" formControlName="title" [interfaceOptions]="popoverOptions">
                 <ion-select-option [value]="item.index" *ngFor="let item of titleTypes">
                   {{ item.value }}
                 </ion-select-option>
@@ -296,19 +296,19 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Property Product Type</ion-text><br />
-        <ion-text class="content">{{getProductType(tenancyDetailsForm.controls.productId.value, 'case') || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getProductType(tenancyDetailsForm.controls.productId.value, 'case') || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">No. of Occupants</ion-text><br />
-        <ion-text class="content">{{tenancyDetailsForm.controls.noOfTenantToBeReferenced.value  || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenancyDetailsForm.controls.noOfTenantToBeReferenced.value  || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Tenancy Start Date</ion-text><br />
-        <ion-text class="content">{{tenancyDetailsForm.controls.tenancyStartDate.value | date: 'dd/MM/yyyy' || 'N/A'}}</ion-text>
+        <ion-text class="content">{{(tenancyDetailsForm.controls.tenancyStartDate.value | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Term(in months)</ion-text><br />
-        <ion-text class="content">{{tenancyDetailsForm.controls.tenancyTerm.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenancyDetailsForm.controls.tenancyTerm.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Reference Paid By Tenant?</ion-text><br />
@@ -324,11 +324,11 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Management Type</ion-text><br />
-        <ion-text class="content">{{getLookupValue(propertyDetailsForm.controls.managementStatus.value, managementStatusTypes) || 'N/A'}}</ion-text>
+        <ion-text class="content">{{(propertyDetailsForm.controls.managementStatus.value | lookup: managementStatusTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Property Rent</ion-text><br />
-        <ion-text class="content">{{propertyDetailsForm.controls.monthlyRent.value ? '£' + propertyDetailsForm.controls.monthlyRent.value : 'N/A'}}</ion-text>
+        <ion-text class="content">{{propertyDetailsForm.controls.monthlyRent.value ? '£' + propertyDetailsForm.controls.monthlyRent.value : DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size="100"><br/></ion-col>
       <ion-col size="100">
@@ -336,63 +336,63 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Completion Method</ion-text><br />
-        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.completeMethod.value, completionMethods) || 'N/A'}}</ion-text>
+        <ion-text class="content">{{(tenantDetailsForm.controls.completeMethod.value | lookup: completionMethods) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Product Type</ion-text><br />
-        <ion-text class="content">{{getProductType(tenantDetailsForm.controls.productId.value, 'application') || 'N/A'}}</ion-text>
+        <ion-text class="content">{{getProductType(tenantDetailsForm.controls.productId.value, 'application') || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Tenant Type</ion-text><br />
-        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) || 'N/A'}}</ion-text>
+        <ion-text class="content">{{(tenantDetailsForm.controls.tenantTypeId.value | lookup: tenantTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Title</ion-text><br />
-        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.title.value, titleTypes) || 'N/A'}}</ion-text>
+        <ion-text class="content">{{(tenantDetailsForm.controls.title.value | lookup: titleTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Other Title</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.otherTitle.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenantDetailsForm.controls.otherTitle.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">First Name</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.forename.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenantDetailsForm.controls.forename.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
+      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="(tenantDetailsForm.controls.tenantTypeId.value | lookup: tenantTypes) == 'Company'">
         <ion-text class="header">Company Name</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.companyName.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenantDetailsForm.controls.companyName.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Middle Name</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.middlename.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenantDetailsForm.controls.middlename.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Last Name</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.surname.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenantDetailsForm.controls.surname.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Email</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.email.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenantDetailsForm.controls.email.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Date of Birth</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.dateOfBirth.value | date: 'dd/MM/yyyy'  || 'N/A'}}</ion-text>
+        <ion-text class="content">{{(tenantDetailsForm.controls.dateOfBirth.value | date: DATE_FORMAT.DATE)  || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Marital Status</ion-text><br />
-        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.maritalStatus.value, maritalStatusTypes) || 'N/A'}}</ion-text>
+        <ion-text class="content">{{(tenantDetailsForm.controls.maritalStatus.value | lookup: maritalStatusTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Nationality</ion-text><br />
-        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.nationality.value, referencingNationalities) || 'N/A'}}</ion-text>
+        <ion-text class="content">{{(tenantDetailsForm.controls.nationality.value | lookup: referencingNationalities) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
-      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="getLookupValue(tenantDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
+      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="(tenantDetailsForm.controls.tenantTypeId.value | lookup: tenantTypes) == 'Company'">
         <ion-text class="header">Registration Number</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.registrationNumber.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenantDetailsForm.controls.registrationNumber.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Rent Share</ion-text><br />
-        <ion-text class="content">{{ tenantDetailsForm.controls.rentShare?.value ? '£' +  tenantDetailsForm.controls.rentShare?.value : 'N/A'}}</ion-text>
+        <ion-text class="content">{{ tenantDetailsForm.controls.rentShare?.value ? '£' +  tenantDetailsForm.controls.rentShare?.value : DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Has the tenant been known by any other name?</ion-text><br />
@@ -400,19 +400,19 @@
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
         <ion-text class="header">Title</ion-text><br />
-        <ion-text class="content">{{getLookupValue(tenantDetailsForm.controls.otherNames['controls'].title.value, titleTypes) || 'N/A'}}</ion-text>
+        <ion-text class="content">{{(tenantDetailsForm.controls.otherNames['controls'].title.value | lookup: titleTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
         <ion-text class="header">First Name</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.otherNames['controls'].forename.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenantDetailsForm.controls.otherNames['controls'].forename.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
         <ion-text class="header">Middle Name</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.otherNames['controls'].middlename.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenantDetailsForm.controls.otherNames['controls'].middlename.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="tenantDetailsForm.controls.hasTenantOtherName.value">
         <ion-text class="header">Last Name</ion-text><br />
-        <ion-text class="content">{{tenantDetailsForm.controls.otherNames['controls'].surname.value || 'N/A'}}</ion-text>
+        <ion-text class="content">{{tenantDetailsForm.controls.otherNames['controls'].surname.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size="100"></ion-col>
     </ion-row>
@@ -438,12 +438,13 @@
     <ion-row>
       <ion-col>
         <div class="tab-container">
-          <mat-tab-group mat-stretch-tabs mat-align-tabs="start" #applicationTabs (selectedIndexChange)="currentSelectedTab($event)">
+          <mat-tab-group mat-stretch-tabs mat-align-tabs="start" [selectedIndex]="selectedTabIndex" #applicationTabs (selectedIndexChange)="currentSelectedTab($event)">
             <mat-tab>
               <ng-template mat-tab-label>
                 <div class="label-text" [class.success-border]='isPropertyTabDetailSubmit && propertyDetailsForm.valid && tenancyDetailsForm.valid'
                 [class.error-border]='(isPropertyTabDetailSubmit) && (!propertyDetailsForm.valid || !tenancyDetailsForm.valid)'>Property/ Rental Details</div>
               </ng-template>
+              <div class="space-break"></div>
               <div class="accordion-container">
                 <div class="accordion-header" (click)="tenancyDetailsAccordion.expanded = !tenancyDetailsAccordion.expanded">
                   <ion-grid class="ion-no-padding">
@@ -491,6 +492,7 @@
                 <div class="label-text" [class.success-border]='isTenantTabDetailSubmit && tenantDetailsForm.valid'
                 [class.error-border]='isTenantTabDetailSubmit && !tenantDetailsForm.valid'>Tenant Details</div>
               </ng-template>
+              <div class="space-break"></div>
               <div class="accordion-container">
                 <div class="accordion-header" (click)="tenantDetailsAccordion.expanded = !tenantDetailsAccordion.expanded">
                   <ion-grid class="ion-no-padding">
@@ -520,6 +522,7 @@
               <ng-template mat-tab-label>
                 <div class="label-text">Review</div>
               </ng-template>
+              <div class="space-break"></div>
               <div class="accordion-container">
                 <app-accordion-list [expanded]="true">
                     <ng-container *ngTemplateOutlet="finalView"></ng-container>

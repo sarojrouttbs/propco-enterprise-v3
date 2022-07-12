@@ -20,4 +20,7 @@ export class NotesService {
     return this.httpClient.put(environment.API_BASE_URL + `notes/${noteId}`, requestObj);
   }
 
+  createNotes(requestObj: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `notes`, requestObj);
+  }
 }

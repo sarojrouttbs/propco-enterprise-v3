@@ -1,17 +1,17 @@
   <ion-grid>
     <ion-row *ngIf="faultDetails?.isClosed">
       <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
-        <app-close-fault  [notificationData]="iacNotification" [faultDetails]="faultDetails" [action]="getLookupValue(iacNotification?.faultStageAction, iacStageActions) ? getLookupValue(iacNotification?.faultStageAction, iacStageActions) : 'Arranging Contractor'"></app-close-fault>
+        <app-close-fault  [notificationData]="iacNotification" [faultDetails]="faultDetails" [action]="(iacNotification?.faultStageAction | lookup: iacStageActions) ? (iacNotification?.faultStageAction | lookup: iacStageActions) : 'Arranging Contractor'"></app-close-fault>
       </ion-col>
     </ion-row>
    
 
     <ion-row *ngIf="iacNotification && !showSkeleton && !faultDetails?.isClosed && isContractorSelected">
-      <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+      <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background border-top-radious">
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
-              <b>{{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm'
+              <b>{{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME
                 }}</b>
             </div>
             <h2 class="banner-heading">
@@ -20,7 +20,7 @@
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
-              {{getLookupValue(iacNotification?.faultStageAction, iacStageActions)}}
+              {{(iacNotification?.faultStageAction | lookup: iacStageActions)}}
               <ion-icon name="checkmark-circle-outline"></ion-icon>
             </ion-button>
             <ng-container *ngIf="iacNotification && iacNotification?.responseReceived">
@@ -29,7 +29,7 @@
                 <span *ngIf="iacNotification?.recipientType === 8">{{recipientTypes.LANDLORD}}</span>
                 <span *ngIf="iacNotification?.recipientType === 11">{{recipientTypes.CONTRACTOR}}</span>
                 <span *ngIf="iacNotification?.recipientType === 1">{{recipientTypes.TENANT}}</span>
-                {{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}
+                {{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME }}
               </h6>
             </ng-container>
 
@@ -49,12 +49,12 @@
               && iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone 
               && !faultDetails?.isEscalated 
               && iacNotification?.chaseTemplateCode !='LNP-L-E'">Escalation due:
-                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
+                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: DATE_FORMAT.DATE_TIME) : ''}}
               </h6>
               <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt 
               && iacNotification.allowedNumberOfChases != iacNotification.numberOfChasesDone 
               && iacNotification?.chaseTemplateCode !='LNP-L-E'"> {{ iacNotification.chase === iacNotification.allowedNumberOfChases ? 'Last chase due('+iacNotification.chase+')' : 'Next chase due('+iacNotification.chase+')' }}:
-                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
+                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: DATE_FORMAT.DATE_TIME) : ''}}
               </h6>
 
             </ng-container>
@@ -75,7 +75,7 @@
               iacNotification?.responseReceived?.isAccepted === false &&
               filteredCCDetails.rejectionReason && 
               (iacNotification?.templateCode === 'QC-L-E' || iacNotification?.templateCode === 'CQ-NA-C-E'  || iacNotification?.templateCode === 'CQ-A-C-E')">Reason:
-                {{filteredCCDetails.rejectionReason || 'N/A'}}
+                {{filteredCCDetails.rejectionReason || DEFAULTS.NOT_AVAILABLE}}
                 <div *ngIf="filteredCCDetails?.isLandlordWantAnotherQuote">Landlord wants another Quote</div>
               </ion-text>
                 <div class="border-bottom"></div>
@@ -86,8 +86,8 @@
               <h4 class="ion-text-center">Next Step:</h4> 
               <h6 *ngIf="quoteArray?.length === 0">
                 <ion-text color="danger">Please note: </ion-text>
-                <span *ngIf="!filteredCCDetails?.contractorPropertyVisitSlot || filteredCCDetails?.contractorPropertyVisitSlot == null">The appointment is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}</span>
-                <span *ngIf="filteredCCDetails?.contractorPropertyVisitSlot">The appointment is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}</span>
+                <span *ngIf="!filteredCCDetails?.contractorPropertyVisitSlot || filteredCCDetails?.contractorPropertyVisitSlot == null">The appointment is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.DATE}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.TIME}}</span>
+                <span *ngIf="filteredCCDetails?.contractorPropertyVisitSlot">The appointment is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.DATE}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}</span>
               </h6>
               <h6 *ngIf="quoteArray?.length > 0">
                 <span>Thank you for carrying out this quote. This is now with the Landlord for review. If we require you to
@@ -101,8 +101,8 @@
               <h4 class="ion-text-center">Next Step:</h4> 
               <h6>
                 <ion-text color="danger">Please note: </ion-text>
-                <span *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">The appointment is due on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} at {{ faultDetails?.contractorWoPropertyVisitAt | date: 'HH:mm' }}</span>
-                <span *ngIf="faultDetails?.contractorWoPropertyVisitSlot">The appointment is due on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }}</span>
+                <span *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">The appointment is due on {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.DATE }} at {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.TIME }}</span>
+                <span *ngIf="faultDetails?.contractorWoPropertyVisitSlot">The appointment is due on {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.DATE }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }}</span>
               </h6>
               <div class="border-bottom"></div>
             </div>
@@ -114,13 +114,13 @@
                 <h4 class="ion-text-center">Next Step:</h4> 
                 <h6 *ngIf="iacNotification?.chaseTemplateCode!='LNP-L-E'">  
                   <ion-text color="danger">Please note: </ion-text>
-                  <span>The fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1? recipientTypes.TENANT :(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} doesn't respond within
+                  <span>The repair will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1? recipientTypes.TENANT :(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} doesn't respond within
                     {{iacNotification?.hoursLeft}}.
                   </span>
                 </h6>
                 <h6 *ngIf="iacNotification?.chaseTemplateCode=='LNP-L-E'">  
                   <ion-text color="danger">Please note: </ion-text>
-                  <span>Fault will be <i>escalated</i> to PM in {{iacNotification?.hoursLeft}}.
+                  <span>Repair will be <i>escalated</i> to PM in {{iacNotification?.hoursLeft}}.
                   </span>
                 </h6>
                 <div class="border-bottom"></div>
@@ -130,17 +130,17 @@
                 <h6>  
                   <ion-text color="danger">Please note: </ion-text>
                   <span *ngIf="!filteredCCDetails?.contractorPropertyVisitSlot || filteredCCDetails?.contractorPropertyVisitSlot == null">
-                    <span *ngIf="currentDate<=filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}.</span>
-                    <span *ngIf="currentDate>filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote was on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}. </span>
+                    <span *ngIf="currentDate<=filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.DATE}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.TIME}}.</span>
+                    <span *ngIf="currentDate>filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote was on {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.DATE}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.TIME}}. </span>
                   </span>
 
                   <span *ngIf="filteredCCDetails?.contractorPropertyVisitSlot">
-                    <span *ngIf="currentDate<=filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}.</span>
-                    <span *ngIf="currentDate>filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote was on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}. </span>
+                    <span *ngIf="currentDate<=filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.DATE}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}.</span>
+                    <span *ngIf="currentDate>filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote was on {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.DATE}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}. </span>
                   </span>
 
                   <span>
-                    The next step is for the {{iacNotification?.recipientType == 1?recipientTypes.TENANT:(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} to upload the Quote and photos.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?recipientTypes.TENANT:(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} doesn't respond within
+                    The next step is for the {{iacNotification?.recipientType == 1?recipientTypes.TENANT:(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} to upload the Quote and photos.<br>Repair will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?recipientTypes.TENANT:(iacNotification?.recipientType == 11?recipientTypes.CONTRACTOR:recipientTypes.LANDLORD)}} doesn't respond within
                     {{iacNotification?.hoursLeft}}.
                   </span>
                 </h6>
@@ -150,11 +150,11 @@
                 <h4 class="ion-text-center">Next Step:</h4>
                 <h6>  
                   <ion-text color="danger">Please note: </ion-text>
-                  <span *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">The appointment for carrying out the work was on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} at {{ faultDetails?.contractorWoPropertyVisitAt | date: 'HH:mm' }}.</span>
-                  <span *ngIf="faultDetails?.contractorWoPropertyVisitSlot">The appointment for carrying out the work was on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }}.</span>
+                  <span *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">The appointment for carrying out the work was on {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.DATE }} at {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.TIME }}.</span>
+                  <span *ngIf="faultDetails?.contractorWoPropertyVisitSlot">The appointment for carrying out the work was on {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.DATE }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }}.</span>
                   
                   <span>
-                    The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to confirm the Completion of Job.<br>Fault will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
+                    The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to confirm the Completion of Job.<br>Repair will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
                     {{iacNotification?.hoursLeft}}.
                   </span>
                 </h6>
@@ -166,14 +166,14 @@
             && !filteredCCDetails?.isLandlordWantAnotherQuote">
               <h6>
                 <ion-text color="danger">Please note: </ion-text>
-                <span *ngIf="faultDetails.isEscalated">Fault Escalated - PM to decide the next steps</span>
+                <span *ngIf="faultDetails.isEscalated">Repair Escalated - PM to decide the next steps</span>
               </h6>
               <div class="border-bottom"></div>
             </div>
             
             <h6 *ngIf="enableMarkCompletedBtn()" class="ion-text-center">
-              <ion-text *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">Contractor to visit property on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy HH:mm' }}</ion-text>
-              <ion-text *ngIf="faultDetails?.contractorWoPropertyVisitSlot">Contractor to visit property on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }} </ion-text>
+              <ion-text *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">Contractor to visit property on {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.DATE_TIME }}</ion-text>
+              <ion-text *ngIf="faultDetails?.contractorWoPropertyVisitSlot">Contractor to visit property on {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.DATE }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }} </ion-text>
               <ion-grid>
                 <ion-row class="ion-justify-content-center"><ion-button color="success" fill="outline" class="action-btn option" (click)="openWOJobCompletionModal()">Mark the Job Completed</ion-button></ion-row>
               </ion-grid>
@@ -188,7 +188,7 @@
             <h4 claas="ion-text-center">Next Step:</h4>
             <h6>
               <ion-text color="danger">Please note: </ion-text>
-              <span>This Fault is escalated as Landlord Override communication option is activated. 
+              <span>This Repair is escalated as Landlord Override communication option is activated. 
                 Please respond yourself or forward to Landlord for them to take an action by clicking here</span>
             </h6>
             <ion-button color="success" class="action-btn" fill="solid" (click)="viewNotification(); $event.stopPropagation();">
@@ -228,7 +228,7 @@
                           *ngIf="(userSelectedActionControl.value == instruction.index)"></ion-icon>
                       </ion-button>
                     <h6 class="ownRepair" *ngIf="(instruction.index == 'DOES_OWN_REPAIRS' && isMatch === false )">
-                      Landlord owned Repair Category does not match the Fault Category</h6>
+                      Landlord owned Repair Category does not match the Repair Category</h6>
                     </div>
                   </ng-container>
                 </ng-container>
@@ -255,9 +255,9 @@
                 </ng-container>
                 <ion-button color="success" *ngIf="iacNotification && iacNotification?.templateCode === 'CWO-C-E'"  
                 expand="block" class="action-btn" fill="{{faultDetails?.isClosed ? 'solid' : 'outline'}}" (click)="closeFault()">
-                  Close Fault</ion-button>
+                  Close Repair</ion-button>
                   <ion-button *ngIf="faultDetails?.isEscalated"  color="success" expand="block" class="action-btn" fill="outline" (click)="snoozeFault()">
-                  Snooze Fault</ion-button>
+                  Snooze Repair</ion-button>
               </ion-row>
             </ion-grid>
           </div>
@@ -298,7 +298,7 @@
     </ion-grid>
     <ion-row *ngIf="isFormsReady && !showSkeleton">
 
-        <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
+        <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background">
           <ng-container *ngIf="!isWorksOrder">
             <div class="quote-request-banner" *ngIf="!isContractorSelected && faultNotifications.length">
               <ion-text>You have requested multiple quotes.</ion-text>
@@ -320,11 +320,11 @@
                       <ion-col size="30">
                         <ion-text  style="padding-bottom: 3px;" class="sq-label">Company Name </ion-text>
                         <span *ngIf="item.get('isPreferred').value" class="prefered-cc" matTooltip="Preferred Contractor"><ion-icon name="checkmark-circle-outline"> </ion-icon></span>
-                        <ion-text>{{item.get('company').value ? item.get('company').value : 'N/A'}}</ion-text>
+                        <ion-text>{{item.get('company').value ? item.get('company').value : DEFAULTS.NOT_AVAILABLE}}</ion-text>
                       </ion-col>
                       <ion-col size="20" size-xl="17">
                         <ion-text  class="sq-label">Mobile</ion-text>
-                        <ion-text >{{item.get('mobile').value ? item.get('mobile').value : 'N/A'}}</ion-text>
+                        <ion-text >{{item.get('mobile').value ? item.get('mobile').value : DEFAULTS.NOT_AVAILABLE}}</ion-text>
                       </ion-col>
             
                       <ion-col size="20" class="skills">
@@ -334,13 +334,13 @@
                             {{ item.get('reference').value?.substring(0,15)+"..." }}
                           </span>
                           <span *ngIf="item.get('reference').value?.length <= 15">
-                            {{ item.get('reference').value || 'N/A' }}
+                            {{ item.get('reference').value || DEFAULTS.NOT_AVAILABLE }}
                           </span>
                         </ion-text>
                       </ion-col>
                       <ion-col size="20">
                         <ion-text  class="sq-label">Quote Status</ion-text>
-                        <ion-text><strong>{{ item.get('status').value ? item.get('status').value : 'N/A'}}</strong></ion-text>
+                        <ion-text><strong>{{ item.get('status').value ? item.get('status').value : DEFAULTS.NOT_AVAILABLE}}</strong></ion-text>
                       </ion-col>
                       <ion-col size="10" size-xl="13">
                         <div class="action-btn-container">
@@ -363,11 +363,11 @@
                     </ion-row>
                   </div>
       
-                  <ion-row id="addCCform" class="row-banner" [formGroup]="addContractorForm" *ngIf="!addMoreCCrestrictAction">
+                  <ion-row id="addCCform" class="row-banner secondary-background" [formGroup]="addContractorForm" *ngIf="!addMoreCCrestrictAction">
                     <ion-col size="45">
                       <ion-item>
                         <ion-label position="floating">Skill Set</ion-label>
-                        <ion-select interface="popover" formControlName="skillSet" class="ion-select-options">
+                        <ion-select interface="popover" formControlName="skillSet" class="ion-select-options" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
                           <ion-select-option value="">Please Select</ion-select-option>
                           <ion-select-option [value]="item.value" *ngFor="let item of contractorSkill">
                             {{ item.value }}
@@ -390,11 +390,9 @@
                           <span>
                             <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
                           </span>&nbsp;
-                          <label style="color: var(--ion-color-step-200); padding-right: 5px;">{{result.fullName}}&nbsp;
-                            <span
-                              style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-                            <span class="text-color-lightgreen"
-                              style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
+                          <label>{{result.fullName}}&nbsp;
+                            <span class="ref">{{result.reference}}</span>&nbsp;
+                            <span class="text-color-lightgreen status">{{result.status}}</span>&nbsp;
                           </label>
       
                         </ion-item>
@@ -413,7 +411,7 @@
                     </ion-col>
                   </ion-row>
                   <ion-col size="100" *ngIf="!addMoreCCrestrictAction">
-                    <ion-text color="dark"> Note: Please click Add to add another contractor to the list.</ion-text>
+                    <ion-text> Note: Please click Add to add another contractor to the list.</ion-text>
                   </ion-col>
                 </div>
                <ng-container *ngTemplateOutlet="quoteDetails"></ng-container>
@@ -453,7 +451,7 @@
         <ion-item>
           <ion-label position="floating">Category <ion-text class="mandatory">*</ion-text>
           </ion-label>
-          <ion-select interface="popover" formControlName="quoteCategory">
+          <ion-select interface="popover" formControlName="quoteCategory" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
             <ion-select-option [value]="item.value" *ngFor="let item of faultCategories">{{ item.value }}
             </ion-select-option>
           </ion-select>
@@ -505,7 +503,7 @@
       <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Quote Status</ion-label>
-          <ion-select interface="popover" formControlName="quoteStatus">
+          <ion-select interface="popover" formControlName="quoteStatus" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
             <ion-select-option [value]="item.index" *ngFor="let item of quoteStatuses">{{ item.value }}
             </ion-select-option>
           </ion-select>
@@ -530,12 +528,21 @@
       </ion-col>
   
       <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Required By<ion-text class="mandatory">*</ion-text>
-          </ion-label>
-          <ion-datetime formControlName="requiredDate" displayFormat="DD/MM/YYYY" interface="popover"
-            class="request-start-date">
-          </ion-datetime>
+        <ion-item id="requiredDate">
+          <ion-label position="floating">Required By</ion-label>
+          <ion-input value="{{ raiseQuoteForm.controls.requiredDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="requiredDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                showDefaultButtons="true"
+                presentation="date"
+                formControlName="requiredDate"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
         <app-validation-message [control]="raiseQuoteForm.controls.requiredDate"></app-validation-message>
       </ion-col>
@@ -563,7 +570,7 @@
       <ion-col size="33.33">
         <ion-item>
           <ion-label position="floating">Job Type</ion-label>
-          <ion-select interface="popover" formControlName="jobType">
+          <ion-select interface="popover" formControlName="jobType" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
             <ion-select-option [value]="item.index" *ngFor="let item of maintenanceJobTypes">{{ item.value }}
             </ion-select-option>
           </ion-select>
@@ -572,7 +579,7 @@
       <ion-col size="33.33">
         <ion-item>
           <ion-label position="floating">Repair Source</ion-label>
-          <ion-select interface="popover" formControlName="repairSource">
+          <ion-select interface="popover" formControlName="repairSource" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
             <ion-select-option [value]="item.index" *ngFor="let item of maintenanceRepairSources">{{ item.value }}
             </ion-select-option>
           </ion-select>
@@ -581,7 +588,7 @@
       <ion-col size="33.33" *ngIf="raiseQuoteForm.controls.repairSource.value === maintenanceRepairSourcesMap.get('third party')">
         <ion-item>
           <ion-label position="floating">Third Party</ion-label>
-            <ion-select interface="popover" formControlName="thirdPartySource">
+            <ion-select interface="popover" formControlName="thirdPartySource" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.index" *ngFor="let item of faultReportedByThirdParty">{{item.value}}
               </ion-select-option>
             </ion-select>
@@ -592,7 +599,7 @@
 </ng-template>
 <ng-template #worksOrderDetails>
   <form [formGroup]="workOrderForm">
-    <ion-row class="row-banner">
+    <ion-row class="row-banner secondary-background">
       <ion-col size="50">
         <ion-item>
           <ion-label position="floating">Contractor <ion-text class="mandatory">*</ion-text>
@@ -608,10 +615,9 @@
             <span>
               <i class="propcoicon no-background propcoicon-contractor" style="background: transparent;"></i>
             </span>&nbsp;
-            <label style="color: var(--ion-color-step-200); padding-right: 5px;">{{result.fullName}}&nbsp;
-              <span style="color: var(--ion-color-step-1000);padding-right: 5px;">{{result.reference}}</span>&nbsp;
-              <span class="text-color-lightgreen"
-                style="color: var(--ion-color-primary);padding-right: 5px;">{{result.status}}</span>&nbsp;
+            <label>{{result.fullName}}&nbsp;
+              <span class="ref">{{result.reference}}</span>&nbsp;
+              <span class="text-color-lightgreen status">{{result.status}}</span>&nbsp;
             </label>
           </ion-item>
         </ion-list>
@@ -644,7 +650,7 @@
         </ion-item>
       </ion-col>
     </ion-row>
-    <ion-row class="row-banner">
+    <ion-row class="row-banner secondary-background border-bottom-radious">
         <ion-col size="50">
           <ion-item>
             <ion-label position="floating">Reference </ion-label>
@@ -678,7 +684,7 @@
         <ion-item>
           <ion-label position="stacked">Repair Cost <ion-text class="mandatory">*</ion-text>
           </ion-label>
-          <input currencyMask formControlName="repairCost" (blur)="onBlurCurrency(workOrderForm.controls.repairCost.value, workOrderForm)"/>
+          <input currencyMask formControlName="repairCost" class="currency-mask" (blur)="onBlurCurrency(workOrderForm.controls.repairCost.value, workOrderForm)"/>
 
         </ion-item>
         <app-validation-message [control]="workOrderForm.controls.repairCost"></app-validation-message>
@@ -690,11 +696,21 @@
         </ion-item>
       </ion-col>
       <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Date </ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-            formControlName="postdate">
-          </ion-datetime>
+        <ion-item id="postdate">
+          <ion-label position="floating">Date</ion-label>
+          <ion-input value="{{ workOrderForm.controls.postdate.value | date: DATE_FORMAT.DATE }}" disabled="true"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="postdate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                showDefaultButtons="true"
+                presentation="date"
+                formControlName="postdate"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
       </ion-col>
       <ion-col size="50">
@@ -763,19 +779,41 @@
         </ion-item>
       </ion-col>
       <ion-col size="33.33">
-        <ion-item>
+        <ion-item id="requestStartDate">
           <ion-label position="floating">Required Start Date</ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-            formControlName="requestStartDate" [min]="currentDate">
-          </ion-datetime>
+          <ion-input value="{{ workOrderForm.controls.requestStartDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="requestStartDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                showDefaultButtons="true"
+                presentation="date"
+                formControlName="requestStartDate"
+                [min]="currentDate"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
       </ion-col>
       <ion-col size="33.33">
-        <ion-item>
-          <ion-label position="floating">Required Completion Date </ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-            formControlName="requiredDate" [min]="currentDate">
-          </ion-datetime>
+        <ion-item id="requiredDate">
+          <ion-label position="floating">Required Completion Date</ion-label>
+          <ion-input value="{{ workOrderForm.controls.requiredDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="requiredDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                showDefaultButtons="true"
+                presentation="date"
+                formControlName="requiredDate"
+                [min]="currentDate"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
       </ion-col>
       <ion-col size="33.33">
@@ -795,7 +833,7 @@
       <ion-col size="33.33">
         <ion-item>
           <ion-label position="floating">Job Type</ion-label>
-          <ion-select interface="popover" formControlName="jobType">
+          <ion-select interface="popover" formControlName="jobType" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
             <ion-select-option [value]="item.index" *ngFor="let item of maintenanceJobTypes">{{ item.value }}
             </ion-select-option>
           </ion-select>
@@ -804,7 +842,7 @@
       <ion-col size="33.33">
         <ion-item>
           <ion-label position="floating">Repair Source</ion-label>
-          <ion-select interface="popover" formControlName="repairSource">
+          <ion-select interface="popover" formControlName="repairSource" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
             <ion-select-option [value]="item.index" *ngFor="let item of maintenanceRepairSources">{{ item.value }}
             </ion-select-option>
           </ion-select>
@@ -813,7 +851,7 @@
       <ion-col size="33.33" *ngIf="workOrderForm.controls.repairSource.value === maintenanceRepairSourcesMap.get('third party')">
         <ion-item>
           <ion-label position="floating">Third Party</ion-label>
-            <ion-select interface="popover" formControlName="thirdPartySource">
+            <ion-select interface="popover" formControlName="thirdPartySource" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
               <ion-select-option [value]="item.index" *ngFor="let item of faultReportedByThirdParty">{{item.value}}
               </ion-select-option>
             </ion-select>

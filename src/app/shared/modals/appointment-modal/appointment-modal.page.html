@@ -17,7 +17,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content id="appointment-modal">
   <form [formGroup]="appointmentForm">
     <ion-grid class="">
       <ion-row class="">
@@ -39,12 +39,23 @@
         </ion-col>
 
         <ion-col size="100" *ngIf="isDateWithTime">
-          <ion-item>
-            <ion-label position="floating">Visit Date/Time<ion-text class="mandatory">*</ion-text>
-            </ion-label>
-            <ion-datetime formControlName="dateTime" displayFormat="DD/MM/YYYY HH:mm" interface="popover" (ionChange)="checkPastDate()"
-              class="request-start-date" [min]="minDate">
-            </ion-datetime>
+          <ion-item id="dateTime">
+            <ion-label position="floating">Visit Date/Time <ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-input value="{{ appointmentForm.controls.dateTime.value | date: DATE_FORMAT.DATE_TIME }}"></ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+            ></ion-icon>
+            <ion-popover trigger="dateTime" show-backdrop="false" side="top">
+              <ng-template>
+                <ion-datetime
+                  showDefaultButtons="true"
+                  presentation="date-time"
+                  formControlName="dateTime"
+                  [min]="minDate"
+                  (ionChange)="checkPastDate()"
+                >
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
           </ion-item>
           <app-validation-message [control]="appointmentForm.controls.dateTime"></app-validation-message>
           <ion-text class="error-message" color="danger" *ngIf="pastDateError">The date/time you have chosen is in past, indicating the Contractor has already visited the property.</ion-text>
@@ -53,7 +64,7 @@
       <ng-container *ngIf="isDateWithSession">
         <ion-col size="100" class="session-label">
           <ion-label position="floating">Select session<ion-text class="mandatory">*</ion-text></ion-label>
-          <ion-radio-group formControlName="appointmentSlot" class="session-block" (ionChange)="checkPastDateWithSession()">
+          <ion-radio-group formControlName="appointmentSlot" class="session-block-radio-btn" (ionChange)="checkPastDateWithSession()">
             <div *ngFor="let item of sessionSlots" matTooltip="{{ item.value.split(',')[1] }}" matTooltipPosition="above">
             <ion-item class="ion-item" lines="none" >
                 <ion-label>
@@ -67,12 +78,24 @@
         </ion-col>
 
         <ion-col size="100">
-          <ion-item>
-            <ion-label position="floating">Select Date<ion-text class="mandatory">*</ion-text>
-            </ion-label>
-            <ion-datetime formControlName="dateTime" displayFormat="DD/MM/YYYY" interface="popover" (ionChange)="checkPastDateWithSession()"
-              class="request-start-date" [min]="minDate">
-            </ion-datetime>
+          <ion-item id="dateTime">
+            <ion-label position="floating">Select Date <ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-input value="{{ appointmentForm.controls.dateTime.value | date: DATE_FORMAT.DATE }}"></ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+            ></ion-icon>
+            <ion-popover trigger="dateTime" show-backdrop="false">
+              <ng-template>
+                <ion-datetime
+                interface="popover"
+                  showDefaultButtons="true"
+                  presentation="date"
+                  formControlName="dateTime"
+                  [min]="minDate"
+                  (ionChange)="checkPastDateWithSession()"
+                >
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
           </ion-item>
           <app-validation-message [control]="appointmentForm.controls.dateTime"></app-validation-message>
           <ion-text class="error-message" color="danger" *ngIf="pastDateErrorWithSession">The date/time you have chosen is in past, indicating the Contractor has already visited the property.</ion-text>
@@ -83,7 +106,7 @@
     </ion-grid>
   </form>
 </ion-content>
-<ion-footer>
+<ion-footer id="appointment-modal">
   <ion-grid [class.unsaved-data-error]="unSavedData">
     <ion-row>
       <ng-container *ngIf="unSavedData">

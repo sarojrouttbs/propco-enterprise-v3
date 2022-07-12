@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { AddressModalPageRoutingModule } from './address-modal-routing.module';
 
 import { AddressModalPage } from './address-modal.page';
+import { ComponentsModule } from '../../components/components.module';
+import { PostcodeDirective } from 'src/app/postcode.directive';
 
 @NgModule({
   imports: [
@@ -14,8 +16,9 @@ import { AddressModalPage } from './address-modal.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    AddressModalPageRoutingModule
+    AddressModalPageRoutingModule,
+    ComponentsModule
   ],
-  declarations: [AddressModalPage]
+  declarations: [AddressModalPage, PostcodeDirective]
 })
 export class AddressModalPageModule {}

@@ -1,18 +1,19 @@
-import { HttpParams } from "@angular/common/http";
-import { Component, Input, OnInit, Output, SimpleChanges } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { Router } from "@angular/router";
-import { PROPCO } from "src/app/shared/constants";
-import { CommonService } from "src/app/shared/services/common.service";
-import { EventEmitter } from "@angular/core";
-import { SolrService } from "../../../solr/solr.service";
-import { SolrSearchHandlerService } from "../../services/solr-search-handler.service";
+import { HttpParams } from '@angular/common/http';
+import { Component, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PROPCO } from 'src/app/shared/constants';
+import { CommonService } from 'src/app/shared/services/common.service';
+import { EventEmitter } from '@angular/core';
+import { SolrService } from '../../../solr/solr.service';
+import { SolrSearchHandlerService } from '../../services/solr-search-handler.service';
+import { WorkspaceService } from 'src/app/agent/workspace/workspace.service';
 declare function openScreen(key: string, value: any): any;
 
 @Component({
-  selector: "app-search-suggestion",
-  templateUrl: "./search-suggestion.component.html",
-  styleUrls: ["./search-suggestion.component.scss"],
+  selector: 'app-search-suggestion',
+  templateUrl: './search-suggestion.component.html',
+  styleUrls: ['./search-suggestion.component.scss'],
 })
 export class SearchSuggestionComponent implements OnInit {
   @Input() searchTerm;
@@ -26,19 +27,19 @@ export class SearchSuggestionComponent implements OnInit {
   @Output() searchClickEvent = new EventEmitter();
   searchTermControl = new FormControl();
   private solrSuggestionConfig = {
-    limit: "30",
-    searchTerm: "",
-    searchTypes: "",
-    searchSwitch: "true",
+    limit: '30',
+    searchTerm: '',
+    searchTypes: '',
+    searchSwitch: 'true',
   };
 
   entityList: string[] = [
-    "Property",
-    "Landlord",
-    "Tenant",
-    "Applicant",
-    "Agent",
-    "Contractor",
+    'Property',
+    'Landlord',
+    'Tenant',
+    'Applicant',
+    'Agent',
+    'Contractor',
   ];
   lookupdata: any;
   officeLookupDetails: any;
@@ -50,8 +51,11 @@ export class SearchSuggestionComponent implements OnInit {
     private solrService: SolrService,
     private commonService: CommonService,
     private router: Router,
-    private solrSearchService: SolrSearchHandlerService
-  ) {}
+    private solrSearchService: SolrSearchHandlerService,
+    private route: ActivatedRoute,
+    private workspaceService: WorkspaceService,
+  ) {
+  }
 
   getItems(ev: any) {
     // Reset items back to all of the items
@@ -59,9 +63,10 @@ export class SearchSuggestionComponent implements OnInit {
 
     // set val to the value of the searchbar
     const searchText = ev.target.value;
+    this.updateQueryParams(searchText, this.entityControl.value);
 
     // if the value is an empty string don't filter the items
-    if (searchText && searchText.trim() !== "" && searchText.length > 3) {
+    if (searchText && searchText.trim() !== '' && searchText.length > 3) {
       this.showLoader = true;
       this.getSuggestions(this.prepareSearchParams(searchText));
     } else {
@@ -72,11 +77,11 @@ export class SearchSuggestionComponent implements OnInit {
   private prepareSearchParams(searchText: string) {
     return (
       new HttpParams()
-        // .set("limit", this.solrSuggestionConfig.limit)
-        .set("searchTerm", searchText)
-        .set("searchTypes", this.transformToUpperCase(this.entityControl.value))
-        .set("searchSwitch", this.solrSuggestionConfig.searchSwitch)
-        .set("hideLoader", "true")
+        // .set('limit', this.solrSuggestionConfig.limit)
+        .set('searchTerm', searchText)
+        .set('searchTypes', this.transformToUpperCase(this.entityControl.value))
+        .set('searchSwitch', this.solrSuggestionConfig.searchSwitch)
+        .set('hideLoader', 'true')
     );
   }
 
@@ -87,12 +92,16 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.isAuthSuccess && changes.isAuthSuccess.currentValue) {
-      this.initDashboard();
-    }
+    this.getQueryParams();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.initDashboard();
+    this.commonService.dataChanged$.subscribe((data) => {
+      this.entityControl.setValue(data.entity);
+      this.searchTermControl.setValue(data.term);
+    });
+  }
 
   private initDashboard() {
     this.getLookupData();
@@ -135,46 +144,83 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   openHomeCategory(key: string, value = null) {
-    openScreen(key, value);
+    if (this.router.url.includes('/agent/')) {
+      this.workspaceService.addItemToWorkSpace(value);
+      return;
+    }
+    /*Navigate to java fx page (If solr loads inside v2)*/
+    openScreen(key, value.propcoId);
   }
 
   goToPage() {
-    
-    if(this.router.url.includes('/solr/dashboard')) {
-      this.router.navigate(["/solr/search-results"], {
+    if (this.router.url.includes('/solr/dashboard')) {
+      this.router.navigate(['/solr/search-results'], {
         queryParams: {
           searchTerm: this.searchTermControl.value,
           type: this.entityControl.value,
-        },replaceUrl:true
-      },);
+        }, replaceUrl: true
+      });
     }
-    if(this.router.url.includes('/agent/dashboard')) {
-      this.router.navigate(["/agent/solr/search-results"], {
+    if (this.router.url.includes('/agent/')) {
+      this.router.navigate(['/agent/solr/search-results'], {
         queryParams: {
           searchTerm: this.searchTermControl.value,
           type: this.entityControl.value,
         },
-        replaceUrl:true
+        replaceUrl: true
       });
     }
     if ((this.pageType === 'solr-resultpage') && this.router.url.includes('/solr/search-result') || this.router.url.includes('/agent/solr/search-result')) {
-      if(this.pageType === 'solr-resultpage' && this.router.url.includes('/solr/search-result')){
-        this.router.navigate(["/solr/search-results"], {
+      if (this.pageType === 'solr-resultpage' && this.router.url.includes('/solr/search-result')) {
+        this.router.navigate(['/solr/search-results'], {
           queryParams: {
             searchTerm: this.searchTermControl.value,
             type: this.entityControl.value,
           },
         });
       }
-      if(this.router.url.includes('/agent/solr/search-result')){
-        this.router.navigate(["/agent/solr/search-results"], {
+      if (this.router.url.includes('/agent/solr/search-result')) {
+        this.router.navigate(['/agent/solr/search-results'], {
           queryParams: {
             searchTerm: this.searchTermControl.value,
             type: this.entityControl.value,
           },
         });
       }
-      this.solrSearchService.search(this.entityControl.value,this.searchTermControl.value);
+      this.solrSearchService.search({ entity: this.entityControl.value, term: this.searchTermControl.value, isSearchResult: true });
     }
+  }
+
+  hideSuggestion() {
+    setTimeout(() => {
+      this.isItemAvailable = false;
+    }, 200);
+  }
+
+  private getQueryParams() {
+    const promise = new Promise((resolve, reject) => {
+      this.route.queryParams.subscribe((params) => {
+        const entityParams = params['type'] ? params['type'] : 'Property';
+        const types: string[] = Array.isArray(entityParams) ? entityParams : [entityParams];
+        this.entityControl.setValue(types);
+        this.searchTerm = params['searchTerm'];
+        resolve(true);
+      });
+    });
+    return promise;
+  }
+
+  onChangeEntity() {
+    this.updateQueryParams(this.searchTermControl.value, this.entityControl.value);
+  }
+
+  private updateQueryParams(searchTerm, entity) {
+    this.router.navigate([], {
+      relativeTo: this.route, queryParams: {
+        searchTerm: searchTerm,
+        type: entity
+      }
+    });
+    this.solrSearchService.search({ entity: this.entityControl.value, term: this.searchTermControl.value, isSearchResult: false });
   }
 }

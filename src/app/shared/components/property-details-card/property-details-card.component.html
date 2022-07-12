@@ -1,0 +1,64 @@
+<!-- <p>outside content</p> -->
+<div class="property-center-card">
+  <ion-grid class="amenity-content">
+    <ion-row class="amenity-row">
+      <ion-col matTooltip="{{ propertyData?.propertyDetails?.numberOfBedroom || '0' }} Bedroom(s)" matTooltipPosition="above">
+        <div class="amenity-wrapper">
+          <i class="propcoicon propcoicon-beds no-background"></i> {{propertyData?.propertyDetails?.numberOfBedroom ||
+          '0'}}
+        </div>
+      </ion-col>
+      <ion-col matTooltip="{{ propertyData?.propertyDetails?.numberOfBathroom || '0' }} Bathroom(s)" matTooltipPosition="above">
+        <div class="amenity-wrapper">
+          <i class="propcoicon propcoicon-bathrooms no-background"></i>{{propertyData?.propertyDetails?.numberOfBathroom
+          || '0'}}
+        </div>
+      </ion-col>
+      <ion-col matTooltip="{{ propertyData?.propertyDetails?.numberOfReception || '0' }} Reception(s)" matTooltipPosition="above">
+        <div class="amenity-wrapper">
+          <i class="propcoicon propcoicon-lounge no-background"></i>{{propertyData?.propertyDetails?.numberOfReception
+          || '0'}}
+        </div>
+      </ion-col>
+      <ion-col matTooltip="{{ getLookupValuebb(propertyData?.propertyDetails?.parking, parkingTypes)  || '0 Parking(s)' }}" matTooltipPosition="above">
+        <div class="amenity-wrapper">
+          <i class="propcoicon propcoicon-garage no-background"></i>
+          <span [ngClass]="{'garage-ellipse' : propertyData?.propertyDetails?.parking}">{{getLookupValuebb(propertyData?.propertyDetails?.parking, parkingTypes)  || '0'}}</span>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="property-info">
+      <ion-col>
+        <ion-text class="rent">RENT</ion-text>
+      </ion-col>
+      <ion-col>
+        <ion-text class="rent-frequency">{{propertyData?.propertyDetails?.advertisementRent | currency: '£' || notAvailable}} </ion-text>
+        <ion-text class="frequency" *ngIf="propertyData?.propertyDetails?.advertisementRent">{{getAdvLookupValue(propertyData?.propertyDetails?.advertisementRentFrequency, advertisementRentFrequencies)}}
+         </ion-text>
+      </ion-col>
+      <ion-col class="furnishing">
+        <ion-text>
+          {{getAdvLookupValue(propertyData?.propertyDetails?.furnishingType, furnishingTypes)}}
+        </ion-text><br>
+        <ion-text> {{(propertyData?.propertyInfo?.managementType | lookup: managementTypes)}}</ion-text>
+      </ion-col>
+
+      <ion-col class="booking-office">
+        <ion-text>{{(propertyData?.propertyInfo?.bookingOfficeCode | lookup: officeCodes)}}
+        </ion-text>
+      </ion-col>
+
+      <ion-col class="agent">
+        <ion-text class="query">Other Agents?</ion-text>
+        <ion-text>&nbsp; {{propertyData?.propertyInfo?.isOnWithOtherAgent ?'Yes':'No' || notAvailable}} </ion-text>
+      </ion-col>
+
+      <ion-col class="agent" *ngIf="propertyData?.propertyInfo?.agentName">
+        <ion-text class="query">Agent Name</ion-text>
+        <ion-text>&nbsp; {{propertyData?.propertyInfo?.agentName}} </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+</div>

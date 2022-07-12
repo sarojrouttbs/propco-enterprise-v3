@@ -17,6 +17,7 @@
   --padding-start: var(--ion-padding-start);
 
   --ion-grid-column-padding: 10px;
+  background-color: var(--ion-background-color);
 
   .heading {
     @include set-text-style(30px, 35px);
@@ -27,7 +28,7 @@
     text-align: right;
     img {
       width: 210px;
-      background: var(--ion-color-step-2000);
+      background: transparent;
       padding: 10px;
       border-radius: 5px;
     }
@@ -35,8 +36,8 @@
 
   .block {
     @include border-radius(5px);
-    background-color: var(--ion-color-step-1900);
-    color: var(--ion-color-step-400);
+    background-color: var(--ion-color-five);
+    color: var(--ion-text-color);
     @include set-text-style(20px, 24px);
     text-align: center;
     min-height: 170px;
@@ -47,7 +48,7 @@
     padding: 30px 10px 10px;
 
     .header-ion {
-      color: var(--ion-color-step-900);
+      color: var(--ion-color-one);
       height: 80px;
       div{
         @include set-text-style(60px, 68px);
@@ -65,11 +66,11 @@
 
   .block:hover {
     transform: scale(1.04);
-    background: var(--ion-color-step-2000);
+    background: var(--ion-color-four);
   }
 
   .block.active {
-    background-color: var(--ion-color-step-2000);
+    background-color: var(--ion-color-four);
     transform: scale(1.04);
   }
 }

@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, CERTIFICATES_CATEGORY, FAULT_NOTIFICATION_STATE, RECIPIENTS } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, FAULT_QUALIFICATION_ACTIONS, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, CERTIFICATES_CATEGORY, FAULT_NOTIFICATION_STATE, RECIPIENTS, DEFAULTS, DATE_FORMAT } from './../../../shared/constants';
 import { ModalController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
@@ -81,6 +81,8 @@ export class JobCompletionComponent implements OnInit {
   certificateTypes: any;
   notificationState = FAULT_NOTIFICATION_STATE;
   recipientTypes = RECIPIENTS;
+  DEFAULTS = DEFAULTS;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private fb: FormBuilder,
@@ -388,8 +390,8 @@ export class JobCompletionComponent implements OnInit {
     notificationObj.isAccepted = data.value;
     notificationObj.submittedByType = 'SECUR_USER';
     if (data.value) {
-      let title = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? 'Close Fault' : data.text;
-      let message = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? `This will close the Fault. Are you sure?` : `Are you sure the Tenant is satisfied with the Job?`;
+      let title = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? 'Close Repair' : data.text;
+      let message = (this.iacNotification.templateCode === 'LF-T-E' || this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'BMF-T-E' || this.iacNotification.templateCode === 'SMF-T-E') ? `This will close the Repair. Are you sure?` : `Are you sure the Tenant is satisfied with the Job?`;
       this.commonService.showConfirm(title, message, '', 'Yes I\'m sure', 'No').then(async res => {
         if (res) {
           this.commonService.showLoader();
@@ -417,7 +419,7 @@ export class JobCompletionComponent implements OnInit {
   async openWOJobCompletionModal(updateFaultStatus = false) {
     const modal = await this.modalController.create({
       component: WorksorderModalPage,
-      cssClass: 'modal-container upload-container',
+      cssClass: 'modal-container upload-container fault-modal-container',
       componentProps: {
         faultNotificationId: this.iacNotification.faultNotificationId,
         faultId: this.faultDetails.faultId,
@@ -659,7 +661,7 @@ export class JobCompletionComponent implements OnInit {
   }
 
   async approveInvoice() {
-    const confirmation = await this.commonService.showConfirm('Yes, Approve this Invoice', 'This will send the Fault to Accounts team for payment. Are you sure?', '', 'Yes');
+    const confirmation = await this.commonService.showConfirm('Yes, Approve this Invoice', 'This will send the Repair to Accounts team for payment. Are you sure?', '', 'Yes');
     if (confirmation) {
       this.commonService.showLoader();
       const approved = await this.pmApproveInvoice();
@@ -672,12 +674,12 @@ export class JobCompletionComponent implements OnInit {
   async rejectInvoice() {
     const modal = await this.modalController.create({
       component: RejectInvoiceComponent,
-      cssClass: 'modal-container reject-invoice-modal',
+      cssClass: 'modal-container reject-invoice-modal fault-modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId,
         title: "Reject the Invoice",
         headingOne: "You have selected 'No, Reject this Invoice.'",
-        headingTwo: "This will escalate the Fault and a notification to Contractor would be sent. Are you sure?",
+        headingTwo: "This will escalate the Repair and a notification to Contractor would be sent. Are you sure?",
       },
       backdropDismiss: false
     });
@@ -757,7 +759,7 @@ export class JobCompletionComponent implements OnInit {
   async closeFault() {
     const modal = await this.modalController.create({
       component: CloseFaultModalPage,
-      cssClass: 'modal-container close-fault-modal',
+      cssClass: 'modal-container close-fault-modal fault-modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId,
         maitenanceId: this.isMaintenanceDetails ? this.faultMaintenanceDetails.maintenanceId : null
@@ -768,7 +770,7 @@ export class JobCompletionComponent implements OnInit {
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
         this._btnHandler('refresh');
-        this.commonService.showMessage('Fault has been closed successfully.', 'Close a Fault', 'success');
+        this.commonService.showMessage('Repair has been closed successfully.', 'Close a Repair', 'success');
         return;
       }
     });
@@ -799,7 +801,7 @@ export class JobCompletionComponent implements OnInit {
   async notificationModal() {
     const modal = await this.modalController.create({
       component: PendingNotificationModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         notificationHistoryId: this.pendingNotification ? this.pendingNotification.notificationHistoryId : '',
         notificationSubject: this.pendingNotification ? this.pendingNotification.subject : '',
@@ -822,11 +824,11 @@ export class JobCompletionComponent implements OnInit {
     if (!faultNotificationId) return;
     this.commonService.showLoader();
     this.faultsService.resendFaultNotification(faultNotificationId).subscribe((response) => {
-      this.commonService.showMessage('Notification resend successfull.', 'Fault Qualification', 'success');
+      this.commonService.showMessage('Notification resend successfull.', 'Repair Qualification', 'success');
       this.commonService.hideLoader();
       this._btnHandler('refresh');
     }, error => {
-      this.commonService.showMessage('Notification resend failed.', 'Fault Qualification', 'error');
+      this.commonService.showMessage('Notification resend failed.', 'Repair Qualification', 'error');
       this.commonService.hideLoader();
     });
   }
@@ -921,7 +923,7 @@ export class JobCompletionComponent implements OnInit {
   async viewBlockManagement() {
     const modal = await this.modalController.create({
       component: BlockManagementModalPage,
-      cssClass: 'modal-container upload-container',
+      cssClass: 'modal-container upload-container fault-modal-container',
       componentProps: {
         blockManagement: this.blockManagement,
         faultCategories: this.faultCategories
@@ -944,7 +946,7 @@ export class JobCompletionComponent implements OnInit {
     }
     const modal = await this.modalController.create({
       component: PropertyCertificateModalPage,
-      cssClass: 'modal-container property-certificates-view',
+      cssClass: 'modal-container property-certificates-view fault-modal-container',
       componentProps: {
         propertyCertificate: category === CERTIFICATES_CATEGORY[0] ? this.certificateCategoriesMap.get(CERTIFICATES_CATEGORY[0]) : mergedServiceContractAndApplicance,
         certificateId: category === CERTIFICATES_CATEGORY[0] ? this.faultDetails.warrantyCertificateId : this.faultDetails.serviceContractCertificateId,

@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Call</ion-title>
+    <ion-buttons slot="end" class="close-btn">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-text-center">
+  <ng-container *ngIf="type=='tel'; then ifBlock else elseBlock"></ng-container>
+  <ng-template #ifBlock>
+    <p class="lable">Call Telephone</p>
+    <ion-text class="info">{{userInfo?.businessTelephoneNo || userInfo?.homeTelephoneNo || notAvailable}}</ion-text>
+  </ng-template>
+  <ng-template #elseBlock>
+    <p class="lable">Call Mobile</p>
+    <ion-text class="info">{{userInfo?.mobile || notAvailable}}</ion-text>
+  </ng-template>
+
+
+
+</ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-button (click)="dismiss()">Close</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

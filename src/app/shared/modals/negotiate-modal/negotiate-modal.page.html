@@ -10,7 +10,7 @@
       <ion-row>
         <ion-col size="80" *ngFor="let comment of commentsArray" offset="{{ comment.negotiatedBy != 'APPLICANT' ? 20 : 0 }}">
           <ion-card>
-            <ion-card-content style="background-color: rgba(var(--ion-color-medium-rgb), .1)">
+            <ion-card-content>
               <p class="name"><ion-text>{{comment.negotiatedByName}}</ion-text></p>
               <p class="comment">{{ comment.comment }}</p>
               <p class="date ion-text-end">{{ comment.createdAt | date:'dd/MM/yyyy hh:mm a' }}</p>
@@ -18,7 +18,7 @@
           </ion-card>
         </ion-col>
       </ion-row>
-    </ion-grid>
+    </ion-grid> 
 </ion-content>
 <ion-footer class="ion-no-padding">
   <form [formGroup]="negotiateForm">

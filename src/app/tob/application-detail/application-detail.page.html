@@ -5,7 +5,7 @@
     <ion-grid id="application-stepper"> 
       <ion-row>
         <ion-col size="100">
-          <mat-horizontal-stepper (selectionChange)="onStepChange($event)" [selectedIndex]="currentStepperIndex"
+          <mat-horizontal-stepper id="tob-application-stepper" (selectionChange)="onStepChange($event)" [selectedIndex]="currentStepperIndex"
             class="stepper-section" #stepper labelPosition="bottom">
             <mat-step [completed]="applicationDetails?.isSubmitted">
               <ng-container *ngTemplateOutlet="occupants"></ng-container>
@@ -294,7 +294,7 @@
                         </ion-col>
                         <ion-col size="20">
                           <ion-text>
-                            {{item.controls['mobile'].value || '-'}}
+                            {{item.controls['mobile'].value || DEFAULTS.NOT_AVAILABLE}}
                           </ion-text>
                         </ion-col>
                         <ion-col size="22">
@@ -307,7 +307,7 @@
                             (click)="onLeadSelection(item); $event.stopPropagation();"
                             [checked]="item.controls['isLead'].value"
                             [disabled]="item.controls['isLead'].value  || !item.controls['applicationApplicantId'].value && !applicationDetails?.isSubmitted"
-                            color="success"></ion-checkbox>
+                            color="primary"></ion-checkbox>
                         </ion-col>
                         <ion-col size="10">
                           <ion-icon (click)="removeCoApplicant(item, i); $event.stopPropagation();" color="danger"
@@ -413,7 +413,7 @@
 
 <ng-template #applicantDetails>
   <form id="applicantDetailsForm" [formGroup]="applicantDetailsForm">
-    <ion-grid>
+    <ion-grid class="ion-padding">
       <ion-row>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
@@ -456,7 +456,7 @@
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3" style="padding-top: 21px;">
           <mat-form-field appearance="fill">
-            <mat-label> Date of birth *</mat-label>
+            <mat-label> Date of birth</mat-label>
             <input matInput [matDatepicker]="picker3" [max]="currentDate" formControlName="dateOfBirth" readonly>
             <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
             <mat-datepicker #picker3></mat-datepicker>
@@ -485,7 +485,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item lines="full" class="margin-top-7">
             <ion-label>Do you have a guarantor?</ion-label>
-            <ion-toggle (ionChange)="isGurantorEnable()" formControlName="guarantor" color="success">
+            <ion-toggle (ionChange)="isGurantorEnable()" formControlName="guarantor" color="primary">
             </ion-toggle>
           </ion-item>
         </ion-col>
@@ -506,7 +506,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item lines="full" class="margin-top-7">
             <ion-label>Any Pets?</ion-label>
-            <ion-toggle formControlName="hasPets" color="success"></ion-toggle>
+            <ion-toggle formControlName="hasPets" color="primary"></ion-toggle>
           </ion-item>
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
@@ -523,7 +523,7 @@
 
 <ng-template #applicantAddress>
   <form [formGroup]="addressDetailsForm" id="addressDetailsForm">
-    <ion-grid>
+    <ion-grid class="ion-padding">
       <ion-row class="ion-justify-content-center" formGroupName="address">
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
@@ -531,7 +531,7 @@
             </ion-label>
             <ion-input type="text" formControlName="postcode"></ion-input>
             <ion-button color="success" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
-              (click)="getAddressList('personal')">Lookup
+              (click)="getAddressList('personal')">Find
               <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
             </ion-button>
           </ion-item>
@@ -565,7 +565,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
             <ion-label position="floating">Select address</ion-label>
-            <ion-select interface="popover" formControlName="addressdetails"
+            <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" formControlName="addressdetails"
               (ionChange)="getAddressDetails(selectedAddress.value, 'personal')" [disabled]="!addressList"
               #selectedAddress>
               <ion-select-option [value]="address?.id" *ngFor="let address of addressList">{{ address?.text }}
@@ -604,7 +604,7 @@
               </ion-label>
               <ion-input type="text" formControlName="postcode"></ion-input>
               <ion-button class="postcode-search" [disabled]="showAddressLoader || applicationDetails?.isSubmitted" color="success"
-                (click)="getAddressList('correspondence-address')"> Lookup
+                (click)="getAddressList('correspondence-address')"> Find
                 <ion-icon *ngIf="showAddressLoader" name="refresh" class="rotating submit-loader"></ion-icon>
               </ion-button>
             </ion-item>
@@ -639,7 +639,7 @@
           <ion-col size-xs="100" size-sm="33.3">
             <ion-item>
               <ion-label position="floating">Select address</ion-label>
-              <ion-select interface="popover" formControlName="addressdetails"
+              <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" formControlName="addressdetails"
                 (ionChange)="getAddressDetails(forwardingAddress.value, 'correspondence-address')"
                 [disabled]="!forwardingAddressList" #forwardingAddress>
                 <ion-select-option [value]="address?.id" *ngFor="let address of forwardingAddressList">
@@ -674,7 +674,7 @@
 
 <ng-template #bankDetails>
   <form id="bank-details" [formGroup]="bankDetailsForm">
-    <ion-grid>
+    <ion-grid class="ion-padding">
       <ion-row formGroupName="bankDetails">
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
@@ -712,16 +712,16 @@
 <ng-template #applicationQuestion>
   <form [formGroup]="applicantQuestionForm" id="question-details">
     <ng-container formArrayName="questions">
-      <ion-grid class="ion-no-padding">
+      <ion-grid class="ion-padding">
         <ion-row *ngFor="let question of applicantQuestionForm.get('questions')['controls']; let in=index"
           class="ion-justify-content-between ion-align-items-center">
           <ng-container [formGroupName]="in">
             <ion-col size="100" class="ion-align-self-end no-padd-top-bottom">
               <ion-item lines="none" class="marg-top-16">
-                <ion-label style="color:var(--ion-color-dark) !important" class="ion-text-wrap">
+                <ion-label>
                   {{question.controls['question'].value}}
                 </ion-label>
-                <ion-toggle [checked]="" formControlName="toggle" color="success"></ion-toggle>
+                <ion-toggle [checked]="" formControlName="toggle" color="primary"></ion-toggle>
               </ion-item>
             </ion-col>
             <ion-col size-xs="100" size-sm="33.3">
@@ -747,9 +747,8 @@
 
 <ng-template #tenancyDetails>
   <form id="tenancy-details" [formGroup]="tenancyDetailForm">
-    <ion-grid>
+    <ion-grid class="ion-padding">
       <ion-row class="ion-justify-content-start">
-
         <ion-col size-xs="100" size-sm="33.3" class="header-content">
           <ion-text class="header">Rent</ion-text><br />
           <ion-text class="content">
@@ -768,7 +767,7 @@
 
         <ion-col size-xs="100" size-sm="33.3" style="padding-top: 21px;">
           <mat-form-field appearance="fill">
-            <mat-label>When would you like to move in? *</mat-label>
+            <mat-label>When would you like to move in?</mat-label>
             <input matInput [matDatepicker]="picker" [max]="maxMoveInDate" [min]="currentDate"
               formControlName="moveInDate" readonly>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -781,7 +780,7 @@
 
         <ion-col size-xs="100" size-sm="33.3" style="padding-top: 21px;">
           <mat-form-field appearance="fill">
-            <mat-label>Tenancy end *</mat-label>
+            <mat-label>Tenancy end</mat-label>
             <input matInput [matDatepicker]="picker1" [min]="tenancyDetailForm.controls.moveInDate.value"
               formControlName="preferredTenancyEndDate" readonly>
             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
@@ -833,7 +832,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item lines="full" class="margin-top-7">
             <ion-label>Are all occupants from the same household?</ion-label>
-            <ion-toggle formControlName="hasSameHouseholdApplicants" color="success"></ion-toggle>
+            <ion-toggle formControlName="hasSameHouseholdApplicants" color="primary"></ion-toggle>
           </ion-item>
           <app-validation-message [control]="tenancyDetailForm.controls.hasSameHouseholdApplicants">
           </app-validation-message>
@@ -860,8 +859,8 @@
 </ng-template>
 
 <ng-template #restriction>
-  <ion-grid class="ion-no-padding restriction-section">
-    <ion-row class="">
+  <ion-grid class="ion-padding restriction-section">
+    <ion-row>
       <ion-col size="100" *ngIf="!applicationDetails?.applicationRestrictions?.length">
         <div class="no-data">No restrictions found!</div>
       </ion-col>
@@ -872,7 +871,7 @@
             <ion-grid>
               <ion-row class="ion-align-items-center ion-justify-content-between">
                 <ion-col class="ion-text-start" size="55">
-                  <ion-text color="dark" class="res-clause-title"> {{ res.restrictionName }} </ion-text>
+                  <ion-text class="res-clause-title"> {{ res.restrictionName }} </ion-text>
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -884,7 +883,7 @@
 </ng-template>
 
 <ng-template #clauses>
-  <ion-grid class="clause-section">
+  <ion-grid class="ion-padding clause-section">
     <ion-row>
       <ion-col size="100" *ngIf="!applicationDetails?.applicationClauses?.length">
         <div class="no-data">No special conditions & clauses found!</div>
@@ -897,7 +896,7 @@
             <ion-grid>
               <ion-row class="ion-align-items-start ion-justify-content-between">
                 <ion-col class="ion-text-start" [size]="clause.isNegotiable? 80 : 100">
-                  <ion-text color="dark" class="res-clause-title"> {{ clause.clauseName }} </ion-text><br />
+                  <ion-text class="res-clause-title"> {{ clause.clauseName }} </ion-text><br />
                   <ion-text color="medium" class="fs-16"> {{ clause.clauseText }} </ion-text>
                 </ion-col>
               </ion-row>
@@ -911,7 +910,7 @@
 
 <ng-template #guarantorDetails>
   <form id="guarantorDetails" [formGroup]="guarantorForm">
-    <ion-grid>
+    <ion-grid class="ion-padding">
       <ion-row>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
@@ -972,7 +971,7 @@
               </ion-label>
               <ion-input type="text" formControlName="postcode"></ion-input>
               <ion-button color="success" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
-                (click)="getAddressList('guarantor')">Lookup
+                (click)="getAddressList('guarantor')">Find
                 <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
               </ion-button>
             </ion-item>
@@ -1007,7 +1006,7 @@
           <ion-col size-xs="100" size-sm="33.3">
             <ion-item>
               <ion-label position="floating">Select address</ion-label>
-              <ion-select interface="popover" formControlName="addressdetails"
+              <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" formControlName="addressdetails"
                 (ionChange)="getAddressDetails(selectedGuarantorAddress.value, 'guarantor')"
                 [disabled]="!guarantorAddressList" #selectedGuarantorAddress>
                 <ion-select-option [value]="address?.id" *ngFor="let address of guarantorAddressList">{{ address?.text
@@ -1041,7 +1040,7 @@
 </ng-template>
 
 <ng-template #finalView>
-  <ion-grid>
+  <ion-grid class="ion-padding">
     <ion-row>
       <ion-col size="100" size-xl="60" offset-xl="20">
         <ion-grid id="final-view">
@@ -1058,19 +1057,19 @@
             <ion-row style="width: 100%" *ngFor="let data of occupantForm.value.coApplicants">
               <ion-col *ngIf="data.isAdded" class="header-content" size-xs="100" size-sm="50">
                 <ion-text class="header"> Forename </ion-text><br />
-                <ion-text class="content">{{ data.forename || '-' }}</ion-text>
+                <ion-text class="content">{{ data.forename || DEFAULTS.NOT_AVAILABLE }}</ion-text>
               </ion-col>
               <ion-col *ngIf="data.isAdded" class="header-content" size-xs="100" size-sm="50">
                 <ion-text class="header"> Surname </ion-text><br />
-                <ion-text class="content">{{ data.surname || '-' }}</ion-text>
+                <ion-text class="content">{{ data.surname || DEFAULTS.NOT_AVAILABLE }}</ion-text>
               </ion-col>
               <ion-col *ngIf="data.isAdded" class="header-content" size-xs="100" size-sm="50">
                 <ion-text class="header"> Mobile </ion-text><br />
-                <ion-text class="content">{{ data.mobile || '-' }}</ion-text>
+                <ion-text class="content">{{ data.mobile || DEFAULTS.NOT_AVAILABLE }}</ion-text>
               </ion-col>
               <ion-col *ngIf="data.isAdded" class="header-content" size-xs="100" size-sm="50">
                 <ion-text class="header"> Email Address </ion-text><br />
-                <ion-text class="content">{{ data.email || '-' }}</ion-text>
+                <ion-text class="content">{{ data.email || DEFAULTS.NOT_AVAILABLE }}</ion-text>
               </ion-col>
             </ion-row>
 
@@ -1083,22 +1082,22 @@
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header"> Name </ion-text><br />
               <ion-text class="content"> {{ applicantDetailsForm.value.forename ? (applicantDetailsForm.value.forename +
-                " " + applicantDetailsForm.value.surname) : '-' }} </ion-text>
+                " " + applicantDetailsForm.value.surname) : DEFAULTS.NOT_AVAILABLE }} </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header"> Email Address </ion-text><br />
-              <ion-text class="content"> {{ applicantDetailsForm.value.email || '-' }} </ion-text>
+              <ion-text class="content"> {{ applicantDetailsForm.value.email || DEFAULTS.NOT_AVAILABLE }} </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header"> Current Position </ion-text><br />
               <ion-text class="content">
                 {{ applicantDetailsForm.value.currentPosition ? (applicantDetailsForm.value.currentPosition | lookup:
-                tenantCurrentPositionTypes) : '-' }}
+                tenantCurrentPositionTypes) : DEFAULTS.NOT_AVAILABLE }}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header"> Occupation </ion-text><br />
-              <ion-text class="content"> {{ applicantDetailsForm.value.occupation || '-' }} </ion-text>
+              <ion-text class="content"> {{ applicantDetailsForm.value.occupation || DEFAULTS.NOT_AVAILABLE }} </ion-text>
             </ion-col>
 
             <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -1109,7 +1108,7 @@
               <ion-text class="header"> Guarantor Type </ion-text><br />
               <ion-text class="content">
                 {{ applicantDetailsForm.value.guarantorType ? (applicantDetailsForm.value.guarantorType | lookup:
-                applicantGuarantorTypes) : '-' }}
+                applicantGuarantorTypes) : DEFAULTS.NOT_AVAILABLE }}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -1118,7 +1117,7 @@
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header"> Pets Info </ion-text><br />
-              <ion-text class="content"> {{ applicantDetailsForm.value.petsInfo || '-' }} </ion-text>
+              <ion-text class="content"> {{ applicantDetailsForm.value.petsInfo || DEFAULTS.NOT_AVAILABLE }} </ion-text>
             </ion-col>
 
             <ion-col size="100" class="border-bottom"></ion-col>
@@ -1176,7 +1175,7 @@
             </ion-col>
             <ion-col class="header-content" size-xs="100" size-sm="50"
               *ngFor="let data of applicantQuestionForm.value.questions">
-              <ion-text class="header">{{data.question || '-'}}</ion-text><br />
+              <ion-text class="header">{{data.question || DEFAULTS.NOT_AVAILABLE}}</ion-text><br />
               <ion-text class="content">{{data.toggle ? 'Yes' : 'No'}}</ion-text>
             </ion-col>
 
@@ -1187,21 +1186,21 @@
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">When would you like to move in?</ion-text><br />
-              <ion-text class="content">{{ (tenancyDetailForm.value.moveInDate | date : 'dd/MM/yyyy') || '-' }}
+              <ion-text class="content">{{ (tenancyDetailForm.value.moveInDate | date : DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE }}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Tenancy End</ion-text><br />
-              <ion-text class="content">{{ (tenancyDetailForm.value.preferredTenancyEndDate | date : 'dd/MM/yyyy') ||
-                '-' }}</ion-text>
+              <ion-text class="content">{{ (tenancyDetailForm.value.preferredTenancyEndDate | date : DATE_FORMAT.DATE) ||
+                DEFAULTS.NOT_AVAILABLE }}</ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Preffered Rent Due Day</ion-text><br />
-              <ion-text class="content">{{ tenancyDetailForm.value.rentDueDay || '-' }}</ion-text>
+              <ion-text class="content">{{ tenancyDetailForm.value.rentDueDay || DEFAULTS.NOT_AVAILABLE }}</ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">No. of Occupants</ion-text><br />
-              <ion-text class="content">{{ tenancyDetailForm.value.numberOfHouseHolds || '-' }}</ion-text>
+              <ion-text class="content">{{ tenancyDetailForm.value.numberOfHouseHolds || DEFAULTS.NOT_AVAILABLE }}</ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">No. of Children</ion-text><br />
@@ -1209,7 +1208,7 @@
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">No. of Adults</ion-text><br />
-              <ion-text class="content">{{ tenancyDetailForm.value.numberOfAdults || '-'}}</ion-text>
+              <ion-text class="content">{{ tenancyDetailForm.value.numberOfAdults || DEFAULTS.NOT_AVAILABLE}}</ion-text>
             </ion-col>
 
             <ion-col size="100" class="border-bottom"></ion-col>
@@ -1255,15 +1254,15 @@
               </ion-col>
               <ion-col size-xs="100" size-sm="50" class="header-content">
                 <ion-text class="header">Name</ion-text><br />
-                <ion-text class="content">{{ guarantorForm.value.forename ? (guarantorForm.value.forename + ' ' + guarantorForm.value.surname) : '-' }}</ion-text>
+                <ion-text class="content">{{ guarantorForm.value.forename ? (guarantorForm.value.forename + ' ' + guarantorForm.value.surname) : DEFAULTS.NOT_AVAILABLE }}</ion-text>
               </ion-col>
               <ion-col size-xs="100" size-sm="50" class="header-content">
                 <ion-text class="header">Email Address</ion-text><br />
-                <ion-text class="content">{{ guarantorForm.value.email || '-' }}</ion-text>
+                <ion-text class="content">{{ guarantorForm.value.email || DEFAULTS.NOT_AVAILABLE }}</ion-text>
               </ion-col>
               <ion-col size-xs="100" size-sm="50" class="header-content">
                 <ion-text class="header">Phone</ion-text><br />
-                <ion-text class="content">{{ guarantorForm.value.mobile || '-' }}</ion-text>
+                <ion-text class="content">{{ guarantorForm.value.mobile || DEFAULTS.NOT_AVAILABLE }}</ion-text>
               </ion-col>
               <ion-col size-xs="100" size-sm="50" class="header-content">
                 <ion-text class="header">Address</ion-text><br />
@@ -1276,7 +1275,7 @@
 
           <ion-row>
             <ion-item lines="none" class="ion-no-padding ion-no-margin">
-              <ion-checkbox color="success" slot="start" class="ion-margin" [(ngModel)]="termsConditionControl"
+              <ion-checkbox color="primary" slot="start" class="ion-margin" [(ngModel)]="termsConditionControl"
                 [disabled]="true" [ngModelOptions]="{standalone: true}"
                 (ionChange)="onTermsModelChanged($event)" style="margin-left: 5px;"></ion-checkbox>
             </ion-item>
@@ -1295,7 +1294,7 @@
 <ng-template #payment>  
   <ng-container *ngIf="PAYMENT_METHOD == 'WORLDPAY_REDIRECT'" >
   <!--payment method 1 starts -->
-    <ion-grid class="ion-no-padding" [hidden]="showWorldpayIframe" id="payment-detail">
+    <ion-grid class="ion-padding" [hidden]="showWorldpayIframe" id="payment-detail">
       <ion-row [hidden]="hidePaymentForm" class="ion-justify-content-between">
         <ion-col size="100" [hidden]="showWorldpayIframe" class="ion-text-center">
           <h2 class="payment-heading">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
@@ -1363,7 +1362,7 @@
 
   <ng-container *ngIf="PAYMENT_METHOD == 'BARCLAYCARD_REDIRECT'" >
     <!--payment method 3 start -->
-    <ion-grid class="ion-no-padding" [hidden]="showWorldpayIframe" id="payment-detail">
+    <ion-grid class="ion-padding" [hidden]="showWorldpayIframe" id="payment-detail">
       <ion-row [hidden]="hidePaymentForm" class="ion-justify-content-between">
         <ion-col size="100" [hidden]="showWorldpayIframe" class="ion-text-center">
           <h2 class="payment-heading">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>

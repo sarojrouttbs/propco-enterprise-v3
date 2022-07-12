@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PROPCO, REFERENCING, REFERENCING_TENANT_TYPE } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, PROPCO, REFERENCING, REFERENCING_TENANT_TYPE } from 'src/app/shared/constants';
 import { AddressModalPage } from 'src/app/shared/modals/address-modal/address-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,13 +14,13 @@ import { ValidationService } from 'src/app/shared/services/validation.service';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 import { ReferencingService } from '../../referencing.service';
 import { HttpParams } from '@angular/common/http';
-
 @Component({
   selector: 'la-application-details',
   templateUrl: './application-details.page.html',
   styleUrls: ['./application-details.page.scss'],
 })
 export class ApplicationDetailsPage implements OnInit {
+  DATE_FORMAT = DATE_FORMAT;
   tenancyDetailsForm: FormGroup;
   propertyDetailsForm: FormGroup;
   tenantDetailsForm: FormGroup;
@@ -44,7 +44,7 @@ export class ApplicationDetailsPage implements OnInit {
   tenantId: any;
   futureDate: string;
   currentDate = this.commonService.getFormatedDate(new Date());
-  adultDate = this.datepipe.transform(new Date().setDate(new Date().getDay() - (18 * 365)), 'yyyy-MM-dd');
+  adultDate = this.datepipe.transform(new Date().setDate(new Date().getDay() - (18 * 365)), this.DATE_FORMAT.YEAR_DATE);
 
   managementStatusTypes: any[] = [];
   managementTypes: any[] = [];
@@ -67,6 +67,15 @@ export class ApplicationDetailsPage implements OnInit {
   titleIndex: any;
   selectedTenancyObj: any = {}
   officeList: string;
+  DEFAULTS = DEFAULTS;
+
+  popoverOptions: any = {
+    cssClass: 'let-alliance-ion-select'
+  };
+  tenantList: any;
+  selectedTabIndex: any;
+  selectedTenantDetails: any;
+  tenantCaseId: any;
 
   constructor(
     private fb: FormBuilder,
@@ -75,8 +84,7 @@ export class ApplicationDetailsPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private referencingService: ReferencingService,
-    public datepipe: DatePipe,
-    private currencyPipe: CurrencyPipe
+    public datepipe: DatePipe
   ) {
   }
 
@@ -86,7 +94,7 @@ export class ApplicationDetailsPage implements OnInit {
     this.tenantDetailsAccordion.expanded = true;
     const date = new Date();
     date.setDate(date.getDate() + 60);
-    this.futureDate = this.datepipe.transform(date, 'yyyy-MM-dd');
+    this.futureDate = this.datepipe.transform(date, this.DATE_FORMAT.YEAR_DATE);
   }
 
   ionViewDidEnter() {
@@ -116,7 +124,7 @@ export class ApplicationDetailsPage implements OnInit {
   private async searchProperty() {
     const modal = await this.modalController.create({
       component: SearchPropertyPage,
-      cssClass: 'modal-container la-property-search',
+      cssClass: 'modal-container la-property-search la-modal-container',
       backdropDismiss: false,
       componentProps: {
         isFAF: false,
@@ -130,19 +138,20 @@ export class ApplicationDetailsPage implements OnInit {
         this.propertyId = res.data.propertyId;
         this.selectTenant();
       } else {
-        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       }
     });
     await modal.present();
   }
 
-  private async selectTenant() {
+  private async selectTenant(message?: string) {
     const modal = await this.modalController.create({
       component: TenantListModalPage,
-      cssClass: 'modal-container tenant-list',
+      cssClass: 'modal-container tenant-list la-modal-container',
       backdropDismiss: false,
       componentProps: {
         paramPropertyId: this.propertyId,
+        paramMessage: message
       }
     });
 
@@ -153,19 +162,52 @@ export class ApplicationDetailsPage implements OnInit {
         }
         else {
           this.tenantId = res.data.tenantId;
-          this.initiateApplication();
+          this.tenantCaseId = res.data.tenantCaseId ? res.data.tenantCaseId : null;
+          if(message){
+            this.router.navigate(['../add-application'], { relativeTo: this.route, queryParams: {
+              pId: this.propertyId,
+              tId: res.data.tenantId
+              }}).then(() => {
+              location.reload();
+            });
+          }
+          else{
+            this.initiateApplication();
+          }
         }
       } else {
-        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       }
     });
     await modal.present();
   }
 
+  private getTenantList() {
+    const params = new HttpParams()
+      .set('agreementStatus', this.proposedAgreementStatusIndex ? this.proposedAgreementStatusIndex : '');
+
+    const promise = new Promise((resolve, reject) => {
+      this.referencingService.getPropertyTenantList(this.propertyId, params).subscribe(
+        res => {
+          this.tenantList = res ? res.data : [];
+          const caseIdTenant = this.tenantList.find(obj => obj.caseId != null);
+          if(caseIdTenant){
+            this.tenantList.map(obj => obj.caseId = caseIdTenant.caseId);
+          }
+          resolve(this.tenantList);
+        },
+        (error) => {
+          resolve(this.tenantList);
+        }
+      );
+    });
+    return promise;
+  }
+
   private async applicationAlert() {
     const modal = await this.modalController.create({
       component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: `<div class='status-block'>There is an application in process for this tenant. You cannot start another application until the processing of existing application has been completed.
@@ -181,7 +223,7 @@ export class ApplicationDetailsPage implements OnInit {
     });
 
     const data = modal.onDidDismiss().then(res => {
-      this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+      this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
     });
 
     await modal.present();
@@ -306,7 +348,8 @@ export class ApplicationDetailsPage implements OnInit {
     forkJoin([
       this.getPropertyById(),
       this.getTenantDetails(),
-      this.getPropertyTenancyList()
+      this.getPropertyTenancyList(),
+      this.getTenantList()
     ]).subscribe(async (values) => {
       // this.commonService.hideLoader();
       if (this.tenantDetails.referencingApplicationStatus == 0 || this.tenantDetails.referencingApplicationStatus == 1) {
@@ -315,6 +358,9 @@ export class ApplicationDetailsPage implements OnInit {
       else{
         this.initPatching();
         this.setValidatorsForForms();
+        this.selectedTenantDetails = this.tenantList.find(obj => obj.tenantId === this.tenantDetails.tenantId);
+        this.selectedTabIndex = this.selectedTenantDetails.caseId ? 1 : 0;
+        this.tenantCaseId = this.selectedTenantDetails.caseId ? this.selectedTenantDetails.caseId : null;
       }
     });
   }
@@ -541,7 +587,7 @@ export class ApplicationDetailsPage implements OnInit {
   async editAddress() {
     const modal = await this.modalController.create({
       component: AddressModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container la-modal-container',
       backdropDismiss: false,
       componentProps: {
         paramAddress: this.address
@@ -608,16 +654,30 @@ export class ApplicationDetailsPage implements OnInit {
     }
     this.commonService.showLoader();
     const applicationRequestObj = this.createApplicationFormValues();
+    if(this.tenantCaseId){
+      applicationRequestObj.case.caseId = this.tenantCaseId;
+    }
+
+    const tmpApplicationNotSubmittedTenantList = this.tenantList.filter(obj => obj.referencingApplicationStatus === null);
+
+    const applicationNotSubmittedTenantList = tmpApplicationNotSubmittedTenantList.
+    filter(obj => obj.tenantId !== applicationRequestObj.applicantId);
 
     this.referencingService.createApplication(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, applicationRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
         this.commonService.showMessage('Application has been created successfully.', 'Create an Application', 'success');
         setTimeout(() => {
-          this.router.navigate(['/let-alliance/dashboard']).then(() => {
-            location.reload();
-          });
-        }, 5000);
+          if (applicationNotSubmittedTenantList.length > 0){
+            const msg = 'Please select other tenant for continuing with referencing for them.';
+            this.selectTenant(msg);
+          }
+          else {
+            this.router.navigate(['../dashboard'], { relativeTo: this.route }).then(() => {
+              location.reload();
+            });
+          }
+        }, 2000);
       },
       error => {
         this.commonService.hideLoader();
@@ -664,8 +724,8 @@ export class ApplicationDetailsPage implements OnInit {
       case: {
         productId: this.tenancyDetailsForm.get('productId').value,
         noOfTenantToBeReferenced: parseInt(this.tenancyDetailsForm.get('noOfTenantToBeReferenced').value),
-        tenancyStartDate: this.datepipe.transform(this.tenancyDetailsForm.get('tenancyStartDate').value, 'yyyy-MM-dd'),
-        tenancyEndDate: this.datepipe.transform(tmpDate, 'yyyy-MM-dd'),
+        tenancyStartDate: this.datepipe.transform(this.tenancyDetailsForm.get('tenancyStartDate').value, this.DATE_FORMAT.YEAR_DATE),
+        tenancyEndDate: this.datepipe.transform(tmpDate, this.DATE_FORMAT.YEAR_DATE),
         tenancyTerm: this.tenancyDetailsForm.get('tenancyTerm').value,
         paidBy: this.tenancyDetailsForm.get('paidBy').value ? 1 : 0,
         offerNds: this.tenancyDetailsForm.get('offerNds').value,
@@ -696,7 +756,7 @@ export class ApplicationDetailsPage implements OnInit {
         middlename: this.tenantDetailsForm.get('middlename').value,
         surname: this.tenantDetailsForm.get('surname').value,
         email: this.tenantDetailsForm.get('email').value,
-        dateOfBirth: this.datepipe.transform(this.tenantDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
+        dateOfBirth: this.datepipe.transform(this.tenantDetailsForm.get('dateOfBirth').value, this.DATE_FORMAT.YEAR_DATE),
         rentShare: parseFloat(this.tenantDetailsForm.get('rentShare').value),
         maritalStatus: this.tenantDetailsForm.get('maritalStatus').value,
         nationality: this.getLookupValue(this.tenantDetailsForm.get('nationality').value, this.referencingNationalities),
@@ -720,7 +780,7 @@ export class ApplicationDetailsPage implements OnInit {
   async cancelApplication() {
     const modal = await this.modalController.create({
       component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: `<div class="center-block">The data entered has not been saved, do you want to exit the Application?
@@ -741,7 +801,7 @@ export class ApplicationDetailsPage implements OnInit {
 
     const data = modal.onDidDismiss().then(res => {
       if (res.data.userInput) {
-        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       }
     });
 

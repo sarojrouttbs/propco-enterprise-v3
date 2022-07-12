@@ -5,7 +5,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Select Guarantor</ion-label>
-            <ion-select interface="popover" formControlName="guarantor" (ionChange)="getGuarantorDetails(selectGuarantorForm.controls.guarantor.value)">
+            <ion-select interface="popover" formControlName="guarantor" (ionChange)="getGuarantorDetails(selectGuarantorForm.controls.guarantor.value)" [interfaceOptions]="popoverOptions">
               <ion-select-option value="a1">New Guarantor</ion-select-option>
               <ion-select-option [value]="item.guarantorId" *ngFor="let item of guarantorList">
                 {{ item.fullName ? item.fullName : item.forename + ' ' + item.surname }}
@@ -26,7 +26,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Completion Method</ion-label>
-            <ion-select interface="popover" formControlName="completeMethod">
+            <ion-select interface="popover" formControlName="completeMethod" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of completionMethods">
                 {{ item.value }}
               </ion-select-option>
@@ -37,7 +37,7 @@
           <ion-item>
             <ion-label position="floating">Product Type  <ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-select interface="popover" formControlName="productId">
+            <ion-select interface="popover" formControlName="productId" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.productId" *ngFor="let item of referencingApplicationProductList">
                 {{ item.productName }}
               </ion-select-option>
@@ -48,7 +48,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Tenant Type <ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-select interface="popover" formControlName="tenantTypeId" (ionChange)="setValidatorsForForms()">
+            <ion-select interface="popover" formControlName="tenantTypeId" (ionChange)="setValidatorsForForms()" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of tenantTypes">
                 {{ item.value }}
               </ion-select-option>
@@ -56,7 +56,7 @@
           </ion-item>
           <app-validation-message [control]="guarantorDetailsForm.controls.tenantTypeId"></app-validation-message>
         </ion-col>
-        <ion-col size="33.3" *ngIf="getLookupValue(guarantorDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
+        <ion-col size="33.3" *ngIf="(guarantorDetailsForm.controls.tenantTypeId.value | lookup: tenantTypes) == 'Company'">
           <ion-item>
             <ion-label position="floating">Company Name <ion-text class="mandatory">*</ion-text>
             </ion-label>
@@ -67,7 +67,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Title <ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-select interface="popover" formControlName="title">
+            <ion-select interface="popover" formControlName="title" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of titleTypes">
                 {{ item.value }}
               </ion-select-option>
@@ -112,7 +112,7 @@
         </ion-col>
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" style="padding-top:13px">
           <mat-form-field appearance="fill">
-            <mat-label>Date of Birth <ion-text class="mandatory">*</ion-text></mat-label>
+            <mat-label>Date of Birth</mat-label>
             <input matInput [matDatepicker]="picker" [max]="adultDate" formControlName="dateOfBirth" readonly>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
@@ -124,7 +124,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Marital Status <ion-text class="mandatory" *ngIf="guarantorDetailsForm.controls.tenantTypeId.value == 1">*</ion-text></ion-label>
-            <ion-select interface="popover" formControlName="maritalStatus">
+            <ion-select interface="popover" formControlName="maritalStatus" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of maritalStatusTypes">
                 {{ item.value }}
               </ion-select-option>
@@ -135,7 +135,7 @@
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
             <ion-label position="floating">Nationality</ion-label>
-            <ion-select interface="popover" formControlName="nationality">
+            <ion-select interface="popover" formControlName="nationality" [interfaceOptions]="popoverOptions">
               <ion-select-option [value]="item.index" *ngFor="let item of referencingNationalities">
                 {{ item.value }}
               </ion-select-option>
@@ -143,7 +143,7 @@
           </ion-item>
           <app-validation-message [control]="guarantorDetailsForm.controls.nationality"></app-validation-message>
         </ion-col>
-        <ion-col size="33.3" *ngIf="getLookupValue(guarantorDetailsForm.controls.tenantTypeId.value, tenantTypes) == 'Company'">
+        <ion-col size="33.3" *ngIf="(guarantorDetailsForm.controls.tenantTypeId.value | lookup: tenantTypes) == 'Company'">
           <ion-item>
             <ion-label position="floating">Registration Number <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-input formControlName="registrationNumber"></ion-input>
@@ -171,7 +171,7 @@
           <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" *ngIf="guarantorDetailsForm.controls.hasTenantOtherName.value">
             <ion-item>
               <ion-label position="floating">Title</ion-label>
-              <ion-select interface="popover" formControlName="title">
+              <ion-select interface="popover" formControlName="title" [interfaceOptions]="popoverOptions">
                 <ion-select-option [value]="item.index" *ngFor="let item of titleTypes">
                   {{ item.value }}
                 </ion-select-option>

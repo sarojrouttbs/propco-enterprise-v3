@@ -72,7 +72,7 @@ export class FaultTitleComponent implements OnInit {
   async notesModal() {    
     const modal = await this.modalController.create({
       component: NotesModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         notesType: NOTES_TYPE.FAULT,
         notesTypeId: this.faultDetails?.faultId,
@@ -93,7 +93,7 @@ export class FaultTitleComponent implements OnInit {
   async cronologicalHistoryModal() {
     const modal = await this.modalController.create({
       component: ChronologicalHistoryPage,
-      cssClass: 'modal-container chronological-history',
+      cssClass: 'modal-container chronological-history fault-modal-container',
       componentProps: {
         faultDetails: this.faultDetails,
         propertyDetails: this.propertyDetails
@@ -110,7 +110,7 @@ export class FaultTitleComponent implements OnInit {
   async sendEmailModal() {
     const modal = await this.modalController.create({
       component: SendEmailModalPage,
-      cssClass: 'modal-container send-email-modal',
+      cssClass: 'modal-container send-email-modal fault-modal-container',
       componentProps: {
         faultDetails: this.faultDetails,
         propertyDetails: this.propertyDetails,

@@ -4,7 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { CommonService } from '../../services/common.service';
 import { ValidationService } from 'src/app/shared/services/validation.service';
-import { DATE_TIME_TYPES, DATE_TIME_TYPES_KEYS, PROPCO } from '../../constants';
+import { DATE_FORMAT, DATE_TIME_TYPES, DATE_TIME_TYPES_KEYS, PROPCO } from '../../constants';
 @Component({
   selector: 'app-contractor-details-modal',
   templateUrl: './contractor-details-modal.page.html',
@@ -26,7 +26,7 @@ export class ContractorDetailsModalPage implements OnInit {
   sessionSlots: any;
   pastDateErrorWithSession: boolean = false;
   estimatedVisitSlot;
-
+  DATE_FORMAT = DATE_FORMAT;
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,
     private commonService: CommonService,
@@ -34,7 +34,7 @@ export class ContractorDetailsModalPage implements OnInit {
 
   ngOnInit() {
     const currentDate = new Date();
-    this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() - 30), 'yyyy-MM-ddTHH:mm');
+    this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() - 30), this.DATE_FORMAT.YEAR_DATE_TIME_1);
     if(this.commonService.getItem(PROPCO.FAULTS_LOOKUP_DATA, true)) {
       this.sessionSlots = (this.commonService.getItem(PROPCO.FAULTS_LOOKUP_DATA, true)).faultContractorPropertyVisitSlots;
       this.sessionSlots = this.commonService.sortBy('index', this.sessionSlots)
@@ -88,11 +88,11 @@ export class ContractorDetailsModalPage implements OnInit {
       };
 
       if(this.contractorDetailForm.get('dateTimeType').value === DATE_TIME_TYPES_KEYS.DATE_WITH_TIME) {
-        this.contractorDetailForm.value.estimatedVisitAt ? requestObj.estimatedVisitAt = this.commonService.getFormatedDate(this.contractorDetailForm.value.estimatedVisitAt, 'yyyy-MM-dd HH:mm:ss') : '';  
+        this.contractorDetailForm.value.estimatedVisitAt ? requestObj.estimatedVisitAt = this.commonService.getFormatedDate(this.contractorDetailForm.value.estimatedVisitAt, this.DATE_FORMAT.YEAR_DATE_TIME) : '';  
       }
       if(this.contractorDetailForm.get('dateTimeType').value === DATE_TIME_TYPES_KEYS.DATE_WITH_SESSION) {
         if(this.contractorDetailForm.value?.estimatedVisitAt && this.contractorDetailForm.value?.estimatedVisitSlot) {
-          this.contractorDetailForm.value.estimatedVisitAt ? requestObj.estimatedVisitAt = this.commonService.getFormatedDate(this.contractorDetailForm.value.estimatedVisitAt, 'yyyy-MM-dd HH:mm:ss') : '';
+          this.contractorDetailForm.value.estimatedVisitAt ? requestObj.estimatedVisitAt = this.commonService.getFormatedDate(this.contractorDetailForm.value.estimatedVisitAt, this.DATE_FORMAT.YEAR_DATE_TIME) : '';
           (this.contractorDetailForm.value?.estimatedVisitSlot) ? requestObj.estimatedVisitSlot = this.contractorDetailForm.value.estimatedVisitSlot.index : '';
         }
       }
@@ -140,7 +140,7 @@ export class ContractorDetailsModalPage implements OnInit {
   }
 
   checkPastDate() {
-    if (new Date(this.contractorDetailForm.value.estimatedVisitAt) < new Date(this.commonService.getFormatedDate(new Date(), 'yyyy-MM-ddTHH:mm'))) {
+    if (new Date(this.contractorDetailForm.value.estimatedVisitAt) < new Date(this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE_TIME_1))) {
       this.pastDateError = true;
     }
     else {
@@ -153,8 +153,8 @@ export class ContractorDetailsModalPage implements OnInit {
       const estimatedVisitSlotTime = this.contractorDetailForm.value.estimatedVisitSlot.value.split(',')[1];
       const estimatedVisitSlotEndTime = (estimatedVisitSlotTime.split('-')[1]).split(':')
       const finalDateTime = new Date(this.contractorDetailForm.value.estimatedVisitAt).setHours(estimatedVisitSlotEndTime[0], estimatedVisitSlotEndTime[1]);
-      if(finalDateTime) this.contractorDetailForm.get('estimatedVisitAt').setValue(this.commonService.getFormatedDate(finalDateTime,'yyyy-MM-ddTHH:mm'));
-      if (new Date(this.contractorDetailForm.value.estimatedVisitAt) <= new Date(this.commonService.getFormatedDate(new Date(), 'yyyy-MM-ddTHH:mm'))) {
+      if(finalDateTime) this.contractorDetailForm.get('estimatedVisitAt').setValue(this.commonService.getFormatedDate(finalDateTime,this.DATE_FORMAT.YEAR_DATE_TIME_1));
+      if (new Date(this.contractorDetailForm.value.estimatedVisitAt) <= new Date(this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE_TIME_1))) {
         this.pastDateErrorWithSession = true;
       } else {
         this.pastDateErrorWithSession = false;

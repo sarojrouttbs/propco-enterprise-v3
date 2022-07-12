@@ -15,11 +15,10 @@
   --padding-end: var(--ion-padding-end);
   --padding-bottom: var(--ion-padding-bottom);
   --padding-start: var(--ion-padding-start);
-  --ion-background-color: #e2e2e2 !important;
 
   table.dataTable {
     tbody tr.escalated {
-      background-color: rgba(var(--ion-color-danger-rgb), 0.5);
+      background-color: rgba(var(--ion-color-danger-rgb), 0.5) !important;
       color: var(--ion-color-step-2000);
     }
   }
@@ -28,117 +27,45 @@
     opacity: 0.7;
   }
 
-  .data-selected {
-    background-color: var(--ion-color-step-1800);
+  .propcoicon.action-btn{
+    background-color: var(--ion-color-five);
   }
-
-  /* table.dataTable {
-    @include set-text-style(14px, 16px);
-
-    &.no-footer {
-      border-bottom: none;
-    }
-
-    thead {
-      background-color: var(--ion-color-step-750);
-      color: var(--ion-color-step-2000);
-
-      th {
-        text-align: left;
-        padding: 15px 8px;
-        font-weight: 500;
-      }
-    }
-
-    tbody {
-      background-color: var(--ion-color-step-1900);
-
-      td {
-        padding: 6px 8px;
-        word-break: break-word;
-      }
-
-      tr {
-        height: 49px;
-        cursor: pointer;
-      }
-
-      tr td:first-child {
-        border-left: 1px solid var(--ion-color-step-1750);
-      }
-      tr td:last-child {
-        border-right: 1px solid var(--ion-color-step-1750);
-      }
-      tr.escalated {
-        background-color: rgba(var(--ion-color-danger-rgb), 0.5);
-        color: var(--ion-color-step-2000);
-      }
-    }
-  }
-
-  .resp-action-icon {
-    min-width: 36px;
-    width: 36px;
-    max-width: 36px;
-    cursor: pointer;
-    color: initial;
-  }
-
-  #divOverlay,
-  #divOverlayChild,
-  #divOverlay2,
-  #matchingOverlay,
-  .card-divoverlay {
-    display: none;
-    background-color: rgba(var(--ion-color-step-800-rgb), 0.5);
-    text-align: right;
-    position: absolute;
-    z-index: 10;
-    padding-right: 10px;
-    color: var(--ion-color-step-2000);
-
-    ion-button {
-      --background: var(--ion-color-step-900);
-      --color: var(--ion-color-step-2000);
-      @include set-text-style(16px, 20px);
-      margin: 0 5px 7px;
-      height: 36px;
-    }
-
-    .propcoicon {
-      display: inline-block;
-      padding: 5px;
-    }
-
-    .propcoicon-actions-on {
-      background-color: var(--ion-color-step-900);
-      margin: 8px 0 6px 6px;
-      color: var(--ion-color-step-2000);
-      cursor: pointer;
-    }
-  } */
 
   .filter-grid {
+    padding-top: 10px;
     height: auto;
-    background: linear-gradient(to bottom, rgba(255, 0, 0, 0), rgb(181 181 181));
+    background: var(--ion-color-five);
     margin-right: 1px;
     text-align: center;
+
+    .filter-grid-count {
+      font-size: 20px;
+      margin-bottom: 3px;
+    }
+    .filter-grid-text {
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
   }
 
   .filter-grid-active {
+    padding-top: 10px;
     height: auto;
-    background: linear-gradient(to top, rgba(255, 0, 0, 0), rgb(181 181 181));
+    background: var(--ion-color-four);
     margin-right: 1px;
     text-align: center;
+    .filter-grid-count {
+      font-size: 20px;
+      margin-bottom: 3px;
+    }
+    .filter-grid-text {
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+
+    
   }
 
-  .filter-grid-count {
-    font-size: 23px;
-    margin-bottom: 6px;
-  }
-  .filter-grid-text {
-    margin-bottom: 6px;
-  }
   ion-item .datetime-icon {
     margin-right: 10px;
     margin-top: 28px;
@@ -154,7 +81,6 @@
     font-size: 30px;
     margin-top: 25px;
     color: var(--ion-color-step-1100);
-    margin-left: -7px;
   }
 
   .select-block {
@@ -167,15 +93,17 @@
   }
 
   ion-checkbox {
-    margin-bottom: 6px;
-    height: 20px;
-    width: 20px;
+    margin-bottom: 3px;
+    height: 18px;
+    width: 18px;
+  }
+
+  .propcoicon.propcoicon-property-description {
+    background: var(--ion-color-five);
+    color: var(--ion-color-one);
   }
 }
 .filter-checkbox {
-  border-width: 1px !important;
-  border-style: solid !important;
-  border-radius: 11px;
   border-color: var(--background-checked);
 }
 
@@ -210,8 +138,15 @@
   margin-right: 15px;
 }
 
-ion-badge{
+ion-badge {
   padding: 4px 4px 1px 4px;
   font-weight: 500;
 }
 
+ion-modal {
+  --background: red;
+  &::part(content) {
+    background: transparent;
+    backdrop-filter: blur(6px);
+  }
+}

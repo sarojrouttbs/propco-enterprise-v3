@@ -4,7 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { PROPCO, REFERENCING, REFERENCING_TENANT_TYPE } from 'src/app/shared/constants';
+import { DATE_FORMAT, PROPCO, REFERENCING, REFERENCING_TENANT_TYPE } from 'src/app/shared/constants';
 import { COMPLETION_METHODS } from 'src/app/shared/constants';
 import { forkJoin } from 'rxjs';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
@@ -49,9 +49,11 @@ export class GuarantorDetailsPage implements OnInit {
   referencingNationalities: any[] = [];
   completionMethods: any[] = COMPLETION_METHODS;
   tenantTypes: any[] = [];
-
-  adultDate = this.datepipe.transform(new Date().setDate(new Date().getDay() - (18 * 365)), 'yyyy-MM-dd');
-
+  DATE_FORMAT = DATE_FORMAT;
+  adultDate = this.datepipe.transform(new Date().setDate(new Date().getDay() - (18 * 365)), this.DATE_FORMAT.YEAR_DATE);
+  popoverOptions: any = {
+    cssClass: 'let-alliance-ion-select'
+  };
   constructor(
     private fb: FormBuilder,
     private modalController: ModalController,
@@ -205,7 +207,7 @@ export class GuarantorDetailsPage implements OnInit {
   private async applicationAlert(isRedirectDashboard?: boolean) {
     const modal = await this.modalController.create({
       component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: `<div class='status-block'>There is an application in process for this guarantor. You cannot start another application until the processing of existing application has been completed.
@@ -222,7 +224,7 @@ export class GuarantorDetailsPage implements OnInit {
 
     if(isRedirectDashboard){
       const data = modal.onDidDismiss().then(res => {
-        this.router.navigate(['/let-alliance/dashboard'], { replaceUrl: true });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       });
     }
 
@@ -424,9 +426,10 @@ export class GuarantorDetailsPage implements OnInit {
         this.commonService.hideLoader();
         this.commonService.showMessage('Application has been created successfully.', 'Create an Application', 'success');
         setTimeout(() => {
-          this.router.navigate(['/let-alliance/dashboard']).then(() => {
+
+          this.router.navigate(['../dashboard'], { relativeTo: this.route}).then(() => {
             location.reload();
-          });
+          });   
         }, 5000);
       },
       error => {
@@ -469,7 +472,7 @@ export class GuarantorDetailsPage implements OnInit {
           middlename: this.guarantorDetailsForm.get('middlename').value,
           surname: this.guarantorDetailsForm.get('surname').value,
           email: this.guarantorDetailsForm.get('email').value,
-          dateOfBirth: this.datepipe.transform(this.guarantorDetailsForm.get('dateOfBirth').value, 'yyyy-MM-dd'),
+          dateOfBirth: this.datepipe.transform(this.guarantorDetailsForm.get('dateOfBirth').value, this.DATE_FORMAT.YEAR_DATE),
           rentShare: parseFloat(this.guarantorDetailsForm.get('rentShare').value),
           maritalStatus: this.guarantorDetailsForm.get('maritalStatus').value,
           nationality: this.getLookupValue(this.guarantorDetailsForm.get('nationality').value, this.referencingNationalities),
@@ -494,7 +497,7 @@ export class GuarantorDetailsPage implements OnInit {
   async cancelApplication(){
     const modal = await this.modalController.create({
       component: SimpleModalPage,
-      cssClass: 'modal-container alert-prompt',
+      cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: `<div class="center-block">The data entered has not been saved, do you want to exit the Application?
@@ -515,7 +518,7 @@ export class GuarantorDetailsPage implements OnInit {
 
     const data = modal.onDidDismiss().then(res => {
       if (res.data.userInput) {
-        this.router.navigate(['/let-alliance/dashboard'], {replaceUrl: true });
+        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       } 
     });
 
@@ -537,5 +540,4 @@ export class GuarantorDetailsPage implements OnInit {
     })
     return propertyStatus;
   }
-
 }

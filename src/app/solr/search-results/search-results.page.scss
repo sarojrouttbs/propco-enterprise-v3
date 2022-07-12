@@ -10,733 +10,353 @@
   border-radius: $radius;
 }
 
-.drawer-container {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-
-.example-is-mobile .example-toolbar {
-  position: fixed;
-  /* Make sure the toolbar will stay on top of the content as it scrolls past. */
-  z-index: 2;
-}
-
-h1.example-app-name {
-  margin-left: 8px;
-}
-
-.solr-filter-sidenav {
-  background-color: var(--ion-color-step-1700);
-  width: 24%;
-  max-width: 278px;
-}
-
-.example-sidenav-container {
-  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
-     causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
-  flex: 1;
-}
-
-.example-is-mobile .example-sidenav-container {
-  /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
-     `<body>` to be our scrolling element for mobile layouts. */
-  flex: 1 0 auto;
-}
-
-.example-action-buttons {
-  padding-bottom: 20px;
-}
-
-.result-headers-align .mat-expansion-panel-header-title,
-.result-headers-align .mat-expansion-panel-header-description {
-  flex-basis: 0;
-}
-
-.result-headers-align .mat-expansion-panel-header-description {
-  justify-content: space-between;
-  align-items: center;
-}
-
-.result-headers-align .mat-form-field+.mat-form-field {
-  margin-left: 8px;
-}
-
-.result-headers-align .mat-checkbox-checked .mat-checkbox-background {
-  background-color: black !important;
-}
-
-.rowStyle {
-  padding-left: 10px;
-  border-radius: 30px;
-  margin-bottom: 10px;
-
-  ion-icon {
-    margin-top: 13px;
-    margin-right: 10px;
-  }
-}
-
-.list {
-  background-color: var(--ion-color-step-1900);
-  padding-left: 13px;
-  padding-right: 13px;
-}
-
-.dual-range {
-  ion-range::part(pin) {
-    transform: translate3d(0px, -24px, 0px) scale(1);
-  }
-}
-
-ion-range::part(pin) {
-  transform: translate3d(0px, -24px, 0px) scale(1);
-  @include set-text-style(9px, 14px);
-  font-weight: bold;
-}
-
-ion-item {
-  --border-width: 0;
-  --inner-border-width: 0;
-}
-
-.mat-expansion-panel-body {
-  padding: 0 7px 0px;
-}
-
-.filter-heading-wrapper {
-  padding-top: 8px;
-  padding-left: 11px;
-  padding-right: 11px;
-  padding-bottom: 12px;
-
-  .filter-heading-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 11px;
-    margin-top: 16px;
-
-    .status-pointer {
-      cursor: pointer;
-      font-size: 27px;
-      color: var(--ion-color-step-1800);
-      background: var(--ion-color-step-1200);
-      margin-right: 7px;
-      border-radius: 3px;
-
-      ion-icon {
-        display: flex;
-      }
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 19px;
-    }
-  }
-}
-
-.solr-pagginater-container {
-  padding: 13px;
-
-  .mat-select-value {
-    color: var(--ion-color-step-2000);
-  }
-
-  .mat-paginator {
-    min-width: 372px;
-    height: 42px;
-    padding: 0;
-    margin: 0;
-    width: 100% !important;
-  }
-
-  .overlay-container {
-    position: relative;
-  }
-
-  .well {
-    background-color: #F0F0F0;
-    border: 0;
-    border-radius: 6px;
-    min-height: 20px;
-    padding: 19px;
-    margin-bottom: 20px;
-  }
-
-  .layout-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-  }
-
-  ion-card {
+#solr-search-result.main-container {
+  .drawer-container {
     display: flex;
     flex-direction: column;
-    width: 100% !important;
-    margin: 0 !important;
-  }
-}
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 
-#details {
-  color: var(--ion-color-step-250);
+    .solr-filter-sidenav {
+      background-color: var(--ion-background-color);
+      width: 24%;
+      max-width: 278px;
+      padding: 10px 0;
 
-  .main-row {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: center;
-  }
+      .filter-heading-wrapper {
+        .status-pointer {
+          cursor: pointer;
+          font-size: 28px;
+          color: var(--ion-color-step-1800);
+          background: var(--ion-color-step-1200);
+          margin-right: 10px;
+          border-radius: 5px;
+          margin-left: 0px;
+          display: inline-block;
+          height: 28px;
+          vertical-align: bottom;
+        }
 
-  img {
-    max-height: 170px;
-    min-height: 125px;
-    width: 90%;
-  }
-
-  .heading {
-    @include set-text-style(22px, 26px);
-  }
-
-  .solr-prop-image img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
-
-  ion-row.property-details-row {
-    margin-bottom: 10px;
-
-    .non-urgent {
-      color: var(--ion-color-primary);
-      @include set-text-style(22px, 26px);
-    }
-
-    .urgent {
-      color: var(--ion-color-warning);
-      @include set-text-style(22px, 26px);
-    }
-
-    .emergency {
-      color: var(--ion-color-danger);
-      @include set-text-style(22px, 26px);
-    }
-  }
-
-  ion-row.fault-meter-row {
-    // margin-top: 12px;
-
-    ion-col {
-      @include set-text-style(16px, 20px);
-      margin: 0;
-
-      img {
-        vertical-align: bottom;
-        width: 20px;
+        h1 {
+          @include set-text-style(20px, 24px);
+          margin: 0;
+          color: var(--ion-text-color);
+          display: inline-block;
+        }
       }
-    }
-  }
 
-  .address {
-    @include set-text-style(20px, 25px);
-    color: var(--ion-color-step-850);
-  }
+      #filter-details-accordian {
+        .mat-expansion-panel {
+          background-color: var(--ion-background-color);
 
-  .text-ellipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-  }
+          .mat-expansion-panel-header {
+            border-top: 1px solid var(--ion-color-five);
+            border-bottom: 1px solid var(--ion-color-five);
+            color: var(--ion-text-color);
+            padding: 0 10px;
 
-  .status {
-    color: var(--ion-color-step-1100);
-    @include set-text-style(17px, 24px);
-  }
+            .mat-expansion-panel-header-description {
+              justify-content: flex-end;
+              margin-right: 0;
+            }
 
-  .ref {
-    @include set-text-style(13px, 21px);
-    color: var(--ion-color-step-600);
-    text-transform: uppercase;
-  }
+            mat-checkbox {
+              @include set-text-style(14px, 24px);
+              color: var(--ion-color-mat-checkbox-label);
+            }
+          }
 
-  .cdk-overlay-container {
-    .mat-option-text {
-      color: var(--ion-solr-font-color);
-      @include set-text-style(14px, 18px);
-    }
+          form {
+            background-color: var(--ion-color-five);
 
-    .mat-pseudo-checkbox {
-      color: var(--ion-solr-font-color);
-    }
+            .list {
+              background-color: var(--ion-color-five);
+              padding: 0 10px;
 
-    .mat-pseudo-checkbox-checked {
-      background: var(--ion-solr-font-color);
-    }
-
-    // .mat-select-panel {
-    //   max-height: none;
-    // }
-  }
-
-  .uppercase {
-    text-transform: uppercase;
-  }
-
-  .name {
-    font-size: 20px;
-  }
-
-  .title {
-    font-size: 20px;
-  }
-
-  .skill-set {
-    color: var(--ion-color-step-950);
-    font-size: 18px;
-  }
-
-  .agent-approved {
-    color: #ff9335;
-    font-size: 18px;
-  }
-}
-
-.tenant,
-.applicant,
-.agent,
-.contractor,
-.landlord {
-  background-color: var(--ion-color-step-1900);
-  margin-bottom: 10px;
-  border-radius: 4px;
-}
-
-#propertyList {
-  min-height: 96px;
-  padding: 10px;
-  color: var(--ion-color-step-250);
-  background-color: var(--ion-color-step-1900);
-  height: 100%;
-  margin-bottom: 10px;
-
-  .heading {
-    @include set-text-style(22px, 26px);
-  }
-
-  .solr-prop-image img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
-
-  ion-row.property-details-row {
-    margin-bottom: 10px;
-
-    .non-urgent {
-      color: var(--ion-color-primary);
-      @include set-text-style(22px, 26px);
-    }
-
-    .urgent {
-      color: var(--ion-color-warning);
-      @include set-text-style(22px, 26px);
-    }
-
-    .emergency {
-      color: var(--ion-color-danger);
-      @include set-text-style(22px, 26px);
-    }
-  }
-
-  ion-row.fault-meter-row {
-    margin-top: 12px;
-
-    ion-col {
-      @include set-text-style(16px, 20px);
-      margin: 0;
-
-      img {
-        vertical-align: bottom;
-        width: 20px;
-      }
-    }
-  }
-
-  .address {
-    @include set-text-style(20px, 25px);
-    color: var(--ion-color-step-850);
-  }
-
-  .text-ellipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-  }
-
-  .status {
-    color: var(--ion-color-step-1100);
-    @include set-text-style(17px, 24px);
-  }
-
-  .ref {
-    @include set-text-style(13px, 21px);
-    color: var(--ion-color-step-600);
-    text-transform: uppercase;
-  }
-
-  .cdk-overlay-container {
-    .mat-option-text {
-      color: var(--ion-solr-font-color);
-      @include set-text-style(14px, 18px);
-    }
-
-    .mat-pseudo-checkbox {
-      color: var(--ion-solr-font-color);
-    }
-
-    .mat-pseudo-checkbox-checked {
-      background: var(--ion-solr-font-color);
-    }
-
-    .mat-select-panel {
-      max-height: none;
-    }
-  }
-
-  .uppercase {
-    text-transform: uppercase;
-  }
-
-  .name {
-    @include set-text-style(20px, 24px);
-  }
-
-  .title {
-    @include set-text-style(20px, 24px);
-  }
-
-  .skill-set {
-    color: var(--ion-color-step-950);
-    @include set-text-style(18px, 22px);
-  }
-
-  .agent-approved {
-    color: #ff9335;
-    @include set-text-style(18px, 22px);
-  }
-}
-
-.landlord i.propcoicon {
-  @include set-text-style(70px, 77px);
-}
-
-.tenant i.propcoicon {
-  @include set-text-style(70px, 77px);
-}
-
-.contractor i.propcoicon {
-  @include set-text-style(70px, 77px);
-}
-
-.agent i.propcoicon {
-  font-size: 70px;
-}
-
-.override-communication {
-  margin-top: 10px;
-}
-
-.status-list {
-  width: 100%;
-  max-height: 200px;
-  position: absolute !important;
-  z-index: 5 !important;
-  cursor: pointer;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-#property-details-skeleton {
-  min-height: 96px;
-  padding: 0;
-  color: var(--ion-color-step-250);
-  background-color: var(--ion-color-step-2000);
-  height: 100%;
-  padding: 15px;
-
-  ion-skeleton-text {
-    margin-top: 10px;
-  }
-
-  ion-thumbnail {
-    height: 190px;
-    width: 100%;
-    object-fit: cover;
-  }
-
-  ion-row.property-details-row {
-    margin-bottom: 10px;
-    margin-top: 5px;
-  }
-
-  ion-row.fault-meter-row {
-    margin-top: 12px;
-
-    .avatar-col>ion-avatar {
-      height: 20px;
-      width: 20px;
-      display: inline-block;
-
-      ion-skeleton-text {
-        margin-top: 0px;
+              ion-list-header {
+                padding-left: 0;
+              }
+            }
+          }
+        }
       }
     }
 
-    .avatar-col>ion-skeleton-text {
-      width: 70%;
-      display: inline-block;
-      margin-left: 5px;
-      height: 18px;
-    }
-  }
-}
+    .solr-pagginater-container {
+      padding: 15px;
+      background-color: var(--ion-background-color);
 
-.solr-pagginater-container {
-  background-color: var(--ion-color-step-1700);
+      .paginator-grid {
+        display: grid;
+        justify-content: start;
+        align-items: center;
+        grid-template-columns: 35px 1fr 500px;
+        gap: 6px;
+        padding-bottom: 15px;
 
-  .paginator-grid {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: space-between;
-    width: 100%;
-    height: 57px;
-    align-items: center;
+        ion-icon {
+          font-size: 28px;
+          color: var(--ion-text-color);
+        }
 
-    ion-icon {
-      font-size: 28px;
-    }
+        .result-wrapper {
+          color: var(--ion-text-color);
+          @include set-text-style(18px, 20px);
+        }
 
-    .filter-icon-wrapper {
-      width: 32px;
-      margin-right: 6px;
-    }
+        &.sidenav-opened {
+          grid-template-columns: 1fr 500px;
+        }
 
-    .result-wrapper {
-      flex-grow: 1;
-    }
-  }
-}
-
-#filter-details-accordian {
-  .mat-expansion-panel {
-    margin-top: 0;
-    box-shadow: none;
-    background-color: var(--ion-color-step-1700);
-  }
-
-  .mat-expansion-panel-header {
-    border: 1px solid var(--ion-color-step-1800);
-    border-right: none;
-  }
-}
-
-.list-view-accordian {
-  margin-bottom: 11px;
-
-  mat-expansion-panel {
-    color: var(--ion-color-step-250);
-    background-color:  var(--ion-color-step-1900);
-    box-shadow: none;
-  }
-
-  .mat-expansion-panel:is(.mat-expanded):not([aria-disabled=true]) {
-    background-color: var(--ion-color-medium-contrast);
-  }
-
-  // .mat-expansion-panel:not(.mat-expanded):not([aria-disabled=true]) .mat-expansion-panel-header:hover{
-  //   background-color: var(--ion-clor-solr-list);
-  // }
-
-  .mat-expansion-panel-header {
-    height: 69px;
-    padding: 0 10px;
-
-    span.mat-content {
-      height: 100%
-    }
-  }
-
-  .address {
-    @include set-text-style(20px, 25px);
-    color: var(--ion-color-step-850);
-  }
-
-  .text-ellipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-  }
-
-  .status {
-    color: var(--ion-color-success-shade);
-    @include set-text-style(17px, 24px);
-    font-weight: bold;
-  }
-
-  .ref {
-    @include set-text-style(14px, 21px);
-    color: var(--ion-color-step-1000);
-    text-transform: capitalize;
-  }
-
-  .pricetag {
-    @include set-text-style(19px, 21px);
-    font-weight: bold;
-    color: var(--ion-color-step-150);
-  }
-
-  .reftag {
-    @include set-text-style(14px, 21px);
-    color: var(--ion-color-step-250);
-  }
-
-  .verticalLine {
-    border-left: 1px solid var(--ion-color-step-800);
-    padding: 0;
-  }
-
-  .title {
-    @include set-text-style(20px, 21px);
-    ion-icon {
-      pointer-events: none;
-    }
-  }
-
-  .list-header {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    width: 100%;
-    // padding-top: 9px;
-
-    .left-side {
-      width: 72%;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-
-      i {
-        width: 65px;
-        font-size: 54px;
-        text-align: left;
-        line-height: 34px;
-        color: var(--ion-color-step-800);
+        .mat-paginator {
+          min-width: 372px;
+          height: 42px;
+          padding: 0;
+          margin: 0;
+          width: 100% !important;
+        }
       }
 
-      .title-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 86%;
-        flex-wrap: wrap;
+      .list-container {
+        .list-view-accordian {
+          .mat-expansion-panel {
+            color: var(--ion-color-step-250);
+            background-color: var(--ion-color-five);
+            box-shadow: none;
+            margin-bottom: 20px;
 
-        .address-ref-wrapper {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          align-items: baseline;
+            .mat-expansion-panel-header {
+              height: auto;
+              font-family: var(--ion-font-family);
+              padding: 0;
 
-          .address {
-            width: 50%;
-            @include set-text-style(15px, 21px);
+              .status-action {
+                display: grid;
+                justify-content: flex-end;
+                align-items: center;
+                grid-template-columns: 200px 32px 37px;
+                gap: 6px;
+                height: 100%;
+
+                i.propcoicon.propcoicon-actions-on {
+                  border-radius: 16px;
+                  font-size: 21px;
+                  width: 30px;
+                  height: 30px;
+                  background: var(--ion-color-warning);
+                  color: var(--ion-color-primary-contrast);
+                }
+              }
+
+              span.mat-content {
+                height: 100%;
+              }
+
+              &.property-header-panel {
+                .emenities-container {
+                  display: grid;
+                  justify-content: flex-start;
+                  align-items: flex-start;
+                  grid-template-columns: auto auto auto auto auto auto;
+                  gap: 2px;
+
+                  .emenities-wrapper {
+                    i.propcoicon {
+                      display: inline-block;
+                      vertical-align: baseline;
+                      font-size: 19px;
+                      height: 20px;
+                      width: 28px;
+                    }
+
+                    span {
+                      padding-right: 8px;
+                      @include set-text-style(13px, 17px);
+                      color: var(--ion-text-color);
+                    }
+
+                    .garage-ellipse {
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                      white-space: nowrap;
+                      width: auto;
+                      display: inline-block;
+                      vertical-align: bottom;
+                      width: auto;
+                      max-width: 90px;
+                    }
+
+                    .pricetag {
+                      @include set-text-style(16px, 20px);
+                      font-weight: bold;
+                      color: var(--ion-text-color);
+                    }
+                  }
+                }
+              }
+
+              &.agent-header-panel,
+              &.landlord-header-panel,
+              &.tenant-header-panel,
+              &.applicant-header-panel,
+              &.contractor-header-panel {
+                .ag-left-side {
+                  display: grid;
+                  justify-content: flex-start;
+                  align-items: center;
+                  grid-template-columns: 55px 1fr;
+                  gap: 15px;
+
+                  i.propcoicon {
+                    width: 54px;
+                    font-size: 54px;
+                    height: 54px;
+                  }
+
+                  .other-details {
+                    .vat {
+                      color: var(--ion-color-warning);
+                      font-weight: bold;
+                      @include set-text-style(14px, 16px);
+                      border-left: 1px solid var(--ion-color-step-800);
+                      padding-left: 6px;
+                    }
+                  }
+                }
+              }
+            }
+
+            .property-content-panel {
+              display: grid;
+              justify-content: start;
+              grid-template-columns: 180px 4fr;
+              gap: 15px;
+              padding: 0 4px 4px;
+
+              .header-content {
+                .header {
+                  color: var(--ion-color-step-1200);
+                  @include set-text-style(12px, 14px);
+                }
+
+                .content {
+                  @include set-text-style(14px, 18px);
+                }
+              }
+            }
+
+            .agent-content-panel,
+            .landlord-content-panel,
+            .tenant-content-panel,
+            .applicant-content-panel,
+            .contractor-content-panel {
+              display: grid;
+              justify-content: start;
+              grid-template-columns: 45px 1fr;
+              gap: 15px;
+              padding: 0 10px 10px;
+
+              .header-content {
+                .header {
+                  color: var(--ion-color-step-1200);
+                  @include set-text-style(12px, 14px);
+                }
+
+                .content {
+                  @include set-text-style(14px, 18px);
+                }
+              }
+
+              .expired {
+                color: var(--ion-color-danger);
+              }
+            }
+          }
+
+          .mat-expansion-panel:is(.mat-expanded):not([aria-disabled="true"]) {
+            background-color: var(--ion-color-five);
+          }
+
+          .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+          }
+
+          .status {
+            color: var(--ion-color-success-shade);
+            @include set-text-style(14px, 18px);
+            text-align: left;
+          }
+
+          .ref {
+            @include set-text-style(12px, 17px);
+            color: var(--ion-color-step-1200);
+            text-transform: capitalize;
+            text-align: left;
+          }
+
+          .reftag {
+            @include set-text-style(13px, 17px);
+            color: var(--ion-text-color);
+          }
+
+          .verticalLine {
+            border-left: 1px solid var(--ion-color-step-800);
+            padding: 0;
+          }
+
+          .title {
+            @include set-text-style(17px, 21px);
+            color: var(--ion-text-color);
+
+            ion-icon {
+              pointer-events: none;
+            }
+          }
+
+          p {
+            margin: 0;
+          }
+
+          @media screen and (max-width: 1170px) {
+            .emenities-wrapper {
+              .garage-ellipse {
+                width: 52px;
+              }
+            }
           }
         }
 
-        .vat {
-          color: var(--ion-color-warning);
-          font-weight: bold;
-          @include set-text-style(14px, 16px);
+        div#search-result-overlay {
+          .propcoicon {
+            border-radius: 16px;
+            font-size: 21px;
+            width: 30px;
+            height: 30px;
+            background: var(--ion-color-warning);
+            color: var(--ion-color-primary-contrast);
+          }
+
+          .propcoicon-actions-on {
+            margin: 9px 0px 5px 6px;
+          }
         }
       }
+
+      .overlay-container {
+        position: relative;
+      }
     }
-  }
-
-  .align-flex-center {
-    align-items: center;
-  }
-
-  p {
-    margin: 0;
-  }
-
-  .ref-header {
-    width: 25%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .emenities-wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    font-size: 12px;
-
-    i {
-      font-size: 19px;
-      text-align: left;
-      width: auto;
-      padding-right: 7px;
-      background-color: inherit;
-      line-height: 35px;
-    }
-
-    span {
-      padding-right: 8px;
-    }
-  }
-
-  .detail-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
   }
 }
 
 .no-background {
   background-color: inherit;
-}
-
-.text {
-  @include set-text-style(12px, 14px);
-  color: var(--ion-color-step-1000);
-}
-
-.text-value {
-  @include set-text-style(14px, 18px);
-}
-
-.mat-drawer-side {
-  border-right: solid 1px var(--ion-color-step-1800);
-}
-
-.ion-align-self-end {
-  justify-content: flex-end;
-  display: flex;
 }
 
 .list-skeleton {
@@ -759,20 +379,12 @@ ion-item {
   }
 
   ion-list {
-    background-color: var(--ion-color-step-1700);
-
     ion-item {
       padding-left: 16px;
       display: flex;
-      background: var(--ion-color-step-1900);
       margin-bottom: 19px;
     }
   }
-}
-
-.list-container {
-  display: flex;
-  flex-direction: column;
 }
 
 .cdk-overlay-container {
@@ -785,10 +397,26 @@ ion-item {
   }
 }
 
-.padding-left {
-  padding-left: 78px;
+ion-item {
+  color: var(--ion-text-color);
 }
 
-.expired {
-  color:  var(--ion-color-danger);
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+  #solr-search-result.main-container {
+    .drawer-container {
+      .solr-pagginater-container {
+        .list-container {
+          .list-view-accordian {
+            .mat-expansion-panel {
+              .mat-expansion-panel-header {
+                .status-action {
+                  grid-template-columns: 120px 32px 37px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

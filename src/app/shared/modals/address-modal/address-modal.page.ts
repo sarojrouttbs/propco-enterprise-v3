@@ -15,26 +15,27 @@ export class AddressModalPage implements OnInit {
   lookupLoader = false;
   addressList: any[];
   selectedAddress: any;
-
-  @Input() paramAddress: string;
+  type: any;
+  paramAddress: any;
+  popoverOptions: any = {
+    cssClass: 'market-apprisal-ion-select'
+  };
 
   constructor(
     private fb: FormBuilder,
     private modalController: ModalController,
-    private navParams: NavParams,
     private commonService: CommonService
   ) {
-   }
+  }
 
   ngOnInit() {
-    this.address = this.navParams.get('paramAddress');
     this.initiateAddressForm();
     this.setAddress();
   }
 
-  initiateAddressForm(){
+  initiateAddressForm() {
     this.addressDetailsForm = this.fb.group({
-      postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
+      postcode: ['', [Validators.required]],
       addressdetails: [''],
       buildingNumber: [''],
       buildingName: [''],
@@ -45,34 +46,39 @@ export class AddressModalPage implements OnInit {
       locality: [''],
       town: ['', Validators.required],
       county: [''],
+      pafReference: [''],
       country: ['', Validators.required],
       latitude: [''],
       longitude: [''],
     });
   }
 
-  setAddress(){
-    this.addressDetailsForm.patchValue({
-     postcode: this.address.postcode,
-     buildingNumber: this.address.buildingNumber,
-     buildingName: this.address.buildingName,
-     street: this.address.street,
-     addressLine1: this.address.addressLine1,
-     addressLine2: this.address.addressLine2,
-     addressLine3: this.address.addressLine3,
-     locality: this.address.locality,
-     town: this.address.town,
-     county: this.address.county,
-     country: this.address.country,
-     latitude: this.address.latitude,
-     longitude: this.address.longitude,
-   });
+  setAddress() {
+    if (this.paramAddress) {
+      this.addressDetailsForm.patchValue({
+        postcode: this.paramAddress.postcode,
+        buildingNumber: this.paramAddress.buildingNumber,
+        buildingName: this.paramAddress.buildingName,
+        street: this.paramAddress.street,
+        addressLine1: this.paramAddress.addressLine1,
+        addressLine2: this.paramAddress.addressLine2,
+        addressLine3: this.paramAddress.addressLine3,
+        locality: this.paramAddress.locality,
+        town: this.paramAddress.town,
+        county: this.paramAddress.county,
+        country: this.paramAddress.country,
+        latitude: this.paramAddress.latitude,
+        longitude: this.paramAddress.longitude,
+        pafReference: this.paramAddress?.pafReference,
+      });
+    }
   }
 
   getAddressList() {
     if (this.addressDetailsForm.get('postcode').value == null) {
       return;
     }
+    this.addressDetailsForm.get('addressdetails').setValue('');
     const postcode = this.addressDetailsForm.get('postcode').value;
     if (postcode) {
       this.lookupLoader = true;
@@ -109,10 +115,11 @@ export class AddressModalPage implements OnInit {
         this.addressDetailsForm.get('addressLine3').setValue(res.line3);
         this.addressDetailsForm.get('locality').setValue(res.line4);
         this.addressDetailsForm.get('town').setValue(res.line5);
-        this.addressDetailsForm.get('county').setValue(res.county);
+        this.addressDetailsForm.get('county').setValue(res.province ? res.province : res.provinceName);
         this.addressDetailsForm.get('country').setValue(res.countryName);
         this.addressDetailsForm.get('latitude').setValue(res.latitude);
         this.addressDetailsForm.get('longitude').setValue(res.longitude);
+        this.addressDetailsForm.get('pafReference').setValue(res.domesticId);
       }
     }, error => {
       this.selectedAddress = {};
@@ -128,8 +135,16 @@ export class AddressModalPage implements OnInit {
   }
 
   saveAddress() {
+    if (this.addressDetailsForm.invalid) {
+      this.addressDetailsForm.markAllAsTouched();
+      return;
+    }
     this.modalController.dismiss({
-      address : this.addressDetailsForm.value
+      address: this.addressDetailsForm.value
     });
+  }
+
+  toUpperCase(formControlName: string, event: any):void {
+    this.addressDetailsForm.get(formControlName).setValue(event.target.value.toUpperCase());
   }
 }

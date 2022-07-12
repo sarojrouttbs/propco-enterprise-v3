@@ -1,0 +1,51 @@
+<ion-content class="workspace">
+  <div id="workspace-container">
+    <div *ngIf="!skeleton && localStorageItems && localStorageItems.length > 0">
+      <nav mat-tab-nav-bar>
+        <a mat-tab-link *ngFor="let item of localStorageItems;let i = index;" 
+        replaceUrl="false"
+          (click)="activeLink = item?.reference;navigate(item)" [active]="activeLink == item?.reference">
+          <div class="record">
+            <div><i class="propcoicon no-background propcoicon-property"></i></div>
+            <div class="flex">
+              <div class="number">{{item?.reference}}</div>
+              <div class="name">{{item?.entityTitle}}</div>
+            </div>
+            <div (click)="closeTab(i);$event.stopPropagation();">
+              <i class="propcoicon propcoicon-close no-background propcoicon-small"></i>
+            </div>
+          </div>
+        </a>
+      </nav>
+
+      <ion-router-outlet class="workspace-router-outlet"></ion-router-outlet>
+    </div>
+    <div *ngIf="!localStorageItems || localStorageItems.length === 0">
+      {{DEFAULT_MESSAGES.NO_DATA_FOUND}}
+    </div>
+    <ng-container *ngIf="skeleton">
+      <ng-container [ngTemplateOutlet]="dashboardSkeleton">
+      </ng-container>
+    </ng-container>
+  </div>
+</ion-content>
+
+<ng-template #dashboardSkeleton>
+  <div class="list-skeleton">
+    <ion-list>
+      <ion-item *ngFor="let item of [0]">
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ng-template>

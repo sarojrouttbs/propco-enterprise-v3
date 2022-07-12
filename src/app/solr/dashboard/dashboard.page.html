@@ -1,7 +1,7 @@
 <ion-content id="solr-dashboard">
-  <ion-chip title="Switch to old dashboard" (click)="openHomeCategory('OpenPropcoDashBoard')">
-    <span><ion-icon name="home-outline" color="danger" size="small"></ion-icon></span>
-  </ion-chip>
+  <div class="swap-icon" (click)="setDefaultHome(false)">
+    <img height="35" width="35" src="assets/images/swap.svg" title="Switch back to the old dashboard" (click)="openHomeCategory('OpenPropcoDashBoard')">
+  </div>
   <div class="divider"></div>
   <ion-grid class="ion-no-padding" fixed >
     <ion-row class="ion-justify-content-center">
@@ -15,12 +15,10 @@
         <ion-skeleton-text class="welcome-skeleton" animated *ngIf="!loaded"></ion-skeleton-text>
       </ion-col>
     </ion-row>
-    <!-- <ion-row class="ion-align-items-center ion-justify-content-center ion-margin-vertical"> -->
       <app-search-suggestion [isAuthSuccess]="isAuthSuccess" [entityControl]="entityControl" [pageType]="'dashboard'" *ngIf="loaded"></app-search-suggestion>
       <ion-skeleton-text class="searchbar-skeleton" animated *ngIf="!loaded"></ion-skeleton-text>
-    <!-- </ion-row> -->
-    <ion-row class="ion-align-items-center ion-justify-content-center">
-      <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding tour-4">
+    <ion-row class="ion-align-items-center ion-justify-content-center tour-4">
+      <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
         <div class="block" (click)="openHomeCategory('OpenApplicantCard')">
           <i class="propcoicon red-icon propcoicon-applicant-card"></i>
           <p>Applicant Card</p>
@@ -35,7 +33,7 @@
       <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
         <div class="block" (click)="openHomeCategory('OpenMarketAppraisal')">
           <i class="propcoicon red-icon propcoicon-market-apprasial"></i>
-          <p>Market Appraisal Form</p>
+          <p>Market Appraisal</p>
         </div>
       </ion-col>
       <ion-col size-xl="20" size="20" class="ion-no-padding">

@@ -14,6 +14,7 @@ export const PROPCO = {
   TOB_LOOKUP_DATA: 'tob_lookup_data',
   TERMS_AND_CONDITIONS: 'terms_and_conditions',
   REFERENCING_INFO: 'referencing_info',
+  PROPERTY_LOOKUP_DATA: 'property_lookup_data'
 };
 
 export const USER_TYPES = {
@@ -115,7 +116,7 @@ export const FAULT_STAGES_INDEX = {
 };
 
 export const LL_INSTRUCTION_TYPES = [
-  //Don't change the Sequence of values it will alter the CLI functionality
+  /** Don't change the Sequence of values it will alter the CLI functionality */
   {
     index: 'DOES_OWN_REPAIRS',
     value: 'Landlord does their own repairs',
@@ -180,6 +181,7 @@ export const URGENCY_TYPES = {
 
 export const REGEX = {
   DECIMAL_REGEX: '[0-9]+(.[0-9][0-9]?)?',
+  POSTCODE_VALIDATOR_REGX: '^([aA-pPrR-uUwWyYzZ0-9][aA-hHkK-yY0-9][aAeEhHmMnNpPrRtTvVxXyY0-9]?[aAbBeEhHmMnNpPrRvVwWxXyY0-9]? {1}[0-9][aAbBdD-hHjJlLnN-uUwW-zZ]{2}|gGiIrR 0aAaA)$'
 };
 
 export const COMPLETION_METHODS = [
@@ -261,7 +263,7 @@ export const PAYMENT_METHOD_TYPES = [
 ];
 
 export const PAYMENT_WARNINGS = {
-  hasSufficientReserveBalance: "Insufficient funds in Landlord's reserve.",
+  hasSufficientReserveBalance: `Insufficient funds in Landlord's reserve.`,
   isFaultEstimateLessThanHalfRentOrThresHoldValue:
     'The Works Order is over half months rent or £250.',
   hasRentArrears: 'The Tenant has rent arrears.',
@@ -276,11 +278,11 @@ export const PAYMENT_WARNINGS = {
 export const CLOSE_REASON = [
   {
     index: 'FAULT_DOES_NOT_EXIST_ANYMORE',
-    value: 'Fault does not exist anymore',
+    value: 'Repair does not exist anymore',
   },
   {
     index: 'TENANTS_RESPONSIBILITY',
-    value: "Tenant's responsibility",
+    value: `Tenant's responsibility`,
   },
   {
     index: 'APPOINTMENT_NOT_BOOKED',
@@ -326,7 +328,7 @@ export const FAULT_QUALIFICATION_ACTIONS = [
   },
   {
     index: 'LANDLORD_INSTRUCTION',
-    value: "Check Landlord's Instructions",
+    value: `Check Landlord's Instructions`,
   },
   {
     index: 'REQUEST_MORE_INFO',
@@ -422,17 +424,17 @@ export const LL_PAYMENT_CONFIG = {
 export const FAULT_EVENT_TYPES = [
   {
     'Major Events': [
-      'Fault Logged',
+      'Repair Logged',
       'Progress Started',
       'CLI action selected',
       'Quote Obtained',
       'Converted To WO',
       'WO Raised',
-      'Fault Closed',
+      'Repair Closed',
     ],
   },
   {
-    Escalations: ['Escalated', 'De Escalated', 'Fault Snoozed'],
+    Escalations: ['Escalated', 'De Escalated', 'Repair Snoozed'],
   },
   {
     'Stage Changed': ['Stage Changed'],
@@ -540,6 +542,10 @@ export const OFFER_STATUSES = {
 export const NOTES_TYPE = {
   OFFER: 'OFFER',
   FAULT: 'FAULT',
+  PROPERTY: 'PROPERTY',
+  MANAGEMENT_INSPECTION: 'MANAGEMENT_INSPECTION',
+  SAFETY_INSPECTIONS: 'SAFETY_INSPECTIONS',
+  SAFETY_DEVICES: 'SAFETY_DEVICES'
 };
 
 export const APPLICATION_STATUSES = {
@@ -557,6 +563,7 @@ export const APPLICATION_ACTION_TYPE = {
 export const ENTITY_TYPE = {
   AGENT: 'AGENT',
   LET_APPLICANT: 'LET_APPLICANT',
+  PROPERTY: 'PROPERTY'
 };
 
 export const PAYMENT_TYPES = {
@@ -600,7 +607,14 @@ export const REFERENCING_TYPES = {
 
 export const DEFAULT_MESSAGES = {
   NO_DATA_FOUND: 'No data found!',
+  NO_RECORD_FOUND: 'No record found!',
   NO_DETAILS_AVAILABLE: 'No details available',
+  NO_TENANCY_AVAILABLE: 'No tenancies associated with this property.',
+  errors: {
+    SOMETHING_WENT_WRONG: 'Something went wrong'
+  },
+  NOT_AVAILABLE_TEXT: 'Not Available',
+  AVAILABLE_SOON: 'Available Soon'
 };
 
 export const FAULT_NOTIFICATION_STATE = {
@@ -610,3 +624,127 @@ export const FAULT_NOTIFICATION_STATE = {
   AWAITING_PAYMENT: 'Awaiting Payment',
   INVOICE_PAID: 'Invoice paid',
 };
+
+export const DEFAULTS = {
+  NOT_AVAILABLE: '-'
+};
+
+export const AGENT_WORKSPACE_CONFIGS = {
+  localStorageName: 'entity_tabs_menu',
+  property: {
+    pageTitleMap: {
+      'dashboard': 'Dashboard',
+      'details': 'Property Details',
+      'offers': 'Offers',
+      'applications': 'Applications',
+      'marketing-activity': 'Marketing Activity',
+      'tenancy': 'Tenancies',
+      'rent': 'Rent/Invoices',
+      'periodic-visit': 'Periodic Visit',
+      'maintenance': 'Maintenance',
+      'notes': 'Notes',
+      'keys': 'Keys',
+      'particulars': 'Particulars',
+      'safety-device': 'Safety Devices/Alarms',
+      'whitegoods': 'Service/White Goods',
+      'safety': 'Safety Devices/Alarms'
+    }
+  }
+};
+
+export const LOGIN_PAGE_TEXT_MESSAGES = [
+  { MESSAGE: 'Whether you’re an established nationwide agent or you’re looking for best in class tools and platforms, PropCo Online Property Management Software has everything you need.' },
+  { MESSAGE: 'Cloud-based Lettings, Management, and Client Accounting System, which embraces the latest technology with ease of use and customer satisfaction.' }
+];
+
+export const BUILD_DETAILS = {
+  BUILD_NUMBER: '1.4.1',
+  BUILD_MONTH_YEAR: 'June 2022'
+};
+
+export const TITLES = [
+  { index: 0, value: 'Mr' },
+  { index: 1, value: 'Mrs' },
+  { index: 2, value: 'Ms' },
+  { index: 3, value: 'Lady' },
+  { index: 4, value: 'Dr' },
+  { index: 5, value: 'Lord' },
+  { index: 6, value: 'Mr & Mrs' },
+  { index: 7, value: 'Mr & Ms' },
+  { index: 8, value: 'Mr & Miss' },
+  { index: 9, value: 'Miss' },
+  { index: 10, value: 'Prof' },
+  { index: 11, value: 'Rt.hon' },
+  { index: 12, value: 'Lt.Sqd' },
+];
+
+export const OWNERSHIP = [
+  { index: 'jointly', value: 'Jointly' },
+  { index: 'solely', value: 'Solely' }
+];
+
+export const MARKET_APPRAISAL = {
+  contact_type: 'contact',
+  property_type: 'property',
+}
+
+export const search_Text = {
+  lanlord: 'LANDLORD',
+  property: 'PROPERTY',
+}
+
+export const MARKETING_ACTIVITY_TYPES = {
+  EMAIL: 'email',
+  SMS: 'sms',
+  MAILSHOT: 'mailshot',
+  VIEWED: 'viewed',
+  BOOKED: 'booked'
+}
+
+export const DATE_FORMAT = {
+  DATE: 'dd/MM/yyyy',
+  DATE_TIME: 'dd/MM/yyyy HH:mm',
+  TIME: 'HH:mm',
+  TIME_SECONDS: 'HH:mm:ss',
+  DATE_TIME_SECONDS: 'dd/MM/yyyy HH:mm:ss',
+  DISPLAY_DATE: 'DD MMM YYYY',
+  DISPLAY_DATE_TIME: 'DD MMM YYYY HH:mm',
+  INPUT_DATE: 'MM/DD/YYYY',
+  INPUT_DATE_TIME: 'MM/DD/YYYY HH:mm',
+  DISPLAY_DATE_1: 'DD/MM/YYYY',
+  DISPLAY_DATE_TIME_1: 'DD/MM/YYYY HH:mm',
+  YEAR_DATE_TIME: 'yyyy-MM-dd HH:mm:ss',
+  YEAR_DATE_TIME_1: 'yyyy-MM-ddTHH:mm',
+  YEAR_DATE: 'yyyy-MM-dd'
+}
+
+export const HMRC = {
+  QUICK_DATE_FILTERS: [
+    {
+      index: "2017-05-06,2018-05-05",
+      value: "2017-2018"
+    },
+    {
+      index: "2018-05-06,2019-05-05",
+      value: "2018-2019"
+    },
+    {
+      index: "2019-05-06,2020-05-05",
+      value: "2019-2020"
+    },
+    {
+      index: "2020-05-06,2021-05-05",
+      value: "2020-2021"
+    },
+    {
+      index: "2021-05-06,2022-05-05",
+      value: "2021-2022"
+    }
+  ],
+  SEARCH_ON_COLUMNS_KEYS: [
+    { index: 'PROPERTY_REFERENCE', value: 'Property Reference' },
+    { index: 'PROPERTY_ADDRESS', value: 'Property Address' },
+    { index: 'LANDLORD_FULLNAME', value: 'Landlord/Owner Full Name' },
+    { index: 'LANDLORD_ADDRESS', value: 'Landlord Address' },
+  ]
+}

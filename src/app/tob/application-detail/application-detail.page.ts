@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAYMENT_TYPES, PAYMENT_CONFIG, APPLICATION_ENTITIES } from 'src/app/shared/constants';
+import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAYMENT_TYPES, PAYMENT_CONFIG, APPLICATION_ENTITIES, DEFAULTS, DATE_FORMAT } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { switchMap, debounceTime } from 'rxjs/operators';
@@ -59,13 +59,13 @@ export class ApplicationDetailPage implements OnInit {
   propertyClauses: any[];
   propertyRestrictions: any[];
   applicantId: string;
-  disableSearchApplicant: boolean = false;
-  resultsAvailable: boolean = null;
-  isStudentProperty: boolean = false;
-  showPostcodeLoader: Boolean = null;
-  showAddressLoader: Boolean = null;
-  showPayment: boolean = false;
-  saveDataLoader: boolean = false;
+  disableSearchApplicant = false;
+  resultsAvailable = null;
+  isStudentProperty = false;
+  showPostcodeLoader = null;
+  showAddressLoader = null;
+  showPayment = false;
+  saveDataLoader = false;
   addressList: any[];
   guarantorAddressList: any[];
   forwardingAddressList: any[];
@@ -78,17 +78,17 @@ export class ApplicationDetailPage implements OnInit {
   ];
   maxMoveInDate = this.commonService.getFormatedDate(new Date().setFullYear(new Date().getFullYear() + 5));
   currentDate = this.commonService.getFormatedDate(new Date());
-  termsConditionControl: boolean = false;
+  termsConditionControl = false;
   termsAndConditionData: any = {};
   applicationStatus: string;
 
   PAYMENT_METHOD = environment.PAYMENT_METHOD;
   PAYMENT_PROD = environment.PAYMENT_PROD;
   paymentDetails: any = {};
-  showWorldpayIframe: boolean = false;
-  hidePaymentForm: boolean = false;
-  isTobPropertyCardReady: boolean = false;
-  showWorldpayInternalForm: boolean = false;
+  showWorldpayIframe = false;
+  hidePaymentForm = false;
+  isTobPropertyCardReady = false;
+  showWorldpayInternalForm = false;
   worldPayInternalData: {
     applicationId?: string,
     startDate?: string,
@@ -97,9 +97,14 @@ export class ApplicationDetailPage implements OnInit {
     propertyId?: string,
     amount?: number,
     entityType?: string,
-    entityId?:string
+    entityId?: string
   } = {};
-  isApplicantDetailsAvailable: boolean = false;
+  isApplicantDetailsAvailable = false;
+  addressPopoverOptions: any = {
+    cssClass: 'address-selection'
+  };
+  DEFAULTS = DEFAULTS;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private route: ActivatedRoute,
@@ -113,7 +118,13 @@ export class ApplicationDetailPage implements OnInit {
 
   ngOnInit() {
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
+    if (!this.propertyId) {
+      this.propertyId = this.route.snapshot.parent.parent.paramMap.get('propertyId');
+    }
     this.applicationId = this.route.snapshot.paramMap.get('applicationId');
+    if (!this.applicationId) {
+      this.applicationId = this.route.snapshot.parent.parent.paramMap.get('applicationId');
+    }
     if (typeof this.applicationId !== 'undefined' && this.applicationId !== null) {
       this.initViewApiCalls();
     }
@@ -164,7 +175,7 @@ export class ApplicationDetailPage implements OnInit {
       }
     },
       error => {
-      })
+      });
   }
 
   private patchApplicantDetail(): void {
@@ -190,7 +201,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private searchApplicant(applicantId: string): Observable<any> {
-    let response = this._tobService.searchApplicant(applicantId);
+    const response = this._tobService.searchApplicant(applicantId);
     return response;
   }
 
@@ -225,7 +236,7 @@ export class ApplicationDetailPage implements OnInit {
     const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
     await this.setApplicationApplicants(applicants);
     await this.setLeadApplicantDetails();
-    if(this.PAYMENT_METHOD === PAYMENT_TYPES.WORLDPAY_OWNFORM) {
+    if (this.PAYMENT_METHOD === PAYMENT_TYPES.WORLDPAY_OWNFORM) {
       await this.setWorldpayInternalData();
     }
     if (this.applicationStatus === 'Accepted') {
@@ -242,7 +253,7 @@ export class ApplicationDetailPage implements OnInit {
   /** Submit Application Functionality **/
 
   async submit() {
-    let isValid = await this.checkFormsValidity();
+    const isValid = await this.checkFormsValidity();
     if (!isValid) {
       this.commonService.showMessage('Please provide complete information.', 'Application Details', 'error');
       return;
@@ -258,11 +269,11 @@ export class ApplicationDetailPage implements OnInit {
   private checkFormsValidity() {
     return new Promise((resolve, reject) => {
       let valid = false;
-      let applicantDetails = this.applicantDetailsForm.valid;
-      let bankDetails = this.bankDetailsForm.valid;
-      let address = this.addressDetailsForm.valid;
-      let tenancyDetails = this.tenancyDetailForm.valid;
-      let guarantorDetails = this.guarantorForm.valid;
+      const applicantDetails = this.applicantDetailsForm.valid;
+      const bankDetails = this.bankDetailsForm.valid;
+      const address = this.addressDetailsForm.valid;
+      const tenancyDetails = this.tenancyDetailForm.valid;
+      const guarantorDetails = this.guarantorForm.valid;
       if (applicantDetails && tenancyDetails && guarantorDetails && bankDetails && address) {
         valid = true;
       }
@@ -278,7 +289,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private submitApplication(): void {
-    let data: any = {};
+    const data: any = {};
     data.submittedBy = ENTITY_TYPE.AGENT;
     data.submittedById = '';
     this._tobService.submitApplication(this.applicationDetails.applicationId, data).subscribe(
@@ -288,7 +299,7 @@ export class ApplicationDetailPage implements OnInit {
           this.showPayment = true;
           this.currentStepperIndex = 10;
         } else {
-          this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+          this.router.navigate([`../../applications`], { replaceUrl: true, relativeTo: this.route });
         }
       },
       error => {
@@ -302,8 +313,8 @@ export class ApplicationDetailPage implements OnInit {
 
   /** Step Change functionality **/
   public onStepChange(event: any): void {
-    let nextIndex = event.selectedIndex;
-    let previousIndex = event.previouslySelectedIndex;
+    const nextIndex = event.selectedIndex;
+    const previousIndex = event.previouslySelectedIndex;
     if (nextIndex > previousIndex) {
       /*call API only in next step*/
       this.savePreviousStep(event);
@@ -332,7 +343,7 @@ export class ApplicationDetailPage implements OnInit {
     if (this.applicationDetails.isSubmitted) {
       return;
     }
-    let previouslySelectedIndex = event.previouslySelectedIndex;
+    const previouslySelectedIndex = event.previouslySelectedIndex;
     this.savePreviouslySelectedData(previouslySelectedIndex);
   }
 
@@ -393,25 +404,25 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private async onSave() {
-    let title = 'Save for later';
-    let message = 'Your application has been saved. Please complete your application within 14 days in order to guarantee a reservation.'
+    const title = 'Save for later';
+    const message = 'Your application has been saved. Please complete your application within 14 days in order to guarantee a reservation.';
     this.commonService.showAlert(title, message, '').then(res => {
       if (res) {
-        this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+        this.router.navigate([`../../applications`], { replaceUrl: true, relativeTo: this.route });
       }
-    })
+    });
   }
 
   private saveApplicantsToApplication() {
-    let apiObservableArray = [];
+    const apiObservableArray = [];
     this.occupantForm.controls['coApplicants'].value.map((element) => {
       if (!element.applicationApplicantId && element.isAdded && !element.isDeleted) {
         if (!element.applicantId) {
-          let isLeadApplicant: boolean = element.isLead;
+          const isLeadApplicant: boolean = element.isLead;
           apiObservableArray.push(this._tobService.addApplicantToApplication(this.applicationId, element, isLeadApplicant));
         }
         if (element.applicantId) {
-          let isLeadApplicant: boolean = element.isLead;
+          const isLeadApplicant: boolean = element.isLead;
           apiObservableArray.push(this._tobService.linkApplicantToApplication(this.applicationId, element, element.applicantId, isLeadApplicant));
         }
       }
@@ -429,13 +440,13 @@ export class ApplicationDetailPage implements OnInit {
       }, error => {
         this.occupantForm.reset(this.occupantForm.value);
       });
-    }, 1000)
+    }, 1000);
   }
 
   onLeadSelection(item: FormGroup) {
     this.commonService.showConfirm('Lead Applicant', 'Are you sure, you want to make this applicant to lead applicant?', '', 'YES', 'NO').then(response => {
       if (response && item.controls['applicationApplicantId'].value) {
-        let updateLeadData = {
+        const updateLeadData = {
           modifiedById: '',
           modifiedBy: ENTITY_TYPE.AGENT
         };
@@ -443,26 +454,26 @@ export class ApplicationDetailPage implements OnInit {
           const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
           await this.setApplicationApplicants(applicants);
           await this.setLeadApplicantDetails();
-        })
+        });
       }
       else {
         item.controls['isLead'].setValue(false);
       }
-    })
+    });
   }
 
   private async getApplicantCoApplicants(applicantId: string) {
     this._tobService.getApplicantCoApplicants(applicantId).subscribe(response => {
       if (response && response.data) {
-        let finalData = this.occupantForm.get("coApplicants").value;
+        const finalData = this.occupantForm.get('coApplicants').value;
         response.data.forEach((item: any) => {
           item.isLead = false;
-          finalData.push(item)
+          finalData.push(item);
         });
-        (this.occupantForm.get("coApplicants") as FormArray)['controls'].splice(0);
-        this.updateOccupantForm(finalData)
+        (this.occupantForm.get('coApplicants') as FormArray)['controls'].splice(0);
+        this.updateOccupantForm(finalData);
       }
-    })
+    });
   }
 
   private getApplicationDetails(applicationId: string) {
@@ -481,7 +492,7 @@ export class ApplicationDetailPage implements OnInit {
   private setApplicationDetails(res: ApplicationModels.IApplicationResponse) {
     return new Promise((resolve, reject) => {
       this.applicationDetails = res;
-      this.applicationDetails.applicationClauses = res.applicationClauses ? res.applicationClauses : []
+      this.applicationDetails.applicationClauses = res.applicationClauses ? res.applicationClauses : [];
       this.applicationDetails.applicationRestrictions = res.applicationRestrictions ? res.applicationRestrictions : [];
       this.applicationStatus = this.commonService.getLookupValue(this.applicationDetails.status, this.applicationStatuses);
       this.applicationDetails.applicationRestrictions = this.applicationDetails.applicationRestrictions.filter(restrict => restrict.value);
@@ -513,9 +524,9 @@ export class ApplicationDetailPage implements OnInit {
 
   private setApplicationApplicants(res: any) {
     return new Promise((resolve, reject) => {
-      (this.occupantForm.get("coApplicants") as FormArray)['controls'].splice(0);
+      (this.occupantForm.get('coApplicants') as FormArray)['controls'].splice(0);
       this.applicationApplicantDetails = (res && res.data) ? res.data : [];
-      let leadApplicantDetails = this.applicationApplicantDetails.filter((occupant) => occupant.isLead);
+      const leadApplicantDetails = this.applicationApplicantDetails.filter((occupant) => occupant.isLead);
       if (leadApplicantDetails && leadApplicantDetails.length > 0) {
         this.applicantId = leadApplicantDetails[0].applicantId;
       }
@@ -527,7 +538,7 @@ export class ApplicationDetailPage implements OnInit {
   private async setLeadApplicantDetails() {
     if (this.applicantId) {
       await this.getApplicantDetails(this.applicantId);
-      if (this.applicationDetails.leadApplicantItemtype === "M") {
+      if (this.applicationDetails.leadApplicantItemtype === 'M') {
         this.getTenantBankDetails(this.applicantId);
         this.getTenantGuarantors(this.applicantId);
       } else {
@@ -538,7 +549,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private async createApplication() {
-    let requestObj: any = {};
+    const requestObj: any = {};
     requestObj.createdBy = ENTITY_TYPE.AGENT;
     requestObj.propertyId = this.propertyId;
     requestObj.status = APPLICATION_STATUSES.NEW;
@@ -547,7 +558,7 @@ export class ApplicationDetailPage implements OnInit {
     requestObj.applicationClauses = this.propertyClauses;
     this._tobService.createApplication(requestObj).subscribe(
       res => {
-        this.router.navigate([`tob/${this.propertyId}/application/${res.applicationId}`], { replaceUrl: true });
+        this.router.navigate([`../application/${res.applicationId}`], { relativeTo: this.route });
       },
       error => {
       }
@@ -693,7 +704,7 @@ export class ApplicationDetailPage implements OnInit {
   async onCancel() {
     const isCancel: boolean = await this.commonService.showConfirm('Cancel', 'Are you sure, you want to cancel this operation?', '', 'Yes', 'No') as boolean;
     if (isCancel) {
-      this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+      this.router.navigate([`../../applications`], { replaceUrl: true, relativeTo: this.route });
     }
   }
 
@@ -742,7 +753,7 @@ export class ApplicationDetailPage implements OnInit {
       title: control.value.title,
       applicantId: ''
     }
-    ))
+    ));
     this.occupantFormArray.removeAt(index);
     this.createItem();
   }
@@ -762,7 +773,7 @@ export class ApplicationDetailPage implements OnInit {
       title: response.title,
       applicantId: response.applicantId
     }
-    ))
+    ));
     this.occupantFormArray.removeAt(index);
     this.createItem();
   }
@@ -771,7 +782,7 @@ export class ApplicationDetailPage implements OnInit {
     this.commonService.showConfirm('Remove Applicant', 'Are you sure, you want to remove this applicant ?', '', 'YES', 'NO').then(response => {
       if (response) {
         if (item.controls['applicationApplicantId'].value) {
-          this._tobService.deleteApplicationApplicant(this.applicationId, item.controls['applicationApplicantId'].value, { "deletedBy": "AGENT" }).subscribe(async (response) => {
+          this._tobService.deleteApplicationApplicant(this.applicationId, item.controls['applicationApplicantId'].value, { 'deletedBy': 'AGENT' }).subscribe(async (response) => {
             const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
             await this.setApplicationApplicants(applicants);
           });
@@ -779,12 +790,12 @@ export class ApplicationDetailPage implements OnInit {
           this.occupantFormArray.removeAt(index);
         }
       }
-    })
+    });
   }
 
   private updateOccupantForm(occupantsList: any[]) {
     if (Array.isArray(occupantsList) && occupantsList.length > 0) {
-      let occupantsArray = this.occupantFormArray;
+      const occupantsArray = this.occupantFormArray;
       occupantsList.forEach(element => {
         if (element.applicantId) {
           occupantsArray.push(this._formBuilder.group({
@@ -808,7 +819,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   checkFormDirty(form: any) {
-    let dirtyForm = this.commonService.getDirtyValues(form);
+    const dirtyForm = this.commonService.getDirtyValues(form);
     if (Object.keys(dirtyForm).length) {
       return true;
     }
@@ -1011,7 +1022,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private updateApplicationDetails() {
-    let requestObj = JSON.parse(JSON.stringify(this.applicationDetails));
+    const requestObj = JSON.parse(JSON.stringify(this.applicationDetails));
     requestObj.applicationRestrictions.map(restrict => { delete restrict.restrictionName; }
     );
     if (requestObj.numberOfAdults) {
@@ -1032,7 +1043,7 @@ export class ApplicationDetailPage implements OnInit {
         this.applicationDetails.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
         this.tenancyDetailForm.reset(this.tenancyDetailForm.value);
       },
-      error => {}
+      error => { }
     );
   }
 
@@ -1052,9 +1063,9 @@ export class ApplicationDetailPage implements OnInit {
     return new Promise((resolve, reject) => {
       this._tobService.getApplicantQuestions().subscribe(res => {
         const response = (res && res.data) ? res.data : undefined;
-        resolve(response)
+        resolve(response);
       }, error => {
-        reject(undefined)
+        reject(undefined);
       });
     });
 
@@ -1064,7 +1075,7 @@ export class ApplicationDetailPage implements OnInit {
     this._tobService.getApplicationQuestionsAnswer(applicationId).subscribe(res => {
       if (res && res.count) {
         this.questionFormArray.controls.forEach(element => {
-          let item = res.data.find(answer => answer.questionId === element.value.applicantQuestionId);
+          const item = res.data.find(answer => answer.questionId === element.value.applicantQuestionId);
           element.patchValue({
             toggle: item ? item.toggle : null,
             answer: item ? item.answer : null,
@@ -1080,7 +1091,7 @@ export class ApplicationDetailPage implements OnInit {
   private createQuestionItems(questionArray: any) {
     const questionFormArray = this.questionFormArray;
     questionArray.forEach(element => {
-      let questionForm = this._formBuilder.group({
+      const questionForm = this._formBuilder.group({
         applicantQuestionId: element.applicantQuestionId,
         question: element.text,
         applicationQuestionId: [null],
@@ -1094,11 +1105,11 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private saveApplicationQuestions() {
-    let apiObservableArray = [];
-    let applicantQuestions = this.applicantQuestionForm.controls.questions.value;
+    const apiObservableArray = [];
+    const applicantQuestions = this.applicantQuestionForm.controls.questions.value;
     if (this.checkFormDirty(this.applicantQuestionForm)) {
       applicantQuestions.forEach(question => {
-        let questionDetails: any = {};
+        const questionDetails: any = {};
         questionDetails.toggle = question.toggle;
         questionDetails.answer = question.type === 'BOOLEAN' ? question.toggle : question.answer;
         questionDetails.answerById = question.answerById;
@@ -1155,7 +1166,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private saveApplicantDetails() {
-    let applicantDetails = this.applicantDetailsForm.value;
+    const applicantDetails = this.applicantDetailsForm.value;
     applicantDetails.dateOfBirth = this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
     if (this.checkFormDirty(this.applicantDetailsForm)) {
       this.updateApplicantDetails();
@@ -1163,7 +1174,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private saveAddressDetails() {
-    let applicantDetails = this.applicantDetailsForm.value;
+    const applicantDetails = this.applicantDetailsForm.value;
     applicantDetails.address = this.addressDetailsForm.value.address;
     applicantDetails.dateOfBirth = this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
     applicantDetails.forwardingAddress = this.addressDetailsForm.value.forwardingAddress;
@@ -1207,16 +1218,16 @@ export class ApplicationDetailPage implements OnInit {
   private patchBankDetails(bankDetails: any) {
     this.bankDetailsForm.patchValue({
       bankDetails: {
-        bankName: bankDetails.bankName ? bankDetails.bankName : "",
-        sortcode: bankDetails.sortcode ? bankDetails.sortcode : "",
-        accountNumber: bankDetails.accountNumber ? bankDetails.accountNumber : "",
-        accountName: bankDetails.accountName ? bankDetails.accountName : "",
+        bankName: bankDetails.bankName ? bankDetails.bankName : '',
+        sortcode: bankDetails.sortcode ? bankDetails.sortcode : '',
+        accountNumber: bankDetails.accountNumber ? bankDetails.accountNumber : '',
+        accountName: bankDetails.accountName ? bankDetails.accountName : '',
       }
     });
   }
 
   private saveBankDetails() {
-    let bankDetails = this.bankDetailsForm.value.bankDetails;
+    const bankDetails = this.bankDetailsForm.value.bankDetails;
     if (this.checkFormDirty(this.bankDetailsForm)) {
       this.updateBankDetails(bankDetails);
     }
@@ -1227,7 +1238,7 @@ export class ApplicationDetailPage implements OnInit {
       res => {
         this.bankDetailsForm.reset(this.bankDetailsForm.value);
       },
-      error => {}
+      error => { }
     );
   }
 
@@ -1344,7 +1355,7 @@ export class ApplicationDetailPage implements OnInit {
 
   private updateGuarantorDetails(guarantorDetails: any) {
     guarantorDetails = this.commonService.replaceEmptyStringWithNull(guarantorDetails);
-    let guarantorId = guarantorDetails.guarantorId;
+    const guarantorId = guarantorDetails.guarantorId;
     delete guarantorDetails.guarantorId;
     this._tobService.updateGuarantorDetails(guarantorDetails, guarantorId).subscribe(
       res => {
@@ -1353,7 +1364,7 @@ export class ApplicationDetailPage implements OnInit {
         }
         this.guarantorForm.reset(this.guarantorForm.value);
       },
-      error => {}
+      error => { }
     );
   }
 
@@ -1369,7 +1380,7 @@ export class ApplicationDetailPage implements OnInit {
           this.guarantorForm.controls['guarantorId'].setValue(res.guarantorId);
         }
       },
-      error => {}
+      error => { }
     );
   }
 
@@ -1395,7 +1406,7 @@ export class ApplicationDetailPage implements OnInit {
     const termsAndCondition = this.termsAndConditionData?.application?.termsAndCondition;
     const modal = await this.modalController.create({
       component: TermsAndConditionModalPage,
-      cssClass: 'modal-container modal-width',
+      cssClass: 'modal-container modal-width tob-modal-container',
       componentProps: {
         data: termsAndCondition,
         heading: 'Terms and Conditions'
@@ -1414,7 +1425,7 @@ export class ApplicationDetailPage implements OnInit {
   async onTermsModelChanged(event) {
     if (!this.applicationDetails.isTermsAndConditionsAccepted) {
       await this.updateApplicationDetails();
-      this.applicationDetails.isTermsAndConditionsAccepted = this.termsConditionControl
+      this.applicationDetails.isTermsAndConditionsAccepted = this.termsConditionControl;
     }
   }
 
@@ -1422,7 +1433,7 @@ export class ApplicationDetailPage implements OnInit {
   private initWorldpayPaymentDetails() {
     var orderCode = 'PROPCOTESTM1TBS' + Math.random();
     this.paymentDetails = {};
-    var paymentConfigUrl = this.PAYMENT_PROD ? PAYMENT_CONFIG.WORLDPAY_REDIRECT.PROD_URL: PAYMENT_CONFIG.WORLDPAY_REDIRECT.TEST_URL;
+    var paymentConfigUrl = this.PAYMENT_PROD ? PAYMENT_CONFIG.WORLDPAY_REDIRECT.PROD_URL : PAYMENT_CONFIG.WORLDPAY_REDIRECT.TEST_URL;
     this.paymentDetails.actionUrl = paymentConfigUrl;
     this.paymentDetails.cartId = orderCode;
     this.paymentDetails.desc = 'Online Reservation - PropCo Web';
@@ -1451,7 +1462,7 @@ export class ApplicationDetailPage implements OnInit {
 
   private initBarclayCardPaymentDetails() {
     var barclayResponseUrl = window.location.origin + window.location.pathname + '#/barclaycard';
-    var paymentConfigUrl = this.PAYMENT_PROD ? PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.PROD_URL: PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.TEST_URL;
+    var paymentConfigUrl = this.PAYMENT_PROD ? PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.PROD_URL : PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.TEST_URL;
     this.paymentDetails = {};
     this.paymentDetails.actionUrl = paymentConfigUrl;
     this.paymentDetails.acceptUrl = barclayResponseUrl;
@@ -1462,21 +1473,21 @@ export class ApplicationDetailPage implements OnInit {
     this.paymentDetails.orderId = 'TBS' + Math.random();
     this.paymentDetails.PSPID = PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.PSPID;
     this.paymentDetails.SHASIGN = this.createSHASIGN();
-}
+  }
 
 
   private createSHASIGN() {
-    var AMOUNT = 'AMOUNT=' + (this.applicationDetails.depositAmount * 100) + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
-    var CURRENCY = 'CURRENCY=' + 'GBP' + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
-    var EMAIL = 'EMAIL=' + this.paymentDetails.email + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
-    var LANGUAGE = 'LANGUAGE=' + 'en_US' + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
-    var ORDER_ID = 'ORDERID=' + this.paymentDetails.orderId + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
-    var PSPID = 'PSPID=' + this.paymentDetails.PSPID + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
-    var ACCEPT_URL = 'ACCEPTURL=' + this.paymentDetails.acceptUrl + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
-    var CANCEL_URL = 'CANCELURL=' + this.paymentDetails.cancelUrl + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
-    var DECLINE_URL = 'DECLINEURL=' + this.paymentDetails.declineUrl + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
-    var EXCEPTION_URL = 'EXCEPTIONURL=' + this.paymentDetails.exceptionUrl + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
-    var shaSignature = ACCEPT_URL + AMOUNT + CANCEL_URL + CURRENCY + DECLINE_URL + EMAIL + EXCEPTION_URL + LANGUAGE + ORDER_ID + PSPID;
+    const AMOUNT = 'AMOUNT=' + (this.applicationDetails.depositAmount * 100) + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    const CURRENCY = 'CURRENCY=' + 'GBP' + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    const EMAIL = 'EMAIL=' + this.paymentDetails.email + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    const LANGUAGE = 'LANGUAGE=' + 'en_US' + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    const ORDER_ID = 'ORDERID=' + this.paymentDetails.orderId + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    const PSPID = 'PSPID=' + this.paymentDetails.PSPID + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    const ACCEPT_URL = 'ACCEPTURL=' + this.paymentDetails.acceptUrl + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    const CANCEL_URL = 'CANCELURL=' + this.paymentDetails.cancelUrl + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    const DECLINE_URL = 'DECLINEURL=' + this.paymentDetails.declineUrl + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    const EXCEPTION_URL = 'EXCEPTIONURL=' + this.paymentDetails.exceptionUrl + PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.SHA_IN_PASS;
+    const shaSignature = ACCEPT_URL + AMOUNT + CANCEL_URL + CURRENCY + DECLINE_URL + EMAIL + EXCEPTION_URL + LANGUAGE + ORDER_ID + PSPID;
     return CryptoJS.SHA512(shaSignature).toString(CryptoJS.enc.hex).toUpperCase();
 
   }
@@ -1512,8 +1523,8 @@ export class ApplicationDetailPage implements OnInit {
     this.showWorldpayIframe = false;
     if (response && response.transaction) {
       this.hidePaymentForm = true;
-      let transactionId = response.transaction;
-      let depositAmountPaid = this.applicationDetails.depositAmount;
+      const transactionId = response.transaction;
+      const depositAmountPaid = this.applicationDetails.depositAmount;
       this.processPayment(transactionId, depositAmountPaid);
     } else {
       this.hidePaymentForm = false;
@@ -1523,16 +1534,16 @@ export class ApplicationDetailPage implements OnInit {
 
   handleBarclaycardResponse(response) {
     this.showWorldpayIframe = false;
-    if (response && response.STATUS == '5') {
+    if (response && response.STATUS === '5') {
       this.hidePaymentForm = true;
       this.processPayment(response.PAYID, this.applicationDetails.depositAmount);
     } else {
       this.initBarclayCardPaymentDetails();
       this.hidePaymentForm = false;
-      if (response && response.STATUS == '1') {
+      if (response && response.STATUS === '1') {
         // this.commonService.showMessage('Payment cancelled', 'Barclay Card', 'error');
       }
-      else if (response && response.STATUS == '0') {
+      else if (response && response.STATUS === '0') {
         this.commonService.showMessage('Invalid or incomplete request, please try again.', 'Payment Failed', 'error');
       }
       else {
@@ -1543,7 +1554,7 @@ export class ApplicationDetailPage implements OnInit {
 
   processPayment(transactionId, depositAmountPaid) {
     this.commonService.showLoader();
-    let paymentDetails: any = {};
+    const paymentDetails: any = {};
     paymentDetails.propertyId = this.propertyId;
     paymentDetails.createdById = '';
     paymentDetails.transactionId = transactionId;
@@ -1556,7 +1567,8 @@ export class ApplicationDetailPage implements OnInit {
     }, error => {
       this.commonService.hideLoader();
       this.commonService.showMessage('Something went wrong on server, please contact us.', 'Process Payment', 'error');
-      this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+      this.router.navigate([`../../applications`], { replaceUrl: true, relativeTo: this.route });
+
     });
   }
 
@@ -1572,14 +1584,14 @@ export class ApplicationDetailPage implements OnInit {
 
     this._tobService.proposeTenancy(proposeTenancyDetails, this.propertyId).subscribe((res) => {
       this.commonService.hideLoader();
-      this.commonService.showAlert('Tenancy', 'Tenancy has been proposed successfully on the property.').then(function (resp) {
+      this.commonService.showAlert('Tenancy', 'Tenancy has been proposed successfully on the property.').then(function(resp) {
         window.history.back();
       });
-      
+
     }, error => {
       this.commonService.hideLoader();
       this.commonService.showMessage('Something went wrong on server, please try again.', 'Propose Tenancy', 'error');
-      this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+      this.router.navigate([`../../applications`], { replaceUrl: true, relativeTo: this.route });
     });
   }
 
@@ -1598,9 +1610,10 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   async openPaymentConfirmation() {
-    let message = '<h1> Congratulations! </h1>' + '<h5>Tenancy has been proposed successfully on the property.</h5>';
+    const message = '<h1> Congratulations! </h1>' + '<h5>Tenancy has been proposed successfully on the property.</h5>';
     const simpleModal = await this.modalController.create({
-      component: SimpleModalPage,
+      component: SimpleModalPage, 
+      cssClass: 'tob-modal-container',
       backdropDismiss: false,
       componentProps: {
         data: message,
@@ -1610,7 +1623,7 @@ export class ApplicationDetailPage implements OnInit {
     });
 
     simpleModal.onDidDismiss().then(res => {
-      this.router.navigate([`tob/${this.propertyId}/applications`], { replaceUrl: true });
+      this.router.navigate([`../../applications`], { replaceUrl: true, relativeTo: this.route });
     });
     await simpleModal.present();
   }

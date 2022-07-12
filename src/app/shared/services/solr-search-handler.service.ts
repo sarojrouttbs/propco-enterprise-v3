@@ -1,14 +1,14 @@
-import { Injectable } from "@angular/core";
-import { Observable, Subject } from "rxjs";
+import { Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class SolrSearchHandlerService {
   private subject = new Subject<any>();
 
-  search(entity, searchTerm) {
-    this.subject.next({ entity: entity, searchTerm: searchTerm });
+  search(data) {
+    this.subject.next(data);
   }
 
   getSearch(): Observable<any> {

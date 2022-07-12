@@ -1,0 +1,65 @@
+// ion-content {
+//     // --ion-background-color: var(--ion-color-step-1650);
+//     background-color: var(--ion-color-four);
+// }
+
+
+.active {
+    // background-color: blue;
+}
+#workspace-container {
+    margin: 0px 2px 2px;
+    border-bottom: 2px solid var(--ion-color-four);
+    border-top: 2px solid var(--ion-color-four);
+
+    ::ng-deep .mat-tab-nav-bar.mat-primary .mat-ink-bar{
+        background-color: transparent;
+    }
+
+    .no-background {
+        background: transparent;
+    }
+    a.mat-tab-link{
+        background-color: var(--ion-color-four);
+        opacity: 1;
+        color: var(--ion-text-color);
+        &.mat-tab-label-active {
+            background-color: var(--ion-background-color);
+        }
+    }
+    a:hover {
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .record {
+        text-align: left;
+        width: 300px;
+        display: flex;
+        flex-direction: row;
+
+        .number {
+            font-size: 12px;
+            margin-left: 10px;
+            color: #3fa4f0;
+        }
+
+        .name {
+            font-size: 16px;
+            margin-left: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 18px;
+        }
+    }
+
+    .flex {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+    }
+
+    .workspace-router-outlet{
+        margin-top: 62px;
+    }
+}

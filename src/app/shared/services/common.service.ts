@@ -3,7 +3,7 @@ import { AlertController, LoadingController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Plugins } from '@capacitor/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { PAYMENT_WARNINGS, PROPCO } from '../constants';
+import { DATE_FORMAT, PAYMENT_WARNINGS, PROPCO } from '../constants';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
@@ -38,12 +38,15 @@ export class CommonService {
     // this.alertPresented = false;
   }
 
+
+
   private dataChange = new Subject<any>();
   dataChanged$ = this.dataChange.asObservable();
 
   dataChanged(data) {
     this.dataChange.next(data);
   }
+
 
   // isCordovaDevice(){
   //     return (this._platform.platforms().indexOf('cordova')!= -1) ? true : false;
@@ -66,10 +69,10 @@ export class CommonService {
 
     for (const element of ca) {
       let c = element;
-      while (c.charAt(0) == ' ') {
+      while (c.charAt(0) === ' ') {
         c = c.substring(1);
       }
-      if (c.indexOf(name) == 0) {
+      if (c.indexOf(name) === 0) {
         return c.substring(name.length, c.length);
       }
     }
@@ -102,12 +105,12 @@ export class CommonService {
   }
 
   getSystemConfig(key: string): Observable<any> {
-    let httpParams = new HttpParams().set('key', key);
+    const httpParams = new HttpParams().set('key', key);
     return this.httpClient.get(environment.API_BASE_URL + 'sysconfig', { params: httpParams });
   }
 
   getSystemOptions(option: string): Observable<any> {
-    let httpParams = new HttpParams().set('option', option);
+    const httpParams = new HttpParams().set('option', option);
     return this.httpClient.get(environment.API_BASE_URL + 'options', { params: httpParams });
   }
 
@@ -123,15 +126,20 @@ export class CommonService {
     return this.httpClient.get(environment.API_BASE_URL + `postcode/${addressId}/retrieve`);
   }
 
+  getUserDetails(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `user/logged-in`);
+  }
+
 
   getLookupValue(id, listOfArray): string {
     let propertyStatus;
     listOfArray = listOfArray && listOfArray.length ? listOfArray : [];
-    listOfArray.find((obj) => {
+    listOfArray.find((obj) => {      
       if (obj.index === id) {
         propertyStatus = obj.value;
       }
-    })
+    });
+
     return propertyStatus;
   }
 
@@ -325,10 +333,10 @@ export class CommonService {
         .set('page', '1')
         .set('text', text)
         .set('types', 'PROPERTY');
-        
-        if(letCategory){
-          params = params.set('prop.mantypeLetCat', letCategory)
-        }
+
+      if (letCategory) {
+        params = params.set('prop.mantypeLetCat', letCategory);
+      }
     }
     else {
       params = new HttpParams()
@@ -349,7 +357,9 @@ export class CommonService {
     // });
     // await this.loader.present();
     const elem = document.getElementById('loading');
-    if (elem) elem.style.display = '';
+    if (elem) {
+      elem.style.display = '';
+    }
   }
 
   hideLoader() {
@@ -358,7 +368,9 @@ export class CommonService {
     // }
     setTimeout(() => {
       const elem = document.getElementById('loading');
-      if (elem) elem.style.display = 'none';
+      if (elem) {
+        elem.style.display = 'none';
+      }
     }, 500);
   }
 
@@ -414,10 +426,10 @@ export class CommonService {
     const fileExtension = name ? name.split('.')[1] : null;
     // if (fileExtension !== 'doc' && fileExtension !== 'odt' && fileExtension !== 'docx') {
     // } 
-    if (fileExtension == 'doc' || fileExtension == 'odt' || fileExtension == 'docx') {
+    if (fileExtension === 'doc' || fileExtension === 'odt' || fileExtension === 'docx') {
       saveAs(url, name);
     } else {
-      let a = document.createElement("a");
+      const a = document.createElement('a');
       document.body.appendChild(a);
       a.href = url;
       a.download = '';
@@ -457,7 +469,7 @@ export class CommonService {
 
   getFormatedDate(date, format?): string {
     if (typeof date !== 'undefined') {
-      return new DatePipe('en-UK').transform(new Date(date), format || 'yyyy-MM-dd');
+      return new DatePipe('en-UK').transform(new Date(date), format || DATE_FORMAT.YEAR_DATE);
     }
   }
 
@@ -497,12 +509,9 @@ export class CommonService {
     const baseContainerHeight = baseContainer.outerHeight(true);
     const baseContainerPosition = baseContainer.position();
     const baseContainerTop = baseContainerPosition.top;
-    //const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    //const divOverlayLeft = isCard ? baseContainerPosition.left : overlayContainerLeftPadding;
     const divOverlayLeft = overlayContainerLeftPadding;
-
     let origDivOverlayHeight;
     let origDivOverlayTop;
     let divOverlayTopBottomPadding = 0;
@@ -512,7 +521,7 @@ export class CommonService {
 
     if (baseContainerHeight > divOverlayHeight) {
       origDivOverlayHeight = baseContainerHeight;
-      origDivOverlayTop = ispaging ? baseContainerTop + $('.dataTables_length').outerHeight(true) : baseContainerTop;
+      origDivOverlayTop = ispaging ? baseContainerTop + 38 : baseContainerTop;
     } else {
       origDivOverlayHeight = divOverlayHeight + (divOverlayTopBottomPadding * 2);
       const extraHeight = divOverlayHeight - baseContainerHeight;
@@ -521,20 +530,13 @@ export class CommonService {
 
     divOverlay.css({
       position: 'absolute',
-      top: origDivOverlayTop,
+      top: origDivOverlayTop + 1,
       right: '0px',
       width: baseContainerWidth,
       height: origDivOverlayHeight,
-      left: divOverlayLeft,
+      left: divOverlayLeft + 1,
       paddingTop: divOverlayTopBottomPadding,
       paddingBottom: divOverlayTopBottomPadding
-    });
-
-    const gridDivOverlay = $('#grid-divoverlay');
-
-    gridDivOverlay.css({
-      width: divOverlay.width(),
-      height: divOverlayHeight
     });
 
     divOverlay.delay(200).slideDown('fast');
@@ -619,13 +621,13 @@ export class CommonService {
 
   getFormatedDateTime(date, format?): string {
     if (typeof date !== 'undefined') {
-      return new DatePipe('en-UK').transform(new Date(date), format || 'yyyy-MM-dd HH:mm:ss');
+      return new DatePipe('en-UK').transform(new Date(date), format || DATE_FORMAT.YEAR_DATE_TIME);
     }
   }
 
   getPaymentWarnings(paymentRules: FaultModels.IFaultWorksorderRules, RepairEstimateThreshold?): Array<string> {
     RepairEstimateThreshold = RepairEstimateThreshold ? RepairEstimateThreshold : 250;
-    let paymentWarnings: string[] = [];
+    const paymentWarnings: string[] = [];
     if (paymentRules && paymentRules.hasOwnProperty('hasOtherInvoicesToBePaid')) {
       if (paymentRules.hasSufficientReserveBalance === false) {
         paymentWarnings.push(PAYMENT_WARNINGS.hasSufficientReserveBalance);
@@ -643,7 +645,7 @@ export class CommonService {
         paymentWarnings.push(PAYMENT_WARNINGS.hasTenantPaidRentOnTime);
       }
       if (paymentRules.isFaultEstimateLessThanHalfRentOrThresHoldValue === false) {
-        let thresoldText = PAYMENT_WARNINGS.isFaultEstimateLessThanHalfRentOrThresHoldValue.replace('£250', `£${RepairEstimateThreshold}`);
+        const thresoldText = PAYMENT_WARNINGS.isFaultEstimateLessThanHalfRentOrThresHoldValue.replace('£250', `£${RepairEstimateThreshold}`);
         paymentWarnings.push(thresoldText);
       }
       if (paymentRules.isTenancyGivenNoticeOrInLastMonth === true) {
@@ -655,7 +657,7 @@ export class CommonService {
 
   scrollToTopById(elementId) {
     const element = document.getElementById(elementId);
-    element.scrollIntoView({behavior: "smooth"});
+    element.scrollIntoView({ behavior: 'smooth' });
   }
 
   sanitizeHtml(html) {
@@ -680,28 +682,42 @@ export class CommonService {
     setTimeout(() => {
       const lastBtn = document.querySelector(`.${paginatorClassName} .mat-paginator-navigation-last`);
       if (lastBtn) {
-        lastBtn.innerHTML = "Last";
+        lastBtn.innerHTML = 'Last';
       }
       const firstBtn = document.querySelector(`.${paginatorClassName} .mat-paginator-navigation-first`);
       if (firstBtn) {
-        firstBtn.innerHTML = "First";
+        firstBtn.innerHTML = 'First';
       }
       const perPage = document.querySelector(`.${paginatorClassName} .mat-paginator-page-size-label`);
       if (perPage) {
-        perPage.innerHTML = "Per page";
+        perPage.innerHTML = 'Per page';
       }
     }, 100);
   }
 
   getPaymentUrl(config): string {
     let url: string;
-    let payment_method = environment.PAYMENT_METHOD;
-    let payment_config = config[payment_method];
+    const paymentMethod = environment.PAYMENT_METHOD;
+    const paymentConfig = config[paymentMethod];
     if (environment.PAYMENT_PROD) {
-      url = payment_config.PROD.URL;
+      url = paymentConfig.PROD.URL;
     } else {
-      url = payment_config.TEST.URL;
+      url = paymentConfig.TEST.URL;
     }
     return url;
   }
+
+  getPropertyLookup(params): Observable<Lookupdata> {
+    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup/property', { params, responseType: 'json' });
+  }
+
+  removeEmpty(obj:any) {
+    for (const key in obj) {
+      if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
+        delete obj[key];
+      }
+    }
+    return obj;
+  }
+
 }

@@ -1,5 +1,5 @@
 import { CommonService } from "./../../services/common.service";
-import { CERTIFICATES_CATEGORY } from "./../../constants";
+import { CERTIFICATES_CATEGORY, DATE_FORMAT, DEFAULTS } from "./../../constants";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ModalController } from "@ionic/angular";
 import { DataTableDirective } from "angular-datatables";
@@ -29,6 +29,8 @@ export class PropertyCertificateModalPage implements OnInit {
   contractDetails;
   CERTIFICATES_CATEGORY = CERTIFICATES_CATEGORY;
   certificateEmail;
+  DATE_FORMAT = DATE_FORMAT;
+  DEFAULTS = DEFAULTS;
 
   constructor(
     private modalController: ModalController,
@@ -53,8 +55,8 @@ export class PropertyCertificateModalPage implements OnInit {
     this.propertyCertificateList = this.propertyCertificate;
     this.propertyCertificateList.forEach((item) => {
       item.expired =
-        this.commonCervice.getFormatedDate(item.expireDate, "yyyy-MM-dd") >
-        this.commonCervice.getFormatedDate(new Date(), "yyyy-MM-dd")
+        this.commonCervice.getFormatedDate(item.expireDate, this.DATE_FORMAT.YEAR_DATE) >
+        this.commonCervice.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE)
           ? true
           : false;
       this.patchPropCrtList(item);

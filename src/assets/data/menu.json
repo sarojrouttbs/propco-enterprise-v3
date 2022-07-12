@@ -1,0 +1,145 @@
+{
+  "agents": [
+    {
+      "index": 1,
+      "key": "dashboard",
+      "name": "Dashboard",
+      "state": "propco.agent.entity.property.dashboard",
+      "subMenu": [],
+      "isActive": false,
+      "route": "dashboard",
+      "showSubmenu": false
+    },
+    {
+      "index": 2,
+      "name": "Marketing",
+      "key": "marketing",
+      "isActive": false,
+      "showSubmenu": false,
+      "subMenu": [
+        {
+          "index": 1,
+          "key": "property_details",
+          "name": "Property Details",
+          "state": "propco.agent.entity.property.propertydetails",
+          "isActive": false,
+          "route": "details"
+        },
+        {
+          "index": 2,
+          "key": "particulars",
+          "name": "Particulars",
+          "state": "propco.agent.entity.property.particulars",
+          "isActive": false,
+          "route": "particulars"
+        },
+        {
+          "index": 3,
+          "key": "rent",
+          "name": "Rent/Invoices",
+          "state": "propco.agent.entity.property.rent",
+          "isActive": false,
+          "route": "rent"
+        },
+        {
+          "index": 4,
+          "key": "marketing_activity",
+          "name": "Marketing Activity",
+          "state": "propco.agent.entity.property.marketingactivity",
+          "isActive": false,
+          "route": "marketing-activity"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "name": "Property Management",
+      "key": "property_management",
+      "isActive": false,
+      "showSubmenu": false,
+      "subMenu": [
+        {
+          "index": 1,
+          "key": "Offers",
+          "name": "Offers",
+          "state": "propco.agent.entity.property.offers",
+          "isActive": false,
+          "route": "offers"
+        },
+        {
+          "index": 2,
+          "key": "applications",
+          "name": "Applications",
+          "state": "propco.agent.entity.property.applications",
+          "isActive": false,
+          "route": "applications"
+        },
+        {
+          "index": 3,
+          "key": "periodic_visit",
+          "name": "Periodic Visit",
+          "state": "propco.agent.entity.property.periodicVisit",
+          "isActive": false,
+          "route": "periodic-visit"
+        },
+        {
+          "index": 4,
+          "key": "maintenance",
+          "name": "Maintenance",
+          "state": "propco.agent.entity.property.maintenance",
+          "isActive": false,
+          "route": "maintenance"
+        },
+        {
+          "index": 5,
+          "key": "safety",
+          "name": "Safety Devices/Alarms",
+          "state": "propco.agent.entity.property.safety",
+          "isActive": false,
+          "route": "safety"
+        },
+        {
+          "index": 6,
+          "key": "whitegoods",
+          "name": "Service/White Goods",
+          "state": "propco.agent.entity.property.whitegoods",
+          "isActive": false,
+          "route": "whitegoods"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Admin",
+      "key": "admin",
+      "isActive": false,
+      "showSubmenu": false,
+      "subMenu": [
+        {
+          "index": 1,
+          "key": "tenancy",
+          "name": "Tenancies",
+          "state": "propco.agent.entity.property.tenancy",
+          "isActive": false,
+          "route": "tenancy"
+        },
+        {
+          "index": 2,
+          "key": "keys",
+          "name": "Keys",
+          "state": "propco.agent.entity.property.keys",
+          "isActive": false,
+          "route": "keys"
+        },
+        {
+          "index": 3,
+          "key": "notes",
+          "name": "Notes",
+          "state": "propco.agent.entity.property.notes",
+          "isActive": false,
+          "route": "notes"
+        }
+      ]
+    }
+  ]
+}

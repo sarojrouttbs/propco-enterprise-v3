@@ -22,17 +22,29 @@ header {
         min-height: 42px;
         height: auto;
         background-color: var(--ion-color-step-1850);
-        border: 0px solid var(--ion-color-step-1850);   
+        border: 0px solid var(--ion-color-step-1850);
+        display: flex;
+        justify-content: space-between;
         .result-search-grid{
             display: flex;
             flex-direction: row;
             padding: 0;
             justify-content: flex-end;
-            margin-right: 18px;
+            margin-right: 15px;
         }
     }
 
     .menu {
        position: relative;
-     }
+    }
+
+    .swap-icon-header {
+        margin: 7px 15px;
+        img {
+            background-color: var(--ion-color-step-1700);
+            border-radius: 5px;
+            padding: 4px;
+            cursor: pointer;
+        }
+    }
 }

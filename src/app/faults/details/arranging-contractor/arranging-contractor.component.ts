@@ -8,7 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES, LL_PAYMENT_CONFIG, QUOTE_CC_STATUS_ID, REGEX, MAINT_SOURCE_TYPES, RECIPIENTS, FAULT_NOTIFICATION_STATE } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES, LL_PAYMENT_CONFIG, QUOTE_CC_STATUS_ID, REGEX, MAINT_SOURCE_TYPES, RECIPIENTS, FAULT_NOTIFICATION_STATE, DEFAULTS, DATE_FORMAT } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -112,7 +112,8 @@ export class ArrangingContractorComponent implements OnInit {
   ccAppointmentSlots;
   recipientTypes = RECIPIENTS;
   notificationState = FAULT_NOTIFICATION_STATE;
-
+  DEFAULTS = DEFAULTS;
+  DATE_FORMAT = DATE_FORMAT;
   constructor(
     private fb: FormBuilder,
     private faultsService: FaultsService,
@@ -831,7 +832,7 @@ export class ArrangingContractorComponent implements OnInit {
           resolve(true);
         }, error => {
           resolve(false);
-          this.commonService.showMessage('Something went wrong', 'Update Fault', 'error');
+          this.commonService.showMessage('Something went wrong', 'Update Repair', 'error');
         });
     });
     return promise;
@@ -1402,7 +1403,7 @@ export class ArrangingContractorComponent implements OnInit {
   private async questionActionRejectQuote() {
     const modal = await this.modalController.create({
       component: RejectionModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         faultNotificationId: this.iacNotification.faultNotificationId,
         faultMaintRejectionReasons: this.contractorMaintRejectionReasons,
@@ -1462,7 +1463,7 @@ export class ArrangingContractorComponent implements OnInit {
       this.quoteUploadModal();
     }
     else {
-      this.commonService.showConfirm(data.text, `You have selected 'No, couldn't carry out the Quote'. The fault will be escalated for manual intervention. Do you want to proceed?`, '', 'Yes', 'No').then(async res => {
+      this.commonService.showConfirm(data.text, `You have selected 'No, couldn't carry out the Quote'. The repair will be escalated for manual intervention. Do you want to proceed?`, '', 'Yes', 'No').then(async res => {
         if (res) {
           const submit = await this.submitQuoteAmout();
           if (submit) {
@@ -1477,7 +1478,7 @@ export class ArrangingContractorComponent implements OnInit {
     if (!data.value) {
       const modal = await this.modalController.create({
         component: RejectionModalPage,
-        cssClass: 'modal-container',
+        cssClass: 'modal-container fault-modal-container',
         componentProps: {
           faultNotificationId: this.iacNotification.faultNotificationId,
           faultMaintRejectionReasons: this.landlordMaintRejectionReasons,
@@ -1514,7 +1515,7 @@ export class ArrangingContractorComponent implements OnInit {
     if (data.value) {
       const modal = await this.modalController.create({
         component: PaymentReceivedModalComponent,
-        cssClass: 'modal-container',
+        cssClass: 'modal-container fault-modal-container',
         componentProps: {
           faultNotificationId: this.iacNotification.faultNotificationId,
         },
@@ -1534,7 +1535,7 @@ export class ArrangingContractorComponent implements OnInit {
       }
       const modal = await this.modalController.create({
         component: WithoutPrepaymentModalComponent,
-        cssClass: 'modal-container',
+        cssClass: 'modal-container fault-modal-container',
         componentProps: {
           faultNotificationId: this.iacNotification.faultNotificationId,
           paymentRules: rules
@@ -1554,7 +1555,7 @@ export class ArrangingContractorComponent implements OnInit {
     if (data.value) {
       this.openWOJobCompletionModal();
     } else {
-      this.commonService.showConfirm(data.text, `You have selected 'No, Couldn't Complete the Job'. The fault will be escalated for manual intervention. Do you want to proceed?`, '', 'YES', 'NO').then(async res => {
+      this.commonService.showConfirm(data.text, `You have selected 'No, Couldn't Complete the Job'. The repair will be escalated for manual intervention. Do you want to proceed?`, '', 'YES', 'NO').then(async res => {
         if (res) {
           const submit = await this.submitJobCompletion();
           if (submit) {
@@ -1571,7 +1572,7 @@ export class ArrangingContractorComponent implements OnInit {
     }
     const modal = await this.modalController.create({
       component: WorksorderModalPage,
-      cssClass: 'modal-container upload-container',
+      cssClass: 'modal-container upload-container fault-modal-container',
       componentProps: {
         faultNotificationId: this.iacNotification.faultNotificationId,
         faultId: this.faultDetails.faultId,
@@ -2252,7 +2253,7 @@ export class ArrangingContractorComponent implements OnInit {
   async notificationModal() {
     const modal = await this.modalController.create({
       component: PendingNotificationModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: {
         notificationHistoryId: this.pendingNotification ? this.pendingNotification.notificationHistoryId : '',
         notificationSubject: this.pendingNotification ? this.pendingNotification.subject : '',
@@ -2293,8 +2294,8 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.iacNotification &&
       (this.iacNotification.responseReceived != null) && 
       this.iacNotification.templateCode === 'CDT-C-E (WO)' && this.faultDetails.contractorWoPropertyVisitAt) {
-      const woAgreedDateTime = this.commonService.getFormatedDate(this.faultDetails.contractorWoPropertyVisitAt, 'yyyy-MM-dd');
-      const today = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
+      const woAgreedDateTime = this.commonService.getFormatedDate(this.faultDetails.contractorWoPropertyVisitAt, this.DATE_FORMAT.YEAR_DATE);
+      const today = this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE);
       if (today >= woAgreedDateTime) {
         enable = true;
       }
@@ -2322,7 +2323,7 @@ export class ArrangingContractorComponent implements OnInit {
   async quoteUploadModal(preUpload?) {
     const modal = await this.modalController.create({
       component: QuoteModalPage,
-      cssClass: 'modal-container upload-container',
+      cssClass: 'modal-container upload-container fault-modal-container',
       componentProps: {
         faultNotificationId: this.iacNotification.faultNotificationId,
         faultId: this.faultDetails.faultId,
@@ -2366,7 +2367,7 @@ export class ArrangingContractorComponent implements OnInit {
   async openAppointmentModal(modalData) {
     const modal = await this.modalController.create({
       component: AppointmentModalPage,
-      cssClass: 'modal-container',
+      cssClass: 'modal-container fault-modal-container',
       componentProps: modalData,
       backdropDismiss: false
     });
@@ -2387,7 +2388,7 @@ export class ArrangingContractorComponent implements OnInit {
   async closeFault() {
     const modal = await this.modalController.create({
       component: CloseFaultModalPage,
-      cssClass: 'modal-container close-fault-modal',
+      cssClass: 'modal-container close-fault-modal fault-modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId,
         maitenanceId: this.isMaintenanceDetails ? this.faultMaintenanceDetails.maintenanceId : null
@@ -2398,7 +2399,7 @@ export class ArrangingContractorComponent implements OnInit {
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
         this._btnHandler('refresh');
-        this.commonService.showMessage('Fault has been closed successfully.', 'Close a Fault', 'success');
+        this.commonService.showMessage('Repair has been closed successfully.', 'Close a Repair', 'success');
         return;
       }
     });
@@ -2419,7 +2420,7 @@ export class ArrangingContractorComponent implements OnInit {
   private async paymentRequestModal(data) {
     const modal = await this.modalController.create({
       component: PaymentRequestModalPage,
-      cssClass: 'modal-container payment-request-modal',
+      cssClass: 'modal-container payment-request-modal fault-modal-container',
       componentProps: data,
       backdropDismiss: false
     });

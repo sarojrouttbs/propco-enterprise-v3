@@ -23,6 +23,19 @@
 }
 
 @font-face {
+  font-family: "Inter-Regular";
+  font-style: normal;
+  src: local("Inter Regular"),local("Inter-Regular")
+    url("../../assets/fonts/inter/inter-regular.ttf") format("ttf"),
+}
+@font-face {
+  font-family: "Inter-Medium";
+  font-style: normal;
+  src: local("Inter Medium"),local("Inter-Medium")
+    url("../../assets/fonts/inter/inter-medium.ttf") format("ttf"),
+}
+
+@font-face {
   font-family: "PropCoIcons";
   src: url("../../assets/fonts/propco-font.woff") format("woff"),
     url("../../assets/fonts/propco-font.svg#PropCoIconsRegular") format("svg");
@@ -530,4 +543,8 @@
 }
 .propcoicon.propcoicon-add:before {
   content: "";
+}
+
+.propcoicon-maintenance:before {
+  content: "";
 }

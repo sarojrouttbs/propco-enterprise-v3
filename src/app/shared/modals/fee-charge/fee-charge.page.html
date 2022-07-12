@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Select Fee/Charge</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<ion-grid id="fee-charge">
+  <ion-row>
+    <ion-col class="table-block">
+      <table>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Amount</th>
+          <th>Paid By</th>
+        </tr>
+        <tr>
+          <td colspan="4" class="ion-text-center">{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</td>
+        </tr>
+      </table>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="100" class="ion-text-end">
+        <ion-button (click)="dismiss()" color="danger">Cancel</ion-button>
+        <ion-button color="success">Select </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

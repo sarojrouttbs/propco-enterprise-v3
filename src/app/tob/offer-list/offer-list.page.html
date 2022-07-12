@@ -2,10 +2,10 @@
   <ion-title></ion-title>
 </ion-header>
 
-<ion-content>
+<ion-content id="tob-offer-list">
   <ng-container>
     <div class="property-details">
-      <ion-grid>
+      <ion-grid class="ion-padding">
         <ion-row class="address">
           <ion-col class="ion-no-padding" size="80" *ngIf="isPropertyDetailsAvailable">
             <h1 *ngIf="propertyDetails?.publishedAddress" class="ion-no-margin">{{ propertyDetails?.publishedAddress }}
@@ -48,7 +48,7 @@
               <mat-label>Date From
               </mat-label>
               <input matInput [matDatepicker]="picker1" [formControl]="fromDate" [max]="maxDate">
-              <mat-datepicker-toggle matPrefix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
           </ion-col>
@@ -58,18 +58,18 @@
               <mat-label>Date To
               </mat-label>
               <input matInput [matDatepicker]="picker2" [formControl]="toDate" [min]="fromDate" [max]="maxDate">
-              <mat-datepicker-toggle matPrefix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
           </ion-col>
 
-          <ion-col class="ion-text-end no-padding-right" size-xl="15" size-sm="25">
+          <ion-col class="ion-text-end no-padding-right" size-xl="20" size-sm="25">
             <ion-button class="btn-filter" color="success" [disabled]="fromDate.value && toDate.value ? false : true"
               (click)="filterByDate()" expand="block">Filter</ion-button>
             <ion-button class="btn-filter" color="danger" (click)="resetFilters()" expand="block">Reset</ion-button>
           </ion-col>
 
-          <ion-col class="ion-no-padding ion-text-end" size-xl="20">
+          <ion-col class="ion-no-padding ion-text-end" size-xl="15">
             <ion-button (click)="hideRecords()"> {{ isHideRejected ? "Show Rejected Offers" : "Hide Rejected Offers"}}
             </ion-button>
           </ion-col>
@@ -81,7 +81,7 @@
   <ng-container>
     <!-- skeleton -->
     <div *ngIf="!isOffersListAvailable">
-      <ion-card *ngFor="let number of [0,1,2,3,4]">
+      <ion-card class="ion-padding no-padding-top-bottom"  *ngFor="let number of [0,1,2,3,4]">
         <ion-card-content>
           <ion-grid>
             <ion-row class="main-row">
@@ -110,19 +110,19 @@
                       </ion-text>
                     </ion-col>
                   </ion-row>
-                  <ion-row>
+                  <ion-row style="margin-top: 20px;">
                     <ion-col class="no-padding-top" size="75">
-                      <ion-grid class="no-padding-left">
+                      <ion-grid class="no-padding">
                         <ion-row>
-                          <ion-col class="no-padding-left" size="33">
+                          <ion-col class="no-padding-left no-padding-top no-padding-bottom" size="33">
                             <ion-skeleton-text animated style="margin-bottom: 10px;"></ion-skeleton-text>
                             <ion-skeleton-text animated style="margin-bottom: 10px;"></ion-skeleton-text>
                           </ion-col>
-                          <ion-col class="no-padding-left" size="33">
+                          <ion-col class="no-padding-left no-padding-top no-padding-bottom" size="33">
                             <ion-skeleton-text animated style="margin-bottom: 10px;"></ion-skeleton-text>
                             <ion-skeleton-text animated style="margin-bottom: 10px;"></ion-skeleton-text>
                           </ion-col>
-                          <ion-col class="no-padding-left" size="33">
+                          <ion-col class="no-padding-left no-padding-top no-padding-bottom" size="33">
                             <ion-skeleton-text animated style="margin-bottom: 10px;"></ion-skeleton-text>
                             <ion-skeleton-text animated style="margin-bottom: 10px;"></ion-skeleton-text>
                           </ion-col>
@@ -157,13 +157,13 @@
     <!-- skeleton -->
 
     <div style="position: relative;" class="overlay-container" *ngIf="isOffersListAvailable">
-      <ion-card *ngFor="let item of obsOfferList | async; let i = index;" (click)="onOfferClick(item)">
+      <ion-card class="ion-padding no-padding-top-bottom" *ngFor="let item of obsOfferList | async; let i = index;" (click)="onOfferClick(item)">
         <ion-card-content>
           <ion-grid>
             <ion-row class="main-row">
-              <ion-col class="" size-xl="15" size="20">
+              <ion-col size-xl="15" size="20">
                 <div (click)="viewDetails(item.offerId)">
-                  <img [src]=" item.numberOfCoApplicants > 0 ? 'assets/images/tob/multi-user.svg' : 'assets/images/tob/single-user.svg' ">
+                  <img class="applicant-img" [src]=" item.numberOfCoApplicants > 0 ? 'assets/images/tob/multi-user.svg' : 'assets/images/tob/single-user.svg' ">
                 </div>
               </ion-col>
               <ion-col class="" size-xl="85" size="80" style="position: static;">
@@ -198,23 +198,23 @@
                       <ion-text>{{ propertyDetails?.advertisementRent || 0 | currency : "GBP" }} {{ (propertyDetails?.advertisementRentFrequency | lookup: rentFrequencyTypes) || '' }}
                       </ion-text><br />
                       <ion-text class="offer-status" [color]="getStatusColor(item?.status)">
-                        {{ (item?.status | lookup: offerStatuses) || '-' }}
+                        {{ (item?.status | lookup: offerStatuses) || DEFAULTS.NOT_AVAILABLE }}
                       </ion-text>
                     </ion-col>
                   </ion-row>
                   <ion-row class="offer-details-row">
                     <ion-col class="no-padding-top col1" size="75">
-                      <ion-grid class="no-padding-left">
+                      <ion-grid class="no-padding">
                         <ion-row>
-                          <ion-col class="no-padding-left col1" size="33">
+                          <ion-col class="no-padding-left no-padding-top no-padding-bottom col1" size="33">
                             <ion-text color="medium">Offer Date and Time</ion-text><br />
-                            <ion-text>{{ item?.offerAt | date: 'dd/MM/yyyy HH:mm' }}</ion-text><br />
+                            <ion-text>{{ (item?.offerAt | date: DATE_FORMAT.DATE_TIME)  || DEFAULTS.NOT_AVAILABLE }}</ion-text><br />
                           </ion-col>
-                          <ion-col class="no-padding-left col2" size="33">
+                          <ion-col class="no-padding-left no-padding-top no-padding-bottom col2" size="33">
                             <ion-text color="medium">Applicant Name</ion-text><br />
                             <ion-text>{{ item?.forename }} {{ item?.surname }}</ion-text><br />
                           </ion-col>
-                          <ion-col class="no-padding-left col3" size="33">
+                          <ion-col class="no-padding-left no-padding-top no-padding-bottom col3" size="33">
                             <ion-text color="medium">No. of Co-applicant(s)</ion-text><br />
                             <ion-text>{{ item?.numberOfCoApplicants ? item?.numberOfCoApplicants : 0 }}</ion-text><br />
                           </ion-col>
@@ -237,7 +237,7 @@
                     </ion-col>
                     <ion-col class="no-padding-top col2 ion-text-end action-icon" size="25">
                       <div>
-                        <i (click)="showMenu($event, 'divOverlay', item, 'offer-details-row', false, true)"
+                        <i (click)="showMenu($event, 'offer-overlay', item, 'offer-details-row', false, true)"
                           class="propcoicon propcoicon-actions-on action-btn"></i>
                       </div>
                     </ion-col>
@@ -255,13 +255,13 @@
           </div>
         </ion-card-content>
       </ion-card>
-      <div id="divOverlay">
+      <div id="offer-overlay" class="overlay-class">
         <ion-button (click)="addNote()">Add Note</ion-button>
         <ion-button (click)="viewDetails()">View Details</ion-button>
-        <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+        <i (click)="hideMenu($event,'offer-overlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>
     </div>
-    <div class="tob-pagination">
+    <div class="tob-pagination ion-padding">
       <mat-paginator [hidden]="!filteredOfferList.data.length" class="paginator" #paginator
         [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
         [length]="filteredOfferList.data.length" [pageSizeOptions]="paginatorConfig.pageSizeOptions"
@@ -271,7 +271,7 @@
   </ng-container>
 
   <ng-container *ngIf="filteredOfferList.data.length > 0">
-    <ion-grid>
+    <ion-grid class="ion-padding">
       <ion-row class="offer-notes">
         <ion-col size="100">
           <h4>Offer Notes:</h4>
@@ -285,32 +285,32 @@
                   <th style="width:10%">Complaint</th>
                   <th style="width:20%">Category</th>
                   <th style="width:10%">User</th>
-                  <th style="width:20%">Notes</th>
-                  <th style="width:10%"></th>
+                  <th style="width:25%">Notes</th>
+                  <th style="width:5%"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let notes of obsOfferNotesList | async" class="table-row">
-                  <td>{{ notes.postedAt | date: 'dd/MM/yyyy' || '-' }}</td>
-                  <td>{{ notes.postedAt | date: 'HH:mm:ss' || '-' }}</td>
-                  <td>{{ (notes.type | lookup: notesTypes) || '-' }}</td>
-                  <td>{{ (notes.complaint | lookup: notesComplaints) || '-' }}</td>
-                  <td>{{ (notes.category | lookup: notesCategories) || '-' }}</td>
-                  <td>{{ notes.userName || '-' }}</td>
-                  <td>{{ notes.notes || '-' }}</td>
+                  <td>{{ (notes.postedAt | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{ (notes.postedAt | date: DATE_FORMAT.TIME_SECONDS) || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{ (notes.type | lookup: notesTypes) || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{ (notes.complaint | lookup: notesComplaints) || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{ (notes.category | lookup: notesCategories) || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{ notes.userName || DEFAULTS.NOT_AVAILABLE }}</td>
+                  <td>{{ notes.notes || DEFAULTS.NOT_AVAILABLE }}</td>
                   <td>
-                    <div>
-                      <i (click)="showMenu($event, 'divOverlayChild', notes, 'table-row', false, false)"
+                    <div class="action-icon-notes">
+                      <i (click)="showMenu($event, 'offer-notes-overlay', notes, 'table-row', false, false)"
                         class="propcoicon propcoicon-actions-on action-btn"></i>
                     </div>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <div id="divOverlayChild">
+            <div id="offer-notes-overlay" class="overlay-class">
               <ion-button (click)="editNote()"> Edit </ion-button>
               <ion-button color="danger" (click)="removeNote()"> Remove </ion-button>
-              <i (click)="hideMenu($event,'divOverlayChild')" class="propcoicon propcoicon-actions-on"></i>
+              <i (click)="hideMenu($event,'offer-notes-overlay')" class="propcoicon propcoicon-actions-on"></i>
             </div>
 
             <div *ngIf="filteredNotesList && !filteredNotesList.data.length">
