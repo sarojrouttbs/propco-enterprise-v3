@@ -104,6 +104,10 @@ export class TenantListModalPage implements OnInit {
       this.referencingService.getPropertyTenantList(this.propertyId, params).subscribe(
         res => {
           this.laTenantList = res ? res.data : [];
+          const caseIdTenant = this.laTenantList.find(obj => obj.caseId != null);
+          if(caseIdTenant){
+            this.laTenantList.map(obj => obj.caseId = caseIdTenant.caseId);
+          }
           this.laTenantList.forEach((item) => {
             item.isRowChecked = false;
           });
