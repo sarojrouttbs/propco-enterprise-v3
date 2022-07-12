@@ -44,7 +44,7 @@ export class SelectSearchAllDirective implements AfterViewInit {
         const isAllCheckedElsLength = checkboxes.filter((c: any) => c.ariaChecked === 'true')?.length ?? 0;
         const isAllChecked = isAllCheckedElsLength == checkboxes?.length;       
         selectAllPlusSearchEl.checked = false;
-        if (isAllChecked || isAllCheckedElsLength == 0) {
+        if (isAllChecked || isAllCheckedElsLength === 0) {
           selectAllPlusSearchEl.indeterminate = false;
           selectAllPlusSearchEl.checked = true;
         } else {
