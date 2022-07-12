@@ -1,4 +1,4 @@
-import { FAULT_STATUSES } from './../../constants';
+import { DEFAULTS, FAULT_STATUSES } from './../../constants';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
@@ -22,6 +22,7 @@ export class ContractorSelectionComponent implements OnInit {
   stageAction;
   nominalCode;
   unSavedData = false;
+  DEFAULTS = DEFAULTS;
 
   constructor(private formBuilder: FormBuilder,
     private modalController: ModalController,

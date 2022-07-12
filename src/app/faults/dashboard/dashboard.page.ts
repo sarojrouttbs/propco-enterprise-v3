@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { ERROR_MESSAGE, FAULT_STATUSES, NOTES_TYPE, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES, MAINT_SOURCE_TYPES, DEFAULT_MESSAGES } from './../../shared/constants';
+import { ERROR_MESSAGE, FAULT_STATUSES, NOTES_TYPE, PROPCO, REPORTED_BY_TYPES, SYSTEM_CONFIG, URGENCY_TYPES, MAINT_SOURCE_TYPES, DEFAULT_MESSAGES, DATE_FORMAT, DEFAULTS } from './../../shared/constants';
 import { CommonService } from './../../shared/services/common.service';
 import { FaultsService } from './../faults.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { NotesModalPage } from '../../shared/modals/notes-modal/notes-modal.page';
 import { EscalateModalPage } from '../../shared/modals/escalate-modal/escalate-modal.page';
 import { ModalController } from '@ionic/angular';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { delay } from 'rxjs/operators';
@@ -95,7 +95,9 @@ export class DashboardPage implements OnInit {
   popoverOptions: any = {
     cssClass: 'fault-modal-container'
   };
-
+  DATE_FORMAT = DATE_FORMAT;
+  DEFAULTS = DEFAULTS;
+  
   constructor(
     private commonService: CommonService,
     private modalController: ModalController,
@@ -153,7 +155,7 @@ export class DashboardPage implements OnInit {
           this.faultNotes = [];
           this.rerenderNotes();
         })
-        this.hideMenu('', 'divOverlay');
+        this.hideMenu('', 'dashboard-overlay');
       },
     };
     const promise = new Promise(async (resolve, reject) => {
@@ -220,7 +222,7 @@ export class DashboardPage implements OnInit {
       this.bucketCount();
     }
     this.loadTable = true;
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'dashboard-overlay');
     this.commonService.removeItem('contractorId');
   }
 
@@ -278,6 +280,7 @@ export class DashboardPage implements OnInit {
   }
 
   onClickRow(data, index?) {
+    this.hideMenu('', 'dashboard-overlay');
     this.selectedData = data;
     this.getFaultNotes(this.selectedData.faultId);
     this.faultList.forEach((e, i) => {
@@ -345,7 +348,7 @@ export class DashboardPage implements OnInit {
         this.commonService.showAlert('Escalate Repair', 'Repair has been escalated to the property manager.');
         this.rerenderFaults(false);
         this.getFaultNotes(this.selectedData.faultId);
-        this.hideMenu('', 'divOverlay');
+        this.hideMenu('', 'dashboard-overlay');
         this.bucketCount();
       }
     });
@@ -358,7 +361,7 @@ export class DashboardPage implements OnInit {
         this.faultsService.deEscalateFault(this.selectedData.faultId, {}).subscribe(res => {
           this.commonService.showAlert('De-Escalate Repair', 'Repair has been de-escalated to the property manager.');
           this.rerenderFaults(false);
-          this.hideMenu('', 'divOverlay');
+          this.hideMenu('', 'dashboard-overlay');
           this.bucketCount();
         }, error => {
         });
@@ -737,7 +740,7 @@ export class DashboardPage implements OnInit {
 
     }
     if (this.filterForm.value.snoozeUntil) {
-      let date = this.datepipe.transform(this.filterForm.value.snoozeUntil, 'yyyy-MM-dd');
+      let date = this.datepipe.transform(this.filterForm.value.snoozeUntil, this.DATE_FORMAT.YEAR_DATE);
       this.faultParams = this.faultParams.set('snoozeUntil', date);
     }
     this.rerenderFaults();
@@ -833,11 +836,11 @@ export class DashboardPage implements OnInit {
 
   onDateChange() {
     if (this.filterForm.get('fromDate').value) {
-      this.fcfd = this.filterForm.get('fromDate').value ? this.datepipe.transform(this.filterForm.get('fromDate').value, 'yyyy-MM-dd') : '';
+      this.fcfd = this.filterForm.get('fromDate').value ? this.datepipe.transform(this.filterForm.get('fromDate').value, this.DATE_FORMAT.YEAR_DATE) : '';
     }
 
     if (this.filterForm.get('toDate').value) {
-      this.fctd = this.filterForm.get('toDate').value ? this.datepipe.transform(this.filterForm.get('toDate').value, 'yyyy-MM-dd') : '';
+      this.fctd = this.filterForm.get('toDate').value ? this.datepipe.transform(this.filterForm.get('toDate').value, this.DATE_FORMAT.YEAR_DATE) : '';
     }
 
     this.filterList();
@@ -924,7 +927,7 @@ export class DashboardPage implements OnInit {
       let requestObj: any = {};
       requestObj.childFaults = childFaults.map(x => x.faultId);
       this.faultsService.mergeFaults(requestObj, data.faultId).subscribe(response => {
-        this.hideMenu('', 'divOverlay');
+        this.hideMenu('', 'dashboard-overlay');
         this.selectedFaultList = [];
         this.filterList();
       });
@@ -1143,9 +1146,9 @@ export class DashboardPage implements OnInit {
 
   setSnoozeMinMaxDate() {
     const currentDate = new Date();
-    this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 1), 'yyyy-MM-dd');
-    this.futureDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 29), 'yyyy-MM-dd');
-    this.currentDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
+    this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 1), this.DATE_FORMAT.YEAR_DATE);
+    this.futureDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() + 29), this.DATE_FORMAT.YEAR_DATE);
+    this.currentDate = this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE);
   }
 }
 

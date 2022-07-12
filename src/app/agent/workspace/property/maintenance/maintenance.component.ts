@@ -4,7 +4,7 @@ import { FormControl } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS, DEFAULTS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -30,6 +30,7 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
   notesCategories: any;
   expenditureLimit = new FormControl('');
   propertyDetails: any;
+  DATE_FORMAT = DATE_FORMAT;
   
   constructor(private commonService: CommonService, private agentService: AgentService) { }
 
@@ -79,7 +80,7 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
             data: []
           });
         })
-        this.hideMenu('', 'divOverlay');
+        this.hideMenu('', 'maintenance-overlay');
       },
     };
   }
@@ -96,7 +97,7 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
   }
 
   onClickRow(data: any) {
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'maintenance-overlay');
     this.selectedData = data;
     this.getMaintenanceNotes(this.selectedData.maintenanceId);
     this.maintenanceList.forEach((e, i) => {

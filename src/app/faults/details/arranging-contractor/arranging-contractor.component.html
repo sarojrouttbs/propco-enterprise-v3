@@ -1,7 +1,7 @@
   <ion-grid>
     <ion-row *ngIf="faultDetails?.isClosed">
       <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
-        <app-close-fault  [notificationData]="iacNotification" [faultDetails]="faultDetails" [action]="getLookupValue(iacNotification?.faultStageAction, iacStageActions) ? getLookupValue(iacNotification?.faultStageAction, iacStageActions) : 'Arranging Contractor'"></app-close-fault>
+        <app-close-fault  [notificationData]="iacNotification" [faultDetails]="faultDetails" [action]="(iacNotification?.faultStageAction | lookup: iacStageActions) ? (iacNotification?.faultStageAction | lookup: iacStageActions) : 'Arranging Contractor'"></app-close-fault>
       </ion-col>
     </ion-row>
    
@@ -11,7 +11,7 @@
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
-              <b>{{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm'
+              <b>{{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME
                 }}</b>
             </div>
             <h2 class="banner-heading">
@@ -20,7 +20,7 @@
             </h2>
             <h6 class="banner-title">Here’s the action you chose:</h6>
             <ion-button color="success" class="icon-button">
-              {{getLookupValue(iacNotification?.faultStageAction, iacStageActions)}}
+              {{(iacNotification?.faultStageAction | lookup: iacStageActions)}}
               <ion-icon name="checkmark-circle-outline"></ion-icon>
             </ion-button>
             <ng-container *ngIf="iacNotification && iacNotification?.responseReceived">
@@ -29,7 +29,7 @@
                 <span *ngIf="iacNotification?.recipientType === 8">{{recipientTypes.LANDLORD}}</span>
                 <span *ngIf="iacNotification?.recipientType === 11">{{recipientTypes.CONTRACTOR}}</span>
                 <span *ngIf="iacNotification?.recipientType === 1">{{recipientTypes.TENANT}}</span>
-                {{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: 'dd/MM/yyyy HH:mm' }}
+                {{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME }}
               </h6>
             </ng-container>
 
@@ -49,12 +49,12 @@
               && iacNotification.allowedNumberOfChases === iacNotification.numberOfChasesDone 
               && !faultDetails?.isEscalated 
               && iacNotification?.chaseTemplateCode !='LNP-L-E'">Escalation due:
-                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
+                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: DATE_FORMAT.DATE_TIME) : ''}}
               </h6>
               <h6 class="banner-title" *ngIf="iacNotification?.nextChaseDueAt 
               && iacNotification.allowedNumberOfChases != iacNotification.numberOfChasesDone 
               && iacNotification?.chaseTemplateCode !='LNP-L-E'"> {{ iacNotification.chase === iacNotification.allowedNumberOfChases ? 'Last chase due('+iacNotification.chase+')' : 'Next chase due('+iacNotification.chase+')' }}:
-                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: 'dd MMM yyyy - HH:mm') : ''}}
+                {{iacNotification ? (iacNotification?.nextChaseDueAt | date: DATE_FORMAT.DATE_TIME) : ''}}
               </h6>
 
             </ng-container>
@@ -86,8 +86,8 @@
               <h4 class="ion-text-center">Next Step:</h4> 
               <h6 *ngIf="quoteArray?.length === 0">
                 <ion-text color="danger">Please note: </ion-text>
-                <span *ngIf="!filteredCCDetails?.contractorPropertyVisitSlot || filteredCCDetails?.contractorPropertyVisitSlot == null">The appointment is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}</span>
-                <span *ngIf="filteredCCDetails?.contractorPropertyVisitSlot">The appointment is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}</span>
+                <span *ngIf="!filteredCCDetails?.contractorPropertyVisitSlot || filteredCCDetails?.contractorPropertyVisitSlot == null">The appointment is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.DATE}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.TIME}}</span>
+                <span *ngIf="filteredCCDetails?.contractorPropertyVisitSlot">The appointment is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.DATE}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}</span>
               </h6>
               <h6 *ngIf="quoteArray?.length > 0">
                 <span>Thank you for carrying out this quote. This is now with the Landlord for review. If we require you to
@@ -101,8 +101,8 @@
               <h4 class="ion-text-center">Next Step:</h4> 
               <h6>
                 <ion-text color="danger">Please note: </ion-text>
-                <span *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">The appointment is due on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} at {{ faultDetails?.contractorWoPropertyVisitAt | date: 'HH:mm' }}</span>
-                <span *ngIf="faultDetails?.contractorWoPropertyVisitSlot">The appointment is due on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }}</span>
+                <span *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">The appointment is due on {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.DATE }} at {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.TIME }}</span>
+                <span *ngIf="faultDetails?.contractorWoPropertyVisitSlot">The appointment is due on {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.DATE }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }}</span>
               </h6>
               <div class="border-bottom"></div>
             </div>
@@ -130,13 +130,13 @@
                 <h6>  
                   <ion-text color="danger">Please note: </ion-text>
                   <span *ngIf="!filteredCCDetails?.contractorPropertyVisitSlot || filteredCCDetails?.contractorPropertyVisitSlot == null">
-                    <span *ngIf="currentDate<=filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}.</span>
-                    <span *ngIf="currentDate>filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote was on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: 'HH:mm'}}. </span>
+                    <span *ngIf="currentDate<=filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.DATE}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.TIME}}.</span>
+                    <span *ngIf="currentDate>filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote was on {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.DATE}} at {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.TIME}}. </span>
                   </span>
 
                   <span *ngIf="filteredCCDetails?.contractorPropertyVisitSlot">
-                    <span *ngIf="currentDate<=filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}.</span>
-                    <span *ngIf="currentDate>filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote was on {{filteredCCDetails?.contractorPropertyVisitAt | date: 'dd/MM/yyyy'}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}. </span>
+                    <span *ngIf="currentDate<=filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote is due on {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.DATE}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}.</span>
+                    <span *ngIf="currentDate>filteredCCDetails?.contractorPropertyVisitAt">The appointment for carrying out the Quote was on {{filteredCCDetails?.contractorPropertyVisitAt | date: DATE_FORMAT.DATE}} {{ filteredCCDetails?.contractorPropertyVisitSlotLabel }}. </span>
                   </span>
 
                   <span>
@@ -150,8 +150,8 @@
                 <h4 class="ion-text-center">Next Step:</h4>
                 <h6>  
                   <ion-text color="danger">Please note: </ion-text>
-                  <span *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">The appointment for carrying out the work was on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} at {{ faultDetails?.contractorWoPropertyVisitAt | date: 'HH:mm' }}.</span>
-                  <span *ngIf="faultDetails?.contractorWoPropertyVisitSlot">The appointment for carrying out the work was on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }}.</span>
+                  <span *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">The appointment for carrying out the work was on {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.DATE }} at {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.TIME }}.</span>
+                  <span *ngIf="faultDetails?.contractorWoPropertyVisitSlot">The appointment for carrying out the work was on {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.DATE }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }}.</span>
                   
                   <span>
                     The next step is for the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} to confirm the Completion of Job.<br>Repair will be <i>escalated</i> automatically if the {{iacNotification?.recipientType == 1?'Tenant':(iacNotification?.recipientType == 11?'Contractor':'Landlord')}} doesn't respond within
@@ -172,8 +172,8 @@
             </div>
             
             <h6 *ngIf="enableMarkCompletedBtn()" class="ion-text-center">
-              <ion-text *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">Contractor to visit property on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy HH:mm' }}</ion-text>
-              <ion-text *ngIf="faultDetails?.contractorWoPropertyVisitSlot">Contractor to visit property on {{ faultDetails?.contractorWoPropertyVisitAt | date: 'dd/MM/yyyy' }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }} </ion-text>
+              <ion-text *ngIf="!faultDetails?.contractorWoPropertyVisitSlot || faultDetails?.contractorWoPropertyVisitSlot == null">Contractor to visit property on {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.DATE_TIME }}</ion-text>
+              <ion-text *ngIf="faultDetails?.contractorWoPropertyVisitSlot">Contractor to visit property on {{ faultDetails?.contractorWoPropertyVisitAt | date: DATE_FORMAT.DATE }} {{ faultDetails?.contractorWoPropertyVisitSlotLabel }} </ion-text>
               <ion-grid>
                 <ion-row class="ion-justify-content-center"><ion-button color="success" fill="outline" class="action-btn option" (click)="openWOJobCompletionModal()">Mark the Job Completed</ion-button></ion-row>
               </ion-grid>
@@ -528,12 +528,21 @@
       </ion-col>
   
       <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Required By<ion-text class="mandatory">*</ion-text>
-          </ion-label>
-          <ion-datetime formControlName="requiredDate" displayFormat="DD/MM/YYYY" interface="popover"
-            class="request-start-date">
-          </ion-datetime>
+        <ion-item id="requiredDate">
+          <ion-label position="floating">Required By</ion-label>
+          <ion-input value="{{ raiseQuoteForm.controls.requiredDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="requiredDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                showDefaultButtons="true"
+                presentation="date"
+                formControlName="requiredDate"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
         <app-validation-message [control]="raiseQuoteForm.controls.requiredDate"></app-validation-message>
       </ion-col>
@@ -687,11 +696,21 @@
         </ion-item>
       </ion-col>
       <ion-col size="50">
-        <ion-item>
-          <ion-label position="floating">Date </ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-            formControlName="postdate">
-          </ion-datetime>
+        <ion-item id="postdate">
+          <ion-label position="floating">Date</ion-label>
+          <ion-input value="{{ workOrderForm.controls.postdate.value | date: DATE_FORMAT.DATE }}" disabled="true"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="postdate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                showDefaultButtons="true"
+                presentation="date"
+                formControlName="postdate"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
       </ion-col>
       <ion-col size="50">
@@ -760,19 +779,41 @@
         </ion-item>
       </ion-col>
       <ion-col size="33.33">
-        <ion-item>
+        <ion-item id="requestStartDate">
           <ion-label position="floating">Required Start Date</ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-            formControlName="requestStartDate" [min]="currentDate">
-          </ion-datetime>
+          <ion-input value="{{ workOrderForm.controls.requestStartDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="requestStartDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                showDefaultButtons="true"
+                presentation="date"
+                formControlName="requestStartDate"
+                [min]="currentDate"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
       </ion-col>
       <ion-col size="33.33">
-        <ion-item>
-          <ion-label position="floating">Required Completion Date </ion-label>
-          <ion-datetime dateFormat="MM/DD/YYYY" displayFormat="DD MMM YYYY" class="datetime-padding"
-            formControlName="requiredDate" [min]="currentDate">
-          </ion-datetime>
+        <ion-item id="requiredDate">
+          <ion-label position="floating">Required Completion Date</ion-label>
+          <ion-input value="{{ workOrderForm.controls.requiredDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
+          ></ion-icon>
+          <ion-popover trigger="requiredDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                showDefaultButtons="true"
+                presentation="date"
+                formControlName="requiredDate"
+                [min]="currentDate"
+              >
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
       </ion-col>
       <ion-col size="33.33">

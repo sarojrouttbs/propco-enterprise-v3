@@ -33,13 +33,13 @@ export class CreateKeySetPage implements OnInit {
 
   private initForm() {
     this.createKeysetForm = this.formBuilder.group({
-      name: '',
-      keyId: '',
-      type: '',
-      postDate: [ new Date(), Validators.required],
+      name: ['', Validators.maxLength(50)],
+      keyId: ['', Validators.maxLength(50)],
+      type: ['', Validators.maxLength(40)],
+      postDate: [new Date(), Validators.required],
       userId: [this.loggedInUserId, Validators.required],
       status: [0, Validators.required],
-      note: ''
+      note: ['', Validators.maxLength(255)],
     });
   }
 

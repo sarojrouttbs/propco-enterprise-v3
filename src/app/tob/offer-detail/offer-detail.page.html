@@ -23,10 +23,10 @@
             </thead>
             <tbody>
               <tr *ngIf="applicantDetail">
-                <td>{{applicantDetail?.reference || '-'}}</td>
-                <td>{{applicantDetail?.fullName || '-'}}</td>
-                <td>{{applicantDetail?.mobile || '-'}}</td>
-                <td>{{applicantDetail?.email || '-'}}</td>
+                <td>{{applicantDetail?.reference || DEFAULTS.NOT_AVAILABLE}}</td>
+                <td>{{applicantDetail?.fullName || DEFAULTS.NOT_AVAILABLE}}</td>
+                <td>{{applicantDetail?.mobile || DEFAULTS.NOT_AVAILABLE}}</td>
+                <td>{{applicantDetail?.email || DEFAULTS.NOT_AVAILABLE}}</td>
                 <td>
                   <ion-checkbox color="medium" checked disabled></ion-checkbox>
                 </td>
@@ -482,7 +482,7 @@
             <mat-label>Confirmed On <ion-text class="mandatory">*</ion-text>
             </mat-label>
             <input matInput [matDatepicker]="applicantConfirmedDate" formControlName="applicantConfirmedDate" readonly>
-            <mat-datepicker-toggle matPrefix [for]="applicantConfirmedDate"></mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix [for]="applicantConfirmedDate"></mat-datepicker-toggle>
             <mat-datepicker #applicantConfirmedDate></mat-datepicker>
           </mat-form-field>
           <div style="margin-top: -20px !important;" class="ion-text-left">
@@ -503,7 +503,7 @@
             <mat-label>Confirmed On <ion-text class="mandatory">*</ion-text>
             </mat-label>
             <input matInput [matDatepicker]="landlordConfirmedDate" formControlName="landlordConfirmedDate" readonly>
-            <mat-datepicker-toggle matPrefix [for]="landlordConfirmedDate"></mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix [for]="landlordConfirmedDate"></mat-datepicker-toggle>
             <mat-datepicker #landlordConfirmedDate></mat-datepicker>
           </mat-form-field>
           <div style="margin-top: -20px !important;" class="ion-text-left">
@@ -549,25 +549,25 @@
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Offer Status</ion-text><br />
-              <ion-text class="content">{{makeAnOfferForm.controls.status.value | lookup: offerStatuses || '-'}}
+              <ion-text class="content">{{makeAnOfferForm.controls.status.value | lookup: offerStatuses || DEFAULTS.NOT_AVAILABLE}}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">When would you like to move in?</ion-text><br />
               <ion-text class="content">{{ makeAnOfferForm.controls.moveInDate.value ?
-                (makeAnOfferForm.controls.moveInDate.value | date: 'dd/MM/yyyy') : '-'}}
+                (makeAnOfferForm.controls.moveInDate.value | date: DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE}}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">For how long?</ion-text><br />
               <ion-text class="content">
                 {{ makeAnOfferForm.controls.rentingTime.value ? (makeAnOfferForm.controls.rentingTime.value | lookup :
-                letDurations) : '-'}}
+                letDurations) : DEFAULTS.NOT_AVAILABLE}}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">No. of occupants</ion-text><br />
-              <ion-text class="content">{{makeAnOfferForm.controls.numberOfAdults.value || '-'}}</ion-text>
+              <ion-text class="content">{{makeAnOfferForm.controls.numberOfAdults.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">No. of children</ion-text><br />
@@ -577,12 +577,12 @@
               <ion-text class="header">Your current position</ion-text><br />
               <ion-text class="content">
                 {{ makeAnOfferForm.controls.currentPosition.value ? (makeAnOfferForm.controls.currentPosition.value |
-                lookup : tenantCurrentPositionTypes) : '-'}}
+                lookup : tenantCurrentPositionTypes) : DEFAULTS.NOT_AVAILABLE}}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Your occupation</ion-text><br />
-              <ion-text class="content">{{makeAnOfferForm.controls.occupation.value || '-'}}</ion-text>
+              <ion-text class="content">{{makeAnOfferForm.controls.occupation.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Do you have a guarantor?</ion-text><br />
@@ -592,7 +592,7 @@
               <ion-text class="header">Relationship</ion-text><br />
               <ion-text class="content">
                 {{ makeAnOfferForm.controls.guarantorType.value ? (makeAnOfferForm.controls.guarantorType.value | lookup
-                : applicantGuarantorTypes) : '-'}}
+                : applicantGuarantorTypes) : DEFAULTS.NOT_AVAILABLE}}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
@@ -602,12 +602,12 @@
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Pets description</ion-text><br />
               <ion-text class="content">
-                {{makeAnOfferForm.controls.hasPets.value ? makeAnOfferForm.controls.petsInfo.value : '-'}}
+                {{makeAnOfferForm.controls.hasPets.value ? makeAnOfferForm.controls.petsInfo.value : DEFAULTS.NOT_AVAILABLE}}
               </ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header ion-text-wrap">Addition Comments</ion-text><br />
-              <ion-text class="content">{{makeAnOfferForm.controls.comments.value || '-'}}</ion-text>
+              <ion-text class="content">{{makeAnOfferForm.controls.comments.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
             </ion-col>
             <ion-col size="100" class="border-bottom"></ion-col>
             <ion-col size="100">
@@ -650,7 +650,7 @@
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Confirmed On</ion-text><br />
               <ion-text class="content">{{confirmationForm.controls.applicantConfirmedDate.value ?
-                (confirmationForm.controls.applicantConfirmedDate.value | date : 'dd/MM/yyyy') : '-'}}</ion-text>
+                (confirmationForm.controls.applicantConfirmedDate.value | date : DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Confirmed by Landlord</ion-text><br />
@@ -660,7 +660,7 @@
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header">Confirmed On</ion-text><br />
               <ion-text class="content">{{confirmationForm.controls.landlordConfirmedDate.value ?
-                (confirmationForm.controls.landlordConfirmedDate.value | date : 'dd/MM/yyyy') : '-'}}</ion-text>
+                (confirmationForm.controls.landlordConfirmedDate.value | date : DATE_FORMAT.DATE) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
 
             </ion-col>
             <ion-col size-xs="100" size-sm="50" class="header-content">

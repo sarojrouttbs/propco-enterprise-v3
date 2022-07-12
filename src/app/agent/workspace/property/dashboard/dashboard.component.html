@@ -84,7 +84,7 @@
             <ion-label>Viewings</ion-label>
           </div>
         </ion-segment-button>
-        <ion-segment-button value="map">
+        <ion-segment-button value="map" (click)="onMapTabClick()">
           <div class="map-segment">
              <i class="propcoicon propcoicon-location no-background"></i>
             <ion-label>Map</ion-label>
@@ -103,7 +103,8 @@
       </div>
       
       <div [hidden]="type != 'map'">
-        <app-google-map [propertyData]="propertyData"></app-google-map>
+        <!-- <app-google-map [propertyData]="propertyData"></app-google-map> -->
+        <app-open-street-map *ngIf="isMapLoad" [propertyData]="propertyData"></app-open-street-map>
       </div>
       <div [hidden]="type != 'notes'">
         <div class="table-block">
@@ -127,9 +128,9 @@
                     <tr *ngFor="let data of notes" class="table-row">
                       <td>{{data.postedAt | date: DATE_FORMAT.DATE || notAvailable}}</td>
                       <td>{{data.postedAt | date: DATE_FORMAT.TIME || notAvailable}}</td>
-                      <td>{{getLookupValue(data.type, notesTypes) || notAvailable}}</td>
-                      <td>{{getLookupValue(data.complaint, notesComplaints) || notAvailable}}</td>
-                      <td>{{getLookupValue(data.category, notesCategories) || notAvailable}}</td>
+                      <td>{{(data.type | lookup: notesTypes) || notAvailable}}</td>
+                      <td>{{(data.complaint | lookup: notesComplaints) || notAvailable}}</td>
+                      <td>{{(data.category | lookup: notesCategories) || notAvailable}}</td>
                       <td>{{data.userName || notAvailable}}</td>
                       <td><i (click)="showNoteDescription(data.notes);"
                           class="propcoicon propcoicon-property-description"></i></td>

@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DEFAULTS, PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { SolrService } from '../solr.service';
 declare function openScreen(key: string, value: any): any;
@@ -139,7 +139,8 @@ export class SearchResultsPage implements OnInit {
   viewType = 'LIST';
   currentDate;
   DEFAULTS = DEFAULTS;
-
+  DATE_FORMAT = DATE_FORMAT;
+  
   constructor(
     private route: ActivatedRoute,
     private solrService: SolrService,
@@ -150,7 +151,7 @@ export class SearchResultsPage implements OnInit {
     private workspaceService: WorkspaceService,
     private router: Router
   ) {
-    this.currentDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
+    this.currentDate = this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE);
   }
 
   setStep(index: number) {
@@ -484,7 +485,7 @@ export class SearchResultsPage implements OnInit {
   }
 
   getSearchResults() {
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'search-result-overlay');
     this.showSkeleton = true;
     this.solrService
       .entitySearch(this.prepareSearchParams())
@@ -596,7 +597,7 @@ export class SearchResultsPage implements OnInit {
   }
 
   openDetails(value?) {
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'search-result-overlay');
     if (this.router.url.includes('/agent/')) {
       this.workspaceService.addItemToWorkSpace(value ? value : this.selectedItem);
       return;
@@ -793,13 +794,6 @@ export class SearchResultsPage implements OnInit {
       borderRadius: '4px'
     });
 
-    const gridDivOverlay = $('#grid-divoverlay');
-
-    gridDivOverlay.css({
-      width: divOverlay.width(),
-      height: divOverlayHeight
-    });
-
     divOverlay.delay(200).slideDown('fast');
     event.stopPropagation();
   }
@@ -813,6 +807,6 @@ export class SearchResultsPage implements OnInit {
   }
 
   toggleSideMenu() {
-    this.hideMenu('', 'divOverlay');
+    this.hideMenu('', 'search-result-overlay');
   }
 }

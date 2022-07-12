@@ -11,6 +11,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { ResendLinkModalPageModule } from 'src/app/shared/modals/resend-link-modal/resend-link-modal.module';
 import { IonicSelectableModule } from 'ionic-selectable';
 import { MaterialModule } from 'src/app/material.module';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { MaterialModule } from 'src/app/material.module';
     ApplicationListPageRoutingModule,
     DataTablesModule,
     ResendLinkModalPageModule,
-    IonicSelectableModule
+    IonicSelectableModule,
+    PipesModule
   ],
   declarations: [ApplicationListPage]
 })

@@ -33,9 +33,9 @@
               <ion-checkbox (click)="updateSelection(item.value, i)" color="primary" formControlName="checked"
                 [name]="item"></ion-checkbox>
             </td>
-            <td>{{item.get('company').value || '-'}}</td>
-            <td>{{item.get('mobile').value || '-'}}</td>
-            <td>{{item.get('reference').value || '-'}}</td>
+            <td>{{item.get('company').value || DEFAULTS.NOT_AVAILABLE}}</td>
+            <td>{{item.get('mobile').value || DEFAULTS.NOT_AVAILABLE}}</td>
+            <td>{{item.get('reference').value || DEFAULTS.NOT_AVAILABLE}}</td>
           </tr>
         </tbody>
       </table>

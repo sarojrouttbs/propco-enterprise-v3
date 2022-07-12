@@ -39,8 +39,8 @@
           style="position: relative">
           <thead>
             <tr>
-              <th>Type</th>
-              <th>Notes</th>
+              <th style="width: 15%;">Type</th>
+              <th style="width: 10%;">Notes</th>
               <th>Certification Number</th>
               <th>Expires</th>
               <th>Appliance</th>
@@ -65,19 +65,19 @@
                 </ion-checkbox>
               </td>
               <td class="resp-action-icon">
-                <i (click)="showMenu($event,'divOverlay', data, 'table-row')"
+                <i (click)="showMenu($event,'whitegoods-overlay', data, 'table-row')"
                   class="propcoicon propcoicon-actions-on action-btn"></i>
               </td>
             </tr>
             <tr *ngIf="whitegoodsList?.length === 0">
-              <td colspan="7" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+              <td colspan="9" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
               </td>
             </tr>
           </tbody>
         </table>
-        <div id="divOverlay">
+        <div id="whitegoods-overlay" class="overlay-class">
           <ion-button>Edit</ion-button>
-          <i (click)="hideMenu($event,'divOverlay')" class="propcoicon propcoicon-actions-on"></i>
+          <i (click)="hideMenu($event,'whitegoods-overlay')" class="propcoicon propcoicon-actions-on"></i>
         </div>
       </div>
     </mat-expansion-panel>

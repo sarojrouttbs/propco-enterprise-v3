@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { AgentService } from 'src/app/agent/agent.service';
-import { DEFAULTS, PROPCO } from '../../constants';
+import { DATE_FORMAT, DEFAULTS, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -22,8 +22,8 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
   portfolioSources: any;
   notAvailable = DEFAULTS.NOT_AVAILABLE
   propertyInspection: any;
-  currentDate = this.commonService.getFormatedDate(new Date(), 'yyyy-MM-dd');
-
+  currentDate = this.commonService.getFormatedDate(new Date(), DATE_FORMAT.YEAR_DATE);
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private commonService: CommonService,

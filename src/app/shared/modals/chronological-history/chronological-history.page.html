@@ -51,9 +51,9 @@
                         <tbody>
                             <tr *ngFor="let elem of eventList">
                                 <td></td>
-                                <td>{{ elem.eventAt | date : 'dd/MM/yyyy HH:mm:ss' }}</td>
-                                <td>{{ elem.eventType || '-' }}</td>
-                                <td>{{ elem.category || '-' }}</td>
+                                <td>{{ elem.eventAt | date : DATE_FORMAT.DATE_TIME_SECONDS }}</td>
+                                <td>{{ elem.eventType || DEFAULTS.NOT_AVAILABLE }}</td>
+                                <td>{{ elem.category || DEFAULTS.NOT_AVAILABLE }}</td>
                                 <td>{{ elem.data.by}}</td>
                                 <td>{{ elem.data.closingReason}}</td>
                                 <td>{{ elem.data.cliSelectedAction}}</td>
@@ -74,7 +74,7 @@
                                 <td>{{ elem.data.to}}</td>
                                 <td>{{ elem.data.subject}}</td>
                                 <td [innerHtml]="elem.data.body"></td>
-                                <td>{{ elem.data.snoozeUntilDate | date : 'dd/MM/yyyy'}}</td>
+                                <td>{{ elem.data.snoozeUntilDate | date : DATE_FORMAT.DATE}}</td>
                             </tr>
                         </tbody>
                     </table>
