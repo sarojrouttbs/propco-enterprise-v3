@@ -14,8 +14,6 @@ import { ValidationService } from 'src/app/shared/services/validation.service';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 import { ReferencingService } from '../../referencing.service';
 import { HttpParams } from '@angular/common/http';
-//import { SelectTenantModalPage } from 'src/app/shared/modals/select-tenant-modal/select-tenant-modal.page';
-
 @Component({
   selector: 'la-application-details',
   templateUrl: './application-details.page.html',
@@ -192,6 +190,10 @@ export class ApplicationDetailsPage implements OnInit {
       this.referencingService.getPropertyTenantList(this.propertyId, params).subscribe(
         res => {
           this.tenantList = res ? res.data : [];
+          const caseIdTenant = this.tenantList.find(obj => obj.caseId != null);
+          if(caseIdTenant){
+            this.tenantList.map(obj => obj.caseId = caseIdTenant.caseId);
+          }
           resolve(this.tenantList);
         },
         (error) => {
@@ -650,7 +652,7 @@ export class ApplicationDetailsPage implements OnInit {
       this.commonService.showMessage('Please fill all required fields.', 'Create an Application', 'error');
       return;
     }
-    //this.commonService.showLoader();
+    this.commonService.showLoader();
     const applicationRequestObj = this.createApplicationFormValues();
     if(this.tenantCaseId){
       applicationRequestObj.case.caseId = this.tenantCaseId;
@@ -661,7 +663,6 @@ export class ApplicationDetailsPage implements OnInit {
     const applicationNotSubmittedTenantList = tmpApplicationNotSubmittedTenantList.
     filter(obj => obj.tenantId !== applicationRequestObj.applicantId);
 
-
     this.referencingService.createApplication(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, applicationRequestObj).subscribe(
       res => {
         this.commonService.hideLoader();
@@ -669,12 +670,6 @@ export class ApplicationDetailsPage implements OnInit {
         setTimeout(() => {
           if (applicationNotSubmittedTenantList.length > 0){
             const msg = 'Please select other tenant for continuing with referencing for them.';
-            /* this.router.navigate(['../add-application'], { relativeTo: this.route, queryParams: {
-              pId: this.propertyId,
-              msg: 
-              }}).then(() => {
-              location.reload();
-            }); */
             this.selectTenant(msg);
           }
           else {
@@ -682,7 +677,7 @@ export class ApplicationDetailsPage implements OnInit {
               location.reload();
             });
           }
-        }, 5000);
+        }, 2000);
       },
       error => {
         this.commonService.hideLoader();
@@ -690,31 +685,6 @@ export class ApplicationDetailsPage implements OnInit {
       }
     );
   }
-
-  /* private async selectTenantForApplication() {
-    const modal = await this.modalController.create({
-      component: SelectTenantModalPage,
-      cssClass: 'modal-container tenant-list la-modal-container',
-      backdropDismiss: false,
-      componentProps: {
-        applicationNotSubmittedTenantList: this.applicationNotSubmittedTenantList,
-      }
-    });
-
-    const data = modal.onDidDismiss().then(res => {
-      if (res.data.tenantId) {
-        this.router.navigate(['../add-application'], { relativeTo: this.route, queryParams: {
-          pId: this.propertyId,
-          tId: res.data.tenantId
-          }}).then(() => {
-          location.reload();
-        });
-      } else {
-        this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
-      }
-    });
-    await modal.present();
-  } */
 
   private checkFormsValidity(): any {
     return new Promise((resolve, reject) => {
