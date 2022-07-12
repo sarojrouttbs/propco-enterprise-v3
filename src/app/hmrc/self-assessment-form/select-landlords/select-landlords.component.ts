@@ -7,6 +7,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 import { HmrcService } from '../../hmrc.service';
 import { createCustomElement } from '@angular/elements';
 import { Subject } from 'rxjs';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-select-landlords',
@@ -20,7 +21,7 @@ export class SelectLandlordsComponent implements OnInit {
   dtTrigger: Subject<any> = new Subject();
 
   landlordList: any;
-  @Input() group;
+  @Input() group: FormGroup;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
@@ -100,11 +101,6 @@ export class SelectLandlordsComponent implements OnInit {
     };
   }
 
-  onManagementChange() {
-    this.landlordParams = this.landlordParams.set('managementType', this.group.value.managementType);
-    this.rerenderLandlordList();
-  }
-
   rerenderLandlordList(resetPaging?): void {
     if (this.dtElements && this.dtElements.first.dtInstance) {
       this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -169,6 +165,25 @@ export class SelectLandlordsComponent implements OnInit {
     });
   }
 
-  applyFilters() { }
-  resetFilters() { }
+  applyFilters() {
+    this.unselectAll();
+    if(this.group.value.managementType){
+      this.landlordParams = this.landlordParams.set('managementType', this.group.value.managementType);
+    }
+    if (this.group.value.searchText && this.group.value.searchText.length > 3) {
+      this.landlordParams = this.landlordParams.set('searchText', this.group.value.searchText);
+      if(this.group.value.searchOnColumns){
+        this.landlordParams = this.landlordParams.set('searchOnColumns', this.group.value.searchOnColumns);
+      }
+    } 
+    this.rerenderLandlordList();
+  }
+
+  resetFilters() {
+    this.unselectAll();
+    this.landlordParams = new HttpParams();
+    this.group.reset();
+    this.group.markAsUntouched();
+    this.rerenderLandlordList();
+  }
 }

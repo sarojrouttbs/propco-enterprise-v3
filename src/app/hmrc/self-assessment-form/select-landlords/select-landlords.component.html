@@ -27,7 +27,7 @@
       <ion-col size="15">
         <ion-item selectSearchAllDirective>
           <ion-label position="floating">Management</ion-label>
-          <ion-select multiple="true" formControlName="managementType" (ionChange)="onManagementChange();">
+          <ion-select multiple="true" formControlName="managementType">
             <ion-select-option [value]="option.index" *ngFor="let option of managementTypes" checked="true">
               {{option.value}}
             </ion-select-option>
@@ -52,16 +52,19 @@
       </ion-col>
 
       <ion-col size="40" class="ion-align-self-end ion-text-right">
-        <ion-button color="success" fill="outline" style="margin-right: 10px;">Apply Filters</ion-button>
-        <ion-button color="danger" fill="outline">Reset Filters</ion-button>
+        <ion-button color="success" fill="outline" style="margin-right: 10px;" (click)="applyFilters()">Apply Filters</ion-button>
+        <ion-button color="danger" fill="outline" (click)="resetFilters()">Reset Filters</ion-button>
       </ion-col>
     </ion-row>
   </form>
   <ion-row>
-    <ion-col size="100" class="ion-text-left" style="margin-top: 10px;">
+    <ion-col size="50" class="ion-text-left" style="margin-top: 10px;">
       <ion-button color="success" fill="solid" style="margin-right: 10px;" (click)="onselectAll()">Select All
       </ion-button>
       <ion-button color="warning" fill="solid" (click)="unselectAll()">Select None</ion-button>
+    </ion-col>
+    <ion-col size="50" class="ion-text-right align-self-center" style="margin-top: 10px;">
+      <ion-text>{{checkedLandlords.length || 0}} record(s) selected</ion-text>
     </ion-col>
     <ion-col size="100" style="margin-top: 10px;">
       <div class="overlay-container" style="position: relative">
@@ -122,7 +125,7 @@
                 <i class="propcoicon propcoicon-actions-on action-btn"></i>
               </td>
             </tr>
-            <tr *ngIf="landlordList?.length == 0">
+            <tr *ngIf="landlordList?.length === 0">
               <td colspan="9" class="no-data-available" style="text-align: center;">
                 <b>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</b>
               </td>
