@@ -46,29 +46,29 @@
             "reviewUsefulInstructions": ""           
         },        
         "escalateFault": {
-            "escalateWindowTitle": "Escalate Fault",
-            "confirmationMessage1": "This fault will be escalated to the Property Manager and a notification will be sent.",
+            "escalateWindowTitle": "Escalate Repair",
+            "confirmationMessage1": "This repair will be escalated to the Property Manager and a notification will be sent.",
             "confirmationMessage2": "Are you sure?",
             "escalationReason": "Landlord has not updated maintenance preferences",
             "escalateAction": "Y",
             "popupCancelConfirmMessage": "Are you sure you want to cancel the process?",            
-            "messageTitle": "Escalate Fault",
-            "message": "Fault has been escalated to the property manager",
+            "messageTitle": "Escalate Repair",
+            "message": "Repair has been escalated to the property manager",
             "faultUpdate": "escalated",
             "tableFaultStatus": "Escalation"                                    
         },
         "deEscalateFault": {
-            "deEscalateWindowTitle": "De-Escalate Fault",
-            "confirmationMessage": "Are you sure you want to de-escalate the fault?",
+            "deEscalateWindowTitle": "De-Escalate Repair",
+            "confirmationMessage": "Are you sure you want to de-escalate the repair?",
             "deEscalateAction": "Y", 
-            "messageTitle": "De-Escalate Fault",
-            "message": "Fault has been de-escalated to the property manager",
+            "messageTitle": "De-Escalate Repair",
+            "message": "Repair has been de-escalated to the property manager",
             "faultUpdate": "escalated",
             "tableFaultStatus": "Reported"                                    
         },
         "cancelEscalateFault": {
-            "escalateWindowTitle": "Escalate Fault",
-            "confirmationMessage1": "This fault will be escalated to the Property Manager and a notification will be sent.",
+            "escalateWindowTitle": "Escalate Repair",
+            "confirmationMessage1": "This repair will be escalated to the Property Manager and a notification will be sent.",
             "confirmationMessage2": "Are you sure?",
             "escalationReason": "Landlord has not updated maintenance preferences",
             "escalateAction": "",            
@@ -76,8 +76,8 @@
             "tableFaultStatus": "Reported"                                    
         },
         "cancelDeEscalateFault": {
-            "deEscalateWindowTitle": "De-Escalate Fault",
-            "confirmationMessage": "Are you sure you want to de-escalate the fault?",
+            "deEscalateWindowTitle": "De-Escalate Repair",
+            "confirmationMessage": "Are you sure you want to de-escalate the repair?",
             "deEscalateAction": "",            
             "faultUpdate": "escalated",
             "tableFaultStatus": "Escalation"                                    

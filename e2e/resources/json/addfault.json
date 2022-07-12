@@ -134,7 +134,7 @@
             "typeAddition2": "",
             "additionalInfo2": "",
             "reporter": "Tenant",
-            "tenancyAgreement": "Confirmed 01/06/2021",
+            "tenancyAgreement": "Extended",
             "reporterList": "Select Tenant",
             "reporterName": "Mr Glen",
             "reporterName1": "Mr Davidson",
@@ -147,7 +147,7 @@
             "tablePropertyId": "000002068",
             "tablePropertyAddress": "10 Old Town Street",
             "tableOffice": "Westerly",
-            "tableManager": "Tbl Support",
+            "tableManager": "Ali Rollason",
             "tableJobTitle": "Dishwasher problem",
             "tableReporter": "Tenant",
             "tableFaultStatus": "Reported"            

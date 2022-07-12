@@ -29,7 +29,7 @@ var CommonFunction = function() {
     }
 
     this.getAttribute = function (loc, attribute) {        
-        this.waitForElement(loc);
+        //this.waitForElement(loc);
         return loc.getAttribute(attribute).then(function(value){
             console.log(value);
             return value;
@@ -37,7 +37,7 @@ var CommonFunction = function() {
     }
 
     this.getText = function (loc) {        
-        this.waitForElement(loc);
+       // this.waitForElement(loc);
         loc.getText().then(function(value){
             console.log(value);
             return value;
@@ -69,6 +69,13 @@ var CommonFunction = function() {
         });
     } 
 
+    this.executeJS = function(script, loc){
+        console.log("Executing JavaScript");
+        browser.controlFlow().execute(function(){
+            browser.executeScript(script, loc.getWebElement());
+        });
+    }
+
     this.getAttributeValueOfHiddenElement = function(loc, attrib){
         browser.controlFlow().execute(function () {
             browser.executeScript("arguments[0].setAttribute('type', '');", loc.getWebElement());
@@ -89,7 +96,7 @@ var CommonFunction = function() {
     }
 
     this.clickOnElement = function(loc, cName){  
-        this.waitForElement(loc); 
+       // this.waitForElement(loc); 
         this.scrollToElement(loc);
         browser.controlFlow().execute(function(){
            browser.executeScript("console.log('" + cName + " is clicked');");          
@@ -167,6 +174,7 @@ var CommonFunction = function() {
     this.selectFromDropDown = function(locList, locValue, cList, cValue){
         this.clickOnElement(locList, cList);
         this.waitForElementToBeVisible(element(by.xpath("//ion-select-popover")), 'Drop down list');
+        browser.sleep(2000);
         this.clickOnElement(locValue, cValue);    
     }
 
@@ -356,7 +364,89 @@ var CommonFunction = function() {
         return cryptoJs.AES.decrypt(encrypted, key).toString(cryptoJs.enc.Utf8);
     }
 
+    this.updateStepDataObject = function(keyList, valueList){                
+        /*return loc.getText().then(function(text){
+            var obj = {param:"Original parameter", pValue:"Original value"};
+            obj.param  = cMessage;
+            obj.pValue = text;
+            return obj;
+        }); */
+        return new Promise (function(resolve,reject) { 
+            const obj = {};
+            let keys = [];
+            let values = [];
+            if(keyList){
+                keys = keyList.split(","); 
+            }
+            console.log(keyList);
+            keys.forEach(item => {
+                console.log(item); 
+            });
+            if(valueList){
+                values = valueList.split(","); 
+            }
+            console.log(valueList);
+            values.forEach(item => {
+                console.log(item); 
+            });
+            for(let i = 0; i<keys.length; i++){
+                obj[keys[i]] = values[i];                               
+            }
+            if (typeof obj != "undefined") {
+                console.log("Step data object is created");
+                resolve(obj);
+            } else {
+                reject("Object does not exist");
+            }             
+        });        
+    }
 
+    this.updateStepTestData = function(keyList, valueList){
+        /*return new Promise (function(resolve,reject) { 
+            let jasmineObj = jasmine.getEnv();
+            let keys = [];
+            let values = [];
+            if(keyList){
+                keys = keyList.split(","); 
+            }
+            if(valueList){
+                values = valueList.split(","); 
+            }
+            for(let i = 0; i<keys.length; i++){
+               jasmineObj.setSpecProperty(keys[i],values[i]);  
+            }
+            if (typeof jasmineObj != "undefined") {
+                console.log("Jasmine env object is created");
+                resolve(true);
+            } else {
+                reject("Object does not exist");
+            }             
+        });*/
+        const obj = {};
+        let keys = [];
+        let values = [];
+        if(keyList){
+            keys = keyList.split(","); 
+        }
+        console.log(keyList);
+        keys.forEach(item => {
+            console.log(item); 
+        });
+        if(valueList){
+            values = valueList.split(","); 
+        }
+        console.log(valueList);
+        values.forEach(item => {
+            console.log(item); 
+        });
+        for(let i = 0; i<keys.length; i++){
+            obj[keys[i]] = values[i];                               
+        }
+        if (typeof obj != "undefined") {
+            console.log("Step data object is created");
+            expect(obj).toBeValid();
+        }
+    }
 
 /*
 * @Author: Sipan.Sarangi

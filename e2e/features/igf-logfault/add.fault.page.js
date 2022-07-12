@@ -7,7 +7,7 @@ var Fault = function (faultDetails) {
      * Locators for elements used in 'Log a Fault' and 'Dashboard Fault Table' functionality  
      */
       
-    this.addFaultBtn = element(by.xpath("//ion-button[contains(text(), 'Add Fault')]"));
+    this.addFaultBtn = element(by.xpath("//ion-button[contains(text(), 'Add Repair')]"));
     this.resetFilterBtn = element(by.xpath("//ion-button[contains(text(), 'Reset Filters')]"));
     this.closeSearchBtn = element(by.xpath("//ion-button[contains(text(), 'close')]"));
     this.propSearchInput = element(by.xpath("//input[@data-placeholder='Start typing to search']"));
@@ -21,7 +21,7 @@ var Fault = function (faultDetails) {
     this.cancelBtn = element(by.xpath("(//ion-button[contains(text(), 'Cancel')])[1]"));
     this.backBtn = element(by.xpath("//ion-button[contains(text(), 'Back')]"));
     this.saveForLaterBtn = element(by.xpath("(//ion-button[contains(text(), 'Save for later')])[1]"));
-    this.faultDetailsTab = element(by.xpath("//div[contains(text(), 'Fault Details')]"));
+    this.faultDetailsTab = element(by.xpath("//mat-tab-header//div[contains(text(), 'Repair Details')]"));
     this.reportedByTab = element(by.xpath("//div[contains(text(), 'Reported By')]"));
     this.accessInfoTab = element(by.xpath("//div[contains(text(), 'Access Information')]"));
     this.mediaDocumentsTab = element(by.xpath("//div[contains(text(), 'Media / Documents')]"));
@@ -34,8 +34,8 @@ var Fault = function (faultDetails) {
     this.additionalInfoAddBtn1 = element(by.xpath("//ion-label[contains(text(), 'Additional Info')]/../../following-sibling::ion-col/ion-button")); 
     this.faultTypeList2 = element(by.xpath("//ion-select[@aria-label='Type']"));
     this.faultTypeValue2 = element(by.xpath("//ion-label[contains(text(), '" + faultDetails.typeAddition2 + "')]/following-sibling::ion-radio"));
-    this.typeAdditionalInfoInput2 = element(by.xpath("//ion-label[contains(text(), 'Fault description')]/../../../../../../form[2]//ion-input/input")); 
-    this.additionalInfoAddBtn2 = element(by.xpath("//ion-label[contains(text(), 'Fault description')]/../../../../../../form[2]//ion-button")); 
+    this.typeAdditionalInfoInput2 = element(by.xpath("//ion-label[contains(text(), 'Repair description')]/../../../../../../form[2]//ion-input/input")); 
+    this.additionalInfoAddBtn2 = element(by.xpath("//ion-label[contains(text(), 'Repair description')]/../../../../../../form[2]//ion-button")); 
     this.urgencyStatusList = element(by.xpath("//ion-select[@formcontrolname='urgencyStatus']"));
     this.urgencyStatusListValue = element(by.xpath("//ion-label[normalize-space(text())='" + faultDetails.editUrgency + "']/following-sibling::ion-radio"));
 
@@ -85,7 +85,8 @@ var Fault = function (faultDetails) {
     this.faultTitle = element(by.xpath("//ion-text[@color='success']/../../following-sibling::ion-col/h2"));
 
     this.createFault = function(faultAttrib){ 
-        commonFunction.waitForElementToBeVisible(this.addFaultBtn, "Add Fault button");          
+        commonFunction.waitForElementToBeVisible(this.addFaultBtn, "Add Fault button");   
+        commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first fault"); 
         commonFunction.clickOnElement(this.addFaultBtn, "Add Fault button");        
         if(faultAttrib.propertyId){
           commonFunction.sendKeysInto(this.propSearchInput, faultAttrib.propertyId);
@@ -203,6 +204,7 @@ var Fault = function (faultDetails) {
     this.viewFault = function(){
         commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first fault"); 
         commonFunction.clickOnElement(this.actionBtn, "Action button");
+        commonFunction.waitForElementToBeVisible(this.viewBtn, "View button");
         commonFunction.clickOnElement(this.viewBtn, "View button"); 
         commonFunction.waitForSpecificElementToBeVisible(by.xpath("//app-fault-title//h2"), "last", "Fault title");       
     }
@@ -211,6 +213,7 @@ var Fault = function (faultDetails) {
         let expCondition = protractor.ExpectedConditions; 
         commonFunction.clickOnElement(this.mediaDocumentsTab, "Media Documents tab");
         commonFunction.scrollToElement(this.cancelBtn);
+        commonFunction.waitForElementToBeVisible(this.initialIssueFolder, "Initial Issue folder");
         commonFunction.clickOnElement(this.initialIssueFolder, "Initial Issue folder"); 
         commonFunction.scrollToElement(this.cancelBtn);
         if(docList){
@@ -264,10 +267,15 @@ var Fault = function (faultDetails) {
           commonFunction.waitForElementToBeVisible(this.faultDetailsTab, "Fault Details tab");
           commonFunction.scrollToElement(this.nextBtn);
           commonFunction.clickOnElement(this.reportedByTab, "Reported By tab");
+          commonFunction.clickOnElement(this.faultDetailsTab, "Fault Details tab");
+          commonFunction.scrollToElement(this.nextBtn);
+          commonFunction.clickOnElement(this.reportedByTab, "Reported By tab");
           commonFunction.waitForElementToBeVisible(this.reporterList, "Reporter Name list");
           commonFunction.clickOnElement(this.accessInfoTab, "Access Information tab");
+          commonFunction.scrollToElement(this.nextBtn);
           commonFunction.waitForElementToBeVisible(this.accessInfoList, "Access Information list");
           commonFunction.clickOnElement(this.reviewTab, "Review tab");
+          commonFunction.scrollToElement(this.cancelBtn);
           commonFunction.clickOnElement(this.faultDetailsTab, "Fault Details tab");
           commonFunction.waitForElementToBeVisible(this.faultDescriptionInput, "Fault Description");
           let descriptionErrorMsg = commonFunction.updateVerificationObject(this.descriptionError, "Fault description error"); 

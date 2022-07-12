@@ -30,7 +30,7 @@ var FaultSummary = function (faultDetails) {
     this.reviewType = element(by.xpath("//ion-grid[contains(@class, 'view-details ng')]//ion-col[7]//ion-text[2]"));  
     this.reviewAdditionalInfo = element(by.xpath("//ion-grid[contains(@class, 'view-details ng')]//ion-col[8]//ion-text[2]"));
     this.reviewSection2Title = element(by.xpath("(//div[@class='sub-heading'])[2]"));
-    this.reviewReporter = element(by.xpath("//ion-text[contains(text(), 'Who reported the fault')]/following-sibling::ion-text"));
+    this.reviewReporter = element(by.xpath("//ion-text[contains(text(), 'Who reported the repair')]/following-sibling::ion-text"));
     this.reviewReporterTitle = element(by.xpath("//ion-text[contains(text(), 'Forename')]/../preceding-sibling::ion-col[1]/ion-text[2]")); 
     this.reviewForename = element(by.xpath("//ion-text[contains(text(), 'Forename')]/following-sibling::ion-text"));
     this.reviewSurname = element(by.xpath("//ion-text[contains(text(), 'Surname')]/following-sibling::ion-text"));
@@ -69,7 +69,9 @@ var FaultSummary = function (faultDetails) {
         let addFault = new fault(faultReported); 
         commonFunction.waitForElementToBeVisible(addFault.actionBtn, "Action button for first fault"); 
         commonFunction.clickOnElement(addFault.actionBtn, "Action button");
+        commonFunction.waitForElementToBeVisible(this.startProgressBtn, "Start Progress button");
         commonFunction.clickOnElement(this.startProgressBtn, "Start Progress button");
+        commonFunction.waitForElementToBeVisible(this.confirmationOKBtn, "Start Progress Confirmation OK button");
         commonFunction.clickOnElement(this.confirmationOKBtn, "Start Progress Confirmation OK button");
         commonFunction.waitForElementToBeVisible(this.faultStatus, "Fault Status");
         if("updatedStatus" in faultReported){
@@ -237,11 +239,13 @@ var FaultSummary = function (faultDetails) {
             commonFunction.uploadImage(addFault.uploadImage, originalFault.editFaultImage, "Fault image");
         }
         if(originalFault.cancelChanges){ 
-           commonFunction.scrollToElement(addFault.cancelBtn);            
+           commonFunction.scrollToElement(addFault.cancelBtn);   
+           commonFunction.waitForElementToBeVisible(addFault.cancelBtn, "Cancel button");         
            commonFunction.clickOnElement(addFault.cancelBtn, "Cancel button");        
         }         
         if(originalFault.submitChanges){
            commonFunction.scrollToElement(addFault.saveForLaterBtn);  
+           commonFunction.waitForElementToBeVisible(addFault.saveForLaterBtn, "Save For Later button");
            commonFunction.clickOnElement(addFault.saveForLaterBtn, "Save For Later button");           
         }
     }
@@ -250,17 +254,21 @@ var FaultSummary = function (faultDetails) {
         let addFault = new fault(faultReported); 
         commonFunction.clickOnElement(addFault.mediaDocumentsTab, "Media Documents tab");
         commonFunction.scrollToElement(addFault.cancelBtn);
+        commonFunction.waitForElementToBeVisible(addFault.initialIssueFolder, "Initial Issue folder");
         commonFunction.clickOnElement(addFault.initialIssueFolder, "Initial Issue folder");
         commonFunction.scrollToElement(addFault.cancelBtn);
         if(faultReported.deleteFile){
             let docs = faultReported.deleteFile.split(",");
             docs.forEach((result) => {
                 var deleteFile = element(by.xpath("//img[contains(@src, '" + result + "') and @title='Click To Download']/../../following-sibling::ion-row//ion-icon"));
+                commonFunction.waitForElementToBeVisible(deleteFile, "Delete file");
                 commonFunction.clickOnElement(deleteFile, "Delete file");
+                commonFunction.waitForElementToBeVisible(this.confirmationOKBtn, "Delete file confirmation OK button");
                 commonFunction.clickOnElement(this.confirmationOKBtn, "Delete file confirmation OK button");
             });
         };
-        commonFunction.scrollToElement(addFault.saveForLaterBtn);        
+        commonFunction.scrollToElement(addFault.saveForLaterBtn);  
+        commonFunction.waitForElementToBeVisible(addFault.saveForLaterBtn, "Save For Later button");
         commonFunction.clickOnElement(addFault.saveForLaterBtn, "Save For Later button");
     }
 }

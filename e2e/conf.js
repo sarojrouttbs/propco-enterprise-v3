@@ -6,8 +6,8 @@ exports.config = {
          },
         'goog:loggingPrefs': {
             'performance': 'ALL',
-            'browser': 'ALL'
-        }
+            'browser': 'ALL'            
+        }       
     },
     framework: 'jasmine',
     restartBrowserBetweenTests: false,
@@ -25,21 +25,38 @@ exports.config = {
         fixafault: [
             './features/igf-logfault/add.fault.spec.js', 
             './features/igf-logfault/fault.summary.spec.js',
-            './features/igf-logfault/merge.fault.spec.js',
+           //'./features/igf-logfault/merge.fault.spec.js',
             './features/igf-logfault/fault.note.spec.js', 
             './features/igf-logfault/fault.escalate.spec.js', 
-            './features/cli-landlordownrepair/landlord.own.repair.spec.js', 
-            './features/iac-arrangingcontractor/obtain.quote.spec.js',
-            './features/iac-arrangingcontractor/proceed.with.worksorder.spec.js',
-            './features/iac-arrangingcontractor/proceed.agent.necessity.spec.js'              
+           //'./features/cli-landlordownrepair/landlord.own.repair.spec.js', 
+           //'./features/iac-arrangingcontractor/obtain.quote.spec.js',
+           //'./features/iac-arrangingcontractor/proceed.with.worksorder.spec.js',
+           //'./features/iac-arrangingcontractor/proceed.agent.necessity.spec.js',
+           //'./features/iac-arrangingcontractor/obtain.ll.authorisation.spec.js',
+           //'./features/iac-arrangingcontractor/payment.requirement.spec.js',  
+           // './features/ipd-jobpayment/check.invoice.spec.js',
+           //'./features/iqf-faultqualification/request.more.information.spec.js',
+           // './features/iqf-faultqualification/close.fault.spec.js',
+           //'./features/iqf-faultqualification/fault.urgency.spec.js',
+           //'./features/iqf-faultqualification/block.management.spec.js',
+           //'./features/iqf-faultqualification/guarantee.warranty.spec.js',
+           //'./features/iqf-faultqualification/service.contract.spec.js',
+          // './features/iqf-faultqualification/appliance.cover.spec.js',
+          //'./features/idb-dashboard/fault.dashboard.spec.js',
+          //'./features/ch-chronologicalhistory/chronological.history.spec.js',
+          //'./features/sendemail/send.email.spec.js'
        ]
     },
     onPrepare: () => {
         require('./util/custom.matcher');
         beforeEach(function(){
             browser.manage().window().maximize();
-            browser.get(browser.params.application_url_qa,180000);
+            browser.get(browser.params.fixafault_url_qa,180000);
         });
+       /* afterEach(function(){
+            browser.manage().deleteAllCookies();
+            browser.executeScript("window.sessionStorage.clear();window.localStorage.clear();");
+        });*/
         var HtmlReporter = require('protractor-beautiful-reporter');
         var path = require('path');
         jasmine.getEnv().addReporter(new HtmlReporter({

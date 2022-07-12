@@ -1,6 +1,8 @@
 {
  "username": "tbl.support",
  "password": "5upp0rt.",
- "application_url_qa": "https://embed-qa.propco.co.uk/v3/#/faults/dashboard?ssoKey=MWPkClLgWzbZBf%2FTlxg2uY53wkHo24d2RknOtV5swAGfKMR4VGUrlXXiCVH6eTeSkOFWroYw0lib7sre%2FoL2vlYPiMtJk2r%2B%2FPxqX8ek0qg%3D"
+ "fixafault_url_qa": "https://embed-qa.propco.co.uk/v3/#/faults/dashboard?ssoKey=MWPkClLgWzbZBf%2FTlxg2uY53wkHo24d2RknOtV5swAGfKMR4VGUrlXXiCVH6eTeSkOFWroYw0lib7sre%2FoL2vlYPiMtJk2r%2B%2FPxqX8ek0qg%3D",
+ "agent_dashboard_url": "https://embed-qa.propco.co.uk/v3/#/agent/dashboard?ssoKey=ymW5mckjeCkB02UdjFQnMd0iRtuwGS24oNi8pFo4KBb%2B0YLXVDOaqTbl2w0a6Ac16TPmy%2FfSe86R70Gz4oMmEq4%2BPwzqD1ff9wZMdJhpULQ%3D",
+ "aesKey": "test"
 }
 
