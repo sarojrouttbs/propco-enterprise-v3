@@ -887,3 +887,8 @@ ion-datetime {
     right: 0;
     color: var( --ion-color-primary); 
 }
+#hmrc-stepper {
+  .ion-date-item-icon {
+    opacity: 0.6;
+  }
+}
