@@ -47,8 +47,8 @@
         },        
         "nonComplaintNote": {
             "complaint": "No",
-            "noteCategory": "Property Visit",
-            "noteType": "Fault",
+            "noteCategory": "Applicant Call",
+            "noteType": "Applicant Contact",
             "notes": "Reporter is yet to confirm visit time",
             "submitNotes": "Y",
             "noteWindowTitle": "Add Note",
@@ -57,8 +57,8 @@
         },
         "complaintNote": {
             "complaint": "Yes",
-            "noteCategory": "Tenant Call",
-            "noteType": "Property Visits",
+            "noteCategory": "Applicant Call",
+            "noteType": "Fault",
             "notes": "Property visit is not scheduled",
             "submitNotes": "Y",
             "noteWindowTitle": "Add Note",
@@ -67,8 +67,8 @@
         },
         "cancelNote": {
             "complaint": "Yes",
-            "noteCategory": "Tenant Call",
-            "noteType": "Property Visits",
+            "noteCategory": "Applicant Call",
+            "noteType": "Fault",
             "notes": "Property visit is not scheduled",
             "submitNotes": "",
             "noteWindowTitle": "Add Note",
