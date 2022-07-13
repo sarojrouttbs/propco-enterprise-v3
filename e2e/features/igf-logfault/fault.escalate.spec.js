@@ -60,5 +60,5 @@ describe('FixAFault Module', function(){
         
         addFault.createFault(fJson);        
         escalate.checkEscalateValidations(eJson);       
-    });   
+    });  
 })
