@@ -79,6 +79,9 @@
                         </tbody>
                     </table>
                 </ng-container>
+                <ng-container *ngIf="!isTableReady">
+                    <h5 *ngIf="isNotConfigured">This functionality isn't configured.</h5>
+                </ng-container>
             </ion-col>
         </ion-row>
     </ion-grid>
