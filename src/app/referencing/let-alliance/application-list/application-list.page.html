@@ -66,7 +66,7 @@
               </ion-item>
           </ion-col>
           <ion-col size-xl="21" size-lg="23" size-md="38" size-sm="50" size-xs="100">
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class="margin-top-13">
               <mat-label>Date of Submission From</mat-label>
               <input matInput [matDatepicker]="picker" [max]="currentDate" formControlName="fromDate" readonly>
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -77,7 +77,7 @@
            </div>
           </ion-col>
           <ion-col size-xl="21" size-lg="23" size-md="38" size-sm="50" size-xs="100">
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class="margin-top-13">
               <mat-label>Date of Submission To</mat-label>
               <input matInput [matDatepicker]="picker1" [max]="currentDate" formControlName="toDate" readonly>
               <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
