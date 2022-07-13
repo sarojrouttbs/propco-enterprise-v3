@@ -4,7 +4,7 @@
   </div>
 <ion-grid>
   <ion-row>
-    <ion-col>
+    <ion-col offset-xl="10" size-xl="80" offset="0" size="100">
       <mat-horizontal-stepper #stepper labelPosition="bottom" [selectedIndex]="currentStepperIndex" id="hmrc-stepper">
         <mat-step [completed]="stepper.selectedIndex > 0">
           <app-select-landlords [group]="selfAssessmentForm"></app-select-landlords>
@@ -19,7 +19,7 @@
         </mat-step>
       </mat-horizontal-stepper>
     </ion-col>
-    <ion-col size="100" class="ion-text-right">
+    <ion-col class="ion-text-right" offset-xl="10" size-xl="80" offset="0" size="100">
       <ion-button fill="solid" *ngIf="stepper.selectedIndex > 0" (click)="onBack(stepper.selectedIndex)">back</ion-button>
       <ion-button color="success" fill="solid" *ngIf="stepper.selectedIndex < 2" (click)="onNext(stepper.selectedIndex)">{{nextLabel}}</ion-button>
     </ion-col>

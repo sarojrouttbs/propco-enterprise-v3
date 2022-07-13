@@ -1,0 +1,87 @@
+pipeline {
+  agent any
+
+ options {
+    buildDiscarder(logRotator(numToKeepStr: '60', artifactNumToKeepStr: '60'))
+    disableConcurrentBuilds(abortPrevious: true)    
+  }
+
+  stages {
+    
+    stage('Checkout Scm') {
+      steps {
+        cleanWs()  
+        git(url: 'git@gitlab.techblue.co.uk:propco/propco-enterprise-v3.git', credentialsId: 'dbc0e816-daf4-4270-8cfb-ffb85299211f', branch: 'qa') //work at static branch 
+      }
+    }
+
+stage('SonarQube analysis') {
+          steps {
+              withSonarQubeEnv(credentialsId : 'ca459b6d-a028-462b-a363-ac91044d1358', installationName : 'Sonar') {
+                 sh '''
+                 /var/jenkins_home/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQube/bin/sonar-scanner
+                 '''
+                } 
+            }
+          }
+
+    stage('Npm build') {
+      steps {
+        withCredentials([string(credentialsId: 'httpd_pass', variable: 'httpd_pass')]) {
+        sh '''VAL_API_BASE_URL="API_BASE_URL: 'https://embed-qa.propco.co.uk/v3-dev/api/',"
+          #VAL_MEDIA_HOST_URL="MEDIA_HOST_URL: 'https://saas-qa.propco.co.uk/demolocal/',"
+          #VAL_WEB_KEY="WEB_KEY: '83e6d53a8ebf3a7fb93b449376730a31b9f641effe57d0b75dc1b7997d656c6de53c0c1e',"
+          #VAL_HOST_WEBURL="HOST_WEBURL: 'https://saas-qa.propco.co.uk/propcoweb/',"
+
+          sed -i "/  API_BASE_URL/c\\  $VAL_API_BASE_URL" src/environments/*
+          #sed -i "/  MEDIA_HOST_URL/c\\  $VAL_MEDIA_HOST_URL" src/environments/*
+          #sed -i "/  WEB_KEY/c\\  $VAL_WEB_KEY" src/environments/*
+          #sed -i "/  HOST_WEBURL/c\\  $VAL_HOST_WEBURL" src/environments/*
+          '''
+       }
+    }
+ }
+     stage('Shell script') {
+      steps {
+         nodejs('Node 14.15') {
+        sh '''
+        npm i
+        ionic build --prod -- --base-href /v3/
+        #npx cap sync
+        #cd android
+        '''
+      }
+      }
+    }
+
+   stage("Run Test Cases") {
+       when {
+           expression {
+               return null
+           }
+       }
+       steps {
+           echo "Dummy step!"
+        }
+   }
+      stage('Trigger QA Nginx Docker build') {
+       steps {
+        build job: "PropCo_QA_nginx_Docker", wait: false     
+            }
+         }
+
+}
+
+  post {
+      always {
+	emailext body: '${SCRIPT,template="groovy-html.template"}',to: 'webteam@techblue.co.uk' , subject: currentBuild.currentResult + " : " + currentBuild.fullDisplayName
+      }
+      failure {
+        updateGitlabCommitStatus name: 'Jenkins job', state: 'failed'
+      }
+      success {
+        updateGitlabCommitStatus name: 'Jenkins job', state: 'success'
+      }
+  }
+
+}

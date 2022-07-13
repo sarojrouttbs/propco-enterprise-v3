@@ -63,7 +63,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
             this._router.navigate(['/login'], { replaceUrl: true });
             return throwError(error);
           }
-        } else if (error.status === 422) {
+        } else if (error.status === 422 || error.status === 451) {
           return throwError(error);
         } else {
           if (error.status === 405 || error.status === 403) {
