@@ -92,6 +92,7 @@ export class ChronologicalHistoryPage implements OnInit {
    propertyDetails;
    isTableReady = false;
    showAll: boolean = true;
+   isNotConfigured:boolean = false;
    DEFAULTS = DEFAULTS;
    DATE_FORMAT = DATE_FORMAT;
    
@@ -153,7 +154,11 @@ export class ChronologicalHistoryPage implements OnInit {
          this.initiateDtOptons();
          this.isTableReady = true;
          // this.rerender();
-      })
+      }, error => {
+         if(error && error.status === 451){
+            this.isNotConfigured = true;
+         }
+      });
    }
 
    initiateDtOptons() {
