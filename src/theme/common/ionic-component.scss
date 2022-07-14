@@ -684,7 +684,6 @@ ion-alert.common-alert-box {
 }
 
 .market-apprisal-ion-select, .fault-ion-select, .let-alliance-ion-select , .hmrc-ion-select{
-  --width: auto;
   .sc-ion-select-popover{
     color: var(--ion-color-three) !important
   }
@@ -692,6 +691,11 @@ ion-alert.common-alert-box {
     --background: var(--ion-color-four);
   }
 }
+
+.ion-select-auto {
+  --width: auto !important;
+}
+
 
 //agnet portal > market appraisal form modals
 .ma-modal-container,.la-modal-container, .tob-modal-container, .fault-modal-container, .property-modal-container {
