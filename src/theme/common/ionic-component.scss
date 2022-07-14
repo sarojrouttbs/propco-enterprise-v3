@@ -241,7 +241,10 @@ ion-item {
 
 .entity-search, .la-application-search, .la-property-search,.nett-modal-container ,.fee-charge-modal-container{
   // .modal-wrapper {
-    min-height: 210px;
+    &::part(content){
+
+    min-height: 220px;
+    height: 225px;
     width: 550px;
 
     ion-content {
@@ -265,7 +268,7 @@ ion-item {
       padding: 0 10px;
     }
   }
-// }
+}
 
 .tenant-list,.fee-charge-modal-container {
   // .modal-wrapper {
