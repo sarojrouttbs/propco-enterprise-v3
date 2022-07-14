@@ -44,7 +44,9 @@ export class SelectLandlordsComponent implements OnInit {
     const element = createCustomElement(SelectAllPlusSearchComponent, {
       injector: this.injector
     });
-    customElements.define(`c-select-all-plus-search`, element);
+    if (!customElements.get('c-select-all-plus-search')) {
+      customElements.define(`c-select-all-plus-search`, element);
+    }
   }
 
   ngOnInit() {

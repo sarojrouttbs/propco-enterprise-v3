@@ -156,7 +156,7 @@ export class ApplicationDetailsPage implements OnInit {
     });
 
     const data = modal.onDidDismiss().then(res => {
-      if (res.data.tenantId) {
+      if (res?.data?.tenantId) {
         if (res.data.referencingApplicationStatus == 0 || res.data.referencingApplicationStatus == 1) {
           this.applicationAlert();
         }
