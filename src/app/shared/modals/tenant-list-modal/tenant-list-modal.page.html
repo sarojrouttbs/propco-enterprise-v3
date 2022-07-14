@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>Select Tenant</ion-title>
     <ion-buttons slot="end">
-      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+      <ion-icon name="close" (click)="cancel()"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -37,13 +37,23 @@
         </tr>
       </tbody>
     </table>
-    <ion-grid class="ion-no-padding" style="margin-top:15px;">
+    <!-- <ion-grid class="ion-no-padding" style="margin-top:15px;">
       <ion-row>
         <ion-col class="ion-text-end">
           <ion-button [disabled]="!isSelected" (click)="dismiss()">OK</ion-button>
         </ion-col>
       </ion-row>
-    </ion-grid>
+    </ion-grid> -->
   </div>
   <div *ngIf="isTableReady && laTenantList.length === 0" style="padding-top: 20px;"> No Record Found</div>
 </ion-content>
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-end">
+        <ion-button class="cancel-button" (click)="cancel()">Cancel</ion-button>
+        <ion-button class="submit-button" [disabled]="!isSelected" (click)="dismiss()">OK</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
