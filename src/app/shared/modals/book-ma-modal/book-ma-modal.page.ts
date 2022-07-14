@@ -73,9 +73,7 @@ export class BookMaModalPage implements OnInit {
     return new Promise((resolve, reject) => {
       this.commonService.getUserDetails().subscribe((res) => {
         const userDeatil = res && res?.data ? res?.data[0] : '';
-        console.log("userDeatil", userDeatil);
         this.bookMaForm.get('assignToId').patchValue(userDeatil.userId);
-
         resolve(true);
       }, error => {
         reject(error)
