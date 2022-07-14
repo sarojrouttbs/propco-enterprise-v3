@@ -35,6 +35,9 @@ export class SelectLandlordsComponent implements OnInit {
   hmrcConfigs = HMRC;
   totalPropertyLandlord = 0;
   selectedPropertyLandlordCount = 0;
+  popoverOptions: any = {
+    cssClass: 'hmrc-ion-select ion-select-auto'
+  };
 
   constructor(
     private hmrcService: HmrcService,
