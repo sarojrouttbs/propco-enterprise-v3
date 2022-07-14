@@ -33,6 +33,8 @@ export class SelectLandlordsComponent implements OnInit {
   uncheckedLandlords: number[] = [];
   gridCheckAll = false;
   hmrcConfigs = HMRC;
+  totalPropertyLandlord = 0;
+  selectedPropertyLandlordCount = 0;
 
   constructor(
     private hmrcService: HmrcService,
@@ -89,10 +91,10 @@ export class SelectLandlordsComponent implements OnInit {
           .set('hideLoader', 'true');
         this.hmrcService.getLandlords(this.landlordParams).subscribe(res => {
           this.landlordList = res && res.data ? res.data : [];
+          this.totalPropertyLandlord = res ? res.count : 0;
           this.landlordList.forEach(item => {
             item.checked = this.isLandlordChecked(item.propertyLinkId);
           });
-
           callback({
             recordsTotal: res ? res.count : 0,
             recordsFiltered: res ? res.count : 0,
@@ -115,34 +117,23 @@ export class SelectLandlordsComponent implements OnInit {
     this.checkedLandlords.length = 0;
     this.gridCheckAll = true;
     this.getRows(true);
+    this.selectedPropertyLandlordCount = this.totalPropertyLandlord;
   }
 
   unselectAll() {
     this.uncheckedLandlords.length = 0;
     this.gridCheckAll = false;
     this.getRows(false);
-  }
-
-  rowCheckBoxChecked(e: any, propertyLinkId: number) {
-    if (e.currentTarget.checked) {
-      this.uncheckedLandlords.splice(this.uncheckedLandlords.indexOf(propertyLinkId), 1);
-      if (!this.gridCheckAll)
-        this.checkedLandlords.push(propertyLinkId);
-    }
-    else {
-      this.checkedLandlords.splice(this.checkedLandlords.indexOf(propertyLinkId), 1);
-      if (this.gridCheckAll)
-        this.uncheckedLandlords.push(propertyLinkId);
-    }
+    this.selectedPropertyLandlordCount = 0;
   }
 
   private isLandlordChecked(propertyLinkId: number) {
     if (!this.gridCheckAll) {
       return this.checkedLandlords.indexOf(propertyLinkId) >= 0 ? true : false;
-    }
-    else {
+    } else {
       return this.uncheckedLandlords.indexOf(propertyLinkId) >= 0 ? false : true;
     }
+
   }
 
   getRows(selected: boolean) {
@@ -156,11 +147,9 @@ export class SelectLandlordsComponent implements OnInit {
       for (const item of temp) {
         if (!selected) {
           if (item.checked) {
-            this.uncheckedLandlords.push(item.value);
             item.checked = false;
           }
         } else {
-          this.checkedLandlords.push(item.value);
           item.checked = true;
         }
       };
@@ -188,4 +177,19 @@ export class SelectLandlordsComponent implements OnInit {
     this.group.markAsUntouched();
     this.rerenderLandlordList();
   }
+
+  onCheckboxClick(data) {
+    const value: any = document.getElementById('checkbox_' + data).getAttribute('ng-reflect-value');
+    const isChecked: any = document.getElementById('checkbox_' + data).getAttribute('aria-checked');
+    if (isChecked === "true") {
+      this.checkedLandlords.splice(this.checkedLandlords.indexOf(+value), 1);
+      this.uncheckedLandlords.push(+value);
+      this.selectedPropertyLandlordCount -= 1;
+    } else {
+      this.uncheckedLandlords.splice(this.uncheckedLandlords.indexOf(+value), 1);
+      this.checkedLandlords.push(+value);
+      this.selectedPropertyLandlordCount += 1;
+    }
+  }
+
 }
