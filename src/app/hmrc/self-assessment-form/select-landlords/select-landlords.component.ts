@@ -42,7 +42,9 @@ export class SelectLandlordsComponent implements OnInit {
     const element = createCustomElement(SelectAllPlusSearchComponent, {
       injector: this.injector
     });
-    customElements.define(`c-select-all-plus-search`, element);
+    if (!customElements.get('c-select-all-plus-search')) {
+      customElements.define(`c-select-all-plus-search`, element);
+    }
   }
 
   ngOnInit() {
@@ -167,15 +169,15 @@ export class SelectLandlordsComponent implements OnInit {
 
   applyFilters() {
     this.unselectAll();
-    if(this.group.value.managementType){
+    if (this.group.value.managementType) {
       this.landlordParams = this.landlordParams.set('managementType', this.group.value.managementType);
     }
     if (this.group.value.searchText && this.group.value.searchText.length > 3) {
       this.landlordParams = this.landlordParams.set('searchText', this.group.value.searchText);
-      if(this.group.value.searchOnColumns){
+      if (this.group.value.searchOnColumns) {
         this.landlordParams = this.landlordParams.set('searchOnColumns', this.group.value.searchOnColumns);
       }
-    } 
+    }
     this.rerenderLandlordList();
   }
 
