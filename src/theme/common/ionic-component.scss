@@ -241,7 +241,10 @@ ion-item {
 
 .entity-search, .la-application-search, .la-property-search,.nett-modal-container ,.fee-charge-modal-container{
   // .modal-wrapper {
-    min-height: 210px;
+    &::part(content){
+
+    min-height: 220px;
+    height: 225px;
     width: 550px;
 
     ion-content {
@@ -265,13 +268,16 @@ ion-item {
       padding: 0 10px;
     }
   }
-// }
+}
 
 .tenant-list,.fee-charge-modal-container {
   // .modal-wrapper {
-    min-height: 300px;
-    min-width: 400px;
-    width: 767px;
+    &::part(content){
+      min-height: 400px;
+      height: auto;
+      min-width: 400px;
+      width: 767px;
+    }
 
     .dataTables_wrapper.no-footer .dataTables_scrollBody{
       border-bottom: none;
@@ -288,8 +294,11 @@ ion-item {
 
 .alert-prompt{
   // .modal-wrapper {
-    min-height: 200px;
-    min-width: 300px;
+    &::part(content){
+      min-height: 200px;
+      min-width: 300px;
+      height: 250px;
+    }
 
     .status-block{
       padding: 10px 0 0 0;
