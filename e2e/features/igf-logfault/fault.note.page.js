@@ -12,7 +12,7 @@ var FaultNote = function (faultDetails) {
     this.addNoteBtn = element(by.xpath("//ion-button[contains(text(), 'Add Note')]"));
     this.popupCloseBtn = element(by.css("ion-buttons.buttons-last-slot"));
     this.popupTitle = element(by.css("ion-title.title-default"));
-    this.popupEnteredOn = element(by.xpath("//ion-datetime[@formcontrolname = 'date']/input"));
+    this.popupEnteredOn = element(by.css("ion-item#date ion-input input"));
     this.popupComplaintBtn = element(by.xpath("//ion-toggle[@formcontrolname = 'complaint']"));
     this.popupCategoryList = element(by.xpath("//ion-select[@formcontrolname = 'category']"));
     this.popupCategoryValue = element(by.xpath("//ion-label[contains(text(), '" + faultDetails.noteCategory + "')]/following-sibling::ion-radio"));
@@ -44,19 +44,19 @@ var FaultNote = function (faultDetails) {
                 expect(text).toBeCorrect(faultReported.noteWindowTitle, "Add Note popup title - " + text);                
             });           
         }        
-        noteDate = commonFunction.getAttributeValueOfHiddenElement(this.popupEnteredOn, "value").then(function(text){
-            let dateArr = text.split("-");
-            let noteEntryDate = dateArr[2] + "/" + dateArr[1] + "/" + dateArr[0];
-            return noteEntryDate;
+        noteDate = commonFunction.getAttribute(this.popupEnteredOn, "value").then(function(text){
+             if(text){return text;}
         });               
         if(faultReported.complaint.includes("Yes")){
             commonFunction.clickOnElement(this.popupComplaintBtn, "Complaint toggle button");
         }
         if(faultReported.noteCategory){
+            commonFunction.waitForElementToBeVisible(this.popupCategoryList, "Category list");
             commonFunction.selectFromDropDown(this.popupCategoryList, this.popupCategoryValue, "Category List", faultReported.noteCategory);
         }
         if(faultReported.noteType){
-            commonFunction.selectFromDropDown(this.popupTypeList, this.popupTypeValue, "Category List", faultReported.noteType);
+            commonFunction.waitForElementToBeVisible(this.popupTypeList, "Type list");
+            commonFunction.selectFromDropDown(this.popupTypeList, this.popupTypeValue, "Type List", faultReported.noteType);
         }
         if(faultReported.notes){
             commonFunction.sendKeysInto(this.popupNotes, faultReported.notes);

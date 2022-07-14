@@ -69,5 +69,5 @@ describe('FixAFault Module', function(){
         addFault.createFault(json);        
         summary.startFaultProgress(json);
         woRepair.changeRepairToLLOwnRepair(json);
-    });   
+    });  
 })

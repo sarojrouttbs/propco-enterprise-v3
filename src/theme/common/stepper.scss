@@ -398,6 +398,9 @@
       background: var(--ion-color-five);
       border-radius: 5px;
     }
+   .mat-horizontal-stepper-header{
+      pointer-events: none !important;
+  }
   }
 }
 

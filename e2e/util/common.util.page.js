@@ -1,5 +1,7 @@
 var path = require('path');
-const { compileFunction } = require('vm');
+var cryptoJs = require('crypto-js')
+
+//const { compileFunction } = require('vm');
 
 var CommonFunction = function() {
     
@@ -27,7 +29,7 @@ var CommonFunction = function() {
     }
 
     this.getAttribute = function (loc, attribute) {        
-        this.waitForElement(loc);
+        //this.waitForElement(loc);
         return loc.getAttribute(attribute).then(function(value){
             console.log(value);
             return value;
@@ -35,7 +37,7 @@ var CommonFunction = function() {
     }
 
     this.getText = function (loc) {        
-        this.waitForElement(loc);
+       // this.waitForElement(loc);
         loc.getText().then(function(value){
             console.log(value);
             return value;
@@ -67,6 +69,13 @@ var CommonFunction = function() {
         });
     } 
 
+    this.executeJS = function(script, loc){
+        console.log("Executing JavaScript");
+        browser.controlFlow().execute(function(){
+            browser.executeScript(script, loc.getWebElement());
+        });
+    }
+
     this.getAttributeValueOfHiddenElement = function(loc, attrib){
         browser.controlFlow().execute(function () {
             browser.executeScript("arguments[0].setAttribute('type', '');", loc.getWebElement());
@@ -87,12 +96,68 @@ var CommonFunction = function() {
     }
 
     this.clickOnElement = function(loc, cName){  
-        this.waitForElement(loc); 
+       // this.waitForElement(loc); 
         this.scrollToElement(loc);
         browser.controlFlow().execute(function(){
            browser.executeScript("console.log('" + cName + " is clicked');");          
-        }); 
+        });
         loc.click();
+        console.log("element clicked " + cName);
+    }
+
+    /**
+     * function to click on specified element if there are multiple elements
+     * @param {WebElement} loc Element locator 'By'
+     * @param {String} elementNo Position of element in the list
+     * @param {String} cName Element name
+     * @param {Number} listIndex Index of element in the list
+     */
+    this.clickOnSpecificElement = function(loc, elementNo, cName, listIndex){  
+        browser.controlFlow().execute(function(){
+           browser.executeScript("console.log('" + cName + " is clicked');");          
+        }); 
+        switch(elementNo){
+            case "first":
+                let firstElement = element.all(loc).first();
+                firstElement.isPresent().then(function(result){
+                    let cf = new CommonFunction();
+                    if(result){
+                        cf.scrollToElement(firstElement);
+                        firstElement.click();
+                    }
+                });
+                break;
+            case "last": 
+                let lastElement = element.all(loc).last();
+                lastElement.isPresent().then(function(result){
+                    let cf = new CommonFunction();
+                    if(result){
+                        cf.scrollToElement(lastElement);
+                        lastElement.click();
+                    }
+                }); 
+                break;
+            case "index":
+                let nthElement = element.all(loc).get(listIndex);    
+                nthElement.isPresent().then(function(result){
+                    let cf = new CommonFunction();
+                    if(result){
+                        cf.scrollToElement(nthElement);
+                        nthElement.click();
+                    }
+                }); 
+                break;
+            default:
+                let eListEnd = element.all(loc).last();
+                eListEnd.isPresent().then(function(result){
+                    let cf = new CommonFunction();
+                    if(result){
+                        cf.scrollToElement(eListEnd);
+                        eListEnd.click();
+                    }
+                }); 
+                break;    
+        }        
         console.log("element clicked " + cName);
     }
  
@@ -108,6 +173,8 @@ var CommonFunction = function() {
 
     this.selectFromDropDown = function(locList, locValue, cList, cValue){
         this.clickOnElement(locList, cList);
+        this.waitForElementToBeVisible(element(by.xpath("//ion-select-popover")), 'Drop down list');
+        browser.sleep(2000);
         this.clickOnElement(locValue, cValue);    
     }
 
@@ -141,6 +208,26 @@ var CommonFunction = function() {
         browser.wait(EC.visibilityOf(loc), 280000);
     }
 
+    this.waitForSpecificElementToBeVisible = function(loc, elementNo, value, listIndex ){
+        browser.controlFlow().execute(function () {
+            browser.executeScript("console.log('Waiting for " + value + " to be visible');");           
+        }); 
+        switch(elementNo){
+            case "first":
+                browser.wait(EC.visibilityOf(element.all(loc).first()), 180000);
+                break;
+            case "last": 
+                browser.wait(EC.visibilityOf(element.all(loc).last()), 180000);
+                break;
+            case "index":
+                browser.wait(EC.visibilityOf(element.all(loc).get(listIndex)), 180000);
+                break;
+            default:
+                browser.wait(EC.visibilityOf(element.all(loc).last()), 180000);
+                break;    
+        }        
+    }
+
     this.waitForElementToBeInvisible = function(loc, value){ 
         browser.controlFlow().execute(function () {
             browser.executeScript("console.log('Waiting for " + value + " to be invisible');");           
@@ -160,7 +247,7 @@ var CommonFunction = function() {
                 this.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
                 break;
             case "past":
-                if(currentDay < 4){
+                if(currentDay < 5){
                   // this.clickOnElement(element(by.xpath("//button[contains(text(), '" + pastMonth + "')]")), pastMonth);
                    this.clickOnElement(element(by.xpath("//ion-picker-column[2]/div/button[contains(@class, 'picker-opt-selected')]/preceding-sibling::button")));
                    this.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
@@ -168,8 +255,8 @@ var CommonFunction = function() {
                 } else{
                     //this.scrollToElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + currentDay-2 + "']")));
                     this.clickOnElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + (currentDay-2).toString() + "']")), currentDay-1);
+                    this.clickOnElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + (currentDay-3).toString() + "']")), currentDay-2);
                     this.clickOnElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + (currentDay-4).toString() + "']")), currentDay-3);
-                    this.clickOnElement(element(by.css("ion-picker-column:nth-child(2) > div > [opt-index = '" + (currentDay-6).toString() + "']")), currentDay-5);
                     this.clickOnElement(element(by.xpath("//button[contains(text(), 'Done')]")), 'Done');
                     break;
                 } 
@@ -206,6 +293,22 @@ var CommonFunction = function() {
               this.scrollToElement(this.getElementByCssContainingText(element, option));
               expect(this.checkCondition(expCondition.visibilityOf(this.getElementByCssContainingText(element, option)))).toBeCorrect(conditionResult, msg + " - " + option);
           });
+        }
+    }
+
+    this.checkOptionData = function(element, optList, optDataList, conditionResult, msg){
+        let expCondition = protractor.ExpectedConditions;
+        let options = [];
+        let optionData = [];
+        if(optList){
+           options = optList.split(","); 
+        }
+        if(optDataList){
+            optionData = optDataList.split(","); 
+        }
+        for(let i = 0; i<options.length; i++){
+            this.scrollToElement(this.getElementByCssContainingText(element, optionData[i]));
+            expect(this.checkCondition(expCondition.visibilityOf(this.getElementByCssContainingText(element, optionData[i])))).toBeCorrect(conditionResult, msg + " : " + options[i] + " - " + optionData[i]);         
         }
     }
     
@@ -251,6 +354,98 @@ var CommonFunction = function() {
             obj.pValue = text;
             return obj;
         });              
+    }
+
+    this.getAESEncryptedString = function(message, key){
+        return cryptoJs.AES.encrypt(message, key);
+    }
+
+    this.getAESDecryptedString = function(encrypted, key){
+        return cryptoJs.AES.decrypt(encrypted, key).toString(cryptoJs.enc.Utf8);
+    }
+
+    this.updateStepDataObject = function(keyList, valueList){                
+        /*return loc.getText().then(function(text){
+            var obj = {param:"Original parameter", pValue:"Original value"};
+            obj.param  = cMessage;
+            obj.pValue = text;
+            return obj;
+        }); */
+        return new Promise (function(resolve,reject) { 
+            const obj = {};
+            let keys = [];
+            let values = [];
+            if(keyList){
+                keys = keyList.split(","); 
+            }
+            console.log(keyList);
+            keys.forEach(item => {
+                console.log(item); 
+            });
+            if(valueList){
+                values = valueList.split(","); 
+            }
+            console.log(valueList);
+            values.forEach(item => {
+                console.log(item); 
+            });
+            for(let i = 0; i<keys.length; i++){
+                obj[keys[i]] = values[i];                               
+            }
+            if (typeof obj != "undefined") {
+                console.log("Step data object is created");
+                resolve(obj);
+            } else {
+                reject("Object does not exist");
+            }             
+        });        
+    }
+
+    this.updateStepTestData = function(keyList, valueList){
+        /*return new Promise (function(resolve,reject) { 
+            let jasmineObj = jasmine.getEnv();
+            let keys = [];
+            let values = [];
+            if(keyList){
+                keys = keyList.split(","); 
+            }
+            if(valueList){
+                values = valueList.split(","); 
+            }
+            for(let i = 0; i<keys.length; i++){
+               jasmineObj.setSpecProperty(keys[i],values[i]);  
+            }
+            if (typeof jasmineObj != "undefined") {
+                console.log("Jasmine env object is created");
+                resolve(true);
+            } else {
+                reject("Object does not exist");
+            }             
+        });*/
+        const obj = {};
+        let keys = [];
+        let values = [];
+        if(keyList){
+            keys = keyList.split(","); 
+        }
+        console.log(keyList);
+        keys.forEach(item => {
+            console.log(item); 
+        });
+        if(valueList){
+            values = valueList.split(","); 
+        }
+        console.log(valueList);
+        values.forEach(item => {
+            console.log(item); 
+        });
+        for(let i = 0; i<keys.length; i++){
+            obj[keys[i]] = values[i];                               
+        }
+        if (typeof obj != "undefined") {
+            console.log("Step data object is created");
+            expect(obj).toBeValid();
+        }
     }
 
 /*
