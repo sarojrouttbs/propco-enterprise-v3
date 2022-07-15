@@ -1,0 +1,11 @@
+{
+    "faultDetails": {
+        "checkFilterBucket":{
+            "filterList": "Active Repairs,Emergency,Urgent,Non urgent,In Assessment,In Automation,Invoice,Escalation"
+        },
+        "checkMyRepairs":{
+            "myUser": "Demo User",
+            "entryList": "10,15,5"
+        }
+    }
+}

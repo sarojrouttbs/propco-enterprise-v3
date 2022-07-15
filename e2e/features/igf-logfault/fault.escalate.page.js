@@ -69,7 +69,6 @@ var FaultEscalate = function () {
 
     this.checkEscalationDetails = function(faultReported){
         let addFault = new fault(faultReported); 
-       // let fSummary = new faultSummary(faultReported);
         commonFunction.waitForElementToBeVisible(addFault.actionBtn, "Action button for first fault");
         commonFunction.clickOnElement(addFault.categoryTbl, "Fault Table Category of first row");
         if(("escalateAction" in faultReported && faultReported.escalateAction) || ("deEscalateAction" in faultReported && !faultReported.deEscalateAction)){
@@ -88,6 +87,7 @@ var FaultEscalate = function () {
         let fSummary = new faultSummary(faultReported);
         commonFunction.waitForElementToBeVisible(addFault.actionBtn, "Action button for first fault");
         commonFunction.clickOnElement(addFault.actionBtn, "Action button for first fault");
+        commonFunction.waitForElementToBeVisible(this.deEscalateBtn, "De-Escalate button");
         commonFunction.clickOnElement(this.deEscalateBtn, "De-Escalate button");
         commonFunction.waitForElementToBeVisible(fSummary.messageTitle, "De-Escalate popup");
         if(faultReported.deEscalateWindowTitle){
@@ -101,6 +101,7 @@ var FaultEscalate = function () {
         if(faultReported.deEscalateAction){
             commonFunction.clickOnElement(fSummary.confirmationOKBtn, "De-Escalate popup Yes button");
             commonFunction.waitForElementToBeVisible(fSummary.messageTitle, "Popup Message");
+            commonFunction.waitForElementToBeVisible(fSummary.messageOKBtn, "Popup Message OK button");
             let msgTitle = commonFunction.updateVerificationObject(fSummary.messageTitle, "Popup Message Title"); 
             expect(msgTitle).toContainData(faultReported.messageTitle);
             let msg = commonFunction.updateVerificationObject(fSummary.confirmationMessage, "Popup Message"); 

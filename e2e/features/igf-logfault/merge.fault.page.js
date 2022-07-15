@@ -50,7 +50,12 @@ var MergeFault = function (faultDetails) {
     this.quotationLabel = element(by.xpath("//ion-label[contains(text(), 'Quotation')]"));
     this.contractorLabel = element(by.xpath("//ion-label[contains(text(), 'Contractor')]"));
     this.cancelBtn = element(by.xpath("//ion-button[contains(text(), 'Proceed') and contains(@class, 'submit-button')]/preceding-sibling::ion-button[3]"));
-
+    this.faultActionStatus = element(by.css("div.banner > h2.banner-heading")); 
+    this.repairCost = element(by.xpath("//input[@formcontrolname = 'repairCost']"));
+    this.contractorBlock = element(by.css("div.contractor-block"));
+    this.dateTimeTypeList = element(by.xpath("//ion-select[contains(@formcontrolname, 'dateTimeType')]"));
+    this.dateTimeType = element(by.xpath("//ion-label[contains(text(), '" + faultDetails.dateTimeType + "')]/following-sibling::ion-radio"));
+    
 
     var faultList = new Map();
 
@@ -179,8 +184,6 @@ var MergeFault = function (faultDetails) {
         expect(usefulInstruction).toContainData(mergedFault.parentUsefulInstruction);
         commonFunction.scrollToElement(addFault.mediaDocumentsTab);
         addFault.checkFaultDocument(mergedFault.parentFile, true, "Fault document is present");
-        commonFunction.clickOnElement(addFault.reviewTab, "Review Tab");
-        commonFunction.scrollToElement(addFault.cancelBtn);
         fSummary.checkReviewDetails(mergedFault);        
     }
     
@@ -222,8 +225,6 @@ var MergeFault = function (faultDetails) {
         });  
         addFault.checkFaultInformationInTable(faultDetails);
         addFault.viewFault();
-        commonFunction.clickOnElement(addFault.reviewTab, "Review Tab");
-        commonFunction.scrollToElement(addFault.cancelBtn);
         fSummary.checkReviewDetails(faultDetails);       
     }
 
@@ -287,8 +288,6 @@ var MergeFault = function (faultDetails) {
         let actionButton = element(by.xpath("//ion-button[contains(text(), 'Start')]/following-sibling::i"));
         commonFunction.clickOnElement(actionButton, "Action button of row 1");
         addFault.viewFault();
-        commonFunction.clickOnElement(addFault.reviewTab, "Review Tab");
-        commonFunction.scrollToElement(addFault.cancelBtn);
         fSummary.checkReviewDetails(mergedFault);        
     }
 
@@ -300,7 +299,7 @@ var MergeFault = function (faultDetails) {
         commonFunction.scrollToElement(this.proceedBtn);
         commonFunction.clickOnElement(this.proceedBtn, "Proceed button");
         commonFunction.clickOnElement(fSummary.confirmationOKBtn, "Proceed Confirmation Yes button");
-        commonFunction.waitForElementToBeVisible(fSummary.faultStatus, "Fault Status");
+        commonFunction.waitForElementToBeVisible(this.faultActionStatus, "Fault action status");         
         if("contractorInput" in faultDetails){
            commonFunction.scrollToElement(this.proceedWithWOBtn);
            commonFunction.clickOnElement(this.proceedWithWOBtn, "Proceed With Works Order button");
@@ -308,38 +307,64 @@ var MergeFault = function (faultDetails) {
            commonFunction.sendKeysInto(this.contractorInput, faultDetails.contractorInput);
            commonFunction.waitForElementToBeVisible(this.contractorSearchValue, "Contractor Search Result");
            commonFunction.clickOnElement(this.contractorSearchValue, "Contractor Search Result");
+           commonFunction.scrollToElement(this.confirmedEstimateInput);
+           commonFunction.sendKeysInto(this.confirmedEstimateInput, faultDetails.confirmedEstimate);
         } else {
             commonFunction.scrollToElement(this.obtainQuoteBtn);
             commonFunction.clickOnElement(this.obtainQuoteBtn, "Obtain Quote button");
         }        
         commonFunction.scrollToElement(this.proceedBtn);
-        commonFunction.sendKeysInto(this.confirmedEstimateInput, faultDetails.confirmedEstimate);
         commonFunction.clickOnElement(this.proceedBtn, "Proceed button");
         commonFunction.clickOnElement(fSummary.confirmationOKBtn, "Proceed Confirmation Yes button");
-        commonFunction.waitForElementToBeVisible(fSummary.faultStatus, "Fault Status");
+        if("contractorInput" in faultDetails === false){
+           commonFunction.waitForElementToBeVisible(this.contractorBlock, "Contractor list");
+           commonFunction.scrollToElement(element(by.xpath("//ion-text[contains(text(), '" + faultDetails.contractor + "')]/../following-sibling::ion-col[4]//ion-checkbox")));
+           commonFunction.clickOnElement(element(by.xpath("//ion-text[contains(text(), '" + faultDetails.contractor + "')]/../following-sibling::ion-col[4]//ion-checkbox")), faultDetails.contractor + " select button");
+           commonFunction.scrollToElement(this.requiredByDate);
+           commonFunction.clickOnElement(this.requiredByDate, "Required By Date picker");
+           commonFunction.clickOnElement(this.requiredByDateDoneBtn, "Required By Date Done button");
+           commonFunction.waitForElementToBeVisible(this.requiredByDate, "Required By Date");         
+        } else {
+            commonFunction.waitForElementToBeVisible(this.repairCost);
+        }        
         commonFunction.scrollToElement(this.nominalCodeList);
         commonFunction.clickOnElement(this.nominalCodeList, "Nominal Code List");
         let nominalCodeValue = element(by.xpath("//ion-label[contains(text(), '" + faultDetails.nominalCode + "')]/following-sibling::ion-icon"));
         commonFunction.clickOnElement(nominalCodeValue, "Nominal Code Value");
-        commonFunction.clickOnElement(this.searchApplyBtn, "Nominal Code Search Apply button");
-        commonFunction.scrollToElement(this.requiredByDate);
-        commonFunction.clickOnElement(this.requiredByDate, "Required By Date picker");
-        commonFunction.clickOnElement(this.requiredByDateDoneBtn, "Required By Date Done button");
-        commonFunction.waitForElementToBeVisible(this.requiredByDate, "Required By Date");
-        if("contractorInput" in faultDetails === false){
-           commonFunction.scrollToElement(this.contractorCheckbox);
-           commonFunction.clickOnElement(this.contractorCheckbox, "Contractor Checkbox");
-        }        
+        commonFunction.clickOnElement(this.searchApplyBtn, "Nominal Code Search Apply button");             
         commonFunction.scrollToElement(this.proceedBtn);
         commonFunction.clickOnElement(this.proceedBtn, "Proceed button");
         if("contractorInput" in faultDetails){
            commonFunction.clickOnElement(this.skipPaymentBtn, "Skip Payment button");
            commonFunction.sendKeysInto(this.skipReason, faultDetails.skipReason);
            commonFunction.clickOnElement(this.submitBtn, "Submit button");
-           commonFunction.waitForElementToBeVisible(this.contractorLabel, "Contractor Label");
+           commonFunction.waitForElementToBeVisible(this.faultActionStatus, "Fault action status"); 
         } else {
             commonFunction.clickOnElement(fSummary.confirmationOKBtn, "Proceed Confirmation Yes button");
-            commonFunction.waitForElementToBeVisible(this.quotationLabel, "Quotation Label");
+            commonFunction.waitForElementToBeVisible(this.contractorBlock, "Contractor list");
+            let contractorActionBtn = element(by.xpath("//ion-text[contains(text(), '" + faultDetails.contractor + "')]/../following-sibling::ion-col[4]//ion-fab-button"));
+            commonFunction.scrollToElement(contractorActionBtn);
+            commonFunction.clickOnElement(contractorActionBtn, "Contractor Action button");
+            let contractorViewBtn = element(by.xpath("//ion-text[contains(text(), '" + faultDetails.contractor + "')]/../following-sibling::ion-col[4]//ion-fab-list/ion-button"));
+            commonFunction.clickOnElement(contractorViewBtn, "Contractor View button");
+            commonFunction.scrollToElement(commonFunction.getElementByCssContainingText('ion-button', faultDetails.positiveResponseCQNACE));
+            commonFunction.clickOnElement(commonFunction.getElementByCssContainingText('ion-button', faultDetails.positiveResponseCQNACE), faultDetails.positiveResponseCQNACE);
+            commonFunction.clickOnElement(fSummary.confirmationOKBtn, "Quote request accept confirmation OK button");
+            commonFunction.waitForElementToBeVisible(this.faultActionStatus, "Fault action status");
+            commonFunction.scrollToElement(commonFunction.getElementByCssContainingText('ion-button', faultDetails.positiveResponseCDTCE));
+            commonFunction.clickOnElement(commonFunction.getElementByCssContainingText('ion-button', faultDetails.positiveResponseCDTCE), faultDetails.positiveResponseCDTCE);
+            commonFunction.clickOnElement(this.dateTimeTypeList, "Date/Time Type list");
+            commonFunction.clickOnElement(this.dateTimeType, "Date/Time Type option");
+            commonFunction.clickOnElement(element(by.xpath("//app-appointment-modal//ion-datetime")), "Date/Time Picker");
+            commonFunction.setDate(faultDetails.visitDateValue);
+            commonFunction.clickOnElement(commonFunction.getElementByCssContainingText('ion-button', 'YES'), "Yes button from schedule contractor quote visit popup");
+            commonFunction.waitForElementToBeVisible(this.faultActionStatus, "Fault action status");
+            commonFunction.scrollToElement(commonFunction.getElementByCssContainingText('ion-button', 'Upload Quote'));
+            commonFunction.clickOnElement(commonFunction.getElementByCssContainingText('ion-button', 'Upload Quote'), "Upload Quote button");
+            commonFunction.sendKeysInto(element(by.xpath("//input[contains(@formcontrolname, 'quote')]")), faultDetails.quoteAmount);
+            commonFunction.uploadImage(element(by.xpath("//input[@id='docFiles']")), faultDetails.quoteDoc, "Quote document");
+            commonFunction.clickOnElement(commonFunction.getElementByCssContainingText('ion-button', 'Submit'), "Quote Upload Submit button");
+            commonFunction.waitForElementToBeVisible(this.faultActionStatus, "Fault action status"); 
         }
         commonFunction.scrollToElement(this.cancelBtn);
         commonFunction.clickOnElement(this.cancelBtn, "Cancel button");
@@ -375,8 +400,6 @@ var MergeFault = function (faultDetails) {
             merge.searchFaultByIdAddress(text); 
         }); 
         addFault.viewFault();
-        commonFunction.clickOnElement(addFault.reviewTab, "Review Tab");
-        commonFunction.scrollToElement(addFault.cancelBtn);
         fSummary.checkReviewDetails(mergedFault); 
     }
 }

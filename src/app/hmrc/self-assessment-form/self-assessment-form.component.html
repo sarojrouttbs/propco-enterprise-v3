@@ -4,8 +4,12 @@
   </div>
 <ion-grid>
   <ion-row>
+    <ion-col class="ion-text-right" size="100">
+      <ion-button style="float: left;" fill="solid" *ngIf="stepper.selectedIndex > 0" (click)="onBack(stepper.selectedIndex)">back</ion-button>
+      <ion-button  color="success" fill="solid" *ngIf="stepper.selectedIndex < 2" (click)="onNext(stepper.selectedIndex)">{{nextLabel}}</ion-button>
+    </ion-col>
     <ion-col>
-      <mat-horizontal-stepper #stepper labelPosition="bottom" [selectedIndex]="currentStepperIndex" id="hmrc-stepper">
+      <mat-horizontal-stepper  #stepper labelPosition="bottom" [selectedIndex]="currentStepperIndex" id="hmrc-stepper">
         <mat-step [completed]="stepper.selectedIndex > 0">
           <app-select-landlords [group]="selfAssessmentForm"></app-select-landlords>
           <ng-template matStepLabel>Select Landlords</ng-template>
@@ -18,10 +22,6 @@
           <ng-template matStepLabel>Preview & Send</ng-template>
         </mat-step>
       </mat-horizontal-stepper>
-    </ion-col>
-    <ion-col size="100" class="ion-text-right">
-      <ion-button fill="solid" *ngIf="stepper.selectedIndex > 0" (click)="onBack(stepper.selectedIndex)">back</ion-button>
-      <ion-button color="success" fill="solid" *ngIf="stepper.selectedIndex < 2" (click)="onNext(stepper.selectedIndex)">{{nextLabel}}</ion-button>
     </ion-col>
   </ion-row>
 </ion-grid>

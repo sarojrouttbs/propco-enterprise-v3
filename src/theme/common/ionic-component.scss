@@ -241,7 +241,10 @@ ion-item {
 
 .entity-search, .la-application-search, .la-property-search,.nett-modal-container ,.fee-charge-modal-container{
   // .modal-wrapper {
-    min-height: 210px;
+    &::part(content){
+
+    min-height: 220px;
+    height: 225px;
     width: 550px;
 
     ion-content {
@@ -265,13 +268,16 @@ ion-item {
       padding: 0 10px;
     }
   }
-// }
+}
 
 .tenant-list,.fee-charge-modal-container {
   // .modal-wrapper {
-    min-height: 300px;
-    min-width: 400px;
-    width: 767px;
+    &::part(content){
+      min-height: 400px;
+      height: auto;
+      min-width: 400px;
+      width: 767px;
+    }
 
     .dataTables_wrapper.no-footer .dataTables_scrollBody{
       border-bottom: none;
@@ -288,8 +294,11 @@ ion-item {
 
 .alert-prompt{
   // .modal-wrapper {
-    min-height: 200px;
-    min-width: 300px;
+    &::part(content){
+      min-height: 200px;
+      min-width: 300px;
+      height: 250px;
+    }
 
     .status-block{
       padding: 10px 0 0 0;
@@ -686,7 +695,6 @@ ion-alert.common-alert-box {
 }
 
 .market-apprisal-ion-select, .fault-ion-select, .let-alliance-ion-select , .hmrc-ion-select{
-  --width: auto;
   .sc-ion-select-popover{
     color: var(--ion-color-three) !important
   }
@@ -694,6 +702,11 @@ ion-alert.common-alert-box {
     --background: var(--ion-color-four);
   }
 }
+
+.ion-select-auto {
+  --width: auto !important;
+}
+
 
 //agnet portal > market appraisal form modals
 .ma-modal-container,.la-modal-container, .tob-modal-container, .fault-modal-container, .property-modal-container {
@@ -897,4 +910,9 @@ ion-datetime {
     position: absolute;
     right: 0;
     color: var( --ion-color-primary); 
+}
+#hmrc-stepper {
+  .ion-date-item-icon {
+    opacity: 0.6;
+  }
 }
