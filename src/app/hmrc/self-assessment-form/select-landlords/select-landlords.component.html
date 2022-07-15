@@ -43,7 +43,7 @@
       <ion-col size="15">
         <ion-item>
           <ion-label position="floating">Column</ion-label>
-          <ion-select interface="popover" formControlName="searchOnColumns">
+          <ion-select interface="popover" formControlName="searchOnColumns" [interfaceOptions]="popoverOptions">
             <ion-select-option [value]="item?.index" *ngFor="let item of hmrcConfigs.SEARCH_ON_COLUMNS_KEYS">
               {{item?.value}}
             </ion-select-option>
