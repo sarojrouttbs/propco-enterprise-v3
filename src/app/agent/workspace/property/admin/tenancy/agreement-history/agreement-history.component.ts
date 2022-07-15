@@ -2,7 +2,7 @@ import { Component, Input, OnInit, QueryList, SimpleChanges, ViewChildren } from
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
-import { DATE_FORMAT } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS } from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-agreement-history',
@@ -10,6 +10,7 @@ import { DATE_FORMAT } from 'src/app/shared/constants';
   styleUrls: ['./agreement-history.component.scss'],
 })
 export class AgreementHistoryComponent implements OnInit {
+  notAvailable = DEFAULTS.NOT_AVAILABLE;
   DATE_FORMAT = DATE_FORMAT;
   logHistoryList: any;
   historyDtOption: DataTables.Settings;
