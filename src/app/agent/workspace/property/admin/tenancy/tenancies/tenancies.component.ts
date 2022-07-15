@@ -113,7 +113,7 @@ export class TenanciesComponent implements OnInit {
     this.agreementStatusesLookup = data.agreementStatuses;
   }
 
-  onRowClick(data) {
+  onRowClick(data: any) {
     this.selectedTenant = data;
     this.isAgreementDetails = true;
     this.tenancies.forEach((e, i) => {
