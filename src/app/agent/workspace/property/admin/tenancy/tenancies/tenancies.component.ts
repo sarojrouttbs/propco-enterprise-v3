@@ -108,7 +108,7 @@ export class TenanciesComponent implements OnInit {
     }
   }
 
-  private setLookupData(data) {
+  private setLookupData(data: any) {
     this.contractTypeLookup = data.contractTypes;
     this.agreementStatusesLookup = data.agreementStatuses;
   }

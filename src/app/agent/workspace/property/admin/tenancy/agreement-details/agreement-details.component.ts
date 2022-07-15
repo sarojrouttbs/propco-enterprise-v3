@@ -114,7 +114,7 @@ export class AgreementDetailsComponent implements OnInit {
     }
   }
 
-  private setLookupData(data) {
+  private setLookupData(data: any) {
     this.frequencyTypes = data.frequencyTypes;
     this.agreementStatuses = data.agreementStatuses;
     this.managementTypes = data.managementTypes;
@@ -150,7 +150,7 @@ export class AgreementDetailsComponent implements OnInit {
     });
   }
 
-  getStatusColorClassName(status) {
+  getStatusColorClassName(status: number) {
     let className = '';
     switch (status) {
       case 3:

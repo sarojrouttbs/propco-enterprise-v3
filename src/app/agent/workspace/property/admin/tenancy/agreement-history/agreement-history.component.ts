@@ -24,7 +24,7 @@ export class AgreementHistoryComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selectedTenant && changes.selectedTenant.currentValue) {
       this.selectedTenant = this.selectedTenant;
-      this.getHistory();
+      this.getAgreementHistory(this.selectedTenant?.agreementId);
     }
   }
 
@@ -33,10 +33,6 @@ export class AgreementHistoryComponent implements OnInit {
     setTimeout(() => {
       this.historyDtTrigger.next();
     }, 100);
-  }
-
-  private getHistory() {
-    this.getAgreementHistory(this.selectedTenant?.agreementId);
   }
 
   private buildDtOptions(): DataTables.Settings {
