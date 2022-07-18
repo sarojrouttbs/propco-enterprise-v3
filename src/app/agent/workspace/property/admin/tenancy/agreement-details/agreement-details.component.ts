@@ -58,8 +58,8 @@ export class AgreementDetailsComponent implements OnInit {
       rentFrequency: [],
       frequencyType: [],
       commissionPercentage: [],
-      managementType: [], // pending from API
-      totalOccupants: [], // pending from API
+      managementType: [],
+      totalOccupants: [],
       noOfOccupiers: [],
       status: [],
       nextClaimDate: [],
@@ -140,6 +140,7 @@ export class AgreementDetailsComponent implements OnInit {
     this.agreementDetailsForm.patchValue(this.agreementDetails)
     this.agreementDetailsForm.patchValue({
       contractType: this.agreementDetails.contractType.toString(),
+      managementType: this.agreementDetails.managementType.toString(),
       totalOccupants: (this.agreementDetails?.totalOccupants ? this.agreementDetails?.totalOccupants : (this.agreementDetails?.noOfOccupiers + this.agreementDetails?.noOfChildren + this.agreementDetails?.noOfPermittedOccupier)),
       tenantName: this.agreementDetails.agreementTenantDetail[0].tenantId,
       rent: this.agreementDetails.agreementTenantDetail[0].rent,
