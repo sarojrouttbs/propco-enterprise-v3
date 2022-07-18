@@ -156,18 +156,18 @@ export class AgreementDetailsComponent implements OnInit {
     switch (status) {
       case 3:
       case 4:
-        className = 'tenancy-status-expired';
+        className = 'expired';
         break;
       case 2:
       case 6:
-        className = 'tenancy-status-confirmed';
+        className = 'confirmed';
         break;
       case 1:
       case 5:
-        className = 'tenancy-status-proposed';
+        className = 'proposed';
         break;
       default:
-        className = 'tenancy-status-other';
+        className = 'other-status';
         break;
     }
     return className;

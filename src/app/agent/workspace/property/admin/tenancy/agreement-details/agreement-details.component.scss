@@ -10,19 +10,19 @@
         margin: 25px -12px;
     }
 
-    .tenancy-status-expired {
+    .expired {
         color: var(--ion-color-primary) !important;
     }
 
-    .tenancy-status-confirmed {
+    .confirmed {
         color: var(--ion-color-success) !important;
     }
 
-    .tenancy-status-proposed {
+    .proposed {
         color: var(--ion-color-warning) !important;
     }
 
-    .tenancy-status-other {
+    .other-status {
         color: var(--ion-color-three) !important;
     }
 
