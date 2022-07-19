@@ -6,12 +6,12 @@
   <ion-row>
     <ion-col class="ion-text-right" size="100">
       <ion-button style="float: left;" fill="solid" *ngIf="stepper.selectedIndex > 0" (click)="onBack(stepper.selectedIndex)">back</ion-button>
-      <ion-button  color="success" fill="solid" *ngIf="stepper.selectedIndex < 2" (click)="onNext(stepper.selectedIndex)">{{nextLabel}}</ion-button>
+      <ion-button  color="success" fill="solid" *ngIf="stepper.selectedIndex < 2" (click)="onNext(stepper.selectedIndex)" [disabled]="isHmrcLandlordSelected === 'false'">{{nextLabel}}</ion-button>
     </ion-col>
     <ion-col>
       <mat-horizontal-stepper  #stepper labelPosition="bottom" [selectedIndex]="currentStepperIndex" id="hmrc-stepper">
         <mat-step [completed]="stepper.selectedIndex > 0">
-          <app-select-landlords [group]="selfAssessmentForm"></app-select-landlords>
+          <app-select-landlords [group]="selfAssessmentForm" (onHmrcLandlordSelect)="onHmrcLandlordSelect($event)"></app-select-landlords>
           <ng-template matStepLabel>Select Landlords</ng-template>
         </mat-step>
         <mat-step [completed]="stepper.selectedIndex > 1">

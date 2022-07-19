@@ -19,6 +19,7 @@ export class SelfAssessmentFormComponent implements OnInit {
   nextLabel: string = 'Next 1/3';
   landlordParams: any = new HttpParams();
   DATE_FORMAT = DATE_FORMAT;
+  isHmrcLandlordSelected = "false";
 
   constructor(
     private fb: FormBuilder,
@@ -87,6 +88,10 @@ export class SelfAssessmentFormComponent implements OnInit {
       });
     });
     return promise;
+  }
+
+  onHmrcLandlordSelect(data: string) {
+    this.isHmrcLandlordSelected = data;
   }
 
 }

@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Injector, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Injector, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { SelectAllPlusSearchComponent } from 'src/app/select-all-plus-search/select-all-plus-search.component';
 import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC, PROPCO } from 'src/app/shared/constants';
@@ -38,6 +38,9 @@ export class SelectLandlordsComponent implements OnInit {
   popoverOptions: any = {
     cssClass: 'hmrc-ion-select ion-select-auto'
   };
+
+  @Output() onHmrcLandlordSelect = new EventEmitter<any>();
+
 
   constructor(
     private hmrcService: HmrcService,
@@ -121,6 +124,7 @@ export class SelectLandlordsComponent implements OnInit {
     this.gridCheckAll = true;
     this.getRows(true);
     this.selectedPropertyLandlordCount = this.totalPropertyLandlord;
+    this.onHmrcLandlordSelect.emit("true");
   }
 
   unselectAll() {
@@ -128,6 +132,7 @@ export class SelectLandlordsComponent implements OnInit {
     this.gridCheckAll = false;
     this.getRows(false);
     this.selectedPropertyLandlordCount = 0;
+    this.onHmrcLandlordSelect.emit("false");
   }
 
   private isLandlordChecked(propertyLinkId: number) {
@@ -164,7 +169,7 @@ export class SelectLandlordsComponent implements OnInit {
     if (this.group.value.managementType) {
       this.landlordParams = this.landlordParams.set('managementType', this.group.value.managementType);
     }
-    if (this.group.value.searchText && this.group.value.searchText.length > 3) {
+    if (this.group.value.searchText && this.group.value.searchText.trim() && this.group.value.searchText.length > 2) {
       this.landlordParams = this.landlordParams.set('searchText', this.group.value.searchText);
       if (this.group.value.searchOnColumns) {
         this.landlordParams = this.landlordParams.set('searchOnColumns', this.group.value.searchOnColumns);
@@ -193,6 +198,10 @@ export class SelectLandlordsComponent implements OnInit {
       this.checkedLandlords.push(+value);
       this.selectedPropertyLandlordCount += 1;
     }
+    if ((this.gridCheckAll && this.uncheckedLandlords.length > 0)
+      || (!this.gridCheckAll && this.checkedLandlords.length > 0))
+      this.onHmrcLandlordSelect.emit("true");
+    else this.onHmrcLandlordSelect.emit("false");
   }
 
 }
