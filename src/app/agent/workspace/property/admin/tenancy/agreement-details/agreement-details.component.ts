@@ -20,7 +20,7 @@ export class AgreementDetailsComponent implements OnInit {
   managementTypes: any;
   contractTypes: any;
   agreementPeriodicities: any;
-  inventoryPreparedBy: any;
+  inventoryPreparedByList: any;
   agreementDetails: any;
   rentFrequencyList = Array.from(Array(100).keys());
   agreementTenantDetails: any;
@@ -120,7 +120,7 @@ export class AgreementDetailsComponent implements OnInit {
     this.managementTypes = data.managementTypes;
     this.contractTypes = data.contractTypes;
     this.agreementPeriodicities = data.agreementPeriodicities;
-    this.inventoryPreparedBy = data.inventoryPreparedBy;
+    this.inventoryPreparedByList = data.inventoryPreparedBy;
   }
 
   private getAgreementDetails() {
@@ -139,8 +139,8 @@ export class AgreementDetailsComponent implements OnInit {
   private patchAgreementDetails() {
     this.agreementDetailsForm.patchValue(this.agreementDetails)
     this.agreementDetailsForm.patchValue({
-      contractType: this.agreementDetails.contractType.toString(),
-      managementType: this.agreementDetails.managementType.toString(),
+      contractType: this.agreementDetails?.contractType ? this.agreementDetails?.contractType.toString() : '',
+      managementType: this.agreementDetails?.managementType ? this.agreementDetails?.managementType.toString() : '',
       totalOccupants: (this.agreementDetails?.totalOccupants ? this.agreementDetails?.totalOccupants : (this.agreementDetails?.noOfOccupiers + this.agreementDetails?.noOfChildren + this.agreementDetails?.noOfPermittedOccupier)),
       tenantName: this.agreementDetails.agreementTenantDetail[0].tenantId,
       rent: this.agreementDetails.agreementTenantDetail[0].rent,

@@ -744,3 +744,27 @@ export const HMRC = {
     { index: 'LANDLORD_ADDRESS', value: 'Landlord Address' },
   ]
 }
+
+export const DATE_RANGE_CONFIG_LIST = [{
+  index: 'Week to Date',
+  value: 'Week to Date'
+},
+{
+  index: 'Month to Date',
+  value: 'Month to Date'
+},
+{
+  index: 'Year to Date',
+  value: 'Year to Date'
+},
+{
+  index: 'Last Month',
+  value: 'Last Month'
+}];
+
+export const DATE_RANGE_CONFIG = {
+  'WEEK_TO_DATE': 'Week to Date',
+  'MONTH_TO_DATE': 'Month to Date',
+  'YEAR_TO_DATE': 'Year to Date',
+  'LAST_MONTH': 'Last Month'
+};
