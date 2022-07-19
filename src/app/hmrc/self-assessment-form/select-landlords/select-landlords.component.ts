@@ -164,7 +164,7 @@ export class SelectLandlordsComponent implements OnInit {
     if (this.group.value.managementType) {
       this.landlordParams = this.landlordParams.set('managementType', this.group.value.managementType);
     }
-    if (this.group.value.searchText && this.group.value.searchText.length > 3) {
+    if (this.group.value.searchText && this.group.value.searchText.trim() && this.group.value.searchText.length > 2) {
       this.landlordParams = this.landlordParams.set('searchText', this.group.value.searchText);
       if (this.group.value.searchOnColumns) {
         this.landlordParams = this.landlordParams.set('searchOnColumns', this.group.value.searchOnColumns);
