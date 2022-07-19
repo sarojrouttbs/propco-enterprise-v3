@@ -104,7 +104,7 @@ export class MarketingActivityComponent implements OnInit {
   }
 
   private getMarketingActivityDetails(propertyId: string) {
-    this.requestParams = this.requestParams.set("hideLoader", "true");
+    this.requestParams = this.requestParams.set('hideLoader', 'true');
     return new Promise((resolve, _reject) => {
       this.agentService.getMarketingActivity(propertyId, this.requestParams).subscribe(
         (res) => {
@@ -120,7 +120,7 @@ export class MarketingActivityComponent implements OnInit {
   private async configureTableData() {
     this.marketActivityListing = [];
     if (this.marketingActivityDetails.length > 0) {
-      const groupedApplicantObj = this.groupArrayOfObjects(this.marketingActivityDetails, "applicantId");
+      const groupedApplicantObj = this.groupArrayOfObjects(this.marketingActivityDetails, 'applicantId');
       const groupedApplicantArr = Object.values(groupedApplicantObj);
       this.marketActivityListing = await this.marketActivityListingData(groupedApplicantArr);
     }
