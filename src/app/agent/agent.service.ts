@@ -170,4 +170,12 @@ export class AgentService {
   getLatlongFromAddress(url: any, params: any): Observable<any> {
     return this.httpClient.get(url, { params });
   }
+
+  getAgreementDetails(agreementId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `agreement/${agreementId}/details`);
+  }
+
+  getAgreementHistory(agreementId: string,): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `agreement/${agreementId}/history`);
+  }
 }

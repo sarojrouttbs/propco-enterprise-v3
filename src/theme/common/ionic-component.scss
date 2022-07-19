@@ -494,7 +494,7 @@ ion-alert.common-alert-box {
   // }
 }
 
-#propertyDashboardTabs{
+#propertyDashboardTabs, #tenancyAgreementEditorTabs {
     z-index: 1000;
     padding-bottom: 10px;
     ion-segment-button{
@@ -529,6 +529,13 @@ ion-alert.common-alert-box {
     border: 1px solid;
     border-color: var(--ion-color-four) transparent transparent var(--ion-color-four);
     background-color: var(--ion-color-six);
+  }
+}
+
+#tenancyAgreementEditorTabs {
+  padding: 0px 10px 10px 10px;
+  ion-segment-button{
+    border: solid 1px var(--ion-color-four);
   }
 }
 
@@ -627,7 +634,8 @@ ion-alert.common-alert-box {
   #la-guarantor-details,
   #market-appraisal-lettings,
   #market-appraisal-property-address,
-  #property-keys {
+  #property-keys,
+  #agreement-details {
     ion-select{
       height: 36px;
     }
@@ -643,6 +651,9 @@ ion-alert.common-alert-box {
     }
   
     // ionic form field - dark / light theme css
+    h4, h5, h6, p, small, div, ion-label, ion-text {
+      color: var(--ion-color-one);
+    }
     ion-item {
       --border-color: var(--ion-color-one) !important;
       ion-label, ion-text {

@@ -47,6 +47,8 @@ import { SafetyDeviceComponent } from './safety-device/safety-device.component';
 import { PercentageDirective } from 'src/app/percentage.directive';
 import { OpenStreetMapComponent } from './open-street-map/open-street-map.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { AgreementDetailsComponent } from './admin/tenancy/agreement-details/agreement-details.component';
+import { AgreementHistoryComponent } from './admin/tenancy/agreement-history/agreement-history.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -107,7 +109,10 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     WhitegoodsComponent,
     SafetyDeviceComponent,
     PercentageDirective,
-    OpenStreetMapComponent
+    OpenStreetMapComponent,
+    AgreementDetailsComponent,
+    AgreementHistoryComponent,
+    PercentageDirective
   ],
   providers: [
     AgentService,
