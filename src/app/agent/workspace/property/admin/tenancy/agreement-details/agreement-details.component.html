@@ -470,7 +470,7 @@
         <ion-item>
           <ion-label position="floating">Inventory Prepared By</ion-label>
           <ion-select formControlName="inventoryPreparedBy" interface="popover">
-            <ion-select-option [value]="item.index" *ngFor="let item of inventoryPreparedBy">
+            <ion-select-option [value]="item.index" *ngFor="let item of inventoryPreparedByList">
               {{item.value}}
             </ion-select-option>
           </ion-select>
