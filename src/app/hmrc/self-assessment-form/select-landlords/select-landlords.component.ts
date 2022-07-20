@@ -136,12 +136,18 @@ export class SelectLandlordsComponent implements OnInit {
   }
 
   private isLandlordChecked(propertyLinkId: number) {
+    
     if (!this.gridCheckAll) {
       return this.checkedLandlords.indexOf(propertyLinkId) >= 0 ? true : false;
     } else {
       return this.uncheckedLandlords.indexOf(propertyLinkId) >= 0 ? false : true;
     }
 
+    if (this.gridCheckAll) {
+      return this.checkedLandlords.indexOf(propertyLinkId) >= 0 ? false : true;
+    } else {
+      return this.uncheckedLandlords.indexOf(propertyLinkId) >= 0 ? true : false;
+    }
   }
 
   getRows(selected: boolean) {
@@ -188,7 +194,7 @@ export class SelectLandlordsComponent implements OnInit {
 
   onCheckboxClick(data) {
     const value: any = document.getElementById('checkbox_' + data).getAttribute('ng-reflect-value');
-    const isChecked: any = document.getElementById('checkbox_' + data).getAttribute('aria-checked');
+    const isChecked: any = document.getElementById('checkbox_' + data).getAttribute('aria-checked');    
     if (isChecked === "true") {
       this.checkedLandlords.splice(this.checkedLandlords.indexOf(+value), 1);
       this.uncheckedLandlords.push(+value);
@@ -197,7 +203,7 @@ export class SelectLandlordsComponent implements OnInit {
       this.uncheckedLandlords.splice(this.uncheckedLandlords.indexOf(+value), 1);
       this.checkedLandlords.push(+value);
       this.selectedPropertyLandlordCount += 1;
-    }
+    }    
     if ((this.gridCheckAll && this.uncheckedLandlords.length > 0)
       || (!this.gridCheckAll && this.checkedLandlords.length > 0))
       this.onHmrcLandlordSelect.emit("true");
