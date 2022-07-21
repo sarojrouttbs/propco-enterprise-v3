@@ -274,7 +274,7 @@ ion-item {
   // .modal-wrapper {
     &::part(content){
       min-height: 400px;
-      height: auto;
+      height: 40%;
       min-width: 400px;
       width: 767px;
     }
