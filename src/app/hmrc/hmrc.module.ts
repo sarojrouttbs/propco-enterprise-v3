@@ -15,6 +15,7 @@ import { PipesModule } from '../shared/pipes/pipes.module';
 import { SelectSearchAllDirective } from '../select-all-plus-search/select-search-all.directive';
 import { SelectAllPlusSearchComponent } from '../select-all-plus-search/select-all-plus-search.component';
 import { SelectDatesComponent } from './self-assessment-form/select-dates/select-dates.component';
+import { PreviewAndSendComponent } from './self-assessment-form/preview-and-send/preview-and-send.component';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { SelectDatesComponent } from './self-assessment-form/select-dates/select
     SelectLandlordsComponent,
     SelectSearchAllDirective,
     SelectAllPlusSearchComponent,
-    SelectDatesComponent
+    SelectDatesComponent,
+    PreviewAndSendComponent
   ],
   entryComponents: [SelectAllPlusSearchComponent]
 })

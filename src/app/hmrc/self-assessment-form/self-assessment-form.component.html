@@ -2,27 +2,42 @@
   <div class="ion-text-center">
     <h2>HMRC Self-Assessment Form</h2>
   </div>
-<ion-grid>
-  <ion-row>
-    <ion-col class="ion-text-right" size="100">
-      <ion-button style="float: left;" fill="solid" *ngIf="stepper.selectedIndex > 0" (click)="onBack(stepper.selectedIndex)">back</ion-button>
-      <ion-button  color="success" fill="solid" *ngIf="stepper.selectedIndex < 2" (click)="onNext(stepper.selectedIndex)" [disabled]="isHmrcLandlordSelected === 'false'">{{nextLabel}}</ion-button>
-    </ion-col>
-    <ion-col>
-      <mat-horizontal-stepper  #stepper labelPosition="bottom" [selectedIndex]="currentStepperIndex" id="hmrc-stepper">
-        <mat-step [completed]="stepper.selectedIndex > 0">
-          <app-select-landlords [group]="selfAssessmentForm" (onHmrcLandlordSelect)="onHmrcLandlordSelect($event)"></app-select-landlords>
-          <ng-template matStepLabel>Select Landlords</ng-template>
-        </mat-step>
-        <mat-step [completed]="stepper.selectedIndex > 1">
-          <ng-template matStepLabel>Select Dates</ng-template>
-          <app-select-dates [group]="selfAssessmentForm"></app-select-dates>
-        </mat-step>
-        <mat-step [completed]="stepper.selectedIndex > 2">
-          <ng-template matStepLabel>Preview & Send</ng-template>
-        </mat-step>
-      </mat-horizontal-stepper>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-right" size="100">
+        <ion-button style="float: left;" fill="solid" *ngIf="stepper.selectedIndex > 0"
+          (click)="onBack(stepper.selectedIndex)">back</ion-button>
+        <ion-button color="success" fill="solid" (click)="onNext(stepper.selectedIndex)"
+          [disabled]="isHmrcLandlordSelected === 'false'" *ngIf="stepper.selectedIndex <= 1">{{stepper.selectedIndex <= 1 ? nextLabel : 'Send' }}
+        </ion-button>
+        <ion-button color="success" fill="solid" (click)="onNext(stepper.selectedIndex)"
+        [disabled]="isHmrcLandlordSelectPreview === 'false'" *ngIf="stepper.selectedIndex === 2">Send</ion-button>
+      </ion-col>
+      <ion-col>
+        <mat-horizontal-stepper #stepper labelPosition="bottom" [selectedIndex]="currentStepperIndex" id="hmrc-stepper">
+          <mat-step [completed]="stepper.selectedIndex > 0">
+            <app-select-landlords 
+            *ngIf="systemConfig"
+            [group]="selfAssessmentForm" 
+            [systemConfig]="systemConfig"
+            (onHmrcLandlordSelect)="onHmrcLandlordSelect($event)">
+            </app-select-landlords>
+            <ng-template matStepLabel>Select Landlords</ng-template>
+          </mat-step>
+          <mat-step [completed]="stepper.selectedIndex > 1">
+            <ng-template matStepLabel>Select Dates</ng-template>
+            <app-select-dates [group]="selfAssessmentForm"></app-select-dates>
+          </mat-step>
+          <mat-step [completed]="stepper.selectedIndex > 2">
+            <ng-template matStepLabel>Preview & Send</ng-template>
+            <app-preview-and-send 
+            *ngIf="stepper.selectedIndex==2" 
+            [group]="selfAssessmentForm"
+            (onHmrcLandlordSelectPreview)="onHmrcLandlordSelectPreview($event)">
+          </app-preview-and-send>
+          </mat-step>
+        </mat-horizontal-stepper>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
