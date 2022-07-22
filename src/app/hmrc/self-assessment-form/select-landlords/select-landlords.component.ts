@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Injector, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Injector, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { SelectAllPlusSearchComponent } from 'src/app/select-all-plus-search/select-all-plus-search.component';
 import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC, PROPCO } from 'src/app/shared/constants';
@@ -22,6 +22,7 @@ export class SelectLandlordsComponent implements OnInit {
 
   landlordList: any;
   @Input() group: FormGroup;
+  @Input() systemConfig;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
@@ -57,7 +58,10 @@ export class SelectLandlordsComponent implements OnInit {
 
   ngOnInit() {
     this.getLookupData();
-    this.initDataTable();
+    this.dtOptions = this.initDataTable();
+    setTimeout(() => {
+      this.dtTrigger.next();
+    }, 100);
   }
 
   private getLookupData() {
@@ -78,8 +82,8 @@ export class SelectLandlordsComponent implements OnInit {
     this.managementTypes = data.managementTypes;
   }
 
-  private initDataTable(): void {
-    this.dtOptions = {
+  private initDataTable(): DataTables.Settings {
+    return {
       paging: true,
       pagingType: 'full_numbers',
       serverSide: true,
@@ -94,6 +98,7 @@ export class SelectLandlordsComponent implements OnInit {
         this.landlordParams = this.landlordParams
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
+          .set('taxHandler', this.systemConfig)
           .set('hideLoader', 'true');
         this.hmrcService.getLandlords(this.landlordParams).subscribe(res => {
           this.landlordList = res && res.data ? res.data : [];
@@ -107,11 +112,11 @@ export class SelectLandlordsComponent implements OnInit {
             data: []
           });
         })
-      },
+      }
     };
   }
 
-  rerenderLandlordList(resetPaging?): void {
+  private rerenderLandlordList(resetPaging?): void {
     if (this.dtElements && this.dtElements.first.dtInstance) {
       this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.ajax.reload((res) => { }, resetPaging);
@@ -124,7 +129,7 @@ export class SelectLandlordsComponent implements OnInit {
     this.gridCheckAll = true;
     this.getRows(true);
     this.selectedPropertyLandlordCount = this.totalPropertyLandlord;
-    this.onHmrcLandlordSelect.emit("true");
+    this.onHmrcLandlordSelect.emit('true');
   }
 
   unselectAll() {
@@ -132,11 +137,11 @@ export class SelectLandlordsComponent implements OnInit {
     this.gridCheckAll = false;
     this.getRows(false);
     this.selectedPropertyLandlordCount = 0;
-    this.onHmrcLandlordSelect.emit("false");
+    this.onHmrcLandlordSelect.emit('false');
   }
 
   private isLandlordChecked(propertyLinkId: number) {
-    
+
     if (!this.gridCheckAll) {
       return this.checkedLandlords.indexOf(propertyLinkId) >= 0 ? true : false;
     } else {
@@ -150,8 +155,7 @@ export class SelectLandlordsComponent implements OnInit {
     }
   }
 
-  getRows(selected: boolean) {
-    this.dtTrigger.next();
+  private getRows(selected: boolean) {
     this.dtElements.first.dtInstance.then((dtInstance: any) => {
       const elements = [];
       $('td', dtInstance.table(0).node()).find('ion-checkbox');
@@ -192,10 +196,10 @@ export class SelectLandlordsComponent implements OnInit {
     this.rerenderLandlordList();
   }
 
-  onCheckboxClick(data) {
+  onCheckboxClick(data: any) {
     const value: any = document.getElementById('checkbox_' + data).getAttribute('ng-reflect-value');
-    const isChecked: any = document.getElementById('checkbox_' + data).getAttribute('aria-checked');    
-    if (isChecked === "true") {
+    const isChecked: any = document.getElementById('checkbox_' + data).getAttribute('aria-checked');
+    if (isChecked === 'true') {
       this.checkedLandlords.splice(this.checkedLandlords.indexOf(+value), 1);
       this.uncheckedLandlords.push(+value);
       this.selectedPropertyLandlordCount -= 1;
@@ -203,11 +207,20 @@ export class SelectLandlordsComponent implements OnInit {
       this.uncheckedLandlords.splice(this.uncheckedLandlords.indexOf(+value), 1);
       this.checkedLandlords.push(+value);
       this.selectedPropertyLandlordCount += 1;
-    }    
-    if ((this.gridCheckAll && this.uncheckedLandlords.length > 0)
-      || (!this.gridCheckAll && this.checkedLandlords.length > 0))
-      this.onHmrcLandlordSelect.emit("true");
-    else this.onHmrcLandlordSelect.emit("false");
-  }
+    }
 
+    if (this.gridCheckAll && this.uncheckedLandlords.length > 0)
+      this.group.get('deselectedPropertyLinkIds').patchValue(this.uncheckedLandlords);
+
+    if (!this.gridCheckAll && this.checkedLandlords.length > 0)
+      this.group.get('selectedPropertyLinkIds').patchValue(this.checkedLandlords);
+
+    if ((this.gridCheckAll &&
+      ((this.uncheckedLandlords.length > 0
+        && this.uncheckedLandlords.length != this.totalPropertyLandlord
+      ) || this.checkedLandlords.length > 0))
+      || (!this.gridCheckAll && this.checkedLandlords.length > 0))
+      this.onHmrcLandlordSelect.emit('true');
+    else this.onHmrcLandlordSelect.emit('false');
+  }
 }
