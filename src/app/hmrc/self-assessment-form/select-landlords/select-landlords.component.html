@@ -69,13 +69,13 @@
     </ion-col>
     <ion-col size="100" style="margin-top: 10px;">
       <div class="overlay-container" style="position: relative">
-        <table datatable [dtOptions]="dtOptions" class="row-border hover" style="width: 100%; position: relative"
-          id="hmrc-landlord-table">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
+          style="width: 100%; position: relative" id="hmrc-landlord-table">
           <thead>
             <tr>
               <th style="width:1%;">Select </th>
-              <th style="width:15%;">Property Reference</th>
-              <th style="width:15%;">Property Address</th>
+              <th style="width:12%;">Property Reference</th>
+              <th style="width:18%;">Property Address</th>
               <th style="width:15%;">Landlord/Owner Full Name</th>
               <th style="width:15%;">Landlord Address</th>
               <th style="width:10%;">Office</th>
@@ -95,13 +95,15 @@
               </td>
               <td>{{ data.propertyReference || DEFAULTS.NOT_AVAILABLE}}</td>
               <td>
-                {{ data.propertyAddress | address }}
-                <span *ngIf="!data.propertyAddress"> DEFAULTS.NOT_AVAILABLE </span>
+                <span matTooltip="{{ (data.propertyAddress | address) }}" matTooltipPosition="above">
+                  {{data.propertyAddress | address:'partial' || DEFAULTS.NOT_AVAILABLE}}
+                </span>
               </td>
               <td>{{data.landlordFullName || DEFAULTS.NOT_AVAILABLE}} </td>
               <td>
-                {{ data.landlordAddress | address }}
-                <span *ngIf="!data.landlordAddress"> DEFAULTS.NOT_AVAILABLE </span>
+                <span matTooltip="{{ (data.landlordAddress | address) }}" matTooltipPosition="above">
+                  {{data.landlordAddress | address:'partial' || DEFAULTS.NOT_AVAILABLE}}
+                </span>
               </td>
               <td>{{(data.propertyOffice | lookup: officeCodes) || DEFAULTS.NOT_AVAILABLE}}</td>
               <td>{{(data.propertyManagementType.toString() | lookup: managementTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
