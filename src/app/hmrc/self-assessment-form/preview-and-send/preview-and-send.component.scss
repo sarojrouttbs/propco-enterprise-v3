@@ -1,0 +1,22 @@
+.select-landlord-text {
+    h4 {
+        color: var(--ion-color-primary);
+        margin-bottom: 15px;
+    }
+    ion-text {
+        color: var(--ion-color-three);
+    }
+}
+ion-button {
+    margin-bottom: 0;
+}
+.ion-color-warning {
+    --ion-color-contrast: unset !important;
+}
+
+.propcoicon.action-btn {
+    background-color: transparent !important;
+}
+.propcoicon.action-btn:hover {
+    color: var(--ion-color-warning-shade);
+}
