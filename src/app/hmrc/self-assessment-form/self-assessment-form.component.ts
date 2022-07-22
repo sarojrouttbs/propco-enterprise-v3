@@ -47,7 +47,7 @@ export class SelfAssessmentFormComponent implements OnInit {
     });
   }
 
-  getSystemConfig() {
+  private getSystemConfig() {
     const params = new HttpParams().set('key', SYSTEM_CONFIG.HMRC_TAX_HANDLER_SELF_ASSESSMENT_FORM)
     new Promise((resolve, reject) => {
       this.hmrcService.getSysconfig(params).subscribe((res) => {

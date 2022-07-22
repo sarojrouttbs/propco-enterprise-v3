@@ -122,7 +122,7 @@ export class PreviewAndSendComponent implements OnInit {
     this.disableButton();
   }
 
-  disableButton() {
+  private disableButton() {
     if (this.unSelectedLandlords.length > 0 && this.unSelectedLandlords.length === this.totalPropertyLandlord)
       this.onHmrcLandlordSelectPreview.emit('false');
     else
