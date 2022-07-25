@@ -3,8 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { HmrcService } from '../hmrc.service';
-import { DatePipe } from '@angular/common';
-import { DATE_FORMAT } from 'src/app/shared/constants';
+import { DATE_FORMAT, SYSTEM_CONFIG } from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-self-assessment-form',
@@ -13,22 +12,24 @@ import { DATE_FORMAT } from 'src/app/shared/constants';
 })
 export class SelfAssessmentFormComponent implements OnInit {
 
-  @ViewChild("stepper", { static: false }) stepper: MatStepper;
+  @ViewChild('stepper', { static: false }) stepper: MatStepper;
   currentStepperIndex = 0;
   selfAssessmentForm: FormGroup;
   nextLabel: string = 'Next 1/3';
   landlordParams: any = new HttpParams();
   DATE_FORMAT = DATE_FORMAT;
-  isHmrcLandlordSelected = "false";
+  isHmrcLandlordSelected = 'false';
+  systemConfig: any;
+  isHmrcLandlordSelectPreview: any;
 
   constructor(
     private fb: FormBuilder,
-    private hmrcService: HmrcService,
-    public datepipe: DatePipe,
+    private hmrcService: HmrcService
   ) { }
 
   ngOnInit() {
-    this.initForm()
+    this.initForm();
+    this.getSystemConfig();
   }
 
   initForm() {
@@ -39,7 +40,22 @@ export class SelfAssessmentFormComponent implements OnInit {
       to: [null, Validators.required],
       quickFilterType: null,
       searchOnColumns: null,
-      searchText: null
+      searchText: null,
+      selectedPropertyLinkIds: null,
+      deselectedPropertyLinkIds: null,
+      statementPreference: null,
+      taxHandler: null
+    });
+  }
+
+  private getSystemConfig() {
+    const params = new HttpParams().set('key', SYSTEM_CONFIG.HMRC_TAX_HANDLER_SELF_ASSESSMENT_FORM)
+    new Promise((resolve, reject) => {
+      this.hmrcService.getSysconfig(params).subscribe((res) => {
+        this.systemConfig = res ? res.HMRC_TAX_HANDLER_SELF_ASSESSMENT_FORM : '';
+        this.selfAssessmentForm.get('taxHandler').patchValue(this.systemConfig);
+        return resolve(true);
+      });
     });
   }
 
@@ -50,9 +66,7 @@ export class SelfAssessmentFormComponent implements OnInit {
         this.nextLabel = 'Next 2/3'
         break;
       case 1:
-        this.getLandlords();
         this.stepper.selectedIndex = 2;
-
         break;
       default:
         break;
@@ -74,25 +88,11 @@ export class SelfAssessmentFormComponent implements OnInit {
     }
   }
 
-
-  private getLandlords() {
-    if (!this.selfAssessmentForm.get('from').value && !this.selfAssessmentForm.get('to').value) {
-      return;
-    }
-    this.landlordParams = this.landlordParams
-      .set('lastGeneratedDateRange.from', this.selfAssessmentForm.get('from').value ? this.datepipe.transform(this.selfAssessmentForm.get('from').value, this.DATE_FORMAT.YEAR_DATE) : '')
-      .set('lastGeneratedDateRange.to', this.selfAssessmentForm.get('to').value ? this.datepipe.transform(this.selfAssessmentForm.get('to').value, this.DATE_FORMAT.YEAR_DATE) : '')
-      .set('hideLoader', 'true');
-    const promise = new Promise((resolve, reject) => {
-      this.hmrcService.getLandlords(this.landlordParams).subscribe((res) => {
-        return resolve(res);
-      });
-    });
-    return promise;
-  }
-
-  onHmrcLandlordSelect(data: string) {
+  onHmrcLandlordSelect(data: any) {
     this.isHmrcLandlordSelected = data;
   }
 
+  onHmrcLandlordSelectPreview(data: any) {
+    this.isHmrcLandlordSelectPreview = data;
+  }
 }

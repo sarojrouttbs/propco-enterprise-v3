@@ -16,6 +16,7 @@ import { SelectSearchAllDirective } from '../select-all-plus-search/select-searc
 import { SelectAllPlusSearchComponent } from '../select-all-plus-search/select-all-plus-search.component';
 import { SelectDatesComponent } from './self-assessment-form/select-dates/select-dates.component';
 import { OfficeFilterModalPageModule } from '../shared/modals/office-filter-modal/office-filter-modal.module';
+import { PreviewAndSendComponent } from './self-assessment-form/preview-and-send/preview-and-send.component';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { OfficeFilterModalPageModule } from '../shared/modals/office-filter-moda
     SelectLandlordsComponent,
     SelectSearchAllDirective,
     SelectAllPlusSearchComponent,
-    SelectDatesComponent
+    SelectDatesComponent,
+    PreviewAndSendComponent
   ],
   entryComponents: [SelectAllPlusSearchComponent]
 })
