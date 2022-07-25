@@ -255,8 +255,8 @@ export class SelectLandlordsComponent implements OnInit {
       if (res && res?.data) {
         this.selectedOfficeList = res?.data?.selectedOfficeList;
         this.selectedRegion = res?.data?.selectedRegion;
-        let propertyOfficeName = res?.data?.selectedOfficeList.map(err => err.officeName).join(", ");
-        let propertyOfficeCodes = res?.data?.selectedOfficeList.map(err => err.officeCode).join(",");
+        const propertyOfficeName = res?.data?.selectedOfficeList.map(err => err.officeName).join(", ");
+        const propertyOfficeCodes = res?.data?.selectedOfficeList.map(err => err.officeCode).join(",");
         this.group.get('propertyOffice').setValue(propertyOfficeName);
         this.landlordParams = this.landlordParams.set('propertyOffice', propertyOfficeCodes);
         this.rerenderLandlordList();
@@ -266,7 +266,7 @@ export class SelectLandlordsComponent implements OnInit {
   }
 
   private getOptions() {
-    let params = new HttpParams()
+    const params = new HttpParams()
       .set('hideLoader', 'true')
       .set('option', 'ENABLE_GROUPOFFICEFILTER');
     return new Promise((resolve, _reject) => {

@@ -6,6 +6,7 @@ import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree'
 import { HttpParams } from '@angular/common/http';
 import { HmrcService } from 'src/app/hmrc/hmrc.service';
 import { FlatTreeControl } from '@angular/cdk/tree';
+import { TodoItemFlatNode, TodoItemNode } from './office-filter-modal.model';
 
 @Component({
   selector: 'app-office-filter-modal',
@@ -266,30 +267,3 @@ export class OfficeFilterModalPage implements OnInit {
     }
   }
 }
-
-// Node for to-do item
-export class TodoItemNode {
-  children: TodoItemNode[];
-  item: string;
-  groupOfficeId: number;
-  groupOfficeCode: string;
-  groupDefinitionId: number;
-  groupDefinitionType: string;
-}
-
-// Flat to-do item node with expandable and level information
-export class TodoItemFlatNode {
-  item: string;
-  level: number;
-  expandable: boolean;
-  groupOfficeId: number;
-  groupOfficeCode: string;
-  groupDefinitionId: number;
-  groupDefinitionType: string;
-}
-
-/**
- * Checklist database, it can build a tree structured Json object.
- * Each node in Json object represents a to-do item or a category.
- * If a node is a category, it has children items and new items can be added under the category.
- */
