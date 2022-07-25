@@ -19,14 +19,14 @@ export class HmrcService {
   }
 
   getOffices(params?: any): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + 'hmrc/offices', { params });
+    return this.httpClient.get(environment.API_BASE_URL + 'offices', { params });
   }
 
   getOfficesGroup(params?: any): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + 'hmrc/offices/group', { params });
+    return this.httpClient.get(environment.API_BASE_URL + 'offices-group', { params });
   }
 
-  getOptions(params): Observable<any> {
+  getOptions(params?: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `options`, { params });
   }
 }

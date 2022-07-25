@@ -76,7 +76,7 @@ export class OfficeFilterModalPage implements OnInit {
       node.groupOfficeCode = value.groupOfficeCode;
       node.groupDefinitionId = selectedDefinationObj[0].groupDefinitionId;
       node.groupDefinitionType = selectedDefinationObj[0].name;
-      if (value != null) {
+      if (value !== null) {
         if (typeof value === 'object') {
           if (value.items.length !== 0) {
             node.children = this.buildFileTree(value.items, level + 1);
@@ -100,7 +100,7 @@ export class OfficeFilterModalPage implements OnInit {
     tenant.isChecked = event.checked;
   }
 
-  populatePreSelectRegions() {
+  private populatePreSelectRegions() {
     this.treeControl.dataNodes.forEach((element) => {
       const isPreviousChecked = this.preSelectedRegion.filter((obj) => obj.groupOfficeId === element.groupOfficeId);
       if (isPreviousChecked.length > 0) {
