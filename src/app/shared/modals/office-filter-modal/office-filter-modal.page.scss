@@ -1,0 +1,19 @@
+#office-filter-modal {
+    .header-section {
+        border-bottom: 1px solid var(--ion-color-four);
+        padding: 10px 0px;
+    }
+
+    mat-checkbox,
+    mat-label {
+        color: var(--ion-color-mat-checkbox-label);
+    }
+
+    .right-left-panel-overflow {
+        height: 355px;
+        overflow: auto;
+        border-right: 1px solid var(--ion-color-four);
+        border-bottom: 1px solid var(--ion-color-four);
+    }
+
+}
