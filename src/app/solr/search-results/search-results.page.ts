@@ -485,7 +485,7 @@ export class SearchResultsPage implements OnInit {
     this.contractorCheck.setValue(false);
   }
 
-  getSearchResults(global?) {
+  getSearchResults(global?: boolean) {
     this.hideMenu('', 'search-result-overlay');
     this.showSkeleton = true;
     this.solrService
@@ -509,7 +509,7 @@ export class SearchResultsPage implements OnInit {
       });
   }
 
-  private prepareSearchParams(global?) {
+  private prepareSearchParams(global?: boolean) {
     const params: any = {};
     params.limit = this.pageSize;
     params.page = this.pageIndex + 1;
