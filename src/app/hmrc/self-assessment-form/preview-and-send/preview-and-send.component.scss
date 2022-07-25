@@ -20,3 +20,15 @@ ion-button {
 .propcoicon.action-btn:hover {
     color: var(--ion-color-warning-shade);
 }
+
+.warning-text {
+    ion-text {
+        color: var(--ion-color-warning);
+        font-style: italic;
+        font-size: 15px;
+    }
+}
+
+.data-highlited {
+    color: var(--ion-color-primary);
+}

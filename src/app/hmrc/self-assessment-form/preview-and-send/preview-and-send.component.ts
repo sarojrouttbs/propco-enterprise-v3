@@ -27,6 +27,7 @@ export class PreviewAndSendComponent implements OnInit {
   selectedLandlords: number[] = [];
   unSelectedLandlords: number[] = [];
   selectedHmrcLandlordCount = 0;
+  emailPattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   DEFAULTS = DEFAULTS;
@@ -97,6 +98,25 @@ export class PreviewAndSendComponent implements OnInit {
           this.selectedHmrcLandlordCount = this.totalPropertyLandlord - this.unSelectedLandlords.length;
           this.landlordList.forEach(item => {
             item.checked = this.unSelectedLandlords.indexOf(item.propertyLinkId) >= 0 ? false : true;
+            item.isDisabled = false;
+            if (item.statementPreference &&
+              item.statementPreference === 2 &&
+              item.landlordEmail &&
+              !item.landlordEmail.match(this.emailPattern)) {
+              item.checked = false;
+              this.unSelectedLandlords.push(item.propertyLinkId);
+              item.isDisabled = true;
+              item.invalid = true;
+            }
+
+            if (item.statementPreference &&
+              item.statementPreference === 3 &&
+              item.landlordEmail &&
+              !item.landlordEmail.match(this.emailPattern)) {
+              item.checked = true;
+              item.isDisabled = true;
+              item.invalid = true;
+            }
           });
           callback({
             recordsTotal: res ? res.count : 0,
@@ -106,7 +126,6 @@ export class PreviewAndSendComponent implements OnInit {
         })
       }
     };
-
   }
 
   onCheckboxChange(e: any) {
