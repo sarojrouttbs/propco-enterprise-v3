@@ -27,6 +27,6 @@ export class HmrcService {
   }
 
   getOptions(params): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `agent-options`, { params });
+    return this.httpClient.get(environment.API_BASE_URL + `options`, { params });
   }
 }
