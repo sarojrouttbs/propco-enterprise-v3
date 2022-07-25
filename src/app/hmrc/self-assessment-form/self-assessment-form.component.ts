@@ -33,6 +33,7 @@ export class SelfAssessmentFormComponent implements OnInit {
 
   initForm() {
     this.selfAssessmentForm = this.fb.group({
+      propertyOffice: [''],
       managementType: [''],
       from: [null, Validators.required],
       to: [null, Validators.required],

@@ -8,6 +8,8 @@ import { HmrcService } from '../../hmrc.service';
 import { createCustomElement } from '@angular/elements';
 import { Subject } from 'rxjs';
 import { FormGroup } from '@angular/forms';
+import { OfficeFilterModalPage } from 'src/app/shared/modals/office-filter-modal/office-filter-modal.page';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-select-landlords',
@@ -15,11 +17,9 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./select-landlords.component.scss'],
 })
 export class SelectLandlordsComponent implements OnInit {
-
   dtOptions: any = {};
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
   dtTrigger: Subject<any> = new Subject();
-
   landlordList: any;
   @Input() group: FormGroup;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
@@ -38,14 +38,18 @@ export class SelectLandlordsComponent implements OnInit {
   popoverOptions: any = {
     cssClass: 'hmrc-ion-select ion-select-auto'
   };
-
   @Output() onHmrcLandlordSelect = new EventEmitter<any>();
-
+  isGroupByOfficeFilter = false;
+  officesList: any = [];
+  selectedRegion = [];
+  selectedOfficeList = [];
+  groupOfficesList: any = [];
 
   constructor(
     private hmrcService: HmrcService,
     private commonService: CommonService,
-    private injector: Injector
+    private injector: Injector,
+    private modalController: ModalController
   ) {
     const element = createCustomElement(SelectAllPlusSearchComponent, {
       injector: this.injector
@@ -56,8 +60,14 @@ export class SelectLandlordsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getLookupData();
+    this.initAPI();
     this.initDataTable();
+  }
+
+  private async initAPI() {
+    this.getLookupData();
+    this.getOptions();
+    this.officesList = await this.getOfficesList();
   }
 
   private getLookupData() {
@@ -166,6 +176,9 @@ export class SelectLandlordsComponent implements OnInit {
 
   applyFilters() {
     this.unselectAll();
+    if (this.group.value.propertyOffice) {
+      this.landlordParams = this.landlordParams.set('propertyOffice', this.group.value.propertyOffice);
+    }
     if (this.group.value.managementType) {
       this.landlordParams = this.landlordParams.set('managementType', this.group.value.managementType);
     }
@@ -184,6 +197,8 @@ export class SelectLandlordsComponent implements OnInit {
     this.group.reset();
     this.group.markAsUntouched();
     this.rerenderLandlordList();
+    this.selectedRegion = [];
+    this.selectedOfficeList = [];
   }
 
   onCheckboxClick(data) {
@@ -204,4 +219,78 @@ export class SelectLandlordsComponent implements OnInit {
     else this.onHmrcLandlordSelect.emit("false");
   }
 
+  async onOfficeClick() {
+    const modal = await this.modalController.create({
+      component: OfficeFilterModalPage,
+      cssClass: 'modal-container office-filter-modal-container',
+      componentProps: {
+        preSelectedRegion: this.selectedRegion,
+        preSelectedOfficeList: this.selectedOfficeList,
+        groupOfficesList: this.groupOfficesList
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => {
+      if (res && res?.data) {
+        this.selectedOfficeList = res?.data?.selectedOfficeList;
+        this.selectedRegion = res?.data?.selectedRegion;
+        let propertyOfficeName = res?.data?.selectedOfficeList.map(err => err.officeName).join(", ");
+        let propertyOfficeCodes = res?.data?.selectedOfficeList.map(err => err.officeCode).join(",");
+        this.group.get('propertyOffice').setValue(propertyOfficeName);
+        this.landlordParams = this.landlordParams.set('propertyOffice', propertyOfficeCodes);
+        this.rerenderLandlordList();
+      }
+    });
+    await modal.present();
+  }
+
+  private getOptions() {
+    let params = new HttpParams()
+      .set("hideLoader", "true")
+      .set("option", "ENABLE_GROUPOFFICEFILTER");
+    return new Promise((resolve, _reject) => {
+      this.hmrcService.getOptions(params).subscribe(
+        async(res) => {
+          if(res.ENABLE_GROUPOFFICEFILTER) {
+            this.isGroupByOfficeFilter = true;
+            this.groupOfficesList = await this.getOfficesGroupList();
+          } else {
+            this.isGroupByOfficeFilter = false;                        
+          }          
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+  }
+
+  private getOfficesList() {
+    const params = new HttpParams().set("hideLoader", "true");
+    return new Promise((resolve, _reject) => {
+      this.hmrcService.getOffices(params).subscribe(
+        (res) => {
+          resolve(res ? res.data : []);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+  }
+
+  private getOfficesGroupList() {
+    return new Promise((resolve, _reject) => {
+      this.hmrcService.getOfficesGroup().subscribe(
+        (res) => {
+          resolve(res ? res : {});
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+  }
 }

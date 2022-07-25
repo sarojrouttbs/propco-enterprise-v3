@@ -14,4 +14,15 @@ export class HmrcService {
     return this.httpClient.get(environment.API_BASE_URL + 'hmrc/landlords', { params });
   }
 
+  getOffices(params?: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'hmrc/offices', { params });
+  }
+
+  getOfficesGroup(params?: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'hmrc/offices/group', { params });
+  }
+
+  getOptions(params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `agent-options`, { params });
+  }
 }

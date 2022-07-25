@@ -22,6 +22,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatCardModule} from '@angular/material/card';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatListModule} from '@angular/material/list';
+import { CdkTreeModule } from '@angular/cdk/tree';
+import { MatTreeModule } from '@angular/material/tree';
 
 export const MY_FORMATS = {
   parse: {
@@ -63,7 +65,9 @@ export const MY_FORMATS = {
     MatCheckboxModule,
     MatCardModule,
     MatMenuModule,
-    MatListModule
+    MatListModule,
+    MatTreeModule,
+    CdkTreeModule
   ],
   providers: [
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
