@@ -267,8 +267,8 @@ export class SelectLandlordsComponent implements OnInit {
 
   private getOptions() {
     let params = new HttpParams()
-      .set("hideLoader", "true")
-      .set("option", "ENABLE_GROUPOFFICEFILTER");
+      .set('hideLoader', 'true')
+      .set('option', 'ENABLE_GROUPOFFICEFILTER');
     return new Promise((resolve, _reject) => {
       this.hmrcService.getOptions(params).subscribe(
         async(res) => {
@@ -288,7 +288,7 @@ export class SelectLandlordsComponent implements OnInit {
   }
 
   private getOfficesList() {
-    const params = new HttpParams().set("hideLoader", "true");
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve, _reject) => {
       this.hmrcService.getOffices(params).subscribe(
         (res) => {
