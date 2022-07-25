@@ -140,7 +140,7 @@ export class SearchResultsPage implements OnInit {
   currentDate;
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
-  
+
   constructor(
     private route: ActivatedRoute,
     private solrService: SolrService,
@@ -179,7 +179,8 @@ export class SearchResultsPage implements OnInit {
     this.getLookupData();
     await this.getQueryParams();
     this.initFilter();
-    this.getSearchResults();
+    const global = true;
+    this.getSearchResults(global);
   }
 
   private multiSearchFilterHandler() {
@@ -484,11 +485,11 @@ export class SearchResultsPage implements OnInit {
     this.contractorCheck.setValue(false);
   }
 
-  getSearchResults() {
+  getSearchResults(global?: boolean) {
     this.hideMenu('', 'search-result-overlay');
     this.showSkeleton = true;
     this.solrService
-      .entitySearch(this.prepareSearchParams())
+      .entitySearch(this.prepareSearchParams(global))
       .subscribe((res) => {
         this.results = res && res.data ? res.data : [];
         this.results.map((x) => {
@@ -508,7 +509,7 @@ export class SearchResultsPage implements OnInit {
       });
   }
 
-  private prepareSearchParams() {
+  private prepareSearchParams(global?: boolean) {
     const params: any = {};
     params.limit = this.pageSize;
     params.page = this.pageIndex + 1;
@@ -516,7 +517,10 @@ export class SearchResultsPage implements OnInit {
       ? this.solrSearchConfig.searchTerm
       : '*';
     params.searchTypes = this.transformToUpperCase(this.entityControl.value);
-
+    this.commonService.dataChanged({ entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm });
+    if (global) {
+      return params;
+    }
     if (this.refreshType === 'ALL') {
     }
     if (this.entityControl.value.indexOf('Property') !== -1) {
@@ -574,7 +578,6 @@ export class SearchResultsPage implements OnInit {
       }
       params.applicantFilter = apFilter;
     }
-    this.commonService.dataChanged({ entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm });
     return params;
   }
 
