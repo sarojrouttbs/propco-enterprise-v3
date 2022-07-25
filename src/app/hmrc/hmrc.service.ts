@@ -14,4 +14,8 @@ export class HmrcService {
     return this.httpClient.get(environment.API_BASE_URL + 'hmrc/landlords', { params });
   }
 
+  getSysconfig(params?: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'sysconfig', { params });
+  }
+
 }

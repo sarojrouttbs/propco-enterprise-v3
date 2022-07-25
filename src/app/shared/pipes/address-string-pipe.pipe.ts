@@ -5,9 +5,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class AddressPipe implements PipeTransform {
 
-  transform(addressObject: any): string {
+  transform(addressObject: any, type?: string): string {
     let addressDetails = null;
-    if (addressObject && addressObject != null) {
+    if (addressObject && addressObject != null && type) {
+      addressDetails = (
+        (addressObject.addressLine1 ? addressObject.addressLine1 : '') +
+        (addressObject.addressLine2 ? ', ' + addressObject.addressLine2 : '')
+      );
+    } else if (addressObject && addressObject != null) {
       addressDetails = (
         (addressObject.addressLine1 ? addressObject.addressLine1 + ', ' : '') +
         (addressObject.addressLine2 ? addressObject.addressLine2 + ', ' : '') +
