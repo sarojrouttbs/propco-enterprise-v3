@@ -15,13 +15,13 @@
         </ion-select>
       </ion-item>
     </ion-col> -->
-      <ion-col size="15" *ngIf="isGroupByOfficeFilter">
+      <ion-col size="15" *ngIf="isGroupOfficeFilter">
         <ion-item>
           <ion-label position="floating">Office</ion-label>
           <ion-input formControlName="propertyOffice" (click)="onOfficeClick()" readonly></ion-input>
         </ion-item>
       </ion-col>
-      <ion-col size="15" *ngIf="!isGroupByOfficeFilter">
+      <ion-col size="15" *ngIf="!isGroupOfficeFilter">
         <ion-item selectSearchAllDirective>
           <ion-label position="floating">Office</ion-label>
           <ion-select multiple="true" formControlName="propertyOffice">

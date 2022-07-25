@@ -40,7 +40,7 @@ export class SelectLandlordsComponent implements OnInit {
     cssClass: 'hmrc-ion-select ion-select-auto'
   };
   @Output() onHmrcLandlordSelect = new EventEmitter<any>();
-  isGroupByOfficeFilter = false;
+  isGroupOfficeFilter = false;
   officesList: any = [];
   selectedRegion = [];
   selectedOfficeList = [];
@@ -70,8 +70,15 @@ export class SelectLandlordsComponent implements OnInit {
 
   private async initAPI() {
     this.getLookupData();
-    this.getOptions();
     this.officesList = await this.getOfficesList();
+    const optionsResponse: any = await this.getOptions();
+    if(optionsResponse.ENABLE_GROUPOFFICEFILTER) {
+      this.isGroupOfficeFilter = true;
+      this.groupOfficesList = await this.getOfficesGroupList();
+    } else {
+      this.isGroupOfficeFilter = false;                        
+    }
+    
   }
 
   private getLookupData() {
@@ -271,14 +278,8 @@ export class SelectLandlordsComponent implements OnInit {
       .set('option', 'ENABLE_GROUPOFFICEFILTER');
     return new Promise((resolve, _reject) => {
       this.hmrcService.getOptions(params).subscribe(
-        async(res) => {
-          if(res.ENABLE_GROUPOFFICEFILTER) {
-            this.isGroupByOfficeFilter = true;
-            this.groupOfficesList = await this.getOfficesGroupList();
-          } else {
-            this.isGroupByOfficeFilter = false;                        
-          }          
-          resolve(true);
+        async(res) => {                    
+          resolve(res ? res : {});
         },
         (error) => {
           resolve(false);
