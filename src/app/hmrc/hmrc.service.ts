@@ -18,4 +18,15 @@ export class HmrcService {
     return this.httpClient.get(environment.API_BASE_URL + 'sysconfig', { params });
   }
 
+  getOffices(params?: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'offices', { params });
+  }
+
+  getOfficesGroup(params?: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'offices-group', { params });
+  }
+
+  getOptions(params?: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `options`, { params });
+  }
 }
