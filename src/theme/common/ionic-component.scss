@@ -916,3 +916,21 @@ ion-datetime {
     opacity: 0.6;
   }
 }
+
+.office-filter-modal-container{
+  &::part(content){
+    height: 525px;
+    width: 750px;
+  }
+
+  .mat-tree {
+    background: var(--ion-color-six);
+    .mat-tree-node {
+      color: var(--ion-color-mat-checkbox-label);
+    }
+  }
+
+  .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background, .mat-checkbox-checked.mat-primary .mat-checkbox-background {
+    background-color: var(--ion-color-success) !important;
+  }
+}

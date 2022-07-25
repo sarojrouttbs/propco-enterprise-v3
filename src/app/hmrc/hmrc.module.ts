@@ -15,6 +15,7 @@ import { PipesModule } from '../shared/pipes/pipes.module';
 import { SelectSearchAllDirective } from '../select-all-plus-search/select-search-all.directive';
 import { SelectAllPlusSearchComponent } from '../select-all-plus-search/select-all-plus-search.component';
 import { SelectDatesComponent } from './self-assessment-form/select-dates/select-dates.component';
+import { OfficeFilterModalPageModule } from '../shared/modals/office-filter-modal/office-filter-modal.module';
 import { PreviewAndSendComponent } from './self-assessment-form/preview-and-send/preview-and-send.component';
 
 @NgModule({
@@ -26,7 +27,8 @@ import { PreviewAndSendComponent } from './self-assessment-form/preview-and-send
     MaterialModule,
     ReactiveFormsModule,
     DataTablesModule,
-    PipesModule
+    PipesModule,
+    OfficeFilterModalPageModule
   ],
   declarations: [
     HmrcPage,
