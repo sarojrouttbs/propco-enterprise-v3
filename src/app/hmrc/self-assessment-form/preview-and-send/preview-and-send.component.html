@@ -66,7 +66,7 @@
                 </span>
               </td>
               <td>{{data.landlordFullName || DEFAULTS.NOT_AVAILABLE}} </td>
-              <td><span [class.data-highlited]="data.invalid">{{data.landlordEmail || DEFAULTS.NOT_AVAILABLE}}</span>
+              <td><span [class.data-highlighted]="data.invalid">{{data.landlordEmail || DEFAULTS.NOT_AVAILABLE}}</span>
               </td>
               <td>{{(data.statementPreference | lookup: statementPreferences) || DEFAULTS.NOT_AVAILABLE}}</td>
               <td class="resp-action-icon">
