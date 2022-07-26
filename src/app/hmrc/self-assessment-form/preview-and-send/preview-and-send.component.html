@@ -20,7 +20,19 @@
   </ion-row>
 
   <ion-row>
-    <ion-col size="100" class="ion-text-right align-self-center" style="margin-top: 10px;">
+    <ion-col size="20">
+      <form [formGroup]="group">
+        <ion-item>
+          <ion-label position="floating">Statement Preference by</ion-label>
+          <ion-select formControlName="statementPreference" interface="popover" (ionChange)="onPreferenceChange()">
+            <ion-select-option [value]="option.index" *ngFor="let option of statementPreferences" checked="true">
+              {{option.value}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </form>
+    </ion-col>
+    <ion-col size="80" class="ion-text-right align-self-center ion-align-self-center" style="margin-top: 10px;">
       <ion-text>{{(selectedHmrcLandlordCount || 0) | number:'1.0'}} record(s) selected</ion-text>
     </ion-col>
     <ion-col size="100" style="margin-top: 10px;">
@@ -34,7 +46,7 @@
               <th style="width: 20%;">Property Address</th>
               <th style="width: 20%;">Landlord/Owner Full Name</th>
               <th style="width: 20%;">Email Address</th>
-              <th>Statement Preference </th>
+              <th>Statement Preference</th>
               <th style="width:36px"></th>
             </tr>
           </thead>
