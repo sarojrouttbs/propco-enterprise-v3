@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren
 import { FormGroup } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC_CONFIG, PROPCO } from 'src/app/shared/constants';
 import { HmrcService } from '../../hmrc.service';
 import { DatePipe } from '@angular/common';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -27,6 +27,7 @@ export class PreviewAndSendComponent implements OnInit {
   selectedLandlords: number[] = [];
   unSelectedLandlords: number[] = [];
   selectedHmrcLandlordCount = 0;
+  emailPattern = HMRC_CONFIG.EMAIL_REGEX;
 
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   DEFAULTS = DEFAULTS;
@@ -81,6 +82,8 @@ export class PreviewAndSendComponent implements OnInit {
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
           .set('taxHandler', this.group.value.taxHandler)
           .set('hideLoader', 'true');
+        if (this.group.value.propertyOffice)
+          this.params = this.params.set('propertyOffice', this.group.value.propertyOffice);
         if (this.group.value.managementType)
           this.params = this.params.set('managementType', this.group.value.managementType);
         if (this.group.value.searchText)
@@ -97,6 +100,25 @@ export class PreviewAndSendComponent implements OnInit {
           this.selectedHmrcLandlordCount = this.totalPropertyLandlord - this.unSelectedLandlords.length;
           this.landlordList.forEach(item => {
             item.checked = this.unSelectedLandlords.indexOf(item.propertyLinkId) >= 0 ? false : true;
+            item.isDisabled = false;
+            if (item.statementPreference &&
+              item.statementPreference === 2 &&
+              item.landlordEmail &&
+              !item.landlordEmail.match(this.emailPattern)) {
+              item.checked = false;
+              this.unSelectedLandlords.push(item.propertyLinkId);
+              item.isDisabled = true;
+              item.invalid = true;
+            }
+
+            if (item.statementPreference &&
+              item.statementPreference === 3 &&
+              item.landlordEmail &&
+              !item.landlordEmail.match(this.emailPattern)) {
+              item.checked = true;
+              item.isDisabled = true;
+              item.invalid = true;
+            }
           });
           callback({
             recordsTotal: res ? res.count : 0,
@@ -106,7 +128,6 @@ export class PreviewAndSendComponent implements OnInit {
         })
       }
     };
-
   }
 
   onCheckboxChange(e: any) {
@@ -128,4 +149,18 @@ export class PreviewAndSendComponent implements OnInit {
     else
       this.onHmrcLandlordSelectPreview.emit('true');
   }
+
+  onPreferenceChange() {
+    this.params = this.params.set('statementPreference', this.group.value.statementPreference);
+    this.rerenderLandlordList();
+  }
+
+  private rerenderLandlordList(resetPaging?): void {
+    if (this.dtElements && this.dtElements.first.dtInstance) {
+      this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.ajax.reload((res) => { }, resetPaging);
+      });
+    }
+  }
+
 }
