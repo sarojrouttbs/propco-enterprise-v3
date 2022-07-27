@@ -13,7 +13,7 @@
       </ion-text>
     </ion-col>
     <ion-col class="property-certificates" size="100">
-      <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && propertyInspection?.expiryDate > currentDate && propertyInspection?.status == 1">
+      <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && propertyInspection?.expiryDate > currentDate && propertyInspection?.status === 1">
         <ion-icon name="checkmark-circle" class="success">
         </ion-icon>&nbsp;&nbsp;
         <ion-text>
@@ -21,7 +21,7 @@
         </ion-text>
       </ng-container>
 
-      <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && propertyInspection?.status == 3">
+      <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && propertyInspection?.status === 3">
         <ion-icon name="checkmark-circle" class="success">
         </ion-icon>&nbsp;&nbsp;
         <ion-text>

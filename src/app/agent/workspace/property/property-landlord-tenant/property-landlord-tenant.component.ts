@@ -89,14 +89,14 @@ export class PropertyLandlordTenantComponent implements OnInit {
   }
 
   onLandlordChange(id?: string) {
-    let landlordId = id ? id : this.landlordListCtrl.value;
-    let landlord = this.propertyLandlords.filter(x => x.landlordId == landlordId);
+    const landlordId = id ? id : this.landlordListCtrl.value;
+    const landlord = this.propertyLandlords.filter(x => x.landlordId == landlordId);
     this.selectedLandlord = landlord[0];
   }
 
   async onTenantChange(id?: string) {
-    let tenantId = id ? id : this.tenantListCtrl.value;
-    let tenant = this.propertyTenants.filter(x => x.tenantId == tenantId);
+    const tenantId = id ? id : this.tenantListCtrl.value;
+    const tenant = this.propertyTenants.filter(x => x.tenantId == tenantId);
     this.selectedTenant = tenant[0];
     this.selectedTenantGuarantors = await this.getTenantsGuarantors(this.selectedTenant.tenantId);
     if (Array.isArray(this.selectedTenantGuarantors) && this.selectedTenantGuarantors.length > 0) {
@@ -115,7 +115,7 @@ export class PropertyLandlordTenantComponent implements OnInit {
   }
 
 
-  async openCallInfo(info, type) {
+  async openCallInfo(info: any, type: any) {
     const modal = await this.modalCtrl.create({
       component: CallInfoModalPage,
       cssClass: 'user-info-modal',
@@ -131,7 +131,7 @@ export class PropertyLandlordTenantComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.agentService.getTenantGuarantors(tenantId).subscribe(
         res => {
-          let guarantorList = res && res.data ? res.data : [];
+          const guarantorList = res && res.data ? res.data : [];
           resolve(guarantorList);
         },
         error => {

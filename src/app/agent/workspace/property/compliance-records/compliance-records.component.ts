@@ -35,8 +35,8 @@ export class ComplianceRecordsComponent implements OnInit {
     });
   }
 
-  getInspection(propertyId) {
-    let params = new HttpParams().set('hideLoader', 'true');
+  private getInspection(propertyId: string) {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve, reject) => {
       this.agentService.getInspection(propertyId, params).subscribe(
         (res) => {

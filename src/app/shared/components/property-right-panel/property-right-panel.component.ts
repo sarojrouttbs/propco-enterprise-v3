@@ -62,7 +62,7 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
       this.setPropertyLookupData();
     }
     else {
-      let params = new HttpParams().set('hideLoader', 'true');
+      const params = new HttpParams().set('hideLoader', 'true');
       this.commonService.getPropertyLookup(params).subscribe(data => {
         this.commonService.setItem(PROPCO.PROPERTY_LOOKUP_DATA, data);
         this.setPropertyLookupData();
