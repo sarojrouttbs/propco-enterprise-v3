@@ -67,7 +67,7 @@
     }
 }
 
-.notes-segment{
+.notes-segment, .compliance-segment{
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -76,6 +76,10 @@
         background-color: transparent;
     }
 }
+
+.compliance-segment {
+    gap: 7%;
+ }
 
 .no-slider-img {
     img {

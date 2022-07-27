@@ -1,0 +1,73 @@
+
+<ion-grid>
+  <form [formGroup]="complianceForm" style="margin-bottom:50px">
+  <ion-row>
+    <ion-col class="property-certificates" size="100">
+      <ion-icon
+        [name]="propertyData?.propertyRentInfo?.emergencyResponseService?.isERSEnabled?'checkmark-circle': 'close-circle'"
+        [ngClass]="propertyData?.propertyRentInfo?.emergencyResponseService?.isERSEnabled?'success': 'danger'">
+      </ion-icon>
+      &nbsp;&nbsp;
+      <ion-text>
+        Covered by Emergency Response
+      </ion-text>
+    </ion-col>
+    <ion-col class="property-certificates" size="100">
+      <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && propertyInspection?.expiryDate > currentDate && propertyInspection?.status === 1">
+        <ion-icon name="checkmark-circle" class="success">
+        </ion-icon>&nbsp;&nbsp;
+        <ion-text>
+          Has valid safety certificate
+        </ion-text>
+      </ng-container>
+
+      <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && propertyInspection?.status === 3">
+        <ion-icon name="checkmark-circle" class="success">
+        </ion-icon>&nbsp;&nbsp;
+        <ion-text>
+          Gas Safety certificate is not required
+        </ion-text>
+      </ng-container>
+
+      <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && 
+      (propertyInspection?.expiryDate < currentDate || !propertyInspection?.isDocumentExist) && 
+      (propertyInspection?.status != 1 && propertyInspection?.status !=3)">
+        <ion-icon name="close-circle" class="danger">
+        </ion-icon>&nbsp;&nbsp;
+        <ion-text>
+          No Valid Gas Safety Certificate
+        </ion-text>
+      </ng-container>
+
+      <ng-container *ngIf="propertyData && !propertyData?.propertyDetails?.hasGas">
+        <ion-icon name="checkmark-circle" class="success">
+        </ion-icon>&nbsp;&nbsp;
+        <ion-text>
+          Gas Safety certificate is not required
+        </ion-text>
+      </ng-container>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="33.3" class="ion-align-self-end">
+      <ion-item lines="none">
+        <ion-toggle color="primary" formControlName="hasLicence">
+        </ion-toggle>
+        <ion-text>Has HMO/Licence</ion-text>
+      </ion-item>
+    </ion-col>
+    <ion-col size="33.3">
+      <ion-item>
+        <ion-label position="floating">HMO Risk</ion-label>
+        <ion-input readonly formControlName="hmoRisk"></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col size="33.3">
+      <ion-item>
+        <ion-label position="floating">Expiry Date</ion-label>
+        <ion-input readonly formControlName="expiry"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</form>
+</ion-grid>
