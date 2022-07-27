@@ -178,4 +178,8 @@ export class AgentService {
   getAgreementHistory(agreementId: string,): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `agreement/${agreementId}/history`);
   }
+
+  getTenantGuarantors(tenantId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}/guarantors`);
+  }
 }

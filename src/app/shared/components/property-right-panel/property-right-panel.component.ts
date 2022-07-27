@@ -15,19 +15,14 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
   lookupdata: any;
   propertyStatuses: any;
   officeCodes: any;
-  houseTypes: any;
   propertylookupdata: any;
   acqisitionOffices: any;
-  propertyCategories: any;
   portfolioSources: any;
-  notAvailable = DEFAULTS.NOT_AVAILABLE
-  propertyInspection: any;
-  currentDate = this.commonService.getFormatedDate(new Date(), DATE_FORMAT.YEAR_DATE);
+  notAvailable = DEFAULTS.NOT_AVAILABLE;
   DATE_FORMAT = DATE_FORMAT;
 
   constructor(
-    private commonService: CommonService,
-    private agentService: AgentService
+    private commonService: CommonService
   ) { }
 
   ngOnInit() {
@@ -39,7 +34,6 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
     if (changes.propertyData && !changes.propertyData.firstChange) {
       this.propertyData = this.propertyData;
       this.propertyData.propertyInfo.status = this.propertyData?.propertyInfo?.status.toString();
-      this.getInspection(this.propertyData.propertyId);
     }
   }
 
@@ -60,7 +54,6 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
   private setLookupData(data) {
     this.propertyStatuses = data.propertyStatuses;
     this.officeCodes = data.officeCodes;
-    this.houseTypes = data.houseTypes;
   }
 
   private getPropertyLookupData() {
@@ -69,7 +62,7 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
       this.setPropertyLookupData();
     }
     else {
-      let params = new HttpParams().set("hideLoader", "true");
+      const params = new HttpParams().set('hideLoader', 'true');
       this.commonService.getPropertyLookup(params).subscribe(data => {
         this.commonService.setItem(PROPCO.PROPERTY_LOOKUP_DATA, data);
         this.setPropertyLookupData();
@@ -80,23 +73,6 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
   private setPropertyLookupData(): void {
     this.propertylookupdata = this.commonService.getItem(PROPCO.PROPERTY_LOOKUP_DATA, true);
     this.acqisitionOffices = this.propertylookupdata.acqisitionOffices;
-    this.propertyCategories = this.propertylookupdata.propertyCategories;
     this.portfolioSources = this.propertylookupdata.portfolioSources;
-  }
-
-  getInspection(propertyId){
-    let params = new HttpParams().set("hideLoader", "true");
-    const promise = new Promise((resolve, reject) => {
-      this.agentService.getInspection(propertyId, params).subscribe(
-        (res) => {
-          this.propertyInspection = res && res.data ? res.data[0] : '';
-          resolve(true);
-        },
-        (error) => {
-          resolve(false);
-        }
-      );
-    });
-    return promise;
   }
 }
