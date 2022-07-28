@@ -54,8 +54,16 @@
         </ion-row>
       </ion-grid>
       <div class="right-left-panel-overflow">
-        <ion-grid>
-          <ion-row *ngFor="let item of officesList; let i=index;" style="padding: 5px 10px;">
+        <ion-grid class="no-padding-top">
+          <ion-row *ngIf="officesList.length > 0">
+            <ion-col class="no-padding-top" style="padding: 5px 15px;">
+              <ion-item>
+                <ion-label position="floating">Search</ion-label>
+                <ion-input [formControl]="searchText"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngFor="let item of filteredOfficesList; let i=index;" style="padding: 5px 10px;">
             <ion-col style="font-size: 14px;">
               <mat-checkbox color="primary" [checked]="item?.isChecked" (change)="selectOffice(item, $event)"
                 style="width: 70%;">
