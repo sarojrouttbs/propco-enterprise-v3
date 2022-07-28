@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
   lookupdata: any;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   notAvailable = DEFAULTS.NOT_AVAILABLE
-  type = 'viewings';
+  type = 'compliance';
   isMenuShown = true;
   DATE_FORMAT = DATE_FORMAT;
   isMapLoad = false;

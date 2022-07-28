@@ -31,8 +31,7 @@
           </ion-select>
         </ion-item>
       </ion-col>
-
-      <ion-col size="15">
+      <!-- <ion-col size="15">
         <ion-item selectSearchAllDirective>
           <ion-label position="floating">Management</ion-label>
           <ion-select multiple="true" formControlName="managementType">
@@ -40,6 +39,54 @@
               {{option.value}}
             </ion-select-option>
           </ion-select>
+        </ion-item>
+      </ion-col> -->
+      <ion-col size=15>
+        <ion-item>
+          <ion-label position="floating">Management</ion-label>
+          <ionic-selectable item-content itemValueField="index" itemTextField="value" [items]="managementTypes"
+            [canSearch]="true" [isMultiple]="true" [canClear]="true" clearButtonText="Clear" closeButtonSlot="end"
+            confirmButtonText="Apply" searchPlaceholder="Search Management" #ManagementTypeFilter
+            formControlName="managementType" [shouldStoreItemValue]="false" class="selectable-height"
+            (click)="beginLoading()" (onOpen)="endLoading()" [shouldBackdropClose]="false">
+            <ng-template ionicSelectableHeaderTemplate>
+              <ion-toolbar>
+                <ion-buttons end>
+                </ion-buttons>
+                <ion-title>
+                  {{ManagementTypeFilter.label}}
+                </ion-title>
+              </ion-toolbar>
+            </ng-template>
+
+            <ng-template ionicSelectableValueTemplate let-managementTypes="value">
+              <div class="ionic-selectable-value-item" *ngFor="let option of managementTypes">
+                {{option.value}}
+              </div>
+            </ng-template>
+            <ng-template ionicSelectableFooterTemplate>
+              <ion-toolbar>
+                <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
+                  (click)="toggleItems()" [disabled]="!managementTypes.length">
+                  {{ManagementTypeFilter.itemsToConfirm.length ? 'Deselect All' : 'Select All'}}
+                </ion-button>
+                <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
+                  (click)="ManagementTypeFilter.confirm();ManagementTypeFilter.close();onManagementChange();"
+                  [disabled]="!ManagementTypeFilter.itemsToConfirm.length">
+                  Ok
+                </ion-button>
+                <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                  (click)="ManagementTypeFilter.clear();ManagementTypeFilter.close();onManagementChange();"
+                  [disabled]="!ManagementTypeFilter.itemsToConfirm.length">
+                  Clear
+                </ion-button>
+                <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                  (click)="ManagementTypeFilter.close()">
+                  Cancel
+                </ion-button>
+              </ion-toolbar>
+            </ng-template>
+          </ionic-selectable>
         </ion-item>
       </ion-col>
       <ion-col size="15">

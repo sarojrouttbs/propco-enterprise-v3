@@ -17,6 +17,7 @@ import { SelectAllPlusSearchComponent } from '../select-all-plus-search/select-a
 import { SelectDatesComponent } from './self-assessment-form/select-dates/select-dates.component';
 import { OfficeFilterModalPageModule } from '../shared/modals/office-filter-modal/office-filter-modal.module';
 import { PreviewAndSendComponent } from './self-assessment-form/preview-and-send/preview-and-send.component';
+import { IonicSelectableModule } from 'ionic-selectable';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { PreviewAndSendComponent } from './self-assessment-form/preview-and-send
     ReactiveFormsModule,
     DataTablesModule,
     PipesModule,
-    OfficeFilterModalPageModule
+    OfficeFilterModalPageModule,
+    IonicSelectableModule
   ],
   declarations: [
     HmrcPage,

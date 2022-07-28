@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Injector, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Injector, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { SelectAllPlusSearchComponent } from 'src/app/select-all-plus-search/select-all-plus-search.component';
 import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC, PROPCO } from 'src/app/shared/constants';
@@ -10,6 +10,7 @@ import { Subject } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { OfficeFilterModalPage } from 'src/app/shared/modals/office-filter-modal/office-filter-modal.page';
 import { ModalController } from '@ionic/angular';
+import { IonicSelectableComponent } from 'ionic-selectable';
 
 @Component({
   selector: 'app-select-landlords',
@@ -46,6 +47,9 @@ export class SelectLandlordsComponent implements OnInit {
   selectedOfficeList = [];
   groupOfficesList: any = [];
 
+  @ViewChild('ManagementTypeFilter') ManagementTypeFilter: IonicSelectableComponent;
+  selectedManagementType: number[] = [];
+
   constructor(
     private hmrcService: HmrcService,
     private commonService: CommonService,
@@ -72,13 +76,13 @@ export class SelectLandlordsComponent implements OnInit {
     this.getLookupData();
     this.officesList = await this.getOfficesList();
     const optionsResponse: any = await this.getOptions();
-    if(optionsResponse.ENABLE_GROUPOFFICEFILTER) {
+    if (optionsResponse.ENABLE_GROUPOFFICEFILTER) {
       this.isGroupOfficeFilter = true;
       this.groupOfficesList = await this.getOfficesGroupList();
     } else {
-      this.isGroupOfficeFilter = false;                        
+      this.isGroupOfficeFilter = false;
     }
-    
+
   }
 
   private getLookupData() {
@@ -193,11 +197,13 @@ export class SelectLandlordsComponent implements OnInit {
 
   applyFilters() {
     this.unselectAll();
+    if (this.checkedLandlords.length > 0)
+      this.checkedLandlords.length = 0;
     if (this.group.value.propertyOffice) {
       this.landlordParams = this.landlordParams.set('propertyOffice', this.group.value.propertyOffice);
     }
     if (this.group.value.managementType) {
-      this.landlordParams = this.landlordParams.set('managementType', this.group.value.managementType);
+      this.landlordParams = this.landlordParams.set('managementType', this.selectedManagementType);
     }
     if (this.group.value.searchText && this.group.value.searchText.trim() && this.group.value.searchText.length > 2) {
       this.landlordParams = this.landlordParams.set('searchText', this.group.value.searchText);
@@ -278,7 +284,7 @@ export class SelectLandlordsComponent implements OnInit {
       .set('option', 'ENABLE_GROUPOFFICEFILTER');
     return new Promise((resolve, _reject) => {
       this.hmrcService.getOptions(params).subscribe(
-        async(res) => {                    
+        async (res) => {
           resolve(res ? res : {});
         },
         (error) => {
@@ -313,5 +319,27 @@ export class SelectLandlordsComponent implements OnInit {
         }
       );
     });
+  }
+
+  beginLoading() {
+    this.commonService.showLoader();
+  }
+
+  endLoading() {
+    this.commonService.hideLoader();
+  }
+
+  toggleItems() {
+    this.ManagementTypeFilter.toggleItems(this.ManagementTypeFilter.itemsToConfirm.length ? false : true);
+  }
+
+  onManagementChange() {
+    this.selectedManagementType.length = 0;
+    if (this.group.value.managementType) {
+      for (var val of this.group.value.managementType) {
+        this.selectedManagementType.push(val.index);
+      }
+    }
+    this.group.get('selectedManagementType').patchValue(this.selectedManagementType);
   }
 }

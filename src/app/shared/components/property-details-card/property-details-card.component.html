@@ -20,43 +20,71 @@
           || '0'}}
         </div>
       </ion-col>
-      <ion-col matTooltip="{{ getLookupValuebb(propertyData?.propertyDetails?.parking, parkingTypes)  || '0 Parking(s)' }}" matTooltipPosition="above">
+      <ion-col matTooltip="{{propertyData?.propertyDetails?.parking ? (propertyData?.propertyDetails?.parking | lookup:parkingTypes) : '0 Parking(s)'}}" matTooltipPosition="above">
         <div class="amenity-wrapper">
           <i class="propcoicon propcoicon-garage no-background"></i>
-          <span [ngClass]="{'garage-ellipse' : propertyData?.propertyDetails?.parking}">{{getLookupValuebb(propertyData?.propertyDetails?.parking, parkingTypes)  || '0'}}</span>
+          <span [ngClass]="{'garage-ellipse' : propertyData?.propertyDetails?.parking}">{{propertyData?.propertyDetails?.parking ? (propertyData?.propertyDetails?.parking | lookup:parkingTypes) : '0'}}</span>
         </div>
       </ion-col>
     </ion-row>
 
     <ion-row class="property-info">
-      <ion-col>
-        <ion-text class="rent">RENT</ion-text>
+      <ion-col size="50">
+        <ion-row>
+          <ion-col size="100">
+            <ion-text class="rent">RENT</ion-text>
+          </ion-col>
+          <ion-col size="100">
+            <ion-text class="rent-frequency">{{propertyData?.propertyDetails?.advertisementRent | currency: '£' || notAvailable}} </ion-text>
+            <ion-text class="frequency" *ngIf="propertyData?.propertyDetails?.advertisementRent">{{propertyData?.propertyDetails?.advertisementRentFrequency ? (propertyData?.propertyDetails?.advertisementRentFrequency | lookup:advertisementRentFrequencies) : ''}}
+             </ion-text>
+          </ion-col>
+          <ion-col class="furnishing" size="100">
+            <ion-text>
+              {{propertyData?.propertyDetails?.furnishingType ? (propertyData?.propertyDetails?.furnishingType | lookup:furnishingTypes) : ''}}
+            </ion-text><br>
+            <ion-text> {{(propertyData?.propertyInfo?.managementType | lookup: managementTypes)}}</ion-text>
+          </ion-col>
+    
+          <ion-col class="booking-office" size="100">
+            <ion-text>{{(propertyData?.propertyInfo?.bookingOfficeCode | lookup: officeCodes)}}
+            </ion-text>
+          </ion-col>
+    
+          <ion-col class="agent" size="100">
+            <ion-text class="query">Other Agents?</ion-text>
+            <ion-text>&nbsp; {{propertyData?.propertyInfo?.isOnWithOtherAgent ?'Yes':'No' || notAvailable}} </ion-text>
+          </ion-col>
+    
+          <ion-col class="agent" *ngIf="propertyData?.propertyInfo?.agentName" size="100">
+            <ion-text class="query">Agent Name</ion-text>
+            <ion-text>&nbsp; {{propertyData?.propertyInfo?.agentName}} </ion-text>
+          </ion-col>
+           <ion-col size="100">
+            <ion-text class="label">Property Type</ion-text><br>
+            <ion-text class="value">{{propertyData?.propertyDetails?.houseType ? (propertyData?.propertyDetails?.houseType | lookup:houseTypes) : notAvailable}}
+            </ion-text>
+          </ion-col>
+          <ion-col size="100">
+            <ion-text class="label">Category</ion-text><br>
+            <ion-text class="value">{{propertyData?.propertyDetails?.propertyCategory ? (propertyData?.propertyDetails?.propertyCategory | lookup:propertyCategories) : notAvailable}}
+            </ion-text>
+          </ion-col>
+        </ion-row>
       </ion-col>
-      <ion-col>
-        <ion-text class="rent-frequency">{{propertyData?.propertyDetails?.advertisementRent | currency: '£' || notAvailable}} </ion-text>
-        <ion-text class="frequency" *ngIf="propertyData?.propertyDetails?.advertisementRent">{{getAdvLookupValue(propertyData?.propertyDetails?.advertisementRentFrequency, advertisementRentFrequencies)}}
-         </ion-text>
-      </ion-col>
-      <ion-col class="furnishing">
-        <ion-text>
-          {{getAdvLookupValue(propertyData?.propertyDetails?.furnishingType, furnishingTypes)}}
-        </ion-text><br>
-        <ion-text> {{(propertyData?.propertyInfo?.managementType | lookup: managementTypes)}}</ion-text>
-      </ion-col>
-
-      <ion-col class="booking-office">
-        <ion-text>{{(propertyData?.propertyInfo?.bookingOfficeCode | lookup: officeCodes)}}
-        </ion-text>
-      </ion-col>
-
-      <ion-col class="agent">
-        <ion-text class="query">Other Agents?</ion-text>
-        <ion-text>&nbsp; {{propertyData?.propertyInfo?.isOnWithOtherAgent ?'Yes':'No' || notAvailable}} </ion-text>
-      </ion-col>
-
-      <ion-col class="agent" *ngIf="propertyData?.propertyInfo?.agentName">
-        <ion-text class="query">Agent Name</ion-text>
-        <ion-text>&nbsp; {{propertyData?.propertyInfo?.agentName}} </ion-text>
+      <ion-col size="50">
+        <ion-row>
+          <ion-col class="property-certificates" size="100">
+            <ion-icon
+              [name]="propertyData?.propertyDetails?.hasElectricalIndemnitySigned?'checkmark-circle': 'close-circle'"
+              [ngClass]="propertyData?.propertyDetails?.hasElectricalIndemnitySigned?'success': 'danger'">
+            </ion-icon>
+              &nbsp;&nbsp;
+            <ion-text>
+              Covered by Rent Indemnity
+            </ion-text>
+          </ion-col>
+        </ion-row>
       </ion-col>
     </ion-row>
   </ion-grid>
