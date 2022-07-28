@@ -24,7 +24,7 @@
       <ion-col size="15" *ngIf="!isGroupOfficeFilter">
         <ion-item selectSearchAllDirective>
           <ion-label position="floating">Office</ion-label>
-          <ion-select multiple="true" formControlName="propertyOffice">
+          <ion-select multiple="true" formControlName="propertyOfficeCodes">
             <ion-select-option [value]="option.officeCode" *ngFor="let option of officesList" checked="true">
               {{option.officeName}}
             </ion-select-option>

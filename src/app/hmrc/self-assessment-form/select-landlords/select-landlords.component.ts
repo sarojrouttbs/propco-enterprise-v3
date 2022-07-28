@@ -193,8 +193,8 @@ export class SelectLandlordsComponent implements OnInit {
 
   applyFilters() {
     this.unselectAll();
-    if (this.group.value.propertyOffice) {
-      this.landlordParams = this.landlordParams.set('propertyOffice', this.group.value.propertyOffice);
+    if (this.group.value.propertyOfficeCodes) {
+      this.landlordParams = this.landlordParams.set('propertyOffice', this.group.value.propertyOfficeCodes);
     }
     if (this.group.value.managementType) {
       this.landlordParams = this.landlordParams.set('managementType', this.group.value.managementType);
@@ -265,8 +265,7 @@ export class SelectLandlordsComponent implements OnInit {
         const propertyOfficeName = res?.data?.selectedOfficeList.map(err => err.officeName).join(", ");
         const propertyOfficeCodes = res?.data?.selectedOfficeList.map(err => err.officeCode).join(",");
         this.group.get('propertyOffice').setValue(propertyOfficeName);
-        this.landlordParams = this.landlordParams.set('propertyOffice', propertyOfficeCodes);
-        this.rerenderLandlordList();
+        this.group.get('propertyOfficeCodes').setValue(propertyOfficeCodes);
       }
     });
     await modal.present();

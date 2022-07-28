@@ -1,0 +1,12 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{modalHeader}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="preview-pdf-modal">
+  <iframe [src]="finalPdfUrl" title="HMRC Report" height="100%" width="100%" style="margin: 10px 0px;"></iframe>
+</ion-content>
