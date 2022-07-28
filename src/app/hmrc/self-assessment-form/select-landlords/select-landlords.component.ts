@@ -48,7 +48,10 @@ export class SelectLandlordsComponent implements OnInit {
   groupOfficesList: any = [];
 
   @ViewChild('ManagementTypeFilter') ManagementTypeFilter: IonicSelectableComponent;
+  @ViewChild('OfficeFilter') OfficeFilter: IonicSelectableComponent;
+
   selectedManagementType: number[] = [];
+  selectedOfficeCode = [];
 
   constructor(
     private hmrcService: HmrcService,
@@ -199,8 +202,8 @@ export class SelectLandlordsComponent implements OnInit {
     this.unselectAll();
     if (this.checkedLandlords.length > 0)
       this.checkedLandlords.length = 0;
-    if (this.group.value.propertyOffice) {
-      this.landlordParams = this.landlordParams.set('propertyOffice', this.group.value.propertyOffice);
+    if (this.group.value.selectedPropertyOfficeCodes) {
+      this.landlordParams = this.landlordParams.set('propertyOffice', this.group.value.selectedPropertyOfficeCodes);
     }
     if (this.group.value.managementType) {
       this.landlordParams = this.landlordParams.set('managementType', this.selectedManagementType);
@@ -271,8 +274,7 @@ export class SelectLandlordsComponent implements OnInit {
         const propertyOfficeName = res?.data?.selectedOfficeList.map(err => err.officeName).join(", ");
         const propertyOfficeCodes = res?.data?.selectedOfficeList.map(err => err.officeCode).join(",");
         this.group.get('propertyOffice').setValue(propertyOfficeName);
-        this.landlordParams = this.landlordParams.set('propertyOffice', propertyOfficeCodes);
-        this.rerenderLandlordList();
+        this.group.get('selectedPropertyOfficeCodes').patchValue(propertyOfficeCodes);
       }
     });
     await modal.present();
@@ -336,10 +338,24 @@ export class SelectLandlordsComponent implements OnInit {
   onManagementChange() {
     this.selectedManagementType.length = 0;
     if (this.group.value.managementType) {
-      for (var val of this.group.value.managementType) {
+      for (let val of this.group.value.managementType) {
         this.selectedManagementType.push(val.index);
       }
     }
     this.group.get('selectedManagementType').patchValue(this.selectedManagementType);
+  }
+
+  toggleItemsOffice() {
+    this.OfficeFilter.toggleItems(this.OfficeFilter.itemsToConfirm.length ? false : true);
+  }
+
+  onOfficeChange() {
+    this.selectedOfficeCode.length = 0;
+    if (this.group.value.propertyOfficeCodes) {
+      for (let val of this.group.value.propertyOfficeCodes) {
+        this.selectedOfficeCode.push(val.officeCode);
+      }
+    }
+    this.group.get('selectedPropertyOfficeCodes').patchValue(this.selectedOfficeCode);
   }
 }
