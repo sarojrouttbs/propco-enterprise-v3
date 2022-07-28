@@ -17,6 +17,7 @@ import { SelectAllPlusSearchComponent } from '../select-all-plus-search/select-a
 import { SelectDatesComponent } from './self-assessment-form/select-dates/select-dates.component';
 import { OfficeFilterModalPageModule } from '../shared/modals/office-filter-modal/office-filter-modal.module';
 import { PreviewAndSendComponent } from './self-assessment-form/preview-and-send/preview-and-send.component';
+import { PreviewPdfModalPageModule } from '../shared/modals/preview-pdf-modal/preview-pdf-modal.module';
 import { IonicSelectableModule } from 'ionic-selectable';
 
 @NgModule({
@@ -30,6 +31,7 @@ import { IonicSelectableModule } from 'ionic-selectable';
     DataTablesModule,
     PipesModule,
     OfficeFilterModalPageModule,
+    PreviewPdfModalPageModule,
     IonicSelectableModule
   ],
   declarations: [

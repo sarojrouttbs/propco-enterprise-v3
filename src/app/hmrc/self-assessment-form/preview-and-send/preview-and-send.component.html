@@ -70,7 +70,7 @@
               </td>
               <td>{{(data.statementPreference | lookup: statementPreferences) || DEFAULTS.NOT_AVAILABLE}}</td>
               <td class="resp-action-icon">
-                <i class="propcoicon propcoicon-viewings action-btn"></i>
+                <i class="propcoicon propcoicon-viewings action-btn" (click)="onRowClick(data)"></i>
               </td>
             </tr>
           </tbody>
