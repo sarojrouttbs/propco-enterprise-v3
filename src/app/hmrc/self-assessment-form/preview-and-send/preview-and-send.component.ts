@@ -42,6 +42,7 @@ export class PreviewAndSendComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log("preview-and-send", this.group.value);
     this.getLookupData();
     this.initDataTable();
     this.disableButton();
@@ -65,6 +66,7 @@ export class PreviewAndSendComponent implements OnInit {
   }
 
   private initDataTable(): void {
+    console.log("before initDataTable", this.group.value);
     this.dtOption = {
       paging: true,
       pagingType: 'full_numbers',
@@ -94,6 +96,9 @@ export class PreviewAndSendComponent implements OnInit {
           this.params = this.params.set('selectedPropertyLinkIds', this.group.value.selectedPropertyLinkIds.toString());
         if (this.group.value.deselectedPropertyLinkIds)
           this.params = this.params.set('deselectedPropertyLinkIds', this.group.value.deselectedPropertyLinkIds.toString());
+        console.log("after initDataTable", this.group.value);
+        console.log("initDataTable params", this.params);
+
         this.hmrcService.getLandlords(this.params).subscribe(res => {
           this.landlordList = res && res.data ? res.data : [];
           this.totalPropertyLandlord = res ? res.count : 0;
