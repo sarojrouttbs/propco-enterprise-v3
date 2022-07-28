@@ -8,8 +8,8 @@ import { CommonService } from '../../services/common.service';
   styleUrls: ['./preview-pdf-modal.page.scss'],
 })
 export class PreviewPdfModalPage implements OnInit {
-  modalHeader;
-  pdfUrl;
+  modalHeader: any;
+  pdfUrl: any;
   finalPdfUrl: any;
   constructor(private modalController: ModalController, private commonService: CommonService) { }
 

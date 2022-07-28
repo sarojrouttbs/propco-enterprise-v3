@@ -720,7 +720,7 @@ export class CommonService {
     return obj;
   }
 
-  sanitizeUrl(url) {
+  sanitizeUrl(url: any) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }

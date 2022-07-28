@@ -153,7 +153,7 @@ export class PreviewAndSendComponent implements OnInit {
       this.onHmrcLandlordSelectPreview.emit('true');
   }
 
-  async onRowClick(data) {
+  async onRowClick(data: any) {
     const respData:any = await this.getPdfUrlDetails(data);
     const file = new Blob([respData], { type: 'application/pdf' });           
     const fileURL = URL.createObjectURL(file);

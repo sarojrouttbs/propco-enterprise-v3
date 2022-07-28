@@ -51,7 +51,7 @@ export class SelectLandlordsComponent implements OnInit {
   @ViewChild('OfficeFilter') OfficeFilter: IonicSelectableComponent;
 
   selectedManagementType: number[] = [];
-  selectedOfficeCode:any = [];
+  selectedOfficeCode = [];
 
   constructor(
     private hmrcService: HmrcService,

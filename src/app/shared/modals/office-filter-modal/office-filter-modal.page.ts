@@ -22,7 +22,7 @@ export class OfficeFilterModalPage implements OnInit {
   preSelectedOfficeList;
 
   searchText = new FormControl();
-  filteredOfficesList: any = [];
+  filteredOfficesList = [];
   officesList: any = [];
   groupOfficesList: any = [];
   groupOfficesDetails: any;
