@@ -338,7 +338,7 @@ export class SelectLandlordsComponent implements OnInit {
   onManagementChange() {
     this.selectedManagementType.length = 0;
     if (this.group.value.managementType) {
-      for (var val of this.group.value.managementType) {
+      for (let val of this.group.value.managementType) {
         this.selectedManagementType.push(val.index);
       }
     }
@@ -352,7 +352,7 @@ export class SelectLandlordsComponent implements OnInit {
   onOfficeChange() {
     this.selectedOfficeCode.length = 0;
     if (this.group.value.propertyOfficeCodes) {
-      for (var val of this.group.value.propertyOfficeCodes) {
+      for (let val of this.group.value.propertyOfficeCodes) {
         this.selectedOfficeCode.push(val.officeCode);
       }
     }
