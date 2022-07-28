@@ -769,3 +769,7 @@ export const DATE_RANGE_CONFIG = {
   'YEAR_TO_DATE': 'Year to Date',
   'LAST_MONTH': 'Last Month'
 };
+
+export const HMRC_CONFIG = {
+  EMAIL_REGEX : /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+}

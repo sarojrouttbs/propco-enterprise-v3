@@ -72,13 +72,13 @@ export class SelectLandlordsComponent implements OnInit {
     this.getLookupData();
     this.officesList = await this.getOfficesList();
     const optionsResponse: any = await this.getOptions();
-    if(optionsResponse.ENABLE_GROUPOFFICEFILTER) {
+    if (optionsResponse.ENABLE_GROUPOFFICEFILTER) {
       this.isGroupOfficeFilter = true;
       this.groupOfficesList = await this.getOfficesGroupList();
     } else {
-      this.isGroupOfficeFilter = false;                        
+      this.isGroupOfficeFilter = false;
     }
-    
+
   }
 
   private getLookupData() {
@@ -193,6 +193,8 @@ export class SelectLandlordsComponent implements OnInit {
 
   applyFilters() {
     this.unselectAll();
+    if (this.checkedLandlords.length > 0)
+      this.checkedLandlords.length = 0;
     if (this.group.value.propertyOfficeCodes) {
       this.landlordParams = this.landlordParams.set('propertyOffice', this.group.value.propertyOfficeCodes);
     }
@@ -277,7 +279,7 @@ export class SelectLandlordsComponent implements OnInit {
       .set('option', 'ENABLE_GROUPOFFICEFILTER');
     return new Promise((resolve, _reject) => {
       this.hmrcService.getOptions(params).subscribe(
-        async(res) => {                    
+        async (res) => {
           resolve(res ? res : {});
         },
         (error) => {

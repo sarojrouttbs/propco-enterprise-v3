@@ -49,6 +49,7 @@ import { OpenStreetMapComponent } from './open-street-map/open-street-map.compon
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { AgreementDetailsComponent } from './admin/tenancy/agreement-details/agreement-details.component';
 import { AgreementHistoryComponent } from './admin/tenancy/agreement-history/agreement-history.component';
+import { ComplianceRecordsComponent } from './compliance-records/compliance-records.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -112,7 +113,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     OpenStreetMapComponent,
     AgreementDetailsComponent,
     AgreementHistoryComponent,
-    PercentageDirective
+    PercentageDirective,
+    ComplianceRecordsComponent
   ],
   providers: [
     AgentService,
