@@ -73,7 +73,7 @@
         </ion-row>
       </ion-grid>
       <div class="overlay-container">
-        <table datatable [dtOptions]="dtOption" [dtTrigger]="dtTrigger" class="row-border hover" width="100%">
+        <table id="marketing-activity-table" datatable [dtOptions]="dtOption" [dtTrigger]="dtTrigger" class="row-border hover" width="100%">
           <thead>
             <tr>
               <th style="width:23%">Applicant</th>
@@ -100,6 +100,13 @@
               <td> {{ smsCountTotal }} </td>
               <td> {{ mailshotCountTotal }} </td>
               <td> - </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="marketActivityListing?.length === 0">
+            <tr>
+              <td colspan="6" class="no-data-available" style="text-align: center;">
+                <b>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</b>
+              </td>
             </tr>
           </tbody>
         </table>

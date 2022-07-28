@@ -6,6 +6,7 @@
 .property-center-card {
   .amenity-content {
     padding: 0;
+
     .amenity-row > ion-col {
       border: solid 1px var(--ion-color-four);
     }
@@ -38,9 +39,9 @@
   }
 
   .property-info {
-    display: inline-grid;
     margin-top: 2px;
     margin-left: 10px;
+
     .rent {
       color: var(--ion-color-success);
       font-size: 20px;
@@ -69,12 +70,34 @@
 
     .agent {
       font-size: 16px;
+
       .query {
         color: var(--ion-label-color);
         font-size: 13px;
       }
+
       :last-child {
         color: var(--ion-text-color);
+      }
+    }
+
+    .label {
+      color: var(--ion-label-color);
+      font-size: 12px;
+    }
+
+    .value {
+      color: var(--ion-color-two);
+    }
+    .property-certificates {
+      color: var(--ion-text-color);
+      display: flex;
+      align-items: center;
+      .success {
+        color: var(--ion-color-success);
+      }
+      .danger {
+        color: var(--ion-color-danger);
       }
     }
   }
