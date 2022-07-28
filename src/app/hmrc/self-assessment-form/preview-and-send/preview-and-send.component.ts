@@ -7,6 +7,8 @@ import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC_CONFIG, PROPCO } from 'sr
 import { HmrcService } from '../../hmrc.service';
 import { DatePipe } from '@angular/common';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { ModalController } from '@ionic/angular';
+import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/preview-pdf-modal.page';
 
 @Component({
   selector: 'app-preview-and-send',
@@ -38,10 +40,12 @@ export class PreviewAndSendComponent implements OnInit {
   constructor(
     private hmrcService: HmrcService,
     public datepipe: DatePipe,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
+    console.log("preview-and-send", this.group.value);
     this.getLookupData();
     this.initDataTable();
     this.disableButton();
@@ -82,8 +86,8 @@ export class PreviewAndSendComponent implements OnInit {
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
           .set('taxHandler', this.group.value.taxHandler)
           .set('hideLoader', 'true');
-        if (this.group.value.propertyOffice)
-          this.params = this.params.set('propertyOffice', this.group.value.propertyOffice);
+        if (this.group.value.selectedPropertyOfficeCodes)
+          this.params = this.params.set('propertyOffice', this.group.value.selectedPropertyOfficeCodes);
         if (this.group.value.selectedManagementType)
           this.params = this.params.set('managementType', this.group.value.selectedManagementType);
         if (this.group.value.searchText)
@@ -94,6 +98,7 @@ export class PreviewAndSendComponent implements OnInit {
           this.params = this.params.set('selectedPropertyLinkIds', this.group.value.selectedPropertyLinkIds.toString());
         if (this.group.value.deselectedPropertyLinkIds)
           this.params = this.params.set('deselectedPropertyLinkIds', this.group.value.deselectedPropertyLinkIds.toString());
+
         this.hmrcService.getLandlords(this.params).subscribe(res => {
           this.landlordList = res && res.data ? res.data : [];
           this.totalPropertyLandlord = res ? res.count : 0;
@@ -148,6 +153,51 @@ export class PreviewAndSendComponent implements OnInit {
       this.onHmrcLandlordSelectPreview.emit('false');
     else
       this.onHmrcLandlordSelectPreview.emit('true');
+  }
+
+  async onRowClick(data: any) {
+    const respData:any = await this.getPdfUrlDetails(data);
+    const file = new Blob([respData], { type: 'application/pdf' });           
+    const fileURL = URL.createObjectURL(file);
+    const modal = await this.modalController.create({
+      component: PreviewPdfModalPage,
+      cssClass: 'modal-container preview-pdf-modal-container',
+      componentProps: {
+        modalHeader: 'HMRC Report',
+        pdfUrl: fileURL
+      },
+      backdropDismiss: false
+    });
+
+    modal.onDidDismiss().then(async res => { });
+    await modal.present();
+  }
+
+  private getPdfUrlDetails(data: any) {
+    const requestObj = {
+      financialYearDateRange: {
+        from: this.group.value.from,
+        to: this.group.value.to
+      },
+      selfAssessmentRequest: [
+        {
+          landlordId: data.landlordId,
+          propertyIds: [
+            data.propertyId
+          ]
+        }
+      ]
+    };
+    return new Promise((resolve, _reject) => {
+      this.hmrcService.getPdfUrlDetails(requestObj).subscribe(
+        (res) => {
+          resolve(res ? res : {});
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
   }
 
   onPreferenceChange() {

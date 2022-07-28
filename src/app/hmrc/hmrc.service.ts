@@ -29,4 +29,8 @@ export class HmrcService {
   getOptions(params?: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `options`, { params });
   }
+
+  getPdfUrlDetails(requestObj: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `hmrc/reports/download`, requestObj, { responseType: 'blob' as 'json' });
+  }
 }
