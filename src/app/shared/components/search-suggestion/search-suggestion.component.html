@@ -85,7 +85,7 @@
     </span>
     <span >{{officeLookupMap.get(item.office)}}</span>&nbsp;
     <span>{{item.name}}</span>&nbsp;
-    <span >{{item.reference.split(",")[0]}}</span>&nbsp;
+    <span >{{item?.reference?.split(",")[0]}}</span>&nbsp;
     <span >{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
     <span>{{item.daytime}}</span>&nbsp;
     <span>{{item.mobile}}</span>&nbsp;
