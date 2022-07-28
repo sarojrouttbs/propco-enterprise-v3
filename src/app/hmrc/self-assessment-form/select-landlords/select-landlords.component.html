@@ -21,16 +21,57 @@
           <ion-input formControlName="propertyOffice" (click)="onOfficeClick()" readonly></ion-input>
         </ion-item>
       </ion-col>
-      <ion-col size="15" *ngIf="!isGroupOfficeFilter">
-        <ion-item selectSearchAllDirective>
+
+      <ion-col size=15 *ngIf="!isGroupOfficeFilter">
+        <ion-item>
           <ion-label position="floating">Office</ion-label>
-          <ion-select multiple="true" formControlName="propertyOfficeCodes">
-            <ion-select-option [value]="option.officeCode" *ngFor="let option of officesList" checked="true">
-              {{option.officeName}}
-            </ion-select-option>
-          </ion-select>
+          <ionic-selectable item-content itemValueField="officeCode" itemTextField="officeName" [items]="officesList"
+            [canSearch]="true" [isMultiple]="true" [canClear]="true" clearButtonText="Clear" closeButtonSlot="end"
+            confirmButtonText="Apply" searchPlaceholder="Search Office" #OfficeFilter
+            formControlName="propertyOfficeCodes" [shouldStoreItemValue]="false" class="selectable-height"
+            (click)="beginLoading()" (onOpen)="endLoading()" [shouldBackdropClose]="false">
+            <ng-template ionicSelectableHeaderTemplate>
+              <ion-toolbar>
+                <ion-buttons end>
+                </ion-buttons>
+                <ion-title>
+                  {{OfficeFilter.label}}
+                </ion-title>
+              </ion-toolbar>
+            </ng-template>
+
+            <ng-template ionicSelectableValueTemplate let-officesList="value">
+              <div class="ionic-selectable-value-item" *ngFor="let option of officesList">
+                {{option.officeName}}
+              </div>
+            </ng-template>
+            <ng-template ionicSelectableFooterTemplate>
+              <ion-toolbar>
+                <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
+                  (click)="toggleItemsOffice()" [disabled]="!officesList.length">
+                  {{OfficeFilter.itemsToConfirm.length ? 'Deselect All' : 'Select All'}}
+                </ion-button>
+                <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
+                  (click)="OfficeFilter.confirm();OfficeFilter.close();onOfficeChange();"
+                  [disabled]="!OfficeFilter.itemsToConfirm.length">
+                  Ok
+                </ion-button>
+                <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                  (click)="OfficeFilter.clear();OfficeFilter.close();onOfficeChange();"
+                  [disabled]="!OfficeFilter.itemsToConfirm.length">
+                  Clear
+                </ion-button>
+                <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                  (click)="OfficeFilter.close()">
+                  Cancel
+                </ion-button>
+              </ion-toolbar>
+            </ng-template>
+          </ionic-selectable>
         </ion-item>
       </ion-col>
+
+
       <!-- <ion-col size="15">
         <ion-item selectSearchAllDirective>
           <ion-label position="floating">Management</ion-label>
