@@ -225,8 +225,6 @@ export class SelectLandlordsComponent implements OnInit {
   }
 
   onCheckboxClick(data: any) {
-    console.log("onCheckboxClick", data);
-
     const value: any = document.getElementById('checkbox_' + data).getAttribute('ng-reflect-value');
     const isChecked: any = document.getElementById('checkbox_' + data).getAttribute('aria-checked');
     if (isChecked === 'true') {
@@ -244,8 +242,6 @@ export class SelectLandlordsComponent implements OnInit {
 
     if (!this.gridCheckAll && this.checkedLandlords.length > 0)
       this.group.get('selectedPropertyLinkIds').patchValue(this.checkedLandlords);
-
-    console.log("patch value",this.group.value);
 
     if ((this.gridCheckAll &&
       ((this.uncheckedLandlords.length > 0
