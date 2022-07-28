@@ -37,6 +37,7 @@ export class SelfAssessmentFormComponent implements OnInit {
       propertyOffice: [''],
       propertyOfficeCodes: [''],
       managementType: [''],
+      selectedManagementType: [''],
       from: [null, Validators.required],
       to: [null, Validators.required],
       quickFilterType: null,

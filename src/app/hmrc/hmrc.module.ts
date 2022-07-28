@@ -18,6 +18,7 @@ import { SelectDatesComponent } from './self-assessment-form/select-dates/select
 import { OfficeFilterModalPageModule } from '../shared/modals/office-filter-modal/office-filter-modal.module';
 import { PreviewAndSendComponent } from './self-assessment-form/preview-and-send/preview-and-send.component';
 import { PreviewPdfModalPageModule } from '../shared/modals/preview-pdf-modal/preview-pdf-modal.module';
+import { IonicSelectableModule } from 'ionic-selectable';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { PreviewPdfModalPageModule } from '../shared/modals/preview-pdf-modal/pr
     DataTablesModule,
     PipesModule,
     OfficeFilterModalPageModule,
-    PreviewPdfModalPageModule
+    PreviewPdfModalPageModule,
+    IonicSelectableModule
   ],
   declarations: [
     HmrcPage,

@@ -85,10 +85,10 @@ export class PreviewAndSendComponent implements OnInit {
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
           .set('taxHandler', this.group.value.taxHandler)
           .set('hideLoader', 'true');
-        if (this.group.value.propertyOfficeCodes)
+          if (this.group.value.propertyOfficeCodes)
           this.params = this.params.set('propertyOffice', this.group.value.propertyOfficeCodes);
-        if (this.group.value.managementType)
-          this.params = this.params.set('managementType', this.group.value.managementType);
+        if (this.group.value.selectedManagementType)
+          this.params = this.params.set('managementType', this.group.value.selectedManagementType);
         if (this.group.value.searchText)
           this.params = this.params.set('searchText', this.group.value.searchText);
         if (this.group.value.searchOnColumns)
