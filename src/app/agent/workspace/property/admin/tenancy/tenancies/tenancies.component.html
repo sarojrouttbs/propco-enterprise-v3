@@ -45,7 +45,7 @@
                 </td> -->
               </tr>
               <tr *ngIf="tenancies?.length === 0">
-                <td colspan="7" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+                <td colspan="7" class="ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
                 </td>
               </tr>
             </tbody>
@@ -92,16 +92,16 @@
         </ion-segment-button>
       </ion-segment>
 
-      <div [hidden]="type != 'agreementDetails'">
+      <div [hidden]="type !== 'agreementDetails'">
         <app-agreement-details (propcoAgreementId)="getPropcoAgreementId($event)" [selectedTenant]="selectedTenant" *ngIf="isAgreementDetails"></app-agreement-details>
       </div>
-      <div [hidden]="type != 'notes'">
+      <div [hidden]="type !== 'notes'">
         <p class="no-data-msg">No notes associated with this</p>
       </div>
-      <div [hidden]="type != 'clauses'">
+      <div [hidden]="type !== 'clauses'">
         <p class="no-data-msg">No clauses to display.</p>
       </div>
-      <div [hidden]="type != 'history'">
+      <div [hidden]="type !== 'history'">
         <app-agreement-history [agreementStatusesLookup]="agreementStatusesLookup" [selectedTenant]="selectedTenant" *ngIf="isAgreementDetails"></app-agreement-history>
       </div>
     </div>

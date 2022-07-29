@@ -32,7 +32,7 @@ export class AgreementDetailsComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selectedTenant && changes.selectedTenant.currentValue) {
       this.selectedTenant = this.selectedTenant;
-      this.initAgreementDetailsAPI();
+      this.initAgreementDetailsApi();
     }
   }
 
@@ -46,7 +46,7 @@ export class AgreementDetailsComponent implements OnInit {
     this.creatForm();
   }
 
-  private async initAgreementDetailsAPI() {
+  private async initAgreementDetailsApi() {
     this.agreementDetails = await this.getAgreementDetails();
     this.propcoAgreementId.emit(this.agreementDetails.propcoAgreementId);
     this.agreementTenantDetails = this.agreementDetails.agreementTenantDetail;
@@ -61,7 +61,7 @@ export class AgreementDetailsComponent implements OnInit {
       frequencyType: [],
       commissionPercentage: [],
       managementType: [],
-      totalOccupants: [],
+      totalOccupants: [{value: '', disabled: true}],
       noOfOccupiers: [],
       status: [],
       nextClaimDate: [],
