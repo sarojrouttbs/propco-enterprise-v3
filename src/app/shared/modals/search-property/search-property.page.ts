@@ -16,7 +16,7 @@ export class SearchPropertyPage {
   filteredProperty: Observable<FaultModels.IPropertyResponse>;
   propertyId;
   isFAF;
-  isNotFound: boolean = false;
+  isNotFound = false;
   officeList: any[] = [];
   agreementStatus: any;
 
@@ -36,7 +36,7 @@ export class SearchPropertyPage {
     );
   }
 
-  initPropertySearchForm(): void {
+  private initPropertySearchForm(): void {
     this.propertySearchForm = this.fb.group({
       text: ''
     });
@@ -57,18 +57,14 @@ export class SearchPropertyPage {
     return response;
   }
 
-  private searchNot() {
-
-  }
-
-  onSelectionChange(data) {
+  onSelectionChange(data: any) {
     if (data) {
       this.propertyId = data.option.value.entityId;
       this.dismiss();
     }
   }
 
-  getSuggestion(event) {
+  getSuggestion(event: any) {
     if (event && event.detail.value && event.detail.value.length > 2) {
       this.filteredProperty = this.commonService.searchPropertyByText(event.detail.value);
     } else {

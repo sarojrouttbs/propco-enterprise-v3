@@ -27,10 +27,10 @@ export class DetailsComponent implements OnInit {
     private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.initAPIcalls();
+    this.initApiCalls();
   }
 
-  private async initAPIcalls() {
+  private async initApiCalls() {
     this.createForm();
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
@@ -143,8 +143,8 @@ export class DetailsComponent implements OnInit {
     })
   }
 
-  getPropertyDetails(propertyId) {
-    const params = new HttpParams().set("hideLoader", "true");
+  getPropertyDetails(propertyId: string) {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
@@ -243,16 +243,15 @@ export class DetailsComponent implements OnInit {
     let params = new HttpParams().set("hideLoader", "true");
     this.agentService.getPropertyLocationsByPropertyId(propertyId, params).subscribe(
       res => {
-        const propertylocationIds: any = [];
         if (res && res.data) {
+          const propertylocationIds: any = [];
           res.data.forEach(element => {
             propertylocationIds.push(element.locationId)
           });
           const control = this.propertyDetailsForm.controls['lettingsDetailsForm'];
           control.patchValue({ propertyLocations: propertylocationIds })
         }
-      }
-    );
+      });
   }
 
   private getChangeHistory(propertyId: string, fieldName: string) {

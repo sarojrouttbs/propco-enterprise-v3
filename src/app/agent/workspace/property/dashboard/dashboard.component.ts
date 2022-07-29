@@ -195,7 +195,7 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
     return promise;
   }
 
-  getPropertyDetails(propertyId) {
+  getPropertyDetails(propertyId: string) {
     let params = new HttpParams().set("hideLoader", "true");
     const promise = new Promise((resolve, reject) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(

@@ -251,7 +251,7 @@ export class OfferDetailPage implements OnInit {
     this.isOffersDetailsAvailable = true;
   }
 
-  private getPropertyDetails(propertyId) {
+  private getPropertyDetails(propertyId: string) {
     this.tobService.getPropertyDetails(propertyId).subscribe(
       (res) => {
         this.propertyDetails = res.data;

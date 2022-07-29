@@ -18,7 +18,7 @@ export class PropertyAddressComponent {
   constructor(private commonService: CommonService) { }
 
   getAddressList() {
-    if (this.group.get('postcode').value == null) {
+    if (this.group.get('postcode').value === null) {
       return;
     }
     this.group.get('addressdetails').setValue('');
@@ -43,7 +43,7 @@ export class PropertyAddressComponent {
     }
   }
 
-  getAddressDetails(addressId) {
+  getAddressDetails(addressId: string) {
     if (!addressId || '') {
       return;
     }

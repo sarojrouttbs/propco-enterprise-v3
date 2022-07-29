@@ -30,7 +30,7 @@ export class SearchApplicationPage implements OnInit {
   referencingApplicantStatusTypes: any[] = [];
   referencingApplicantResultTypes: any[] = [];
 
-  isNotFound: boolean = false;
+  isNotFound = false;
 
   constructor(
     private fb: FormBuilder,
@@ -127,13 +127,13 @@ export class SearchApplicationPage implements OnInit {
     }
   }
 
-  initPropertySearchForm(): void {
+  private initPropertySearchForm(): void {
     this.applicationSearchForm = this.fb.group({
       text: "",
     });
   }
 
-  onSelectionChange(data) {
+  onSelectionChange(data: any) {
     if (data) {
       this.applicationId = data.option.value.applicationId;
       this.dismiss();

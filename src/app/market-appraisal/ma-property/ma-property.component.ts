@@ -298,8 +298,8 @@ export class MaPropertyComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.maService.getPropertyLocationsByPropertyId(propertyId).subscribe(
         res => {
-          const propertylocationIds: any = [];
           if (res && res.data) {
+            const propertylocationIds: any = [];
             res.data.forEach(element => {
               propertylocationIds.push(element.locationId)
             });
