@@ -182,4 +182,8 @@ export class AgentService {
   getTenantGuarantors(tenantId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}/guarantors`);
   }
+
+  getPropertyHMOLicence(propertyId: string, params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/licences`,{ params });
+  }
 }
