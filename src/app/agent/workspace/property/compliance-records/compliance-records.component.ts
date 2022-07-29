@@ -53,7 +53,7 @@ export class ComplianceRecordsComponent implements OnInit {
     }
   }
 
-  private setLookupData(data) {
+  private setLookupData(data: any) {
     this.licenceSchemeLookup = data.hmoLicenceSchemes;
     this.licenceStatusLookup = data.hmoStatuses;
     this.mapLookup();
@@ -120,13 +120,11 @@ export class ComplianceRecordsComponent implements OnInit {
   }
 
   private async checkHmoRisk(license: PropertHmoLicence) {
-    let hmoRisk: any;
     if (license.licenceSchemeLookup !== null && license.licenceSchemeLookup === HMO_LICENCE_CONFIG.NO_SCHEME && license.licenceStatusLookup === null) {
-      hmoRisk = this.licenceSchemeLookupMap.get(license.licenceSchemeLookup);
+      return this.licenceSchemeLookupMap.get(license.licenceSchemeLookup);
     } else {
-      hmoRisk = this.licenceStatusLookupMap.get(license.licenceStatusLookup);
+      return this.licenceStatusLookupMap.get(license.licenceStatusLookup);
     }
-    return hmoRisk;
   }
 
   private checkHasHmoLicense(licenseData: PropertHmoLicence[]) {
