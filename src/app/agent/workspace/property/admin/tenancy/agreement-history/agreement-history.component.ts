@@ -2,7 +2,7 @@ import { Component, Input, OnInit, QueryList, SimpleChanges, ViewChildren } from
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
-import { DATE_FORMAT, DEFAULTS } from 'src/app/shared/constants';
+import { CHECKED_IN_OUT_STATUS, DATE_FORMAT, DEFAULTS } from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-agreement-history',
@@ -12,6 +12,7 @@ import { DATE_FORMAT, DEFAULTS } from 'src/app/shared/constants';
 export class AgreementHistoryComponent implements OnInit {
   notAvailable = DEFAULTS.NOT_AVAILABLE;
   DATE_FORMAT = DATE_FORMAT;
+  CHECKED_IN_OUT_STATUS = CHECKED_IN_OUT_STATUS;
   logHistoryList: any;
   historyDtOption: DataTables.Settings;
   historyDtTrigger: Subject<any> = new Subject();
