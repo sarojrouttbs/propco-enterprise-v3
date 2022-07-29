@@ -21,7 +21,7 @@ export class SolrHeaderComponent {
   }
 
   private updateUserDetail(body) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.solrService.updateUserDetails(body).subscribe(
         (res) => {
           if (res) {

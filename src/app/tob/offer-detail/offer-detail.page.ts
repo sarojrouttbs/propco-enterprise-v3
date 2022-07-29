@@ -203,7 +203,7 @@ export class OfferDetailPage implements OnInit {
   }
 
   private async getOfferDetails(offerId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.tobService.getOfferDetails(offerId).subscribe(
         (res) => {
           this.offerDetails = res;
@@ -218,7 +218,6 @@ export class OfferDetailPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private async patchOfferDetails() {

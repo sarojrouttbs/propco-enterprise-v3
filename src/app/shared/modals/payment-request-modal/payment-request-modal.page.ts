@@ -93,7 +93,7 @@ export class PaymentRequestModalPage {
   }
 
   private raiseWorksOrder() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.createFaultMaintenaceWorksOrder(this.woData, this.faultId).subscribe((res) => {
         resolve(res);
         this.commonService.showMessage('Successfully Raised', 'Works Order', 'success');
@@ -103,11 +103,10 @@ export class PaymentRequestModalPage {
         this.commonService.showMessage('Something went wrong', 'Works Order', 'error');
       });
     });
-    return promise;
   }
 
   private updateWorksOrder() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateQuoteDetails(
         this.woData, this.maintenanceId).subscribe((res) => {
           resolve(true);
@@ -118,11 +117,10 @@ export class PaymentRequestModalPage {
           this.commonService.showMessage('Something went wrong', 'Works Order', 'error');
         });
     });
-    return promise;
   }
 
   private async saveFaultDetails(data): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.saveFaultDetails(this.faultId, data).subscribe(
         res => {
           resolve(true);
@@ -133,11 +131,10 @@ export class PaymentRequestModalPage {
         }
       );
     });
-    return promise;
   }
 
   private issueWorksOrderContractor() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let req: any = {};
       req.submittedById = '';
       req.submittedByType = 'SECUR_USER';
@@ -152,7 +149,6 @@ export class PaymentRequestModalPage {
         }
       );
     });
-    return promise;
   }
 
   private async saveFaultLLAuth() {
@@ -162,7 +158,7 @@ export class PaymentRequestModalPage {
     if (this.contractorId) {
       requestObj.contractorId = this.contractorId;
     }
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.saveFaultLLAuth(requestObj, this.faultNotificationId).subscribe(res => {
         resolve(true);
       }, error => {
@@ -170,11 +166,10 @@ export class PaymentRequestModalPage {
         resolve(false);
       })
     });
-    return promise;
   }
 
   private async updateFaultNotification(data, faultNotificationId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let notificationObj = {} as FaultModels.IUpdateNotification;
       notificationObj.isAccepted = data;
       notificationObj.submittedByType = 'SECUR_USER';
@@ -187,7 +182,6 @@ export class PaymentRequestModalPage {
         }
       );
     });
-    return promise;
   }
 
   async onCancel() {

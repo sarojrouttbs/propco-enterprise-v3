@@ -75,7 +75,7 @@ export class AddressModalPage implements OnInit {
   }
 
   getAddressList() {
-    if (this.addressDetailsForm.get('postcode').value === null) {
+    if (this.addressDetailsForm.get('postcode').value == null) {
       return;
     }
     this.addressDetailsForm.get('addressdetails').setValue('');

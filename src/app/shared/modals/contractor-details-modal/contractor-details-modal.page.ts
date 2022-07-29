@@ -99,7 +99,7 @@ export class ContractorDetailsModalPage implements OnInit {
       
       this.contractorDetailForm.value.email ? requestObj.email = this.contractorDetailForm.value.email : '';
       this.llContractorDetails.landlordOwnContractorId ? requestObj.landlordOwnContractorId = this.llContractorDetails.landlordOwnContractorId : '';
-      const promise = new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.faultsService.saveOwnContractor(this.faultId, requestObj).subscribe(
           res => {
             resolve(true);
@@ -110,7 +110,6 @@ export class ContractorDetailsModalPage implements OnInit {
           }
         );
       });
-      return promise;
     } else {
       this.contractorDetailForm.markAllAsTouched();
     }

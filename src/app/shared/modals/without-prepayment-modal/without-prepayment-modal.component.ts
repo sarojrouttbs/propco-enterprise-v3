@@ -65,7 +65,7 @@ export class WithoutPrepaymentModalComponent implements OnInit {
   }
 
   private async getSystemOptions(): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.commonService.getSystemOptions(SYSTEM_OPTIONS.REPAIR_ESTIMATE_QUOTE_THRESHOLD).subscribe(res => {
         this.REPAIR_ESTIMATE_QUOTE_THRESHOLD = res ? parseInt(res.REPAIR_ESTIMATE_QUOTE_THRESHOLD, 10) : this.REPAIR_ESTIMATE_QUOTE_THRESHOLD;
         resolve(true);
@@ -73,7 +73,6 @@ export class WithoutPrepaymentModalComponent implements OnInit {
         resolve(false);
       });
     });
-    return promise;
   }
 
   submit() {

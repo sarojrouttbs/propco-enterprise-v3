@@ -18,7 +18,7 @@ export class PendingNotificationModalPage {
   ) { }
 
   save() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.forwardNotification(this.notificationHistoryId).subscribe(
         res => {
           resolve(true);
@@ -29,7 +29,6 @@ export class PendingNotificationModalPage {
         }
       );
     });
-    return promise;
   }
 
   dismiss() {

@@ -123,8 +123,8 @@ export class WorkspacePage {
   }
 
   getPropertyById(id) {
-    let params = new HttpParams().set("hideLoader", "true");
-    const promise = new Promise((resolve, reject) => {
+    const params = new HttpParams().set("hideLoader", "true");
+    return new Promise((resolve) => {
       this.agentService.getPropertyById(id, params).subscribe(
         (res) => {
           resolve(res.data);
@@ -134,7 +134,6 @@ export class WorkspacePage {
         }
       );
     });
-    return promise;
   }
 
   onSwitch(item) {

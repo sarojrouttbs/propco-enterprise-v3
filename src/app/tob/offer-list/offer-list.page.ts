@@ -227,7 +227,7 @@ export class OfferListPage implements OnInit {
   }
 
   private getPropertyById() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.tobService.getPropertyDetails(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
@@ -243,11 +243,10 @@ export class OfferListPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private getOfferList() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.tobService.getOfferList(this.propertyId).subscribe(
         (res) => {
           this.isOffersListAvailable = true;
@@ -262,7 +261,7 @@ export class OfferListPage implements OnInit {
   }
 
   private getUserAccessRight() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.tobService.getUserAccessRight().subscribe(
         async (res) => {
           if (res) {
@@ -380,7 +379,7 @@ export class OfferListPage implements OnInit {
   }
 
   private getNotesList(offerId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.tobService.getNotesList(offerId).subscribe(
         (res) => {
           if (res && res.data) {

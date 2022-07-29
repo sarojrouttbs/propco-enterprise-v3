@@ -526,7 +526,7 @@ export class DetailsPage {
   }
 
   getPropertyById() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getPropertyById(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
@@ -542,11 +542,10 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private getPropertyTenancies() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getPropertyTenancies(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
@@ -575,11 +574,10 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private deleteAdditionalInfo(infoId: string) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.deleteAdditionalInfo(infoId).subscribe(
         res => {
           resolve(true);
@@ -590,11 +588,10 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private addAdditionalInfo(faultId: string, requestObj: any) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.addAdditionalInfo(faultId, requestObj).subscribe(
         res => {
           resolve(true);
@@ -605,11 +602,10 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private updateAdditionalInfo(id: string, requestObj: any) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateAdditionalInfo(id, requestObj).subscribe(
         res => {
           resolve(true);
@@ -620,7 +616,6 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private onlyUnique(value, index, self) {
@@ -650,7 +645,7 @@ export class DetailsPage {
 
 
   private getHMOLicenceDetails() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getHMOLicenceDetailsAgainstProperty(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
@@ -664,11 +659,10 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private getFaultHistory() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getFaultHistory(this.faultId).subscribe(
         res => {
           if (res) {
@@ -682,11 +676,10 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private getFaultAdditionalInfo() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getFaultAdditionalInfo().subscribe(
         res => {
           if (res) {
@@ -699,11 +692,10 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private getLandlordsOfProperty(propertyId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getLandlordsOfProperty(propertyId).subscribe(
         res => {
           /*filter out LL which have link with the property*/
@@ -716,11 +708,10 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private getPropertyTenants(propertyId, agreementId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getPropertyTenants(propertyId, agreementId).subscribe(
         res => {
           this.propertyTenants = res && res.data ? res.data : [];
@@ -732,14 +723,13 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private getTenantsGuarantors(tenantId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getTenantGuarantors(tenantId).subscribe(
         res => {
-          var guarantorList = res && res.data ? res.data : [];
+          const guarantorList = res && res.data ? res.data : [];
           this.allGuarantors = this.allGuarantors.concat(guarantorList);
           resolve(res);
         },
@@ -749,11 +739,10 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private getFaultDetails() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getFaultDetails(this.faultId).subscribe(
         res => {
           if (res) {
@@ -766,11 +755,10 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private getLandlordDetails(landlordId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getLandlordDetails(landlordId).subscribe(
         res => {
           let categoryNames = [];
@@ -788,11 +776,10 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private getLandlordDppDetails(landlordId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getLandlordDppDetails(landlordId).subscribe(
         res => {
           let dppDetails = res ? res.data : [];
@@ -804,11 +791,10 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private getPreferredSuppliers(landlordId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         res => {
           this.preferredSuppliers = res && res.data ? res.data : [];
@@ -819,18 +805,16 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private getContractorDetails(contractorId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getContractorDetails(contractorId).subscribe(res => {
         resolve(res);
       }, error => {
         reject(null);
       });
     });
-    return promise;
   }
 
   getUploadedFile(files: FileList) {
@@ -861,7 +845,7 @@ export class DetailsPage {
     if (files) {
       for (let file of files) {
         if (this.validateUploadLimit(file)) {
-          let isImage: boolean = false;
+          let isImage = false;
           let date = Date.now();
           if (file.type.split("/")[0] !== 'image') {
             isImage = false;
@@ -940,7 +924,7 @@ export class DetailsPage {
   }
 
   getFaultDocuments(faultId: string) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getFaultDocuments(faultId).subscribe(response => {
         if (response) {
           resolve(response.data);
@@ -951,7 +935,6 @@ export class DetailsPage {
         resolve([]);
       });
     });
-    return promise;
   }
 
   private filterDocsByStage(details: FaultModels.IFaultResponse) {
@@ -1121,7 +1104,7 @@ export class DetailsPage {
   }
 
   async getReportedByIdList() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let reportedBy = this.reportedByForm.get('reportedBy').value;
       if (reportedBy === 'LANDLORD') {
         this.getLandlordsOfProperty(this.propertyId).then((data: any[]) => {
@@ -1170,7 +1153,6 @@ export class DetailsPage {
       }
 
     });
-    return promise;
   }
 
   onSelectAgreement() {
@@ -1241,8 +1223,7 @@ export class DetailsPage {
   }
 
   private checkFormsValidity() {
-    return new Promise((resolve, reject) => {
-      let valid = false;
+    return new Promise((resolve) => {
       let describeFaultForm = this.describeFaultForm.valid;
       let faultDetailsForm = this.faultDetailsForm.valid;
       let reportedByForm = this.reportedByForm.valid;
@@ -1258,14 +1239,14 @@ export class DetailsPage {
       }
 
       if (describeFaultForm && faultDetailsForm && reportedByForm && accessInfoForm) {
-        valid = true;
+        return resolve(true);
       }
-      return resolve(valid);
+      return resolve(false);
     });
   }
 
   private createFaultFormValues(): any {
-    let faultDetails = {
+    return {
       urgencyStatus: this.faultDetailsForm.get('urgencyStatus').value,
       reportedBy: this.reportedByForm.get('reportedBy').value,
       category: this.describeFaultForm.get('category').value,
@@ -1284,7 +1265,6 @@ export class DetailsPage {
       stage: FAULT_STAGES.FAULT_LOGGED,
       stageAction: FAULT_STAGES_ACTIONS.FAULT_LOGGED
     }
-    return faultDetails;
   }
 
   async searchProperty() {
@@ -1297,7 +1277,7 @@ export class DetailsPage {
       }
     });
 
-    const data = modal.onDidDismiss().then(res => {
+    modal.onDidDismiss().then(res => {
       if (res.data.propertyId) {
         this.propertyId = res.data.propertyId;
         this.initiateFault();
@@ -1371,7 +1351,7 @@ export class DetailsPage {
   }
 
   private saveAdditionalInfoForm() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       // this.commonService.showLoader();
       let apiObservableArray = [];
       this.faultDetailsForm.controls['additionalInfo'].value.forEach(info => {
@@ -1395,7 +1375,6 @@ export class DetailsPage {
         resolve(true);
       });
     });
-    return promise;
   }
 
   async startProgress() {
@@ -1820,7 +1799,7 @@ export class DetailsPage {
     let notificationObj = {} as FaultModels.IUpdateNotification;
     notificationObj.isVoided = true;
     notificationObj.submittedByType = 'SECUR_USER';
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateNotification(this.cliNotification.faultNotificationId, notificationObj).subscribe(
         res => {
           resolve(true);
@@ -1831,7 +1810,6 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private updateFaultStatus(status): Promise<any> {
@@ -1841,7 +1819,7 @@ export class DetailsPage {
   private updateFaultDetails(requestObj): Promise<any> {
     requestObj.submittedByType = 'SECUR_USER';
     requestObj.submittedById = '';
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.updateFault(this.faultId, requestObj).subscribe(
         res => {
           // this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
@@ -1852,7 +1830,6 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   async checkFaultNotifications(faultId) {
@@ -1867,10 +1844,9 @@ export class DetailsPage {
   }
 
   private filterNotifications(data, stage, action?) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let filtereData = null;
       let currentStage = stage;
-      let currentAction = action;
 
       if (data.length == 0)
         resolve(null);
@@ -1891,11 +1867,6 @@ export class DetailsPage {
       //   resolve(filtereData[0]);
       // }
     });
-    return promise;
-  }
-
-  private handleCLInotification(notification) {
-
   }
 
   questionAction(data) {
@@ -2010,7 +1981,7 @@ export class DetailsPage {
   }
 
   private async updateFaultNotification(data, faultNotificationId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let notificationObj = {} as FaultModels.IUpdateNotification;
       notificationObj.isAccepted = data;
       notificationObj.submittedByType = 'SECUR_USER';
@@ -2023,7 +1994,6 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   onSearchChange(event: any) {
@@ -2246,7 +2216,7 @@ export class DetailsPage {
   }
 
   async fetchPendingNotification(faultId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.fetchPendingNotification(faultId).subscribe(
         res => {
           this.pendingNotification = res ? res : '';
@@ -2257,7 +2227,6 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   async notificationModal() {
@@ -2335,7 +2304,7 @@ export class DetailsPage {
   }
 
   private getMaxDocUploadLimit(): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.commonService.getSystemOptions(MAX_DOC_UPLOAD_SIZE.FAULT_DOCUMENT_UPLOAD_SIZE).subscribe(res => {
         this.MAX_DOC_UPLOAD_LIMIT = res ? parseInt(res.FAULT_DOCUMENT_UPLOAD_SIZE, 10) : '';
         // this.MAX_DOC_UPLOAD_LIMIT = 1;
@@ -2344,7 +2313,6 @@ export class DetailsPage {
         resolve(false);
       });
     });
-    return promise;
   }
 
   onBlurCurrency(val: any, form: FormGroup) {
@@ -2358,7 +2326,7 @@ export class DetailsPage {
   }
 
   private async saveFaultDetails(data, faultId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.saveFaultDetails(faultId, data).subscribe(
         res => {
           this.commonService.showMessage('Title changed successfully.', 'Repair', 'success');
@@ -2369,7 +2337,6 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   getMoreCodes(event: {
@@ -2543,7 +2510,7 @@ export class DetailsPage {
   }
 
   private getWorksOrderPaymentRules(actionType = WORKSORDER_RAISE_TYPE.AUTO) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
         res => {
           resolve(res);
@@ -2557,18 +2524,16 @@ export class DetailsPage {
         }
       );
     });
-    return promise;
   }
 
   private async getSystemOptions(key): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.commonService.getSystemOptions(key).subscribe(res => {
         resolve(res ? res['key'] : '');
       }, error => {
         resolve('');
       });
     });
-    return promise;
   }
 
   private async paymentRequestModal(data) {

@@ -250,7 +250,7 @@ export class MaPropertyComponent implements OnInit {
 
   /** Services**/
   private getAccessibleOffices() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.maService.getaccessibleOffices().subscribe(
         (res) => {
           resolve(res ? res.data : []);
@@ -260,11 +260,11 @@ export class MaPropertyComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private getLocationByOffice(officeCode: string) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.maService.getOfficeLocations(officeCode).subscribe(
         (res) => {
           resolve(res ? res.data : []);
@@ -274,11 +274,11 @@ export class MaPropertyComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private getPropertyDetails(propertyId: string) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.maService.getPropertyDetails(propertyId).subscribe(
         (res) => {
           resolve(res.data);
@@ -288,14 +288,14 @@ export class MaPropertyComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
 
 
 
   private getPropertyLocationsByPropertyId(propertyId: string) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.maService.getPropertyLocationsByPropertyId(propertyId).subscribe(
         res => {
           if (res && res.data) {
@@ -310,7 +310,7 @@ export class MaPropertyComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
   /**ends**/
 

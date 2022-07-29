@@ -148,7 +148,7 @@ export class ResendLinkModalPage implements OnInit {
   }
 
   private getTenantDetails() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.getTenantDetails(this.applicantId).subscribe(
         (res) => {
           this.applicantDetails = res ? res : {};
@@ -163,11 +163,10 @@ export class ResendLinkModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private getGuarantorDetails() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.getGuarantorDetails(this.applicantId).subscribe(
         (res) => {
           this.applicantDetails = res ? res : {};
@@ -182,7 +181,6 @@ export class ResendLinkModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   disableCheckbox(emailId: any, event: any) {

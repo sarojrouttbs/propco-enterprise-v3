@@ -25,6 +25,7 @@ export class TenanciesComponent implements OnInit {
   DATE_FORMAT = DATE_FORMAT;
   selectedTenant: any;
   isAgreementDetails = false;
+  propcoAgreementId: any;
 
   constructor(private commonService: CommonService, private agentService: AgentService) { }
 
@@ -128,5 +129,9 @@ export class TenanciesComponent implements OnInit {
 
   hideMenu(event: any, id: any) {
     this.commonService.hideMenu(event, id);
+  }
+
+  getPropcoAgreementId(data: any) {
+    this.propcoAgreementId = data; 
   }
 }

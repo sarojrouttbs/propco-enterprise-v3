@@ -52,7 +52,7 @@ export class FaultTitleComponent {
   }
 
   private async saveFaultDetails(data, faultId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.saveFaultDetails(faultId, data).subscribe(
         res => {
           this.commonService.showMessage('Title has been updated successfully.', 'Fault', 'success');
@@ -63,7 +63,6 @@ export class FaultTitleComponent {
         }
       );
     });
-    return promise;
   }
 
   async notesModal() {    
