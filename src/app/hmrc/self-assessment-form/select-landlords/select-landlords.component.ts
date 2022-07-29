@@ -227,16 +227,15 @@ export class SelectLandlordsComponent implements OnInit {
     this.selectedOfficeList = [];
   }
 
-  onCheckboxClick(data: any) {
-    const value: any = document.getElementById('checkbox_' + data).getAttribute('ng-reflect-value');
-    const isChecked: any = document.getElementById('checkbox_' + data).getAttribute('aria-checked');
+  onCheckboxClick(checkboxVal: any) {
+    const isChecked: any = document.getElementById('checkbox_' + checkboxVal).getAttribute('aria-checked');
     if (isChecked === 'true') {
-      this.checkedLandlords.splice(this.checkedLandlords.indexOf(+value), 1);
-      this.uncheckedLandlords.push(+value);
+      this.checkedLandlords.splice(this.checkedLandlords.indexOf(checkboxVal), 1);
+      this.uncheckedLandlords.push(checkboxVal);
       this.selectedPropertyLandlordCount -= 1;
     } else {
-      this.uncheckedLandlords.splice(this.uncheckedLandlords.indexOf(+value), 1);
-      this.checkedLandlords.push(+value);
+      this.uncheckedLandlords.splice(this.uncheckedLandlords.indexOf(checkboxVal), 1);
+      this.checkedLandlords.push(checkboxVal);
       this.selectedPropertyLandlordCount += 1;
     }
 

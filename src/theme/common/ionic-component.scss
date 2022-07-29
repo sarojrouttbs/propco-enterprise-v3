@@ -571,7 +571,7 @@ ion-alert.common-alert-box {
   }
   ion-item[aria-disabled="true"] { 
     ion-label, ion-text {
-      opacity: 0.6;
+      opacity: 1;
     }
   }
   #market-appraisal{
@@ -918,7 +918,7 @@ ion-datetime {
 }
 
 .office-filter-modal-container{
-  &::part(content){
+  &::part(content) {
     height: 525px;
     width: 750px;
   }
@@ -940,6 +940,7 @@ ion-datetime {
   .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background, .mat-checkbox-checked.mat-primary .mat-checkbox-background {
     background-color: var(--ion-color-success) !important;
   }
+  
 }
 
 .preview-pdf-modal-container{
