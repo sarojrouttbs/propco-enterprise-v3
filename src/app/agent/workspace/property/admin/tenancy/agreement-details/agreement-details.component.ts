@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DATE_FORMAT, DEFAULTS, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -25,13 +25,14 @@ export class AgreementDetailsComponent implements OnInit {
   rentFrequencyList = Array.from(Array(100).keys());
   agreementTenantDetails: any;
   @Input() selectedTenant;
+  @Output() propcoAgreementId = new EventEmitter<any>();
 
   constructor(private agentService: AgentService, private _formBuilder: FormBuilder, private commonService: CommonService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selectedTenant && changes.selectedTenant.currentValue) {
       this.selectedTenant = this.selectedTenant;
-      this.initAgreementDetailsAPI();
+      this.initAgreementDetailsApi();
     }
   }
 
@@ -45,8 +46,9 @@ export class AgreementDetailsComponent implements OnInit {
     this.creatForm();
   }
 
-  private async initAgreementDetailsAPI() {
+  private async initAgreementDetailsApi() {
     this.agreementDetails = await this.getAgreementDetails();
+    this.propcoAgreementId.emit(this.agreementDetails.propcoAgreementId);
     this.agreementTenantDetails = this.agreementDetails.agreementTenantDetail;
     this.patchAgreementDetails();
   }
@@ -59,12 +61,12 @@ export class AgreementDetailsComponent implements OnInit {
       frequencyType: [],
       commissionPercentage: [],
       managementType: [],
-      totalOccupants: [],
+      totalOccupants: [{value: '', disabled: true}],
       noOfOccupiers: [],
       status: [],
       nextClaimDate: [],
       dayRentDue: [],
-      directDebitDueDay: [],
+      directDebitDueDay: ['0'],
       noOfChildren: [],
       noOfHouseholds: [],
       tenancy: [],
@@ -139,6 +141,8 @@ export class AgreementDetailsComponent implements OnInit {
   private patchAgreementDetails() {
     this.agreementDetailsForm.patchValue(this.agreementDetails)
     this.agreementDetailsForm.patchValue({
+      commissionPercentage: this.agreementDetails?.commissionPercentage ? this.agreementDetails?.commissionPercentage.toString() : '0',
+      directDebitDueDay: this.agreementDetails?.directDebitDueDay ? this.agreementDetails?.directDebitDueDay : '0',
       contractType: this.agreementDetails?.contractType ? this.agreementDetails?.contractType.toString() : '',
       managementType: this.agreementDetails?.managementType ? this.agreementDetails?.managementType.toString() : '',
       totalOccupants: (this.agreementDetails?.totalOccupants ? this.agreementDetails?.totalOccupants : (this.agreementDetails?.noOfOccupiers + this.agreementDetails?.noOfChildren + this.agreementDetails?.noOfPermittedOccupier)),

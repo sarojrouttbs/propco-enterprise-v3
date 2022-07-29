@@ -779,3 +779,8 @@ export const HMO_LICENCE_CONFIG = {
   HMO_RISK_DEFAULT: 'Not yet checked',
   HMO_LICENCE_EXPIRY_DATE_DEFAULT: 'Unknown'
 }
+
+export const CHECKED_IN_OUT_STATUS = {
+  CHECKED_IN: 'Checked In',
+  CHECKED_OUT: 'Checked Out'
+}
