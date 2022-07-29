@@ -1,12 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { FaultsService } from 'src/app/faults/faults.service';
 import { switchMap, debounceTime } from 'rxjs/operators';
-// import { IPropertyResponse } from '../../../faults/details/details-model';
 import { Observable } from 'rxjs';
-import { PlatformLocation } from '@angular/common';
 import { CommonService } from '../../services/common.service';
 
 
@@ -15,7 +11,7 @@ import { CommonService } from '../../services/common.service';
   templateUrl: './search-property.page.html',
   styleUrls: ['./search-property.page.scss'],
 })
-export class SearchPropertyPage implements OnInit {
+export class SearchPropertyPage {
   propertySearchForm: FormGroup;
   filteredProperty: Observable<FaultModels.IPropertyResponse>;
   propertyId;
@@ -38,9 +34,6 @@ export class SearchPropertyPage implements OnInit {
     this.filteredProperty = this.propertySearchForm.get('text').valueChanges.pipe(debounceTime(300),
       switchMap((value: string) => (value.length > 2) ? this.searchProperty(value, this.isFAF, this.officeList, this.agreementStatus) : new Observable())
     );
-  }
-
-  ngOnInit() {
   }
 
   initPropertySearchForm(): void {

@@ -880,36 +880,34 @@ export class DashboardPage implements OnInit {
   }
 
   validateFaults(faultDetail) {
-    let valid = true;
     if (faultDetail.status === FAULT_STATUSES.CLOSED) {
       this.commonService.showAlert('Repair Closed', 'Repair status is closed, Please select another repair.', '');
-      return valid = false;
+      return false;
     }
     if (this.selectedFaultList.length === 3) {
       this.commonService.showAlert('Maximum Limit', 'Maximum allowed limit to merge repair is 3.', '');
-      return valid = false;
+      return false;
     }
     if (this.selectedFaultList.length > 0) {
       let matchedProperty = this.selectedFaultList.filter(data => data.propertyId === faultDetail.propertyId);
       if (matchedProperty.length === 0) {
         this.commonService.showAlert('Property not matched', 'You can only merge repairs that are reported for the same property.', '');
-        return valid = false;
+        return false;
       }
     }
-    return valid;
+    return true;
   }
 
   async checkMaintenance(faultDetail, event) {
-    let valid = true;
     const data = await this.getFaultMaintenance(faultDetail.faultId);
     if (data) {
       event.target.checked = false;
       faultDetail.isChecked = false;
       event.stopPropagation();
       this.commonService.showAlert('Quote/Works Order Raised', 'There is active maintenance linked with this repair, cannot be selected to merge.', '');
-      return valid = false;
+      return false;
     }
-    return valid;
+    return true;
   }
 
   selectCheckedFault() {

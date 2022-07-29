@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DATE_FORMAT, HMRC } from 'src/app/shared/constants';
 import { DatePipe } from '@angular/common';
@@ -8,7 +8,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './select-dates.component.html',
   styleUrls: ['./select-dates.component.scss'],
 })
-export class SelectDatesComponent implements OnInit {
+export class SelectDatesComponent {
   @Input() group: FormGroup;
   hmrcConfigs = HMRC;
   popoverOptions: any = {
@@ -19,8 +19,6 @@ export class SelectDatesComponent implements OnInit {
   constructor(
     public datepipe: DatePipe
   ) { }
-
-  ngOnInit() { }
 
   onFilterChange(index: string) {
     if (!index) return;

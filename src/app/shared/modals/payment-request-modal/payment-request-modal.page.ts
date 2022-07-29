@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
@@ -10,7 +10,7 @@ import { CommonService } from '../../services/common.service';
   templateUrl: './payment-request-modal.page.html',
   styleUrls: ['./payment-request-modal.page.scss'],
 })
-export class PaymentRequestModalPage implements OnInit {
+export class PaymentRequestModalPage {
   stageAction;
   paymentWarnings;
   isWoRaised;
@@ -32,8 +32,6 @@ export class PaymentRequestModalPage implements OnInit {
     private faultsService: FaultsService,
     private commonService: CommonService
   ) { }
-
-  ngOnInit() { }
 
   save() {
     this.modalController.dismiss('success');

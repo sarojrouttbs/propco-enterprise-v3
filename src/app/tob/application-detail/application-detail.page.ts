@@ -386,6 +386,8 @@ export class ApplicationDetailPage implements OnInit {
       case 10:
         this.initPaymentConfiguration();
         break;
+      default:
+        break;
     }
   }
 

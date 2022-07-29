@@ -1,7 +1,6 @@
 import { HttpParams } from "@angular/common/http";
 import {
   Component,
-  OnInit,
   QueryList,
   ViewChild,
   ViewChildren,
@@ -26,7 +25,7 @@ import { WorkspaceService } from "./workspace.service";
   templateUrl: "./workspace.page.html",
   styleUrls: ["./workspace.page.scss"],
 })
-export class WorkspacePage implements OnInit {
+export class WorkspacePage {
   @ViewChild(MatTabGroup, { read: MatTabGroup })
   public tabGroup: MatTabGroup;
   @ViewChildren(MatTab, { read: MatTab })
@@ -54,7 +53,7 @@ export class WorkspacePage implements OnInit {
       this.localStorageItems = val;
     });
   }
-  ngOnInit() { }
+
   private async initWorkspace() {
     this.skeleton = true;
     this.localStorageItems = this.fetchItems();

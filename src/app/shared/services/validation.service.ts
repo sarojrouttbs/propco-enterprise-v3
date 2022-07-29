@@ -6,8 +6,6 @@ import { FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
 })
 export class ValidationService {
 
-  constructor() { }
-
   static getValidatorErrorMessage(validatorName: string, validatorValue?: any) {
     const config = {
       required: 'This field is required.',
