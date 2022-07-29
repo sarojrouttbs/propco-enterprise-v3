@@ -571,7 +571,7 @@ ion-alert.common-alert-box {
   }
   ion-item[aria-disabled="true"] { 
     ion-label, ion-text {
-      opacity: 0.6;
+      opacity: 1;
     }
   }
   #market-appraisal{
@@ -923,14 +923,28 @@ ion-datetime {
     width: 750px;
 }
 
-.mat-tree {
-  background: var(--ion-color-six);
-  .mat-tree-node {
-    color: var(--ion-color-mat-checkbox-label);
+  ion-item {
+    --border-color: var(--ion-color-one);
+    ion-label {
+      color: var(--ion-color-three) !important;
+    }
+  }
+
+  .mat-tree {
+    background: var(--ion-color-six);
+    .mat-tree-node {
+      color: var(--ion-color-mat-checkbox-label);
+    }
   }
 }
 
 .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background, .mat-checkbox-checked.mat-primary .mat-checkbox-background {
     background-color: var(--ion-color-success) !important;
+  }
+
+.preview-pdf-modal-container{
+  &::part(content){
+    height: 575px;
+    width: 850px;
   }
 }

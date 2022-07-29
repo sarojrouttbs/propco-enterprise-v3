@@ -54,7 +54,7 @@ const routes: Routes = [
     path: 'hmrc',
     loadChildren: () => import('./hmrc/hmrc.module').then( m => m.HmrcPageModule),
     canActivate: [AuthGuard]
-  },
+  }
 ];
 
 @NgModule({

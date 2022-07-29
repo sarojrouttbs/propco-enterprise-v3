@@ -7,6 +7,8 @@ import { HttpParams } from '@angular/common/http';
 import { HmrcService } from 'src/app/hmrc/hmrc.service';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { TodoItemFlatNode, TodoItemNode } from './office-filter-modal.model';
+import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-office-filter-modal',
@@ -19,6 +21,8 @@ export class OfficeFilterModalPage implements OnInit {
   preSelectedRegion;
   preSelectedOfficeList;
 
+  searchText = new FormControl();
+  filteredOfficesList = [];
   officesList: any = [];
   groupOfficesList: any = [];
   groupOfficesDetails: any;
@@ -53,6 +57,16 @@ export class OfficeFilterModalPage implements OnInit {
     this.dataChange.subscribe(data => {
       this.dataSource.data = data;
     });
+    this.searchText.valueChanges
+      .pipe(
+        debounceTime(200),
+        distinctUntilChanged()
+      ).subscribe(searchTerm => {
+        this.filteredOfficesList = this.officesList.filter(item =>
+          item?.officeName?.toLowerCase().includes(searchTerm)
+        );
+      });
+    this.filteredOfficesList = [...this.officesList];
   }
 
   ngOnInit() {
@@ -154,7 +168,6 @@ export class OfficeFilterModalPage implements OnInit {
     // Force update for the parent
     descendants.forEach((child) => this.checklistSelection.isSelected(child));
     this.checkAllParentsSelection(node);
-
   }
 
   /** Toggle a leaf to-do item selection. Check all the parents to see if they changed */
@@ -217,11 +230,12 @@ export class OfficeFilterModalPage implements OnInit {
     } else {
       this.officesList = [];
     }
+    this.filteredOfficesList = [...this.officesList];
   }
 
   private getOfficesList(groupOfficeIdsList: any) {
     const params = new HttpParams()
-      .set('groupOfficeIds', groupOfficeIdsList);
+      .set('parentGroupOfficeIds', groupOfficeIdsList);
     return new Promise((resolve, _reject) => {
       this.hmrcService.getOffices(params).subscribe(
         (res) => {

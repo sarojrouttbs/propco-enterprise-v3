@@ -8,7 +8,7 @@
         <ion-button style="float: left;" fill="solid" *ngIf="stepper.selectedIndex > 0"
           (click)="onBack(stepper.selectedIndex)">back</ion-button>
         <ion-button color="success" fill="solid" (click)="onNext(stepper.selectedIndex)"
-          [disabled]="isHmrcLandlordSelected === 'false'" *ngIf="stepper.selectedIndex <= 1">{{stepper.selectedIndex <= 1 ? nextLabel : 'Send' }}
+          [disabled]="isHmrcLandlordSelected === 'false' || (stepper.selectedIndex === 1 && !selfAssessmentForm.valid)" *ngIf="stepper.selectedIndex <= 1">{{stepper.selectedIndex <= 1 ? nextLabel : 'Send' }}
         </ion-button>
         <ion-button color="success" fill="solid" (click)="onNext(stepper.selectedIndex)"
         [disabled]="isHmrcLandlordSelectPreview === 'false'" *ngIf="stepper.selectedIndex === 2">Send</ion-button>

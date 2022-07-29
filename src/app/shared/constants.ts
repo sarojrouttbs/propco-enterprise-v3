@@ -771,5 +771,11 @@ export const DATE_RANGE_CONFIG = {
 };
 
 export const HMRC_CONFIG = {
-  EMAIL_REGEX : /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+  EMAIL_REGEX: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+}
+
+export const HMO_LICENCE_CONFIG = {
+  NO_SCHEME: 4,
+  HMO_RISK_DEFAULT: 'Not yet checked',
+  HMO_LICENCE_EXPIRY_DATE_DEFAULT: 'Unknown'
 }
