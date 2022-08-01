@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { IonSlides, ModalController, ViewDidEnter } from '@ionic/angular';
 
 @Component({
@@ -6,7 +6,7 @@ import { IonSlides, ModalController, ViewDidEnter } from '@ionic/angular';
   templateUrl: './image.page.html',
   styleUrls: ['./image.page.scss'],
 })
-export class ImagePage implements OnInit, ViewDidEnter {
+export class ImagePage implements ViewDidEnter {
   @ViewChild(IonSlides, { static: false }) slides: IonSlides;
 
   @Input() imgList: any;
@@ -18,9 +18,6 @@ export class ImagePage implements OnInit, ViewDidEnter {
   };
 
   constructor(private modalController: ModalController) { }
-
-  ngOnInit() {
-  }
 
   ionViewDidEnter() {
     this.slides.slideTo(this.selectedIndex + 1);

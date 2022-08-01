@@ -247,7 +247,7 @@ export class QuoteModalPage implements OnInit {
   }
 
   private async upload(apiObservableArray) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         forkJoin(apiObservableArray).subscribe(() => {
           resolve(true);
@@ -256,11 +256,10 @@ export class QuoteModalPage implements OnInit {
         });
       }, 1000);
     });
-    return promise;
   }
 
   private async prepareUploadData(type) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let apiObservableArray = [];
       let uploadedDoc = (type === 'fault' || type === 'maint') ? this.uploadDocumentForm.controls.quotes.value : this.uploadPhotoForm.controls.photos.value;
       uploadedDoc.forEach(data => {
@@ -281,12 +280,11 @@ export class QuoteModalPage implements OnInit {
       });
       resolve(apiObservableArray);
     });
-    return promise;
   }
 
   async submitQuoteAmout() {
     this.showLoader = true;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.quoteService.saveNotificationQuoteAmount(this.quoteAssessmentForm.value, this.faultNotificationId).subscribe(
         res => {
           this.showLoader = false;
@@ -299,24 +297,24 @@ export class QuoteModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private validateReq(byPassLimitVal = false) {
-    let valid = true;
-    if (!this.quoteAssessmentForm.valid) { this.commonService.showMessage('Quote Amount is required', 'Quote Assessment', 'error'); return valid = false; }
+    if (!this.quoteAssessmentForm.valid) { this.commonService.showMessage('Quote Amount is required', 'Quote Assessment', 'error'); 
+    return false; }
     if (this.QUOTE_LIMIT && this.QUOTE_LIMIT < this.quoteAssessmentForm.value.quoteAmount && this.uploadedPhoto.length === 0) {
       if (!byPassLimitVal) {
         this.isLimitExceed = true;
-        return valid = false;
+        return false;
       }
     }
-    if (this.uploadedQuote.length == 0) { this.commonService.showMessage('Quote Document is required', 'Quote Assessment', 'error'); return valid = false; }
-    return valid;
+    if (this.uploadedQuote.length == 0) { this.commonService.showMessage('Quote Document is required', 'Quote Assessment', 'error'); 
+    return false; }
+    return true;
   }
 
   private getMaxQuoteAmount(): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.commonService.getSystemConfig(MAX_QUOTE_LIMIT.FAULT_LARGE_QUOTE_LIMIT).subscribe(res => {
         this.QUOTE_LIMIT = res ? parseInt(res.FAULT_LARGE_QUOTE_LIMIT, 10) : '';
         resolve(true);
@@ -324,7 +322,6 @@ export class QuoteModalPage implements OnInit {
         resolve(false);
       });
     });
-    return promise;
   }
 
   updateQuoteAmount() {
@@ -335,7 +332,7 @@ export class QuoteModalPage implements OnInit {
       contractorId: this.contractorId,
       isDraft: false
     }
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.quoteService.saveQuoteAmount(requestObj, this.faultId).subscribe(
         res => {
           this.showLoader = false;
@@ -347,7 +344,6 @@ export class QuoteModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   continue() {

@@ -186,7 +186,7 @@ export class ApplicationDetailsPage implements OnInit {
     const params = new HttpParams()
       .set('agreementStatus', this.proposedAgreementStatusIndex ? this.proposedAgreementStatusIndex : '');
 
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.getPropertyTenantList(this.propertyId, params).subscribe(
         res => {
           this.tenantList = res ? res.data : [];
@@ -201,7 +201,7 @@ export class ApplicationDetailsPage implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private async applicationAlert() {
@@ -230,7 +230,7 @@ export class ApplicationDetailsPage implements OnInit {
   }
 
   private getLookupData(): any {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
       if (this.lookupdata) {
         this.setLookupData(this.lookupdata);
@@ -245,11 +245,11 @@ export class ApplicationDetailsPage implements OnInit {
         });
       }
     });
-    return promise;
+    
   }
 
   private getReferencingLookupData(): any {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingLookupdata = this.commonService.getItem(PROPCO.REFERENCING_LOOKUP_DATA, true);
       if (this.referencingLookupdata) {
         this.setReferencingLookupData(this.referencingLookupdata);
@@ -266,7 +266,7 @@ export class ApplicationDetailsPage implements OnInit {
 
       }
     });
-    return promise;
+    
   }
 
   private setLookupData(data: any): void {
@@ -366,7 +366,7 @@ export class ApplicationDetailsPage implements OnInit {
   }
 
   private getPropertyById() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.getPropertyById(this.propertyId).subscribe(
         res => {
           this.propertyDetails = res && res.data ? res.data : {};
@@ -379,14 +379,14 @@ export class ApplicationDetailsPage implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private getPropertyTenancyList() {
     const params = new HttpParams()
       .set('status', this.proposedAgreementStatusIndex ? this.proposedAgreementStatusIndex : '');
 
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.getPropertyTenancyList(this.propertyId, params).subscribe(
         res => {
           this.propertyTenancyList = res && res.data ? res.data : [];
@@ -398,11 +398,11 @@ export class ApplicationDetailsPage implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private getTenantDetails() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.getTenantDetails(this.tenantId).subscribe(
         res => {
           this.tenantDetails = res ? res : {};
@@ -414,7 +414,7 @@ export class ApplicationDetailsPage implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private getProductList() {
@@ -424,7 +424,7 @@ export class ApplicationDetailsPage implements OnInit {
       this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
     }
     else{
-      const promise = new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
           res => {
             this.referencingProductList = res ? res : {};
@@ -441,7 +441,7 @@ export class ApplicationDetailsPage implements OnInit {
             resolve(this.referencingProductList);
         });
       });
-      return promise;
+      
     }
   }
 
@@ -687,8 +687,7 @@ export class ApplicationDetailsPage implements OnInit {
   }
 
   private checkFormsValidity(): any {
-    return new Promise((resolve, reject) => {
-      let valid = false;
+    return new Promise((resolve) => {
       const isValidTenancyDetailsForm = this.tenancyDetailsForm.valid;
       const isValidPropertyDetailsForm = this.propertyDetailsForm.valid;
       const isValidTenantDetailsForm = this.tenantDetailsForm.valid;
@@ -703,9 +702,9 @@ export class ApplicationDetailsPage implements OnInit {
       }
 
       if (isValidTenancyDetailsForm && isValidPropertyDetailsForm && isValidTenantDetailsForm) {
-        valid = true;
+        return resolve(true);
       }
-      return resolve(valid);
+      return resolve(false);
     });
   }
 

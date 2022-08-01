@@ -208,7 +208,7 @@ export class CommonService {
   }
 
   async showAlert(title: string, displayText: string, subtitle?: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let alertPopup: any;
       this.alertCtrl.create({
         header: title,
@@ -234,7 +234,7 @@ export class CommonService {
   }
 
   async showConfirm(title: string, displayText: string, subtitle?: string, okText?: string, cancelText?: string, inputs?: any) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let alertPopup: any;
       this.alertCtrl.create({
         header: title,
@@ -275,7 +275,7 @@ export class CommonService {
   }
 
   async presentToastWithOptions(title: string, displayText: string, subtitle?: string, okText?: string, cancelText?: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let alertPopup: any;
       this.toastController.create({
         header: title,

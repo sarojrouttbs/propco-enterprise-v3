@@ -132,7 +132,7 @@ export class PreviewAndSendComponent implements OnInit {
       }
     };
   }
-
+  
   onCheckboxChange(e: any) {
     if (e.detail.checked) {
       this.selectedLandlords.push(e.detail.value);
