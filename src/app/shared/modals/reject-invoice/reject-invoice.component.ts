@@ -36,7 +36,7 @@ export class RejectInvoiceComponent implements OnInit {
     let notificationObj = {} as any;
     notificationObj.isApproved = false;
     notificationObj.rejectionReason = this.rejectInvoiceForm.value.rejectionReason;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.pmRejectApproveInvoice(notificationObj, this.faultId).subscribe(
         res => {
           this.commonService.showMessage('Success', 'Invoice Rejected', 'success');
@@ -50,7 +50,6 @@ export class RejectInvoiceComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   async onCancel() {

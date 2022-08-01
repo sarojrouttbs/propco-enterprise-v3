@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { NOTES_ORIGIN, NOTES_TYPE } from '../../constants';
@@ -12,7 +12,7 @@ import { CommonService } from '../../services/common.service';
   templateUrl: './fault-title.component.html',
   styleUrls: ['./fault-title.component.scss'],
 })
-export class FaultTitleComponent implements OnInit {
+export class FaultTitleComponent {
   @Input() faultDetails;
   @Input() describeFaultForm;
   @Input() title;
@@ -26,9 +26,6 @@ export class FaultTitleComponent implements OnInit {
     private commonService: CommonService,
     private modalController: ModalController
   ) { }
-
-  ngOnInit() {    
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if(changes.faultNotificationDetails && changes.faultNotificationDetails.currentValue){
@@ -55,7 +52,7 @@ export class FaultTitleComponent implements OnInit {
   }
 
   private async saveFaultDetails(data, faultId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.saveFaultDetails(faultId, data).subscribe(
         res => {
           this.commonService.showMessage('Title has been updated successfully.', 'Fault', 'success');
@@ -66,7 +63,6 @@ export class FaultTitleComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   async notesModal() {    

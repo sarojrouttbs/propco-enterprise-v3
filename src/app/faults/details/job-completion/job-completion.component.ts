@@ -183,7 +183,7 @@ export class JobCompletionComponent implements OnInit {
   }
 
   private getFaultMaintenance() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const params: any = new HttpParams().set('showCancelled', 'true');
       this.faultsService.getQuoteDetails(this.faultDetails.faultId, params).subscribe((res) => {
         this.isMaintenanceDetails = true;
@@ -193,7 +193,7 @@ export class JobCompletionComponent implements OnInit {
         resolve(false);
       });
     });
-    return promise;
+    
   }
 
   initPatching(): void {
@@ -328,7 +328,7 @@ export class JobCompletionComponent implements OnInit {
   }
 
   private filterNotifications(data, stage, action) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let filtereData = null;
       if (data.length === 0) {
         resolve(null);
@@ -348,7 +348,7 @@ export class JobCompletionComponent implements OnInit {
         resolve(null);
       }
     });
-    return promise;
+    
   }
 
   private disableWorksOrderDetail() {
@@ -487,7 +487,7 @@ export class JobCompletionComponent implements OnInit {
   }
 
   private async updateFaultNotification(notificationObj, faultNotificationId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateNotification(faultNotificationId, notificationObj).subscribe(
         res => {
           resolve(true);
@@ -497,7 +497,7 @@ export class JobCompletionComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
 
@@ -550,7 +550,7 @@ export class JobCompletionComponent implements OnInit {
   }
 
   updateFaultSummary(faultRequestObj) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateFault(this.faultDetails.faultId, faultRequestObj).subscribe(
         res => {
           resolve(true);
@@ -560,7 +560,7 @@ export class JobCompletionComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   onSearchContractor(event: any) {
@@ -696,7 +696,7 @@ export class JobCompletionComponent implements OnInit {
   private getSystemOptions() {
     const params: any = new HttpParams().set('option', 'INVOICE_VERIFICATION_THRESHOLD');
 
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getSystemOptions(params).subscribe(
         (res: any) => {
           resolve(res.INVOICE_VERIFICATION_THRESHOLD);
@@ -706,13 +706,13 @@ export class JobCompletionComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private pmApproveInvoice() {
     let notificationObj = {} as any;
     notificationObj.isApproved = true;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.pmRejectApproveInvoice(notificationObj, this.faultDetails.faultId).subscribe(
         res => {
           this.commonService.showMessage('Success', 'Invoice Approved', 'success');
@@ -724,11 +724,11 @@ export class JobCompletionComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private invoiceUploaded() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.invoiceUploaded(this.faultDetails.faultId).subscribe(
         res => {
           this.commonService.showMessage('Success', 'Invoice Uploaded', 'success');
@@ -740,7 +740,7 @@ export class JobCompletionComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   getPendingHours() {
@@ -784,7 +784,7 @@ export class JobCompletionComponent implements OnInit {
   }
 
   async fetchPendingNotification(faultId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.fetchPendingNotification(faultId).subscribe(
         res => {
           this.pendingNotification = res ? res : '';
@@ -795,7 +795,7 @@ export class JobCompletionComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   async notificationModal() {
@@ -874,7 +874,7 @@ export class JobCompletionComponent implements OnInit {
   private fetchPropertyCertificates(category) {
     if (this.faultDetails.propertyId) {
       const params: any = new HttpParams().set('categories', category).set('isArchived', 'false');
-      const promise = new Promise((resolve) => {
+      return new Promise((resolve) => {
         this.faultsService.fetchPropertyCertificates(this.faultDetails.propertyId, params).subscribe(
           res => {
             if (category === "4938" && res === null) {
@@ -893,13 +893,13 @@ export class JobCompletionComponent implements OnInit {
           }
         );
       });
-      return promise;
+      
     }
   }
 
   private getPropertyHeadLease() {
     if (this.faultDetails.propertyId) {
-      const promise = new Promise((resolve) => {
+      return new Promise((resolve) => {
         this.faultsService.getPropertyHeadLease(this.faultDetails.propertyId).subscribe(
           res => {
             if (res) {
@@ -916,7 +916,7 @@ export class JobCompletionComponent implements OnInit {
           }
         );
       });
-      return promise;
+      
     }
   }
 

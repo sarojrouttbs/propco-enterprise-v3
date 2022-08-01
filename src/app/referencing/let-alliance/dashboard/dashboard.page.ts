@@ -83,7 +83,7 @@ export class DashboardPage implements OnInit {
       this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
     }
     else{
-      const promise = new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
           res => {
             this.referencingProductList = res ? res : {};
@@ -100,7 +100,6 @@ export class DashboardPage implements OnInit {
             resolve(this.referencingProductList);
         });
       });
-      return promise;
     }
   }
 
@@ -164,15 +163,13 @@ export class DashboardPage implements OnInit {
   }
 
   getApplicationStatus() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.getApplicationStatus(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.applicationId).subscribe(res => {
         resolve(res);
       }, error => {
         resolve(false);
       });
     });
-
-    return promise;
   }
 
   getLookupValue(index: any, lookup: any, type?: any) {

@@ -135,7 +135,7 @@ export class RentSalesFiguresComponent implements OnInit {
 
   private getRentIndemnityProducts() {
     let params = new HttpParams().set('hideLoader', 'true');
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.agentService.getRentindemnityProducts(params).subscribe((res) => {
         this.rentIndemnityProducts = res && res.data ? res.data : [];
         resolve(true);

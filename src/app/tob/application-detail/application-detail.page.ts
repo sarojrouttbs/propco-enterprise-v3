@@ -267,17 +267,16 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private checkFormsValidity() {
-    return new Promise((resolve, reject) => {
-      let valid = false;
+    return new Promise((resolve) => {
       const applicantDetails = this.applicantDetailsForm.valid;
       const bankDetails = this.bankDetailsForm.valid;
       const address = this.addressDetailsForm.valid;
       const tenancyDetails = this.tenancyDetailForm.valid;
       const guarantorDetails = this.guarantorForm.valid;
       if (applicantDetails && tenancyDetails && guarantorDetails && bankDetails && address) {
-        valid = true;
+        return resolve(true);
       }
-      return resolve(valid);
+      return resolve(false);
     });
   }
 
@@ -386,6 +385,8 @@ export class ApplicationDetailPage implements OnInit {
       case 10:
         this.initPaymentConfiguration();
         break;
+      default:
+        break;
     }
   }
 
@@ -490,7 +491,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private setApplicationDetails(res: ApplicationModels.IApplicationResponse) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.applicationDetails = res;
       this.applicationDetails.applicationClauses = res.applicationClauses ? res.applicationClauses : [];
       this.applicationDetails.applicationRestrictions = res.applicationRestrictions ? res.applicationRestrictions : [];
@@ -523,7 +524,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private setApplicationApplicants(res: any) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       (this.occupantForm.get('coApplicants') as FormArray)['controls'].splice(0);
       this.applicationApplicantDetails = (res && res.data) ? res.data : [];
       const leadApplicantDetails = this.applicationApplicantDetails.filter((occupant) => occupant.isLead);
