@@ -414,8 +414,8 @@
       <ion-row>
         <ion-col size="100">
           <div class="overlay-container" style="position: relative">
-            <table datatable [dtOptions]="faultsDtOption" class="row-border hover" style="width: 100%; position: relative"
-              id="faultListTable">
+            <table datatable [dtOptions]="faultsDtOption" class="row-border hover table-width" style="position: relative"
+              id="faultListTable" aria-describedby="fault">
               <thead>
                 <tr>
                   <!-- <th style="width:1%"></th> -->
@@ -494,8 +494,8 @@
         <ion-col size="100">
           <h4>Repair Notes:</h4>
           <div class="overlay-container" style="position: relative">
-            <table datatable [dtOptions]="notesDtOption" [dtTrigger]="notesDtTrigger" class="row-border hover"
-              style="width: 100%; position: relative" #faultNotesTable>
+            <table datatable [dtOptions]="notesDtOption" [dtTrigger]="notesDtTrigger" class="row-border hover table-width"
+              style="position: relative" #faultNotesTable aria-describedby="faultNotes">
               <thead>
                 <tr>
                   <th style="width:15%">Date</th>
