@@ -104,23 +104,18 @@ export class PreviewAndSendComponent implements OnInit {
           this.landlordList.forEach(item => {
             item.checked = this.unSelectedLandlords.indexOf(item.propertyLinkId) >= 0 ? false : true;
             item.isDisabled = false;
-            if (item.statementPreference &&
-              item.statementPreference === 2 &&
-              item.landlordEmail &&
-              !item.landlordEmail.match(this.emailPattern)) {
-              item.checked = false;
-              this.unSelectedLandlords.push(item.propertyLinkId);
-              item.isDisabled = true;
-              item.invalid = true;
-            }
-
-            if (item.statementPreference &&
-              item.statementPreference === 3 &&
-              item.landlordEmail &&
-              !item.landlordEmail.match(this.emailPattern)) {
-              item.checked = true;
-              item.isDisabled = true;
-              item.invalid = true;
+            if (item.landlordEmail && !item.landlordEmail.match(this.emailPattern)) {
+              if (item.statementPreference &&
+                item.statementPreference === 3) {
+                item.checked = true;
+                item.isDisabled = true;
+                item.invalid = true;
+              } else {
+                item.checked = false;
+                this.unSelectedLandlords.push(item.propertyLinkId);
+                item.isDisabled = true;
+                item.invalid = true;
+              }
             }
           });
           callback({
@@ -132,7 +127,7 @@ export class PreviewAndSendComponent implements OnInit {
       }
     };
   }
-  
+
   onCheckboxChange(e: any) {
     if (e.detail.checked) {
       this.selectedLandlords.push(e.detail.value);
@@ -154,8 +149,8 @@ export class PreviewAndSendComponent implements OnInit {
   }
 
   async onRowClick(data: any) {
-    const respData:any = await this.getPdfUrlDetails(data);
-    const file = new Blob([respData], { type: 'application/pdf' });           
+    const respData: any = await this.getPdfUrlDetails(data);
+    const file = new Blob([respData], { type: 'application/pdf' });
     const fileURL = URL.createObjectURL(file);
     const modal = await this.modalController.create({
       component: PreviewPdfModalPage,
