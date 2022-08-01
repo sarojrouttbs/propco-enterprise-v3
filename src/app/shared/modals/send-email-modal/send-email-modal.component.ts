@@ -158,7 +158,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked {
   }
 
   private async getLandlordList() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getLandlordsOfProperty(this.propertyDetails.propertyId).subscribe(
         async (res) => {
           const llList = res && res.data ? res.data.filter((llDetail => (llDetail.propertyLinkStatus === PROPERTY_LINK_STATUS.CURRENT) && (llDetail.status === 1 || llDetail.status === 3))) : [];
@@ -218,7 +218,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked {
   }
 
   private async getSingleTenantDetails(tenantId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getTenantDetails(tenantId).subscribe((res) => {
         return resolve(res ? res : {});
       });
@@ -242,7 +242,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked {
   }
 
   private async getPreferredContractorList(landlordId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         async (res) => {
           return resolve(res ? res.data : []);
@@ -277,7 +277,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked {
   }
 
   private getFaultMaintenance(): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const params: any = new HttpParams().set('showCancelled', 'true');
       this.faultsService.getQuoteDetails(this.faultDetails.faultId, params).subscribe((res) => {
         resolve(res ? res.data[0] : {});
@@ -285,7 +285,6 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked {
         resolve(false);
       });
     });
-    return promise;
   }
 
   private async getQuoteContractorList() {
@@ -299,7 +298,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked {
   }
 
   private getSingleContractorDetails(contractorId): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getContractorDetails(contractorId).subscribe((res) => {
         return resolve(res ? res : {});
       });
@@ -512,18 +511,17 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked {
   }
 
   private async getSystemConfigs(key): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.commonService.getSystemConfig(key).subscribe(res => {
         resolve(res);
       }, error => {
         resolve(true);
       });
     });
-    return promise;
   }
 
   private getLandlordDppDetails(landlordId): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getLandlordDppDetails(landlordId).subscribe((res) => {
         return resolve(res ? res : {});
       });

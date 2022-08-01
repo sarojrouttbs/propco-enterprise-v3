@@ -99,7 +99,7 @@ export class TenantListModalPage implements OnInit {
     const params = new HttpParams()
       .set('agreementStatus', this.proposedAgreementStatusIndex ? this.proposedAgreementStatusIndex : '');
 
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.getPropertyTenantList(this.propertyId, params).subscribe(
         res => {
           this.laTenantList = res ? res.data : [];
@@ -117,7 +117,6 @@ export class TenantListModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   toggleReferencing(tenant: any, event: any) {
@@ -132,7 +131,7 @@ export class TenantListModalPage implements OnInit {
   }
 
   private updateTenantDetails(tenantId: any, requestObj: any) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.updateTenantDetails(tenantId, requestObj).subscribe(
         res => {
           resolve(true);
@@ -143,7 +142,6 @@ export class TenantListModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   selectTenant(tenant: any, event: any) {

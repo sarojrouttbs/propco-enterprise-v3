@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -7,12 +7,9 @@ import { CommonService } from '../../services/common.service';
   styleUrls: ['./tob-property-details.component.scss'],
 })
 
-export class TobPropertyDetailsComponent implements OnInit {
+export class TobPropertyDetailsComponent {
   @Input() propertyDetails;
   @Input() rentFrequencyTypes;
   @Input() isTobPropertyCardReady;
   constructor(public commonService: CommonService) { }
-
-  ngOnInit() {
-  }
 }

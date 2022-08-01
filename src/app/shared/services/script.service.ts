@@ -24,7 +24,7 @@ export class ScriptService {
   }
 
   loadScript(name: string) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       //resolve if already loaded
       if (this.scripts[name].loaded) {
         resolve({ script: name, loaded: true, status: 'Already Loaded' });

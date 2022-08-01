@@ -105,7 +105,6 @@ export class NegotiateModalPage implements OnInit {
         console.log(error);
       });
     });
-    return promise;
   }
 
   private async getRestrictionNegotiationComments(offerRestrictionId) {
@@ -117,7 +116,6 @@ export class NegotiateModalPage implements OnInit {
         console.log(error);
       });
     });
-    return promise;
   }
 
   private getUserDetails() {

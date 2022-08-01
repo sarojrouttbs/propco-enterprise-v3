@@ -1,12 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { FaultsService } from 'src/app/faults/faults.service';
 import { switchMap, debounceTime } from 'rxjs/operators';
-// import { IPropertyResponse } from '../../../faults/details/details-model';
 import { Observable } from 'rxjs';
-import { PlatformLocation } from '@angular/common';
 import { CommonService } from '../../services/common.service';
 
 
@@ -15,12 +11,12 @@ import { CommonService } from '../../services/common.service';
   templateUrl: './search-property.page.html',
   styleUrls: ['./search-property.page.scss'],
 })
-export class SearchPropertyPage implements OnInit {
+export class SearchPropertyPage {
   propertySearchForm: FormGroup;
   filteredProperty: Observable<FaultModels.IPropertyResponse>;
   propertyId;
   isFAF;
-  isNotFound: boolean = false;
+  isNotFound = false;
   officeList: any[] = [];
   agreementStatus: any;
 
@@ -40,10 +36,7 @@ export class SearchPropertyPage implements OnInit {
     );
   }
 
-  ngOnInit() {
-  }
-
-  initPropertySearchForm(): void {
+  private initPropertySearchForm(): void {
     this.propertySearchForm = this.fb.group({
       text: ''
     });
@@ -64,18 +57,14 @@ export class SearchPropertyPage implements OnInit {
     return response;
   }
 
-  private searchNot() {
-
-  }
-
-  onSelectionChange(data) {
+  onSelectionChange(data: any) {
     if (data) {
       this.propertyId = data.option.value.entityId;
       this.dismiss();
     }
   }
 
-  getSuggestion(event) {
+  getSuggestion(event: any) {
     if (event && event.detail.value && event.detail.value.length > 2) {
       this.filteredProperty = this.commonService.searchPropertyByText(event.detail.value);
     } else {
