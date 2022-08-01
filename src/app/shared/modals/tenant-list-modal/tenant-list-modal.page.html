@@ -9,7 +9,7 @@
 <ion-content id="tenant-list-modal">
   <h4 style="padding: 0 10px;">{{paramMessage}}</h4>
   <div class="table-container" *ngIf="isTableReady && laTenantList.length > 0">
-    <table datatable [dtOptions]="dtOptions" class="row-border hover table-span" aria-describedby="tenant">
+    <table datatable [dtOptions]="dtOptions" class="row-border hover table-width" aria-describedby="tenant">
       <thead>
         <tr>
           <th style="width:7%">Select</th>
