@@ -158,7 +158,7 @@ export class DashboardPage implements OnInit {
         this.hideMenu('', 'dashboard-overlay');
       },
     };
-    const promise = new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
       this.LET_CATEGORY = this.commonService.getItem(PROPCO.LET_CATEGORY, true);
       if (!this.LET_CATEGORY) {
         let category = await this.getSystemConfigs(SYSTEM_CONFIG.FAULT_MANAGEMENT_LETCAT);
@@ -171,7 +171,6 @@ export class DashboardPage implements OnInit {
       this.bucketCount();
       resolve(dtOption)
     });
-    return promise;
   }
 
   initFilterForm() {
@@ -227,14 +226,13 @@ export class DashboardPage implements OnInit {
   }
 
   private async getSystemConfigs(key): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.commonService.getSystemConfig(key).subscribe(res => {
         resolve(res[key]);
       }, error => {
         resolve(true);
       });
     });
-    return promise;
   }
 
   private getLookupData() {
@@ -452,7 +450,7 @@ export class DashboardPage implements OnInit {
   }
 
   getMgntServiceType() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getManagementTypes().subscribe(res => {
         this.managementTypeList = res ? res : [];
         if (this.managementTypeList) {
@@ -469,7 +467,6 @@ export class DashboardPage implements OnInit {
         resolve(true);
       });
     });
-    return promise;
   }
 
   getAssignedUsers() {
@@ -880,36 +877,34 @@ export class DashboardPage implements OnInit {
   }
 
   validateFaults(faultDetail) {
-    let valid = true;
     if (faultDetail.status === FAULT_STATUSES.CLOSED) {
       this.commonService.showAlert('Repair Closed', 'Repair status is closed, Please select another repair.', '');
-      return valid = false;
+      return false;
     }
     if (this.selectedFaultList.length === 3) {
       this.commonService.showAlert('Maximum Limit', 'Maximum allowed limit to merge repair is 3.', '');
-      return valid = false;
+      return false;
     }
     if (this.selectedFaultList.length > 0) {
       let matchedProperty = this.selectedFaultList.filter(data => data.propertyId === faultDetail.propertyId);
       if (matchedProperty.length === 0) {
         this.commonService.showAlert('Property not matched', 'You can only merge repairs that are reported for the same property.', '');
-        return valid = false;
+        return false;
       }
     }
-    return valid;
+    return true;
   }
 
   async checkMaintenance(faultDetail, event) {
-    let valid = true;
     const data = await this.getFaultMaintenance(faultDetail.faultId);
     if (data) {
       event.target.checked = false;
       faultDetail.isChecked = false;
       event.stopPropagation();
       this.commonService.showAlert('Quote/Works Order Raised', 'There is active maintenance linked with this repair, cannot be selected to merge.', '');
-      return valid = false;
+      return false;
     }
-    return valid;
+    return true;
   }
 
   selectCheckedFault() {
@@ -935,7 +930,7 @@ export class DashboardPage implements OnInit {
   }
 
   async getFaultMaintenance(faultId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const params: any = new HttpParams().set('showCancelled', 'false');
       this.faultsService.getQuoteDetails(faultId, params).subscribe((res) => {
         resolve(res ? res.data[0] : false);
@@ -943,7 +938,6 @@ export class DashboardPage implements OnInit {
         resolve(false);
       });
     });
-    return promise;
   }
 
   bucketCount() {
@@ -972,7 +966,7 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('limit');
     faultCountParams = faultCountParams.delete('fus');
     this.activeRepairLoader = true;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
         this.activeRepairLoader = false;
         this.activeRepairCount = res ? res.count : 0;
@@ -982,7 +976,6 @@ export class DashboardPage implements OnInit {
         resolve(false);
       });
     });
-    return promise;
   }
 
   getEmergencyCount() {

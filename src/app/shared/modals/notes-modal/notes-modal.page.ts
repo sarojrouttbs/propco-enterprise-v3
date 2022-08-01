@@ -52,7 +52,7 @@ export class NotesModalPage implements OnInit {
   }
 
   private async getDefaultCategory(key: any): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.commonService.getSystemConfig(key).subscribe(res => {
         let category = this.notesCategories.filter(x => { return x.value.toLowerCase() == res[key] });
         this.notesForm.patchValue({ category: category[0].index });
@@ -62,11 +62,10 @@ export class NotesModalPage implements OnInit {
         resolve(true);
       });
     });
-    return promise;
   }
 
   private async getDefaultType(key): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.commonService.getSystemConfig(key).subscribe(res => {
         if (res && res[key] != null) {
           let type = this.notesTypes.filter(x => { return x.value.replace(/ /g, '').toLowerCase() == res[key].replace(/ /g, '').toLowerCase() });
@@ -78,7 +77,6 @@ export class NotesModalPage implements OnInit {
         resolve(true);
       });
     });
-    return promise;
   }
 
   private async getLookupData() {

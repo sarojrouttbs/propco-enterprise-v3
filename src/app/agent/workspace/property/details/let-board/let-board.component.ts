@@ -1,14 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-let-board',
   templateUrl: './let-board.component.html',
   styleUrls: ['./let-board.component.scss'],
 })
-export class LetBoardComponent implements OnInit {
+export class LetBoardComponent {
   @Input() group;
-  constructor() { }
-
-  ngOnInit() {}
-
 }

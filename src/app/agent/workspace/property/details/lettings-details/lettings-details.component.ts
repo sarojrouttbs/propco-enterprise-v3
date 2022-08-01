@@ -26,10 +26,10 @@ export class LettingsDetailsComponent implements OnInit {
   constructor(private commonService: CommonService, private agentService: AgentService) { }
 
   ngOnInit() {
-    this.initAPIcalls();
+    this.initApiCalls();
   }
 
-  private async initAPIcalls() {
+  private async initApiCalls() {
     this.getLookupData();
     this.getPropertyLookupData();
   }

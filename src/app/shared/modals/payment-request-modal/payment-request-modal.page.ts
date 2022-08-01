@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
@@ -10,7 +10,7 @@ import { CommonService } from '../../services/common.service';
   templateUrl: './payment-request-modal.page.html',
   styleUrls: ['./payment-request-modal.page.scss'],
 })
-export class PaymentRequestModalPage implements OnInit {
+export class PaymentRequestModalPage {
   stageAction;
   paymentWarnings;
   isWoRaised;
@@ -32,8 +32,6 @@ export class PaymentRequestModalPage implements OnInit {
     private faultsService: FaultsService,
     private commonService: CommonService
   ) { }
-
-  ngOnInit() { }
 
   save() {
     this.modalController.dismiss('success');
@@ -95,7 +93,7 @@ export class PaymentRequestModalPage implements OnInit {
   }
 
   private raiseWorksOrder() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.createFaultMaintenaceWorksOrder(this.woData, this.faultId).subscribe((res) => {
         resolve(res);
         this.commonService.showMessage('Successfully Raised', 'Works Order', 'success');
@@ -105,11 +103,10 @@ export class PaymentRequestModalPage implements OnInit {
         this.commonService.showMessage('Something went wrong', 'Works Order', 'error');
       });
     });
-    return promise;
   }
 
   private updateWorksOrder() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateQuoteDetails(
         this.woData, this.maintenanceId).subscribe((res) => {
           resolve(true);
@@ -120,11 +117,10 @@ export class PaymentRequestModalPage implements OnInit {
           this.commonService.showMessage('Something went wrong', 'Works Order', 'error');
         });
     });
-    return promise;
   }
 
   private async saveFaultDetails(data): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.saveFaultDetails(this.faultId, data).subscribe(
         res => {
           resolve(true);
@@ -135,11 +131,10 @@ export class PaymentRequestModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private issueWorksOrderContractor() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let req: any = {};
       req.submittedById = '';
       req.submittedByType = 'SECUR_USER';
@@ -154,7 +149,6 @@ export class PaymentRequestModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private async saveFaultLLAuth() {
@@ -164,7 +158,7 @@ export class PaymentRequestModalPage implements OnInit {
     if (this.contractorId) {
       requestObj.contractorId = this.contractorId;
     }
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.saveFaultLLAuth(requestObj, this.faultNotificationId).subscribe(res => {
         resolve(true);
       }, error => {
@@ -172,11 +166,10 @@ export class PaymentRequestModalPage implements OnInit {
         resolve(false);
       })
     });
-    return promise;
   }
 
   private async updateFaultNotification(data, faultNotificationId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let notificationObj = {} as FaultModels.IUpdateNotification;
       notificationObj.isAccepted = data;
       notificationObj.submittedByType = 'SECUR_USER';
@@ -189,7 +182,6 @@ export class PaymentRequestModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   async onCancel() {

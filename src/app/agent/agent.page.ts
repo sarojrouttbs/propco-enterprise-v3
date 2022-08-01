@@ -5,11 +5,4 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './agent.page.html',
   styleUrls: ['./agent.page.scss'],
 })
-export class AgentPage implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}
+export class AgentPage { }

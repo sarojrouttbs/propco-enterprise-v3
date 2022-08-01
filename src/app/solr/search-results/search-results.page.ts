@@ -372,7 +372,7 @@ export class SearchResultsPage implements OnInit {
   }
 
   private getQueryParams() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.route.queryParams.subscribe((params) => {
         this.solrSearchConfig.types = params['type']
           ? params['type']
@@ -383,7 +383,6 @@ export class SearchResultsPage implements OnInit {
         resolve(true);
       });
     });
-    return promise;
   }
 
   private initFilter() {
