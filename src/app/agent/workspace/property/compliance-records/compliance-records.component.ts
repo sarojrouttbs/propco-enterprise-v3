@@ -13,6 +13,7 @@ import { PropertHmoLicence } from '../../workspace.model';
 })
 export class ComplianceRecordsComponent implements OnInit {
   @Input() propertyData: any;
+  @Input() type: string;
   complianceForm: FormGroup;
   propertyInspection: any;
   propertyLicence: PropertHmoLicence[];
