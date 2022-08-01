@@ -93,7 +93,7 @@ export class ContractorSelectionComponent implements OnInit {
   }
 
   updateFaultSummary(faultRequestObj) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateFault(this.faultDetails.faultId, faultRequestObj).subscribe(
         res => {
           this.showLoader = false;
@@ -107,7 +107,6 @@ export class ContractorSelectionComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private async updateFaultStatus(status) {

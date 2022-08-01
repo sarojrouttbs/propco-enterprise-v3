@@ -17,9 +17,9 @@ export class PropertyChecksComponent implements OnInit {
   constructor(private commonService: CommonService) { }
 
   ngOnInit() {
-    this.initAPIcalls();
+    this.initApiCalls();
   }
-  private async initAPIcalls() {
+  private async initApiCalls() {
     this.getPropertyLookupData();
   }
   private getPropertyLookupData() {

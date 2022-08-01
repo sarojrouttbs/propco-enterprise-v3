@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
   templateUrl: './property-address.component.html',
   styleUrls: ['./property-address.component.scss'],
 })
-export class PropertyAddressComponent implements OnInit {
+export class PropertyAddressComponent {
   @Input() group;
   address: any;
   lookupLoader = false;
@@ -16,8 +16,6 @@ export class PropertyAddressComponent implements OnInit {
     cssClass: 'address-selection'
   };
   constructor(private commonService: CommonService) { }
-
-  ngOnInit() {}
 
   getAddressList() {
     if (this.group.get('postcode').value == null) {
@@ -45,7 +43,7 @@ export class PropertyAddressComponent implements OnInit {
     }
   }
 
-  getAddressDetails(addressId) {
+  getAddressDetails(addressId: string) {
     if (!addressId || '') {
       return;
     }

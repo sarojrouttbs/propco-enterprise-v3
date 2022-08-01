@@ -100,7 +100,7 @@ export class AddressModalPage implements OnInit {
     }
   }
 
-  getAddressDetails(addressId) {
+  getAddressDetails(addressId: string) {
     if (!addressId || '') {
       return;
     }

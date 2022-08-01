@@ -55,7 +55,7 @@ export class CloseFaultModalPage implements OnInit {
         submittedById: '',
         submittedByType: 'SECUR_USER'
       };
-      const promise = new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.faultsService.closeFault(this.faultId, requestObj).subscribe(
           res => {
             this.showLoader = false;
@@ -69,7 +69,6 @@ export class CloseFaultModalPage implements OnInit {
           }
         );
       });
-      return promise;
     } else {
       this.showLoader = false;
       this.closeFaultForm.markAllAsTouched();

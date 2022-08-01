@@ -126,7 +126,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
 
   private getPropertyDetails(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
           if (res && res.data) {
@@ -142,7 +142,6 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
         }
       );
     });
-    return promise;
   }
 
   private getLookupData() {
@@ -251,7 +250,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
 
   getVisitHmoLicence(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.agentService.getVisitHmoLicence(propertyId, params).subscribe(
         (res) => {
           if (res && res.data) {
@@ -265,7 +264,6 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
         }
       );
     });
-    return promise;
   }
 
   async addNotes() {

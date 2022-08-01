@@ -148,8 +148,8 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
   }
 
   getPropertyById(propertyId) {
-    let params = new HttpParams().set("hideLoader", "true");
-    const promise = new Promise((resolve, reject) => {
+    const params = new HttpParams().set("hideLoader", "true");
+    return new Promise((resolve) => {
       this.agentService.getPropertyById(propertyId, params).subscribe(
         (res) => {
           this.propertyData = res && res.data ? res.data : '';
@@ -160,12 +160,11 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
         }
       );
     });
-    return promise;
   }
 
   getPropertyLandlords(propertyId) {
-    let params = new HttpParams().set("hideLoader", "true");
-    const promise = new Promise((resolve, reject) => {
+    const params = new HttpParams().set("hideLoader", "true");
+    return new Promise((resolve) => {
       this.agentService.getPropertyLandlords(propertyId, params).subscribe(
         (res) => {
           this.propertyLandlords = res && res.data ? res.data : '';
@@ -176,12 +175,11 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
         }
       );
     });
-    return promise;
   }
 
   getPropertyTenant(propertyId) {
-    let params = new HttpParams().set("hideLoader", "true");
-    const promise = new Promise((resolve, reject) => {
+    const params = new HttpParams().set("hideLoader", "true");
+    return new Promise((resolve) => {
       this.agentService.getPropertyTenants(propertyId, params).subscribe(
         (res) => {
           this.propertyTenants = res && res.data ? res.data : '';
@@ -192,12 +190,11 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
         }
       );
     });
-    return promise;
   }
 
   getPropertyDetails(propertyId) {
-    let params = new HttpParams().set("hideLoader", "true");
-    const promise = new Promise((resolve, reject) => {
+    const params = new HttpParams().set("hideLoader", "true");
+    return new Promise((resolve) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
           this.propertyDetails = res && res.data ? res.data : '';
@@ -208,14 +205,13 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
         }
       );
     });
-    return promise;
   }
 
   getOptions() {
-    let params = new HttpParams()
+    const params = new HttpParams()
       .set("hideLoader", "true")
       .set("option", "WEB_IMAGE_URL");
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.agentService.getSyatemOptions(params).subscribe(
         (res) => {
           this.options = res ? res.WEB_IMAGE_URL : '';
@@ -226,7 +222,6 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
         }
       );
     });
-    return promise;
   }
 
   next() {

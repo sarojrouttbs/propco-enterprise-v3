@@ -106,7 +106,7 @@ export class WhitegoodsComponent implements OnInit {
 
   private getPropertyDetails(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
           resolve(res?.data);
@@ -116,7 +116,6 @@ export class WhitegoodsComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   showMenu(event: any, id: any, data: any, className: any) {
