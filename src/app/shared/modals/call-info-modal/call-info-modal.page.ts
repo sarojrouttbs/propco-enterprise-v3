@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { DEFAULT_MESSAGES } from '../../constants';
 
@@ -7,7 +7,7 @@ import { DEFAULT_MESSAGES } from '../../constants';
   templateUrl: './call-info-modal.page.html',
   styleUrls: ['./call-info-modal.page.scss'],
 })
-export class CallInfoModalPage implements OnInit {
+export class CallInfoModalPage {
 
   notAvailable = DEFAULT_MESSAGES.NOT_AVAILABLE_TEXT
   userInfo;
@@ -16,8 +16,6 @@ export class CallInfoModalPage implements OnInit {
   constructor(
     private modalController: ModalController
   ) { }
-
-  ngOnInit() { }
 
   dismiss() {
     this.modalController.dismiss();

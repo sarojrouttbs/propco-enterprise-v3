@@ -30,7 +30,7 @@ export class SearchApplicationPage implements OnInit {
   referencingApplicantStatusTypes: any[] = [];
   referencingApplicantResultTypes: any[] = [];
 
-  isNotFound: boolean = false;
+  isNotFound = false;
 
   constructor(
     private fb: FormBuilder,
@@ -106,7 +106,7 @@ export class SearchApplicationPage implements OnInit {
       this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
     }
     else{
-      const promise = new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
           res => {
             this.referencingProductList = res ? res : {};
@@ -123,17 +123,16 @@ export class SearchApplicationPage implements OnInit {
             resolve(this.referencingProductList);
         });
       });
-      return promise;
     }
   }
 
-  initPropertySearchForm(): void {
+  private initPropertySearchForm(): void {
     this.applicationSearchForm = this.fb.group({
       text: "",
     });
   }
 
-  onSelectionChange(data) {
+  onSelectionChange(data: any) {
     if (data) {
       this.applicationId = data.option.value.applicationId;
       this.dismiss();

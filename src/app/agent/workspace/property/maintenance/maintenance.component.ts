@@ -174,7 +174,7 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
 
   private getPropertyDetails(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.agentService.getPropertyById(propertyId, params).subscribe(
         (res) => {
           if (res && res.data) {
@@ -187,7 +187,6 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
         }
       );
     });
-    return promise;
   }
 
   ngOnDestroy() {

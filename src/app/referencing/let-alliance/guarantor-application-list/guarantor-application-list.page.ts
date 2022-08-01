@@ -161,7 +161,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
       this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
     }
     else{
-      const promise = new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
           res => {
             this.referencingProductList = res ? res : {};
@@ -178,7 +178,6 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
             resolve(this.referencingProductList);
         });
       });
-      return promise;
     }
   }
 
@@ -221,7 +220,7 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   }
 
   getApplicationStatus() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.getApplicationStatus(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE, this.selectedData.applicationId).subscribe(res => {
         resolve(res);
       }, error => {
@@ -229,7 +228,6 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
       });
     });
 
-    return promise;
   }
 
   getProductType(productId: any, name: any): string{

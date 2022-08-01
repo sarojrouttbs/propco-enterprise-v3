@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
 @Component({
@@ -6,7 +6,7 @@ import { FaultsService } from 'src/app/faults/faults.service';
   templateUrl: './pending-notification-modal.page.html',
   styleUrls: ['./pending-notification-modal.page.scss'],
 })
-export class PendingNotificationModalPage implements OnInit {
+export class PendingNotificationModalPage {
 
   notificationHistoryId;
   notificationSubject;
@@ -17,11 +17,8 @@ export class PendingNotificationModalPage implements OnInit {
     private faultsService: FaultsService
   ) { }
 
-  ngOnInit() {
-  }
-
   save() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.forwardNotification(this.notificationHistoryId).subscribe(
         res => {
           resolve(true);
@@ -32,7 +29,6 @@ export class PendingNotificationModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   dismiss() {

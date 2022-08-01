@@ -113,7 +113,7 @@ export class AppointmentModalPage implements OnInit {
 
   saveContractorVisit(faultNotificationId, requestObj) {
     this.showLoader = true;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.saveContractorVisit(faultNotificationId, requestObj).subscribe(
         res => {
           this.showLoader = false;
@@ -126,12 +126,11 @@ export class AppointmentModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   saveWoContractorVisit(faultNotificationId, requestObj) {
     this.showLoader = true;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateWOContractorVisit(faultNotificationId, requestObj).subscribe(
         res => {
           this.showLoader = false;
@@ -143,12 +142,11 @@ export class AppointmentModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   modifyContractorVisit(faultId, requestObj) {
     this.showLoader = true;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.modifyContractorVisit(faultId, requestObj).subscribe(
         res => {
           this.showLoader = false;
@@ -160,12 +158,11 @@ export class AppointmentModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   modifyWoContractorVisit(faultId, requestObj) {
     this.showLoader = true;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.modifyWoContractorVisit(faultId, requestObj).subscribe(
         res => {
           this.showLoader = false;
@@ -177,7 +174,6 @@ export class AppointmentModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   async onCancel() {

@@ -198,7 +198,7 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   private getQueryParams() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.route.queryParams.subscribe((params) => {
         const entityParams = params['type'] ? params['type'] : 'Property';
         const types: string[] = Array.isArray(entityParams) ? entityParams : [entityParams];
@@ -207,7 +207,6 @@ export class SearchSuggestionComponent implements OnInit {
         resolve(true);
       });
     });
-    return promise;
   }
 
   onChangeEntity() {

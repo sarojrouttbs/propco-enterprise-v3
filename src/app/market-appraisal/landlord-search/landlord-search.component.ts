@@ -122,7 +122,7 @@ export class LandlordSearchComponent implements OnInit {
   }
 
   private getLandlordDetails(landlordId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.marketAppraisalService.getLandlordDetails(landlordId).subscribe(
         res => {
           this.landlordDetails = res ? res : [];
@@ -134,11 +134,11 @@ export class LandlordSearchComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private getLandlordProperties(landlordId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.marketAppraisalService.getLandlordProperties(landlordId).subscribe(
         res => {
           this.propertySuggestion = res ? res.data : [];
@@ -155,7 +155,7 @@ export class LandlordSearchComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private getSuggestions(params: HttpParams) {

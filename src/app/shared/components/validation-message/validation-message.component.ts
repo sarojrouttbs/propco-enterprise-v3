@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ValidationService } from '../../services/validation.service';
 
@@ -7,11 +7,8 @@ import { ValidationService } from '../../services/validation.service';
   templateUrl: './validation-message.component.html',
   styleUrls: ['./validation-message.component.scss'],
 })
-export class ValidationMessageComponent implements OnInit {
+export class ValidationMessageComponent {
   @Input() control: FormControl;
-  constructor() { }
-
-  ngOnInit() {}
 
   get errorMessage() {
     /* console.log(this.control.errors); */

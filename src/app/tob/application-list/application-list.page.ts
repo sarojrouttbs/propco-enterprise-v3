@@ -85,7 +85,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   private getApplicationList() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.tobService.getApplicationList(this.propertyId).subscribe(
         (res) => {
           if (res) {
@@ -100,7 +100,7 @@ export class ApplicationListPage implements OnInit {
   }
 
   private getPropertyById() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.tobService.getPropertyDetails(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
@@ -116,7 +116,6 @@ export class ApplicationListPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private getLookUpData() {
