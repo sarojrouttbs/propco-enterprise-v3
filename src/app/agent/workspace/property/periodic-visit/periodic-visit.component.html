@@ -34,8 +34,8 @@
         </ion-grid>
       </div>
       <div class="overlay-container" style="position: relative">
-        <table datatable [dtOptions]="dtOptions" class="row-border hover" width="100%" id="periodic-visit-table"
-          style="position: relative">
+        <table datatable [dtOptions]="dtOptions" class="row-border hover table-span" id="periodic-visit-table"
+          style="position: relative" aria-describedby="periodicVisit">
           <thead>
             <tr>
               <th>Type</th>
@@ -118,8 +118,8 @@
 
       <div class="overlay-container" style="position: relative">
         <h5>Periodic Visit Notes :</h5>
-        <table datatable [dtOptions]="notesDtOption" [dtTrigger]="notesDtTrigger" class="row-border hover"
-          style="width: 100%; position: relative" #faultNotesTable>
+        <table datatable [dtOptions]="notesDtOption" [dtTrigger]="notesDtTrigger" class="row-border hover table-span"
+          style="position: relative" #faultNotesTable aria-describedby="periodicNotes">
           <thead>
             <tr>
               <th style="width:15%">Date</th>
