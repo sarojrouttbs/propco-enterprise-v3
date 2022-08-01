@@ -141,7 +141,7 @@ export class AgreementDetailsComponent implements OnInit {
   private patchAgreementDetails() {
     this.agreementDetailsForm.patchValue(this.agreementDetails)
     this.agreementDetailsForm.patchValue({
-      commissionPercentage: this.agreementDetails?.commissionPercentage ? this.agreementDetails?.commissionPercentage.toString() : '0',
+      commissionPercentage: this.agreementDetails?.commissionPercentage ? this.agreementDetails?.commissionPercentage.toString()+'%' : '0%',
       directDebitDueDay: this.agreementDetails?.directDebitDueDay ? this.agreementDetails?.directDebitDueDay : '0',
       contractType: this.agreementDetails?.contractType ? this.agreementDetails?.contractType.toString() : '',
       managementType: this.agreementDetails?.managementType ? this.agreementDetails?.managementType.toString() : '',
