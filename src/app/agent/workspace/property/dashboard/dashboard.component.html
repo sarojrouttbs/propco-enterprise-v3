@@ -83,16 +83,14 @@
         <p>{{DEFAULT_MESSAGES.AVAILABLE_SOON}}</p>
       </div>
       <div [hidden]="type != 'map'">
-        <!-- <app-google-map [propertyData]="propertyData"></app-google-map> -->
         <app-open-street-map *ngIf="isMapLoad" [propertyData]="propertyData"></app-open-street-map>
       </div>
       <div [hidden]="type != 'notes'">
         <div class="table-block">
           <ion-row>
             <ion-col size="100">
-              <!-- <p class="label">Notes</p> -->
               <div class="overlay-container">
-                <table datatable [dtOptions]="dtOptions" class="row-border hover" id="propertyNotesTable" width="100%">
+                <table datatable [dtOptions]="dtOptions" class="row-border hover table-width" id="propertyNotesTable" aria-describedby="notes">
                   <thead>
                     <tr>
                       <th style="width:15%">Date</th>

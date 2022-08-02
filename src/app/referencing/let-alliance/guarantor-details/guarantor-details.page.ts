@@ -77,9 +77,6 @@ export class GuarantorDetailsPage implements OnInit {
     this.initiateApplication();
   }
 
-  ionViewDidEnter() {
-  }
-
   initiateApplication() {
     if(this.applicantId && this.applicationId){
       this.getLookupData();
