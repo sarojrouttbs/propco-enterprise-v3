@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { IonSlides, ModalController, ViewDidEnter } from '@ionic/angular';
+import { IonSlides, ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, PROPCO, DEFAULT_MESSAGES, DEFAULTS, NOTES_TYPE, DATE_FORMAT } from 'src/app/shared/constants';
@@ -11,7 +11,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit, ViewDidEnter {
+export class DashboardComponent implements OnInit {
   @ViewChild(IonSlides, { static: false }) slides: IonSlides;
 
   propertyData: any = '';
@@ -129,10 +129,6 @@ export class DashboardComponent implements OnInit, ViewDidEnter {
     }
   }
 
-
-
-  ionViewDidEnter() {
-  }
 
   async openPreview(index) {
     const modal = await this.modalCtrl.create({
