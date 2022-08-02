@@ -32,7 +32,7 @@ const routes: Routes = [
   {
     path: 'solr',
     loadChildren: () => import('./solr/solr.module').then(m => m.SolrPageModule),
-    data: { preload: true, delay: 10000 }
+    data: { preload: true, delay: 0 }
   },
   {
     path: 'barclaycard',
