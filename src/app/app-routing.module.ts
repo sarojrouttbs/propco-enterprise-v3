@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { NoPreloading, RouterModule, Routes } from '@angular/router';
+import { CustomPreloadingStrategy } from './custom-preloading-strategy';
 import { AuthGuard } from './shared/authguard';
 import { LoginGuard } from './shared/guard/login.guard';
 
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
   },
   {
     path: '',
@@ -15,51 +16,52 @@ const routes: Routes = [
   },
   {
     path: 'faults',
-    loadChildren: () => import('./faults/faults.module').then( m => m.FaultsPageModule),
+    loadChildren: () => import('./faults/faults.module').then(m => m.FaultsPageModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'let-alliance',
-    loadChildren: () => import('./referencing/let-alliance/let-alliance.module').then( m => m.LetAlliancePageModule),
+    loadChildren: () => import('./referencing/let-alliance/let-alliance.module').then(m => m.LetAlliancePageModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'tob',
-    loadChildren: () => import('./tob/tob.module').then( m => m.TobPageModule),
+    loadChildren: () => import('./tob/tob.module').then(m => m.TobPageModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'solr',
-    loadChildren: () => import('./solr/solr.module').then( m => m.SolrPageModule)
+    loadChildren: () => import('./solr/solr.module').then(m => m.SolrPageModule),
+    data: { preload: true, delay: 10000 }
   },
   {
     path: 'barclaycard',
-    loadChildren: () => import('./barclaycard/barclaycard.module').then( m => m.BarclaycardPageModule)
+    loadChildren: () => import('./barclaycard/barclaycard.module').then(m => m.BarclaycardPageModule)
   },
   {
     path: 'worldpay',
-    loadChildren: () => import('./worldpay/worldpay.module').then( m => m.WorldpayPageModule)
+    loadChildren: () => import('./worldpay/worldpay.module').then(m => m.WorldpayPageModule)
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule),
+    loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule),
     canActivate: [LoginGuard]
   },
   {
     path: 'agent',
-    loadChildren: () => import('./agent/agent.module').then( m => m.AgentPageModule),
-    canActivate: [AuthGuard]
+    loadChildren: () => import('./agent/agent.module').then(m => m.AgentPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: 'hmrc',
-    loadChildren: () => import('./hmrc/hmrc.module').then( m => m.HmrcPageModule),
+    loadChildren: () => import('./hmrc/hmrc.module').then(m => m.HmrcPageModule),
     canActivate: [AuthGuard]
   }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: NoPreloading })
+    RouterModule.forRoot(routes, { preloadingStrategy: CustomPreloadingStrategy })
   ],
   exports: [RouterModule]
 })
