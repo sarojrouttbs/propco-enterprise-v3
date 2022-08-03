@@ -1,29 +1,29 @@
-import { HttpParams } from "@angular/common/http";
+import { HttpParams } from '@angular/common/http';
 import {
   Component,
   QueryList,
   ViewChild,
   ViewChildren,
-} from "@angular/core";
-import { Location } from "@angular/common";
-import { MatTab, MatTabGroup } from "@angular/material/tabs";
+} from '@angular/core';
+import { Location } from '@angular/common';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import {
   ActivatedRoute,
   Router,
   RouterOutlet,
-} from "@angular/router";
+} from '@angular/router';
 import {
   AGENT_WORKSPACE_CONFIGS,
   DEFAULT_MESSAGES,
-} from "src/app/shared/constants";
-import { CommonService } from "src/app/shared/services/common.service";
-import { AgentService } from "../agent.service";
-import { WorkspaceService } from "./workspace.service";
+} from 'src/app/shared/constants';
+import { CommonService } from 'src/app/shared/services/common.service';
+import { AgentService } from '../agent.service';
+import { WorkspaceService } from './workspace.service';
 
 @Component({
-  selector: "app-workspace",
-  templateUrl: "./workspace.page.html",
-  styleUrls: ["./workspace.page.scss"],
+  selector: 'app-workspace',
+  templateUrl: './workspace.page.html',
+  styleUrls: ['./workspace.page.scss'],
 })
 export class WorkspacePage {
   @ViewChild(MatTabGroup, { read: MatTabGroup })
@@ -61,7 +61,7 @@ export class WorkspacePage {
       this.selectedEntityDetails = this.getActiveTabEntityInfo();
       await this.getEntityFullDetails();
     } else {
-      this.router.navigate(["/agent"], { replaceUrl: true });
+      this.router.navigate(['/agent'], { replaceUrl: true });
     }
     this.skeleton = false;
   }
@@ -95,7 +95,7 @@ export class WorkspacePage {
 
   private async getEntityFullDetails() {
     switch (this.selectedEntityDetails.entity) {
-      case "PROPERTY":
+      case 'PROPERTY':
         let prop = await this.getPropertyById(
           this.selectedEntityDetails.entityId
         );
@@ -113,17 +113,17 @@ export class WorkspacePage {
     this.closedTabs.push(index);
     await this.workspaceService.removeItemByIndex(index);
     if (!this.workspaceService.isWorkspaceItemAvailable()) {
-      this.router.navigate(["agent/dashboard"], { replaceUrl: true });
+      this.router.navigate(['agent/dashboard'], { replaceUrl: true });
     } else {
       await this.workspaceService.activeNextTabOnDelete();
-      this.router.navigate(["agent/workspace"]).then(() => {
+      this.router.navigate(['agent/workspace']).then(() => {
         window.location.reload();
       });
     }
   }
 
   getPropertyById(id) {
-    const params = new HttpParams().set("hideLoader", "true");
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getPropertyById(id, params).subscribe(
         (res) => {
@@ -138,7 +138,7 @@ export class WorkspacePage {
 
   onSwitch(item) {
     switch (item.entity) {
-      case "PROPERTY":
+      case 'PROPERTY':
         this.location.replaceState(item.state);
         break;
 

@@ -45,7 +45,7 @@ export class QuoteModalPage implements OnInit {
 
     this.router.events.subscribe(async () => {
       const isModalOpened = await this.modalController.getTop();
-      if (router.url.toString() === "/login" && isModalOpened) this.dismiss();
+      if (router.url.toString() === '/login' && isModalOpened) this.dismiss();
     });
 
   }
@@ -116,17 +116,17 @@ export class QuoteModalPage implements OnInit {
 
   uploadDocument(uploadedDocument, type: string) {
     if (((this.uploadedPhoto.length + uploadedDocument.length) > 5 && type === 'photo') || ((this.uploadedQuote.length + uploadedDocument.length) > 5 && type === 'quote')) {
-      this.commonService.showMessage("You are only allowed to upload a maximum of 5 document", "Warning", "warning");
+      this.commonService.showMessage('You are only allowed to upload a maximum of 5 document', 'Warning', 'warning');
       return;
     }
     if (uploadedDocument) {
       for (let file of uploadedDocument) {
         if (this.validateUploadLimit(file)) {
           let isImage: boolean = false;
-          if (file.type.split("/")[0] !== 'image') {
+          if (file.type.split('/')[0] !== 'image') {
             isImage = false;
           }
-          else if (file.type.split("/")[0] == 'image') {
+          else if (file.type.split('/')[0] == 'image') {
             isImage = true;
           }
           if (type === 'photo') {

@@ -240,7 +240,7 @@ export class DetailsComponent implements OnInit {
   }
 
   private getPropertyLocationsByPropertyId(propertyId: string) {
-    let params = new HttpParams().set("hideLoader", "true");
+    let params = new HttpParams().set('hideLoader', 'true');
     this.agentService.getPropertyLocationsByPropertyId(propertyId, params).subscribe(
       res => {
         if (res && res.data) {

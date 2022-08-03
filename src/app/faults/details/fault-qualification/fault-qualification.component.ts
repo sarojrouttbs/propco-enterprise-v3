@@ -39,7 +39,7 @@ export class FaultQualificationComponent implements OnInit {
   iqfNotification;
   warrantyCertificateId: any = null;
   serviceContractCertificateId: any = null;
-  otherStageActions = FAULT_QUALIFICATION_ACTIONS.filter(action => { return (action.index == "LANDLORD_INSTRUCTION") });
+  otherStageActions = FAULT_QUALIFICATION_ACTIONS.filter(action => { return (action.index == 'LANDLORD_INSTRUCTION') });
   userSelectedActionControl = new FormControl();
   iqfStageActions = FAULT_QUALIFICATION_ACTIONS;
   isUserActionChange = false;
@@ -545,12 +545,12 @@ export class FaultQualificationComponent implements OnInit {
       return new Promise((resolve) => {
         this.faultsService.fetchPropertyCertificates(this.faultDetails.propertyId, params).subscribe(
           res => {
-            if (category === "4938" && res === null) {
+            if (category === '4938' && res === null) {
               this.faultQualificationForm.patchValue({ isUnderWarranty: false });
               this.faultQualificationForm.get('isUnderWarranty').updateValueAndValidity();
             }
 
-            if (category === "4940" && res === null) {
+            if (category === '4940' && res === null) {
               this.faultQualificationForm.patchValue({ isUnderServiceContract: false });
               this.faultQualificationForm.get('isUnderServiceContract').updateValueAndValidity();
             }

@@ -58,7 +58,7 @@ export class TenanciesComponent implements OnInit {
         let params = new HttpParams()
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
-          .set("hideLoader", "true");
+          .set('hideLoader', 'true');
         this.agentService.getPropertyTenancies(this.selectedEntityDetails.entityId, params).subscribe(res => {
           let tenancies = res && res.data ? res.data : [];
           tenancies.map((data) => {
