@@ -126,7 +126,7 @@ export class AgreementDetailsComponent implements OnInit {
   }
 
   private getAgreementDetails() {
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve) => {
       this.agentService.getAgreementDetails(this.selectedTenant?.agreementId).subscribe(
         (res) => {
           resolve(res ? res : {});

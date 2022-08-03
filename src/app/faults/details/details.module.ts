@@ -51,16 +51,9 @@ import { ChronologicalHistoryPageModule } from 'src/app/shared/modals/chronologi
 import { SnoozeFaultModalPageModule } from 'src/app/shared/modals/snooze-fault-modal/snooze-fault-modal.module';
 import { SendEmailModalModule } from 'src/app/shared/modals/send-email-modal/send-email-modal.module';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
+import { CURRENCY_MASK_CONFIGURATION } from 'src/app/shared/constants';
 
-export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
-  align: "left",
-  allowNegative: false,
-  decimal: ".",
-  precision: 2,
-  prefix: "£ ",
-  suffix: "",
-  thousands: ","
-};
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 @NgModule({
   imports: [
     CommonModule,

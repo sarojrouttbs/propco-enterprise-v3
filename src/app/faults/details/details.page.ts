@@ -25,7 +25,7 @@ import { SnoozeFaultModalPage } from 'src/app/shared/modals/snooze-fault-modal/s
   styleUrls: ['./details.page.scss', '../../shared/drag-drop.scss'],
 })
 export class DetailsPage {
-  @ViewChild("stepper", { static: false }) stepper: MatStepper;
+  @ViewChild('stepper', { static: false }) stepper: MatStepper;
   currentStepperIndex = 0;
   faultCategories: any[] = [];
   pageNo = 1;
@@ -847,10 +847,10 @@ export class DetailsPage {
         if (this.validateUploadLimit(file)) {
           let isImage = false;
           let date = Date.now();
-          if (file.type.split("/")[0] !== 'image') {
+          if (file.type.split('/')[0] !== 'image') {
             isImage = false;
           }
-          else if (file.type.split("/")[0] == 'image') {
+          else if (file.type.split('/')[0] == 'image') {
             isImage = true;
           }
           this.photos.push(this.createItem({
@@ -1259,7 +1259,7 @@ export class DetailsPage {
       areOccupiersVulnerable: this.accessInfoForm.get('areOccupiersVulnerable').value,
       tenantNotes: this.accessInfoForm.get('tenantNotes').value,
       propertyId: this.propertyId,
-      sourceType: "FAULT",
+      sourceType: 'FAULT',
       additionalInfo: this.faultDetailsForm.get('additionalInfo').value,
       isDraft: false,
       stage: FAULT_STAGES.FAULT_LOGGED,
@@ -1685,12 +1685,8 @@ export class DetailsPage {
           const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
-          // if (this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD) {
-          //   requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
-          // }
           forkJoin(requestArray).subscribe(data => {
             this.refreshDetailsAndStage();
-            // this.commonService.showLoader();
             setTimeout(async () => {
               await this.checkFaultNotifications(this.faultId);
               this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[0].index);
@@ -1727,12 +1723,8 @@ export class DetailsPage {
           const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
-          // if (this.faultDetails.status !== AWAITING_RESPONSE_LANDLORD) {
-          //   requestArray.push(this.updateFaultStatus(AWAITING_RESPONSE_LANDLORD));
-          // }
           forkJoin(requestArray).subscribe(data => {
             this.refreshDetailsAndStage();
-            // this.commonService.showLoader();
             setTimeout(async () => {
               await this.checkFaultNotifications(this.faultId);
               this.cliNotification = await this.filterNotifications(this.faultNotifications, FAULT_STAGES.LANDLORD_INSTRUCTION, LL_INSTRUCTION_TYPES[3].index);
@@ -1822,7 +1814,6 @@ export class DetailsPage {
     return new Promise((resolve, reject) => {
       this.faultsService.updateFault(this.faultId, requestObj).subscribe(
         res => {
-          // this.commonService.showMessage('Fault details have been updated successfully.', 'Fault Summary', 'success');
           resolve(true);
         },
         error => {
@@ -1853,7 +1844,6 @@ export class DetailsPage {
       filtereData = data.filter((x => x.faultStage === currentStage)).filter((x => !x.isVoided));
       if (filtereData.length == 0)
         resolve(null);
-      // if (filtereData[0].firstEmailSentAt) {
       filtereData = filtereData.sort((a, b) => {
         return <any>new Date(b.createdAt) - <any>new Date(a.createdAt);
       });
@@ -1863,9 +1853,6 @@ export class DetailsPage {
         filtereData[0].chase
       ];
       resolve(filtereData[0]);
-      // } else {
-      //   resolve(filtereData[0]);
-      // }
     });
   }
 
@@ -1964,8 +1951,6 @@ export class DetailsPage {
       this.openJobCompletionModal('Are you sure the repair is complete?');
     }
   }
-
-
 
   async presentRepairCategories(ev: any) {
     const popover = await this.popoverController.create({
@@ -2125,7 +2110,6 @@ export class DetailsPage {
         this.removeFile(file, i);
         this.filteredDocuments.splice(i, 1);
         if (this.filteredDocuments.length == 0) {
-          // this.getDocs();
           this.prepareDocumentsList();
           this.mediaType = 'upload';
         }
@@ -2135,7 +2119,7 @@ export class DetailsPage {
 
   changeString(data): string {
     if (data) {
-      return data.replace(/_/g, " ");
+      return data.replace(/_/g, ' ');
     }
   }
 
@@ -2148,7 +2132,7 @@ export class DetailsPage {
         if (this.files[i].folderName === FOLDER_NAMES[1].index && this.files[i].contractorCompanyName) {
           this.files[i].folderName = e.folderName + ' - ' + e.contractorCompanyName;
         }
-        this.files[i].folderName = e.folderName.replace(/_/g, " ");
+        this.files[i].folderName = e.folderName.replace(/_/g, ' ');
         this.files[i].isUploaded = true;
         if (e.name != null && DOCUMENTS_TYPE.indexOf(e.name.split('.')[1]) !== -1) {
           this.files[i].isImage = false;
@@ -2195,12 +2179,12 @@ export class DetailsPage {
   async markJobComplete(faultId) {
     let requestObj = {
       'additionalEstimate': 0,
-      'additionalWorkDetails': "",
+      'additionalWorkDetails': '',
       'isAccepted': true,
       'isAnyFurtherWork': false,
       'isVoided': false,
       'jobCompletionDate': this.commonService.getFormatedDate(new Date()),
-      'submittedByType': "SECUR_USER"
+      'submittedByType': 'SECUR_USER'
     };
     this.faultsService.markJobComplete(faultId, requestObj).subscribe(data => {
       this.refreshDetailsAndStage();
@@ -2307,7 +2291,6 @@ export class DetailsPage {
     return new Promise((resolve) => {
       this.commonService.getSystemOptions(MAX_DOC_UPLOAD_SIZE.FAULT_DOCUMENT_UPLOAD_SIZE).subscribe(res => {
         this.MAX_DOC_UPLOAD_LIMIT = res ? parseInt(res.FAULT_DOCUMENT_UPLOAD_SIZE, 10) : '';
-        // this.MAX_DOC_UPLOAD_LIMIT = 1;
         resolve(true);
       }, error => {
         resolve(false);
@@ -2357,7 +2340,6 @@ export class DetailsPage {
         this.page++;
       });
     }
-
   }
 
   getCodes(page?: number, size?: number) {
@@ -2365,7 +2347,7 @@ export class DetailsPage {
 
     this.nominalCodes.forEach(code => {
       let heading = code.heading ? code.heading.toUpperCase() : '';
-      code.concat = heading + ", " + code.nominalCode + ", " + code.description;
+      code.concat = heading + ', ' + code.nominalCode + ', ' + code.description;
       if (this.faultDetails.nominalCode) {
         this.landlordInstFrom.get('nominalCode').setValue(code);
       }

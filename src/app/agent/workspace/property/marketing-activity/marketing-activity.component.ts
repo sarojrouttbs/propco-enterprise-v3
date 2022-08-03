@@ -105,7 +105,7 @@ export class MarketingActivityComponent implements OnInit {
 
   private getMarketingActivityDetails(propertyId: string) {
     this.requestParams = this.requestParams.set('hideLoader', 'true');
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve) => {
       this.agentService.getMarketingActivity(propertyId, this.requestParams).subscribe(
         (res) => {
           resolve(res ? res : []);

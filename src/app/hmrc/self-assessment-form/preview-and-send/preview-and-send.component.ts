@@ -181,7 +181,7 @@ export class PreviewAndSendComponent implements OnInit {
         }
       ]
     };
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve) => {
       this.hmrcService.getPdfUrlDetails(requestObj).subscribe(
         (res) => {
           resolve(res ? res : {});

@@ -9,16 +9,9 @@ import { ComponentsModule } from '../../components/components.module';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { QuoteModalPage } from './quote-modal.page';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+import { CURRENCY_MASK_CONFIGURATION } from '../../constants';
 
-export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
-  align: "left",
-  allowNegative: false,
-  decimal: ".",
-  precision: 2,
-  prefix: "£ ",
-  suffix: "",
-  thousands: ","
-};
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
 const routes: Routes = [
   {
