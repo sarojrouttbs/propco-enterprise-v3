@@ -99,8 +99,8 @@ export class MarketAppraisalPage implements OnInit {
         propertyNotes: '',
         propertyStyle: '',
         rentRange: this.formBuilder.group({
-          maximum: ['', [Validators.required, ValidationService.rentRaneToVal]],
-          minimum: ['', Validators.required],
+          maximum: [0, [Validators.required, ValidationService.rentRaneToVal]],
+          minimum: [0, Validators.required],
         }),
         status: [null, Validators.required],
         agentName: '',
