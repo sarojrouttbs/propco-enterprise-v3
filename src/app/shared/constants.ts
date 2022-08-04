@@ -771,7 +771,8 @@ export const DATE_RANGE_CONFIG = {
 };
 
 export const HMRC_CONFIG = {
-  EMAIL_REGEX: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+  EMAIL_REGEX: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+  HMRC_SENDER_EMAIL_ACCOUNT: 'HMRC_SENDER_EMAIL_ACCOUNT'
 }
 
 export const HMO_LICENCE_CONFIG = {

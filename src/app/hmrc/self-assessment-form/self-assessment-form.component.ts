@@ -3,7 +3,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { HmrcService } from '../hmrc.service';
-import { DATE_FORMAT, SYSTEM_CONFIG } from 'src/app/shared/constants';
+import { DATE_FORMAT, HMRC_CONFIG, SYSTEM_CONFIG } from 'src/app/shared/constants';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-self-assessment-form',
@@ -24,7 +25,9 @@ export class SelfAssessmentFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private hmrcService: HmrcService
+    private hmrcService: HmrcService,
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -53,11 +56,11 @@ export class SelfAssessmentFormComponent implements OnInit {
 
   private getSystemConfig() {
     const params = new HttpParams().set('key', SYSTEM_CONFIG.HMRC_TAX_HANDLER_SELF_ASSESSMENT_FORM)
-    new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.hmrcService.getSysconfig(params).subscribe((res) => {
         this.systemConfig = res ? res.HMRC_TAX_HANDLER_SELF_ASSESSMENT_FORM : '';
         this.selfAssessmentForm.get('taxHandler').patchValue(this.systemConfig);
-        return resolve(true);
+        resolve(true);
       });
     });
   }
@@ -97,5 +100,31 @@ export class SelfAssessmentFormComponent implements OnInit {
 
   onHmrcLandlordSelectPreview(data: any) {
     this.isHmrcLandlordSelectPreview = data;
+  }
+
+  createHmrc() {
+    this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
+    return;
+    const params = {
+      accountType: HMRC_CONFIG.HMRC_SENDER_EMAIL_ACCOUNT,
+      financialYearDateRange: {
+        from: this.selfAssessmentForm.value.from,
+        to: this.selfAssessmentForm.value.to
+      },
+      deselectedPropertyLinkIds: this.selfAssessmentForm.value.deselectedPropertyLinkIds,
+      managementType: this.selfAssessmentForm.value.managementType,
+      propertyOffice: this.selfAssessmentForm.value.propertyOffice,
+      searchOnColumns: this.selfAssessmentForm.value.searchOnColumns,
+      searchText: this.selfAssessmentForm.value.valuesearchText,
+      selectedPropertyLinkIds: this.selfAssessmentForm.value.selectedPropertyLinkIds,
+      taxHandler: this.selfAssessmentForm.value.taxHandler
+    }
+    return new Promise((resolve) => {
+      this.hmrcService.createHmrc(params).subscribe((res) => {        
+        this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
+
+        resolve(true);
+      });
+    });
   }
 }

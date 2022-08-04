@@ -19,6 +19,7 @@ import { OfficeFilterModalPageModule } from '../shared/modals/office-filter-moda
 import { PreviewAndSendComponent } from './self-assessment-form/preview-and-send/preview-and-send.component';
 import { PreviewPdfModalPageModule } from '../shared/modals/preview-pdf-modal/preview-pdf-modal.module';
 import { IonicSelectableModule } from 'ionic-selectable';
+import { ProgressSummaryComponent } from './self-assessment-form/progress-summary/progress-summary.component';
 
 @NgModule({
   imports: [
@@ -41,7 +42,8 @@ import { IonicSelectableModule } from 'ionic-selectable';
     SelectSearchAllDirective,
     SelectAllPlusSearchComponent,
     SelectDatesComponent,
-    PreviewAndSendComponent
+    PreviewAndSendComponent,
+    ProgressSummaryComponent
   ],
   entryComponents: [SelectAllPlusSearchComponent]
 })
