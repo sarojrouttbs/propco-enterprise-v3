@@ -102,7 +102,7 @@ export class SelfAssessmentFormComponent implements OnInit {
     this.isHmrcLandlordSelectPreview = data;
   }
 
-  createHmrc() {
+  generateHMRC() {
     this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
     return;
     const params = {
@@ -120,7 +120,7 @@ export class SelfAssessmentFormComponent implements OnInit {
       taxHandler: this.selfAssessmentForm.value.taxHandler
     }
     return new Promise((resolve) => {
-      this.hmrcService.createHmrc(params).subscribe((res) => {        
+      this.hmrcService.generateHMRC(params).subscribe((res) => {        
         this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
 
         resolve(true);

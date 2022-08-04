@@ -34,7 +34,7 @@ export class HmrcService {
     return this.httpClient.post(environment.API_BASE_URL + `hmrc/reports/download`, requestObj, { responseType: 'blob' as 'json' });
   }
 
-  createHmrc(requestObj: any): Observable<any> {
+  generateHMRC(requestObj: any): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `hmrc`, requestObj);
   }
 
@@ -42,7 +42,7 @@ export class HmrcService {
     return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}/count`);
   }
 
-  getLastBatchDetails(batchId: string): Observable<any> {
+  getHMRCBatchDetails(batchId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}`);
   }
 
