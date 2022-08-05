@@ -84,7 +84,7 @@ export class OfficeFilterModalPage implements OnInit {
     return Object.keys(obj).reduce<TodoItemNode[]>((accumulator, key) => {
       const value = obj[key];
       const node = new TodoItemNode();
-      const selectedDefinationObj = this.groupOfficesList.definition.filter((obj) => value.groupDefinitionId === obj.groupDefinitionId);
+      const selectedDefinationObj = this.groupOfficesList.definition.filter((element: any) => value.groupDefinitionId === element.groupDefinitionId);
       node.item = value.name;
       node.groupOfficeId = value.groupOfficeId;
       node.groupOfficeCode = value.groupOfficeCode;
@@ -236,7 +236,7 @@ export class OfficeFilterModalPage implements OnInit {
   private getOfficesList(groupOfficeIdsList: any) {
     const params = new HttpParams()
       .set('parentGroupOfficeIds', groupOfficeIdsList);
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve) => {
       this.hmrcService.getOffices(params).subscribe(
         (res) => {
           const responseData = res ? res.data : [];

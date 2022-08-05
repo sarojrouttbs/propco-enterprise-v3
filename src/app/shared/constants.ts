@@ -722,20 +722,20 @@ export const DATE_FORMAT = {
 export const HMRC = {
   QUICK_DATE_FILTERS: [
     {
-      index: "2021-04-06,2022-04-05",
-      value: "2021-2022"
+      index: '2021-04-06,2022-04-05',
+      value: '2021-2022'
     }, {
-      index: "2020-04-06,2021-04-05",
-      value: "2020-2021"
+      index: '2020-04-06,2021-04-05',
+      value: '2020-2021'
     }, {
-      index: "2019-04-06,2020-04-05",
-      value: "2019-2020"
+      index: '2019-04-06,2020-04-05',
+      value: '2019-2020'
     }, {
-      index: "2018-04-06,2019-04-05",
-      value: "2018-2019"
+      index: '2018-04-06,2019-04-05',
+      value: '2018-2019'
     }, {
-      index: "2017-04-06,2018-04-05",
-      value: "2017-2018"
+      index: '2017-04-06,2018-04-05',
+      value: '2017-2018'
     }
   ],
   SEARCH_ON_COLUMNS_KEYS: [
@@ -771,7 +771,8 @@ export const DATE_RANGE_CONFIG = {
 };
 
 export const HMRC_CONFIG = {
-  EMAIL_REGEX: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+  EMAIL_REGEX: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+  HMRC_SENDER_EMAIL_ACCOUNT: 'HMRC_SENDER_EMAIL_ACCOUNT'
 }
 
 export const HMO_LICENCE_CONFIG = {
@@ -783,4 +784,14 @@ export const HMO_LICENCE_CONFIG = {
 export const CHECKED_IN_OUT_STATUS = {
   CHECKED_IN: 'Checked In',
   CHECKED_OUT: 'Checked Out'
+}
+
+export const CURRENCY_MASK_CONFIGURATION = {
+  align: 'left',
+  allowNegative: false,
+  decimal: '.',
+  precision: 2,
+  prefix: '£ ',
+  suffix: '',
+  thousands: ','
 }

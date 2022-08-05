@@ -322,7 +322,7 @@ export class DashboardPage implements OnInit {
       backdropDismiss: false
     });
 
-    const data = modal.onDidDismiss().then(res => {
+    modal.onDidDismiss().then(res => {
       if (res.data && res.data.noteId) {
         this.getFaultNotes(this.selectedData.faultId);
       }
@@ -454,7 +454,7 @@ export class DashboardPage implements OnInit {
       this.faultsService.getManagementTypes().subscribe(res => {
         this.managementTypeList = res ? res : [];
         if (this.managementTypeList) {
-          for (var val of this.managementTypeList) {
+          for (let val of this.managementTypeList) {
             if (val.letCategory === this.LET_CATEGORY) {
               this.FULLY_MANAGED_PROPERTY_TYPES.push(val.index);
               this.fpm.push(val.index);
@@ -561,7 +561,7 @@ export class DashboardPage implements OnInit {
     this.searchKey.reset();
   }
 
-  async checkboxClick(controlName?) {
+  async checkboxClick(controlName?: string) {
     this.isFilter = true;
     this.fs = [];
     this.fus = [];
@@ -647,7 +647,7 @@ export class DashboardPage implements OnInit {
     this.isFilter = true;
     this.fs = [];
     if (this.filterForm.get('statusFilter').value) {
-      for (var val of this.filterForm.get('statusFilter').value) {
+      for (let val of this.filterForm.get('statusFilter').value) {
         this.fs.push(val.index);
       }
     }
@@ -658,7 +658,7 @@ export class DashboardPage implements OnInit {
     this.isFilter = true;
     this.fat = [];
     if (this.filterForm.get('assignToFilter').value) {
-      for (var val of this.filterForm.get('assignToFilter').value) {
+      for (let val of this.filterForm.get('assignToFilter').value) {
         this.fat.push(val.userId);
       }
     }
@@ -670,7 +670,7 @@ export class DashboardPage implements OnInit {
       this.isFilter = true;
       this.fpo = [];
       if (this.filterForm.get('branchfilter').value) {
-        for (var val of this.filterForm.get('branchfilter').value) {
+        for (let val of this.filterForm.get('branchfilter').value) {
           this.fpo.push(val.officeCode);
         }
       }
@@ -682,7 +682,7 @@ export class DashboardPage implements OnInit {
     this.isFilter = true;
     this.fpm = [];
     if (this.filterForm.get('managementFilter').value) {
-      for (var val of this.filterForm.get('managementFilter').value) {
+      for (let val of this.filterForm.get('managementFilter').value) {
         this.fpm.push(val.index);
       }
     }
@@ -852,7 +852,7 @@ export class DashboardPage implements OnInit {
     this.filterForm.get(controlName).setValue(true);
   }
 
-  beginLoading() {
+  startLoading() {
     this.commonService.showLoader();
   }
 
@@ -860,9 +860,7 @@ export class DashboardPage implements OnInit {
     this.commonService.hideLoader();
   }
 
-  startLoading() { }
-
-  selectFault(faultDetail, event) {
+  selectFault(faultDetail: any, event: any) {
     if (event.target.checked && this.validateFaults(faultDetail) && this.checkMaintenance(faultDetail, event)) {
       faultDetail.isChecked = true;
       this.selectedFaultList.push(faultDetail);
@@ -988,7 +986,7 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('page');
     faultCountParams = faultCountParams.delete('limit');
     this.emergencyLoader = true;
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
         this.emergencyLoader = false;
         this.emergencyCount = res ? res.count : 0;
@@ -1010,7 +1008,7 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('page');
     faultCountParams = faultCountParams.delete('limit');
     this.urgentLoader = true;
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
         this.urgentLoader = false;
         this.urgentCount = res ? res.count : 0;
@@ -1032,7 +1030,7 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('page');
     faultCountParams = faultCountParams.delete('limit');
     this.nonUrgentLoader = true;
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
         this.nonUrgentLoader = false;
         this.nonUrgentCount = res ? res.count : 0;
@@ -1055,7 +1053,7 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('limit');
     faultCountParams = faultCountParams.delete('fus');
     this.assismentLoader = true;
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
         this.assismentLoader = false;
         this.assismentCount = res ? res.count : 0;
@@ -1080,7 +1078,7 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('limit');
     faultCountParams = faultCountParams.delete('fus');
     this.automationLoader = true;
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
         this.automationLoader = false;
         this.automationCount = res ? res.count : 0;
@@ -1103,7 +1101,7 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('limit');
     faultCountParams = faultCountParams.delete('fus');
     this.invoiceLoader = true;
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
         this.invoiceLoader = false;
         this.invoiceCount = res ? res.count : 0;
@@ -1125,7 +1123,7 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('limit');
     faultCountParams = faultCountParams.delete('fus');
     this.escalationLoader = true;
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
         this.escalationLoader = false;
         this.escalationCount = res ? res.count : 0;

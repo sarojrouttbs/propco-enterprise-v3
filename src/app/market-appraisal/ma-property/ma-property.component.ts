@@ -1,14 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { off } from 'process';
-import { PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, PROPCO } from 'src/app/shared/constants';
 import { AddressModalPage } from 'src/app/shared/modals/address-modal/address-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { MarketAppraisalService } from '../market-appraisal.service';
-import { HttpParams } from '@angular/common/http';
-import { error } from 'protractor';
-
 
 @Component({
   selector: 'app-ma-property',
@@ -47,6 +43,11 @@ export class MaPropertyComponent implements OnInit {
     totalDays: '00'
   }
   existingPropertyId: string = null;
+  DATE_FORMAT = DATE_FORMAT;
+  maxDate;
+  minDate;
+  currentDate;
+  
   constructor(private modalController: ModalController,
     private commonService: CommonService,
     private maService: MarketAppraisalService) {
@@ -115,8 +116,8 @@ export class MaPropertyComponent implements OnInit {
       status: property.status ? property.status.toString() : '',
       agentName: property.agentName ? property.agentName : '',
       rentRange: {
-        minimum: property.minimumRent ? property.minimumRent : '',
-        maximum: property.maximumRent ? property.maximumRent : '',
+        minimum: property.minimumRent ? property.minimumRent : 0,
+        maximum: property.maximumRent ? property.maximumRent : 0,
       },
       availableFromDate: property.availableFromDate ? property.availableFromDate : '',
       availableToDate: property.availableToDate ? property.availableToDate : '',
@@ -201,19 +202,19 @@ export class MaPropertyComponent implements OnInit {
   /* To calculate total duration on date change */
   calculateTotalDuration() {
     const propertyDetails = this.propertyForm.value;
+    this.maxDate = propertyDetails?.availableToDate ? this.commonService.getFormatedDate(propertyDetails.availableToDate) : this.currentDate;
+    this.minDate = propertyDetails?.availableFromDate ? this.commonService.getFormatedDate(propertyDetails.availableFromDate) : this.currentDate;
     if (propertyDetails.availableFromDate && propertyDetails.availableToDate) {
       propertyDetails.availableToDate = new Date(propertyDetails.availableToDate)
       propertyDetails.availableFromDate = new Date(propertyDetails.availableFromDate)
-      var monthDuration, dateDuration;
-      var availableToYear = propertyDetails.availableToDate.getFullYear();
-      var availableToMonth = propertyDetails.availableToDate.getMonth();
-      var availableToDate = propertyDetails.availableToDate.getDate();
-
-      var availableFromYear = propertyDetails.availableFromDate.getFullYear();
-      var availableFromMonth = propertyDetails.availableFromDate.getMonth();
-      var availableFromDate = propertyDetails.availableFromDate.getDate();
-
-      var yearDuration = availableToYear - availableFromYear;
+      let monthDuration, dateDuration;
+      let availableToYear = propertyDetails.availableToDate.getFullYear();
+      let availableToMonth = propertyDetails.availableToDate.getMonth();
+      let availableToDate = propertyDetails.availableToDate.getDate();
+      let availableFromYear = propertyDetails.availableFromDate.getFullYear();
+      let availableFromMonth = propertyDetails.availableFromDate.getMonth();
+      let availableFromDate = propertyDetails.availableFromDate.getDate();
+      let yearDuration = availableToYear - availableFromYear;
 
       if (availableToMonth >= availableFromMonth) {
         monthDuration = availableToMonth - availableFromMonth;
@@ -236,10 +237,10 @@ export class MaPropertyComponent implements OnInit {
       this.duration.totalMonths = this.formatDateDuration('' + monthDuration);
       this.duration.totalDays = this.formatDateDuration('' + dateDuration);
     }
-  };
+  }
 
   private formatDateDuration(durationType) {
-    var duration = durationType;
+    let duration = durationType;
     if (duration.length <= 1) {
       duration = '0' + duration;
     }
@@ -288,11 +289,7 @@ export class MaPropertyComponent implements OnInit {
         }
       );
     });
-    
   }
-
-
-
 
   private getPropertyLocationsByPropertyId(propertyId: string) {
     return new Promise((resolve) => {

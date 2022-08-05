@@ -9,15 +9,8 @@ import { MaterialModule } from 'src/app/material.module';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
 import { NegotiateModalPageModule } from 'src/app/shared/modals/negotiate-modal/negotiate-modal.module';
-export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
-  align: 'left',
-  allowNegative: false,
-  decimal: '.',
-  precision: 2,
-  prefix: '£ ',
-  suffix: '',
-  thousands: ','
-};
+import { CURRENCY_MASK_CONFIGURATION } from 'src/app/shared/constants';
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
 @NgModule({
   imports: [
