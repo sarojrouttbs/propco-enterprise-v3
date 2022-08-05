@@ -40,7 +40,7 @@ export class TermsOfBusinessComponent implements OnInit {
   }
 
   private getTobVersionList() {
-    const params = new HttpParams().set("hideLoader", "true");
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getTobVersionList(params).subscribe(
         (res) => {
@@ -55,7 +55,7 @@ export class TermsOfBusinessComponent implements OnInit {
   }
 
   private getVersionHistory(propertyId: string) {
-    const params = new HttpParams().set("hideLoader", "true");
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getVersionHistory(propertyId, params).subscribe(
         (res) => {

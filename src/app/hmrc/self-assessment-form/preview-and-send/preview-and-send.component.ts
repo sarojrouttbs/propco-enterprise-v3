@@ -140,6 +140,10 @@ export class PreviewAndSendComponent implements OnInit {
       this.selectedLandlords.splice(this.selectedLandlords.indexOf(e.detail.value), 1);
       this.selectedHmrcLandlordCount -= 1;
     }
+    if (this.selectedLandlords.length > 0)
+      this.group.get('selectedPropertyLinkIds').patchValue(this.selectedLandlords.toString());
+    if (this.unSelectedLandlords.length > 0)
+      this.group.get('deselectedPropertyLinkIds').patchValue(this.selectedLandlords.toString())
     this.disableButton();
   }
 
@@ -183,7 +187,7 @@ export class PreviewAndSendComponent implements OnInit {
         }
       ]
     };
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve) => {
       this.hmrcService.getPdfUrlDetails(requestObj).subscribe(
         (res) => {
           resolve(res ? res : {});
