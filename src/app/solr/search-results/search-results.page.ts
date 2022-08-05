@@ -120,15 +120,8 @@ export class SearchResultsPage implements OnInit {
     floor: 0,
     ceil: 5000,
     translate: (value: number, label: LabelType): string => {
-      switch (label) {
-        case LabelType.Low:
-          return '£' + value;
-        case LabelType.High:
-          return '£' + value;
-        default:
-          return '£' + value;
-      }
-    },
+      return '£' + value;
+    }
   };
 
   numberOfBedroomOptions: Options = {
@@ -500,11 +493,9 @@ export class SearchResultsPage implements OnInit {
           }
         });
         this.length = res && res.count ? res.count : 0;
-        // this.opened = true;
         this.loaded = true;
         this.showSkeleton = false;
         this.customizePaginator();
-        // this.iterator();
       });
   }
 
@@ -731,8 +722,6 @@ export class SearchResultsPage implements OnInit {
     this.entityControl.setValue(tmpArray);
     this.commonService.dataChanged({ entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm });
   }
-
-  private renderEntity() { }
 
   private transformToUpperCase(data: any) {
     if (data) {

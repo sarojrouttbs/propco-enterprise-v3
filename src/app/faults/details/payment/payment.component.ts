@@ -113,7 +113,7 @@ export class PaymentComponent implements OnInit {
       worksOrderNumber: [{ value: this.faultDetails.reference, disabled: true }],
       postdate: [{ value: '', disabled: true }],
       nominalCode: ['', Validators.required],
-      description: [this.categoryName + " " + this.faultDetails.title, Validators.required],
+      description: [this.categoryName + ' ' + this.faultDetails.title, Validators.required],
       paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
       keysLocation: this.faultDetails.doesBranchHoldKeys ? KEYS_LOCATIONS.KEY_IN_BRANCH : KEYS_LOCATIONS.DO_NOT_HOLD_KEY,
       returnKeysTo: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
@@ -560,7 +560,7 @@ export class PaymentComponent implements OnInit {
     let codes = [];
 
     this.nominalCodes.forEach(code => {
-      code.concat = code.nominalCode + " - " + code.description;
+      code.concat = code.nominalCode + ' - ' + code.description;
       if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 6) {
         this.workOrderForm.get('nominalCode').setValue(code);
       }
@@ -601,7 +601,7 @@ export class PaymentComponent implements OnInit {
         let data = res ? res : '';
         if (data) {
           this.workOrderForm.patchValue({
-            mgntHoldKey: "Contact Branch - " + data.branding.phone
+            mgntHoldKey: 'Contact Branch - ' + data.branding.phone
           });
         }
       }, error => {
@@ -629,9 +629,9 @@ export class PaymentComponent implements OnInit {
       cssClass: 'modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId,
-        title: "Job Completion",
+        title: 'Job Completion',
         headingOne: "You have selected 'No, Reject this Invoice.'",
-        headingTwo: "This will escalate the Repair and a notification to Contractor would be sent. Are you sure?",
+        headingTwo: 'This will escalate the Repair and a notification to Contractor would be sent. Are you sure?',
       },
       backdropDismiss: false
     });

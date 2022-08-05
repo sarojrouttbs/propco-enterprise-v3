@@ -108,7 +108,6 @@ export class AgentHeaderComponent {
       case 'self-assessment-form':
         this.router.navigate([`/agent/hmrc/${pageRef}`]);
         break;
-
       default:
         break;
     }

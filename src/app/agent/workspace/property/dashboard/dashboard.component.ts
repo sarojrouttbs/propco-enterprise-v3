@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit {
         let params = new HttpParams()
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
-          .set("hideLoader", "true")
+          .set('hideLoader', 'true')
           .set('entityId', this.selectedEntityDetails.entityId)
           .set('entityType', NOTES_TYPE.PROPERTY);
         that.agentService.getNotes(params).subscribe(res => {
@@ -144,7 +144,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getPropertyById(propertyId) {
-    const params = new HttpParams().set("hideLoader", "true");
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getPropertyById(propertyId, params).subscribe(
         (res) => {
@@ -159,7 +159,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getPropertyLandlords(propertyId) {
-    const params = new HttpParams().set("hideLoader", "true");
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getPropertyLandlords(propertyId, params).subscribe(
         (res) => {
@@ -174,7 +174,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getPropertyTenant(propertyId) {
-    const params = new HttpParams().set("hideLoader", "true");
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getPropertyTenants(propertyId, params).subscribe(
         (res) => {
@@ -189,7 +189,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getPropertyDetails(propertyId) {
-    const params = new HttpParams().set("hideLoader", "true");
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
@@ -205,8 +205,8 @@ export class DashboardComponent implements OnInit {
 
   getOptions() {
     const params = new HttpParams()
-      .set("hideLoader", "true")
-      .set("option", "WEB_IMAGE_URL");
+      .set('hideLoader', 'true')
+      .set('option', 'WEB_IMAGE_URL');
     return new Promise((resolve) => {
       this.agentService.getSyatemOptions(params).subscribe(
         (res) => {

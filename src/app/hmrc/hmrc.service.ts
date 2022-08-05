@@ -33,4 +33,20 @@ export class HmrcService {
   getPdfUrlDetails(requestObj: any): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `hmrc/reports/download`, requestObj, { responseType: 'blob' as 'json' });
   }
+
+  generateHMRC(requestObj: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `hmrc`, requestObj);
+  }
+
+  getBatchCount(batchId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}/count`);
+  }
+
+  getHMRCBatchDetails(batchId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}`);
+  }
+
+  getLandlordBatchCount(params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `hmrc/landlords/batch-count`, { params });
+  }
 }
