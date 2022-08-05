@@ -210,7 +210,6 @@ export class MarketingActivityComponent implements OnInit {
     }
     this.requestParams = this.requestParams.set('dateRange.from', this.fromDate.value);
     this.requestParams = this.requestParams.set('dateRange.to', this.toDate.value);
-    this.getMarketingActivity();
   }
 
   private getFirstDayOfWeek(currentDate: Date) {
