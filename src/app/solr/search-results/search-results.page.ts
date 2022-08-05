@@ -439,10 +439,10 @@ export class SearchResultsPage implements OnInit {
       isVatRegistered: false,
     });
     this.contractorFilter = this.fb.group({
-      vatRegistered: false,
-      approvedByAgent: false,
+      isVatRegistered: false,
+      isAgentContractorApproved: false,
       status: [[]],
-      skills: [[]],
+      occupation: [[]],
     });
     this.applicantFilter = this.fb.group({
       officeCode: [[]],
@@ -558,11 +558,11 @@ export class SearchResultsPage implements OnInit {
     if (this.entityControl.value.indexOf('Contractor') !== -1) {
       const ccFilter = Object.assign(this.contractorFilter.value, {});
 
-      if (!ccFilter.vatRegistered) {
-        delete ccFilter.vatRegistered;
+      if (!ccFilter.isVatRegistered) {
+        delete ccFilter.isVatRegistered;
       }
-      if (!ccFilter.approvedByAgent) {
-        delete ccFilter.approvedByAgent;
+      if (!ccFilter.isAgentContractorApproved) {
+        delete ccFilter.isAgentContractorApproved;
       }
       params.contractorFilter = ccFilter;
     }
