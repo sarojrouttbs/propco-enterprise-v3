@@ -83,6 +83,8 @@ export class SearchResultsPage implements OnInit {
   landlordStatusesFiltered;
   applicantStatuses;
   applicantStatusesFiltered;
+  agentStatuses;
+  agentStatusesFiltered;
   tenantStatuses;
   tenantStatusesFiltered;
   contractorStatuses;
@@ -113,6 +115,7 @@ export class SearchResultsPage implements OnInit {
   landlordStatusFilterCtrl: FormControl = new FormControl();
   tenantStatusFilterCtrl: FormControl = new FormControl();
   applicantStatuFilterCtrl: FormControl = new FormControl();
+  agentStatuFilterCtrl: FormControl = new FormControl();
   contractorStatusFilterCtrl: FormControl = new FormControl();
   contractorSkillFilterCtrl: FormControl = new FormControl();
 
@@ -208,6 +211,9 @@ export class SearchResultsPage implements OnInit {
     this.contractorStatusFilterCtrl.valueChanges.subscribe((src) => {
       this.filterMultiSearch(src, 'conStatus');
     });
+    this.agentStatuFilterCtrl.valueChanges.subscribe((src) => {
+      this.filterMultiSearch(src, 'agentStatus');
+    });
   }
 
   private filterMultiSearch(srchStr: string, type: string) {
@@ -290,6 +296,17 @@ export class SearchResultsPage implements OnInit {
         this.applicantStatusesFiltered = tmp;
         break;
       }
+      case 'agentStatus': {
+        if (!srchStr) {
+          this.agentStatusesFiltered = this.agentStatuses;
+          return;
+        }
+        tmp = this.agentStatuses.filter(
+          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+        );
+        this.agentStatusesFiltered = tmp;
+        break;
+      }
       case 'tenantStatus': {
         if (!srchStr) {
           this.tenantStatusesFiltered = this.tenantStatuses;
@@ -351,6 +368,8 @@ export class SearchResultsPage implements OnInit {
       data.landlordStatuses;
     this.applicantStatuses = this.applicantStatusesFiltered =
       data.applicantStatuses;
+    this.agentStatuses = this.agentStatusesFiltered =
+      data.agentStatuses;
     this.tenantStatuses = this.tenantStatusesFiltered = data.tenantStatuses;
     this.contractorSkills = this.contractorSkillsFiltered =
       data.contractorSkills;
