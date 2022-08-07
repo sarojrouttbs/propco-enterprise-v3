@@ -624,10 +624,12 @@ export class SearchResultsPage implements OnInit {
   }
 
   refreshAll() {
+    this.pageIndex = 0;
     this.getSearchResults();
   }
 
   resetAll() {
+    this.pageIndex = 0;
     this.propertyFilter.reset();
     this.propertyFilter.controls['propertyRent'].setValue(this.priceKnobValues);
     this.propertyFilter.controls['numberOfBedroom'].setValue(
@@ -669,6 +671,7 @@ export class SearchResultsPage implements OnInit {
   }
 
   refresh(type: string) {
+    this.pageIndex = 0;
     this.refreshType = type;
     this.getSearchResults();
   }
