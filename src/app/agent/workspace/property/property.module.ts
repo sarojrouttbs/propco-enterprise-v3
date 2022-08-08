@@ -50,16 +50,9 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { AgreementDetailsComponent } from './admin/tenancy/agreement-details/agreement-details.component';
 import { AgreementHistoryComponent } from './admin/tenancy/agreement-history/agreement-history.component';
 import { ComplianceRecordsComponent } from './compliance-records/compliance-records.component';
+import { CURRENCY_MASK_CONFIGURATION } from 'src/app/shared/constants';
 
-export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
-  align: "left",
-  allowNegative: false,
-  decimal: ".",
-  precision: 2,
-  prefix: "£ ",
-  suffix: "",
-  thousands: ","
-};
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
 @NgModule({
   imports: [

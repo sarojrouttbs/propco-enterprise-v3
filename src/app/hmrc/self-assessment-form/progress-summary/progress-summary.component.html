@@ -1,0 +1,71 @@
+<ion-content id="progress-summary">
+  <div class="ion-text-center">
+    <h2>Progress Summary</h2>
+  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="100">
+        <ion-progress-bar value="0.25" color="secondary"></ion-progress-bar>
+      </ion-col>
+      <ion-col class="no-padding-bottom" class="table-block" size="100">
+        <table>
+          <tr>
+            <th>Action Items</th>
+            <th>Number of Records</th>
+            <th>Success</th>
+            <th>Failure</th>
+          </tr>
+          <tr>
+            <td>Total Records</td>
+            <td>1100</td>
+            <td>520</td>
+            <td>520</td>
+          </tr>
+          <tr>
+            <td>Records with preferance as "Print"</td>
+            <td>1100</td>
+            <td>520</td>
+            <td>520</td>
+          </tr>
+          <tr>
+            <td>Records with preferance as "Email & Print"</td>
+            <td>1100</td>
+            <td>520</td>
+            <td>520</td>
+          </tr>
+          <tr>
+            <td>Records with preferance as "Email"</td>
+            <td>1100</td>
+            <td>520</td>
+            <td>520</td>
+          </tr>
+          <tr>
+            <td>Records with preferance as "Online"</td>
+            <td>1100</td>
+            <td>520</td>
+            <td>520</td>
+          </tr>
+          <!-- <tr *ngFor="let history of versionHistoryList" class="table-row">
+            <td>{{history?.createdAt | date: DATE_FORMAT.DATE_TIME || notAvailable}}</td>
+            <td>{{history?.description || notAvailable}}</td>
+            <td>{{history?.version || notAvailable}}</td>
+          </tr>
+          <tr *ngIf="!versionHistoryList?.length">
+            <td colspan="12" class="ion-text-center">No data to display</td>
+          </tr> -->
+        </table>
+      </ion-col>
+      <ion-col size="100">
+        <ion-text>
+          <strong>Note:</strong> The action items marked (*) do not perform action of print or email per preferred mode
+          of communication of landlords. The same records shall be recorded for audit & DMS marked as actioned.
+        </ion-text>
+      </ion-col>
+      <ion-col size="100" class="ion-align-self-end ion-text-right">
+        <ion-button color="tertiary" fill="solid" style="margin-right: 16px;">Download PDF
+        </ion-button>
+        <ion-button color="medium" fill="solid">Finish</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

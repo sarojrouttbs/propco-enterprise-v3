@@ -9,15 +9,8 @@ import { WorksorderModalPage } from './worksorder-modal.page';
 import { WorksorderService } from './worksorder.service';
 import { ComponentsModule } from '../../components/components.module';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
-export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
-  align: "left",
-  allowNegative: false,
-  decimal: ".",
-  precision: 2,
-  prefix: "£ ",
-  suffix: "",
-  thousands: ","
-};
+import { CURRENCY_MASK_CONFIGURATION } from '../../constants';
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
 const routes: Routes = [
   {

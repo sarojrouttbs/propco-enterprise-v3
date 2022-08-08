@@ -165,7 +165,6 @@ export class SelectLandlordsComponent implements OnInit {
   }
 
   private isLandlordChecked(propertyLinkId: number) {
-
     if (!this.gridCheckAll) {
       return this.checkedLandlords.indexOf(propertyLinkId) >= 0 ? true : false;
     } else {
@@ -270,8 +269,8 @@ export class SelectLandlordsComponent implements OnInit {
       if (res && res?.data) {
         this.selectedOfficeList = res?.data?.selectedOfficeList;
         this.selectedRegion = res?.data?.selectedRegion;
-        const propertyOfficeName = res?.data?.selectedOfficeList.map(err => err.officeName).join(", ");
-        const propertyOfficeCodes = res?.data?.selectedOfficeList.map(err => err.officeCode).join(",");
+        const propertyOfficeName = res?.data?.selectedOfficeList.map(err => err.officeName).join(', ');
+        const propertyOfficeCodes = res?.data?.selectedOfficeList.map(err => err.officeCode).join(',');
         this.group.get('propertyOffice').setValue(propertyOfficeName);
         this.group.get('selectedPropertyOfficeCodes').patchValue(propertyOfficeCodes);
       }
@@ -283,7 +282,7 @@ export class SelectLandlordsComponent implements OnInit {
     const params = new HttpParams()
       .set('hideLoader', 'true')
       .set('option', 'ENABLE_GROUPOFFICEFILTER');
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve) => {
       this.hmrcService.getOptions(params).subscribe(
         async (res) => {
           resolve(res ? res : {});
@@ -297,7 +296,7 @@ export class SelectLandlordsComponent implements OnInit {
 
   private getOfficesList() {
     const params = new HttpParams().set('hideLoader', 'true');
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve) => {
       this.hmrcService.getOffices(params).subscribe(
         (res) => {
           resolve(res ? res.data : []);
@@ -310,7 +309,7 @@ export class SelectLandlordsComponent implements OnInit {
   }
 
   private getOfficesGroupList() {
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve) => {
       this.hmrcService.getOfficesGroup().subscribe(
         (res) => {
           resolve(res ? res : {});

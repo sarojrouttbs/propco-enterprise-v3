@@ -352,6 +352,7 @@ export class ApplicationDetailPage implements OnInit {
         if (!this.applicationDetails.isSubmitted) {
           this.saveApplicantsToApplication();
         }
+        break;
       case 1:
         if (!this.applicationDetails.isSubmitted && this.applicantId) {
           this.saveApplicantDetails();

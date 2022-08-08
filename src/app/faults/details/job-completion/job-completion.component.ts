@@ -131,7 +131,7 @@ export class JobCompletionComponent implements OnInit {
       worksOrderNumber: [{ value: this.faultDetails.reference, disabled: true }],
       postdate: [{ value: '', disabled: true }],
       nominalCode: ['', Validators.required],
-      description: [this.categoryName + " " + this.faultDetails.title, Validators.required],
+      description: [this.categoryName + ' ' + this.faultDetails.title, Validators.required],
       paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
       keysLocation: this.faultDetails.doesBranchHoldKeys ? KEYS_LOCATIONS.KEY_IN_BRANCH : KEYS_LOCATIONS.DO_NOT_HOLD_KEY,
       returnKeysTo: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
@@ -606,7 +606,7 @@ export class JobCompletionComponent implements OnInit {
     let codes = [];
 
     this.nominalCodes.forEach(code => {
-      code.concat = code.nominalCode + " - " + code.description;
+      code.concat = code.nominalCode + ' - ' + code.description;
       if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 6) {
         this.workOrderForm.get('nominalCode').setValue(code);
       }
@@ -647,7 +647,7 @@ export class JobCompletionComponent implements OnInit {
         let data = res ? res : '';
         if (data) {
           this.workOrderForm.patchValue({
-            mgntHoldKey: "Contact Branch - " + data.branding.phone
+            mgntHoldKey: 'Contact Branch - ' + data.branding.phone
           });
         }
       }, error => {
@@ -678,9 +678,9 @@ export class JobCompletionComponent implements OnInit {
       cssClass: 'modal-container reject-invoice-modal fault-modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId,
-        title: "Reject the Invoice",
+        title: 'Reject the Invoice',
         headingOne: "You have selected 'No, Reject this Invoice.'",
-        headingTwo: "This will escalate the Repair and a notification to Contractor would be sent. Are you sure?",
+        headingTwo: 'This will escalate the Repair and a notification to Contractor would be sent. Are you sure?',
       },
       backdropDismiss: false
     });
@@ -878,12 +878,12 @@ export class JobCompletionComponent implements OnInit {
       return new Promise((resolve) => {
         this.faultsService.fetchPropertyCertificates(this.faultDetails.propertyId, params).subscribe(
           res => {
-            if (category === "4938" && res === null) {
+            if (category === '4938' && res === null) {
               this.faultQualificationForm.patchValue({ isUnderWarranty: false });
               this.faultQualificationForm.get('isUnderWarranty').updateValueAndValidity();
             }
 
-            if (category === "4940" && res === null) {
+            if (category === '4940' && res === null) {
               this.faultQualificationForm.patchValue({ isUnderServiceContract: false });
               this.faultQualificationForm.get('isUnderServiceContract').updateValueAndValidity();
             }

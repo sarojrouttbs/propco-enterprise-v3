@@ -89,8 +89,8 @@ export class BookMaModalPage implements OnInit {
 
   getAvailableSlots() {
     let params = new HttpParams()
-      .set("assignTo", this.bookMaForm.value.assignToId)
-      .set("viewingDate", this.commonService.getFormatedDate(this.bookMaForm.value.dueDate));
+      .set('assignTo', this.bookMaForm.value.assignToId)
+      .set('viewingDate', this.commonService.getFormatedDate(this.bookMaForm.value.dueDate));
     return new Promise((resolve) => {
       this.maService.getAvailableSlots(params).subscribe(
         (res) => {

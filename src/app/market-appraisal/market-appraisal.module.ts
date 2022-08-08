@@ -16,15 +16,8 @@ import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng
 import { PipesModule } from '../shared/pipes/pipes.module';
 import { BookMaModalPageModule } from '../shared/modals/book-ma-modal/book-ma-modal.module';
 import { CurrencyDirective } from '../currency.directive';
-export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
-  align: "left",
-  allowNegative: false,
-  decimal: ".",
-  precision: 2,
-  prefix: "£ ",
-  suffix: "",
-  thousands: ","
-};
+import { CURRENCY_MASK_CONFIGURATION } from '../shared/constants';
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 @NgModule({
   imports: [
 CommonModule,

@@ -45,8 +45,8 @@ export class ApplicationListPage implements OnInit, OnDestroy {
 
   applicationParams: any = new HttpParams();
 
-  error: any = { isError: false, errorMessage: "" };
-  errorTo: any = { isError: false, errorMessage: "" };
+  error: any = { isError: false, errorMessage: '' };
+  errorTo: any = { isError: false, errorMessage: '' };
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;

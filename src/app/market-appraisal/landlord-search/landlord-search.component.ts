@@ -64,10 +64,10 @@ export class LandlordSearchComponent implements OnInit {
   }
 
   onFocus() {
-    if (this.type === MARKET_APPRAISAL.contact_type && this.suggestions.length) {
+    if (this.type === MARKET_APPRAISAL.contact_type && this.suggestions?.length) {
       this.isItemAvailable = true;
     }
-    if (this.type === MARKET_APPRAISAL.property_type && this.propertySuggestion.length) {
+    if (this.type === MARKET_APPRAISAL.property_type && this.propertySuggestion?.length) {
       this.isPropertyItemAvailable = true;
     }
   }

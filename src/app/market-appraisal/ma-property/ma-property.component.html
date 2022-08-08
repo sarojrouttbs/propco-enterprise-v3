@@ -196,23 +196,31 @@
                 </ion-item>
               </ion-col>
               <ion-col size="50">
-                <mat-form-field appearance="fill">
-                  <mat-label> Available From</mat-label>
-                  <input matInput [matDatepicker]="picker1" formControlName="availableFromDate" readonly (dateChange)="calculateTotalDuration()"
-                  [max]="propertyForm.controls.availableToDate.value">
-                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                  <mat-datepicker #picker1></mat-datepicker>
-                </mat-form-field>
+                <ion-item id="availableFromDate">
+                  <ion-label position="floating">Available From <ion-text class="mandatory">*</ion-text></ion-label>
+                  <ion-input value="{{ propertyForm.controls.availableFromDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                  <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                  <ion-popover trigger="availableFromDate" show-backdrop="false">
+                    <ng-template>
+                      <ion-datetime [max]="maxDate" (ionChange)="calculateTotalDuration()" showDefaultButtons="true" presentation="date" formControlName="availableFromDate">
+                      </ion-datetime>
+                    </ng-template>
+                  </ion-popover>
+                </ion-item>
                 <app-validation-message [control]="propertyForm.controls.availableFromDate"></app-validation-message>
               </ion-col>
               <ion-col size="50">
-                <mat-form-field appearance="fill">
-                  <mat-label> Available To </mat-label>
-                  <input matInput [matDatepicker]="topicker" formControlName="availableToDate"  (dateChange)="calculateTotalDuration()"
-                  [min]="propertyForm.controls.availableFromDate.value" readonly>
-                  <mat-datepicker-toggle matSuffix [for]="topicker"></mat-datepicker-toggle>
-                  <mat-datepicker #topicker></mat-datepicker>
-                </mat-form-field>
+                <ion-item id="availableToDate">
+                  <ion-label position="floating">Available To</ion-label>
+                  <ion-input value="{{ propertyForm.controls.availableToDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                  <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                  <ion-popover trigger="availableToDate" show-backdrop="false">
+                    <ng-template>
+                      <ion-datetime [min]="minDate" (ionChange)="calculateTotalDuration()" showDefaultButtons="true" presentation="date" formControlName="availableToDate">
+                      </ion-datetime>
+                    </ng-template>
+                  </ion-popover>
+                </ion-item>
               </ion-col>
               <ion-col size="100">
                 <div class="lettings-details-duration">
@@ -258,9 +266,9 @@
               <ng-container formGroupName="rentRange">
                 <ion-col size="50">
                   <ion-item style="margin-top: 2px;">
-                    <ion-label position="floating">Rent Range From <ion-text class="mandatory">*</ion-text>
+                    <ion-label position="stacked">Rent Range From <ion-text class="mandatory">*</ion-text>
                     </ion-label>
-                    <ion-input formControlName="minimum" currency-validator></ion-input>
+                    <input class="currency-input" currencyMask formControlName="minimum">
                   </ion-item>
                   <app-validation-message [control]="propertyForm.controls['rentRange'].get('minimum')"></app-validation-message>
                 </ion-col>
