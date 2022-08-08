@@ -173,7 +173,7 @@ export class DetailsComponent implements OnInit {
       isHmoProperty: this.propertyDetails?.propertyInfo?.isHmoProperty ? this.propertyDetails?.propertyInfo?.isHmoProperty : false,
       isOnWithOtherAgent: this.propertyDetails?.propertyInfo?.isOnWithOtherAgent ? this.propertyDetails?.propertyInfo?.isOnWithOtherAgent : false,
       internalNote: this.propertyDetails?.propertyDescription?.internalNote ? this.propertyDetails?.propertyDescription?.internalNote : '',
-      azReference: this.propertyDetails?.propertyWebInfo?.azReference ? this.propertyDetails?.propertyWebInfo?.azReference : '',
+      azReference: this.propertyDetails?.propertyWebInfo?.azReference ? this.propertyDetails?.propertyWebInfo?.azReference : ''
     });
   }
 
@@ -217,7 +217,7 @@ export class DetailsComponent implements OnInit {
       carbonMonoxideDetectors: this.propertyDetails?.carbonMonoxideDetectors ? this.propertyDetails?.carbonMonoxideDetectors : '',
       coDetectorNo: this.propertyDetails?.coDetectorNo ? this.propertyDetails?.coDetectorNo : '',
       numberOfFireBlankets: this.propertyDetails?.numberOfFireBlankets ? this.propertyDetails?.numberOfFireBlankets : '',
-      numberOfFireExtinguishers: this.propertyDetails?.numberOfFireExtinguishers ? this.propertyDetails?.numberOfFireExtinguishers : '',
+      numberOfFireExtinguishers: this.propertyDetails?.numberOfFireExtinguishers ? this.propertyDetails?.numberOfFireExtinguishers : ''
     });
   }
 
@@ -242,7 +242,7 @@ export class DetailsComponent implements OnInit {
       organisationName: this.propertyDetails?.propertyInfo?.address.organisationName,
       floor: this.propertyDetails?.propertyDetails?.floor,
       block: this.propertyDetails?.propertyInfo?.block,
-      room: this.propertyDetails?.propertyInfo?.room,
+      room: this.propertyDetails?.propertyInfo?.room
     });
   }
 
