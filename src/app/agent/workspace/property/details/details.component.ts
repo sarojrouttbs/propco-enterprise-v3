@@ -89,7 +89,10 @@ export class DetailsComponent implements OnInit {
         phoneTwo: [''],
         internalNote: [''],
         fileNumber: [''],
-        azReference: ['']
+        azReference: [''],
+        marketingAs: [''],
+        landlordOccupancy: [''],
+        withdrawnReason: ['']
       }),
       letBoardForm: this._formBuilder.group({
         isBoardAllowed: [false],
@@ -110,6 +113,7 @@ export class DetailsComponent implements OnInit {
         hasLetBefore: [''],
         hasGas: [''],
         hasPat: [''],
+        hasPortableAppliances: [''],
         hasOil: [''],
         hasSolidFuel: [''],
         smokeDetectors: [''],
@@ -138,7 +142,8 @@ export class DetailsComponent implements OnInit {
         pafref: [''],
         organisationName: [''],
         floor: [''],
-        block: ['']
+        block: [''],
+        room: ['']
       })
     })
   }
@@ -203,6 +208,7 @@ export class DetailsComponent implements OnInit {
       hasLetBefore: this.propertyDetails?.propertyDetails?.hasLetBefore ? this.propertyDetails?.propertyDetails?.hasLetBefore : false,
       hasGas: this.propertyDetails?.propertyDetails?.hasGas ? this.propertyDetails?.propertyDetails?.hasGas : false,
       hasPat: this.propertyDetails?.propertyDetails?.hasPat ? this.propertyDetails?.propertyDetails?.hasPat : false,
+      hasPortableAppliances: this.propertyDetails?.propertyDetails?.hasPortableAppliances ? this.propertyDetails?.propertyDetails?.hasPortableAppliances : false,
       hasOil: this.propertyDetails?.propertyDetails?.hasOil ? this.propertyDetails?.propertyDetails?.hasOil : false,
       hasSolidFuel: this.propertyDetails?.propertyDetails?.hasSolidFuel ? this.propertyDetails?.propertyDetails?.hasSolidFuel : false,
       smokeDetectors: this.propertyDetails?.smokeDetectors ? this.propertyDetails?.smokeDetectors : '',
@@ -236,6 +242,7 @@ export class DetailsComponent implements OnInit {
       organisationName: this.propertyDetails?.propertyInfo?.address.organisationName,
       floor: this.propertyDetails?.propertyDetails?.floor,
       block: this.propertyDetails?.propertyInfo?.block,
+      room: this.propertyDetails?.propertyInfo?.room,
     });
   }
 
