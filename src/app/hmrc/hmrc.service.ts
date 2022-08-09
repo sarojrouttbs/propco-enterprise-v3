@@ -51,7 +51,10 @@ export class HmrcService {
   }
 
   downloadPdf(url: any): Observable<Blob> {
-    console.log(url,'url')
     return this.httpClient.get(url, { responseType: 'blob' });
+  }
+
+  getUserBatch(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `hmrc/user/batch`);
   }
 }

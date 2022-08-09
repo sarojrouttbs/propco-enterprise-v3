@@ -6,6 +6,7 @@ import { interval } from 'rxjs';
 import { DATE_FORMAT, DEFAULTS, HMRC_CONFIG, PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
 import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/preview-pdf-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { BatchDetail } from '../../hmrc-modal';
 import { HmrcService } from '../../hmrc.service';
 
 @Component({
@@ -34,7 +35,7 @@ export class ProgressSummaryComponent implements OnInit {
     finalUrl: null,
     blobUrl: null
   };
-  batchDetails: any;
+  batchDetails: BatchDetail;
   currentDate = new Date();
   DATE_FORMAT = DATE_FORMAT;
 
@@ -103,21 +104,31 @@ export class ProgressSummaryComponent implements OnInit {
     });
   }
 
-  startTimer() {
-    const timer = interval(5000).subscribe((sec) => {
-      // this.getBatchCount();
-
-      //unsubscribe if the process is complete
+  private startTimer() {
+    const timer = interval(10000).subscribe(() => {
+      this.refreshBatchDetails();
+      /* unsubscribe if the process is complete */
       if (this.finalCount == 1)
         timer.unsubscribe();
     });
+  }
+
+  private async refreshBatchDetails() {
+    const existingBatchDetails = await this.getBatchDetails() as BatchDetail;
+    this.batchDetails = existingBatchDetails;
+    if (existingBatchDetails) {
+      await this.getBatchCount();
+      if (existingBatchDetails.isCompleted) {
+        this.finalCount = 1;
+      }
+    }
   }
 
   getBatchCount() {
     const params = new HttpParams().set('hideLoader', true);
     return new Promise((resolve) => {
       this.hmrcService.getBatchCount(this.formObj.batchId, params).subscribe((res) => {
-        const response = res && res.data ? res.data : '';
+        const response: any = res && res.data ? res.data : '';
         response.forEach(element => {
           if (element.statementPreference !== null) {
             this.batchList = this.statementPreferences.map((x) => {
@@ -150,11 +161,18 @@ export class ProgressSummaryComponent implements OnInit {
   private async initPdfDownloadProcess() {
     this.PDF_CONFIG.baseUrl = await this.getSystemConfig(SYSTEM_CONFIG.HMRC_BATCH_PRINT_BASE_URL);
     this.PDF_CONFIG.folderName = await this.getSystemConfig(SYSTEM_CONFIG.HMRC_BATCH_PRINT_FOLDER);
-    this.batchDetails = await this.getBatchDetails() as any;
-    this.createPdfUrl();
+    this.batchDetails = await this.getBatchDetails() as BatchDetail;
+    if (this.batchDetails && this.batchDetails.printFilePath) {
+      this.createPdfUrl();
+    }
   }
 
   async previewPdf() {
+    if (this.batchDetails && this.batchDetails.printFilePath === null) {
+      /* show message to user if there is no success record */
+      this.commonService.showAlert('HMRC Progress Summary', 'No success records found');
+      return;
+    }
     const modal = await this.modalController.create({
       component: PreviewPdfModalPage,
       cssClass: 'modal-container preview-pdf-modal-container',
@@ -170,7 +188,7 @@ export class ProgressSummaryComponent implements OnInit {
   }
 
   private getBatchDetails() {
-    const batchId = 'a3c7b2f7-ce5b-4700-bd56-d6355c1a87dc';
+    const batchId = this.formObj.batchId;
     return new Promise((resolve) => {
       this.hmrcService.getHmrcBatchDetails(batchId).subscribe(
         (res) => {
