@@ -17,7 +17,7 @@
       <form [formGroup]="group">
         <ion-grid id="property-check-grid">
           <ion-row>
-            <ion-col size="33.3" class="switch-block">
+            <ion-col size="40" class="switch-block">
               <ion-row> 
                 <ion-col size="100">
                   <ion-item lines="none" class="ion-align-self-end">
@@ -37,33 +37,40 @@
                   <ion-item lines="none" class="ion-align-self-end">
                     <ion-toggle formControlName="hasPat" color="primary">
                     </ion-toggle>
-                    <ion-label>Does property have PAT?</ion-label>
+                    <ion-label>Does property have PA test?</ion-label>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="100">
+                  <ion-item lines="none" class="ion-align-self-end">
+                    <ion-toggle formControlName="hasPortableAppliances" color="primary">
+                    </ion-toggle>
+                    <ion-label>Does property have portable appliances?</ion-label>
                   </ion-item>
                 </ion-col>
                 <ion-col size="100">
                   <ion-item lines="none" class="ion-align-self-end">
                     <ion-toggle formControlName="hasElectricalIndemnitySigned" color="primary">
                     </ion-toggle>
-                    <ion-label>Electrical indemnity signed by landlord?</ion-label>
+                    <ion-label>Electrical indemnity signed by LL?</ion-label>
                   </ion-item>
                 </ion-col>
                 <ion-col size="100">
                   <ion-item lines="none" class="ion-align-self-end">
                     <ion-toggle formControlName="hasOil" color="primary">
                     </ion-toggle>
-                    <ion-label>Does property have oil?</ion-label>
+                    <ion-label>Does property have Oil?</ion-label>
                   </ion-item>
                 </ion-col>
                 <ion-col size="100">
                   <ion-item lines="none" class="ion-align-self-end">
                     <ion-toggle formControlName="hasSolidFuel" color="primary">
                     </ion-toggle>
-                    <ion-label>Does property have solid fuel?</ion-label>
+                    <ion-label>Does property have Solid Fuel?</ion-label>
                   </ion-item>
                 </ion-col>
               </ion-row>
             </ion-col>
-            <ion-col size="33.3" class="input-block">
+            <ion-col size="30" class="input-block">
               <ion-row>
                 <ion-col>
                   <ion-item>
@@ -99,7 +106,7 @@
                 </ion-col>
               </ion-row>
             </ion-col>
-            <ion-col size="33.3" class="input-block">
+            <ion-col size="30" class="input-block">
               <ion-row >
                 <ion-col>
                   <ion-item>

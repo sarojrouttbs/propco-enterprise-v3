@@ -106,7 +106,6 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIG
     OpenStreetMapComponent,
     AgreementDetailsComponent,
     AgreementHistoryComponent,
-    PercentageDirective,
     ComplianceRecordsComponent
   ],
   providers: [

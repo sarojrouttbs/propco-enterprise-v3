@@ -23,7 +23,7 @@
                 <ion-col>
                   <ion-item>
                     <ion-label position="floating">Postcode <ion-text class="mandatory">*</ion-text></ion-label>
-                    <ion-input formControlName="postcode"  (input)="toUpperCase('postcode', $event);"></ion-input>
+                    <ion-input formControlName="postcode" (input)="toUpperCase('postcode', $event);"></ion-input>
                   </ion-item>
                   <app-validation-message [control]="group.controls.postcode"></app-validation-message>
                 </ion-col>
@@ -66,16 +66,22 @@
             </ion-col>
              <ion-col size="33" class="no-padding">
               <ion-row>
-                <ion-col size="50">
+                <ion-col size="33.3">
                   <ion-item>
                     <ion-label position="floating">Block</ion-label>
                     <ion-input formControlName="block"></ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col size="50">
+                <ion-col size="33.3">
                   <ion-item>
                     <ion-label position="floating">Floor</ion-label>
                     <ion-input formControlName="floor"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="33.3">
+                  <ion-item>
+                    <ion-label position="floating">Room/Flat</ion-label>
+                    <ion-input formControlName="room"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="100">
