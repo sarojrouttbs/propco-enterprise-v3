@@ -21,8 +21,9 @@ export class PropertyAddressComponent {
     if (this.group.get('postcode').value == null) {
       return;
     }
-    this.group.get('addressdetails').setValue('');
     const postcode = this.group.get('postcode').value;
+    this.group.reset();
+    this.group.get('postcode').setValue(postcode);
     if (postcode) {
       this.lookupLoader = true;
       this.commonService.getPostcodeAddressList(postcode).subscribe(res => {
