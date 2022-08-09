@@ -1,5 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { interval } from 'rxjs';
 import { DEFAULTS, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -26,7 +27,9 @@ export class ProgressSummaryComponent implements OnInit {
 
   constructor(
     private hmrcService: HmrcService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -127,4 +130,7 @@ export class ProgressSummaryComponent implements OnInit {
     });
   }
 
+  redirectToHome() {
+    this.router.navigate(['../self-assessment-form'], { replaceUrl: true, relativeTo: this.route });
+  }
 }
