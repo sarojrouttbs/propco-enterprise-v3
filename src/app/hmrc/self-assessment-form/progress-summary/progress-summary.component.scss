@@ -47,4 +47,15 @@
     td {
         color: var(--ion-color-one);
     }
+
+    .action-panel {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        .info-icon {
+            font-size: 29px;
+            pointer-events: none;
+            margin-top: 2px;
+        }
+    }
 }

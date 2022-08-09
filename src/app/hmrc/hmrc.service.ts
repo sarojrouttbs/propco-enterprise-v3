@@ -42,11 +42,16 @@ export class HmrcService {
     return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}/count`);
   }
 
-  getHMRCBatchDetails(batchId: string): Observable<any> {
+  getHmrcBatchDetails(batchId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}`);
   }
 
   getLandlordBatchCount(params: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `hmrc/landlords/batch-count`, { params });
+  }
+
+  downloadPdf(url: any): Observable<Blob> {
+    console.log(url,'url')
+    return this.httpClient.get(url, { responseType: 'blob' });
   }
 }
