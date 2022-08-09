@@ -108,7 +108,7 @@ export class ProgressSummaryComponent implements OnInit {
     const timer = interval(10000).subscribe(() => {
       this.refreshBatchDetails();
       /* unsubscribe if the process is complete */
-      if (this.finalCount == 1)
+      if (this.finalCount === 1)
         timer.unsubscribe();
     });
   }
@@ -206,7 +206,7 @@ export class ProgressSummaryComponent implements OnInit {
       this.PDF_CONFIG.finalUrl = this.PDF_CONFIG.baseUrl + this.PDF_CONFIG.folderName + '/' + this.batchDetails.printFilePath;
       const pdfBlob = await this.getPdfBlob() as Blob;
       if (pdfBlob) {
-        const newBlob = new Blob([pdfBlob], { type: "application/pdf" });
+        const newBlob = new Blob([pdfBlob], { type: 'application/pdf' });
         const blobUrl = window.URL.createObjectURL(newBlob);
         this.PDF_CONFIG.blobUrl = blobUrl;
       }
