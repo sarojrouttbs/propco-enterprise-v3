@@ -104,7 +104,6 @@ export class ProgressSummaryComponent implements OnInit {
     return new Promise((resolve) => {
       this.hmrcService.getBatchCount("82a03fab-4b58-46e7-a0e6-ca62e91fab74", params).subscribe((res) => {
         const response = res && res.data ? res.data : '';
-
         response.forEach(element => {
           if (element.statementPreference !== null) {
             this.batchList = this.statementPreferences.map((x) => {
