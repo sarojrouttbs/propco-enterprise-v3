@@ -5,6 +5,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { HmrcService } from '../hmrc.service';
 import { DATE_FORMAT, HMRC_CONFIG, SYSTEM_CONFIG } from 'src/app/shared/constants';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-self-assessment-form',
@@ -27,7 +28,8 @@ export class SelfAssessmentFormComponent implements OnInit {
     private fb: FormBuilder,
     private hmrcService: HmrcService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private commonService: CommonService
   ) { }
 
   ngOnInit() {
@@ -50,7 +52,8 @@ export class SelfAssessmentFormComponent implements OnInit {
       selectedPropertyLinkIds: null,
       deselectedPropertyLinkIds: null,
       statementPreference: null,
-      taxHandler: null
+      taxHandler: null,
+      batchId: ''
     });
   }
 
@@ -103,26 +106,29 @@ export class SelfAssessmentFormComponent implements OnInit {
   }
 
   generateHMRC() {
-    this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
-    return;
+    this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
     const params = {
       accountType: HMRC_CONFIG.HMRC_SENDER_EMAIL_ACCOUNT,
       financialYearDateRange: {
         from: this.selfAssessmentForm.value.from,
         to: this.selfAssessmentForm.value.to
       },
-      deselectedPropertyLinkIds: this.selfAssessmentForm.value.deselectedPropertyLinkIds,
-      managementType: this.selfAssessmentForm.value.managementType,
-      propertyOffice: this.selfAssessmentForm.value.propertyOffice,
+      deselectedPropertyLinkIds: this.selfAssessmentForm.value.deselectedPropertyLinkIds ? this.selfAssessmentForm.value.deselectedPropertyLinkIds : [],
+      managementType: this.selfAssessmentForm.value.managementType ? this.selfAssessmentForm.value.managementType : [],
+      propertyOffice: this.selfAssessmentForm.value.propertyOffice ? this.selfAssessmentForm.value.propertyOffice : [],
       searchOnColumns: this.selfAssessmentForm.value.searchOnColumns,
       searchText: this.selfAssessmentForm.value.valuesearchText,
-      selectedPropertyLinkIds: this.selfAssessmentForm.value.selectedPropertyLinkIds,
+      selectedPropertyLinkIds: this.selfAssessmentForm.value.selectedPropertyLinkIds ? this.selfAssessmentForm.value.selectedPropertyLinkIds : [],
       taxHandler: this.selfAssessmentForm.value.taxHandler
     }
     return new Promise((resolve) => {
-      this.hmrcService.generateHMRC(params).subscribe((res) => {        
+      this.hmrcService.generateHMRC(params).subscribe((res) => {
+        if (res) {
+          const response = JSON.parse(res);
+          this.selfAssessmentForm.get('batchId').patchValue(response.batchId)
+        }
+        this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
         this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
-
         resolve(true);
       });
     });
