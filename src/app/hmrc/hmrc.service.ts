@@ -38,8 +38,8 @@ export class HmrcService {
     return this.httpClient.post(environment.API_BASE_URL + `hmrc`, requestObj);
   }
 
-  getBatchCount(batchId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}/count`);
+  getBatchCount(batchId: string, params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}/count`, { params });
   }
 
   getHmrcBatchDetails(batchId: string): Observable<any> {

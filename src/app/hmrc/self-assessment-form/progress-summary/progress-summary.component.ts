@@ -1,7 +1,9 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { DATE_FORMAT, HMRC_CONFIG, SYSTEM_CONFIG } from 'src/app/shared/constants';
+import { interval } from 'rxjs';
+import { DATE_FORMAT, DEFAULTS, HMRC_CONFIG, PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
 import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/preview-pdf-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { HmrcService } from '../../hmrc.service';
@@ -12,6 +14,19 @@ import { HmrcService } from '../../hmrc.service';
   styleUrls: ['./progress-summary.component.scss'],
 })
 export class ProgressSummaryComponent implements OnInit {
+  batchCount: any;
+  lookupdata: any;
+  statementPreferences: any;
+  batchList: any;
+  NOT_AVAILABLE = DEFAULTS.NOT_AVAILABLE;
+  totalSuccess: any;
+  totalFinalRecords = 0;
+  totalSuccessRecords = 0;
+  failureRecords = 0;
+  finalCount = 0;
+  progressBarColor = 'danger';
+  percentage = 0;
+  formObj = this.commonService.getItem('HMRC_FILTER', true);
   HMRC_CONFIG = HMRC_CONFIG;
   PDF_CONFIG = {
     baseUrl: null,
@@ -21,12 +36,115 @@ export class ProgressSummaryComponent implements OnInit {
   };
   batchDetails: any;
   currentDate = new Date();
-  DATE_FORMAT = DATE_FORMAT
+  DATE_FORMAT = DATE_FORMAT;
 
-  constructor(private hmrcService: HmrcService, private modalController: ModalController, private commonService: CommonService) { }
+  constructor(
+    private hmrcService: HmrcService,
+    private commonService: CommonService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private modalController: ModalController
+  ) { }
 
   ngOnInit() {
+    this.getLookupData();
+    this.startTimer();
+    this.getLandlordBatchCount();
+    this.getBatchCount();
     this.initPdfDownloadProcess();
+  }
+
+  private getLookupData() {
+    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
+    if (this.lookupdata) {
+      this.setLookupData(this.lookupdata);
+    } else {
+      this.commonService.getLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
+        this.lookupdata = data;
+        this.setLookupData(data);
+      });
+    }
+  }
+
+  private setLookupData(data: any) {
+    this.statementPreferences = data.statementPreferences;
+  }
+
+  getLandlordBatchCount() {
+    const reqObj: any = {
+      managementType: this.formObj.managementType ? this.formObj.managementType : [],
+      propertyOffice: this.formObj.propertyOffice ? this.formObj.propertyOffice : [],
+      selectedPropertyLinkIds: this.formObj.selectedPropertyLinkIds ? this.formObj.selectedPropertyLinkIds : [],
+      deselectedPropertyLinkIds: this.formObj.deselectedPropertyLinkIds ? this.formObj.deselectedPropertyLinkIds : [],
+      taxHandler: this.formObj.taxHandler
+    }
+    if (this.formObj.searchText)
+      reqObj.searchText = this.formObj.searchText;
+    if (this.formObj.searchOnColumns)
+      reqObj.searchOnColumns = this.formObj.searchOnColumns;
+
+    return new Promise((resolve) => {
+      this.hmrcService.getLandlordBatchCount(reqObj).subscribe((res) => {
+        const response = res && res.data ? res.data : '';
+        response.forEach(element => {
+          if (element.statementPreference !== null) {
+            this.batchList = this.statementPreferences.map((x) => {
+              if (x.index == element.statementPreference) {
+                x.totalRecords = element.statementPreferenceCount;
+                this.totalFinalRecords += element.statementPreferenceCount;
+              }
+              return x;
+            });
+          }
+        });
+        resolve(true);
+      });
+    });
+  }
+
+  startTimer() {
+    const timer = interval(5000).subscribe((sec) => {
+      // this.getBatchCount();
+
+      //unsubscribe if the process is complete
+      if (this.finalCount == 1)
+        timer.unsubscribe();
+    });
+  }
+
+  getBatchCount() {
+    const params = new HttpParams().set('hideLoader', true);
+    return new Promise((resolve) => {
+      this.hmrcService.getBatchCount(this.formObj.batchId, params).subscribe((res) => {
+        const response = res && res.data ? res.data : '';
+        response.forEach(element => {
+          if (element.statementPreference !== null) {
+            this.batchList = this.statementPreferences.map((x) => {
+              if (x.index == element.statementPreference) {
+                x.totalSuccess = element.statementPreferenceCount;
+                this.totalSuccessRecords += element.statementPreferenceCount;
+                // this.totalSuccessRecords += 3;
+                // this.failureRecords += 2;
+                this.finalCount = (this.totalSuccessRecords + this.failureRecords) / this.totalFinalRecords;
+                // this.finalCount = (this.totalSuccessRecords + this.failureRecords) / 1000;
+                this.percentage = (this.finalCount * 100);
+                if (this.finalCount >= 0.33 && this.finalCount < 0.66)
+                  this.progressBarColor = 'warning';
+                if (this.finalCount >= 0.66)
+                  this.progressBarColor = 'success';
+              }
+              return x;
+            });
+          }
+        });
+        resolve(true);
+      });
+    });
+  }
+
+  redirectToHome() {
+    this.router.navigate(['../self-assessment-form'], { replaceUrl: true, relativeTo: this.route });
   }
 
   private async initPdfDownloadProcess() {
@@ -94,5 +212,4 @@ export class ProgressSummaryComponent implements OnInit {
       });
     });
   }
-
 }
