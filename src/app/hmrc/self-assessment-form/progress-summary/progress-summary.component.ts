@@ -24,6 +24,7 @@ export class ProgressSummaryComponent implements OnInit {
   finalCount = 0;
   progressBarColor = 'danger';
   percentage = 0;
+  formObj = this.commonService.getItem('HMRC_FILTER', true);
 
   constructor(
     private hmrcService: HmrcService,
@@ -57,18 +58,17 @@ export class ProgressSummaryComponent implements OnInit {
   }
 
   getLandlordBatchCount() {
-    const filter = this.commonService.getItem('HMRC_FILTER', true);
     const reqObj: any = {
-      managementType: filter.managementType ? filter.managementType : [],
-      propertyOffice: filter.propertyOffice ? filter.propertyOffice : [],
-      selectedPropertyLinkIds: filter.selectedPropertyLinkIds ? filter.selectedPropertyLinkIds : [],
-      deselectedPropertyLinkIds: filter.deselectedPropertyLinkIds ? filter.deselectedPropertyLinkIds : [],
-      taxHandler: filter.taxHandler
+      managementType: this.formObj.managementType ? this.formObj.managementType : [],
+      propertyOffice: this.formObj.propertyOffice ? this.formObj.propertyOffice : [],
+      selectedPropertyLinkIds: this.formObj.selectedPropertyLinkIds ? this.formObj.selectedPropertyLinkIds : [],
+      deselectedPropertyLinkIds: this.formObj.deselectedPropertyLinkIds ? this.formObj.deselectedPropertyLinkIds : [],
+      taxHandler: this.formObj.taxHandler
     }
-    if (filter.searchText)
-      reqObj.searchText = filter.searchText;
-    if (filter.searchOnColumns)
-      reqObj.searchOnColumns = filter.searchOnColumns;
+    if (this.formObj.searchText)
+      reqObj.searchText = this.formObj.searchText;
+    if (this.formObj.searchOnColumns)
+      reqObj.searchOnColumns = this.formObj.searchOnColumns;
 
     return new Promise((resolve) => {
       this.hmrcService.getLandlordBatchCount(reqObj).subscribe((res) => {
@@ -102,7 +102,7 @@ export class ProgressSummaryComponent implements OnInit {
   getBatchCount() {
     const params = new HttpParams().set('hideLoader', true);
     return new Promise((resolve) => {
-      this.hmrcService.getBatchCount("82a03fab-4b58-46e7-a0e6-ca62e91fab74", params).subscribe((res) => {
+      this.hmrcService.getBatchCount(this.formObj.batchId, params).subscribe((res) => {
         const response = res && res.data ? res.data : '';
         response.forEach(element => {
           if (element.statementPreference !== null) {
