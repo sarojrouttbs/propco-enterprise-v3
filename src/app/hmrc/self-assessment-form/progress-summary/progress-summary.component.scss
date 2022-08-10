@@ -58,4 +58,11 @@
     .button-margin {
         margin-right: 16px;
     }
+
+    ion-progress-bar{
+        height: 6px;
+    }
+    .mandatory{
+        color: var(--ion-color-primary);
+    }
 }

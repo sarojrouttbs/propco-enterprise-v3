@@ -20,7 +20,7 @@ export class ProgressSummaryComponent implements OnInit {
   totalSuccess: any;
   totalFinalRecords = 0;
   totalSuccessRecords = 0;
-  failureRecords = 0;
+  totalFailureRecords = 0;
   finalCount = 0;
   progressBarColor = 'danger';
   percentage = 0;
@@ -78,6 +78,7 @@ export class ProgressSummaryComponent implements OnInit {
             this.batchList = this.statementPreferences.map((x) => {
               if (x.index == element.statementPreference) {
                 x.totalRecords = element.statementPreferenceCount;
+                x.totalFailure = 
                 this.totalFinalRecords += element.statementPreferenceCount;
               }
               return x;
@@ -91,7 +92,7 @@ export class ProgressSummaryComponent implements OnInit {
 
   startTimer() {
     const timer = interval(5000).subscribe((sec) => {
-      // this.getBatchCount();
+      this.getBatchCount();
 
       //unsubscribe if the process is complete
       if (this.finalCount == 1)
@@ -108,13 +109,16 @@ export class ProgressSummaryComponent implements OnInit {
           if (element.statementPreference !== null) {
             this.batchList = this.statementPreferences.map((x) => {
               if (x.index == element.statementPreference) {
-                x.totalSuccess = element.statementPreferenceCount;
-                this.totalSuccessRecords += element.statementPreferenceCount;
-                // this.totalSuccessRecords += 3;
-                // this.failureRecords += 2;
-                this.finalCount = (this.totalSuccessRecords + this.failureRecords) / this.totalFinalRecords;
-                // this.finalCount = (this.totalSuccessRecords + this.failureRecords) / 1000;
-                this.percentage = (this.finalCount * 100);
+                x.totalSuccess = element.successCount;
+                x.totalFailure = element.failureCount
+                // this.totalSuccessRecords += (element.successCount ? element.successCount : 0);
+                // this.failureRecords += (element.failureCount ? element.failureCount : 0 );
+
+                this.totalSuccessRecords += 3;
+                this.totalFailureRecords += 2;
+                // this.finalCount = (this.totalSuccessRecords + this.failureRecords) / this.totalFinalRecords;
+                this.finalCount = (this.totalSuccessRecords + this.totalFailureRecords) / 1000;
+                this.percentage = Math.round(this.finalCount * 100);
                 if (this.finalCount >= 0.33 && this.finalCount < 0.66)
                   this.progressBarColor = 'warning';
                 if (this.finalCount >= 0.66)
