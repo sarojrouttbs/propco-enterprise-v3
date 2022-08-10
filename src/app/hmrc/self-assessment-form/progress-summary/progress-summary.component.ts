@@ -23,7 +23,7 @@ export class ProgressSummaryComponent implements OnInit {
   totalSuccess: any;
   totalFinalRecords = 0;
   totalSuccessRecords = 0;
-  failureRecords = 0;
+  totalFailureRecords = 0;
   finalCount = 0;
   progressBarColor = 'danger';
   percentage = 0;
@@ -48,10 +48,13 @@ export class ProgressSummaryComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.initApi();
+  }
+
+  private async initApi() {
     this.getLookupData();
     this.startTimer();
     this.getLandlordBatchCount();
-    this.getBatchCount();
     this.initPdfDownloadProcess();
   }
 
@@ -93,7 +96,8 @@ export class ProgressSummaryComponent implements OnInit {
             this.batchList = this.statementPreferences.map((x) => {
               if (x.index == element.statementPreference) {
                 x.totalRecords = element.statementPreferenceCount;
-                this.totalFinalRecords += element.statementPreferenceCount;
+                x.totalFailure =
+                  this.totalFinalRecords += element.statementPreferenceCount;
               }
               return x;
             });
@@ -105,11 +109,15 @@ export class ProgressSummaryComponent implements OnInit {
   }
 
   private startTimer() {
-    const timer = interval(10000).subscribe(() => {
-      this.refreshBatchDetails();
+    const timer = interval(10000).subscribe((sec) => {
+      if (this.finalCount != 1)
+        this.refreshBatchDetails();
+
       /* unsubscribe if the process is complete */
-      if (this.finalCount === 1)
+      if (this.finalCount === 1) {
         timer.unsubscribe();
+        this.commonService.showMessage('We have successfully generated SA form for ' + this.totalSuccessRecords + ' records & saved the records in DMS.', 'Progress Summary', 'success');
+      }
     });
   }
 
@@ -118,9 +126,8 @@ export class ProgressSummaryComponent implements OnInit {
     this.batchDetails = existingBatchDetails;
     if (existingBatchDetails) {
       await this.getBatchCount();
-      if (existingBatchDetails.isCompleted) {
+      if (existingBatchDetails.isCompleted)
         this.finalCount = 1;
-      }
     }
   }
 
@@ -128,27 +135,32 @@ export class ProgressSummaryComponent implements OnInit {
     const params = new HttpParams().set('hideLoader', true);
     return new Promise((resolve) => {
       this.hmrcService.getBatchCount(this.formObj.batchId, params).subscribe((res) => {
-        const response: any = res && res.data ? res.data : '';
-        response.forEach(element => {
-          if (element.statementPreference !== null) {
-            this.batchList = this.statementPreferences.map((x) => {
-              if (x.index == element.statementPreference) {
-                x.totalSuccess = element.statementPreferenceCount;
-                this.totalSuccessRecords += element.statementPreferenceCount;
-                // this.totalSuccessRecords += 3;
-                // this.failureRecords += 2;
-                this.finalCount = (this.totalSuccessRecords + this.failureRecords) / this.totalFinalRecords;
-                // this.finalCount = (this.totalSuccessRecords + this.failureRecords) / 1000;
-                this.percentage = (this.finalCount * 100);
-                if (this.finalCount >= 0.33 && this.finalCount < 0.66)
-                  this.progressBarColor = 'warning';
-                if (this.finalCount >= 0.66)
-                  this.progressBarColor = 'success';
-              }
-              return x;
-            });
-          }
-        });
+        const response = res && res.data ? res.data : '';
+        this.totalSuccessRecords = 0;
+        this.totalFailureRecords = 0;
+        if (response) {
+          response.forEach(element => {
+            if (element.statementPreference !== null) {
+              this.batchList = this.statementPreferences.map((x) => {
+                if (x.index == element.statementPreference) {
+                  x.totalSuccess = (element.successCount ? element.successCount : 0);
+                  x.totalFailure = (element.failureCount ? element.failureCount : 0);
+                  this.totalSuccessRecords += x.totalSuccess;
+                  this.totalFailureRecords += x.totalFailure;
+                  //check totalFinalRecords is greator than 0 or not othere wise finalCount will show infinit as output
+                  if (this.totalFinalRecords > 0)
+                    this.finalCount = (this.totalSuccessRecords + this.totalFailureRecords) / this.totalFinalRecords;
+                  this.percentage = Math.round(this.finalCount * 100);
+                  if (this.finalCount >= 0.33 && this.finalCount < 0.66)
+                    this.progressBarColor = 'warning';
+                  if (this.finalCount >= 0.66)
+                    this.progressBarColor = 'success';
+                }
+                return x;
+              });
+            }
+          });
+        }
         resolve(true);
       });
     });
@@ -159,10 +171,10 @@ export class ProgressSummaryComponent implements OnInit {
   }
 
   private async initPdfDownloadProcess() {
-    this.PDF_CONFIG.baseUrl = await this.getSystemConfig(SYSTEM_CONFIG.HMRC_BATCH_PRINT_BASE_URL);
-    this.PDF_CONFIG.folderName = await this.getSystemConfig(SYSTEM_CONFIG.HMRC_BATCH_PRINT_FOLDER);
     this.batchDetails = await this.getBatchDetails() as BatchDetail;
     if (this.batchDetails && this.batchDetails.printFilePath) {
+      this.PDF_CONFIG.baseUrl = await this.getSystemConfig(SYSTEM_CONFIG.HMRC_BATCH_PRINT_BASE_URL);
+      this.PDF_CONFIG.folderName = await this.getSystemConfig(SYSTEM_CONFIG.HMRC_BATCH_PRINT_FOLDER);
       this.createPdfUrl();
     }
   }
