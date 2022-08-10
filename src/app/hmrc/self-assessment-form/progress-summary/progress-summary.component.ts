@@ -78,8 +78,8 @@ export class ProgressSummaryComponent implements OnInit {
             this.batchList = this.statementPreferences.map((x) => {
               if (x.index == element.statementPreference) {
                 x.totalRecords = element.statementPreferenceCount;
-                x.totalFailure = 
-                this.totalFinalRecords += element.statementPreferenceCount;
+                x.totalFailure =
+                  this.totalFinalRecords += element.statementPreferenceCount;
               }
               return x;
             });
@@ -95,8 +95,10 @@ export class ProgressSummaryComponent implements OnInit {
       this.getBatchCount();
 
       //unsubscribe if the process is complete
-      if (this.finalCount == 1)
+      if (this.finalCount == 1) {
         timer.unsubscribe();
+        this.commonService.showMessage('We have successfully generated SA form for ' + this.totalSuccessRecords + ' records & saved the records in DMS.', 'Progress Summary', 'success');
+      }
     });
   }
 
@@ -105,29 +107,31 @@ export class ProgressSummaryComponent implements OnInit {
     return new Promise((resolve) => {
       this.hmrcService.getBatchCount(this.formObj.batchId, params).subscribe((res) => {
         const response = res && res.data ? res.data : '';
-        response.forEach(element => {
-          if (element.statementPreference !== null) {
-            this.batchList = this.statementPreferences.map((x) => {
-              if (x.index == element.statementPreference) {
-                x.totalSuccess = element.successCount;
-                x.totalFailure = element.failureCount
-                // this.totalSuccessRecords += (element.successCount ? element.successCount : 0);
-                // this.failureRecords += (element.failureCount ? element.failureCount : 0 );
-
-                this.totalSuccessRecords += 3;
-                this.totalFailureRecords += 2;
-                // this.finalCount = (this.totalSuccessRecords + this.failureRecords) / this.totalFinalRecords;
-                this.finalCount = (this.totalSuccessRecords + this.totalFailureRecords) / 1000;
-                this.percentage = Math.round(this.finalCount * 100);
-                if (this.finalCount >= 0.33 && this.finalCount < 0.66)
-                  this.progressBarColor = 'warning';
-                if (this.finalCount >= 0.66)
-                  this.progressBarColor = 'success';
-              }
-              return x;
-            });
-          }
-        });
+        this.totalSuccessRecords = 0;
+        this.totalFailureRecords = 0;
+        if (response) {
+          response.forEach(element => {
+            if (element.statementPreference !== null) {
+              this.batchList = this.statementPreferences.map((x) => {
+                if (x.index == element.statementPreference) {
+                  x.totalSuccess = (element.successCount ? element.successCount : 0);
+                  x.totalFailure = (element.failureCount ? element.failureCount : 0);
+                  this.totalSuccessRecords += x.totalSuccess;
+                  this.totalFailureRecords += x.totalFailure;
+                  //check totalFinalRecords is greator than 0 or not othere wise finalCount will show infinit as output
+                  if (this.totalFinalRecords > 0)
+                    this.finalCount = (this.totalSuccessRecords + this.totalFailureRecords) / this.totalFinalRecords;
+                  this.percentage = Math.round(this.finalCount * 100);
+                  if (this.finalCount >= 0.33 && this.finalCount < 0.66)
+                    this.progressBarColor = 'warning';
+                  if (this.finalCount >= 0.66)
+                    this.progressBarColor = 'success';
+                }
+                return x;
+              });
+            }
+          });
+        }
         resolve(true);
       });
     });

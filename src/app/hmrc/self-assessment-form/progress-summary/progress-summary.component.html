@@ -7,12 +7,12 @@
       <ion-col size="100" class="element-margin">
         <ion-progress-bar [value]="finalCount" [color]="progressBarColor" matTooltip="{{percentage+'%'}}">
         </ion-progress-bar>
-        <ion-label>{{percentage}}%</ion-label>
+        <ion-label class="ion-float-right">{{percentage}}%</ion-label>
       </ion-col>
       <ion-col class="no-padding-bottom" class="table-block" size="100">
         <table aria-label="progressSummary">
           <tr>
-            <th>Action Items</th>
+            <th class="action-item">Action Items</th>
             <th>Number of Records</th>
             <th>Success</th>
             <th>Failure</th>
@@ -28,9 +28,9 @@
               <ion-text class="mandatory" *ngIf="batch?.index === 6 || batch?.index === 1 || batch?.index === 0">*
               </ion-text> Records with preferance as "{{batch?.value}}" {{batch?.index}}
             </td>
-            <td>{{batch?.totalRecords || NOT_AVAILABLE}}</td>
-            <td>{{batch?.totalSuccess || NOT_AVAILABLE}}</td>
-            <td>{{batch?.totalFailure || NOT_AVAILABLE}}</td>
+            <td>{{batch?.totalRecords || 0}}</td>
+            <td>{{batch?.totalSuccess || 0}}</td>
+            <td>{{batch?.totalFailure || 0}}</td>
           </tr>
         </table>
       </ion-col>
