@@ -1,14 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-
 import { AddressModalPageRoutingModule } from './address-modal-routing.module';
-
 import { AddressModalPage } from './address-modal.page';
 import { ComponentsModule } from '../../components/components.module';
-import { PostcodeDirective } from 'src/app/postcode.directive';
+import { PostcodeDirectiveModule } from '../../directives/postcode-directive.module';
+
 
 @NgModule({
   imports: [
@@ -17,8 +15,9 @@ import { PostcodeDirective } from 'src/app/postcode.directive';
     ReactiveFormsModule,
     IonicModule,
     AddressModalPageRoutingModule,
-    ComponentsModule
+    ComponentsModule,
+    PostcodeDirectiveModule
   ],
-  declarations: [AddressModalPage, PostcodeDirective]
+  declarations: [AddressModalPage]
 })
 export class AddressModalPageModule {}
