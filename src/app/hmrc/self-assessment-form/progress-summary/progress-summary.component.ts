@@ -48,6 +48,10 @@ export class ProgressSummaryComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.initApi();
+  }
+
+  private async initApi() {
     this.getLookupData();
     this.startTimer();
     this.getLandlordBatchCount();
@@ -150,7 +154,7 @@ export class ProgressSummaryComponent implements OnInit {
                   if (this.finalCount >= 0.33 && this.finalCount < 0.66)
                     this.progressBarColor = 'warning';
                   if (this.finalCount >= 0.66)
-                    this.progressBarColor = 'success';                    
+                    this.progressBarColor = 'success';
                 }
                 return x;
               });
@@ -167,10 +171,10 @@ export class ProgressSummaryComponent implements OnInit {
   }
 
   private async initPdfDownloadProcess() {
-    this.PDF_CONFIG.baseUrl = await this.getSystemConfig(SYSTEM_CONFIG.HMRC_BATCH_PRINT_BASE_URL);
-    this.PDF_CONFIG.folderName = await this.getSystemConfig(SYSTEM_CONFIG.HMRC_BATCH_PRINT_FOLDER);
     this.batchDetails = await this.getBatchDetails() as BatchDetail;
     if (this.batchDetails && this.batchDetails.printFilePath) {
+      this.PDF_CONFIG.baseUrl = await this.getSystemConfig(SYSTEM_CONFIG.HMRC_BATCH_PRINT_BASE_URL);
+      this.PDF_CONFIG.folderName = await this.getSystemConfig(SYSTEM_CONFIG.HMRC_BATCH_PRINT_FOLDER);
       this.createPdfUrl();
     }
   }
