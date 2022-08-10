@@ -59,7 +59,6 @@
     .button-margin {
         margin-right: 16px;
     }
-
     ion-progress-bar {
         height: 8px;
         border-radius: 5px;
@@ -72,5 +71,15 @@
     }
     tr:nth-child(2) {
         font-weight: bold !important;
+    }
+    .action-panel {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        .info-icon {
+            @include set-text-style(29px, 33px);
+            pointer-events: none;
+            margin-top: 2px;
+        }
     }
 }
