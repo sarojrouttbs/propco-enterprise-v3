@@ -63,7 +63,7 @@
         align-items: center;
         justify-content: flex-end;
         .info-icon {
-            font-size: 29px;
+            @include set-text-style(29px, 18px);
             pointer-events: none;
             margin-top: 2px;
         }
