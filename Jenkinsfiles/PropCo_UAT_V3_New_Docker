@@ -1,0 +1,101 @@
+pipeline {
+  agent any
+
+tools {
+    jdk 'JDK 1.8_202'
+    nodejs 'Node 14.15'
+  }
+
+   options {
+    buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+    disableConcurrentBuilds(abortPrevious: true)    
+  }
+
+  stages {
+
+    stage('CleanWorkspace') {
+            steps {
+                cleanWs()
+            }
+          }
+ 
+    stage('Checkout Scm') {
+      steps {
+        git(credentialsId: 'dbc0e816-daf4-4270-8cfb-ffb85299211f', url: 'git@gitlab.techblue.co.uk:propco/propco-enterprise-v3.git',branch: 'staging')
+      }
+    }
+
+    stage('Npm build') {
+      steps {
+        nodejs('Node 14.15') {
+          withCredentials([string(credentialsId: 'httpd_pass', variable: 'httpd_password')]) {
+              sh '''VAL_API_BASE_URL="API_BASE_URL: 'https://saas-uat-api.propco.co.uk/v3-dev/api/'",
+                VAL_MEDIA_HOST_URL="MEDIA_HOST_URL: 'https://saas-uat.propco.co.uk/uat/',"
+                #VAL_WEB_KEY="WEB_KEY: '83e6d53a8ebf3a7fb93b449376730a31b9f641effe57d0b75dc1b7997d656c6de53c0c1e',"
+                #VAL_HOST_WEBURL="HOST_WEBURL: 'https://pentest.propco.co.uk/onboard/',"
+                VAL_PAYMENT_METHOD="PAYMENT_METHOD: 'BARCLAYCARD_REDIRECT',"
+
+                sed -i "/  API_BASE_URL/c\\  $VAL_API_BASE_URL" src/environments/*
+                sed -i "/  MEDIA_HOST_URL/c\\  $VAL_MEDIA_HOST_URL" src/environments/*
+                #sed -i "/  WEB_KEY/c\\  $VAL_WEB_KEY" src/environments/*
+                #sed -i "/  HOST_WEBURL/c\\  $VAL_HOST_WEBURL" src/environments/*
+                sed -i "/  PAYMENT_METHOD/c\\  $VAL_PAYMENT_METHOD" src/environments/*
+             '''
+             }
+           }
+         }
+         }
+
+    stage('SonarQube analysis') {
+          steps {
+              withSonarQubeEnv(credentialsId : 'ca459b6d-a028-462b-a363-ac91044d1358', installationName : 'Sonar') {
+                 sh '''
+                 /var/jenkins_home/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQube/bin/sonar-scanner
+                 '''
+                              
+                }  
+            }
+          }
+
+    stage('Execute Shell') {
+         steps {
+        sh '''npm i
+        #ionic build -- --base-href /propco-v3/
+        ionic build --prod -- --base-href /propco-v3/
+        '''
+      }
+    }
+
+   stage("Run Test Cases") {
+       when {
+           expression {
+               return null
+           }
+       }
+       steps {
+           echo "Dummy step!"
+        }
+   }
+
+
+      stage('Trigger UAT Nginx Docker build') {
+       steps {
+        build job: "PropCo_UAT_nginx_Docker", wait: false     
+            }
+         }    
+  
+ }
+
+  post {
+      always {
+	emailext body: '${SCRIPT,template="groovy-html.template"}',to: 'webteam@techblue.co.uk' , subject: currentBuild.currentResult + " : " + currentBuild.fullDisplayName
+      }
+      failure {
+        updateGitlabCommitStatus name: 'Jenkins job', state: 'failed'
+      }
+      success {
+        updateGitlabCommitStatus name: 'Jenkins job', state: 'success'
+      }
+  }
+
+}
