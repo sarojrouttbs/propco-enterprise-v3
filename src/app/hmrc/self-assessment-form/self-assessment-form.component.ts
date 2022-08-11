@@ -6,6 +6,7 @@ import { HmrcService } from '../hmrc.service';
 import { DATE_FORMAT, HMRC_CONFIG, SYSTEM_CONFIG } from 'src/app/shared/constants';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { BatchDetail } from '../hmrc-modal';
 
 @Component({
   selector: 'app-self-assessment-form',
@@ -35,6 +36,7 @@ export class SelfAssessmentFormComponent implements OnInit {
   ngOnInit() {
     this.initForm();
     this.getSystemConfig();
+    this.checkExistingBatch();
   }
 
   initForm() {
@@ -121,15 +123,52 @@ export class SelfAssessmentFormComponent implements OnInit {
       selectedPropertyLinkIds: this.selfAssessmentForm.value.selectedPropertyLinkIds ? this.selfAssessmentForm.value.selectedPropertyLinkIds : [],
       taxHandler: this.selfAssessmentForm.value.taxHandler
     }
-    return new Promise((resolve) => {
-      this.hmrcService.generateHMRC(params).subscribe((res) => {
-        if (res) {
-          const response = JSON.parse(res);
-          this.selfAssessmentForm.get('batchId').patchValue(response.batchId)
+    this.hmrcService.generateHMRC(params).subscribe((res) => {
+      if (res) {
+        const response = res;
+        this.selfAssessmentForm.get('batchId').patchValue(response.batchId)
+      }
+      this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
+      this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
+    });
+  }
+
+  private async checkExistingBatch() {
+    const existingBatch:any = await this.getUserBatch();
+    if (existingBatch) {
+      const existingBatchDetails = await this.getBatchDetails(existingBatch.batchId) as BatchDetail;
+      if (existingBatchDetails) {
+        if (!existingBatchDetails.isCompleted) {
+          /* Redirect to progress summary page if processing is not completed */
+          this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
+          this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
         }
-        this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
-        this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
-        resolve(true);
+      }
+    }
+  }
+
+
+  private getBatchDetails(batchId: string) {
+    return new Promise((resolve) => {
+      this.hmrcService.getHmrcBatchDetails(batchId).subscribe(
+        (res) => {
+          resolve(res ? res : null);
+        },
+        (error) => {
+          resolve(null);
+        }
+      );
+    });
+  }
+
+  private getUserBatch() {
+    return new Promise((resolve) => {
+      this.hmrcService.getUserBatch().subscribe((res) => {
+        if (res) {
+          resolve(res);
+        } else {
+          resolve(null);
+        }
       });
     });
   }
