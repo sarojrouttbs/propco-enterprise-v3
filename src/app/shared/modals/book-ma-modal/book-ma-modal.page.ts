@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { MarketAppraisalService } from 'src/app/market-appraisal/market-appraisal.service';
+import { DATE_FORMAT } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -20,7 +21,8 @@ export class BookMaModalPage implements OnInit {
   popoverOptions: any = {
     cssClass: 'market-apprisal-ion-select'
   };
-  
+  DATE_FORMAT = DATE_FORMAT;
+
   constructor(
     private formBuilder: FormBuilder,
     private modalController: ModalController,
@@ -30,7 +32,7 @@ export class BookMaModalPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.getAssignedUsers();
+    this.initApi();
   }
 
   initForm() {
@@ -48,8 +50,13 @@ export class BookMaModalPage implements OnInit {
     });
   }
 
+  async initApi() {
+    await this.getAssignedUsers();
+    this.getUserDetails();
+  }
+
   getAssignedUsers() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.maService.getAssignedUsers().subscribe(
         (res) => {
           this.users = res && res.data ? res.data : '';
@@ -60,20 +67,31 @@ export class BookMaModalPage implements OnInit {
         }
       );
     });
-    return promise;
+  }
+
+  private getUserDetails() {
+    return new Promise((resolve, reject) => {
+      this.commonService.getUserDetails().subscribe((res) => {
+        const userDeatil = res && res?.data ? res?.data[0] : '';
+        this.bookMaForm.get('assignToId').patchValue(userDeatil.userId);
+        resolve(true);
+      }, error => {
+        reject(error)
+      });
+    });
   }
 
   getSlots() {
-    if (this.bookMaForm.value.user && this.bookMaForm.value.date) {
+    if (this.bookMaForm.value.assignToId && this.bookMaForm.value.dueDate) {
       this.getAvailableSlots();
     }
   }
 
   getAvailableSlots() {
     let params = new HttpParams()
-      .set("assignTo", this.bookMaForm.value.user)
-      .set("viewingDate", this.commonService.getFormatedDate(this.bookMaForm.value.date));
-    const promise = new Promise((resolve, reject) => {
+      .set('assignTo', this.bookMaForm.value.assignToId)
+      .set('viewingDate', this.commonService.getFormatedDate(this.bookMaForm.value.dueDate));
+    return new Promise((resolve) => {
       this.maService.getAvailableSlots(params).subscribe(
         (res) => {
           this.timeSlots = res && res.data ? res.data : '';
@@ -84,7 +102,6 @@ export class BookMaModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   dismiss() {

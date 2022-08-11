@@ -1,6 +1,6 @@
 import { Directive, HostListener } from '@angular/core';
 import { NgControl } from '@angular/forms';
-import { REGEX } from './shared/constants';
+import { REGEX } from '../constants';
 
 @Directive({
   selector: '[postcode-validator]'

@@ -80,86 +80,143 @@
 </ng-container>
 
 <ng-container *ngIf="type == 'tenant'">
-  <ion-grid class="main-block">
-    <ion-row>
-      <ion-col>
-        <div class="landlord-tenant-header">
-          <ion-fab-button>
-            <span>TT</span>
-          </ion-fab-button>
-          <ion-text> &nbsp;Current Tenants ({{tenantList.length}}) </ion-text>
-        </div>
-      </ion-col>
-      <ion-col class="ion-text-right ion-align-self-center">
-        <span class="tenant-status">{{(selectedTenant?.status | lookup: tenantStatuses)}}</span>
-      </ion-col>
-    </ion-row>
-    <ng-container *ngIf="tenantList.length>0; then ifBlock else elseBlock"></ng-container>
-    <ng-template #ifBlock>
-      <ion-row>
-        <ion-col size="100">
-          <ion-select interface="popover" class="landlord-tenant-dropdown" [formControl]="tenantListCtrl"
-            (ionChange)="onTenantChange();">
-            <ion-select-option [value]="item.tenantId" *ngFor="let item of tenantList">
-              {{item.name || item.title +' '+ item.forename}}
-              <span *ngIf="item?.isLead"> - {{item?.isLead ? 'Primary' : 'Co-Tenant' }}</span>
-            </ion-select-option>
-          </ion-select>
-        </ion-col>
-      </ion-row>
-      <ion-row class="landlord-tenant-details">
-        <ion-col size="25">
-          <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
-          <ion-text> View </ion-text>
-        </ion-col>
-        <ion-col size="25">
-          <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
-          <ion-text><a href="mailto:{{selectedTenant?.email || notAvailable}}"> Email </a> </ion-text>
-        </ion-col>
-        <ion-col size="25">
-          <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
-          <ion-text (click)="openCallInfo(selectedTenant, 'tel')"> Tel </ion-text>
-        </ion-col>
-        <ion-col size="25">
-          <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
-          <ion-text (click)="openCallInfo(selectedTenant, 'mobile')"> Mobile </ion-text>
-        </ion-col>
-      </ion-row>
-
-      <ion-row class="rent-history-block">
-        <ion-col size="25">
-          <ion-label>Tenancy Start</ion-label><br>
-          <ion-text> - </ion-text>
-        </ion-col>
-        <ion-col size="25">
-          <ion-label>Tenancy End</ion-label><br>
-          <ion-text> - </ion-text>
-        </ion-col>
-        <ion-col size="50">
-          <ion-label>Term</ion-label><br>
-          <ion-text> - </ion-text>
-        </ion-col>
-      </ion-row>
-
-      <ion-row class="rent-detail-block">
-        <ion-col size="33.3">
-          <ion-label>Current Rent</ion-label><br>
-          <ion-text> - </ion-text>
-        </ion-col>
-        <ion-col size="33.3" class="middle-block">
-          <ion-label>Outstanding</ion-label><br>
-          <ion-text> - </ion-text>
-        </ion-col>
-        <ion-col size="33.3">
-          <ion-label>Deposit</ion-label><br>
-          <ion-text> - </ion-text>
-        </ion-col>
-      </ion-row>
-    </ng-template>
-    <ng-template #elseBlock>
-      <ion-row class="no-data">
-        There is no data to be shown
-      </ion-row>
-    </ng-template>
-  </ion-grid>
+  <ion-row>
+    <ion-col size="50" class="ion-no-padding">
+      <ion-grid class="main-block">
+        <ion-row>
+          <ion-col>
+            <div class="landlord-tenant-header">
+              <ion-fab-button>
+                <span>TT</span>
+              </ion-fab-button>
+              <ion-text> &nbsp;Current Tenants ({{tenantList.length}}) </ion-text>
+            </div>
+          </ion-col>
+          <ion-col class="ion-text-right ion-align-self-center">
+            <span class="tenant-status">{{(selectedTenant?.status | lookup: tenantStatuses)}}</span>
+          </ion-col>
+        </ion-row>
+        <ng-container *ngIf="tenantList.length>0; then ifBlock else elseBlock"></ng-container>
+        <ng-template #ifBlock>
+          <ion-row>
+            <ion-col size="100">
+              <ion-select interface="popover" class="landlord-tenant-dropdown" [formControl]="tenantListCtrl"
+                (ionChange)="onTenantChange();">
+                <ion-select-option [value]="item.tenantId" *ngFor="let item of tenantList">
+                  {{item.name || item.title +' '+ item.forename}}
+                  <span *ngIf="item?.isLead"> - {{item?.isLead ? 'Primary' : 'Co-Tenant' }}</span>
+                </ion-select-option>
+              </ion-select>
+            </ion-col>
+          </ion-row>
+          <ion-row class="landlord-tenant-details">
+            <ion-col size="25">
+              <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
+              <ion-text> View </ion-text>
+            </ion-col>
+            <ion-col size="25">
+              <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
+              <ion-text><a href="mailto:{{selectedTenant?.email || notAvailable}}"> Email </a> </ion-text>
+            </ion-col>
+            <ion-col size="25">
+              <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
+              <ion-text (click)="openCallInfo(selectedTenant, 'tel')"> Tel </ion-text>
+            </ion-col>
+            <ion-col size="25">
+              <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
+              <ion-text (click)="openCallInfo(selectedTenant, 'mobile')"> Mobile </ion-text>
+            </ion-col>
+          </ion-row>
+    
+          <ion-row class="rent-history-block">
+            <ion-col size="25">
+              <ion-label>Tenancy Start</ion-label><br>
+              <ion-text> - </ion-text>
+            </ion-col>
+            <ion-col size="25">
+              <ion-label>Tenancy End</ion-label><br>
+              <ion-text> - </ion-text>
+            </ion-col>
+            <ion-col size="50">
+              <ion-label>Term</ion-label><br>
+              <ion-text> - </ion-text>
+            </ion-col>
+          </ion-row>
+    
+          <ion-row class="rent-detail-block">
+            <ion-col size="33.3">
+              <ion-label>Current Rent</ion-label><br>
+              <ion-text> - </ion-text>
+            </ion-col>
+            <ion-col size="33.3" class="middle-block">
+              <ion-label>Outstanding</ion-label><br>
+              <ion-text> - </ion-text>
+            </ion-col>
+            <ion-col size="33.3">
+              <ion-label>Deposit</ion-label><br>
+              <ion-text> - </ion-text>
+            </ion-col>
+          </ion-row>
+        </ng-template>
+        <ng-template #elseBlock>
+          <ion-row class="no-data">
+            There is no data to be shown
+          </ion-row>
+        </ng-template>
+      </ion-grid>
+    </ion-col>
+    <ion-col size="50" class="ion-no-padding">
+      <ion-grid class="main-block guarantor-block">
+        <ion-row>
+          <ion-col>
+            <div class="landlord-tenant-header">
+              <ion-fab-button>
+                <span>GU</span>
+              </ion-fab-button>
+              <ion-text> &nbsp;Current Guarantors ({{selectedTenantGuarantors?.length}}) </ion-text>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ng-container *ngIf="selectedTenantGuarantors?.length > 0; then guarantorIfBlock else guarantorElseBlock"></ng-container>
+        <ng-template #guarantorIfBlock>
+          <ion-row>
+            <ion-col size="100">
+              <ion-select interface="popover" class="landlord-tenant-dropdown"
+              #guarantors
+                (ionChange)="onGuarantorChange($event);" [formControl]="guarantor">
+                <ion-select-option [value]="item.guarantorId" *ngFor="let item of selectedTenantGuarantors">
+                  {{item.fullName || item.displayAs || item.name || (item.title +' '+ item.forename +' '+ item.surname)}}
+                </ion-select-option>
+              </ion-select>
+            </ion-col>
+          </ion-row>
+          <ion-row class="landlord-tenant-details">
+            <ion-col size="32">
+              <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
+              <ion-text> View </ion-text>
+            </ion-col>
+            <ion-col size="25">
+              <ion-icon name="chevron-forward-circle-outline" color="primary"></ion-icon>&nbsp;
+              <ion-text (click)="openCallInfo(selectedGuarantor, 'tel')"> Tel </ion-text>
+            </ion-col>
+          </ion-row>
+          <ion-row class="rent-history-block">
+            <ion-col size="32">
+              <ion-label>Rent Guaranteed</ion-label><br>
+              <ion-text> {{selectedGuarantor?.rentGuaranteed | currency: '£' || notAvailable}} </ion-text>
+            </ion-col>
+            <ion-col size="50">
+              <ion-label>Tenant Guaranteed</ion-label><br>
+              <ion-text> {{selectedGuarantor?.tenantGuaranteed || notAvailable}} </ion-text>
+            </ion-col>
+          </ion-row>
+        </ng-template>
+        <ng-template #guarantorElseBlock>
+          <ion-row class="no-data">
+            There is no data to be shown
+          </ion-row>
+        </ng-template>
+      </ion-grid>
+    </ion-col>
+  </ion-row>
 </ng-container>

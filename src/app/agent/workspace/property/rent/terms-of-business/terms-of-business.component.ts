@@ -40,8 +40,8 @@ export class TermsOfBusinessComponent implements OnInit {
   }
 
   private getTobVersionList() {
-    let params = new HttpParams().set("hideLoader", "true");
-    const promise = new Promise((resolve, reject) => {
+    const params = new HttpParams().set('hideLoader', 'true');
+    return new Promise((resolve) => {
       this.agentService.getTobVersionList(params).subscribe(
         (res) => {
           this.versionList = res && res.data ? res.data.filter((x) => !(x.withdrawnDate != null && x.withdrawnDate < this.currentDate)) : '';
@@ -52,12 +52,11 @@ export class TermsOfBusinessComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private getVersionHistory(propertyId: string) {
-    let params = new HttpParams().set("hideLoader", "true");
-    const promise = new Promise((resolve, reject) => {
+    const params = new HttpParams().set('hideLoader', 'true');
+    return new Promise((resolve) => {
       this.agentService.getVersionHistory(propertyId, params).subscribe(
         (res) => {
           this.versionHistoryList = res && res.data ? res.data : '';
@@ -71,6 +70,5 @@ export class TermsOfBusinessComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 }

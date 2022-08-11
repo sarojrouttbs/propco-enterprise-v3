@@ -110,7 +110,7 @@ export class KeysComponent implements OnInit {
   }
 
   private getUsersList() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.agentService.getUsersList().subscribe(
         (res) => {
           resolve(res?.data);
@@ -120,7 +120,6 @@ export class KeysComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private fetchItems() {
@@ -141,7 +140,7 @@ export class KeysComponent implements OnInit {
 
   private getPropertyDetails(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
           this.keyCode.setValue(res?.data?.keyCode);
@@ -154,11 +153,10 @@ export class KeysComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private getKeysListing(propertyId: string) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.agentService.getKeysListing(propertyId).subscribe(
         (res) => {
           resolve(res?.data);
@@ -168,7 +166,6 @@ export class KeysComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private setApplicationApplicants() {

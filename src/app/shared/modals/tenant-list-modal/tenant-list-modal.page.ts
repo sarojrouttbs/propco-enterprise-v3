@@ -34,7 +34,7 @@ export class TenantListModalPage implements OnInit {
 
   @Input() paramPropertyId: string;
   @Input() paramMessage: string;
-  isTableReady: boolean  = false;
+  isTableReady: boolean = false;
   DEFAULTS = DEFAULTS;
   tenantCaseId: any;
 
@@ -43,7 +43,7 @@ export class TenantListModalPage implements OnInit {
     private navParams: NavParams,
     private modalController: ModalController,
     private commonService: CommonService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.propertyId = this.navParams.get('paramPropertyId');
@@ -55,7 +55,6 @@ export class TenantListModalPage implements OnInit {
       searching: false,
       ordering: false,
       info: false,
-      scrollY: '97px',
       scrollCollapse: false
     };
     await this.getTenantList();
@@ -100,12 +99,12 @@ export class TenantListModalPage implements OnInit {
     const params = new HttpParams()
       .set('agreementStatus', this.proposedAgreementStatusIndex ? this.proposedAgreementStatusIndex : '');
 
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.getPropertyTenantList(this.propertyId, params).subscribe(
         res => {
           this.laTenantList = res ? res.data : [];
           const caseIdTenant = this.laTenantList.find(obj => obj.caseId != null);
-          if(caseIdTenant){
+          if (caseIdTenant) {
             this.laTenantList.map(obj => obj.caseId = caseIdTenant.caseId);
           }
           this.laTenantList.forEach((item) => {
@@ -118,7 +117,6 @@ export class TenantListModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   toggleReferencing(tenant: any, event: any) {
@@ -133,7 +131,7 @@ export class TenantListModalPage implements OnInit {
   }
 
   private updateTenantDetails(tenantId: any, requestObj: any) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.updateTenantDetails(tenantId, requestObj).subscribe(
         res => {
           resolve(true);
@@ -144,33 +142,32 @@ export class TenantListModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   selectTenant(tenant: any, event: any) {
     tenant.isRowChecked = event.target.checked;
 
-    if(event.target.checked){
+    if (event.target.checked) {
       this.tenantId = tenant.tenantId;
       this.tenantCaseId = tenant.caseId;
       this.referencingApplicationStatus = tenant.referencingApplicationStatus;
       this.isSelected = true;
       this.laTenantList.forEach(
-        ele => { 
-          if(ele.tenantId != tenant.tenantId) {
+        ele => {
+          if (ele.tenantId != tenant.tenantId) {
             ele.isRowChecked = false;
           }
-      })
+        })
     }
-    else{
-      const selectedRow = this.laTenantList.find(item => item.isRowChecked === true );
-      if(selectedRow){
+    else {
+      const selectedRow = this.laTenantList.find(item => item.isRowChecked === true);
+      if (selectedRow) {
         this.tenantId = selectedRow.tenantId;
         this.tenantCaseId = selectedRow.caseId;
         this.referencingApplicationStatus = selectedRow.referencingApplicationStatus;
         this.isSelected = true;
       }
-      else{
+      else {
         this.isSelected = false;
         this.tenantId = null;
         this.tenantCaseId = null;
@@ -190,5 +187,8 @@ export class TenantListModalPage implements OnInit {
       tenantCaseId: this.tenantCaseId,
       dismissed: true
     });
+  }
+  cancel() {
+    this.modalController.dismiss();
   }
 }

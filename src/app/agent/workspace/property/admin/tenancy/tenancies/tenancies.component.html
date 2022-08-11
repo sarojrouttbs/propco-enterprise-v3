@@ -16,8 +16,8 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
     <div id="tenancy-details">
-        <div class="overlay-container">
-          <table datatable [dtOptions]="dtOptions" class="row-border hover" id="propertyTenancyTable" width="100%" style="position: relative;">
+        <div class="overlay-container" style="position: relative;">
+          <table datatable [dtOptions]="dtOptions" class="row-border hover table-width" id="propertyTenancyTable" style="position: relative;" aria-describedby="tenancies">
             <thead>
               <tr>
                 <th style="width:5%"></th>
@@ -25,29 +25,80 @@
                 <th style="width:15%">Tenant</th>
                 <th style="width:15%">Start</th>
                 <th style="width:15%">End</th>
-                <!-- <th style="width:15%">Branch</th> -->
                 <th style="width:15%">Type</th>
-                <th style="width:15%">Lapse To</th>
+                <th>Lapse To</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let data of tenancies" class="table-row">
+              <tr *ngFor="let data of tenancies" class="table-row pointer" (click)="onRowClick(data)" [class.data-selected]="data.isSelected">
                 <td>{{data?.tenancyLetter || notAvailable}}</td>
                 <td>{{(data?.status | lookup: agreementStatusesLookup) || notAvailable}}</td>
                 <td>{{((data?.tenants?.displayAs) ? data?.tenants?.displayAs : (data?.tenants?.forename +' '+data?.tenants?.surname)) || notAvailable}}</td>
                 <td>{{data?.tenancyStartDate | date: DATE_FORMAT.DATE || notAvailable}}</td>
                 <td>{{data?.tenancyEndDate | date: DATE_FORMAT.DATE || notAvailable}}</td>
-                <!-- <td>{{data?.officeCode | lookup: officeLookup}}</td> -->
                 <td>{{(data?.contractType | lookup: contractTypeLookup) || notAvailable}}</td>
                 <td>{{(data?.lapseToContract | lookup: contractTypeLookup) || notAvailable}}</td>
               </tr>
               <tr *ngIf="tenancies?.length === 0">
-                <td colspan="6" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+                <td colspan="7" class="ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
                 </td>
               </tr>
             </tbody>
           </table>
+          <div id="tenancies-overlay" class="overlay-class">
+            <ion-button>View Agreement Details</ion-button>
+            <i (click)="hideMenu($event,'tenancies-overlay')" class="propcoicon propcoicon-actions-on"></i>
+          </div>
         </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<mat-accordion class="form-view-accordian" multi>
+  <mat-expansion-panel #agreementDetailsEditor hideToggle [expanded]="isAgreementDetails">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Tenancy Agreement Editor {{ propcoAgreementId ? '('+propcoAgreementId+')' : '' }}
+      </mat-panel-title>
+      <mat-panel-description class="ion-justify-content-end no-margin">
+        <div>
+          <span *ngIf="!agreementDetailsEditor.expanded" class="accordian-icon" title="Expand">
+            <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+          </span>
+          <span *ngIf="agreementDetailsEditor.expanded" class="accordian-icon" title="Collapse">
+            <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+          </span>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div id="tenancy-agreement-editor">
+      <ion-segment [(ngModel)]="type" class="segment-card" id="tenancyAgreementEditorTabs">
+        <ion-segment-button value="agreementDetails" checked>
+          <ion-label>Agreement Details</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="notes">
+          <ion-label>Notes</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="clauses">
+          <ion-label>Clauses</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="history">
+          <ion-label>History</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
+      <div [hidden]="type !== 'agreementDetails'">
+        <app-agreement-details (propcoAgreementId)="getPropcoAgreementId($event)" [selectedTenant]="selectedTenant" *ngIf="isAgreementDetails"></app-agreement-details>
+      </div>
+      <div [hidden]="type !== 'notes'">
+        <p class="no-data-msg">No notes associated with this</p>
+      </div>
+      <div [hidden]="type !== 'clauses'">
+        <p class="no-data-msg">No clauses to display.</p>
+      </div>
+      <div [hidden]="type !== 'history'">
+        <app-agreement-history [agreementStatusesLookup]="agreementStatusesLookup" [selectedTenant]="selectedTenant" *ngIf="isAgreementDetails"></app-agreement-history>
+      </div>
     </div>
   </mat-expansion-panel>
 </mat-accordion>

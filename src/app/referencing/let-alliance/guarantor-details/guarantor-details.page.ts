@@ -77,9 +77,6 @@ export class GuarantorDetailsPage implements OnInit {
     this.initiateApplication();
   }
 
-  ionViewDidEnter() {
-  }
-
   initiateApplication() {
     if(this.applicantId && this.applicationId){
       this.getLookupData();
@@ -189,7 +186,7 @@ export class GuarantorDetailsPage implements OnInit {
   }
 
   getTenantGuarantorList() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.getTenantGuarantorList(this.applicantId).subscribe(
         res => {
           this.guarantorList = res && res.data? res.data : [];
@@ -200,8 +197,6 @@ export class GuarantorDetailsPage implements OnInit {
           resolve(this.guarantorList);
       });
     });
-
-    return promise;
   }
 
   private async applicationAlert(isRedirectDashboard?: boolean) {
@@ -250,7 +245,7 @@ export class GuarantorDetailsPage implements OnInit {
   }
 
   private getGuarantorDetailsById(guarantorId: any) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.getGuarantorDetails(guarantorId).subscribe(
         res => {
           this.guarantorDetails = res ? res : {};
@@ -265,11 +260,10 @@ export class GuarantorDetailsPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private getPropertyById() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.referencingService.getPropertyById(this.propertyId).subscribe(
         res => {
           this.propertyDetails = res && res.data ? res.data : {};
@@ -281,7 +275,6 @@ export class GuarantorDetailsPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private getProductList() {
@@ -291,7 +284,7 @@ export class GuarantorDetailsPage implements OnInit {
       this.referencingApplicationProductList = this.referencingProductList?.applicationProducts ? this.referencingProductList.applicationProducts : [];
     }
     else{
-      const promise = new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         this.referencingService.getProductList(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(
           res => {
             this.referencingProductList = res ? res : {};
@@ -308,7 +301,6 @@ export class GuarantorDetailsPage implements OnInit {
             resolve(this.referencingProductList);
         });
       });
-      return promise;
     }
   }
 
@@ -441,17 +433,16 @@ export class GuarantorDetailsPage implements OnInit {
   }
 
   private checkFormsValidity(): any {
-    return new Promise((resolve, reject) => {
-      let valid = false;
+    return new Promise((resolve) => {
       const isValidGuarantorDetailsForm = this.guarantorDetailsForm.valid;
       if (!isValidGuarantorDetailsForm) {
         this.checkTenantDetailsTabValidation();
       }
 
       if (isValidGuarantorDetailsForm) {
-        valid = true;
+        return resolve(true);
       }
-      return resolve(valid);
+      return resolve(false);
     });
   }
 

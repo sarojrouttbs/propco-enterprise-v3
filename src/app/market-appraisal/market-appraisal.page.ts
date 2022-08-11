@@ -99,8 +99,8 @@ export class MarketAppraisalPage implements OnInit {
         propertyNotes: '',
         propertyStyle: '',
         rentRange: this.formBuilder.group({
-          maximum: ['', [Validators.required, ValidationService.rentRaneToVal]],
-          minimum: ['', Validators.required],
+          maximum: [0, [Validators.required, ValidationService.rentRaneToVal]],
+          minimum: [0, Validators.required],
         }),
         status: [null, Validators.required],
         agentName: '',
@@ -306,7 +306,7 @@ export class MarketAppraisalPage implements OnInit {
 
   createLandlord() {
     const params = this.maForm.getRawValue().contactForm;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.maService.createLandlord(params).subscribe(
         (res) => {
           resolve(res);
@@ -316,7 +316,7 @@ export class MarketAppraisalPage implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   updateLandlord() {
@@ -325,7 +325,7 @@ export class MarketAppraisalPage implements OnInit {
     params.status = params.landlordStatus;
     params.foreName = params.forename;
     params.surName = params.surname;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.maService.updateLandlord(params, llId).subscribe(
         (res) => {
           resolve(true);
@@ -335,7 +335,7 @@ export class MarketAppraisalPage implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   updateProperty(payload) {
@@ -344,7 +344,7 @@ export class MarketAppraisalPage implements OnInit {
     params.maximumRent = params.rentRange.maximum;
     params.minimumRent = params.rentRange.minimum;
     params.propertyDescription = params.propertyNotes;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.maService.updateProperty(params, propertyId).subscribe(
         (res) => {
           resolve(true);
@@ -354,11 +354,11 @@ export class MarketAppraisalPage implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private createProperty(payload) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.maService.createNewProperty(payload).subscribe(
         (res) => {
           resolve(res);
@@ -368,7 +368,7 @@ export class MarketAppraisalPage implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   async bookMa() {

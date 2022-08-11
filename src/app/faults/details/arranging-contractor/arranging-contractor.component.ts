@@ -27,7 +27,7 @@ import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-m
   styleUrls: ['./arranging-contractor.component.scss', '../details.page.scss'],
 })
 export class ArrangingContractorComponent implements OnInit {
-  @ViewChild("outsideElement", { static: true }) outsideElement: ElementRef;
+  @ViewChild('outsideElement', { static: true }) outsideElement: ElementRef;
   @ViewChild('modalView', { static: true }) modalView$: ElementRef;
   raiseQuoteForm: FormGroup;
   workOrderForm: FormGroup;
@@ -201,7 +201,7 @@ export class ArrangingContractorComponent implements OnInit {
       paidBy: ['LANDLORD', Validators.required],
       propertyId: [this.faultDetails.propertyId, Validators.required],
       quoteCategory: [{ value: this.categoryMap.get(this.faultDetails.category), disabled: true }],
-      description: [(this.faultDetails.sourceType === 'FAULT' ? (this.categoryName + " " + this.faultDetails.title) : (this.faultDetails.fixfloCategory + " " + this.faultDetails.title)), [Validators.required, Validators.maxLength(70)]],
+      description: [(this.faultDetails.sourceType === 'FAULT' ? (this.categoryName + ' ' + this.faultDetails.title) : (this.faultDetails.fixfloCategory + ' ' + this.faultDetails.title)), [Validators.required, Validators.maxLength(70)]],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
       requiredDate: ['', Validators.required],
       contact: '',
@@ -247,7 +247,7 @@ export class ArrangingContractorComponent implements OnInit {
       worksOrderNumber: [{ value: this.faultDetails.reference, disabled: true }],
       postdate: [{ value: this.currentDate, disabled: true }],
       nominalCode: ['', Validators.required],
-      description: [(this.faultDetails.sourceType === 'FAULT' ? (this.categoryName + " " + this.faultDetails.title) : (this.faultDetails.fixfloCategory + " " + this.faultDetails.title)), [Validators.required, Validators.maxLength(70)]],
+      description: [(this.faultDetails.sourceType === 'FAULT' ? (this.categoryName + ' ' + this.faultDetails.title) : (this.faultDetails.fixfloCategory + ' ' + this.faultDetails.title)), [Validators.required, Validators.maxLength(70)]],
       paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
       keysLocation: this.faultDetails.doesBranchHoldKeys ? KEYS_LOCATIONS.KEY_IN_BRANCH : KEYS_LOCATIONS.DO_NOT_HOLD_KEY,
       returnKeysTo: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
@@ -338,7 +338,6 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   async removeContractor(i: any, isRejected: boolean) {
-    // if (this.restrictAction) { return; }
     if (isRejected) {
       this.commonService.showAlert('Remove Contractor', 'Removing the rejected contractor is restricted.');
       return;
@@ -392,11 +391,11 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async enableCCAddform() {
     this.activeContractorCount  = await this.getActiveContractorCount() as number;
-    this.activeContractorCount < this.MAX_ACTIVE_QUOTE_CONTRACTOR ? this.addMoreCCrestrictAction = false : this.addMoreCCrestrictAction = true;
+    this.addMoreCCrestrictAction = this.activeContractorCount < this.MAX_ACTIVE_QUOTE_CONTRACTOR ? false : true;
   }
 
   private getFaultMaintenance() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const params: any = new HttpParams().set('showCancelled', 'true');
       this.faultsService.getQuoteDetails(this.faultDetails.faultId, params).subscribe((res) => {
         this.isMaintenanceDetails = true;
@@ -406,7 +405,6 @@ export class ArrangingContractorComponent implements OnInit {
         resolve(false);
       });
     });
-    return promise;
   }
 
   initPatching(): void {
@@ -677,7 +675,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private raiseQuote(isDraft: boolean = false) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.raiseQuote(this.prepareQuoteData(isDraft), this.faultDetails.faultId).subscribe((res) => {
         resolve(res);
         this.commonService.showMessage('Successfully Raised', 'Quote', 'success');
@@ -686,11 +684,10 @@ export class ArrangingContractorComponent implements OnInit {
         this.commonService.showMessage('Something went wrong', 'Quote', 'error');
       });
     });
-    return promise;
   }
 
   private updateQuote() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateQuoteDetails(
         this.prepareQuoteData(), this.faultMaintenanceDetails.maintenanceId).subscribe((res) => {
           resolve(true);
@@ -700,11 +697,10 @@ export class ArrangingContractorComponent implements OnInit {
           this.commonService.showMessage('Something went wrong', 'Quote', 'error');
         });
     });
-    return promise;
   }
 
   private raiseWorksOrder(isDraft: boolean = true) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.createFaultMaintenaceWorksOrder(this.prepareWorksOrderData(isDraft), this.faultDetails.faultId).subscribe((res) => {
         resolve(res);
         this.commonService.showMessage('Successfully Raised', 'Works Order', 'success');
@@ -713,11 +709,10 @@ export class ArrangingContractorComponent implements OnInit {
         this.commonService.showMessage('Something went wrong', 'Works Order', 'error');
       });
     });
-    return promise;
   }
 
   private updateWorksOrder() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateQuoteDetails(
         this.prepareWorksOrderData(), this.faultMaintenanceDetails.maintenanceId).subscribe((res) => {
           resolve(true);
@@ -727,28 +722,26 @@ export class ArrangingContractorComponent implements OnInit {
           this.commonService.showMessage('Something went wrong', 'Works Order', 'error');
         });
     });
-    return promise;
   }
 
   private validateReq(skipReqValidation: boolean = false) {
-    let invalid = true;
     if (!this.isWorksOrder) {
       /*Quote form validations*/
       if (!skipReqValidation) {
         if (!this.raiseQuoteForm.valid) {
           this.commonService.showMessage('Please fill all required fields.', 'Quote', 'error');
           this.raiseQuoteForm.markAllAsTouched();
-          return invalid;
+          return true;
         }
         if (this.raiseQuoteForm.value.contractorList.length == 0) {
           this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Quote', 'error');
-          return invalid;
+          return true;
         }
         if (this.raiseQuoteForm.get('contractorList').value) {
           const anyActiveContractor = this.raiseQuoteForm.get('contractorList').value.find(x => x.isActive);
           if (!anyActiveContractor) {
             this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
-            return invalid;
+            return true;
           }
         }
       }
@@ -757,7 +750,7 @@ export class ArrangingContractorComponent implements OnInit {
           const anyActiveContractor = this.raiseQuoteForm.get('contractorList').value.find(x => x.isActive);
           if (!anyActiveContractor) {
             this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
-            return invalid;
+            return true;
           }
         }
       }
@@ -766,7 +759,7 @@ export class ArrangingContractorComponent implements OnInit {
           const defaulter = this.faultMaintenanceDetails.quoteContractors.find(x => x.isRejected && x.contractorId === this.filteredCCDetails.contractorId);
           if (defaulter) {
             this.commonService.showMessage('Selected contractor is rejected.Please select another one', 'Quote', 'error');
-            return invalid;
+            return true;
           }
         }
       }
@@ -774,20 +767,20 @@ export class ArrangingContractorComponent implements OnInit {
       if (!this.workOrderForm.valid) {
         if (this.workOrderForm.controls['contractorName'].invalid) {
           this.commonService.showMessage('Invalid Contractor.', 'Works Order', 'error');
-          return invalid;
+          return true;
         }
         this.commonService.showMessage('Please fill all required fields.', 'Works Order', 'error');
         this.workOrderForm.markAllAsTouched();
-        return invalid;
+        return true;
       }
     }
-    return invalid = false;
+    return false;
   }
 
   private updateFaultQuoteContractor() {
     let items = this.getChangedCCList();
     if (!items.length) return true;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateFaultQuoteContractor(
         items,
         this.faultMaintenanceDetails.maintenanceId).subscribe((res) => {
@@ -798,7 +791,6 @@ export class ArrangingContractorComponent implements OnInit {
           this.commonService.showMessage('Something went wrong', 'Update Quote Contractor', 'error');
         });
     });
-    return promise;
   }
 
   private getNewCCList() {
@@ -826,7 +818,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private updateFault(isSubmit = false, stageAction = '') {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateFault(
         this.faultDetails.faultId, this.prepareFaultData(isSubmit, stageAction)).subscribe((res) => {
           resolve(true);
@@ -835,7 +827,6 @@ export class ArrangingContractorComponent implements OnInit {
           this.commonService.showMessage('Something went wrong', 'Update Repair', 'error');
         });
     });
-    return promise;
   }
 
   private prepareQuoteData(isDraft: boolean = false) {
@@ -961,7 +952,6 @@ export class ArrangingContractorComponent implements OnInit {
           if (quoteRaised) {
             const faultUpdated = await this.updateFault(true);
             if (faultUpdated) {
-              // this.commonService.showLoader();
               setTimeout(async () => {
                 this._btnHandler('refresh');
               }, 1000);
@@ -1095,7 +1085,7 @@ export class ArrangingContractorComponent implements OnInit {
 
 
   addContractors() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let contractIds = this.getNewCCList();
       if (contractIds.length) {
         this.faultsService.addContractors(this.faultMaintenanceDetails.maintenanceId, contractIds).subscribe(
@@ -1110,11 +1100,10 @@ export class ArrangingContractorComponent implements OnInit {
         resolve(true);
       }
     });
-    return promise;
   }
 
   private deleteContrator(maintenanceId: string, contractorId: string) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.deleteContractor(maintenanceId, contractorId).subscribe(
         res => {
           resolve(true);
@@ -1124,7 +1113,6 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private getUserDetails() {
@@ -1139,10 +1127,10 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private getPreferredSuppliers(landlordId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         res => {
-          res && res.data ? this.preferredSuppliersList = res.data : [];
+          this.preferredSuppliersList = res && res.data ? res.data : [];
           resolve(true);
         },
         error => {
@@ -1150,7 +1138,6 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   async checkFaultNotifications(faultId) {
@@ -1165,7 +1152,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private filterNotifications(data, stage, action, contractorId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let filteredData = null;
       if (data.length === 0) {
         resolve(null);
@@ -1203,7 +1190,6 @@ export class ArrangingContractorComponent implements OnInit {
         resolve(null);
       }
     });
-    return promise;
   }
 
   private disableQuoteDetail() {
@@ -1443,9 +1429,9 @@ export class ArrangingContractorComponent implements OnInit {
       let modalData = {
         faultId: this.faultDetails.faultId,
         faultNotificationId: this.iacNotification.faultNotificationId,
-        title: "Arranging Contractor",
+        title: 'Arranging Contractor',
         headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
-        headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants.",
+        headingTwo: 'Please input the appointment date and time that the Contractor has agreed with the occupants.',
         type: APPOINTMENT_MODAL_TYPE.QUOTE,
         contractorDetails: this.filteredCCDetails,
         contractorWoPropertyVisitAt: this.faultDetails.contractorWoPropertyVisitAt,
@@ -1597,7 +1583,7 @@ export class ArrangingContractorComponent implements OnInit {
     notificationObj.submittedByType = 'SECUR_USER';
     notificationObj.isDraft = false;
     notificationObj.contractorId = this.filteredCCDetails.contractorId;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.saveNotificationQuoteAmount(notificationObj, this.iacNotification.faultNotificationId).subscribe(
         res => {
           resolve(true);
@@ -1607,7 +1593,6 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   saveFaultLLAuth() {
@@ -1615,7 +1600,7 @@ export class ArrangingContractorComponent implements OnInit {
     requestObj.isAccepted = true;
     requestObj.submittedByType = 'SECUR_USER';
     requestObj.contractorId = this.filteredCCDetails.contractorId;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.saveFaultLLAuth(requestObj, this.iacNotification.faultNotificationId).subscribe(res => {
         resolve(true);
       }, error => {
@@ -1623,7 +1608,6 @@ export class ArrangingContractorComponent implements OnInit {
         resolve(false);
       })
     });
-    return promise;
   }
 
   private getContractorDetails(contractor, type) {
@@ -1733,7 +1717,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async updateFaultNotification(notificationObj, faultNotificationId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateNotification(faultNotificationId, notificationObj).subscribe(
         res => {
           resolve(true);
@@ -1743,11 +1727,10 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private async saveContractorVisitResponse(faultNotificationId, notificationObj): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.saveContractorVisit(faultNotificationId, notificationObj).subscribe(
         res => {
           resolve(true);
@@ -1757,7 +1740,6 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   getFileType(name): boolean {
@@ -1816,7 +1798,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private updateFaultStatus(status): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateFaultStatus(this.faultDetails.faultId, status).subscribe(
         res => {
           resolve(true);
@@ -1826,11 +1808,10 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   updateFaultSummary(faultRequestObj) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateFault(this.faultDetails.faultId, faultRequestObj).subscribe(
         res => {
           resolve(true);
@@ -1840,7 +1821,6 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private async saveFaultDetails(data, faultId): Promise<any> {
@@ -1849,7 +1829,7 @@ export class ArrangingContractorComponent implements OnInit {
       reqObj.isDraft = this.faultDetails.isDraft;
       reqObj.submittedByType = 'SECUR_USER';
       reqObj.submittedById = ''
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.saveFaultDetails(faultId, data).subscribe(
         res => {
           resolve(true);
@@ -1860,7 +1840,6 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   onSearchContractor(event: any) {
@@ -1882,14 +1861,13 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async getSystemConfigs(key): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.commonService.getSystemConfig(key).subscribe(res => {
         resolve(parseInt(res[key], 10));
       }, error => {
         resolve(true);
       });
     });
-    return promise;
   }
 
   getMoreCodes(event: {
@@ -1918,7 +1896,7 @@ export class ArrangingContractorComponent implements OnInit {
 
     this.nominalCodes.forEach(code => {
       let heading = code.heading ? code.heading.toUpperCase() : '';
-      code.concat = heading + ", " + code.nominalCode + ", " + code.description;
+      code.concat = heading + ', ' + code.nominalCode + ', ' + code.description;
       //quote
       if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 4) {
         this.raiseQuoteForm.get('nominalCode').setValue(code);
@@ -2005,7 +1983,7 @@ export class ArrangingContractorComponent implements OnInit {
         let data = res ? res : '';
         if (data) {
           this.workOrderForm.patchValue({
-            mgntHoldKey: "Contact Branch - " + data.branding.phone
+            mgntHoldKey: 'Contact Branch - ' + data.branding.phone
           });
         }
       }, error => {
@@ -2014,7 +1992,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private getFaultDetails(faultId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getFaultDetails(faultId).subscribe(
         res => {
           if (res) {
@@ -2026,7 +2004,6 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private async worksOrderActionVisitTime(data) {
@@ -2034,9 +2011,9 @@ export class ArrangingContractorComponent implements OnInit {
       let modalData = {
         faultId: this.faultDetails.faultId,
         faultNotificationId: this.iacNotification.faultNotificationId,
-        title: "Appointment Date/Time",
+        title: 'Appointment Date/Time',
         headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
-        headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
+        headingTwo: 'Please add the appointment date & time the contractor has agreed with the occupants.',
         type: APPOINTMENT_MODAL_TYPE.WO
       }
       this.openAppointmentModal(modalData);
@@ -2060,7 +2037,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async saveWOContractorVisitResponse(faultNotificationId, requestObj): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateWOContractorVisit(faultNotificationId, requestObj).subscribe(
         res => {
           resolve(true);
@@ -2070,7 +2047,6 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   /*iac004 iac007.2*/
@@ -2117,14 +2093,13 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private async getSystemOptions(key): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.commonService.getSystemOptions(key).subscribe(res => {
         resolve(res ? res['key'] : '');
       }, error => {
         resolve('');
       });
     });
-    return promise;
   }
 
   private async raiseWorksOrderAndNotification(paymentRequired: boolean, actionType = WORKSORDER_RAISE_TYPE.AUTO) {
@@ -2161,7 +2136,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private getWorksOrderPaymentRules(actionType = WORKSORDER_RAISE_TYPE.AUTO, sendRepairCost= false) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : null;
       const repairCost = sendRepairCost ? this.workOrderForm.get('repairCost').value : null;
       this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId, ccId ,repairCost).subscribe(
@@ -2171,22 +2146,17 @@ export class ArrangingContractorComponent implements OnInit {
         error => {
           if (error.error && error.error.hasOwnProperty('errorCode')) {
             this.commonService.showMessage(error.error ? error.error.message : 'Something went wrong', 'Arranging Contractor', 'error');
-            if (error.error.errorCode === ERROR_CODE.PAYMENT_RULES_CHECKING_FAILED && actionType !== WORKSORDER_RAISE_TYPE.AUTO) {
               resolve(null);
-            } else {
-              resolve(null);
-            }
           } else {
             resolve(null);
           }
         }
       );
     });
-    return promise;
   }
 
   private issueWorksOrderContractor() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let req: any = {};
       req.submittedById = '';
       req.submittedByType = 'SECUR_USER';
@@ -2200,11 +2170,11 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private sendLandlordPaymentRequest() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.sendLandlordPaymentRequest(this.faultDetails.faultId).subscribe(
         res => {
           resolve(true);
@@ -2216,12 +2186,10 @@ export class ArrangingContractorComponent implements OnInit {
           } else {
             resolve(true);
           }
-
-
         }
       );
     });
-    return promise;
+    
   }
 
   async faultNotification(action, ccId) {
@@ -2236,7 +2204,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   async fetchPendingNotification(faultId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.fetchPendingNotification(faultId).subscribe(
         res => {
           this.pendingNotification = res ? res : '';
@@ -2247,7 +2215,7 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   async notificationModal() {
@@ -2276,7 +2244,7 @@ export class ArrangingContractorComponent implements OnInit {
     let notificationObj = {} as any;
     notificationObj.isAccepted = false;
     notificationObj.submittedByType = 'SECUR_USER';
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.saveWorksOrderCompletion(notificationObj, this.iacNotification.faultNotificationId).subscribe(
         res => {
           resolve(true);
@@ -2286,7 +2254,7 @@ export class ArrangingContractorComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   enableMarkCompletedBtn(): boolean {
@@ -2352,9 +2320,9 @@ export class ArrangingContractorComponent implements OnInit {
     let modalData = {
       faultId: this.faultDetails.faultId,
       faultNotificationId: this.iacNotification.faultNotificationId,
-      title: "Appointment Date/Time",
+      title: 'Appointment Date/Time',
       headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
-      headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
+      headingTwo: 'Please add the appointment date & time the contractor has agreed with the occupants.',
       type: templateCode === 'CDT-C-E' || templateCode === 'CQ-C-E' ? APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE : APPOINTMENT_MODAL_TYPE.MODIFY_WO,
       contractorDetails: this.filteredCCDetails,
       contractorWoPropertyVisitAt: this.faultDetails.contractorWoPropertyVisitAt,
@@ -2437,7 +2405,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private getLLPaymentEsclationDue(): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let urgencyStatus = this.faultDetails.urgencyStatus == 2 ? LL_PAYMENT_CONFIG.URGENT : LL_PAYMENT_CONFIG.NON_URGENT;
       this.commonService.getSystemConfig(urgencyStatus).subscribe(res => {
         let minutes = res && this.faultDetails.urgencyStatus == 2 ? parseInt(res.FAULT_URGENT_LL_PAYMENT_UNSUCCESSFUL_EMAIL_NUDGE_MINUTES, 10) : parseInt(res.FAULT_NON_URGENT_LL_PAYMENT_UNSUCCESSFUL_EMAIL_NUDGE_MINUTES, 10);
@@ -2455,7 +2423,7 @@ export class ArrangingContractorComponent implements OnInit {
         resolve(false);
       });
     });
-    return promise;
+    
   }
 
   selectedCCDetails(id) {
@@ -2491,7 +2459,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   scrollToAddCC(): void {
-    document.getElementById("addCCform").scrollIntoView({ behavior: "smooth" });
+    document.getElementById('addCCform').scrollIntoView({ behavior: 'smooth' });
   }
 
   async overrideQuote(preUpload?) {
@@ -2524,18 +2492,7 @@ export class ArrangingContractorComponent implements OnInit {
         if(!this.isWorksOrder && action.index === 'DOES_OWN_REPAIRS') {
           otherStageActions.push(action);
           return;
-        }
-        if(this.iacNotification.responseReceived === null) {
-          /*awaiting response*/
-        }
-        else if(this.iacNotification.responseReceived) {
-          /*response recieved*/
-          if(this.iacNotification.responseReceived.isAccepted === false) {
-            /*negative response*/
-          } else {
-            /*positive response*/
-          } 
-        }
+        }        
       });
       this.otherStageActions = otherStageActions;
     }

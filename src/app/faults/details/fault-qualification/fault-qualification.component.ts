@@ -39,7 +39,7 @@ export class FaultQualificationComponent implements OnInit {
   iqfNotification;
   warrantyCertificateId: any = null;
   serviceContractCertificateId: any = null;
-  otherStageActions = FAULT_QUALIFICATION_ACTIONS.filter(action => { return (action.index == "LANDLORD_INSTRUCTION") });
+  otherStageActions = FAULT_QUALIFICATION_ACTIONS.filter(action => { return (action.index == 'LANDLORD_INSTRUCTION') });
   userSelectedActionControl = new FormControl();
   iqfStageActions = FAULT_QUALIFICATION_ACTIONS;
   isUserActionChange = false;
@@ -173,7 +173,7 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private filterNotifications(data, stage, action) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let filtereData = null;
       if (data.length === 0) {
         resolve(null);
@@ -193,7 +193,7 @@ export class FaultQualificationComponent implements OnInit {
         resolve(null);
       }
     });
-    return promise;
+    
   }
 
   async viewBranchDetails() {
@@ -470,7 +470,7 @@ export class FaultQualificationComponent implements OnInit {
 
   private fetchAgreementsClauses() {
     if (this.faultDetails.agreementId) {
-      const promise = new Promise((resolve) => {
+      return new Promise((resolve) => {
         this.faultsService.fetchAgreementsClauses(this.faultDetails.agreementId).subscribe(
           res => {
             this.tenancyClauses = res ? res : '';
@@ -485,7 +485,7 @@ export class FaultQualificationComponent implements OnInit {
           }
         );
       });
-      return promise;
+      
     }
   }
 
@@ -526,7 +526,7 @@ export class FaultQualificationComponent implements OnInit {
   viewServiceContract() { }
 
   private updateFaultDetails(faultId, requestObj): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.updateFault(faultId, requestObj).subscribe(
         () => {
           resolve(true);
@@ -536,21 +536,21 @@ export class FaultQualificationComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private fetchPropertyCertificates(category) {
     if (this.faultDetails.propertyId) {
       const params: any = new HttpParams().set('categories', category).set('isArchived', 'false');
-      const promise = new Promise((resolve) => {
+      return new Promise((resolve) => {
         this.faultsService.fetchPropertyCertificates(this.faultDetails.propertyId, params).subscribe(
           res => {
-            if (category === "4938" && res === null) {
+            if (category === '4938' && res === null) {
               this.faultQualificationForm.patchValue({ isUnderWarranty: false });
               this.faultQualificationForm.get('isUnderWarranty').updateValueAndValidity();
             }
 
-            if (category === "4940" && res === null) {
+            if (category === '4940' && res === null) {
               this.faultQualificationForm.patchValue({ isUnderServiceContract: false });
               this.faultQualificationForm.get('isUnderServiceContract').updateValueAndValidity();
             }
@@ -561,7 +561,7 @@ export class FaultQualificationComponent implements OnInit {
           }
         );
       });
-      return promise;
+      
     }
   }
 
@@ -638,7 +638,7 @@ export class FaultQualificationComponent implements OnInit {
   }
 
   private async updateFaultNotification(notificationObj, faultNotificationId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateNotification(faultNotificationId, notificationObj).subscribe(
         res => {
           resolve(true);
@@ -648,12 +648,12 @@ export class FaultQualificationComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private getPropertyHeadLease() {
     if (this.faultDetails.propertyId) {
-      const promise = new Promise((resolve) => {
+      return new Promise((resolve) => {
         this.faultsService.getPropertyHeadLease(this.faultDetails.propertyId).subscribe(
           res => {
             if (res) {
@@ -670,7 +670,7 @@ export class FaultQualificationComponent implements OnInit {
           }
         );
       });
-      return promise;
+      
     }
   }
 

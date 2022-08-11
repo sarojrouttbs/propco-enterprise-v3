@@ -267,17 +267,16 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private checkFormsValidity() {
-    return new Promise((resolve, reject) => {
-      let valid = false;
+    return new Promise((resolve) => {
       const applicantDetails = this.applicantDetailsForm.valid;
       const bankDetails = this.bankDetailsForm.valid;
       const address = this.addressDetailsForm.valid;
       const tenancyDetails = this.tenancyDetailForm.valid;
       const guarantorDetails = this.guarantorForm.valid;
       if (applicantDetails && tenancyDetails && guarantorDetails && bankDetails && address) {
-        valid = true;
+        return resolve(true);
       }
-      return resolve(valid);
+      return resolve(false);
     });
   }
 
@@ -353,6 +352,7 @@ export class ApplicationDetailPage implements OnInit {
         if (!this.applicationDetails.isSubmitted) {
           this.saveApplicantsToApplication();
         }
+        break;
       case 1:
         if (!this.applicationDetails.isSubmitted && this.applicantId) {
           this.saveApplicantDetails();
@@ -385,6 +385,8 @@ export class ApplicationDetailPage implements OnInit {
         break;
       case 10:
         this.initPaymentConfiguration();
+        break;
+      default:
         break;
     }
   }
@@ -490,7 +492,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private setApplicationDetails(res: ApplicationModels.IApplicationResponse) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.applicationDetails = res;
       this.applicationDetails.applicationClauses = res.applicationClauses ? res.applicationClauses : [];
       this.applicationDetails.applicationRestrictions = res.applicationRestrictions ? res.applicationRestrictions : [];
@@ -523,7 +525,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private setApplicationApplicants(res: any) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       (this.occupantForm.get('coApplicants') as FormArray)['controls'].splice(0);
       this.applicationApplicantDetails = (res && res.data) ? res.data : [];
       const leadApplicantDetails = this.applicationApplicantDetails.filter((occupant) => occupant.isLead);
@@ -860,15 +862,24 @@ export class ApplicationDetailPage implements OnInit {
     switch (addressType) {
       case 'personal':
         postcode = this.addressDetailsForm.controls.address['controls'].postcode;
-        postcode.value ? (this.showPostcodeLoader = true) : '';
+        const addressPostcode = postcode.value;
+        this.showPostcodeLoader =  postcode.value ? true : '';
+        this.addressDetailsForm.controls.address.reset();
+        this.addressDetailsForm.controls.address['controls'].postcode.setValue(addressPostcode);
         break;
       case 'correspondence-address':
         postcode = this.addressDetailsForm.controls.forwardingAddress['controls'].postcode;
-        postcode.value ? (this.showAddressLoader = true) : '';
+        const forwardingAddressPostcode = postcode.value;
+        this.showPostcodeLoader =  postcode.value ? true : '';
+        this.addressDetailsForm.controls.forwardingAddress.reset();
+        this.addressDetailsForm.controls.forwardingAddress['controls'].postcode.setValue(forwardingAddressPostcode);
         break;
       case 'guarantor':
         postcode = this.guarantorForm.controls.address['controls'].postcode;
-        postcode.value ? (this.showPostcodeLoader = true) : '';
+        const guarantorFormPostcode = postcode.value;
+        this.showPostcodeLoader =  postcode.value ? true : '';
+        this.guarantorForm.controls.address.reset();
+        this.guarantorForm.controls.address['controls'].postcode.setValue(guarantorFormPostcode);
         break;
     }
     if (postcode.valid && postcode.value) {
@@ -921,6 +932,9 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   getAddressDetails(addressId: string, addressType: string) {
+    if (!addressId || '') {
+      return;
+    }
     this.commonService.getPostcodeAddressDetails(addressId).subscribe(
       res => {
         if (res && res.line1) {

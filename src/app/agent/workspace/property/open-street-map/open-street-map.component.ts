@@ -45,7 +45,7 @@ export class OpenStreetMapComponent implements OnInit {
       .set('hideLoader', 'true')
       .set('q', address)
       .set('format', 'json');
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.agentService.getLatlongFromAddress('https://nominatim.openstreetmap.org/search', params).subscribe(
         (resp: any) => {
           if (resp && resp[0]) {
@@ -57,7 +57,6 @@ export class OpenStreetMapComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 }
 

@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { AgentService } from 'src/app/agent/agent.service';
-import { PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -23,13 +23,18 @@ export class LettingsDetailsComponent implements OnInit {
   propertyLetReasons: any;
   propertyAreas: any;
   propertyLocations: any;
+  marketingAs: any;
+  landlordOccupancies: any;
+  withdrawnReasons: any;
+  DATE_FORMAT = DATE_FORMAT;
+
   constructor(private commonService: CommonService, private agentService: AgentService) { }
 
   ngOnInit() {
-    this.initAPIcalls();
+    this.initApiCalls();
   }
 
-  private async initAPIcalls() {
+  private async initApiCalls() {
     this.getLookupData();
     this.getPropertyLookupData();
   }
@@ -54,6 +59,7 @@ export class LettingsDetailsComponent implements OnInit {
     this.rentCategories = data.rentCategories;
     this.officeCodes = data.officeCodes;
     this.propertyLetReasons = data.propertyLetReasons;
+    this.landlordOccupancies = data.landlordOccupancies;    
   }
 
   private getPropertyLookupData() {
@@ -62,7 +68,7 @@ export class LettingsDetailsComponent implements OnInit {
       this.setPropertyLookupData(this.propertylookupdata);
     }
     else {
-      let params = new HttpParams().set("hideLoader", "true");
+      let params = new HttpParams().set('hideLoader', 'true');
       this.commonService.getPropertyLookup(params).subscribe(data => {
         this.commonService.setItem(PROPCO.PROPERTY_LOOKUP_DATA, data);
         this.setPropertyLookupData(data);
@@ -74,6 +80,8 @@ export class LettingsDetailsComponent implements OnInit {
     this.acqisitionOffices = data.acqisitionOffices;
     this.portfolioSources = data.portfolioSources;
     this.propertyAreas = data.propertyAreas;
+    this.marketingAs = data.marketingAs;
+    this.withdrawnReasons = data.withdrawnReasons;
   }
 
   getPropertyLocations(officeCode) {

@@ -1,0 +1,496 @@
+<form [formGroup]="agreementDetailsForm">
+  <ion-grid id="agreement-details">
+    <ion-row class="bg-color">
+      <ion-col size="70">
+        <h5>Tenant(s)</h5>
+        <h5>
+          <ion-text>
+            {{this.agreementDetails?.occupier}}
+          </ion-text>
+          <ion-label [ngClass]="getStatusColorClassName(this.agreementDetails?.status)">
+            {{(this.agreementDetails?.status | lookup: agreementStatuses)}}
+          </ion-label>
+        </h5>
+      </ion-col>
+      <ion-col size="30">
+        <ion-item>
+          <ion-label position="floating">Tenant Name</ion-label>
+          <ion-select formControlName="tenantName" interface="popover">
+            <ion-select-option [value]="item.tenantId" *ngFor="let item of agreementTenantDetails">
+              {{item.tenantName}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100">
+        <ion-row>
+          <ion-col size="40" style="margin-top: 2px;">
+            <ion-item>
+              <ion-label position="stacked">Rent</ion-label>
+              <input class="currency-input" currencyMask formControlName="rent">
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Per</ion-label>
+              <ion-select formControlName="rentFrequency" interface="popover" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
+                <ion-select-option [value]="item" *ngFor="let item of rentFrequencyList">
+                  {{item}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size="40">
+            <ion-item>
+              <ion-label position="floating">Frequency</ion-label>
+              <ion-select formControlName="frequencyType" interface="popover" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
+                <ion-select-option [value]="item.index" *ngFor="let item of frequencyTypes">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item>
+              <ion-label position="floating">Commission</ion-label>
+              <ion-input percentage-validator formControlName="commissionPercentage"></ion-input>
+            </ion-item>
+            <div *ngIf="agreementDetailsForm.get('commissionPercentage').hasError('invalidPattern')" class="error-message">
+              Invalid Commission (%)
+            </div>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item>
+              <ion-label position="floating">Management</ion-label>
+              <ion-select formControlName="managementType" interface="popover" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
+                <ion-select-option [value]="item.index" *ngFor="let item of managementTypes">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item>
+              <ion-label position="floating">Total Occupants</ion-label>
+              <ion-input formControlName="totalOccupants"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item>
+              <ion-label position="floating">No. of Tenants</ion-label>
+              <ion-input formControlName="noOfOccupiers"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+
+      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100">
+        <ion-row>
+          <ion-col size="50">
+            <ion-item>
+              <ion-label position="floating">Status</ion-label>
+              <ion-select formControlName="status" interface="popover" [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
+                <ion-select-option [value]="item.index" *ngFor="let item of agreementStatuses">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item id="nextClaimDate">
+              <ion-label position="floating">Next Claim</ion-label>
+              <ion-input value="{{ agreementDetailsForm.controls.nextClaimDate.value | date: DATE_FORMAT.DATE }}">
+              </ion-input>
+              <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+              <ion-popover trigger="nextClaimDate" show-backdrop="false">
+                <ng-template>
+                  <ion-datetime showDefaultButtons="true" presentation="date" formControlName="nextClaimDate">
+                  </ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item>
+              <ion-label position="floating">Day Rent Due</ion-label>
+              <ion-input formControlName="dayRentDue"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item>
+              <ion-label position="floating">Direct Debit Due Day</ion-label>
+              <ion-input formControlName="directDebitDueDay"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item>
+              <ion-label position="floating">No. of Children</ion-label>
+              <ion-input formControlName="noOfChildren"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item>
+              <ion-label position="floating">No. of Households</ion-label>
+              <ion-input formControlName="noOfHouseholds"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+
+      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100">
+        <ion-row>
+          <ion-col size="25">
+            <ion-item>
+              <ion-label position="floating">Tenancy</ion-label>
+              <ion-input formControlName="tenancy"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="25">
+            <ion-item>
+              <ion-label position="floating">Room</ion-label>
+              <ion-input formControlName="room"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item id="lastRentRequestDate">
+              <ion-label position="floating">Last Claim Request</ion-label>
+              <ion-input value="{{ agreementDetailsForm.controls.lastRentRequestDate.value | date: DATE_FORMAT.DATE }}">
+              </ion-input>
+              <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+              <ion-popover trigger="lastRentRequestDate" show-backdrop="false">
+                <ng-template>
+                  <ion-datetime showDefaultButtons="true" presentation="date" formControlName="lastRentRequestDate">
+                  </ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </ion-item>
+          </ion-col>
+          <ion-col size="100">
+            <ion-item>
+              <ion-label position="floating">Occupier</ion-label>
+              <ion-input formControlName="occupier"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item>
+              <ion-label position="floating">No. of Permitted Occupier</ion-label>
+              <ion-input formControlName="noOfPermittedOccupier"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item>
+              <ion-label position="floating">Permitted Delay (in days)</ion-label>
+              <ion-input formControlName="permittedDelay"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+
+    <div class="border-top"></div>
+    <h5 style="padding-left: 5px;">Original Contract Details</h5>
+
+    <ion-row>
+      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100">
+        <ion-item id="originalStart">
+          <ion-label position="floating">Original Move In</ion-label>
+          <ion-input value="{{ agreementDetailsForm.controls.originalStart.value | date: DATE_FORMAT.DATE }}">
+          </ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+          <ion-popover trigger="originalStart" show-backdrop="false">
+            <ng-template>
+              <ion-datetime showDefaultButtons="true" presentation="date" formControlName="originalStart">
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100">
+        <ion-item id="originalEnd">
+          <ion-label position="floating">Original Move Out</ion-label>
+          <ion-input value="{{ agreementDetailsForm.controls.originalEnd.value | date: DATE_FORMAT.DATE }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+          <ion-popover trigger="originalEnd" show-backdrop="false">
+            <ng-template>
+              <ion-datetime showDefaultButtons="true" presentation="date" formControlName="originalEnd">
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <div class="border-top"></div>
+    <h5 style="padding-left: 5px;">Contract Switches</h5>
+
+    <ion-row>
+      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100" class="ion-align-self-end">
+        <ion-item lines="none">
+          <ion-toggle formControlName="isLapseAfterEffectiveDateExpire" color="primary">
+          </ion-toggle>
+          <ion-text>'Lapse' After Effective Date Expires</ion-text>
+        </ion-item>
+      </ion-col>
+      <ion-col size="7" class="ion-align-self-end">
+        <ion-item lines="none">
+          <ion-toggle formControlName="isCheckin" color="primary">
+          </ion-toggle>
+        </ion-item>
+      </ion-col>
+      <ion-col size="21.3">
+        <ion-item id="checkInDate">
+          <ion-label position="floating">Check In</ion-label>
+          <ion-input value="{{ agreementDetailsForm.controls.checkInDate.value | date: DATE_FORMAT.DATE }}"
+            [disabled]="!agreementDetailsForm.get('isCheckin').value"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+          <ion-popover trigger="checkInDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime showDefaultButtons="true" presentation="date" formControlName="checkInDate">
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+      </ion-col>
+      <ion-col size="5"></ion-col>
+      <ion-col size="7" class="ion-align-self-end">
+        <ion-item lines="none">
+          <ion-toggle formControlName="isCheckout" color="primary">
+          </ion-toggle>
+        </ion-item>
+      </ion-col>
+      <ion-col size="21.3">
+        <ion-item id="checkOutDate">
+          <ion-label position="floating">Check Out</ion-label>
+          <ion-input value="{{ agreementDetailsForm.controls.checkOutDate.value | date: DATE_FORMAT.DATE }}"
+            [disabled]="!agreementDetailsForm.get('isCheckout').value"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+          <ion-popover trigger="checkOutDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime showDefaultButtons="true" presentation="date" formControlName="checkOutDate">
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+      </ion-col>
+      <ion-col size="5"></ion-col>
+      <ion-col size="33.3" class="ion-align-self-end">
+        <ion-item lines="none">
+          <ion-toggle formControlName="isPostRent" color="primary">
+          </ion-toggle>
+          <ion-text>Post Rent</ion-text>
+        </ion-item>
+      </ion-col>
+      <ion-col size="33.3" class="ion-align-self-end">
+        <ion-item lines="none">
+          <ion-toggle formControlName="isAllowPayment" color="primary">
+          </ion-toggle>
+          <ion-text>Allow Payments</ion-text>
+        </ion-item>
+      </ion-col>
+      <ion-col size="33.3" class="ion-align-self-end">
+        <ion-item lines="none">
+          <ion-toggle formControlName="isOnHold" color="primary">
+          </ion-toggle>
+          <ion-text>On Hold</ion-text>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <div class="border-top"></div>
+    <h5 style="padding-left: 5px;">Renewal Details</h5>
+
+    <ion-row>
+      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100">
+        <ion-item id="renewalStart">
+          <ion-label position="floating">Renewal Start</ion-label>
+          <ion-input value="{{ agreementDetailsForm.controls.renewalStart.value | date: DATE_FORMAT.DATE }}">
+          </ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+          <ion-popover trigger="renewalStart" show-backdrop="false">
+            <ng-template>
+              <ion-datetime showDefaultButtons="true" presentation="date" formControlName="renewalStart">
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100" style="margin-top: 2px;">
+        <ion-item>
+          <ion-label position="stacked">Renewal Rent</ion-label>
+          <input class="currency-input" currencyMask formControlName="renewalRent">
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <div class="border-top"></div>
+    <h5 style="padding-left: 5px;">Suggested Renewal Terms</h5>
+
+    <ion-row>
+      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100">
+        <ion-item>
+          <ion-label position="floating">Suggested Term</ion-label>
+          <ion-input formControlName="suggestedTerm"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100" style="margin-top: 2px;">
+        <ion-item>
+          <ion-label position="stacked">Suggested Rent</ion-label>
+          <input class="currency-input" currencyMask formControlName="suggestedRent">
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100">
+        <ion-item>
+          <ion-label position="floating">Suggested Periodicity</ion-label>
+          <ion-select formControlName="suggestedPeriodicity" interface="popover">
+            <ion-select-option [value]="item.index" *ngFor="let item of agreementPeriodicities">
+              {{item.value}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <div class="border-top"></div>
+    <h5 style="padding-left: 5px;">Effective Contract Type</h5>
+
+    <ion-row>
+      <ion-col size-xl="25" size-lg="25" size-md="33.3" size-sm="50" size-xs="100">
+        <ion-item>
+          <ion-label position="floating">Type</ion-label>
+          <ion-select formControlName="contractType" interface="popover">
+            <ion-select-option [value]="item.index" *ngFor="let item of contractTypes">
+              {{item.value}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="25" size-lg="25" size-md="33.3" size-sm="50" size-xs="100">
+        <ion-item>
+          <ion-label position="floating">Sub Type</ion-label>
+          <ion-input formControlName="contractSubType"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="25" size-lg="25" size-md="33.3" size-sm="50" size-xs="100" class="ion-align-self-end">
+        <ion-item lines="none">
+          <ion-toggle formControlName="isStudentTypeAgreement" color="primary">
+          </ion-toggle>
+          <ion-text>Student Type Agreement</ion-text>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="25" size-lg="25" size-md="33.3" size-sm="50" size-xs="100" class="ion-align-self-end">
+        <ion-item lines="none">
+          <ion-toggle formControlName="isChangeOfSharerAgreement" color="primary">
+          </ion-toggle>
+          <ion-text>Change Of Sharer Agreement</ion-text>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <div class="border-top"></div>
+    <h5 style="padding-left: 5px;">Effective Contract Details</h5>
+
+    <ion-row>
+      <ion-col size-xl="25" size-lg="25" size-md="33.3" size-sm="50" size-xs="100">
+        <ion-item id="tenancyStartDate">
+          <ion-label position="floating">Effective Move In</ion-label>
+          <ion-input value="{{ agreementDetailsForm.controls.tenancyStartDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+          <ion-popover trigger="tenancyStartDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime showDefaultButtons="true" presentation="date" formControlName="tenancyStartDate">
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="25" size-lg="25" size-md="33.3" size-sm="50" size-xs="100">
+        <ion-item id="tenancyEndDate">
+          <ion-label position="floating">Effective Move Out</ion-label>
+          <ion-input value="{{ agreementDetailsForm.controls.tenancyEndDate.value | date: DATE_FORMAT.DATE }}">
+          </ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+          <ion-popover trigger="tenancyEndDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime showDefaultButtons="true" presentation="date" formControlName="tenancyEndDate">
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="25" size-lg="25" size-md="33.3" size-sm="50" size-xs="100">
+        <ion-item id="noticeDate">
+          <ion-label position="floating">Notice Date</ion-label>
+          <ion-input value="{{ agreementDetailsForm.controls.noticeDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+          <ion-popover trigger="noticeDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime showDefaultButtons="true" presentation="date" formControlName="noticeDate">
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="25" size-lg="25" size-md="33.3" size-sm="50" size-xs="100">
+        <ion-item id="noticeProcessedDate">
+          <ion-label position="floating">Notice Processed</ion-label>
+          <ion-input value="{{ agreementDetailsForm.controls.noticeProcessedDate.value | date: DATE_FORMAT.DATE }}">
+          </ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+          <ion-popover trigger="noticeProcessedDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime showDefaultButtons="true" presentation="date" formControlName="noticeProcessedDate">
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <div class="border-top"></div>
+    <h5 style="padding-left: 5px;">Filters</h5>
+
+    <ion-row>
+      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100">
+        <ion-item lines="none">
+          <ion-toggle formControlName="isExcludeFromArrears" color="primary">
+          </ion-toggle>
+          <ion-text>Exclude From Arrears</ion-text>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <div class="border-top"></div>
+    <h5 style="padding-left: 5px;">Inventory</h5>
+
+    <ion-row>
+      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100">
+        <ion-item>
+          <ion-label position="floating">Inventory Prepared By</ion-label>
+          <ion-select formControlName="inventoryPreparedBy" interface="popover">
+            <ion-select-option [value]="item.index" *ngFor="let item of inventoryPreparedByList">
+              {{item.value}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <div class="border-top"></div>
+    <h5 style="padding-left: 5px;">Related Links</h5>
+
+    <ion-row>
+      <ion-col>
+        <div class="propco-btn-group">
+          <ion-button color="success" size="small">Meter Readings</ion-button>
+          <ion-button color="success" size="small">Deposit Protection</ion-button>
+          <ion-button color="success" size="small">Nominal Coding</ion-button>
+          <ion-button color="success" size="small">Rent Indemnity</ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+</form>

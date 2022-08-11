@@ -1,5 +1,5 @@
 import { ERROR_MESSAGE, DOCUMENTS_TYPE, PROPCO, DEFAULTS, DATE_FORMAT } from './../../constants';
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
+import { Component, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 import { FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -11,7 +11,7 @@ import { ContactDetailsModalPage } from '../../modals/contact-details-modal/cont
   templateUrl: './property-details.component.html',
   styleUrls: ['./property-details.component.scss', '../../drag-drop.scss'],
 })
-export class PropertyDetailsComponent implements OnInit {
+export class PropertyDetailsComponent {
   @Input() propertyDetails;
   @Input() parentForm: FormGroup;
   @Input() files;
@@ -72,10 +72,6 @@ export class PropertyDetailsComponent implements OnInit {
     if(changes.leadTenantId && changes.leadTenantId.currentValue){
       this.leadTenantId = changes.leadTenantId.currentValue;           
     }
-  }
-
-  ngOnInit() {    
-    
   }
 
   private setLookupData() {

@@ -14,4 +14,47 @@ export class HmrcService {
     return this.httpClient.get(environment.API_BASE_URL + 'hmrc/landlords', { params });
   }
 
+  getSysconfig(params?: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'sysconfig', { params });
+  }
+
+  getOffices(params?: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'offices', { params });
+  }
+
+  getOfficesGroup(params?: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + 'offices-group', { params });
+  }
+
+  getOptions(params?: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `options`, { params });
+  }
+
+  getPdfUrlDetails(requestObj: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `hmrc/reports/download`, requestObj, { responseType: 'blob' as 'json' });
+  }
+
+  generateHMRC(requestObj: any): Observable<any> {
+    return this.httpClient.post(environment.API_BASE_URL + `hmrc`, requestObj);
+  }
+
+  getBatchCount(batchId: string, params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}/count`, { params });
+  }
+
+  getHmrcBatchDetails(batchId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}`);
+  }
+
+  getLandlordBatchCount(params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `hmrc/landlords/batch-count`, { params });
+  }
+
+  downloadPdf(url: any): Observable<Blob> {
+    return this.httpClient.get(url, { responseType: 'blob' });
+  }
+
+  getUserBatch(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `hmrc/user/batch`);
+  }
 }

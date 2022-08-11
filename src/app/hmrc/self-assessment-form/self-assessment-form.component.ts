@@ -3,8 +3,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { HmrcService } from '../hmrc.service';
-import { DatePipe } from '@angular/common';
-import { DATE_FORMAT } from 'src/app/shared/constants';
+import { DATE_FORMAT, HMRC_CONFIG, SYSTEM_CONFIG } from 'src/app/shared/constants';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonService } from 'src/app/shared/services/common.service';
+import { BatchDetail } from '../hmrc-modal';
 
 @Component({
   selector: 'app-self-assessment-form',
@@ -13,31 +15,58 @@ import { DATE_FORMAT } from 'src/app/shared/constants';
 })
 export class SelfAssessmentFormComponent implements OnInit {
 
-  @ViewChild("stepper", { static: false }) stepper: MatStepper;
+  @ViewChild('stepper', { static: false }) stepper: MatStepper;
   currentStepperIndex = 0;
   selfAssessmentForm: FormGroup;
   nextLabel: string = 'Next 1/3';
   landlordParams: any = new HttpParams();
   DATE_FORMAT = DATE_FORMAT;
+  isHmrcLandlordSelected = 'false';
+  systemConfig: any;
+  isHmrcLandlordSelectPreview: any;
 
   constructor(
     private fb: FormBuilder,
     private hmrcService: HmrcService,
-    public datepipe: DatePipe,
+    private route: ActivatedRoute,
+    private router: Router,
+    private commonService: CommonService
   ) { }
 
   ngOnInit() {
-    this.initForm()
+    this.initForm();
+    this.getSystemConfig();
+    this.checkExistingBatch();
   }
 
   initForm() {
     this.selfAssessmentForm = this.fb.group({
+      propertyOffice: [''],
+      propertyOfficeCodes: [''],
+      selectedPropertyOfficeCodes: [''],
       managementType: [''],
+      selectedManagementType: [''],
       from: [null, Validators.required],
       to: [null, Validators.required],
       quickFilterType: null,
       searchOnColumns: null,
-      searchText: null
+      searchText: null,
+      selectedPropertyLinkIds: null,
+      deselectedPropertyLinkIds: null,
+      statementPreference: null,
+      taxHandler: null,
+      batchId: ''
+    });
+  }
+
+  private getSystemConfig() {
+    const params = new HttpParams().set('key', SYSTEM_CONFIG.HMRC_TAX_HANDLER_SELF_ASSESSMENT_FORM)
+    return new Promise((resolve) => {
+      this.hmrcService.getSysconfig(params).subscribe((res) => {
+        this.systemConfig = res ? res.HMRC_TAX_HANDLER_SELF_ASSESSMENT_FORM : '';
+        this.selfAssessmentForm.get('taxHandler').patchValue(this.systemConfig);
+        resolve(true);
+      });
     });
   }
 
@@ -48,9 +77,7 @@ export class SelfAssessmentFormComponent implements OnInit {
         this.nextLabel = 'Next 2/3'
         break;
       case 1:
-        this.getLandlords();
         this.stepper.selectedIndex = 2;
-
         break;
       default:
         break;
@@ -72,21 +99,77 @@ export class SelfAssessmentFormComponent implements OnInit {
     }
   }
 
-
-  private getLandlords() {
-    if (!this.selfAssessmentForm.get('from').value && !this.selfAssessmentForm.get('to').value) {
-      return;
-    }
-    this.landlordParams = this.landlordParams
-      .set('lastGeneratedDateRange.from', this.selfAssessmentForm.get('from').value ? this.datepipe.transform(this.selfAssessmentForm.get('from').value, this.DATE_FORMAT.YEAR_DATE) : '')
-      .set('lastGeneratedDateRange.to', this.selfAssessmentForm.get('to').value ? this.datepipe.transform(this.selfAssessmentForm.get('to').value, this.DATE_FORMAT.YEAR_DATE) : '')
-      .set('hideLoader', 'true');
-    const promise = new Promise((resolve, reject) => {
-      this.hmrcService.getLandlords(this.landlordParams).subscribe((res) => {
-        return resolve(res);
-      });
-    });
-    return promise;
+  onHmrcLandlordSelect(data: any) {
+    this.isHmrcLandlordSelected = data;
   }
 
+  onHmrcLandlordSelectPreview(data: any) {
+    this.isHmrcLandlordSelectPreview = data;
+  }
+
+  generateHMRC() {
+    this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
+    const params = {
+      accountType: HMRC_CONFIG.HMRC_SENDER_EMAIL_ACCOUNT,
+      financialYearDateRange: {
+        from: this.selfAssessmentForm.value.from,
+        to: this.selfAssessmentForm.value.to
+      },
+      deselectedPropertyLinkIds: this.selfAssessmentForm.value.deselectedPropertyLinkIds ? this.selfAssessmentForm.value.deselectedPropertyLinkIds : [],
+      managementType: this.selfAssessmentForm.value.managementType ? this.selfAssessmentForm.value.managementType : [],
+      propertyOffice: this.selfAssessmentForm.value.propertyOffice ? this.selfAssessmentForm.value.propertyOffice : [],
+      searchOnColumns: this.selfAssessmentForm.value.searchOnColumns,
+      searchText: this.selfAssessmentForm.value.valuesearchText,
+      selectedPropertyLinkIds: this.selfAssessmentForm.value.selectedPropertyLinkIds ? this.selfAssessmentForm.value.selectedPropertyLinkIds : [],
+      taxHandler: this.selfAssessmentForm.value.taxHandler
+    }
+    this.hmrcService.generateHMRC(params).subscribe((res) => {
+      if (res) {
+        const response = res;
+        this.selfAssessmentForm.get('batchId').patchValue(response.batchId)
+      }
+      this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
+      this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
+    });
+  }
+
+  private async checkExistingBatch() {
+    const existingBatch:any = await this.getUserBatch();
+    if (existingBatch) {
+      const existingBatchDetails = await this.getBatchDetails(existingBatch.batchId) as BatchDetail;
+      if (existingBatchDetails) {
+        if (!existingBatchDetails.isCompleted) {
+          /* Redirect to progress summary page if processing is not completed */
+          this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
+          this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
+        }
+      }
+    }
+  }
+
+
+  private getBatchDetails(batchId: string) {
+    return new Promise((resolve) => {
+      this.hmrcService.getHmrcBatchDetails(batchId).subscribe(
+        (res) => {
+          resolve(res ? res : null);
+        },
+        (error) => {
+          resolve(null);
+        }
+      );
+    });
+  }
+
+  private getUserBatch() {
+    return new Promise((resolve) => {
+      this.hmrcService.getUserBatch().subscribe((res) => {
+        if (res) {
+          resolve(res);
+        } else {
+          resolve(null);
+        }
+      });
+    });
+  }
 }
