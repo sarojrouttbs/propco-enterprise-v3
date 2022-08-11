@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS,DEFAULTS, ENTITY_TYPE, DATE_FORMAT } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, DEFAULTS, ENTITY_TYPE, DATE_FORMAT } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ValidationService } from 'src/app/shared/services/validation.service';
 
@@ -21,22 +21,25 @@ export class DetailsComponent implements OnInit {
   isMenuShown = true;
   DATE_FORMAT = DATE_FORMAT;
 
-  constructor(private router: Router, private agentService: AgentService, private commonService: CommonService, private _formBuilder: FormBuilder) { }
+  constructor(private router: Router,
+    private agentService: AgentService,
+    private commonService: CommonService,
+    private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.initAPIcalls();
+    this.initApiCalls();
   }
 
-  private async initAPIcalls() {
+  private async initApiCalls() {
     this.createForm();
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
     this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);
-    await this.patchLettingsDetails();
-    await this.patchLetBoardDetails();
-    await this.patchPropertyHistory();
-    await this.patchPropertyChecks();
-    await this.patchPropertyAddressDetails();
+    this.patchLettingsDetails();
+    this.patchLetBoardDetails();
+    this.patchPropertyHistory();
+    this.patchPropertyChecks();
+    this.patchPropertyAddressDetails();
     this.getPropertyLocationsByPropertyId(this.selectedEntityDetails.entityId);
   }
 
@@ -86,7 +89,10 @@ export class DetailsComponent implements OnInit {
         phoneTwo: [''],
         internalNote: [''],
         fileNumber: [''],
-        azReference: ['']
+        azReference: [''],
+        marketingAs: [''],
+        landlordOccupancy: [''],
+        withdrawnReason: ['']
       }),
       letBoardForm: this._formBuilder.group({
         isBoardAllowed: [false],
@@ -95,7 +101,7 @@ export class DetailsComponent implements OnInit {
         slipOrderedOn: [''],
         boardRef: ['']
       }),
-      history: this._formBuilder.group({  
+      history: this._formBuilder.group({
         createdAt: [''],
         createdBy: [''],
         statusChangedOn: [''],
@@ -103,13 +109,14 @@ export class DetailsComponent implements OnInit {
         maStatusChangedOn: [''],
         maStatusChangedBy: ['']
       }),
-      propertyChecksForm:  this._formBuilder.group({
+      propertyChecksForm: this._formBuilder.group({
         hasLetBefore: [''],
         hasGas: [''],
         hasPat: [''],
+        hasPortableAppliances: [''],
         hasOil: [''],
         hasSolidFuel: [''],
-        smokeDetectors: [''], 
+        smokeDetectors: [''],
         smokeAlarmNo: [''],
         hasElectricalIndemnitySigned: [''],
         carbonMonoxideDetectors: [''],
@@ -117,7 +124,7 @@ export class DetailsComponent implements OnInit {
         numberOfFireBlankets: [''],
         numberOfFireExtinguishers: ['']
       }),
-      propertyAddressForm : this._formBuilder.group({
+      propertyAddressForm: this._formBuilder.group({
         postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
         addressdetails: [''],
         buildingNumber: [''],
@@ -132,17 +139,18 @@ export class DetailsComponent implements OnInit {
         country: [''],
         latitude: [''],
         longitude: [''],
-        pafref:[''],
-        organisationName:[''],
-        floor:[''],
-        block:['']
+        pafref: [''],
+        organisationName: [''],
+        floor: [''],
+        block: [''],
+        room: ['']
       })
     })
   }
 
-  getPropertyDetails(propertyId) {
-    let params = new HttpParams().set("hideLoader", "true");
-    const promise = new Promise((resolve, reject) => {
+  getPropertyDetails(propertyId: string) {
+    const params = new HttpParams().set('hideLoader', 'true');
+    return new Promise((resolve) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
           resolve(res.data);
@@ -152,35 +160,20 @@ export class DetailsComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private patchLettingsDetails() {
     const control = this.propertyDetailsForm.controls['lettingsDetailsForm'];
+    control.patchValue(this.propertyDetails?.propertyInfo);
+    control.patchValue(this.propertyDetails?.propertyDetails);
     control.patchValue({
       status: this.propertyDetails?.propertyInfo?.status ? this.propertyDetails?.propertyInfo?.status.toString() : '',
       maStatus: this.propertyDetails?.propertyInfo?.maStatus ? this.propertyDetails?.propertyInfo?.maStatus.toString() : '',
       managementType: this.propertyDetails?.propertyInfo?.managementType ? this.propertyDetails?.propertyInfo?.managementType.toString() : '',
-      rentCategory: this.propertyDetails?.propertyInfo?.rentCategory ? this.propertyDetails?.propertyInfo?.rentCategory : '',
-      hmoPropertyRef: this.propertyDetails?.propertyInfo?.hmoPropertyRef ? this.propertyDetails?.propertyInfo?.hmoPropertyRef : '',
       isHmoProperty: this.propertyDetails?.propertyInfo?.isHmoProperty ? this.propertyDetails?.propertyInfo?.isHmoProperty : false,
-      officeCode: this.propertyDetails?.propertyInfo?.officeCode ? this.propertyDetails?.propertyInfo?.officeCode : '',
-      acquisitionOffice: this.propertyDetails?.propertyInfo?.acquisitionOffice ? this.propertyDetails?.propertyInfo?.acquisitionOffice : '',
-      bookingOfficeCode: this.propertyDetails?.propertyInfo?.bookingOfficeCode ? this.propertyDetails?.propertyInfo?.bookingOfficeCode : '',
-      legacyReference: this.propertyDetails?.propertyDetails?.legacyReference ? this.propertyDetails?.propertyDetails?.legacyReference : '',
-      memberNo: this.propertyDetails?.propertyDetails?.memberNo ? this.propertyDetails?.propertyDetails?.memberNo : '',
-      portfolioSource: this.propertyDetails?.propertyInfo?.portfolioSource ? this.propertyDetails?.propertyInfo?.portfolioSource : '',
-      lettingReason: this.propertyDetails?.propertyDetails?.lettingReason ? this.propertyDetails?.propertyDetails?.lettingReason : '',
       isOnWithOtherAgent: this.propertyDetails?.propertyInfo?.isOnWithOtherAgent ? this.propertyDetails?.propertyInfo?.isOnWithOtherAgent : false,
-      agentName: this.propertyDetails?.propertyInfo?.agentName ? this.propertyDetails?.propertyInfo?.agentName : '',
-      appraisedDate: this.propertyDetails?.propertyDetails?.appraisedDate ? this.propertyDetails?.propertyDetails?.appraisedDate : '',
-      instructedDate: this.propertyDetails?.propertyDetails?.instructedDate ? this.propertyDetails?.propertyDetails?.instructedDate : '',
-      floorArea: this.propertyDetails?.propertyDetails?.floorArea ? this.propertyDetails?.propertyDetails?.floorArea : '',
-      phoneOne: this.propertyDetails?.propertyDetails?.phoneOne ? this.propertyDetails?.propertyDetails?.phoneOne : '',
-      phoneTwo: this.propertyDetails?.propertyDetails?.phoneTwo ? this.propertyDetails?.propertyDetails?.phoneTwo : '',
-      internalNote:  this.propertyDetails?.propertyDescription?.internalNote ? this.propertyDetails?.propertyDescription?.internalNote:'',
-      fileNumber: this.propertyDetails?.propertyInfo?.fileNumber ? this.propertyDetails?.propertyInfo?.fileNumber : '',
-      azReference: this.propertyDetails?.propertyWebInfo?.azReference ? this.propertyDetails?.propertyWebInfo?.azReference : '',
+      internalNote: this.propertyDetails?.propertyDescription?.internalNote ? this.propertyDetails?.propertyDescription?.internalNote : '',
+      azReference: this.propertyDetails?.propertyWebInfo?.azReference ? this.propertyDetails?.propertyWebInfo?.azReference : ''
     });
   }
 
@@ -215,6 +208,7 @@ export class DetailsComponent implements OnInit {
       hasLetBefore: this.propertyDetails?.propertyDetails?.hasLetBefore ? this.propertyDetails?.propertyDetails?.hasLetBefore : false,
       hasGas: this.propertyDetails?.propertyDetails?.hasGas ? this.propertyDetails?.propertyDetails?.hasGas : false,
       hasPat: this.propertyDetails?.propertyDetails?.hasPat ? this.propertyDetails?.propertyDetails?.hasPat : false,
+      hasPortableAppliances: this.propertyDetails?.propertyDetails?.hasPortableAppliances ? this.propertyDetails?.propertyDetails?.hasPortableAppliances : false,
       hasOil: this.propertyDetails?.propertyDetails?.hasOil ? this.propertyDetails?.propertyDetails?.hasOil : false,
       hasSolidFuel: this.propertyDetails?.propertyDetails?.hasSolidFuel ? this.propertyDetails?.propertyDetails?.hasSolidFuel : false,
       smokeDetectors: this.propertyDetails?.smokeDetectors ? this.propertyDetails?.smokeDetectors : '',
@@ -223,7 +217,7 @@ export class DetailsComponent implements OnInit {
       carbonMonoxideDetectors: this.propertyDetails?.carbonMonoxideDetectors ? this.propertyDetails?.carbonMonoxideDetectors : '',
       coDetectorNo: this.propertyDetails?.coDetectorNo ? this.propertyDetails?.coDetectorNo : '',
       numberOfFireBlankets: this.propertyDetails?.numberOfFireBlankets ? this.propertyDetails?.numberOfFireBlankets : '',
-      numberOfFireExtinguishers: this.propertyDetails?.numberOfFireExtinguishers ? this.propertyDetails?.numberOfFireExtinguishers : '',
+      numberOfFireExtinguishers: this.propertyDetails?.numberOfFireExtinguishers ? this.propertyDetails?.numberOfFireExtinguishers : ''
     });
   }
 
@@ -244,42 +238,42 @@ export class DetailsComponent implements OnInit {
       country: this.propertyDetails?.propertyInfo?.address.country,
       latitude: this.propertyDetails?.propertyInfo?.address.latitude,
       longitude: this.propertyDetails?.propertyInfo?.address.longitude,
-      pafref:this.propertyDetails?.propertyInfo?.address.pafReference,
+      pafref: this.propertyDetails?.propertyInfo?.address.pafReference,
       organisationName: this.propertyDetails?.propertyInfo?.address.organisationName,
       floor: this.propertyDetails?.propertyDetails?.floor,
       block: this.propertyDetails?.propertyInfo?.block,
+      room: this.propertyDetails?.propertyInfo?.room
     });
   }
 
   private getPropertyLocationsByPropertyId(propertyId: string) {
-    let params = new HttpParams().set("hideLoader", "true");
+    let params = new HttpParams().set('hideLoader', 'true');
     this.agentService.getPropertyLocationsByPropertyId(propertyId, params).subscribe(
       res => {
-        const propertylocationIds: any = [];
-        if(res && res.data) {
+        if (res && res.data) {
+          const propertylocationIds: any = [];
           res.data.forEach(element => {
             propertylocationIds.push(element.locationId)
           });
           const control = this.propertyDetailsForm.controls['lettingsDetailsForm'];
-          control.patchValue({propertyLocations: propertylocationIds})
+          control.patchValue({ propertyLocations: propertylocationIds })
         }
-      }
-    );
+      });
   }
 
   private getChangeHistory(propertyId: string, fieldName: string) {
     const params = new HttpParams()
-    .set('hideLoader', 'true')
-    .set('entityId', propertyId)
-    .set('entityType', ENTITY_TYPE.PROPERTY)
-    .set('fieldName', fieldName);
-    const promise = new Promise((resolve, reject) => {
+      .set('hideLoader', 'true')
+      .set('entityId', propertyId)
+      .set('entityType', ENTITY_TYPE.PROPERTY)
+      .set('fieldName', fieldName);
+    return new Promise((resolve) => {
       this.agentService.getChangeHistory(params).subscribe(
         (res) => {
-          if(res && fieldName === 'marketingStatus') {
+          if (res && fieldName === 'marketingStatus') {
             this.propertyDetails.propertyInfo.maStatusChangedBy = res[0].changedBy;
-          } else if(res && fieldName === 'status') {
-            this.propertyDetails.propertyInfo.statusChangedBy = res[0].changedBy; 
+          } else if (res && fieldName === 'status') {
+            this.propertyDetails.propertyInfo.statusChangedBy = res[0].changedBy;
           }
           resolve(true);
         },
@@ -288,6 +282,5 @@ export class DetailsComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 }

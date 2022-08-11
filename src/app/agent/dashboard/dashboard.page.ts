@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -6,15 +6,12 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
 })
-export class DashboardPage implements OnInit {
+export class DashboardPage {
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
   ) { }
-
-  ngOnInit() {
-  }
 
   redirect(type: string) {
     switch (type) {

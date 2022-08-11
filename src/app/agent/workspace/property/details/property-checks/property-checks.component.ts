@@ -17,9 +17,9 @@ export class PropertyChecksComponent implements OnInit {
   constructor(private commonService: CommonService) { }
 
   ngOnInit() {
-    this.initAPIcalls();
+    this.initApiCalls();
   }
-  private async initAPIcalls() {
+  private async initApiCalls() {
     this.getPropertyLookupData();
   }
   private getPropertyLookupData() {
@@ -28,7 +28,7 @@ export class PropertyChecksComponent implements OnInit {
       this.setPropertyLookupData(this.propertylookupdata);
     }
     else {
-      let params = new HttpParams().set("hideLoader", "true");
+      let params = new HttpParams().set('hideLoader', 'true');
       this.commonService.getPropertyLookup(params).subscribe(data => {
         this.commonService.setItem(PROPCO.PROPERTY_LOOKUP_DATA, data);
         this.setPropertyLookupData(data);

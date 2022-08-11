@@ -2,14 +2,14 @@
   <ion-toolbar>
     <ion-title>Select Tenant</ion-title>
     <ion-buttons slot="end">
-      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+      <ion-icon name="close" (click)="cancel()"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content id="tenant-list-modal">
   <h4 style="padding: 0 10px;">{{paramMessage}}</h4>
   <div class="table-container" *ngIf="isTableReady && laTenantList.length > 0">
-    <table datatable [dtOptions]="dtOptions" class="row-border hover" style="width: 100%;">
+    <table datatable [dtOptions]="dtOptions" class="row-border hover table-width" aria-describedby="tenant">
       <thead>
         <tr>
           <th style="width:7%">Select</th>
@@ -37,13 +37,23 @@
         </tr>
       </tbody>
     </table>
-    <ion-grid class="ion-no-padding" style="margin-top:15px;">
+    <!-- <ion-grid class="ion-no-padding" style="margin-top:15px;">
       <ion-row>
         <ion-col class="ion-text-end">
           <ion-button [disabled]="!isSelected" (click)="dismiss()">OK</ion-button>
         </ion-col>
       </ion-row>
-    </ion-grid>
+    </ion-grid> -->
   </div>
   <div *ngIf="isTableReady && laTenantList.length === 0" style="padding-top: 20px;"> No Record Found</div>
 </ion-content>
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-end">
+        <ion-button class="cancel-button" (click)="cancel()">Cancel</ion-button>
+        <ion-button class="submit-button" [disabled]="!isSelected" (click)="dismiss()">OK</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

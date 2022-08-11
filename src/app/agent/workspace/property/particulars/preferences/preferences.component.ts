@@ -72,7 +72,7 @@ export class PreferencesComponent implements OnInit {
 
   private getPropertyDetails(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
           if (res && res.data) {
@@ -85,11 +85,10 @@ export class PreferencesComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
   private getPropertyById(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.agentService.getPropertyById(propertyId, params).subscribe(
         (res) => {
           if (res && res.data) {
@@ -102,6 +101,5 @@ export class PreferencesComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 }

@@ -109,7 +109,7 @@ export class DashboardPage implements OnInit {
 
   private getUserDetails() {
     const params = new HttpParams().set('hideLoader', 'true');
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.solrService.getUserDetails(params).subscribe(
         (res) => {
           if (res) {
@@ -125,7 +125,7 @@ export class DashboardPage implements OnInit {
   }
 
   private updateUserDetail(body: object) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.solrService.updateUserDetails(body).subscribe(
         (res) => {
           if (res) {

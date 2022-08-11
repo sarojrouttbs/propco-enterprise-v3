@@ -106,8 +106,8 @@ export class RentComponent implements OnInit {
   }
 
   getPropertyDetails(propertyId: string) {
-    let params = new HttpParams().set("hideLoader", "true");
-    const promise = new Promise((resolve, reject) => {
+    const params = new HttpParams().set('hideLoader', 'true');
+    return new Promise((resolve) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
           resolve(res.data);
@@ -117,6 +117,5 @@ export class RentComponent implements OnInit {
         }
       );
     });
-    return promise;
   }
 }

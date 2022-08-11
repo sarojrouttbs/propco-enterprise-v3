@@ -10,11 +10,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatOptionModule, MAT_DATE_FORMATS } from '@angular/material/core';
+import { MatOptionModule, MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatExpansionModule} from '@angular/material/expansion';
@@ -22,8 +21,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatCardModule} from '@angular/material/card';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatListModule} from '@angular/material/list';
+import { CdkTreeModule } from '@angular/cdk/tree';
+import { MatTreeModule } from '@angular/material/tree';
 
-export const MY_FORMATS = {
+export const MATERIAL_DATE_FORMATS = {
   parse: {
     dateInput: 'LL',
   },
@@ -63,10 +64,12 @@ export const MY_FORMATS = {
     MatCheckboxModule,
     MatCardModule,
     MatMenuModule,
-    MatListModule
+    MatListModule,
+    MatTreeModule,
+    CdkTreeModule
   ],
   providers: [
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: MATERIAL_DATE_FORMATS }
   ],
 })
 export class MaterialModule {}

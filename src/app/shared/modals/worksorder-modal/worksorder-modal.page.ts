@@ -49,7 +49,7 @@ export class WorksorderModalPage implements OnInit {
 
     this.router.events.subscribe(async () => {
       const isModalOpened = await this.modalController.getTop();
-      if (router.url.toString() === "/login" && isModalOpened) this.dismiss();
+      if (router.url.toString() === '/login' && isModalOpened) this.dismiss();
     });
 
   }
@@ -122,7 +122,7 @@ export class WorksorderModalPage implements OnInit {
 
   uploadDocument(uploadedDocument, type: string) {
     if (((this.uploadedPhoto.length + uploadedDocument.length > 5) && type === 'photo') || ((this.uploadedInvoice.length + uploadedDocument.length > 5) && type === 'invoice')) {
-      this.commonService.showMessage("You are only allowed to upload a maximum of 5 document", "Warning", "warning");
+      this.commonService.showMessage('You are only allowed to upload a maximum of 5 document', 'Warning', 'warning');
       return;
     }
     if (uploadedDocument) {
@@ -130,10 +130,10 @@ export class WorksorderModalPage implements OnInit {
         if (this.validateUploadLimit(file)) {
 
           let isImage: boolean = false;
-          if (file.type.split("/")[0] !== 'image') {
+          if (file.type.split('/')[0] !== 'image') {
             isImage = false;
           }
-          else if (file.type.split("/")[0] == 'image') {
+          else if (file.type.split('/')[0] == 'image') {
             isImage = true;
           }
           if (type === 'photo') {
@@ -222,7 +222,7 @@ export class WorksorderModalPage implements OnInit {
     const photos = await this.prepareUploadData('completion');
     apiObservableArray = apiObservableArray.concat(faultData);
     apiObservableArray = apiObservableArray.concat(photos);
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         forkJoin(apiObservableArray).subscribe(() => {
           this.showLoader = false;
@@ -234,11 +234,10 @@ export class WorksorderModalPage implements OnInit {
         });
       }, 1000);
     });
-    return promise;
   }
 
   private async prepareUploadData(type) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let apiObservableArray = [];
       let uploadedDoc = (type === 'invoice') ? this.uploadDocumentForm.controls.invoices.value : this.uploadPhotoForm.controls.photos.value;
       uploadedDoc.forEach(data => {
@@ -258,12 +257,11 @@ export class WorksorderModalPage implements OnInit {
       });
       resolve(apiObservableArray);
     });
-    return promise;
   }
 
   private submitWorksOrderCompletion() {
     this.showLoader = true;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.worksorderService.saveWorksOrderCompletion(this.prepareData(), this.actionType === 'regular' ? this.faultNotificationId : this.faultId, this.actionType).subscribe(
         res => {
           this.commonService.showMessage('Success', 'Job Completed', 'success');
@@ -276,7 +274,6 @@ export class WorksorderModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private prepareData() {
@@ -289,20 +286,20 @@ export class WorksorderModalPage implements OnInit {
   }
 
   private validateReq() {
-    let valid = true;
     if (!this.jobCompletionForm.valid) {
       this.commonService.showMessage('Job completion details are required', 'Mark the Job Completed', 'error');
-      this.jobCompletionForm.markAllAsTouched(); return valid = false;
+      this.jobCompletionForm.markAllAsTouched(); 
+      return false;
     }
     if (this.actionType === 'view' && this.uploadDocumentForm.controls.invoices.value.length === 0) {
       this.commonService.showMessage('Please upload Invoice', 'Mark the Job Completed', 'error');
-      return valid = false;
+      return false;
     }
     if (this.uploadDocumentForm.controls.invoices.value.length > 0 && !this.jobCompletionForm.value.invoiceAmount) {
       this.commonService.showMessage('Please add invoice amount', 'Mark the Job Completed', 'error');
-      return valid = false;
+      return false;
     }
-    return valid;
+    return true;
   }
 
   enableAnyFurtherWork() {
@@ -324,7 +321,7 @@ export class WorksorderModalPage implements OnInit {
 
   private updateInvoiceAmount() {
     this.showLoader = true;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let req: any = {};
       req.invoiceAmount = this.jobCompletionForm.value.invoiceAmount;
       req.stage = this.stage;
@@ -342,12 +339,11 @@ export class WorksorderModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   private updateFurtherWorkDetails() {
     this.showLoader = true;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let reqObj: any = {};
       reqObj.stage = this.stage;
       reqObj.isDraft = false;
@@ -367,7 +363,6 @@ export class WorksorderModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
 

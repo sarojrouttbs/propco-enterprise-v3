@@ -50,7 +50,7 @@ export class JobCompletionModalPage implements OnInit {
   }
 
   updateNotification(faultNotificationId, requestObj) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateNotification(faultNotificationId, requestObj).subscribe(
         res => {
           this.showLoader = false;
@@ -63,7 +63,6 @@ export class JobCompletionModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   async onCancel() {

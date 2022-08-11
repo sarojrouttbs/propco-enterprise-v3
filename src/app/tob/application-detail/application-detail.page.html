@@ -529,7 +529,7 @@
           <ion-item>
             <ion-label position="floating"> Postcode <ion-text class="mandatory">*</ion-text>
             </ion-label>
-            <ion-input type="text" formControlName="postcode"></ion-input>
+            <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
             <ion-button color="success" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
               (click)="getAddressList('personal')">Find
               <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
@@ -602,7 +602,7 @@
             <ion-item>
               <ion-label position="floating">Postcode <ion-text class="mandatory">*</ion-text>
               </ion-label>
-              <ion-input type="text" formControlName="postcode"></ion-input>
+              <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
               <ion-button class="postcode-search" [disabled]="showAddressLoader || applicationDetails?.isSubmitted" color="success"
                 (click)="getAddressList('correspondence-address')"> Find
                 <ion-icon *ngIf="showAddressLoader" name="refresh" class="rotating submit-loader"></ion-icon>
@@ -969,7 +969,7 @@
               <ion-label position="floating"> Postcode <ion-text *ngIf="isStudentProperty" class="mandatory">*
                 </ion-text>
               </ion-label>
-              <ion-input type="text" formControlName="postcode"></ion-input>
+              <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
               <ion-button color="success" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
                 (click)="getAddressList('guarantor')">Find
                 <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>

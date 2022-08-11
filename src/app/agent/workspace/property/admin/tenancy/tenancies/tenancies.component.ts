@@ -11,6 +11,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
   styleUrls: ['./tenancies.component.scss'],
 })
 export class TenanciesComponent implements OnInit {
+  type = 'agreementDetails';
   dtOptions: any = {};
   localStorageItems: any = [];
   selectedEntityDetails: any = null;
@@ -18,11 +19,13 @@ export class TenanciesComponent implements OnInit {
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   notAvailable = DEFAULTS.NOT_AVAILABLE
   lookupdata: any;
-  officeLookup: any;
   contractTypeLookup: any;
   agreementStatusesLookup: any;
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
   DATE_FORMAT = DATE_FORMAT;
+  selectedTenant: any;
+  isAgreementDetails = false;
+  propcoAgreementId: any;
 
   constructor(private commonService: CommonService, private agentService: AgentService) { }
 
@@ -55,7 +58,7 @@ export class TenanciesComponent implements OnInit {
         let params = new HttpParams()
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
-          .set("hideLoader", "true");
+          .set('hideLoader', 'true');
         this.agentService.getPropertyTenancies(this.selectedEntityDetails.entityId, params).subscribe(res => {
           let tenancies = res && res.data ? res.data : [];
           tenancies.map((data) => {
@@ -106,9 +109,29 @@ export class TenanciesComponent implements OnInit {
     }
   }
 
-  private setLookupData(data) {
-    this.officeLookup = data.officeCodes;
+  private setLookupData(data: any) {
     this.contractTypeLookup = data.contractTypes;
     this.agreementStatusesLookup = data.agreementStatuses;
+  }
+
+  onRowClick(data: any) {
+    this.selectedTenant = data;
+    this.isAgreementDetails = true;
+    this.tenancies.forEach((e, i) => {
+      if (e.agreementId === data.agreementId) this.tenancies[i].isSelected = true;
+      else this.tenancies[i].isSelected = false;
+    });
+  }
+
+  showMenu(event: any, id: any, className: any) {
+    this.commonService.showMenu(event, id, className, true);
+  }
+
+  hideMenu(event: any, id: any) {
+    this.commonService.hideMenu(event, id);
+  }
+
+  getPropcoAgreementId(data: any) {
+    this.propcoAgreementId = data; 
   }
 }

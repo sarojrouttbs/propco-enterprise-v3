@@ -52,7 +52,7 @@ export class SnoozeFaultModalPage implements OnInit {
       submittedByType: 'SECUR_USER',
     }
     this.showLoader = true;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.saveSnoozeFaultData(requestObj, this.faultId).subscribe(
         res => {
           this.showLoader = false;
@@ -64,7 +64,6 @@ export class SnoozeFaultModalPage implements OnInit {
         }
       );
     });
-    return promise;
   }
 
   dismiss() {

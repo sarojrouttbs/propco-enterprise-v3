@@ -242,6 +242,9 @@ export const SYSTEM_CONFIG = {
   FAULT_DEFAULT_NOTE_TYPE: 'FAULT_DEFAULT_NOTE_TYPE',
   MAX_ACTIVE_QUOTE_CONTRACTOR: 'MAX_ACTIVE_QUOTE_CONTRACTOR',
   FAULT_OVERRIDE_COMMUNICATION_CONSENT: 'FAULT_OVERRIDE_COMMUNICATION_CONSENT',
+  HMRC_TAX_HANDLER_SELF_ASSESSMENT_FORM: 'HMRC_TAX_HANDLER_SELF_ASSESSMENT_FORM',
+  HMRC_BATCH_PRINT_BASE_URL: 'HMRC_BATCH_PRINT_BASE_URL',
+  HMRC_BATCH_PRINT_FOLDER: 'HMRC_BATCH_PRINT_FOLDER'
 };
 
 export const SYSTEM_OPTIONS = {
@@ -721,24 +724,20 @@ export const DATE_FORMAT = {
 export const HMRC = {
   QUICK_DATE_FILTERS: [
     {
-      index: "2017-05-06,2018-05-05",
-      value: "2017-2018"
-    },
-    {
-      index: "2018-05-06,2019-05-05",
-      value: "2018-2019"
-    },
-    {
-      index: "2019-05-06,2020-05-05",
-      value: "2019-2020"
-    },
-    {
-      index: "2020-05-06,2021-05-05",
-      value: "2020-2021"
-    },
-    {
-      index: "2021-05-06,2022-05-05",
-      value: "2021-2022"
+      index: '2021-04-06,2022-04-05',
+      value: '2021-2022'
+    }, {
+      index: '2020-04-06,2021-04-05',
+      value: '2020-2021'
+    }, {
+      index: '2019-04-06,2020-04-05',
+      value: '2019-2020'
+    }, {
+      index: '2018-04-06,2019-04-05',
+      value: '2018-2019'
+    }, {
+      index: '2017-04-06,2018-04-05',
+      value: '2017-2018'
     }
   ],
   SEARCH_ON_COLUMNS_KEYS: [
@@ -747,4 +746,55 @@ export const HMRC = {
     { index: 'LANDLORD_FULLNAME', value: 'Landlord/Owner Full Name' },
     { index: 'LANDLORD_ADDRESS', value: 'Landlord Address' },
   ]
+}
+
+export const DATE_RANGE_CONFIG_LIST = [{
+  index: 'Week to Date',
+  value: 'Week to Date'
+},
+{
+  index: 'Month to Date',
+  value: 'Month to Date'
+},
+{
+  index: 'Year to Date',
+  value: 'Year to Date'
+},
+{
+  index: 'Last Month',
+  value: 'Last Month'
+}];
+
+export const DATE_RANGE_CONFIG = {
+  'WEEK_TO_DATE': 'Week to Date',
+  'MONTH_TO_DATE': 'Month to Date',
+  'YEAR_TO_DATE': 'Year to Date',
+  'LAST_MONTH': 'Last Month'
+};
+
+export const HMRC_CONFIG = {
+  EMAIL_REGEX: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+  HMRC_SENDER_EMAIL_ACCOUNT: 'HMRC_SENDER_EMAIL_ACCOUNT',
+  DOWNLOAD_PDF_INFO_TEXT: 'Please note that download pdf is only available for the records with print in their preference'
+}
+
+export const HMO_LICENCE_CONFIG = {
+  NO_SCHEME: 4,
+  HMO_RISK_DEFAULT: 'Not yet checked',
+  HMO_LICENCE_EXPIRY_DATE_DEFAULT: 'Unknown'
+}
+
+export const CHECKED_IN_OUT_STATUS = {
+  CHECKED_IN: 'Checked In',
+  CHECKED_OUT: 'Checked Out'
+}
+
+export const CURRENCY_MASK_CONFIGURATION = {
+  align: 'left',
+  allowNegative: false,
+  decimal: '.',
+  precision: 2,
+  prefix: '£ ',
+  suffix: '',
+  thousands: ','
 }

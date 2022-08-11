@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { AgentService } from 'src/app/agent/agent.service';
 import { WorkspaceService } from 'src/app/agent/workspace/workspace.service';
-import { DEFAULTS, DEFAULT_MESSAGES, ERROR_MESSAGE } from '../../constants';
+import { DEFAULT_MESSAGES, ERROR_MESSAGE } from '../../constants';
 import { SimpleModalPage } from '../../modals/simple-modal/simple-modal.page';
 import { CommonService } from '../../services/common.service';
 import { ThemeService } from '../../services/theme.service';
@@ -14,7 +14,7 @@ import { ThemeService } from '../../services/theme.service';
   templateUrl: './agent-header.component.html',
   styleUrls: ['./agent-header.component.scss'],
 })
-export class AgentHeaderComponent implements OnInit {
+export class AgentHeaderComponent {
   entityControl = new FormControl(['Property']);
   public themeColor = [
     { name: 'Light', class: 'light-theme' },
@@ -40,8 +40,6 @@ export class AgentHeaderComponent implements OnInit {
       this.themeService.activeTheme(this.defaultTheme);
     }
   }
-
-  ngOnInit() { }
 
   searchHandler(term: string) { }
 
@@ -110,7 +108,6 @@ export class AgentHeaderComponent implements OnInit {
       case 'self-assessment-form':
         this.router.navigate([`/agent/hmrc/${pageRef}`]);
         break;
-
       default:
         break;
     }

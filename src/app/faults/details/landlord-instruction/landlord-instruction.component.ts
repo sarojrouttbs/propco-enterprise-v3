@@ -22,7 +22,7 @@ import { ContractorDetailsModalPage } from 'src/app/shared/modals/contractor-det
   styleUrls: ['./landlord-instruction.component.scss', '../details.page.scss']
 })
 export class LandlordInstructionComponent implements OnInit {
-  @ViewChild("outsideElement", { static: true }) outsideElement: ElementRef;
+  @ViewChild('outsideElement', { static: true }) outsideElement: ElementRef;
   @ViewChild('modalView', { static: true }) modalView$: ElementRef;
   landlordInstFrom: FormGroup;
   workOrderForm: FormGroup;
@@ -201,7 +201,7 @@ export class LandlordInstructionComponent implements OnInit {
   }
 
   private getLandlordDetails(landlordId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getLandlordDetails(landlordId).subscribe(
         res => {
           let categoryNames = [];
@@ -219,7 +219,7 @@ export class LandlordInstructionComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private getMaxRentShareLandlord(landlords) {
@@ -657,7 +657,7 @@ export class LandlordInstructionComponent implements OnInit {
     let notificationObj = {} as FaultModels.IUpdateNotification;
     notificationObj.isVoided = true;
     notificationObj.submittedByType = 'SECUR_USER';
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateNotification(this.cliNotification.faultNotificationId, notificationObj).subscribe(
         res => {
           resolve(true);
@@ -668,13 +668,13 @@ export class LandlordInstructionComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private updateFaultDetails(requestObj): Promise<any> {
     requestObj.submittedByType = 'SECUR_USER';
     requestObj.submittedById = '';
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.updateFault(this.faultDetails.faultId, requestObj).subscribe(
         res => {
           resolve(true);
@@ -684,7 +684,7 @@ export class LandlordInstructionComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private updateFaultStatus(status): Promise<any> {
@@ -727,20 +727,19 @@ export class LandlordInstructionComponent implements OnInit {
   }
 
   private createFaultFormValues(): any {
-    let faultDetails = {
+    return {
       category: this.describeFaultForm.get('category').value,
       title: this.describeFaultForm.get('title').value,
       isTenantPresenceRequired: this.accessInfoForm.get('isTenantPresenceRequired').value,
       areOccupiersVulnerable: this.accessInfoForm.get('areOccupiersVulnerable').value,
       tenantNotes: this.accessInfoForm.get('tenantNotes').value,
-      sourceType: "FAULT",
+      sourceType: 'FAULT',
     }
-    return faultDetails;
   }
 
 
   private updateFault(isSubmit = false, stageAction = '') {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateFault(
         this.faultDetails.faultId, this.prepareFaultData(isSubmit, stageAction)).subscribe((res) => {
           resolve(true);
@@ -749,7 +748,7 @@ export class LandlordInstructionComponent implements OnInit {
           this.commonService.showMessage('Something went wrong', 'Update Repair', 'error');
         });
     });
-    return promise;
+    
   }
 
 
@@ -786,7 +785,7 @@ export class LandlordInstructionComponent implements OnInit {
 
 
   private getPreferredSuppliers(landlordId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         res => {
           this.preferredSuppliers = res && res.data ? res.data : [];
@@ -797,7 +796,7 @@ export class LandlordInstructionComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   async checkFaultNotifications(faultId) {
@@ -812,7 +811,7 @@ export class LandlordInstructionComponent implements OnInit {
   }
 
   private filterNotifications(data, stage, action) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let filtereData = null;
       let currentStage = stage;
       let currentAction = action;
@@ -827,7 +826,7 @@ export class LandlordInstructionComponent implements OnInit {
       filtereData[0].chase = filtereData[0].numberOfChasesDone + 1;
       resolve(filtereData[0]);
     });
-    return promise;
+    
   }
 
   setUserAction(index) {
@@ -1020,18 +1019,18 @@ export class LandlordInstructionComponent implements OnInit {
 
 
   private getContractorDetails(contractorId) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.getContractorDetails(contractorId).subscribe(res => {
         resolve(res);
       }, error => {
         reject(null);
       });
     });
-    return promise;
+    
   }
 
   private async updateFaultNotification(data, faultNotificationId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let notificationObj = {} as FaultModels.IUpdateNotification;
       notificationObj.isAccepted = data;
       notificationObj.submittedByType = 'SECUR_USER';
@@ -1044,7 +1043,7 @@ export class LandlordInstructionComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   onSearchContractor(event: any) {
@@ -1084,7 +1083,7 @@ export class LandlordInstructionComponent implements OnInit {
 
     this.nominalCodes.forEach(code => {
       let heading = code.heading ? code.heading.toUpperCase() : '';
-      code.concat = heading + ", " + code.nominalCode + ", " + code.description;
+      code.concat = heading + ', ' + code.nominalCode + ', ' + code.description;
       if (this.faultDetails.nominalCode && code.nominalCode === this.faultDetails.nominalCode) {
         this.landlordInstFrom.get('nominalCode').setValue(code);
       }
@@ -1170,7 +1169,7 @@ export class LandlordInstructionComponent implements OnInit {
   }
 
   async fetchPendingNotification(faultId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.fetchPendingNotification(faultId).subscribe(
         res => {
           this.pendingNotification = res ? res : '';
@@ -1181,7 +1180,7 @@ export class LandlordInstructionComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   async notificationModal() {
@@ -1341,18 +1340,18 @@ export class LandlordInstructionComponent implements OnInit {
   }
 
   private async getSystemOptions(key): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.commonService.getSystemOptions(key).subscribe(res => {
         resolve(res ? res['key'] : '');
       }, error => {
         resolve('');
       });
     });
-    return promise;
+    
   }
 
   private getWorksOrderPaymentRules(actionType = WORKSORDER_RAISE_TYPE.AUTO) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getWorksOrderPaymentRules(this.faultDetails.faultId).subscribe(
         res => {
           resolve(res);
@@ -1366,7 +1365,7 @@ export class LandlordInstructionComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   async presentRepairCategories(ev: any) {

@@ -1,0 +1,85 @@
+@mixin set-text-style($size, $lheight) {
+    font-size: $size;
+    line-height: $lheight;
+}
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -ms-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+}
+
+#progress-summary {
+    --padding-top: var(--ion-padding-top);
+    --padding-end: var(--ion-padding-end);
+    --padding-bottom: var(--ion-padding-bottom);
+    --padding-start: var(--ion-padding-start);
+
+    div {
+        h2 {
+            color: var(--ion-color-three);
+            font-weight: 600;
+        }
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        border: 1px solid var(--ion-color-four);
+    }
+
+    th {
+        background-color: var(--ion-color-three);
+        color: var(--ion-color-success-contrast);
+    }
+    td,
+    th {
+        text-align: center;
+        padding: 8px;
+        width: 20px;
+    }
+    tr:nth-child(even) {
+        background-color: var(--ion-color-five);
+    }
+    tr:nth-child(odd) {
+        background-color: var(--ion-color-four);
+    }
+    td {
+        color: var(--ion-color-one);
+    }
+    .note-text {
+        color: var(--ion-color-three);
+    }
+
+    .element-margin {
+        margin-bottom: 25px;
+    }
+
+    .button-margin {
+        margin-right: 16px;
+    }
+    ion-progress-bar {
+        height: 8px;
+        border-radius: 5px;
+    }
+    .mandatory {
+        color: var(--ion-color-primary);
+    }
+    .action-item {
+        width: 46%;
+    }
+    tr:nth-child(2) {
+        font-weight: bold !important;
+    }
+    .action-panel {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        .info-icon {
+            @include set-text-style(29px, 33px);
+            pointer-events: none;
+            margin-top: 2px;
+        }
+    }
+}

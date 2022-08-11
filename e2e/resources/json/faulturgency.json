@@ -1,0 +1,34 @@
+{
+    "faultDetails": {
+        "faultUrgencyComplete": {
+            "propertyId": "000002063",
+            "category": "Appliances",
+            "urgency": "",
+            "title": "Dishwasher problem",
+            "description": "Dishwasher is not working",
+            "typeAddition1": "",
+            "additionalInfo1": "",
+            "typeAddition2": "",
+            "additionalInfo2": "",
+            "reporter": "Tenant",
+            "tenancyAgreement": "Extended",
+            "reporterList": "Select Tenant",
+            "reporterName": "Mr D O",
+            "accessInfo": "Tenant",
+            "isOccupierVulnerable": "",
+            "usefulInstruction": "",
+            "faultImage": "../resources/upload/Dishwasher.png",
+            "urgencyOptions": "Emergency,Urgent,Non Urgent",
+            "urgency1": "Urgent",
+            "urgency2": "Emergency",
+            "urgency3": "Non Urgent",
+            "urgencyHeader1": "URGENT",
+            "urgencyHeader2": "EMERGENCY",
+            "urgencyHeader3": "NON URGENT",
+            "urgencyChangeMsg": "This will change the urgency status. Are you sure you want to proceed?",
+            "tableUrgency1": "warning",
+            "tableUrgency2": "danger",
+            "tableUrgency3": "success"                                                               
+        }
+    }
+}

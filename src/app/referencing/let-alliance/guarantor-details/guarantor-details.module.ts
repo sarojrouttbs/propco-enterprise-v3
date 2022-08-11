@@ -12,16 +12,9 @@ import { GuarantorDetailsPageRoutingModule } from './guarantor-details-routing.m
 import { GuarantorDetailsPage } from './guarantor-details.page';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
+import { CURRENCY_MASK_CONFIGURATION } from 'src/app/shared/constants';
 
-export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
-  align: "left",
-  allowNegative: false,
-  decimal: ".",
-  precision: 2,
-  prefix: "£ ",
-  suffix: "",
-  thousands: ","
-};
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
 @NgModule({
   imports: [

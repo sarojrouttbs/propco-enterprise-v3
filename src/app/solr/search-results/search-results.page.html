@@ -78,7 +78,7 @@
                           noEntriesFoundLabel="'no matching found'"
                         ></ngx-mat-select-search>
                       </mat-option>
-                      <mat-option *ngFor="let item of managementTypesFiltered" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option *ngFor="let item of managementTypesFiltered" [value]="item.value">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -91,7 +91,7 @@
                           noEntriesFoundLabel="'no matching found'"
                         ></ngx-mat-select-search>
                       </mat-option>
-                      <mat-option *ngFor="let item of propertyStylesFiltered" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option *ngFor="let item of propertyStylesFiltered" [value]="item.value">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -106,7 +106,7 @@
                       noEntriesFoundLabel="'no matching found'"
                     ></ngx-mat-select-search>
                       </mat-option>
-                      <mat-option *ngFor="let item of houseTypesFiltered" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option *ngFor="let item of houseTypesFiltered" [value]="item.value">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -119,7 +119,7 @@
                       noEntriesFoundLabel="'no matching found'"
                     ></ngx-mat-select-search>
                       </mat-option>
-                      <mat-option *ngFor="let item of propertyStatusesFiltered" [value]="item.index">{{item.value}}</mat-option>
+                      <mat-option *ngFor="let item of propertyStatusesFiltered" [value]="item.value">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -180,7 +180,7 @@
                     noEntriesFoundLabel="'no matching found'"
                   ></ngx-mat-select-search>
                     </mat-option>
-                    <mat-option *ngFor="let item of landlordStatusesFiltered" [value]="item.index">{{item.value}}</mat-option>
+                    <mat-option *ngFor="let item of landlordStatusesFiltered" [value]="item.value">{{item.value}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </ion-col>
@@ -268,7 +268,7 @@
                       noEntriesFoundLabel="'no matching found'"
                     ></ngx-mat-select-search>
                     </mat-option>
-                    <mat-option *ngFor="let item of tenantStatusesFiltered" [value]="item.index">{{item.value}}</mat-option>
+                    <mat-option *ngFor="let item of tenantStatusesFiltered" [value]="item.value">{{item.value}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </ion-col>
@@ -379,12 +379,12 @@
                 <mat-form-field [floatLabel]="'never'">
                   <mat-select placeholder="Status" formControlName="status" multiple>
                     <mat-option>
-                      <ngx-mat-select-search [formControl]="applicantStatuFilterCtrl"
+                      <ngx-mat-select-search [formControl]="agentStatuFilterCtrl"
                     placeholderLabel="search"
                     noEntriesFoundLabel="'no matching found'"
                   ></ngx-mat-select-search>
                     </mat-option>
-                    <mat-option *ngFor="let item of applicantStatusesFiltered" [value]="item.index">{{item.value}}</mat-option>
+                    <mat-option *ngFor="let item of agentStatusesFiltered" [value]="item.value">{{item.value}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </ion-col>
@@ -429,20 +429,20 @@
                   noEntriesFoundLabel="'no matching found'"
                 ></ngx-mat-select-search>
                   </mat-option>
-                  <mat-option *ngFor="let item of contractorStatusesFiltered" [value]="item.index">{{item.value}}</mat-option>
+                  <mat-option *ngFor="let item of contractorStatusesFiltered" [value]="item.value">{{item.value}}</mat-option>
                 </mat-select>
               </mat-form-field>
             </ion-col>
             <ion-col size="50">
               <mat-form-field [floatLabel]="'never'">
-                <mat-select placeholder="Skill Set" formControlName="skills" multiple>
+                <mat-select placeholder="Skill Set" formControlName="occupation" multiple>
                   <mat-option>
                     <ngx-mat-select-search [formControl]="contractorSkillFilterCtrl"
                   placeholderLabel="search"
                   noEntriesFoundLabel="'no matching found'"
                 ></ngx-mat-select-search>
                   </mat-option>
-                  <mat-option *ngFor="let item of contractorSkillsFiltered" [value]="item.index">{{item.value}}</mat-option>
+                  <mat-option *ngFor="let item of contractorSkillsFiltered" [value]="item.value">{{item.value}}</mat-option>
                 </mat-select>
               </mat-form-field>
             </ion-col>
@@ -450,13 +450,13 @@
           <ion-row>
             <ion-col size="100">
               <ion-item lines="none">
-                <ion-toggle color="primary" formControlName="vatRegistered"></ion-toggle>
+                <ion-toggle color="primary" formControlName="isVatRegistered"></ion-toggle>
                 VAT Registered
               </ion-item>
             </ion-col>
             <ion-col size="100">
               <ion-item lines="none">
-                <ion-toggle color="primary" formControlName="approvedByAgent"></ion-toggle>
+                <ion-toggle color="primary" formControlName="isAgentContractorApproved"></ion-toggle>
                 Agency Approved
               </ion-item>
             </ion-col>

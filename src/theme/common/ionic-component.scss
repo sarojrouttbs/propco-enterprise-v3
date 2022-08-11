@@ -241,7 +241,10 @@ ion-item {
 
 .entity-search, .la-application-search, .la-property-search,.nett-modal-container ,.fee-charge-modal-container{
   // .modal-wrapper {
-    min-height: 210px;
+    &::part(content){
+
+    min-height: 220px;
+    height: 225px;
     width: 550px;
 
     ion-content {
@@ -265,13 +268,16 @@ ion-item {
       padding: 0 10px;
     }
   }
-// }
+}
 
 .tenant-list,.fee-charge-modal-container {
   // .modal-wrapper {
-    min-height: 300px;
-    min-width: 400px;
-    width: 767px;
+    &::part(content){
+      min-height: 400px;
+      height: 40%;
+      min-width: 400px;
+      width: 767px;
+    }
 
     .dataTables_wrapper.no-footer .dataTables_scrollBody{
       border-bottom: none;
@@ -288,8 +294,11 @@ ion-item {
 
 .alert-prompt{
   // .modal-wrapper {
-    min-height: 200px;
-    min-width: 300px;
+    &::part(content){
+      min-height: 200px;
+      min-width: 300px;
+      height: 250px;
+    }
 
     .status-block{
       padding: 10px 0 0 0;
@@ -485,7 +494,7 @@ ion-alert.common-alert-box {
   // }
 }
 
-#propertyDashboardTabs{
+#propertyDashboardTabs, #tenancyAgreementEditorTabs {
     z-index: 1000;
     padding-bottom: 10px;
     ion-segment-button{
@@ -523,6 +532,13 @@ ion-alert.common-alert-box {
   }
 }
 
+#tenancyAgreementEditorTabs {
+  padding: 0px 10px 10px 10px;
+  ion-segment-button{
+    border: solid 1px var(--ion-color-four);
+  }
+}
+
 #marketAppraisalTabs{
   ion-segment-button{
     border: solid 1px var(--ion-color-four);
@@ -555,7 +571,7 @@ ion-alert.common-alert-box {
   }
   ion-item[aria-disabled="true"] { 
     ion-label, ion-text {
-      opacity: 0.6;
+      opacity: 1;
     }
   }
   #market-appraisal{
@@ -618,7 +634,8 @@ ion-alert.common-alert-box {
   #la-guarantor-details,
   #market-appraisal-lettings,
   #market-appraisal-property-address,
-  #property-keys {
+  #property-keys,
+  #agreement-details {
     ion-select{
       height: 36px;
     }
@@ -634,6 +651,9 @@ ion-alert.common-alert-box {
     }
   
     // ionic form field - dark / light theme css
+    h4, h5, h6, p, small, div, ion-label, ion-text {
+      color: var(--ion-color-one);
+    }
     ion-item {
       --border-color: var(--ion-color-one) !important;
       ion-label, ion-text {
@@ -675,7 +695,6 @@ ion-alert.common-alert-box {
 }
 
 .market-apprisal-ion-select, .fault-ion-select, .let-alliance-ion-select , .hmrc-ion-select{
-  --width: auto;
   .sc-ion-select-popover{
     color: var(--ion-color-three) !important
   }
@@ -683,6 +702,11 @@ ion-alert.common-alert-box {
     --background: var(--ion-color-four);
   }
 }
+
+.ion-select-auto {
+  --width: auto !important;
+}
+
 
 //agnet portal > market appraisal form modals
 .ma-modal-container,.la-modal-container, .tob-modal-container, .fault-modal-container, .property-modal-container {
@@ -886,4 +910,42 @@ ion-datetime {
     position: absolute;
     right: 0;
     color: var( --ion-color-primary); 
+}
+#hmrc-stepper {
+  .ion-date-item-icon {
+    opacity: 0.6;
+  }
+}
+
+.office-filter-modal-container{
+  &::part(content) {
+    height: 525px;
+    width: 750px;
+  }
+
+  ion-item {
+    --border-color: var(--ion-color-one);
+    ion-label {
+      color: var(--ion-color-three) !important;
+    }
+  }
+
+  .mat-tree {
+    background: var(--ion-color-six);
+    .mat-tree-node {
+      color: var(--ion-color-mat-checkbox-label);
+    }
+  }
+
+  .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background, .mat-checkbox-checked.mat-primary .mat-checkbox-background {
+    background-color: var(--ion-color-success) !important;
+  }
+  
+}
+
+.preview-pdf-modal-container{
+  &::part(content){
+    height: 575px;
+    width: 850px;
+  }
 }

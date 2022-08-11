@@ -15,6 +15,11 @@ import { PipesModule } from '../shared/pipes/pipes.module';
 import { SelectSearchAllDirective } from '../select-all-plus-search/select-search-all.directive';
 import { SelectAllPlusSearchComponent } from '../select-all-plus-search/select-all-plus-search.component';
 import { SelectDatesComponent } from './self-assessment-form/select-dates/select-dates.component';
+import { OfficeFilterModalPageModule } from '../shared/modals/office-filter-modal/office-filter-modal.module';
+import { PreviewAndSendComponent } from './self-assessment-form/preview-and-send/preview-and-send.component';
+import { PreviewPdfModalPageModule } from '../shared/modals/preview-pdf-modal/preview-pdf-modal.module';
+import { IonicSelectableModule } from 'ionic-selectable';
+import { ProgressSummaryComponent } from './self-assessment-form/progress-summary/progress-summary.component';
 
 @NgModule({
   imports: [
@@ -25,7 +30,10 @@ import { SelectDatesComponent } from './self-assessment-form/select-dates/select
     MaterialModule,
     ReactiveFormsModule,
     DataTablesModule,
-    PipesModule
+    PipesModule,
+    OfficeFilterModalPageModule,
+    PreviewPdfModalPageModule,
+    IonicSelectableModule
   ],
   declarations: [
     HmrcPage,
@@ -33,7 +41,9 @@ import { SelectDatesComponent } from './self-assessment-form/select-dates/select
     SelectLandlordsComponent,
     SelectSearchAllDirective,
     SelectAllPlusSearchComponent,
-    SelectDatesComponent
+    SelectDatesComponent,
+    PreviewAndSendComponent,
+    ProgressSummaryComponent
   ],
   entryComponents: [SelectAllPlusSearchComponent]
 })

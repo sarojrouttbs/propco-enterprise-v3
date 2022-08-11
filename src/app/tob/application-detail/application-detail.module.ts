@@ -9,6 +9,7 @@ import { ComponentsModule } from 'src/app/shared/components/components.module';
 import { MaterialModule } from 'src/app/material.module';
 import { TemplateFormModule } from 'src/app/worldpay-ownform/template-form/template-form.module';
 import { TermsAndConditionModalPageModule } from 'src/app/shared/modals/terms-and-condition-modal/terms-and-condition-modal.module';
+import { PostcodeDirectiveModule } from 'src/app/shared/directives/postcode-directive.module';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { TermsAndConditionModalPageModule } from 'src/app/shared/modals/terms-an
     ComponentsModule,
     MaterialModule,
     TemplateFormModule,
-    TermsAndConditionModalPageModule
+    TermsAndConditionModalPageModule,
+    PostcodeDirectiveModule
   ],
   declarations: [ApplicationDetailPage]
 })

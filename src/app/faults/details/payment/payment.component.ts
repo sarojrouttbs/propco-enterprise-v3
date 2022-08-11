@@ -113,7 +113,7 @@ export class PaymentComponent implements OnInit {
       worksOrderNumber: [{ value: this.faultDetails.reference, disabled: true }],
       postdate: [{ value: '', disabled: true }],
       nominalCode: ['', Validators.required],
-      description: [this.categoryName + " " + this.faultDetails.title, Validators.required],
+      description: [this.categoryName + ' ' + this.faultDetails.title, Validators.required],
       paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
       keysLocation: this.faultDetails.doesBranchHoldKeys ? KEYS_LOCATIONS.KEY_IN_BRANCH : KEYS_LOCATIONS.DO_NOT_HOLD_KEY,
       returnKeysTo: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
@@ -157,7 +157,7 @@ export class PaymentComponent implements OnInit {
   }
 
   private getFaultMaintenance() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const params: any = new HttpParams().set('showCancelled', 'true');
       this.faultsService.getQuoteDetails(this.faultDetails.faultId, params).subscribe((res) => {
         this.isMaintenanceDetails = true;
@@ -167,7 +167,7 @@ export class PaymentComponent implements OnInit {
         resolve(false);
       });
     });
-    return promise;
+    
   }
 
   initPatching(): void {
@@ -296,7 +296,7 @@ export class PaymentComponent implements OnInit {
   }
 
   private filterNotifications(data, stage, action) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let filtereData = null;
       if (data.length === 0) {
         resolve(null);
@@ -315,7 +315,7 @@ export class PaymentComponent implements OnInit {
         resolve(null);
       }
     });
-    return promise;
+    
   }
 
   private disableWorksOrderDetail() {
@@ -444,7 +444,7 @@ export class PaymentComponent implements OnInit {
   }
 
   private async updateFaultNotification(notificationObj, faultNotificationId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateNotification(faultNotificationId, notificationObj).subscribe(
         res => {
           resolve(true);
@@ -454,7 +454,7 @@ export class PaymentComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
 
@@ -505,7 +505,7 @@ export class PaymentComponent implements OnInit {
   }
 
   updateFaultSummary(faultRequestObj) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.updateFault(this.faultDetails.faultId, faultRequestObj).subscribe(
         res => {
           resolve(true);
@@ -515,7 +515,7 @@ export class PaymentComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   onSearchContractor(event: any) {
@@ -560,7 +560,7 @@ export class PaymentComponent implements OnInit {
     let codes = [];
 
     this.nominalCodes.forEach(code => {
-      code.concat = code.nominalCode + " - " + code.description;
+      code.concat = code.nominalCode + ' - ' + code.description;
       if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 6) {
         this.workOrderForm.get('nominalCode').setValue(code);
       }
@@ -601,7 +601,7 @@ export class PaymentComponent implements OnInit {
         let data = res ? res : '';
         if (data) {
           this.workOrderForm.patchValue({
-            mgntHoldKey: "Contact Branch - " + data.branding.phone
+            mgntHoldKey: 'Contact Branch - ' + data.branding.phone
           });
         }
       }, error => {
@@ -629,9 +629,9 @@ export class PaymentComponent implements OnInit {
       cssClass: 'modal-container',
       componentProps: {
         faultId: this.faultDetails.faultId,
-        title: "Job Completion",
+        title: 'Job Completion',
         headingOne: "You have selected 'No, Reject this Invoice.'",
-        headingTwo: "This will escalate the Repair and a notification to Contractor would be sent. Are you sure?",
+        headingTwo: 'This will escalate the Repair and a notification to Contractor would be sent. Are you sure?',
       },
       backdropDismiss: false
     });
@@ -648,7 +648,7 @@ export class PaymentComponent implements OnInit {
   private getSystemOptions() {
     const params: any = new HttpParams().set('option', 'INVOICE_VERIFICATION_THRESHOLD');
 
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.getSystemOptions(params).subscribe(
         (res: any) => {
           resolve(res.INVOICE_VERIFICATION_THRESHOLD);
@@ -658,13 +658,13 @@ export class PaymentComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private pmApproveInvoice() {
     let notificationObj = {} as any;
     notificationObj.isApproved = true;
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.pmRejectApproveInvoice(notificationObj, this.faultDetails.faultId).subscribe(
         res => {
           this.commonService.showMessage('Success', 'Invoice Approved', 'success');
@@ -676,11 +676,11 @@ export class PaymentComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   private invoiceUploaded() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.faultsService.invoiceUploaded(this.faultDetails.faultId).subscribe(
         res => {
           this.commonService.showMessage('Success', 'Invoice Uploaded', 'success');
@@ -692,7 +692,7 @@ export class PaymentComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   getPendingHours() {
@@ -736,7 +736,7 @@ export class PaymentComponent implements OnInit {
   }
 
   async fetchPendingNotification(faultId): Promise<any> {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.faultsService.fetchPendingNotification(faultId).subscribe(
         res => {
           this.pendingNotification = res ? res : '';
@@ -747,7 +747,7 @@ export class PaymentComponent implements OnInit {
         }
       );
     });
-    return promise;
+    
   }
 
   async notificationModal() {

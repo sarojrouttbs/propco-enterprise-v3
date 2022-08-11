@@ -46,26 +46,16 @@
         <ion-text class="value">{{propertyData?.propertyDetails?.instructedDate ? (propertyData?.propertyDetails?.instructedDate | date: DATE_FORMAT.DATE) : notAvailable}}</ion-text>
       </ion-col>
       <ion-col size="50">
-        <ion-text class="label">Property Type</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyDetails?.houseType ? (propertyData?.propertyDetails?.houseType | lookup:houseTypes) : notAvailable}}
-        </ion-text>
-      </ion-col>
-      <ion-col size="50">
         <ion-text class="label">Acquisition Office</ion-text><br>
         <ion-text class="value">{{propertyData?.propertyInfo?.acquisitionOffice ? (propertyData?.propertyInfo?.acquisitionOffice | lookup:acqisitionOffices) : notAvailable}}
         </ion-text>
       </ion-col>
-      <ion-col size="50">
-        <ion-text class="label">Category</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyDetails?.propertyCategory ? (propertyData?.propertyDetails?.propertyCategory | lookup:propertyCategories) : notAvailable}}
-        </ion-text>
-      </ion-col>
-      <ion-col class="property-certificates" size="100" style="margin-top: 15px;">
+      <!-- <ion-col class="property-certificates" size="100" style="margin-top: 15px;">
         <ion-text class="sucess" style="min-width: 21px;">{{propertyData?.propertyInfo?.webVisitCount ? propertyData?.propertyInfo?.webVisitCount : '0'}} </ion-text>&nbsp;
         <ion-text>
           Property visits from web</ion-text>
-      </ion-col>
-      <ion-col class="property-certificates" size="100">
+      </ion-col> -->
+      <!-- <ion-col class="property-certificates" size="100">
         <ion-icon
           [name]="propertyData?.propertyDetails?.hasElectricalIndemnitySigned?'checkmark-circle': 'close-circle'"
           [ngClass]="propertyData?.propertyDetails?.hasElectricalIndemnitySigned?'sucess': 'danger'">
@@ -75,53 +65,7 @@
         <ion-text>
           Covered by Rent Indemnity
         </ion-text>
-      </ion-col>
-      <ion-col class="property-certificates" size="100">
-        <ion-icon
-          [name]="propertyData?.propertyRentInfo?.emergencyResponseService?.isERSEnabled?'checkmark-circle': 'close-circle'"
-          [ngClass]="propertyData?.propertyRentInfo?.emergencyResponseService?.isERSEnabled?'sucess': 'danger'">
-        </ion-icon>
-        &nbsp;&nbsp;
-        <ion-text>
-          Covered by Emergency Response
-        </ion-text>
-      </ion-col>
-      <ion-col class="property-certificates" size="100">
-        <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && propertyInspection?.expiryDate > currentDate && propertyInspection?.status == 1">
-          <ion-icon name="checkmark-circle" class="sucess">
-          </ion-icon>&nbsp;&nbsp;
-          <ion-text>
-            Has valid safety certificate
-          </ion-text>
-        </ng-container>
-
-        <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && propertyInspection?.status == 3">
-          <ion-icon name="checkmark-circle" class="sucess">
-          </ion-icon>&nbsp;&nbsp;
-          <ion-text>
-            Gas Safety certificate is not required
-          </ion-text>
-        </ng-container>
-
-        <ng-container *ngIf="propertyData?.propertyDetails?.hasGas && 
-        (propertyInspection?.expiryDate < currentDate || !propertyInspection?.isDocumentExist) && 
-        (propertyInspection?.status != 1 && propertyInspection?.status !=3)">
-          <ion-icon name="close-circle" class="danger">
-          </ion-icon>&nbsp;&nbsp;
-          <ion-text>
-            No Valid Gas Safety Certificate
-          </ion-text>
-        </ng-container>
-
-        <ng-container *ngIf="propertyData && !propertyData?.propertyDetails?.hasGas">
-          <ion-icon name="checkmark-circle" class="sucess">
-          </ion-icon>&nbsp;&nbsp;
-          <ion-text>
-            Gas Safety certificate is not required
-          </ion-text>
-        </ng-container>
-       
-      </ion-col>
+      </ion-col> -->
     </ion-row>
 
   </ion-grid>

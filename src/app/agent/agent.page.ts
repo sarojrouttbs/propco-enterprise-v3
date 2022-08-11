@@ -1,15 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-agent',
   templateUrl: './agent.page.html',
   styleUrls: ['./agent.page.scss'],
 })
-export class AgentPage implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}
+export class AgentPage { }

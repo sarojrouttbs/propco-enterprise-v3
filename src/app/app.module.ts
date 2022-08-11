@@ -18,6 +18,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { DataTablesModule } from 'angular-datatables';
 import { AutocloseOverlaysService } from './shared/services/autoclose-overlays.service';
+import { CustomPreloadingStrategy } from './custom-preloading-strategy';
 
 @NgModule({
   declarations: [AppComponent],
@@ -47,7 +48,8 @@ import { AutocloseOverlaysService } from './shared/services/autoclose-overlays.s
       multi: true
     },
     CommonService,
-    AutocloseOverlaysService
+    AutocloseOverlaysService,
+    CustomPreloadingStrategy
   ],
   bootstrap: [AppComponent]
 })

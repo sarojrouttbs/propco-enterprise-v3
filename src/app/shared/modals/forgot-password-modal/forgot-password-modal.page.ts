@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { ValidationService } from '../../services/validation.service';
@@ -8,13 +8,10 @@ import { ValidationService } from '../../services/validation.service';
   templateUrl: './forgot-password-modal.page.html',
   styleUrls: ['./forgot-password-modal.page.scss'],
 })
-export class ForgotPasswordModalPage implements OnInit {
+export class ForgotPasswordModalPage {
   heading;
   email = new FormControl('', [Validators.required, ValidationService.emailValidator]);
   constructor(private modalController: ModalController) { }
-
-  ngOnInit() {
-  }
 
   dismiss() {
     this.modalController.dismiss({
