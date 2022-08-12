@@ -19,13 +19,14 @@ export class AgreementHistoryComponent implements OnInit {
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
   @Input() selectedTenant;
   @Input() agreementStatusesLookup;
+  tenant: any;
 
   constructor(private agentService: AgentService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selectedTenant && changes.selectedTenant.currentValue) {
-      this.selectedTenant = this.selectedTenant;
-      this.getAgreementHistory(this.selectedTenant?.agreementId);
+      this.tenant = this.selectedTenant;
+      this.getAgreementHistory(this.tenant?.agreementId);
     }
   }
 

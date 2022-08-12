@@ -1357,11 +1357,7 @@ export class LandlordInstructionComponent implements OnInit {
           resolve(res);
         },
         error => {
-          if (error.error && error.error.hasOwnProperty('errorCode')) {
-            resolve(null);
-          } else {
-            resolve(null);
-          }
+          resolve(null);
         }
       );
     });
