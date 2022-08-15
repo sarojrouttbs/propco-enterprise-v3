@@ -18,7 +18,8 @@ export class TermsOfBusinessComponent implements OnInit {
   versionHistoryList: any;
   notAvailable = DEFAULTS.NOT_AVAILABLE
   DATE_FORMAT = DATE_FORMAT;
-  
+  property: any;
+
   constructor(
     private agentService: AgentService,
     private commonService: CommonService
@@ -26,7 +27,7 @@ export class TermsOfBusinessComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.propertyDetails && !changes.propertyDetails.firstChange) {
-      this.propertyDetails = this.propertyDetails;
+      this.property = this.propertyDetails;
       this.getVersionHistory(this.propertyDetails.propertyId);
     }
   }
@@ -60,8 +61,8 @@ export class TermsOfBusinessComponent implements OnInit {
       this.agentService.getVersionHistory(propertyId, params).subscribe(
         (res) => {
           this.versionHistoryList = res && res.data ? res.data : '';
-          if (this.propertyDetails.propertyInfo?.currentTOB) {
-            this.group.get('version').setValue(this.propertyDetails.propertyInfo?.currentTOB);
+          if (this.property.propertyInfo?.currentTOB) {
+            this.group.get('version').setValue(this.property.propertyInfo?.currentTOB);
           }
           resolve(true);
         },
