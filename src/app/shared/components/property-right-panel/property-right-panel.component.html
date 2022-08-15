@@ -1,72 +1,55 @@
 <div class="property-right-card">
   <ion-grid class="property-details">
     <ion-row class="property-status">
-      <ion-col matTooltip="{{ (propertyData?.propertyInfo?.status | lookup:propertyStatuses  || notAvailable) | uppercase }}" matTooltipPosition="above">
+      <ion-col matTooltip="{{ (property?.propertyInfo?.status | lookup:propertyStatuses  || notAvailable) | uppercase }}" matTooltipPosition="above">
         <ion-text>
-          <span class="property-status-circle" [ngClass]="propertyData?.propertyInfo?.status === '1' ? 'avaialble-circle' : 'other-status-circle'"></span>
-          <span class="status">{{propertyData?.propertyInfo?.status | lookup:propertyStatuses || notAvailable}}</span>
+          <span class="property-status-circle" [ngClass]="property?.propertyInfo?.status === '1' ? 'avaialble-circle' : 'other-status-circle'"></span>
+          <span class="status">{{property?.propertyInfo?.status | lookup:propertyStatuses || notAvailable}}</span>
         </ion-text>
       </ion-col>
     </ion-row>
     <ion-row class="property-info">
       <ion-col size="50">
         <ion-text class="label">Available From</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.availableFrom ? (propertyData?.propertyInfo?.availableFrom | date: DATE_FORMAT.DATE) : notAvailable}}</ion-text>
+        <ion-text class="value">{{property?.propertyInfo?.availableFrom ? (property?.propertyInfo?.availableFrom | date: DATE_FORMAT.DATE) : notAvailable}}</ion-text>
       </ion-col>
       <ion-col size="50">
         <ion-text class="label">Branch PMC</ion-text>
         <br>
-        <ion-text class="value">{{propertyData?.branchPMC ? propertyData?.branchPMC : notAvailable}}</ion-text>
+        <ion-text class="value">{{property?.branchPMC ? property?.branchPMC : notAvailable}}</ion-text>
       </ion-col>
       <ion-col size="50">
         <ion-text class="label">Available To</ion-text>
         <br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.availableTo ? (propertyData?.propertyInfo?.availableTo | date: DATE_FORMAT.DATE) : notAvailable}}</ion-text>
+        <ion-text class="value">{{property?.propertyInfo?.availableTo ? (property?.propertyInfo?.availableTo | date: DATE_FORMAT.DATE) : notAvailable}}</ion-text>
       </ion-col>
       <ion-col size="50">
         <ion-text class="label">Booking Office</ion-text>
         <br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.bookingOfficeCode ? (propertyData?.propertyInfo?.bookingOfficeCode | lookup:officeCodes) : notAvailable}}
+        <ion-text class="value">{{property?.propertyInfo?.bookingOfficeCode ? (property?.propertyInfo?.bookingOfficeCode | lookup:officeCodes) : notAvailable}}
         </ion-text>
       </ion-col>
       <ion-col size="50">
         <ion-text class="label">Appraised</ion-text>
         <br>
-        <ion-text class="value">{{propertyData?.propertyDetails?.appraisedDate ? (propertyData?.propertyDetails?.appraisedDate | date: DATE_FORMAT.DATE) : notAvailable}}</ion-text>
+        <ion-text class="value">{{property?.propertyDetails?.appraisedDate ? (property?.propertyDetails?.appraisedDate | date: DATE_FORMAT.DATE) : notAvailable}}</ion-text>
       </ion-col>
       <ion-col size="50">
         <ion-text class="label">Portfolio Source</ion-text>
         <br>
         <ion-text class="value">
-          {{propertyData?.propertyInfo?.portfolioSource ? (propertyData?.propertyInfo?.portfolioSource | lookup:portfolioSources) : notAvailable}}
+          {{property?.propertyInfo?.portfolioSource ? (property?.propertyInfo?.portfolioSource | lookup:portfolioSources) : notAvailable}}
         </ion-text>
       </ion-col>
       <ion-col size="50">
         <ion-text class="label">Instructed</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyDetails?.instructedDate ? (propertyData?.propertyDetails?.instructedDate | date: DATE_FORMAT.DATE) : notAvailable}}</ion-text>
+        <ion-text class="value">{{property?.propertyDetails?.instructedDate ? (property?.propertyDetails?.instructedDate | date: DATE_FORMAT.DATE) : notAvailable}}</ion-text>
       </ion-col>
       <ion-col size="50">
         <ion-text class="label">Acquisition Office</ion-text><br>
-        <ion-text class="value">{{propertyData?.propertyInfo?.acquisitionOffice ? (propertyData?.propertyInfo?.acquisitionOffice | lookup:acqisitionOffices) : notAvailable}}
+        <ion-text class="value">{{property?.propertyInfo?.acquisitionOffice ? (property?.propertyInfo?.acquisitionOffice | lookup:acqisitionOffices) : notAvailable}}
         </ion-text>
       </ion-col>
-      <!-- <ion-col class="property-certificates" size="100" style="margin-top: 15px;">
-        <ion-text class="sucess" style="min-width: 21px;">{{propertyData?.propertyInfo?.webVisitCount ? propertyData?.propertyInfo?.webVisitCount : '0'}} </ion-text>&nbsp;
-        <ion-text>
-          Property visits from web</ion-text>
-      </ion-col> -->
-      <!-- <ion-col class="property-certificates" size="100">
-        <ion-icon
-          [name]="propertyData?.propertyDetails?.hasElectricalIndemnitySigned?'checkmark-circle': 'close-circle'"
-          [ngClass]="propertyData?.propertyDetails?.hasElectricalIndemnitySigned?'sucess': 'danger'">
-        </ion-icon>
-        &nbsp;&nbsp;
-
-        <ion-text>
-          Covered by Rent Indemnity
-        </ion-text>
-      </ion-col> -->
     </ion-row>
-
   </ion-grid>
 </div>

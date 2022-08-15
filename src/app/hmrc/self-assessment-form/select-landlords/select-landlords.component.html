@@ -170,13 +170,13 @@
           <thead>
             <tr>
               <th scope="col" style="width:1%;">Select </th>
-              <th scope="col" style="width:12%;">Property Reference</th>
+              <th scope="col" style="width:12%;">Property Ref</th>
               <th scope="col" style="width:18%;">Property Address</th>
-              <th scope="col" style="width:15%;">Landlord/Owner Full Name</th>
+              <th scope="col" style="width:15%;">Landlord Name</th>
               <th scope="col" style="width:15%;">Landlord Address</th>
               <th scope="col" style="width:10%;">Office</th>
               <th scope="col" style="width:10%;">Management</th>
-              <th scope="col">Last Generated On</th>
+              <th scope="col">Last Generated Till</th>
               <th scope="col" style="width:36px"></th>
             </tr>
           </thead>
@@ -204,9 +204,6 @@
               <td>{{(data.propertyOffice | lookup: officeCodes) || DEFAULTS.NOT_AVAILABLE}}</td>
               <td>{{(data.propertyManagementType.toString() | lookup: managementTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
               <td>{{(data.lastGeneratedAt | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</td>
-              <td class="resp-action-icon">
-                <i class="propcoicon propcoicon-actions-on action-btn"></i>
-              </td>
             </tr>
           </tbody>
           <tbody *ngIf="landlordList?.length === 0">

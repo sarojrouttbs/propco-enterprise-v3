@@ -2100,7 +2100,7 @@ export class DetailsPage {
 
   goBackToUpload(value) {
     this.mediaType = value;
-    this.filteredDocuments == null;
+    this.filteredDocuments = null;
   }
 
   async deleteDocument(file, i: number) {
@@ -2498,11 +2498,7 @@ export class DetailsPage {
           resolve(res);
         },
         error => {
-          if (error.error && error.error.hasOwnProperty('errorCode')) {
-            resolve(null);
-          } else {
-            resolve(null);
-          }
+          resolve(null);
         }
       );
     });
