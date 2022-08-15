@@ -29,11 +29,13 @@ export class RentSalesFiguresComponent implements OnInit {
   rentFrequencyDropdown: number[] = this.getNumbers();
   rentIndemnityProducts: any;
   eriProducts: any;
+  property: any;
+
   constructor(private commonService: CommonService, private agentService: AgentService, private modalController: ModalController) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.propertyDetails && !changes.propertyDetails.firstChange) {
-      this.propertyDetails = this.propertyDetails;
+      this.property = this.propertyDetails;
       if (this.propertyDetails) {
         this.patchFormData();
       }
@@ -48,42 +50,42 @@ export class RentSalesFiguresComponent implements OnInit {
 
   private patchFormData(): void {
     this.group.patchValue({
-      rentAmount: this.propertyDetails?.propertyRentInfo?.rentAmount || 0,
-      rentFrequency: this.propertyDetails?.propertyRentInfo?.rentFrequency,
-      frequencyType: this.propertyDetails?.propertyRentInfo?.frequencyType,
-      depositAmount: this.propertyDetails?.propertyRentInfo?.depositAmount || 0,
-      depositSchemeNo: this.propertyDetails?.propertyRentInfo?.depositSchemeNo,
-      depositScheme: parseInt(this.propertyDetails?.propertyRentInfo?.depositScheme),
-      salePriceType: this.propertyDetails?.propertyRentInfo?.salePriceType,
-      salePrice: this.propertyDetails?.propertyRentInfo?.salePrice || 0,
-      aegisInsurance: this.propertyDetails?.propertyRentInfo?.aegisInsurance,
-      rentIndemnityProductId: this.propertyDetails?.propertyRentInfo?.rentIndemnityProductId,
-      isRentIndeminityRequired: this.propertyDetails?.propertyRentInfo?.isRentIndeminityRequired,
-      isRentIndeminityEnabled: this.propertyDetails?.propertyRentInfo?.isRentIndeminityEnabled,
-      isUseRentPercentage: this.propertyDetails?.propertyRentInfo?.isUseRentPercentage,
-      premiumPercentage: this.propertyDetails?.propertyRentInfo?.premiumPercentage,
-      premiumAmount: this.propertyDetails?.propertyRentInfo?.premiumAmount || '',
-      rentStartDate: this.propertyDetails?.propertyRentInfo?.rentStartDate,
-      rentStopDate: this.propertyDetails?.propertyRentInfo?.rentStopDate,
-      claimDefaultInDays: this.propertyDetails?.propertyRentInfo?.claimDefaultInDays,
-      manualClaim: this.propertyDetails?.propertyRentInfo?.manualClaim,
-      isClaimAuthorised: this.propertyDetails?.propertyRentInfo?.isClaimAuthorised,
+      rentAmount: this.property?.propertyRentInfo?.rentAmount || 0,
+      rentFrequency: this.property?.propertyRentInfo?.rentFrequency,
+      frequencyType: this.property?.propertyRentInfo?.frequencyType,
+      depositAmount: this.property?.propertyRentInfo?.depositAmount || 0,
+      depositSchemeNo: this.property?.propertyRentInfo?.depositSchemeNo,
+      depositScheme: parseInt(this.property?.propertyRentInfo?.depositScheme),
+      salePriceType: this.property?.propertyRentInfo?.salePriceType,
+      salePrice: this.property?.propertyRentInfo?.salePrice || 0,
+      aegisInsurance: this.property?.propertyRentInfo?.aegisInsurance,
+      rentIndemnityProductId: this.property?.propertyRentInfo?.rentIndemnityProductId,
+      isRentIndeminityRequired: this.property?.propertyRentInfo?.isRentIndeminityRequired,
+      isRentIndeminityEnabled: this.property?.propertyRentInfo?.isRentIndeminityEnabled,
+      isUseRentPercentage: this.property?.propertyRentInfo?.isUseRentPercentage,
+      premiumPercentage: this.property?.propertyRentInfo?.premiumPercentage,
+      premiumAmount: this.property?.propertyRentInfo?.premiumAmount || '',
+      rentStartDate: this.property?.propertyRentInfo?.rentStartDate,
+      rentStopDate: this.property?.propertyRentInfo?.rentStopDate,
+      claimDefaultInDays: this.property?.propertyRentInfo?.claimDefaultInDays,
+      manualClaim: this.property?.propertyRentInfo?.manualClaim,
+      isClaimAuthorised: this.property?.propertyRentInfo?.isClaimAuthorised,
       emergencyResponseService:
       {
-        isERSEnabled: this.propertyDetails?.propertyRentInfo?.emergencyResponseService?.isERSEnabled,
-        eriProduct: parseInt(this.propertyDetails?.propertyRentInfo?.emergencyResponseService?.eriProduct),
-        inceptionDate: this.propertyDetails?.propertyRentInfo?.emergencyResponseService?.inceptionDate,
-        renewalDate: this.propertyDetails?.propertyRentInfo?.emergencyResponseService?.renewalDate,
-        cancelledDate: this.propertyDetails?.propertyRentInfo?.emergencyResponseService?.cancelledDate
+        isERSEnabled: this.property?.propertyRentInfo?.emergencyResponseService?.isERSEnabled,
+        eriProduct: parseInt(this.property?.propertyRentInfo?.emergencyResponseService?.eriProduct),
+        inceptionDate: this.property?.propertyRentInfo?.emergencyResponseService?.inceptionDate,
+        renewalDate: this.property?.propertyRentInfo?.emergencyResponseService?.renewalDate,
+        cancelledDate: this.property?.propertyRentInfo?.emergencyResponseService?.cancelledDate
       },
-      managementCommission: this.propertyDetails?.propertyRentInfo?.managementCommission,
-      vatInclusive: this.propertyDetails?.propertyRentInfo?.vatInclusive,
-      secondLevelCommission: this.propertyDetails?.propertyRentInfo?.secondLevelCommission,
-      narrativeForFees: this.propertyDetails?.propertyRentInfo?.narrativeForFees,
-      narrativeForFeesVat: this.propertyDetails?.propertyRentInfo?.narrativeForFeesVat,
-      lastRentReview: this.propertyDetails?.propertyRentInfo?.lastRentReview,
-      nextRentReview: this.propertyDetails?.propertyRentInfo?.nextRentReview,
-      isLandlordArrearsExcluded: this.propertyDetails?.propertyRentInfo?.isLandlordArrearsExcluded
+      managementCommission: this.property?.propertyRentInfo?.managementCommission,
+      vatInclusive: this.property?.propertyRentInfo?.vatInclusive,
+      secondLevelCommission: this.property?.propertyRentInfo?.secondLevelCommission,
+      narrativeForFees: this.property?.propertyRentInfo?.narrativeForFees,
+      narrativeForFeesVat: this.property?.propertyRentInfo?.narrativeForFeesVat,
+      lastRentReview: this.property?.propertyRentInfo?.lastRentReview,
+      nextRentReview: this.property?.propertyRentInfo?.nextRentReview,
+      isLandlordArrearsExcluded: this.property?.propertyRentInfo?.isLandlordArrearsExcluded
     });
   }
 

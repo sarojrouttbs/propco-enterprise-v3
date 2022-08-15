@@ -21,10 +21,10 @@
     <div class="table-container" [formGroup]="selectionForm">
       <table>
         <tr>
-          <th>Select</th>
-          <th>Company</th>
-          <th>Contact Tel.</th>
-          <th>Trade</th>
+          <th scope="col">Select</th>
+          <th scope="col">Company</th>
+          <th scope="col">Contact Tel.</th>
+          <th scope="col">Trade</th>
         </tr>
         <tbody formArrayName="contractorList">
           <tr *ngFor="let item of selectionForm.get('contractorList')['controls']; let i = index;" class="table-row"

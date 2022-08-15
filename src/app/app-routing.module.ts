@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NoPreloading, RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { CustomPreloadingStrategy } from './custom-preloading-strategy';
 import { AuthGuard } from './shared/authguard';
 import { LoginGuard } from './shared/guard/login.guard';
