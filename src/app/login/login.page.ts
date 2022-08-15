@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { BUILD_DETAILS, ERROR_MESSAGE, LOGIN_PAGE_TEXT_MESSAGES, PROPCO } from '../shared/constants';
+import { BUILD_DETAILS, DATE_FORMAT, ERROR_MESSAGE, LOGIN_PAGE_TEXT_MESSAGES, PROPCO } from '../shared/constants';
 import { ForgotPasswordModalPage } from '../shared/modals/forgot-password-modal/forgot-password-modal.page';
 import { CommonService } from '../shared/services/common.service';
 import { ValidationService } from '../shared/services/validation.service';
@@ -28,6 +28,8 @@ export class LoginPage implements OnInit {
 
   sliderMsgList = LOGIN_PAGE_TEXT_MESSAGES;
   buildDetails = BUILD_DETAILS;
+  currentDate = new Date();
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(private _formBuilder: FormBuilder,
     private modalController: ModalController,

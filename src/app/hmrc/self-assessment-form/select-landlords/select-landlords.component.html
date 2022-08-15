@@ -177,7 +177,6 @@
               <th scope="col" style="width:10%;">Office</th>
               <th scope="col" style="width:10%;">Management</th>
               <th scope="col">Last Generated Till</th>
-              <th scope="col" style="width:36px"></th>
             </tr>
           </thead>
           <tbody>
@@ -203,7 +202,7 @@
               </td>
               <td>{{(data.propertyOffice | lookup: officeCodes) || DEFAULTS.NOT_AVAILABLE}}</td>
               <td>{{(data.propertyManagementType.toString() | lookup: managementTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
-              <td>{{(data.lastGeneratedAt | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</td>
+              <td>{{(data.lastGeneratedTill | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</td>
             </tr>
           </tbody>
           <tbody *ngIf="landlordList?.length === 0">

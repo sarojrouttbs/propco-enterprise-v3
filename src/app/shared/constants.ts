@@ -661,8 +661,7 @@ export const LOGIN_PAGE_TEXT_MESSAGES = [
 ];
 
 export const BUILD_DETAILS = {
-  BUILD_NUMBER: '1.4.1',
-  BUILD_MONTH_YEAR: 'June 2022'
+  BUILD_NUMBER: '1.4.1'
 };
 
 export const TITLES = [
@@ -718,7 +717,8 @@ export const DATE_FORMAT = {
   DISPLAY_DATE_TIME_1: 'DD/MM/YYYY HH:mm',
   YEAR_DATE_TIME: 'yyyy-MM-dd HH:mm:ss',
   YEAR_DATE_TIME_1: 'yyyy-MM-ddTHH:mm',
-  YEAR_DATE: 'yyyy-MM-dd'
+  YEAR_DATE: 'yyyy-MM-dd',
+  MONTH_YEAR: 'MMM YYYY'
 }
 
 export const HMRC = {
