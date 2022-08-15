@@ -44,9 +44,9 @@
         <ion-col class="no-padding-bottom" class="table-block">
           <table>
             <tr>
-              <th>Created At</th>
-              <th>Description</th>
-              <th>Version</th>
+              <th scope="col">Created At</th>
+              <th scope="col">Description</th>
+              <th scope="col">Version</th>
             </tr>
             <tr *ngFor="let history of versionHistoryList" class="table-row">
               <td>{{history?.createdAt | date: DATE_FORMAT.DATE_TIME || notAvailable}}</td>
