@@ -88,17 +88,16 @@ export class ContractorDetailsModalPage implements OnInit {
       };
 
       if(this.contractorDetailForm.get('dateTimeType').value === DATE_TIME_TYPES_KEYS.DATE_WITH_TIME) {
-        this.contractorDetailForm.value.estimatedVisitAt ? requestObj.estimatedVisitAt = this.commonService.getFormatedDate(this.contractorDetailForm.value.estimatedVisitAt, this.DATE_FORMAT.YEAR_DATE_TIME) : '';  
+        requestObj.estimatedVisitAt = this.contractorDetailForm.value.estimatedVisitAt ? this.commonService.getFormatedDate(this.contractorDetailForm.value.estimatedVisitAt, this.DATE_FORMAT.YEAR_DATE_TIME) :'';
       }
       if(this.contractorDetailForm.get('dateTimeType').value === DATE_TIME_TYPES_KEYS.DATE_WITH_SESSION) {
         if(this.contractorDetailForm.value?.estimatedVisitAt && this.contractorDetailForm.value?.estimatedVisitSlot) {
-          this.contractorDetailForm.value.estimatedVisitAt ? requestObj.estimatedVisitAt = this.commonService.getFormatedDate(this.contractorDetailForm.value.estimatedVisitAt, this.DATE_FORMAT.YEAR_DATE_TIME) : '';
-          (this.contractorDetailForm.value?.estimatedVisitSlot) ? requestObj.estimatedVisitSlot = this.contractorDetailForm.value.estimatedVisitSlot.index : '';
+          requestObj.estimatedVisitAt = this.contractorDetailForm.value.estimatedVisitAt ? this.commonService.getFormatedDate(this.contractorDetailForm.value.estimatedVisitAt, this.DATE_FORMAT.YEAR_DATE_TIME) : '';
+          requestObj.estimatedVisitSlot = this.contractorDetailForm.value?.estimatedVisitSlot ? this.contractorDetailForm.value.estimatedVisitSlot.index : '';
         }
       }
-      
-      this.contractorDetailForm.value.email ? requestObj.email = this.contractorDetailForm.value.email : '';
-      this.llContractorDetails.landlordOwnContractorId ? requestObj.landlordOwnContractorId = this.llContractorDetails.landlordOwnContractorId : '';
+      requestObj.email = this.contractorDetailForm.value.email ? this.contractorDetailForm.value.email : '';
+      requestObj.landlordOwnContractorId = this.llContractorDetails.landlordOwnContractorId ? this.llContractorDetails.landlordOwnContractorId : '';
       return new Promise((resolve) => {
         this.faultsService.saveOwnContractor(this.faultId, requestObj).subscribe(
           res => {
