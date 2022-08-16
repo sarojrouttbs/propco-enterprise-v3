@@ -138,8 +138,9 @@ export class SelfAssessmentFormComponent implements OnInit {
     if (existingBatch) {
       const existingBatchDetails = await this.getBatchDetails(existingBatch.batchId) as BatchDetail;
       if (existingBatchDetails) {
-        if (!existingBatchDetails.isCompleted) {
+        if (this.commonService.getItem('HMRC_FILTER')) {
           /* Redirect to progress summary page if processing is not completed */
+          this.selfAssessmentForm.value.batchId = existingBatch.batchId;
           this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
           this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
         }
