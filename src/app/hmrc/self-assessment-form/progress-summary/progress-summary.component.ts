@@ -38,6 +38,7 @@ export class ProgressSummaryComponent implements OnInit {
   batchDetails: BatchDetail;
   currentDate = new Date();
   DATE_FORMAT = DATE_FORMAT;
+  isProcessCompleted = false;
 
   constructor(
     private hmrcService: HmrcService,
@@ -117,6 +118,7 @@ export class ProgressSummaryComponent implements OnInit {
       if (this.finalCount === 1) {
         timer.unsubscribe();
         this.commonService.showMessage('We have successfully generated SA form for ' + this.totalSuccessRecords + ' records & saved the records in DMS.', 'Progress Summary', 'success');
+        this.isProcessCompleted = true;
       }
     });
   }
