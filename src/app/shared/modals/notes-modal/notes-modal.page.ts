@@ -23,8 +23,8 @@ export class NotesModalPage implements OnInit {
   notesComplaints: any[];
   notesTypes: any[];
   isAddNote: boolean;
-  notesType: String;
-  notesTypeId: String;
+  notesType: string;
+  notesTypeId: string;
   notesOrigin;
   faultNotificationDetails;
   reference;

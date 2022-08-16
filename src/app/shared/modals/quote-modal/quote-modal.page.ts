@@ -62,11 +62,11 @@ export class QuoteModalPage implements OnInit {
 
   get photos(): FormArray {
     return this.uploadPhotoForm.get('photos') as FormArray;
-  };
+  }
 
   get quotes(): FormArray {
     return this.uploadDocumentForm.get('quotes') as FormArray;
-  };
+  }
 
   private initquoteAssessmentForm(): void {
     this.quoteAssessmentForm = this.formBuilder.group({

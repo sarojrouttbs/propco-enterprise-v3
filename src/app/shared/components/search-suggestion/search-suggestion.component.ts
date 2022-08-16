@@ -1,10 +1,9 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { EventEmitter } from '@angular/core';
 import { SolrService } from '../../../solr/solr.service';
 import { SolrSearchHandlerService } from '../../services/solr-search-handler.service';
 import { WorkspaceService } from 'src/app/agent/workspace/workspace.service';

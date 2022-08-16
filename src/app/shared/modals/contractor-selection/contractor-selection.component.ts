@@ -1,6 +1,5 @@
 import { DEFAULTS, FAULT_STATUSES } from './../../constants';
-import { FormArray, FormGroup, Validators } from '@angular/forms';
-import { FormBuilder } from '@angular/forms';
+import { FormArray, FormGroup, FormBuilder } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { CommonService } from './../../services/common.service';
 import { FaultsService } from './../../../faults/faults.service';
