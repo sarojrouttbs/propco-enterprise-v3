@@ -171,6 +171,7 @@ export class ProgressSummaryComponent implements OnInit {
   }
 
   redirectToHome() {
+    this.commonService.removeItem('HMRC_FILTER');
     this.router.navigate(['../self-assessment-form'], { replaceUrl: true, relativeTo: this.route });
   }
 
