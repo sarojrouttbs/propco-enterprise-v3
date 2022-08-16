@@ -51,6 +51,8 @@ import { AgreementDetailsComponent } from './admin/tenancy/agreement-details/agr
 import { AgreementHistoryComponent } from './admin/tenancy/agreement-history/agreement-history.component';
 import { ComplianceRecordsComponent } from './compliance-records/compliance-records.component';
 import { CURRENCY_MASK_CONFIGURATION } from 'src/app/shared/constants';
+import { PostcodeDirectiveModule } from 'src/app/shared/directives/postcode-directive.module';
+
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
@@ -76,7 +78,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIG
     FeeChargePageModule,
     KeyActivityModalPageModule,
     CreateKeySetPageModule,
-    LeafletModule
+    LeafletModule,
+    PostcodeDirectiveModule
   ],
   declarations: [
     PropertyPage,
@@ -106,7 +109,6 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIG
     OpenStreetMapComponent,
     AgreementDetailsComponent,
     AgreementHistoryComponent,
-    PercentageDirective,
     ComplianceRecordsComponent
   ],
   providers: [

@@ -2,8 +2,6 @@ import { environment } from './../../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-environment
 @Injectable()
 export class QuoteService {
 

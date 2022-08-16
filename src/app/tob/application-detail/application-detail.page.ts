@@ -201,8 +201,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private searchApplicant(applicantId: string): Observable<any> {
-    const response = this._tobService.searchApplicant(applicantId);
-    return response;
+    return this._tobService.searchApplicant(applicantId);
   }
 
   private async initApiCalls() {
@@ -862,15 +861,24 @@ export class ApplicationDetailPage implements OnInit {
     switch (addressType) {
       case 'personal':
         postcode = this.addressDetailsForm.controls.address['controls'].postcode;
-        postcode.value ? (this.showPostcodeLoader = true) : '';
+        const addressPostcode = postcode.value;
+        this.showPostcodeLoader =  postcode.value ? true : '';
+        this.addressDetailsForm.controls.address.reset();
+        this.addressDetailsForm.controls.address['controls'].postcode.setValue(addressPostcode);
         break;
       case 'correspondence-address':
         postcode = this.addressDetailsForm.controls.forwardingAddress['controls'].postcode;
-        postcode.value ? (this.showAddressLoader = true) : '';
+        const forwardingAddressPostcode = postcode.value;
+        this.showPostcodeLoader =  postcode.value ? true : '';
+        this.addressDetailsForm.controls.forwardingAddress.reset();
+        this.addressDetailsForm.controls.forwardingAddress['controls'].postcode.setValue(forwardingAddressPostcode);
         break;
       case 'guarantor':
         postcode = this.guarantorForm.controls.address['controls'].postcode;
-        postcode.value ? (this.showPostcodeLoader = true) : '';
+        const guarantorFormPostcode = postcode.value;
+        this.showPostcodeLoader =  postcode.value ? true : '';
+        this.guarantorForm.controls.address.reset();
+        this.guarantorForm.controls.address['controls'].postcode.setValue(guarantorFormPostcode);
         break;
     }
     if (postcode.valid && postcode.value) {
@@ -923,6 +931,9 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   getAddressDetails(addressId: string, addressType: string) {
+    if (!addressId || '') {
+      return;
+    }
     this.commonService.getPostcodeAddressDetails(addressId).subscribe(
       res => {
         if (res && res.line1) {
