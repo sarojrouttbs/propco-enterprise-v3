@@ -6,8 +6,6 @@ import { OfficeFilterModalPage } from './office-filter-modal.page';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
 import { ComponentsModule } from '../../components/components.module';
-import { MatTreeModule } from '@angular/material/tree';
-import { CdkTreeModule } from '@angular/cdk/tree';
 
 const routes: Routes = [
   {

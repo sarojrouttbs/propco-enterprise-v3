@@ -1,6 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { AgentService } from 'src/app/agent/agent.service';
 import { DATE_FORMAT, DEFAULTS, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
