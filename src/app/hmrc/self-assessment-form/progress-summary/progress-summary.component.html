@@ -12,10 +12,10 @@
       <ion-col class="no-padding-bottom" class="table-block" size="100">
         <table aria-label="progressSummary">
           <tr>
-            <th class="action-item">Action Items</th>
-            <th>Number of Records</th>
-            <th>Success</th>
-            <th>Failure</th>
+            <th scope="col" class="action-item">Action Items</th>
+            <th scope="col">Number of Records</th>
+            <th scope="col">Success</th>
+            <th scope="col">Failure</th>
           </tr>
           <tr>
             <td>Total Records</td>
@@ -26,7 +26,7 @@
           <tr *ngFor="let batch of batchList">
             <td>
               <ion-text class="mandatory" *ngIf="batch?.index === 6 || batch?.index === 1 || batch?.index === 0">*
-              </ion-text> Records with preferance as "{{batch?.value}}"
+              </ion-text> Records with preference as "{{batch?.value}}"
             </td>
             <td>{{batch?.totalRecords || 0}}</td>
             <td>{{batch?.totalSuccess || 0}}</td>

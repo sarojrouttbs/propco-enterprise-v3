@@ -109,7 +109,7 @@ export class ProgressSummaryComponent implements OnInit {
   }
 
   private startTimer() {
-    const timer = interval(10000).subscribe((sec) => {
+    const timer = interval(2500).subscribe((sec) => {
       if (this.finalCount != 1)
         this.refreshBatchDetails();
 
