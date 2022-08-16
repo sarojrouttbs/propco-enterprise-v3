@@ -201,8 +201,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private searchApplicant(applicantId: string): Observable<any> {
-    const response = this._tobService.searchApplicant(applicantId);
-    return response;
+    return this._tobService.searchApplicant(applicantId);
   }
 
   private async initApiCalls() {

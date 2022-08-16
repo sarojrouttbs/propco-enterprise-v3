@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Plugins } from '@capacitor/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
 const { Network } = Plugins;
-import { ToastController } from '@ionic/angular';
 import { ToastrService } from 'ngx-toastr';
 import { saveAs } from 'file-saver';
 import { DomSanitizer } from '@angular/platform-browser';

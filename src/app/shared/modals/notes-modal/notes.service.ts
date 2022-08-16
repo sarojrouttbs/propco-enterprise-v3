@@ -8,15 +8,15 @@ export class NotesService {
 
   constructor(private httpClient: HttpClient) { }
 
-  createFaultNotes(faultId: String, requestObj: any): Observable<any> {
+  createFaultNotes(faultId: string, requestObj: any): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `faults/${faultId}/notes`, requestObj);
   }
 
-  createOfferNotes(offerId: String, requestObj: any): Observable<any> {
+  createOfferNotes(offerId: string, requestObj: any): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `offers/${offerId}/notes`, requestObj);
   }
 
-  updateNotes(noteId: String, requestObj: any): Observable<any> {
+  updateNotes(noteId: string, requestObj: any): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `notes/${noteId}`, requestObj);
   }
 

@@ -22,9 +22,9 @@ export class TemplateFormComponent implements OnInit {
     startDate?: string,
     expiryDate?: string,
     transactionId?: number,
-    propertyId?: String,
+    propertyId?: string,
     amount?: number,
-    entityType?: String
+    entityType?: string
     entityId?: string
   } = {};
   
