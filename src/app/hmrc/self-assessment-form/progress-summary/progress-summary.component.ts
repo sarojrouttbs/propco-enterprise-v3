@@ -39,6 +39,7 @@ export class ProgressSummaryComponent implements OnInit {
   currentDate = new Date();
   DATE_FORMAT = DATE_FORMAT;
   isProcessCompleted = false;
+  showPdfBtnLoader = false;
 
   constructor(
     private hmrcService: HmrcService,
@@ -56,7 +57,6 @@ export class ProgressSummaryComponent implements OnInit {
     this.getLookupData();
     this.startTimer();
     this.getLandlordBatchCount();
-    this.initPdfDownloadProcess();
   }
 
   private getLookupData() {
@@ -116,6 +116,7 @@ export class ProgressSummaryComponent implements OnInit {
 
       /* unsubscribe if the process is complete */
       if (this.finalCount === 1) {
+        this.initPdfDownloadProcess();
         timer.unsubscribe();
         this.commonService.showMessage('We have successfully generated SA form for ' + this.totalSuccessRecords + ' records & saved the records in DMS.', 'Progress Summary', 'success');
         this.isProcessCompleted = true;
@@ -143,7 +144,7 @@ export class ProgressSummaryComponent implements OnInit {
         if (response) {
           response.forEach(element => {
             if (element.statementPreference !== null) {
-              this.batchList = this.statementPreferences.map((x) => {
+              const batchList = this.statementPreferences.map((x) => {
                 if (x.index == element.statementPreference) {
                   x.totalSuccess = (element.successCount ? element.successCount : 0);
                   x.totalFailure = (element.failureCount ? element.failureCount : 0);
@@ -160,6 +161,7 @@ export class ProgressSummaryComponent implements OnInit {
                 }
                 return x;
               });
+              this.batchList = batchList;
             }
           });
         }
@@ -173,11 +175,14 @@ export class ProgressSummaryComponent implements OnInit {
   }
 
   private async initPdfDownloadProcess() {
+    this.showPdfBtnLoader = true;
     this.batchDetails = await this.getBatchDetails() as BatchDetail;
     if (this.batchDetails && this.batchDetails.printFilePath) {
       this.PDF_CONFIG.baseUrl = await this.getSystemConfig(SYSTEM_CONFIG.HMRC_BATCH_PRINT_BASE_URL);
       this.PDF_CONFIG.folderName = await this.getSystemConfig(SYSTEM_CONFIG.HMRC_BATCH_PRINT_FOLDER);
       this.createPdfUrl();
+    } else {
+      this.showPdfBtnLoader = false;
     }
   }
 
@@ -223,7 +228,10 @@ export class ProgressSummaryComponent implements OnInit {
         const newBlob = new Blob([pdfBlob], { type: 'application/pdf' });
         const blobUrl = window.URL.createObjectURL(newBlob);
         this.PDF_CONFIG.blobUrl = blobUrl;
+        this.showPdfBtnLoader = false;
       }
+    } else {
+      this.showPdfBtnLoader = false;
     }
   }
   private getPdfBlob() {
