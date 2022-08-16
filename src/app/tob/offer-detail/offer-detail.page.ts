@@ -174,8 +174,7 @@ export class OfferDetailPage implements OnInit {
   }
 
   private searchApplicant(applicantId: string): Observable<any> {
-    const response = this.tobService.searchApplicant(applicantId);
-    return response;
+    return this.tobService.searchApplicant(applicantId);
   }
 
   private initForms() {
