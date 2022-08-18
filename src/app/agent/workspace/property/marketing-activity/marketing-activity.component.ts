@@ -31,7 +31,7 @@ export class MarketingActivityComponent implements OnInit {
   quickFilterType = new FormControl();
   fromDate = new FormControl();
   toDate = new FormControl();
-  showOnlyCurrentActivity = new FormControl(false);
+  showOnlyCurrentActivity = new FormControl(true);
   DATE_FORMAT = DATE_FORMAT;
   DATE_RANGE_CONFIG_LIST = DATE_RANGE_CONFIG_LIST;
   currentDate = new Date();
@@ -74,6 +74,7 @@ export class MarketingActivityComponent implements OnInit {
   private async initAPICalls() {
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
+    this.requestParams = this.requestParams.set('showOnlyCurrentActivity', this.showOnlyCurrentActivity.value);
     this.getMarketingActivity();
   }
 
@@ -219,19 +220,28 @@ export class MarketingActivityComponent implements OnInit {
     return new Date(date.setDate(diff));
   }
 
-  applyFilters() {
-    this.requestParams = this.requestParams.set('dateRange.from', this.fromDate.value ? this.commonService.getFormatedDate(this.fromDate.value, this.DATE_FORMAT.YEAR_DATE) : '');
-    this.requestParams = this.requestParams.set('dateRange.to', this.toDate.value ? this.commonService.getFormatedDate(this.toDate.value, this.DATE_FORMAT.YEAR_DATE) : '');
-    // this.requestParams = this.requestParams.set('showOnlyCurrentActivity', this.showOnlyCurrentActivity.value);
+  onCurrentActivityChange() {
+    this.requestParams = this.requestParams.set('showOnlyCurrentActivity', this.showOnlyCurrentActivity.value ? false : true);
     this.getMarketingActivity();
+  }
+
+  applyFilters() {
+    if (this.fromDate.value && this.toDate.value) {
+      this.showOnlyCurrentActivity.setValue(false);
+      this.requestParams = this.requestParams.set('dateRange.from', this.fromDate.value ? this.commonService.getFormatedDate(this.fromDate.value, this.DATE_FORMAT.YEAR_DATE) : '');
+      this.requestParams = this.requestParams.set('dateRange.to', this.toDate.value ? this.commonService.getFormatedDate(this.toDate.value, this.DATE_FORMAT.YEAR_DATE) : '');
+      this.requestParams = this.requestParams.set('showOnlyCurrentActivity', this.showOnlyCurrentActivity.value);
+      this.getMarketingActivity();
+    }
   }
 
   resetFilters() {
     this.quickFilterType.reset();
     this.fromDate.reset();
     this.toDate.reset();
-    this.showOnlyCurrentActivity.reset();
+    this.showOnlyCurrentActivity.setValue(true);
     this.requestParams = new HttpParams();
+    this.requestParams = this.requestParams.set('showOnlyCurrentActivity', this.showOnlyCurrentActivity.value);
     this.getMarketingActivity();
   }
 
