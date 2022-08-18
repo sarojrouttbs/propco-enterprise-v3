@@ -107,6 +107,13 @@ export class SelfAssessmentFormComponent implements OnInit {
     this.isHmrcLandlordSelectPreview = data;
   }
 
+  async proceed() {
+    const proceed = await this.commonService.showConfirm('HMRC Self-Assessment Form', 'Are you sure you want to proceed with the send action?', '', 'Confirm', 'Cancel');
+    if (proceed) {
+      this.generateHMRC()
+    }
+  }
+
   generateHMRC() {
     this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
     const params = {
@@ -134,7 +141,7 @@ export class SelfAssessmentFormComponent implements OnInit {
   }
 
   private async checkExistingBatch() {
-    const existingBatch:any = await this.getUserBatch();
+    const existingBatch: any = await this.getUserBatch();
     if (existingBatch) {
       const existingBatchDetails = await this.getBatchDetails(existingBatch.batchId) as BatchDetail;
       if (existingBatchDetails) {
