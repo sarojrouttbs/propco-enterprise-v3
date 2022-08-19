@@ -92,18 +92,16 @@ export class ProgressSummaryComponent implements OnInit {
     return new Promise((resolve) => {
       this.hmrcService.getLandlordBatchCount(reqObj).subscribe((res) => {
         const response = res && res.data ? res.data : '';
-        response.forEach(element => {
-          if (element.statementPreference !== null) {
-            this.batchList = this.statementPreferences.map((x) => {
-              if (x.index == element.statementPreference) {
-                x.totalRecords = element.statementPreferenceCount;
-                x.totalFailure =
-                  this.totalFinalRecords += element.statementPreferenceCount;
-              }
-              return x;
-            });
+        let statementPref: any = this.statementPreferences;
+        statementPref.push({ index: null, value: 'No Preference Available' });
+        statementPref.forEach(element => {
+          const pref = response.filter(ref => element.index === ref.statementPreference);
+          if (pref.length > 0) {
+            element.totalRecords = pref[0].statementPreferenceCount;
+            this.totalFinalRecords += pref[0].statementPreferenceCount;
           }
         });
+        this.batchList = statementPref;
         resolve(true);
       });
     });
@@ -141,30 +139,22 @@ export class ProgressSummaryComponent implements OnInit {
         const response = res && res.data ? res.data : '';
         this.totalSuccessRecords = 0;
         this.totalFailureRecords = 0;
-        if (response) {
-          response.forEach(element => {
-            if (element.statementPreference !== null) {
-              const batchList = this.statementPreferences.map((x) => {
-                if (x.index == element.statementPreference) {
-                  x.totalSuccess = (element.successCount ? element.successCount : 0);
-                  x.totalFailure = (element.failureCount ? element.failureCount : 0);
-                  this.totalSuccessRecords += x.totalSuccess;
-                  this.totalFailureRecords += x.totalFailure;
-                  //check totalFinalRecords is greator than 0 or not othere wise finalCount will show infinit as output
-                  if (this.totalFinalRecords > 0)
-                    this.finalCount = (this.totalSuccessRecords + this.totalFailureRecords) / this.totalFinalRecords;
-                  this.percentage = Math.round(this.finalCount * 100);
-                  if (this.finalCount >= 0.33 && this.finalCount < 0.66)
-                    this.progressBarColor = 'warning';
-                  if (this.finalCount >= 0.66)
-                    this.progressBarColor = 'success';
-                }
-                return x;
-              });
-              this.batchList = batchList;
-            }
-          });
-        }
+        this.batchList.forEach(element => {
+          const pref = response.filter(ref => element.index === ref.statementPreference);
+          if (pref.length > 0) {
+            element.totalSuccess = (pref[0].successCount ? pref[0].successCount : 0);
+            element.totalFailure = (pref[0].failureCount ? pref[0].failureCount : 0);
+            this.totalSuccessRecords += element.totalSuccess;
+            this.totalFailureRecords += element.totalFailure;
+          }
+          if (this.totalFinalRecords > 0)
+            this.finalCount = (this.totalSuccessRecords + this.totalFailureRecords) / this.totalFinalRecords;
+          this.percentage = Math.round(this.finalCount * 100);
+          if (this.finalCount >= 0.33 && this.finalCount < 0.66)
+            this.progressBarColor = 'warning';
+          if (this.finalCount >= 0.66)
+            this.progressBarColor = 'success';
+        });
         resolve(true);
       });
     });
