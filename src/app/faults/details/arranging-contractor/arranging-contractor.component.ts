@@ -8,7 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
-import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, ERROR_CODE, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES, LL_PAYMENT_CONFIG, QUOTE_CC_STATUS_ID, REGEX, MAINT_SOURCE_TYPES, RECIPIENTS, FAULT_NOTIFICATION_STATE, DEFAULTS, DATE_FORMAT } from './../../../shared/constants';
+import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES, LL_PAYMENT_CONFIG, QUOTE_CC_STATUS_ID, REGEX, MAINT_SOURCE_TYPES, RECIPIENTS, FAULT_NOTIFICATION_STATE, DEFAULTS, DATE_FORMAT } from './../../../shared/constants';
 import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
 import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
@@ -27,7 +27,7 @@ import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-m
   styleUrls: ['./arranging-contractor.component.scss', '../details.page.scss'],
 })
 export class ArrangingContractorComponent implements OnInit {
-  @ViewChild("outsideElement", { static: true }) outsideElement: ElementRef;
+  @ViewChild('outsideElement', { static: true }) outsideElement: ElementRef;
   @ViewChild('modalView', { static: true }) modalView$: ElementRef;
   raiseQuoteForm: FormGroup;
   workOrderForm: FormGroup;
@@ -201,7 +201,7 @@ export class ArrangingContractorComponent implements OnInit {
       paidBy: ['LANDLORD', Validators.required],
       propertyId: [this.faultDetails.propertyId, Validators.required],
       quoteCategory: [{ value: this.categoryMap.get(this.faultDetails.category), disabled: true }],
-      description: [(this.faultDetails.sourceType === 'FAULT' ? (this.categoryName + " " + this.faultDetails.title) : (this.faultDetails.fixfloCategory + " " + this.faultDetails.title)), [Validators.required, Validators.maxLength(70)]],
+      description: [(this.faultDetails.sourceType === 'FAULT' ? (this.categoryName + ' ' + this.faultDetails.title) : (this.faultDetails.fixfloCategory + ' ' + this.faultDetails.title)), [Validators.required, Validators.maxLength(70)]],
       orderedBy: [{ value: '', disabled: true }, Validators.required],
       requiredDate: ['', Validators.required],
       contact: '',
@@ -247,7 +247,7 @@ export class ArrangingContractorComponent implements OnInit {
       worksOrderNumber: [{ value: this.faultDetails.reference, disabled: true }],
       postdate: [{ value: this.currentDate, disabled: true }],
       nominalCode: ['', Validators.required],
-      description: [(this.faultDetails.sourceType === 'FAULT' ? (this.categoryName + " " + this.faultDetails.title) : (this.faultDetails.fixfloCategory + " " + this.faultDetails.title)), [Validators.required, Validators.maxLength(70)]],
+      description: [(this.faultDetails.sourceType === 'FAULT' ? (this.categoryName + ' ' + this.faultDetails.title) : (this.faultDetails.fixfloCategory + ' ' + this.faultDetails.title)), [Validators.required, Validators.maxLength(70)]],
       paidBy: [{ value: 'LANDLORD', disabled: true }, Validators.required],
       keysLocation: this.faultDetails.doesBranchHoldKeys ? KEYS_LOCATIONS.KEY_IN_BRANCH : KEYS_LOCATIONS.DO_NOT_HOLD_KEY,
       returnKeysTo: this.faultDetails.doesBranchHoldKeys ? 'Return to Branch' : '',
@@ -338,7 +338,6 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   async removeContractor(i: any, isRejected: boolean) {
-    // if (this.restrictAction) { return; }
     if (isRejected) {
       this.commonService.showAlert('Remove Contractor', 'Removing the rejected contractor is restricted.');
       return;
@@ -392,7 +391,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private async enableCCAddform() {
     this.activeContractorCount  = await this.getActiveContractorCount() as number;
-    this.activeContractorCount < this.MAX_ACTIVE_QUOTE_CONTRACTOR ? this.addMoreCCrestrictAction = false : this.addMoreCCrestrictAction = true;
+    this.addMoreCCrestrictAction = this.activeContractorCount < this.MAX_ACTIVE_QUOTE_CONTRACTOR ? false : true;
   }
 
   private getFaultMaintenance() {
@@ -726,24 +725,23 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   private validateReq(skipReqValidation: boolean = false) {
-    let invalid = true;
     if (!this.isWorksOrder) {
       /*Quote form validations*/
       if (!skipReqValidation) {
         if (!this.raiseQuoteForm.valid) {
           this.commonService.showMessage('Please fill all required fields.', 'Quote', 'error');
           this.raiseQuoteForm.markAllAsTouched();
-          return invalid;
+          return true;
         }
         if (this.raiseQuoteForm.value.contractorList.length == 0) {
           this.commonService.showMessage('Atleast one contractor is required for raising quote.', 'Quote', 'error');
-          return invalid;
+          return true;
         }
         if (this.raiseQuoteForm.get('contractorList').value) {
           const anyActiveContractor = this.raiseQuoteForm.get('contractorList').value.find(x => x.isActive);
           if (!anyActiveContractor) {
             this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
-            return invalid;
+            return true;
           }
         }
       }
@@ -752,7 +750,7 @@ export class ArrangingContractorComponent implements OnInit {
           const anyActiveContractor = this.raiseQuoteForm.get('contractorList').value.find(x => x.isActive);
           if (!anyActiveContractor) {
             this.commonService.showMessage('Select atleast one contractor for raising quote.', 'Quote', 'error');
-            return invalid;
+            return true;
           }
         }
       }
@@ -761,7 +759,7 @@ export class ArrangingContractorComponent implements OnInit {
           const defaulter = this.faultMaintenanceDetails.quoteContractors.find(x => x.isRejected && x.contractorId === this.filteredCCDetails.contractorId);
           if (defaulter) {
             this.commonService.showMessage('Selected contractor is rejected.Please select another one', 'Quote', 'error');
-            return invalid;
+            return true;
           }
         }
       }
@@ -769,14 +767,14 @@ export class ArrangingContractorComponent implements OnInit {
       if (!this.workOrderForm.valid) {
         if (this.workOrderForm.controls['contractorName'].invalid) {
           this.commonService.showMessage('Invalid Contractor.', 'Works Order', 'error');
-          return invalid;
+          return true;
         }
         this.commonService.showMessage('Please fill all required fields.', 'Works Order', 'error');
         this.workOrderForm.markAllAsTouched();
-        return invalid;
+        return true;
       }
     }
-    return invalid = false;
+    return false;
   }
 
   private updateFaultQuoteContractor() {
@@ -954,7 +952,6 @@ export class ArrangingContractorComponent implements OnInit {
           if (quoteRaised) {
             const faultUpdated = await this.updateFault(true);
             if (faultUpdated) {
-              // this.commonService.showLoader();
               setTimeout(async () => {
                 this._btnHandler('refresh');
               }, 1000);
@@ -1133,7 +1130,7 @@ export class ArrangingContractorComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.faultsService.getPreferredSuppliers(landlordId).subscribe(
         res => {
-          res && res.data ? this.preferredSuppliersList = res.data : [];
+          this.preferredSuppliersList = res && res.data ? res.data : [];
           resolve(true);
         },
         error => {
@@ -1432,9 +1429,9 @@ export class ArrangingContractorComponent implements OnInit {
       let modalData = {
         faultId: this.faultDetails.faultId,
         faultNotificationId: this.iacNotification.faultNotificationId,
-        title: "Arranging Contractor",
+        title: 'Arranging Contractor',
         headingOne: "You have selected 'Yes, agreed Date/Time with Tenant.'",
-        headingTwo: "Please input the appointment date and time that the Contractor has agreed with the occupants.",
+        headingTwo: 'Please input the appointment date and time that the Contractor has agreed with the occupants.',
         type: APPOINTMENT_MODAL_TYPE.QUOTE,
         contractorDetails: this.filteredCCDetails,
         contractorWoPropertyVisitAt: this.faultDetails.contractorWoPropertyVisitAt,
@@ -1899,7 +1896,7 @@ export class ArrangingContractorComponent implements OnInit {
 
     this.nominalCodes.forEach(code => {
       let heading = code.heading ? code.heading.toUpperCase() : '';
-      code.concat = heading + ", " + code.nominalCode + ", " + code.description;
+      code.concat = heading + ', ' + code.nominalCode + ', ' + code.description;
       //quote
       if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 4) {
         this.raiseQuoteForm.get('nominalCode').setValue(code);
@@ -1986,7 +1983,7 @@ export class ArrangingContractorComponent implements OnInit {
         let data = res ? res : '';
         if (data) {
           this.workOrderForm.patchValue({
-            mgntHoldKey: "Contact Branch - " + data.branding.phone
+            mgntHoldKey: 'Contact Branch - ' + data.branding.phone
           });
         }
       }, error => {
@@ -2014,9 +2011,9 @@ export class ArrangingContractorComponent implements OnInit {
       let modalData = {
         faultId: this.faultDetails.faultId,
         faultNotificationId: this.iacNotification.faultNotificationId,
-        title: "Appointment Date/Time",
+        title: 'Appointment Date/Time',
         headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
-        headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
+        headingTwo: 'Please add the appointment date & time the contractor has agreed with the occupants.',
         type: APPOINTMENT_MODAL_TYPE.WO
       }
       this.openAppointmentModal(modalData);
@@ -2149,11 +2146,7 @@ export class ArrangingContractorComponent implements OnInit {
         error => {
           if (error.error && error.error.hasOwnProperty('errorCode')) {
             this.commonService.showMessage(error.error ? error.error.message : 'Something went wrong', 'Arranging Contractor', 'error');
-            if (error.error.errorCode === ERROR_CODE.PAYMENT_RULES_CHECKING_FAILED && actionType !== WORKSORDER_RAISE_TYPE.AUTO) {
               resolve(null);
-            } else {
-              resolve(null);
-            }
           } else {
             resolve(null);
           }
@@ -2193,8 +2186,6 @@ export class ArrangingContractorComponent implements OnInit {
           } else {
             resolve(true);
           }
-
-
         }
       );
     });
@@ -2329,9 +2320,9 @@ export class ArrangingContractorComponent implements OnInit {
     let modalData = {
       faultId: this.faultDetails.faultId,
       faultNotificationId: this.iacNotification.faultNotificationId,
-      title: "Appointment Date/Time",
+      title: 'Appointment Date/Time',
       headingOne: "You have selected 'Yes, agreed Date/Time with Tenant'.",
-      headingTwo: "Please add the appointment date & time the contractor has agreed with the occupants.",
+      headingTwo: 'Please add the appointment date & time the contractor has agreed with the occupants.',
       type: templateCode === 'CDT-C-E' || templateCode === 'CQ-C-E' ? APPOINTMENT_MODAL_TYPE.MODIFY_QUOTE : APPOINTMENT_MODAL_TYPE.MODIFY_WO,
       contractorDetails: this.filteredCCDetails,
       contractorWoPropertyVisitAt: this.faultDetails.contractorWoPropertyVisitAt,
@@ -2468,7 +2459,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   scrollToAddCC(): void {
-    document.getElementById("addCCform").scrollIntoView({ behavior: "smooth" });
+    document.getElementById('addCCform').scrollIntoView({ behavior: 'smooth' });
   }
 
   async overrideQuote(preUpload?) {
@@ -2501,18 +2492,7 @@ export class ArrangingContractorComponent implements OnInit {
         if(!this.isWorksOrder && action.index === 'DOES_OWN_REPAIRS') {
           otherStageActions.push(action);
           return;
-        }
-        if(this.iacNotification.responseReceived === null) {
-          /*awaiting response*/
-        }
-        else if(this.iacNotification.responseReceived) {
-          /*response recieved*/
-          if(this.iacNotification.responseReceived.isAccepted === false) {
-            /*negative response*/
-          } else {
-            /*positive response*/
-          } 
-        }
+        }        
       });
       this.otherStageActions = otherStageActions;
     }

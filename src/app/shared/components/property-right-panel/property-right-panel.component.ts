@@ -1,6 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { AgentService } from 'src/app/agent/agent.service';
 import { DATE_FORMAT, DEFAULTS, PROPCO } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
@@ -20,6 +19,7 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
   portfolioSources: any;
   notAvailable = DEFAULTS.NOT_AVAILABLE;
   DATE_FORMAT = DATE_FORMAT;
+  property: any;
 
   constructor(
     private commonService: CommonService
@@ -32,8 +32,8 @@ export class PropertyRightPanelComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.propertyData && !changes.propertyData.firstChange) {
-      this.propertyData = this.propertyData;
-      this.propertyData.propertyInfo.status = this.propertyData?.propertyInfo?.status.toString();
+      this.property = this.propertyData;
+      this.property.propertyInfo.status = this.property?.propertyInfo?.status.toString();
     }
   }
 

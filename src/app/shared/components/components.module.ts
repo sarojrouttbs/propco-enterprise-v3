@@ -19,16 +19,9 @@ import { SearchResultsComponent } from './search-results/search-results.componen
 import { SolrHeaderComponent } from './solr-header/solr-header.component';
 import { PropertyDetailsCardComponent } from './property-details-card/property-details-card.component';
 import { PropertyRightPanelComponent } from './property-right-panel/property-right-panel.component';
+import { CURRENCY_MASK_CONFIGURATION } from '../constants';
 
-export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
-    align: "left",
-    allowNegative: false,
-    decimal: ".",
-    precision: 2,
-    prefix: "£ ",
-    suffix: "",
-    thousands: ","
-  };
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 @NgModule({
     imports: [
         CommonModule,

@@ -10,9 +10,7 @@ import {
   GuidedTour,
   Orientation,
 } from '../../shared/interface/guided-tour.model';
-import { ThemeService } from 'src/app/shared/services/theme.service';
 declare function openScreen(key: string, value: any): any;
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',

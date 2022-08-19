@@ -1,14 +1,12 @@
-import { CommonService } from "./../../services/common.service";
-import { CERTIFICATES_CATEGORY, DATE_FORMAT, DEFAULTS } from "./../../constants";
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { ModalController } from "@ionic/angular";
-import { DataTableDirective } from "angular-datatables";
-import { Subject } from "rxjs";
-import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
+import { CommonService } from './../../services/common.service';
+import { CERTIFICATES_CATEGORY, DATE_FORMAT, DEFAULTS } from './../../constants';
+import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 @Component({
-  selector: "app-property-certificate-modal",
-  templateUrl: "./property-certificate-modal.page.html",
-  styleUrls: ["./property-certificate-modal.page.scss"],
+  selector: 'app-property-certificate-modal',
+  templateUrl: './property-certificate-modal.page.html',
+  styleUrls: ['./property-certificate-modal.page.scss'],
 })
 export class PropertyCertificateModalPage implements OnInit {
   propertyCertificate;
@@ -65,7 +63,7 @@ export class PropertyCertificateModalPage implements OnInit {
 
   private patchPropCrtList(data) {
     const propCrtList = this.propertyCertificateListForm.get(
-      "propertyCertificateList"
+      'propertyCertificateList'
     ) as FormArray;
     const contGrup = this.formBuilder.group({
       type: data.type,
@@ -99,12 +97,12 @@ export class PropertyCertificateModalPage implements OnInit {
 
   selectCertificate(certificate, i) {
     const contlistArray = this.propertyCertificateListForm.get(
-      "propertyCertificateList"
+      'propertyCertificateList'
     ) as FormArray;
     if (!certificate.checked) {
       contlistArray.controls.forEach((element, index) => {
         if (i != index) {
-          element.get("checked").setValue(false);
+          element.get('checked').setValue(false);
         } else {
           this.setDetails(certificate);
           this.showDetails = true;

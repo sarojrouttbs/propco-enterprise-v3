@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Plugins } from '@capacitor/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
 const { Network } = Plugins;
-import { ToastController } from '@ionic/angular';
 import { ToastrService } from 'ngx-toastr';
 import { saveAs } from 'file-saver';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -134,7 +133,7 @@ export class CommonService {
   getLookupValue(id, listOfArray): string {
     let propertyStatus;
     listOfArray = listOfArray && listOfArray.length ? listOfArray : [];
-    listOfArray.find((obj) => {      
+    listOfArray.find((obj) => {
       if (obj.index === id) {
         propertyStatus = obj.value;
       }
@@ -412,8 +411,8 @@ export class CommonService {
     }));
   }
 
-  downloadDocument(response, fileName) {
-    const type = null;
+  downloadDocument(response, fileName, fileType?:any) {
+    const type = fileType;
     const blob = new Blob([response], { type: type });
     const downloadURL = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -711,9 +710,9 @@ export class CommonService {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup/property', { params, responseType: 'json' });
   }
 
-  removeEmpty(obj:any) {
+  removeEmpty(obj: any) {
     for (const key in obj) {
-      if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
+      if (obj[key] === null || obj[key] === undefined || obj[key] === '') {
         delete obj[key];
       }
     }

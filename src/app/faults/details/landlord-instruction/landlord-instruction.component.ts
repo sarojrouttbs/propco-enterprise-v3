@@ -22,7 +22,7 @@ import { ContractorDetailsModalPage } from 'src/app/shared/modals/contractor-det
   styleUrls: ['./landlord-instruction.component.scss', '../details.page.scss']
 })
 export class LandlordInstructionComponent implements OnInit {
-  @ViewChild("outsideElement", { static: true }) outsideElement: ElementRef;
+  @ViewChild('outsideElement', { static: true }) outsideElement: ElementRef;
   @ViewChild('modalView', { static: true }) modalView$: ElementRef;
   landlordInstFrom: FormGroup;
   workOrderForm: FormGroup;
@@ -727,15 +727,14 @@ export class LandlordInstructionComponent implements OnInit {
   }
 
   private createFaultFormValues(): any {
-    let faultDetails = {
+    return {
       category: this.describeFaultForm.get('category').value,
       title: this.describeFaultForm.get('title').value,
       isTenantPresenceRequired: this.accessInfoForm.get('isTenantPresenceRequired').value,
       areOccupiersVulnerable: this.accessInfoForm.get('areOccupiersVulnerable').value,
       tenantNotes: this.accessInfoForm.get('tenantNotes').value,
-      sourceType: "FAULT",
+      sourceType: 'FAULT',
     }
-    return faultDetails;
   }
 
 
@@ -1084,7 +1083,7 @@ export class LandlordInstructionComponent implements OnInit {
 
     this.nominalCodes.forEach(code => {
       let heading = code.heading ? code.heading.toUpperCase() : '';
-      code.concat = heading + ", " + code.nominalCode + ", " + code.description;
+      code.concat = heading + ', ' + code.nominalCode + ', ' + code.description;
       if (this.faultDetails.nominalCode && code.nominalCode === this.faultDetails.nominalCode) {
         this.landlordInstFrom.get('nominalCode').setValue(code);
       }
@@ -1358,11 +1357,7 @@ export class LandlordInstructionComponent implements OnInit {
           resolve(res);
         },
         error => {
-          if (error.error && error.error.hasOwnProperty('errorCode')) {
-            resolve(null);
-          } else {
-            resolve(null);
-          }
+          resolve(null);
         }
       );
     });

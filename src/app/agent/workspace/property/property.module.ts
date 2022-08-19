@@ -50,17 +50,11 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { AgreementDetailsComponent } from './admin/tenancy/agreement-details/agreement-details.component';
 import { AgreementHistoryComponent } from './admin/tenancy/agreement-history/agreement-history.component';
 import { ComplianceRecordsComponent } from './compliance-records/compliance-records.component';
-import { FurtherDetailsComponent } from './particulars/further-details/further-details.component';
+import { CURRENCY_MASK_CONFIGURATION } from 'src/app/shared/constants';
+import { PostcodeDirectiveModule } from 'src/app/shared/directives/postcode-directive.module';
 
-export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
-  align: "left",
-  allowNegative: false,
-  decimal: ".",
-  precision: 2,
-  prefix: "£ ",
-  suffix: "",
-  thousands: ","
-};
+
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
 @NgModule({
   imports: [
@@ -84,7 +78,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     FeeChargePageModule,
     KeyActivityModalPageModule,
     CreateKeySetPageModule,
-    LeafletModule
+    LeafletModule,
+    PostcodeDirectiveModule
   ],
   declarations: [
     PropertyPage,
@@ -116,7 +111,6 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     AgreementHistoryComponent,
     PercentageDirective,
     ComplianceRecordsComponent,
-    FurtherDetailsComponent
   ],
   providers: [
     AgentService,

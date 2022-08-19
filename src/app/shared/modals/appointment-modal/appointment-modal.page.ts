@@ -47,12 +47,7 @@ export class AppointmentModalPage implements OnInit {
       this.sessionSlots = this.commonService.sortBy('index', this.sessionSlots)
     }
     this.initForm();
-    if ((this.contractorDetails && this.contractorDetails.contractorPropertyVisitAt) || this.contractorWoPropertyVisitAt) {
-      this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() - 30), this.DATE_FORMAT.YEAR_DATE_TIME_1);
-    }
-    else {
-      this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() - 30), this.DATE_FORMAT.YEAR_DATE_TIME_1);
-    }
+    this.minDate = this.commonService.getFormatedDate(currentDate.setDate(currentDate.getDate() - 30), this.DATE_FORMAT.YEAR_DATE_TIME_1);
     this.patchValue();
   }
 

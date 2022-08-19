@@ -369,9 +369,9 @@
           <h2>Preferred Suppliers</h2>
           <table>
             <tr>
-              <th>REF</th>
-              <th>SUPPLIER / CONTRACTOR</th>
-              <th>TRADE</th>
+              <th scope="col">REF</th>
+              <th scope="col">SUPPLIER / CONTRACTOR</th>
+              <th scope="col">TRADE</th>
             </tr>
             <tr *ngFor="let supplier of preferredSuppliers">
               <td>{{supplier.reference}}</td>
@@ -455,9 +455,9 @@
           </ion-row>
           <table>
             <tr>
-              <th><ion-skeleton-text animated></ion-skeleton-text></th>
-              <th><ion-skeleton-text animated></ion-skeleton-text></th>
-              <th><ion-skeleton-text animated></ion-skeleton-text></th>
+              <th scope="col"><ion-skeleton-text animated></ion-skeleton-text></th>
+              <th scope="col"><ion-skeleton-text animated></ion-skeleton-text></th>
+              <th scope="col"><ion-skeleton-text animated></ion-skeleton-text></th>
             </tr>
             <tr>
               <td><ion-skeleton-text animated></ion-skeleton-text></td>

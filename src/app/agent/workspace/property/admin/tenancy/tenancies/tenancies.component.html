@@ -20,14 +20,13 @@
           <table datatable [dtOptions]="dtOptions" class="row-border hover table-width" id="propertyTenancyTable" style="position: relative;" aria-describedby="tenancies">
             <thead>
               <tr>
-                <th style="width:5%"></th>
-                <th style="width:13%">Status</th>
-                <th style="width:15%">Tenant</th>
-                <th style="width:15%">Start</th>
-                <th style="width:15%">End</th>
-                <th style="width:15%">Type</th>
-                <th>Lapse To</th>
-                <!-- <th style="width:38px;"></th> -->
+                <th scope="col" style="width:5%"></th>
+                <th scope="col" style="width:13%">Status</th>
+                <th scope="col" style="width:15%">Tenant</th>
+                <th scope="col" style="width:15%">Start</th>
+                <th scope="col" style="width:15%">End</th>
+                <th scope="col" style="width:15%">Type</th>
+                <th scope="col">Lapse To</th>
               </tr>
             </thead>
             <tbody>
@@ -39,13 +38,9 @@
                 <td>{{data?.tenancyEndDate | date: DATE_FORMAT.DATE || notAvailable}}</td>
                 <td>{{(data?.contractType | lookup: contractTypeLookup) || notAvailable}}</td>
                 <td>{{(data?.lapseToContract | lookup: contractTypeLookup) || notAvailable}}</td>
-                <!-- <td class="resp-action-icon">
-                  <i (click)="showMenu($event,'tenancies-overlay','table-row')"
-                    class="propcoicon propcoicon-actions-on action-btn"></i>
-                </td> -->
               </tr>
               <tr *ngIf="tenancies?.length === 0">
-                <td colspan="7" class="ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+                <td colspan="7" class="ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</strong>
                 </td>
               </tr>
             </tbody>

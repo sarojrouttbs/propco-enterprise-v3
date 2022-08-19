@@ -18,7 +18,8 @@ export class TermsOfBusinessComponent implements OnInit {
   versionHistoryList: any;
   notAvailable = DEFAULTS.NOT_AVAILABLE
   DATE_FORMAT = DATE_FORMAT;
-  
+  property: any;
+
   constructor(
     private agentService: AgentService,
     private commonService: CommonService
@@ -26,7 +27,7 @@ export class TermsOfBusinessComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.propertyDetails && !changes.propertyDetails.firstChange) {
-      this.propertyDetails = this.propertyDetails;
+      this.property = this.propertyDetails;
       this.getVersionHistory(this.propertyDetails.propertyId);
     }
   }
@@ -40,7 +41,7 @@ export class TermsOfBusinessComponent implements OnInit {
   }
 
   private getTobVersionList() {
-    const params = new HttpParams().set("hideLoader", "true");
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getTobVersionList(params).subscribe(
         (res) => {
@@ -55,13 +56,13 @@ export class TermsOfBusinessComponent implements OnInit {
   }
 
   private getVersionHistory(propertyId: string) {
-    const params = new HttpParams().set("hideLoader", "true");
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getVersionHistory(propertyId, params).subscribe(
         (res) => {
           this.versionHistoryList = res && res.data ? res.data : '';
-          if (this.propertyDetails.propertyInfo?.currentTOB) {
-            this.group.get('version').setValue(this.propertyDetails.propertyInfo?.currentTOB);
+          if (this.property.propertyInfo?.currentTOB) {
+            this.group.get('version').setValue(this.property.propertyInfo?.currentTOB);
           }
           resolve(true);
         },

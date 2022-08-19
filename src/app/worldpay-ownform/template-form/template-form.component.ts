@@ -1,8 +1,8 @@
-import { Component, ElementRef, Input, OnInit, Output, ViewChild, EventEmitter } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { PAYMENT_CONFIG } from "src/app/shared/constants";
-import { CommonService } from "src/app/shared/services/common.service";
-import { TemplateFormService } from "./template-form.service";
+import { Component, ElementRef, Input, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PAYMENT_CONFIG } from 'src/app/shared/constants';
+import { CommonService } from 'src/app/shared/services/common.service';
+import { TemplateFormService } from './template-form.service';
 
 declare var Worldpay: any;
 
@@ -22,9 +22,9 @@ export class TemplateFormComponent implements OnInit {
     startDate?: string,
     expiryDate?: string,
     transactionId?: number,
-    propertyId?: String,
+    propertyId?: string,
     amount?: number,
-    entityType?: String
+    entityType?: string
     entityId?: string
   } = {};
   
