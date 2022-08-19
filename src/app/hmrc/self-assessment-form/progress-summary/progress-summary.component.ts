@@ -40,6 +40,7 @@ export class ProgressSummaryComponent implements OnInit {
   DATE_FORMAT = DATE_FORMAT;
   isProcessCompleted = false;
   showPdfBtnLoader = false;
+  showCsvBtnLoader = false;
 
   constructor(
     private hmrcService: HmrcService,
@@ -55,8 +56,8 @@ export class ProgressSummaryComponent implements OnInit {
 
   private async initApi() {
     this.getLookupData();
+    await this.getLandlordBatchCount();
     this.startTimer();
-    this.getLandlordBatchCount();
   }
 
   private getLookupData() {
@@ -114,22 +115,24 @@ export class ProgressSummaryComponent implements OnInit {
 
       /* unsubscribe if the process is complete */
       if (this.finalCount === 1) {
+        this.getBatchCount();
         this.initPdfDownloadProcess();
         timer.unsubscribe();
-        this.commonService.showMessage('We have successfully generated SA form for ' + this.totalSuccessRecords + ' records & saved the records in DMS.', 'Progress Summary', 'success');
+        if (!this.commonService.getItem('HRMRC_PROCESS_COMPLETED', true)) {
+          this.commonService.setItem('HRMRC_PROCESS_COMPLETED', 'true');
+          this.commonService.showMessage('We have successfully generated SA form for ' + this.totalSuccessRecords + ' records & saved the records in DMS.', 'Progress Summary', 'success');
+        }
         this.isProcessCompleted = true;
       }
     });
   }
 
   private async refreshBatchDetails() {
+    await this.getBatchCount();
     const existingBatchDetails = await this.getBatchDetails() as BatchDetail;
     this.batchDetails = existingBatchDetails;
-    if (existingBatchDetails) {
-      await this.getBatchCount();
-      if (existingBatchDetails.isCompleted)
-        this.finalCount = 1;
-    }
+    if (existingBatchDetails && existingBatchDetails.isCompleted && this.percentage === 100)
+      this.finalCount = 1;
   }
 
   getBatchCount() {
@@ -139,22 +142,24 @@ export class ProgressSummaryComponent implements OnInit {
         const response = res && res.data ? res.data : '';
         this.totalSuccessRecords = 0;
         this.totalFailureRecords = 0;
-        this.batchList.forEach(element => {
-          const pref = response.filter(ref => element.index === ref.statementPreference);
-          if (pref.length > 0) {
-            element.totalSuccess = (pref[0].successCount ? pref[0].successCount : 0);
-            element.totalFailure = (pref[0].failureCount ? pref[0].failureCount : 0);
-            this.totalSuccessRecords += element.totalSuccess;
-            this.totalFailureRecords += element.totalFailure;
-          }
-          if (this.totalFinalRecords > 0)
-            this.finalCount = (this.totalSuccessRecords + this.totalFailureRecords) / this.totalFinalRecords;
-          this.percentage = Math.round(this.finalCount * 100);
-          if (this.finalCount >= 0.33 && this.finalCount < 0.66)
-            this.progressBarColor = 'warning';
-          if (this.finalCount >= 0.66)
-            this.progressBarColor = 'success';
-        });
+        if (response) {
+          this.batchList.forEach(element => {
+            const pref = response.filter(ref => element.index === ref.statementPreference);
+            if (pref.length > 0) {
+              element.totalSuccess = (pref[0].successCount ? pref[0].successCount : 0);
+              element.totalFailure = (pref[0].failureCount ? pref[0].failureCount : 0);
+              this.totalSuccessRecords += element.totalSuccess;
+              this.totalFailureRecords += element.totalFailure;
+            }
+            if (this.totalFinalRecords > 0)
+              this.finalCount = (this.totalSuccessRecords + this.totalFailureRecords) / this.totalFinalRecords;
+            this.percentage = Math.round(this.finalCount * 100);
+            if (this.finalCount >= 0.33 && this.finalCount < 0.66)
+              this.progressBarColor = 'warning';
+            if (this.finalCount >= 0.66)
+              this.progressBarColor = 'success';
+          });
+        }
         resolve(true);
       });
     });
@@ -162,6 +167,7 @@ export class ProgressSummaryComponent implements OnInit {
 
   redirectToHome() {
     this.commonService.removeItem('HMRC_FILTER');
+    this.commonService.removeItem('HRMRC_PROCESS_COMPLETED');
     this.router.navigate(['../self-assessment-form'], { replaceUrl: true, relativeTo: this.route });
   }
 
@@ -241,6 +247,27 @@ export class ProgressSummaryComponent implements OnInit {
       this.hmrcService.getSysconfig(params).subscribe((res) => {
         resolve(res ? res[config] : null);
       });
+    });
+  }
+
+  async getCsv() {
+    const params = new HttpParams().set('hideLoader', true);
+    this.showCsvBtnLoader = true;
+    const batchId = this.formObj.batchId;
+    return new Promise((resolve) => {
+      this.hmrcService.getCsv(batchId, params).subscribe(
+        (res) => {
+          this.showCsvBtnLoader = false;
+          if (res)
+            this.commonService.downloadDocument(res, batchId, 'text/csv');
+          else
+            this.commonService.showAlert('HMRC Progress Summary', 'No data available');
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
     });
   }
 }

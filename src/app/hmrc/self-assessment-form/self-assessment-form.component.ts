@@ -115,7 +115,6 @@ export class SelfAssessmentFormComponent implements OnInit {
   }
 
   generateHMRC() {
-    this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
     const params = {
       accountType: HMRC_CONFIG.HMRC_SENDER_EMAIL_ACCOUNT,
       financialYearDateRange: {
@@ -133,9 +132,9 @@ export class SelfAssessmentFormComponent implements OnInit {
     this.hmrcService.generateHMRC(params).subscribe((res) => {
       if (res) {
         const response = res;
-        this.selfAssessmentForm.get('batchId').patchValue(response.batchId)
+        this.selfAssessmentForm.get('batchId').patchValue(response.batchId);
       }
-      this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
+      this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value);
       this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
     });
   }
@@ -148,7 +147,7 @@ export class SelfAssessmentFormComponent implements OnInit {
         if (this.commonService.getItem('HMRC_FILTER')) {
           /* Redirect to progress summary page if processing is not completed */
           this.selfAssessmentForm.value.batchId = existingBatch.batchId;
-          this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
+          // this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
           this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
         }
       }
