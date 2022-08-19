@@ -50,6 +50,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { AgreementDetailsComponent } from './admin/tenancy/agreement-details/agreement-details.component';
 import { AgreementHistoryComponent } from './admin/tenancy/agreement-history/agreement-history.component';
 import { ComplianceRecordsComponent } from './compliance-records/compliance-records.component';
+import { FurtherDetailsComponent } from './particulars/further-details/further-details.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -114,7 +115,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     AgreementDetailsComponent,
     AgreementHistoryComponent,
     PercentageDirective,
-    ComplianceRecordsComponent
+    ComplianceRecordsComponent,
+    FurtherDetailsComponent
   ],
   providers: [
     AgentService,

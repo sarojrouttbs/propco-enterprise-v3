@@ -1,0 +1,112 @@
+<mat-accordion multi class="form-view-accordian">
+  <!-------------------------------------------Further Details-------------------------------------------------------------------->
+  <mat-expansion-panel #furtherDetails hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Further Details
+      </mat-panel-title>
+      <mat-panel-description class="ion-justify-content-end no-margin">
+        <div>
+          <span *ngIf="!furtherDetails.expanded" class="accordian-icon" title="Expand">
+            <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+          </span>
+          <span *ngIf="furtherDetails.expanded" class="accordian-icon" title="Collapse">
+            <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+          </span>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <form [formGroup]="furtherDetailsForm">
+      <ion-grid>
+        <ion-row class="prefernce-options">
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Legacy Ref</ion-label>
+              <ion-input formControlName="legacyRef"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Floor</ion-label>
+              <ion-input formControlName="floor"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Shower Rooms</ion-label>
+              <ion-input formControlName="showerRoom"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Member No</ion-label>
+              <ion-input formControlName="memberNo"></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Reason For Letting</ion-label>
+              <ion-select interface="popover" formControlName="reasonForLetting" >
+                <ion-select-option [value]="item.index" *ngFor="let item of lettingReason">{{item.value}}</ion-select-option>                
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Property Style</ion-label>
+              <ion-select interface="popover" formControlName="propStyle">
+                <ion-select-option [value]="item.index" *ngFor="let item of propStyle">{{item.value}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Kitchen Style</ion-label>
+              <ion-select interface="popover" formControlName="kitchenStyle">
+                <ion-select-option [value]="item.index" *ngFor="let item of kitchenStyle">{{item.value}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Category</ion-label>
+              <ion-select interface="popover" formControlName="category">
+                <ion-select-option [value]="item.index" *ngFor="let item of propCategories">{{item.value}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Overall Condition</ion-label>
+              <ion-select interface="popover" formControlName="overallCondtion">
+                <ion-select-option [value]="item.index" *ngFor="let item of overallConditions">{{item.value}}</ion-select-option>                
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Decorative Condition</ion-label>
+              <ion-select interface="popover" formControlName="decorativeCondition">
+                <ion-select-option [value]="item.index" *ngFor="let item of decorativeConditions">{{item.value}}</ion-select-option>                                
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="20">
+            <ion-item lines="none">
+              <ion-checkbox checked="false" formControlName="lifAccess"></ion-checkbox>
+              <ion-label class="ion-padding-start">Lift Access</ion-label>
+            </ion-item>            
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </mat-expansion-panel>  
+</mat-accordion>
