@@ -198,7 +198,7 @@ export class SelectLandlordsComponent implements OnInit {
   }
 
   applyFilters() {
-    // this.unselectAll();
+    this.unselectAll();
     if (this.checkedLandlords.length > 0)
       this.checkedLandlords.length = 0;
     if (this.group.value.selectedPropertyOfficeCodes) {
