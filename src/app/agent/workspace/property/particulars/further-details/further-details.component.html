@@ -22,7 +22,7 @@
           <ion-col size="20">
             <ion-item>
               <ion-label position="floating">Legacy Ref</ion-label>
-              <ion-input formControlName="legacyRef"></ion-input>
+              <ion-input formControlName="legacyReference"></ion-input>
             </ion-item>
           </ion-col>
           <ion-col size="20">
@@ -34,7 +34,7 @@
           <ion-col size="20">
             <ion-item>
               <ion-label position="floating">Shower Rooms</ion-label>
-              <ion-input formControlName="showerRoom"></ion-input>
+              <ion-input formControlName="showerRooms"></ion-input>
             </ion-item>
           </ion-col>
           <ion-col size="20">
@@ -47,8 +47,8 @@
           <ion-col size="20">
             <ion-item>
               <ion-label position="floating">Reason For Letting</ion-label>
-              <ion-select interface="popover" formControlName="reasonForLetting" >
-                <ion-select-option [value]="item.index" *ngFor="let item of lettingReason">{{item.value}}</ion-select-option>                
+              <ion-select interface="popover" formControlName="lettingReason" >
+                <ion-select-option [value]="item.index" *ngFor="let item of propertyLetReasons">{{item.value}}</ion-select-option>                
               </ion-select>
             </ion-item>
           </ion-col>
@@ -58,8 +58,8 @@
           <ion-col size="20">
             <ion-item>
               <ion-label position="floating">Property Style</ion-label>
-              <ion-select interface="popover" formControlName="propStyle">
-                <ion-select-option [value]="item.index" *ngFor="let item of propStyle">{{item.value}}</ion-select-option>
+              <ion-select interface="popover" formControlName="propertyStyle">
+                <ion-select-option [value]="item.index" *ngFor="let item of propertyStyles">{{item.value}}</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-col>
@@ -67,7 +67,7 @@
             <ion-item>
               <ion-label position="floating">Kitchen Style</ion-label>
               <ion-select interface="popover" formControlName="kitchenStyle">
-                <ion-select-option [value]="item.index" *ngFor="let item of kitchenStyle">{{item.value}}</ion-select-option>
+                <ion-select-option [value]="item.index" *ngFor="let item of kitchenStyles">{{item.value}}</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-col>
@@ -75,8 +75,8 @@
           <ion-col size="20">
             <ion-item>
               <ion-label position="floating">Category</ion-label>
-              <ion-select interface="popover" formControlName="category">
-                <ion-select-option [value]="item.index" *ngFor="let item of propCategories">{{item.value}}</ion-select-option>
+              <ion-select interface="popover" formControlName="propertyCategory">
+                <ion-select-option [value]="item.index" *ngFor="let item of propertyCategories">{{item.value}}</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-col>
@@ -84,7 +84,7 @@
           <ion-col size="20">
             <ion-item>
               <ion-label position="floating">Overall Condition</ion-label>
-              <ion-select interface="popover" formControlName="overallCondtion">
+              <ion-select interface="popover" formControlName="overAllCondition">
                 <ion-select-option [value]="item.index" *ngFor="let item of overallConditions">{{item.value}}</ion-select-option>                
               </ion-select>
             </ion-item>
@@ -101,7 +101,7 @@
         <ion-row>
           <ion-col size="20">
             <ion-item lines="none">
-              <ion-checkbox checked="false" formControlName="lifAccess"></ion-checkbox>
+              <ion-checkbox checked="false" formControlName="isLiftAccess"></ion-checkbox>
               <ion-label class="ion-padding-start">Lift Access</ion-label>
             </ion-item>            
           </ion-col>

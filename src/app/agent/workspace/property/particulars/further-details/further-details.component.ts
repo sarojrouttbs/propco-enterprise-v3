@@ -11,45 +11,46 @@ import { CommonService } from 'src/app/shared/services/common.service';
   styleUrls: ['./further-details.component.scss'],
 })
 export class FurtherDetailsComponent implements OnInit {
-  furtherDetailsForm : FormGroup;
+  furtherDetailsForm: FormGroup;
   localStorageItems: any;
   lookupData: any;
   lettingReason: any;
-  propStyle: any;
   propertyLookupData: any;
-  kitchenStyle: any;
-  propCategories: any;
   overallConditions: any;
   decorativeConditions: any;
   selectedEntryDetails: any;
+  kitchenStyles: any;
+  propertyCategories: any;
+  propertyLetReasons: any;
+  propertyStyles: any;
   constructor(
-    private formBuilder : FormBuilder,
-    private commonService : CommonService,
+    private formBuilder: FormBuilder,
+    private commonService: CommonService,
     private agentService: AgentService
-    ) { }
+  ) { }
 
   ngOnInit() {
     this.InitForm();
     this.InitAPI();
   }
 
-  private InitForm(){    
-      this.furtherDetailsForm = this.formBuilder.group({
-        legacyRef:[''],
-        floor:[''],
-        showerRoom:[''],
-        memberNo:[''],
-        reasonForLetting:[''],
-        propStyle:[''],
-        kitchenStyle:[''],
-        category:[''],
-        overallCondtion:[''],
-        decorativeCondition:[''],
-        lifAccess:[false]
-      })
+  private InitForm() {
+    this.furtherDetailsForm = this.formBuilder.group({
+      legacyReference: [''],
+      floor: [''],
+      showerRooms: [''],
+      memberNo: [''],
+      lettingReason: [''],
+      propertyStyle: [''],
+      kitchenStyle: [''],
+      propertyCategory: [''],
+      overAllCondition: [''],
+      decorativeCondition: [''],
+      isLiftAccess: [false]
+    })
   }
 
-  private async InitAPI() {    
+  private async InitAPI() {
     this.localStorageItems = await this.fetchItems();
     this.selectedEntryDetails = await this.getActiveTabEntityInfo();
     this.getLookUpData();
@@ -67,17 +68,17 @@ export class FurtherDetailsComponent implements OnInit {
   }
 
   private getActiveTabEntityInfo() {
-    let item = this.localStorageItems.filter((x) => x.isSelected);
+    const item = this.localStorageItems.filter((x) => x.isSelected);
     if (item) {
       return item[0];
     }
   }
-  
+
   private getLookUpData() {
     this.lookupData = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
-    if(this.lookupData){
+    if (this.lookupData) {
       this.setUpLookUpData(this.lookupData);
-    }  else {
+    } else {
       this.commonService.getLookup().subscribe((data) => {
         this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
         this.lookupData = data;
@@ -85,10 +86,10 @@ export class FurtherDetailsComponent implements OnInit {
       });
     }
   }
-  
+
   private setUpLookUpData(lookupData: any) {
-    this.lettingReason = lookupData.propertyLetReasons;
-    this.propStyle = lookupData.propertyStyles;
+    this.propertyLetReasons = lookupData.propertyLetReasons;
+    this.propertyStyles = lookupData.propertyStyles;
   }
 
   private getPropertyLookupData() {
@@ -97,7 +98,7 @@ export class FurtherDetailsComponent implements OnInit {
       this.setPropertyLookupData(this.propertyLookupData);
     }
     else {
-      let params = new HttpParams().set("hideLoader", "true");
+      const params = new HttpParams().set('hideLoader', 'true');
       this.commonService.getPropertyLookup(params).subscribe(data => {
         this.commonService.setItem(PROPCO.PROPERTY_LOOKUP_DATA, data);
         this.setPropertyLookupData(data);
@@ -106,40 +107,32 @@ export class FurtherDetailsComponent implements OnInit {
   }
 
   private setPropertyLookupData(propertylookupdata: any) {
-      this.kitchenStyle = propertylookupdata.kitchenStyles;
-      this.propCategories = propertylookupdata.propertyCategories;
-      this.overallConditions = propertylookupdata.overallConditions;
-      this.decorativeConditions = propertylookupdata.decorativeConditions;
+    this.kitchenStyles = propertylookupdata.kitchenStyles;
+    this.propertyCategories = propertylookupdata.propertyCategories;
+    this.overallConditions = propertylookupdata.overallConditions;
+    this.decorativeConditions = propertylookupdata.decorativeConditions;
   }
 
   private getPropertyDetails() {
     const params = new HttpParams().set('hideLoader', 'true');
-    return new Promise((resolve, reject)=>{
-      this.agentService.getPropertyDetails(this.selectedEntryDetails.entityId, params).subscribe(result =>{
-        if(result && result.data && result.data.propertyDetails){
+    return new Promise((resolve, reject) => {
+      this.agentService.getPropertyDetails(this.selectedEntryDetails.entityId, params).subscribe(result => {
+        if (result && result.data && result.data.propertyDetails) {
           this.patchFurtherDetails(result.data.propertyDetails);
         }
         resolve(result.data.propertyDetails);
-      }, error =>{
+      }, error => {
         reject(error);
       })
     })
   }
 
   private patchFurtherDetails(propertyDetails: any) {
+    this.furtherDetailsForm.patchValue(propertyDetails);
     this.furtherDetailsForm.patchValue({
-      legacyRef:propertyDetails.legacyReference ? propertyDetails.legacyReference : null, 
-      floor:propertyDetails.floor ? propertyDetails.floor : null,
-      showerRoom:propertyDetails.showerRooms ? propertyDetails.showerRooms : 0,
-      memberNo:propertyDetails.memberNo ? propertyDetails.memberNo : 0, 
-      reasonForLetting:propertyDetails.lettingReason ? propertyDetails.lettingReason : null,
-      propStyle:propertyDetails.propertyStyle ? propertyDetails.propertyStyle: null, 
-      kitchenStyle:propertyDetails.kitchenStyle ? propertyDetails.kitchenStyle : null,
-      category:propertyDetails.propertyCategory ? propertyDetails.propertyCategory: null,
-      overallCondtion:propertyDetails.overAllCondition ? propertyDetails.overAllCondition : null,
-      decorativeCondition:propertyDetails.decorativeCondition ? propertyDetails.decorativeCondition: null, 
-      lifAccess: propertyDetails.isLiftAccess ? true : false
+      showerRooms: propertyDetails.showerRooms ? propertyDetails.showerRooms : 0,
+      memberNo: propertyDetails.memberNo ? propertyDetails.memberNo : 0,
+      isLiftAccess: propertyDetails.isLiftAccess ? true : false
     })
   }
-
 }
