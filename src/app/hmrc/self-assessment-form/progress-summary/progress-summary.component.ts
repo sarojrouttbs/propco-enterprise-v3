@@ -78,34 +78,44 @@ export class ProgressSummaryComponent implements OnInit {
   }
 
   getLandlordBatchCount() {
-    const reqObj: any = {
-      managementType: this.formObj.managementType ? this.formObj.managementType : [],
-      propertyOffice: this.formObj.propertyOffice ? this.formObj.propertyOffice : [],
-      selectedPropertyLinkIds: this.formObj.selectedPropertyLinkIds ? this.formObj.selectedPropertyLinkIds : [],
-      deselectedPropertyLinkIds: this.formObj.deselectedPropertyLinkIds ? this.formObj.deselectedPropertyLinkIds : [],
-      taxHandler: this.formObj.taxHandler
-    }
-    if (this.formObj.searchText)
-      reqObj.searchText = this.formObj.searchText;
-    if (this.formObj.searchOnColumns)
-      reqObj.searchOnColumns = this.formObj.searchOnColumns;
+    if (this.commonService.getItem('HMRC_BATCH_COUNT', true)) {
+      const response = this.commonService.getItem('HMRC_BATCH_COUNT', true);
+      this.getActionItems(response);
+    } else {
+      const reqObj: any = {
+        managementType: this.formObj.managementType ? this.formObj.managementType : [],
+        propertyOffice: this.formObj.propertyOffice ? this.formObj.propertyOffice : [],
+        selectedPropertyLinkIds: this.formObj.selectedPropertyLinkIds ? this.formObj.selectedPropertyLinkIds : [],
+        deselectedPropertyLinkIds: this.formObj.deselectedPropertyLinkIds ? this.formObj.deselectedPropertyLinkIds : [],
+        taxHandler: this.formObj.taxHandler
+      }
+      if (this.formObj.searchText)
+        reqObj.searchText = this.formObj.searchText;
+      if (this.formObj.searchOnColumns)
+        reqObj.searchOnColumns = this.formObj.searchOnColumns;
 
-    return new Promise((resolve) => {
-      this.hmrcService.getLandlordBatchCount(reqObj).subscribe((res) => {
-        const response = res && res.data ? res.data : '';
-        let statementPref: any = this.statementPreferences;
-        statementPref.push({ index: null, value: 'No Preference Available' });
-        statementPref.forEach(element => {
-          const pref = response.filter(ref => element.index === ref.statementPreference);
-          if (pref.length > 0) {
-            element.totalRecords = pref[0].statementPreferenceCount;
-            this.totalFinalRecords += pref[0].statementPreferenceCount;
-          }
+      return new Promise((resolve) => {
+        this.hmrcService.getLandlordBatchCount(reqObj).subscribe((res) => {
+          const response = res && res.data ? res.data : '';
+          this.commonService.setItem('HMRC_BATCH_COUNT', response);
+          this.getActionItems(response);
+          resolve(true);
         });
-        this.batchList = statementPref;
-        resolve(true);
       });
+    }
+  }
+
+  private getActionItems(response) {
+    let statementPref: any = this.statementPreferences;
+    statementPref.push({ index: null, value: 'No Preference Available' });
+    statementPref.forEach(element => {
+      const pref = response.filter(ref => element.index === ref.statementPreference);
+      if (pref.length > 0) {
+        element.totalRecords = pref[0].statementPreferenceCount;
+        this.totalFinalRecords += pref[0].statementPreferenceCount;
+      }
     });
+    this.batchList = statementPref;
   }
 
   private startTimer() {
@@ -168,6 +178,7 @@ export class ProgressSummaryComponent implements OnInit {
   redirectToHome() {
     this.commonService.removeItem('HMRC_FILTER');
     this.commonService.removeItem('HRMRC_PROCESS_COMPLETED');
+    this.commonService.removeItem('HMRC_BATCH_COUNT');
     this.router.navigate(['../self-assessment-form'], { replaceUrl: true, relativeTo: this.route });
   }
 
