@@ -133,7 +133,7 @@ export class CommonService {
   getLookupValue(id, listOfArray): string {
     let propertyStatus;
     listOfArray = listOfArray && listOfArray.length ? listOfArray : [];
-    listOfArray.find((obj) => {      
+    listOfArray.find((obj) => {
       if (obj.index === id) {
         propertyStatus = obj.value;
       }
@@ -411,8 +411,8 @@ export class CommonService {
     }));
   }
 
-  downloadDocument(response, fileName) {
-    const type = null;
+  downloadDocument(response, fileName, fileType?:any) {
+    const type = fileType;
     const blob = new Blob([response], { type: type });
     const downloadURL = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -710,7 +710,7 @@ export class CommonService {
     return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup/property', { params, responseType: 'json' });
   }
 
-  removeEmpty(obj:any) {
+  removeEmpty(obj: any) {
     for (const key in obj) {
       if (obj[key] === null || obj[key] === undefined || obj[key] === '') {
         delete obj[key];
