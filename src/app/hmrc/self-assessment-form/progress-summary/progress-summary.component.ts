@@ -105,7 +105,7 @@ export class ProgressSummaryComponent implements OnInit {
     }
   }
 
-  private getActionItems(response) {
+  private getActionItems(response: any) {
     let statementPref: any = this.statementPreferences;
     statementPref.push({ index: null, value: 'No Preference Available' });
     statementPref.forEach(element => {
