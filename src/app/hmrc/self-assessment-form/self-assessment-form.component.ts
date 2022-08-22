@@ -107,8 +107,14 @@ export class SelfAssessmentFormComponent implements OnInit {
     this.isHmrcLandlordSelectPreview = data;
   }
 
+  async proceed() {
+    const proceed = await this.commonService.showConfirm('HMRC Self-Assessment Form', 'Are you sure you want to proceed with the send action?', '', 'Confirm', 'Cancel');
+    if (proceed) {
+      this.generateHMRC()
+    }
+  }
+
   generateHMRC() {
-    this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
     const params = {
       accountType: HMRC_CONFIG.HMRC_SENDER_EMAIL_ACCOUNT,
       financialYearDateRange: {
@@ -126,21 +132,22 @@ export class SelfAssessmentFormComponent implements OnInit {
     this.hmrcService.generateHMRC(params).subscribe((res) => {
       if (res) {
         const response = res;
-        this.selfAssessmentForm.get('batchId').patchValue(response.batchId)
+        this.selfAssessmentForm.get('batchId').patchValue(response.batchId);
       }
-      this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
+      this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value);
       this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
     });
   }
 
   private async checkExistingBatch() {
-    const existingBatch:any = await this.getUserBatch();
+    const existingBatch: any = await this.getUserBatch();
     if (existingBatch) {
       const existingBatchDetails = await this.getBatchDetails(existingBatch.batchId) as BatchDetail;
       if (existingBatchDetails) {
-        if (!existingBatchDetails.isCompleted) {
+        if (this.commonService.getItem('HMRC_FILTER')) {
           /* Redirect to progress summary page if processing is not completed */
-          this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
+          this.selfAssessmentForm.value.batchId = existingBatch.batchId;
+          // this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value)
           this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
         }
       }

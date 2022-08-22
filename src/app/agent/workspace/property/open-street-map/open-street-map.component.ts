@@ -61,27 +61,25 @@ export class OpenStreetMapComponent implements OnInit {
 }
 
 export const getOptions = (lat: number, long: number) => {
-  const options: Leaflet.MapOptions = {
+  return {
     layers: getLayers(lat,long),
     zoom: 17,
     center: new Leaflet.LatLng(lat,long)
-  };
-  return options;
+  } as Leaflet.MapOptions;
 }
 
 export const getLayers = (lat: number, long: number): Leaflet.Layer[] => {
-  const layers = [
+  return [
     // Basic style
     new Leaflet.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '...'
     } as Leaflet.TileLayerOptions),
     ...getMarkers(lat, long)
   ] as Leaflet.Layer[];
-  return layers;
 };
 
 export const getMarkers = (lat: number, long: number): Leaflet.Marker[] => {
-  const markers = [
+  return [
     new Leaflet.Marker(new Leaflet.LatLng(lat, long), {
       icon: new Leaflet.Icon({
         iconSize: [50, 41],
@@ -90,5 +88,4 @@ export const getMarkers = (lat: number, long: number): Leaflet.Marker[] => {
       }),
     } as Leaflet.MarkerOptions),
   ] as Leaflet.Marker[];
-  return markers;
 };

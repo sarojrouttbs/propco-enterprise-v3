@@ -38,12 +38,12 @@
           style="position: relative" aria-describedby="periodicVisit">
           <thead>
             <tr>
-              <th>Type</th>
-              <th>Status</th>
-              <th>Index</th>
-              <th>Due Date</th>
-              <th>Description</th>
-              <th style="width:36px"></th>
+              <th scope="col">Type</th>
+              <th scope="col">Status</th>
+              <th scope="col">Index</th>
+              <th scope="col">Due Date</th>
+              <th scope="col">Description</th>
+              <th scope="col" style="width:36px"></th>
             </tr>
           </thead>
           <tbody>
@@ -60,7 +60,7 @@
               </td>
             </tr>
             <tr *ngIf="visitList?.length === 0">
-              <td colspan="7" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+              <td colspan="7" class="no-data-available ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</strong>
               </td>
             </tr>
           </tbody>
@@ -122,13 +122,13 @@
           style="position: relative" #faultNotesTable aria-describedby="periodicNotes">
           <thead>
             <tr>
-              <th style="width:15%">Date</th>
-              <th style="width:15%">Time</th>
-              <th style="width:15%">Type</th>
-              <th style="width:15%">Complaint</th>
-              <th style="width:15%">Category</th>
-              <th>User</th>
-              <th style="width:40px">Notes</th>
+              <th scope="col" style="width:15%">Date</th>
+              <th scope="col" style="width:15%">Time</th>
+              <th scope="col" style="width:15%">Type</th>
+              <th scope="col" style="width:15%">Complaint</th>
+              <th scope="col" style="width:15%">Category</th>
+              <th scope="col">User</th>
+              <th scope="col" style="width:40px">Notes</th>
             </tr>
           </thead>
           <tbody>

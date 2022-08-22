@@ -11,7 +11,7 @@
           [disabled]="isHmrcLandlordSelected === 'false' || (stepper.selectedIndex === 1 && !selfAssessmentForm.valid)" *ngIf="stepper.selectedIndex <= 1">{{stepper.selectedIndex <= 1 ? nextLabel : 'Send' }}
         </ion-button>
         <ion-button color="success" fill="solid" (click)="onNext(stepper.selectedIndex)"
-        [disabled]="isHmrcLandlordSelectPreview === 'false'" *ngIf="stepper.selectedIndex === 2" (click)="generateHMRC()">Send</ion-button>
+        [disabled]="isHmrcLandlordSelectPreview === 'false'" *ngIf="stepper.selectedIndex === 2" (click)="proceed()">Send</ion-button>
       </ion-col>
       <ion-col>
         <mat-horizontal-stepper #stepper labelPosition="bottom" [selectedIndex]="currentStepperIndex" id="hmrc-stepper">

@@ -9,13 +9,27 @@
         </ion-progress-bar>
         <ion-label class="ion-float-right">{{percentage}}%</ion-label>
       </ion-col>
+      <ion-col size="50" class="ion-align-self-center">
+        <strong>Processing complete. {{totalSuccessRecords}} successfully processed, {{totalFailureRecords}} failed.</strong>
+      </ion-col>
+      <ion-col size="50" class="ion-align-self-end ion-text-right">
+        <ion-button color="success" fill="outline" (click)="previewPdf()"
+          [disabled]="!isProcessCompleted">
+          <ion-spinner name="crescent" class="pdf-spinner" *ngIf="showPdfBtnLoader" color="success"></ion-spinner> Download PDF
+        </ion-button>
+        <ion-button color="success" fill="outline" (click)="getCsv()" [disabled]="!isProcessCompleted">
+          <ion-spinner name="crescent" class="pdf-spinner" *ngIf="showCsvBtnLoader" color="success"></ion-spinner>Download CSV
+        </ion-button>
+        <ion-button color="success" fill="solid" (click)="redirectToHome()" [disabled]="!isProcessCompleted">Finish
+        </ion-button>
+      </ion-col>
       <ion-col class="no-padding-bottom" class="table-block" size="100">
         <table aria-label="progressSummary">
           <tr>
-            <th class="action-item">Action Items</th>
-            <th>Number of Records</th>
-            <th>Success</th>
-            <th>Failure</th>
+            <th scope="col" class="action-item">Action Items</th>
+            <th scope="col">Number of Records</th>
+            <th scope="col">Success</th>
+            <th scope="col">Failure</th>
           </tr>
           <tr>
             <td>Total Records</td>
@@ -26,7 +40,7 @@
           <tr *ngFor="let batch of batchList">
             <td>
               <ion-text class="mandatory" *ngIf="batch?.index === 6 || batch?.index === 1 || batch?.index === 0">*
-              </ion-text> Records with preferance as "{{batch?.value}}" {{batch?.index}}
+              </ion-text> Records with preference as "{{batch?.value}}"
             </td>
             <td>{{batch?.totalRecords || 0}}</td>
             <td>{{batch?.totalSuccess || 0}}</td>
@@ -40,14 +54,17 @@
           of communication of landlords. The same records shall be recorded for audit & DMS marked as actioned.
         </ion-text>
       </ion-col>
-      <ion-col size="100" class="action-panel">
+      <!-- <ion-col size="100" class="action-panel">
         <span style="cursor: pointer;" [title]="HMRC_CONFIG.DOWNLOAD_PDF_INFO_TEXT">
           <ion-icon name="information-circle-outline" class="info-icon"></ion-icon>
         </span>
-        <ion-button color="tertiary" fill="solid" style="margin-right: 9px;" (click)="previewPdf()" [disabled]="!batchDetails?.isCompleted">Download PDF
+        <ion-button color="tertiary" fill="solid" style="margin-right: 9px;" (click)="previewPdf()"
+          [disabled]="!isProcessCompleted">
+          <ion-spinner name="crescent" class="pdf-spinner" *ngIf="showPdfBtnLoader"></ion-spinner> Download PDF
         </ion-button>
-        <ion-button color="medium" fill="solid" (click)="redirectToHome()" [disabled]="!batchDetails?.isCompleted">Finish</ion-button>
-    </ion-col>
+        <ion-button color="medium" fill="solid" (click)="redirectToHome()" [disabled]="!isProcessCompleted">Finish
+        </ion-button>
+      </ion-col> -->
     </ion-row>
   </ion-grid>
 </ion-content>

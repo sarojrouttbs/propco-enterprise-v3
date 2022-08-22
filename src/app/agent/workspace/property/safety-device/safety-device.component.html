@@ -32,15 +32,15 @@
           style="position: relative" aria-describedby="safetyDevice">
           <thead>
             <tr>
-              <th style="width:100px">Item</th>
-              <th>Type</th>
-              <th>Location</th>
-              <th>Serial Number</th>
-              <th>Last Tested On</th>
-              <th>Expiry Date</th>
-              <th>External Link</th>
-              <th>Notes</th>
-              <th style="width:36px"></th>
+              <th scope="col" style="width:100px">Item</th>
+              <th scope="col">Type</th>
+              <th scope="col">Location</th>
+              <th scope="col">Serial Number</th>
+              <th scope="col">Last Tested On</th>
+              <th scope="col">Expiry Date</th>
+              <th scope="col">External Link</th>
+              <th scope="col">Notes</th>
+              <th scope="col" style="width:36px"></th>
             </tr>
           </thead>
           <tbody>
@@ -60,7 +60,7 @@
               </td>
             </tr>
             <tr *ngIf="safetyDeviceList?.length === 0">
-              <td colspan="9" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+              <td colspan="9" class="no-data-available ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</strong>
               </td>
             </tr>
           </tbody>
@@ -79,13 +79,13 @@
           style="position: relative" #faultNotesTable aria-describedby="safetyDeviceNotes">
           <thead>
             <tr>
-              <th style="width:15%">Date</th>
-              <th style="width:15%">Time</th>
-              <th style="width:15%">Type</th>
-              <th style="width:15%">Complaint</th>
-              <th style="width:15%">Category</th>
-              <th>User</th>
-              <th style="width:40px">Notes</th>
+              <th scope="col" style="width:15%">Date</th>
+              <th scope="col" style="width:15%">Time</th>
+              <th scope="col" style="width:15%">Type</th>
+              <th scope="col" style="width:15%">Complaint</th>
+              <th scope="col" style="width:15%">Category</th>
+              <th scope="col">User</th>
+              <th scope="col" style="width:40px">Notes</th>
             </tr>
           </thead>
           <tbody>

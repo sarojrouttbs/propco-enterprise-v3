@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ModalController, NavParams } from '@ionic/angular';
-import { FaultsService } from 'src/app/faults/faults.service';
 import { DATE_FORMAT } from '../../constants';
 import { CommonService } from '../../services/common.service';
 import { CommentItem, UserDetails } from './negotiate-modal.model';
