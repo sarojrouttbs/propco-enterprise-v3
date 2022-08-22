@@ -1,10 +1,9 @@
 import { FaultsService } from './../../../faults/faults.service';
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { CommonService } from '../../services/common.service';
 import { PROPCO } from '../../constants';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-escalate-modal',
@@ -52,7 +51,6 @@ export class EscalateModalPage implements OnInit {
       });
     } else {
       this.showLoader = false;
-      // this.commonService.showMessage('Please fill all the required fields.', 'Add Note', 'error');
       this.escalateForm.markAllAsTouched();
     }
   }

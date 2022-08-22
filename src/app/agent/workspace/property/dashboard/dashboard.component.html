@@ -8,7 +8,7 @@
               <ion-slides pager *ngIf="propertyDetails?.media">
                 <ion-slide *ngFor="let data of propertyDetails?.media; let index = index">
                   <div class="swiper-zoom-container">
-                    <img [src]="options + data?.fileName" [title]="data?.label" tappable (click)="openPreview(index)">
+                    <img [src]="options + data?.fileName" [title]="data?.label" tappable (click)="openPreview(index)" alt="data?.label">
                   </div>
                   <button type="submit" ion-button color="light" class="swiper-button-prev swiper-button-black"
                     (click)="prev()" *ngIf="propertyDetails?.media.length > 1">
@@ -21,7 +21,7 @@
                 </ion-slide>
               </ion-slides>
               <div class="no-slider-img" *ngIf="!propertyDetails?.media">
-                <img src="assets/images/upload-image.jpg">
+                <img src="assets/images/upload-image.jpg" alt="default">
               </div>
             </ion-col>
             <ion-col size="33.3" class="ion-no-padding">
@@ -40,10 +40,6 @@
               <app-property-landlord-tenant [type]="'tenant'" [propertyTenants]="propertyTenants">
               </app-property-landlord-tenant>
             </ion-col>
-            <!-- <ion-col size="33.3" class="ion-no-padding">
-              <app-property-landlord-tenant [type]="'guarantor'" [propertyTenants]="propertyTenants">
-              </app-property-landlord-tenant>
-            </ion-col> -->
           </ion-row>
         </ion-col>
       </ion-row>
@@ -93,13 +89,13 @@
                 <table datatable [dtOptions]="dtOptions" class="row-border hover table-width" id="propertyNotesTable" aria-describedby="notes">
                   <thead>
                     <tr>
-                      <th style="width:15%">Date</th>
-                      <th style="width:15%">Time</th>
-                      <th style="width:15%">Type</th>
-                      <th style="width:15%">Complaint</th>
-                      <th style="width:15%">Category</th>
-                      <th>User</th>
-                      <th style="width:40px">Notes</th>
+                      <th scope="col" style="width:15%">Date</th>
+                      <th scope="col" style="width:15%">Time</th>
+                      <th scope="col" style="width:15%">Type</th>
+                      <th scope="col" style="width:15%">Complaint</th>
+                      <th scope="col" style="width:15%">Category</th>
+                      <th scope="col">User</th>
+                      <th scope="col" style="width:40px">Notes</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -114,7 +110,7 @@
                           class="propcoicon propcoicon-property-description"></i></td>
                     </tr>
                     <tr *ngIf="notes?.length == 0">
-                      <td colspan="7" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</b>
+                      <td colspan="7" class="no-data-available ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</strong>
                       </td>
                     </tr>
                   </tbody>

@@ -65,11 +65,11 @@ export class WorksorderModalPage implements OnInit {
 
   get photos(): FormArray {
     return this.uploadPhotoForm.get('photos') as FormArray;
-  };
+  }
 
   get invoices(): FormArray {
     return this.uploadDocumentForm.get('invoices') as FormArray;
-  };
+  }
 
   private initjobCompletionForm(): void {
     if (this.actionType !== 'view') {

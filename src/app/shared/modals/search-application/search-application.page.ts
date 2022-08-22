@@ -1,8 +1,7 @@
-import { PlatformLocation } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ModalController, NavParams } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { ReferencingService } from 'src/app/referencing/referencing.service';

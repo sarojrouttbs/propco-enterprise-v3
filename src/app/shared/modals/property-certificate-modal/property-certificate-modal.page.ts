@@ -1,9 +1,7 @@
 import { CommonService } from './../../services/common.service';
 import { CERTIFICATES_CATEGORY, DATE_FORMAT, DEFAULTS } from './../../constants';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { DataTableDirective } from 'angular-datatables';
-import { Subject } from 'rxjs';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-property-certificate-modal',

@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, AfterViewChecked, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, AfterViewChecked } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
@@ -98,13 +98,13 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked {
     this.isContractor = false;
     if (recipient === RECIPIENTS.LANDLORD) {
       this.initLLData();
-    };
+    }
     if (recipient === RECIPIENTS.TENANT) {
       this.initTTData();
-    };
+    }
     if (recipient === RECIPIENTS.CONTRACTOR) {
       this.initCCData();
-    };
+    }
   }
 
   private async initLLData() {

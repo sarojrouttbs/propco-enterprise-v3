@@ -32,16 +32,16 @@
         <table datatable [dtOptions]="dtOptions" class="row-border hover table-width" id="propertyMaintenanceTable" style="position: relative;" aria-describedby="maintenance">
           <thead>
             <tr>
-              <th style="width:10%">Put On</th>
-              <th style="width:10%">Type</th>
-              <th style="width:16%">Description</th>
-              <th style="width:9%">Works Value</th>
-              <th style="width:9%">Raised</th>
-              <th style="width:9%">Paid</th>
-              <th style="width:9%">Inv#</th>
-              <th style="width:15%">Contractor</th>
-              <th style="width:10%">Status</th>
-              <th style="width:36px"></th>
+              <th scope="col" style="width:10%">Put On</th>
+              <th scope="col" style="width:10%">Type</th>
+              <th scope="col" style="width:16%">Description</th>
+              <th scope="col" style="width:9%">Works Value</th>
+              <th scope="col" style="width:9%">Raised</th>
+              <th scope="col" style="width:9%">Paid</th>
+              <th scope="col" style="width:9%">Inv#</th>
+              <th scope="col" style="width:15%">Contractor</th>
+              <th scope="col" style="width:10%">Status</th>
+              <th scope="col" style="width:36px"></th>
             </tr>
           </thead>
           <tbody>
@@ -62,7 +62,7 @@
               </td>
             </tr>
             <tr *ngIf="maintenanceList?.length === 0">
-              <td colspan="10" class="no-data-available ion-text-center"><b>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</b>
+              <td colspan="10" class="no-data-available ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong>
               </td>
             </tr>
           </tbody>
@@ -78,13 +78,13 @@
           style="position: relative" #maintenanceNotesTable aria-describedby="maintenanceNotes">
           <thead>
             <tr>
-              <th style="width:15%">Date</th>
-              <th style="width:15%">Time</th>
-              <th style="width:15%">Type</th>
-              <th style="width:15%">Complaint</th>
-              <th style="width:15%">Category</th>
-              <th>User</th>
-              <th style="width:40px">Notes</th>
+              <th scope="col" style="width:15%">Date</th>
+              <th scope="col" style="width:15%">Time</th>
+              <th scope="col" style="width:15%">Type</th>
+              <th scope="col" style="width:15%">Complaint</th>
+              <th scope="col" style="width:15%">Category</th>
+              <th scope="col">User</th>
+              <th scope="col" style="width:40px">Notes</th>
             </tr>
           </thead>
           <tbody>
