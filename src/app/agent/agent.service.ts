@@ -188,7 +188,7 @@ export class AgentService {
   }
 
   getClauses(params: any): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `pvt/clauses`, { params });
+    return this.httpClient.get(environment.API_BASE_URL + `clauses/node`, { params });
   }
 
   getPropertyClauses(propertyId: string, params: any): Observable<any> {
