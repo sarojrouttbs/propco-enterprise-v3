@@ -55,7 +55,7 @@ import { PostcodeDirectiveModule } from 'src/app/shared/directives/postcode-dire
 import { PropertyFeaturesComponent } from './particulars/property-features/property-features.component';
 import { PropertyRoomsComponent } from './particulars/property-rooms/property-rooms.component';
 import { IonicSelectableModule } from 'ionic-selectable';
-
+import { FurtherDetailsComponent } from './particulars/further-details/further-details.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
@@ -114,6 +114,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIG
     AgreementDetailsComponent,
     AgreementHistoryComponent,
     ComplianceRecordsComponent,
+    FurtherDetailsComponent,
     PropertyFeaturesComponent,
     PropertyRoomsComponent
   ],

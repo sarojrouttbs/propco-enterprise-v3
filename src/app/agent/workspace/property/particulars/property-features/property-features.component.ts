@@ -134,7 +134,7 @@ export class PropertyFeaturesComponent implements OnInit {
     return this.propertyBulletsForm.get('propertyBulletPoint') as FormArray;
   }
 
-  private createPropertyBulletsForm() {
+  createPropertyBulletsForm() {
     const bulletsArray = this.propertyBulletsFormArray;
     if(bulletsArray.value.length < 10) {
       bulletsArray.push(this._formBuilder.group({
