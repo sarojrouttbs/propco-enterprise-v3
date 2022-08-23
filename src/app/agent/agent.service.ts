@@ -186,4 +186,12 @@ export class AgentService {
   getPropertyHMOLicence(propertyId: string, params: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/licences`,{ params });
   }
+
+  getClauses(params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `pvt/clauses`, { params });
+  }
+
+  getPropertyClauses(propertyId: string, params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/clauses/node`, { params });
+  }  
 }
