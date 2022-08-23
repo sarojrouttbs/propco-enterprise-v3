@@ -263,6 +263,7 @@ export class ProgressSummaryComponent implements OnInit {
   }
 
   async getCsv() {
+    const date = new Date();
     const params = new HttpParams().set('hideLoader', true);
     this.showCsvBtnLoader = true;
     const batchId = this.formObj.batchId;
@@ -271,9 +272,9 @@ export class ProgressSummaryComponent implements OnInit {
         (res) => {
           this.showCsvBtnLoader = false;
           if (res)
-            this.commonService.downloadDocument(res, batchId, 'text/csv');
+            this.commonService.downloadDocument(res, 'Billing file (' + this.commonService.getFormatedDate(date) + ')', 'text/csv');
           else
-            this.commonService.showAlert('HMRC Progress Summary', 'No data available');
+            this.commonService.showAlert('Download CSV for billing', 'No data available');
           resolve(true);
         },
         (error) => {
