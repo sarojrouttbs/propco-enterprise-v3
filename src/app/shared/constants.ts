@@ -798,3 +798,8 @@ export const CURRENCY_MASK_CONFIGURATION = {
   suffix: '',
   thousands: ','
 }
+
+export const PROPERTY_CLAUSE_SCOPE = {
+  FEATURE: 'Feature',
+  ROOM: 'Room'
+}
