@@ -41,6 +41,7 @@ export class ProgressSummaryComponent implements OnInit {
   isProcessCompleted = false;
   showPdfBtnLoader = false;
   showCsvBtnLoader = false;
+  showSummaryReportBtnLoader = false;
 
   constructor(
     private hmrcService: HmrcService,
@@ -273,6 +274,27 @@ export class ProgressSummaryComponent implements OnInit {
             this.commonService.downloadDocument(res, batchId, 'text/csv');
           else
             this.commonService.showAlert('HMRC Progress Summary', 'No data available');
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+  }
+
+  async getSummaryReportCsv() {
+    const params = new HttpParams().set('hideLoader', true);
+    this.showSummaryReportBtnLoader = true;
+    const batchId = this.formObj.batchId;
+    return new Promise((resolve) => {
+      this.hmrcService.getSummaryReportCsv(batchId, params).subscribe(
+        (res) => {
+          this.showSummaryReportBtnLoader = false;
+          if (res)
+            this.commonService.downloadDocument(res, 'Download Summary', 'text/csv');
+          else
+            this.commonService.showAlert('HMRC Download Summary', 'No data available');
           resolve(true);
         },
         (error) => {
