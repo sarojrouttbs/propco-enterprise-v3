@@ -1,0 +1,18 @@
+#property-features {
+    ion-chip.selected-clauses-chips {
+        ion-label {
+            color: var(--ion-color-step-2000) !important;
+        }
+        background-color: var(--ion-color-secondary);
+        border-radius: 4px;
+        ion-icon {
+            color: var(--ion-color-step-2000);
+        }
+    }
+
+    ion-chip.formfield-chips {
+        height: 20px;
+        padding: 8px;
+        background-color: var(--ion-color-four);
+    }
+}
