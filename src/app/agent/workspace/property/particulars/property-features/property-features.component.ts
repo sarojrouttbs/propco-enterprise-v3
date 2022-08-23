@@ -55,7 +55,7 @@ export class PropertyFeaturesComponent implements OnInit {
   }
 
   private getActiveTabEntityInfo() {
-    let item = this.localStorageItems.filter((x) => x.isSelected);
+    const item = this.localStorageItems.filter((x) => x.isSelected);
     if (item) {
       return item[0];
     }
@@ -87,9 +87,7 @@ export class PropertyFeaturesComponent implements OnInit {
     return new Promise((resolve) => {
       this.agentService.getClauses(params).subscribe(
         (res: any) => {
-          if (res && res.data) {
-            resolve(res?.data);
-          }
+          resolve(res && res?.data ? res?.data : []);
         },
         (error) => {
           resolve(false);
