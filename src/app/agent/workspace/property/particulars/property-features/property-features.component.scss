@@ -15,4 +15,15 @@
         padding: 8px;
         background-color: var(--ion-color-four);
     }
+
+    .bullet-point {
+        ion-input {
+            --padding-bottom: 0px;
+            top: 8px;
+        }
+    }
+
+    .selectable-height {
+        max-height: 30px !important;
+    }
 }

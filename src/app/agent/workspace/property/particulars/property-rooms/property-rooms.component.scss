@@ -7,4 +7,8 @@
             color: var(--ion-color-step-2000);
         }
     }
+
+    .selectable-height {
+        max-height: 30px !important;
+    }
 }
