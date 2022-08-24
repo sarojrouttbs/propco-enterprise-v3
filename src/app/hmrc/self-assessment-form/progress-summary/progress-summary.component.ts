@@ -42,7 +42,7 @@ export class ProgressSummaryComponent implements OnInit {
   showPdfBtnLoader = false;
   showCsvBtnLoader = false;
   showSummaryReportBtnLoader = false;
-  DEFAULT_MESSAGES = DEFAULT_MESSAGES;  
+  DEFAULT_MESSAGES = DEFAULT_MESSAGES;
 
   constructor(
     private hmrcService: HmrcService,
@@ -273,7 +273,7 @@ export class ProgressSummaryComponent implements OnInit {
         (res) => {
           this.showCsvBtnLoader = false;
           if (res)
-            this.commonService.downloadDocument(res, 'Billing file (' + this.commonService.getFormatedDate(date) + ')', 'text/csv');
+            this.commonService.downloadDocument(res, 'Billing file (' + this.commonService.getFormatedDate(date, DATE_FORMAT.DATE) + ')', 'text/csv');
           else
             this.commonService.showAlert('Download CSV for billing', DEFAULT_MESSAGES.NO_DATA_AVAILABLE);
           resolve(true);
