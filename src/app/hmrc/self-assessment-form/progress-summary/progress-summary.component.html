@@ -25,7 +25,8 @@
           [disabled]="!isProcessCompleted">
           <ion-spinner name="crescent" class="pdf-spinner" *ngIf="showPdfBtnLoader" color="success"></ion-spinner> Download PDF
         </ion-button>
-        <ion-button color="success" fill="outline" (click)="getCsv()" [disabled]="!isProcessCompleted">
+        <ion-button color="success" fill="outline" (click)="getCsv()" [disabled]="!isProcessCompleted" #tooltip="matTooltip"
+        matTooltip="Download CSV for billing"  matTooltipPosition="above">
           <ion-spinner name="crescent" class="pdf-spinner" *ngIf="showCsvBtnLoader" color="success"></ion-spinner>Download CSV
         </ion-button>
         <ion-button color="success" fill="solid" (click)="redirectToHome()" [disabled]="!isProcessCompleted">Finish
