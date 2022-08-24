@@ -76,7 +76,8 @@
         <app-compliance-records [propertyData]="propertyDetails"></app-compliance-records>
       </div>
       <div [hidden]="type != 'viewings'" class="ion-text-center">
-        <p>{{DEFAULT_MESSAGES.AVAILABLE_SOON}}</p>
+        <!-- <p>{{DEFAULT_MESSAGES.AVAILABLE_SOON}}</p> -->
+        <app-viewings></app-viewings>
       </div>
       <div [hidden]="type != 'map'">
         <app-open-street-map *ngIf="isMapLoad" [propertyData]="propertyData"></app-open-street-map>
