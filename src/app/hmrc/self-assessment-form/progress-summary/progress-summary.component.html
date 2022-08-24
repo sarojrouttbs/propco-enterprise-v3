@@ -18,15 +18,18 @@
         <strong>Processing complete. {{totalSuccessRecords}} successfully processed, {{totalFailureRecords}} failed.</strong>
       </ion-col>
       <ion-col class="ion-align-self-end ion-text-right">
-        <ion-button color="success" fill="outline" (click)="getSummaryReportCsv()" [disabled]="!isProcessCompleted">
+        <ion-button color="success" fill="outline" (click)="getSummaryReportCsv()" [disabled]="!isProcessCompleted"
+        #tooltip="matTooltip"
+        matTooltip="Please click to download the summary report of success & failure records."  matTooltipPosition="above">
           <ion-spinner name="crescent" class="pdf-spinner" *ngIf="showSummaryReportBtnLoader" color="success"></ion-spinner>Download Summary
         </ion-button>
         <ion-button color="success" fill="outline" (click)="previewPdf()"
-          [disabled]="!isProcessCompleted">
+          [disabled]="!isProcessCompleted" #tooltip="matTooltip"
+          matTooltip="Please click to download the collated reports."  matTooltipPosition="above">
           <ion-spinner name="crescent" class="pdf-spinner" *ngIf="showPdfBtnLoader" color="success"></ion-spinner> Download PDF
         </ion-button>
         <ion-button color="success" fill="outline" (click)="getCsv()" [disabled]="!isProcessCompleted" #tooltip="matTooltip"
-        matTooltip="Download CSV for billing"  matTooltipPosition="above">
+        matTooltip="Please click to download the CSV file for billing."  matTooltipPosition="above">
           <ion-spinner name="crescent" class="pdf-spinner" *ngIf="showCsvBtnLoader" color="success"></ion-spinner>Download CSV
         </ion-button>
         <ion-button color="success" fill="solid" (click)="redirectToHome()" [disabled]="!isProcessCompleted">Finish
