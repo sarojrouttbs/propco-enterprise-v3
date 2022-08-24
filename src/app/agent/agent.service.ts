@@ -184,7 +184,13 @@ export class AgentService {
   }
 
   getPropertyHMOLicence(propertyId: string, params: any): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/licences`,{ params });
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/licences`, { params });
+  }
+
+  getViewings(propertyId: string, params: any): Observable<any> {
+    console.log("in service");
+    
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/viewings`, { params });
   }
 
   getClauses(params: any): Observable<any> {

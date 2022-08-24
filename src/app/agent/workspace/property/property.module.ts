@@ -56,7 +56,7 @@ import { PropertyFeaturesComponent } from './particulars/property-features/prope
 import { PropertyRoomsComponent } from './particulars/property-rooms/property-rooms.component';
 import { IonicSelectableModule } from 'ionic-selectable';
 import { FurtherDetailsComponent } from './particulars/further-details/further-details.component';
-
+import { ViewingsComponent } from './viewings/viewings.component';
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
 @NgModule({
@@ -116,7 +116,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIG
     ComplianceRecordsComponent,
     FurtherDetailsComponent,
     PropertyFeaturesComponent,
-    PropertyRoomsComponent
+    PropertyRoomsComponent,
+    ViewingsComponent
   ],
   providers: [
     AgentService,
