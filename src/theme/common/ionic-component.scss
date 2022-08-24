@@ -860,7 +860,7 @@ ion-alert.common-alert-box {
       ion-item{
         --border-color: var(--ion-color-one);
         ion-label{
-          color: var(--ion-color-three) !important;
+          color: var(--ion-color-two) !important;
         }
       }
     }
@@ -871,7 +871,7 @@ ion-list{
   ion-item{
     --border-color: var(--ion-color-one);
     ion-label{
-      color: var(--ion-color-three) !important;
+      color: var(--ion-color-two) !important;
     }
   }
 }

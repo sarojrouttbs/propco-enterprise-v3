@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { interval } from 'rxjs';
-import { DATE_FORMAT, DEFAULTS, HMRC_CONFIG, PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC_CONFIG, PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
 import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/preview-pdf-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { BatchDetail } from '../../hmrc-modal';
@@ -41,6 +41,8 @@ export class ProgressSummaryComponent implements OnInit {
   isProcessCompleted = false;
   showPdfBtnLoader = false;
   showCsvBtnLoader = false;
+  showSummaryReportBtnLoader = false;
+  DEFAULT_MESSAGES = DEFAULT_MESSAGES;  
 
   constructor(
     private hmrcService: HmrcService,
@@ -273,7 +275,28 @@ export class ProgressSummaryComponent implements OnInit {
           if (res)
             this.commonService.downloadDocument(res, 'Billing file (' + this.commonService.getFormatedDate(date) + ')', 'text/csv');
           else
-            this.commonService.showAlert('Download CSV for billing', 'No data available');
+            this.commonService.showAlert('Download CSV for billing', DEFAULT_MESSAGES.NO_DATA_AVAILABLE);
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+  }
+
+  async getSummaryReportCsv() {
+    const params = new HttpParams().set('hideLoader', true);
+    this.showSummaryReportBtnLoader = true;
+    const batchId = this.formObj.batchId;
+    return new Promise((resolve) => {
+      this.hmrcService.getSummaryReportCsv(batchId, params).subscribe(
+        (res) => {
+          this.showSummaryReportBtnLoader = false;
+          if (res)
+            this.commonService.downloadDocument(res, 'Download Summary', 'text/csv');
+          else
+            this.commonService.showAlert('HMRC Download Summary', DEFAULT_MESSAGES.NO_DATA_AVAILABLE);
           resolve(true);
         },
         (error) => {
