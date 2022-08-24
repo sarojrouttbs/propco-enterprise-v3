@@ -56,8 +56,6 @@ import { PropertyFeaturesComponent } from './particulars/property-features/prope
 import { PropertyRoomsComponent } from './particulars/property-rooms/property-rooms.component';
 import { IonicSelectableModule } from 'ionic-selectable';
 import { FurtherDetailsComponent } from './particulars/further-details/further-details.component';
-import { GridViewComponent } from './viewings/grid-view/grid-view.component';
-import { ListViewComponent } from './viewings/list-view/list-view.component';
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
 @NgModule({
@@ -117,9 +115,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIG
     ComplianceRecordsComponent,
     FurtherDetailsComponent,
     PropertyFeaturesComponent,
-    PropertyRoomsComponent,
-    GridViewComponent,
-    ListViewComponent
+    PropertyRoomsComponent
   ],
   providers: [
     AgentService,
