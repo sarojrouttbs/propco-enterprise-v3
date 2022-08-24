@@ -17,8 +17,8 @@
     </mat-expansion-panel-header>
 
     <form [formGroup]="propertyBulletsForm">
-      <ion-grid style="padding: 10px;">
-        <ion-row>
+      <ion-grid class="ion-no-padding">
+        <ion-row style="padding: 0px 10px;">
           <ion-col>
             <h5>Bullets</h5>
           </ion-col>
@@ -26,7 +26,7 @@
             <ion-button color="success" (click)="createPropertyBulletsForm()" [disabled]="propertyBulletsFormArray.value.length >= 10">Add Bullets</ion-button>
           </ion-col>
         </ion-row>
-        <ion-row formArrayName="propertyBulletPoint">
+        <ion-row formArrayName="propertyBulletPoint" style="padding: 10px 5px;">
           <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100"
             *ngFor="let item of propertyBulletsForm.get('propertyBulletPoint')['controls']; let i=index">
             <ion-row>
