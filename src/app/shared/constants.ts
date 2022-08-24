@@ -617,7 +617,8 @@ export const DEFAULT_MESSAGES = {
     SOMETHING_WENT_WRONG: 'Something went wrong'
   },
   NOT_AVAILABLE_TEXT: 'Not Available',
-  AVAILABLE_SOON: 'Available Soon'
+  AVAILABLE_SOON: 'Available Soon',
+  NO_DATA_AVAILABLE: 'No data available.',
 };
 
 export const FAULT_NOTIFICATION_STATE = {
