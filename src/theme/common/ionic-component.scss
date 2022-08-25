@@ -11,8 +11,8 @@
 }
 
 ion-card {
-  --background: var(--ion-color-step-2000);
-  // background: var(--ion-color-five);
+  background: var(--ion-background-color);
+  color: var(--ion-color-one);
   box-shadow: unset !important;
 
   ion-card-content {
@@ -558,11 +558,7 @@ ion-alert.common-alert-box {
   }
   
 }
-#agent-portal {
-  ion-card {
-    background: var(--ion-background-color);
-    color: var(--ion-color-one);
-  }
+// #agent-portal {
   ion-item {
     --border-color: var(--ion-color-one);
     ion-label {
@@ -571,7 +567,7 @@ ion-alert.common-alert-box {
   }
   ion-item[aria-disabled="true"] { 
     ion-label, ion-text {
-      opacity: 1;
+      opacity: 1!important;
     }
   }
   #market-appraisal{
@@ -693,7 +689,7 @@ ion-alert.common-alert-box {
       }
     }
   }
-}
+// }
 
 .market-apprisal-ion-select, .fault-ion-select, .let-alliance-ion-select , .hmrc-ion-select{
   .sc-ion-select-popover{
@@ -914,7 +910,7 @@ ion-datetime {
 }
 #hmrc-stepper {
   .ion-date-item-icon {
-    opacity: 0.6;
+    opacity: 1!important;
   }
 }
 
