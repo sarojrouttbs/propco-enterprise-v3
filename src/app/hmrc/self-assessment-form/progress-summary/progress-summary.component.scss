@@ -58,7 +58,7 @@
     }
 
     .element-margin {
-        margin-bottom: 25px;
+        margin-bottom: 5px;
     }
 
     .button-margin {
@@ -97,5 +97,11 @@
             width: 22px;
             margin-right: 10px;
         }
+    }
+
+    .error-icon {
+        font-size: 22px;
+        padding-left: 4px;
+        pointer-events: none;
     }
 }

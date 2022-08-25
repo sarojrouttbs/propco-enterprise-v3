@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -57,4 +58,24 @@ export class HmrcService {
   getUserBatch(): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `hmrc/user/batch`);
   }
+
+  getCsv(batchId: string, params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}/download`, { responseType: 'blob', params: params }).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.log(`${operation} failed: ${error.message}`);
+      return throwError(error);
+    };
+  }
+
+  getSummaryReportCsv(batchId: string, params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}/audit/download`, { responseType: 'blob', params: params }).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
 }
