@@ -44,8 +44,9 @@ export class AgentHeaderComponent {
   searchHandler(term: string) { }
 
   goToHome() {
-    this.router.navigate(['/', 'agent']);
+    this.router.navigate(['agent/dashboard'], { replaceUrl: true });
   }
+  
   goToWorkSpace() {
     if (!this.workSpaceService.isWorkspaceItemAvailable()) {
       this.openWorkspaceItemNotFoundModal();

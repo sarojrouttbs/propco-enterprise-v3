@@ -635,7 +635,8 @@ ion-alert.common-alert-box {
   #market-appraisal-lettings,
   #market-appraisal-property-address,
   #property-keys,
-  #agreement-details {
+  #agreement-details,
+  #property-features {
     ion-select{
       height: 36px;
     }
@@ -859,7 +860,7 @@ ion-alert.common-alert-box {
       ion-item{
         --border-color: var(--ion-color-one);
         ion-label{
-          color: var(--ion-color-three) !important;
+          color: var(--ion-color-two) !important;
         }
       }
     }
@@ -870,7 +871,7 @@ ion-list{
   ion-item{
     --border-color: var(--ion-color-one);
     ion-label{
-      color: var(--ion-color-three) !important;
+      color: var(--ion-color-two) !important;
     }
   }
 }

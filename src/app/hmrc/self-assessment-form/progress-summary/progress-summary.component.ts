@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { interval } from 'rxjs';
-import { DATE_FORMAT, DEFAULTS, HMRC_CONFIG, PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC_CONFIG, PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
 import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/preview-pdf-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { BatchDetail } from '../../hmrc-modal';
@@ -40,6 +40,9 @@ export class ProgressSummaryComponent implements OnInit {
   DATE_FORMAT = DATE_FORMAT;
   isProcessCompleted = false;
   showPdfBtnLoader = false;
+  showCsvBtnLoader = false;
+  showSummaryReportBtnLoader = false;
+  DEFAULT_MESSAGES = DEFAULT_MESSAGES;
 
   constructor(
     private hmrcService: HmrcService,
@@ -55,8 +58,8 @@ export class ProgressSummaryComponent implements OnInit {
 
   private async initApi() {
     this.getLookupData();
+    await this.getLandlordBatchCount();
     this.startTimer();
-    this.getLandlordBatchCount();
   }
 
   private getLookupData() {
@@ -77,36 +80,44 @@ export class ProgressSummaryComponent implements OnInit {
   }
 
   getLandlordBatchCount() {
-    const reqObj: any = {
-      managementType: this.formObj.managementType ? this.formObj.managementType : [],
-      propertyOffice: this.formObj.propertyOffice ? this.formObj.propertyOffice : [],
-      selectedPropertyLinkIds: this.formObj.selectedPropertyLinkIds ? this.formObj.selectedPropertyLinkIds : [],
-      deselectedPropertyLinkIds: this.formObj.deselectedPropertyLinkIds ? this.formObj.deselectedPropertyLinkIds : [],
-      taxHandler: this.formObj.taxHandler
-    }
-    if (this.formObj.searchText)
-      reqObj.searchText = this.formObj.searchText;
-    if (this.formObj.searchOnColumns)
-      reqObj.searchOnColumns = this.formObj.searchOnColumns;
+    if (this.commonService.getItem('HMRC_BATCH_COUNT', true)) {
+      const response = this.commonService.getItem('HMRC_BATCH_COUNT', true);
+      this.getActionItems(response);
+    } else {
+      const reqObj: any = {
+        managementType: this.formObj.managementType ? this.formObj.managementType : [],
+        propertyOffice: this.formObj.propertyOffice ? this.formObj.propertyOffice : [],
+        selectedPropertyLinkIds: this.formObj.selectedPropertyLinkIds ? this.formObj.selectedPropertyLinkIds : [],
+        deselectedPropertyLinkIds: this.formObj.deselectedPropertyLinkIds ? this.formObj.deselectedPropertyLinkIds : [],
+        taxHandler: this.formObj.taxHandler
+      }
+      if (this.formObj.searchText)
+        reqObj.searchText = this.formObj.searchText;
+      if (this.formObj.searchOnColumns)
+        reqObj.searchOnColumns = this.formObj.searchOnColumns;
 
-    return new Promise((resolve) => {
-      this.hmrcService.getLandlordBatchCount(reqObj).subscribe((res) => {
-        const response = res && res.data ? res.data : '';
-        response.forEach(element => {
-          if (element.statementPreference !== null) {
-            this.batchList = this.statementPreferences.map((x) => {
-              if (x.index == element.statementPreference) {
-                x.totalRecords = element.statementPreferenceCount;
-                x.totalFailure =
-                  this.totalFinalRecords += element.statementPreferenceCount;
-              }
-              return x;
-            });
-          }
+      return new Promise((resolve) => {
+        this.hmrcService.getLandlordBatchCount(reqObj).subscribe((res) => {
+          const response = res && res.data ? res.data : '';
+          this.commonService.setItem('HMRC_BATCH_COUNT', response);
+          this.getActionItems(response);
+          resolve(true);
         });
-        resolve(true);
       });
+    }
+  }
+
+  private getActionItems(response: any) {
+    let statementPref: any = this.statementPreferences;
+    statementPref.push({ index: null, value: 'No Preference Available' });
+    statementPref.forEach(element => {
+      const pref = response.filter(ref => element.index === ref.statementPreference);
+      if (pref.length > 0) {
+        element.totalRecords = pref[0].statementPreferenceCount;
+        this.totalFinalRecords += pref[0].statementPreferenceCount;
+      }
     });
+    this.batchList = statementPref;
   }
 
   private startTimer() {
@@ -116,22 +127,24 @@ export class ProgressSummaryComponent implements OnInit {
 
       /* unsubscribe if the process is complete */
       if (this.finalCount === 1) {
+        this.getBatchCount();
         this.initPdfDownloadProcess();
         timer.unsubscribe();
-        this.commonService.showMessage('We have successfully generated SA form for ' + this.totalSuccessRecords + ' records & saved the records in DMS.', 'Progress Summary', 'success');
+        if (!this.commonService.getItem('HRMRC_PROCESS_COMPLETED', true)) {
+          this.commonService.setItem('HRMRC_PROCESS_COMPLETED', 'true');
+          this.commonService.showMessage('We have successfully generated SA form for ' + this.totalSuccessRecords + ' records & saved the records in DMS.', 'Progress Summary', 'success');
+        }
         this.isProcessCompleted = true;
       }
     });
   }
 
   private async refreshBatchDetails() {
+    await this.getBatchCount();
     const existingBatchDetails = await this.getBatchDetails() as BatchDetail;
     this.batchDetails = existingBatchDetails;
-    if (existingBatchDetails) {
-      await this.getBatchCount();
-      if (existingBatchDetails.isCompleted)
-        this.finalCount = 1;
-    }
+    if (existingBatchDetails && existingBatchDetails.isCompleted && this.percentage === 100)
+      this.finalCount = 1;
   }
 
   getBatchCount() {
@@ -142,27 +155,21 @@ export class ProgressSummaryComponent implements OnInit {
         this.totalSuccessRecords = 0;
         this.totalFailureRecords = 0;
         if (response) {
-          response.forEach(element => {
-            if (element.statementPreference !== null) {
-              const batchList = this.statementPreferences.map((x) => {
-                if (x.index == element.statementPreference) {
-                  x.totalSuccess = (element.successCount ? element.successCount : 0);
-                  x.totalFailure = (element.failureCount ? element.failureCount : 0);
-                  this.totalSuccessRecords += x.totalSuccess;
-                  this.totalFailureRecords += x.totalFailure;
-                  //check totalFinalRecords is greator than 0 or not othere wise finalCount will show infinit as output
-                  if (this.totalFinalRecords > 0)
-                    this.finalCount = (this.totalSuccessRecords + this.totalFailureRecords) / this.totalFinalRecords;
-                  this.percentage = Math.round(this.finalCount * 100);
-                  if (this.finalCount >= 0.33 && this.finalCount < 0.66)
-                    this.progressBarColor = 'warning';
-                  if (this.finalCount >= 0.66)
-                    this.progressBarColor = 'success';
-                }
-                return x;
-              });
-              this.batchList = batchList;
+          this.batchList.forEach(element => {
+            const pref = response.filter(ref => element.index === ref.statementPreference);
+            if (pref.length > 0) {
+              element.totalSuccess = (pref[0].successCount ? pref[0].successCount : 0);
+              element.totalFailure = (pref[0].failureCount ? pref[0].failureCount : 0);
+              this.totalSuccessRecords += element.totalSuccess;
+              this.totalFailureRecords += element.totalFailure;
             }
+            if (this.totalFinalRecords > 0)
+              this.finalCount = (this.totalSuccessRecords + this.totalFailureRecords) / this.totalFinalRecords;
+            this.percentage = Math.round(this.finalCount * 100);
+            if (this.finalCount >= 0.33 && this.finalCount < 0.66)
+              this.progressBarColor = 'warning';
+            if (this.finalCount >= 0.66)
+              this.progressBarColor = 'success';
           });
         }
         resolve(true);
@@ -172,6 +179,8 @@ export class ProgressSummaryComponent implements OnInit {
 
   redirectToHome() {
     this.commonService.removeItem('HMRC_FILTER');
+    this.commonService.removeItem('HRMRC_PROCESS_COMPLETED');
+    this.commonService.removeItem('HMRC_BATCH_COUNT');
     this.router.navigate(['../self-assessment-form'], { replaceUrl: true, relativeTo: this.route });
   }
 
@@ -251,6 +260,49 @@ export class ProgressSummaryComponent implements OnInit {
       this.hmrcService.getSysconfig(params).subscribe((res) => {
         resolve(res ? res[config] : null);
       });
+    });
+  }
+
+  async getCsv() {
+    const date = new Date();
+    const params = new HttpParams().set('hideLoader', true);
+    this.showCsvBtnLoader = true;
+    const batchId = this.formObj.batchId;
+    return new Promise((resolve) => {
+      this.hmrcService.getCsv(batchId, params).subscribe(
+        (res) => {
+          this.showCsvBtnLoader = false;
+          if (res)
+            this.commonService.downloadDocument(res, 'Billing file (' + this.commonService.getFormatedDate(date, DATE_FORMAT.DATE) + ')', 'text/csv');
+          else
+            this.commonService.showAlert('Download CSV for billing', DEFAULT_MESSAGES.NO_DATA_AVAILABLE);
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+  }
+
+  async getSummaryReportCsv() {
+    const params = new HttpParams().set('hideLoader', true);
+    this.showSummaryReportBtnLoader = true;
+    const batchId = this.formObj.batchId;
+    return new Promise((resolve) => {
+      this.hmrcService.getSummaryReportCsv(batchId, params).subscribe(
+        (res) => {
+          this.showSummaryReportBtnLoader = false;
+          if (res)
+            this.commonService.downloadDocument(res, 'Download Summary', 'text/csv');
+          else
+            this.commonService.showAlert('HMRC Download Summary', DEFAULT_MESSAGES.NO_DATA_AVAILABLE);
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
     });
   }
 }

@@ -225,7 +225,7 @@ export class SearchResultsPage implements OnInit {
           return;
         }
         tmp = this.managementTypes.filter(
-          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+          (x) => x.value.toLowerCase().indexOf(srchStr.toLocaleLowerCase()) > -1
         );
         this.managementTypesFiltered = tmp;
         break;
@@ -236,7 +236,7 @@ export class SearchResultsPage implements OnInit {
           return;
         }
         tmp = this.propertyStyles.filter(
-          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+          (x) => x.value.toLowerCase().indexOf(srchStr.toLocaleLowerCase()) > -1
         );
         this.propertyStylesFiltered = tmp;
         break;
@@ -247,7 +247,7 @@ export class SearchResultsPage implements OnInit {
           return;
         }
         tmp = this.houseTypes.filter(
-          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+          (x) => x.value.toLowerCase().indexOf(srchStr.toLocaleLowerCase()) > -1
         );
         this.houseTypesFiltered = tmp;
         break;
@@ -258,7 +258,7 @@ export class SearchResultsPage implements OnInit {
           return;
         }
         tmp = this.propertyStatuses.filter(
-          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+          (x) => x.value.toLowerCase().indexOf(srchStr.toLocaleLowerCase()) > -1
         );
         this.propertyStatusesFiltered = tmp;
         break;
@@ -269,7 +269,7 @@ export class SearchResultsPage implements OnInit {
           return;
         }
         tmp = this.officeCodes.filter(
-          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+          (x) => x.value.toLowerCase().indexOf(srchStr.toLocaleLowerCase()) > -1
         );
         this.officeCodesFiltered = tmp;
         break;
@@ -280,7 +280,7 @@ export class SearchResultsPage implements OnInit {
           return;
         }
         tmp = this.landlordStatuses.filter(
-          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+          (x) => x.value.toLowerCase().indexOf(srchStr.toLocaleLowerCase()) > -1
         );
         this.landlordStatusesFiltered = tmp;
         break;
@@ -291,7 +291,7 @@ export class SearchResultsPage implements OnInit {
           return;
         }
         tmp = this.applicantStatuses.filter(
-          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+          (x) => x.value.toLowerCase().indexOf(srchStr.toLocaleLowerCase()) > -1
         );
         this.applicantStatusesFiltered = tmp;
         break;
@@ -302,7 +302,7 @@ export class SearchResultsPage implements OnInit {
           return;
         }
         tmp = this.agentStatuses.filter(
-          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+          (x) => x.value.toLowerCase().indexOf(srchStr.toLocaleLowerCase()) > -1
         );
         this.agentStatusesFiltered = tmp;
         break;
@@ -313,7 +313,7 @@ export class SearchResultsPage implements OnInit {
           return;
         }
         tmp = this.tenantStatuses.filter(
-          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+          (x) => x.value.toLowerCase().indexOf(srchStr.toLocaleLowerCase()) > -1
         );
         this.tenantStatusesFiltered = tmp;
         break;
@@ -324,7 +324,7 @@ export class SearchResultsPage implements OnInit {
           return;
         }
         tmp = this.contractorSkills.filter(
-          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+          (x) => x.value.toLowerCase().indexOf(srchStr.toLocaleLowerCase()) > -1
         );
         this.contractorSkillsFiltered = tmp;
         break;
@@ -335,7 +335,7 @@ export class SearchResultsPage implements OnInit {
           return;
         }
         tmp = this.contractorStatuses.filter(
-          (x) => x.value.toLowerCase().indexOf(srchStr) > -1
+          (x) => x.value.toLowerCase().indexOf(srchStr.toLocaleLowerCase()) > -1
         );
         this.contractorStatusesFiltered = tmp;
         break;
