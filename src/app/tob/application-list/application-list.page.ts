@@ -111,7 +111,6 @@ export class ApplicationListPage implements OnInit {
           }
         },
         error => {
-          console.log(error);
           resolve(0);
         }
       );
@@ -126,7 +125,6 @@ export class ApplicationListPage implements OnInit {
       this.commonService.getLookup().subscribe(data => {
         this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
         this.setLookupData();
-      }, error => {
       });
     }
   }
@@ -268,13 +266,12 @@ export class ApplicationListPage implements OnInit {
             applicationId: applicationId
           };
           this.tobService.rejectAllApplication(requestObj).subscribe((res) => {
-            this.commonService.showAlert('Reject All Application', 'All applications have been rejected successfully.').then(response => {
-              if (response) {
+            this.commonService.showAlert('Reject All Application', 'All applications have been rejected successfully.').then(resp => {
+              if (resp) {
                 this.initApiCalls();
               }
             });
-          },
-            (error) => { });
+          });
         } else {
           this.commonService.showAlert('Reject All Application', 'Only Applications except Accept status are rejected as all.');
         }
@@ -290,15 +287,12 @@ export class ApplicationListPage implements OnInit {
       this.commonService.showConfirm('Accept Application', 'Are you sure, you want to accept this application?', '', 'YES', 'NO').then(response => {
         if (response) {
           this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.ACCEPTED, {}).subscribe((response) => {
-            this.commonService.showAlert('Accept Application', 'Application has been accepted successfully.').then(response => {
-              if (response) {
+            this.commonService.showAlert('Accept Application', 'Application has been accepted successfully.').then(resp => {
+              if (resp) {
                 this.initApiCalls();
               }
             });
-          },
-            (error) => {
-
-            });
+          });
         }
       });
     }
@@ -308,15 +302,12 @@ export class ApplicationListPage implements OnInit {
     this.commonService.showConfirm('Reject Application', 'Are you sure, you want to reject this application?', '', 'YES', 'NO').then(response => {
       if (response) {
         this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.REJECTED, {}).subscribe((res) => {
-          this.commonService.showAlert('Reject Application', 'Application has been rejected successfully.').then(response => {
-            if (response) {
+          this.commonService.showAlert('Reject Application', 'Application has been rejected successfully.').then(resp => {
+            if (resp) {
               this.initApiCalls();
             }
           });
-        },
-          (error) => {
-
-          });
+        });
       }
     });
   }
@@ -325,15 +316,12 @@ export class ApplicationListPage implements OnInit {
     this.commonService.showConfirm('On Hold Application', 'Are you sure, you want to on hold this application?', '', 'YES', 'NO').then(response => {
       if (response) {
         this.tobService.updateApplicationStatus(this.selectedApplicationRow.applicationId, APPLICATION_STATUSES.ON_HOLD, {}).subscribe((res) => {
-          this.commonService.showAlert('On Hold Application', 'Application status has been changed to on hold successfully.').then(response => {
-            if (response) {
+          this.commonService.showAlert('On Hold Application', 'Application status has been changed to on hold successfully.').then(resp => {
+            if (resp) {
               this.initApiCalls();
             }
           });
-        },
-          (error) => {
-
-          });
+        });
       }
     });
   }
@@ -351,7 +339,7 @@ export class ApplicationListPage implements OnInit {
       backdropDismiss: false
     });
 
-    const data = modal.onDidDismiss().then(res => {
+    modal.onDidDismiss().then(res => {
       if (res?.data?.holdingDepositePaid) {
         this.initApiCalls();
       }
@@ -424,6 +412,6 @@ export class ApplicationListPage implements OnInit {
   }
 
   private checkApplicationsAvailable() {
-    (this.filteredApplicationList?.data.length > 0) ? this.isRecordsAvailable = true : this.isRecordsAvailable = false;
+    this.isRecordsAvailable = this.filteredApplicationList?.data.length > 0 ? true : false;
   }
 }
