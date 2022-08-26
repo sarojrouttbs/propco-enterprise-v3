@@ -163,7 +163,7 @@
             <ion-row class="main-row">
               <ion-col size-xl="15" size="20">
                 <div (click)="viewDetails(item.offerId)">
-                  <img class="applicant-img" [src]=" item.numberOfCoApplicants > 0 ? 'assets/images/tob/multi-user.svg' : 'assets/images/tob/single-user.svg' " alt="">
+                  <img class="applicant-img" [src]=" item.numberOfCoApplicants > 0 ? 'assets/images/tob/multi-user.svg' : 'assets/images/tob/single-user.svg' " alt="applicantImage">
                 </div>
               </ion-col>
               <ion-col class="" size-xl="85" size="80" style="position: static;">
@@ -276,7 +276,7 @@
         <ion-col size="100">
           <h4>Offer Notes:</h4>
           <div style="position: relative;" class="overlay-container">
-            <table class="fs-14">
+            <table class="fs-14" aria-describedby="offerList">
               <thead>
                 <tr>
                   <th scope="col" style="width:10%">Date</th>

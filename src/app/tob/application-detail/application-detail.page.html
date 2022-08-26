@@ -1213,8 +1213,7 @@
             <ng-container>
               <ion-col size-xs="100" size-sm="50" *ngFor="let res of applicationDetails?.applicationRestrictions">
                 <div class="res-clause-view">
-                  <img
-                    [src]="res.isNegotiable? 'assets/images/tob/icon-not-negotiable.svg': 'assets/images/tob/close.svg'" />
+                  <img [src]="res.isNegotiable? 'assets/images/tob/icon-not-negotiable.svg': 'assets/images/tob/close.svg'" alt="negotiableIcon"/>
                   <div style="padding-left:10px">{{ res.restrictionName }}</div>
                 </div>
               </ion-col>

@@ -408,6 +408,6 @@ export class OfferListPage implements OnInit {
   }
 
   private checkOffersAvailable() {
-    this.isRecordsAvailable = (this.filteredOfferList?.data.length > 0) ? true : false;
+    this.isRecordsAvailable = this.filteredOfferList?.data.length > 0 ? true : false;
   }
 }

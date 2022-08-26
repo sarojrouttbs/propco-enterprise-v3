@@ -412,6 +412,6 @@ export class ApplicationListPage implements OnInit {
   }
 
   private checkApplicationsAvailable() {
-    this.isRecordsAvailable = (this.filteredApplicationList?.data.length > 0) ? true : false;
+    this.isRecordsAvailable = this.filteredApplicationList?.data.length > 0 ? true : false;
   }
 }
