@@ -102,12 +102,7 @@
             <mat-step [completed]="applicationDetails?.isSubmitted" [aria-labelledby]="!(showPayment || applicationStatus === 'Accepted') ? 'disabled_stepper_step' : null">
               <ng-container *ngTemplateOutlet="payment"></ng-container>
               <ng-template matStepLabel>Holding <br/> Deposit</ng-template>
-              <!-- <div class="action-btn-section">
-                <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-                <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
-              </div> -->
             </mat-step>
-
           </mat-horizontal-stepper>
         </ion-col>
       </ion-row>
@@ -408,7 +403,6 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <!-- <ion-button (click)="saveApplicantsToApplication()">Submit</ion-button> -->
 </ng-template>
 
 <ng-template #applicantDetails>
