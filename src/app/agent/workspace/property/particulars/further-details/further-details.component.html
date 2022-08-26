@@ -22,19 +22,19 @@
           <ion-col size="20">
             <ion-item>
               <ion-label position="floating">Legacy Ref</ion-label>
-              <ion-input formControlName="legacyReference"></ion-input>
+              <ion-input formControlName="legacyReference" maxlength="40" ></ion-input>
             </ion-item>
           </ion-col>
           <ion-col size="20">
             <ion-item>
               <ion-label position="floating">Floor</ion-label>
-              <ion-input formControlName="floor"></ion-input>
+              <ion-input formControlName="floor" maxlength="15"></ion-input>
             </ion-item>
           </ion-col>
           <ion-col size="20">
             <ion-item>
               <ion-label position="floating">Shower Rooms</ion-label>
-              <ion-input formControlName="showerRooms"></ion-input>
+              <ion-input formControlName="showerRooms" maxlength="9"></ion-input>
             </ion-item>
           </ion-col>
           <ion-col size="20">
@@ -101,7 +101,7 @@
         <ion-row>
           <ion-col size="20">
             <ion-item lines="none">
-              <ion-checkbox checked="false" formControlName="isLiftAccess"></ion-checkbox>
+              <ion-toggle formControlName="isLiftAccess"></ion-toggle>
               <ion-label class="ion-padding-start">Lift Access</ion-label>
             </ion-item>            
           </ion-col>
