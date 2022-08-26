@@ -19,11 +19,11 @@ export class GridViewComponent implements OnInit, OnChanges {
   pageIndex = 0;
   public pageSize = 10;
   selectedItem: any;
-  notAvailable = DEFAULTS.NOT_AVAILABLE
+  notAvailable = DEFAULTS.NOT_AVAILABLE;
   localStorageItems: any;
   selectedEntityDetails: any;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
-  
+
   constructor(
     private el: ElementRef<HTMLElement>,
     private agentService: AgentService,

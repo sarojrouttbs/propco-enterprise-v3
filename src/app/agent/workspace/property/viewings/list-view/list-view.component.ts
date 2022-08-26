@@ -16,7 +16,7 @@ export class ListViewComponent implements OnInit, OnChanges {
   viewingList: any;
   DATE_FORMAT = DATE_FORMAT;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
-  notAvailable = DEFAULTS.NOT_AVAILABLE
+  notAvailable = DEFAULTS.NOT_AVAILABLE;
   dtOptions: any = {};
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
   selectedData: any;
