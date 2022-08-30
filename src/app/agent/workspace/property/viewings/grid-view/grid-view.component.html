@@ -1,4 +1,4 @@
-<ion-row class="grid-view overlay-container" *ngIf="viewingList" style="position: relative;">
+<ion-row class="grid-view overlay-container" *ngIf="viewingList.length > 0" style="position: relative;">
   <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100" class="property-card-set"
     *ngFor="let item of viewingList; let i=index">
     <ion-card style="margin: 0;">
@@ -92,7 +92,7 @@
 
   </div>
 </ion-row>
-<ion-row *ngIf="viewingList">
+<ion-row *ngIf="viewingList.length > 0">
   <ion-col size="auto">
     <mat-paginator #paginator [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex"
       [showFirstLastButtons]="true" [pageSizeOptions]="[10, 20, 30, 100]" (page)="pageEvent = handlePage($event);">
@@ -100,7 +100,7 @@
   </ion-col>
 </ion-row>
 
-<ion-row *ngIf="!viewingList">
+<ion-row *ngIf="viewingList.length === 0">
   <ion-col>
     <p>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</p>
   </ion-col>
