@@ -80,7 +80,6 @@ export class ListViewComponent implements OnInit, OnChanges {
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
           .set('hideLoader', 'true');
         this.agentService.getViewings(this.selectedEntityDetails.entityId, this.viewingsParams).subscribe(res => {
-          console.log(res);
           this.viewingList = res && res.data ? res.data : [];
           callback({
             recordsTotal: res ? res.count : 0,

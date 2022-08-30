@@ -13,7 +13,7 @@ export class GridViewComponent implements OnInit, OnChanges {
 
   @Input() viewingForm;
   @Input() viewingsParams;
-  viewingList: any;
+  viewingList = [];
   DATE_FORMAT = DATE_FORMAT;
   pageEvent: PageEvent;
   pageIndex = 0;

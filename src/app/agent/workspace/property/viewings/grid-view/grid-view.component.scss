@@ -35,7 +35,7 @@
             .duration-block {
                 .header {
                     color: var(--ion-color-two);
-                    @include set-text-style(11px, 19px);
+                    @include set-text-style(11px, 15px);
                 }
                 .content {
                     @include set-text-style(17px, 20px);
