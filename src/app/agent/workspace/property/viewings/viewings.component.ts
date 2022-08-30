@@ -28,6 +28,7 @@ export class ViewingsComponent implements OnInit {
   popoverOptions: any = {
     cssClass: 'market-apprisal-ion-select'
   };
+  
   constructor(
     private commonService: CommonService,
     private fb: FormBuilder
