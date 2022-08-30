@@ -23,6 +23,7 @@ export class GridViewComponent implements OnInit, OnChanges {
   localStorageItems: any;
   selectedEntityDetails: any;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
+  length: number;
 
   constructor(
     private el: ElementRef<HTMLElement>,
@@ -67,6 +68,7 @@ export class GridViewComponent implements OnInit, OnChanges {
   private getViewings() {
     this.agentService.getViewings(this.selectedEntityDetails.entityId, this.viewingsParams).subscribe(res => {
       this.viewingList = res && res.data ? res.data : [];
+      this.length = res && res.count ? res.count : 0;
       this.customizePaginator();
     })
   }

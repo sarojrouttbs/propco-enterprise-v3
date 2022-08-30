@@ -25,7 +25,10 @@ export class ViewingsComponent implements OnInit {
   DATE_FORMAT = DATE_FORMAT;
   currentDate = new Date();
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
+  popoverOptions: any = {
+    cssClass: 'market-apprisal-ion-select'
+  };
+  
   constructor(
     private commonService: CommonService,
     private fb: FormBuilder
