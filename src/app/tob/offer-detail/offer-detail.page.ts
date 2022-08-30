@@ -129,9 +129,7 @@ export class OfferDetailPage implements OnInit {
           this.isEnable('guarantor');
           this.isEnable('pets');
         }
-      },
-      (error) => { }
-    );
+      });
   }
 
   private patchApplicantDetail() {
@@ -267,9 +265,7 @@ export class OfferDetailPage implements OnInit {
         ]);
         this.makeAnOfferForm.get('amount').updateValueAndValidity();
         this.isTobPropertyCardReady = true;
-      },
-      (error) => { }
-    );
+      });
   }
 
   private getNoDeposit() {
@@ -278,9 +274,7 @@ export class OfferDetailPage implements OnInit {
         if (res) {
           this.propertyDetails.noDepositScheme = res.noDepositScheme;
         }
-      },
-      (error) => { }
-    );
+      });
   }
 
   private getPropertyClauses(propertyId) {
@@ -290,9 +284,7 @@ export class OfferDetailPage implements OnInit {
         this.negotiatableClauses = this.propertyClauses.filter(
           (result) => result.isNegotiable
         );
-      },
-      (error) => { }
-    );
+      });
   }
 
   private getPropertyRestrictions(propertyId) {
@@ -309,9 +301,7 @@ export class OfferDetailPage implements OnInit {
             restrict.key.replace(/_/g, ' ')
           ))
         );
-      },
-      (error) => { }
-    );
+      });
   }
 
   async onSubmit() {
@@ -469,7 +459,7 @@ export class OfferDetailPage implements OnInit {
     if (this.makeAnOfferForm.valid) {
       this.updateApplicantDetails();
       this.tobService.createOffer(this.prepareCreateOffer()).subscribe(
-        (res) => {
+        (resp) => {
           const applicantName =
             this.applicantDetail.fullName ||
             this.applicantDetail.title +
@@ -571,8 +561,7 @@ export class OfferDetailPage implements OnInit {
     this.tobService
       .updateApplicantDetails(this.applicantId, requestObj)
       .subscribe(
-        (res) => { },
-        (error) => { }
+        (res) => { }
       );
   }
 
@@ -603,9 +592,7 @@ export class OfferDetailPage implements OnInit {
         (data) => {
           this.commonService.setItem(PROPCO.TOB_LOOKUP_DATA, data);
           this.setTobLookupData();
-        },
-        (error) => { }
-      );
+        });
     }
   }
   private setLookupData(): void {
@@ -740,7 +727,7 @@ export class OfferDetailPage implements OnInit {
       backdropDismiss: false,
     });
 
-    const data = modal.onDidDismiss().then((res) => { });
+    modal.onDidDismiss().then((res) => { });
     await modal.present();
   }
 

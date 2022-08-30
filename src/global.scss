@@ -339,7 +339,7 @@ body {
   }
 }
 
-#faultListTable, #la-application-list, #la-guarantor-application-list, #tenant-list-modal, #propertyNotesTable, #propertyTenancyTable, #periodic-visit-table, #propertyMaintenanceTable, #periodic-visit-notes-table, #whitegoods-table, #safety-device-table, #hmrc-landlord-table, #hmrc-preview-and-send-table, #marketing-activity-table, #viewings-table {
+#faultListTable, #la-application-list, #la-guarantor-application-list, #tenant-list-modal, #propertyNotesTable, #propertyTenancyTable, #periodic-visit-table, #propertyMaintenanceTable, #periodic-visit-notes-table, #whitegoods-table, #safety-device-table, #hmrc-landlord-table, #hmrc-preview-and-send-table, #marketing-activity-table {
   tr.odd {
     td.dataTables_empty {
       display: none;
@@ -867,7 +867,7 @@ mat-form-field {
   }
 }
 
-#agent-portal {
+// #agent-portal {
   .postcode-find-btn {
     margin-right: 0px;
     margin-bottom: 0px;
@@ -911,7 +911,7 @@ mat-form-field {
   .other-status-circle {
     background-color: var(--ion-color-warning);
   }
-}
+// }
 
 .unsaved-data-error{
   background: rgba(var(--ion-color-danger-rgb), 0.2);

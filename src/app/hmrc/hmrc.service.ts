@@ -72,4 +72,10 @@ export class HmrcService {
     };
   }
 
+  getSummaryReportCsv(batchId: string, params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}/audit/download`, { responseType: 'blob', params: params }).pipe(tap((res: any) => { }),
+      catchError(this.handleError<any>(''))
+    );
+  }
+
 }
