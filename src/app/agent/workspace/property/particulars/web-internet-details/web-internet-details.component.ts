@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, PROPCO, DATE_FORMAT } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { IPropertyDetails } from '../../../workspace.model';
 
 @Component({
   selector: 'app-web-internet-details',
@@ -30,6 +31,7 @@ export class WebInternetDetailsComponent implements OnInit {
   furnishingTypes: any;
   propertyLookupData: any;
   DATE_FORMAT = DATE_FORMAT;
+  propertyDetails : IPropertyDetails[];
   
   constructor(
     private formBuilder : FormBuilder,
@@ -158,7 +160,7 @@ export class WebInternetDetailsComponent implements OnInit {
     const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve, reject) => {
       this.agentService.getPropertyDetails(this.selectedEntryDetails.entityId, params).subscribe(result => {
-        if (result && result.data && result.data.propertyDetails && result.data.propertyInfo) {
+        if (result && result.data && result.data.propertyDetails && result.data.propertyInfo) {        
           this.patchPropertyDetails(result.data.propertyDetails);
           this.patchPropertyInfo(result.data.propertyInfo);
         }
@@ -170,7 +172,7 @@ export class WebInternetDetailsComponent implements OnInit {
   }
 
 
-  private patchPropertyDetails(propertyDetails: any) {
+  private patchPropertyDetails(propertyDetails: IPropertyDetails) {
     this.webInternetDetailForm.patchValue(propertyDetails);
     this.webInternetDetailForm.patchValue({
       noOfSingleBedrooms: propertyDetails.noOfSingleBedrooms ? propertyDetails.noOfSingleBedrooms : 0,
@@ -181,7 +183,7 @@ export class WebInternetDetailsComponent implements OnInit {
     })
   }
 
-  private patchPropertyInfo(propertyInfo: any) {
+  private patchPropertyInfo(propertyInfo: IPropertyDetails) {
     this.webInternetDetailForm.patchValue(propertyInfo);
     }
 }
