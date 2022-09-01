@@ -1,13 +1,14 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { IonModal, ModalController } from '@ionic/angular';
 import { interval } from 'rxjs';
 import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC_CONFIG, PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
-import { HmrcReportPage } from 'src/app/shared/modals/hmrc-report/hmrc-report.page';
+// import { HmrcReportPage } from 'src/app/shared/modals/hmrc-report/hmrc-report.page';
 import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/preview-pdf-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { BatchDetail } from '../../hmrc-modal';
+import { HmrcReportPage } from '../../hmrc-modals/hmrc-report/hmrc-report.page';
 import { HmrcService } from '../../hmrc.service';
 @Component({
   selector: 'app-progress-summary',

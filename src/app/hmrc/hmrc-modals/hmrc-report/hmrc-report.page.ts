@@ -3,9 +3,9 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { HmrcService } from 'src/app/hmrc/hmrc.service';
-import { DATE_FORMAT, DEFAULT_MESSAGES } from '../../constants';
-import { CommonService } from '../../services/common.service';
-import { PreviewPdfModalPage } from '../preview-pdf-modal/preview-pdf-modal.page';
+import { DATE_FORMAT, DEFAULT_MESSAGES } from 'src/app/shared/constants';
+import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/preview-pdf-modal.page';
+import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-hmrc-report',
