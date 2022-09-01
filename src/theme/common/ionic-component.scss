@@ -949,3 +949,10 @@ ion-datetime {
     width: 850px;
   }
 }
+
+.hmrc-report-modal{
+  &::part(content){
+    width: 450px;
+    height: 230px;
+  }
+}

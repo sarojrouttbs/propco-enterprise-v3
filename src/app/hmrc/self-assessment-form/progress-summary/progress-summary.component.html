@@ -32,7 +32,7 @@
         matTooltip="Please click to download the CSV file for billing."  matTooltipPosition="above">
           <ion-spinner name="crescent" class="pdf-spinner" *ngIf="showCsvBtnLoader" color="success"></ion-spinner>Download CSV
         </ion-button>
-        <ion-button color="success" fill="solid" (click)="redirectToHome()" [disabled]="!isProcessCompleted">Finish
+        <ion-button color="success" fill="solid" (click)="openHmrcReportModal()" [disabled]="!isProcessCompleted">Finish
         </ion-button>
       </ion-col>
       <ion-col class="no-padding-bottom" class="table-block" size="100">
