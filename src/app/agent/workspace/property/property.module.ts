@@ -59,6 +59,7 @@ import { FurtherDetailsComponent } from './particulars/further-details/further-d
 import { ViewingsComponent } from './viewings/viewings.component';
 import { GridViewComponent } from './viewings/grid-view/grid-view.component';
 import { ListViewComponent } from './viewings/list-view/list-view.component';
+import { WebInternetDetailsComponent } from './particulars/web-internet-details/web-internet-details.component';
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
 @NgModule({
@@ -85,7 +86,7 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIG
     CreateKeySetPageModule,
     LeafletModule,
     PostcodeDirectiveModule,
-    IonicSelectableModule
+    IonicSelectableModule,
   ],
   declarations: [
     PropertyPage,
@@ -121,7 +122,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIG
     PropertyRoomsComponent,
     ViewingsComponent,
     GridViewComponent,
-    ListViewComponent
+    ListViewComponent,
+    WebInternetDetailsComponent
   ],
   providers: [
     AgentService,
