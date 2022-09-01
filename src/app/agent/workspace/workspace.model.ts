@@ -61,3 +61,43 @@ export interface PropertHmoLicence {
   hmoLicensed: boolean;
   hmoLicenceExpiryDate: string
 }
+
+export interface IPropertyDetails {
+  numberOfBedroom : string,
+  noOfSingleBedrooms:string,
+  noOfDoubleBedrooms:string,
+  isStudio:boolean,
+  publishedAddress:string,
+  hasUploadedToWebsite:boolean,
+  numberOfBathroom:string,
+  ensuite:string,
+  showerRooms:string,
+  advertisementRent:string,
+  advertisementRentFrequency: string,
+  isPropertyOfWeek:boolean,
+  numberOfReception:string,
+  numberOfFloors: string,
+  availableFrom:string,
+  availableTo:string,
+  isLiftAccess:boolean,
+  houseType:string,
+  furnishingType:string,
+  kitchenStyle:string,
+  isStudentLettingEnabled:boolean,
+  propertyStyle:string,
+  propertyAge:string,
+  decorativeCondition: string,
+  overAllCondition:string,
+  isStudentFriendly:boolean,
+  parking:string,
+  garage:string,
+  heatingType:string,
+  garden:string,
+  isExclWaterTax:boolean,
+  floorArea:string,
+  floorAreaType:string,
+  landArea:string,
+  landAreaTypes:string,
+  isExclCouncilTax:boolean,
+  isReferral:boolean
+}
