@@ -40,14 +40,15 @@ ion-split-pane {
 
 ion-button {
   --box-shadow: none !important;
-  --border-radius: 4px;
+  --border-radius: 18px;
   --background: var(--ion-color-step-900);
   --color: var(--ion-color-step-2000);
   text-transform: capitalize;
   font-weight: 400;
   // margin: 0 5px;
   letter-spacing: 0;
-  
+  @include set-text-style(14px, 18px);
+
   &.reset-button {
     --background: var(--ion-color-danger);
   }
@@ -190,27 +191,30 @@ ion-item {
     }
 
     ion-header {
-      background: var(--ion-color-step-900);
+      background: var(--ion-color-five);
       ion-toolbar {
         --min-height: 40px;
-        --background: var(--ion-color-step-900);
+        --background: var(--ion-color-five);
 
         ion-title {
-          --color: var(--ion-color-step-2000);
+          --color: var(--ion-text-color);
           @include set-text-style(16px, 20px);
         }
 
         ion-icon {
           font-size: 25px;
-          color: var(--ion-color-step-2000);
+          color: var(--ion-text-color);
           cursor: pointer;
         }
+      }
+      &.header-md::after{
+        background-image: none;
       }
     }
 
     ion-content {
       --background: var(--ion-color-six);
-      --color: var(--ion-color-step-200);
+      --color: var(--ion-text-color);
       --padding-top: 0px;
       --padding-bottom: 0px;
       --padding-start: 10px;
