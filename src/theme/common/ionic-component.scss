@@ -949,3 +949,8 @@ ion-datetime {
     width: 850px;
   }
 }
+
+ion-modal.ion-datepicker-modal {
+    --width: 350px;
+    --height: 395px;
+}
