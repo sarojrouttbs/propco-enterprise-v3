@@ -945,8 +945,9 @@ ion-datetime {
 
 .preview-pdf-modal-container{
   &::part(content){
-    height: 98%;
+    height: 95%;
     width: 900px;
+    min-height: 575px;
   }
 }
 
