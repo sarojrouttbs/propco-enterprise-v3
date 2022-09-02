@@ -29,7 +29,7 @@
             <app-select-dates [group]="selfAssessmentForm"></app-select-dates>
           </mat-step>
           <mat-step [completed]="stepper.selectedIndex > 2">
-            <ng-template matStepLabel>Preview & Send</ng-template>
+            <ng-template matStepLabel>Send</ng-template>
             <app-preview-and-send 
             *ngIf="stepper.selectedIndex==2" 
             [group]="selfAssessmentForm"
