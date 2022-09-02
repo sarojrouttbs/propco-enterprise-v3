@@ -1,0 +1,383 @@
+<mat-accordion multi class="form-view-accordian">
+  <mat-expansion-panel #WebInternetDetails hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Details for Web/Internet
+      </mat-panel-title>
+      <mat-panel-description class="ion-justify-content-end no-margin">
+        <div>
+          <span *ngIf="!WebInternetDetails.expanded" class="accordian-icon" title="Expand">
+            <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+          </span>
+          <span *ngIf="WebInternetDetails.expanded" class="accordian-icon" title="Collapse">
+            <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+          </span>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <form [formGroup]="webInternetDetailForm">
+      <ion-grid>
+        <ion-row class="prefernce-options">
+          <ion-col size="10">
+            <ion-item>
+              <ion-label position="floating">Bedrooms <ion-text class="mandatory">*</ion-text>
+              </ion-label>
+              <ion-input formControlName="numberOfBedroom"></ion-input>
+            </ion-item>
+            <app-validation-message [control]="webInternetDetailForm.controls.numberOfBedroom"></app-validation-message>
+          </ion-col>
+          <ion-col size="10">
+            <ion-item>
+              <ion-label position="floating">Single Bedrooms</ion-label>
+              <ion-input formControlName="noOfSingleBedrooms"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="10">
+            <ion-item>
+              <ion-label position="floating">Double Bedrooms</ion-label>
+              <ion-input formControlName="noOfDoubleBedrooms"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="10">
+            <ion-item lines="none">
+              <ion-toggle color="primary" formControlName="isStudio"></ion-toggle>
+              <ion-text>Studio</ion-text>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="30">
+            <ion-item>
+              <ion-label position="floating">Display Address <ion-text class="mandatory">*</ion-text>
+              </ion-label>
+              <ion-input formControlName="publishedAddress"></ion-input>
+            </ion-item>
+            <app-validation-message [control]="webInternetDetailForm.controls.publishedAddress">
+            </app-validation-message>
+          </ion-col>
+          <ion-col size="30">
+            <ion-item lines="none">
+              <ion-toggle color="primary" formControlName="hasUploadedToWebsite"></ion-toggle>
+              <ion-text>Not to be uploaded to the website </ion-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="14">
+            <ion-item>
+              <ion-label position="floating">Bathrooms</ion-label>
+              <ion-input formControlName="numberOfBathroom"></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="14">
+            <ion-item>
+              <ion-label position="floating">En-suites</ion-label>
+              <ion-input formControlName="ensuite"></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12">
+            <ion-item>
+              <ion-label position="floating">Shower Rooms</ion-label>
+              <ion-input formControlName="showerRooms"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="15">
+            <ion-item>
+              <ion-label position="stacked">Advertised Rent <ion-text class="mandatory">*</ion-text>
+              </ion-label>
+              <input class="currency-input" currencyMask formControlName="advertisementRent" />
+            </ion-item>
+            <app-validation-message [control]="webInternetDetailForm.controls.advertisementRent">
+            </app-validation-message>
+          </ion-col>
+          <ion-col size="15">
+            <ion-item>
+              <ion-label position="floating">Frequency <ion-text class="mandatory">*</ion-text>
+              </ion-label>
+              <ion-select interface="popover" formControlName="advertisementRentFrequency">
+                <ion-select-option [value]="item.index" *ngFor="let item of advertisementRentFrequencies">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <app-validation-message [control]="webInternetDetailForm.controls.advertisementRentFrequency">
+            </app-validation-message>
+          </ion-col>
+          <ion-col size="25">
+            <ion-item lines="none">
+              <ion-toggle color="primary" formControlName="isPropertyOfWeek"></ion-toggle>
+              <ion-text>Property of the Week</ion-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Receptions</ion-label>
+              <ion-input formControlName="numberOfReception"></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Floors</ion-label>
+              <ion-input formControlName="numberOfFloors"></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="15">
+            <ion-item id="availableFromDate">
+              <ion-label position="floating">Available From</ion-label>
+              <ion-input value="{{ webInternetDetailForm.controls.availableFrom.value | date: DATE_FORMAT.DATE }}"
+                readonly>
+              </ion-input>
+              <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+              <ion-popover trigger="availableFromDate" show-backdrop="false" side="top" alignment="center">
+                <ng-template>
+                  <ion-datetime showDefaultButtons="true" presentation="date" formControlName="availableFrom">
+                  </ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </ion-item>
+          </ion-col>
+          <ion-col size="15">
+            <ion-item id="availableToDate">
+              <ion-label position="floating">Available To</ion-label>
+              <ion-input value="{{ webInternetDetailForm.controls.availableTo.value | date: DATE_FORMAT.DATE }}"
+                readonly>
+              </ion-input>
+              <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+              <ion-popover trigger="availableToDate" show-backdrop="false" side="top" alignment="center">
+                <ng-template>
+                  <ion-datetime showDefaultButtons="true" presentation="date" formControlName="availableTo">
+                  </ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </ion-item>
+          </ion-col>
+          <ion-col size="25">
+            <ion-item lines="none">
+              <ion-toggle color="primary" formControlName="isLiftAccess"></ion-toggle>
+              <ion-text>Lift Access</ion-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="40">
+            <ion-item>
+              <ion-label position="floating">Property Type</ion-label>
+              <ion-select interface="popover" formControlName="houseType">
+                <ion-select-option [value]="item.index" *ngFor="let item of houseTypes">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="15">
+            <ion-item>
+              <ion-label position="floating">Funishing <ion-text class="mandatory">*</ion-text>
+              </ion-label>
+              <ion-select interface="popover" formControlName="furnishingType">
+                <ion-select-option [value]="item.index" *ngFor="let item of furnishingTypes">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <app-validation-message [control]="webInternetDetailForm.controls.furnishingType"></app-validation-message>
+          </ion-col>
+
+          <ion-col size="15">
+            <ion-item>
+              <ion-label position="floating">Kitchen Style </ion-label>
+              <ion-select interface="popover" formControlName="kitchenStyle">
+                <ion-select-option [value]="item.index" *ngFor="let item of kitchenStyles">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="30">
+            <ion-item lines="none">
+              <ion-toggle color="primary" formControlName="isStudentLettingEnabled"></ion-toggle>
+              <ion-text>Student Lettings</ion-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Property Style</ion-label>
+              <ion-select interface="popover" formControlName="propertyStyle">
+                <ion-select-option [value]="item.index" *ngFor="let item of propertyStyles">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Property Age</ion-label>
+              <ion-select interface="popover" formControlName="propertyAge">
+                <ion-select-option [value]="item.index" *ngFor="let item of propertyAges">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="15">
+            <ion-item>
+              <ion-label position="floating">Decorative Condition</ion-label>
+              <ion-select interface="popover" formControlName="decorativeCondition">
+                <ion-select-option [value]="item.index" *ngFor="let item of decorativeConditions">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="15">
+            <ion-item>
+              <ion-label position="floating">Overall Condition</ion-label>
+              <ion-select interface="popover" formControlName="overAllCondition">
+                <ion-select-option [value]="item.index" *ngFor="let item of overallConditions">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="30">
+            <ion-item lines="none">
+              <ion-toggle color="primary" formControlName="isStudentFriendly"></ion-toggle>
+              <ion-text>Student Friendly</ion-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Parking</ion-label>
+              <ion-select interface="popover" formControlName="parking">
+                <ion-select-option [value]="item.index" *ngFor="let item of parkingTypes">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Garages</ion-label>
+              <ion-select interface="popover" formControlName="garage">
+                <ion-select-option [value]="item.index" *ngFor="let item of propertyGarages">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="15">
+            <ion-item>
+              <ion-label position="floating">Heating</ion-label>
+              <ion-select interface="popover" formControlName="heatingType">
+                <ion-select-option [value]="item.index" *ngFor="let item of heatingTypes">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="15">
+            <ion-item>
+              <ion-label position="floating">Garden</ion-label>
+              <ion-select interface="popover" formControlName="garden">
+                <ion-select-option [value]="item.index" *ngFor="let item of propertyGardens">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="30">
+            <ion-item lines="none">
+              <ion-toggle color="primary" formControlName="isExclWaterTax"></ion-toggle>
+              <ion-text>Exclusive Water</ion-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Floor Area</ion-label>
+              <ion-input interface="popover" formControlName="floorArea"></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">In</ion-label>
+              <ion-select interface="popover" formControlName="floorAreaType">
+                <ion-select-option [value]="item.index" *ngFor="let item of floorAreas">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="15">
+            <ion-item>
+              <ion-label position="floating">Land Area</ion-label>
+              <ion-input formControlName="landArea"></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="15">
+            <ion-item>
+              <ion-label position="floating">In</ion-label>
+              <ion-select interface="popover" formControlName="landAreaTypes">
+                <ion-select-option [value]="item.index" *ngFor="let item of floorAreas">
+                  {{item.value}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="30">
+            <ion-item lines="none">
+              <ion-toggle color="primary" formControlName="isExclCouncilTax"></ion-toggle>
+              <ion-text>Exclusive Tax</ion-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="20">
+          </ion-col>
+          <ion-col size="20">
+          </ion-col>
+          <ion-col size="15">
+          </ion-col>
+          <ion-col size="15">
+          </ion-col>
+          <ion-col size="30">
+            <ion-item lines="none">
+              <ion-toggle color="primary" formControlName="isReferral"></ion-toggle>
+              <ion-text>Referral</ion-text>`
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </mat-expansion-panel>
+</mat-accordion>

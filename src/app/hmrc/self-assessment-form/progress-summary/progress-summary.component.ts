@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { interval } from 'rxjs';
@@ -7,8 +7,8 @@ import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC_CONFIG, PROPCO, SYSTEM_CO
 import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/preview-pdf-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { BatchDetail } from '../../hmrc-modal';
+import { HmrcReportPage } from '../../hmrc-modals/hmrc-report/hmrc-report.page';
 import { HmrcService } from '../../hmrc.service';
-
 @Component({
   selector: 'app-progress-summary',
   templateUrl: './progress-summary.component.html',
@@ -177,13 +177,6 @@ export class ProgressSummaryComponent implements OnInit {
     });
   }
 
-  redirectToHome() {
-    this.commonService.removeItem('HMRC_FILTER');
-    this.commonService.removeItem('HRMRC_PROCESS_COMPLETED');
-    this.commonService.removeItem('HMRC_BATCH_COUNT');
-    this.router.navigate(['../self-assessment-form'], { replaceUrl: true, relativeTo: this.route });
-  }
-
   private async initPdfDownloadProcess() {
     this.showPdfBtnLoader = true;
     this.batchDetails = await this.getBatchDetails() as BatchDetail;
@@ -244,6 +237,7 @@ export class ProgressSummaryComponent implements OnInit {
       this.showPdfBtnLoader = false;
     }
   }
+
   private getPdfBlob() {
     return new Promise((resolve) => {
       this.hmrcService.downloadPdf(this.PDF_CONFIG.finalUrl).subscribe((res) => {
@@ -304,5 +298,24 @@ export class ProgressSummaryComponent implements OnInit {
         }
       );
     });
+  }
+
+  async openHmrcReportModal() {
+    if (!this.batchDetails)
+      await this.initPdfDownloadProcess();
+    const modal = await this.modalController.create({
+      component: HmrcReportPage,
+      cssClass: 'modal-container hmrc-report-modal',
+      componentProps: {
+        batchId: this.formObj.batchId,
+        baseUrl: this.PDF_CONFIG.baseUrl,
+        folderName: this.PDF_CONFIG.folderName,
+        batchDetails: this.batchDetails,
+        blobUrl: this.PDF_CONFIG.blobUrl
+      },
+      backdropDismiss: false
+    });
+    modal.onDidDismiss();
+    await modal.present();
   }
 }
