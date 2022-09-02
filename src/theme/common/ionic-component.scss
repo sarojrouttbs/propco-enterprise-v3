@@ -945,8 +945,9 @@ ion-datetime {
 
 .preview-pdf-modal-container{
   &::part(content){
-    height: 575px;
-    width: 850px;
+    height: 95%;
+    width: 900px;
+    min-height: 550px;
   }
 }
 
@@ -956,6 +957,7 @@ ion-datetime {
     height: 230px;
   }
 }
+
 ion-modal.ion-datepicker-modal {
     --width: 350px;
     --height: 395px;
