@@ -951,6 +951,13 @@ ion-datetime {
   }
 }
 
+.hmrc-report-modal{
+  &::part(content){
+    width: 450px;
+    height: 230px;
+  }
+}
+
 ion-modal.ion-datepicker-modal {
     --width: 350px;
     --height: 395px;
