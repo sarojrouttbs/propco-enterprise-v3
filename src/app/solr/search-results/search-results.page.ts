@@ -136,6 +136,7 @@ export class SearchResultsPage implements OnInit {
   currentDate;
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
+  isEntityFilterApplied = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -597,7 +598,7 @@ export class SearchResultsPage implements OnInit {
   public handlePage(e: PageEvent) {
     this.pageIndex = e.pageIndex;
     this.pageSize = e.pageSize;
-    this.getSearchResults();
+    this.getSearchResults(this.isEntityFilterApplied ? false : true);
     return e;
   }
 
@@ -643,11 +644,13 @@ export class SearchResultsPage implements OnInit {
   }
 
   refreshAll() {
+    this.isEntityFilterApplied = true;
     this.pageIndex = 0;
     this.getSearchResults();
   }
 
   resetAll() {
+    this.isEntityFilterApplied = true;
     this.pageIndex = 0;
     this.propertyFilter.reset();
     this.propertyFilter.controls['propertyRent'].setValue(this.priceKnobValues);
@@ -690,6 +693,7 @@ export class SearchResultsPage implements OnInit {
   }
 
   refresh(type: string) {
+    this.isEntityFilterApplied = true;
     this.pageIndex = 0;
     this.refreshType = type;
     this.getSearchResults();
@@ -697,6 +701,7 @@ export class SearchResultsPage implements OnInit {
 
   reset(form: FormGroup) {
     if (form) {
+      this.isEntityFilterApplied = true;
       form.reset();
       if (form.value.hasOwnProperty('propertyRent')) {
         form.controls['propertyRent'].setValue(this.priceKnobValues);
@@ -755,6 +760,8 @@ export class SearchResultsPage implements OnInit {
   }
 
   async searchHandler(data) {
+    this.isEntityFilterApplied = false;
+    this.pageIndex = 0;
     this.entityControl.setValue(data.entity);
     this.solrSearchConfig.searchTerm = data.term ? data.term : '';
     if (data.isSearchResult) {

@@ -946,7 +946,20 @@ ion-datetime {
 
 .preview-pdf-modal-container{
   &::part(content){
-    height: 575px;
-    width: 850px;
+    height: 95%;
+    width: 900px;
+    min-height: 550px;
   }
+}
+
+.hmrc-report-modal{
+  &::part(content){
+    width: 450px;
+    height: 230px;
+  }
+}
+
+ion-modal.ion-datepicker-modal {
+    --width: 350px;
+    --height: 395px;
 }
