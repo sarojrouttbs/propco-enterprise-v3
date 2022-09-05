@@ -780,8 +780,7 @@ export class ApplicationDetailPage implements OnInit {
 
   private updateOccupantForm(occupantsList: any[]) {
     if (Array.isArray(occupantsList) && occupantsList.length > 0) {
-      const coApplicants: any = this.occupantForm.get('coApplicants');
-      const occupantsArray = coApplicants;
+      const occupantsArray: any = this.occupantForm.get('coApplicants');
       occupantsList.forEach(element => {
         if (element.applicantId) {
           occupantsArray.push(this._formBuilder.group({
@@ -1080,8 +1079,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private createQuestionItems(questionArray: any) {
-    const questions: any = this.applicantQuestionForm.get('questions');
-    const questionFormArray = questions;
+    const questionFormArray: any = this.applicantQuestionForm.get('questions');;
     questionArray.forEach(element => {
       const questionForm = this._formBuilder.group({
         applicantQuestionId: element.applicantQuestionId,
@@ -1523,10 +1521,11 @@ export class ApplicationDetailPage implements OnInit {
     } else {
       this.initBarclayCardPaymentDetails();
       this.hidePaymentForm = false;
-      if (response && response.STATUS === '0') {
+      if (response && response.STATUS === '1') {
+        console.log('Payment cancelled');
+      } else if (response && response.STATUS === '0') {
         this.commonService.showMessage('Invalid or incomplete request, please try again.', 'Payment Failed', 'error');
-      }
-      else {
+      } else {
         this.commonService.showMessage('Something went wrong on server, please try again.', 'Payment Failed', 'error');
       }
     }
