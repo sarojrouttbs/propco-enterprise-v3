@@ -47,7 +47,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of visitList" class="table-row" (click)="onClickRow(data); $event.stopPropagation();"
+            <tr *ngFor="let data of visitList" class="table-row pointer" (click)="onClickRow(data); $event.stopPropagation();"
               [ngClass]="{'row-selected' : data.isSelected}">
               <td>{{(data?.visitType| lookup: propertyVisitTypes) || notAvailable}}</td>
               <td>{{(data?.status | lookup: inspectionStatuses) || notAvailable}}</td>
@@ -60,7 +60,7 @@
               </td>
             </tr>
             <tr *ngIf="visitList?.length === 0">
-              <td colspan="7" class="no-data-available ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</strong>
+              <td colspan="6" class="no-data-available ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong>
               </td>
             </tr>
           </tbody>
@@ -119,7 +119,7 @@
       <div class="overlay-container" style="position: relative">
         <h5>Periodic Visit Notes :</h5>
         <table datatable [dtOptions]="notesDtOption" [dtTrigger]="notesDtTrigger" class="row-border hover table-width"
-          style="position: relative" #faultNotesTable aria-describedby="periodicNotes">
+          style="position: relative" aria-describedby="periodicNotes" id="periodic-visit-notes-table">
           <thead>
             <tr>
               <th scope="col" style="width:15%">Date</th>
@@ -132,7 +132,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let notes of visitNotes?.data" class="table-row">
+            <tr *ngFor="let notes of visitNotes" class="table-row">
               <td>{{(notes.postedAt | date: DATE_FORMAT.DATE) || notAvailable}}</td>
               <td>{{(notes.postedAt | date: DATE_FORMAT.TIME) || notAvailable}}</td>
               <td>{{(notes.type | lookup:notesTypes) || notAvailable}}</td>
@@ -140,6 +140,12 @@
               <td>{{(notes.category | lookup:notesCategories) || notAvailable}}</td>
               <td>{{notes.userName || notAvailable}}</td>
               <td><i (click)="showNoteDescription(notes.notes);" class="propcoicon propcoicon-property-description"></i>
+              </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="visitNotes?.length === 0">
+            <tr>
+              <td colspan="7" class="no-data-available ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong>
               </td>
             </tr>
           </tbody>

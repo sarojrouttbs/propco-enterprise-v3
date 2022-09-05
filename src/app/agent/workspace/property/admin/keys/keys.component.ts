@@ -27,7 +27,7 @@ export class KeysComponent implements OnInit {
   keyActivities: any;
   keyStatuses: any;
   userDetailsList: any;
-  logHistoryList: any;
+  logHistoryList = [];
   historyDtOption: DataTables.Settings;
   historyDtTrigger: Subject<any> = new Subject();
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;

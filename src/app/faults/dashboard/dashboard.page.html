@@ -495,7 +495,7 @@
           <h4>Repair Notes:</h4>
           <div class="overlay-container" style="position: relative">
             <table datatable [dtOptions]="notesDtOption" [dtTrigger]="notesDtTrigger" class="row-border hover table-width"
-              style="position: relative" #faultNotesTable aria-describedby="faultNotes">
+              style="position: relative" #faultNotesTable aria-describedby="faultNotes" id="faultNotesTable">
               <thead>
                 <tr>
                   <th scope="col" style="width:15%">Date</th>
@@ -504,8 +504,7 @@
                   <th scope="col" style="width:15%">Complaint</th>
                   <th scope="col" style="width:15%">Category</th>
                   <th scope="col">User</th>
-                  <th scope="col" style="width:40px">Notes</th>
-                  
+                  <th scope="col" style="width:40px">Notes</th>                  
                 </tr>
               </thead>
               <tbody>
@@ -517,19 +516,21 @@
                   <td>{{(notes.category |lookup: notesCategories) || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td>{{notes.userName || DEFAULTS.NOT_AVAILABLE}}</td>
                   <td><i (click)="showNoteDescription(notes.notes);"
-                      class="propcoicon propcoicon-property-description"></i></td>
-                  
+                      class="propcoicon propcoicon-property-description"></i></td>                  
+                </tr>                
+              </tbody>
+              <tbody *ngIf="faultNotes?.length === 0">
+                <tr>
+                  <td colspan="7" class="no-data-available ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong>
+                  </td>
                 </tr>
-                
               </tbody>
             </table>
-            <div id="dashboard-notes-overlay" class="overlay-class">
-             
+            <div id="dashboard-notes-overlay" class="overlay-class">             
               <i (click)="hideMenu($event,'dashboard-notes-overlay')" class="propcoicon propcoicon-actions-on"></i>
             </div>
           </div>
         </ion-col>
       </ion-row>
-  
     </ion-grid>
   </ion-content>
