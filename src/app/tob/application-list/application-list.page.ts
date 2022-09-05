@@ -56,6 +56,9 @@ export class ApplicationListPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ionViewDidEnter() { 
     this.obsApplicationList = this.filteredApplicationList.connect();
     this.initData();
   }

@@ -1597,8 +1597,8 @@ export class ApplicationDetailPage implements OnInit {
 
     this._tobService.proposeTenancy(proposeTenancyDetails, this.propertyId).subscribe((res) => {
       this.commonService.hideLoader();
-      this.commonService.showAlert('Tenancy', 'Tenancy has been proposed successfully on the property.').then(function(resp) {
-        window.history.back();
+      this.commonService.showAlert('Tenancy', 'Tenancy has been proposed successfully on the property.').then((resp) => {
+        this.router.navigate([`../../applications`], { replaceUrl: true, relativeTo: this.route });
       });
 
     }, error => {
