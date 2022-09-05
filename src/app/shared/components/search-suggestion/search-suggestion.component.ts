@@ -78,7 +78,7 @@ export class SearchSuggestionComponent implements OnInit {
       new HttpParams()
         // .set('limit', this.solrSuggestionConfig.limit)
         .set('searchTerm', searchText)
-        .set('searchTypes', this.transformToUpperCase(this.entityControl.value))
+        .set('searchTypes', 'TENANT,COTENANT')
         .set('searchSwitch', this.solrSuggestionConfig.searchSwitch)
         .set('hideLoader', 'true')
     );
