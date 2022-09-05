@@ -444,7 +444,7 @@ export class SearchResultsPage implements OnInit {
     this.tenantFilter = this.fb.group({
       status: [[]],
       officeCode: [[]],
-      tenantType: [['LEAD_TENANT']],
+      tenantType: [['TENANT']],
     });
     this.agentFilter = this.fb.group({
       status: [[]],
@@ -529,6 +529,9 @@ export class SearchResultsPage implements OnInit {
     params.searchTypes = this.transformToUpperCase(this.entityControl.value);
     this.commonService.dataChanged({ entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm });
     if (global) {
+      if (params.searchTypes.indexOf('TENANT') > -1) {
+        params.searchTypes.push('COTENANT')
+      }
       return params;
     }
     if (this.refreshType === 'ALL') {
@@ -551,9 +554,6 @@ export class SearchResultsPage implements OnInit {
         delete llFilter.isOverseas;
       }
       params.landlordFilter = llFilter;
-    }
-    if (this.entityControl.value.indexOf('Tenant') !== -1) {
-      params.tenantFilter = this.tenantFilter.value;
     }
     if (this.entityControl.value.indexOf('Agent') !== -1) {
       const atFilter = Object.assign(this.agentFilter.value, {});
@@ -587,6 +587,17 @@ export class SearchResultsPage implements OnInit {
         delete apFilter.isStudent;
       }
       params.applicantFilter = apFilter;
+    }
+    if (this.entityControl.value.indexOf('Tenant') !== -1) {
+      params.tenantFilter = this.tenantFilter.value;
+      const index = params.searchTypes.indexOf('TENANT');
+      if (params.searchTypes.indexOf('TENANT') !== -1) {
+        params.searchTypes.splice(index, 1);
+      }
+      params.searchTypes = [...params.searchTypes, ...this.transformToUpperCase(this.tenantFilter.value.tenantType)];
+      if (params.searchTypes.indexOf('TENANT') === -1 && params.searchTypes.indexOf('COTENANT') === -1) {
+        params.searchTypes.push('TENANT', 'COTENANT');
+      }
     }
     return params;
   }
@@ -660,7 +671,7 @@ export class SearchResultsPage implements OnInit {
     this.propertyFilter.controls['rentType'].setValue('DEFAULT_RENT');
     this.landlordFilter.reset();
     this.tenantFilter.reset();
-    this.tenantFilter.controls['tenantType'].setValue(['LEAD_TENANT']);
+    this.tenantFilter.controls['tenantType'].setValue(['TENANT']);
     this.applicantFilter.reset();
     this.agentFilter.reset();
     this.contractorFilter.reset();

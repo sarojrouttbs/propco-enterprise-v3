@@ -45,8 +45,8 @@
           <ng-container [ngTemplateOutlet]="applicantSuggestion"  *ngIf="item?.entityType === 'APPLICANT'"
               [ngTemplateOutletContext]="{item:item}">
           </ng-container>
-          <ng-container [ngTemplateOutlet]="tenantSuggestion"  *ngIf="item?.entityType === 'TENANT'"
-              [ngTemplateOutletContext]="{item:item}">
+          <ng-container [ngTemplateOutlet]="tenantSuggestion"  *ngIf="item?.entityType === 'TENANT' || item?.entityType === 'COTENANT'"
+          [ngTemplateOutletContext]="{item:item}">
           </ng-container>
           <ng-container [ngTemplateOutlet]="contractorSuggestion"  *ngIf="item?.entityType === 'CONTRACTOR'"
               [ngTemplateOutletContext]="{item:item}">
