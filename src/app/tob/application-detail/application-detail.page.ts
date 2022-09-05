@@ -345,39 +345,32 @@ export class ApplicationDetailPage implements OnInit {
   private savePreviouslySelectedData(index: number) {
     switch (index) {
       case 0:
-        if (!this.applicationDetails.isSubmitted) {
+        if (!this.applicationDetails.isSubmitted)
           this.saveApplicantsToApplication();
-        }
         break;
       case 1:
-        if (!this.applicationDetails.isSubmitted && this.applicantId) {
+        if (!this.applicationDetails.isSubmitted && this.applicantId)
           this.saveApplicantDetails();
-        }
         break;
       case 2:
-        if (!this.applicationDetails.isSubmitted && this.applicantId) {
+        if (!this.applicationDetails.isSubmitted && this.applicantId)
           this.saveAddressDetails();
-        }
         break;
       case 3:
-        if (!this.applicationDetails.isSubmitted && this.applicantId) {
+        if (!this.applicationDetails.isSubmitted && this.applicantId)
           this.saveBankDetails();
-        }
         break;
       case 4:
-        if (!this.applicationDetails.isSubmitted) {
+        if (!this.applicationDetails.isSubmitted)
           this.saveApplicationQuestions();
-        }
         break;
       case 5:
-        if (!this.applicationDetails.isSubmitted) {
+        if (!this.applicationDetails.isSubmitted)
           this.saveTenancyDetail();
-        }
         break;
       case 8:
-        if (!this.applicationDetails.isSubmitted) {
+        if (!this.applicationDetails.isSubmitted)
           this.saveGuarantorDetails();
-        }
         break;
       case 10:
         this.initPaymentConfiguration();
@@ -709,7 +702,8 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private createItem(): void {
-    this.occupantFormArray.push(this._formBuilder.group({
+    const coApplicants: any = this.occupantForm.get('coApplicants');
+    coApplicants.push(this._formBuilder.group({
       surname: ['', [Validators.required, ValidationService.alphabetValidator]],
       forename: ['', [Validators.required, ValidationService.alphabetValidator]],
       email: ['', [Validators.required, ValidationService.emailValidator]],
@@ -726,12 +720,9 @@ export class ApplicationDetailPage implements OnInit {
     ));
   }
 
-  get occupantFormArray() {
-    return this.occupantForm.get('coApplicants') as FormArray;
-  }
-
   addApplicant(control: FormControl, index: number) {
-    this.occupantFormArray.push(this._formBuilder.group({
+    const coApplicants: any = this.occupantForm.get('coApplicants');
+    coApplicants.push(this._formBuilder.group({
       surname: control.value.surname,
       forename: control.value.forename,
       email: control.value.email,
@@ -746,12 +737,13 @@ export class ApplicationDetailPage implements OnInit {
       applicantId: ''
     }
     ));
-    this.occupantFormArray.removeAt(index);
+    coApplicants.removeAt(index);
     this.createItem();
   }
 
   private addSearchApplicant(response: any, index: number) {
-    this.occupantFormArray.push(this._formBuilder.group({
+    const coApplicants: any = this.occupantForm.get('coApplicants');
+    coApplicants.push(this._formBuilder.group({
       surname: response.surname,
       forename: response.forename,
       email: response.email,
@@ -766,7 +758,7 @@ export class ApplicationDetailPage implements OnInit {
       applicantId: response.applicantId
     }
     ));
-    this.occupantFormArray.removeAt(index);
+    coApplicants.removeAt(index);
     this.createItem();
   }
 
@@ -779,7 +771,8 @@ export class ApplicationDetailPage implements OnInit {
             await this.setApplicationApplicants(applicants);
           });
         } else {
-          this.occupantFormArray.removeAt(index);
+          const coApplicants: any = this.occupantForm.get('coApplicants');
+          coApplicants.removeAt(index);
         }
       }
     });
@@ -787,7 +780,7 @@ export class ApplicationDetailPage implements OnInit {
 
   private updateOccupantForm(occupantsList: any[]) {
     if (Array.isArray(occupantsList) && occupantsList.length > 0) {
-      const occupantsArray = this.occupantFormArray;
+      const occupantsArray: any = this.occupantForm.get('coApplicants');
       occupantsList.forEach(element => {
         if (element.applicantId) {
           occupantsArray.push(this._formBuilder.group({
@@ -1056,10 +1049,6 @@ export class ApplicationDetailPage implements OnInit {
     });
   }
 
-  get questionFormArray() {
-    return this.applicantQuestionForm.get('questions') as FormArray;
-  }
-
   private async getApplicantQuestions() {
     return new Promise((resolve, reject) => {
       this._tobService.getApplicantQuestions().subscribe(res => {
@@ -1073,9 +1062,10 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private getApplicationQuestionsAnswer(applicationId: string) {
+    const questions: any = this.applicantQuestionForm.get('questions');
     this._tobService.getApplicationQuestionsAnswer(applicationId).subscribe(res => {
       if (res && res.count) {
-        this.questionFormArray.controls.forEach(element => {
+        questions.controls.forEach(element => {
           const item = res.data.find(answer => answer.questionId === element.value.applicantQuestionId);
           element.patchValue({
             toggle: item ? item.toggle : null,
@@ -1089,7 +1079,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private createQuestionItems(questionArray: any) {
-    const questionFormArray = this.questionFormArray;
+    const questionFormArray: any = this.applicantQuestionForm.get('questions');;
     questionArray.forEach(element => {
       const questionForm = this._formBuilder.group({
         applicantQuestionId: element.applicantQuestionId,
@@ -1200,8 +1190,7 @@ export class ApplicationDetailPage implements OnInit {
 
   private getTenantBankDetails(applicantId: string) {
     return new Promise((resolve, reject) => {
-      this._tobService.getTenantBankDetails(applicantId).subscribe(
-        res => {
+      this._tobService.getTenantBankDetails(applicantId).subscribe(res => {
           if (res) {
             this.patchBankDetails(res);
           }
@@ -1236,8 +1225,7 @@ export class ApplicationDetailPage implements OnInit {
     this._tobService.updateBankDetails(this.applicantId, bankDetails).subscribe(
       res => {
         this.bankDetailsForm.reset(this.bankDetailsForm.value);
-      },
-      error => { }
+      }
     );
   }
 
@@ -1534,12 +1522,10 @@ export class ApplicationDetailPage implements OnInit {
       this.initBarclayCardPaymentDetails();
       this.hidePaymentForm = false;
       if (response && response.STATUS === '1') {
-        // this.commonService.showMessage('Payment cancelled', 'Barclay Card', 'error');
-      }
-      else if (response && response.STATUS === '0') {
+        console.log('Payment cancelled');
+      } else if (response && response.STATUS === '0') {
         this.commonService.showMessage('Invalid or incomplete request, please try again.', 'Payment Failed', 'error');
-      }
-      else {
+      } else {
         this.commonService.showMessage('Something went wrong on server, please try again.', 'Payment Failed', 'error');
       }
     }
