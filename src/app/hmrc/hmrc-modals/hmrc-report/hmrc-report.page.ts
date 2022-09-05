@@ -58,7 +58,7 @@ export class HmrcReportPage {
       this.hmrcService.getCsv(this.batchId, params).subscribe(
         (res) => {
           this.showBillingBtnLoader = false;
-          if (this.summaryReport)
+          if (res)
             this.commonService.downloadDocument(res, 'Billing file (' + this.commonService.getFormatedDate(date, DATE_FORMAT.DATE) + ')', 'text/csv');
           else
             this.commonService.showAlert('Download CSV for billing', DEFAULT_MESSAGES.NO_DATA_AVAILABLE);
