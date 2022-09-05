@@ -28,7 +28,7 @@ export class DashboardPage implements OnInit {
   dtTrigger: Subject<any> = new Subject();
   notesDtTrigger: Subject<any> = new Subject();
   faultList: any[];
-  faultNotes: any[];
+  faultNotes = [];
   selectedData: any;
   private lookupdata: any;
   faultCategories: any[];

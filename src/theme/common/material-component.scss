@@ -214,6 +214,7 @@
     }
     .mat-expansion-panel:is(.mat-expanded):not([aria-disabled=true]) {
       background-color: var(--ion-color-five);
+      margin-bottom: 10px;
     }
     
     &.list-view-accordian {

@@ -44,7 +44,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of safetyDeviceList" class="table-row"
+            <tr *ngFor="let data of safetyDeviceList" class="table-row pointer"
               [ngClass]="{'row-selected' : data.rowSelected}" (click)="onClickRow(data);">
               <td>{{data?.safetyDeviceType | lookup: safetyDeviceTypes || notAvailable}}</td>
               <td>{{data?.smokeDetectorType | lookup: smokeDetectors || notAvailable}}</td>
@@ -60,7 +60,7 @@
               </td>
             </tr>
             <tr *ngIf="safetyDeviceList?.length === 0">
-              <td colspan="9" class="no-data-available ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</strong>
+              <td colspan="9" class="no-data-available ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong>
               </td>
             </tr>
           </tbody>
@@ -76,7 +76,7 @@
       <div class="overlay-container" style="position: relative">
         <h5>Safety Device Notes :</h5>
         <table datatable [dtOptions]="notesDtOption" [dtTrigger]="notesDtTrigger" class="row-border hover table-width"
-          style="position: relative" #faultNotesTable aria-describedby="safetyDeviceNotes">
+          style="position: relative" aria-describedby="safetyDeviceNotes" id="safety-device-notes-table">
           <thead>
             <tr>
               <th scope="col" style="width:15%">Date</th>
@@ -89,7 +89,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let notes of safetyDeviceNotes?.data" class="table-row">
+            <tr *ngFor="let notes of safetyDeviceNotes" class="table-row">
               <td>{{(notes.postedAt | date: DATE_FORMAT.DATE) || notAvailable}}</td>
               <td>{{(notes.postedAt | date: DATE_FORMAT.TIME) || notAvailable}}</td>
               <td>{{(notes.type | lookup:notesTypes) || notAvailable}}</td>
@@ -100,9 +100,14 @@
               </td>
             </tr>
           </tbody>
+          <tbody *ngIf="safetyDeviceNotes?.length === 0">
+            <tr>
+              <td colspan="7" class="no-data-available ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
-
     </mat-expansion-panel>
   </mat-accordion>
 </ion-content>
