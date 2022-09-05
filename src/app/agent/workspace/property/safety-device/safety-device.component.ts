@@ -182,7 +182,7 @@ export class SafetyDeviceComponent implements OnInit {
       .set('entityId', safetyDeviceId)
       .set('entityType', NOTES_TYPE.SAFETY_INSPECTIONS);
     this.agentService.getNotes(params).subscribe(res => {
-      this.safetyDeviceNotes = res && res?.data ? res?.data : [];
+      this.safetyDeviceNotes = res && res.data ? res.data : [];
       this.rerenderNotes();
     });
   }

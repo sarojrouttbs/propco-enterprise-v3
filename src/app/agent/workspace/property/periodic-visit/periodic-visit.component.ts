@@ -204,7 +204,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
       .set('entityId', visitId)
       .set('entityType', NOTES_TYPE.MANAGEMENT_INSPECTION);
     this.agentService.getNotes(params).subscribe(res => {
-      this.visitNotes = res && res?.data ? res?.data : [];
+      this.visitNotes = res && res.data ? res.data : [];
       this.rerenderNotes();
     });
   }
