@@ -40,7 +40,7 @@
                 <td>{{(data?.lapseToContract | lookup: contractTypeLookup) || notAvailable}}</td>
               </tr>
               <tr *ngIf="tenancies?.length === 0">
-                <td colspan="7" class="ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</strong>
+                <td colspan="7" class="ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong>
                 </td>
               </tr>
             </tbody>

@@ -32,7 +32,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
   propertyVisitTypes: any;
   notAvailable = DEFAULTS.NOT_AVAILABLE;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
-  visitNotes: any;
+  visitNotes = [];
   notesTypes: any;
   notesComplaints: any;
   notesCategories: any;
@@ -204,7 +204,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
       .set('entityId', visitId)
       .set('entityType', NOTES_TYPE.MANAGEMENT_INSPECTION);
     this.agentService.getNotes(params).subscribe(res => {
-      this.visitNotes = res ? res : [];
+      this.visitNotes = res && res.data ? res.data : [];
       this.rerenderNotes();
     });
   }
