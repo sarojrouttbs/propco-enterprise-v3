@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { AgentService } from 'src/app/agent/agent.service';
-import { DATE_FORMAT, DEFAULTS } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -19,6 +19,7 @@ export class TermsOfBusinessComponent implements OnInit {
   notAvailable = DEFAULTS.NOT_AVAILABLE
   DATE_FORMAT = DATE_FORMAT;
   property: any;
+  DEFAULT_MESSAGES = DEFAULT_MESSAGES;
 
   constructor(
     private agentService: AgentService,
