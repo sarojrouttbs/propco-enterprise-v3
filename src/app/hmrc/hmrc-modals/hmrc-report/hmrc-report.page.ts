@@ -98,7 +98,7 @@ export class HmrcReportPage {
     this.commonService.showMessage('We have successfully completed the process.', 'Progress Summary', 'success');
     this.dismiss();
     setTimeout(() => {
-      this.router.navigate(['../hmrc/self-assessment-form'], { replaceUrl: true });
+      this.router.navigate(['../agent/hmrc/self-assessment-form'], { replaceUrl: true });
     }, 1000);
   }
 
