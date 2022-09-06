@@ -6,6 +6,7 @@ import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, PROPCO, DEFAULT_MESSAGES, DEFAULTS, NOTES_TYPE, DATE_FORMAT } from 'src/app/shared/constants';
 import { ImagePage } from 'src/app/shared/modals/image/image.page';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -36,6 +37,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   DATE_FORMAT = DATE_FORMAT;
   isMapLoad = false;
   viewingCount = 0;
+  private viewingCountSubscription:Subscription;
 
   constructor(
     private modalCtrl: ModalController,
@@ -88,7 +90,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.getPropertyById(this.selectedEntityDetails.entityId);
     this.getPropertyLandlords(this.selectedEntityDetails.entityId);
     this.getPropertyTenant(this.selectedEntityDetails.entityId);
-    this.agentService.updatedViewingCount.subscribe(count=> {
+    this.viewingCountSubscription = this.agentService.updatedViewingCount.subscribe(count=> {
       this.viewingCount = count;
     })
   }
@@ -243,6 +245,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.agentService.updatedViewingCount.unsubscribe();
+    this.viewingCountSubscription.unsubscribe();
   }
 }
