@@ -97,10 +97,7 @@ export class HmrcReportPage {
     this.commonService.removeItem('HRMRC_PROCESS_COMPLETED');
     this.commonService.removeItem('HMRC_BATCH_COUNT');
     this.commonService.showMessage('We have successfully completed the process.', 'Progress Summary', 'success');
-    this.dismiss();
-    setTimeout(() => {
-      this.router.navigate(['../agent/hmrc/self-assessment-form'], { replaceUrl: true, relativeTo: this.route });
-    }, 1000);
+    this.modalController.dismiss('success');
   }
 
   dismiss() {
