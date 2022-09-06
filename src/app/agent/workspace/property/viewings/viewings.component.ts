@@ -28,7 +28,7 @@ export class ViewingsComponent implements OnInit {
   popoverOptions: any = {
     cssClass: 'market-apprisal-ion-select'
   };
-  
+
   constructor(
     private commonService: CommonService,
     private fb: FormBuilder
@@ -36,7 +36,8 @@ export class ViewingsComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.viewingInstructions && changes.viewingInstructions.currentValue) {
-      this.viewingForm.get('viewingInstructions').setValue(this.viewingInstructions);
+      if (this.viewingForm)
+        this.viewingForm.get('viewingInstructions').setValue(this.viewingInstructions);
     }
   }
 
@@ -55,6 +56,8 @@ export class ViewingsComponent implements OnInit {
       toDate: [''],
       viewingInstructions: ['']
     });
+    if (this.viewingInstructions)
+      this.viewingForm.get('viewingInstructions').setValue(this.viewingInstructions);
   }
 
   onFilterChange() {
@@ -96,10 +99,8 @@ export class ViewingsComponent implements OnInit {
   }
 
   resetFilter() {
-    this.viewingForm.reset();
+    this.viewingForm.get('quickFilterType').reset();
+    this.viewingForm.get('fromDate').reset();
+    this.viewingForm.get('toDate').reset();
   }
-
-
-
-
 }

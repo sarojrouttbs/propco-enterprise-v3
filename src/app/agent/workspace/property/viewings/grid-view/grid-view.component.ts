@@ -69,6 +69,7 @@ export class GridViewComponent implements OnInit, OnChanges {
     this.agentService.getViewings(this.selectedEntityDetails.entityId, this.viewingsParams).subscribe(res => {
       this.viewingList = res && res.data ? res.data : [];
       this.length = res && res.count ? res.count : 0;
+      this.agentService.updateCount(this.length);
       this.customizePaginator();
     })
   }

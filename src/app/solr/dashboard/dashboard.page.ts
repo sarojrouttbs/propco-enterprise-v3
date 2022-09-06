@@ -65,6 +65,7 @@ export class DashboardPage implements OnInit {
       this.disableWelcomeTour();
     },
   };
+  isSolrTourDone = false;
 
 
   constructor(
@@ -89,29 +90,28 @@ export class DashboardPage implements OnInit {
     if (accessToken && webKey) {
       this.setDefaultHome(true);
       this.loggedInUserData = this.commonService.getItem(PROPCO.USER_DETAILS, true);
+      this.isSolrTourDone = this.loggedInUserData.isSolrTourDone;
+      this.showTourGuide();
       this.loaded = true;
       return;
     }
     const isAuthSuccess = await this.authenticateSso();
     if (isAuthSuccess) {
       this.setDefaultHome(true);
-      this.loggedInUserData = await this.getUserDetails();
+      this.loggedInUserData = await this.getUserDetailsPvt();
+      this.isSolrTourDone = this.loggedInUserData.isSolrTourDone;
       this.loaded = true;
-      if (!this.commonService.getItem('disableTour')) {
-        setTimeout(() => {
-          this.guidedTourService.startTour(this.dashboardTour);
-        }, 300);
-      }
+      this.showTourGuide();
     }
   }
 
-  private getUserDetails() {
+  private getUserDetailsPvt() {
     const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
-      this.solrService.getUserDetails(params).subscribe(
+      this.solrService.getUserDetailsPvt(params).subscribe(
         (res) => {
           if (res) {
-            this.commonService.setItem(PROPCO.USER_DETAILS, res.data[0])
+            this.commonService.setItem(PROPCO.USER_DETAILS, res.data[0]);
             resolve(res ? res.data[0] : null);
           }
         },
@@ -169,6 +169,22 @@ export class DashboardPage implements OnInit {
   }
 
   private disableWelcomeTour() {
-    this.commonService.setItem('disableTour', true);
+    const payload = {
+      isSolrTourDone: true
+    }
+    const success = this.updateUserDetail(payload);
+    if (success) {
+      let userDataLocal = this.commonService.getItem(PROPCO.USER_DETAILS, true);
+      userDataLocal.isSolrTourDone = true;
+      this.commonService.setItem(PROPCO.USER_DETAILS, userDataLocal);
+    }
+  }
+
+  private showTourGuide() {
+    if (!this.isSolrTourDone) {
+      setTimeout(() => {
+        this.guidedTourService.startTour(this.dashboardTour);
+      }, 300);
+    }
   }
 }

@@ -9,8 +9,8 @@ import { environment } from 'src/environments/environment';
 export class SolrService {
   constructor(private httpClient: HttpClient) {}
 
-  getUserDetails(params: HttpParams): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `user/logged-in`, {
+  getUserDetailsPvt(params: HttpParams): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `user/logged-in/node`, {
       params,
     });
   }
