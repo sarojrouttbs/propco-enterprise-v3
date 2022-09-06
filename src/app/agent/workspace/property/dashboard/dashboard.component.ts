@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren, OnDestroy } from '@angular/core';
 import { IonSlides, ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
@@ -11,7 +11,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild(IonSlides, { static: false }) slides: IonSlides;
 
   propertyData: any = '';
@@ -240,5 +240,9 @@ export class DashboardComponent implements OnInit {
 
   onMapTabClick() {
     this.isMapLoad = true;
+  }
+
+  ngOnDestroy() {
+    this.agentService.updatedViewingCount.unsubscribe();
   }
 }
