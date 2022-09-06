@@ -4,7 +4,7 @@
       <ion-col size="50" class="ion-align-self-end ion-text-left">
         <ion-button color="success" fill="outline">Add </ion-button>
       </ion-col>
-      <ion-col size="50" class="ion-align-self-end view-class ion-text-right">
+      <ion-col size="50" class="ion-align-self-end view-class ion-text-right view-block">
         <div style="margin-right: 10px;display: inline-block;" class="pointer">
           <i class="propcoicon propcoicon-grid-view action-btn" (click)="switchView('grid')"></i>
         </div>
@@ -62,7 +62,7 @@
       <ion-col size="60">
         <ion-item>
           <ion-label position="floating">Viewing Instructions</ion-label>
-          <ion-input formControlName="viewingInstructions"></ion-input>
+          <ion-textarea rows="1" formControlName="viewingInstructions"></ion-textarea>
         </ion-item>
       </ion-col>
     </ion-row>
