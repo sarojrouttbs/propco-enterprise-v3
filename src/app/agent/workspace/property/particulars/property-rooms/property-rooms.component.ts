@@ -59,7 +59,7 @@ export class PropertyRoomsComponent implements OnInit {
           }
           resolve(res?.data);
         },
-        (error) => {
+        (_error) => {
           resolve(false);
         }
       );
@@ -73,9 +73,9 @@ export class PropertyRoomsComponent implements OnInit {
     return new Promise((resolve) => {
       this.agentService.getClauses(params).subscribe(
         (res: any) => {
-          resolve(res && res?.data ? res?.data : []);
+          resolve(res && res.data ? res.data : []);
         },
-        (error) => {
+        (_error) => {
           resolve(false);
         }
       );

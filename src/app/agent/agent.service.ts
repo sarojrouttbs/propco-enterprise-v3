@@ -197,5 +197,9 @@ export class AgentService {
 
   getPropertyClauses(propertyId: string, params: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/clauses/node`, { params });
-  }  
+  }
+  
+  getClausesHeadings(params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `clauses/headings/node`, { params });
+  }
 }
