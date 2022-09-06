@@ -1,17 +1,18 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren, OnDestroy } from '@angular/core';
 import { IonSlides, ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, PROPCO, DEFAULT_MESSAGES, DEFAULTS, NOTES_TYPE, DATE_FORMAT } from 'src/app/shared/constants';
 import { ImagePage } from 'src/app/shared/modals/image/image.page';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild(IonSlides, { static: false }) slides: IonSlides;
 
   propertyData: any = '';
@@ -35,6 +36,8 @@ export class DashboardComponent implements OnInit {
   isMenuShown = true;
   DATE_FORMAT = DATE_FORMAT;
   isMapLoad = false;
+  viewingCount = 0;
+  private viewingCountSubscription:Subscription;
 
   constructor(
     private modalCtrl: ModalController,
@@ -87,6 +90,9 @@ export class DashboardComponent implements OnInit {
     this.getPropertyById(this.selectedEntityDetails.entityId);
     this.getPropertyLandlords(this.selectedEntityDetails.entityId);
     this.getPropertyTenant(this.selectedEntityDetails.entityId);
+    this.viewingCountSubscription = this.agentService.updatedViewingCount.subscribe(count=> {
+      this.viewingCount = count;
+    })
   }
 
   private getLookupData() {
@@ -236,5 +242,9 @@ export class DashboardComponent implements OnInit {
 
   onMapTabClick() {
     this.isMapLoad = true;
+  }
+
+  ngOnDestroy() {
+    this.viewingCountSubscription.unsubscribe();
   }
 }
