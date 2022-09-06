@@ -74,11 +74,15 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   private prepareSearchParams(searchText: string) {
+    let searchTypes = this.transformToUpperCase(this.entityControl.value);
+    if (searchTypes.indexOf('TENANT') !== -1) {
+      searchTypes.push('COTENANT');
+    }
     return (
       new HttpParams()
         // .set('limit', this.solrSuggestionConfig.limit)
         .set('searchTerm', searchText)
-        .set('searchTypes', 'TENANT,COTENANT')
+        .set('searchTypes', searchTypes)
         .set('searchSwitch', this.solrSuggestionConfig.searchSwitch)
         .set('hideLoader', 'true')
     );

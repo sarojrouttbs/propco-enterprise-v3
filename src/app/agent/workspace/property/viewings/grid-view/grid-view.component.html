@@ -62,7 +62,7 @@
               </ion-text>
             </ion-col>
             <ion-col size="100" class="ion-text-left date-block">
-              <ion-text>Registered On: {{item?.postDate || notAvailable}}</ion-text>
+              <ion-text>Registered On: {{item?.postDate | date: DATE_FORMAT.DATE || notAvailable}}</ion-text>
             </ion-col>
           </ion-row>
         </ion-grid>

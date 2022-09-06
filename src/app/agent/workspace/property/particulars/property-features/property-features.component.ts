@@ -17,7 +17,7 @@ export class PropertyFeaturesComponent implements OnInit {
   selectedEntityDetails: any;
   propertyFeaturesList: any = [];
   propertyBulletsForm: FormGroup;
-  @ViewChild('PropertyFeaturesFilter') PropertyFeaturesFilter: IonicSelectableComponent;
+  @ViewChild('propertyFeaturesFilter') propertyFeaturesFilter: IonicSelectableComponent;
 
   constructor(private commonService: CommonService, private agentService: AgentService, private _formBuilder: FormBuilder) { }
 
@@ -73,7 +73,7 @@ export class PropertyFeaturesComponent implements OnInit {
           }
           resolve(res?.data);
         },
-        (error) => {
+        (_error) => {
           resolve(false);
         }
       );
@@ -87,9 +87,9 @@ export class PropertyFeaturesComponent implements OnInit {
     return new Promise((resolve) => {
       this.agentService.getClauses(params).subscribe(
         (res: any) => {
-          resolve(res && res?.data ? res?.data : []);
+          resolve(res && res.data ? res.data : []);
         },
-        (error) => {
+        (_error) => {
           resolve(false);
         }
       );
@@ -119,7 +119,7 @@ export class PropertyFeaturesComponent implements OnInit {
   }
 
   toggleItemsFeatures() {
-    this.PropertyFeaturesFilter.toggleItems(this.PropertyFeaturesFilter.itemsToConfirm.length ? false : true);
+    this.propertyFeaturesFilter.toggleItems(this.propertyFeaturesFilter.itemsToConfirm.length ? false : true);
   }
 
   private initPropertyBulletsForm(): void {
