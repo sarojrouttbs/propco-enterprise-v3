@@ -1,0 +1,28 @@
+#property-clauses {
+    ion-chip {
+        color: var(--ion-color-step-2000);
+        background-color: var(--ion-color-secondary);
+        border-radius: 4px;
+        margin: 0px 10px 10px 0px;
+        ion-icon {
+            color: var(--ion-color-step-2000);
+        }
+    }
+
+    .selectable-height {
+        max-height: 30px !important;
+    }
+
+    .selected-clauses-label {
+        color: var(--ion-color-three);
+    }
+
+    .selected-clause-info {
+        margin: 0px 0px 0px 10px;
+        padding: 15px;
+        background-color: var(--ion-color-four);
+        color: var(--ion-color-one);
+        border-radius: 5px;
+        min-height: 160px;
+    }
+}

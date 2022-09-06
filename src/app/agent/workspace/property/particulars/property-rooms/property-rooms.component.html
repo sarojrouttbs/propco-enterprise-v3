@@ -23,7 +23,7 @@
             <ion-label position="floating">Property Rooms</ion-label>
             <ionic-selectable item-content itemValueField="clauseId" itemTextField="clauseName" [items]="propertyRoomsList"
               [canSearch]="true" [isMultiple]="true" [canClear]="true" clearButtonText="Clear" closeButtonSlot="end"
-              confirmButtonText="Apply" searchPlaceholder="Start typing to choose rooms" #PropertyRoomFilter
+              confirmButtonText="Apply" searchPlaceholder="Start typing to choose rooms" #propertyRoomFilter
               [formControl]="propertyRooms" [shouldStoreItemValue]="false" class="selectable-height"
               (click)="beginLoading()" (onOpen)="endLoading()" [shouldBackdropClose]="false">
               <ng-template ionicSelectableHeaderTemplate>
@@ -31,7 +31,7 @@
                   <ion-buttons end>
                   </ion-buttons>
                   <ion-title>
-                    {{PropertyRoomFilter.label}}
+                    {{propertyRoomFilter.label}}
                   </ion-title>
                 </ion-toolbar>
               </ng-template>
@@ -45,20 +45,20 @@
                 <ion-toolbar>
                   <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
                     (click)="toggleItemsRooms()" [disabled]="!propertyRoomsList.length">
-                    {{PropertyRoomFilter.itemsToConfirm.length ? 'Deselect All' : 'Select All'}}
+                    {{propertyRoomFilter.itemsToConfirm.length ? 'Deselect All' : 'Select All'}}
                   </ion-button>
                   <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
-                    (click)="PropertyRoomFilter.confirm();PropertyRoomFilter.close();"
-                    [disabled]="!PropertyRoomFilter.itemsToConfirm.length">
+                    (click)="propertyRoomFilter.confirm();propertyRoomFilter.close();"
+                    [disabled]="!propertyRoomFilter.itemsToConfirm.length">
                     OK
                   </ion-button>
                   <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
-                    (click)="PropertyRoomFilter.clear();PropertyRoomFilter.close();"
-                    [disabled]="!PropertyRoomFilter.itemsToConfirm.length">
+                    (click)="propertyRoomFilter.clear();propertyRoomFilter.close();"
+                    [disabled]="!propertyRoomFilter.itemsToConfirm.length">
                     Clear
                   </ion-button>
                   <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
-                    (click)="PropertyRoomFilter.close()">
+                    (click)="propertyRoomFilter.close()">
                     Cancel
                   </ion-button>
                 </ion-toolbar>
