@@ -35,6 +35,7 @@ export class DashboardComponent implements OnInit {
   isMenuShown = true;
   DATE_FORMAT = DATE_FORMAT;
   isMapLoad = false;
+  viewingCount = 0;
 
   constructor(
     private modalCtrl: ModalController,
@@ -87,6 +88,9 @@ export class DashboardComponent implements OnInit {
     this.getPropertyById(this.selectedEntityDetails.entityId);
     this.getPropertyLandlords(this.selectedEntityDetails.entityId);
     this.getPropertyTenant(this.selectedEntityDetails.entityId);
+    this.agentService.updatedViewingCount.subscribe(count=> {
+      this.viewingCount = count;
+    })
   }
 
   private getLookupData() {
