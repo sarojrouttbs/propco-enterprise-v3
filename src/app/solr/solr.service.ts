@@ -10,7 +10,7 @@ export class SolrService {
   constructor(private httpClient: HttpClient) {}
 
   getUserDetailsPvt(params: HttpParams): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `pvt/user/logged-in`, {
+    return this.httpClient.get(environment.API_BASE_URL + `user/logged-in/node`, {
       params,
     });
   }
