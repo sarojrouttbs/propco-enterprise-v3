@@ -27,7 +27,7 @@
                   <ionic-selectable item-content itemValueField="clauseId" itemTextField="clauseName"
                     [items]="propertyClausesList" [canSearch]="true" [isMultiple]="true" [canClear]="true"
                     clearButtonText="Clear" closeButtonSlot="end" confirmButtonText="Apply"
-                    searchPlaceholder="Start typing to choose clauses" #PropertyClausesFilter
+                    searchPlaceholder="Start typing to choose clauses" #propertyClausesFilter
                     [formControl]="propertyClauses" [shouldStoreItemValue]="false" class="selectable-height"
                     (click)="beginLoading()" (onOpen)="endLoading()" [shouldBackdropClose]="false">
                     <ng-template ionicSelectableHeaderTemplate>
@@ -35,7 +35,7 @@
                         <ion-buttons end>
                         </ion-buttons>
                         <ion-title>
-                          {{PropertyClausesFilter.label}}
+                          {{propertyClausesFilter.label}}
                         </ion-title>
                       </ion-toolbar>
                     </ng-template>
@@ -49,20 +49,20 @@
                       <ion-toolbar>
                         <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
                           (click)="toggleItemsClauses()" [disabled]="!propertyClausesList.length">
-                          {{PropertyClausesFilter.itemsToConfirm.length ? 'Deselect All' : 'Select All'}}
+                          {{propertyClausesFilter.itemsToConfirm.length ? 'Deselect All' : 'Select All'}}
                         </ion-button>
                         <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
-                          (click)="PropertyClausesFilter.confirm();PropertyClausesFilter.close();onSelectionChange();"
-                          [disabled]="!PropertyClausesFilter.itemsToConfirm.length">
+                          (click)="propertyClausesFilter.confirm();propertyClausesFilter.close();onSelectionChange();"
+                          [disabled]="!propertyClausesFilter.itemsToConfirm.length">
                           OK
                         </ion-button>
                         <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
-                          (click)="PropertyClausesFilter.clear();PropertyClausesFilter.close();onSelectionChange();"
-                          [disabled]="!PropertyClausesFilter.itemsToConfirm.length">
+                          (click)="propertyClausesFilter.clear();propertyClausesFilter.close();onSelectionChange();"
+                          [disabled]="!propertyClausesFilter.itemsToConfirm.length">
                           Clear
                         </ion-button>
                         <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
-                          (click)="PropertyClausesFilter.close()">
+                          (click)="propertyClausesFilter.close()">
                           Cancel
                         </ion-button>
                       </ion-toolbar>

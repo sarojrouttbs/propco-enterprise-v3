@@ -16,7 +16,7 @@ export class PropertyRoomsComponent implements OnInit {
   propertyRoomsList: any = [];
   localStorageItems: any;
   selectedEntityDetails: any;
-  @ViewChild('PropertyRoomFilter') PropertyRoomFilter: IonicSelectableComponent;
+  @ViewChild('propertyRoomFilter') propertyRoomFilter: IonicSelectableComponent;
 
   constructor(private commonService: CommonService, private agentService: AgentService) { }
 
@@ -101,6 +101,6 @@ export class PropertyRoomsComponent implements OnInit {
   }
 
   toggleItemsRooms() {
-    this.PropertyRoomFilter.toggleItems(this.PropertyRoomFilter.itemsToConfirm.length ? false : true);
+    this.propertyRoomFilter.toggleItems(this.propertyRoomFilter.itemsToConfirm.length ? false : true);
   }
 }

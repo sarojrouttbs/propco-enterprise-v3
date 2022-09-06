@@ -16,7 +16,7 @@ export class ClausesComponent implements OnInit {
   propertyClausesList: any = [];
   localStorageItems: any;
   selectedEntityDetails: any;
-  @ViewChild('PropertyClausesFilter') PropertyClausesFilter: IonicSelectableComponent;
+  @ViewChild('propertyClausesFilter') propertyClausesFilter: IonicSelectableComponent;
   selectedClause: any;
   notAvailable = DEFAULTS.NOT_AVAILABLE;
   clausesHeadingList: any = [];
@@ -140,6 +140,6 @@ export class ClausesComponent implements OnInit {
   }
 
   toggleItemsClauses() {
-    this.PropertyClausesFilter.toggleItems(this.PropertyClausesFilter.itemsToConfirm.length ? false : true);
+    this.propertyClausesFilter.toggleItems(this.propertyClausesFilter.itemsToConfirm.length ? false : true);
   }
 }
