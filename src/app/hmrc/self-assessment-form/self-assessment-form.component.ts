@@ -138,7 +138,7 @@ export class SelfAssessmentFormComponent implements OnInit {
       this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value);
       this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
     }, error => {
-      if (error.error.errorCode === 'UNPROCESSABLE_ENTITY') {
+      if (error.error && error.error.errorCode === 'UNPROCESSABLE_ENTITY') {
         this.commonService.showAlert('Warning', 'Another process is already running. Please try again later.');
         return;
       }
