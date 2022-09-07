@@ -114,7 +114,7 @@ export class SelfAssessmentFormComponent implements OnInit {
     }
   }
 
-  generateHMRC() {
+  async generateHMRC() {
     const params = {
       accountType: HMRC_CONFIG.HMRC_SENDER_EMAIL_ACCOUNT,
       financialYearDateRange: {
@@ -129,6 +129,7 @@ export class SelfAssessmentFormComponent implements OnInit {
       selectedPropertyLinkIds: this.selfAssessmentForm.value.selectedPropertyLinkIds ? this.selfAssessmentForm.value.selectedPropertyLinkIds : [],
       taxHandler: this.selfAssessmentForm.value.taxHandler
     }
+
     this.hmrcService.generateHMRC(params).subscribe((res) => {
       if (res) {
         const response = res;
@@ -136,6 +137,11 @@ export class SelfAssessmentFormComponent implements OnInit {
       }
       this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value);
       this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
+    }, error => {
+      if (error?.error?.errorCode === 'UNPROCESSABLE_ENTITY') {
+        this.commonService.showAlert('Warning', 'Another process is already running. Please try again later.');
+        return;
+      }
     });
   }
 

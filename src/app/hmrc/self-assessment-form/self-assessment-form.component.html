@@ -1,11 +1,13 @@
 <ion-content id="self-assessment-form">
-  <div class="ion-text-center">
-    <h2>HMRC Self-Assessment Form</h2>
-  </div>
   <ion-grid>
     <ion-row>
-      <ion-col class="ion-text-right" size="100">
-        <ion-button style="float: left;" fill="solid" *ngIf="stepper.selectedIndex > 0"
+      <ion-col size="50"  class="ion-text-left">
+        <div>
+          <h2>HMRC Self-Assessment Form</h2>
+        </div>
+      </ion-col>
+      <ion-col class="ion-text-right" size="50">
+        <ion-button fill="solid" *ngIf="stepper.selectedIndex > 0"
           (click)="onBack(stepper.selectedIndex)">back</ion-button>
         <ion-button color="success" fill="solid" (click)="onNext(stepper.selectedIndex)"
           [disabled]="isHmrcLandlordSelected === 'false' || (stepper.selectedIndex === 1 && !selfAssessmentForm.valid)" *ngIf="stepper.selectedIndex <= 1">{{stepper.selectedIndex <= 1 ? nextLabel : 'Send' }}
