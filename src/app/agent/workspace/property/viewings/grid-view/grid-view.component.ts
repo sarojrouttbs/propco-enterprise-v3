@@ -13,7 +13,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 })
 export class GridViewComponent implements OnInit, OnDestroy {
 
-  viewingsParams: any = new HttpParams();
+  viewingsParams = new HttpParams();
   viewingList = [];
   DATE_FORMAT = DATE_FORMAT;
   pageEvent: PageEvent;

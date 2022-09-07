@@ -13,7 +13,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 })
 export class ListViewComponent implements OnInit, OnDestroy {
 
-  viewingsParams: any = new HttpParams();
+  viewingsParams = new HttpParams();
   viewingList: any;
   DATE_FORMAT = DATE_FORMAT;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
