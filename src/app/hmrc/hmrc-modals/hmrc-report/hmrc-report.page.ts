@@ -1,6 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { HmrcService } from 'src/app/hmrc/hmrc.service';
 import { DATE_FORMAT, DEFAULT_MESSAGES } from 'src/app/shared/constants';
@@ -26,8 +25,7 @@ export class HmrcReportPage {
   constructor(
     private modalController: ModalController,
     private hmrcService: HmrcService,
-    private commonService: CommonService,
-    private router: Router
+    private commonService: CommonService
   ) { }
 
   async previewPdf() {
@@ -96,10 +94,7 @@ export class HmrcReportPage {
     this.commonService.removeItem('HRMRC_PROCESS_COMPLETED');
     this.commonService.removeItem('HMRC_BATCH_COUNT');
     this.commonService.showMessage('We have successfully completed the process.', 'Progress Summary', 'success');
-    this.dismiss();
-    setTimeout(() => {
-      this.router.navigate(['../hmrc/self-assessment-form'], { replaceUrl: true });
-    }, 1000);
+    this.modalController.dismiss('success');
   }
 
   dismiss() {

@@ -315,7 +315,11 @@ export class ProgressSummaryComponent implements OnInit {
       },
       backdropDismiss: false
     });
-    modal.onDidDismiss();
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data === 'success') {
+        this.router.navigate(['../self-assessment-form'], { relativeTo: this.route });
+      }
+    });
     await modal.present();
   }
 }
