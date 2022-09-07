@@ -959,7 +959,9 @@ ion-datetime {
   }
 }
 
-ion-modal.ion-datepicker-modal {
-  --width: 350px;
-  --height: 395px;
+ion-popover.ion-datepicker-popover {
+  &::part(content){
+    --width: 270px;
+    --height: 390px;
+  }
 }

@@ -651,7 +651,8 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'particulars': 'Particulars',
       'safety-device': 'Safety Devices/Alarms',
       'whitegoods': 'Service/White Goods',
-      'safety': 'Safety Devices/Alarms'
+      'safety': 'Safety Devices/Alarms',
+      'clauses': 'Clauses'
     }
   }
 };
@@ -802,5 +803,6 @@ export const CURRENCY_MASK_CONFIGURATION = {
 
 export const PROPERTY_CLAUSE_SCOPE = {
   FEATURE: 'Feature',
-  ROOM: 'Room'
+  ROOM: 'Room',
+  PROPERTY: 'Property'
 }

@@ -13,6 +13,7 @@ import { ParticularsComponent } from './particulars/particulars.component';
 import { WhitegoodsComponent } from './whitegoods/whitegoods.component';
 import { KeysComponent } from './admin/keys/keys.component';
 import { SafetyDeviceComponent } from './safety-device/safety-device.component';
+import { ClausesComponent } from './admin/clauses/clauses.component';
 
 const routes: Routes = [
   {
@@ -66,6 +67,10 @@ const routes: Routes = [
       {
         path: 'safety',
         component: SafetyDeviceComponent,
+      },
+      {
+        path: 'clauses',
+        component: ClausesComponent,
       },
       {
         path: 'create-offer',

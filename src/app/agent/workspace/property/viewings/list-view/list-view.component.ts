@@ -81,6 +81,7 @@ export class ListViewComponent implements OnInit, OnChanges {
           .set('hideLoader', 'true');
         this.agentService.getViewings(this.selectedEntityDetails.entityId, this.viewingsParams).subscribe(res => {
           this.viewingList = res && res.data ? res.data : [];
+          this.agentService.updateCount(res && res.count ? res.count : 0);
           callback({
             recordsTotal: res ? res.count : 0,
             recordsFiltered: res ? res.count : 0,
