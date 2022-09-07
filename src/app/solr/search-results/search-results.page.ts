@@ -10,6 +10,7 @@ declare function openScreen(key: string, value: any): any;
 import { Options, LabelType } from '@angular-slider/ngx-slider';
 import { SolrSearchHandlerService } from 'src/app/shared/services/solr-search-handler.service';
 import { WorkspaceService } from 'src/app/agent/workspace/workspace.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-search-results',
@@ -146,7 +147,8 @@ export class SearchResultsPage implements OnInit {
     private el: ElementRef<HTMLElement>,
     private solrSearchService: SolrSearchHandlerService,
     private workspaceService: WorkspaceService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.currentDate = this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE);
   }
@@ -657,6 +659,7 @@ export class SearchResultsPage implements OnInit {
   refreshAll() {
     this.isEntityFilterApplied = true;
     this.pageIndex = 0;
+    this.updateRoute();
     this.getSearchResults();
   }
 
@@ -707,6 +710,7 @@ export class SearchResultsPage implements OnInit {
     this.isEntityFilterApplied = true;
     this.pageIndex = 0;
     this.refreshType = type;
+    this.updateRoute();
     this.getSearchResults();
   }
 
@@ -770,15 +774,15 @@ export class SearchResultsPage implements OnInit {
     }
   }
 
-  async searchHandler(data) {
+  async searchHandler(data: any) {
     this.isEntityFilterApplied = false;
     this.pageIndex = 0;
     this.entityControl.setValue(data.entity);
+    this.solrSearchConfig.types = this.entityControl.value;
     this.solrSearchConfig.searchTerm = data.term ? data.term : '';
     if (data.isSearchResult) {
       this.initResults();
     } else {
-      await this.getQueryParams();
       this.initFilter();
     }
   }
@@ -839,5 +843,20 @@ export class SearchResultsPage implements OnInit {
 
   toggleSideMenu() {
     this.hideMenu('', 'search-result-overlay');
+  }
+
+  private updateRoute() {
+    const params = {
+      searchTerm: this.solrSearchConfig.searchTerm,
+      type: this.entityControl.value
+    };
+    const urlTree = this.router.createUrlTree([], {
+      relativeTo: this.route,
+      queryParams: params,
+      queryParamsHandling: 'merge',
+    });
+
+    //Update route with Query Params
+    this.location.go(urlTree.toString());
   }
 }
