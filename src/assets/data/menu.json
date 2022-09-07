@@ -48,6 +48,14 @@
           "state": "propco.agent.entity.property.marketingactivity",
           "isActive": false,
           "route": "marketing-activity"
+        },
+        {
+          "index": 5,
+          "key": "media",
+          "name": "Media",
+          "state": "propco.agent.entity.property.media",
+          "isActive": false,
+          "route": "media"
         }
       ]
     },

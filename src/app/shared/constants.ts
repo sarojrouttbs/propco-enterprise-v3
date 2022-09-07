@@ -652,7 +652,8 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'safety-device': 'Safety Devices/Alarms',
       'whitegoods': 'Service/White Goods',
       'safety': 'Safety Devices/Alarms',
-      'clauses': 'Clauses'
+      'clauses': 'Clauses',
+      'media' : 'Media'
     }
   }
 };
