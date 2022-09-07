@@ -39,11 +39,11 @@ export class ListViewComponent implements OnInit, OnDestroy {
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
     this.listSubscription = this.agentService.updateResetFilter.subscribe(res => {      
-      if (res.isFilter === true) {
+      if (res?.isFilter) {
         this.viewingsParams = this.viewingsParams.set('startDateRange.from', res.from ? this.commonService.getFormatedDate(res.from, this.DATE_FORMAT.YEAR_DATE) : '');
         this.viewingsParams = this.viewingsParams.set('startDateRange.to', res.to ? this.commonService.getFormatedDate(res.to, this.DATE_FORMAT.YEAR_DATE) : '');
         this.rerenderViewingList();
-      } else if (res.isFilter === false) {
+      } else if (!res?.isFilter) {
         this.viewingsParams = this.viewingsParams.delete('startDateRange.from');
         this.viewingsParams = this.viewingsParams.delete('startDateRange.to');
         this.rerenderViewingList();
