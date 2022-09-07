@@ -66,9 +66,10 @@ export class AppHttpInterceptor implements HttpInterceptor {
         } else if (error.status === 422 || error.status === 451) {
           return throwError(error);
         } else {
-          if (error.status === 405 || error.status === 403) {
+          if (error.status === 405 || error.status === 403 || error.status === 423) {
             return throwError(error);
           }
+
           if (!error.error.message) {
             this._commonService.showMessage('Something went wrong on server, please try again.', 'Service Unavailable', 'error');
           }
