@@ -512,7 +512,10 @@
             <ng-container [ngTemplateOutlet]="landlordSearchListView"  *ngIf="item?.entityType === 'LANDLORD'"
                   [ngTemplateOutletContext]="{item:item}">
             </ng-container>
-            <ng-container [ngTemplateOutlet]="tenantSearchListView"  *ngIf="item?.entityType === 'TENANT' || 'COTENANT'"
+            <ng-container [ngTemplateOutlet]="tenantSearchListView"  *ngIf="item?.entityType === 'TENANT'"
+                  [ngTemplateOutletContext]="{item:item}">
+            </ng-container>
+            <ng-container [ngTemplateOutlet]="tenantSearchListView"  *ngIf="item?.entityType === 'COTENANT'"
                   [ngTemplateOutletContext]="{item:item}">
             </ng-container>
             <ng-container [ngTemplateOutlet]="contractorSearchListView"  *ngIf="item?.entityType === 'CONTRACTOR'"
