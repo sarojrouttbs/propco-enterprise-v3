@@ -14,6 +14,7 @@ import { WhitegoodsComponent } from './whitegoods/whitegoods.component';
 import { KeysComponent } from './admin/keys/keys.component';
 import { SafetyDeviceComponent } from './safety-device/safety-device.component';
 import { ClausesComponent } from './admin/clauses/clauses.component';
+import { MediaComponent } from './media/media.component';
 
 const routes: Routes = [
   {
@@ -104,6 +105,10 @@ const routes: Routes = [
       {
         path: 'application/:applicationId',
         loadChildren: () => import('../../../tob/application-detail/application-detail.module').then(m => m.ApplicationDetailPageModule)
+      },
+      {
+        path:'media',
+        component: MediaComponent
       }
     ]
   }
