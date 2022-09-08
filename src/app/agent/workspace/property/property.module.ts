@@ -61,6 +61,7 @@ import { GridViewComponent } from './viewings/grid-view/grid-view.component';
 import { ListViewComponent } from './viewings/list-view/list-view.component';
 import { WebInternetDetailsComponent } from './particulars/web-internet-details/web-internet-details.component';
 import { ClausesComponent } from './admin/clauses/clauses.component';
+import { MediaComponent } from './media/media.component';
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
 @NgModule({
@@ -125,7 +126,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIG
     GridViewComponent,
     ListViewComponent,
     WebInternetDetailsComponent,
-    ClausesComponent
+    ClausesComponent,
+    MediaComponent
   ],
   providers: [
     AgentService,
