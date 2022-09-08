@@ -1,5 +1,7 @@
-import { Component, Input, OnChanges, OnInit, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
+import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
+import { Subscription } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -9,10 +11,9 @@ import { CommonService } from 'src/app/shared/services/common.service';
   templateUrl: './list-view.component.html',
   styleUrls: ['./list-view.component.scss'],
 })
-export class ListViewComponent implements OnInit, OnChanges {
+export class ListViewComponent implements OnInit, OnDestroy {
 
-  @Input() viewingForm;
-  @Input() viewingsParams;
+  viewingsParams = new HttpParams();
   viewingList: any;
   DATE_FORMAT = DATE_FORMAT;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
@@ -22,19 +23,12 @@ export class ListViewComponent implements OnInit, OnChanges {
   selectedData: any;
   localStorageItems: any;
   selectedEntityDetails: any;
+  listSubscription: Subscription;
 
   constructor(
     private agentService: AgentService,
     private commonService: CommonService
   ) { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.viewingsParams && changes.viewingsParams.currentValue) {
-      if (this.viewingForm.value.fromDate && this.viewingForm.value.toDate) {
-        this.rerenderViewingList();
-      }
-    }
-  }
 
   ngOnInit() {
     this.initApi();
@@ -44,6 +38,17 @@ export class ListViewComponent implements OnInit, OnChanges {
   async initApi() {
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
+    this.listSubscription = this.agentService.updateResetFilter.subscribe(res => {      
+      if (res?.isFilter) {
+        this.viewingsParams = this.viewingsParams.set('startDateRange.from', res.from ? this.commonService.getFormatedDate(res.from, this.DATE_FORMAT.YEAR_DATE) : '');
+        this.viewingsParams = this.viewingsParams.set('startDateRange.to', res.to ? this.commonService.getFormatedDate(res.to, this.DATE_FORMAT.YEAR_DATE) : '');
+        this.rerenderViewingList();
+      } else if (!res?.isFilter) {
+        this.viewingsParams = this.viewingsParams.delete('startDateRange.from');
+        this.viewingsParams = this.viewingsParams.delete('startDateRange.to');
+        this.rerenderViewingList();
+      }
+    });
   }
 
   private fetchItems() {
@@ -108,5 +113,9 @@ export class ListViewComponent implements OnInit, OnChanges {
 
   hideMenu(event: any, id: any) {
     this.commonService.hideMenu(event, id);
+  }
+
+  ngOnDestroy() {
+    this.listSubscription.unsubscribe();
   }
 }
