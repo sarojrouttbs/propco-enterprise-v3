@@ -18,6 +18,7 @@ import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/pre
 export class PreviewAndSendComponent implements OnInit {
 
   @Input() group: FormGroup;
+  @Input() systemConfig;
   dtOption: any = {};
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
   dtTrigger: Subject<any> = new Subject();
@@ -84,7 +85,7 @@ export class PreviewAndSendComponent implements OnInit {
         this.params = this.params
           .set('limit', tableParams.length)
           .set('page', tableParams.start ? (Math.floor(tableParams.start / tableParams.length) + 1) + '' : '1')
-          .set('taxHandler', this.group.value.taxHandler)
+          .set('taxHandler', this.systemConfig)
           .set('hideLoader', 'true');
         if (this.group.value.selectedPropertyOfficeCodes)
           this.params = this.params.set('propertyOffice', this.group.value.selectedPropertyOfficeCodes);
