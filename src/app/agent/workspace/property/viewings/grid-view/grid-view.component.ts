@@ -1,5 +1,7 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { Subscription } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -9,10 +11,9 @@ import { CommonService } from 'src/app/shared/services/common.service';
   templateUrl: './grid-view.component.html',
   styleUrls: ['./grid-view.component.scss'],
 })
-export class GridViewComponent implements OnInit, OnChanges {
+export class GridViewComponent implements OnInit, OnDestroy {
 
-  @Input() viewingForm;
-  @Input() viewingsParams;
+  viewingsParams = new HttpParams();
   viewingList = [];
   DATE_FORMAT = DATE_FORMAT;
   pageEvent: PageEvent;
@@ -24,20 +25,13 @@ export class GridViewComponent implements OnInit, OnChanges {
   selectedEntityDetails: any;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   length: number;
+  gridSubscription: Subscription;
 
   constructor(
     private el: ElementRef<HTMLElement>,
     private agentService: AgentService,
     private commonService: CommonService
   ) { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.viewingsParams && changes.viewingsParams.currentValue) {
-      if (this.viewingForm.value.fromDate && this.viewingForm.value.toDate) {
-        this.getViewings();
-      }
-    }
-  }
 
   ngOnInit() {
     this.initApi();
@@ -46,6 +40,17 @@ export class GridViewComponent implements OnInit, OnChanges {
   async initApi() {
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
+    this.gridSubscription = this.agentService.updateResetFilter.subscribe(res => {
+      if (res?.isFilter) {
+        this.viewingsParams = this.viewingsParams.set('startDateRange.from', res.from ? this.commonService.getFormatedDate(res.from, this.DATE_FORMAT.YEAR_DATE) : '');
+        this.viewingsParams = this.viewingsParams.set('startDateRange.to', res.to ? this.commonService.getFormatedDate(res.to, this.DATE_FORMAT.YEAR_DATE) : '');
+        this.getViewings();
+      } else if (!res?.isFilter) {
+        this.viewingsParams = this.viewingsParams.delete('startDateRange.from');
+        this.viewingsParams = this.viewingsParams.delete('startDateRange.to');
+        this.getViewings();
+      }
+    });
     this.getViewings();
   }
 
@@ -135,5 +140,9 @@ export class GridViewComponent implements OnInit, OnChanges {
 
   hideMenu(event: any, id: any) {
     this.commonService.hideMenu(event, id);
+  }
+
+  ngOnDestroy() {
+    this.gridSubscription.unsubscribe();
   }
 }

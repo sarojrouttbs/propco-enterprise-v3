@@ -1,8 +1,8 @@
-import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { DataTableDirective } from 'angular-datatables';
+import { AgentService } from 'src/app/agent/agent.service';
 import { DATE_FORMAT, DATE_RANGE_CONFIG, DATE_RANGE_CONFIG_LIST } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 
@@ -19,7 +19,6 @@ export class ViewingsComponent implements OnInit {
   viewings: any;
   dtOptions: any = {};
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
-  viewingsParams: any = new HttpParams();
   viewingForm: FormGroup;
   DATE_RANGE_CONFIG_LIST = DATE_RANGE_CONFIG_LIST;
   DATE_FORMAT = DATE_FORMAT;
@@ -31,7 +30,8 @@ export class ViewingsComponent implements OnInit {
 
   constructor(
     private commonService: CommonService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private agentService: AgentService
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -94,13 +94,21 @@ export class ViewingsComponent implements OnInit {
   }
 
   applyFilter() {
-    this.viewingsParams = this.viewingsParams.set('dateRange.from', this.viewingForm.value.fromDate ? this.commonService.getFormatedDate(this.viewingForm.value.fromDate, this.DATE_FORMAT.YEAR_DATE) : '');
-    this.viewingsParams = this.viewingsParams.set('dateRange.to', this.viewingForm.value.toDate ? this.commonService.getFormatedDate(this.viewingForm.value.toDate, this.DATE_FORMAT.YEAR_DATE) : '');
+    const filter = {
+      isFilter: true,
+      from: this.viewingForm.value.fromDate ? this.commonService.getFormatedDate(this.viewingForm.value.fromDate, this.DATE_FORMAT.YEAR_DATE) : '',
+      to: this.viewingForm.value.toDate ? this.commonService.getFormatedDate(this.viewingForm.value.toDate, this.DATE_FORMAT.YEAR_DATE) : ''
+    }
+    this.agentService.resetFilter(filter);
   }
 
   resetFilter() {
     this.viewingForm.get('quickFilterType').reset();
     this.viewingForm.get('fromDate').reset();
     this.viewingForm.get('toDate').reset();
+    const filter = {
+      isFilter: false
+    }
+    this.agentService.resetFilter(filter);
   }
 }
