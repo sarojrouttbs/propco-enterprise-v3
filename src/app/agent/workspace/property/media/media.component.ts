@@ -13,14 +13,14 @@ import { CommonService } from 'src/app/shared/services/common.service';
 })
 export class MediaComponent implements OnInit {
   @ViewChild(IonSlides, { static: false }) slides: IonSlides;
-  mediaSegment = "pictures";
-  isExpanded: boolean = false;
+  mediaSegment = 'pictures';
+  isExpanded = false;
   mediaForm: FormGroup;
   localStorageItems: any;
   selectedEntryDetails: any;
   propertyDetails: any;
   options: any;
-  isImageSelected: boolean = false;
+  isImageSelected = false;
   selectedMediaDetails: any
   constructor(
     private formBuilder: FormBuilder,
@@ -116,7 +116,7 @@ export class MediaComponent implements OnInit {
     this.slides.slidePrev();
   }
 
-   removeMediaImages(selectedItem) {
+   removeMediaImages(selectedItem: any) {
     this.commonService.showConfirm('Media', 'Are you sure, you want to remove this image?', '', 'YES', 'NO').then(response => {
       if (response) {
         const index = this.propertyDetails.value.indexOf(selectedItem);
