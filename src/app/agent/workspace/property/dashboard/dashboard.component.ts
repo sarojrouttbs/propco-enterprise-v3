@@ -38,6 +38,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isMapLoad = false;
   viewingCount = 0;
   private viewingCountSubscription:Subscription;
+  isSkeleton = true;
 
   constructor(
     private modalCtrl: ModalController,
@@ -108,7 +109,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setLookupData(data) {
+  private setLookupData(data: any) {
     this.notesCategories = data.notesCategories;
     this.notesComplaints = data.notesComplaint;
     this.notesTypes = data.notesType;
@@ -135,7 +136,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-
   async openPreview(index) {
     const modal = await this.modalCtrl.create({
       component: ImagePage,
@@ -149,7 +149,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     modal.present();
   }
 
-  getPropertyById(propertyId) {
+  getPropertyById(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getPropertyById(propertyId, params).subscribe(
@@ -164,7 +164,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  getPropertyLandlords(propertyId) {
+  getPropertyLandlords(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getPropertyLandlords(propertyId, params).subscribe(
@@ -179,7 +179,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  getPropertyTenant(propertyId) {
+  getPropertyTenant(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getPropertyTenants(propertyId, params).subscribe(
@@ -194,16 +194,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  getPropertyDetails(propertyId) {
+  getPropertyDetails(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
           this.propertyDetails = res && res.data ? res.data : '';
+          this.isSkeleton = false;
           resolve(true);
         },
         (error) => {
           resolve(false);
+          this.isSkeleton = false;
         }
       );
     });
