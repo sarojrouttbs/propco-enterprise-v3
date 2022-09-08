@@ -35,6 +35,7 @@
             <app-preview-and-send 
             *ngIf="stepper.selectedIndex==2" 
             [group]="selfAssessmentForm"
+            [systemConfig]="systemConfig"
             (onHmrcLandlordSelectPreview)="onHmrcLandlordSelectPreview($event)">
           </app-preview-and-send>
           </mat-step>
