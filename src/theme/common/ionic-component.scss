@@ -25,12 +25,13 @@ ion-range {
   --pin-background: var(--ion-color-tertiary);
 }
 
-.split-pane-md.split-pane-visible > .split-pane-side {
+.split-pane-md.split-pane-visible>.split-pane-side {
   max-width: 15%;
 }
 
 ion-split-pane {
   --border: 0px !important;
+
   #menu-list {
     ion-item {
       cursor: pointer;
@@ -57,7 +58,8 @@ ion-button {
     --background: var(--ion-color-success);
   }
 }
-ion-button.button-outline{
+
+ion-button.button-outline {
   --border-width: 1.5px;
 }
 
@@ -102,11 +104,11 @@ ion-item {
     }
   }
 
-  ion-toggle{
+  ion-toggle {
     padding-left: 0;
   }
 
-  ion-textarea.sc-ion-textarea-md-h{
+  ion-textarea.sc-ion-textarea-md-h {
     margin-top: 6px;
   }
 }
@@ -171,6 +173,7 @@ ion-item {
   ion-item {
     ion-datetime {
       padding-bottom: 8px;
+
       &.ng-pristine {
         padding-bottom: 11px;
       }
@@ -180,72 +183,80 @@ ion-item {
 
 .modal-container {
   // .modal-wrapper {
-    width: 100% !important;
-    --color: var(--ion-color-step-2000);
-    width: 500px;
-    height: auto;
-    min-height: 400px;
+  width: 100% !important;
+  --color: var(--ion-color-step-2000);
+  width: 500px;
+  height: auto;
+  min-height: 400px;
 
-    ion-item {
-      --background: transparent;
-    }
+  ion-item {
+    --background: transparent;
+  }
 
-    ion-header {
-      background: var(--ion-color-five);
-      ion-toolbar {
-        --min-height: 40px;
-        --background: var(--ion-color-five);
+  ion-header {
+    background: var(--ion-color-five);
 
-        ion-title {
-          --color: var(--ion-text-color);
-          @include set-text-style(16px, 20px);
-        }
+    ion-toolbar {
+      --min-height: 40px;
+      --background: var(--ion-color-five);
 
-        ion-icon {
-          font-size: 25px;
-          color: var(--ion-text-color);
-          cursor: pointer;
-        }
+      ion-title {
+        --color: var(--ion-text-color);
+        @include set-text-style(16px, 20px);
       }
-      &.header-md::after{
-        background-image: none;
+
+      ion-icon {
+        font-size: 25px;
+        color: var(--ion-text-color);
+        cursor: pointer;
       }
     }
 
-    ion-content {
-      --background: var(--ion-color-six);
-      --color: var(--ion-text-color);
-      --padding-top: 0px;
-      --padding-bottom: 0px;
-      --padding-start: 10px;
-      --padding-end: 10px;
-    }
-
-    ion-footer {
-      background: var(--ion-color-six);
-    }
-
-    .footer-md::before {
-      height: 0;
-    }
-
-    .cancel-button {
-      --background: var(--ion-color-danger);
-    }
-  
-    .save-button {
-      --background: var(--ion-color-success);
-    }
-  
-    .submit-button {
-      --background: var(--ion-color-success);
+    &.header-md::after {
+      background-image: none;
     }
   }
+
+  ion-content {
+    --background: var(--ion-color-six);
+    --color: var(--ion-text-color);
+    --padding-top: 0px;
+    --padding-bottom: 0px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+  }
+
+  ion-footer {
+    background: var(--ion-color-six);
+  }
+
+  .footer-md::before {
+    height: 0;
+  }
+
+  .cancel-button {
+    --background: var(--ion-color-danger);
+  }
+
+  .save-button {
+    --background: var(--ion-color-success);
+  }
+
+  .submit-button {
+    --background: var(--ion-color-success);
+  }
+}
+
 // }
 
-.entity-search, .la-application-search, .la-property-search,.nett-modal-container ,.fee-charge-modal-container{
+.entity-search,
+.la-application-search,
+.la-property-search,
+.nett-modal-container,
+.fee-charge-modal-container {
+
   // .modal-wrapper {
-    &::part(content){
+  &::part(content) {
 
     min-height: 220px;
     height: 225px;
@@ -253,65 +264,73 @@ ion-item {
 
     ion-content {
       --background: var(--ion-color-six);
+
       ion-item {
         --border-color: var(--ion-color-one);
+
         ion-label {
           color: var(--ion-color-three) !important;
         }
       }
     }
-    ion-footer{
+
+    ion-footer {
       background: var(--ion-color-six);
     }
-    
-    .mat-form-field-appearance-legacy .mat-form-field-infix{
+
+    .mat-form-field-appearance-legacy .mat-form-field-infix {
       padding: .5em 0 !important;
     }
 
-    .mat-form-field{
+    .mat-form-field {
       padding: 0 10px;
     }
   }
 }
 
-.tenant-list,.fee-charge-modal-container {
-  // .modal-wrapper {
-    &::part(content){
-      min-height: 400px;
-      height: 40%;
-      min-width: 400px;
-      width: 767px;
-    }
+.tenant-list,
+.fee-charge-modal-container {
 
-    .dataTables_wrapper.no-footer .dataTables_scrollBody{
-      border-bottom: none;
-    }
+  // .modal-wrapper {
+  &::part(content) {
+    min-height: 400px;
+    height: 40%;
+    min-width: 400px;
+    width: 767px;
+  }
+
+  .dataTables_wrapper.no-footer .dataTables_scrollBody {
+    border-bottom: none;
+  }
+
   // }
 }
 
 .resend-link {
   // .modal-wrapper {
-    min-height: 450px;
-    min-width: 750px;
+  min-height: 450px;
+  min-width: 750px;
   // }
 }
 
-.alert-prompt{
+.alert-prompt {
+
   // .modal-wrapper {
-    &::part(content){
-      min-height: 200px;
-      min-width: 300px;
-      height: 250px;
-    }
+  &::part(content) {
+    min-height: 200px;
+    min-width: 300px;
+    height: 250px;
+  }
 
-    .status-block{
-      padding: 10px 0 0 0;
-    }
+  .status-block {
+    padding: 10px 0 0 0;
+  }
 
-    .center-block{
-      text-align: center;
-      margin-top: 25px;
-    }
+  .center-block {
+    text-align: center;
+    margin-top: 25px;
+  }
+
   // }
 }
 
@@ -343,6 +362,7 @@ ion-alert.common-alert-box {
   .alert-head {
     background: var(--ion-color-step-900);
     padding: 10px;
+
     h2 {
       color: var(--ion-color-step-2000);
       @include set-text-style(16px, 20px);
@@ -368,14 +388,16 @@ ion-alert.common-alert-box {
       border-radius: 4px;
       padding: 5px 10px;
       height: 36px;
-      .alert-button-inner {
-      }
+
+      .alert-button-inner {}
     }
-    .ion-color-danger{
+
+    .ion-color-danger {
       background-color: var(--ion-color-danger);
 
     }
-    .ion-color-success{
+
+    .ion-color-success {
       background-color: var(--ion-color-success);
     }
 
@@ -385,41 +407,43 @@ ion-alert.common-alert-box {
 
 .upload-container {
   // .modal-wrapper {
-    @include border-radius(10px);
-    // --color: var(--ion-color-step-2000);
-    width: 750px;
-    height: auto;
-    min-height: 500px;
-    ion-content {
-      --background: var(--ion-color-step-1800);
-      --color: var(--ion-color-step-200);
-      --padding-top: 25px;
-      --padding-bottom: 0px;
-      --padding-start: 20px;
-      --padding-end: 20px;
-    }
+  @include border-radius(10px);
+  // --color: var(--ion-color-step-2000);
+  width: 750px;
+  height: auto;
+  min-height: 500px;
 
-    // ion-footer {
-    //   border-top: 1px solid var(--ion-color-step-800);
-    //   padding: 3px 5px;
-    // }
+  ion-content {
+    --background: var(--ion-color-step-1800);
+    --color: var(--ion-color-step-200);
+    --padding-top: 25px;
+    --padding-bottom: 0px;
+    --padding-start: 20px;
+    --padding-end: 20px;
+  }
+
+  // ion-footer {
+  //   border-top: 1px solid var(--ion-color-step-800);
+  //   padding: 3px 5px;
+  // }
   // }
 }
 
 .ionic-selectable-group .ionic-selectable-item {
   --padding-start: 8px !important;
   --padding-end: 8px !important;
+
   ion-icon {
     margin-inline-end: 15px;
   }
 }
 
-.ionic-selectable-modal{
-  ion-footer ion-toolbar:last-of-type{
+.ionic-selectable-modal {
+  ion-footer ion-toolbar:last-of-type {
     text-align: right;
     padding: 0 10px;
 
-    ion-button{
+    ion-button {
       margin: 0 6px;
     }
   }
@@ -429,96 +453,107 @@ ion-alert.common-alert-box {
   min-width: 30% !important;
 }
 
-.tenancy-clause-modal .modal-wrapper{
+.tenancy-clause-modal .modal-wrapper {
   min-width: 725px;
 }
 
 .property-certificates-list {
   // .modal-wrapper {
-    height: 500px;
-    min-width: 400px;
-    width: 800px;
-    ion-footer {
-      // border-top: 1px solid var(--ion-color-step-800);
-      padding: 5px;
-    }
+  height: 500px;
+  min-width: 400px;
+  width: 800px;
+
+  ion-footer {
+    // border-top: 1px solid var(--ion-color-step-800);
+    padding: 5px;
+  }
+
   // }
 }
 
-.property-certificates-view{
+.property-certificates-view {
   // .modal-wrapper {
-    min-height: 300px;
-    width: 800px;
+  min-height: 300px;
+  width: 800px;
+
   // }
   ion-footer {
     padding: 5px;
   }
 }
 
-.ll-contractor-modal{
+.ll-contractor-modal {
   // .modal-wrapper {
-    width: 600px;
-    height: auto;
-    min-height: 460px;
+  width: 600px;
+  height: auto;
+  min-height: 460px;
   // }
 }
 
-.payment-request-modal{
+.payment-request-modal {
   // .modal-wrapper {
-    height: auto;
-    min-height: 450px;
+  height: auto;
+  min-height: 450px;
   // }
 }
 
 .chronological-history {
   // .modal-wrapper {
-    height: auto;
-    min-width: 400px;
-    width: 800px;
-    min-height: 65%;
-    .dataTables_wrapper table.dataTable {
-      line-height: 22px;
-    }
-    .dataTables_wrapper table.dataTable thead tr th{
-      padding: 10px 8px;
-    }
-    // .dtr-data a img {
-    //   display: none;
-    // }
-    p a {
-      pointer-events: none;
-       cursor: default;
-    }
-    span.dtr-title {
-      width: 30%;
-    }
-    ul {
-      width: 100%;
+  height: auto;
+  min-width: 400px;
+  width: 800px;
+  min-height: 65%;
+
+  .dataTables_wrapper table.dataTable {
+    line-height: 22px;
   }
+
+  .dataTables_wrapper table.dataTable thead tr th {
+    padding: 10px 8px;
+  }
+
+  // .dtr-data a img {
+  //   display: none;
+  // }
+  p a {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  span.dtr-title {
+    width: 30%;
+  }
+
+  ul {
+    width: 100%;
+  }
+
   // }
 }
 
-#propertyDashboardTabs, #tenancyAgreementEditorTabs {
+#propertyDashboardTabs,
+#tenancyAgreementEditorTabs {
+  z-index: 1000;
+  padding-bottom: 10px;
+
+  ion-segment-button {
+    border: solid 1px var(--ion-color-four);
+    border-top: none;
+    color: var(--ion-text-color);
+    max-width: 785px;
+    --color-hover: var(--ion-text-color);
+    --background-hover: var(--ion-color-five);
+    --background: var(--ion-color-five);
     z-index: 1000;
-    padding-bottom: 10px;
-    ion-segment-button{
-      border: solid 1px var(--ion-color-four);
-      border-top: none;
-      color: var(--ion-text-color);
-      max-width: 785px;
-      --color-hover:var(--ion-text-color);
-      --background-hover: var(--ion-color-five);
-      --background: var(--ion-color-five);
-      z-index: 1000;
   }
-  
-  .segment-button-checked{
+
+  .segment-button-checked {
     --background-checked: var(--ion-background-color);
     --indicator-height: none;
     --color-checked: var(--ion-text-color);
   }
-  
-  .segment-button-checked:before{
+
+  .segment-button-checked:before {
     content: "";
     vertical-align: middle;
     margin: auto;
@@ -538,167 +573,204 @@ ion-alert.common-alert-box {
 
 #tenancyAgreementEditorTabs {
   padding: 0px 10px 10px 10px;
-  ion-segment-button{
+
+  ion-segment-button {
     border: solid 1px var(--ion-color-four);
   }
 }
 
-#marketAppraisalTabs, #mediaTabs{
-  ion-segment-button{
+#marketAppraisalTabs,
+#mediaTabs {
+  ion-segment-button {
     border: solid 1px var(--ion-color-four);
     color: var(--ion-text-color);
-    --color-hover:var(--ion-text-color);
+    --color-hover: var(--ion-text-color);
     --background-hover: var(--ion-color-five);
     --background: var(--ion-color-five);
     z-index: 1000;
     font-size: 18px;
     text-transform: uppercase;
-    max-width: 100%!important;
+    max-width: 100% !important;
   }
-  .segment-button-checked{
+
+  .segment-button-checked {
     --background-checked: var(--ion-background-color);
     --indicator-height: none;
     --color-checked: var(--ion-text-color);
   }
-  
+
 }
+
 // #agent-portal {
+ion-item {
+  --border-color: var(--ion-color-one);
+
+  ion-label {
+    color: var(--ion-color-three) !important;
+  }
+}
+
+ion-item[aria-disabled="true"] {
+
+  ion-label,
+  ion-text {
+    opacity: 1 !important;
+  }
+}
+
+#market-appraisal {
+  ion-segment {
+    margin-bottom: 10px;
+  }
+
+  ion-card-content {
+    padding-top: 0;
+
+    ion-item {
+      ion-select {
+        height: 40px;
+      }
+    }
+  }
+}
+
+#fault-list {
+  .filter-grid-active:before {
+    content: "";
+    vertical-align: middle;
+    margin: auto;
+    position: absolute;
+    display: block;
+    left: 0;
+    right: 0;
+    bottom: -8px;
+    width: 12px;
+    height: 12px;
+    transform: rotate(225deg);
+    border-color: var(--ion-color-four) transparent transparent var(--ion-color-four);
+    background-color: var(--ion-color-six);
+  }
+}
+
+.drop-zone {
+  background-color: var(--ion-color-six) !important;
+  border: 2px solid var(--ion-color-three) !important;
+}
+
+.secondary-background {
+  background: var(--ion-color-five);
+}
+
+.border-top-radious {
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.border-bottom-radious {
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+#property-address-details,
+#property-letting-details,
+#property-check-grid,
+#property-let-board-details,
+#property-history-details,
+#property-rent-sales-figures,
+#la-application-list,
+#la-application-details,
+#la-guarantor-details,
+#market-appraisal-lettings,
+#market-appraisal-property-address,
+#property-keys,
+#agreement-details,
+#property-features {
+  ion-select {
+    height: 36px;
+  }
+
+  ion-textarea {
+    .textarea-wrapper {
+      height: 32px !important;
+
+      textarea {
+        padding-top: 0px;
+        height: unset !important;
+      }
+    }
+  }
+
+  // ionic form field - dark / light theme css
+  h4,
+  h5,
+  h6,
+  p,
+  small,
+  div,
+  ion-label,
+  ion-text {
+    color: var(--ion-color-one);
+  }
+
   ion-item {
-    --border-color: var(--ion-color-one);
-    ion-label {
+    --border-color: var(--ion-color-one) !important;
+
+    ion-label,
+    ion-text {
       color: var(--ion-color-three) !important;
     }
-  }
-  ion-item[aria-disabled="true"] { 
-    ion-label, ion-text {
-      opacity: 1!important;
-    }
-  }
-  #market-appraisal{
-    ion-segment{
-      margin-bottom: 10px;
-    }
-    ion-card-content{
-      padding-top: 0;
-      ion-item {
-        ion-select {
-          height: 40px;
-        }
-      }
-    }    
-  }
-  #fault-list{
-    .filter-grid-active:before {
-      content: "";
-      vertical-align: middle;
-      margin: auto;
-      position: absolute;
-      display: block;
-      left: 0;
-      right: 0;
-      bottom: -8px;
-      width: 12px;
-      height: 12px;
-      transform: rotate(225deg);
-      border-color: var(--ion-color-four) transparent transparent var(--ion-color-four);
-      background-color: var(--ion-color-six);
+
+    ion-select,
+    ion-input {
+      color: var(--ion-color-one) !important;
     }
   }
 
-  .drop-zone {
-    background-color: var(--ion-color-six) !important;
-    border: 2px solid var(--ion-color-three) !important;
-  }
+  ion-item[aria-disabled="true"] {
 
-  .secondary-background{
-    background: var(--ion-color-five);
+    ion-label,
+    ion-text {
+      opacity: 0.6;
+    }
   }
+}
 
-  .border-top-radious{
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
-  }
-  .border-bottom-radious{
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-  }
+#tob-application-stepper {
 
-  #property-address-details,
-  #property-letting-details,
-  #property-check-grid,
-  #property-let-board-details,
-  #property-history-details,
-  #property-rent-sales-figures,
-  #la-application-list,
-  #la-application-details,
-  #la-guarantor-details,
-  #market-appraisal-lettings,
-  #market-appraisal-property-address,
-  #property-keys,
-  #agreement-details,
-  #property-features {
-    ion-select{
-      height: 36px;
-    }
-  
-    ion-textarea{
-      .textarea-wrapper{
-        height: 32px !important;
-        textarea{
-          padding-top: 0px;
-          height: unset !important; 
-        }
-      }
-    }
-  
-    // ionic form field - dark / light theme css
-    h4, h5, h6, p, small, div, ion-label, ion-text {
-      color: var(--ion-color-one);
-    }
-    ion-item {
-      --border-color: var(--ion-color-one) !important;
-      ion-label, ion-text {
-        color: var(--ion-color-three) !important;
-      }
-  
-      ion-select, ion-input {
-        color: var(--ion-color-one) !important;
-      }
-    }
-    ion-item[aria-disabled="true"] { 
-      ion-label, ion-text {
-        opacity: 0.6;
-      }
-    }
-  }
+  // ionic form field - dark / light theme css
+  ion-item {
+    --border-color: var(--ion-color-one) !important;
 
-  #tob-application-stepper {
-    // ionic form field - dark / light theme css
-    ion-item {
-      --border-color: var(--ion-color-one) !important;
-      ion-label, ion-text {
-        color: var(--ion-color-three) !important;
-      }
-  
-      ion-select, ion-input {
-        color: var(--ion-color-one) !important;
-      }
+    ion-label,
+    ion-text {
+      color: var(--ion-color-three) !important;
     }
-  }
 
-  #property-keys {
-    ion-textarea {
-      .textarea-wrapper {
-        height: 50px !important;
-      }
+    ion-select,
+    ion-input {
+      color: var(--ion-color-one) !important;
     }
   }
+}
+
+#property-keys {
+  ion-textarea {
+    .textarea-wrapper {
+      height: 50px !important;
+    }
+  }
+}
+
 // }
 
-.market-apprisal-ion-select, .fault-ion-select, .let-alliance-ion-select , .hmrc-ion-select{
-  .sc-ion-select-popover{
+.market-apprisal-ion-select,
+.fault-ion-select,
+.let-alliance-ion-select,
+.hmrc-ion-select {
+  .sc-ion-select-popover {
     color: var(--ion-color-three) !important
   }
+
   ion-list ion-item.item-radio-checked {
     --background: var(--ion-color-four);
   }
@@ -710,131 +782,161 @@ ion-alert.common-alert-box {
 
 
 //agnet portal > market appraisal form modals
-.ma-modal-container,.la-modal-container, .tob-modal-container, .fault-modal-container, .property-modal-container {
+.ma-modal-container,
+.la-modal-container,
+.tob-modal-container,
+.fault-modal-container,
+.property-modal-container {
+
   // .modal-wrapper {
-    &::part(content) {
-      --background: var(--ion-color-six);
-      h4, h5, h6, p, small, div, ion-label, ion-text {
-        color: var(--ion-color-one);
+  &::part(content) {
+    --background: var(--ion-color-six);
+
+    h4,
+    h5,
+    h6,
+    p,
+    small,
+    div,
+    ion-label,
+    ion-text {
+      color: var(--ion-color-one);
+    }
+
+    ion-item {
+      --border-color: var(--ion-color-one);
+
+      ion-label {
+        color: var(--ion-color-three) !important;
       }
-      ion-item {
-        --border-color: var(--ion-color-one);
-        ion-label {
-          color: var(--ion-color-three) !important;
-        }
-      }
-      .dataTables_wrapper {
-        .dataTables_length {
-          select {
-            option {
-              color: var(--ion-color-one);
-              background-color: var(--ion-color-six);
-            }
-          }
-        }
-        table.dataTable {
-          border: 1px solid var(--ion-color-four);
-          thead {
-            background-color: var(--ion-color-three);
-            color: var(--ion-color-step-2000);
-          }
-          
-          tbody {
-            color: var(--ion-color-two);
-            tr:hover {
-              box-shadow: inset 0 0 0 9999px var(--ion-color-five);
-            }
-            tr {
-              background-color: var(--ion-color-six);
-            }
-  
-            td, th .row-border {
-              border-top: 1px solid var(--ion-color-four);
-            }
+    }
+
+    .dataTables_wrapper {
+      .dataTables_length {
+        select {
+          option {
+            color: var(--ion-color-one);
+            background-color: var(--ion-color-six);
           }
         }
       }
 
-      .mat-form-field-wrapper {
-        margin-bottom: 0;
-        padding-bottom: 27px;
-      }
-    
-      .mat-form-field-underline::before {
-        background-color: var(--ion-color-one) !important;
-      }
-  
-      .mat-datepicker-toggle .mat-icon-button {
-        color: var(--ion-color-primary);
-      }
-    
-      .mat-form-field-appearance-fill .mat-form-field-flex {
-        color: var(--ion-color-one) !important;
-      }
-    
-      .mat-form-field-label {
-        padding-top: 5px;
-        font-size: 16px;
-        mat-label {
-          color: var(--ion-color-three) !important;
-        }
-      }
-    
-      .mat-form-field-infix{
-        input{
-          padding-top: 12px;
-        }
-      }
+      table.dataTable {
+        border: 1px solid var(--ion-color-four);
 
-      .mat-tab-group {  
-        .mat-tab-header {
-          .mat-tab-label-container { 
-            .mat-tab-label {
-              background-color: var(--ion-color-four);
-              color: var(--ion-color-one);
-            }
-            .mat-tab-label-active {
-              background-color: var(--ion-color-success);
-            }
+        thead {
+          background-color: var(--ion-color-three);
+          color: var(--ion-color-step-2000);
+        }
+
+        tbody {
+          color: var(--ion-color-two);
+
+          tr:hover {
+            box-shadow: inset 0 0 0 9999px var(--ion-color-five);
+          }
+
+          tr {
+            background-color: var(--ion-color-six);
+          }
+
+          td,
+          th .row-border {
+            border-top: 1px solid var(--ion-color-four);
           }
         }
       }
     }
-    &::part(footer){
-      background: var(--ion-color-six);
-      ion-item {
-        --border-color: var(--ion-color-one);
-        ion-label {
-          color: var(--ion-color-three) !important;
-        }
-      }
+
+    .mat-form-field-wrapper {
+      margin-bottom: 0;
+      padding-bottom: 27px;
     }
-    .drop-zone{
-      background-color: var(--ion-color-five)
+
+    .mat-form-field-underline::before {
+      background-color: var(--ion-color-one) !important;
     }
-    #contractor-details-modal, #appointment-modal {
-      .session-block-radio-btn {
-        .ion-radio {
-          margin: 0px 20px -5px 0px;
-          --color: var(--ion-color-primary) !important;
-        }
+
+    .mat-datepicker-toggle .mat-icon-button {
+      color: var(--ion-color-primary);
+    }
+
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+      color: var(--ion-color-one) !important;
+    }
+
+    .mat-form-field-label {
+      padding-top: 5px;
+      font-size: 16px;
+
+      mat-label {
+        color: var(--ion-color-three) !important;
       }
     }
 
-    #key-activity-modal {
-      .mat-form-field-infix{
-        input{
-          padding-top: 5px !important;
+    .mat-form-field-infix {
+      input {
+        padding-top: 12px;
+      }
+    }
+
+    .mat-tab-group {
+      .mat-tab-header {
+        .mat-tab-label-container {
+          .mat-tab-label {
+            background-color: var(--ion-color-four);
+            color: var(--ion-color-one);
+          }
+
+          .mat-tab-label-active {
+            background-color: var(--ion-color-success);
+          }
         }
       }
     }
-  } 
+  }
+
+  &::part(footer) {
+    background: var(--ion-color-six);
+
+    ion-item {
+      --border-color: var(--ion-color-one);
+
+      ion-label {
+        color: var(--ion-color-three) !important;
+      }
+    }
+  }
+
+  .drop-zone {
+    background-color: var(--ion-color-five)
+  }
+
+  #contractor-details-modal,
+  #appointment-modal {
+    .session-block-radio-btn {
+      .ion-radio {
+        margin: 0px 20px -5px 0px;
+        --color: var(--ion-color-primary) !important;
+      }
+    }
+  }
+
+  #key-activity-modal {
+    .mat-form-field-infix {
+      input {
+        padding-top: 5px !important;
+      }
+    }
+  }
+}
+
 // }
 
-.ma-modal-container{
+.ma-modal-container {
   // .modal-wrapper {
-    height: auto;
-    min-height: 500px;
+  height: auto;
+  min-height: 500px;
   // }
 }
 
@@ -842,24 +944,27 @@ ion-alert.common-alert-box {
   --width: auto;
 }
 
-.ionic-selectable-modal{
-  ion-header{
-    .toolbar-searchbar{
-      ion-searchbar{
-        input{
+.ionic-selectable-modal {
+  ion-header {
+    .toolbar-searchbar {
+      ion-searchbar {
+        input {
           --placeholder-color: var(--ion-color-one);
         }
-        ion-icon{
+
+        ion-icon {
           color: var(--ion-color-one);
         }
       }
     }
   }
-  ion-content{
-    ion-list{
-      ion-item{
+
+  ion-content {
+    ion-list {
+      ion-item {
         --border-color: var(--ion-color-one);
-        ion-label{
+
+        ion-label {
           color: var(--ion-color-two) !important;
         }
       }
@@ -867,10 +972,11 @@ ion-alert.common-alert-box {
   }
 }
 
-ion-list{
-  ion-item{
+ion-list {
+  ion-item {
     --border-color: var(--ion-color-one);
-    ion-label{
+
+    ion-label {
       color: var(--ion-color-two) !important;
     }
   }
@@ -891,6 +997,7 @@ ion-list{
     .searchbar-input-container {
       box-shadow: none;
       border-left: 0;
+
       .searchbar-input {
         box-shadow: none;
         padding-top: 4px;
@@ -899,33 +1006,35 @@ ion-list{
       }
     }
   }
-  
+
 }
 
 ion-datetime {
-  --background: var( --ion-color-six); 
+  --background: var(--ion-color-six);
 }
 
 .ion-date-item-icon {
-    bottom: 0;
-    position: absolute;
-    right: 0;
-    color: var( --ion-color-primary); 
+  bottom: 0;
+  position: absolute;
+  right: 0;
+  color: var(--ion-color-primary);
 }
+
 #hmrc-stepper {
   .ion-date-item-icon {
-    opacity: 1!important;
+    opacity: 1 !important;
   }
 }
 
-.office-filter-modal-container{
-  &::part(content){
+.office-filter-modal-container {
+  &::part(content) {
     height: 525px;
     width: 750px;
   }
 
   ion-item {
     --border-color: var(--ion-color-one);
+
     ion-label {
       color: var(--ion-color-three) !important;
     }
@@ -933,33 +1042,35 @@ ion-datetime {
 
   .mat-tree {
     background: var(--ion-color-six);
+
     .mat-tree-node {
       color: var(--ion-color-mat-checkbox-label);
     }
   }
 
-  .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background, .mat-checkbox-checked.mat-primary .mat-checkbox-background {
+  .mat-checkbox-indeterminate.mat-primary .mat-checkbox-background,
+  .mat-checkbox-checked.mat-primary .mat-checkbox-background {
     background-color: var(--ion-color-success) !important;
   }
 }
 
-.preview-pdf-modal-container{
-  &::part(content){
+.preview-pdf-modal-container {
+  &::part(content) {
     height: 95%;
     width: 900px;
     min-height: 550px;
   }
 }
 
-.hmrc-report-modal{
-  &::part(content){
+.hmrc-report-modal {
+  &::part(content) {
     width: 450px;
     height: 230px;
   }
 }
 
 ion-popover.ion-datepicker-popover {
-  &::part(content){
+  &::part(content) {
     --width: 270px;
     --height: 390px;
   }
@@ -967,57 +1078,53 @@ ion-popover.ion-datepicker-popover {
 
 #media-content {
   .chip {
+    color: var(--ion-color-primary-contrast);
+    border-radius: 4px;
+    width: 100%;
+    padding: 8px;
+    ion-icon {
       color: var(--ion-color-primary-contrast);
-      border-radius: 4px;
-      width: 100%;
-      padding: 8px;
-
-      ion-icon {
-          color: var(--ion-color-primary-contrast);
-      }
+    }
   }
 
   .active-chip {
-
-      background-color: var(--ion-color-secondary-shade);
+    background-color: var(--ion-color-secondary-shade);
   }
 
   .inactive-chip {
-
-      background-color: var(--ion-color-three);
-
+    background-color: var(--ion-color-three);
   }
 
   .selectable-height {
-      max-height: 30px !important;
+    max-height: 30px !important;
   }
 
   .drop-zone {
-      background-color: var(--ion-color-four) !important;
-      border: 0px !important;
+    background-color: var(--ion-color-four) !important;
+    border: 0px !important;
   }
 
   ion-checkbox {
-      width: 25px;
-      height: 25px;
-      --background: var(--ion-color-three);
-      border: 0;
-      margin-right: 5px;
-      margin-top: -4px;
+    width: 25px;
+    height: 25px;
+    --background: var(--ion-color-three);
+    border: 0;
+    margin-right: 5px;
+    margin-top: -4px;
   }
 
   ion-checkbox::part(container) {
-      border-radius: 4px;
-      border: 2px solid;
+    border-radius: 4px;
+    border: 2px solid;
   }
 
   ion-thumbnail {
-      --size: 180px;
-      --border-radius: 0px;
-      --height: 161px;
-
+    --size: 180px;
+    --border-radius: 0px;
+    --height: 161px;
   }
+
   ion-label {
-      color: var(--ion-color-six);
+    color: var(--ion-color-six);
   }
 }

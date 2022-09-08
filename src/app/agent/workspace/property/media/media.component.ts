@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IonSlides } from '@ionic/angular';
 import { AgentService } from 'src/app/agent/agent.service';
-import { AGENT_WORKSPACE_CONFIGS } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, PROPCO, SYSTEM_OPTIONS } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -41,7 +41,7 @@ export class MediaComponent implements OnInit {
   private getOptions() {
     const params = new HttpParams()
       .set('hideLoader', 'true')
-      .set('option', 'WEB_IMAGE_URL');
+      .set('option', SYSTEM_OPTIONS.WEB_IMAGE_URL);
     return new Promise((resolve) => {
       this.agentService.getSyatemOptions(params).subscribe(
         (res) => {
@@ -99,8 +99,8 @@ export class MediaComponent implements OnInit {
     })
   }
 
-   getImageDetails(ev: any) {
-    this.selectedMediaDetails = this.propertyDetails.media.filter(item => item.mediaId == ev);
+   getImageDetails(mediaId: any) {
+    this.selectedMediaDetails = this.propertyDetails.media.filter(item => item.mediaId == mediaId);
     this.mediaForm.patchValue(this.selectedMediaDetails[0]);
     this.isImageSelected = true;
   }
@@ -116,23 +116,22 @@ export class MediaComponent implements OnInit {
     this.slides.slidePrev();
   }
 
-   removeMediaImages(selectedItem: any) {
+   removeMediaImage(selectedItem: any) {
     this.commonService.showConfirm('Media', 'Are you sure, you want to remove this image?', '', 'YES', 'NO').then(response => {
       if (response) {
         const index = this.propertyDetails.value.indexOf(selectedItem);
         if (index !== -1) {
           this.propertyDetails.value.splice(index, 1);
         }
-        const selectedValue = this.propertyDetails.value;
         this.propertyDetails.reset();
-        this.propertyDetails.setValue(selectedValue);
+        this.propertyDetails.setValue(this.propertyDetails.value);
         if(this.selectedMediaDetails.mediaId === selectedItem.mediaId)
           this.selectedMediaDetails = '';
       }
     });
   }
 
-  activeInactiveChip(key, value){
+  activeInactiveChip(key: string, value: boolean){
     this.mediaForm.controls[key].setValue(!value);
   }
 }
