@@ -24,7 +24,6 @@ export class DashboardPage {
       case 'market-appraisal':
         this.router.navigate([`../market-appraisal`], { relativeTo: this.route });
         break;
-
       default:
         break;
     }

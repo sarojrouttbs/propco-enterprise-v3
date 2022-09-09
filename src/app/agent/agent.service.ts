@@ -11,10 +11,17 @@ export class AgentService {
   private getViewingCount = new BehaviorSubject<number>(0);
   updatedViewingCount = this.getViewingCount.asObservable();
 
+  private resetViewingFilter = new BehaviorSubject<any>('');
+  updateResetFilter = this.resetViewingFilter.asObservable();
+
   constructor(private httpClient: HttpClient) { }
 
   updateCount(message: number) {
     this.getViewingCount.next(message);
+  }
+
+  resetFilter(message: any) {
+    this.resetViewingFilter.next(message);
   }
 
   getPropertyById(propertyId: string, params): Observable<any> {

@@ -1,0 +1,158 @@
+<ion-segment [(ngModel)]="mediaSegment" id="mediaTabs">
+  <ion-segment-button value="pictures">
+    <ion-label>Pictures</ion-label>
+  </ion-segment-button>
+</ion-segment>
+<ion-content id="media-content" [ngSwitch]="mediaSegment">
+  <ion-grid *ngSwitchCase="'pictures'">
+    <ion-row>
+      <ion-col size-lg="65" size-lg="65" size-md="100" size-sm="100" size-xs="100">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="33.3" *ngFor="let data of propertyDetails?.media; let index = index">
+              <ion-grid class="col-grid-bg" *ngIf="!isExpanded" (click)="getImageDetails(data?.mediaId)">
+                <ion-row>
+                  <ion-col size="100">
+                    <img class='small-img' [src]="options + data?.fileName" [title]="data?.label" tappable
+                      alt="data?.label" />
+                  </ion-col>
+                  <ion-col size="100">
+                    <ion-row>
+                      <ion-col size="15">
+                        <ion-checkbox></ion-checkbox>                       
+                      </ion-col>
+                      <ion-col size="85" class="ion-text-right">
+                        <ion-label>{{data?.label}}</ion-label>
+                        <img src="assets/images/agent/file-download.svg" class="download-icon">
+                        <ion-icon name="close-circle-outline"
+                          (click)="removeMediaImage(data);$event.stopPropagation();"></ion-icon>
+                        <ion-icon name="scan-outline" (click)="expandView()"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-col>
+            <ion-col class="ion-no-padding" *ngIf="isExpanded">
+              <ion-slides pager *ngIf="propertyDetails?.media">
+                <ion-slide *ngFor="let data of propertyDetails?.media; let index = index">
+                  <div class="swiper-zoom-container">
+                    <img [src]="options + data?.fileName" [title]="data?.label" tappable alt="data?.label">
+                  </div>
+                  <button type="submit" ion-button color="light" class="swiper-button-prev swiper-button-black"
+                    (click)="prev()" *ngIf="propertyDetails?.media.length > 1">
+                    <ion-icon name="chevron-back-outline"></ion-icon>
+                  </button>
+                  <button type="submit" ion-button color="light" class="swiper-button-next swiper-button-black"
+                    (click)="next()" *ngIf="propertyDetails?.media.length > 1">
+                    <ion-icon name="chevron-forward-outline"></ion-icon>
+                  </button>
+                </ion-slide>
+              </ion-slides>
+              <div class="no-slider-img" *ngIf="!propertyDetails?.media">
+                <img src="assets/images/upload-image.jpg" alt="default">
+              </div>
+            </ion-col>
+            <ion-col size="85">
+              <ion-button color="primary">Select All</ion-button>
+              <ion-button color="success">Export</ion-button>
+            </ion-col>
+            <ion-col size="15" class="ion-text-right">
+              <ion-icon name="list-outline" [color]="!isExpanded ? 'primary': ''" (click)="this.isExpanded = false;">
+              </ion-icon>
+              <ion-icon name="square-outline" [color]="isExpanded ? 'primary': ''" (click)="expandView()"></ion-icon>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+      <ion-col size-lg="35" size-lg="35" size-md="100" size-sm="100" size-xs="100">
+        <form file-drop [formGroup]="mediaForm">
+          <ion-grid class="side-media-form ion-padding">
+            <ion-row class="upload-row-bg" *ngIf="!isImageSelected">
+              <ion-col size="100">
+                <ion-item lines="none" style="width: 100%" class="ion-text-center">
+                  <ion-label>Drag files here to upload</ion-label>
+                </ion-item>
+              </ion-col>
+              <ion-col class="ion-text-center">
+                <input type="file" class="hide-input" #btnUpload>
+                <ion-button color="success" (click)="btnUpload.click()">Select File</ion-button>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="50">
+                <ion-item>
+                  <ion-label position="floating">Image Index</ion-label>
+                  <ion-input formControlName="imageIndex"></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="50">
+                <ion-item>
+                  <ion-label position="floating">Image Label</ion-label>
+                  <ion-input formControlName="label"></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="100">
+                <ion-item>
+                  <ion-label position="floating">Description</ion-label>
+                  <ion-input formControlName="description"></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col size="100">
+                <ion-item lines="none">
+                  <ion-label>Picture Publishing</ion-label>
+                </ion-item>
+              </ion-col>
+
+              <ion-col size-lg="33.3" size-lg="33.3" size-md="16.6" size-sm="16.6" size-xs="16.6">
+                <ion-chip class="chip"
+                  [ngClass]="{'active-chip': this.mediaForm.get('isInternal').value, 'inactive-chip':!this.mediaForm.get('isInternal').value}"
+                  (click)="activeInactiveChip('isInternal', this.mediaForm.get('isInternal').value)">
+                  Internal</ion-chip>
+              </ion-col>
+              <ion-col size-lg="33.3" size-lg="33.3" size-md="16.6" size-sm="16.6" size-xs="16.6">
+                <ion-chip class="chip"
+                  [ngClass]="{'active-chip': this.mediaForm.get('isPublishOnParticulars').value, 'inactive-chip':!this.mediaForm.get('isPublishOnParticulars').value}"
+                  (click)="activeInactiveChip('isPublishOnParticulars', this.mediaForm.get('isPublishOnParticulars').value)">
+                  Particulars</ion-chip>
+              </ion-col>
+              <ion-col size-lg="33.3" size-lg="33.3" size-md="16.6" size-sm="16.6" size-xs="16.6">
+                <ion-chip class="chip"
+                  [ngClass]="{'active-chip': this.mediaForm.get('isPublishOnCarousel').value, 'inactive-chip':!this.mediaForm.get('isPublishOnCarousel').value}"
+                  (click)="activeInactiveChip('isPublishOnCarousel', this.mediaForm.get('isPublishOnCarousel').value)">
+                  Carousel</ion-chip>
+              </ion-col>
+              <ion-col size-lg="33.3" size-lg="33.3" size-md="16.6" size-sm="16.6" size-xs="16.6">
+                <ion-chip class="chip"
+                  [ngClass]="{'active-chip': this.mediaForm.get('isPublishOnInternet').value, 'inactive-chip':!this.mediaForm.get('isPublishOnInternet').value}"
+                  (click)="activeInactiveChip('isPublishOnInternet', this.mediaForm.get('isPublishOnInternet').value)">
+                  Internet</ion-chip>
+              </ion-col>
+              <ion-col size-lg="33.3" size-lg="33.3" size-md="16.6" size-sm="16.6" size-xs="16.6">
+                <ion-chip class="chip"
+                  [ngClass]="{'active-chip': this.mediaForm.get('isPublishOnWindowCards').value, 'inactive-chip':!this.mediaForm.get('isPublishOnWindowCards').value}"
+                  (click)="activeInactiveChip('isPublishOnWindowCards', this.mediaForm.get('isPublishOnWindowCards').value)">
+                  Window Cards</ion-chip>
+              </ion-col>
+              <ion-col size-lg="33.3" size-lg="33.3" size-md="16.6" size-sm="16.6" size-xs="16.6">
+                <ion-chip class="chip"
+                  [ngClass]="{'active-chip': this.mediaForm.get('isPublishOnLettingList').value, 'inactive-chip':!this.mediaForm.get('isPublishOnLettingList').value}"
+                  (click)="activeInactiveChip('isPublishOnLettingList', this.mediaForm.get('isPublishOnLettingList').value)">
+                  Letting Lists</ion-chip>
+              </ion-col>
+              <ion-col size="50">
+                <ion-button color="medium">Select All</ion-button>
+              </ion-col>
+              <ion-col size="50" class="ion-text-right">
+                <ion-button color="success">Add</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
