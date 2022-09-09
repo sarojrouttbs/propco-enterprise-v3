@@ -15,6 +15,8 @@ export class PropertyAddressComponent {
   addressPopoverOptions: any = {
     cssClass: 'address-selection'
   };
+  @Input() isPropertyAddressAvailable = false;
+
   constructor(private commonService: CommonService) { }
 
   getAddressList() {

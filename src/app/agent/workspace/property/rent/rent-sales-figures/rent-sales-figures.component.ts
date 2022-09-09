@@ -30,6 +30,7 @@ export class RentSalesFiguresComponent implements OnInit {
   rentIndemnityProducts: any;
   eriProducts: any;
   property: any;
+  isRentForm = false;
 
   constructor(private commonService: CommonService, private agentService: AgentService, private modalController: ModalController) { }
 
@@ -87,6 +88,7 @@ export class RentSalesFiguresComponent implements OnInit {
       nextRentReview: this.property?.propertyRentInfo?.nextRentReview,
       isLandlordArrearsExcluded: this.property?.propertyRentInfo?.isLandlordArrearsExcluded
     });
+    this.isRentForm = true;
   }
 
   private getLookupData() {
