@@ -31,7 +31,7 @@
           <ion-label position="floating">From</ion-label>
           <ion-input value="{{ viewingForm.controls.fromDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-          <ion-popover trigger="fromDate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="fromDate" show-backdrop="false">
             <ng-template>
               <ion-datetime showDefaultButtons="true" presentation="date" formControlName="fromDate">
               </ion-datetime>
@@ -44,7 +44,7 @@
           <ion-label position="floating">To</ion-label>
           <ion-input value="{{ viewingForm.controls.toDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-          <ion-popover trigger="toDate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="toDate" show-backdrop="false">
             <ng-template>
               <ion-datetime showDefaultButtons="true" presentation="date" formControlName="toDate">
               </ion-datetime>
@@ -62,7 +62,7 @@
       <ion-col size="60">
         <ion-item>
           <ion-label position="floating">Viewing Instructions</ion-label>
-          <ion-textarea rows="1" formControlName="viewingInstructions"></ion-textarea>
+          <ion-textarea rows="1" formControlName="viewingInstructions" autoGrow="true"></ion-textarea>
         </ion-item>
       </ion-col>
     </ion-row>
