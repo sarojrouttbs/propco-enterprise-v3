@@ -15,6 +15,7 @@ export class PreferencesComponent implements OnInit {
   localStorageItems: any;
   selectedEntityDetails: any;
   propertyDetails: any;
+  isPropertyPreferencesAvailable = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -52,6 +53,7 @@ export class PreferencesComponent implements OnInit {
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
     this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);
     await this.getPropertyById(this.selectedEntityDetails.entityId);
+    this.isPropertyPreferencesAvailable = true;
   }
 
   private fetchItems() {
@@ -80,7 +82,7 @@ export class PreferencesComponent implements OnInit {
           }
           resolve(res.data);
         },
-        (error) => {
+        (_error) => {
           resolve(false);
         }
       );
@@ -96,7 +98,7 @@ export class PreferencesComponent implements OnInit {
           }
           resolve(res.data);
         },
-        (error) => {
+        (_error) => {
           resolve(false);
         }
       );
