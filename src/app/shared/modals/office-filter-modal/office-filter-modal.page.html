@@ -8,59 +8,97 @@
 </ion-header>
 
 <ion-content id="office-filter-modal">
+  <ion-grid class="ion-no-padding header-section">
+    <ion-row>
+      <ion-col size="40" class="ion-text-left">
+        <ion-button size="small" color="medium" fill="outline" style="margin-right: 10px;" (click)="onExpandAll()">
+          Expand All
+        </ion-button>
+        <ion-button size="small" color="medium" fill="outline" (click)="onCollapseAll()">Collapse All</ion-button>
+      </ion-col>
+      <ion-col size="30">
+        <ion-item class="margin-20-search-box" *ngIf="officesList.length > 0">
+          <ion-label position="floating">Search</ion-label>
+          <ion-input [formControl]="searchText"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="30" class="ion-text-right">
+        <ion-button size="small" color="medium" fill="outline" style="margin-right: 10px;" (click)="onselectAll()"
+          [disabled]="this.officesList?.length == 0">Select All</ion-button>
+        <ion-button size="small" color="medium" fill="outline" (click)="unselectAll()"
+          [disabled]="this.officesList?.length == 0">Select None</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   <div class="filter-container" style="display: flex;">
     <div class="filter-left" style="width: 60%">
-      <ion-grid class="ion-no-padding header-section">
-        <ion-row>
-          <ion-col size="100" class="ion-text-left">
-            <ion-button size="small" fill="solid" style="margin-right: 10px;" (click)="onExpandAll()">Expand All
-            </ion-button>
-            <ion-button size="small" fill="solid" (click)="onCollapseAll()">Collapse All</ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
       <div class="right-left-panel-overflow" style="border-left: 1px solid var(--ion-color-four);">
-        <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-          <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
-            <button mat-icon-button disabled></button>
-            <mat-checkbox color="primary" class="checklist-leaf-node" [checked]="checklistSelection.isSelected(node)"
-              (change)="todoLeafItemSelectionToggle(node);onCheckBoxClick();" style="width: 45%;">
-              {{node.item}} - {{node.groupOfficeCode}} - {{node.groupDefinitionType}}
-            </mat-checkbox>
-          </mat-tree-node>
-          <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
-            <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.filename">
-              <ion-icon *ngIf="treeControl.isExpanded(node)" name="chevron-down-sharp"></ion-icon>
-              <ion-icon *ngIf="!treeControl.isExpanded(node)" name="chevron-forward-sharp"></ion-icon>
-            </button>
-            <mat-checkbox color="primary" [checked]="descendantsAllSelected(node)"
-              [indeterminate]="descendantsPartiallySelected(node)"
-              (change)="todoItemSelectionToggle(node);onCheckBoxClick();" style="width: 45%;">{{node.item}} -
-              {{node.groupOfficeCode}} - {{node.groupDefinitionType}}</mat-checkbox>
-          </mat-tree-node>
-        </mat-tree>
+        <ion-grid>
+          <ion-row class="filter-list">
+            <ion-col size="60">
+              <ion-label class="fw-700">Name</ion-label>
+            </ion-col>
+            <ion-col size="20">
+              <ion-label class="fw-700">Code</ion-label>
+            </ion-col>
+            <ion-col size="20">
+              <ion-label class="fw-700">Type</ion-label>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+              <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
+                <ion-col size="10">
+                  <button mat-icon-button disabled></button>
+                </ion-col>
+                <ion-col size="45">
+                  <mat-checkbox color="primary" class="checklist-leaf-node"
+                    [checked]="checklistSelection.isSelected(node)"
+                    (change)="todoLeafItemSelectionToggle(node);onCheckBoxClick();">
+                    {{node.item}}
+                  </mat-checkbox>
+                </ion-col>
+                <ion-col size="25">
+                  {{node.groupOfficeCode}}
+                </ion-col>
+                <ion-col size="20">
+                  {{node.groupDefinitionType}}
+                </ion-col>
+              </mat-tree-node>
+              <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+                <ion-col size="10">
+                  <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.filename">
+                    <ion-icon *ngIf="treeControl.isExpanded(node)" name="chevron-down-sharp"></ion-icon>
+                    <ion-icon *ngIf="!treeControl.isExpanded(node)" name="chevron-forward-sharp"></ion-icon>
+                  </button>
+                </ion-col>
+                <ion-col size="50">
+                  <mat-checkbox color="primary" [checked]="descendantsAllSelected(node)"
+                    [indeterminate]="descendantsPartiallySelected(node)"
+                    (change)="todoItemSelectionToggle(node);onCheckBoxClick();">{{node.item}}
+                  </mat-checkbox>
+                </ion-col>
+                <ion-col size="20">
+                  {{node.groupOfficeCode}}
+                </ion-col>
+                <ion-col size="20">
+                  {{node.groupDefinitionType}}
+                </ion-col>
+              </mat-tree-node>
+            </mat-tree>
+          </ion-row>
+        </ion-grid>
       </div>
     </div>
     <div class="filter-right" style="width: 40%">
-      <ion-grid class="ion-no-padding">
-        <ion-row class="header-section">
-          <ion-col size="100" class="ion-text-right">
-            <ion-button size="small" fill="solid" style="margin-right: 10px;" (click)="onselectAll()"
-              [disabled]="this.officesList?.length == 0">Select All
-            </ion-button>
-            <ion-button size="small" fill="solid" (click)="unselectAll()" [disabled]="this.officesList?.length == 0">
-              Select None</ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
       <div class="right-left-panel-overflow">
         <ion-grid class="no-padding-top">
-          <ion-row *ngIf="officesList.length > 0">
-            <ion-col class="no-padding-top" style="padding: 5px 15px;">
-              <ion-item>
-                <ion-label position="floating">Search</ion-label>
-                <ion-input [formControl]="searchText"></ion-input>
-              </ion-item>
+          <ion-row class="filter-list" *ngIf="officesList.length > 0">
+            <ion-col>
+              <ion-label class="fw-700">Office Name</ion-label>
+            </ion-col>
+            <ion-col>
+              <ion-label class="fw-700">Office Code</ion-label>
             </ion-col>
           </ion-row>
           <ion-row *ngFor="let item of filteredOfficesList; let i=index;" style="padding: 5px 10px;">
@@ -77,7 +115,6 @@
     </div>
   </div>
 </ion-content>
-
 <ion-footer>
   <ion-grid>
     <ion-row>
