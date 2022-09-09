@@ -24,9 +24,9 @@
       </ion-col>
       <ion-col size="30" class="ion-text-right">
         <ion-button size="small" color="medium" fill="outline" style="margin-right: 10px;" (click)="onselectAll()"
-          [disabled]="this.officesList?.length == 0">Select All</ion-button>
+          [disabled]="this.officesList?.length === 0">Select All</ion-button>
         <ion-button size="small" color="medium" fill="outline" (click)="unselectAll()"
-          [disabled]="this.officesList?.length == 0">Select None</ion-button>
+          [disabled]="this.officesList?.length === 0">Select None</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
