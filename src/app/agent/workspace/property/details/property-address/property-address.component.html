@@ -15,260 +15,263 @@
         </div>
       </mat-panel-description>
     </mat-expansion-panel-header>
-      <form [formGroup]="group" id="property-address-details" *ngIf="isPropertyAddressAvailable">
-        <ion-grid>
-          <ion-row>
-            <ion-col size="33" class="no-padding">
-              <ion-row>
-                <ion-col>
-                  <ion-item>
-                    <ion-label position="floating">Postcode <ion-text class="mandatory">*</ion-text></ion-label>
-                    <ion-input postcode-validator formControlName="postcode" (input)="toUpperCase('postcode', $event);"></ion-input>
-                  </ion-item>
-                  <app-validation-message [control]="group.controls.postcode"></app-validation-message>
-                </ion-col>
-                <ion-col class="ion-align-self-end" size="auto">
-                  <ion-button class="postcode-find-btn" (click)="getAddressList()">Find</ion-button>
-                </ion-col>
-              </ion-row>
-              <ion-row *ngIf="addressList">
-                <ion-col size="100">
-                  <ion-item>
-                    <ion-label position="floating">Select Address</ion-label>
-                    <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" [disabled]="!addressList" formControlName="addressdetails" (ionChange)="getAddressDetails(selectedAddress.value)" #selectedAddress>
-                      <ion-select-option [value]="address?.id" *ngFor="let address of addressList">
-                        {{ address?.text }}
-                      </ion-select-option>
-                    </ion-select>
-                  </ion-item>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col size="100">
-                  <ion-item>
-                    <ion-label position="floating">Organization Name</ion-label>
-                    <ion-input formControlName="organisationName"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="100">
-                  <ion-item>
-                    <ion-label position="floating">TDS Building</ion-label>
-                    <ion-input formControlName="buildingName"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="100">
-                  <ion-item>
-                    <ion-label position="floating">TDS Street</ion-label>
-                    <ion-input formControlName="street"></ion-input>
-                  </ion-item>
-                </ion-col>
-              </ion-row>
-            </ion-col>
-             <ion-col size="33" class="no-padding">
-              <ion-row>
-                <ion-col size="33.3">
-                  <ion-item>
-                    <ion-label position="floating">Block</ion-label>
-                    <ion-input formControlName="block"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="33.3">
-                  <ion-item>
-                    <ion-label position="floating">Floor</ion-label>
-                    <ion-input formControlName="floor"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="33.3">
-                  <ion-item>
-                    <ion-label position="floating">Room/Flat</ion-label>
-                    <ion-input formControlName="room"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="100">
-                  <ion-item>
-                    <ion-label position="floating">Address 1 <ion-text class="mandatory">*</ion-text></ion-label>
-                    <ion-input formControlName="addressLine1"></ion-input>
-                  </ion-item>
-                  <app-validation-message [control]="group.controls.addressLine1"></app-validation-message>
-                </ion-col>
-                <ion-col size="100">
-                  <ion-item>
-                    <ion-label position="floating">Address 2 </ion-label>
-                    <ion-input formControlName="addressLine2"></ion-input>
-                  </ion-item>
-                  <app-validation-message [control]="group.controls.addressLine2"></app-validation-message>
-                </ion-col>
-                <ion-col size="100">
-                  <ion-item>
-                    <ion-label position="floating">Address 3</ion-label>
-                    <ion-input formControlName="addressLine3"></ion-input>
-                  </ion-item>
-                </ion-col>
-              </ion-row>
-            </ion-col>
-            <ion-col size="33" class="no-padding">
-              <ion-row>
-                <ion-col size="50">
-                  <ion-item>
-                    <ion-label position="floating">Locality</ion-label>
-                    <ion-input formControlName="locality"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="50">
-                  <ion-item>
-                    <ion-label position="floating">Town <ion-text class="mandatory">*</ion-text></ion-label>
-                    <ion-input formControlName="town"></ion-input>
-                  </ion-item>
-                  <app-validation-message [control]="group.controls.town"></app-validation-message>
-                </ion-col>
-                <ion-col size="50">
-                  <ion-item>
-                    <ion-label position="floating">County</ion-label>
-                    <ion-input formControlName="county"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="50">
-                  <ion-item>
-                    <ion-label position="floating">Country</ion-label>
-                    <ion-input formControlName="country"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="33.33">
-                  <ion-item>
-                    <ion-label position="floating">Latitude</ion-label>
-                    <ion-input formControlName="latitude"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="33.33">
-                  <ion-item>
-                    <ion-label position="floating">Longitude</ion-label>
-                    <ion-input formControlName="longitude"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="33.33">
-                  <ion-item>
-                    <ion-label position="floating">Paf. Ref.</ion-label>
-                    <ion-input formControlName="pafref"></ion-input>
-                  </ion-item>
-                </ion-col>
-              </ion-row>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+      <form [formGroup]="group" id="property-address-details">
+        <ng-container *ngIf="isPropertyAddressAvailable; else skeletonBlock">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="33" class="no-padding">
+                <ion-row>
+                  <ion-col>
+                    <ion-item>
+                      <ion-label position="floating">Postcode <ion-text class="mandatory">*</ion-text></ion-label>
+                      <ion-input postcode-validator formControlName="postcode" (input)="toUpperCase('postcode', $event);"></ion-input>
+                    </ion-item>
+                    <app-validation-message [control]="group.controls.postcode"></app-validation-message>
+                  </ion-col>
+                  <ion-col class="ion-align-self-end" size="auto">
+                    <ion-button class="postcode-find-btn" (click)="getAddressList()">Find</ion-button>
+                  </ion-col>
+                </ion-row>
+                <ion-row *ngIf="addressList">
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="floating">Select Address</ion-label>
+                      <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" [disabled]="!addressList" formControlName="addressdetails" (ionChange)="getAddressDetails(selectedAddress.value)" #selectedAddress>
+                        <ion-select-option [value]="address?.id" *ngFor="let address of addressList">
+                          {{ address?.text }}
+                        </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="floating">Organization Name</ion-label>
+                      <ion-input formControlName="organisationName"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="floating">TDS Building</ion-label>
+                      <ion-input formControlName="buildingName"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="floating">TDS Street</ion-label>
+                      <ion-input formControlName="street"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+               <ion-col size="33" class="no-padding">
+                <ion-row>
+                  <ion-col size="33.3">
+                    <ion-item>
+                      <ion-label position="floating">Block</ion-label>
+                      <ion-input formControlName="block"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="33.3">
+                    <ion-item>
+                      <ion-label position="floating">Floor</ion-label>
+                      <ion-input formControlName="floor"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="33.3">
+                    <ion-item>
+                      <ion-label position="floating">Room/Flat</ion-label>
+                      <ion-input formControlName="room"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="floating">Address 1 <ion-text class="mandatory">*</ion-text></ion-label>
+                      <ion-input formControlName="addressLine1"></ion-input>
+                    </ion-item>
+                    <app-validation-message [control]="group.controls.addressLine1"></app-validation-message>
+                  </ion-col>
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="floating">Address 2 </ion-label>
+                      <ion-input formControlName="addressLine2"></ion-input>
+                    </ion-item>
+                    <app-validation-message [control]="group.controls.addressLine2"></app-validation-message>
+                  </ion-col>
+                  <ion-col size="100">
+                    <ion-item>
+                      <ion-label position="floating">Address 3</ion-label>
+                      <ion-input formControlName="addressLine3"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+              <ion-col size="33" class="no-padding">
+                <ion-row>
+                  <ion-col size="50">
+                    <ion-item>
+                      <ion-label position="floating">Locality</ion-label>
+                      <ion-input formControlName="locality"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="50">
+                    <ion-item>
+                      <ion-label position="floating">Town <ion-text class="mandatory">*</ion-text></ion-label>
+                      <ion-input formControlName="town"></ion-input>
+                    </ion-item>
+                    <app-validation-message [control]="group.controls.town"></app-validation-message>
+                  </ion-col>
+                  <ion-col size="50">
+                    <ion-item>
+                      <ion-label position="floating">County</ion-label>
+                      <ion-input formControlName="county"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="50">
+                    <ion-item>
+                      <ion-label position="floating">Country</ion-label>
+                      <ion-input formControlName="country"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="33.33">
+                    <ion-item>
+                      <ion-label position="floating">Latitude</ion-label>
+                      <ion-input formControlName="latitude"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="33.33">
+                    <ion-item>
+                      <ion-label position="floating">Longitude</ion-label>
+                      <ion-input formControlName="longitude"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="33.33">
+                    <ion-item>
+                      <ion-label position="floating">Paf. Ref.</ion-label>
+                      <ion-input formControlName="pafref"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ng-container>
       </form>
-
-      <!-- Skeleton -->
-
-      <ion-grid *ngIf="!isPropertyAddressAvailable">
-        <ion-row>
-          <ion-col size="33" class="no-padding">
-            <ion-row>
-              <ion-col>
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-            <ion-row *ngIf="addressList">
-              <ion-col size="100">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col size="100">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-              <ion-col size="100">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-              <ion-col size="100">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-col>
-          <ion-col size="33" class="no-padding">
-            <ion-row>
-              <ion-col size="33.3">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-              <ion-col size="33.3">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-              <ion-col size="33.3">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-              <ion-col size="100">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>                
-              </ion-col>
-              <ion-col size="100">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-              <ion-col size="100">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-col>
-          <ion-col size="33" class="no-padding">
-            <ion-row>
-              <ion-col size="50">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-              <ion-col size="50">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-              <ion-col size="50">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-              <ion-col size="50">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-              <ion-col size="33.33">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-              <ion-col size="33.33">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-              <ion-col size="33.33">
-                <ion-item lines="none">
-                  <ion-skeleton-text animated></ion-skeleton-text>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-      <!-- Skeleton -->
   </mat-expansion-panel>
 </mat-accordion>
+
+<!-- Skeleton -->
+<ng-template #skeletonBlock>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="33" class="no-padding">
+        <ion-row>
+          <ion-col>
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="addressList">
+          <ion-col size="100">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="100">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="100">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="100">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col size="33" class="no-padding">
+        <ion-row>
+          <ion-col size="33.3">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="33.3">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="33.3">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="100">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>                
+          </ion-col>
+          <ion-col size="100">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="100">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col size="33" class="no-padding">
+        <ion-row>
+          <ion-col size="50">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="33.33">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="33.33">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="33.33">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ng-template>
+<!-- Skeleton -->
