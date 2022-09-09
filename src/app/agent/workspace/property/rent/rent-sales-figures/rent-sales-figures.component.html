@@ -17,94 +17,153 @@
           </div>
         </mat-panel-description>
       </mat-expansion-panel-header>
-          <ion-grid>
+      <ion-grid *ngIf="isRentForm">
+        <ion-row>
+          <ion-col size="33" class="no-padding">
             <ion-row>
-              <ion-col size="33" class="no-padding">
-                <ion-row>
-                  <ion-col size="100">
-                    <ion-item>
-                      <ion-label position="stacked">Rent
-                      </ion-label>
-                      <input class="currency-input" currencyMask formControlName="rentAmount">
-                    </ion-item>
-                  </ion-col>
-                  <ion-col size="50">
-                    <ion-item>
-                      <ion-label position="floating">Every
-                      </ion-label>
-                      <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="rentFrequency">
-                        <ion-select-option [value]="index" *ngFor="let index of rentFrequencyDropdown">
-                          {{ index }}
-                        </ion-select-option>
-                      </ion-select>
-                    </ion-item>
-                  </ion-col>
-                  <ion-col size="50">
-                    <ion-item>
-                      <ion-label position="floating">Frequency
-                      </ion-label>
-                      <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="frequencyType">
-                        <ion-select-option [value]="data?.index" *ngFor="let data of frequencyTypes">
-                          {{ data?.value }}
-                        </ion-select-option>
-                      </ion-select>
-                    </ion-item>
-                  </ion-col>
-                </ion-row>
+              <ion-col size="100">
+                <ion-item>
+                  <ion-label position="stacked">Rent
+                  </ion-label>
+                  <input class="currency-input" currencyMask formControlName="rentAmount">
+                </ion-item>
               </ion-col>
-              <ion-col size="33" class="no-padding">
-                <ion-row>
-                  <ion-col size="50">
-                    <ion-item style="margin-top: 2px;">
-                      <ion-label position="stacked">Deposit
-                      </ion-label>
-                      <input class="currency-input" currencyMask formControlName="depositAmount">
-                    </ion-item>
-                  </ion-col>
-                  <ion-col size="50">
-                    <ion-item >
-                      <ion-label position="floating">Deposit Scheme No
-                      </ion-label>
-                      <ion-input formControlName="depositSchemeNo"></ion-input>
-                    </ion-item>
-                  </ion-col>
-                  <ion-col size="100">
-                    <ion-item>
-                      <ion-label position="floating">Deposit Scheme
-                      </ion-label>
-                      <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="depositScheme">
-                        <ion-select-option [value]="data?.index" *ngFor="let data of depositSchemes">
-                          {{ data?.value }}
-                        </ion-select-option>
-                      </ion-select>
-                    </ion-item>
-                  </ion-col>
-                </ion-row>
+              <ion-col size="50">
+                <ion-item>
+                  <ion-label position="floating">Every
+                  </ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="rentFrequency">
+                    <ion-select-option [value]="index" *ngFor="let index of rentFrequencyDropdown">
+                      {{ index }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
               </ion-col>
-              <ion-col size="33" class="no-padding">
-                <ion-row>
-                  <ion-col size="100">
-                    <ion-item>
-                      <ion-label position="floating">Sale Price Type
-                      </ion-label>
-                      <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="salePriceType">
-                        <ion-select-option [value]="data?.index" *ngFor="let data of salePrices">
-                          {{ data?.value }}
-                        </ion-select-option>
-                      </ion-select>
-                    </ion-item>
-                  </ion-col>
-                  <ion-col size="100">
-                    <ion-item>
-                      <ion-label position="stacked">Sale Price
-                      </ion-label>
-                      <input class="currency-input" currencyMask formControlName="salePrice">
-                    </ion-item>
-                  </ion-col>
-                </ion-row>
+              <ion-col size="50">
+                <ion-item>
+                  <ion-label position="floating">Frequency
+                  </ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="frequencyType">
+                    <ion-select-option [value]="data?.index" *ngFor="let data of frequencyTypes">
+                      {{ data?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
               </ion-col>
             </ion-row>
-          </ion-grid>
+          </ion-col>
+          <ion-col size="33" class="no-padding">
+            <ion-row>
+              <ion-col size="50">
+                <ion-item style="margin-top: 2px;">
+                  <ion-label position="stacked">Deposit
+                  </ion-label>
+                  <input class="currency-input" currencyMask formControlName="depositAmount">
+                </ion-item>
+              </ion-col>
+              <ion-col size="50">
+                <ion-item >
+                  <ion-label position="floating">Deposit Scheme No
+                  </ion-label>
+                  <ion-input formControlName="depositSchemeNo"></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="100">
+                <ion-item>
+                  <ion-label position="floating">Deposit Scheme
+                  </ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="depositScheme">
+                    <ion-select-option [value]="data?.index" *ngFor="let data of depositSchemes">
+                      {{ data?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col size="33" class="no-padding">
+            <ion-row>
+              <ion-col size="100">
+                <ion-item>
+                  <ion-label position="floating">Sale Price Type
+                  </ion-label>
+                  <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="salePriceType">
+                    <ion-select-option [value]="data?.index" *ngFor="let data of salePrices">
+                      {{ data?.value }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col size="100">
+                <ion-item>
+                  <ion-label position="stacked">Sale Price
+                  </ion-label>
+                  <input class="currency-input" currencyMask formControlName="salePrice">
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!-- Skeleton -->
+      <ion-grid *ngIf="!isRentForm">
+        <ion-row>
+          <ion-col size="33" class="no-padding">
+            <ion-row>
+              <ion-col size="100">
+                <ion-item lines="none">
+                  <ion-skeleton-text animated></ion-skeleton-text>
+                </ion-item>
+              </ion-col>
+              <ion-col size="50">
+                <ion-item lines="none">
+                  <ion-skeleton-text animated></ion-skeleton-text>
+                </ion-item>
+              </ion-col>
+              <ion-col size="50">
+                <ion-item lines="none">
+                  <ion-skeleton-text animated></ion-skeleton-text>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col size="33" class="no-padding">
+            <ion-row>
+              <ion-col size="50">
+                <ion-item lines="none">
+                  <ion-skeleton-text animated></ion-skeleton-text>
+                </ion-item>
+              </ion-col>
+              <ion-col size="50">
+                <ion-item lines="none">
+                  <ion-skeleton-text animated></ion-skeleton-text>
+                </ion-item>
+              </ion-col>
+              <ion-col size="100">
+                <ion-item lines="none">
+                  <ion-skeleton-text animated></ion-skeleton-text>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col size="33" class="no-padding">
+            <ion-row>
+              <ion-col size="100">
+                <ion-item lines="none">
+                  <ion-skeleton-text animated></ion-skeleton-text>
+                </ion-item>
+              </ion-col>
+              <ion-col size="100">
+                <ion-item lines="none">
+                  <ion-skeleton-text animated></ion-skeleton-text>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <!-- Skeleton -->
     </mat-expansion-panel>
     <mat-expansion-panel #rentProtection hideToggle>
       <mat-expansion-panel-header>
