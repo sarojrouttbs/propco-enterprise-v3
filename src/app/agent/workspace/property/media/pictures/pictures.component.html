@@ -55,11 +55,9 @@
           <ion-button color="success">Export</ion-button>
           </ion-col>
           <ion-col class="ion-text-right">
-            <ion-icon name="list-outline" [color]="!isExpanded ? 'primary': ''" (click)="this.isExpanded = false;" style="width: 36px;
-          height: 33px;vertical-align: bottom;">
+            <ion-icon name="list-outline" [color]="!isExpanded ? 'primary': ''" (click)="this.isExpanded = false;" class="pic-list-icon">
           </ion-icon>
-          <ion-icon name="square-outline" [color]="isExpanded ? 'primary': ''" (click)="expandView()" style="width: 36px;
-          height: 24px;"></ion-icon>
+          <ion-icon name="square-outline" [color]="isExpanded ? 'primary': ''" (click)="expandView()"  class="pic-expand-icon"></ion-icon>
           </ion-col>
         </ion-row>
       </ion-col>
