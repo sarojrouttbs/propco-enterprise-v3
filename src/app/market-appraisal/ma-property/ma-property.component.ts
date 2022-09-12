@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
@@ -14,6 +15,7 @@ import { MarketAppraisalService } from '../market-appraisal.service';
 export class MaPropertyComponent implements OnInit {
   @Input() group;
   @Input() contactGroup;
+  @Input() accessibleOffices;
   @Input('group') set _(value: any) {
     this.propertyForm = value as FormGroup;
   }
@@ -33,7 +35,6 @@ export class MaPropertyComponent implements OnInit {
   furnishingTypes: any;
   propertyLetReasons: any;
   advertisementRentFrequencies: any;
-  accessibleOffices: any;
   marketLocations: any;
   propertyData;
   propertyDetails;
@@ -47,7 +48,7 @@ export class MaPropertyComponent implements OnInit {
   maxDate;
   minDate;
   currentDate;
-  
+
   constructor(private modalController: ModalController,
     private commonService: CommonService,
     private maService: MarketAppraisalService) {
@@ -55,7 +56,6 @@ export class MaPropertyComponent implements OnInit {
 
   ngOnInit() {
     this.getLookupData();
-    this.initApiCalls();
     this.getPropertyData();
   }
 
@@ -69,13 +69,6 @@ export class MaPropertyComponent implements OnInit {
         this.lookupdata = data;
         this.setLookupData(data);
       });
-    }
-  }
-
-  private async initApiCalls() {
-    const offices = await this.getAccessibleOffices();
-    if (offices) {
-      this.accessibleOffices = offices;
     }
   }
 
@@ -249,21 +242,6 @@ export class MaPropertyComponent implements OnInit {
 
   /** ends**/
 
-  /** Services**/
-  private getAccessibleOffices() {
-    return new Promise((resolve) => {
-      this.maService.getaccessibleOffices().subscribe(
-        (res) => {
-          resolve(res ? res.data : []);
-        },
-        (error) => {
-          resolve(false);
-        }
-      );
-    });
-    
-  }
-
   private getLocationByOffice(officeCode: string) {
     return new Promise((resolve) => {
       this.maService.getOfficeLocations(officeCode).subscribe(
@@ -275,7 +253,7 @@ export class MaPropertyComponent implements OnInit {
         }
       );
     });
-    
+
   }
 
   private getPropertyDetails(propertyId: string) {
@@ -307,7 +285,7 @@ export class MaPropertyComponent implements OnInit {
         }
       );
     });
-    
+
   }
   /**ends**/
 
