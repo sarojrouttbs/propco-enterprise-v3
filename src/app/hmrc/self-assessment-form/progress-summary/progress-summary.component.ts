@@ -1,9 +1,9 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { interval } from 'rxjs';
-import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC_CONFIG, PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC_CONFIG, HMRC_ERROR_MESSAGES, PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
 import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/preview-pdf-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { BatchDetail } from '../../hmrc-modal';
@@ -102,6 +102,9 @@ export class ProgressSummaryComponent implements OnInit {
           this.commonService.setItem('HMRC_BATCH_COUNT', response);
           this.getActionItems(response);
           resolve(true);
+        },(_error) => {
+          this.commonService.showMessage(HMRC_ERROR_MESSAGES.GET_DETAILS_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
+          resolve(false);
         });
       });
     }
@@ -173,6 +176,10 @@ export class ProgressSummaryComponent implements OnInit {
           });
         }
         resolve(true);
+      }, (_error) => {
+        this.commonService.showMessage(HMRC_ERROR_MESSAGES.GET_DETAILS_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
+        this.finalCount = 1;
+        resolve(false);
       });
     });
   }
@@ -216,7 +223,8 @@ export class ProgressSummaryComponent implements OnInit {
         (res) => {
           resolve(res ? res : null);
         },
-        (error) => {
+        (_error) => {
+          this.commonService.showMessage(HMRC_ERROR_MESSAGES.GET_DETAILS_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
           resolve(null);
         }
       );
@@ -242,7 +250,8 @@ export class ProgressSummaryComponent implements OnInit {
     return new Promise((resolve) => {
       this.hmrcService.downloadPdf(this.PDF_CONFIG.finalUrl).subscribe((res) => {
         resolve(res ? res : null)
-      }, error => {
+      }, (_error) => {
+        this.commonService.showMessage(HMRC_ERROR_MESSAGES.DOWNLOAD_FORM_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
         resolve(null);
       })
     });
@@ -272,7 +281,9 @@ export class ProgressSummaryComponent implements OnInit {
             this.commonService.showAlert('Download CSV for billing', DEFAULT_MESSAGES.NO_DATA_AVAILABLE);
           resolve(true);
         },
-        (error) => {
+        (_error) => {
+          this.showCsvBtnLoader = false;
+          this.commonService.showMessage(HMRC_ERROR_MESSAGES.DOWNLOAD_BILLING_CSV_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
           resolve(false);
         }
       );
@@ -293,7 +304,9 @@ export class ProgressSummaryComponent implements OnInit {
             this.commonService.showAlert('HMRC Download Summary', DEFAULT_MESSAGES.NO_DATA_AVAILABLE);
           resolve(true);
         },
-        (error) => {
+        (_error) => {
+          this.showSummaryReportBtnLoader = false;
+          this.commonService.showMessage(HMRC_ERROR_MESSAGES.DOWNLOAD_SUMMARY_SHEET_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
           resolve(false);
         }
       );
