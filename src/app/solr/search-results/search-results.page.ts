@@ -650,6 +650,9 @@ export class SearchResultsPage implements OnInit {
       case 'LANDLORD':
         action = 'OpenLandlord';
         break;
+      case 'COTENANT':
+        action = 'OpenCoTenant';
+        break;
       default:
         return;
     }
