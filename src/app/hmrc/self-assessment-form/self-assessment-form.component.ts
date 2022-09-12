@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { HmrcService } from '../hmrc.service';
-import { DATE_FORMAT, HMRC_CONFIG, SYSTEM_CONFIG } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULT_MESSAGES, ERROR_CODE, HMRC_CONFIG, HMRC_ERROR_MESSAGES, SYSTEM_CONFIG } from 'src/app/shared/constants';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { BatchDetail } from '../hmrc-modal';
@@ -137,11 +137,12 @@ export class SelfAssessmentFormComponent implements OnInit {
       }
       this.commonService.setItem('HMRC_FILTER', this.selfAssessmentForm.value);
       this.router.navigate(['../progress-summary'], { replaceUrl: true, relativeTo: this.route });
-    }, error => {
-      if (error?.error?.errorCode === 'UNPROCESSABLE_ENTITY') {
-        this.commonService.showAlert('Warning', 'Another process is already running. Please try again later.');
+    }, (error) => {
+      if (error?.error?.errorCode === ERROR_CODE.UNPROCESSABLE_ENTITY) {
+        this.commonService.showMessage(HMRC_ERROR_MESSAGES.ANOTHER_PROCESS_IS_RUNNING, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
         return;
       }
+      this.commonService.showMessage(HMRC_ERROR_MESSAGES.FACING_PROBLEM_TO_GENERATE_REPORT, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
     });
   }
 
@@ -167,7 +168,8 @@ export class SelfAssessmentFormComponent implements OnInit {
         (res) => {
           resolve(res ? res : null);
         },
-        (error) => {
+        (_error) => {
+          this.commonService.showMessage(HMRC_ERROR_MESSAGES.GET_DETAILS_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
           resolve(null);
         }
       );
@@ -182,6 +184,10 @@ export class SelfAssessmentFormComponent implements OnInit {
         } else {
           resolve(null);
         }
+      },
+      (_error) => {
+        this.commonService.showMessage(HMRC_ERROR_MESSAGES.GET_DETAILS_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
+        resolve(null);
       });
     });
   }

@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren
 import { FormGroup } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC_CONFIG, PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC_CONFIG, HMRC_ERROR_MESSAGES, PROPCO } from 'src/app/shared/constants';
 import { HmrcService } from '../../hmrc.service';
 import { DatePipe } from '@angular/common';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -124,6 +124,8 @@ export class PreviewAndSendComponent implements OnInit {
             recordsFiltered: res ? res.count : 0,
             data: []
           });
+        }, (_error) => {
+          this.commonService.showMessage(HMRC_ERROR_MESSAGES.FACING_PROBLEM_TO_FETCH_DETAILS, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
         })
       }
     };
@@ -155,6 +157,8 @@ export class PreviewAndSendComponent implements OnInit {
 
   async onRowClick(data: any) {
     const respData: any = await this.getPdfUrlDetails(data);
+    if(!respData)
+      return;
     const file = new Blob([respData], { type: 'application/pdf' });
     const fileURL = URL.createObjectURL(file);
     const modal = await this.modalController.create({
@@ -191,7 +195,8 @@ export class PreviewAndSendComponent implements OnInit {
         (res) => {
           resolve(res ? res : {});
         },
-        (error) => {
+        (_error) => {
+          this.commonService.showMessage(HMRC_ERROR_MESSAGES.PREVIEW_PDF_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
           resolve(false);
         }
       );
