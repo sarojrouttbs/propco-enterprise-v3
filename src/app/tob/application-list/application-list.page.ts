@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
@@ -100,8 +101,9 @@ export class ApplicationListPage implements OnInit {
   }
 
   private getPropertyById() {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
-      this.tobService.getPropertyDetails(this.propertyId).subscribe(
+      this.tobService.getPropertyDetails(this.propertyId,params).subscribe(
         res => {
           if (res && res.data) {
             this.isPropertyDetailsAvailable = true;
