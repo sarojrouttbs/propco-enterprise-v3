@@ -162,7 +162,9 @@ export class WebInternetDetailsComponent implements OnInit {
       this.agentService.getPropertyDetails(this.selectedEntryDetails.entityId, params).subscribe(result => {
         if (result && result.data && result.data.propertyDetails && result.data.propertyInfo) {        
           this.patchPropertyDetails(result.data.propertyDetails);
-          this.patchPropertyInfo(result.data.propertyInfo);
+          this.patchPropertyInfo(result.data.propertyInfo);  
+          this.patchPropertyWebInfo(result.data.propertyWebInfo);
+          this.patchPropertyDescription(result.data.propertyDescription);
         }
         resolve(result.data.propertyDetails);
       }, error => {
@@ -171,12 +173,9 @@ export class WebInternetDetailsComponent implements OnInit {
     })
   }
 
-
   private patchPropertyDetails(propertyDetails: IPropertyDetails) {
     this.webInternetDetailForm.patchValue(propertyDetails);
-    this.webInternetDetailForm.patchValue({
-      noOfSingleBedrooms: propertyDetails.noOfSingleBedrooms ? propertyDetails.noOfSingleBedrooms : 0,
-      noOfDoubleBedrooms: propertyDetails.noOfDoubleBedrooms ? propertyDetails.noOfDoubleBedrooms : 0,
+    this.webInternetDetailForm.patchValue({    
       showerRooms: propertyDetails.showerRooms ? propertyDetails.showerRooms : 0,
       isLiftAccess: propertyDetails.isLiftAccess ? true : false,
       parking: Number(propertyDetails.parking)
@@ -186,4 +185,16 @@ export class WebInternetDetailsComponent implements OnInit {
   private patchPropertyInfo(propertyInfo: IPropertyDetails) {
     this.webInternetDetailForm.patchValue(propertyInfo);
     }
+
+  private patchPropertyDescription(propertyDescription: IPropertyDetails) {
+      this.webInternetDetailForm.patchValue(propertyDescription);
+  }
+  
+  private patchPropertyWebInfo(propertyWebInfo: IPropertyDetails) {
+      this.webInternetDetailForm.patchValue(propertyWebInfo);
+      this.webInternetDetailForm.patchValue({
+        hasUploadedToWebsite: propertyWebInfo.hasUploadedToWebsite ? false : true
+      });
+  }
+  
 }

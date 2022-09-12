@@ -1,32 +1,95 @@
 <ion-content id="market-appraisal">
-  <ion-segment [(ngModel)]="type" class="segment-card" id="marketAppraisalTabs">
-    <ion-segment-button value="contact" checked>
-      <ion-label>MA Contact</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="property">
-      <ion-label>Property</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-
-  <app-landlord-search [type]="type"></app-landlord-search>
-
-  <div [hidden]="type != 'contact'">
-    <app-ma-contact [group]="maForm.controls['contactForm']"></app-ma-contact>
-  </div>
-
-  <div [hidden]="type != 'property'">
-    <app-ma-property [group]="maForm.controls['propertyForm']" [contactGroup]="maForm.controls['contactForm']"></app-ma-property>
-  </div>
-
-  <div class="button-block">
-    <ion-row>
-      <ion-col class="ion-text-end">
-        <ion-button color="danger" (click)="cancel()">Cancel</ion-button>
-        <ion-button color="success" (click)="changeSegment()">{{type==='contact'? 'Go To Property' : 'Go To Contact'}}</ion-button>
-        <ion-button color="success" (click)="saveWithoutBooking()">Save
-          Without Booking</ion-button>
-        <ion-button color="success" (click)="bookMa()" [disabled]="maForm.get('contactForm').invalid || maForm.get('propertyForm').invalid">Book MA</ion-button>
-      </ion-col>
-    </ion-row>
-  </div>
+  <ng-container *ngIf="!skeleton">
+    <ion-segment [(ngModel)]="type" class="segment-card" id="marketAppraisalTabs">
+      <ion-segment-button value="contact" checked>
+        <ion-label>MA Contact</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="property">
+        <ion-label>Property</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  
+    <app-landlord-search [type]="type"></app-landlord-search>
+  
+    <div [hidden]="type != 'contact'">
+      <app-ma-contact [group]="maForm.controls['contactForm']"></app-ma-contact>
+    </div>
+  
+    <div [hidden]="type != 'property'">
+      <app-ma-property [group]="maForm.controls['propertyForm']" [contactGroup]="maForm.controls['contactForm']" [accessibleOffices]="accessibleOffices"></app-ma-property>
+    </div>
+  
+    <div>
+      <ion-row>
+        <ion-col class="ion-text-end">
+          <ion-button color="danger" (click)="cancel()">Cancel</ion-button>
+          <ion-button color="success" (click)="changeSegment()">{{type==='contact'? 'Go To Property' : 'Go To Contact'}}</ion-button>
+          <ion-button color="success" (click)="saveWithoutBooking()">Save
+            Without Booking</ion-button>
+          <ion-button color="success" (click)="bookMa()" [disabled]="maForm.get('contactForm').invalid || maForm.get('propertyForm').invalid">Book MA</ion-button>
+        </ion-col>
+      </ion-row>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="skeleton">
+    <ng-container [ngTemplateOutlet]="maSkeleton">
+    </ng-container>
+  </ng-container>
 </ion-content>
+
+<ng-template #maSkeleton>
+  <ion-row>
+    <ion-col size="100" class="ion-no-padding">
+      <ion-row>
+        <ion-col size="50">
+          <ion-skeleton-text animated style="height: 40px;"></ion-skeleton-text><br>
+        </ion-col>
+        <ion-col size="50">
+          <ion-skeleton-text animated style="height: 40px;"></ion-skeleton-text><br>
+          <ion-skeleton-text animated style="height: 25px;width: 100%;"></ion-skeleton-text><br>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ma-skeleton-block">
+        <ng-container [ngTemplateOutlet]="maSkeletonFormBlock">
+        </ng-container>
+      </ion-row>
+      <ion-row class="ma-skeleton-block">
+        <ng-container [ngTemplateOutlet]="maSkeletonFormBlock">
+        </ng-container>
+      </ion-row>
+      <ion-row class="ma-skeleton-block">
+        <ng-container [ngTemplateOutlet]="maSkeletonFormBlock">
+        </ng-container>
+      </ion-row>
+      <ion-row>
+        <ion-col size="100">
+          <ion-skeleton-text animated class="button-block"></ion-skeleton-text>
+          <ion-skeleton-text animated class="button-block"></ion-skeleton-text>
+          <ion-skeleton-text animated class="button-block"></ion-skeleton-text>
+          <ion-skeleton-text animated class="button-block"></ion-skeleton-text>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+</ng-template>
+<ng-template #maSkeletonFormBlock>
+  <ion-col size="100">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="25"><ion-skeleton-text animated style="height: 25px;" ></ion-skeleton-text></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="25"><ion-skeleton-text animated ></ion-skeleton-text></ion-col>
+        <ion-col size="25"><ion-skeleton-text animated ></ion-skeleton-text></ion-col>
+        <ion-col size="25"><ion-skeleton-text animated ></ion-skeleton-text></ion-col>
+        <ion-col size="25"><ion-skeleton-text animated ></ion-skeleton-text></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="25"><ion-skeleton-text animated ></ion-skeleton-text></ion-col>
+        <ion-col size="25"><ion-skeleton-text animated ></ion-skeleton-text></ion-col>
+        <ion-col size="25"><ion-skeleton-text animated ></ion-skeleton-text></ion-col>
+        <ion-col size="25"><ion-skeleton-text animated ></ion-skeleton-text></ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-col>
+</ng-template>
