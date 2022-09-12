@@ -70,6 +70,7 @@ export const ERROR_MESSAGE = {
 export const ERROR_CODE = {
   PARAMETER_MISSING_INVALID: 'PARAMETER_MISSING_INVALID',
   PAYMENT_RULES_CHECKING_FAILED: 'PAYMENT_RULES_CHECKING_FAILED',
+  UNPROCESSABLE_ENTITY: 'UNPROCESSABLE_ENTITY'
 };
 
 export const HEAD_CATEGORY = {
@@ -807,4 +808,15 @@ export const PROPERTY_CLAUSE_SCOPE = {
   FEATURE: 'Feature',
   ROOM: 'Room',
   PROPERTY: 'Property'
+}
+
+export const HMRC_ERROR_MESSAGES = {
+  FACING_PROBLEM_TO_FETCH_DETAILS: 'We are currently experiencing some problem in fetching the landlords, please contact helpdesk.',
+  FACING_PROBLEM_TO_GENERATE_REPORT: 'We are currently experiencing some problem in generating the self-assessment form, please contact helpdesk.',
+  ANOTHER_PROCESS_IS_RUNNING: 'We cannot proceed since another action is in progress.',
+  PREVIEW_PDF_ERROR: 'We are currently experiencing some problem in providing the preview right now.',
+  DOWNLOAD_BILLING_CSV_ERROR: 'We are currently experiencing some problem in downloading the file for billing purpose.',
+  DOWNLOAD_SUMMARY_SHEET_ERROR: 'We are currently experiencing some problem in downloading the summary sheet.',
+  DOWNLOAD_FORM_ERROR: 'We are currently experiencing some problem in printing the form.',
+  GET_DETAILS_ERROR: 'We are currently experiencing some problem in getting the details, please contact helpdesk.'
 }

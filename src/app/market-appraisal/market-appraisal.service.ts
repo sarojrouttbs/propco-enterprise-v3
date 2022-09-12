@@ -38,9 +38,9 @@ export class MarketAppraisalService {
     return this.httpClient.put(environment.API_BASE_URL + `properties/${propertyId}/node`, params);
   }
 
-  getaccessibleOffices(): Observable<any> {
+  getaccessibleOffices(params?: any): Observable<any> {
     return this.httpClient.get(
-      environment.API_BASE_URL + `accessible-offices`, {}
+      environment.API_BASE_URL + `accessible-offices`, { params }
     );
   }
 
