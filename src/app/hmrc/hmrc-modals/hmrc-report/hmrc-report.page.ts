@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { HmrcService } from 'src/app/hmrc/hmrc.service';
-import { DATE_FORMAT, DEFAULT_MESSAGES } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULT_MESSAGES, HMRC_ERROR_MESSAGES } from 'src/app/shared/constants';
 import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/preview-pdf-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 
@@ -44,7 +44,7 @@ export class HmrcReportPage {
       backdropDismiss: false
     });
 
-    modal.onDidDismiss().then(async res => { });
+    modal.onDidDismiss();
     await modal.present();
   }
 
@@ -62,7 +62,9 @@ export class HmrcReportPage {
             this.commonService.showAlert('Download CSV for billing', DEFAULT_MESSAGES.NO_DATA_AVAILABLE);
           resolve(true);
         },
-        (error) => {
+        (_error) => {
+          this.showBillingBtnLoader = false;
+          this.commonService.showMessage(HMRC_ERROR_MESSAGES.DOWNLOAD_BILLING_CSV_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
           resolve(false);
         }
       );
@@ -82,7 +84,9 @@ export class HmrcReportPage {
             this.commonService.showAlert('HMRC Download Summary', DEFAULT_MESSAGES.NO_DATA_AVAILABLE);
           resolve(true);
         },
-        (error) => {
+        (_error) => {
+          this.showSummaryReportBtnLoader = false;
+          this.commonService.showMessage(HMRC_ERROR_MESSAGES.DOWNLOAD_SUMMARY_SHEET_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
           resolve(false);
         }
       );
