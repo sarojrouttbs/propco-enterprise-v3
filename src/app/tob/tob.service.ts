@@ -160,8 +160,8 @@ export class TobService {
     );
   }
 
-  getApplicationList(propertyId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/applications`);
+  getApplicationList(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/applications`,{params});
   }
 
   getApplicantQuestions(): Observable<any> {
