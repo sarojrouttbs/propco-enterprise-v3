@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
@@ -263,16 +264,15 @@ export class ApplicationListPage implements OnInit {
   rejectAllApplications() {
     this.commonService.showConfirm('Reject All Application', 'Are you sure, you want to reject all application?', '', 'YES', 'NO').then(response => {
       if (response) {
-        const applicationId = this.applicationList.map(function(application) {
+        const applicationIds = this.applicationList.map(function(application) {
           return application.applicationId;
         });
-        if (applicationId.length > 0) {
-          const requestObj: any = {
-            applicationId: applicationId
-          };
-          this.tobService.rejectAllApplication(requestObj).subscribe((res) => {
-            this.commonService.showAlert('Reject All Application', 'All applications have been rejected successfully.').then(response => {
-              if (response) {
+        if (applicationIds.length > 0) {
+          const params = new HttpParams()
+          .set('applicationId', applicationIds.join());
+          this.tobService.rejectAllApplication(params).subscribe((res) => {
+            this.commonService.showAlert('Reject All Application', 'All applications have been rejected successfully.').then(resp => {
+              if (resp) {
                 this.initApiCalls();
               }
             });
