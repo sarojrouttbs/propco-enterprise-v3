@@ -13,6 +13,7 @@ import { TermsAndConditionModalPage } from 'src/app/shared/modals/terms-and-cond
 import { environment } from 'src/environments/environment';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 import * as CryptoJS from 'crypto-js/crypto-js';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-application-detail',
@@ -555,8 +556,9 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private getPropertyDetails(propertyId: string) {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve, reject) => {
-      this._tobService.getPropertyDetails(propertyId).subscribe(
+      this._tobService.getPropertyDetails(propertyId, params).subscribe(
         res => {
           if (res) {
             this.propertyDetails = res.data;

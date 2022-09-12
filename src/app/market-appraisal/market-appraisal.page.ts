@@ -7,6 +7,7 @@ import { DATE_FORMAT, MARKET_APPRAISAL } from '../shared/constants';
 import { CommonService } from '../shared/services/common.service';
 import { ValidationService } from '../shared/services/validation.service';
 import { MarketAppraisalService } from './market-appraisal.service';
+import { HttpParams } from '@angular/common/http';
 @Component({
   selector: 'app-market-appraisal',
   templateUrl: './market-appraisal.page.html',
@@ -17,7 +18,8 @@ export class MarketAppraisalPage implements OnInit {
   type = MARKET_APPRAISAL.contact_type;
   maForm: FormGroup;
   DATE_FORMAT = DATE_FORMAT;
-  
+  skeleton = true;
+  accessibleOffices: any;
   constructor(
     private commonService: CommonService,
     private router: Router,
@@ -28,6 +30,7 @@ export class MarketAppraisalPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
+    this.initApiCalls();
   }
 
   initForm() {
@@ -108,6 +111,31 @@ export class MarketAppraisalPage implements OnInit {
         numberOfBedroom: ''
       })
     });
+  }
+
+  private async initApiCalls() {
+    const offices = await this.getAccessibleOffices();
+    if (offices) {
+      this.accessibleOffices = offices;
+    }
+    this.skeleton = false;
+  }
+
+  /** Services**/
+  private getAccessibleOffices() {
+    const params = new HttpParams()
+      .set('hideLoader', 'true');
+    return new Promise((resolve) => {
+      this.maService.getaccessibleOffices(params).subscribe(
+        (res) => {
+          resolve(res ? res.data : []);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+
   }
 
   cancel() {
@@ -316,7 +344,7 @@ export class MarketAppraisalPage implements OnInit {
         }
       );
     });
-    
+
   }
 
   updateLandlord() {
@@ -335,7 +363,7 @@ export class MarketAppraisalPage implements OnInit {
         }
       );
     });
-    
+
   }
 
   updateProperty(payload) {
@@ -354,7 +382,7 @@ export class MarketAppraisalPage implements OnInit {
         }
       );
     });
-    
+
   }
 
   private createProperty(payload) {
@@ -368,7 +396,7 @@ export class MarketAppraisalPage implements OnInit {
         }
       );
     });
-    
+
   }
 
   async bookMa() {
@@ -387,5 +415,4 @@ export class MarketAppraisalPage implements OnInit {
     });
     await modal.present();
   }
-
 }
