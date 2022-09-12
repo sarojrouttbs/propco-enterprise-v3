@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
@@ -226,8 +227,9 @@ export class OfferListPage implements OnInit {
   }
 
   private getPropertyById() {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
-      this.tobService.getPropertyDetails(this.propertyId).subscribe(
+      this.tobService.getPropertyDetails(this.propertyId, params).subscribe(
         res => {
           if (res && res.data) {
             this.isPropertyDetailsAvailable = true;
@@ -245,8 +247,9 @@ export class OfferListPage implements OnInit {
   }
 
   private getOfferList() {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
-      this.tobService.getOfferList(this.propertyId).subscribe(
+      this.tobService.getOfferList(this.propertyId, params).subscribe(
         (res) => {
           this.isOffersListAvailable = true;
           if (res && res.data) {
@@ -260,8 +263,9 @@ export class OfferListPage implements OnInit {
   }
 
   private getUserAccessRight() {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
-      this.tobService.getUserAccessRight().subscribe(
+      this.tobService.getUserAccessRight(params).subscribe(
         async (res) => {
           if (res) {
             resolve(res);
