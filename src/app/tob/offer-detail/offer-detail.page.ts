@@ -15,6 +15,7 @@ import { switchMap, debounceTime } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 import { NegotiateModalPage } from 'src/app/shared/modals/negotiate-modal/negotiate-modal.page';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-offer-detail',
@@ -248,7 +249,8 @@ export class OfferDetailPage implements OnInit {
   }
 
   private getPropertyDetails(propertyId: string) {
-    this.tobService.getPropertyDetails(propertyId).subscribe(
+    const params = new HttpParams().set('hideLoader', 'true');
+    this.tobService.getPropertyDetails(propertyId, params).subscribe(
       (res) => {
         this.propertyDetails = res.data;
         this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
