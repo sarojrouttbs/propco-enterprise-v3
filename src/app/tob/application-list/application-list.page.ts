@@ -86,8 +86,9 @@ export class ApplicationListPage implements OnInit {
   }
 
   private getApplicationList() {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
-      this.tobService.getApplicationList(this.propertyId).subscribe(
+      this.tobService.getApplicationList(this.propertyId, params).subscribe(
         (res) => {
           if (res) {
             this.isApplicationListAvailable = true;
