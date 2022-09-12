@@ -62,6 +62,7 @@ import { ListViewComponent } from './viewings/list-view/list-view.component';
 import { WebInternetDetailsComponent } from './particulars/web-internet-details/web-internet-details.component';
 import { ClausesComponent } from './admin/clauses/clauses.component';
 import { MediaComponent } from './media/media.component';
+import { PicturesComponent } from './media/pictures/pictures.component';
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
 @NgModule({
@@ -127,7 +128,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIG
     ListViewComponent,
     WebInternetDetailsComponent,
     ClausesComponent,
-    MediaComponent
+    MediaComponent,
+    PicturesComponent
   ],
   providers: [
     AgentService,
