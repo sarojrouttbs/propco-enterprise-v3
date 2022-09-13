@@ -63,7 +63,7 @@ export class OfficeFilterModalPage implements OnInit {
         distinctUntilChanged()
       ).subscribe(searchTerm => {
         this.filteredOfficesList = this.officesList.filter(item =>
-          item?.officeName?.toLowerCase().includes(searchTerm)
+          item?.officeName?.toLowerCase().includes(searchTerm.toLowerCase())
         );
       });
     this.filteredOfficesList = [...this.officesList];
