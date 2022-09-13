@@ -10,19 +10,19 @@
 <ion-content id="office-filter-modal">
   <ion-grid class="ion-no-padding header-section">
     <ion-row>
-      <ion-col size="40" class="ion-text-left">
+      <ion-col size-xl="48" size-lg="48" size-md="40" size-sm="40" size-xs="40" class="ion-text-left">
         <ion-button size="small" color="medium" fill="outline" style="margin-right: 10px;" (click)="onExpandAll()">
           Expand All
         </ion-button>
         <ion-button size="small" color="medium" fill="outline" (click)="onCollapseAll()">Collapse All</ion-button>
       </ion-col>
-      <ion-col size="30">
+      <ion-col size-xl="26" size-lg="26" size-md="30" size-sm="30" size-xs="30">
         <ion-item class="margin-20-search-box" *ngIf="officesList.length > 0">
           <ion-label position="floating">Search</ion-label>
           <ion-input [formControl]="searchText"></ion-input>
         </ion-item>
       </ion-col>
-      <ion-col size="30" class="ion-text-right">
+      <ion-col size-xl="26" size-lg="26" size-md="30" size-sm="30" size-xs="30" class="ion-text-right">
         <ion-button size="small" color="medium" fill="outline" style="margin-right: 10px;" (click)="onselectAll()"
           [disabled]="this.officesList?.length === 0">Select All</ion-button>
         <ion-button size="small" color="medium" fill="outline" (click)="unselectAll()"
@@ -31,7 +31,7 @@
     </ion-row>
   </ion-grid>
   <div class="filter-container" style="display: flex;">
-    <div class="filter-left" style="width: 60%">
+    <div class="filter-left" style="width: 48%">
       <div class="right-left-panel-overflow" style="border-left: 1px solid var(--ion-color-four);">
         <ion-grid>
           <ion-row class="filter-list">
@@ -90,7 +90,7 @@
         </ion-grid>
       </div>
     </div>
-    <div class="filter-right" style="width: 40%">
+    <div class="filter-right" style="width: 52%">
       <div class="right-left-panel-overflow">
         <ion-grid class="no-padding-top">
           <ion-row class="filter-list" *ngIf="officesList.length > 0">

@@ -920,8 +920,9 @@ ion-datetime {
 
 .office-filter-modal-container{
   &::part(content){
-    height: 525px;
-    width: 850px;
+    height: 530px;
+    width: 900px;
+    border-radius: 10px;
   }
 
   @media screen and (min-width: 768px) and (max-width: 1024px){
