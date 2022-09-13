@@ -26,7 +26,7 @@
         <ion-button size="small" color="medium" fill="outline" style="margin-right: 10px;" (click)="onselectAll()"
           [disabled]="this.officesList?.length === 0">Select All</ion-button>
         <ion-button size="small" color="medium" fill="outline" (click)="unselectAll()"
-          [disabled]="this.officesList?.length === 0">Select None</ion-button>
+          [disabled]="this.officesList?.length === 0">Unselect All</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -119,8 +119,8 @@
   <ion-grid>
     <ion-row>
       <ion-col size="100" class="ion-text-end">
-        <ion-button (click)="dismiss()" color="danger">Cancel</ion-button>
-        <ion-button (click)="onSave()" color="success">OK</ion-button>
+        <ion-button (click)="dismiss()" color="danger" fill="outline">Cancel</ion-button>
+        <ion-button (click)="onSave()" color="success">Finish</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

@@ -160,8 +160,8 @@ export class TobService {
     );
   }
 
-  getApplicationList(propertyId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/applications`);
+  getApplicationList(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/applications`,{params});
   }
 
   getApplicantQuestions(): Observable<any> {
@@ -245,8 +245,8 @@ export class TobService {
     );
   }
 
-  rejectAllApplication(body: any): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `applications/reject`, body).pipe(
+  rejectAllApplication(params: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `applications/reject`, {}, { params }).pipe(
       tap(() => { }),
       catchError(this.handleError<any>(''))
     );
