@@ -729,7 +729,7 @@ export class OfferDetailPage implements OnInit {
       backdropDismiss: false,
     });
 
-    modal.onDidDismiss().then((res) => { });
+    modal.onDidDismiss();
     await modal.present();
   }
 

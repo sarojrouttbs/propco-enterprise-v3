@@ -60,7 +60,6 @@ export class ContactDetailsModalPage implements OnInit {
     if (this.tenantId) {
       this.faultsService.getTenantDetails(this.tenantId).subscribe((res) => {
         this.tenantDetails = res ? res : '';        
-      }, error => {
       });
     }
   }

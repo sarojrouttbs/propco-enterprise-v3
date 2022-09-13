@@ -235,7 +235,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
       backdropDismiss: false
     });
 
-    modal.onDidDismiss().then(async res => { });
+    modal.onDidDismiss();
     await modal.present();
   }
 
