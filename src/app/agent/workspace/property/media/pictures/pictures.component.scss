@@ -1,0 +1,181 @@
+#picture-content {
+  .media-container {
+    display: grid;
+    padding: 10px;
+    gap: 0 10px;
+
+    .image-details-block {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 470px 50px;
+      gap: 10px 0;
+
+      .image-list-block {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, 250px);
+        grid-template-rows: 230px;
+        gap: 10px 10px;
+        overflow: auto;
+
+        .picture-details {
+          display: grid;
+          grid-template-rows: 170px 35px;
+          gap: 5px 0;
+          /* width: 250px;
+             */
+          border-radius: 5px;
+          background-color: var(--ion-color-two);
+          padding: 10px;
+
+          .small-picture {
+            img {
+              max-height: 100%;
+              object-fit: cover;
+            }
+          }
+
+          .picture-action {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            div:first-child {
+              margin-top: 5px;
+
+              ion-checkbox {
+                vertical-align: middle;
+              }
+
+              ion-label {
+                font-size: 10px;
+                white-space: nowrap;
+                width: 96px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: inline-block;
+                padding-left: 5px;
+              }
+            }
+
+            div:last-child {
+              text-align: right;
+
+              img.download-icon {
+                height: 30px;
+                width: 36px;
+                vertical-align: bottom;
+              }
+            }
+
+            ion-icon {
+              width: 36px;
+              height: 33px;
+              vertical-align: bottom;
+              color: var(--ion-color-step-0);
+            }
+          }
+
+        }
+
+       
+      }   
+
+      .image-action-block {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        div:last-child {
+          text-align: right;
+          margin-top: 5px;
+        }
+        .pic-list-icon{
+          width: 36px;
+          height: 33px;
+          vertical-align: bottom;
+        }        
+        .pic-expand-icon{
+          width: 36px;
+          height: 24px;
+        } 
+      }
+
+      .slide-main {
+        .swiper-button-prev,
+        .swiper-button-next {
+          background-color: transparent;
+          background-image: none !important;
+
+          ion-icon {
+            color: white;
+            position: absolute;
+            height: 50%;
+            transform: translate(-30%, -50%);
+            width: 35px;
+            height: 35px;
+            display: block;
+          }
+        }
+
+        .swiper-slide img {
+          width: 100% !important;
+          max-width: 100% !important;
+          height: 100% !important;
+          max-height: 100% !important;
+          object-fit: fill !important;
+        }
+
+       
+        @media screen and (min-width: 768px) and (max-width: 1024px){
+         ion-slides{
+           width: 737px;
+          }  
+        }
+
+        @media screen and (min-width: 1920px){
+          .swiper-slide img {
+            width: 49% !important;
+           }  
+         }
+      }
+    }
+
+    .image-add-block {
+      background: var(--ion-color-four);
+      border-radius: 5px;
+
+      .side-media-form {
+        .upload-row-bg {
+          background-color: var(--ion-color-two);
+          height: 150px;
+
+          .hide-input {
+            display: none;
+          }
+        }
+
+        .chip {
+          color: var(--ion-color-primary-contrast);
+          border-radius: 4px;
+          width: 100%;
+          padding: 8px;
+          margin: 0;
+
+          ion-icon {
+            color: var(--ion-color-primary-contrast);
+          }
+        }
+
+        .active-chip {
+          background-color: var(--ion-color-secondary-shade);
+        }
+
+        .inactive-chip {
+          background-color: var(--ion-color-three);
+        }
+      }
+    }
+  }
+
+  ion-label {
+    color: var(--ion-color-six);
+  }
+}
