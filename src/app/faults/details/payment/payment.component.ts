@@ -262,10 +262,6 @@ export class PaymentComponent implements OnInit {
         this.saveForLater();
         break;
       }
-      case 'proceed': {
-        this.proceed();
-        break;
-      }
       default: {
         this.btnAction.emit(type);
         break;
@@ -280,10 +276,7 @@ export class PaymentComponent implements OnInit {
     }
     this.saving = false;
   }
-
-  private async proceed() {
-  }
-
+  
   async checkFaultNotifications(faultId) {
     return new Promise((resolve, reject) => {
       this.faultsService.getFaultNotifications(faultId).subscribe(async (response) => {
@@ -416,7 +409,7 @@ export class PaymentComponent implements OnInit {
   }
 
   private getContractorDetails(contractId, type) {
-    return new Promise((resolve, reject) => {
+    return new Promise(() => {
       this.faultsService.getContractorDetails(contractId).subscribe((res) => {
         let data = res ? res : '';
         if (type === 'wo') {
@@ -438,7 +431,6 @@ export class PaymentComponent implements OnInit {
             contractorId: data ? data.contractorId : undefined
           });
         }
-      }, error => {
       });
     });
   }
@@ -596,7 +588,7 @@ export class PaymentComponent implements OnInit {
   }
 
   officeDetails() {
-    return new Promise((resolve, reject) => {
+    return new Promise(() => {
       this.faultsService.getOfficeDetails(this.propertyDetails.office).subscribe((res) => {
         let data = res ? res : '';
         if (data) {
@@ -604,7 +596,6 @@ export class PaymentComponent implements OnInit {
             mgntHoldKey: 'Contact Branch - ' + data.branding.phone
           });
         }
-      }, error => {
       });
     });
   }

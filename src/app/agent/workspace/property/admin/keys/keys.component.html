@@ -16,139 +16,141 @@
           </div>
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <ion-grid class="common-field-block">
-        <ion-row>
-          <ion-col size-xl="60" size-lg="60" size-md="50" size-sm="50" class="ion-align-self-end">
-            <ion-button color="success" (click)="createKeyset()">Add</ion-button>
-          </ion-col>
-          <ion-col size-xl="20" size-lg="20" size-md="25" size-sm="25">
-            <ion-item>
-              <ion-label position="floating">Key Code</ion-label>
-              <ion-input [formControl]="keyCode" readonly></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size-xl="20" size-lg="20" size-md="25" size-sm="25">
-            <ion-item>
-              <ion-label position="floating">Alarm Code</ion-label>
-              <ion-input [formControl]="alarmCode" readonly></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-
-      <form [formGroup]="propertyKeySetForm">
-        <ion-grid class="no-padding">
-          <ion-row class="ion-justify-content-start" formArrayName="propertyKeySets">
-            <ion-col size="100" *ngIf="propertyKeySetForm.get('propertyKeySets')['controls'].length === 0"
-              class="no-record-msg">
-              <ion-text><strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong></ion-text>
+      <ng-container *ngIf="isPropertyPropertyKeysetAvailable; else skeletonBlock">
+        <ion-grid class="common-field-block">
+          <ion-row>
+            <ion-col size-xl="60" size-lg="60" size-md="50" size-sm="50" class="ion-align-self-end">
+              <ion-button color="success" (click)="createKeyset()">Add</ion-button>
             </ion-col>
-            <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100"
-              class="property-card-set ion-no-padding"
-              *ngFor="let item of propertyKeySetForm.get('propertyKeySets')['controls']; let i=index">
-              <ion-card [formGroupName]="i">
-                <ion-card-content class="ion-no-padding">
-                  <div class="header"
-                    [ngClass]="{'warning' : item.controls.status.value === 0, 'success' : item.controls.status.value === 1, 'danger' : item.controls.status.value === 2}">
-                    <ion-grid>
-                      <ion-row class="ion-align-items-center">
-                        <ion-col size="50">
-                          <ion-text>{{item.controls.status.value | lookup: keyStatuses || notAvailable}}</ion-text>
-                        </ion-col>
-                        <ion-col size="50" class="ion-text-right">
-                          <div matTooltip="History" matTooltipPosition="above" (click)="onHistoryClick(item.value)" style="display: inline-block; vertical-align: text-bottom;">
-                            <i class="propcoicon propcoicon-log-history pointer"></i>
-                          </div>
-                          <div matTooltip="Remove" matTooltipPosition="above" (click)="deleteKeyset(item.value)" style="display: inline-block; vertical-align: text-bottom;">
-                            <i class="propcoicon propcoicon-cancel pointer"></i>
-                          </div>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </div>
-                  <div class="content">
-                    <ion-grid>
-                      <ion-row>
-                        <ion-col size="100">
-                          <ion-item>
-                            <ion-label position="floating">Name</ion-label>
-                            <ion-input formControlName="name"></ion-input>
-                          </ion-item>
-                          <app-validation-message [control]="item.controls.name"></app-validation-message>
-                        </ion-col>
-                        <ion-col size="100">
-                          <ion-item>
-                            <ion-label position="floating">Key ID</ion-label>
-                            <ion-input formControlName="keyId"></ion-input>
-                          </ion-item>
-                          <app-validation-message [control]="item.controls.keyId"></app-validation-message>
-                        </ion-col>
-                        <ion-col size="100">
-                          <ion-item>
-                            <ion-label position="floating">Key Type</ion-label>
-                            <ion-input formControlName="type"></ion-input>
-                          </ion-item>
-                          <app-validation-message [control]="item.controls.type"></app-validation-message>
-                        </ion-col>
-                        <ion-col size="50">
-                          <mat-form-field appearance="fill" style="margin-top: 11px;">
-                            <mat-label> Setup Date
-                            </mat-label>
-                            <input matInput [matDatepicker]="picker" formControlName="createdAt" readonly>
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                          </mat-form-field>
-                          <app-validation-message [control]="item.controls.createdAt"></app-validation-message>
-                        </ion-col>
-                        <ion-col size="50">
-                          <ion-item>
-                            <ion-label position="floating">Setup By <ion-text class="mandatory">*</ion-text>
-                            </ion-label>
-                            <ion-select interface="popover" formControlName="userId">
-                              <ion-select-option [value]="item.userId" *ngFor="let item of userDetailsList">
-                                {{ item?.forename }} {{ item?.surname }}
-                              </ion-select-option>
-                            </ion-select>
-                          </ion-item>
-                          <app-validation-message [control]="item.controls.userId"></app-validation-message>
-                        </ion-col>
-                        <ion-col size="100">
-                          <ion-item>
-                            <ion-label position="floating">Comments</ion-label>
-                            <ion-textarea rows="1" formControlName="note" auto-grow="true">
-                            </ion-textarea>
-                          </ion-item>
-                          <app-validation-message [control]="item.controls.note"></app-validation-message>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </div>
-                  <div class="footer">
-                    <ion-grid>
-                      <ion-row>
-                        <ion-col size="70">
-                          <div class="propco-btn-group">
-                            <ion-button *ngIf="item.controls.status.value === 0 || item.controls.status.value === 2"
-                            color="success" (click)="addKeysetLogHistory(item.value, 1)">
-                            Check In</ion-button>
-
-                          <ion-button *ngIf="item.controls.status.value === 0 || item.controls.status.value === 1"
-                            color="success" (click)="addKeysetLogHistory(item.value, 2)">
-                            Check Out</ion-button>
-                          </div>
-                        </ion-col>
-                        <ion-col size="30" class="ion-text-right">
-                          <ion-button color="success" (click)="onUpdateKeyset(item.value, item)">Update</ion-button>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </div>
-                </ion-card-content>
-              </ion-card>
+            <ion-col size-xl="20" size-lg="20" size-md="25" size-sm="25">
+              <ion-item>
+                <ion-label position="floating">Key Code</ion-label>
+                <ion-input [formControl]="keyCode" readonly></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size-xl="20" size-lg="20" size-md="25" size-sm="25">
+              <ion-item>
+                <ion-label position="floating">Alarm Code</ion-label>
+                <ion-input [formControl]="alarmCode" readonly></ion-input>
+              </ion-item>
             </ion-col>
           </ion-row>
         </ion-grid>
-      </form>
+
+        <form [formGroup]="propertyKeySetForm">        
+          <ion-grid class="no-padding">
+            <ion-row class="ion-justify-content-start" formArrayName="propertyKeySets">
+              <ion-col size="100" *ngIf="propertyKeySetForm.get('propertyKeySets')['controls'].length === 0"
+                class="no-record-msg">
+                <ion-text><strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong></ion-text>
+              </ion-col>
+              <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100"
+                class="property-card-set ion-no-padding"
+                *ngFor="let item of propertyKeySetForm.get('propertyKeySets')['controls']; let i=index">
+                <ion-card [formGroupName]="i">
+                  <ion-card-content class="ion-no-padding">
+                    <div class="header"
+                      [ngClass]="{'warning' : item.controls.status.value === 0, 'success' : item.controls.status.value === 1, 'danger' : item.controls.status.value === 2}">
+                      <ion-grid>
+                        <ion-row class="ion-align-items-center">
+                          <ion-col size="50">
+                            <ion-text>{{item.controls.status.value | lookup: keyStatuses || notAvailable}}</ion-text>
+                          </ion-col>
+                          <ion-col size="50" class="ion-text-right">
+                            <div matTooltip="History" matTooltipPosition="above" (click)="onHistoryClick(item.value)" style="display: inline-block; vertical-align: text-bottom;">
+                              <i class="propcoicon propcoicon-log-history pointer"></i>
+                            </div>
+                            <div matTooltip="Remove" matTooltipPosition="above" (click)="deleteKeyset(item.value)" style="display: inline-block; vertical-align: text-bottom;">
+                              <i class="propcoicon propcoicon-cancel pointer"></i>
+                            </div>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                    <div class="content">
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size="100">
+                            <ion-item>
+                              <ion-label position="floating">Name</ion-label>
+                              <ion-input formControlName="name"></ion-input>
+                            </ion-item>
+                            <app-validation-message [control]="item.controls.name"></app-validation-message>
+                          </ion-col>
+                          <ion-col size="100">
+                            <ion-item>
+                              <ion-label position="floating">Key ID</ion-label>
+                              <ion-input formControlName="keyId"></ion-input>
+                            </ion-item>
+                            <app-validation-message [control]="item.controls.keyId"></app-validation-message>
+                          </ion-col>
+                          <ion-col size="100">
+                            <ion-item>
+                              <ion-label position="floating">Key Type</ion-label>
+                              <ion-input formControlName="type"></ion-input>
+                            </ion-item>
+                            <app-validation-message [control]="item.controls.type"></app-validation-message>
+                          </ion-col>
+                          <ion-col size="50">
+                            <mat-form-field appearance="fill" style="margin-top: 11px;">
+                              <mat-label> Setup Date
+                              </mat-label>
+                              <input matInput [matDatepicker]="picker" formControlName="createdAt" readonly>
+                              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                              <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                            <app-validation-message [control]="item.controls.createdAt"></app-validation-message>
+                          </ion-col>
+                          <ion-col size="50">
+                            <ion-item>
+                              <ion-label position="floating">Setup By <ion-text class="mandatory">*</ion-text>
+                              </ion-label>
+                              <ion-select interface="popover" formControlName="userId">
+                                <ion-select-option [value]="item.userId" *ngFor="let item of userDetailsList">
+                                  {{ item?.forename }} {{ item?.surname }}
+                                </ion-select-option>
+                              </ion-select>
+                            </ion-item>
+                            <app-validation-message [control]="item.controls.userId"></app-validation-message>
+                          </ion-col>
+                          <ion-col size="100">
+                            <ion-item>
+                              <ion-label position="floating">Comments</ion-label>
+                              <ion-textarea rows="1" formControlName="note" auto-grow="true">
+                              </ion-textarea>
+                            </ion-item>
+                            <app-validation-message [control]="item.controls.note"></app-validation-message>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                    <div class="footer">
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size="70">
+                            <div class="propco-btn-group">
+                              <ion-button *ngIf="item.controls.status.value === 0 || item.controls.status.value === 2"
+                              color="success" (click)="addKeysetLogHistory(item.value, 1)">
+                              Check In</ion-button>
+  
+                            <ion-button *ngIf="item.controls.status.value === 0 || item.controls.status.value === 1"
+                              color="success" (click)="addKeysetLogHistory(item.value, 2)">
+                              Check Out</ion-button>
+                            </div>
+                          </ion-col>
+                          <ion-col size="30" class="ion-text-right">
+                            <ion-button color="success" (click)="onUpdateKeyset(item.value, item)">Update</ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </form>
+      </ng-container>
 
       <h5 style="padding: 5px 10px;">Log History</h5>
       <div class="overlay-container" style="position: relative;">
@@ -191,7 +193,7 @@
       </div>
 
       <h5 style="padding: 0px 10px;">Notes</h5>
-      <ion-grid class="common-field-block">
+      <ion-grid class="common-field-block" *ngIf="isPropertyPropertyKeysetAvailable">
         <ion-row>
           <ion-col size="100">
             <ion-item>
@@ -201,6 +203,120 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+
+      <ion-grid class="common-field-block" *ngIf="!isPropertyPropertyKeysetAvailable">
+        <ion-row>
+          <ion-col size="100">
+            <ion-item lines="none">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      
     </mat-expansion-panel>
   </mat-accordion>
 </ion-content>
+
+<ng-template #skeletonBlock>
+  <ion-grid class="common-field-block">
+    <ion-row>
+      <ion-col size-xl="60" size-lg="60" size-md="50" size-sm="50" class="ion-align-self-end">
+        <ion-item lines="none">
+          <ion-skeleton-text animated style="width: 20%;"></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="20" size-lg="20" size-md="25" size-sm="25">
+        <ion-item lines="none">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+      <ion-col size-xl="20" size-lg="20" size-md="25" size-sm="25">
+        <ion-item lines="none">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid class="no-padding">
+    <ion-row class="ion-justify-content-start">
+      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100"
+        class="property-card-set ion-no-padding" *ngFor="let number of [0,1,2,3,4]">
+        <ion-card>
+          <ion-card-content class="ion-no-padding">
+            <div class="header">
+              <ion-grid>
+                <ion-row class="ion-align-items-center">
+                  <ion-col size="50">
+                    <ion-item lines="none">
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="50" class="ion-text-right">
+                    <ion-item lines="none">
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+            <div class="content">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="100">
+                    <ion-item lines="none">
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="100">
+                    <ion-item lines="none">
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="100">
+                    <ion-item lines="none">
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="50">
+                    <ion-item lines="none">
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="50">
+                    <ion-item lines="none">
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="100">
+                    <ion-item lines="none">
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+            <div class="footer">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="50">
+                    <div class="propco-btn-group">
+                      <ion-item lines="none">
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                      </ion-item>
+                    </div>
+                  </ion-col>
+                  <ion-col size="50" class="ion-text-right">
+                    <ion-item lines="none">
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ng-template>

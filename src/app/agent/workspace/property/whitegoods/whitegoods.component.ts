@@ -152,7 +152,7 @@ export class WhitegoodsComponent implements OnInit {
   private rerenderWhitegoods(resetPaging?: any): void {
     if (this.dtElements && this.dtElements.first.dtInstance) {
       this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.ajax.reload((res) => { }, resetPaging);
+        dtInstance.ajax.reload(resetPaging);
       });
     }
   }

@@ -173,7 +173,7 @@ export class PreviewAndSendComponent implements OnInit {
       backdropDismiss: false
     });
 
-    modal.onDidDismiss().then(async res => { });
+    modal.onDidDismiss();
     await modal.present();
   }
 
@@ -213,7 +213,7 @@ export class PreviewAndSendComponent implements OnInit {
   private rerenderLandlordList(resetPaging?): void {
     if (this.dtElements && this.dtElements.first.dtInstance) {
       this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.ajax.reload((res) => { }, resetPaging);
+        dtInstance.ajax.reload(resetPaging);
       });
     }
   }
