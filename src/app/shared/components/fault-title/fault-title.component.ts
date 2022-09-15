@@ -80,9 +80,7 @@ export class FaultTitleComponent {
       backdropDismiss: false
     });
 
-    const data = modal.onDidDismiss().then(res => {
-    });
-
+    modal.onDidDismiss();
     await modal.present();
   }
 
@@ -97,9 +95,7 @@ export class FaultTitleComponent {
       backdropDismiss: false
     });
 
-    const data = modal.onDidDismiss().then(res => {
-    });
-
+    modal.onDidDismiss();
     await modal.present();
   }
 
@@ -115,7 +111,7 @@ export class FaultTitleComponent {
       backdropDismiss: false
     });
 
-    const data = modal.onDidDismiss().then(async res => {
+    modal.onDidDismiss().then(async res => {
       if (res.data && res.data == 'success') {
         this.commonService.showMessage('Email has been sent successfully', 'Send Email', 'success');
         return;
