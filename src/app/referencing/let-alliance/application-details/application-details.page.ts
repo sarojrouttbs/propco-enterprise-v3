@@ -133,7 +133,7 @@ export class ApplicationDetailsPage implements OnInit {
       }
     });
 
-    const data = modal.onDidDismiss().then(res => {
+    modal.onDidDismiss().then(res => {
       if (res.data.propertyId) {
         this.propertyId = res.data.propertyId;
         this.selectTenant();
@@ -155,7 +155,7 @@ export class ApplicationDetailsPage implements OnInit {
       }
     });
 
-    const data = modal.onDidDismiss().then(res => {
+    modal.onDidDismiss().then(res => {
       if (res?.data?.tenantId) {
         if (res.data.referencingApplicationStatus == 0 || res.data.referencingApplicationStatus == 1) {
           this.applicationAlert();
@@ -222,7 +222,7 @@ export class ApplicationDetailsPage implements OnInit {
       }
     });
 
-    const data = modal.onDidDismiss().then(res => {
+    modal.onDidDismiss().then(res => {
       this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
     });
 
@@ -593,7 +593,7 @@ export class ApplicationDetailsPage implements OnInit {
         paramAddress: this.address
       }
     });
-    const data = modal.onDidDismiss().then(res => {
+    modal.onDidDismiss().then(res => {
       if (res.data.address) {
         this.address = res.data.address;
       }
@@ -798,7 +798,7 @@ export class ApplicationDetailsPage implements OnInit {
       }
     });
 
-    const data = modal.onDidDismiss().then(res => {
+    modal.onDidDismiss().then(res => {
       if (res.data.userInput) {
         this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
       }

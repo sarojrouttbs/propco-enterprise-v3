@@ -224,7 +224,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
   private rerenderApplications(resetPaging?: any): void {
     if (this.dtElements && this.dtElements.first.dtInstance) {
       this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.ajax.reload((res) => { }, resetPaging);
+        dtInstance.ajax.reload(resetPaging);
       });
     }
   }
@@ -313,7 +313,7 @@ export class ApplicationListPage implements OnInit, OnDestroy {
         }
       });
   
-      const data = modal.onDidDismiss().then(res => {
+      modal.onDidDismiss().then(res => {
         if (res.data.userInput) {
           this.router.navigate(['../add-guarantor'], { 
             relativeTo: this.route,
@@ -326,7 +326,6 @@ export class ApplicationListPage implements OnInit, OnDestroy {
             }, 
             replaceUrl: true 
           });
-        } else {
         }
       });
   
