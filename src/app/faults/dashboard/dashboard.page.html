@@ -108,7 +108,7 @@
               <ion-input value="{{ filterForm.controls.fromDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
               ></ion-icon>
-              <ion-popover trigger="fromDate" show-backdrop="false">
+              <ion-popover class="ion-datepicker-popover" trigger="fromDate" show-backdrop="false">
                 <ng-template>
                   <ion-datetime
                     showDefaultButtons="true"
@@ -126,7 +126,7 @@
               <ion-input value="{{ filterForm.controls.toDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
               ></ion-icon>
-              <ion-popover trigger="toDate" show-backdrop="false">
+              <ion-popover class="ion-datepicker-popover" trigger="toDate" show-backdrop="false">
                 <ng-template>
                   <ion-datetime
                     showDefaultButtons="true"
@@ -382,7 +382,7 @@
               <ion-input value="{{ filterForm.controls.snoozeUntil.value | date: DATE_FORMAT.DATE }}"></ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
               ></ion-icon>
-              <ion-popover trigger="snoozeUntil" show-backdrop="false">
+              <ion-popover class="ion-datepicker-popover" trigger="snoozeUntil" show-backdrop="false">
                 <ng-template>
                   <ion-datetime
                     showDefaultButtons="true"
