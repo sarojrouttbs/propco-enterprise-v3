@@ -368,7 +368,6 @@ export class OfferListPage implements OnInit {
       this.commonService.getLookup().subscribe(data => {
         this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
         this.setLookupData();
-      }, error => {
       });
     }
   }

@@ -17,106 +17,150 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <ion-grid class="no-padding">
-        <ion-row>
-          <ion-col size="60" class="no-padding">
-            <ion-row>
-              <ion-col size="60" class="no-padding">
-                <ion-item>
-                  <ion-label position="floating">Property Specific Clause</ion-label>
-                  <ionic-selectable item-content itemValueField="clauseId" itemTextField="clauseName"
-                    [items]="propertyClausesList" [canSearch]="true" [isMultiple]="true" [canClear]="true"
-                    clearButtonText="Clear" closeButtonSlot="end" confirmButtonText="Apply"
-                    searchPlaceholder="Start typing to choose clauses" #propertyClausesFilter
-                    [formControl]="propertyClauses" [shouldStoreItemValue]="false" class="selectable-height"
-                    (click)="beginLoading()" (onOpen)="endLoading()" [shouldBackdropClose]="false">
-                    <ng-template ionicSelectableHeaderTemplate>
-                      <ion-toolbar>
-                        <ion-buttons end>
-                        </ion-buttons>
-                        <ion-title>
-                          {{propertyClausesFilter.label}}
-                        </ion-title>
-                      </ion-toolbar>
-                    </ng-template>
-
-                    <ng-template ionicSelectableValueTemplate let-propertyClausesList="value">
-                      <div class="ionic-selectable-value-item" *ngFor="let option of propertyClausesList">
-                        {{option.clauseName}}
-                      </div>
-                    </ng-template>
-                    <ng-template ionicSelectableFooterTemplate>
-                      <ion-toolbar>
-                        <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
-                          (click)="toggleItemsClauses()" [disabled]="!propertyClausesList.length">
-                          {{propertyClausesFilter.itemsToConfirm.length ? 'Deselect All' : 'Select All'}}
-                        </ion-button>
-                        <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
-                          (click)="propertyClausesFilter.confirm();propertyClausesFilter.close();onSelectionChange();"
-                          [disabled]="!propertyClausesFilter.itemsToConfirm.length">
-                          OK
-                        </ion-button>
-                        <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
-                          (click)="propertyClausesFilter.clear();propertyClausesFilter.close();onSelectionChange();"
-                          [disabled]="!propertyClausesFilter.itemsToConfirm.length">
-                          Clear
-                        </ion-button>
-                        <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
-                          (click)="propertyClausesFilter.close()">
-                          Cancel
-                        </ion-button>
-                      </ion-toolbar>
-                    </ng-template>
-                  </ionic-selectable>
-                </ion-item>
-              </ion-col>
-              <ion-col size="40" class="ion-text-center">
-                <!-- <ion-button color="success">Add</ion-button> -->
-              </ion-col>
-            </ion-row>
-
-            <ion-row style="margin-top: 30px;" class="no-padding-left" *ngIf="propertyClauses.value?.length">
-              <ion-col size="100" class="no-padding-left" style="margin-bottom: 10px;">
-                <ion-text class="selected-clauses-label">
-                  Select a clause to see full details
-                </ion-text>
-              </ion-col>
-              <ion-col size="100" class="no-padding">
-                <ion-chip *ngFor="let item of propertyClauses.value"
-                  (click)="getClauseDetails(item);$event.stopPropagation();">
-                  <ion-label>{{ item?.clauseName }}</ion-label>
-                  <ion-icon name="close" (click)="removeClauses(item);$event.stopPropagation();"></ion-icon>
-                </ion-chip>
-              </ion-col>
-            </ion-row>
-          </ion-col>
-          <ion-col size="40">
-            <ion-grid class="selected-clause-info">
+      <ng-container *ngIf="isPropertyClausesAvailable; else skeletonBlock">
+        <ion-grid class="no-padding">
+          <ion-row>
+            <ion-col size="60" class="no-padding">
               <ion-row>
-                <ion-col size="100">
-                  <ion-text>Information of selected clause shown in here.</ion-text>
+                <ion-col size="60" class="no-padding">
+                  <ion-item>
+                    <ion-label position="floating">Property Specific Clause</ion-label>
+                    <ionic-selectable item-content itemValueField="clauseId" itemTextField="clauseName"
+                      [items]="propertyClausesList" [canSearch]="true" [isMultiple]="true" [canClear]="true"
+                      clearButtonText="Clear" closeButtonSlot="end" confirmButtonText="Apply"
+                      searchPlaceholder="Start typing to choose clauses" #propertyClausesFilter
+                      [formControl]="propertyClauses" [shouldStoreItemValue]="false" class="selectable-height"
+                      (click)="beginLoading()" (onOpen)="endLoading()" [shouldBackdropClose]="false">
+                      <ng-template ionicSelectableHeaderTemplate>
+                        <ion-toolbar>
+                          <ion-buttons end>
+                          </ion-buttons>
+                          <ion-title>
+                            {{propertyClausesFilter.label}}
+                          </ion-title>
+                        </ion-toolbar>
+                      </ng-template>
+
+                      <ng-template ionicSelectableValueTemplate let-propertyClausesList="value">
+                        <div class="ionic-selectable-value-item" *ngFor="let option of propertyClausesList">
+                          {{option.clauseName}}
+                        </div>
+                      </ng-template>
+                      <ng-template ionicSelectableFooterTemplate>
+                        <ion-toolbar>
+                          <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
+                            (click)="toggleItemsClauses()" [disabled]="!propertyClausesList.length">
+                            {{propertyClausesFilter.itemsToConfirm.length ? 'Deselect All' : 'Select All'}}
+                          </ion-button>
+                          <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
+                            (click)="propertyClausesFilter.confirm();propertyClausesFilter.close();onSelectionChange();"
+                            [disabled]="!propertyClausesFilter.itemsToConfirm.length">
+                            OK
+                          </ion-button>
+                          <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                            (click)="propertyClausesFilter.clear();propertyClausesFilter.close();onSelectionChange();"
+                            [disabled]="!propertyClausesFilter.itemsToConfirm.length">
+                            Clear
+                          </ion-button>
+                          <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                            (click)="propertyClausesFilter.close()">
+                            Cancel
+                          </ion-button>
+                        </ion-toolbar>
+                      </ng-template>
+                    </ionic-selectable>
+                  </ion-item>
                 </ion-col>
-                <ng-container *ngIf="selectedClause">
-                  <ion-col size="100">
-                    <ion-text><strong>Clause Name:</strong> {{selectedClause?.clauseName || notAvailable}}</ion-text>
-                  </ion-col>
-                  <ion-col size="100">
-                    <ion-text>{{selectedClause?.clauseText}}</ion-text>
-                  </ion-col>
-                  <ion-col size="100">
-                    <ion-text><strong>Clause Heading:</strong> {{selectedClause?.clauseHeading || notAvailable}}
-                    </ion-text>
-                  </ion-col>
-                  <ion-col size="100">
-                    <ion-text><strong>Clause Number:</strong> {{selectedClause?.clauseNumber || notAvailable}}
-                    </ion-text>
-                  </ion-col>
-                </ng-container>
+                <ion-col size="40" class="ion-text-center">
+                  <!-- <ion-button color="success">Add</ion-button> -->
+                </ion-col>
               </ion-row>
-            </ion-grid>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+
+              <ion-row style="margin-top: 30px;" class="no-padding-left" *ngIf="propertyClauses.value?.length">
+                <ion-col size="100" class="no-padding-left" style="margin-bottom: 10px;">
+                  <ion-text class="selected-clauses-label">
+                    Select a clause to see full details
+                  </ion-text>
+                </ion-col>
+                <ion-col size="100" class="no-padding">
+                  <ion-chip *ngFor="let item of propertyClauses.value"
+                    (click)="getClauseDetails(item);$event.stopPropagation();">
+                    <ion-label>{{ item?.clauseName }}</ion-label>
+                    <ion-icon name="close" (click)="removeClauses(item);$event.stopPropagation();"></ion-icon>
+                  </ion-chip>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col size="40">
+              <ion-grid class="selected-clause-info">
+                <ion-row>
+                  <ion-col size="100">
+                    <ion-text>Information of selected clause shown in here.</ion-text>
+                  </ion-col>
+                  <ng-container *ngIf="selectedClause">
+                    <ion-col size="100">
+                      <ion-text><strong>Clause Name:</strong> {{selectedClause?.clauseName || notAvailable}}</ion-text>
+                    </ion-col>
+                    <ion-col size="100">
+                      <ion-text>{{selectedClause?.clauseText}}</ion-text>
+                    </ion-col>
+                    <ion-col size="100">
+                      <ion-text><strong>Clause Heading:</strong> {{selectedClause?.clauseHeading || notAvailable}}
+                      </ion-text>
+                    </ion-col>
+                    <ion-col size="100">
+                      <ion-text><strong>Clause Number:</strong> {{selectedClause?.clauseNumber || notAvailable}}
+                      </ion-text>
+                    </ion-col>
+                  </ng-container>
+                </ion-row>
+              </ion-grid>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ng-container>      
     </mat-expansion-panel>
   </mat-accordion>
 </ion-content>
+
+<!-- skeleton -->
+<ng-template #skeletonBlock>
+  <ion-grid class="no-padding">
+    <ion-row>
+      <ion-col size="60" class="no-padding">
+        <ion-row>
+          <ion-col size="100" class="no-padding" style="margin-top: 25px;">
+            <ion-item lines="none">
+              <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="no-padding-left">
+          <ion-col size="100" class="no-padding">
+            <ion-item lines="none">
+              <ion-skeleton-text animated style="width: 40%;"></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+          <ion-col size="100" class="no-padding">
+            <ion-item lines="none">
+              <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col size="40">
+        <ion-grid class="selected-clause-info">
+          <ion-row>
+            <ion-col size="100">
+              <ion-item lines="none">
+                <ion-skeleton-text animated style="width: 80%;"></ion-skeleton-text>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ng-template>
+<!-- skeleton -->

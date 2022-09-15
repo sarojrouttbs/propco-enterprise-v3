@@ -1313,7 +1313,6 @@ export class ArrangingContractorComponent implements OnInit {
           }
           this.raiseQuoteForm.get('contact').setValue(contact);
         }
-      }, error => {
       });
     }
   }
@@ -1673,7 +1672,6 @@ export class ArrangingContractorComponent implements OnInit {
             }
           }
         }
-      }, error => {
       });
     });
   }
@@ -1978,7 +1976,7 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   officeDetails() {
-    return new Promise((resolve, reject) => {
+    return new Promise(() => {
       this.faultsService.getOfficeDetails(this.propertyDetails.office).subscribe((res) => {
         let data = res ? res : '';
         if (data) {
@@ -1986,7 +1984,6 @@ export class ArrangingContractorComponent implements OnInit {
             mgntHoldKey: 'Contact Branch - ' + data.branding.phone
           });
         }
-      }, error => {
       });
     });
   }

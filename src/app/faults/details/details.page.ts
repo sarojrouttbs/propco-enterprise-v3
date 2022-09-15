@@ -632,7 +632,6 @@ export class DetailsPage {
       if (res) {
         this.returnTenantArrears(res);
       }
-    }, error => {
     });
   }
 
@@ -1147,7 +1146,6 @@ export class DetailsPage {
               }
             }
             resolve(res);
-          }, error => {
           });
         }
       }

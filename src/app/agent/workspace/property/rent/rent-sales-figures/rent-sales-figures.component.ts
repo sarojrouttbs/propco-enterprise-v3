@@ -157,8 +157,7 @@ export class RentSalesFiguresComponent implements OnInit {
       backdropDismiss: false
     });
 
-    modal.onDidDismiss().then(async res => {
-    });
+    modal.onDidDismiss();
     await modal.present();
   }
 
@@ -170,8 +169,7 @@ export class RentSalesFiguresComponent implements OnInit {
       backdropDismiss: false
     });
 
-    modal.onDidDismiss().then(async res => {
-    });
+    modal.onDidDismiss();
     await modal.present();
   }
 
@@ -183,8 +181,7 @@ export class RentSalesFiguresComponent implements OnInit {
       backdropDismiss: false
     });
 
-    modal.onDidDismiss().then(async res => {
-    });
+    modal.onDidDismiss();
     await modal.present();
   }
 

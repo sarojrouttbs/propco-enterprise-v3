@@ -135,8 +135,7 @@ export class PropertyDetailsComponent {
       backdropDismiss: false
     });
 
-    modal.onDidDismiss().then(async res => {
-    });
+    modal.onDidDismiss();
     await modal.present();
   }
 }

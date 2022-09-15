@@ -224,9 +224,7 @@ export class FaultQualificationComponent implements OnInit {
       backdropDismiss: false
     });
 
-    modal.onDidDismiss().then(async () => {
-    });
-
+    modal.onDidDismiss();
     await modal.present();
   }
 
@@ -522,8 +520,6 @@ export class FaultQualificationComponent implements OnInit {
 
     await modal.present();
   }
-
-  viewServiceContract() { }
 
   private updateFaultDetails(faultId, requestObj): Promise<any> {
     return new Promise((resolve, reject) => {
