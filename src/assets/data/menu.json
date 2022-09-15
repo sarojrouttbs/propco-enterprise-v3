@@ -48,6 +48,14 @@
           "state": "propco.agent.entity.property.marketingactivity",
           "isActive": false,
           "route": "marketing-activity"
+        },
+        {
+          "index": 5,
+          "key": "media",
+          "name": "Media",
+          "state": "propco.agent.entity.property.media",
+          "isActive": false,
+          "route": "media"
         }
       ]
     },
@@ -133,6 +141,14 @@
         },
         {
           "index": 3,
+          "key": "clauses",
+          "name": "Clauses",
+          "state": "propco.agent.entity.property.clauses",
+          "isActive": false,
+          "route": "clauses"
+        },
+        {
+          "index": 4,
           "key": "notes",
           "name": "Notes",
           "state": "propco.agent.entity.property.notes",

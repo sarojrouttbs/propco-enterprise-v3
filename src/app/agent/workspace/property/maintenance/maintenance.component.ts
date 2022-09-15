@@ -22,7 +22,7 @@ export class MaintenanceComponent implements OnInit, OnDestroy {
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   notesDtTrigger: Subject<any> = new Subject();
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
-  maintenanceNotes: any;
+  maintenanceNotes = [];
   selectedData: any;
   lookupdata: any;
   notesTypes: any;

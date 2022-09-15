@@ -16,4 +16,32 @@
         border-bottom: 1px solid var(--ion-color-four);
     }
 
+    .margin-20-search-box {
+        margin-top: -17px;
+        padding-left: 0;
+      }
+    
+    @media screen and (max-width: 768px){
+        .margin-20-search-box {
+            padding-left: 60px;
+        }
+    } 
+
+    table{
+        width: 100%
+    }
+
+    .filter-list{
+        padding: 5px 12px;        
+        border-bottom: 1px solid var(--ion-color-four);
+        font-size: 14px;
+    }
+
+    ion-grid{
+        padding:0px;
+    }
+
+    mat-tree{
+        width: 100%
+    }
 }

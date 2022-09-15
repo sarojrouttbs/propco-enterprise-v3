@@ -1,0 +1,81 @@
+<mat-accordion multi class="form-view-accordian" id="property-rooms">
+  <mat-expansion-panel #rooms hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Rooms
+      </mat-panel-title>
+      <mat-panel-description class="ion-justify-content-end no-margin">
+        <div>
+          <span *ngIf="!rooms.expanded" class="accordian-icon" title="Expand">
+            <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+          </span>
+          <span *ngIf="rooms.expanded" class="accordian-icon" title="Collapse">
+            <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+          </span>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <ion-grid class="rooms-block">
+      <ion-row class="filter-block">
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Property Rooms</ion-label>
+            <ionic-selectable item-content itemValueField="clauseId" itemTextField="clauseName" [items]="propertyRoomsList"
+              [canSearch]="true" [isMultiple]="true" [canClear]="true" clearButtonText="Clear" closeButtonSlot="end"
+              confirmButtonText="Apply" searchPlaceholder="Start typing to choose rooms" #propertyRoomFilter
+              [formControl]="propertyRooms" [shouldStoreItemValue]="false" class="selectable-height"
+              (click)="beginLoading()" (onOpen)="endLoading()" [shouldBackdropClose]="false">
+              <ng-template ionicSelectableHeaderTemplate>
+                <ion-toolbar>
+                  <ion-buttons end>
+                  </ion-buttons>
+                  <ion-title>
+                    {{propertyRoomFilter.label}}
+                  </ion-title>
+                </ion-toolbar>
+              </ng-template>
+  
+              <ng-template ionicSelectableValueTemplate let-propertyRoomsList="value">
+                <div class="ionic-selectable-value-item" *ngFor="let option of propertyRoomsList">
+                  {{option.clauseName}}
+                </div>
+              </ng-template>
+              <ng-template ionicSelectableFooterTemplate>
+                <ion-toolbar>
+                  <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
+                    (click)="toggleItemsRooms()" [disabled]="!propertyRoomsList.length">
+                    {{propertyRoomFilter.itemsToConfirm.length ? 'Deselect All' : 'Select All'}}
+                  </ion-button>
+                  <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
+                    (click)="propertyRoomFilter.confirm();propertyRoomFilter.close();"
+                    [disabled]="!propertyRoomFilter.itemsToConfirm.length">
+                    OK
+                  </ion-button>
+                  <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                    (click)="propertyRoomFilter.clear();propertyRoomFilter.close();"
+                    [disabled]="!propertyRoomFilter.itemsToConfirm.length">
+                    Clear
+                  </ion-button>
+                  <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                    (click)="propertyRoomFilter.close()">
+                    Cancel
+                  </ion-button>
+                </ion-toolbar>
+              </ng-template>
+            </ionic-selectable>
+          </ion-item>
+
+        </ion-col>
+      </ion-row>
+
+      <div style="margin-top: 15px;">
+        <ion-chip *ngFor="let item of propertyRooms.value">
+          <ion-label>{{ item?.clauseName }}</ion-label>
+          <ion-icon name="close" (click)="removeRooms(item)"></ion-icon>
+        </ion-chip>
+      </div>
+    </ion-grid>
+
+  </mat-expansion-panel>
+</mat-accordion>

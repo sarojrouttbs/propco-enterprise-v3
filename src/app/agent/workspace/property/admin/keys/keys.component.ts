@@ -27,7 +27,7 @@ export class KeysComponent implements OnInit {
   keyActivities: any;
   keyStatuses: any;
   userDetailsList: any;
-  logHistoryList: any;
+  logHistoryList = [];
   historyDtOption: DataTables.Settings;
   historyDtTrigger: Subject<any> = new Subject();
   @ViewChildren(DataTableDirective) dtElements: QueryList<DataTableDirective>;
@@ -40,6 +40,8 @@ export class KeysComponent implements OnInit {
   loginUserDetails: any;
   selectedItemForHistory: any;
   selecteKeysetData: any;
+
+  isPropertyPropertyKeysetAvailable = false;
 
   constructor(private modalController: ModalController, private commonService: CommonService, private agentService: AgentService, private _formBuilder: FormBuilder) { }
 
@@ -88,7 +90,7 @@ export class KeysComponent implements OnInit {
     this.propertyKeySetList = [];
     this.propertyKeySetFormArray.clear();
     this.propertyKeySetList = await this.getKeysListing(this.selectedEntityDetails.entityId);
-    this.setApplicationApplicants();
+    this.setKeysetDetails();
   }
 
   private initForm() {
@@ -96,8 +98,9 @@ export class KeysComponent implements OnInit {
   }
 
   private getUserDetails() {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve, reject) => {
-      this.commonService.getUserDetails().subscribe((res) => {
+      this.agentService.getUserDetails(params).subscribe((res) => {
         if (res) {
           resolve(res?.data[0]);
         } else {
@@ -110,8 +113,9 @@ export class KeysComponent implements OnInit {
   }
 
   private getUsersList() {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
-      this.agentService.getUsersList().subscribe(
+      this.agentService.getUsersList(params).subscribe(
         (res) => {
           resolve(res?.data);
         },
@@ -156,8 +160,9 @@ export class KeysComponent implements OnInit {
   }
 
   private getKeysListing(propertyId: string) {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
-      this.agentService.getKeysListing(propertyId).subscribe(
+      this.agentService.getKeysListing(propertyId, params).subscribe(
         (res) => {
           resolve(res?.data);
         },
@@ -168,7 +173,7 @@ export class KeysComponent implements OnInit {
     });
   }
 
-  private setApplicationApplicants() {
+  private setKeysetDetails() {
     this.updatePropertyKeySetForm(this.propertyKeySetList);
   }
 
@@ -201,6 +206,7 @@ export class KeysComponent implements OnInit {
         }
       });
     }
+    this.isPropertyPropertyKeysetAvailable = true;
   }
 
   private buildDtOptions(): DataTables.Settings {

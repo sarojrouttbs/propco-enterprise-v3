@@ -80,9 +80,7 @@ export class LoginPage implements OnInit {
       backdropDismiss: false
     });
 
-    const data = modal.onDidDismiss().then(res => {
-
-    });
+    modal.onDidDismiss();
     await modal.present();
   }
 }

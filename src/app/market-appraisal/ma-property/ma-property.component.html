@@ -200,9 +200,9 @@
                   <ion-label position="floating">Available From <ion-text class="mandatory">*</ion-text></ion-label>
                   <ion-input value="{{ propertyForm.controls.availableFromDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
                   <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-                  <ion-popover trigger="availableFromDate" show-backdrop="false">
+                  <ion-popover class="ion-datepicker-popover" trigger="availableFromDate" show-backdrop="false">
                     <ng-template>
-                      <ion-datetime [max]="maxDate" (ionChange)="calculateTotalDuration()" showDefaultButtons="true" presentation="date" formControlName="availableFromDate">
+                      <ion-datetime [max]="maxDate" (ionChange)="calculateTotalDuration()" [showDefaultButtons]="true" presentation="date" formControlName="availableFromDate">
                       </ion-datetime>
                     </ng-template>
                   </ion-popover>
@@ -214,9 +214,9 @@
                   <ion-label position="floating">Available To</ion-label>
                   <ion-input value="{{ propertyForm.controls.availableToDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
                   <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-                  <ion-popover trigger="availableToDate" show-backdrop="false">
+                  <ion-popover class="ion-datepicker-popover" trigger="availableToDate" show-backdrop="false">
                     <ng-template>
-                      <ion-datetime [min]="minDate" (ionChange)="calculateTotalDuration()" showDefaultButtons="true" presentation="date" formControlName="availableToDate">
+                      <ion-datetime [min]="minDate" (ionChange)="calculateTotalDuration()" [showDefaultButtons]="true" presentation="date" formControlName="availableToDate">
                       </ion-datetime>
                     </ng-template>
                   </ion-popover>

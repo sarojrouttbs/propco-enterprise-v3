@@ -1,0 +1,80 @@
+<ion-grid id="viewings">
+  <form [formGroup]="viewingForm">
+    <ion-row>
+      <ion-col size="50" class="ion-align-self-end ion-text-left">
+        <ion-button color="success" fill="outline">Add </ion-button>
+      </ion-col>
+      <ion-col size="50" class="ion-align-self-end view-class ion-text-right view-block">
+        <div style="margin-right: 10px;display: inline-block;" class="pointer">
+          <i class="propcoicon propcoicon-grid-view action-btn" (click)="switchView('grid')"></i>
+        </div>
+        <div style="display: inline-block;" class="pointer">
+          <i class="propcoicon propcoicon-list-view action-btn" (click)="switchView('list')"></i>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="15">
+        <ion-item>
+          <ion-label position="floating">Quick Filter
+          </ion-label>
+          <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="quickFilterType"
+            (ionChange)="onFilterChange()">
+            <ion-select-option [value]="data?.index" *ngFor="let data of DATE_RANGE_CONFIG_LIST">
+              {{ data?.value }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col size="15">
+        <ion-item id="fromDate">
+          <ion-label position="floating">From</ion-label>
+          <ion-input value="{{ viewingForm.controls.fromDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+          <ion-popover class="ion-datepicker-popover" trigger="fromDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime showDefaultButtons="true" presentation="date" formControlName="fromDate">
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+      </ion-col>
+      <ion-col size="15">
+        <ion-item id="toDate">
+          <ion-label position="floating">To</ion-label>
+          <ion-input value="{{ viewingForm.controls.toDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+          <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+          <ion-popover class="ion-datepicker-popover" trigger="toDate" show-backdrop="false">
+            <ng-template>
+              <ion-datetime showDefaultButtons="true" presentation="date" formControlName="toDate">
+              </ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+      </ion-col>
+      <ion-col class="ion-align-self-end ion-text-right">
+        <ion-button color="success" fill="outline" style="margin-right: 16px;" (click)="applyFilter()">Apply Filters
+        </ion-button>
+        <ion-button color="danger" fill="outline" (click)="resetFilter()">Reset Filters</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="viewings-instructions">
+      <ion-col size="60">
+        <ion-item>
+          <ion-label position="floating">Viewing Instructions</ion-label>
+          <ion-textarea rows="1" formControlName="viewingInstructions" autoGrow="true"></ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </form>
+  <ng-container *ngIf="viewType === 'grid'; then girdView; else listView">
+  </ng-container>
+</ion-grid>
+
+<ng-template #girdView>
+  <app-grid-view></app-grid-view>
+</ng-template>
+
+<ng-template #listView>
+  <app-list-view></app-list-view>
+</ng-template>

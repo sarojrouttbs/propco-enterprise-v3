@@ -62,7 +62,7 @@ export class SearchSuggestionComponent implements OnInit {
 
     // set val to the value of the searchbar
     const searchText = ev.target.value;
-    this.updateQueryParams(searchText, this.entityControl.value);
+    this.updateQueryParams();
 
     // if the value is an empty string don't filter the items
     if (searchText && searchText.trim() !== '' && searchText.length > 3) {
@@ -74,11 +74,15 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   private prepareSearchParams(searchText: string) {
+    let searchTypes = this.transformToUpperCase(this.entityControl.value);
+    if (searchTypes.indexOf('TENANT') !== -1) {
+      searchTypes.push('COTENANT');
+    }
     return (
       new HttpParams()
         // .set('limit', this.solrSuggestionConfig.limit)
         .set('searchTerm', searchText)
-        .set('searchTypes', this.transformToUpperCase(this.entityControl.value))
+        .set('searchTypes', searchTypes)
         .set('searchSwitch', this.solrSuggestionConfig.searchSwitch)
         .set('hideLoader', 'true')
     );
@@ -209,16 +213,10 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   onChangeEntity() {
-    this.updateQueryParams(this.searchTermControl.value, this.entityControl.value);
+    this.updateQueryParams();
   }
 
-  private updateQueryParams(searchTerm, entity) {
-    this.router.navigate([], {
-      relativeTo: this.route, queryParams: {
-        searchTerm: searchTerm,
-        type: entity
-      }
-    });
+  private updateQueryParams() {
     this.solrSearchService.search({ entity: this.entityControl.value, term: this.searchTermControl.value, isSearchResult: false });
   }
 }

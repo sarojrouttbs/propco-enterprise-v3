@@ -1,0 +1,49 @@
+<div class="overlay-container" style="position: relative">
+  <table datatable [dtOptions]="dtOptions" class="row-border hover table-width" id="viewing-table"
+    style="position: relative" aria-describedby="viewings">
+    <thead>
+      <tr>
+        <th scope="col" style="width:10%">Created On</th>
+        <th scope="col" style="width:10%">Due Date</th>
+        <th scope="col" style="width:10%">Time</th>
+        <th scope="col" style="width:10%">Applicant ref.</th>
+        <th scope="col" style="width:15%">Applicant Name</th>
+        <th scope="col" style="width:15%">Assign To</th>
+        <th scope="col" style="width:15%">Meeting Location</th>
+        <th scope="col">Notes</th>
+        <th scope="col" style="width:40px"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of viewingList" class="table-row">
+        <td>{{(data?.startAt | date: DATE_FORMAT.DATE) || notAvailable}}</td>
+        <td>{{(data?.stopAt | date: DATE_FORMAT.DATE) || notAvailable}}</td>
+        <td>{{data?.startAt | date: DATE_FORMAT.TIME}} - {{data.stopAt | date: DATE_FORMAT.TIME }}</td>
+        <td>{{data?.applicantReference || notAvailable}}</td>
+        <td>{{data?.applicantName || notAvailable}}</td>
+        <td>{{data?.assignedToName || notAvailable}}</td>
+        <td>{{data?.meetingLocation || notAvailable}}</td>
+        <td>{{data?.note || notAvailable}}</td>
+        <td class="resp-action-icon">
+          <i (click)="showMenu($event,'viewings-overlay', data, 'table-row')"
+            class="propcoicon propcoicon-actions-on action-btn"></i>
+        </td>
+      </tr>
+      <tr *ngIf="viewingList?.length === 0">
+        <td colspan="9" class="no-data-available ion-text-center">
+          <strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="viewings-overlay" class="overlay-class">
+    <ion-button>Mark As Done</ion-button>
+    <ion-button>Feedback</ion-button>
+    <ion-button>View Applicant</ion-button>
+    <ion-button>Edit</ion-button>
+    <ion-button>Add Note</ion-button>
+    <ion-button>Cancel</ion-button>
+    <ion-button>Remove</ion-button>
+    <i (click)="hideMenu($event,'viewings-overlay')" class="propcoicon propcoicon-actions-on"></i>
+  </div>
+</div>

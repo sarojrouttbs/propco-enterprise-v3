@@ -241,8 +241,8 @@
               <ion-col size="50">
                 <mat-form-field [floatLabel]="'never'">
                   <mat-select placeholder="Entity Type" formControlName="tenantType" multiple>
-                    <mat-option  [value]="'LEAD_TENANT'">Tenant</mat-option>
-                    <mat-option  [value]="'CO_TENANT'">Co Tenant</mat-option>
+                    <mat-option  [value]="'TENANT'">Tenant</mat-option>
+                    <mat-option  [value]="'COTENANT'">Co Tenant</mat-option>
                   </mat-select>
                 </mat-form-field>
               </ion-col>
@@ -513,6 +513,9 @@
                   [ngTemplateOutletContext]="{item:item}">
             </ng-container>
             <ng-container [ngTemplateOutlet]="tenantSearchListView"  *ngIf="item?.entityType === 'TENANT'"
+                  [ngTemplateOutletContext]="{item:item}">
+            </ng-container>
+            <ng-container [ngTemplateOutlet]="tenantSearchListView"  *ngIf="item?.entityType === 'COTENANT'"
                   [ngTemplateOutletContext]="{item:item}">
             </ng-container>
             <ng-container [ngTemplateOutlet]="contractorSearchListView"  *ngIf="item?.entityType === 'CONTRACTOR'"
@@ -896,7 +899,7 @@
                 <ion-text class="header">Guarantor Name</ion-text><br />
                 <ion-text class="content" [title]="item?.guarantor || DEFAULTS.NOT_AVAILABLE">{{(item?.guarantor | RemainingCountPipe) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
-              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content" *ngIf="item?.entityType === 'TENANT'">
                 <ion-text class="header">Co-Tenant Name</ion-text><br />
                 <ion-text class="content" [title]="item?.coTenant || DEFAULTS.NOT_AVAILABLE">{{(item?.coTenant | RemainingCountPipe) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>

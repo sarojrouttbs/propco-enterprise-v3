@@ -70,8 +70,8 @@ export class TobService {
     );
   }
 
-  getPropertyDetails(propertyId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tob`).pipe(tap((res: any) => { }),
+  getPropertyDetails(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/tob`, {params}).pipe(tap((res: any) => { }),
       catchError(this.handleError<any>(''))
     );
   }
@@ -137,12 +137,12 @@ export class TobService {
     };
   }
 
-  getOfferList(propertyId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/offers`);
+  getOfferList(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/offers`, { params });
   }
 
-  getUserAccessRight(): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `offers/access-rights`);
+  getUserAccessRight(params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `offers/access-rights`, {params});
   }
 
   getNotesList(offerId: string): Observable<any> {
@@ -160,8 +160,8 @@ export class TobService {
     );
   }
 
-  getApplicationList(propertyId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/applications`);
+  getApplicationList(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/applications`,{params});
   }
 
   getApplicantQuestions(): Observable<any> {

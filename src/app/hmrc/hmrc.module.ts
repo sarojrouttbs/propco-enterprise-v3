@@ -20,6 +20,8 @@ import { PreviewAndSendComponent } from './self-assessment-form/preview-and-send
 import { PreviewPdfModalPageModule } from '../shared/modals/preview-pdf-modal/preview-pdf-modal.module';
 import { IonicSelectableModule } from 'ionic-selectable';
 import { ProgressSummaryComponent } from './self-assessment-form/progress-summary/progress-summary.component';
+import { HmrcReportPageModule } from './hmrc-modals/hmrc-report/hmrc-report.module';
+// import { HmrcReportPageModule } from '../shared/modals/hmrc-report/hmrc-report.module';
 
 @NgModule({
   imports: [
@@ -33,7 +35,8 @@ import { ProgressSummaryComponent } from './self-assessment-form/progress-summar
     PipesModule,
     OfficeFilterModalPageModule,
     PreviewPdfModalPageModule,
-    IonicSelectableModule
+    IonicSelectableModule,
+    HmrcReportPageModule
   ],
   declarations: [
     HmrcPage,

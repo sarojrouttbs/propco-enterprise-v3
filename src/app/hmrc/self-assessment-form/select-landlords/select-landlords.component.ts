@@ -1,8 +1,8 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Injector, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Injector, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { SelectAllPlusSearchComponent } from 'src/app/select-all-plus-search/select-all-plus-search.component';
-import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC, PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC, HMRC_ERROR_MESSAGES, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { HmrcService } from '../../hmrc.service';
 import { createCustomElement } from '@angular/elements';
@@ -135,6 +135,8 @@ export class SelectLandlordsComponent implements OnInit {
             recordsFiltered: res ? res.count : 0,
             data: []
           });
+        }, (_error) => {
+          this.commonService.showMessage(HMRC_ERROR_MESSAGES.FACING_PROBLEM_TO_FETCH_DETAILS, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
         })
       }
     };
@@ -143,7 +145,7 @@ export class SelectLandlordsComponent implements OnInit {
   private rerenderLandlordList(resetPaging?): void {
     if (this.dtElements && this.dtElements.first.dtInstance) {
       this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.ajax.reload((res) => { }, resetPaging);
+        dtInstance.ajax.reload(resetPaging);
       });
     }
   }
