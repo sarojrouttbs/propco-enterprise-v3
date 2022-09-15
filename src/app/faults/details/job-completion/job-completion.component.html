@@ -349,7 +349,7 @@
           <ion-input value="{{ workOrderForm.controls.postdate.value | date: DATE_FORMAT.DATE }}" [disabled]="iacNotification ? true : false"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
           ></ion-icon>
-          <ion-popover trigger="postdate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="postdate" show-backdrop="false">
             <ng-template>
               <ion-datetime
                 showDefaultButtons="true"
@@ -439,7 +439,7 @@
           <ion-input value="{{ workOrderForm.controls.requiredDate.value | date: DATE_FORMAT.DATE }}" [disabled]="iacNotification ? true : false"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
           ></ion-icon>
-          <ion-popover trigger="requiredDate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="requiredDate" show-backdrop="false">
             <ng-template>
               <ion-datetime
                 showDefaultButtons="true"

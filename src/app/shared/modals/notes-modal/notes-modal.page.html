@@ -19,7 +19,7 @@
             <ion-input value="{{ notesForm.controls.date.value | date: DATE_FORMAT.DATE }}" readonly="true"></ion-input>
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
             ></ion-icon>
-            <ion-popover trigger="date" show-backdrop="false">
+            <ion-popover class="ion-datepicker-popover" trigger="date" show-backdrop="false">
               <ng-template>
                 <ion-datetime
                   showDefaultButtons="true"
