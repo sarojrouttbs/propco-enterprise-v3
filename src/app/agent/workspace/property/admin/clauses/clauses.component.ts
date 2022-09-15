@@ -20,6 +20,7 @@ export class ClausesComponent implements OnInit {
   selectedClause: any;
   notAvailable = DEFAULTS.NOT_AVAILABLE;
   clausesHeadingList: any = [];
+  isPropertyClausesAvailable = false;
 
   constructor(private commonService: CommonService, private agentService: AgentService) { }
 
@@ -62,6 +63,7 @@ export class ClausesComponent implements OnInit {
             this.propertyClauses.setValue(res?.data);
           }
           resolve(res?.data);
+          this.isPropertyClausesAvailable = true;
         },
         (_error) => {
           resolve(false);

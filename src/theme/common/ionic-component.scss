@@ -910,8 +910,10 @@ ion-datetime {
     bottom: 0;
     position: absolute;
     right: 0;
-    color: var( --ion-color-primary); 
+    color: var( --ion-color-primary);
+    margin: 16px 0px;
 }
+
 #hmrc-stepper {
   .ion-date-item-icon {
     opacity: 1!important;
@@ -920,8 +922,9 @@ ion-datetime {
 
 .office-filter-modal-container{
   &::part(content){
-    height: 525px;
-    width: 850px;
+    height: 530px;
+    width: 900px;
+    border-radius: 10px;
   }
 
   @media screen and (min-width: 768px) and (max-width: 1024px){
