@@ -140,16 +140,16 @@ export class AgentService {
     );
   }
 
-  getKeysListing(propertyId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/keys`);
+  getKeysListing(propertyId: string, params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/keys`, { params });
   }
 
   getkeysetLogHistory(keySetId: number): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `keys/${keySetId}/logs`);
   }
 
-  getUsersList(): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `users-list`, {});
+  getUsersList(params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `users-list`, { params });
   }
 
   createKeyset(propertyId: string, requestObj: any): Observable<any> {
@@ -216,5 +216,9 @@ export class AgentService {
 
   getClausesHeadings(params: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `clauses/headings/node`, { params });
+  }
+
+  getUserDetails(params: any): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `user/logged-in`, { params });
   }
 }
