@@ -1,36 +1,40 @@
 <ion-content id="property-dashboard">
   <div class="dashboard">
     <div class="homescreen-content">
+
       <ion-row>
         <ion-col size="100" class="ion-no-padding">
-          <ion-row>
-            <ion-col size="33.3" class="ion-no-padding">
-              <ion-slides pager *ngIf="propertyDetails?.media">
-                <ion-slide *ngFor="let data of propertyDetails?.media; let index = index">
-                  <div class="swiper-zoom-container">
-                    <img [src]="options + data?.fileName" [title]="data?.label" tappable (click)="openPreview(index)" alt="data?.label">
-                  </div>
-                  <button type="submit" ion-button color="light" class="swiper-button-prev swiper-button-black"
-                    (click)="prev()" *ngIf="propertyDetails?.media.length > 1">
-                    <ion-icon name="chevron-back-outline"></ion-icon>
-                  </button>
-                  <button type="submit" ion-button color="light" class="swiper-button-next swiper-button-black"
-                    (click)="next()" *ngIf="propertyDetails?.media.length > 1">
-                    <ion-icon name="chevron-forward-outline"></ion-icon>
-                  </button>
-                </ion-slide>
-              </ion-slides>
-              <div class="no-slider-img" *ngIf="!propertyDetails?.media">
-                <img src="assets/images/upload-image.jpg" alt="default">
-              </div>
-            </ion-col>
-            <ion-col size="33.3" class="ion-no-padding">
-              <app-property-details-card [propertyData]="propertyDetails"></app-property-details-card>
-            </ion-col>
-            <ion-col size="33.3" class="right-panel-block ion-no-padding">
-              <app-property-right-panel [propertyData]="propertyDetails"></app-property-right-panel>
-            </ion-col>
-          </ion-row>
+          <ng-container *ngIf="!isSkeleton; else skeletonBlock">
+            <ion-row>
+              <ion-col size="33.3" class="ion-no-padding">
+                <ion-slides pager *ngIf="propertyDetails?.media">
+                  <ion-slide *ngFor="let data of propertyDetails?.media; let index = index">
+                    <div class="swiper-zoom-container">
+                      <img [src]="options + data?.fileName" [title]="data?.label" tappable (click)="openPreview(index)"
+                        alt="data?.label">
+                    </div>
+                    <button type="submit" ion-button color="light" class="swiper-button-prev swiper-button-black"
+                      (click)="prev()" *ngIf="propertyDetails?.media.length > 1">
+                      <ion-icon name="chevron-back-outline"></ion-icon>
+                    </button>
+                    <button type="submit" ion-button color="light" class="swiper-button-next swiper-button-black"
+                      (click)="next()" *ngIf="propertyDetails?.media.length > 1">
+                      <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </button>
+                  </ion-slide>
+                </ion-slides>
+                <div class="no-slider-img" *ngIf="!propertyDetails?.media">
+                  <img src="assets/images/upload-image.jpg" alt="default">
+                </div>
+              </ion-col>
+              <ion-col size="33.3" class="ion-no-padding">
+                <app-property-details-card [propertyData]="propertyDetails"></app-property-details-card>
+              </ion-col>
+              <ion-col size="33.3" class="right-panel-block ion-no-padding">
+                <app-property-right-panel [propertyData]="propertyDetails"></app-property-right-panel>
+              </ion-col>
+            </ion-row>
+          </ng-container>
           <ion-row>
             <ion-col size="33.3" class="ion-no-padding">
               <app-property-landlord-tenant [type]="'landlord'" [propertyLandlords]="propertyLandlords">
@@ -54,13 +58,13 @@
         </ion-segment-button>
         <ion-segment-button value="viewings">
           <div class="viewings-segment">
-            <span>0</span>
+            <span>{{viewingCount}}</span>
             <ion-label>Viewings</ion-label>
           </div>
         </ion-segment-button>
         <ion-segment-button value="map" (click)="onMapTabClick()">
           <div class="map-segment">
-             <i class="propcoicon propcoicon-location no-background"></i>
+            <i class="propcoicon propcoicon-location no-background"></i>
             <ion-label>Map</ion-label>
           </div>
         </ion-segment-button>
@@ -70,13 +74,13 @@
             <ion-label>Notes</ion-label>
           </div>
         </ion-segment-button>
-       
+
       </ion-segment>
       <div [hidden]="type != 'compliance'">
         <app-compliance-records [propertyData]="propertyDetails"></app-compliance-records>
       </div>
       <div [hidden]="type != 'viewings'" class="ion-text-center">
-        <p>{{DEFAULT_MESSAGES.AVAILABLE_SOON}}</p>
+        <app-viewings [viewingInstructions]="propertyDetails?.viewingInstruction"></app-viewings>
       </div>
       <div [hidden]="type != 'map'">
         <app-open-street-map *ngIf="isMapLoad" [propertyData]="propertyData"></app-open-street-map>
@@ -86,7 +90,8 @@
           <ion-row>
             <ion-col size="100">
               <div class="overlay-container">
-                <table datatable [dtOptions]="dtOptions" class="row-border hover table-width" id="propertyNotesTable" aria-describedby="notes">
+                <table datatable [dtOptions]="dtOptions" class="row-border hover table-width" id="propertyNotesTable"
+                  aria-describedby="notes">
                   <thead>
                     <tr>
                       <th scope="col" style="width:15%">Date</th>
@@ -110,7 +115,8 @@
                           class="propcoicon propcoicon-property-description"></i></td>
                     </tr>
                     <tr *ngIf="notes?.length == 0">
-                      <td colspan="7" class="no-data-available ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_RECORD_FOUND}}</strong>
+                      <td colspan="7" class="no-data-available ion-text-center">
+                        <strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong>
                       </td>
                     </tr>
                   </tbody>
@@ -122,4 +128,144 @@
       </div>
     </div>
   </div>
+
 </ion-content>
+<ng-template #skeletonBlock>
+  <ion-row>
+    <ion-col size="100" class="ion-no-padding">
+      <ion-row>
+        <ion-col size="33.3">
+          <ion-skeleton-text animated style="height: 270px;"></ion-skeleton-text>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-skeleton-text animated style="height: 40px;"></ion-skeleton-text><br>
+          <ion-row>
+            <ion-col size="50">
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text><br>
+            </ion-col>
+            <ion-col size="50">
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text><br>
+            </ion-col>
+          </ion-row>
+          <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text><br>
+          <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text><br>
+          <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-row>
+            <ion-skeleton-text animated style="height: 40px;"></ion-skeleton-text><br>
+            <ion-col size="50">
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text><br>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text><br>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text><br>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="50">
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text><br>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text><br>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text><br>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+            </ion-col>
+          </ion-row>
+
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="33.3">
+          <ion-skeleton-text animated style="height: 40px;"></ion-skeleton-text><br>
+          <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+          <ion-row>
+            <ion-col size="25">
+              <ion-skeleton-text animated></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="25">
+              <ion-skeleton-text animated></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="25">
+              <ion-skeleton-text animated></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="25">
+              <ion-skeleton-text animated></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+            </ion-col>
+          </ion-row>
+          <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text><br>
+          <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-skeleton-text animated style="height: 40px;"></ion-skeleton-text><br>
+          <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+          <ion-row>
+            <ion-col size="25">
+              <ion-skeleton-text animated></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="25">
+              <ion-skeleton-text animated></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="25">
+              <ion-skeleton-text animated></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="25">
+              <ion-skeleton-text animated></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+            </ion-col>
+          </ion-row>
+          <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text><br>
+          <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+        </ion-col>
+        <ion-col size="33.3">
+          <ion-skeleton-text animated style="height: 40px;"></ion-skeleton-text><br>
+          <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+          <ion-row>
+            <ion-col size="25">
+              <ion-skeleton-text animated></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="25">
+              <ion-skeleton-text animated></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="25">
+              <ion-skeleton-text animated></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="25">
+              <ion-skeleton-text animated></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+            </ion-col>
+          </ion-row>
+          <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text><br>
+          <ion-skeleton-text animated style="width: 70%;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 60%;"></ion-skeleton-text>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+</ng-template>

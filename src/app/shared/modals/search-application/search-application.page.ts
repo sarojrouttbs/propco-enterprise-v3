@@ -69,13 +69,10 @@ export class SearchApplicationPage implements OnInit {
   private getLookupData(): void {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
     this.referencingLookupdata = this.commonService.getItem(PROPCO.REFERENCING_LOOKUP_DATA, true);
-    if (this.lookupdata) {
-      this.setLookupData(this.lookupdata);
-    } else {
+    if (!this.lookupdata) {
       this.commonService.getLookup().subscribe(data => {
         this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
         this.lookupdata = data;
-        this.setLookupData(data);
       });
     }
 
@@ -88,9 +85,6 @@ export class SearchApplicationPage implements OnInit {
         this.setReferencingLookupData(data);
       });
     }
-  }
-
-  private setLookupData(data: any): void {
   }
 
   private setReferencingLookupData(data: any): void {

@@ -43,8 +43,12 @@ export class AppHttpInterceptor implements HttpInterceptor {
       }
 
       // }
-      return next.handle(authReq).pipe(catchError((error: HttpErrorResponse) => {
+      return next.handle(authReq).pipe(catchError((error: HttpErrorResponse) => {        
         this._commonService.hideLoader();
+        if(error.url.includes('hmrc')) {
+          return throwError(error);
+        }
+        
         if (error.status === 404 || error.status === 502 || error.status === 503 || error.status === 500) {
           this._commonService.showMessage('Something went wrong on server, please try again.', 'Service Unavailable', 'error');
           return throwError(error);
@@ -66,9 +70,10 @@ export class AppHttpInterceptor implements HttpInterceptor {
         } else if (error.status === 422 || error.status === 451) {
           return throwError(error);
         } else {
-          if (error.status === 405 || error.status === 403) {
+          if (error.status === 405 || error.status === 403 || error.status === 423) {
             return throwError(error);
           }
+
           if (!error.error.message) {
             this._commonService.showMessage('Something went wrong on server, please try again.', 'Service Unavailable', 'error');
           }

@@ -1,0 +1,115 @@
+<mat-accordion multi class="form-view-accordian" id="property-features">
+  <mat-expansion-panel #features hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Features
+      </mat-panel-title>
+      <mat-panel-description class="ion-justify-content-end no-margin">
+        <div>
+          <span *ngIf="!features.expanded" class="accordian-icon" title="Expand">
+            <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+          </span>
+          <span *ngIf="features.expanded" class="accordian-icon" title="Collapse">
+            <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+          </span>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <form [formGroup]="propertyBulletsForm">
+      <ion-grid class="ion-no-padding">
+        <ion-row style="padding: 0px 10px;">
+          <ion-col>
+            <h5>Bullets</h5>
+          </ion-col>
+          <ion-col class="ion-align-self-center ion-text-right">
+            <ion-button color="success" (click)="createPropertyBulletsForm()" [disabled]="propertyBulletsFormArray.value.length >= 10">Add Bullets</ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row formArrayName="propertyBulletPoint" style="padding: 10px 5px;">
+          <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100"
+            *ngFor="let item of propertyBulletsForm.get('propertyBulletPoint')['controls']; let i=index">
+            <ion-row>
+              <ion-col size="10" class="ion-align-self-end ion-no-padding" style="top: 4px;">
+                <ion-chip class="formfield-chips fw-700">
+                  <ion-label>{{i+1}}</ion-label>
+                </ion-chip>
+              </ion-col>
+              <ion-col size="78" class="ion-no-padding">
+                <ion-item [formGroupName]="i" class="bullet-point">
+                  <ion-input formControlName="bulletPoint"></ion-input>
+                </ion-item>    
+              </ion-col>
+              <ion-col size="12" class="ion-align-self-end ion-no-padding" style="top: 8px;">
+                <ion-icon (click)="deletePropertyBullet(item, i)"
+                style="font-size: 32px;" color="danger" class="pointer" name="close-circle-outline"></ion-icon>    
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+
+    <ion-grid class="features-block">
+      <ion-row>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Basic Property Features</ion-label>
+            <ionic-selectable item-content itemValueField="clauseId" itemTextField="clauseName"
+              [items]="propertyFeaturesList" [canSearch]="true" [isMultiple]="true" [canClear]="true"
+              clearButtonText="Clear" closeButtonSlot="end" confirmButtonText="Apply"
+              searchPlaceholder="Start typing to choose features" #propertyFeaturesFilter
+              [formControl]="propertyFeatures" [shouldStoreItemValue]="false" class="selectable-height"
+              (click)="beginLoading()" (onOpen)="endLoading()" [shouldBackdropClose]="false">
+              <ng-template ionicSelectableHeaderTemplate>
+                <ion-toolbar>
+                  <ion-buttons end>
+                  </ion-buttons>
+                  <ion-title>
+                    {{propertyFeaturesFilter.label}}
+                  </ion-title>
+                </ion-toolbar>
+              </ng-template>
+
+              <ng-template ionicSelectableValueTemplate let-propertyFeaturesList="value">
+                <div class="ionic-selectable-value-item" *ngFor="let option of propertyFeaturesList">
+                  {{option.clauseName}}
+                </div>
+              </ng-template>
+              <ng-template ionicSelectableFooterTemplate>
+                <ion-toolbar>
+                  <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
+                    (click)="toggleItemsFeatures()" [disabled]="!propertyFeaturesList.length">
+                    {{propertyFeaturesFilter.itemsToConfirm.length ? 'Deselect All' : 'Select All'}}
+                  </ion-button>
+                  <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
+                    (click)="propertyFeaturesFilter.confirm();propertyFeaturesFilter.close();"
+                    [disabled]="!propertyFeaturesFilter.itemsToConfirm.length">
+                    OK
+                  </ion-button>
+                  <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                    (click)="propertyFeaturesFilter.clear();propertyFeaturesFilter.close();"
+                    [disabled]="!propertyFeaturesFilter.itemsToConfirm.length">
+                    Clear
+                  </ion-button>
+                  <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
+                    (click)="propertyFeaturesFilter.close()">
+                    Cancel
+                  </ion-button>
+                </ion-toolbar>
+              </ng-template>
+            </ionic-selectable>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <div style="margin-top: 15px;">
+        <ion-chip class="selected-clauses-chips" *ngFor="let item of propertyFeatures.value">
+          <ion-label>{{ item?.clauseName }}</ion-label>
+          <ion-icon name="close" (click)="removeFeature(item)"></ion-icon>
+        </ion-chip>
+      </div>
+    </ion-grid>
+
+  </mat-expansion-panel>
+</mat-accordion>

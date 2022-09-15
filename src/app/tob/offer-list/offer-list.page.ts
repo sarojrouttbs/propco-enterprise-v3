@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
@@ -91,7 +92,7 @@ export class OfferListPage implements OnInit {
   }
 
   private initOfferList() {
-    this.filteredOfferList.data = this.offerList as OfferData[];
+    this.filteredOfferList.data = this.offerList;
     this.filteredOfferList.paginator = this.paginator;
     this.sortKey = '1';
     this.sortResult();
@@ -164,7 +165,6 @@ export class OfferListPage implements OnInit {
     const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
-    // const divOverlayLeft = (divOverlay.parent('.overlay-container').innerWidth() - baseContainerWidth - (id === 'offer-notes-divOverlay' ? 0 : 25));
     const divOverlayLeft = baseContainerPosition.left;
 
     let origDivOverlayHeight;
@@ -227,8 +227,9 @@ export class OfferListPage implements OnInit {
   }
 
   private getPropertyById() {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
-      this.tobService.getPropertyDetails(this.propertyId).subscribe(
+      this.tobService.getPropertyDetails(this.propertyId, params).subscribe(
         res => {
           if (res && res.data) {
             this.isPropertyDetailsAvailable = true;
@@ -246,8 +247,9 @@ export class OfferListPage implements OnInit {
   }
 
   private getOfferList() {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
-      this.tobService.getOfferList(this.propertyId).subscribe(
+      this.tobService.getOfferList(this.propertyId, params).subscribe(
         (res) => {
           this.isOffersListAvailable = true;
           if (res && res.data) {
@@ -261,8 +263,9 @@ export class OfferListPage implements OnInit {
   }
 
   private getUserAccessRight() {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
-      this.tobService.getUserAccessRight().subscribe(
+      this.tobService.getUserAccessRight(params).subscribe(
         async (res) => {
           if (res) {
             resolve(res);
@@ -289,7 +292,7 @@ export class OfferListPage implements OnInit {
       backdropDismiss: false
     });
 
-    const data = modal.onDidDismiss().then(res => {
+    modal.onDidDismiss().then(res => {
       if (res.data && res.data.noteId) {
         this.getOfferNotes(offerId);
       }
@@ -365,7 +368,6 @@ export class OfferListPage implements OnInit {
       this.commonService.getLookup().subscribe(data => {
         this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
         this.setLookupData();
-      }, error => {
       });
     }
   }
@@ -409,6 +411,6 @@ export class OfferListPage implements OnInit {
   }
 
   private checkOffersAvailable() {
-    (this.filteredOfferList?.data.length > 0) ? this.isRecordsAvailable = true : this.isRecordsAvailable = false;
+    this.isRecordsAvailable = this.filteredOfferList?.data.length > 0 ? true : false;
   }
 }

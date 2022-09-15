@@ -13,6 +13,7 @@ import { TermsAndConditionModalPage } from 'src/app/shared/modals/terms-and-cond
 import { environment } from 'src/environments/environment';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 import * as CryptoJS from 'crypto-js/crypto-js';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-application-detail',
@@ -171,11 +172,8 @@ export class ApplicationDetailPage implements OnInit {
           this.patchApplicantDetail();
           this.patchApplicantAddressDetail();
         }
-
       }
-    },
-      error => {
-      });
+    });
   }
 
   private patchApplicantDetail(): void {
@@ -348,39 +346,32 @@ export class ApplicationDetailPage implements OnInit {
   private savePreviouslySelectedData(index: number) {
     switch (index) {
       case 0:
-        if (!this.applicationDetails.isSubmitted) {
+        if (!this.applicationDetails.isSubmitted)
           this.saveApplicantsToApplication();
-        }
         break;
       case 1:
-        if (!this.applicationDetails.isSubmitted && this.applicantId) {
+        if (!this.applicationDetails.isSubmitted && this.applicantId)
           this.saveApplicantDetails();
-        }
         break;
       case 2:
-        if (!this.applicationDetails.isSubmitted && this.applicantId) {
+        if (!this.applicationDetails.isSubmitted && this.applicantId)
           this.saveAddressDetails();
-        }
         break;
       case 3:
-        if (!this.applicationDetails.isSubmitted && this.applicantId) {
+        if (!this.applicationDetails.isSubmitted && this.applicantId)
           this.saveBankDetails();
-        }
         break;
       case 4:
-        if (!this.applicationDetails.isSubmitted) {
+        if (!this.applicationDetails.isSubmitted)
           this.saveApplicationQuestions();
-        }
         break;
       case 5:
-        if (!this.applicationDetails.isSubmitted) {
+        if (!this.applicationDetails.isSubmitted)
           this.saveTenancyDetail();
-        }
         break;
       case 8:
-        if (!this.applicationDetails.isSubmitted) {
+        if (!this.applicationDetails.isSubmitted)
           this.saveGuarantorDetails();
-        }
         break;
       case 10:
         this.initPaymentConfiguration();
@@ -451,7 +442,7 @@ export class ApplicationDetailPage implements OnInit {
           modifiedById: '',
           modifiedBy: ENTITY_TYPE.AGENT
         };
-        this._tobService.updateLead(updateLeadData, this.applicationId, item.controls['applicationApplicantId'].value).subscribe(async (response) => {
+        this._tobService.updateLead(updateLeadData, this.applicationId, item.controls['applicationApplicantId'].value).subscribe(async (resp) => {
           const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
           await this.setApplicationApplicants(applicants);
           await this.setLeadApplicantDetails();
@@ -471,7 +462,7 @@ export class ApplicationDetailPage implements OnInit {
           item.isLead = false;
           finalData.push(item);
         });
-        (this.occupantForm.get('coApplicants') as FormArray)['controls'].splice(0);
+        this.occupantForm.get('coApplicants')['controls'].splice(0);
         this.updateOccupantForm(finalData);
       }
     });
@@ -497,7 +488,7 @@ export class ApplicationDetailPage implements OnInit {
       this.applicationDetails.applicationRestrictions = res.applicationRestrictions ? res.applicationRestrictions : [];
       this.applicationStatus = this.commonService.getLookupValue(this.applicationDetails.status, this.applicationStatuses);
       this.applicationDetails.applicationRestrictions = this.applicationDetails.applicationRestrictions.filter(restrict => restrict.value);
-      this.applicationDetails.applicationRestrictions.map(
+      this.applicationDetails.applicationRestrictions.forEach(
         restrict =>
         (restrict.restrictionName = this.commonService.camelize(
           restrict.key.replace(/_/g, ' ')
@@ -525,7 +516,7 @@ export class ApplicationDetailPage implements OnInit {
 
   private setApplicationApplicants(res: any) {
     return new Promise((resolve) => {
-      (this.occupantForm.get('coApplicants') as FormArray)['controls'].splice(0);
+      this.occupantForm.get('coApplicants')['controls'].splice(0);
       this.applicationApplicantDetails = (res && res.data) ? res.data : [];
       const leadApplicantDetails = this.applicationApplicantDetails.filter((occupant) => occupant.isLead);
       if (leadApplicantDetails && leadApplicantDetails.length > 0) {
@@ -560,15 +551,14 @@ export class ApplicationDetailPage implements OnInit {
     this._tobService.createApplication(requestObj).subscribe(
       res => {
         this.router.navigate([`../application/${res.applicationId}`], { relativeTo: this.route });
-      },
-      error => {
       }
     );
   }
 
   private getPropertyDetails(propertyId: string) {
+    const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve, reject) => {
-      this._tobService.getPropertyDetails(propertyId).subscribe(
+      this._tobService.getPropertyDetails(propertyId, params).subscribe(
         res => {
           if (res) {
             this.propertyDetails = res.data;
@@ -594,7 +584,6 @@ export class ApplicationDetailPage implements OnInit {
       if (res) {
         this.propertyDetails.noDepositScheme = res.noDepositScheme;
       }
-    }, (error) => {
     });
   }
 
@@ -617,7 +606,7 @@ export class ApplicationDetailPage implements OnInit {
       this._tobService.getPropertyRestrictions(propertyId).subscribe(
         res => {
           this.propertyRestrictions = (res && res.data) ? res.data.filter(result => result.value) : [];
-          this.propertyRestrictions.map(restrict => restrict.restrictionName = this.commonService.camelize(restrict.key.replace(/_/g, ' ')));
+          this.propertyRestrictions.forEach(restrict => restrict.restrictionName = this.commonService.camelize(restrict.key.replace(/_/g, ' ')));
           resolve(true);
         },
         error => {
@@ -635,7 +624,6 @@ export class ApplicationDetailPage implements OnInit {
       if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
         this.onSave();
       }
-    }, error => {
     });
   }
 
@@ -648,7 +636,6 @@ export class ApplicationDetailPage implements OnInit {
       this.commonService.getLookup().subscribe(data => {
         this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
         this.setLookupData();
-      }, error => {
       });
     }
   }
@@ -661,7 +648,6 @@ export class ApplicationDetailPage implements OnInit {
       this.commonService.getTobLookup().subscribe(data => {
         this.commonService.setItem(PROPCO.TOB_LOOKUP_DATA, data);
         this.setTobLookupData();
-      }, error => {
       });
     }
   }
@@ -718,7 +704,8 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private createItem(): void {
-    this.occupantFormArray.push(this._formBuilder.group({
+    const coApplicants: any = this.occupantForm.get('coApplicants');
+    coApplicants.push(this._formBuilder.group({
       surname: ['', [Validators.required, ValidationService.alphabetValidator]],
       forename: ['', [Validators.required, ValidationService.alphabetValidator]],
       email: ['', [Validators.required, ValidationService.emailValidator]],
@@ -735,12 +722,9 @@ export class ApplicationDetailPage implements OnInit {
     ));
   }
 
-  get occupantFormArray() {
-    return this.occupantForm.get('coApplicants') as FormArray;
-  }
-
   addApplicant(control: FormControl, index: number) {
-    this.occupantFormArray.push(this._formBuilder.group({
+    const coApplicants: any = this.occupantForm.get('coApplicants');
+    coApplicants.push(this._formBuilder.group({
       surname: control.value.surname,
       forename: control.value.forename,
       email: control.value.email,
@@ -755,12 +739,13 @@ export class ApplicationDetailPage implements OnInit {
       applicantId: ''
     }
     ));
-    this.occupantFormArray.removeAt(index);
+    coApplicants.removeAt(index);
     this.createItem();
   }
 
   private addSearchApplicant(response: any, index: number) {
-    this.occupantFormArray.push(this._formBuilder.group({
+    const coApplicants: any = this.occupantForm.get('coApplicants');
+    coApplicants.push(this._formBuilder.group({
       surname: response.surname,
       forename: response.forename,
       email: response.email,
@@ -775,7 +760,7 @@ export class ApplicationDetailPage implements OnInit {
       applicantId: response.applicantId
     }
     ));
-    this.occupantFormArray.removeAt(index);
+    coApplicants.removeAt(index);
     this.createItem();
   }
 
@@ -783,12 +768,13 @@ export class ApplicationDetailPage implements OnInit {
     this.commonService.showConfirm('Remove Applicant', 'Are you sure, you want to remove this applicant ?', '', 'YES', 'NO').then(response => {
       if (response) {
         if (item.controls['applicationApplicantId'].value) {
-          this._tobService.deleteApplicationApplicant(this.applicationId, item.controls['applicationApplicantId'].value, { 'deletedBy': 'AGENT' }).subscribe(async (response) => {
+          this._tobService.deleteApplicationApplicant(this.applicationId, item.controls['applicationApplicantId'].value, { 'deletedBy': 'AGENT' }).subscribe(async (resp) => {
             const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
             await this.setApplicationApplicants(applicants);
           });
         } else {
-          this.occupantFormArray.removeAt(index);
+          const coApplicants: any = this.occupantForm.get('coApplicants');
+          coApplicants.removeAt(index);
         }
       }
     });
@@ -796,7 +782,7 @@ export class ApplicationDetailPage implements OnInit {
 
   private updateOccupantForm(occupantsList: any[]) {
     if (Array.isArray(occupantsList) && occupantsList.length > 0) {
-      const occupantsArray = this.occupantFormArray;
+      const occupantsArray: any = this.occupantForm.get('coApplicants');
       occupantsList.forEach(element => {
         if (element.applicantId) {
           occupantsArray.push(this._formBuilder.group({
@@ -1024,11 +1010,9 @@ export class ApplicationDetailPage implements OnInit {
     this.applicationDetails.rentDueDay = this.tenancyDetailForm.value.rentDueDay;
     this.applicationDetails.numberOfAdults = this.tenancyDetailForm.value.numberOfAdults;
     this.applicationDetails.numberOfChildren = this.tenancyDetailForm.value.numberOfChildren;
-    // this.applicationDetails.noOfOccupants = this.tenancyDetailForm.value.noOfOccupants;
     this.applicationDetails.hasSameHouseholdApplicants = this.tenancyDetailForm.value.hasSameHouseholdApplicants;
     this.applicationDetails.numberOfHouseHolds = this.tenancyDetailForm.value.numberOfHouseHolds;
     this.applicationDetails.isNoDepositScheme = this.tenancyDetailForm.value.isNoDepositScheme;
-
     if (this.checkFormDirty(this.tenancyDetailForm)) {
       this.updateApplicationDetails();
     }
@@ -1056,7 +1040,6 @@ export class ApplicationDetailPage implements OnInit {
         this.applicationDetails.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
         this.tenancyDetailForm.reset(this.tenancyDetailForm.value);
       },
-      error => { }
     );
   }
 
@@ -1066,10 +1049,6 @@ export class ApplicationDetailPage implements OnInit {
     this.applicantQuestionForm = this._formBuilder.group({
       questions: this._formBuilder.array([])
     });
-  }
-
-  get questionFormArray() {
-    return this.applicantQuestionForm.get('questions') as FormArray;
   }
 
   private async getApplicantQuestions() {
@@ -1085,9 +1064,10 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private getApplicationQuestionsAnswer(applicationId: string) {
+    const questions: any = this.applicantQuestionForm.get('questions');
     this._tobService.getApplicationQuestionsAnswer(applicationId).subscribe(res => {
       if (res && res.count) {
-        this.questionFormArray.controls.forEach(element => {
+        questions.controls.forEach(element => {
           const item = res.data.find(answer => answer.questionId === element.value.applicantQuestionId);
           element.patchValue({
             toggle: item ? item.toggle : null,
@@ -1097,12 +1077,11 @@ export class ApplicationDetailPage implements OnInit {
           });
         });
       }
-    }, error => {
     });
   }
 
   private createQuestionItems(questionArray: any) {
-    const questionFormArray = this.questionFormArray;
+    const questionFormArray: any = this.applicantQuestionForm.get('questions');;
     questionArray.forEach(element => {
       const questionForm = this._formBuilder.group({
         applicantQuestionId: element.applicantQuestionId,
@@ -1134,7 +1113,6 @@ export class ApplicationDetailPage implements OnInit {
       if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
         this.onSave();
       }
-    }, error => {
     });
   }
 
@@ -1214,8 +1192,7 @@ export class ApplicationDetailPage implements OnInit {
 
   private getTenantBankDetails(applicantId: string) {
     return new Promise((resolve, reject) => {
-      this._tobService.getTenantBankDetails(applicantId).subscribe(
-        res => {
+      this._tobService.getTenantBankDetails(applicantId).subscribe(res => {
           if (res) {
             this.patchBankDetails(res);
           }
@@ -1250,8 +1227,7 @@ export class ApplicationDetailPage implements OnInit {
     this._tobService.updateBankDetails(this.applicantId, bankDetails).subscribe(
       res => {
         this.bankDetailsForm.reset(this.bankDetailsForm.value);
-      },
-      error => { }
+      }
     );
   }
 
@@ -1316,8 +1292,6 @@ export class ApplicationDetailPage implements OnInit {
         if (res && res.data) {
           this.setGuarantorDetails(res.data[0]);
         }
-      },
-      error => {
       }
     );
   }
@@ -1328,8 +1302,6 @@ export class ApplicationDetailPage implements OnInit {
         if (res && res.data) {
           this.setGuarantorDetails(res.data[0]);
         }
-      },
-      error => {
       }
     );
   }
@@ -1376,8 +1348,7 @@ export class ApplicationDetailPage implements OnInit {
           this.onSave();
         }
         this.guarantorForm.reset(this.guarantorForm.value);
-      },
-      error => { }
+      }
     );
   }
 
@@ -1392,8 +1363,7 @@ export class ApplicationDetailPage implements OnInit {
         if (res) {
           this.guarantorForm.controls['guarantorId'].setValue(res.guarantorId);
         }
-      },
-      error => { }
+      }
     );
   }
 
@@ -1407,7 +1377,7 @@ export class ApplicationDetailPage implements OnInit {
       this._tobService.getTermsAndConditions().subscribe(data => {
         this.commonService.setItem(PROPCO.TERMS_AND_CONDITIONS, data);
         this.setTermsAndConditionData();
-      }, error => { });
+      });
     }
   }
 
@@ -1427,7 +1397,7 @@ export class ApplicationDetailPage implements OnInit {
       backdropDismiss: false
     });
 
-    const data = modal.onDidDismiss().then(res => {
+    modal.onDidDismiss().then(res => {
       if (!this.termsConditionControl) {
         this.termsConditionControl = res.data.accepted;
       }
@@ -1554,12 +1524,10 @@ export class ApplicationDetailPage implements OnInit {
       this.initBarclayCardPaymentDetails();
       this.hidePaymentForm = false;
       if (response && response.STATUS === '1') {
-        // this.commonService.showMessage('Payment cancelled', 'Barclay Card', 'error');
-      }
-      else if (response && response.STATUS === '0') {
+        console.log('Payment cancelled');
+      } else if (response && response.STATUS === '0') {
         this.commonService.showMessage('Invalid or incomplete request, please try again.', 'Payment Failed', 'error');
-      }
-      else {
+      } else {
         this.commonService.showMessage('Something went wrong on server, please try again.', 'Payment Failed', 'error');
       }
     }

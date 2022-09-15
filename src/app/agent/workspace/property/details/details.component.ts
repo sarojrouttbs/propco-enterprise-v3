@@ -20,6 +20,7 @@ export class DetailsComponent implements OnInit {
   activeLink: any;
   isMenuShown = true;
   DATE_FORMAT = DATE_FORMAT;
+  isPropertyAddressAvailable = false;
 
   constructor(private router: Router,
     private agentService: AgentService,
@@ -155,7 +156,7 @@ export class DetailsComponent implements OnInit {
         (res) => {
           resolve(res.data);
         },
-        (error) => {
+        (_error) => {
           resolve(false);
         }
       );
@@ -244,6 +245,7 @@ export class DetailsComponent implements OnInit {
       block: this.propertyDetails?.propertyInfo?.block,
       room: this.propertyDetails?.propertyInfo?.room
     });
+    this.isPropertyAddressAvailable = true;
   }
 
   private getPropertyLocationsByPropertyId(propertyId: string) {
@@ -277,7 +279,7 @@ export class DetailsComponent implements OnInit {
           }
           resolve(true);
         },
-        (error) => {
+        (_error) => {
           resolve(false);
         }
       );

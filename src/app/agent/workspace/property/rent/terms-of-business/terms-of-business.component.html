@@ -42,7 +42,7 @@
       </ion-row>
       <ion-row>
         <ion-col class="no-padding-bottom" class="table-block">
-          <table>
+          <table aria-describedby="termsOfBusinessTable">
             <tr>
               <th scope="col">Created At</th>
               <th scope="col">Description</th>
@@ -54,7 +54,7 @@
               <td>{{history?.version || notAvailable}}</td>
             </tr>
             <tr *ngIf="!versionHistoryList?.length">
-              <td colspan="12" class="ion-text-center">No data to display</td>
+              <td colspan="12" class="ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong></td>
             </tr>
           </table>
         </ion-col>

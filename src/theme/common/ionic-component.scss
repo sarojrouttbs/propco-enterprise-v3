@@ -11,8 +11,8 @@
 }
 
 ion-card {
-  --background: var(--ion-color-step-2000);
-  // background: var(--ion-color-five);
+  background: var(--ion-background-color);
+  color: var(--ion-color-one);
   box-shadow: unset !important;
 
   ion-card-content {
@@ -40,14 +40,15 @@ ion-split-pane {
 
 ion-button {
   --box-shadow: none !important;
-  --border-radius: 4px;
+  --border-radius: 18px;
   --background: var(--ion-color-step-900);
   --color: var(--ion-color-step-2000);
   text-transform: capitalize;
   font-weight: 400;
   // margin: 0 5px;
   letter-spacing: 0;
-  
+  @include set-text-style(14px, 18px);
+
   &.reset-button {
     --background: var(--ion-color-danger);
   }
@@ -190,27 +191,30 @@ ion-item {
     }
 
     ion-header {
-      background: var(--ion-color-step-900);
+      background: var(--ion-color-five);
       ion-toolbar {
-        --min-height: 40px;
-        --background: var(--ion-color-step-900);
+        --min-height: 48px;
+        --background: var(--ion-color-five);
 
         ion-title {
-          --color: var(--ion-color-step-2000);
+          --color: var(--ion-text-color);
           @include set-text-style(16px, 20px);
         }
 
         ion-icon {
           font-size: 25px;
-          color: var(--ion-color-step-2000);
+          color: var(--ion-text-color);
           cursor: pointer;
         }
+      }
+      &.header-md::after{
+        background-image: none;
       }
     }
 
     ion-content {
       --background: var(--ion-color-six);
-      --color: var(--ion-color-step-200);
+      --color: var(--ion-text-color);
       --padding-top: 0px;
       --padding-bottom: 0px;
       --padding-start: 10px;
@@ -539,7 +543,7 @@ ion-alert.common-alert-box {
   }
 }
 
-#marketAppraisalTabs{
+#marketAppraisalTabs, #mediaTabs{
   ion-segment-button{
     border: solid 1px var(--ion-color-four);
     color: var(--ion-text-color);
@@ -559,10 +563,6 @@ ion-alert.common-alert-box {
   
 }
 // #agent-portal {
-  ion-card {
-    background: var(--ion-background-color);
-    color: var(--ion-color-one);
-  }
   ion-item {
     --border-color: var(--ion-color-one);
     ion-label {
@@ -571,7 +571,7 @@ ion-alert.common-alert-box {
   }
   ion-item[aria-disabled="true"] { 
     ion-label, ion-text {
-      opacity: 1;
+      opacity: 1!important;
     }
   }
   #market-appraisal{
@@ -635,7 +635,8 @@ ion-alert.common-alert-box {
   #market-appraisal-lettings,
   #market-appraisal-property-address,
   #property-keys,
-  #agreement-details {
+  #agreement-details,
+  #property-features {
     ion-select{
       height: 36px;
     }
@@ -859,7 +860,7 @@ ion-alert.common-alert-box {
       ion-item{
         --border-color: var(--ion-color-one);
         ion-label{
-          color: var(--ion-color-three) !important;
+          color: var(--ion-color-two) !important;
         }
       }
     }
@@ -870,7 +871,7 @@ ion-list{
   ion-item{
     --border-color: var(--ion-color-one);
     ion-label{
-      color: var(--ion-color-three) !important;
+      color: var(--ion-color-two) !important;
     }
   }
 }
@@ -913,14 +914,22 @@ ion-datetime {
 }
 #hmrc-stepper {
   .ion-date-item-icon {
-    opacity: 0.6;
+    opacity: 1!important;
   }
 }
 
 .office-filter-modal-container{
-  &::part(content) {
-    height: 525px;
-    width: 750px;
+  &::part(content){
+    height: 530px;
+    width: 900px;
+    border-radius: 10px;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1024px){
+    &::part(content){
+      height: 525px;
+      width: 750px;
+    }  
   }
 
   ion-item {
@@ -945,7 +954,23 @@ ion-datetime {
 
 .preview-pdf-modal-container{
   &::part(content){
-    height: 575px;
-    width: 850px;
+    height: 95%;
+    width: 900px;
+    min-height: 550px;
   }
 }
+
+.hmrc-report-modal{
+  &::part(content){
+    width: 450px;
+    height: 230px;
+  }
+}
+
+ion-popover.ion-datepicker-popover {
+  &::part(content){
+    --width: 270px;
+    --height: 390px;
+  }
+}
+

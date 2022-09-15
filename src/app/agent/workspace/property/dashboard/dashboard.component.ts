@@ -1,17 +1,18 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren, OnDestroy } from '@angular/core';
 import { IonSlides, ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, PROPCO, DEFAULT_MESSAGES, DEFAULTS, NOTES_TYPE, DATE_FORMAT } from 'src/app/shared/constants';
 import { ImagePage } from 'src/app/shared/modals/image/image.page';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild(IonSlides, { static: false }) slides: IonSlides;
 
   propertyData: any = '';
@@ -35,6 +36,9 @@ export class DashboardComponent implements OnInit {
   isMenuShown = true;
   DATE_FORMAT = DATE_FORMAT;
   isMapLoad = false;
+  viewingCount = 0;
+  private viewingCountSubscription:Subscription;
+  isSkeleton = true;
 
   constructor(
     private modalCtrl: ModalController,
@@ -87,6 +91,9 @@ export class DashboardComponent implements OnInit {
     this.getPropertyById(this.selectedEntityDetails.entityId);
     this.getPropertyLandlords(this.selectedEntityDetails.entityId);
     this.getPropertyTenant(this.selectedEntityDetails.entityId);
+    this.viewingCountSubscription = this.agentService.updatedViewingCount.subscribe(count=> {
+      this.viewingCount = count;
+    })
   }
 
   private getLookupData() {
@@ -102,7 +109,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  private setLookupData(data) {
+  private setLookupData(data: any) {
     this.notesCategories = data.notesCategories;
     this.notesComplaints = data.notesComplaint;
     this.notesTypes = data.notesType;
@@ -129,7 +136,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-
   async openPreview(index) {
     const modal = await this.modalCtrl.create({
       component: ImagePage,
@@ -143,7 +149,7 @@ export class DashboardComponent implements OnInit {
     modal.present();
   }
 
-  getPropertyById(propertyId) {
+  getPropertyById(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getPropertyById(propertyId, params).subscribe(
@@ -158,7 +164,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getPropertyLandlords(propertyId) {
+  getPropertyLandlords(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getPropertyLandlords(propertyId, params).subscribe(
@@ -173,7 +179,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getPropertyTenant(propertyId) {
+  getPropertyTenant(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getPropertyTenants(propertyId, params).subscribe(
@@ -188,16 +194,18 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getPropertyDetails(propertyId) {
+  getPropertyDetails(propertyId: string) {
     const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
           this.propertyDetails = res && res.data ? res.data : '';
+          this.isSkeleton = false;
           resolve(true);
         },
         (error) => {
           resolve(false);
+          this.isSkeleton = false;
         }
       );
     });
@@ -236,5 +244,9 @@ export class DashboardComponent implements OnInit {
 
   onMapTabClick() {
     this.isMapLoad = true;
+  }
+
+  ngOnDestroy() {
+    this.viewingCountSubscription.unsubscribe();
   }
 }

@@ -1,0 +1,9 @@
+<ion-segment [(ngModel)]="mediaSegment" id="mediaTabs">
+  <ion-segment-button value="pictures">
+    <ion-label>Pictures</ion-label>
+  </ion-segment-button>
+</ion-segment>
+<ion-content [ngSwitch]="mediaSegment">
+    <app-pictures *ngSwitchCase="'pictures'"></app-pictures>
+</ion-content>
+ 

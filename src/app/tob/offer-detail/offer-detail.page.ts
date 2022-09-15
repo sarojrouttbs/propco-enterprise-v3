@@ -15,6 +15,7 @@ import { switchMap, debounceTime } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 import { NegotiateModalPage } from 'src/app/shared/modals/negotiate-modal/negotiate-modal.page';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-offer-detail',
@@ -129,9 +130,7 @@ export class OfferDetailPage implements OnInit {
           this.isEnable('guarantor');
           this.isEnable('pets');
         }
-      },
-      (error) => { }
-    );
+      });
   }
 
   private patchApplicantDetail() {
@@ -250,7 +249,8 @@ export class OfferDetailPage implements OnInit {
   }
 
   private getPropertyDetails(propertyId: string) {
-    this.tobService.getPropertyDetails(propertyId).subscribe(
+    const params = new HttpParams().set('hideLoader', 'true');
+    this.tobService.getPropertyDetails(propertyId, params).subscribe(
       (res) => {
         this.propertyDetails = res.data;
         this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
@@ -267,9 +267,7 @@ export class OfferDetailPage implements OnInit {
         ]);
         this.makeAnOfferForm.get('amount').updateValueAndValidity();
         this.isTobPropertyCardReady = true;
-      },
-      (error) => { }
-    );
+      });
   }
 
   private getNoDeposit() {
@@ -278,9 +276,7 @@ export class OfferDetailPage implements OnInit {
         if (res) {
           this.propertyDetails.noDepositScheme = res.noDepositScheme;
         }
-      },
-      (error) => { }
-    );
+      });
   }
 
   private getPropertyClauses(propertyId) {
@@ -290,9 +286,7 @@ export class OfferDetailPage implements OnInit {
         this.negotiatableClauses = this.propertyClauses.filter(
           (result) => result.isNegotiable
         );
-      },
-      (error) => { }
-    );
+      });
   }
 
   private getPropertyRestrictions(propertyId) {
@@ -309,9 +303,7 @@ export class OfferDetailPage implements OnInit {
             restrict.key.replace(/_/g, ' ')
           ))
         );
-      },
-      (error) => { }
-    );
+      });
   }
 
   async onSubmit() {
@@ -469,7 +461,7 @@ export class OfferDetailPage implements OnInit {
     if (this.makeAnOfferForm.valid) {
       this.updateApplicantDetails();
       this.tobService.createOffer(this.prepareCreateOffer()).subscribe(
-        (res) => {
+        (resp) => {
           const applicantName =
             this.applicantDetail.fullName ||
             this.applicantDetail.title +
@@ -571,8 +563,7 @@ export class OfferDetailPage implements OnInit {
     this.tobService
       .updateApplicantDetails(this.applicantId, requestObj)
       .subscribe(
-        (res) => { },
-        (error) => { }
+        (res) => { }
       );
   }
 
@@ -603,9 +594,7 @@ export class OfferDetailPage implements OnInit {
         (data) => {
           this.commonService.setItem(PROPCO.TOB_LOOKUP_DATA, data);
           this.setTobLookupData();
-        },
-        (error) => { }
-      );
+        });
     }
   }
   private setLookupData(): void {
@@ -740,7 +729,7 @@ export class OfferDetailPage implements OnInit {
       backdropDismiss: false,
     });
 
-    const data = modal.onDidDismiss().then((res) => { });
+    modal.onDidDismiss();
     await modal.present();
   }
 

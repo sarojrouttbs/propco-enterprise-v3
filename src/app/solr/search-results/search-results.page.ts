@@ -10,6 +10,7 @@ declare function openScreen(key: string, value: any): any;
 import { Options, LabelType } from '@angular-slider/ngx-slider';
 import { SolrSearchHandlerService } from 'src/app/shared/services/solr-search-handler.service';
 import { WorkspaceService } from 'src/app/agent/workspace/workspace.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-search-results',
@@ -146,7 +147,8 @@ export class SearchResultsPage implements OnInit {
     private el: ElementRef<HTMLElement>,
     private solrSearchService: SolrSearchHandlerService,
     private workspaceService: WorkspaceService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.currentDate = this.commonService.getFormatedDate(new Date(), this.DATE_FORMAT.YEAR_DATE);
   }
@@ -444,7 +446,7 @@ export class SearchResultsPage implements OnInit {
     this.tenantFilter = this.fb.group({
       status: [[]],
       officeCode: [[]],
-      tenantType: [['LEAD_TENANT']],
+      tenantType: [['TENANT']],
     });
     this.agentFilter = this.fb.group({
       status: [[]],
@@ -529,6 +531,9 @@ export class SearchResultsPage implements OnInit {
     params.searchTypes = this.transformToUpperCase(this.entityControl.value);
     this.commonService.dataChanged({ entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm });
     if (global) {
+      if (params.searchTypes.indexOf('TENANT') > -1) {
+        params.searchTypes.push('COTENANT')
+      }
       return params;
     }
     if (this.refreshType === 'ALL') {
@@ -551,9 +556,6 @@ export class SearchResultsPage implements OnInit {
         delete llFilter.isOverseas;
       }
       params.landlordFilter = llFilter;
-    }
-    if (this.entityControl.value.indexOf('Tenant') !== -1) {
-      params.tenantFilter = this.tenantFilter.value;
     }
     if (this.entityControl.value.indexOf('Agent') !== -1) {
       const atFilter = Object.assign(this.agentFilter.value, {});
@@ -587,6 +589,17 @@ export class SearchResultsPage implements OnInit {
         delete apFilter.isStudent;
       }
       params.applicantFilter = apFilter;
+    }
+    if (this.entityControl.value.indexOf('Tenant') !== -1) {
+      params.tenantFilter = this.tenantFilter.value;
+      const index = params.searchTypes.indexOf('TENANT');
+      if (params.searchTypes.indexOf('TENANT') !== -1) {
+        params.searchTypes.splice(index, 1);
+      }
+      params.searchTypes = [...params.searchTypes, ...this.transformToUpperCase(this.tenantFilter.value.tenantType)];
+      if (params.searchTypes.indexOf('TENANT') === -1 && params.searchTypes.indexOf('COTENANT') === -1) {
+        params.searchTypes.push('TENANT', 'COTENANT');
+      }
     }
     return params;
   }
@@ -637,6 +650,9 @@ export class SearchResultsPage implements OnInit {
       case 'LANDLORD':
         action = 'OpenLandlord';
         break;
+      case 'COTENANT':
+        action = 'OpenCoTenant';
+        break;
       default:
         return;
     }
@@ -646,6 +662,7 @@ export class SearchResultsPage implements OnInit {
   refreshAll() {
     this.isEntityFilterApplied = true;
     this.pageIndex = 0;
+    this.updateRoute();
     this.getSearchResults();
   }
 
@@ -660,7 +677,7 @@ export class SearchResultsPage implements OnInit {
     this.propertyFilter.controls['rentType'].setValue('DEFAULT_RENT');
     this.landlordFilter.reset();
     this.tenantFilter.reset();
-    this.tenantFilter.controls['tenantType'].setValue(['LEAD_TENANT']);
+    this.tenantFilter.controls['tenantType'].setValue(['TENANT']);
     this.applicantFilter.reset();
     this.agentFilter.reset();
     this.contractorFilter.reset();
@@ -696,6 +713,7 @@ export class SearchResultsPage implements OnInit {
     this.isEntityFilterApplied = true;
     this.pageIndex = 0;
     this.refreshType = type;
+    this.updateRoute();
     this.getSearchResults();
   }
 
@@ -759,15 +777,15 @@ export class SearchResultsPage implements OnInit {
     }
   }
 
-  async searchHandler(data) {
+  async searchHandler(data: any) {
     this.isEntityFilterApplied = false;
     this.pageIndex = 0;
     this.entityControl.setValue(data.entity);
+    this.solrSearchConfig.types = this.entityControl.value;
     this.solrSearchConfig.searchTerm = data.term ? data.term : '';
     if (data.isSearchResult) {
       this.initResults();
     } else {
-      await this.getQueryParams();
       this.initFilter();
     }
   }
@@ -828,5 +846,20 @@ export class SearchResultsPage implements OnInit {
 
   toggleSideMenu() {
     this.hideMenu('', 'search-result-overlay');
+  }
+
+  private updateRoute() {
+    const params = {
+      searchTerm: this.solrSearchConfig.searchTerm,
+      type: this.entityControl.value
+    };
+    const urlTree = this.router.createUrlTree([], {
+      relativeTo: this.route,
+      queryParams: params,
+      queryParamsHandling: 'merge',
+    });
+
+    //Update route with Query Params
+    this.location.go(urlTree.toString());
   }
 }
