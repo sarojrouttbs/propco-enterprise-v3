@@ -201,19 +201,22 @@ export class SelectLandlordsComponent implements OnInit {
 
   applyFilters() {
     this.unselectAll();
+    this.landlordParams = this.landlordParams
+      .delete('propertyOffice')
+      .delete('managementType')
+      .delete('searchText')
+      .delete('searchOnColumns');
+
     if (this.checkedLandlords.length > 0)
       this.checkedLandlords.length = 0;
-    if (this.group.value.selectedPropertyOfficeCodes) {
+    if (this.group.value.selectedPropertyOfficeCodes)
       this.landlordParams = this.landlordParams.set('propertyOffice', this.group.value.selectedPropertyOfficeCodes);
-    }
-    if (this.group.value.managementType) {
+    if (this.group.value.managementType)
       this.landlordParams = this.landlordParams.set('managementType', this.selectedManagementType);
-    }
     if (this.group.value.searchText && this.group.value.searchText.trim() && this.group.value.searchText.length > 2) {
       this.landlordParams = this.landlordParams.set('searchText', this.group.value.searchText);
-      if (this.group.value.searchOnColumns) {
+      if (this.group.value.searchOnColumns)
         this.landlordParams = this.landlordParams.set('searchOnColumns', this.group.value.searchOnColumns);
-      }
     }
     this.rerenderLandlordList();
   }
@@ -272,7 +275,7 @@ export class SelectLandlordsComponent implements OnInit {
         this.selectedOfficeList = res?.data?.selectedOfficeList;
         this.selectedRegion = res?.data?.selectedRegion;
         const propertyOfficeName = res?.data?.selectedOfficeList.map(err => err.officeName).join(', ');
-        const propertyOfficeCodes = res?.data?.selectedOfficeList.map(err => err.officeCode).join(',');
+        const propertyOfficeCodes = res?.data?.selectedOfficeList.map(err => err.officeCode);        
         this.group.get('propertyOffice').setValue(propertyOfficeName);
         this.group.get('selectedPropertyOfficeCodes').patchValue(propertyOfficeCodes);
       }
@@ -355,7 +358,7 @@ export class SelectLandlordsComponent implements OnInit {
       for (let val of this.group.value.propertyOfficeCodes) {
         this.selectedOfficeCode.push(val.officeCode);
       }
-    }
+    }    
     this.group.get('selectedPropertyOfficeCodes').patchValue(this.selectedOfficeCode);
   }
 }
