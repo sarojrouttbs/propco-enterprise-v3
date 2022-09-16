@@ -85,8 +85,8 @@ export class ProgressSummaryComponent implements OnInit {
       this.getActionItems(response);
     } else {
       const reqObj: any = {
-        managementType: this.formObj.managementType ? this.formObj.managementType : [],
-        propertyOffice: this.formObj.propertyOffice ? this.formObj.propertyOffice : [],
+        managementType: this.formObj.selectedManagementType ? this.formObj.selectedManagementType : [],
+        propertyOffice: this.formObj.selectedPropertyOfficeCodes ? this.formObj.selectedPropertyOfficeCodes : [],
         selectedPropertyLinkIds: this.formObj.selectedPropertyLinkIds ? this.formObj.selectedPropertyLinkIds : [],
         deselectedPropertyLinkIds: this.formObj.deselectedPropertyLinkIds ? this.formObj.deselectedPropertyLinkIds : [],
         taxHandler: this.formObj.taxHandler

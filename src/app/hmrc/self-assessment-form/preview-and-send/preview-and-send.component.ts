@@ -29,7 +29,6 @@ export class PreviewAndSendComponent implements OnInit {
   statementPreferences: any;
   selectedLandlords: number[] = [];
   unSelectedLandlords: number[] = [];
-  selectedHmrcLandlordCount = 0;
   emailPattern = HMRC_CONFIG.EMAIL_REGEX;
 
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
@@ -50,6 +49,7 @@ export class PreviewAndSendComponent implements OnInit {
     this.getLookupData();
     this.initDataTable();
     this.disableButton();
+    this.selectedLandlords = this.group.value.selectedPropertyLinkIds;
   }
 
   private getLookupData() {
@@ -103,7 +103,6 @@ export class PreviewAndSendComponent implements OnInit {
         this.hmrcService.getLandlords(this.params).subscribe(res => {
           this.landlordList = res && res.data ? res.data : [];
           this.totalPropertyLandlord = res ? res.count : 0;
-          this.selectedHmrcLandlordCount = this.totalPropertyLandlord - this.unSelectedLandlords.length;
           this.landlordList.forEach(item => {
             item.checked = this.unSelectedLandlords.indexOf(item.propertyLinkId) >= 0 ? false : true;
             item.isDisabled = false;
@@ -116,6 +115,7 @@ export class PreviewAndSendComponent implements OnInit {
               } else {
                 item.checked = false;
                 this.unSelectedLandlords.push(item.propertyLinkId);
+                this.selectedLandlords.splice(this.selectedLandlords.indexOf(item.propertyLinkId), 1);
                 item.isDisabled = true;
                 item.invalid = true;
               }
@@ -137,16 +137,14 @@ export class PreviewAndSendComponent implements OnInit {
     if (e.detail.checked) {
       this.selectedLandlords.push(e.detail.value);
       this.unSelectedLandlords.splice(this.unSelectedLandlords.indexOf(e.detail.value), 1);
-      this.selectedHmrcLandlordCount += 1;
     } else {
       this.unSelectedLandlords.push(e.detail.value);
       this.selectedLandlords.splice(this.selectedLandlords.indexOf(e.detail.value), 1);
-      this.selectedHmrcLandlordCount -= 1;
     }
     if (this.selectedLandlords.length > 0)
-      this.group.get('selectedPropertyLinkIds').patchValue(this.selectedLandlords.toString());
+      this.group.get('selectedPropertyLinkIds').setValue(this.selectedLandlords);
     if (this.unSelectedLandlords.length > 0)
-      this.group.get('deselectedPropertyLinkIds').patchValue(this.selectedLandlords.toString())
+      this.group.get('deselectedPropertyLinkIds').setValue(this.unSelectedLandlords);
     this.disableButton();
   }
 
@@ -159,7 +157,7 @@ export class PreviewAndSendComponent implements OnInit {
 
   async onRowClick(data: any) {
     const respData: any = await this.getPdfUrlDetails(data);
-    if(!respData)
+    if (!respData)
       return;
     const file = new Blob([respData], { type: 'application/pdf' });
     const fileURL = URL.createObjectURL(file);
