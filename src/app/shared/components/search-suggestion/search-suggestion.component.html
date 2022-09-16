@@ -136,8 +136,8 @@
   </div>
 </ng-template>
 
-<ng-template #agentSuggestion  let-item="item" >
-  <div  style="width: 100%">
+<ng-template #agentSuggestion  let-item="item">
+  <div (click)="openHomeCategory('OpenAgent',item)" style="width:100%">
     <span>
       <i class="propcoicon no-background propcoicon-agent red-icon"></i>
     </span>
