@@ -12,7 +12,7 @@
             <ion-label position="floating">Select Financial Year
             </ion-label>
             <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="quickFilterType" #quickFilter (ionChange)="onFilterChange(quickFilter.value)">
-              <ion-select-option [value]="data?.index" *ngFor="let data of hmrcConfigs.QUICK_DATE_FILTERS">
+              <ion-select-option [value]="data?.index" *ngFor="let data of dateFilterList">
                 {{ data?.value }}
               </ion-select-option>
             </ion-select>
