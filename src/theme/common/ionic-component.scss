@@ -910,8 +910,10 @@ ion-datetime {
     bottom: 0;
     position: absolute;
     right: 0;
-    color: var( --ion-color-primary); 
+    color: var( --ion-color-primary);
+    margin: 16px 0px;
 }
+
 #hmrc-stepper {
   .ion-date-item-icon {
     opacity: 1!important;

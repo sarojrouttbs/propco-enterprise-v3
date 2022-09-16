@@ -84,7 +84,7 @@
               <ion-input value="{{ userActionForms.controls.requiredStartDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
               ></ion-icon>
-              <ion-popover trigger="requiredStartDate" show-backdrop="false" side="top">
+              <ion-popover class="ion-datepicker-popover" trigger="requiredStartDate" show-backdrop="false" side="top">
                 <ng-template>
                   <ion-datetime
                     showDefaultButtons="true"
@@ -105,7 +105,7 @@
               <ion-input value="{{ userActionForms.controls.requiredCompletionDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
               ></ion-icon>
-              <ion-popover trigger="requiredCompletionDate" show-backdrop="false" side="top">
+              <ion-popover class="ion-datepicker-popover" trigger="requiredCompletionDate" show-backdrop="false" side="top">
                 <ng-template>
                   <ion-datetime
                     showDefaultButtons="true"

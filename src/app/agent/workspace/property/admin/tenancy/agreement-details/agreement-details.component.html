@@ -105,7 +105,7 @@
               <ion-input value="{{ agreementDetailsForm.controls.nextClaimDate.value | date: DATE_FORMAT.DATE }}">
               </ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-              <ion-popover trigger="nextClaimDate" show-backdrop="false">
+              <ion-popover class="ion-datepicker-popover" trigger="nextClaimDate" show-backdrop="false">
                 <ng-template>
                   <ion-datetime showDefaultButtons="true" presentation="date" formControlName="nextClaimDate">
                   </ion-datetime>
@@ -160,7 +160,7 @@
               <ion-input value="{{ agreementDetailsForm.controls.lastRentRequestDate.value | date: DATE_FORMAT.DATE }}">
               </ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-              <ion-popover trigger="lastRentRequestDate" show-backdrop="false">
+              <ion-popover class="ion-datepicker-popover" trigger="lastRentRequestDate" show-backdrop="false">
                 <ng-template>
                   <ion-datetime showDefaultButtons="true" presentation="date" formControlName="lastRentRequestDate">
                   </ion-datetime>
@@ -200,7 +200,7 @@
           <ion-input value="{{ agreementDetailsForm.controls.originalStart.value | date: DATE_FORMAT.DATE }}">
           </ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-          <ion-popover trigger="originalStart" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="originalStart" show-backdrop="false">
             <ng-template>
               <ion-datetime showDefaultButtons="true" presentation="date" formControlName="originalStart">
               </ion-datetime>
@@ -213,7 +213,7 @@
           <ion-label position="floating">Original Move Out</ion-label>
           <ion-input value="{{ agreementDetailsForm.controls.originalEnd.value | date: DATE_FORMAT.DATE }}"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-          <ion-popover trigger="originalEnd" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="originalEnd" show-backdrop="false">
             <ng-template>
               <ion-datetime showDefaultButtons="true" presentation="date" formControlName="originalEnd">
               </ion-datetime>
@@ -246,7 +246,7 @@
           <ion-input value="{{ agreementDetailsForm.controls.checkInDate.value | date: DATE_FORMAT.DATE }}"
             [disabled]="!agreementDetailsForm.get('isCheckin').value"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-          <ion-popover trigger="checkInDate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="checkInDate" show-backdrop="false">
             <ng-template>
               <ion-datetime showDefaultButtons="true" presentation="date" formControlName="checkInDate">
               </ion-datetime>
@@ -267,7 +267,7 @@
           <ion-input value="{{ agreementDetailsForm.controls.checkOutDate.value | date: DATE_FORMAT.DATE }}"
             [disabled]="!agreementDetailsForm.get('isCheckout').value"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-          <ion-popover trigger="checkOutDate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="checkOutDate" show-backdrop="false">
             <ng-template>
               <ion-datetime showDefaultButtons="true" presentation="date" formControlName="checkOutDate">
               </ion-datetime>
@@ -309,7 +309,7 @@
           <ion-input value="{{ agreementDetailsForm.controls.renewalStart.value | date: DATE_FORMAT.DATE }}">
           </ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-          <ion-popover trigger="renewalStart" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="renewalStart" show-backdrop="false">
             <ng-template>
               <ion-datetime showDefaultButtons="true" presentation="date" formControlName="renewalStart">
               </ion-datetime>
@@ -398,7 +398,7 @@
           <ion-label position="floating">Effective Move In</ion-label>
           <ion-input value="{{ agreementDetailsForm.controls.tenancyStartDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-          <ion-popover trigger="tenancyStartDate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="tenancyStartDate" show-backdrop="false">
             <ng-template>
               <ion-datetime showDefaultButtons="true" presentation="date" formControlName="tenancyStartDate">
               </ion-datetime>
@@ -412,7 +412,7 @@
           <ion-input value="{{ agreementDetailsForm.controls.tenancyEndDate.value | date: DATE_FORMAT.DATE }}">
           </ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-          <ion-popover trigger="tenancyEndDate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="tenancyEndDate" show-backdrop="false">
             <ng-template>
               <ion-datetime showDefaultButtons="true" presentation="date" formControlName="tenancyEndDate">
               </ion-datetime>
@@ -425,7 +425,7 @@
           <ion-label position="floating">Notice Date</ion-label>
           <ion-input value="{{ agreementDetailsForm.controls.noticeDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-          <ion-popover trigger="noticeDate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="noticeDate" show-backdrop="false">
             <ng-template>
               <ion-datetime showDefaultButtons="true" presentation="date" formControlName="noticeDate">
               </ion-datetime>
@@ -439,7 +439,7 @@
           <ion-input value="{{ agreementDetailsForm.controls.noticeProcessedDate.value | date: DATE_FORMAT.DATE }}">
           </ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-          <ion-popover trigger="noticeProcessedDate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="noticeProcessedDate" show-backdrop="false">
             <ng-template>
               <ion-datetime showDefaultButtons="true" presentation="date" formControlName="noticeProcessedDate">
               </ion-datetime>

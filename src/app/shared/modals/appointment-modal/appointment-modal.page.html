@@ -44,7 +44,7 @@
             <ion-input value="{{ appointmentForm.controls.dateTime.value | date: DATE_FORMAT.DATE_TIME }}"></ion-input>
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
             ></ion-icon>
-            <ion-popover trigger="dateTime" show-backdrop="false" side="top">
+            <ion-popover class="ion-datepicker-popover" trigger="dateTime" show-backdrop="false" side="top">
               <ng-template>
                 <ion-datetime
                   showDefaultButtons="true"
@@ -83,7 +83,7 @@
             <ion-input value="{{ appointmentForm.controls.dateTime.value | date: DATE_FORMAT.DATE }}"></ion-input>
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
             ></ion-icon>
-            <ion-popover trigger="dateTime" show-backdrop="false">
+            <ion-popover class="ion-datepicker-popover" trigger="dateTime" show-backdrop="false">
               <ng-template>
                 <ion-datetime
                 interface="popover"

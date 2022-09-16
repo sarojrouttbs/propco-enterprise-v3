@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAYMENT_TYPES, PAYMENT_CONFIG, APPLICATION_ENTITIES, DEFAULTS, DATE_FORMAT } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -1018,7 +1018,7 @@ export class ApplicationDetailPage implements OnInit {
     }
   }
 
-  private updateApplicationDetails() {
+  private async updateApplicationDetails() {
     const requestObj = JSON.parse(JSON.stringify(this.applicationDetails));
     requestObj.applicationRestrictions.map(restrict => { delete restrict.restrictionName; }
     );
@@ -1609,7 +1609,7 @@ export class ApplicationDetailPage implements OnInit {
     await simpleModal.present();
   }
 
-  private setWorldpayInternalData() {
+  private async setWorldpayInternalData() {
     this.worldPayInternalData.applicationId = this.applicationId;
     this.worldPayInternalData.startDate = this.applicationDetails.moveInDate;
     this.worldPayInternalData.expiryDate = this.applicationDetails.preferredTenancyEndDate;
