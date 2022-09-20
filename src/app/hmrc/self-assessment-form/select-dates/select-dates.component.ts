@@ -35,7 +35,7 @@ export class SelectDatesComponent implements OnInit {
     this.group.controls.to.setValue(this.datepipe.transform(splittedValue[1], this.DATE_FORMAT.YEAR_DATE));
   }
 
-  getDateFilterList() {
+  private getDateFilterList() {
     let fromDate = new Date(HMRC.START_DATE);
     const currentYear = new Date().getFullYear();
     const yearDiff = currentYear - fromDate.getFullYear();
