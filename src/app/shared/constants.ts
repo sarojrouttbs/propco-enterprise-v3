@@ -727,24 +727,7 @@ export const DATE_FORMAT = {
 }
 
 export const HMRC = {
-  QUICK_DATE_FILTERS: [
-    {
-      index: '2021-04-06,2022-04-05',
-      value: '2021-2022'
-    }, {
-      index: '2020-04-06,2021-04-05',
-      value: '2020-2021'
-    }, {
-      index: '2019-04-06,2020-04-05',
-      value: '2019-2020'
-    }, {
-      index: '2018-04-06,2019-04-05',
-      value: '2018-2019'
-    }, {
-      index: '2017-04-06,2018-04-05',
-      value: '2017-2018'
-    }
-  ],
+  START_DATE: '2017-04-06',
   SEARCH_ON_COLUMNS_KEYS: [
     { index: 'PROPERTY_REFERENCE', value: 'Property Reference' },
     { index: 'PROPERTY_ADDRESS', value: 'Property Address' },
