@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { DEFAULT_MESSAGES } from '../../constants';
+import { DEFAULT_MESSAGES } from '../../../../../shared/constants';
 
 @Component({
   selector: 'app-call-info-modal',

@@ -4,7 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { OWNERSHIP, PROPCO } from 'src/app/shared/constants';
 import { AddressModalPage } from 'src/app/shared/modals/address-modal/address-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { DisplayAsModalPage } from 'src/app/shared/modals/display-as-modal/display-as-modal.page';
+import { DisplayAsModalPage } from 'src/app/market-appraisal/market-appraisal-modal/display-as-modal/display-as-modal.page';
 import { MarketAppraisalService } from 'src/app/market-appraisal/market-appraisal.service';
 @Component({
   selector: 'app-ma-contact',

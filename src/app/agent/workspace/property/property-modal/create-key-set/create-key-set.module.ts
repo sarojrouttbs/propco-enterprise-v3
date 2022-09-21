@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { CreateKeySetPage } from './create-key-set.page';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
-import { ComponentsModule } from '../../components/components.module';
+import { ComponentsModule } from '../../../../../shared/components/components.module';
 import { AgentService } from 'src/app/agent/agent.service';
 
 const routes: Routes = [

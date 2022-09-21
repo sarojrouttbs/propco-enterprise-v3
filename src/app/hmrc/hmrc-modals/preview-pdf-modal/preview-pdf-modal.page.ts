@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { CommonService } from '../../services/common.service';
+import { CommonService } from '../../../shared/services/common.service';
 
 @Component({
   selector: 'app-preview-pdf-modal',

@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { KeyActivityModalPage } from './key-activity-modal.page';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
-import { ComponentsModule } from '../../components/components.module';
+import { ComponentsModule } from 'src/app/shared/components/components.module';
 
 const routes: Routes = [
   {

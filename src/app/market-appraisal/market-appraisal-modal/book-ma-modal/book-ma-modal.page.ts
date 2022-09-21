@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { MarketAppraisalService } from 'src/app/market-appraisal/market-appraisal.service';
-import { DATE_FORMAT } from '../../constants';
-import { CommonService } from '../../services/common.service';
+import { DATE_FORMAT } from '../../../shared/constants';
+import { CommonService } from '../../../shared/services/common.service';
 
 @Component({
   selector: 'app-book-ma-modal',

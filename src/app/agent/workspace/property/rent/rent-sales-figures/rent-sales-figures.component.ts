@@ -4,10 +4,11 @@ import { FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AgentService } from 'src/app/agent/agent.service';
 import { PROPCO } from 'src/app/shared/constants';
-import { ChangeGrossPage } from 'src/app/shared/modals/change-gross/change-gross.page';
-import { ChangeNettPage } from 'src/app/shared/modals/change-nett/change-nett.page';
-import { FeeChargePage } from 'src/app/shared/modals/fee-charge/fee-charge.page';
+import { ChangeGrossPage } from 'src/app/agent/workspace/property/property-modal/change-gross/change-gross.page';
+import { ChangeNettPage } from 'src/app/agent/workspace/property/property-modal/change-nett/change-nett.page';
+// import { FeeChargePage } from 'src/app/shared/modals/fee-charge/fee-charge.page';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { FeeChargePage } from '../../property-modal/fee-charge/fee-charge.page';
 
 @Component({
   selector: 'app-rent-sales-figures',

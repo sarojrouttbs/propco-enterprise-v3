@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { TITLES } from '../../constants';
+import { TITLES } from '../../../shared/constants';
 
 @Component({
   selector: 'app-display-as-modal',
