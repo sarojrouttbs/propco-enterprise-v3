@@ -229,9 +229,11 @@ export class SelectLandlordsComponent implements OnInit {
     this.rerenderLandlordList();
     this.selectedRegion = [];
     this.selectedOfficeList = [];
+    this.checkedLandlords.length = 0;
+    this.uncheckedLandlords.length = 0;
   }
 
-  onCheckboxClick(checkboxVal: any) {
+  onCheckboxClick(checkboxVal: any) {    
     const isChecked: any = document.getElementById('checkbox_' + checkboxVal).getAttribute('aria-checked');
     if (isChecked === 'true') {
       this.checkedLandlords.splice(this.checkedLandlords.indexOf(checkboxVal), 1);

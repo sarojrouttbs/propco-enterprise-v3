@@ -115,7 +115,8 @@ export class PreviewAndSendComponent implements OnInit {
               } else {
                 item.checked = false;
                 this.unSelectedLandlords.push(item.propertyLinkId);
-                this.selectedLandlords.splice(this.selectedLandlords.indexOf(item.propertyLinkId), 1);
+                if (this.selectedLandlords)
+                  this.selectedLandlords.splice(this.selectedLandlords.indexOf(item.propertyLinkId), 1);
                 item.isDisabled = true;
                 item.invalid = true;
               }
