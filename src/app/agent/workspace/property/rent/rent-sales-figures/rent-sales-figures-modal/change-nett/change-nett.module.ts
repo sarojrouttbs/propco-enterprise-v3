@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ChangeNettPageRoutingModule } from './change-nett-routing.module';
 
 import { ChangeNettPage } from './change-nett.page';
-import { ComponentsModule } from '../../../../../shared/components/components.module';
+import { ComponentsModule } from 'src/app/shared/components/components.module';
 
 @NgModule({
   imports: [

@@ -4,7 +4,7 @@ import { IonSlides, ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, PROPCO, DEFAULT_MESSAGES, DEFAULTS, NOTES_TYPE, DATE_FORMAT } from 'src/app/shared/constants';
-import { ImagePage } from '../property-modal/image/image.page';
+import { ImagePage } from './dashboard-modal/image/image.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { Subscription } from 'rxjs';
 

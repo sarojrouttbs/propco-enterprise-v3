@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, NOTES_TYPE, PROPCO } from 'src/app/shared/constants';
 import { NotesModalPage } from 'src/app/shared/modals/notes-modal/notes-modal.page';
-import { PeriodicVisitModalPage } from '../property-modal/periodic-visit-modal/periodic-visit-modal.page';
+import { PeriodicVisitModalPage } from './periodic-visit-modal/periodic-visit-modal/periodic-visit-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({

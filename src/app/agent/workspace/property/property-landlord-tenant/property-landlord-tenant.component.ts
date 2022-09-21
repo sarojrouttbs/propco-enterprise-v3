@@ -4,7 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
 import { DATE_FORMAT, DEFAULTS, PROPCO } from 'src/app/shared/constants';
-import { CallInfoModalPage } from 'src/app/agent/workspace/property/property-modal/call-info-modal/call-info-modal.page';
+import { CallInfoModalPage } from './property-landlord-tenant-modal/call-info-modal/call-info-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
