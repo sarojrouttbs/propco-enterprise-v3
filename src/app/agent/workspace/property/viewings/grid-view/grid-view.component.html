@@ -92,7 +92,7 @@
 
   </div>
 </ion-row>
-<ion-row *ngIf="viewingList.length > 0">
+<ion-row *ngIf="viewingList.length > 0" style="justify-content: end">
   <ion-col size="auto">
     <mat-paginator #paginator [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex"
       [showFirstLastButtons]="true" [pageSizeOptions]="[10, 20, 30, 100]" (page)="pageEvent = handlePage($event);">
