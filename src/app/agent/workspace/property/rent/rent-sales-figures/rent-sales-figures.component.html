@@ -281,7 +281,7 @@
               <ion-col size="30">
                 <ion-item id="inceptionDate">
                   <ion-label position="floating">Inception Date</ion-label>
-                  <ion-input value="{{ group.controls.emergencyResponseService.controls.inceptionDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                  <ion-input value="{{ group.get('emergencyResponseService')['controls'].inceptionDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
                   <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
                   <ion-popover class="ion-datepicker-popover" trigger="inceptionDate" show-backdrop="false">
                     <ng-template>
@@ -299,7 +299,7 @@
               <ion-col size="30">
                 <ion-item id="renewalDate">
                   <ion-label position="floating">Renewal Date</ion-label>
-                  <ion-input value="{{ group.controls.emergencyResponseService.controls.renewalDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                  <ion-input value="{{ group.get('emergencyResponseService')['controls'].renewalDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
                   <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
                   <ion-popover class="ion-datepicker-popover" trigger="renewalDate" show-backdrop="false">
                     <ng-template>
@@ -317,7 +317,7 @@
               <ion-col size="30">
                 <ion-item id="cancelledDate">
                   <ion-label position="floating">Cancelled Date</ion-label>
-                  <ion-input value="{{ group.controls.emergencyResponseService.controls.cancelledDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                  <ion-input value="{{ group.get('emergencyResponseService')['controls'].cancelledDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
                   <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
                   <ion-popover class="ion-datepicker-popover" trigger="cancelledDate" show-backdrop="false">
                     <ng-template>
