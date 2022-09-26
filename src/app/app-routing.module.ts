@@ -56,6 +56,10 @@ const routes: Routes = [
     path: 'hmrc',
     loadChildren: () => import('./hmrc/hmrc.module').then(m => m.HmrcPageModule),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'sso-failure-page',
+    loadChildren: () => import('./sso-failure-page/sso-failure-page.module').then( m => m.SsoFailurePagePageModule)
   }
 ];
 

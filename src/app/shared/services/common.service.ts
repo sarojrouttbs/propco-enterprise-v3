@@ -722,4 +722,10 @@ export class CommonService {
   sanitizeUrl(url: any) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
+
+  getUserDetailsPvt(params?): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `user/logged-in/node`, {
+      params,
+    });
+  }
 }
