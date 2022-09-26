@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { APPOINTMENT_MODAL_TYPE, DATE_FORMAT, DATE_TIME_TYPES, DATE_TIME_TYPES_KEYS, PROPCO } from '../../constants';
-import { CommonService } from '../../services/common.service';
+import { APPOINTMENT_MODAL_TYPE, DATE_FORMAT, DATE_TIME_TYPES, DATE_TIME_TYPES_KEYS, PROPCO } from '../../../shared/constants';
+import { CommonService } from '../../../shared/services/common.service';
 
 @Component({
   selector: 'app-appointment-modal',

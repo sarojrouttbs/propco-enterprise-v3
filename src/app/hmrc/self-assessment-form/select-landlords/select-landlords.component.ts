@@ -1,17 +1,14 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Injector, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { SelectAllPlusSearchComponent } from 'src/app/select-all-plus-search/select-all-plus-search.component';
 import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC, HMRC_ERROR_MESSAGES, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { HmrcService } from '../../hmrc.service';
-import { createCustomElement } from '@angular/elements';
 import { Subject } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { OfficeFilterModalPage } from 'src/app/shared/modals/office-filter-modal/office-filter-modal.page';
+import { OfficeFilterModalPage } from '../../hmrc-modals/office-filter-modal/office-filter-modal.page';
 import { ModalController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
-
 @Component({
   selector: 'app-select-landlords',
   templateUrl: './select-landlords.component.html',
@@ -56,16 +53,8 @@ export class SelectLandlordsComponent implements OnInit {
   constructor(
     private hmrcService: HmrcService,
     private commonService: CommonService,
-    private injector: Injector,
     private modalController: ModalController
-  ) {
-    const element = createCustomElement(SelectAllPlusSearchComponent, {
-      injector: this.injector
-    });
-    if (!customElements.get('c-select-all-plus-search')) {
-      customElements.define(`c-select-all-plus-search`, element);
-    }
-  }
+  ) { }
 
   ngOnInit() {
     this.initAPI();
@@ -233,7 +222,7 @@ export class SelectLandlordsComponent implements OnInit {
     this.uncheckedLandlords.length = 0;
   }
 
-  onCheckboxClick(checkboxVal: any) {    
+  onCheckboxClick(checkboxVal: any) {
     const isChecked: any = document.getElementById('checkbox_' + checkboxVal).getAttribute('aria-checked');
     if (isChecked === 'true') {
       this.checkedLandlords.splice(this.checkedLandlords.indexOf(checkboxVal), 1);
@@ -277,7 +266,7 @@ export class SelectLandlordsComponent implements OnInit {
         this.selectedOfficeList = res?.data?.selectedOfficeList;
         this.selectedRegion = res?.data?.selectedRegion;
         const propertyOfficeName = res?.data?.selectedOfficeList.map(err => err.officeName).join(', ');
-        const propertyOfficeCodes = res?.data?.selectedOfficeList.map(err => err.officeCode);        
+        const propertyOfficeCodes = res?.data?.selectedOfficeList.map(err => err.officeCode);
         this.group.get('propertyOffice').setValue(propertyOfficeName);
         this.group.get('selectedPropertyOfficeCodes').patchValue(propertyOfficeCodes);
       }
@@ -360,7 +349,7 @@ export class SelectLandlordsComponent implements OnInit {
       for (let val of this.group.value.propertyOfficeCodes) {
         this.selectedOfficeCode.push(val.officeCode);
       }
-    }    
+    }
     this.group.get('selectedPropertyOfficeCodes').patchValue(this.selectedOfficeCode);
   }
 }
