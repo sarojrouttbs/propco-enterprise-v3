@@ -1,15 +1,15 @@
-import { QuoteService } from './../quote-modal/quote.service';
+import { QuoteService } from './quote.service';
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
-import { ComponentsModule } from '../../components/components.module';
+import { ComponentsModule } from '../../../../../shared/components/components.module';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { QuoteModalPage } from './quote-modal.page';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
-import { CURRENCY_MASK_CONFIGURATION } from '../../constants';
+import { CURRENCY_MASK_CONFIGURATION } from '../../../../../shared/constants';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 

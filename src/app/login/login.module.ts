@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { LoginPageRoutingModule } from './login-routing.module';
 import { LoginPage } from './login.page';
 import { ComponentsModule } from '../shared/components/components.module';
-import { ForgotPasswordModalPageModule } from '../shared/modals/forgot-password-modal/forgot-password-modal.module';
+import { ForgotPasswordModalPageModule } from './login-modal/forgot-password-modal/forgot-password-modal.module';
 
 @NgModule({
   imports: [

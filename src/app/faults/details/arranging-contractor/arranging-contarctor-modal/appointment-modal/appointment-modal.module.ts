@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { AppointmentModalPage } from './appointment-modal.page';
-import { ComponentsModule } from '../../../shared/components/components.module';
+import { ComponentsModule } from '../../../../../shared/components/components.module';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 

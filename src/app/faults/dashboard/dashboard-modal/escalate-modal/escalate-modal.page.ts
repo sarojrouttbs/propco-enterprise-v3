@@ -1,9 +1,9 @@
-import { FaultsService } from './../../../faults/faults.service';
+import { FaultsService } from 'src/app/faults/faults.service';
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { CommonService } from '../../services/common.service';
-import { PROPCO } from '../../constants';
+import { CommonService } from 'src/app/shared/services/common.service';
+import { PROPCO } from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-escalate-modal',

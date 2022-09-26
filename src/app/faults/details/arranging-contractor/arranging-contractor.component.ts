@@ -1,7 +1,7 @@
 import { ContractorSelectionComponent } from './../../../shared/modals/contractor-selection/contractor-selection.component';
 import { CloseFaultModalPage } from './../../../shared/modals/close-fault-modal/close-fault-modal.page';
 import { WorksorderModalPage } from 'src/app/shared/modals/worksorder-modal/worksorder-modal.page';
-import { RejectionModalPage } from './../../../shared/modals/rejection-modal/rejection-modal.page';
+import { RejectionModalPage } from './arranging-contarctor-modal/rejection-modal/rejection-modal.page';
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
@@ -9,18 +9,17 @@ import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
 import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES, LL_PAYMENT_CONFIG, QUOTE_CC_STATUS_ID, REGEX, MAINT_SOURCE_TYPES, RECIPIENTS, FAULT_NOTIFICATION_STATE, DEFAULTS, DATE_FORMAT } from './../../../shared/constants';
-import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
+import { AppointmentModalPage } from 'src/app/faults/details/arranging-contractor/arranging-contarctor-modal/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
-import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
+import { QuoteModalPage } from 'src/app/faults/details/arranging-contractor/arranging-contarctor-modal/quote-modal/quote-modal.page';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
-import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-received-modal/payment-received-modal.component';
-import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
+import { PaymentReceivedModalComponent } from './arranging-contarctor-modal/payment-received-modal/payment-received-modal.component';
+import { WithoutPrepaymentModalComponent } from 'src/app/faults/details/arranging-contractor/arranging-contarctor-modal/without-prepayment-modal/without-prepayment-modal.component';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HttpParams } from '@angular/common/http';
 import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.page';
-
 @Component({
   selector: 'app-arranging-contractor',
   templateUrl: './arranging-contractor.component.html',

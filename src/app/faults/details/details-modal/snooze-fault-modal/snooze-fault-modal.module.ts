@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { SnoozeFaultModalPage } from './snooze-fault-modal.page';
 import { Routes, RouterModule } from '@angular/router';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { ComponentsModule } from '../../components/components.module';
+import { ComponentsModule } from 'src/app/shared/components/components.module';
 import { MaterialModule } from 'src/app/material.module';
 
 const routes: Routes = [

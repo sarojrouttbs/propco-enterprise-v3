@@ -1,18 +1,18 @@
-import { FaultsService } from './../../../faults/faults.service';
+import { FaultsService } from '../../../../faults.service';
 import { QuoteService } from './quote.service';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { CommonService } from '../../services/common.service';
+import { CommonService } from '../../../../../shared/services/common.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { forkJoin } from 'rxjs';
-import { FOLDER_NAMES, MAX_QUOTE_LIMIT } from './../../../shared/constants';
+import { FOLDER_NAMES, MAX_QUOTE_LIMIT } from '../../../../../shared/constants';
 
 @Component({
   selector: 'app-quote-modal',
   templateUrl: './quote-modal.page.html',
-  styleUrls: ['./quote-modal.page.scss', '../../drag-drop.scss'],
+  styleUrls: ['./quote-modal.page.scss', '../../../../../shared/drag-drop.scss'],
 })
 export class QuoteModalPage implements OnInit {
   faultNotificationId;
