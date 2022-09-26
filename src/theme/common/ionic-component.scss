@@ -975,3 +975,14 @@ ion-popover.ion-datepicker-popover {
   }
 }
 
+.key-activity-modal {
+  &::part(content){ 
+    height: 435px;
+  }
+}
+
+.create-keyset-modal {
+  &::part(content){ 
+    height: 550px;
+  }
+}

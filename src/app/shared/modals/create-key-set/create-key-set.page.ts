@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AgentService } from 'src/app/agent/agent.service';
+import { DATE_FORMAT } from '../../constants';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class CreateKeySetPage implements OnInit {
   keyStatuses;
   propertyId;
   loggedInUserId;
+  DATE_FORMAT = DATE_FORMAT;
 
   constructor(
     private modalController: ModalController,
@@ -36,7 +38,7 @@ export class CreateKeySetPage implements OnInit {
       name: ['', Validators.maxLength(50)],
       keyId: ['', Validators.maxLength(50)],
       type: ['', Validators.maxLength(40)],
-      postDate: [new Date(), Validators.required],
+      postDate: [this.commonService.getFormatedDate(new Date()), Validators.required],
       userId: [this.loggedInUserId, Validators.required],
       status: [0, Validators.required],
       note: ['', Validators.maxLength(255)],

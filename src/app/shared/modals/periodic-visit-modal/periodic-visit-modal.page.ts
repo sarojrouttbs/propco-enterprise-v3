@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
+import { DATE_FORMAT } from '../../constants';
 
 @Component({
   selector: 'app-periodic-visit-modal',
@@ -8,7 +9,7 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./periodic-visit-modal.page.scss'],
 })
 export class PeriodicVisitModalPage implements OnInit {
-
+  DATE_FORMAT = DATE_FORMAT;
   propertyVisitTypes;
   inspectionStatuses;
   popoverOptions: any = {

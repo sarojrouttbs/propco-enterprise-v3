@@ -180,13 +180,7 @@ export class DetailsComponent implements OnInit {
 
   private patchLetBoardDetails() {
     const control = this.propertyDetailsForm.controls['letBoardForm'];
-    control.patchValue({
-      isBoardAllowed: this.propertyDetails?.propertyInfo?.isBoardAllowed,
-      boardOrderedOn: this.propertyDetails?.propertyInfo?.boardOrderedOn ? this.propertyDetails.propertyInfo.boardOrderedOn : DEFAULTS.NOT_AVAILABLE,
-      boardRemovedOn: this.propertyDetails?.propertyInfo?.boardRemovedOn ? this.propertyDetails.propertyInfo.boardRemovedOn : DEFAULTS.NOT_AVAILABLE,
-      slipOrderedOn: this.propertyDetails?.propertyInfo?.slipOrderedOn ? this.propertyDetails.propertyInfo.slipOrderedOn : DEFAULTS.NOT_AVAILABLE,
-      boardRef: this.propertyDetails?.propertyInfo?.boardRef ? this.propertyDetails?.propertyInfo?.boardRef : DEFAULTS.NOT_AVAILABLE
-    });
+    control.patchValue(this.propertyDetails?.propertyInfo);
   }
 
   private async patchPropertyHistory() {

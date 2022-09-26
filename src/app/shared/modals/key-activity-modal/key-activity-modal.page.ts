@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AgentService } from 'src/app/agent/agent.service';
+import { DATE_FORMAT } from '../../constants';
 import { CommonService } from '../../services/common.service';
 import { ValidationService } from '../../services/validation.service';
 
@@ -16,6 +17,7 @@ export class KeyActivityModalPage implements OnInit {
   keyActivities;
   keyActivityForm: FormGroup;
   userDetailsList;
+  DATE_FORMAT = DATE_FORMAT;
   constructor(
     private modalController: ModalController,
     private formBuilder: FormBuilder,
@@ -31,7 +33,7 @@ export class KeyActivityModalPage implements OnInit {
     this.initForm();
     if (this.isAddKeyActivity) {
       this.keyActivityForm.get('activityType').setValue(this.data.activityType);
-      this.keyActivityForm.get('postDate').setValue(new Date);
+      this.keyActivityForm.get('postDate').setValue(this.commonService.getFormatedDate(new Date()));
       this.keyActivityForm.get('userId').setValue(this.data.userId);
     } else {
       this.patchActivityValue();

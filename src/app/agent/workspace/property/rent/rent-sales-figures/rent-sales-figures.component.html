@@ -207,26 +207,31 @@
                   <ion-text class="toggle-btn-text">Rent Indemnity</ion-text>
                 </ion-item>
               </ion-col>
-              
-              
-              
-              
-              
               <ion-col size="16.6">
-                <mat-form-field appearance="fill">
-                  <mat-label>Valid From</mat-label>
-                  <input matInput [matDatepicker]="picker1" formControlName="rentStartDate" readonly>
-                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                  <mat-datepicker #picker1></mat-datepicker>
-                </mat-form-field>
+                <ion-item id="rentStartDate">
+                  <ion-label position="floating">Valid From</ion-label>
+                  <ion-input value="{{ group.controls.rentStartDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                  <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                  <ion-popover class="ion-datepicker-popover" trigger="rentStartDate" show-backdrop="false">
+                    <ng-template>
+                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="rentStartDate">
+                      </ion-datetime>
+                    </ng-template>
+                  </ion-popover>
+                </ion-item>
               </ion-col>
               <ion-col size="16.6">
-              <mat-form-field appearance="fill">
-                <mat-label>Expires</mat-label>
-                <input matInput [matDatepicker]="picker2" formControlName="rentStopDate" readonly>
-                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                <mat-datepicker #picker2></mat-datepicker>
-              </mat-form-field>
+                <ion-item id="rentStopDate">
+                  <ion-label position="floating">Expires</ion-label>
+                  <ion-input value="{{ group.controls.rentStopDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                  <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                  <ion-popover class="ion-datepicker-popover" trigger="rentStopDate" show-backdrop="false">
+                    <ng-template>
+                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="rentStopDate">
+                      </ion-datetime>
+                    </ng-template>
+                  </ion-popover>
+                </ion-item>
               </ion-col>
               <ion-col size="33.3"></ion-col>
               <ion-col size="33.3" class="ion-align-self-center">
@@ -235,8 +240,6 @@
                   <ion-text class="toggle-btn-text">Claims Authorised</ion-text>
                 </ion-item>
               </ion-col>
-                
-                
             </ion-row>
       </ion-grid>
     </mat-expansion-panel>
@@ -276,12 +279,17 @@
                 </ion-item>
               </ion-col>
               <ion-col size="30">
-                <mat-form-field appearance="fill">
-                  <mat-label>Inception Date</mat-label>
-                  <input matInput [matDatepicker]="picker3" formControlName="inceptionDate" readonly>
-                  <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-                  <mat-datepicker #picker3></mat-datepicker>
-                </mat-form-field>
+                <ion-item id="inceptionDate">
+                  <ion-label position="floating">Inception Date</ion-label>
+                  <ion-input value="{{ group.controls.emergencyResponseService.controls.inceptionDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                  <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                  <ion-popover class="ion-datepicker-popover" trigger="inceptionDate" show-backdrop="false">
+                    <ng-template>
+                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="inceptionDate">
+                      </ion-datetime>
+                    </ng-template>
+                  </ion-popover>
+                </ion-item>
               </ion-col>
               <ion-col size="3.3" class="ion-align-self-center">
                 <div title="Remove Date" class="remove-date" (click)="removeDate('inceptionDate')">
@@ -289,12 +297,17 @@
                 </div>
               </ion-col>
               <ion-col size="30">
-                <mat-form-field appearance="fill">
-                  <mat-label>Renewal Date</mat-label>
-                  <input matInput [matDatepicker]="picker4" formControlName="renewalDate" readonly>
-                  <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
-                  <mat-datepicker #picker4></mat-datepicker>
-                </mat-form-field>
+                <ion-item id="renewalDate">
+                  <ion-label position="floating">Renewal Date</ion-label>
+                  <ion-input value="{{ group.controls.emergencyResponseService.controls.renewalDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                  <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                  <ion-popover class="ion-datepicker-popover" trigger="renewalDate" show-backdrop="false">
+                    <ng-template>
+                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="renewalDate">
+                      </ion-datetime>
+                    </ng-template>
+                  </ion-popover>
+                </ion-item>
               </ion-col>
               <ion-col size="3.3" class="ion-align-self-center">
                 <div title="Remove Date" class="remove-date" (click)="removeDate('renewalDate')">
@@ -302,12 +315,17 @@
                 </div>
               </ion-col>
               <ion-col size="30">
-                <mat-form-field appearance="fill">
-                  <mat-label>Cancelled Date</mat-label>
-                  <input matInput [matDatepicker]="picker5" formControlName="cancelledDate" readonly>
-                  <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
-                  <mat-datepicker #picker5></mat-datepicker>
-                </mat-form-field>
+                <ion-item id="cancelledDate">
+                  <ion-label position="floating">Cancelled Date</ion-label>
+                  <ion-input value="{{ group.controls.emergencyResponseService.controls.cancelledDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                  <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                  <ion-popover class="ion-datepicker-popover" trigger="cancelledDate" show-backdrop="false">
+                    <ng-template>
+                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="cancelledDate">
+                      </ion-datetime>
+                    </ng-template>
+                  </ion-popover>
+                </ion-item>
               </ion-col>
               <ion-col size="3.3" class="ion-align-self-center">
                 <div title="Remove Date" class="remove-date" (click)="removeDate('cancelledDate')">
@@ -315,12 +333,17 @@
                 </div>
               </ion-col> 
               <ion-col size="33.3">
-                <mat-form-field appearance="fill">
-                  <mat-label>Date Changed</mat-label>
-                  <input matInput [matDatepicker]="picker6" readonly>
-                  <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
-                  <mat-datepicker #picker6></mat-datepicker>
-                </mat-form-field>
+                <ion-item id="dateChanged">
+                  <ion-label position="floating">Date Changed</ion-label>
+                  <ion-input value="{{ dateChanged.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                  <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                  <ion-popover class="ion-datepicker-popover" trigger="dateChanged" show-backdrop="false">
+                    <ng-template>
+                      <ion-datetime [showDefaultButtons]="true" presentation="date" [formControl]="dateChanged">
+                      </ion-datetime>
+                    </ng-template>
+                  </ion-popover>
+                </ion-item>
               </ion-col>
               <ion-col size="35">
                 <ion-button color="success" (click)="opneFeeChargeModal()">Add Premium</ion-button>
@@ -436,20 +459,30 @@
               <ion-col size="33" class="no-padding">
                 <ion-row class="ion-align-items-center">
                   <ion-col size="50">
-                    <mat-form-field appearance="fill">
-                      <mat-label>Last Rent Review</mat-label>
-                      <input matInput [matDatepicker]="picker7" formControlName="lastRentReview" readonly>
-                      <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
-                      <mat-datepicker #picker7></mat-datepicker>
-                    </mat-form-field>
+                    <ion-item id="lastRentReview">
+                      <ion-label position="floating">Last Rent Review</ion-label>
+                      <ion-input value="{{ group.controls.lastRentReview.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                      <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                      <ion-popover class="ion-datepicker-popover" trigger="lastRentReview" show-backdrop="false">
+                        <ng-template>
+                          <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="lastRentReview">
+                          </ion-datetime>
+                        </ng-template>
+                      </ion-popover>
+                    </ion-item>
                   </ion-col>
                   <ion-col size="50">
-                    <mat-form-field appearance="fill">
-                      <mat-label>Next Rent Review</mat-label>
-                      <input matInput [matDatepicker]="picker8" formControlName="nextRentReview" readonly>
-                      <mat-datepicker-toggle matSuffix [for]="picker8"></mat-datepicker-toggle>
-                      <mat-datepicker #picker8></mat-datepicker>
-                    </mat-form-field>
+                    <ion-item id="nextRentReview">
+                      <ion-label position="floating">Next Rent Review</ion-label>
+                      <ion-input value="{{ group.controls.nextRentReview.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                      <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                      <ion-popover class="ion-datepicker-popover" trigger="nextRentReview" show-backdrop="false">
+                        <ng-template>
+                          <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="nextRentReview">
+                          </ion-datetime>
+                        </ng-template>
+                      </ion-popover>
+                    </ion-item>
                   </ion-col>
                   <ion-col size="100">
                     <ion-list-header class="fees-heading">

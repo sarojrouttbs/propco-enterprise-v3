@@ -26,28 +26,43 @@
               </ion-item>
             </ion-col>
             <ion-col size="20">
-              <mat-form-field appearance="fill">
-                <mat-label>Board Ordered On </mat-label>
-                <input matInput [matDatepicker]="picker1" formControlName="boardOrderedOn" [disabled]="!group.get('isBoardAllowed').value"  readonly>
-                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                <mat-datepicker #picker1></mat-datepicker>
-              </mat-form-field>
+              <ion-item id="boardOrderedOn">
+                <ion-label position="floating">Board Ordered On</ion-label>
+                <ion-input value="{{ group.get('boardOrderedOn').value | date: DATE_FORMAT.DATE }}" [disabled]="!group.get('isBoardAllowed').value"></ion-input>
+                <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                <ion-popover class="ion-datepicker-popover" trigger="boardOrderedOn" show-backdrop="false">
+                  <ng-template>
+                    <ion-datetime showDefaultButtons="true" presentation="date" formControlName="boardOrderedOn">
+                    </ion-datetime>
+                  </ng-template>
+                </ion-popover>
+              </ion-item>
             </ion-col>
             <ion-col size="20">
-              <mat-form-field appearance="fill">
-                <mat-label>Board Removed On </mat-label>
-                <input matInput [matDatepicker]="picker2" formControlName="boardRemovedOn" [disabled]="!group.get('isBoardAllowed').value" readonly>
-                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                <mat-datepicker #picker2></mat-datepicker>
-              </mat-form-field>
+              <ion-item id="boardRemovedOn">
+                <ion-label position="floating">Board Removed On</ion-label>
+                <ion-input value="{{ group.get('boardRemovedOn').value | date: DATE_FORMAT.DATE }}" [disabled]="!group.get('isBoardAllowed').value"></ion-input>
+                <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                <ion-popover class="ion-datepicker-popover" trigger="boardRemovedOn" show-backdrop="false">
+                  <ng-template>
+                    <ion-datetime showDefaultButtons="true" presentation="date" formControlName="boardRemovedOn">
+                    </ion-datetime>
+                  </ng-template>
+                </ion-popover>
+              </ion-item>
             </ion-col>
             <ion-col size="20">
-              <mat-form-field appearance="fill">
-                <mat-label>Let Agreed Slip Ordered On </mat-label>
-                <input matInput [matDatepicker]="picker3" formControlName="slipOrderedOn" [disabled]="!group.get('isBoardAllowed').value" readonly>
-                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-                <mat-datepicker #picker3></mat-datepicker>
-              </mat-form-field>
+              <ion-item id="slipOrderedOn">
+                <ion-label position="floating">Let Agreed Slip Ordered On</ion-label>
+                <ion-input value="{{ group.get('slipOrderedOn').value | date: DATE_FORMAT.DATE }}" [disabled]="!group.get('isBoardAllowed').value"></ion-input>
+                <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                <ion-popover class="ion-datepicker-popover" trigger="slipOrderedOn" show-backdrop="false">
+                  <ng-template>
+                    <ion-datetime showDefaultButtons="true" presentation="date" formControlName="slipOrderedOn">
+                    </ion-datetime>
+                  </ng-template>
+                </ion-popover>
+              </ion-item>
             </ion-col>
             <ion-col size="20">
               <ion-item>

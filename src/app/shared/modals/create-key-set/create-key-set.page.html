@@ -33,12 +33,17 @@
           <app-validation-message [control]="createKeysetForm.controls.type"></app-validation-message>
         </ion-col>
         <ion-col size="50">
-          <mat-form-field appearance="fill" style="margin-top: 3px;">
-            <mat-label>Entered On</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="postDate" readonly>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
+          <ion-item id="postDate">
+            <ion-label position="floating">Entered On <ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-input value="{{ createKeysetForm.controls.postDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="postDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="postDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
           <app-validation-message [control]="createKeysetForm.controls.postDate"></app-validation-message>
         </ion-col>
         <ion-col size="50">
