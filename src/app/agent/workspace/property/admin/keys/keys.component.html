@@ -92,16 +92,20 @@
                             <app-validation-message [control]="item.controls.type"></app-validation-message>
                           </ion-col>
                           <ion-col size="50">
-                            <mat-form-field appearance="fill" style="margin-top: 11px;">
-                              <mat-label> Setup Date
-                              </mat-label>
-                              <input matInput [matDatepicker]="picker" formControlName="createdAt" readonly>
-                              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                              <mat-datepicker #picker></mat-datepicker>
-                            </mat-form-field>
+                            <ion-item [id]="'createdAt' + i">
+                              <ion-label position="floating">Setup Date</ion-label>
+                              <ion-input value="{{ item.controls.createdAt.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                              <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                              <ion-popover class="ion-datepicker-popover" [trigger]="'createdAt' + i" show-backdrop="false">
+                                <ng-template>
+                                  <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="createdAt">
+                                  </ion-datetime>
+                                </ng-template>
+                              </ion-popover>
+                            </ion-item>
                             <app-validation-message [control]="item.controls.createdAt"></app-validation-message>
                           </ion-col>
-                          <ion-col size="50">
+                          <ion-col size="50" style="margin-top: 4px;">
                             <ion-item>
                               <ion-label position="floating">Setup By <ion-text class="mandatory">*</ion-text>
                               </ion-label>

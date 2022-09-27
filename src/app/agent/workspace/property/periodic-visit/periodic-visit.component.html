@@ -92,12 +92,17 @@
                 </ion-item>
               </ion-col>
               <ion-col size="33.3">
-                <mat-form-field appearance="fill" style="margin-top: 6px;">
-                  <mat-label>Visit Sequence Start Date </mat-label>
-                  <input matInput [matDatepicker]="picker" formControlName="visitSequenceStartDate" readonly>
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
+                <ion-item id="visitSequenceStartDate">
+                  <ion-label position="floating">Visit Sequence Start Date</ion-label>
+                  <ion-input value="{{ requirementForm.controls.visitSequenceStartDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                  <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                  <ion-popover class="ion-datepicker-popover" trigger="visitSequenceStartDate" show-backdrop="false">
+                    <ng-template>
+                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="visitSequenceStartDate">
+                      </ion-datetime>
+                    </ng-template>
+                  </ion-popover>
+                </ion-item>
               </ion-col>
               <ion-col size="33.3">
                 <ion-item>
