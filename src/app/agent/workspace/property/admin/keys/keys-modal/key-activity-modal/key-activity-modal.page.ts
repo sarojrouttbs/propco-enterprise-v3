@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AgentService } from 'src/app/agent/agent.service';
-import { DATE_FORMAT } from '../../constants';
-import { CommonService } from '../../services/common.service';
-import { ValidationService } from '../../services/validation.service';
+import { DATE_FORMAT } from 'src/app/shared/constants';
+import { CommonService } from 'src/app/shared/services/common.service';
+import { ValidationService } from 'src/app/shared/services/validation.service';
 
 @Component({
   selector: 'app-key-activity-modal',

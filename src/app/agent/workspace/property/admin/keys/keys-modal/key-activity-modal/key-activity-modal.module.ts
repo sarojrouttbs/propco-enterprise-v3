@@ -2,16 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { CreateKeySetPage } from './create-key-set.page';
+import { KeyActivityModalPage } from './key-activity-modal.page';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
-import { ComponentsModule } from '../../components/components.module';
-import { AgentService } from 'src/app/agent/agent.service';
+import { ComponentsModule } from 'src/app/shared/components/components.module';
 
 const routes: Routes = [
   {
     path: '',
-    component: CreateKeySetPage
+    component: KeyActivityModalPage
   }
 ];
 
@@ -25,8 +24,7 @@ const routes: Routes = [
     MaterialModule,
     ComponentsModule
   ],
-  providers: [AgentService],
-  declarations: [CreateKeySetPage],
-  exports: [CreateKeySetPage]
+  declarations: [KeyActivityModalPage],
+  exports: [KeyActivityModalPage]
 })
-export class CreateKeySetPageModule { }
+export class KeyActivityModalPageModule {}

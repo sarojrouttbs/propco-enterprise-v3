@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ChangeGrossPageRoutingModule } from './change-gross-routing.module';
 
 import { ChangeGrossPage } from './change-gross.page';
-import { ComponentsModule } from '../../components/components.module';
+import { ComponentsModule } from 'src/app/shared/components/components.module';
 
 @NgModule({
   imports: [

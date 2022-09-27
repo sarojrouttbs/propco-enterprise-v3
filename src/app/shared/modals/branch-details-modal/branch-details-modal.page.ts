@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { DEFAULTS } from '../../constants';
+import { DEFAULTS } from '../../../shared/constants';
 
 @Component({
   selector: 'app-branch-details-modal',

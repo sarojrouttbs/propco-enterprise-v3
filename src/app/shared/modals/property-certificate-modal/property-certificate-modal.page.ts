@@ -14,10 +14,6 @@ export class PropertyCertificateModalPage implements OnInit {
   certificateId;
   certificateTypes;
   isEditable;
-  // dtOptions: any = {};
-  // dtTrigger: Subject<any> = new Subject();
-  // @ViewChild(DataTableDirective, { static: false })
-  // dtElement: DataTableDirective;
   propertyCertificateList: any[] = [];
   propertyCertificateListForm = new FormGroup({
     propertyCertificateList: new FormArray([]),

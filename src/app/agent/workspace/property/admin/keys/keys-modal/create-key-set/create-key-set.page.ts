@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AgentService } from 'src/app/agent/agent.service';
-import { DATE_FORMAT } from '../../constants';
-import { CommonService } from '../../services/common.service';
+import { DATE_FORMAT } from 'src/app/shared/constants';
+import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-create-key-set',
