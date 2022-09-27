@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { DATE_FORMAT } from '../../constants';
+import { DATE_FORMAT } from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-periodic-visit-modal',
