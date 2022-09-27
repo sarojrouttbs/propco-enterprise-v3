@@ -85,7 +85,6 @@ var Fault = function (faultDetails) {
     this.faultTitle = element(by.xpath("//ion-text[@color='success']/../../following-sibling::ion-col/h2"));
 
     this.createFault = function(faultAttrib){ 
-        browser.sleep(300000);
         commonFunction.waitForElementToBeVisible(this.addFaultBtn, "Add Fault button");   
         commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first fault"); 
         commonFunction.clickOnElement(this.addFaultBtn, "Add Fault button");        
