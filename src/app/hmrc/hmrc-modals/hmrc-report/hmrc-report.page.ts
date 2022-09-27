@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { HmrcService } from 'src/app/hmrc/hmrc.service';
 import { DATE_FORMAT, DEFAULT_MESSAGES, HMRC_ERROR_MESSAGES } from 'src/app/shared/constants';
-import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/preview-pdf-modal.page';
+import { PreviewPdfModalPage } from '../preview-pdf-modal/preview-pdf-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({

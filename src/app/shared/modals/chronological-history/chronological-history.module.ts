@@ -8,7 +8,7 @@ import { ChronologicalHistoryPageRoutingModule } from './chronological-history-r
 
 import { ChronologicalHistoryPage } from './chronological-history.page';
 import { DataTablesModule } from 'angular-datatables';
-import { ComponentsModule } from '../../components/components.module';
+import { ComponentsModule } from '../../../shared/components/components.module';
 
 @NgModule({
   imports: [

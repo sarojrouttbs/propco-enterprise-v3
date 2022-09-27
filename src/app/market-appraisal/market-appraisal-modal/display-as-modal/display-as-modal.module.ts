@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { IonicModule } from '@ionic/angular';
-import { BranchDetailsModalPage } from './branch-details-modal.page';
+import { DisplayAsModalPage } from './display-as-modal.page';
 import { Routes, RouterModule } from '@angular/router';
 import { ComponentsModule } from '../../../shared/components/components.module';
-import { FaultsService } from 'src/app/faults/faults.service';
 
 const routes: Routes = [
   {
     path: '',
-    component: BranchDetailsModalPage
+    component: DisplayAsModalPage
   }
 ];
 
@@ -19,12 +19,11 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    ReactiveFormsModule,
     RouterModule.forChild(routes),
+    ReactiveFormsModule,
     ComponentsModule
   ],
-  declarations: [BranchDetailsModalPage],
-  providers: [FaultsService],
-  exports: [BranchDetailsModalPage]
+  declarations: [DisplayAsModalPage],
+  exports: [DisplayAsModalPage]
 })
-export class BranchDetailsModalPageModule { }
+export class DisplayAsModalPageModule {}
