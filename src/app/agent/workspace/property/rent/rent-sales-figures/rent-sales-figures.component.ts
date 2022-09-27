@@ -1,9 +1,9 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AgentService } from 'src/app/agent/agent.service';
-import { PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, PROPCO } from 'src/app/shared/constants';
 import { ChangeGrossPage } from './rent-sales-figures-modal/change-gross/change-gross.page';
 import { ChangeNettPage } from './rent-sales-figures-modal/change-nett/change-nett.page';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -31,6 +31,8 @@ export class RentSalesFiguresComponent implements OnInit {
   eriProducts: any;
   property: any;
   isRentForm = false;
+  DATE_FORMAT = DATE_FORMAT;
+  dateChanged = new FormControl('');
 
   constructor(private commonService: CommonService, private agentService: AgentService, private modalController: ModalController) { }
 
