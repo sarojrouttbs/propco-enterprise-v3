@@ -25,7 +25,7 @@
     </ion-row>
 
     <ion-row>
-      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100">
+      <ion-col size-xl="50" size-lg="50" size-md="50" size-sm="50" size-xs="100">
         <ion-row>
           <ion-col size="40" style="margin-top: 2px;">
             <ion-item>
@@ -84,10 +84,36 @@
               <ion-input formControlName="noOfOccupiers"></ion-input>
             </ion-item>
           </ion-col>
+          <ion-col size="25">
+            <ion-item>
+              <ion-label position="floating">Tenancy</ion-label>
+              <ion-input formControlName="tenancy"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="25">
+            <ion-item>
+              <ion-label position="floating">Room</ion-label>
+              <ion-input formControlName="room"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="50">
+            <ion-item id="lastRentRequestDate">
+              <ion-label position="floating">Last Claim Request</ion-label>
+              <ion-input value="{{ agreementDetailsForm.controls.lastRentRequestDate.value | date: DATE_FORMAT.DATE }}">
+              </ion-input>
+              <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+              <ion-popover class="ion-datepicker-popover" trigger="lastRentRequestDate" show-backdrop="false">
+                <ng-template>
+                  <ion-datetime showDefaultButtons="true" presentation="date" formControlName="lastRentRequestDate">
+                  </ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </ion-item>
+          </ion-col>       
         </ion-row>
       </ion-col>
 
-      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100">
+      <ion-col size-xl="50" size-lg="50" size-md="50" size-sm="50" size-xs="100">
         <ion-row>
           <ion-col size="50">
             <ion-item>
@@ -137,38 +163,7 @@
               <ion-input formControlName="noOfHouseholds"></ion-input>
             </ion-item>
           </ion-col>
-        </ion-row>
-      </ion-col>
-
-      <ion-col size-xl="33.3" size-lg="33.3" size-md="50" size-sm="50" size-xs="100">
-        <ion-row>
-          <ion-col size="25">
-            <ion-item>
-              <ion-label position="floating">Tenancy</ion-label>
-              <ion-input formControlName="tenancy"></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size="25">
-            <ion-item>
-              <ion-label position="floating">Room</ion-label>
-              <ion-input formControlName="room"></ion-input>
-            </ion-item>
-          </ion-col>
           <ion-col size="50">
-            <ion-item id="lastRentRequestDate">
-              <ion-label position="floating">Last Claim Request</ion-label>
-              <ion-input value="{{ agreementDetailsForm.controls.lastRentRequestDate.value | date: DATE_FORMAT.DATE }}">
-              </ion-input>
-              <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-              <ion-popover class="ion-datepicker-popover" trigger="lastRentRequestDate" show-backdrop="false">
-                <ng-template>
-                  <ion-datetime showDefaultButtons="true" presentation="date" formControlName="lastRentRequestDate">
-                  </ion-datetime>
-                </ng-template>
-              </ion-popover>
-            </ion-item>
-          </ion-col>
-          <ion-col size="100">
             <ion-item>
               <ion-label position="floating">Occupier</ion-label>
               <ion-input formControlName="occupier"></ion-input>
@@ -180,6 +175,13 @@
               <ion-input formControlName="noOfPermittedOccupier"></ion-input>
             </ion-item>
           </ion-col>
+        </ion-row>
+      </ion-col>
+
+      <ion-col size-xl="50" size-lg="50" size-md="50" size-sm="50" size-xs="100">
+        <ion-row>
+         
+         
           <ion-col size="50">
             <ion-item>
               <ion-label position="floating">Permitted Delay (in days)</ion-label>
