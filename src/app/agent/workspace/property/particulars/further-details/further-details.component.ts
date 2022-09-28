@@ -7,8 +7,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-further-details',
-  templateUrl: './further-details.component.html',
-  styleUrls: ['./further-details.component.scss'],
+  templateUrl: './further-details.component.html'
 })
 export class FurtherDetailsComponent implements OnInit {
   furtherDetailsForm: FormGroup;

@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { environment } from './../../environments/environment';
 
 @Injectable()
@@ -120,7 +120,7 @@ export class FaultsService {
 
   downloadDocument(documentId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `documents/${documentId}/download`,
-      { responseType: 'arraybuffer' }).pipe(tap((res: any) => { }),
+      { responseType: 'arraybuffer' }).pipe(
         catchError(this.handleError<any>(''))
       );
   }
@@ -187,25 +187,25 @@ export class FaultsService {
   }
 
   getTenantDetails(tenantId: any): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}`).pipe(tap((res: any) => { }),
+    return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}`).pipe(
       catchError(this.handleError<any>(''))
     );
   }
 
   getaccessibleOffices(): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `accessible-offices`).pipe(tap((res: any) => { }),
+    return this.httpClient.get(environment.API_BASE_URL + `accessible-offices`).pipe(
       catchError(this.handleError<any>(''))
     );
   }
 
   getManagementTypes(): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `management-types`).pipe(tap((res: any) => { }),
+    return this.httpClient.get(environment.API_BASE_URL + `management-types`).pipe(
       catchError(this.handleError<any>(''))
     );
   }
 
   getAssignedUsers(): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `accessible-users`).pipe(tap((res: any) => { }),
+    return this.httpClient.get(environment.API_BASE_URL + `accessible-users`).pipe(
       catchError(this.handleError<any>(''))
     );
   }
@@ -219,7 +219,7 @@ export class FaultsService {
   }
 
   getNominalCodes(): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `nominal-codes`).pipe(tap((res: any) => { }),
+    return this.httpClient.get(environment.API_BASE_URL + `nominal-codes`).pipe(
       catchError(this.handleError<any>(''))
     );
   }

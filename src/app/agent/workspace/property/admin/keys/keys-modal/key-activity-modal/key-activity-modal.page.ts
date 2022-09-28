@@ -8,8 +8,7 @@ import { ValidationService } from 'src/app/shared/services/validation.service';
 
 @Component({
   selector: 'app-key-activity-modal',
-  templateUrl: './key-activity-modal.page.html',
-  styleUrls: ['./key-activity-modal.page.scss'],
+  templateUrl: './key-activity-modal.page.html'
 })
 export class KeyActivityModalPage implements OnInit {
   isAddKeyActivity;

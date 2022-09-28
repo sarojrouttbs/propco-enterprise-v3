@@ -576,9 +576,7 @@ export class OfferDetailPage implements OnInit {
         (data) => {
           this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
           this.setLookupData();
-        },
-        (error) => { }
-      );
+        });
     }
   }
 

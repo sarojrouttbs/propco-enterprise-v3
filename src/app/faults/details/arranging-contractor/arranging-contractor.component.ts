@@ -163,7 +163,7 @@ export class ArrangingContractorComponent implements OnInit {
       && this.faultMaintenanceDetails && this.faultMaintenanceDetails.isCancelled) 
         {
           this.faultMaintenanceDetails = null
-        };
+        }
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
@@ -2122,11 +2122,9 @@ export class ArrangingContractorComponent implements OnInit {
     if (!submit) return false;
     if (submit) {
       if (paymentRequired) {
-        const success = await this.sendLandlordPaymentRequest() as boolean;
-        return success;
+        return await this.sendLandlordPaymentRequest() as boolean;
       } else {
-        const success = await this.issueWorksOrderContractor() as boolean;
-        return success;
+        return await this.issueWorksOrderContractor() as boolean;
       }
     }
   }
