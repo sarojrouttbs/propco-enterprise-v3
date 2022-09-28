@@ -5,8 +5,7 @@ import { ValidationService } from 'src/app/shared/services/validation.service';
 
 @Component({
   selector: 'app-forgot-password-modal',
-  templateUrl: './forgot-password-modal.page.html',
-  styleUrls: ['./forgot-password-modal.page.scss'],
+  templateUrl: './forgot-password-modal.page.html'
 })
 export class ForgotPasswordModalPage {
   heading;

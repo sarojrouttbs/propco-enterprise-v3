@@ -5,8 +5,7 @@ import { TITLES } from '../../../shared/constants';
 
 @Component({
   selector: 'app-display-as-modal',
-  templateUrl: './display-as-modal.page.html',
-  styleUrls: ['./display-as-modal.page.scss'],
+  templateUrl: './display-as-modal.page.html'
 })
 export class DisplayAsModalPage implements OnInit {
 

@@ -838,7 +838,7 @@ export class DetailsPage {
 
   get photos(): FormArray {
     return this.uploadDocForm.get('photos') as FormArray;
-  };
+  }
 
   submit(files) {
     if (files) {

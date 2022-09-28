@@ -5,8 +5,7 @@ import { DATE_FORMAT } from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-periodic-visit-modal',
-  templateUrl: './periodic-visit-modal.page.html',
-  styleUrls: ['./periodic-visit-modal.page.scss'],
+  templateUrl: './periodic-visit-modal.page.html'
 })
 export class PeriodicVisitModalPage implements OnInit {
   DATE_FORMAT = DATE_FORMAT;

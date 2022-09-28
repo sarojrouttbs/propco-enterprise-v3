@@ -409,10 +409,7 @@ export class MarketAppraisalPage implements OnInit {
       },
       backdropDismiss: false
     });
-
-    modal.onDidDismiss().then(async res => {
-
-    });
+    modal.onDidDismiss()
     await modal.present();
   }
 }

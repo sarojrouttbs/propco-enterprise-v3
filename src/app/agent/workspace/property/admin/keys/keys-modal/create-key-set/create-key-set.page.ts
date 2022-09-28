@@ -7,8 +7,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-create-key-set',
-  templateUrl: './create-key-set.page.html',
-  styleUrls: ['./create-key-set.page.scss'],
+  templateUrl: './create-key-set.page.html'
 })
 export class CreateKeySetPage implements OnInit {
   createKeysetForm: FormGroup;

@@ -576,7 +576,7 @@ export class DashboardPage implements OnInit {
       });
     }
     setTimeout(() => {
-      this.filterForm.get(controlName).value ? this.isBucketActive = true : this.isBucketActive = false;
+      this.isBucketActive = this.filterForm.get(controlName).value ? true : false;
       this.faultParams = this.faultParams.delete('fpm');
       this.fpm = this.bucketFpm;
       if (this.filterForm.get('repairCheckbox').value) {
