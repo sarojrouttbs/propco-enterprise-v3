@@ -7,7 +7,7 @@ import { Observable, Subject, Subscription } from 'rxjs';
 import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { NotesModalPage } from '../../shared/modals/notes-modal/notes-modal.page';
-import { EscalateModalPage } from '../../shared/modals/escalate-modal/escalate-modal.page';
+import { EscalateModalPage } from './dashboard-modal/escalate-modal/escalate-modal.page';
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';

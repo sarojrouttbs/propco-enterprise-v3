@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { CommonService } from '../../services/common.service';
+import { CommonService } from '../../../../../shared/services/common.service';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { DATE_FORMAT, PAYMENT_WARNINGS, SYSTEM_OPTIONS } from '../../constants';
+import { DATE_FORMAT, PAYMENT_WARNINGS, SYSTEM_OPTIONS } from '../../../../../shared/constants';
 @Component({
   selector: 'app-without-prepayment-modal',
   templateUrl: './without-prepayment-modal.component.html',

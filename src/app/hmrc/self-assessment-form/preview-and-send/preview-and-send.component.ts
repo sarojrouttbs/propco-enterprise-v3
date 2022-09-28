@@ -30,7 +30,6 @@ export class PreviewAndSendComponent implements OnInit {
   selectedLandlords: number[] = [];
   unSelectedLandlords: number[] = [];
   emailPattern = HMRC_CONFIG.EMAIL_REGEX;
-
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;

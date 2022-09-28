@@ -330,7 +330,7 @@ export class ProgressSummaryComponent implements OnInit {
     });
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data === 'success') {
-        this.router.navigate(['../self-assessment-form'], { relativeTo: this.route });
+        this.router.navigate(['../self-assessment-form'], { replaceUrl: true, relativeTo: this.route });
       }
     });
     await modal.present();

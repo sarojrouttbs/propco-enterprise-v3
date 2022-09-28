@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { CommonService } from '../../services/common.service';
+import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { PAYMENT_METHOD_TYPES } from '../../constants';
+import { PAYMENT_METHOD_TYPES } from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-payment-received-modal',
