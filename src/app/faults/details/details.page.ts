@@ -17,7 +17,7 @@ import { DOCUMENT } from '@angular/common';
 import { JobCompletionModalPage } from 'src/app/shared/modals/job-completion-modal/job-completion-modal.page';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.page';
-import { SnoozeFaultModalPage } from 'src/app/shared/modals/snooze-fault-modal/snooze-fault-modal.page';
+import { SnoozeFaultModalPage } from './details-modal/snooze-fault-modal/snooze-fault-modal.page';
 
 @Component({
   selector: 'fault-details',
@@ -838,7 +838,7 @@ export class DetailsPage {
 
   get photos(): FormArray {
     return this.uploadDocForm.get('photos') as FormArray;
-  };
+  }
 
   submit(files) {
     if (files) {

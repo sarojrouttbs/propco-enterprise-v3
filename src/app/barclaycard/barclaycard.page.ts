@@ -3,8 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-barclaycard',
-  templateUrl: './barclaycard.page.html',
-  styleUrls: ['./barclaycard.page.scss'],
+  templateUrl: './barclaycard.page.html'
 })
 export class BarclaycardPage implements OnInit {
 

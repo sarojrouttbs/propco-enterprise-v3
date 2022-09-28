@@ -45,7 +45,7 @@
             "accessInfo": "Tenant",
             "isOccupierVulnerable": "",
             "usefulInstruction": "",
-            "faultImage": "../resources/upload/Dishwasher.png",
+            "faultImage": "",
             "tableUrgency": "",
             "tableCategory": "Appliances",
             "tablePropertyId": "000002063",

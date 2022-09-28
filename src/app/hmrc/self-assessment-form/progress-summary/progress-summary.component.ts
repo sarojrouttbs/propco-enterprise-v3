@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { interval } from 'rxjs';
 import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC_CONFIG, HMRC_ERROR_MESSAGES, PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
-import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/preview-pdf-modal.page';
+import { PreviewPdfModalPage } from '../../hmrc-modals/preview-pdf-modal/preview-pdf-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { BatchDetail } from '../../hmrc-modal';
 import { HmrcReportPage } from '../../hmrc-modals/hmrc-report/hmrc-report.page';
@@ -330,7 +330,7 @@ export class ProgressSummaryComponent implements OnInit {
     });
     modal.onDidDismiss().then(async res => {
       if (res.data && res.data === 'success') {
-        this.router.navigate(['../self-assessment-form'], { relativeTo: this.route });
+        this.router.navigate(['../self-assessment-form'], { replaceUrl: true, relativeTo: this.route });
       }
     });
     await modal.present();

@@ -6,8 +6,7 @@ import { CHECKED_IN_OUT_STATUS, DATE_FORMAT, DEFAULTS } from 'src/app/shared/con
 
 @Component({
   selector: 'app-agreement-history',
-  templateUrl: './agreement-history.component.html',
-  styleUrls: ['./agreement-history.component.scss'],
+  templateUrl: './agreement-history.component.html'
 })
 export class AgreementHistoryComponent implements OnInit {
   notAvailable = DEFAULTS.NOT_AVAILABLE;
