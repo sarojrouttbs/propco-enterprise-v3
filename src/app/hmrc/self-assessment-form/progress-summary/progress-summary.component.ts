@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { interval } from 'rxjs';
-import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC_CONFIG, HMRC_ERROR_MESSAGES, PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC_CONFIG, HMRC_ERROR_MESSAGES, HMRC_PREFERENCE_ORDER, PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
 import { PreviewPdfModalPage } from '../../hmrc-modals/preview-pdf-modal/preview-pdf-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { BatchDetail } from '../../hmrc-modal';
@@ -102,7 +102,7 @@ export class ProgressSummaryComponent implements OnInit {
           this.commonService.setItem('HMRC_BATCH_COUNT', response);
           this.getActionItems(response);
           resolve(true);
-        },(_error) => {
+        }, (_error) => {
           this.commonService.showMessage(HMRC_ERROR_MESSAGES.GET_DETAILS_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
           resolve(false);
         });
@@ -115,12 +115,16 @@ export class ProgressSummaryComponent implements OnInit {
     statementPref.push({ index: null, value: 'No Preference Available' });
     statementPref.forEach(element => {
       const pref = response.filter(ref => element.index === ref.statementPreference);
+      const order = HMRC_PREFERENCE_ORDER.filter(order => element.index === order.index);
+      element.order = order[0]?.order;
       if (pref.length > 0) {
         element.totalRecords = pref[0].statementPreferenceCount;
         this.totalFinalRecords += pref[0].statementPreferenceCount;
       }
     });
-    this.batchList = statementPref;
+    this.batchList = statementPref.sort(function (a, b) {
+      return a.order - b.order;
+    });
   }
 
   private startTimer() {
