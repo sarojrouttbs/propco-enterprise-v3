@@ -51,7 +51,7 @@
           </tr>
           <tr *ngFor="let batch of batchList">
             <td>
-              <ion-text class="mandatory" *ngIf="batch?.index === 6 || batch?.index === 1 || batch?.index === 0">*
+              <ion-text class="mandatory" *ngIf="batch?.index === 0 || batch?.index === 5 || batch?.index === 6 || batch?.index === null"><strong>*</strong>
               </ion-text> Records with preference as "{{batch?.value}}"
             </td>
             <td>{{batch?.totalRecords || 0}}</td>
