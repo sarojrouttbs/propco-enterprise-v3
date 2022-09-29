@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -13,7 +13,6 @@ export class HodlingDepositePaidService {
 
   offlinePaymentService(applicationId: string, body: any): Observable<any> {
     return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/offline-payment`, body).pipe(
-      tap(() => { }),
       catchError(this.handleError<any>(''))
     );
   }

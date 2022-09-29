@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { FAULT_STAGES, FAULT_QUALIFICATION_ACTIONS } from 'src/app/shared/constants';
 import { PropertyCertificateModalPage } from 'src/app/shared/modals/property-certificate-modal/property-certificate-modal.page';
-import { BranchDetailsModalPage } from 'src/app/shared/modals/branch-details-modal/branch-details-modal.page';
+import { BranchDetailsModalPage } from './fault-qualification-modal/branch-details-modal/branch-details-modal.page';
 import { CloseFaultModalPage } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.page';
 import { TenancyClauseModalPage } from 'src/app/shared/modals/tenancy-clause-modal/tenancy-clause-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';

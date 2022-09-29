@@ -108,7 +108,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked {
   }
 
   private async initLLData() {
-    if (!this.landLordList || this.landLordList.length <= 0 || this.landLordList === []) {
+    if (!this.landLordList || this.landLordList.length <= 0) {
       await this.getLandlordDetails();
     } else {
       this.isLandlord = true;
@@ -116,7 +116,7 @@ export class SendEmailModalPage implements OnInit, AfterViewChecked {
   }
 
   private async initTTData() {
-    if (!this.tenantList || this.tenantList.length <= 0 || this.tenantList === []) {
+    if (!this.tenantList || this.tenantList.length <= 0) {
       await this.getTenantList();
     } else {
       this.isTenant = true;

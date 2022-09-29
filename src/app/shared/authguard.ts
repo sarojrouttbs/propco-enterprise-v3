@@ -23,6 +23,8 @@ export class AuthGuard implements CanActivate {
             return true;
         } else {
             if (ssoKey && ssoKey !== 'undefined') {
+                this.commonService.setItem(PROPCO.SSO_URL_ROUTE, state.url);
+                this.commonService.setItem(PROPCO.SSO_KEY, ssoKey);
                 return new Promise<boolean>((resolve, reject) => {
                     this.commonService.authenticateSsoToken(ssoKey).toPromise().then(response => {
                         this.commonService.setItem(PROPCO.SSO_KEY, ssoKey);
@@ -30,10 +32,8 @@ export class AuthGuard implements CanActivate {
                         this.commonService.setItem(PROPCO.WEB_KEY, response.webKey);
                         resolve(true);
                     }, err => {
-                        // resolve(true);
-                        reject(false);
+                        this.router.navigate(['/sso-failure-page'], { replaceUrl: true });
                     });
-
                 });
             } else {
                 // not logged in so redirect to login page

@@ -8,7 +8,7 @@ import { HmrcService } from '../../hmrc.service';
 import { DatePipe } from '@angular/common';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ModalController } from '@ionic/angular';
-import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/preview-pdf-modal.page';
+import { PreviewPdfModalPage } from '../../hmrc-modals/preview-pdf-modal/preview-pdf-modal.page';
 
 @Component({
   selector: 'app-preview-and-send',
@@ -30,7 +30,6 @@ export class PreviewAndSendComponent implements OnInit {
   selectedLandlords: number[] = [];
   unSelectedLandlords: number[] = [];
   emailPattern = HMRC_CONFIG.EMAIL_REGEX;
-
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;

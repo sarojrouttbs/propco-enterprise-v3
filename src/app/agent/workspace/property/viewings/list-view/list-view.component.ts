@@ -8,8 +8,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-list-view',
-  templateUrl: './list-view.component.html',
-  styleUrls: ['./list-view.component.scss'],
+  templateUrl: './list-view.component.html'
 })
 export class ListViewComponent implements OnInit, OnDestroy {
 

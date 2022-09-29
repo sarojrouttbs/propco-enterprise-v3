@@ -1,0 +1,111 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Periodic Visit</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <form [formGroup]="visitForm">
+      <ion-row>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Type</ion-label>
+            <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="visitType">
+              <ion-select-option [value]="type?.index" *ngFor="let type of propertyVisitTypes">
+                {{ type?.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Details</ion-label>
+            <ion-input formControlName="details"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Contact Name</ion-label>
+            <ion-input formControlName="contactName"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Contact Number</ion-label>
+            <ion-input formControlName="contactNumber"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Status</ion-label>
+            <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="status">
+              <ion-select-option [value]="status?.index" *ngFor="let status of inspectionStatuses">
+                {{ status?.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Visit Number</ion-label>
+            <ion-input formControlName="visitNumber"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100" style="padding-top: 8px;">
+          <ion-item id="dueDate">
+            <ion-label position="floating">Due Date</ion-label>
+            <ion-input value="{{ visitForm.controls.dueDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="dueDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="dueDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100" style="padding-top: 8px;">
+          <ion-item id="bookedDate">
+            <ion-label position="floating">Booked Date</ion-label>
+            <ion-input value="{{ visitForm.controls.bookedDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="bookedDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="bookedDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Comments</ion-label>
+            <ion-input formControlName="comments"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">External Report Link</ion-label>
+            <ion-input formControlName="reportLink"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+
+      <ion-col size="100" class="ion-text-end">
+        <ion-button (click)="dismiss()" color="danger">Cancel</ion-button>
+        <ion-button color="success">OK </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
