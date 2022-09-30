@@ -501,6 +501,11 @@ export class SearchResultsPage implements OnInit {
 
   getSearchResults(global?: boolean) {
     this.hideMenu('', 'search-result-overlay');
+    const params = {
+      searchTerm: this.solrSearchConfig.searchTerm,
+      type: this.entityControl.value
+    };
+    this.commonService.setItem(PROPCO.SOLR_SERACH_TERMS, params);
     this.showSkeleton = true;
     this.solrService
       .entitySearch(this.prepareSearchParams(global))
