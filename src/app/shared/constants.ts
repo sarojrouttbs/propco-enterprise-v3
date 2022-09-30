@@ -805,3 +805,13 @@ export const HMRC_ERROR_MESSAGES = {
   DOWNLOAD_FORM_ERROR: 'We are currently experiencing some problem in printing the form.',
   GET_DETAILS_ERROR: 'We are currently experiencing some problem in getting the details, please contact helpdesk.'
 }
+
+export const HMRC_PREFERENCE_ORDER = [
+  { order: 1, index:1 },
+  { order: 2, index:2 },
+  { order: 3, index:3 },
+  { order: 4, index:4 },
+  { order: 5, index:6 },
+  { order: 6, index:5 },
+  { order: 7, index:0 }
+]
