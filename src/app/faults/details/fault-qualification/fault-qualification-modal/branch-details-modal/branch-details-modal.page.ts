@@ -4,8 +4,7 @@ import { DEFAULTS } from 'src/app/shared/constants';
 
 @Component({
   selector: 'app-branch-details-modal',
-  templateUrl: './branch-details-modal.page.html',
-  styleUrls: ['./branch-details-modal.page.scss'],
+  templateUrl: './branch-details-modal.page.html'
 })
 export class BranchDetailsModalPage {
   branchDetails;
