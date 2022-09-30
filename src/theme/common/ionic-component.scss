@@ -185,6 +185,8 @@ ion-item {
     width: 500px;
     height: auto;
     min-height: 400px;
+    --border-radius: 5px;
+    --box-shadow: none;
 
     ion-item {
       --background: transparent;
@@ -339,6 +341,10 @@ ion-select-popover {
 ion-alert.common-alert-box {
   --background: var(--ion-color-six);
   --max-width: 400px;
+
+  .alert-wrapper{
+    box-shadow: none;
+  }
 
   .alert-head {
     background: var(--ion-color-five);
