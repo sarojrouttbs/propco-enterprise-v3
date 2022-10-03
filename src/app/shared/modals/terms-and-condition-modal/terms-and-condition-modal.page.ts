@@ -3,8 +3,7 @@ import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-terms-and-condition-modal',
-  templateUrl: './terms-and-condition-modal.page.html',
-  styleUrls: ['./terms-and-condition-modal.page.scss'],
+  templateUrl: './terms-and-condition-modal.page.html'
 })
 export class TermsAndConditionModalPage {
   data: any;

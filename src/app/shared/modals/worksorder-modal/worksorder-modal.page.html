@@ -58,8 +58,6 @@
           </ion-col>
           <ion-col size="100">
             <ion-item class="marg-top-16" [disabled]="!jobCompletionForm.controls.isAnyFurtherWork.value">
-              <!-- <ion-label position="floating">Estimate</ion-label>
-              <ion-input formControlName="additionalEstimate"></ion-input> -->
             <ion-label position="stacked">Additional Estimate <ion-text *ngIf="jobCompletionForm.controls.isAnyFurtherWork.value" class="mandatory">*</ion-text></ion-label>
             <input currencyMask formControlName="additionalEstimate" (blur)="onBlurAdditionalEstimate(jobCompletionForm.controls.additionalEstimate.value, jobCompletionForm)" />
           </ion-item>
@@ -76,15 +74,8 @@
         </ion-row>
       </ion-grid>
     </form>
-    <!-- <div class="border-bottom"></div> -->
-    <!-- <h3>Upload Invoice</h3> -->
     <form class="drop-zone" style="margin: 20px 0 10px; padding: 10px 10px 0px 10px; text-align: left; border: 0;"
       [formGroup]="uploadDocumentForm">
-      <!-- <input type="file" class="custom-file-input form-control" id="docFiles"
-        accept=".png,.jpeg,.pdf,.jpg,.gif,.bmp,.text,.doc,.csv,.docx,.odt" multiple
-        (change)="uploadDocument($event.target.files,'invoice')">
-      <label for="docFiles" class="browse-btn">Browse Files</label> -->
-
       <ion-grid class="ion-no-padding">
         <ion-row>
           <ion-col size="50" class="ion-text-left ion-no-padding">
@@ -107,7 +98,6 @@
               <ion-row>
                 <ion-col size="100">
                   <img [src]="file.documentUrl ? file.documentUrl : '/assets/images/default.jpg'">
-                  <!-- (click)="downloadFaultDocumentByUrl(file.documentUrl)"> -->
                 </ion-col>
               </ion-row>
               <ion-row class="ion-justify-content-between">
@@ -127,13 +117,8 @@
     </ion-grid>
   </div>
   <div [hidden]="type != 'photos'">
-    <!-- <h3>Upload Photo</h3> -->
     <form class="drop-zone" style="margin: 20px 0 10px; padding: 10px 10px 0px 10px; text-align: left; border: 0;"
       [formGroup]="uploadPhotoForm">
-      <!-- <input type="file" class="custom-file-input form-control" id="photoFiles" accept=".png,.jpeg,.jpg" multiple
-        (change)="uploadDocument($event.target.files,'photo')">
-      <label for="photoFiles" class="browse-btn">Browse Files</label> -->
-
       <ion-grid class="ion-no-padding">
         <ion-row>
           <ion-col size="50" class="ion-text-left ion-no-padding">
@@ -155,7 +140,6 @@
               <ion-row>
                 <ion-col size="100">
                   <img [src]="file.documentUrl ? file.documentUrl : '/assets/images/default.jpg'">
-                  <!-- (click)="downloadFaultDocumentByUrl(file.documentUrl)"> -->
                 </ion-col>
               </ion-row>
               <ion-row class="ion-justify-content-between">
