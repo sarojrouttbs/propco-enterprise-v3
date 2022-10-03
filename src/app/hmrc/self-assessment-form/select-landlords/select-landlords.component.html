@@ -5,16 +5,6 @@
         <h4>Step 1: Select Landlords</h4>
         <ion-text>Please filter & select the landlords as per the requirement.</ion-text>
       </ion-col>
-
-      <!-- <ion-col size="15">
-      <ion-item>
-        <ion-label position="floating">Tax Handler</ion-label>
-        <ion-select interface="popover">
-          <ion-select-option>
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-    </ion-col> -->
       <ion-col size="15" *ngIf="isGroupOfficeFilter">
         <ion-item>
           <ion-label position="floating">Office</ion-label>
@@ -70,18 +60,6 @@
           </ionic-selectable>
         </ion-item>
       </ion-col>
-
-
-      <!-- <ion-col size="15">
-        <ion-item selectSearchAllDirective>
-          <ion-label position="floating">Management</ion-label>
-          <ion-select multiple="true" formControlName="managementType">
-            <ion-select-option [value]="option.index" *ngFor="let option of managementTypes" checked="true">
-              {{option.value}}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-col> -->
       <ion-col size=15>
         <ion-item>
           <ion-label position="floating">Management</ion-label>
@@ -160,9 +138,6 @@
       </ion-button>
       <ion-button color="warning" fill="solid" (click)="unselectAll()">Select None</ion-button>
     </ion-col>
-    <!-- <ion-col size="50" class="ion-text-right align-self-center" style="margin-top: 10px;">
-      <ion-text>{{(selectedPropertyLandlordCount || 0) | number:'1.0'}} record(s) selected</ion-text>
-    </ion-col> -->
     <ion-col size="100" style="margin-top: 10px;">
       <div class="overlay-container" style="position: relative">
         <ion-text class="label-total-count">{{(selectedPropertyLandlordCount || 0) | number:'1.0'}} record(s) selected</ion-text>

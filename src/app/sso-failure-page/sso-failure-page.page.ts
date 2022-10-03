@@ -6,8 +6,7 @@ import { CommonService } from '../shared/services/common.service';
 
 @Component({
   selector: 'app-sso-failure-page',
-  templateUrl: './sso-failure-page.page.html',
-  styleUrls: ['./sso-failure-page.page.scss'],
+  templateUrl: './sso-failure-page.page.html'
 })
 export class SsoFailurePagePage implements OnInit {
   ssoKey: any;

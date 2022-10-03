@@ -9,8 +9,7 @@ import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-notes-modal',
-  templateUrl: './notes-modal.page.html',
-  styleUrls: ['./notes-modal.page.scss'],
+  templateUrl: './notes-modal.page.html'
 })
 export class NotesModalPage implements OnInit {
 
@@ -125,7 +124,6 @@ export class NotesModalPage implements OnInit {
         this.createFaultNotes(requestObj);
       }
     } else {
-      // this.commonService.showMessage('Please fill all the required fields.', 'Add Note', 'error');
       this.notesForm.markAllAsTouched();
     }
   }

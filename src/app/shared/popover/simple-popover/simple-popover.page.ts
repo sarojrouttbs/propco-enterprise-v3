@@ -4,8 +4,7 @@ NavParams
 
 @Component({
   selector: 'app-simple-popover',
-  templateUrl: './simple-popover.page.html',
-  styleUrls: ['./simple-popover.page.scss'],
+  templateUrl: './simple-popover.page.html'
 })
 export class SimplePopoverPage {
   @Input() data;
