@@ -3,8 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
 @Component({
   selector: 'app-pending-notification-modal',
-  templateUrl: './pending-notification-modal.page.html',
-  styleUrls: ['./pending-notification-modal.page.scss'],
+  templateUrl: './pending-notification-modal.page.html'
 })
 export class PendingNotificationModalPage {
 
