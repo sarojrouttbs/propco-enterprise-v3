@@ -627,7 +627,7 @@ export class SearchResultsPage implements OnInit {
     }
   }
 
-  openDetails(value?) {
+  openDetails(value?) {    
     this.hideMenu('', 'search-result-overlay');
     if (this.router.url.includes('/agent/')) {
       this.workspaceService.addItemToWorkSpace(value ? value : this.selectedItem);
