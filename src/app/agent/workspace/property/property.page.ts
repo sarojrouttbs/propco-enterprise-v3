@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AGENT_WORKSPACE_CONFIGS, PROPCO } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import menuList from '../../../../assets/data/menu.json';
 import { WorkspaceService } from '../workspace.service';
@@ -80,11 +80,16 @@ export class PropertyPage implements OnInit {
   }
 
   onShowSearchResultClick() {
-    const solrSearchTerms = this.commonService.getItem(PROPCO.SOLR_SERACH_TERMS)
-    if (this.router.url.includes('/agent/')) {
-      this.router.navigate(['/agent/solr/search-results'], {
-        queryParams: JSON.parse(solrSearchTerms)
-      });
+    const solrSearchTerms = JSON.parse(this.commonService.getItem(PROPCO.SOLR_SERACH_TERMS));
+    if(solrSearchTerms) {
+      if (this.router.url.includes('/agent/')) {
+        this.router.navigate(['/agent/solr/search-results'], {
+          queryParams: solrSearchTerms.queryParams,
+          replaceUrl: true
+        });
+      }
+    } else {
+      this.commonService.showMessage(DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'Error', 'error');
     }
   }
 }
