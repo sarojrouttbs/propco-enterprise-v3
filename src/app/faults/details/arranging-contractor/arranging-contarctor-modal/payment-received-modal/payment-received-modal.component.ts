@@ -27,7 +27,6 @@ export class PaymentReceivedModalComponent implements OnInit {
       paymentMethod: ['', Validators.required],
       isAccepted: true,
       submittedByType: 'SECUR_USER',
-      // other: '',
     });
   }
 
@@ -39,17 +38,11 @@ export class PaymentReceivedModalComponent implements OnInit {
       return;
     }
     let reqObj = JSON.parse(JSON.stringify(this.paymentReceivedForm.value));
-    // if (reqObj.rejectionReason === 'Other') {
-    //   if (reqObj.other) {
-    //     reqObj.rejectionReason = reqObj.other;
-    //   }
-    // }
     this.faultsService.savePaymentReceived(this.faultNotificationId, reqObj).subscribe(res => {
       this.showLoader = false;
       this.modalController.dismiss('success');
     }, error => {
       this.showLoader = false;
-      // this.commonService.showMessage('Something went wrong on server, please try again.', 'Payment Received','error');
       this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Payment Received', 'error');
     })
   }

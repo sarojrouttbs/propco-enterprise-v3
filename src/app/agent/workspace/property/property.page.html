@@ -4,6 +4,7 @@
     <div class="property-lettings">
       <span>Property (Lettings)</span>
     </div>
+    <div class="seach-result pointer" (click)="onShowSearchResultClick()">Show Search Results</div>
     <mat-nav-list class="sidenav-block-list" *ngFor="let item of menuItems" >
       <a mat-list-item  *ngIf="!item?.subMenu?.length"
        [routerLink]="'/agent/workspace/property/'+proptertyId+'/'+item.route" (click)="workspaceSetActiveLink(item.route);" routerLinkActive="menu active">{{item.name}}</a>

@@ -233,16 +233,16 @@ export class GuarantorApplicationListPage implements OnInit, OnDestroy {
   getProductType(productId: any, name: any): string{
     let productType: any;
     if(name == 'case'){
-      this.referencingCaseProductList.find((obj) => {
+      productType = this.referencingCaseProductList.find((obj) => {
         if (obj.productId === productId) {
-          productType = obj.productName;
+          return obj.productName;
         }
       });
     }
     else if(name == 'application'){
-      this.referencingApplicationProductList.find((obj) => {
+      productType = this.referencingApplicationProductList.find((obj) => {
         if (obj.productId === productId) {
-          productType = obj.productName;
+          return obj.productName;
         }
       });
     }

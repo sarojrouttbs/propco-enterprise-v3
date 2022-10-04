@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PROPCO } from 'src/app/shared/constants';
@@ -46,6 +46,8 @@ export class SearchSuggestionComponent implements OnInit {
   showLoader: boolean = false;
   @Input() pageType: string;
   @Input() loaded: string;
+  @ViewChild('solrSearchBar') solrSearchBar: any;
+
   constructor(
     private solrService: SolrService,
     private commonService: CommonService,
@@ -57,6 +59,7 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   getItems(ev: any) {
+    this.solrSearchBar.setFocus();
     // Reset items back to all of the items
     this.initializeItems();
 

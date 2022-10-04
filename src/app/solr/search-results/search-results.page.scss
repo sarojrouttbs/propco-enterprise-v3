@@ -112,11 +112,10 @@
         }
 
         .mat-paginator {
-          min-width: 372px;
           height: 42px;
           padding: 0;
           margin: 0;
-          width: 100% !important;
+          float: right;
         }
       }
 
@@ -373,7 +372,7 @@
     }
 
     .paginator {
-      width: 207px;
+      width: 280px;
       height: 20px;
     }
   }

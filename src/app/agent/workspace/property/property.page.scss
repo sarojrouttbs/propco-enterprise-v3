@@ -144,3 +144,10 @@ h1.example-app-name {
        `<body>` to be our scrolling element for mobile layouts. */
   flex: 1 0 auto;
 }
+
+.seach-result {
+  padding: 15px;
+  color: var(--ion-color-secondary);
+  font-style: italic;
+  text-decoration: underline;
+}

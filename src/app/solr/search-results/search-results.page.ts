@@ -138,6 +138,7 @@ export class SearchResultsPage implements OnInit {
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
   isEntityFilterApplied = false;
+  isResetPageIndex = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -175,6 +176,11 @@ export class SearchResultsPage implements OnInit {
   }
 
   private async initResults() {
+    const solrSearchTerms = JSON.parse(this.commonService.getItem(PROPCO.SOLR_SERACH_TERMS));
+    if(solrSearchTerms) {
+      this.pageIndex = solrSearchTerms.pageIndex;
+      this.pageSize = solrSearchTerms.pageSize;
+    }
     this.getLookupData();
     await this.getQueryParams();
     this.initFilter();
@@ -501,6 +507,19 @@ export class SearchResultsPage implements OnInit {
 
   getSearchResults(global?: boolean) {
     this.hideMenu('', 'search-result-overlay');
+    if(this.isResetPageIndex) {
+      this.pageIndex = 0;
+      this.isResetPageIndex = false;
+    }
+    const params = {
+      queryParams: {
+        searchTerm: this.solrSearchConfig.searchTerm,
+        type: this.entityControl.value,
+      },
+      pageSize: this.pageSize,
+      pageIndex: this.pageIndex
+    };
+    this.commonService.setItem(PROPCO.SOLR_SERACH_TERMS, params);
     this.showSkeleton = true;
     this.solrService
       .entitySearch(this.prepareSearchParams(global))
@@ -778,6 +797,7 @@ export class SearchResultsPage implements OnInit {
   }
 
   async searchHandler(data: any) {
+    this.isResetPageIndex = true;
     this.isEntityFilterApplied = false;
     this.pageIndex = 0;
     this.entityControl.setValue(data.entity);
@@ -798,7 +818,6 @@ export class SearchResultsPage implements OnInit {
     const baseContainerHeight = baseContainer.outerHeight(true);
     const baseContainerPosition = baseContainer.position();
     const baseContainerTop = baseContainerPosition.top;
-    const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() -
       divOverlay.parent('.overlay-container').width()) / 2;

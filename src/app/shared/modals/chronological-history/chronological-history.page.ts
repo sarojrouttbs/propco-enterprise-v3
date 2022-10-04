@@ -153,7 +153,6 @@ export class ChronologicalHistoryPage implements OnInit {
          await this.updateEventList(this.eventList);
          this.initiateDtOptons();
          this.isTableReady = true;
-         // this.rerender();
       }, error => {
          if(error && error.status === 451){
             this.isNotConfigured = true;

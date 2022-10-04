@@ -15,7 +15,8 @@ export const PROPCO = {
   TERMS_AND_CONDITIONS: 'terms_and_conditions',
   REFERENCING_INFO: 'referencing_info',
   PROPERTY_LOOKUP_DATA: 'property_lookup_data',
-  SSO_URL_ROUTE: 'sso_url_route'
+  SSO_URL_ROUTE: 'sso_url_route',
+  SOLR_SERACH_TERMS: 'solr_search_terms'
 };
 
 export const USER_TYPES = {
