@@ -1318,7 +1318,6 @@ export class DetailsPage {
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
       faultRequestObj.stage = this.faultDetails.stage;
       faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
-      // Object.assign(faultRequestObj, this.landlordInstFrom.value);
       faultRequestObj.contractor = this.landlordInstFrom.value.contractor;
       faultRequestObj.confirmedEstimate = this.landlordInstFrom.value.confirmedEstimate;
       faultRequestObj.nominalCode = this.landlordInstFrom.value.nominalCode.nominalCode;
@@ -1350,7 +1349,6 @@ export class DetailsPage {
 
   private saveAdditionalInfoForm() {
     return new Promise((resolve) => {
-      // this.commonService.showLoader();
       let apiObservableArray = [];
       this.faultDetailsForm.controls['additionalInfo'].value.forEach(info => {
         if (info.id) {
@@ -1367,9 +1365,7 @@ export class DetailsPage {
           this.commonService.showMessage('Updated successfully.', 'Update Addtional Info', 'success');
           resolve(true);
         }
-        // this.commonService.hideLoader();
       }, error => {
-        // this.commonService.hideLoader();
         resolve(true);
       });
     });
@@ -1464,6 +1460,7 @@ export class DetailsPage {
     if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
       if (this.cliNotification && this.cliNotification.responseReceived) {
         if (this.cliNotification.responseReceived.isAccepted) {
+          /*Do Nothing*/
         } else {
           this.isUserActionChange = true;
           this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
@@ -1680,7 +1677,6 @@ export class DetailsPage {
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
-          const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
           forkJoin(requestArray).subscribe(data => {
@@ -1718,7 +1714,6 @@ export class DetailsPage {
           faultRequestObj.requiredStartDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredStartDate));
           faultRequestObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredCompletionDate));
           faultRequestObj.orderedById = this.loggedInUserData.userId;
-          const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
           forkJoin(requestArray).subscribe(data => {

@@ -63,9 +63,6 @@ export class PropertyDetailsComponent {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // if (changes.propertyDetails && changes.propertyDetails.currentValue) {
-    //   this.propertyDetails = changes.propertyDetails.currentValue;
-    // }
     if(changes.landlordDetails && changes.landlordDetails.currentValue){
       this.landlordDetails = changes.landlordDetails.currentValue;           
     }
@@ -94,17 +91,16 @@ export class PropertyDetailsComponent {
   }
 
   getFilteredDocs(files: Array<any>): string {
-    let url = null;
     if (files && files[0].documentId) {
       const filteredDoc = files.filter(data => data.folderName === 'initial issue');
       if (filteredDoc.length && DOCUMENTS_TYPE.indexOf(filteredDoc[0].name.split('.')[1]) == -1) {
-        return url = filteredDoc[0].documentUrl;
+        return filteredDoc[0].documentUrl;
       }
       else
-        return url = 'assets/images/default.jpg';
+        return 'assets/images/default.jpg';
     }
     if (files && !files[0].documentId) {
-      return url = files[0].documentUrl;
+      return files[0].documentUrl;
     }
   }
 

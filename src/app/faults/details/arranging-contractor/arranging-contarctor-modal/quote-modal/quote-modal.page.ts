@@ -96,14 +96,13 @@ export class QuoteModalPage implements OnInit {
       this.uploadedPhoto.splice(i, 1);
       this.photos.removeAt(i);
       if (this.uploadedPhoto.length == 0) {
-        // this.isLimitExceed = true;
       }
     }
   }
 
   async deleteDocument(i, type: string, documentId) {
-    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
-    if (response) {
+    const deleteMedia = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
+    if (deleteMedia) {
       this.quoteService.deleteDocument(documentId).subscribe(response => {
         this.removeFile(i, type);
       });
@@ -130,7 +129,6 @@ export class QuoteModalPage implements OnInit {
             isImage = true;
           }
           if (type === 'photo') {
-            // this.isLimitExceed = false;
             this.photos.push(this.createItem({
               file: file
             }));
@@ -188,10 +186,6 @@ export class QuoteModalPage implements OnInit {
       || (this.uploadPhotoForm.controls.photos && this.uploadPhotoForm.controls.photos.value.length !== 0)
       || this.quoteAssessmentForm.value.quoteAmount) {
       this.unSavedData = true;
-      // const cancel = await this.commonService.presentToastWithOptions('Quote Assessment', 'Are you sure you want to cancel the process of uploading the quote photos?', '', 'Yes', 'No');
-      // if (cancel) {
-      //   this.dismiss();
-      // }
     } else {
       this.dismiss();
     }

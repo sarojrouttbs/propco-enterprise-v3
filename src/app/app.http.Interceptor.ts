@@ -14,10 +14,6 @@ export class AppHttpInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // this.totalRequests = 0;
-    //if (!req.url.includes('applicant/search')) {
-    //this._commonService.showLoader();
-    //}
 
     if (this._commonService.isInternetConnected()) {
       const accessToken = window.localStorage.getItem(PROPCO.ACCESS_TOKEN);
@@ -36,13 +32,11 @@ export class AppHttpInterceptor implements HttpInterceptor {
 
       const authReq = req.clone({ headers: requestHeader });
       this.totalRequests++;
-      // if (this.totalRequests === 1) {
       let hideLoader = req.params.get('hideLoader');
       if (!hideLoader) {
         this._commonService.showLoader();
       }
 
-      // }
       return next.handle(authReq).pipe(catchError((error: HttpErrorResponse) => {        
         this._commonService.hideLoader();
         if(error.url.includes('hmrc')) {

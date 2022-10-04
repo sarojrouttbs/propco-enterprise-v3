@@ -509,12 +509,21 @@ export class FaultQualificationComponent implements OnInit {
 
     modal.onDidDismiss().then(async res => {
       if (res.data && (res.data.certificateId != null || res.data.certificateId != '')) {
-        category === CERTIFICATES_CATEGORY[0] ? this.warrantyCertificateId = res.data.certificateId : this.serviceContractCertificateId = res.data.certificateId;
+        if(category === CERTIFICATES_CATEGORY[0] )
+          this.warrantyCertificateId = res.data.certificateId;
+        else 
+          this.serviceContractCertificateId = res.data.certificateId;
         if (res.data.certificateEmail != null || res.data.certificateEmail != '') {
-          category === CERTIFICATES_CATEGORY[0] ? this.warrantyEmail = res.data.certificateEmail : this.serviceContractEmail = res.data.certificateEmail;
+          if(category === CERTIFICATES_CATEGORY[0])
+           this.warrantyEmail = res.data.certificateEmail;
+          else
+           this.serviceContractEmail = res.data.certificateEmail;
         }
       } else {
-        category === CERTIFICATES_CATEGORY[0] ? this.faultQualificationForm.get('isUnderWarranty').setValue(false) : this.faultQualificationForm.get('isUnderServiceContract').setValue(false);
+        if(category === CERTIFICATES_CATEGORY[0])
+          this.faultQualificationForm.get('isUnderWarranty').setValue(false);
+          else 
+          this.faultQualificationForm.get('isUnderServiceContract').setValue(false);
       }
     });
 
@@ -652,12 +661,10 @@ export class FaultQualificationComponent implements OnInit {
       return new Promise((resolve) => {
         this.faultsService.getPropertyHeadLease(this.faultDetails.propertyId).subscribe(
           res => {
-            if (res) {
-              this.blockManagement = (res && res.managementCompany && res.managementCompany.name && res.managementCompany.email) ? res : '';
-              if (!this.blockManagement) {
-                this.faultQualificationForm.patchValue({ isUnderBlockManagement: false });
-                this.faultQualificationForm.get('isUnderBlockManagement').updateValueAndValidity();
-              }
+            this.blockManagement = (res && res.managementCompany && res.managementCompany.name && res.managementCompany.email) ? res : '';
+            if (!this.blockManagement && res) {
+              this.faultQualificationForm.patchValue({ isUnderBlockManagement: false });
+              this.faultQualificationForm.get('isUnderBlockManagement').updateValueAndValidity();
             }
             resolve(true);
           },
