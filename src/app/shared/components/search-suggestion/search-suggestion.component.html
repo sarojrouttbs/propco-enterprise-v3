@@ -19,6 +19,7 @@
   <ion-col [size]="pageType == 'dashboard'?'68':'70'" style="padding-right: 0;" class="ion-no-padding tour-2">
     <div>
       <ion-searchbar 
+      #solrSearchBar
       [(ngModel)]="searchTerm" 
       [placeholder]="'Start typing to search ' + (entityControl.value.length ? ''+ (entityControl.value.join(', ')) + '':'')" 
       class="searchbarCustom" 

@@ -2344,7 +2344,12 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   getRepairSource(repairSource) {
-    return repairSource === MAINT_SOURCE_TYPES.FIXFLO ? this.maintenanceRepairSourcesMap.get('fixflo') : (this.faultDetails.reportedBy === 'THIRD_PARTY' ? this.maintenanceRepairSourcesMap.get('third party') : this.maintenanceRepairSourcesMap.get('customer report'));
+    if(repairSource === MAINT_SOURCE_TYPES.FIXFLO)
+      return this.maintenanceRepairSourcesMap.get('fixflo');
+    else if(this.faultDetails.reportedBy === 'THIRD_PARTY')
+      return this.maintenanceRepairSourcesMap.get('third party');
+    else
+      return this.maintenanceRepairSourcesMap.get('customer report');
   }
 
   async closeFault() {
@@ -2443,8 +2448,13 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.faultMaintenanceDetails.quoteContractors && this.faultMaintenanceDetails.quoteContractors.length) {
         let nonSQContractors = this.faultMaintenanceDetails.quoteContractors.filter(data => !data.isNonSq)
         if (this.faultMaintenanceDetails.quoteContractors.length === 1 || this.filteredCCDetails.contractorId || nonSQContractors.length === 1) {
-          let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : 
-            (this.faultMaintenanceDetails.quoteContractors.length === 1) ? this.faultMaintenanceDetails.quoteContractors[0].contractorId : nonSQContractors[0].contractorId;
+          let ccId;
+          if(this.filteredCCDetails.contractorId)
+            ccId = this.filteredCCDetails.contractorId;
+          else if(this.faultMaintenanceDetails.quoteContractors.length === 1)
+            ccId = this.faultMaintenanceDetails.quoteContractors[0].contractorId;
+          else 
+            ccId = nonSQContractors[0].contractorId;
         if (ccId) {
           this.selectedCCDetails(ccId);
         }
