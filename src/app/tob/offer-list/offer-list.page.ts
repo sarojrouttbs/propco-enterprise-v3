@@ -155,16 +155,17 @@ export class OfferListPage implements OnInit {
   }
 
   showMenu(event: any, id: any, data: any, className: any, isCard?: any, isOffer?: any) {
-    isOffer ? (this.selectedOfferRow = data) : (this.selectedNotesRow = data);
+    if(isOffer)
+      this.selectedOfferRow = data;
+    else
+      this.selectedNotesRow = data;
     const baseContainer = $(event.target).parents('.' + className);
     const divOverlay = $('#' + id);
     const baseContainerWidth = baseContainer.outerWidth(true);
     const baseContainerHeight = baseContainer.outerHeight(true);
     const baseContainerPosition = baseContainer.position();
     const baseContainerTop = baseContainerPosition.top;
-    const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
-    const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() - divOverlay.parent('.overlay-container').width()) / 2;
     const divOverlayLeft = baseContainerPosition.left;
 
     let origDivOverlayHeight;

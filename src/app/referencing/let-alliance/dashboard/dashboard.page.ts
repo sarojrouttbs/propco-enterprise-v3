@@ -167,7 +167,6 @@ export class DashboardPage implements OnInit {
   }
 
   getLookupValue(index: any, lookup: any, type?: any) {
-    //index = (type == 'category' && index) ? Number(index) : index;
     return this.commonService.getLookupValue(index, lookup);
   }
 

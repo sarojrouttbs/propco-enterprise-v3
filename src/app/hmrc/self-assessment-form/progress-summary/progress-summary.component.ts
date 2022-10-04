@@ -115,8 +115,8 @@ export class ProgressSummaryComponent implements OnInit {
     statementPref.push({ index: null, value: 'No Preference Available' });
     statementPref.forEach(element => {
       const pref = response.filter(ref => element.index === ref.statementPreference);
-      const order = HMRC_PREFERENCE_ORDER.filter(order => element.index === order.index);
-      element.order = order[0]?.order;
+      const prefOrder = HMRC_PREFERENCE_ORDER.filter(order => element.index === order.index);
+      element.order = prefOrder[0]?.order;
       if (pref.length > 0) {
         element.totalRecords = pref[0].statementPreferenceCount;
         this.totalFinalRecords += pref[0].statementPreferenceCount;

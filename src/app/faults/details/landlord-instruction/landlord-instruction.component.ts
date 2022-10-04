@@ -263,6 +263,7 @@ export class LandlordInstructionComponent implements OnInit {
     if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
       if (this.cliNotification && this.cliNotification.responseReceived) {
         if (this.cliNotification.responseReceived.isAccepted) {
+          /*Do Nothing*/
         } else {
           this.isUserActionChange = true;
           this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
@@ -563,7 +564,6 @@ export class LandlordInstructionComponent implements OnInit {
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
           faultRequestObj.proceedInDifferentWay = true;
-          const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
           forkJoin(requestArray).subscribe(data => {
@@ -598,7 +598,6 @@ export class LandlordInstructionComponent implements OnInit {
           faultRequestObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredCompletionDate));
           faultRequestObj.orderedById = this.loggedInUserData.userId;
           faultRequestObj.proceedInDifferentWay = true;
-          const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
           forkJoin(requestArray).subscribe(data => {

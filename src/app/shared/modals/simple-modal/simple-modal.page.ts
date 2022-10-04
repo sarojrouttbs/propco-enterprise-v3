@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { CommonService } from '../../services/common.service';
@@ -8,7 +8,7 @@ import { CommonService } from '../../services/common.service';
   templateUrl: './simple-modal.page.html',
   styleUrls: ['./simple-modal.page.scss'],
 })
-export class SimpleModalPage implements OnInit, OnDestroy {
+export class SimpleModalPage implements OnInit {
 
   data: any;
   heading: string;
@@ -27,7 +27,6 @@ export class SimpleModalPage implements OnInit, OnDestroy {
 
   logout() {
     this.commonService.logout();
-    //this.dismiss();
   }
   
   dismiss(userInputValue: any) {
@@ -35,10 +34,6 @@ export class SimpleModalPage implements OnInit, OnDestroy {
       userInput: userInputValue,
       dismissed: true
     });
-  }
-
-  ngOnDestroy() {
-    //this.stopInterval();
   }
 
 }
