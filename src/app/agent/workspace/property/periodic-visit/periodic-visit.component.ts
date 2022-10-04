@@ -288,7 +288,6 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // this.dtTrigger.unsubscribe();
     this.notesDtTrigger.unsubscribe();
   }
 }

@@ -55,7 +55,7 @@
               </td>
               <td>{{(data.statementPreference | lookup: statementPreferences) || DEFAULTS.NOT_AVAILABLE}}</td>
               <td class="resp-action-icon">
-                <i class="propcoicon propcoicon-viewings action-btn" (click)="onRowClick(data)"></i>
+                <i matTooltip="Preview HMRC Report" class="propcoicon propcoicon-viewings action-btn" (click)="onRowClick(data)"></i>
               </td>
               <td class="resp-action-icon">
                 <i (click)="showMenu($event,'preview-and-send-overlay', data, 'table-row')"
