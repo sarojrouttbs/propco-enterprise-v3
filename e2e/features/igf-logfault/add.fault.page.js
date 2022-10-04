@@ -84,19 +84,19 @@ var Fault = function (faultDetails) {
     this.viewBtn = element(by.xpath("//ion-button[contains(text(), 'View')]"));  
     this.faultTitle = element(by.xpath("//ion-text[@color='success']/../../following-sibling::ion-col/h2"));
 
-    this.createFault = function(faultAttrib){ 
-        commonFunction.waitForElementToBeVisible(this.addFaultBtn, "Add Fault button");   
+    this.createFault = function(faultAttrib, fileToUpload){ 
+        commonFunction.waitForElementToBeVisible(this.addFaultBtn, "Add Repair button");   
         commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first fault"); 
-        commonFunction.clickOnElement(this.addFaultBtn, "Add Fault button");        
+        commonFunction.clickOnElement(this.addFaultBtn, "Add Repair button");        
         if(faultAttrib.propertyId){
           commonFunction.sendKeysInto(this.propSearchInput, faultAttrib.propertyId);
           commonFunction.clickOnElement(this.propSearchResult, "Property Search result");
         }
         commonFunction.waitForElementToBeVisible(this.headingText, "Heading Text");
         commonFunction.scrollToElement(this.faultCategory);
-        commonFunction.clickOnElement(this.faultCategory, "Fault Category");
+        commonFunction.clickOnElement(this.faultCategory, "Repair Category");
         if(faultAttrib.urgency){
-          commonFunction.clickOnElement(this.faultUrgency, "Fault Urgency button"); 
+          commonFunction.clickOnElement(this.faultUrgency, "Repair Urgency button"); 
         }                  
         if(faultAttrib.title){
           commonFunction.sendKeysInto(this.faultTitleInput, faultAttrib.title);
@@ -121,10 +121,10 @@ var Fault = function (faultDetails) {
           if(faultAttrib.reporter.includes("Tenant")){
              commonFunction.selectFromDropDown(this.agreementList, this.agreement, "Tenancy Agreement List", faultAttrib.tenancyAgreement);
           } else if (faultAttrib.reporter.includes("Guarantor")){
-            commonFunction.selectFromDropDown(this.reporterTypeList, this.reporterType, "Fault Reporter Type list", faultAttrib.reporter);
+            commonFunction.selectFromDropDown(this.reporterTypeList, this.reporterType, "Repair Reporter Type list", faultAttrib.reporter);
             commonFunction.selectFromDropDown(this.agreementList, this.agreement, "Tenancy Agreement List", faultAttrib.tenancyAgreement);
           } else {
-              commonFunction.selectFromDropDown(this.reporterTypeList, this.reporterType, "Fault Reporter Type list", faultAttrib.reporter);
+              commonFunction.selectFromDropDown(this.reporterTypeList, this.reporterType, "Repair Reporter Type list", faultAttrib.reporter);
           }                 
         }
         commonFunction.selectFromDropDown(this.reporterList, this.reporterName, "Reporter list", faultAttrib.reporterName);
@@ -140,9 +140,10 @@ var Fault = function (faultDetails) {
           commonFunction.sendKeysInto(this.usefulInstructionInput, faultAttrib.usefulInstruction);                
         }            
         commonFunction.clickOnElement(this.nextBtn, "Next button");
-        commonFunction.scrollToElement(this.nextBtn);        
-        if(faultAttrib.faultImage){
-          commonFunction.uploadImage(this.uploadImage, faultAttrib.faultImage, "Fault image");
+        commonFunction.scrollToElement(this.nextBtn); 
+        browser.sleep(3000);   
+        if(fileToUpload){
+           commonFunction.uploadImage(this.uploadImage, fileToUpload, "Repair image");               
         } 
         commonFunction.scrollToElement(this.reviewTab);       
         commonFunction.clickOnElement(this.reviewTab, "Review Tab");         
@@ -151,41 +152,41 @@ var Fault = function (faultDetails) {
     }
 
     this.checkFaultInformationInTable = function(faultDetailsTbl){    
-        commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first fault");       
+        commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first Repair");       
        if(faultDetailsTbl.tableUrgency){
-         let tblUrgency = commonFunction.updateVerificationObjectByAttrib(this.faultUrgencyTbl, "Urgency in Fault Table", "color");
+         let tblUrgency = commonFunction.updateVerificationObjectByAttrib(this.faultUrgencyTbl, "Urgency in Repair Table", "color");
          expect(tblUrgency).toContainData(faultDetailsTbl.tableUrgency);
        }
        if(faultDetailsTbl.tableCategory){
-         let tblCategory = commonFunction.updateVerificationObject(this.categoryTbl, "Category in Fault Table");
+         let tblCategory = commonFunction.updateVerificationObject(this.categoryTbl, "Category in Repair Table");
          expect(tblCategory).toContainData(faultDetailsTbl.tableCategory);
        }
        if(faultDetailsTbl.tablePropertyId){
-         let tblProperty1 = commonFunction.updateVerificationObject(this.propertyTbl, "Property id in Fault Table"); 
+         let tblProperty1 = commonFunction.updateVerificationObject(this.propertyTbl, "Property id in Repair Table"); 
          expect(tblProperty1).toContainData(faultDetailsTbl.tablePropertyId); 
        }
        if(faultDetailsTbl.tablePropertyAddress){
-         let tblProperty2 = commonFunction.updateVerificationObject(this.propertyTbl, "Property address in Fault Table"); 
+         let tblProperty2 = commonFunction.updateVerificationObject(this.propertyTbl, "Property address in Repair Table"); 
          expect(tblProperty2).toContainData(faultDetailsTbl.tablePropertyAddress);
        }
        if(faultDetailsTbl.tableOffice){
-         let tblOffice = commonFunction.updateVerificationObject(this.officeTbl, "Property office in Fault Table"); 
+         let tblOffice = commonFunction.updateVerificationObject(this.officeTbl, "Property office in Repair Table"); 
          expect(tblOffice).toContainData(faultDetailsTbl.tableOffice);
        } 
        if(faultDetailsTbl.tableManager){
-         let tblManager = commonFunction.updateVerificationObject(this.managerTbl, "Property manager in Fault Table"); 
+         let tblManager = commonFunction.updateVerificationObject(this.managerTbl, "Property manager in Repair Table"); 
          expect(tblManager).toContainData(faultDetailsTbl.tableManager);    
        } 
        if(faultDetailsTbl.tableJobTitle){
-         let tblJobTitle = commonFunction.updateVerificationObject(this.jobTitleTbl, "Job title in Fault Table"); 
+         let tblJobTitle = commonFunction.updateVerificationObject(this.jobTitleTbl, "Job title in Repair Table"); 
          expect(tblJobTitle).toContainData(faultDetailsTbl.tableJobTitle);
        }   
        if(faultDetailsTbl.tableReporter){
-         let tblReporter = commonFunction.updateVerificationObject(this.reporterTbl, "Reported By in Fault Table"); 
+         let tblReporter = commonFunction.updateVerificationObject(this.reporterTbl, "Reported By in Repair Table"); 
          expect(tblReporter).toContainData(faultDetailsTbl.tableReporter); 
        } 
        if(faultDetailsTbl.tableFaultStatus){
-         let tblStatus = commonFunction.updateVerificationObject(this.faultStatusTbl, "Status in Fault Table"); 
+         let tblStatus = commonFunction.updateVerificationObject(this.faultStatusTbl, "Status in Repair Table"); 
          expect(tblStatus).toContainData(faultDetailsTbl.tableFaultStatus);
        }              
     }
@@ -195,18 +196,18 @@ var Fault = function (faultDetails) {
      * @param {Object} nfmProperty Non-fully managed property data 
      */
     this.addFaultForNFMProperty = function(nfmProperty){
-        commonFunction.clickOnElement(this.addFaultBtn, "Add Fault button"); 
+        commonFunction.clickOnElement(this.addFaultBtn, "Add Repair button"); 
         commonFunction.sendKeysInto(this.propSearchInput, nfmProperty.propertyId);
         let searchResult = commonFunction.updateVerificationObject(this.propSearchResult, "Property search result"); 
         expect(searchResult).toContainData(nfmProperty.searchResult);
     }
 
     this.viewFault = function(){
-        commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first fault"); 
+        commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first Repair"); 
         commonFunction.clickOnElement(this.actionBtn, "Action button");
         commonFunction.waitForElementToBeVisible(this.viewBtn, "View button");
         commonFunction.clickOnElement(this.viewBtn, "View button"); 
-        commonFunction.waitForSpecificElementToBeVisible(by.xpath("//app-fault-title//h2"), "last", "Fault title");       
+        commonFunction.waitForSpecificElementToBeVisible(by.xpath("//app-fault-title//h2"), "last", "Repair title");       
     }
 
     this.checkFaultDocument = function(docList, conditionResult, msg){
@@ -226,13 +227,13 @@ var Fault = function (faultDetails) {
     }
 
     this.checkFaultTitleLength = function(faultProperty){
-        commonFunction.clickOnElement(this.addFaultBtn, "Add Fault button"); 
+        commonFunction.clickOnElement(this.addFaultBtn, "Add Repair button"); 
         commonFunction.sendKeysInto(this.propSearchInput, faultProperty.propertyId);
         commonFunction.clickOnElement(this.propSearchResult, "Property Search result");
-        commonFunction.clickOnElement(this.faultCategory, "Fault Category");
+        commonFunction.clickOnElement(this.faultCategory, "Repair Category");
         commonFunction.sendKeysInto(this.faultTitleInput, faultProperty.title);
-        commonFunction.clickOnElement(this.faultUrgency, "Fault Urgency button");  
-        let faultTitleError = commonFunction.updateVerificationObject(this.titleError, "Fault title error"); 
+        commonFunction.clickOnElement(this.faultUrgency, "Repair Urgency button");  
+        let faultTitleError = commonFunction.updateVerificationObject(this.titleError, "Repair title error"); 
         expect(faultTitleError).toContainData(faultProperty.titleError);
     }
 
@@ -251,23 +252,23 @@ var Fault = function (faultDetails) {
     }
 
     this.checkFaultDetailsValiadation = function(faultValidation){
-        commonFunction.clickOnElement(this.addFaultBtn, "Add Fault button");          
+        commonFunction.clickOnElement(this.addFaultBtn, "Add Repair button");          
         if(faultValidation.propertyId){
           commonFunction.sendKeysInto(this.propSearchInput, faultValidation.propertyId);
           commonFunction.clickOnElement(this.propSearchResult, "Property Search result");
         }
-        commonFunction.clickOnElement(this.faultCategory, "Fault Category");
+        commonFunction.clickOnElement(this.faultCategory, "Repair Category");
         if(faultValidation.validation){
-          commonFunction.clickOnElement(this.faultTitleInput, "Fault Title");
-          commonFunction.clickOnElement(this.faultUrgency, "Fault Urgency");
-          let titleErrorMsg = commonFunction.updateVerificationObject(this.titleError, "Fault title error"); 
+          commonFunction.clickOnElement(this.faultTitleInput, "Repair Title");
+          commonFunction.clickOnElement(this.faultUrgency, "Repair Urgency");
+          let titleErrorMsg = commonFunction.updateVerificationObject(this.titleError, "Repair title error"); 
           expect(titleErrorMsg).toContainData(faultValidation.titleError);
           commonFunction.sendKeysInto(this.faultTitleInput, faultValidation.title);
           commonFunction.clickOnElement(this.nextBtn, "Next button");
-          commonFunction.waitForElementToBeVisible(this.faultDetailsTab, "Fault Details tab");
+          commonFunction.waitForElementToBeVisible(this.faultDetailsTab, "Repair Details tab");
           commonFunction.scrollToElement(this.nextBtn);
           commonFunction.clickOnElement(this.reportedByTab, "Reported By tab");
-          commonFunction.clickOnElement(this.faultDetailsTab, "Fault Details tab");
+          commonFunction.clickOnElement(this.faultDetailsTab, "Repair Details tab");
           commonFunction.scrollToElement(this.nextBtn);
           commonFunction.clickOnElement(this.reportedByTab, "Reported By tab");
           commonFunction.waitForElementToBeVisible(this.reporterList, "Reporter Name list");
@@ -276,9 +277,9 @@ var Fault = function (faultDetails) {
           commonFunction.waitForElementToBeVisible(this.accessInfoList, "Access Information list");
           commonFunction.clickOnElement(this.reviewTab, "Review tab");
           commonFunction.scrollToElement(this.cancelBtn);
-          commonFunction.clickOnElement(this.faultDetailsTab, "Fault Details tab");
-          commonFunction.waitForElementToBeVisible(this.faultDescriptionInput, "Fault Description");
-          let descriptionErrorMsg = commonFunction.updateVerificationObject(this.descriptionError, "Fault description error"); 
+          commonFunction.clickOnElement(this.faultDetailsTab, "Repair Details tab");
+          commonFunction.waitForElementToBeVisible(this.faultDescriptionInput, "Repair Description");
+          let descriptionErrorMsg = commonFunction.updateVerificationObject(this.descriptionError, "Repair description error"); 
           expect(descriptionErrorMsg).toContainData(faultValidation.descriptionError);
           commonFunction.clickOnElement(this.reportedByTab, "Reported By tab");
           commonFunction.waitForElementToBeVisible(this.reporterList, "Reporter Name list");
@@ -293,7 +294,7 @@ var Fault = function (faultDetails) {
         } else {
           commonFunction.sendKeysInto(this.faultTitleInput, faultValidation.title);
           commonFunction.clickOnElement(this.nextBtn, "Next button");
-          commonFunction.waitForElementToBeVisible(this.faultDetailsTab, "Fault Details tab");
+          commonFunction.waitForElementToBeVisible(this.faultDetailsTab, "Repair Details tab");
           commonFunction.scrollToElement(this.nextBtn);
           commonFunction.sendKeysInto(this.faultDescriptionInput, faultValidation.description);
           commonFunction.clickOnElement(this.nextBtn, "Next button");
@@ -301,10 +302,10 @@ var Fault = function (faultDetails) {
             if(faultValidation.reporter.includes("Tenant")){
               commonFunction.selectFromDropDown(this.agreementList, this.agreement, "Tenancy Agreement List", faultValidation.tenancyAgreement);
             } else if (faultValidation.reporter.includes("Guarantor")){
-              commonFunction.selectFromDropDown(this.reporterTypeList, this.reporterType, "Fault Reporter Type list", faultValidation.reporter);
+              commonFunction.selectFromDropDown(this.reporterTypeList, this.reporterType, "Repair Reporter Type list", faultValidation.reporter);
               commonFunction.selectFromDropDown(this.agreementList, this.agreement, "Tenancy Agreement List", faultValidation.tenancyAgreement);
             } else {
-                commonFunction.selectFromDropDown(this.reporterTypeList, this.reporterType, "Fault Reporter Type list", faultValidation.reporter);
+                commonFunction.selectFromDropDown(this.reporterTypeList, this.reporterType, "Repair Reporter Type list", faultValidation.reporter);
             }                 
           }
           commonFunction.selectFromDropDown(this.reporterList, this.reporterName, "Reporter list", faultValidation.reporterName);
@@ -315,32 +316,32 @@ var Fault = function (faultDetails) {
           commonFunction.scrollToElement(this.nextBtn);
           commonFunction.clickOnElement(this.nextBtn, "Next button");
           commonFunction.scrollToElement(this.nextBtn);
-          commonFunction.uploadImage(this.uploadImage, faultValidation.faultImage, "Fault image");
+          commonFunction.uploadImage(this.uploadImage, faultValidation.faultImage, "Repair image");
           if(faultValidation.cancelFault){
             commonFunction.scrollToElement(this.cancelBtn);
             commonFunction.clickOnElement(this.cancelBtn, "Cancel button");
-            commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first fault"); 
-            let tblJobTitle = commonFunction.updateVerificationObject(this.jobTitleTbl, "Job title in Fault Table"); 
+            commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first Repair"); 
+            let tblJobTitle = commonFunction.updateVerificationObject(this.jobTitleTbl, "Job title in Repair Table"); 
             expect(tblJobTitle).not.toContainData(faultValidation.title);
           }
         }      
     }
 
     this.saveFaultForLater = function(faultSaveLater){
-      commonFunction.clickOnElement(this.addFaultBtn, "Add Fault button");          
+      commonFunction.clickOnElement(this.addFaultBtn, "Add Repair button");          
       if(faultSaveLater.propertyId){
         commonFunction.sendKeysInto(this.propSearchInput, faultSaveLater.propertyId);
         commonFunction.clickOnElement(this.propSearchResult, "Property Search result");
       }
-      commonFunction.clickOnElement(this.faultCategory, "Fault Category");
+      commonFunction.clickOnElement(this.faultCategory, "Repair Category");
       commonFunction.sendKeysInto(this.faultTitleInput, faultSaveLater.title);
       commonFunction.clickOnElement(this.nextBtn, "Next button");
-      commonFunction.waitForElementToBeVisible(this.faultDetailsTab, "Fault Details tab");
+      commonFunction.waitForElementToBeVisible(this.faultDetailsTab, "Repair Details tab");
       commonFunction.scrollToElement(this.nextBtn);
       commonFunction.sendKeysInto(this.faultDescriptionInput, faultSaveLater.description);
       commonFunction.clickOnElement(this.saveForLaterBtn, "SaveForLater button");
-      commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first fault");
-      var tblJobTitle = commonFunction.updateVerificationObject(this.jobTitleTbl, "Job title in Fault Table"); 
+      commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first Repair");
+      var tblJobTitle = commonFunction.updateVerificationObject(this.jobTitleTbl, "Job title in Repair Table"); 
       expect(tblJobTitle).toContainData(faultSaveLater.tableJobTitle); 
       this.viewFault();
       commonFunction.scrollToElement(this.nextBtn);
@@ -349,10 +350,10 @@ var Fault = function (faultDetails) {
         if(faultSaveLater.reporter.includes("Tenant")){
           commonFunction.selectFromDropDown(this.agreementList, this.agreement, "Tenancy Agreement List", faultSaveLater.tenancyAgreement);
         } else if (faultSaveLater.reporter.includes("Guarantor")){
-          commonFunction.selectFromDropDown(this.reporterTypeList, this.reporterType, "Fault Reporter Type list", faultSaveLater.reporter);
+          commonFunction.selectFromDropDown(this.reporterTypeList, this.reporterType, "Repair Reporter Type list", faultSaveLater.reporter);
           commonFunction.selectFromDropDown(this.agreementList, this.agreement, "Tenancy Agreement List", faultSaveLater.tenancyAgreement);
         } else {
-            commonFunction.selectFromDropDown(this.reporterTypeList, this.reporterType, "Fault Reporter Type list", faultSaveLater.reporter);
+            commonFunction.selectFromDropDown(this.reporterTypeList, this.reporterType, "Repair Reporter Type list", faultSaveLater.reporter);
         }                 
       }
       commonFunction.selectFromDropDown(this.reporterList, this.reporterName, "Reporter list", faultSaveLater.reporterName);
@@ -363,7 +364,7 @@ var Fault = function (faultDetails) {
       commonFunction.scrollToElement(this.nextBtn);
       commonFunction.clickOnElement(this.nextBtn, "Next button");
       commonFunction.scrollToElement(this.nextBtn);
-      commonFunction.uploadImage(this.uploadImage, faultSaveLater.faultImage, "Fault image");
+      commonFunction.uploadImage(this.uploadImage, faultSaveLater.faultImage, "Repair image");
       commonFunction.scrollToElement(this.saveForLaterBtn);
       commonFunction.clickOnElement(this.saveForLaterBtn, "SaveForLater button"); 
       this.checkFaultInformationInTable(faultSaveLater);
