@@ -4,7 +4,6 @@ import { ModalController } from '@ionic/angular';
 import { FaultsService } from 'src/app/faults/faults.service';
 import { DATE_FORMAT } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
-// import { CommonService } from '../../services/common.service';
 
 @Component({
   selector: 'app-snooze-fault-modal',

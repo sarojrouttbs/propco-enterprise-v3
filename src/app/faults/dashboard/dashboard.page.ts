@@ -196,18 +196,18 @@ export class DashboardPage implements OnInit {
       snoozeUntil: []
     });
 
-    this.filterForm.get('fromDate').valueChanges.subscribe(value => {
-      if (value) {
+    this.filterForm.get('fromDate').valueChanges.subscribe(fromDate => {
+      if (fromDate) {
         this.onDateChange();
       }
     });
-    this.filterForm.get('toDate').valueChanges.subscribe(value => {
-      if (value) {
+    this.filterForm.get('toDate').valueChanges.subscribe(toDate => {
+      if (toDate) {
         this.onDateChange();
       }
     });
-    this.filterForm.get('snoozeUntil').valueChanges.subscribe(value => {
-      if (value) {
+    this.filterForm.get('snoozeUntil').valueChanges.subscribe(snoozeUntil => {
+      if (snoozeUntil) {
         setTimeout(() => {
           this.filterList();
         }, 300)
@@ -356,7 +356,7 @@ export class DashboardPage implements OnInit {
   async deEscalateFault() {
     this.commonService.showConfirm('De-Escalate Repair', 'Are you sure you want to de-escalate the repair?', '', 'Yes', 'No').then(res => {
       if (res) {
-        this.faultsService.deEscalateFault(this.selectedData.faultId, {}).subscribe(res => {
+        this.faultsService.deEscalateFault(this.selectedData.faultId, {}).subscribe(escalteFaultRes => {
           this.commonService.showAlert('De-Escalate Repair', 'Repair has been de-escalated to the property manager.');
           this.rerenderFaults(false);
           this.hideMenu('', 'dashboard-overlay');

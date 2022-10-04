@@ -798,7 +798,6 @@ export class SearchResultsPage implements OnInit {
     const baseContainerHeight = baseContainer.outerHeight(true);
     const baseContainerPosition = baseContainer.position();
     const baseContainerTop = baseContainerPosition.top;
-    const divOverlayWidth = divOverlay.css('width', baseContainerWidth + 'px');
     const divOverlayHeight = divOverlay.height();
     const overlayContainerLeftPadding = (divOverlay.parent('.overlay-container').innerWidth() -
       divOverlay.parent('.overlay-container').width()) / 2;
