@@ -171,6 +171,7 @@ export class DashboardPage implements OnInit {
   openHomeCategory(key: string, value = null) {
     openScreen(key, value);
   }
+  
 
   private disableWelcomeTour() {
     const payload = {
@@ -184,7 +185,7 @@ export class DashboardPage implements OnInit {
     }
   }
 
-  private showTourGuide() {
+  showTourGuide() {
     if (!this.isSolrTourDone) {
       setTimeout(() => {
         this.guidedTourService.startTour(this.dashboardTour);
