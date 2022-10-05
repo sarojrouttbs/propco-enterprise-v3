@@ -126,17 +126,17 @@
       </ion-col>
 
       <ion-col size="40" class="ion-align-self-end ion-text-right no-padding-right">
-        <ion-button color="success" fill="outline" style="margin-right: 16px;" (click)="applyFilters()">Apply Filters
+        <ion-button class="no-margin-bottom" color="success" fill="outline" style="margin-right: 16px;" (click)="applyFilters()">Apply Filters
         </ion-button>
-        <ion-button color="danger" fill="outline" (click)="resetFilters()">Reset Filters</ion-button>
+        <ion-button class="no-margin-bottom" color="danger" fill="outline" (click)="resetFilters()">Reset Filters</ion-button>
       </ion-col>
     </ion-row>
   </form>
   <ion-row>
     <ion-col size="100" class="ion-text-left" style="margin-top: 10px;">
-      <ion-button color="success" fill="solid" style="margin-right: 10px;" (click)="onselectAll()">Select All
+      <ion-button class="no-margin-bottom" color="success" fill="solid" style="margin-right: 10px;" (click)="onselectAll()">Select All
       </ion-button>
-      <ion-button color="warning" fill="solid" (click)="unselectAll()">Select None</ion-button>
+      <ion-button class="no-margin-bottom" color="warning" fill="solid" (click)="unselectAll()">Select None</ion-button>
     </ion-col>
     <ion-col size="100" style="margin-top: 10px;">
       <div class="overlay-container" style="position: relative">
@@ -153,6 +153,7 @@
               <th scope="col" style="width:10%;">Office</th>
               <th scope="col" style="width:10%;">Management</th>
               <th scope="col" style="width:15%;">Last Generated Till</th>
+              <th scope="col" style="width:36px;"></th>
             </tr>
           </thead>
           <tbody>
@@ -179,6 +180,10 @@
               <td>{{(data.propertyOffice | lookup: officeCodes) || DEFAULTS.NOT_AVAILABLE}}</td>
               <td>{{(data.propertyManagementType.toString() | lookup: managementTypes) || DEFAULTS.NOT_AVAILABLE}}</td>
               <td>{{(data.lastGeneratedTill | date: DATE_FORMAT.DATE) || DEFAULTS.NOT_AVAILABLE}}</td>
+              <td class="resp-action-icon">
+                <i (click)="showMenu($event,'select-landlords-overlay', data, 'table-row')"
+                  class="propcoicon propcoicon-actions-on action-btn"></i>
+              </td>
             </tr>
           </tbody>
           <tbody *ngIf="landlordList?.length === 0">
@@ -189,6 +194,11 @@
             </tr>
           </tbody>
         </table>
+        <div id="select-landlords-overlay" class="overlay-class">
+          <ion-button (click)="onClick('PROPERTY')">View Property</ion-button>
+          <ion-button (click)="onClick('LANDLORD')">View Landlord</ion-button>
+          <i (click)="hideMenu($event,'select-landlords-overlay')" class="propcoicon propcoicon-actions-on"></i>
+        </div>
       </div>
     </ion-col>
   </ion-row>
