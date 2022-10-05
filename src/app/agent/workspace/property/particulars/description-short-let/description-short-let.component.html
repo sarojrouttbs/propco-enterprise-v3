@@ -1,0 +1,75 @@
+<mat-accordion multi class="form-view-accordian">
+  <!-------------------------------------------Further Details-------------------------------------------------------------------->
+  <mat-expansion-panel #descriptionShortLet hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Description - Short Let
+      </mat-panel-title>
+      <mat-panel-description class="ion-justify-content-end no-margin">
+        <div>
+          <span *ngIf="!descriptionShortLet.expanded" class="accordian-icon" title="Expand">
+            <ion-icon style="pointer-events:none" name="add-circle"></ion-icon>
+          </span>
+          <span *ngIf="descriptionShortLet.expanded" class="accordian-icon" title="Collapse">
+            <ion-icon style="pointer-events:none" name="remove-circle"></ion-icon>
+          </span>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <form [formGroup]="descShortLetForm">
+      <ion-grid>
+        <ion-row class="prefernce-options">
+          <ion-col size="20">
+           <ion-button (click)="copyDescription()" >Copy From Description</ion-button>
+          </ion-col>
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Published Address</ion-label>
+              <ion-input formControlName="publishedAddress"></ion-input>
+            </ion-item>
+          </ion-col>  
+          
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Advertised Rent</ion-label>
+              <ion-input formControlName="advertisedRent"></ion-input> 
+            </ion-item>
+          </ion-col>  
+
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Rent Periodicity</ion-label>
+              <ion-select interface="popover" formControlName="rentPeriodicity">
+                <ion-select-option [value]="item.index" *ngFor="let item of advertisementRentFrequencies">{{item.value}}</ion-select-option>   
+              </ion-select>
+            </ion-item>
+          </ion-col>  
+
+          <ion-col size="20">
+            <ion-item>
+              <ion-label position="floating">Advertised Deposit</ion-label>
+              <ion-input formControlName="advertisedDeposit"></ion-input> 
+            </ion-item>
+          </ion-col>
+          
+          <ion-col size="100">
+            <ion-item>
+              <ion-label position="floating">Small Description</ion-label>
+              <ion-textarea  auto-grow="true" formControlName="smallDescription">
+              </ion-textarea>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="100">
+            <ion-item>
+              <ion-label position="floating">Full Published Description</ion-label>
+              <ion-textarea  auto-grow="true" formControlName="fullPublishedDescription">
+              </ion-textarea>
+            </ion-item>
+          </ion-col>
+
+        </ion-row>       
+      </ion-grid>
+    </form>
+  </mat-expansion-panel>  
+</mat-accordion>
