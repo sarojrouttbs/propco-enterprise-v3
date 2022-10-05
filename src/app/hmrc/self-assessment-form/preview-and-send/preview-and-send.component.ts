@@ -12,6 +12,7 @@ import { PreviewPdfModalPage } from '../../hmrc-modals/preview-pdf-modal/preview
 import { AddressPipe } from 'src/app/shared/pipes/address-string-pipe.pipe';
 import { WorkspaceService } from 'src/app/agent/workspace/workspace.service';
 import { Router } from '@angular/router';
+import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 declare function openScreen(key: string, value: any): any;
 
 @Component({
@@ -265,8 +266,7 @@ export class PreviewAndSendComponent implements OnInit {
         this.workspaceService.addItemToWorkSpace(this.selectedData);
         break;
       case ENTITY_TYPE.LANDLORD:
-          action = 'OpenLandlord';
-          openScreen(action, this.selectedData?.propcoLandlordId);
+        this.openItemUnderDevelopmentModal();
         break;
       default:
         return;
@@ -280,5 +280,24 @@ export class PreviewAndSendComponent implements OnInit {
     this.selectedData.entityId = this.selectedData.propertyId;
     this.selectedData.reference = this.selectedData.propertyReference;
     this.selectedData.address = addressStr;
+  }
+
+  private async openItemUnderDevelopmentModal() {
+    const modal = await this.modalController.create({
+      component: SimpleModalPage,
+      cssClass: 'modal-container alert-prompt',
+      backdropDismiss: false,
+      componentProps: {
+        data: `${DEFAULT_MESSAGES.UNDER_DEVELOPMENT}`,
+        heading: 'Workspace',
+        buttonList: [
+          {
+            text: 'OK',
+            value: false,
+          },
+        ],
+      },
+    });
+    await modal.present();
   }
 }

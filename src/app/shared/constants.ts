@@ -628,6 +628,7 @@ export const DEFAULT_MESSAGES = {
   NOT_AVAILABLE_TEXT: 'Not Available',
   AVAILABLE_SOON: 'Available Soon',
   NO_DATA_AVAILABLE: 'No data available.',
+  UNDER_DEVELOPMENT: 'This functionality is under developement.'
 };
 
 export const FAULT_NOTIFICATION_STATE = {
