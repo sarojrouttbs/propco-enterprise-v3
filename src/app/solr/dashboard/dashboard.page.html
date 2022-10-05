@@ -1,7 +1,20 @@
 <ion-content id="solr-dashboard">
-  <div class="swap-icon" (click)="setDefaultHome(false)">
-    <img height="35" width="35" src="assets/images/swap.svg" title="Switch back to the old dashboard" (click)="openHomeCategory('OpenPropcoDashBoard')">
-  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="swap-icon" (click)="setDefaultHome(false)">
+          <img height="35" width="35" src="assets/images/swap.svg" title="Switch back to the old dashboard" (click)="openHomeCategory('OpenPropcoDashBoard')">
+        </div>
+      </ion-col>
+      <ion-col>
+        <div class="swap-icon ion-justify-content-end" (click)="showTourGuide()">          
+          <span title="Introduction">
+            <ion-icon name="bulb-outline"></ion-icon>
+          </span>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>  
   <div class="divider"></div>
   <ion-grid class="ion-no-padding" fixed >
     <ion-row class="ion-justify-content-center">
