@@ -570,7 +570,12 @@ export const APPLICATION_ACTION_TYPE = {
 export const ENTITY_TYPE = {
   AGENT: 'AGENT',
   LET_APPLICANT: 'LET_APPLICANT',
-  PROPERTY: 'PROPERTY'
+  PROPERTY: 'PROPERTY',
+  LANDLORD: 'LANDLORD',
+  APPLICANT: 'APPLICANT',
+  CONTRACTOR: 'CONTRACTOR',
+  TENANT: 'TENANT',
+  COTENANT: 'COTENANT'
 };
 
 export const PAYMENT_TYPES = {
@@ -623,6 +628,7 @@ export const DEFAULT_MESSAGES = {
   NOT_AVAILABLE_TEXT: 'Not Available',
   AVAILABLE_SOON: 'Available Soon',
   NO_DATA_AVAILABLE: 'No data available.',
+  UNDER_DEVELOPMENT: 'This functionality is under developement.'
 };
 
 export const FAULT_NOTIFICATION_STATE = {

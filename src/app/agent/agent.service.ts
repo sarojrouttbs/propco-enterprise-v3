@@ -221,4 +221,8 @@ export class AgentService {
   getUserDetails(params: any): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `user/logged-in`, { params });
   }
+
+  getPropertyShortLetDesc(propertyId: string, params): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/shortlet/node`, { params })
+  }
 }

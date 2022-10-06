@@ -63,6 +63,9 @@ import { WebInternetDetailsComponent } from './particulars/web-internet-details/
 import { ClausesComponent } from './admin/clauses/clauses.component';
 import { MediaComponent } from './media/media.component';
 import { PicturesComponent } from './media/pictures/pictures.component';
+import { DescriptionShortLetComponent } from './particulars/description-short-let/description-short-let.component';
+import { DescriptionComponent } from './particulars/description/description.component';
+
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
 @NgModule({
@@ -129,7 +132,9 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIG
     WebInternetDetailsComponent,
     ClausesComponent,
     MediaComponent,
-    PicturesComponent
+    PicturesComponent,
+    DescriptionShortLetComponent,
+    DescriptionComponent
   ],
   providers: [
     AgentService,
