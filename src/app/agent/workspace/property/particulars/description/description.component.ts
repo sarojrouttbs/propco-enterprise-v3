@@ -68,7 +68,7 @@ export class DescriptionComponent implements OnInit {
     return new Promise((resolve) => {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
-          this.patchFormValue(res?.data?.propertyDescription);
+          this.descriptionForm.patchValue(res?.data?.propertyDescription);
           resolve(true);
         },
         (error) => {
@@ -77,19 +77,4 @@ export class DescriptionComponent implements OnInit {
       );
     });
   }
-
-  private patchFormValue(data) {
-    this.descriptionForm.patchValue({
-      stopTapLocation: data?.stopTapLocation,
-      virtualTour: data?.virtualTour,
-      publishedAddress: data?.publishedAddress,
-      epcAssetRating: data?.epcAssetRating,
-      epcRegisterUrl: data?.epcRegisterUrl,
-      internalNote: data?.internalNote,
-      smallDescription: data?.smallDescription,
-      fullPublishedDescription: data?.fullPublishedDescription,
-      directionToProperty: data?.directionToProperty
-    })
-  }
-
 }
