@@ -44,8 +44,8 @@ private initForm() {
     this.localStorageItems = await this.fetchItems();
     this.selectedEntryDetails = await this.getActiveTabEntityInfo();
     this.getLookUpData();  
-    this.descpData = this.getCopyPropertyDescription().then((result) => {
-      return result;
+    this.getCopyPropertyDescription().then((result) => {
+      this.descpData = result;
     });
     this.getPropertyDescription();
   }
@@ -98,7 +98,7 @@ private initForm() {
     const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve, reject) => {
       this.agentService.getPropertyShortLetDesc(this.selectedEntryDetails.entityId, params).subscribe(result => {     
-        this.descShortLetForm.patchValue(result.data?.propertyDescription);
+        this.patchShortLetFormValue(result);
         resolve(result.data?.propertyDescription);
       }, error => {
         reject(error);
@@ -107,6 +107,20 @@ private initForm() {
   }
 
    copyDescription(){
-      this.descShortLetForm.patchValue(this.descpData);
+    this.descShortLetForm.patchValue({
+      smallDescription:this.descpData.smallDescription,
+      fullPublishedDescription:this.descpData.fullPublishedDescription,
+    })
+  }
+
+  patchShortLetFormValue(data){
+    this.descShortLetForm.patchValue({
+      publishedAddress : data.publishedAddress,
+      advertisedRent: data.advertisedRent,
+      rentPeriodicity:data.rentPeriodicity,
+      smallDescription:data.smallDescription,
+      fullPublishedDescription:data.fullPublishedDescription,
+      advertisedDeposit:data.advertisedDeposit,
+    })
   }
 }

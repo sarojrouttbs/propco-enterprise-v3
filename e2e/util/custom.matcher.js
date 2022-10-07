@@ -1,4 +1,4 @@
-var matchersUtil = require('../../node_modules/jasmine-core/lib/jasmine-core/jasmine');
+var matchersUtil = require('jasmine-core/lib/jasmine-core/jasmine');
 
 beforeAll(function() {
     jasmine.addMatchers({
