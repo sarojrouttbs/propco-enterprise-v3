@@ -1,5 +1,5 @@
 exports.config = {
-    seleniumAddress: 'http://localhost:4444/wd/hub',
+    seleniumAddress: 'http://magnus.techblue.co.uk:4444/wd/hub',
     capabilities: {
         'browserName': 'chrome',
          chromeOptions: {
@@ -73,7 +73,6 @@ exports.config = {
             }
         });
         beforeEach(function(){
-           // browser.manage().window().maximize();   
             browser.driver.manage().window().setPosition(0,0);         
             browser.get(browser.params.fixafault_url_qa,180000);
         });

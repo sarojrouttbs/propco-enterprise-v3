@@ -5,7 +5,15 @@ var fileFunction = new fileUtil();
 
 describe('FixAFault Module', function(){
    
-    it('should allow PM to create a repair on behalf of Tenant - IGF002_01, IGF002_02', function(done){
+    it('should allow PM to create a repair on behalf of Tenant - IGF002_01, IGF002_02', function(){
+        let json = addFaultJson.faultDetails.tenant; 
+        let addFault = new fault(json); 
+
+        addFault.createFault(json);
+        addFault.checkFaultInformationInTable(json);             
+    });
+
+    /* it('should allow PM to create a repair on behalf of Tenant - IGF002_01, IGF002_02', function(done){
         let json = addFaultJson.faultDetails.tenant; 
         let addFault = new fault(json); 
 
@@ -21,7 +29,7 @@ describe('FixAFault Module', function(){
         }            
     }, 240000);
 
-    /* it('should not allow repair creation for Non Fully Managed Property - IGF002_03', function(){
+    it('should not allow repair creation for Non Fully Managed Property - IGF002_03', function(){
          let json = addFaultJson.faultDetails.nfmProperty; 
          let addFault = new fault(json); 
                       

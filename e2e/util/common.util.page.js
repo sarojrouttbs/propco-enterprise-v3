@@ -1,7 +1,5 @@
 var path = require('path');
-var cryptoJs = require('crypto-js')
-
-//const { compileFunction } = require('vm');
+var cryptoJs = require('crypto-js');
 
 var CommonFunction = function() {
     
@@ -190,12 +188,18 @@ var CommonFunction = function() {
         browser.controlFlow().execute(function () {
            browser.executeScript("console.log('" + value + " is uploaded');");           
         }); 
+        console.log("Environment: " + browser.params.environment);
+        if(browser.params.environment.includes("remote")){
+            var remoteEnv = require('selenium-webdriver/remote');
+            browser.setFileDetector(new remoteEnv.FileDetector());
+        }
         this.scrollToElement(loc);
-        console.log(fileToUpload);
+        console.log("FileToUpload: " +fileToUpload);
         if(fileToUpload){
             let docs = fileToUpload.split(",");
             docs.forEach(function(result){
                 let absolutePath = path.resolve(__dirname, result);
+                console.log("Image path: " + absolutePath);
                 loc.clear().sendKeys(absolutePath);
             });
         }      
