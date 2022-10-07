@@ -46,7 +46,7 @@
             "isOccupierVulnerable": "",
             "usefulInstruction": "",
             "fileSource": "https://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia-logo.png",
-            "faultImage": "./Dishwasher.png",
+            "faultImage": "../resources/upload/Dishwasher.png",
             "tableUrgency": "",
             "tableCategory": "Appliances",
             "tablePropertyId": "000002063",
