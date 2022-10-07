@@ -84,7 +84,7 @@ var Fault = function (faultDetails) {
     this.viewBtn = element(by.xpath("//ion-button[contains(text(), 'View')]"));  
     this.faultTitle = element(by.xpath("//ion-text[@color='success']/../../following-sibling::ion-col/h2"));
 
-    this.createFault = function(faultAttrib, fileToUpload){ 
+    this.createFault = function(faultAttrib){ 
         commonFunction.waitForElementToBeVisible(this.addFaultBtn, "Add Repair button");   
         commonFunction.waitForElementToBeVisible(this.actionBtn, "Action button for first fault"); 
         commonFunction.clickOnElement(this.addFaultBtn, "Add Repair button");        
@@ -142,8 +142,8 @@ var Fault = function (faultDetails) {
         commonFunction.clickOnElement(this.nextBtn, "Next button");
         commonFunction.scrollToElement(this.nextBtn); 
         browser.sleep(3000);   
-        if(fileToUpload){
-           commonFunction.uploadImage(this.uploadImage, fileToUpload, "Repair image");               
+        if(faultAttrib.faultImage){
+           commonFunction.uploadImage(this.uploadImage, faultAttrib.faultImage, "Repair image");               
         } 
         commonFunction.scrollToElement(this.reviewTab);       
         commonFunction.clickOnElement(this.reviewTab, "Review Tab");         
