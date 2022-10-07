@@ -55,6 +55,7 @@
             </div>
           <div class="right-menu">
             <div class="ion-no-padding" class="result-search-grid">
+              <app-loader></app-loader>
               <app-search-suggestion [pageType]="'agent-header'" [entityControl]="entityControl" (searchClickEvent)="searchHandler($event)" [searchTerm]="''"></app-search-suggestion>  
           </div>
             <div id="userInfo" layout="row">
