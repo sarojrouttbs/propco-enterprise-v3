@@ -382,7 +382,6 @@ export class DashboardPage implements OnInit {
         this.commonService.showMessage('Repair has been closed successfully.', 'Close Repair', 'success');
         this.rerenderFaults(false);
         this.bucketCount();
-        return;
       }
     });
 
@@ -565,7 +564,7 @@ export class DashboardPage implements OnInit {
     this.fs = [];
     this.fus = [];
     this.showEscalated = '';
-    const filterForm = this.filterForm as FormGroup;
+    const filterForm = this.filterForm;
     let checkBoxControls = ['repairCheckbox', 'newRepairs', 'emergency', 'urgent', 'nonUrgent', 'assessment', 'automation', 'invoice', 'escalation']
 
     if (controlName) {
@@ -953,7 +952,6 @@ export class DashboardPage implements OnInit {
   getActiveRepairCount() {
     let statusArray = Object.values(FAULT_STATUSES);
     let fs = statusArray.filter(status => status != FAULT_STATUSES.CANCELLED && status != FAULT_STATUSES.CLOSED);
-
     let faultCountParams: any = this.faultParams
       .set('fs', fs.toString())
       .set('showEscalated', 'false')
@@ -985,15 +983,11 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('page');
     faultCountParams = faultCountParams.delete('limit');
     this.emergencyLoader = true;
-    new Promise((resolve) => {
-      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
-        this.emergencyLoader = false;
-        this.emergencyCount = res ? res.count : 0;
-        resolve(true);
-      }, error => {
-        this.emergencyLoader = false;
-        resolve(false);
-      });
+    this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+      this.emergencyLoader = false;
+      this.emergencyCount = res ? res.count : 0;
+    }, error => {
+      this.emergencyLoader = false;
     });
   }
 
@@ -1007,15 +1001,11 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('page');
     faultCountParams = faultCountParams.delete('limit');
     this.urgentLoader = true;
-    new Promise((resolve) => {
-      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
-        this.urgentLoader = false;
-        this.urgentCount = res ? res.count : 0;
-        resolve(true);
-      }, error => {
-        this.urgentLoader = false;
-        resolve(false);
-      });
+    this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+      this.urgentLoader = false;
+      this.urgentCount = res ? res.count : 0;
+    }, error => {
+      this.urgentLoader = false;
     });
   }
 
@@ -1029,15 +1019,11 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('page');
     faultCountParams = faultCountParams.delete('limit');
     this.nonUrgentLoader = true;
-    new Promise((resolve) => {
-      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
-        this.nonUrgentLoader = false;
-        this.nonUrgentCount = res ? res.count : 0;
-        resolve(true);
-      }, error => {
-        this.nonUrgentLoader = false;
-        resolve(false);
-      });
+    this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+      this.nonUrgentLoader = false;
+      this.nonUrgentCount = res ? res.count : 0;
+    }, error => {
+      this.nonUrgentLoader = false;
     });
   }
 
@@ -1052,15 +1038,11 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('limit');
     faultCountParams = faultCountParams.delete('fus');
     this.assismentLoader = true;
-    new Promise((resolve) => {
-      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
-        this.assismentLoader = false;
-        this.assismentCount = res ? res.count : 0;
-        resolve(true);
-      }, error => {
-        this.assismentLoader = false;
-        resolve(false);
-      });
+    this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+      this.assismentLoader = false;
+      this.assismentCount = res ? res.count : 0;
+    }, error => {
+      this.assismentLoader = false;
     });
   }
 
@@ -1077,15 +1059,11 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('limit');
     faultCountParams = faultCountParams.delete('fus');
     this.automationLoader = true;
-    new Promise((resolve) => {
-      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
-        this.automationLoader = false;
-        this.automationCount = res ? res.count : 0;
-        resolve(true);
-      }, error => {
-        this.automationLoader = false;
-        resolve(false);
-      });
+    this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+      this.automationLoader = false;
+      this.automationCount = res ? res.count : 0;
+    }, error => {
+      this.automationLoader = false;
     });
   }
 
@@ -1100,15 +1078,11 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('limit');
     faultCountParams = faultCountParams.delete('fus');
     this.invoiceLoader = true;
-    new Promise((resolve) => {
-      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
-        this.invoiceLoader = false;
-        this.invoiceCount = res ? res.count : 0;
-        resolve(true);
-      }, error => {
-        this.invoiceLoader = false;
-        resolve(false);
-      });
+    this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+      this.invoiceLoader = false;
+      this.invoiceCount = res ? res.count : 0;
+    }, error => {
+      this.invoiceLoader = false;
     });
   }
 
@@ -1122,15 +1096,11 @@ export class DashboardPage implements OnInit {
     faultCountParams = faultCountParams.delete('limit');
     faultCountParams = faultCountParams.delete('fus');
     this.escalationLoader = true;
-    new Promise((resolve) => {
-      this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
-        this.escalationLoader = false;
-        this.escalationCount = res ? res.count : 0;
-        resolve(true);
-      }, error => {
-        this.escalationLoader = false;
-        resolve(false);
-      });
+    this.faultsService.getFaultCounts(faultCountParams).subscribe((res) => {
+      this.escalationLoader = false;
+      this.escalationCount = res ? res.count : 0;
+    }, error => {
+      this.escalationLoader = false;
     });
   }
 

@@ -266,7 +266,7 @@ export class FaultQualificationComponent implements OnInit {
               this.updateFault(null);
             }
           });
-        };
+        }
         this.proceeding = false
       } else {
         this.commonService.showAlert('Warning', 'Please choose one option to proceed.');
@@ -522,7 +522,7 @@ export class FaultQualificationComponent implements OnInit {
       } else {
         if(category === CERTIFICATES_CATEGORY[0])
           this.faultQualificationForm.get('isUnderWarranty').setValue(false);
-          else 
+        else 
           this.faultQualificationForm.get('isUnderServiceContract').setValue(false);
       }
     });

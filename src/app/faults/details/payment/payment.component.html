@@ -10,7 +10,7 @@
           </div>        
           <div class="question-answer ion-text-center" *ngIf="faultDetails && !faultDetails?.isWOConvertedToInvoice">
             <h4>Next Step:</h4> 
-            <h6><b>Convert Works Order to Invoice</b></h6>
+            <h6><strong>Convert Works Order to Invoice</strong></h6>
             <h6>
               <ion-text color="danger">Please note: </ion-text><ion-text>Invoice has been approved by the Property Manager and passed to Accounts for payment.</ion-text>
             </h6>
@@ -18,7 +18,7 @@
           </div>
           <div class="question-answer ion-text-center" *ngIf="faultDetails && faultDetails?.isWOConvertedToInvoice && !faultDetails?.isContractorPaymentDone">
             <h4>Next Step:</h4> 
-            <h6><b>Contractor Awaiting Payment</b></h6>
+            <h6><strong>Contractor Awaiting Payment</strong></h6>
             <h6>
               <ion-text color="danger">Please note: </ion-text><ion-text>Works Order  has been converted to Invoice.Contractor  will be paid in the next payment run subject to funds being available.</ion-text>
             </h6>
@@ -26,7 +26,7 @@
           </div>
           <div class="question-answer ion-text-center" *ngIf="faultDetails && faultDetails?.isWOConvertedToInvoice && faultDetails?.isContractorPaymentDone">
             <h4>Next Step:</h4> 
-            <h6><b>Contractor paid.This repair is now Closed</b></h6>
+            <h6><strong>Contractor paid.This repair is now Closed</strong></h6>
             <div class="border-bottom"></div>
           </div>
         </div>

@@ -40,7 +40,7 @@
         <div *ngIf="cliNotification && !faultDetails?.isClosed">
           <div class="banner">
             <div class="ion-text-left">
-              <b>{{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME }}</b>
+              <strong>{{cliNotification?.chaseTemplateCode}} {{cliNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME }}</strong>
             </div>
             <h2 class="banner-heading" >
               {{cliNotification && cliNotification?.responseReceived ? notificationState.RESPONSE_RECEIVED: 
@@ -367,7 +367,7 @@
         </div>
         <div class="preferred-supplier">
           <h2>Preferred Suppliers</h2>
-          <table>
+          <table aria-describedby="preferred-supplier">
             <tr>
               <th scope="col">REF</th>
               <th scope="col">SUPPLIER / CONTRACTOR</th>
@@ -453,7 +453,7 @@
               <ion-skeleton-text animated></ion-skeleton-text>
             </ion-col>
           </ion-row>
-          <table>
+          <table aria-describedby="preferred-supplier">
             <tr>
               <th scope="col"><ion-skeleton-text animated></ion-skeleton-text></th>
               <th scope="col"><ion-skeleton-text animated></ion-skeleton-text></th>

@@ -17,9 +17,4 @@ export class ForgotPasswordModalPage {
       dismissed: true
     });
   }
-
-  submit() {
-
-  }
-
 }

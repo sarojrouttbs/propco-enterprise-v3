@@ -3,7 +3,7 @@ import { WorksorderModalPage } from 'src/app/shared/modals/worksorder-modal/work
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, forkJoin } from 'rxjs';
 import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
@@ -13,9 +13,9 @@ import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
 import { CloseFaultModalPage } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.page';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
-import { forkJoin } from 'rxjs';
 import { BlockManagementModalPage } from 'src/app/shared/modals/block-management-modal/block-management-modal.page';
 import { PropertyCertificateModalPage } from 'src/app/shared/modals/property-certificate-modal/property-certificate-modal.page';
+import { AddressPipe } from 'src/app/shared/pipes/address-string-pipe.pipe';
 
 
 @Component({
@@ -449,22 +449,12 @@ export class JobCompletionComponent implements OnInit {
   private getContractorDetails(contractId, type) {
     return new Promise(() => {
       this.faultsService.getContractorDetails(contractId).subscribe((res) => {
-        let data = res ? res : '';
+        const data = res ? res : '';
         if (type === 'wo') {
-          const addressArray = new Array();
-          if (data && data.address) {
-            if (data.address.addressLine1 != null && data.address.addressLine1 != '') { addressArray.push(data.address.addressLine1) }
-            if (data.address.addressLine2 != null && data.address.addressLine2 != '') { addressArray.push(data.address.addressLine2) }
-            if (data.address.addressLine3 != null && data.address.addressLine3 != '') { addressArray.push(data.address.addressLine3) }
-            if (data.address.town != null && data.address.town != '') { addressArray.push(data.address.town) }
-            if (data.address.postcode != null && data.address.postcode != '') { addressArray.push(data.address.postcode) }
-          }
-          const addressString = addressArray.length ? addressArray.join(', ') : '';
+          const filterPipe = new AddressPipe();
+          const addressString = filterPipe.transform(data.address);
           this.workOrderForm.patchValue({
             company: data ? data.companyName : undefined, agentReference: data ? data.agentReference : undefined,
-            // defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined,
-            // defaultCommissionAmount: data ? data.defaultCommissionAmount : undefined,
-            // businessTelephone: data ? data.businessTelephone : undefined,
             daytime: data ? data.businessTelephone : undefined,
             contractorName: data ? data.fullName : undefined, 
             address: addressString,
@@ -508,8 +498,8 @@ export class JobCompletionComponent implements OnInit {
   }
 
   async deleteDocument(documentId, i: number) {
-    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
-    if (response) {
+    const deleteMedia = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
+    if (deleteMedia) {
       this.faultsService.deleteDocument(documentId).subscribe(response => {
         this.removeFile(i);
       });

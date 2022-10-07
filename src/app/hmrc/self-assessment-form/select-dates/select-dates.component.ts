@@ -39,6 +39,7 @@ export class SelectDatesComponent implements OnInit {
     let fromDate = new Date(HMRC.START_DATE);
     const currentYear = new Date().getFullYear();
     const yearDiff = currentYear - fromDate.getFullYear();
+    const list = [];
     for (let i = 1; i <= yearDiff; i++) {
       const year = fromDate.getFullYear();
       const month = fromDate.getMonth();
@@ -51,11 +52,16 @@ export class SelectDatesComponent implements OnInit {
 
       const obj: any = {
         index: this.commonService.getFormatedDate(fromDate) + ',' + this.commonService.getFormatedDate(toDate),
-        value: fromYear + '-' + toYear
+        value: fromYear + '-' + toYear,
+        order: i
       }
-      this.dateFilterList.push(obj)
+      list.push(obj)
       fromDate = new Date(this.commonService.getFormatedDate(date));
     }
+    if (list)
+      this.dateFilterList = list.sort(function (a, b) {
+        return b.order - a.order;
+      });
   }
 
 }

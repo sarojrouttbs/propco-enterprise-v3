@@ -41,8 +41,6 @@ export class AgentHeaderComponent {
     }
   }
 
-  searchHandler(term: string) { }
-
   goToHome() {
     this.router.navigate(['agent/dashboard'], { replaceUrl: true });
   }

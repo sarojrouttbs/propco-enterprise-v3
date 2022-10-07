@@ -2,7 +2,7 @@
   <ion-slides [options]="sliderOpts" pager>
     <ion-slide *ngFor="let data of imgList; let i = index">
       <div class="swiper-zoom-container">
-        <img [src]="baseUrl + data?.fileName" [title]="data?.label">
+        <img [src]="baseUrl + data?.fileName" [title]="data?.label" alt="data?.label">
       </div>
       <button type="submit" ion-button color="light" class="swiper-button-prev swiper-button-black" (click)="prev()" *ngIf="imgList.length > 1">
         <ion-icon name="chevron-back-outline"></ion-icon>
