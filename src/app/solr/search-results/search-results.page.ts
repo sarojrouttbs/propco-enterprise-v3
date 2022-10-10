@@ -556,6 +556,7 @@ export class SearchResultsPage implements OnInit {
       return params;
     }
     if (this.refreshType === 'ALL') {
+      /* Do Noting */
     }
     if (this.entityControl.value.indexOf('Property') !== -1) {
       params.propertyFilter = Object.assign({}, this.propertyFilter.value);

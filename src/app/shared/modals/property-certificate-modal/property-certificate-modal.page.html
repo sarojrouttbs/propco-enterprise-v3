@@ -27,7 +27,7 @@
     </ion-row>
 
     <div class="table-container" *ngIf="isEditable" [formGroup]="propertyCertificateListForm">
-      <table>
+      <table aria-describedby="property-certificate-list">
         <tr>
           <th scope="col">Select</th>
           <th scope="col">ID</th>
@@ -122,7 +122,7 @@
 </ng-template>
 <ng-template #contractDetailsTemplate>
   <div class="table-container" style="margin-top: 20px;" *ngIf="isEditable" [formGroup]="propertyCertificateListForm">
-    <table>
+    <table aria-describedby="property-certificate-list">
       <tr>
         <th scope="col">Select</th>
         <th scope="col">ID</th>

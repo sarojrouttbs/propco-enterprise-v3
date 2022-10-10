@@ -33,7 +33,7 @@ export class TemplateFormComponent implements OnInit {
     this._worldPayInternalData = value;
   }
   
-  @Output() successPayment = new EventEmitter<Boolean>();
+  @Output() successPayment = new EventEmitter<boolean>();
   clientKey = null;
 
   processPaymentReqBody: any = {};

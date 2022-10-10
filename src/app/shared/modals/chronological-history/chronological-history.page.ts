@@ -400,7 +400,8 @@ export class ChronologicalHistoryPage implements OnInit {
          this.eventTypes.forEach((element, index) => {
             if (new RegExp(Object.values(element)[0].join("|").toLowerCase()).test(elem.eventType.toLowerCase())) {
                category = Object.keys(element)[0];
-               elem.eventTypeId === FAULT_EVENT_TYPES_ID.NOTIFICATION_SENT && elem.data.recipient ? category = `${category}(${elem.data.recipient})`: ''; 
+               if(elem.eventTypeId === FAULT_EVENT_TYPES_ID.NOTIFICATION_SENT && elem.data.recipient)
+                  category = `${category}(${elem.data.recipient})`; 
             }
          });
          return category;
