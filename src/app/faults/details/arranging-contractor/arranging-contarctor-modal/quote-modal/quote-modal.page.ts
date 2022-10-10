@@ -95,8 +95,6 @@ export class QuoteModalPage implements OnInit {
     } else {
       this.uploadedPhoto.splice(i, 1);
       this.photos.removeAt(i);
-      if (this.uploadedPhoto.length == 0) {
-      }
     }
   }
 

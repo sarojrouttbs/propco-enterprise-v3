@@ -294,7 +294,7 @@
             <ion-grid>
               <ion-row>
                 <ion-col size="100">
-                  <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'">
+                  <img [src]="file.documentUrl ? file.documentUrl : 'assets/images/default.jpg'" alt="default-image">
                 </ion-col>
               </ion-row>
               <ion-row class="ion-justify-content-between">
@@ -327,7 +327,7 @@
           <ion-grid>
             <ion-row>
               <ion-col size="100">
-                <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file)" title="Click To Download">
+                <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file)" title="Click To Download" alt="download-image">
               </ion-col>
             </ion-row>
             <ion-row class="ion-justify-content-between">
@@ -706,14 +706,14 @@
         <h2 class="heading">Log a repair</h2>
         <h2>
           What do you want to report in
-          <b>
+          <strong>
             {{ propertyDetails?.address?.addressLine1 ?
             propertyDetails?.address?.addressLine1 + ',' : ''}} {{
             propertyDetails?.address?.addressLine2 ?
             propertyDetails?.address?.addressLine2 + ',' : ''}} {{
             propertyDetails?.address?.locality ? propertyDetails?.address?.locality +
             ',' : ''}} {{ propertyDetails?.address?.postcode }} ?
-          </b>
+          </strong>
         </h2>
       </ion-col>
     </ion-row>
@@ -733,15 +733,15 @@
         <h2 class="heading">Log a repair</h2>
         <h2>
           Describe the issue with
-          <b>{{(describeFaultForm?.controls?.category?.value | lookup: faultCategories)}}</b> in
-          <b>
+          <strong>{{(describeFaultForm?.controls?.category?.value | lookup: faultCategories)}}</strong> in
+          <strong>
             {{ propertyDetails?.address?.addressLine1 ?
             propertyDetails?.address?.addressLine1 + ',' : ''}} {{
             propertyDetails?.address?.addressLine2 ?
             propertyDetails?.address?.addressLine2 + ',' : ''}} {{
             propertyDetails?.address?.locality ? propertyDetails?.address?.locality +
             ',' : ''}} {{ propertyDetails?.address?.postcode }} ?
-          </b>
+          </strong>
         </h2>
         <div class="priority-heading">Select the priority</div>
         <ion-button (click)="setUrgencyStatus(3)" class="non-urgent-btn"
@@ -786,7 +786,7 @@
             <span *ngIf="faultId">
               {{faultDetails?.isClosed || (faultDetails?.isClosed && faultDetails?.isEscalated) ? 'Closed' : 
               (faultDetails?.isEscalated ? 'Escalation' : (faultDetails?.status | lookup: faultStatuses))  }} &nbsp;
-              <img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.isEscalated" />
+              <img src="assets/images/fault-categories/escalation.svg" *ngIf="faultDetails?.isEscalated" alt="escalation-image"/>
             </span>
           </h2>
         </ion-col>
@@ -1005,7 +1005,7 @@
               <ion-skeleton-text animated></ion-skeleton-text>
             </ion-col>
           </ion-row>
-          <table>
+          <table aria-describedby="preferred-supplier">
             <tr>
               <th scope="col"><ion-skeleton-text animated></ion-skeleton-text></th>
               <th scope="col"><ion-skeleton-text animated></ion-skeleton-text></th>

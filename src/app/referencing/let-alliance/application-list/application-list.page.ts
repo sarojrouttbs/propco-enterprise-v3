@@ -357,8 +357,8 @@ export class ApplicationListPage implements OnInit, OnDestroy {
       cssClass: 'modal-container alert-prompt la-modal-container',
       backdropDismiss: false,
       componentProps: {
-        data: `<div class='status-block'><b>Application Status - </b>${this.getLookupValue(this.applicationStatus.status, this.referencingApplicantStatusTypes)}
-        </br></br><b>Application Grade - </b>${this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes) : DEFAULTS.NOT_AVAILABLE}
+        data: `<div class='status-block'><strong>Application Status - </strong>${this.getLookupValue(this.applicationStatus.status, this.referencingApplicantStatusTypes)}
+        </br></br><strong>Application Grade - </strong>${this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes)? this.getLookupValue(this.applicationStatus.referencingResult, this.referencingApplicantResultTypes) : DEFAULTS.NOT_AVAILABLE}
         </div>`,
         heading: 'Status',
         buttonList: [

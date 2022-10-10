@@ -192,7 +192,7 @@ export class SelectLandlordsComponent implements OnInit {
         } else {
           item.checked = true;
         }
-      };
+      }
     });
   }
 
