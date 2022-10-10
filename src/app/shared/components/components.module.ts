@@ -20,6 +20,7 @@ import { SolrHeaderComponent } from './solr-header/solr-header.component';
 import { PropertyDetailsCardComponent } from './property-details-card/property-details-card.component';
 import { PropertyRightPanelComponent } from './property-right-panel/property-right-panel.component';
 import { CURRENCY_MASK_CONFIGURATION } from '../constants';
+import { LoaderComponent } from './loader/loader.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 @NgModule({
@@ -34,8 +35,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIG
         PipesModule,
         
     ],
-    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent, PropertyDetailsCardComponent, PropertyRightPanelComponent],
-    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent, PropertyDetailsCardComponent, PropertyRightPanelComponent],
+    declarations: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent, PropertyDetailsCardComponent, PropertyRightPanelComponent, LoaderComponent],
+    exports: [ValidationMessageComponent, PropertyDetailsComponent, AccordionListComponent, CloseFaultComponent, FaultTitleComponent, UseractionformsComponent, TobPropertyDetailsComponent, AgentHeaderComponent,SearchSuggestionComponent,SearchResultsComponent,SolrHeaderComponent, PropertyDetailsCardComponent, PropertyRightPanelComponent, LoaderComponent],
     providers: [CurrencyPipe, { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }]
 })
 
