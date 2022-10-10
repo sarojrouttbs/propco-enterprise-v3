@@ -25,8 +25,6 @@ export class ParticularsService {
         this.commonService.showAutoSaveLoader(this.formStatus);
         const changedData = this.commonService.getDirtyValues(formName)
         const controlName = Object.keys(changedData);
-        console.log(changedData);
-        console.log(controlName);
         this.formChangedValue = changedData ?? {};
         
       }),
