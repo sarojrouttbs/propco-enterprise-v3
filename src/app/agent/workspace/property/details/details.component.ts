@@ -144,9 +144,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
       }),
       letBoardForm: this._formBuilder.group({
         isBoardAllowed: [false],
-        boardOrderedOn: [''],
-        boardRemovedOn: [''],
-        slipOrderedOn: [''],
+        boardOrderedDate: [''],
+        boardRemovedDate: [''],
+        slipOrderedDate: [''],
         boardRef: ['']
       }),
       history: this._formBuilder.group({
@@ -165,10 +165,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
         hasOil: [''],
         hasSolidFuel: [''],
         smokeDetectors: [''],
-        smokeAlarmNo: [''],
+        numberOfSmokeAlarms: [''],
         hasElectricalIndemnitySigned: [''],
         carbonMonoxideDetectors: [''],
-        coDetectorNo: null,
+        numberOfCOAlarms: null,
         numberOfFireBlankets: [''],
         numberOfFireExtinguishers: ['']
       }),
@@ -254,10 +254,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
       hasOil: this.propertyDetails?.propertyDetails?.hasOil ? this.propertyDetails?.propertyDetails?.hasOil : false,
       hasSolidFuel: this.propertyDetails?.propertyDetails?.hasSolidFuel ? this.propertyDetails?.propertyDetails?.hasSolidFuel : false,
       smokeDetectors: this.propertyDetails?.smokeDetectors ? this.propertyDetails?.smokeDetectors : '',
-      smokeAlarmNo: this.propertyDetails?.smokeAlarmNo ? this.propertyDetails?.smokeAlarmNo : '',
+      numberOfSmokeAlarms: this.propertyDetails?.numberOfSmokeAlarms ? this.propertyDetails?.numberOfSmokeAlarms : '',
       hasElectricalIndemnitySigned: this.propertyDetails?.propertyDetails?.hasElectricalIndemnitySigned ? this.propertyDetails?.propertyDetails?.hasElectricalIndemnitySigned : false,
       carbonMonoxideDetectors: this.propertyDetails?.carbonMonoxideDetectors ? this.propertyDetails?.carbonMonoxideDetectors : '',
-      coDetectorNo: this.propertyDetails?.coDetectorNo ? this.propertyDetails?.coDetectorNo : '',
+      numberOfCOAlarms: this.propertyDetails?.numberOfCOAlarms ? this.propertyDetails?.numberOfCOAlarms : '',
       numberOfFireBlankets: this.propertyDetails?.numberOfFireBlankets ? this.propertyDetails?.numberOfFireBlankets : '',
       numberOfFireExtinguishers: this.propertyDetails?.numberOfFireExtinguishers ? this.propertyDetails?.numberOfFireExtinguishers : ''
     });
