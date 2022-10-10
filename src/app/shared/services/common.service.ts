@@ -32,17 +32,21 @@ export class CommonService {
     public toastController: ToastController,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer
-  ) {  }
-
-
+  ) {  }  
 
   private dataChange = new Subject<any>();
   dataChanged$ = this.dataChange.asObservable();
+
+  private isAutosaveLoader = new Subject<any>();
+  isAutosaveLoader$ = this.isAutosaveLoader.asObservable();
 
   dataChanged(data) {
     this.dataChange.next(data);
   }
 
+  showAutoSaveLoader(value) {
+    this.isAutosaveLoader.next(value)
+  }
 
   async isInternetConnected(): Promise<boolean> {
     const status = await Network.getStatus();
