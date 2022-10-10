@@ -5,6 +5,7 @@ import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, PROPCO, DATE_FORMAT } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { IPropertyDetails } from '../../../workspace.model';
+import { ParticularsService } from '../particulars.service';
 
 @Component({
   selector: 'app-web-internet-details',
@@ -36,7 +37,8 @@ export class WebInternetDetailsComponent implements OnInit {
   constructor(
     private formBuilder : FormBuilder,
     private commonService : CommonService,
-    private agentService : AgentService
+    private agentService : AgentService,
+    private particularService : ParticularsService
   ) { }
 
   ngOnInit() {
@@ -92,6 +94,7 @@ export class WebInternetDetailsComponent implements OnInit {
     this.getLookupData();
     this.getPropertyLookupData();
     this.getPropertyDetails();
+    this.particularService.updateDetails(this.webInternetDetailForm, this.selectedEntryDetails.entityId);
   }
 
   private getLookupData() {
