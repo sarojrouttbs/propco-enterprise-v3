@@ -1081,7 +1081,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private createQuestionItems(questionArray: any) {
-    const questionFormArray: any = this.applicantQuestionForm.get('questions');;
+    const questionFormArray: any = this.applicantQuestionForm.get('questions');
     questionArray.forEach(element => {
       const questionForm = this._formBuilder.group({
         applicantQuestionId: element.applicantQuestionId,

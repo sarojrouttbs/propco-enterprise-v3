@@ -1305,7 +1305,7 @@
 
     <div style="padding:10px 4px;" [hidden]="hidePaymentForm">
       <ion-button [hidden]="true" id="worldpayResponse" (click)="paymentDone()">Payment Done</ion-button>
-      <iframe name="worldpay-iframe" id="worldpay-iframe" [hidden]="!showWorldpayIframe"></iframe>
+      <iframe name="worldpay-iframe" id="worldpay-iframe" [hidden]="!showWorldpayIframe" title="worldpay-iframe"></iframe>
       <form ngNoForm [action]="paymentDetails?.actionUrl" method="POST" target="worldpay-iframe"
         class="payment-form ion-text-center">
         <input id="email" name="email" [value]="paymentDetails?.email" type="hidden" />
@@ -1343,7 +1343,7 @@
     </ion-grid>
     <div style="padding:10px 4px;" *ngIf="!showWorldpayInternalForm" >
       <ion-button [hidden]="true" id="worldpayResponse" (click)="paymentDone()">Payment Done</ion-button>
-      <iframe name="worldpay-iframe" id="worldpay-iframe" [hidden]="!showWorldpayIframe"></iframe>
+      <iframe name="worldpay-iframe" id="worldpay-iframe" [hidden]="!showWorldpayIframe" title="worldpay-iframe"></iframe>
       <form target="worldpay-iframe" class="payment-form">
         <ion-button color="danger" [hidden]="showWorldpayInternalForm" (click)=onCancel()>Cancel</ion-button>&nbsp;
         <ion-button type="submit" color="success" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayInternalForm" (click)="showWorldpayInternalForm = true;">Pay</ion-button>
@@ -1372,7 +1372,7 @@
     </ion-grid>
     <div style="padding:10px 4px;" [hidden]="hidePaymentForm">
       <ion-button [hidden]="true" id="barclaycardResponse" (click)="paymentDone()">Payment Done</ion-button>
-      <iframe name="barclaycard-iframe" id="barclaycard-iframe" [hidden]="!showWorldpayIframe"></iframe>
+      <iframe name="barclaycard-iframe" id="barclaycard-iframe" [hidden]="!showWorldpayIframe" title="barclaycard-iframe"></iframe>
       <form ngNoForm [action]="paymentDetails?.actionUrl" method="POST" target="barclaycard-iframe"
         id="form1" name="form1" class="payment-form ion-text-center">
         <input type="hidden" name="SHASIGN" [value]="paymentDetails?.SHASIGN">

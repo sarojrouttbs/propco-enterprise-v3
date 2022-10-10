@@ -12,9 +12,6 @@ export class SolrHeaderComponent {
   entityControl = new FormControl(['Property']);
   constructor(private solrService: SolrService) {
   }
- 
-  searchHandler(term) {
-  }
 
   openHomeCategory(key: string, value = null) {
     openScreen(key, value);
