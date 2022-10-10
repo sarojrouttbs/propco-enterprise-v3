@@ -20,6 +20,7 @@ import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-noti
 import { DomSanitizer } from '@angular/platform-browser';
 import { HttpParams } from '@angular/common/http';
 import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.page';
+import { AddressPipe } from 'src/app/shared/pipes/address-string-pipe.pipe';
 @Component({
   selector: 'app-arranging-contractor',
   templateUrl: './arranging-contractor.component.html',
@@ -1612,19 +1613,12 @@ export class ArrangingContractorComponent implements OnInit {
     const contractId = typeof contractor === 'object' ? contractor.entityId : contractor;
     return new Promise((resolve, reject) => {
       this.faultsService.getContractorDetails(contractId).subscribe((res) => {
-        let data = res ? res : '';
+        const data = res ? res : '';
         if (type === 'quote') {
           this.patchContartorList(data, true, false);
-        } else if (type === 'wo') {
-          const addressArray = new Array();
-          if (data && data.address) {
-            if (data.address.addressLine1 != null && data.address.addressLine1 != '') { addressArray.push(data.address.addressLine1) }
-            if (data.address.addressLine2 != null && data.address.addressLine2 != '') { addressArray.push(data.address.addressLine2) }
-            if (data.address.addressLine3 != null && data.address.addressLine3 != '') { addressArray.push(data.address.addressLine3) }
-            if (data.address.town != null && data.address.town != '') { addressArray.push(data.address.town) }
-            if (data.address.postcode != null && data.address.postcode != '') { addressArray.push(data.address.postcode) }
-          }
-          const addressString = addressArray.length ? addressArray.join(', ') : '';
+        } else if (type === 'wo') {          
+          const filterPipe = new AddressPipe();
+          const addressString = filterPipe.transform(data.address);
           this.workOrderForm.patchValue({
             company: data ? data.companyName : undefined,
             agentReference: data ? data.agentReference : undefined,
@@ -1753,8 +1747,8 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   async deleteDocument(documentId, i: number) {
-    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
-    if (response) {
+    const deleteMedia = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
+    if (deleteMedia) {
       this.faultsService.deleteDocument(documentId).subscribe(response => {
         this.removeFile(i);
       });

@@ -1590,8 +1590,8 @@ export class DetailsPage {
           this.proceeding = false;
           return;
         }
-        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action.<br/> Are you sure?', '', 'Yes', 'No');
-        if (response) {
+        const proceedWithWO = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action.<br/> Are you sure?', '', 'Yes', 'No');
+        if (proceedWithWO) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
             if (!voidResponce) return;
@@ -1613,8 +1613,8 @@ export class DetailsPage {
         }
         break;
       case LL_INSTRUCTION_TYPES[2].index: //cli006c
-        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action.<br/>  Are you sure?', '', 'Yes', 'No');
-        if (response) {
+        const obtainQuote = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action.<br/>  Are you sure?', '', 'Yes', 'No');
+        if (obtainQuote) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
             if (!voidResponce) return;
@@ -1645,8 +1645,8 @@ export class DetailsPage {
           this.proceeding = false;
           return;
         }
-        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action.<br/> Are you sure?', '', 'Yes', 'No');
-        if (response) {
+        const emergency = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action.<br/> Are you sure?', '', 'Yes', 'No');
+        if (emergency) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
             if (!voidResponce) return;
@@ -1668,8 +1668,8 @@ export class DetailsPage {
         }
         break;
       case LL_INSTRUCTION_TYPES[0].index: //cli006a
-        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. <br/> Are you sure?', '', 'Yes', 'No');
-        if (response) {
+        const ownRepairs = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. <br/> Are you sure?', '', 'Yes', 'No');
+        if (ownRepairs) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
             if (!voidResponce) return;
@@ -1701,8 +1701,8 @@ export class DetailsPage {
           this.proceeding = false;
           return;
         }
-        var response = await this.commonService.showConfirm('Landlord Instructions', `You have selected the "Obtain Landlord's Authorisation" action. This will send out a notification to Landlord. <br/> Are you sure?`, '', 'Yes', 'No');
-        if (response) {
+        const obtainAuthorisation = await this.commonService.showConfirm('Landlord Instructions', `You have selected the "Obtain Landlord's Authorisation" action. This will send out a notification to Landlord. <br/> Are you sure?`, '', 'Yes', 'No');
+        if (obtainAuthorisation) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
             if (!voidResponce) return;
@@ -2097,8 +2097,8 @@ export class DetailsPage {
   }
 
   async deleteDocument(file, i: number) {
-    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
-    if (response) {
+    const deleteMedia = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
+    if (deleteMedia) {
       this.faultsService.deleteDocument(file.documentId).subscribe(response => {
         this.removeFile(file, i);
         this.filteredDocuments.splice(i, 1);

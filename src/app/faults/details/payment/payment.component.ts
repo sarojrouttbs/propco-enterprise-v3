@@ -13,6 +13,7 @@ import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
 import { CloseFaultModalPage } from 'src/app/shared/modals/close-fault-modal/close-fault-modal.page';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
+import { AddressPipe } from 'src/app/shared/pipes/address-string-pipe.pipe';
 
 @Component({
   selector: 'app-payment',
@@ -411,17 +412,10 @@ export class PaymentComponent implements OnInit {
   private getContractorDetails(contractId, type) {
     return new Promise(() => {
       this.faultsService.getContractorDetails(contractId).subscribe((res) => {
-        let data = res ? res : '';
+        const data = res ? res : '';
         if (type === 'wo') {
-          const addressArray = new Array();
-          if (data && data.address) {
-            if (data.address.addressLine1 != null && data.address.addressLine1 != '') { addressArray.push(data.address.addressLine1) }
-            if (data.address.addressLine2 != null && data.address.addressLine2 != '') { addressArray.push(data.address.addressLine2) }
-            if (data.address.addressLine3 != null && data.address.addressLine3 != '') { addressArray.push(data.address.addressLine3) }
-            if (data.address.town != null && data.address.town != '') { addressArray.push(data.address.town) }
-            if (data.address.postcode != null && data.address.postcode != '') { addressArray.push(data.address.postcode) }
-          }
-          const addressString = addressArray.length ? addressArray.join(', ') : '';
+          const filterPipe = new AddressPipe();
+          const addressString = filterPipe.transform(data.address);
           this.workOrderForm.patchValue({
             company: data ? data.companyName : undefined, agentReference: data ? data.agentReference : undefined,
             defaultCommissionPercentage: data ? data.defaultCommissionPercentage : undefined,
@@ -446,9 +440,7 @@ export class PaymentComponent implements OnInit {
         }
       );
     });
-    
   }
-
 
   getFileType(name): boolean {
     if (name != null) {
@@ -464,8 +456,8 @@ export class PaymentComponent implements OnInit {
   }
 
   async deleteDocument(documentId, i: number) {
-    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
-    if (response) {
+    const deleteMedia = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
+    if (deleteMedia) {
       this.faultsService.deleteDocument(documentId).subscribe(response => {
         this.removeFile(i);
       });
@@ -532,14 +524,11 @@ export class PaymentComponent implements OnInit {
     text: string
   }) {
     if (event) {
-      let text = (event.text || '').trim().toLowerCase();
+      const text = (event.text || '').trim().toLowerCase();
       this.getCodesAsync(this.page, 10).subscribe(codes => {
         codes = event.component.items.concat(codes);
-
-        if (text) {
+        if (text) 
           codes = this.filterCodes(codes, text);
-        }
-
         event.component.items = codes;
         event.component.endInfiniteScroll();
         this.page++;
@@ -550,7 +539,6 @@ export class PaymentComponent implements OnInit {
 
   getCodes(page?: number, size?: number) {
     let codes = [];
-
     this.nominalCodes.forEach(code => {
       code.concat = code.nominalCode + ' - ' + code.description;
       if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 6) {

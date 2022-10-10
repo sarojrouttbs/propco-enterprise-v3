@@ -26,12 +26,13 @@ export class AgreementDetailsComponent implements OnInit {
   agreementTenantDetails: any;
   @Input() selectedTenant;
   @Output() propcoAgreementId = new EventEmitter<any>();
+  tenant: any;
 
   constructor(private agentService: AgentService, private _formBuilder: FormBuilder, private commonService: CommonService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selectedTenant && changes.selectedTenant.currentValue) {
-      this.selectedTenant = this.selectedTenant;
+      this.tenant = this.selectedTenant;
       this.initAgreementDetailsApi();
     }
   }
@@ -127,7 +128,7 @@ export class AgreementDetailsComponent implements OnInit {
 
   private getAgreementDetails() {
     return new Promise((resolve) => {
-      this.agentService.getAgreementDetails(this.selectedTenant?.agreementId).subscribe(
+      this.agentService.getAgreementDetails(this.tenant?.agreementId).subscribe(
         (res) => {
           resolve(res ? res : {});
         },
