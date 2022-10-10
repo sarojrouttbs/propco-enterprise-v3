@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -224,5 +225,19 @@ export class AgentService {
 
   getPropertyShortLetDesc(propertyId: string, params): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/shortlet/node`, { params })
+  }
+
+  updatePropertyDetails(propertyId: number, requestObj: any): Observable<any> {
+    const params = new HttpParams().set('hideLoader', 'true');
+    return this.httpClient.patch(environment.API_BASE_URL + `properties/${propertyId}/update/node`, requestObj,  { params }).pipe(
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.log(`${operation} failed: ${error.message}`);
+      return throwError(error);
+    };
   }
 }
