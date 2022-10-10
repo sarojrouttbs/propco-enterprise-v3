@@ -663,7 +663,8 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'whitegoods': 'Service/White Goods',
       'safety': 'Safety Devices/Alarms',
       'clauses': 'Clauses',
-      'media' : 'Media'
+      'media' : 'Media',
+      'user-assignments' : 'User Assignments'
     }
   }
 };
