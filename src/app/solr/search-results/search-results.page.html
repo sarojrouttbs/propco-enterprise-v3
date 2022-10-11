@@ -554,7 +554,7 @@
                 <ion-row>
                   <ion-col size="100" class="ion-no-padding" style="margin-bottom: 8px;">
                     <div class="title text-ellipsis" [title]="item?.address" (click)="$event.stopPropagation();openDetails(item)">
-                      <b>{{item?.officeCode || DEFAULTS.NOT_AVAILABLE}}</b> {{item?.address}}
+                      <strong>{{item?.officeCode || DEFAULTS.NOT_AVAILABLE}}</strong> {{item?.address}}
                     </div>
                   </ion-col>
                   <ion-col size="100" class="ion-no-padding">
@@ -614,7 +614,7 @@
       </mat-expansion-panel-header>
       <ion-card-content class="property-content-panel details">
         <div style="padding-top: 10px;">
-          <img [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.png';" style="width: 100%;">
+          <img [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.png';" style="width: 100%;" alt="placeholder-image">
         </div>
         <div>
           <ion-grid style="padding:0">
@@ -668,11 +668,11 @@
           <ion-row>
             <ion-col size-xl="70" size-lg="70" size-md="60" size-sm="60" size-xs="50">
               <div class="ag-left-side">
-                <div>
+                <div (click)="$event.stopPropagation();openDetails(item)">
                   <i class="propcoicon propcoicon-agent no-background"></i>
                 </div>
                 <div>
-                  <div class="title text-ellipsis" [title]="item?.fullName">{{item?.reference}}&nbsp;{{item?.fullName}}</div>
+                  <div class="title text-ellipsis" [title]="item?.fullName" (click)="$event.stopPropagation();openDetails(item)">{{item?.reference}}&nbsp;{{item?.fullName}}</div>
                   <div class="other-details">
                     <span *ngIf="item?.address" [title]="item?.address">{{item?.address}}&nbsp;</span>
                     <span class="vat" *ngIf="item?.isVatRegistered">VAT Registered&nbsp;</span>
@@ -742,11 +742,11 @@
           <ion-row>
             <ion-col size-xl="70" size-lg="70" size-md="60" size-sm="60" size-xs="50">
               <div class="ag-left-side">
-                <div>
+                <div (click)="$event.stopPropagation();openDetails(item)">
                   <i class="propcoicon propcoicon-landlord no-background"></i>
                 </div>
                 <div>
-                  <div class="title text-ellipsis" [title]="item?.fullName">{{item?.fullName}}</div>
+                  <div class="title text-ellipsis" [title]="item?.fullName" (click)="$event.stopPropagation();openDetails(item)">{{item?.fullName}}</div>
                   <div class="other-details">
                     <span *ngIf="item?.address" class="address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
                     <span class="verticalLine" *ngIf="item?.address">&nbsp;</span>
@@ -840,11 +840,11 @@
           <ion-row>
             <ion-col size-xl="70" size-lg="70" size-md="60" size-sm="60" size-xs="50">
               <div class="ag-left-side">
-                <div>
+                <div (click)="$event.stopPropagation();openDetails(item)">
                   <i class="propcoicon propcoicon-tenant no-background"></i>
                 </div>
                 <div>
-                  <div class="title text-ellipsis" [title]="item?.fullName">{{item?.fullName}}</div>
+                  <div class="title text-ellipsis" [title]="item?.fullName" (click)="$event.stopPropagation();openDetails(item)">{{item?.fullName}}</div>
                   <div class="other-details">
                     <span *ngIf="item?.address" class="address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
                     <span class="verticalLine" *ngIf="item?.address">&nbsp;</span>
@@ -923,11 +923,11 @@
           <ion-row>
             <ion-col size-xl="70" size-lg="70" size-md="60" size-sm="60" size-xs="50">
               <div class="ag-left-side">
-                <div>
+                <div (click)="$event.stopPropagation();openDetails(item)">
                   <i class="propcoicon propcoicon-applicant-let no-background"></i>
                 </div>
                 <div>
-                  <div class="title text-ellipsis" [title]="item?.fullName">
+                  <div class="title text-ellipsis" [title]="item?.fullName" (click)="$event.stopPropagation();openDetails(item)">
                     {{item?.fullName}}&nbsp;&nbsp;
                     <span title="Hot" *ngIf="item?.isHot"><ion-icon color="danger" name="flame-outline"></ion-icon></span>
                     <span title="Student" *ngIf="item?.isStudent"><ion-icon color="danger"name="person-circle-outline"></ion-icon></span>
@@ -1011,11 +1011,11 @@
           <ion-row>
             <ion-col size-xl="70" size-lg="70" size-md="60" size-sm="60" size-xs="50">
               <div class="ag-left-side">
-                <div>
+                <div (click)="$event.stopPropagation();openDetails(item)">
                   <i class="propcoicon propcoicon-contractor no-background"></i>
                 </div>
                 <div>
-                  <div class="title text-ellipsis" [title]="item?.fullName">{{item?.fullName}}</div>
+                  <div class="title text-ellipsis" [title]="item?.fullName" (click)="$event.stopPropagation();openDetails(item)">{{item?.fullName}}</div>
                   <div class="other-details">
                     <span *ngIf="item?.address" class="address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
                     <span class="verticalLine" *ngIf="item?.reftag">&nbsp;</span>

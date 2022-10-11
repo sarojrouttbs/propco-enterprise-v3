@@ -1,7 +1,7 @@
 import { ContractorSelectionComponent } from './../../../shared/modals/contractor-selection/contractor-selection.component';
 import { CloseFaultModalPage } from './../../../shared/modals/close-fault-modal/close-fault-modal.page';
 import { WorksorderModalPage } from 'src/app/shared/modals/worksorder-modal/worksorder-modal.page';
-import { RejectionModalPage } from './../../../shared/modals/rejection-modal/rejection-modal.page';
+import { RejectionModalPage } from './arranging-contarctor-modal/rejection-modal/rejection-modal.page';
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
@@ -9,18 +9,18 @@ import { debounceTime, delay, switchMap } from 'rxjs/operators';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { FaultsService } from '../../faults.service';
 import { PROPCO, FAULT_STAGES, ACCESS_INFO_TYPES, SYSTEM_CONFIG, MAINTENANCE_TYPES, LL_INSTRUCTION_TYPES, KEYS_LOCATIONS, FILE_IDS, MAINT_CONTACT, APPOINTMENT_MODAL_TYPE, REJECTED_BY_TYPE, SYSTEM_OPTIONS, WORKSORDER_RAISE_TYPE, FAULT_STATUSES, LL_PAYMENT_CONFIG, QUOTE_CC_STATUS_ID, REGEX, MAINT_SOURCE_TYPES, RECIPIENTS, FAULT_NOTIFICATION_STATE, DEFAULTS, DATE_FORMAT } from './../../../shared/constants';
-import { AppointmentModalPage } from 'src/app/shared/modals/appointment-modal/appointment-modal.page';
+import { AppointmentModalPage } from 'src/app/faults/details/arranging-contractor/arranging-contarctor-modal/appointment-modal/appointment-modal.page';
 import { ModalController } from '@ionic/angular';
-import { QuoteModalPage } from 'src/app/shared/modals/quote-modal/quote-modal.page';
+import { QuoteModalPage } from 'src/app/faults/details/arranging-contractor/arranging-contarctor-modal/quote-modal/quote-modal.page';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { DatePipe } from '@angular/common';
-import { PaymentReceivedModalComponent } from 'src/app/shared/modals/payment-received-modal/payment-received-modal.component';
-import { WithoutPrepaymentModalComponent } from 'src/app/shared/modals/without-prepayment-modal/without-prepayment-modal.component';
+import { PaymentReceivedModalComponent } from './arranging-contarctor-modal/payment-received-modal/payment-received-modal.component';
+import { WithoutPrepaymentModalComponent } from 'src/app/faults/details/arranging-contractor/arranging-contarctor-modal/without-prepayment-modal/without-prepayment-modal.component';
 import { PendingNotificationModalPage } from 'src/app/shared/modals/pending-notification-modal/pending-notification-modal.page';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HttpParams } from '@angular/common/http';
 import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.page';
-
+import { AddressPipe } from 'src/app/shared/pipes/address-string-pipe.pipe';
 @Component({
   selector: 'app-arranging-contractor',
   templateUrl: './arranging-contractor.component.html',
@@ -164,7 +164,7 @@ export class ArrangingContractorComponent implements OnInit {
       && this.faultMaintenanceDetails && this.faultMaintenanceDetails.isCancelled) 
         {
           this.faultMaintenanceDetails = null
-        };
+        }
     this.getLookupData();
     this.initForms();
     this.initApiCalls();
@@ -1613,19 +1613,12 @@ export class ArrangingContractorComponent implements OnInit {
     const contractId = typeof contractor === 'object' ? contractor.entityId : contractor;
     return new Promise((resolve, reject) => {
       this.faultsService.getContractorDetails(contractId).subscribe((res) => {
-        let data = res ? res : '';
+        const data = res ? res : '';
         if (type === 'quote') {
           this.patchContartorList(data, true, false);
-        } else if (type === 'wo') {
-          const addressArray = new Array();
-          if (data && data.address) {
-            if (data.address.addressLine1 != null && data.address.addressLine1 != '') { addressArray.push(data.address.addressLine1) }
-            if (data.address.addressLine2 != null && data.address.addressLine2 != '') { addressArray.push(data.address.addressLine2) }
-            if (data.address.addressLine3 != null && data.address.addressLine3 != '') { addressArray.push(data.address.addressLine3) }
-            if (data.address.town != null && data.address.town != '') { addressArray.push(data.address.town) }
-            if (data.address.postcode != null && data.address.postcode != '') { addressArray.push(data.address.postcode) }
-          }
-          const addressString = addressArray.length ? addressArray.join(', ') : '';
+        } else if (type === 'wo') {          
+          const filterPipe = new AddressPipe();
+          const addressString = filterPipe.transform(data.address);
           this.workOrderForm.patchValue({
             company: data ? data.companyName : undefined,
             agentReference: data ? data.agentReference : undefined,
@@ -1754,8 +1747,8 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   async deleteDocument(documentId, i: number) {
-    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
-    if (response) {
+    const deleteMedia = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
+    if (deleteMedia) {
       this.faultsService.deleteDocument(documentId).subscribe(response => {
         this.removeFile(i);
       });
@@ -2123,11 +2116,9 @@ export class ArrangingContractorComponent implements OnInit {
     if (!submit) return false;
     if (submit) {
       if (paymentRequired) {
-        const success = await this.sendLandlordPaymentRequest() as boolean;
-        return success;
+        return await this.sendLandlordPaymentRequest() as boolean;
       } else {
-        const success = await this.issueWorksOrderContractor() as boolean;
-        return success;
+        return await this.issueWorksOrderContractor() as boolean;
       }
     }
   }
@@ -2347,7 +2338,12 @@ export class ArrangingContractorComponent implements OnInit {
   }
 
   getRepairSource(repairSource) {
-    return repairSource === MAINT_SOURCE_TYPES.FIXFLO ? this.maintenanceRepairSourcesMap.get('fixflo') : (this.faultDetails.reportedBy === 'THIRD_PARTY' ? this.maintenanceRepairSourcesMap.get('third party') : this.maintenanceRepairSourcesMap.get('customer report'));
+    if(repairSource === MAINT_SOURCE_TYPES.FIXFLO)
+      return this.maintenanceRepairSourcesMap.get('fixflo');
+    else if(this.faultDetails.reportedBy === 'THIRD_PARTY')
+      return this.maintenanceRepairSourcesMap.get('third party');
+    else
+      return this.maintenanceRepairSourcesMap.get('customer report');
   }
 
   async closeFault() {
@@ -2446,8 +2442,13 @@ export class ArrangingContractorComponent implements OnInit {
     if (this.faultMaintenanceDetails.quoteContractors && this.faultMaintenanceDetails.quoteContractors.length) {
         let nonSQContractors = this.faultMaintenanceDetails.quoteContractors.filter(data => !data.isNonSq)
         if (this.faultMaintenanceDetails.quoteContractors.length === 1 || this.filteredCCDetails.contractorId || nonSQContractors.length === 1) {
-          let ccId = this.filteredCCDetails.contractorId ? this.filteredCCDetails.contractorId : 
-            (this.faultMaintenanceDetails.quoteContractors.length === 1) ? this.faultMaintenanceDetails.quoteContractors[0].contractorId : nonSQContractors[0].contractorId;
+          let ccId;
+          if(this.filteredCCDetails.contractorId)
+            ccId = this.filteredCCDetails.contractorId;
+          else if(this.faultMaintenanceDetails.quoteContractors.length === 1)
+            ccId = this.faultMaintenanceDetails.quoteContractors[0].contractorId;
+          else 
+            ccId = nonSQContractors[0].contractorId;
         if (ccId) {
           this.selectedCCDetails(ccId);
         }

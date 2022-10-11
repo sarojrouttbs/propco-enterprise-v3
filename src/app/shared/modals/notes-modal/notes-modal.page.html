@@ -19,7 +19,7 @@
             <ion-input value="{{ notesForm.controls.date.value | date: DATE_FORMAT.DATE }}" readonly="true"></ion-input>
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
             ></ion-icon>
-            <ion-popover trigger="date" show-backdrop="false">
+            <ion-popover class="ion-datepicker-popover" trigger="date" show-backdrop="false">
               <ng-template>
                 <ion-datetime
                   showDefaultButtons="true"
@@ -38,13 +38,6 @@
           </ion-item>
           <app-validation-message [control]="notesForm.controls.complaint"></app-validation-message>
         </ion-col>
-        <!-- <ion-col size="100">
-          <ion-item>
-            <ion-label position="floating">Entered By</ion-label>
-            <ion-input formControlName="user"></ion-input>
-          </ion-item>
-          <app-validation-message [control]="notesForm.controls.user"></app-validation-message>
-        </ion-col> -->
         <ion-col size="50">
           <ion-item>
             <ion-label position="floating">Category </ion-label>

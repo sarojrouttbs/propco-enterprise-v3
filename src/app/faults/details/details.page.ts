@@ -17,7 +17,7 @@ import { DOCUMENT } from '@angular/common';
 import { JobCompletionModalPage } from 'src/app/shared/modals/job-completion-modal/job-completion-modal.page';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { PaymentRequestModalPage } from 'src/app/shared/modals/payment-request-modal/payment-request-modal.page';
-import { SnoozeFaultModalPage } from 'src/app/shared/modals/snooze-fault-modal/snooze-fault-modal.page';
+import { SnoozeFaultModalPage } from './details-modal/snooze-fault-modal/snooze-fault-modal.page';
 
 @Component({
   selector: 'fault-details',
@@ -838,7 +838,7 @@ export class DetailsPage {
 
   get photos(): FormArray {
     return this.uploadDocForm.get('photos') as FormArray;
-  };
+  }
 
   submit(files) {
     if (files) {
@@ -1318,7 +1318,6 @@ export class DetailsPage {
     if (this.stepper.selectedIndex === FAULT_STAGES_INDEX.LANDLORD_INSTRUCTION) {
       faultRequestObj.stage = this.faultDetails.stage;
       faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
-      // Object.assign(faultRequestObj, this.landlordInstFrom.value);
       faultRequestObj.contractor = this.landlordInstFrom.value.contractor;
       faultRequestObj.confirmedEstimate = this.landlordInstFrom.value.confirmedEstimate;
       faultRequestObj.nominalCode = this.landlordInstFrom.value.nominalCode.nominalCode;
@@ -1350,7 +1349,6 @@ export class DetailsPage {
 
   private saveAdditionalInfoForm() {
     return new Promise((resolve) => {
-      // this.commonService.showLoader();
       let apiObservableArray = [];
       this.faultDetailsForm.controls['additionalInfo'].value.forEach(info => {
         if (info.id) {
@@ -1367,9 +1365,7 @@ export class DetailsPage {
           this.commonService.showMessage('Updated successfully.', 'Update Addtional Info', 'success');
           resolve(true);
         }
-        // this.commonService.hideLoader();
       }, error => {
-        // this.commonService.hideLoader();
         resolve(true);
       });
     });
@@ -1464,6 +1460,7 @@ export class DetailsPage {
     if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
       if (this.cliNotification && this.cliNotification.responseReceived) {
         if (this.cliNotification.responseReceived.isAccepted) {
+          /*Do Nothing*/
         } else {
           this.isUserActionChange = true;
           this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
@@ -1593,8 +1590,8 @@ export class DetailsPage {
           this.proceeding = false;
           return;
         }
-        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action.<br/> Are you sure?', '', 'Yes', 'No');
-        if (response) {
+        const proceedWithWO = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action.<br/> Are you sure?', '', 'Yes', 'No');
+        if (proceedWithWO) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
             if (!voidResponce) return;
@@ -1616,8 +1613,8 @@ export class DetailsPage {
         }
         break;
       case LL_INSTRUCTION_TYPES[2].index: //cli006c
-        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action.<br/>  Are you sure?', '', 'Yes', 'No');
-        if (response) {
+        const obtainQuote = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action.<br/>  Are you sure?', '', 'Yes', 'No');
+        if (obtainQuote) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
             if (!voidResponce) return;
@@ -1648,8 +1645,8 @@ export class DetailsPage {
           this.proceeding = false;
           return;
         }
-        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action.<br/> Are you sure?', '', 'Yes', 'No');
-        if (response) {
+        const emergency = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action.<br/> Are you sure?', '', 'Yes', 'No');
+        if (emergency) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
             if (!voidResponce) return;
@@ -1671,8 +1668,8 @@ export class DetailsPage {
         }
         break;
       case LL_INSTRUCTION_TYPES[0].index: //cli006a
-        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. <br/> Are you sure?', '', 'Yes', 'No');
-        if (response) {
+        const ownRepairs = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. <br/> Are you sure?', '', 'Yes', 'No');
+        if (ownRepairs) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
             if (!voidResponce) return;
@@ -1680,7 +1677,6 @@ export class DetailsPage {
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
-          const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
           forkJoin(requestArray).subscribe(data => {
@@ -1705,8 +1701,8 @@ export class DetailsPage {
           this.proceeding = false;
           return;
         }
-        var response = await this.commonService.showConfirm('Landlord Instructions', `You have selected the "Obtain Landlord's Authorisation" action. This will send out a notification to Landlord. <br/> Are you sure?`, '', 'Yes', 'No');
-        if (response) {
+        const obtainAuthorisation = await this.commonService.showConfirm('Landlord Instructions', `You have selected the "Obtain Landlord's Authorisation" action. This will send out a notification to Landlord. <br/> Are you sure?`, '', 'Yes', 'No');
+        if (obtainAuthorisation) {
           if (this.cliNotification && (this.cliNotification.responseReceived == null || this.cliNotification.responseReceived.isAccepted == null) && !this.cliNotification.isVoided && this.isUserActionChange) {
             let voidResponce = await this.voidNotification();
             if (!voidResponce) return;
@@ -1718,7 +1714,6 @@ export class DetailsPage {
           faultRequestObj.requiredStartDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredStartDate));
           faultRequestObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredCompletionDate));
           faultRequestObj.orderedById = this.loggedInUserData.userId;
-          const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
           forkJoin(requestArray).subscribe(data => {
@@ -2102,8 +2097,8 @@ export class DetailsPage {
   }
 
   async deleteDocument(file, i: number) {
-    const response = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
-    if (response) {
+    const deleteMedia = await this.commonService.showConfirm('Delete Media/Document', 'Do you want to delete the media/document?', '', 'YES', 'NO');
+    if (deleteMedia) {
       this.faultsService.deleteDocument(file.documentId).subscribe(response => {
         this.removeFile(file, i);
         this.filteredDocuments.splice(i, 1);

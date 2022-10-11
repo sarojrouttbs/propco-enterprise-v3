@@ -3,8 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-worldpay',
-  templateUrl: './worldpay.page.html',
-  styleUrls: ['./worldpay.page.scss'],
+  templateUrl: './worldpay.page.html'
 })
 export class WorldpayPage implements OnInit {
 

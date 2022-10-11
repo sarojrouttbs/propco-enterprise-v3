@@ -132,7 +132,6 @@ export class SafetyDeviceComponent implements OnInit {
 
   onClickRow(data: any) {
     this.hideMenu('', 'safety-overlay');
-    // this.getSafetyDeviceNotes(data.safetyDeviceId);
     this.safetyDeviceList.forEach((e, i) => {
       if (e.safetyDeviceId === data.safetyDeviceId) { this.safetyDeviceList[i].rowSelected = true; }
       else { this.safetyDeviceList[i].rowSelected = false; }

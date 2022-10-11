@@ -14,7 +14,9 @@ export const PROPCO = {
   TOB_LOOKUP_DATA: 'tob_lookup_data',
   TERMS_AND_CONDITIONS: 'terms_and_conditions',
   REFERENCING_INFO: 'referencing_info',
-  PROPERTY_LOOKUP_DATA: 'property_lookup_data'
+  PROPERTY_LOOKUP_DATA: 'property_lookup_data',
+  SSO_URL_ROUTE: 'sso_url_route',
+  SOLR_SERACH_TERMS: 'solr_search_terms'
 };
 
 export const USER_TYPES = {
@@ -568,7 +570,12 @@ export const APPLICATION_ACTION_TYPE = {
 export const ENTITY_TYPE = {
   AGENT: 'AGENT',
   LET_APPLICANT: 'LET_APPLICANT',
-  PROPERTY: 'PROPERTY'
+  PROPERTY: 'PROPERTY',
+  LANDLORD: 'LANDLORD',
+  APPLICANT: 'APPLICANT',
+  CONTRACTOR: 'CONTRACTOR',
+  TENANT: 'TENANT',
+  COTENANT: 'COTENANT'
 };
 
 export const PAYMENT_TYPES = {
@@ -621,6 +628,7 @@ export const DEFAULT_MESSAGES = {
   NOT_AVAILABLE_TEXT: 'Not Available',
   AVAILABLE_SOON: 'Available Soon',
   NO_DATA_AVAILABLE: 'No data available.',
+  UNDER_DEVELOPMENT: 'This functionality is under developement.'
 };
 
 export const FAULT_NOTIFICATION_STATE = {
@@ -727,24 +735,7 @@ export const DATE_FORMAT = {
 }
 
 export const HMRC = {
-  QUICK_DATE_FILTERS: [
-    {
-      index: '2021-04-06,2022-04-05',
-      value: '2021-2022'
-    }, {
-      index: '2020-04-06,2021-04-05',
-      value: '2020-2021'
-    }, {
-      index: '2019-04-06,2020-04-05',
-      value: '2019-2020'
-    }, {
-      index: '2018-04-06,2019-04-05',
-      value: '2018-2019'
-    }, {
-      index: '2017-04-06,2018-04-05',
-      value: '2017-2018'
-    }
-  ],
+  START_DATE: '2017-04-06',
   SEARCH_ON_COLUMNS_KEYS: [
     { index: 'PROPERTY_REFERENCE', value: 'Property Reference' },
     { index: 'PROPERTY_ADDRESS', value: 'Property Address' },
@@ -820,3 +811,13 @@ export const HMRC_ERROR_MESSAGES = {
   DOWNLOAD_FORM_ERROR: 'We are currently experiencing some problem in printing the form.',
   GET_DETAILS_ERROR: 'We are currently experiencing some problem in getting the details, please contact helpdesk.'
 }
+
+export const HMRC_PREFERENCE_ORDER = [
+  { order: 1, index:1 },
+  { order: 2, index:2 },
+  { order: 3, index:3 },
+  { order: 4, index:4 },
+  { order: 5, index:6 },
+  { order: 6, index:5 },
+  { order: 7, index:0 }
+]

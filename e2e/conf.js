@@ -1,9 +1,10 @@
 exports.config = {
-    seleniumAddress: 'http://magnus.techblue.co.uk:4444/wd/hub',
+    seleniumAddress: 'http://localhost:4444/wd/hub',
     capabilities: {
         'browserName': 'chrome',
          chromeOptions: {
             //args: [ "--headless", "--disable-gpu", "--window-size=800,600" ]
+            args: ["--disable-dev-shm-usage"]
          },
         /*'moz:firefoxOptions': {
            // args: [ "--headless" ]
@@ -52,8 +53,28 @@ exports.config = {
     },
     onPrepare: () => {
         require('./util/custom.matcher');
+        var getScreenSize = function() {
+            return browser.driver.executeScript(function() {
+                return {
+                    width: window.screen.availWidth,
+                    height: window.screen.availHeight
+                };
+            });
+        };
+        getScreenSize().then(function(screenSize) {
+            console.log("available width: " +screenSize.width);
+            console.log("available height: " +screenSize.height);
+            if(screenSize.width > 1300 && screenSize.height > 700) {
+                console.log("Using available window");
+                browser.driver.manage().window().setSize(screenSize.width, screenSize.height);
+            } else {
+                console.log("Increasing window");
+                browser.driver.manage().window().setSize(1366, 768);
+            }
+        });
         beforeEach(function(){
-            browser.manage().window().maximize();
+           // browser.manage().window().maximize();   
+            browser.driver.manage().window().setPosition(0,0);         
             browser.get(browser.params.fixafault_url_qa,180000);
         });
        /* afterEach(function(){

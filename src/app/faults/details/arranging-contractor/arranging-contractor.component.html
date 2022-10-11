@@ -11,8 +11,8 @@
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
-              <b>{{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME
-                }}</b>
+              <strong>{{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME
+                }}</strong>
             </div>
             <h2 class="banner-heading">
               {{iacNotification && iacNotification?.responseReceived ? notificationState.RESPONSE_RECEIVED: 
@@ -276,7 +276,7 @@
                 <ion-grid>
                   <ion-row>
                     <ion-col size="100">
-                      <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file?.documentUrl, file?.name)" title="Click To Download">
+                      <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file?.documentUrl, file?.name)" title="Click To Download" alt="download-image">
                     </ion-col>    
                   </ion-row>
                   <ion-row class="ion-justify-content-between">
@@ -533,7 +533,7 @@
           <ion-input value="{{ raiseQuoteForm.controls.requiredDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
           ></ion-icon>
-          <ion-popover trigger="requiredDate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="requiredDate" show-backdrop="false">
             <ng-template>
               <ion-datetime
                 showDefaultButtons="true"
@@ -701,7 +701,7 @@
           <ion-input value="{{ workOrderForm.controls.postdate.value | date: DATE_FORMAT.DATE }}" disabled="true"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
           ></ion-icon>
-          <ion-popover trigger="postdate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="postdate" show-backdrop="false">
             <ng-template>
               <ion-datetime
                 showDefaultButtons="true"
@@ -784,7 +784,7 @@
           <ion-input value="{{ workOrderForm.controls.requestStartDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
           ></ion-icon>
-          <ion-popover trigger="requestStartDate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="requestStartDate" show-backdrop="false">
             <ng-template>
               <ion-datetime
                 showDefaultButtons="true"
@@ -803,7 +803,7 @@
           <ion-input value="{{ workOrderForm.controls.requiredDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
           ></ion-icon>
-          <ion-popover trigger="requiredDate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="requiredDate" show-backdrop="false">
             <ng-template>
               <ion-datetime
                 showDefaultButtons="true"

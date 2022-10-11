@@ -12,7 +12,7 @@
             <label for="files" class="browse-btn">Browse Files</label>
           </form>
           <div *ngIf="files.length" class="fault-image">
-            <img [src]="getFilteredDocs(files)">
+            <img [src]="getFilteredDocs(files)" alt="filtered-docs">
           </div>
         </ion-col>
         <ion-col class="" size-xl="83" size="77">
@@ -33,7 +33,6 @@
                     {{ propertyDetails?.address?.postcode }}
                   </h2>
                 </div>
-                <!-- <ion-button color="dark" fill="outline" (click)="contactDetailModal()" size="small"><img src="assets/images/contact.png" style="height: 25px; margin-top: 0px;" alt="">Contact &nbsp;</ion-button> -->
               </ion-col>
               <ion-col class="no-padding-top col2 ion-text-end" size="25">
                 <h2 [class]="urgencyStatus==1 ? 'emergency' : (urgencyStatus==2? 'urgent' : 'non-urgent')"
@@ -96,29 +95,29 @@
             <ion-row class="fault-meter-row">
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <img src="assets/images/fault-categories/info.png"
-                  matTooltip="{{propertyDetails?.electricMeterLocation || DEFAULTS.NOT_AVAILABLE}}" matTooltipPosition="above" />&nbsp;
+                  matTooltip="{{propertyDetails?.electricMeterLocation || DEFAULTS.NOT_AVAILABLE}}" matTooltipPosition="above" alt="info-image"/>&nbsp;
                 Electric Meter
               </ion-col>
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <img src="assets/images/fault-categories/info.png"
-                  matTooltip="{{propertyDetails?.waterMeterLocation || DEFAULTS.NOT_AVAILABLE}}" matTooltipPosition="above" />&nbsp; Water
+                  matTooltip="{{propertyDetails?.waterMeterLocation || DEFAULTS.NOT_AVAILABLE}}" matTooltipPosition="above" alt="info-image"/>&nbsp; Water
                 Meter
               </ion-col>
               <ion-col size-xl="25" size-lg="22" size-md="22">
                 <img src="assets/images/fault-categories/info.png"
-                  matTooltip="{{propertyDetails?.gasMeterLocation || DEFAULTS.NOT_AVAILABLE}}" matTooltipPosition="above" />&nbsp; Gas
+                  matTooltip="{{propertyDetails?.gasMeterLocation || DEFAULTS.NOT_AVAILABLE}}" matTooltipPosition="above" alt="info-image"/>&nbsp; Gas
                 Meter
               </ion-col>
               <ion-col size-xl="25" size-lg="34" size-md="34">
                 <img src="assets/images/fault-categories/info.png"
-                  matTooltip="{{propertyDetails?.stopTapLocation || DEFAULTS.NOT_AVAILABLE}}" matTooltipPosition="above" style="float: left;"/>&nbsp; Stop Tap
+                  matTooltip="{{propertyDetails?.stopTapLocation || DEFAULTS.NOT_AVAILABLE}}" matTooltipPosition="above" style="float: left;" alt="info-image"/>&nbsp; Stop Tap
                 <ion-button class="contact-btn" color="dark" fill="outline" (click)="contactDetailModal()" size="small" style=" margin-top: 0px; float: right;" *ngIf="faultId">
                   <img src="assets/images/contact.png" style="height: 25px; margin-top: 0px;" alt="">Contact &nbsp;</ion-button>
               </ion-col>
             </ion-row>
             <ion-text class="ion-float-right override-communication"
               *ngIf="communicationPreference && communicationPreference === true" color="danger">
-              <b>Override Landlord's Communication - Enabled</b>
+              <strong>Override Landlord's Communication - Enabled</strong>
             </ion-text>
           </ion-grid>
         </ion-col>

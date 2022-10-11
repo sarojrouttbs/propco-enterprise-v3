@@ -5,7 +5,6 @@
 >
   <ion-col [size]="pageType == 'dashboard'?'12':'22'" class="solrMutiSelect ion-no-padding tour-1">
     <mat-form-field appearance="fill">
-      <!-- <mat-label>Select</mat-label> -->
       <mat-select [formControl]="entityControl" (selectionChange)="onChangeEntity()" multiple class="mat-select-red solr-entity-selector ion-text-center">
         <mat-select-trigger>
           {{entityControl.value ? entityControl.value[0] : ''}}
@@ -20,6 +19,7 @@
   <ion-col [size]="pageType == 'dashboard'?'68':'70'" style="padding-right: 0;" class="ion-no-padding tour-2">
     <div>
       <ion-searchbar 
+      #solrSearchBar
       [(ngModel)]="searchTerm" 
       [placeholder]="'Start typing to search ' + (entityControl.value.length ? ''+ (entityControl.value.join(', ')) + '':'')" 
       class="searchbarCustom" 
@@ -29,8 +29,6 @@
       (ionBlur) = "hideSuggestion()"
       (ionFocus) = "suggestions.length > 0 ? isItemAvailable = true : false"
       >
-      <!-- (ionBlur) = "isItemAvailable = false"
-      (ionFocus) = "suggestions.length > 0 ? isItemAvailable = true : false" -->
       </ion-searchbar>
       <ion-progress-bar color="danger" [type]="'indeterminate'" *ngIf="showLoader" style="position: absolute;"></ion-progress-bar>
       <ion-list *ngIf="isItemAvailable" class="solrSuggestionList" 
@@ -66,7 +64,7 @@
 </ion-row>
 
 <ng-template #propertySuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenProperty',item)">
+  <div (click)="openHomeCategory('OpenProperty',item)" style="width: 100%">
     <span>
       <i class="propcoicon no-background propcoicon-property red-icon"></i>
     </span>
@@ -79,7 +77,7 @@
 </ng-template>
 
 <ng-template #landlordSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenLandlord',item)">
+  <div (click)="openHomeCategory('OpenLandlord',item)" style="width: 100%">
     <span>
       <i class="propcoicon no-background propcoicon-landlord red-icon"></i>
     </span>
@@ -94,7 +92,7 @@
 </ng-template>
 
 <ng-template #applicantSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenApplicant',item)">
+  <div (click)="openHomeCategory('OpenApplicant',item)" style="width: 100%">
     <span>
       <i class="propcoicon no-background propcoicon-applicant-let red-icon"></i>
     </span>
@@ -109,7 +107,7 @@
 </ng-template>
 
 <ng-template #tenantSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenTenant',item)">
+  <div (click)="openHomeCategory('OpenTenant',item)" style="width: 100%">
     <span>
       <i class="propcoicon no-background propcoicon-tenant red-icon"></i>
     </span>
@@ -123,7 +121,7 @@
 </ng-template>
 
 <ng-template #contractorSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenContractor',item)">
+  <div (click)="openHomeCategory('OpenContractor',item)" style="width: 100%">
     <span>
       <i class="propcoicon no-background propcoicon-contractor red-icon"></i>
     </span>
@@ -137,7 +135,7 @@
 </ng-template>
 
 <ng-template #agentSuggestion  let-item="item">
-  <div (click)="openHomeCategory('OpenAgent',item)">
+  <div (click)="openHomeCategory('OpenAgent',item)" style="width:100%">
     <span>
       <i class="propcoicon no-background propcoicon-agent red-icon"></i>
     </span>

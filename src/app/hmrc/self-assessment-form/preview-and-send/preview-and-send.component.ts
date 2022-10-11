@@ -3,12 +3,17 @@ import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren
 import { FormGroup } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC_CONFIG, HMRC_ERROR_MESSAGES, PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, ENTITY_TYPE, HMRC_CONFIG, HMRC_ERROR_MESSAGES, PROPCO } from 'src/app/shared/constants';
 import { HmrcService } from '../../hmrc.service';
 import { DatePipe } from '@angular/common';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ModalController } from '@ionic/angular';
-import { PreviewPdfModalPage } from 'src/app/shared/modals/preview-pdf-modal/preview-pdf-modal.page';
+import { PreviewPdfModalPage } from '../../hmrc-modals/preview-pdf-modal/preview-pdf-modal.page';
+import { AddressPipe } from 'src/app/shared/pipes/address-string-pipe.pipe';
+import { WorkspaceService } from 'src/app/agent/workspace/workspace.service';
+import { Router } from '@angular/router';
+import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
+declare function openScreen(key: string, value: any): any;
 
 @Component({
   selector: 'app-preview-and-send',
@@ -29,20 +34,21 @@ export class PreviewAndSendComponent implements OnInit {
   statementPreferences: any;
   selectedLandlords: number[] = [];
   unSelectedLandlords: number[] = [];
-  selectedHmrcLandlordCount = 0;
   emailPattern = HMRC_CONFIG.EMAIL_REGEX;
-
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
 
   @Output() onHmrcLandlordSelectPreview = new EventEmitter<any>();
+  selectedData: any;
 
   constructor(
     private hmrcService: HmrcService,
     public datepipe: DatePipe,
     private commonService: CommonService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private router: Router,
+    private workspaceService: WorkspaceService
   ) { }
 
   ngOnInit() {
@@ -50,6 +56,7 @@ export class PreviewAndSendComponent implements OnInit {
     this.getLookupData();
     this.initDataTable();
     this.disableButton();
+    this.selectedLandlords = this.group.value.selectedPropertyLinkIds;
   }
 
   private getLookupData() {
@@ -103,7 +110,6 @@ export class PreviewAndSendComponent implements OnInit {
         this.hmrcService.getLandlords(this.params).subscribe(res => {
           this.landlordList = res && res.data ? res.data : [];
           this.totalPropertyLandlord = res ? res.count : 0;
-          this.selectedHmrcLandlordCount = this.totalPropertyLandlord - this.unSelectedLandlords.length;
           this.landlordList.forEach(item => {
             item.checked = this.unSelectedLandlords.indexOf(item.propertyLinkId) >= 0 ? false : true;
             item.isDisabled = false;
@@ -116,6 +122,8 @@ export class PreviewAndSendComponent implements OnInit {
               } else {
                 item.checked = false;
                 this.unSelectedLandlords.push(item.propertyLinkId);
+                if (this.selectedLandlords)
+                  this.selectedLandlords.splice(this.selectedLandlords.indexOf(item.propertyLinkId), 1);
                 item.isDisabled = true;
                 item.invalid = true;
               }
@@ -137,16 +145,14 @@ export class PreviewAndSendComponent implements OnInit {
     if (e.detail.checked) {
       this.selectedLandlords.push(e.detail.value);
       this.unSelectedLandlords.splice(this.unSelectedLandlords.indexOf(e.detail.value), 1);
-      this.selectedHmrcLandlordCount += 1;
     } else {
       this.unSelectedLandlords.push(e.detail.value);
       this.selectedLandlords.splice(this.selectedLandlords.indexOf(e.detail.value), 1);
-      this.selectedHmrcLandlordCount -= 1;
     }
     if (this.selectedLandlords.length > 0)
-      this.group.get('selectedPropertyLinkIds').patchValue(this.selectedLandlords.toString());
+      this.group.get('selectedPropertyLinkIds').setValue(this.selectedLandlords);
     if (this.unSelectedLandlords.length > 0)
-      this.group.get('deselectedPropertyLinkIds').patchValue(this.selectedLandlords.toString())
+      this.group.get('deselectedPropertyLinkIds').setValue(this.unSelectedLandlords);
     this.disableButton();
   }
 
@@ -159,7 +165,7 @@ export class PreviewAndSendComponent implements OnInit {
 
   async onRowClick(data: any) {
     const respData: any = await this.getPdfUrlDetails(data);
-    if(!respData)
+    if (!respData)
       return;
     const file = new Blob([respData], { type: 'application/pdf' });
     const fileURL = URL.createObjectURL(file);
@@ -218,4 +224,82 @@ export class PreviewAndSendComponent implements OnInit {
     }
   }
 
+  showMenu(event: any, id: any, data: any, className: any) {
+    this.selectedData = data;
+    this.commonService.showMenu(event, id, className, true);
+  }
+
+  hideMenu(event: any, id: any) {
+    this.commonService.hideMenu(event, id);
+  }
+
+  onClick(entityType: any) {
+    this.hideMenu('', 'preview-and-send-overlay');
+    if (this.router.url.includes('/agent/')) {
+      this.gotoWorkSpaceV3(entityType);
+      return;
+    }
+
+    /*Navigate to java fx page (If solr loads inside v2)*/
+    this.gotoWorkSpaceV2(entityType);
+  }
+
+  private gotoWorkSpaceV2(entityType: any) {
+    let action;
+    switch (entityType) {
+      case ENTITY_TYPE.PROPERTY:
+        action = 'OpenProperty';
+        openScreen(action, this.selectedData?.propcoPropertyId);
+        break;
+      case ENTITY_TYPE.LANDLORD:
+        action = 'OpenLandlord';
+        openScreen(action, this.selectedData?.propcoLandlordId);
+        break;
+      default:
+        return;
+    }
+  }
+
+  private gotoWorkSpaceV3(entityType: any) {
+    let action;
+    switch (entityType) {
+      case ENTITY_TYPE.PROPERTY:
+        this.constructPropertyEntityData(entityType);
+        this.workspaceService.addItemToWorkSpace(this.selectedData);
+        break;
+      case ENTITY_TYPE.LANDLORD:
+        this.openItemUnderDevelopmentModal();
+        break;
+      default:
+        return;
+    }
+  }
+
+  private constructPropertyEntityData(entityType: any) {
+    const addressPipe = new AddressPipe();
+    const addressStr = addressPipe.transform(this.selectedData.propertyAddress);
+    this.selectedData.entityType = entityType;
+    this.selectedData.entityId = this.selectedData.propertyId;
+    this.selectedData.reference = this.selectedData.propertyReference;
+    this.selectedData.address = addressStr;
+  }
+
+  private async openItemUnderDevelopmentModal() {
+    const modal = await this.modalController.create({
+      component: SimpleModalPage,
+      cssClass: 'modal-container alert-prompt',
+      backdropDismiss: false,
+      componentProps: {
+        data: `${DEFAULT_MESSAGES.UNDER_DEVELOPMENT}`,
+        heading: 'Workspace',
+        buttonList: [
+          {
+            text: 'OK',
+            value: false,
+          },
+        ],
+      },
+    });
+    await modal.present();
+  }
 }

@@ -213,7 +213,7 @@
                     <ion-label position="floating">Appraised</ion-label>
                     <ion-input value="{{ group.controls.appraisedDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
                     <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-                    <ion-popover trigger="appraisedDate" show-backdrop="false">
+                    <ion-popover class="ion-datepicker-popover" trigger="appraisedDate" show-backdrop="false">
                       <ng-template>
                         <ion-datetime showDefaultButtons="true" presentation="date" formControlName="appraisedDate">
                         </ion-datetime>
@@ -226,7 +226,7 @@
                     <ion-label position="floating">Instructed</ion-label>
                     <ion-input value="{{ group.controls.instructedDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
                     <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-                    <ion-popover trigger="instructedDate" show-backdrop="false">
+                    <ion-popover class="ion-datepicker-popover" trigger="instructedDate" show-backdrop="false">
                       <ng-template>
                         <ion-datetime showDefaultButtons="true" presentation="date" formControlName="instructedDate">
                         </ion-datetime>

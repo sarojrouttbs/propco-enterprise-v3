@@ -3,8 +3,8 @@ import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { FaultsService } from 'src/app/faults/faults.service';
-import { DATE_FORMAT, DEFAULTS, FAULT_EVENT_TYPES, FAULT_EVENT_TYPES_ID, LL_INSTRUCTION_TYPES, PROPCO } from '../../constants';
-import { CommonService } from '../../services/common.service';
+import { DATE_FORMAT, DEFAULTS, FAULT_EVENT_TYPES, FAULT_EVENT_TYPES_ID, LL_INSTRUCTION_TYPES, PROPCO } from '../../../shared/constants';
+import { CommonService } from '../../../shared/services/common.service';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as  pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs= pdfFonts.pdfMake.vfs;
@@ -153,7 +153,6 @@ export class ChronologicalHistoryPage implements OnInit {
          await this.updateEventList(this.eventList);
          this.initiateDtOptons();
          this.isTableReady = true;
-         // this.rerender();
       }, error => {
          if(error && error.status === 451){
             this.isNotConfigured = true;
@@ -401,7 +400,8 @@ export class ChronologicalHistoryPage implements OnInit {
          this.eventTypes.forEach((element, index) => {
             if (new RegExp(Object.values(element)[0].join("|").toLowerCase()).test(elem.eventType.toLowerCase())) {
                category = Object.keys(element)[0];
-               elem.eventTypeId === FAULT_EVENT_TYPES_ID.NOTIFICATION_SENT && elem.data.recipient ? category = `${category}(${elem.data.recipient})`: ''; 
+               if(elem.eventTypeId === FAULT_EVENT_TYPES_ID.NOTIFICATION_SENT && elem.data.recipient)
+                  category = `${category}(${elem.data.recipient})`; 
             }
          });
          return category;

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -60,7 +60,7 @@ export class HmrcService {
   }
 
   getCsv(batchId: string, params: any): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}/download`, { responseType: 'blob', params: params }).pipe(tap((res: any) => { }),
+    return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}/download`, { responseType: 'blob', params: params }).pipe(
       catchError(this.handleError<any>(''))
     );
   }
@@ -73,7 +73,7 @@ export class HmrcService {
   }
 
   getSummaryReportCsv(batchId: string, params: any): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}/audit/download`, { responseType: 'blob', params: params }).pipe(tap((res: any) => { }),
+    return this.httpClient.get(environment.API_BASE_URL + `hmrc/${batchId}/audit/download`, { responseType: 'blob', params: params }).pipe(
       catchError(this.handleError<any>(''))
     );
   }

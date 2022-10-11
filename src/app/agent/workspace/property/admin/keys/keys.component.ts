@@ -6,8 +6,8 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
-import { CreateKeySetPage } from 'src/app/shared/modals/create-key-set/create-key-set.page';
-import { KeyActivityModalPage } from 'src/app/shared/modals/key-activity-modal/key-activity-modal.page';
+import { CreateKeySetPage } from './keys-modal/create-key-set/create-key-set.page';
+import { KeyActivityModalPage } from './keys-modal/key-activity-modal/key-activity-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({

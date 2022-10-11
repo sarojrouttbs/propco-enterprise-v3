@@ -123,15 +123,19 @@
   }
 }
 
-.swap-icon {
-  position: absolute;
+.swap-icon { 
     left: 7px;
     top: 7px;
+    display: grid;
 
   img {
       background-color: var(--ion-color-step-1700);
       border-radius: 5px;
       padding: 4px;
       cursor: pointer;
+  }
+  ion-icon{
+    font-size: 32px;
+    pointer-events: none;
   }
 }

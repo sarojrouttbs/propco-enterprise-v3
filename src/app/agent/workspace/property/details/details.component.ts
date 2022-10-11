@@ -1,7 +1,9 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { debounceTime, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, DEFAULTS, ENTITY_TYPE, DATE_FORMAT } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -12,7 +14,7 @@ import { ValidationService } from 'src/app/shared/services/validation.service';
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss'],
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent implements OnInit, OnDestroy {
   propertyDetailsForm: FormGroup;
   propertyDetails: any;
   localStorageItems: any = [];
@@ -21,6 +23,10 @@ export class DetailsComponent implements OnInit {
   isMenuShown = true;
   DATE_FORMAT = DATE_FORMAT;
   isPropertyAddressAvailable = false;
+
+  private unsubscribe = new Subject<void>();
+  formStatus: FormStatus.Saving | FormStatus.Saved | FormStatus.Idle = FormStatus.Idle;
+  formChangedValue: any;
 
   constructor(private router: Router,
     private agentService: AgentService,
@@ -42,6 +48,47 @@ export class DetailsComponent implements OnInit {
     this.patchPropertyChecks();
     this.patchPropertyAddressDetails();
     this.getPropertyLocationsByPropertyId(this.selectedEntityDetails.entityId);
+    this.updateDetails();
+  }
+
+  updateDetails() {
+    this.propertyDetailsForm.valueChanges.pipe(
+      debounceTime(1000),
+      tap(() => {
+        this.formStatus = FormStatus.Saving;
+        this.commonService.showAutoSaveLoader(this.formStatus);
+        const changedData = this.commonService.getDirtyValues(this.propertyDetailsForm)
+        const controlName = Object.keys(changedData);
+        this.formChangedValue = changedData[controlName[0]] ?? {};
+      }),
+      switchMap((value) => {
+        if(Object.keys(this.formChangedValue).length > 0) {
+          return this.agentService.updatePropertyDetails(this.selectedEntityDetails.entityId, this.formChangedValue);
+        }
+      }),
+      takeUntil(this.unsubscribe)
+      ).subscribe(async (value) => {
+        this.propertyDetailsForm.markAsPristine();
+        this.propertyDetailsForm.markAsUntouched();
+        this.formStatus = FormStatus.Saved;
+        this.commonService.showAutoSaveLoader(this.formStatus);
+        await this.sleep(2000);
+        if (this.formStatus === FormStatus.Saved) {
+          this.formStatus = FormStatus.Idle;
+          this.commonService.showAutoSaveLoader(this.formStatus);
+        }
+      }, (error) => {
+        this.propertyDetailsForm.markAsPristine();
+        this.propertyDetailsForm.markAsUntouched();
+        this.formStatus = FormStatus.Idle;
+        this.commonService.showAutoSaveLoader(this.formStatus);
+        this.updateDetails();
+      }
+    );
+  }
+
+  sleep(ms: number): Promise<any> {
+    return new Promise((res) => setTimeout(res, ms));
   }
 
   private fetchItems() {
@@ -180,13 +227,7 @@ export class DetailsComponent implements OnInit {
 
   private patchLetBoardDetails() {
     const control = this.propertyDetailsForm.controls['letBoardForm'];
-    control.patchValue({
-      isBoardAllowed: this.propertyDetails?.propertyInfo?.isBoardAllowed,
-      boardOrderedOn: this.propertyDetails?.propertyInfo?.boardOrderedOn ? this.propertyDetails.propertyInfo.boardOrderedOn : DEFAULTS.NOT_AVAILABLE,
-      boardRemovedOn: this.propertyDetails?.propertyInfo?.boardRemovedOn ? this.propertyDetails.propertyInfo.boardRemovedOn : DEFAULTS.NOT_AVAILABLE,
-      slipOrderedOn: this.propertyDetails?.propertyInfo?.slipOrderedOn ? this.propertyDetails.propertyInfo.slipOrderedOn : DEFAULTS.NOT_AVAILABLE,
-      boardRef: this.propertyDetails?.propertyInfo?.boardRef ? this.propertyDetails?.propertyInfo?.boardRef : DEFAULTS.NOT_AVAILABLE
-    });
+    control.patchValue(this.propertyDetails?.propertyInfo);
   }
 
   private async patchPropertyHistory() {
@@ -285,4 +326,14 @@ export class DetailsComponent implements OnInit {
       );
     });
   }
+
+  ngOnDestroy() {
+    this.unsubscribe.next()
+  }
+}
+
+enum FormStatus {
+  Saving = 'Saving...',
+  Saved = 'Saved!',
+  Idle = '',
 }

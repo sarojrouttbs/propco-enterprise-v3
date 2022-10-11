@@ -12,7 +12,7 @@
             <ion-label position="floating">Select Financial Year
             </ion-label>
             <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="quickFilterType" #quickFilter (ionChange)="onFilterChange(quickFilter.value)">
-              <ion-select-option [value]="data?.index" *ngFor="let data of hmrcConfigs.QUICK_DATE_FILTERS">
+              <ion-select-option [value]="data?.index" *ngFor="let data of dateFilterList">
                 {{ data?.value }}
               </ion-select-option>
             </ion-select>
@@ -24,7 +24,7 @@
             <ion-input value="{{ group.controls.from.value | date: DATE_FORMAT.DATE }}" disabled="true"></ion-input>
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
             ></ion-icon>
-            <ion-popover trigger="fromDate" show-backdrop="false">
+            <ion-popover class="ion-datepicker-popover" trigger="fromDate" show-backdrop="false">
               <ng-template>
                 <ion-datetime
                   showDefaultButtons="true"
@@ -42,7 +42,7 @@
             <ion-input value="{{ group.controls.to.value | date: DATE_FORMAT.DATE }}" disabled="true"></ion-input>
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
             ></ion-icon>
-            <ion-popover trigger="toDate" show-backdrop="false">
+            <ion-popover class="ion-datepicker-popover" trigger="toDate" show-backdrop="false">
               <ng-template>
                 <ion-datetime
                   showDefaultButtons="true"

@@ -3,8 +3,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-property-address',
-  templateUrl: './property-address.component.html',
-  styleUrls: ['./property-address.component.scss'],
+  templateUrl: './property-address.component.html'
 })
 export class PropertyAddressComponent {
   @Input() group;

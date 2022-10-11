@@ -185,6 +185,8 @@ ion-item {
     width: 500px;
     height: auto;
     min-height: 400px;
+    --border-radius: 5px;
+    --box-shadow: none;
 
     ion-item {
       --background: transparent;
@@ -340,11 +342,15 @@ ion-alert.common-alert-box {
   --background: var(--ion-color-six);
   --max-width: 400px;
 
+  .alert-wrapper{
+    box-shadow: none;
+  }
+
   .alert-head {
-    background: var(--ion-color-step-900);
+    background: var(--ion-color-five);
     padding: 10px;
     h2 {
-      color: var(--ion-color-step-2000);
+      color: var(--ion-text-color);
       @include set-text-style(16px, 20px);
     }
   }
@@ -365,8 +371,8 @@ ion-alert.common-alert-box {
     .alert-button {
       background: var(--ion-color-step-900);
       color: var(--ion-color-step-2000);
-      border-radius: 4px;
-      padding: 5px 10px;
+      border-radius: 18px;
+      padding: 5px 15px;
       height: 36px;
       .alert-button-inner {
       }
@@ -910,8 +916,10 @@ ion-datetime {
     bottom: 0;
     position: absolute;
     right: 0;
-    color: var( --ion-color-primary); 
+    color: var( --ion-color-primary);
+    margin: 16px 0px;
 }
+
 #hmrc-stepper {
   .ion-date-item-icon {
     opacity: 1!important;
@@ -974,3 +982,14 @@ ion-popover.ion-datepicker-popover {
   }
 }
 
+.key-activity-modal {
+  &::part(content){ 
+    height: 435px;
+  }
+}
+
+.create-keyset-modal {
+  &::part(content){ 
+    height: 550px;
+  }
+}

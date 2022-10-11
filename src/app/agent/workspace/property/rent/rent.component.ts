@@ -8,8 +8,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-rent',
-  templateUrl: './rent.component.html',
-  styleUrls: ['./rent.component.scss'],
+  templateUrl: './rent.component.html'
 })
 export class RentComponent implements OnInit {
 

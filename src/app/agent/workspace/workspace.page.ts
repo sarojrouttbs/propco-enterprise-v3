@@ -96,7 +96,7 @@ export class WorkspacePage {
   private async getEntityFullDetails() {
     switch (this.selectedEntityDetails.entity) {
       case 'PROPERTY':
-        let prop = await this.getPropertyById(
+        const prop = await this.getPropertyById(
           this.selectedEntityDetails.entityId
         );
         if (prop) {

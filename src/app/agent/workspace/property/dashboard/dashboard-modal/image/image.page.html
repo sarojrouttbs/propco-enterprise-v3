@@ -1,0 +1,38 @@
+<ion-content>
+  <ion-slides [options]="sliderOpts" pager>
+    <ion-slide *ngFor="let data of imgList; let i = index">
+      <div class="swiper-zoom-container">
+        <img [src]="baseUrl + data?.fileName" [title]="data?.label" alt="data?.label">
+      </div>
+      <button type="submit" ion-button color="light" class="swiper-button-prev swiper-button-black" (click)="prev()" *ngIf="imgList.length > 1">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </button>
+      <button type="submit" ion-button color="light" class="swiper-button-next swiper-button-black" (click)="next()" *ngIf="imgList.length > 1">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </button>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
+
+<ion-footer>
+  <ion-row style="display: block;">
+    <ion-col size="4" class="ion-text-center">
+      <ion-button (click)="zoom(false)" fill="clear" color="light">
+        <ion-icon name="remove" slot="start"></ion-icon>
+        Zoom Out
+      </ion-button>
+    </ion-col>
+    <ion-col size="4" class="ion-text-center">
+      <ion-button (click)="close()" fill="clear" color="light">
+        <ion-icon name="close" slot="start"></ion-icon>
+        Close
+      </ion-button>
+    </ion-col>
+    <ion-col size="4" class="ion-text-center">
+      <ion-button (click)="zoom(true)" fill="clear" color="light">
+        <ion-icon name="add" slot="start"></ion-icon>
+        Zoom In
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

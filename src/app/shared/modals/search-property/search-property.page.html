@@ -13,16 +13,8 @@
     <mat-form-field>
       <input matInput placeholder="Start typing to search" [matAutocomplete]="auto" formControlName='text'>
     </mat-form-field>
-    <!-- <ion-searchbar placeholder="Start typing to search" [matAutocomplete]="auto" formControlName='text'></ion-searchbar> -->
-    <!-- <ion-searchbar type="search" debounce="300" (ionChange)="getSuggestion($event)" formControlName='text'></ion-searchbar>
-     <ion-list>
-         <ion-item *ngFor="let item of (filteredProperty | async)?.data">
-           {{ item.address }}
-          </ion-item>
-     </ion-list> -->
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
       <mat-option *ngFor="let result of (filteredProperty | async)?.data" [value]="result" class="search-option">
-        <!-- <span>{{getLookupValue(result.officeCode, officeLookupDetails)}}&nbsp;</span> -->
         <span>
           <i class="propcoicon no-background propcoicon-property"
             style="background: transparent;vertical-align:middle"></i>
