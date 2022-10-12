@@ -263,6 +263,7 @@ export class LandlordInstructionComponent implements OnInit {
     if (this.faultDetails.userSelectedAction === LL_INSTRUCTION_TYPES[3].index) {
       if (this.cliNotification && this.cliNotification.responseReceived) {
         if (this.cliNotification.responseReceived.isAccepted) {
+          /*Do Nothing*/
         } else {
           this.isUserActionChange = true;
           this.userSelectedActionControl.setValue(LL_INSTRUCTION_TYPES[2].index);
@@ -488,8 +489,8 @@ export class LandlordInstructionComponent implements OnInit {
           this.proceeding = false;
           return;
         }
-        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action.<br/> Are you sure?', '', 'Yes', 'No');
-        if (response) {
+        const proceedWithWo = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Proceed with Worksorder" action.<br/> Are you sure?', '', 'Yes', 'No');
+        if (proceedWithWo) {
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
@@ -508,8 +509,8 @@ export class LandlordInstructionComponent implements OnInit {
         }
         break;
       case LL_INSTRUCTION_TYPES[2].index: //cli006c
-        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action.<br/>  Are you sure?', '', 'Yes', 'No');
-        if (response) {
+        const obtainQuote = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Obtain Quote" action.<br/>  Are you sure?', '', 'Yes', 'No');
+        if (obtainQuote) {
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
@@ -537,8 +538,8 @@ export class LandlordInstructionComponent implements OnInit {
           this.proceeding = false;
           return;
         }
-        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action.<br/> Are you sure?', '', 'Yes', 'No');
-        if (response) {
+        const emergency = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "EMERGENCY/URGENT – proceed as agent of necessity" action.<br/> Are you sure?', '', 'Yes', 'No');
+        if (emergency) {
           faultRequestObj.stage = FAULT_STAGES.ARRANGING_CONTRACTOR;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
@@ -557,13 +558,12 @@ export class LandlordInstructionComponent implements OnInit {
         }
         break;
       case LL_INSTRUCTION_TYPES[0].index: //cli006a
-        var response = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. <br/> Are you sure?', '', 'Yes', 'No');
-        if (response) {
+        const ownRepairs = await this.commonService.showConfirm('Landlord Instructions', 'You have selected the "Landlord does their own repairs" action. This will send out a notification to Landlord. <br/> Are you sure?', '', 'Yes', 'No');
+        if (ownRepairs) {
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
           faultRequestObj.proceedInDifferentWay = true;
-          const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
           forkJoin(requestArray).subscribe(data => {
@@ -588,8 +588,8 @@ export class LandlordInstructionComponent implements OnInit {
           this.proceeding = false;
           return;
         }
-        var response = await this.commonService.showConfirm('Landlord Instructions', `You have selected the "Obtain Landlord's Authorisation" action. This will send out a notification to Landlord. <br/> Are you sure?`, '', 'Yes', 'No');
-        if (response) {
+        const obtainAuthorisation = await this.commonService.showConfirm('Landlord Instructions', `You have selected the "Obtain Landlord's Authorisation" action. This will send out a notification to Landlord. <br/> Are you sure?`, '', 'Yes', 'No');
+        if (obtainAuthorisation) {
           faultRequestObj.stage = FAULT_STAGES.LANDLORD_INSTRUCTION;
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
@@ -598,7 +598,6 @@ export class LandlordInstructionComponent implements OnInit {
           faultRequestObj.requiredCompletionDate = this.commonService.getFormatedDate(new Date(this.landlordInstFrom.value.requiredCompletionDate));
           faultRequestObj.orderedById = this.loggedInUserData.userId;
           faultRequestObj.proceedInDifferentWay = true;
-          const AWAITING_RESPONSE_LANDLORD = 15;
           let requestArray = [];
           requestArray.push(this.updateFaultDetails(faultRequestObj));
           forkJoin(requestArray).subscribe(data => {
@@ -630,7 +629,7 @@ export class LandlordInstructionComponent implements OnInit {
           faultRequestObj.userSelectedAction = this.userSelectedActionControl.value;
           faultRequestObj.stageAction = this.userSelectedActionControl.value;
           faultRequestObj.proceedInDifferentWay = true;
-          let res = await this.updateFaultDetails(faultRequestObj);
+          const res = await this.updateFaultDetails(faultRequestObj);
           if (res) {
             await this._btnHandler('refresh');
             this.checkForLLSuggestedAction();
@@ -643,7 +642,6 @@ export class LandlordInstructionComponent implements OnInit {
           } else {
             this.commonService.showAlert('Get an Estimate?', 'Please fill the confirmed estimate.');
           }
-
         }
         break;
       default:
@@ -690,7 +688,6 @@ export class LandlordInstructionComponent implements OnInit {
   private updateFaultStatus(status): Promise<any> {
     return this.faultsService.updateFaultStatus(this.faultDetails.faultId, status).toPromise();
   }
-
 
   private updateFaultSummary() {
     let faultRequestObj = this.createFaultFormValues();

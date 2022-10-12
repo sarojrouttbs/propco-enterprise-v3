@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { SolrService } from '../solr.service';
@@ -72,7 +72,8 @@ export class DashboardPage implements OnInit {
     private solrService: SolrService,
     private route: ActivatedRoute,
     private commonService: CommonService,
-    private guidedTourService: GuidedTourService
+    private guidedTourService: GuidedTourService,
+    private router: Router
   ) {
   }
 
@@ -102,13 +103,15 @@ export class DashboardPage implements OnInit {
       this.isSolrTourDone = this.loggedInUserData.isSolrTourDone;
       this.loaded = true;
       this.showTourGuide();
+    } else {
+      this.router.navigate(['/sso-failure-page'], { replaceUrl: true });
     }
   }
 
   private getUserDetailsPvt() {
     const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
-      this.solrService.getUserDetailsPvt(params).subscribe(
+      this.commonService.getUserDetailsPvt(params).subscribe(
         (res) => {
           if (res) {
             this.commonService.setItem(PROPCO.USER_DETAILS, res.data[0]);
@@ -144,6 +147,8 @@ export class DashboardPage implements OnInit {
   private authenticateSso() {
     const snapshot = this.route.snapshot;
     const ssoKey = encodeURIComponent(snapshot.queryParams.ssoKey);
+    this.commonService.setItem(PROPCO.SSO_URL_ROUTE, this.router.url);
+    this.commonService.setItem(PROPCO.SSO_KEY, ssoKey);
     return new Promise((resolve, reject) => {
       this.solrService
         .authenticateSsoToken(ssoKey)
@@ -157,8 +162,7 @@ export class DashboardPage implements OnInit {
             resolve(true);
           },
           (err) => {
-            // resolve(true);
-            reject(false);
+            resolve(false);
           }
         );
     });
@@ -167,6 +171,7 @@ export class DashboardPage implements OnInit {
   openHomeCategory(key: string, value = null) {
     openScreen(key, value);
   }
+  
 
   private disableWelcomeTour() {
     const payload = {
@@ -180,7 +185,7 @@ export class DashboardPage implements OnInit {
     }
   }
 
-  private showTourGuide() {
+  showTourGuide() {
     if (!this.isSolrTourDone) {
       setTimeout(() => {
         this.guidedTourService.startTour(this.dashboardTour);

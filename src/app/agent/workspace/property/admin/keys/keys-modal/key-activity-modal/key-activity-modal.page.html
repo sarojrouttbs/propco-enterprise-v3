@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Key Activity</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="key-activity-modal">
+  <form [formGroup]="keyActivityForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="50">
+          <ion-item>
+            <ion-label position="floating">Type <ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-select interface="popover" formControlName="activityType">
+              <ion-select-option [value]="type?.index" *ngFor="let type of keyActivities">
+                {{ type?.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="keyActivityForm.controls.activityType"></app-validation-message>
+        </ion-col>
+        <ion-col size="50">
+          <ion-item>
+            <ion-label position="floating">To</ion-label>
+            <ion-input formControlName="name"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="keyActivityForm.controls.name"></app-validation-message>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Contact Number</ion-label>
+            <ion-input formControlName="contact"></ion-input>
+          </ion-item>
+          <app-validation-message [control]="keyActivityForm.controls.contact"></app-validation-message>
+        </ion-col>
+        <ion-col size="50">
+          <ion-item>
+            <ion-label position="floating">Recorded By <ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-select interface="popover" formControlName="userId">
+              <ion-select-option [value]="item.userId" *ngFor="let item of userDetailsList">
+                {{ item?.forename }} {{ item?.surname }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="keyActivityForm.controls.userId"></app-validation-message>
+        </ion-col>
+        <ion-col size="50">
+          <ion-item id="postDate">
+            <ion-label position="floating">Date</ion-label>
+            <ion-input value="{{ keyActivityForm.controls.postDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="postDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="postDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Comments</ion-label>
+            <ion-textarea rows="1" formControlName="note" auto-grow="true">
+            </ion-textarea>
+          </ion-item>
+          <app-validation-message [control]="keyActivityForm.controls.note"></app-validation-message>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="100" class="ion-text-end">
+        <ion-button (click)="dismiss()" color="danger">Cancel</ion-button>
+        <ion-button (click)="submitKeyActivity()" color="success">OK</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

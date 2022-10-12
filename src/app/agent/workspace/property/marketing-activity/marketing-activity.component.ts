@@ -10,8 +10,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-marketing-activity',
-  templateUrl: './marketing-activity.component.html',
-  styleUrls: ['./marketing-activity.component.scss'],
+  templateUrl: './marketing-activity.component.html'
 })
 export class MarketingActivityComponent implements OnInit {
   localStorageItems: any = [];

@@ -122,8 +122,8 @@ export class SelfAssessmentFormComponent implements OnInit {
         to: this.selfAssessmentForm.value.to
       },
       deselectedPropertyLinkIds: this.selfAssessmentForm.value.deselectedPropertyLinkIds ? this.selfAssessmentForm.value.deselectedPropertyLinkIds : [],
-      managementType: this.selfAssessmentForm.value.managementType ? this.selfAssessmentForm.value.managementType : [],
-      propertyOffice: this.selfAssessmentForm.value.propertyOffice ? this.selfAssessmentForm.value.propertyOffice : [],
+      managementType: this.selfAssessmentForm.value.selectedManagementType ? this.selfAssessmentForm.value.selectedManagementType : [],
+      propertyOffice: this.selfAssessmentForm.value.selectedPropertyOfficeCodes ? this.selfAssessmentForm.value.selectedPropertyOfficeCodes : [],
       searchOnColumns: this.selfAssessmentForm.value.searchOnColumns,
       searchText: this.selfAssessmentForm.value.valuesearchText,
       selectedPropertyLinkIds: this.selfAssessmentForm.value.selectedPropertyLinkIds ? this.selfAssessmentForm.value.selectedPropertyLinkIds : [],
@@ -185,10 +185,10 @@ export class SelfAssessmentFormComponent implements OnInit {
           resolve(null);
         }
       },
-      (_error) => {
-        this.commonService.showMessage(HMRC_ERROR_MESSAGES.GET_DETAILS_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
-        resolve(null);
-      });
+        (_error) => {
+          this.commonService.showMessage(HMRC_ERROR_MESSAGES.GET_DETAILS_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
+          resolve(null);
+        });
     });
   }
 }

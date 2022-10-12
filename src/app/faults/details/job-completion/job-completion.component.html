@@ -11,8 +11,8 @@
         <div class="arranging-contractor">
           <div class="banner">
             <div class="ion-text-left">
-              <b>{{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME
-                }}</b>
+              <strong>{{iacNotification?.chaseTemplateCode}} {{iacNotification?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME
+                }}</strong>
             </div>
             <h2 class="banner-heading">
               {{iacNotification && iacNotification?.responseReceived ? notificationState.RESPONSE_RECEIVED: 
@@ -104,11 +104,11 @@
             <div class="question-answer" *ngIf="iacNotification && iacNotification?.responseReceived?.isAccepted && faultDetails?.status === 8">
               <h4 class="ion-text-center">Next Step:</h4> 
                 <ng-container *ngIf="faultDetails?.invoiceAmount" >
-                  <h6><b>Invoice Amount: £{{faultDetails?.invoiceAmount}}</b></h6>
+                  <h6><strong>Invoice Amount: £{{faultDetails?.invoiceAmount}}</strong></h6>
                 </ng-container>
                 <ng-container *ngIf="faultDetails?.invoiceAmount > INVOICE_VERIFICATION_THRESHOLD">
                   <ion-text color="danger">Note: </ion-text>
-                  <span><b>Please review the Invoice.As the Invoice amount is over the {{INVOICE_VERIFICATION_THRESHOLD || 0 | currency : "£"}}, it needs additional verification before Approval.</b></span>
+                  <span><strong>Please review the Invoice.As the Invoice amount is over the {{INVOICE_VERIFICATION_THRESHOLD || 0 | currency : "£"}}, it needs additional verification before Approval.</strong></span>
                 </ng-container>
                 <h6>Do you want to approve this invoice ?</h6>
               <ion-grid>
@@ -191,7 +191,7 @@
                 <ion-grid>
                   <ion-row>
                     <ion-col size="100">
-                      <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file?.documentUrl, file?.name)" title="Click To Download">
+                      <img [src]="file?.isImage ? (file?.documentUrl ? file?.documentUrl : 'assets/images/default.jpg') : 'assets/images/default.jpg'" (click)="downloadDocumentByURl(file?.documentUrl, file?.name)" title="Click To Download" alt="download-image">
                     </ion-col>    
                   </ion-row>
                   <ion-row class="ion-justify-content-between">
@@ -237,9 +237,9 @@
       <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background">
         <h2>Further Job(s) Required</h2>
         <div class="border-bottom"></div>
-        <div>Is there any further work to Quote for ? : <b>Yes</b></div>
-        <div>Estimate : <b>{{faultDetails?.additionalEstimate || 0 | currency : "£"}}</b></div>
-        <div>Additional Details : <b>{{faultDetails?.additionalWorkDetail || DEFAULTS.NOT_AVAILABLE}}</b></div>
+        <div>Is there any further work to Quote for ? : <strong>Yes</strong></div>
+        <div>Estimate : <strong>{{faultDetails?.additionalEstimate || 0 | currency : "£"}}</strong></div>
+        <div>Additional Details : <strong>{{faultDetails?.additionalWorkDetail || DEFAULTS.NOT_AVAILABLE}}</strong></div>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -349,7 +349,7 @@
           <ion-input value="{{ workOrderForm.controls.postdate.value | date: DATE_FORMAT.DATE }}" [disabled]="iacNotification ? true : false"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
           ></ion-icon>
-          <ion-popover trigger="postdate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="postdate" show-backdrop="false">
             <ng-template>
               <ion-datetime
                 showDefaultButtons="true"
@@ -439,7 +439,7 @@
           <ion-input value="{{ workOrderForm.controls.requiredDate.value | date: DATE_FORMAT.DATE }}" [disabled]="iacNotification ? true : false"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
           ></ion-icon>
-          <ion-popover trigger="requiredDate" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover" trigger="requiredDate" show-backdrop="false">
             <ng-template>
               <ion-datetime
                 showDefaultButtons="true"

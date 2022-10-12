@@ -5,8 +5,7 @@ import { CommonService } from '../../services/common.service';
 
 @Component({
   selector: 'app-address-modal',
-  templateUrl: './address-modal.page.html',
-  styleUrls: ['./address-modal.page.scss'],
+  templateUrl: './address-modal.page.html'
 })
 export class AddressModalPage implements OnInit {
   addressDetailsForm: FormGroup;

@@ -1,17 +1,19 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, EventEmitter, Injector, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { SelectAllPlusSearchComponent } from 'src/app/select-all-plus-search/select-all-plus-search.component';
-import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, HMRC, HMRC_ERROR_MESSAGES, PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, ENTITY_TYPE, HMRC, HMRC_ERROR_MESSAGES, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { HmrcService } from '../../hmrc.service';
-import { createCustomElement } from '@angular/elements';
 import { Subject } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { OfficeFilterModalPage } from 'src/app/shared/modals/office-filter-modal/office-filter-modal.page';
+import { OfficeFilterModalPage } from '../../hmrc-modals/office-filter-modal/office-filter-modal.page';
 import { ModalController } from '@ionic/angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
-
+import { Router } from '@angular/router';
+import { WorkspaceService } from 'src/app/agent/workspace/workspace.service';
+import { AddressPipe } from 'src/app/shared/pipes/address-string-pipe.pipe';
+import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
+declare function openScreen(key: string, value: any): any;
 @Component({
   selector: 'app-select-landlords',
   templateUrl: './select-landlords.component.html',
@@ -52,20 +54,15 @@ export class SelectLandlordsComponent implements OnInit {
 
   selectedManagementType: number[] = [];
   selectedOfficeCode = [];
+  selectedData: any;
 
   constructor(
     private hmrcService: HmrcService,
     private commonService: CommonService,
-    private injector: Injector,
-    private modalController: ModalController
-  ) {
-    const element = createCustomElement(SelectAllPlusSearchComponent, {
-      injector: this.injector
-    });
-    if (!customElements.get('c-select-all-plus-search')) {
-      customElements.define(`c-select-all-plus-search`, element);
-    }
-  }
+    private modalController: ModalController,
+    private router: Router,
+    private workspaceService: WorkspaceService
+  ) { }
 
   ngOnInit() {
     this.initAPI();
@@ -195,25 +192,28 @@ export class SelectLandlordsComponent implements OnInit {
         } else {
           item.checked = true;
         }
-      };
+      }
     });
   }
 
   applyFilters() {
     this.unselectAll();
+    this.landlordParams = this.landlordParams
+      .delete('propertyOffice')
+      .delete('managementType')
+      .delete('searchText')
+      .delete('searchOnColumns');
+
     if (this.checkedLandlords.length > 0)
       this.checkedLandlords.length = 0;
-    if (this.group.value.selectedPropertyOfficeCodes) {
+    if (this.group.value.selectedPropertyOfficeCodes)
       this.landlordParams = this.landlordParams.set('propertyOffice', this.group.value.selectedPropertyOfficeCodes);
-    }
-    if (this.group.value.managementType) {
+    if (this.group.value.managementType)
       this.landlordParams = this.landlordParams.set('managementType', this.selectedManagementType);
-    }
     if (this.group.value.searchText && this.group.value.searchText.trim() && this.group.value.searchText.length > 2) {
       this.landlordParams = this.landlordParams.set('searchText', this.group.value.searchText);
-      if (this.group.value.searchOnColumns) {
+      if (this.group.value.searchOnColumns)
         this.landlordParams = this.landlordParams.set('searchOnColumns', this.group.value.searchOnColumns);
-      }
     }
     this.rerenderLandlordList();
   }
@@ -226,6 +226,8 @@ export class SelectLandlordsComponent implements OnInit {
     this.rerenderLandlordList();
     this.selectedRegion = [];
     this.selectedOfficeList = [];
+    this.checkedLandlords.length = 0;
+    this.uncheckedLandlords.length = 0;
   }
 
   onCheckboxClick(checkboxVal: any) {
@@ -272,7 +274,7 @@ export class SelectLandlordsComponent implements OnInit {
         this.selectedOfficeList = res?.data?.selectedOfficeList;
         this.selectedRegion = res?.data?.selectedRegion;
         const propertyOfficeName = res?.data?.selectedOfficeList.map(err => err.officeName).join(', ');
-        const propertyOfficeCodes = res?.data?.selectedOfficeList.map(err => err.officeCode).join(',');
+        const propertyOfficeCodes = res?.data?.selectedOfficeList.map(err => err.officeCode);
         this.group.get('propertyOffice').setValue(propertyOfficeName);
         this.group.get('selectedPropertyOfficeCodes').patchValue(propertyOfficeCodes);
       }
@@ -357,5 +359,84 @@ export class SelectLandlordsComponent implements OnInit {
       }
     }
     this.group.get('selectedPropertyOfficeCodes').patchValue(this.selectedOfficeCode);
+  }
+
+  showMenu(event: any, id: any, data: any, className: any) {
+    this.selectedData = data;
+    this.commonService.showMenu(event, id, className, true);
+  }
+
+  hideMenu(event: any, id: any) {
+    this.commonService.hideMenu(event, id);
+  }
+
+  onClick(entityType: any) {
+    this.hideMenu('', 'select-landlords-overlay');
+    if (this.router.url.includes('/agent/')) {
+      this.gotoWorkSpaceV3(entityType);
+      return;
+    }
+
+    /*Navigate to java fx page (If solr loads inside v2)*/
+    this.gotoWorkSpaceV2(entityType);
+  }
+
+  private gotoWorkSpaceV2(entityType: any) {
+    let action;
+    switch (entityType) {
+      case ENTITY_TYPE.PROPERTY:
+        action = 'OpenProperty';
+        openScreen(action, this.selectedData?.propcoPropertyId);
+        break;
+      case ENTITY_TYPE.LANDLORD:
+        action = 'OpenLandlord';
+        openScreen(action, this.selectedData?.propcoLandlordId);
+        break;
+      default:
+        return;
+    }
+  }
+
+  private gotoWorkSpaceV3(entityType: any) {
+    let action;
+    switch (entityType) {
+      case ENTITY_TYPE.PROPERTY:
+        this.constructPropertyEntityData(entityType);
+        this.workspaceService.addItemToWorkSpace(this.selectedData);
+        break;
+      case ENTITY_TYPE.LANDLORD:
+        this.openItemUnderDevelopmentModal();
+        break;
+      default:
+        return;
+    }
+  }
+
+  private constructPropertyEntityData(entityType: any) {
+    const addressPipe = new AddressPipe();
+    const addressStr = addressPipe.transform(this.selectedData.propertyAddress);
+    this.selectedData.entityType = entityType;
+    this.selectedData.entityId = this.selectedData.propertyId;
+    this.selectedData.reference = this.selectedData.propertyReference;
+    this.selectedData.address = addressStr;
+  }
+
+  private async openItemUnderDevelopmentModal() {
+    const modal = await this.modalController.create({
+      component: SimpleModalPage,
+      cssClass: 'modal-container alert-prompt',
+      backdropDismiss: false,
+      componentProps: {
+        data: `${DEFAULT_MESSAGES.UNDER_DEVELOPMENT}`,
+        heading: 'Workspace',
+        buttonList: [
+          {
+            text: 'OK',
+            value: false,
+          },
+        ],
+      },
+    });
+    await modal.present();
   }
 }

@@ -8,7 +8,7 @@
           <ion-col size="25">
             <div class="property-img">
               <img [src]=" propertyDetails?.propertyImageUrl ? commonService.getResizedImageUrl(propertyDetails?.propertyImageUrl) : 'assets/images/default.jpg'"
-              onerror="this.src='assets/images/default.jpg'">
+              onerror="this.src='assets/images/default.jpg'" alt="default-image">
             </div>
           </ion-col>
           <ion-col class="property-details" size="75">

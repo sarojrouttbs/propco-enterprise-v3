@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Yes, Payment received</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="paymentReceivedForm">
+    <ion-grid class="">
+      <ion-row class="">
+        <ion-col size="100">
+          <h6>Please select how the payment was received.</h6>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Payment Method<ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-select interface="popover" formControlName="paymentMethod" class="ion-select-options">
+              <ion-select-option [value]="item" *ngFor="let item of paymentMethodTypes">
+                {{ item}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="paymentReceivedForm.controls.paymentMethod"></app-validation-message>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
+<ion-footer>
+  <ion-grid [class.unsaved-data-error]="unSavedData">
+    <ion-row>
+      <ng-container *ngIf="unSavedData">
+        <ion-col size="70">
+          <div class="ion-padding-top">Are you sure you want to cancel the process?</div>
+        </ion-col>
+        <ion-col size="30" class="ion-text-end">
+          <ion-button color="danger" (click)="continue()">No</ion-button>&nbsp;
+          <ion-button color="success" (click)="dismiss()">Yes</ion-button>
+        </ion-col>
+      </ng-container>
+      <ng-container *ngIf="!unSavedData">
+        <ion-col size="100" class="ion-text-end">
+          <ion-button (click)="onCancel()" color="danger">Cancel</ion-button>
+          <ion-button (click)="submit()" color="success" [disabled]="showLoader">OK 
+            <ion-icon *ngIf="showLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

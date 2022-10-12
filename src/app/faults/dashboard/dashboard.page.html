@@ -108,7 +108,7 @@
               <ion-input value="{{ filterForm.controls.fromDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
               ></ion-icon>
-              <ion-popover trigger="fromDate" show-backdrop="false">
+              <ion-popover class="ion-datepicker-popover" trigger="fromDate" show-backdrop="false">
                 <ng-template>
                   <ion-datetime
                     showDefaultButtons="true"
@@ -126,7 +126,7 @@
               <ion-input value="{{ filterForm.controls.toDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
               ></ion-icon>
-              <ion-popover trigger="toDate" show-backdrop="false">
+              <ion-popover class="ion-datepicker-popover" trigger="toDate" show-backdrop="false">
                 <ng-template>
                   <ion-datetime
                     showDefaultButtons="true"
@@ -382,7 +382,7 @@
               <ion-input value="{{ filterForm.controls.snoozeUntil.value | date: DATE_FORMAT.DATE }}"></ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
               ></ion-icon>
-              <ion-popover trigger="snoozeUntil" show-backdrop="false">
+              <ion-popover class="ion-datepicker-popover" trigger="snoozeUntil" show-backdrop="false">
                 <ng-template>
                   <ion-datetime
                     showDefaultButtons="true"
@@ -418,7 +418,6 @@
               id="faultListTable" aria-describedby="fault">
               <thead>
                 <tr>
-                  <!-- <th scope="col" style="width:1%"></th> -->
                   <th scope="col" style="width:9%">Issue ID</th>
                   <th scope="col" style="width:10%">Reported On</th>
                   <th scope="col" style="width:11%">Category</th>
@@ -472,7 +471,7 @@
                   </td>
                 </tr>
                 <tr *ngIf="faultList?.length == 0">
-                  <td colspan="11" class="no-data-available" style="text-align: center;"><b>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</b></td>
+                  <td colspan="11" class="no-data-available" style="text-align: center;"><strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong></td>
                 </tr>
               </tbody>
             </table>

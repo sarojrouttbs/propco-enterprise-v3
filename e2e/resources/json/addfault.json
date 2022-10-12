@@ -23,7 +23,7 @@
                 "tablePropertyId": "000002063",
                 "tablePropertyAddress": "Cobourg House",
                 "tableOffice": "Westerly",
-                "tableManager": "Tbl Support",
+                "tableManager": "Ali Rollason",
                 "tableJobTitle": "Dishwasher problem",
                 "tableReporter": "Landlord",
                 "tableFaultStatus": "Reported"                
@@ -45,13 +45,14 @@
             "accessInfo": "Tenant",
             "isOccupierVulnerable": "",
             "usefulInstruction": "",
+            "fileSource": "https://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia-logo.png",
             "faultImage": "../resources/upload/Dishwasher.png",
             "tableUrgency": "",
             "tableCategory": "Appliances",
             "tablePropertyId": "000002063",
             "tablePropertyAddress": "Cobourg House",
             "tableOffice": "Westerly",
-            "tableManager": "Tbl Support",
+            "tableManager": "Ali Rollason",
             "tableJobTitle": "Dishwasher problem",
             "tableReporter": "Tenant",
             "tableFaultStatus": "Reported"
@@ -79,7 +80,7 @@
             "tablePropertyId": "000002063",
             "tablePropertyAddress": "Cobourg House",
             "tableOffice": "Westerly",
-            "tableManager": "Tbl Support",
+            "tableManager": "Ali Rollason",
             "tableJobTitle": "Dishwasher problem",
             "tableReporter": "Guarantor",
             "tableFaultStatus": "Reported"
@@ -107,7 +108,7 @@
             "tablePropertyId": "000002063",
             "tablePropertyAddress": "Cobourg House",
             "tableOffice": "Westerly",
-            "tableManager": "Tbl Support",
+            "tableManager": "Ali Rollason",
             "tableJobTitle": "Dishwasher problem",
             "tableReporter": "Third Party",
             "tableFaultStatus": "Reported"
@@ -224,7 +225,7 @@
             "tablePropertyId": "000002063",
             "tablePropertyAddress": "Cobourg House",
             "tableOffice": "Westerly",
-            "tableManager": "Tbl Support",
+            "tableManager": "Ali Rollason",
             "tableJobTitle": "Save For Later Fault",
             "tableReporter": "Tenant",
             "tableFaultStatus": "Reported"

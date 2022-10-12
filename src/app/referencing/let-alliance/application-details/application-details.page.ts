@@ -1,15 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DATE_FORMAT, DEFAULTS, PROPCO, REFERENCING, REFERENCING_TENANT_TYPE } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, PROPCO, REFERENCING, REFERENCING_TENANT_TYPE, COMPLETION_METHODS } from 'src/app/shared/constants';
 import { AddressModalPage } from 'src/app/shared/modals/address-modal/address-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SearchPropertyPage } from 'src/app/shared/modals/search-property/search-property.page';
 import { TenantListModalPage } from 'src/app/shared/modals/tenant-list-modal/tenant-list-modal.page';
 import { forkJoin } from 'rxjs';
-import { CurrencyPipe, DatePipe } from '@angular/common';
-import { COMPLETION_METHODS } from 'src/app/shared/constants';
+import { DatePipe } from '@angular/common';
 import { ValidationService } from 'src/app/shared/services/validation.service';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 import { ReferencingService } from '../../referencing.service';
@@ -351,7 +350,6 @@ export class ApplicationDetailsPage implements OnInit {
       this.getPropertyTenancyList(),
       this.getTenantList()
     ]).subscribe(async (values) => {
-      // this.commonService.hideLoader();
       if (this.tenantDetails.referencingApplicationStatus == 0 || this.tenantDetails.referencingApplicationStatus == 1) {
         this.applicationAlert();
       }
@@ -471,10 +469,10 @@ export class ApplicationDetailsPage implements OnInit {
     let managementIndex: any;
 
     if(managementValueFromLookup == 'Fully Managed'){
-      managementIndex = this.getLookupIndex('Fully Managed', this.managementStatusTypes);;
+      managementIndex = this.getLookupIndex('Fully Managed', this.managementStatusTypes);
     }
     else if(managementValueFromLookup == 'Let Only'){
-      managementIndex = this.getLookupIndex('Let Only', this.managementStatusTypes);;
+      managementIndex = this.getLookupIndex('Let Only', this.managementStatusTypes);
     }
 
     this.tenancyDetailsForm.patchValue({
@@ -826,16 +824,16 @@ export class ApplicationDetailsPage implements OnInit {
   getProductType(productId: any, name: any): string{
     let productType: any;
     if(name == 'case'){
-      this.referencingCaseProductList.find((obj) => {
+      productType = this.referencingCaseProductList.find((obj) => {
         if (obj.productId === productId) {
-          productType = obj.productName;
+          return obj.productName;
         }
       });
     }
     else if(name == 'application'){
-      this.referencingApplicationProductList.find((obj) => {
+      productType = this.referencingApplicationProductList.find((obj) => {
         if (obj.productId === productId) {
-          productType = obj.productName;
+          return obj.productName;
         }
       });
     }

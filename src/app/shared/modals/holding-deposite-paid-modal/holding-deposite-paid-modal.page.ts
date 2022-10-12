@@ -52,6 +52,6 @@ export class HoldingDepositePaidModalPage implements OnInit {
   private offlinePaymentService(requestObj) {
     this.holdingDepositePaidService.offlinePaymentService(this.selectedApplication.applicationId, requestObj).subscribe(res => {
       this.modalController.dismiss({ holdingDepositePaid: true });
-    }, err => {});
+    });
   }
 }

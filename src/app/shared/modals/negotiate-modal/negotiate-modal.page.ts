@@ -96,7 +96,7 @@ export class NegotiateModalPage implements OnInit {
   }
 
   private async getClauseNegotiationComments(offerClauseId) {
-    let promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.negotiateService.getClauseNegotiationComments(offerClauseId).subscribe(res => {
         resolve((res && res.data) || []);
       }, error => {
@@ -107,7 +107,7 @@ export class NegotiateModalPage implements OnInit {
   }
 
   private async getRestrictionNegotiationComments(offerRestrictionId) {
-    let promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.negotiateService.getRestrictionNegotiationComments(offerRestrictionId).subscribe(res => {
         resolve((res && res.data) || []);
       }, error => {

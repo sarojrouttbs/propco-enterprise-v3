@@ -135,7 +135,7 @@
                 readonly>
               </ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-              <ion-popover trigger="availableFromDate" show-backdrop="false" side="top" alignment="center">
+              <ion-popover class="ion-datepicker-popover" trigger="availableFromDate" show-backdrop="false">
                 <ng-template>
                   <ion-datetime showDefaultButtons="true" presentation="date" formControlName="availableFrom">
                   </ion-datetime>
@@ -150,7 +150,7 @@
                 readonly>
               </ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-              <ion-popover trigger="availableToDate" show-backdrop="false" side="top" alignment="center">
+              <ion-popover class="ion-datepicker-popover" trigger="availableToDate" show-backdrop="false">
                 <ng-template>
                   <ion-datetime showDefaultButtons="true" presentation="date" formControlName="availableTo">
                   </ion-datetime>

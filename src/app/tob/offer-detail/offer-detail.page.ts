@@ -21,7 +21,6 @@ import { HttpParams } from '@angular/common/http';
   selector: 'app-offer-detail',
   templateUrl: './offer-detail.page.html',
   styleUrls: [
-    './offer-detail.page.scss',
     '../common-css/offer-application-detail.scss',
   ],
   providers: [
@@ -576,9 +575,7 @@ export class OfferDetailPage implements OnInit {
         (data) => {
           this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
           this.setLookupData();
-        },
-        (error) => { }
-      );
+        });
     }
   }
 

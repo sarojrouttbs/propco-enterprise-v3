@@ -23,7 +23,6 @@ interface Lookupdata {
 export class CommonService {
   private loader;
   entityType;
-  // public alertPresented: any;
 
   constructor(
     private alertCtrl: AlertController,
@@ -33,31 +32,25 @@ export class CommonService {
     public toastController: ToastController,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer
-  ) {
-    // this.alertPresented = false;
-  }
-
-
+  ) {  }  
 
   private dataChange = new Subject<any>();
   dataChanged$ = this.dataChange.asObservable();
+
+  private isAutosaveLoader = new Subject<any>();
+  isAutosaveLoader$ = this.isAutosaveLoader.asObservable();
 
   dataChanged(data) {
     this.dataChange.next(data);
   }
 
-
-  // isCordovaDevice(){
-  //     return (this._platform.platforms().indexOf('cordova')!= -1) ? true : false;
-  // }
+  showAutoSaveLoader(value) {
+    this.isAutosaveLoader.next(value)
+  }
 
   async isInternetConnected(): Promise<boolean> {
     const status = await Network.getStatus();
     return status.connected;
-    //  NetworkStatus: {
-    //   connected : boolean;
-    //   connectionType : any;
-    //   }
   }
 
 
@@ -183,25 +176,19 @@ export class CommonService {
     else if (type === 'error') {
       this.toastr.error(message, title ? title : 'Error', {
         timeOut: 4000,
-        // disableTimeOut: true,
         closeButton: true,
-        // tapToDismiss: false
       });
     }
     else if (type === 'info') {
       this.toastr.info(message, title ? title : 'Info', {
         timeOut: 4000,
-        // disableTimeOut: true,
         closeButton: true,
-        // tapToDismiss: false
       });
     }
     else if (type === 'warning') {
       this.toastr.warning(message, title ? title : 'Warning', {
         timeOut: 4000,
-        // disableTimeOut: true,
         closeButton: true,
-        // tapToDismiss: false
       });
     }
   }
@@ -304,7 +291,6 @@ export class CommonService {
             }
           }
         ],
-        // backdropDismiss: false,
       }).then(res => {
         alertPopup = res;
         res.present();
@@ -350,11 +336,6 @@ export class CommonService {
   }
 
   showLoader(duration?: number) {
-    // this.loader = await this.loadingCtrl.create({
-    //   message: 'Loading...',
-    //   spinner: 'crescent'
-    // });
-    // await this.loader.present();
     const elem = document.getElementById('loading');
     if (elem) {
       elem.style.display = '';
@@ -362,9 +343,6 @@ export class CommonService {
   }
 
   hideLoader() {
-    // if (this.loader) {
-    //   this.loader.dismiss();
-    // }
     setTimeout(() => {
       const elem = document.getElementById('loading');
       if (elem) {
@@ -374,15 +352,6 @@ export class CommonService {
   }
 
   getResizedImageUrl(imageName, size?) {
-    // let srcUrl = '';
-    // if (url) {
-    //   const splitUrl = url.split('images/');
-    //   const mediaHost = (splitUrl.length > 0) ? splitUrl[0] : '';
-    //   const fileName = (splitUrl.length > 0) ? splitUrl[1] : '';
-    //   size = size ? size : 400;
-    //   srcUrl = mediaHost + 'images/resize.php/' + fileName + '?resize(' + size + ')';
-    // }
-    // return srcUrl;
     let srcUrl = '';
     if (imageName) {
       let mediaHost = environment.MEDIA_HOST_URL;
@@ -423,8 +392,6 @@ export class CommonService {
 
   downloadDocumentByUrl(url, name?) {
     const fileExtension = name ? name.split('.')[1] : null;
-    // if (fileExtension !== 'doc' && fileExtension !== 'odt' && fileExtension !== 'docx') {
-    // } 
     if (fileExtension === 'doc' || fileExtension === 'odt' || fileExtension === 'docx') {
       saveAs(url, name);
     } else {
@@ -447,8 +414,6 @@ export class CommonService {
 
   logout() {
     const accessToken = window.localStorage.getItem(PROPCO.ACCESS_TOKEN);
-    /* let queryParams = {'token': accessToken}; */
-    /* this.resetLocalStorage(); */
     this.showLoader();
     this.httpClient.get(environment.API_BASE_URL + 'authentication/user/logout', {}).toPromise().finally(() => {
       this.hideLoader();
@@ -549,55 +514,6 @@ export class CommonService {
       event.stopPropagation();
     }
   }
-
-  // async showCheckBoxConfirm(title: string, okText?: string, cancelText?: string, input?: any) {
-  //   if (!this.alertPresented) {
-  //     return new Promise((resolve, reject) => {
-  //       this.alertPresented = true;
-  //       let alertPopup: any;
-  //       this.alertCtrl.create({
-  //         header: title,
-  //         cssClass: 'common-alert-box',
-  //         inputs: input ? input : '',
-  //         buttons: [
-  //           {
-  //             text: cancelText ? cancelText : 'Cancel',
-  //             cssClass: 'ion-color-danger',
-  //             role: 'cancel',
-  //             handler: () => {
-  //               alertPopup.dismiss().then((res) => {
-  //                 this.alertPresented = false;
-
-  //                 resolve(false);
-  //               });
-  //               return false;
-  //             }
-  //           },
-  //           {
-  //             text: okText ? okText : 'Ok',
-  //             cssClass: 'ion-color-success',
-  //             handler: (data) => {
-  //               if (data.length > 0) {
-  //                 alertPopup.dismiss().then((res) => {
-  //                   this.alertPresented = false;;
-
-  //                   resolve(data);
-  //                 });
-  //               }
-  //               return false;
-  //             }
-  //           }
-  //         ],
-  //         backdropDismiss: false,
-  //       }).then(res => {
-  //         alertPopup = res;
-  //         res.present();
-  //       });
-
-  //     });
-  //   }
-
-  // }
 
   sortBy(field: string, element: []) {
 
@@ -721,5 +637,11 @@ export class CommonService {
 
   sanitizeUrl(url: any) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  getUserDetailsPvt(params?): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `user/logged-in/node`, {
+      params,
+    });
   }
 }
