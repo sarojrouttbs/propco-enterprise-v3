@@ -34,7 +34,7 @@ export class UserAssignmentsComponent implements OnInit {
   }
   private async init() {
     this.localStorageItems = await this.fetchItems();
-    let item = this.localStorageItems.filter((x) => x.isSelected);
+    const item = this.localStorageItems.filter((x) => x.isSelected);
     if (item) {
       this.authKey = this.commonService.getItem('access_token');
       this.webKey = this.commonService.getItem('web_key');
