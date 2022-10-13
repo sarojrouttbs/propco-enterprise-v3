@@ -65,6 +65,7 @@ import { MediaComponent } from './media/media.component';
 import { PicturesComponent } from './media/pictures/pictures.component';
 import { DescriptionShortLetComponent } from './particulars/description-short-let/description-short-let.component';
 import { DescriptionComponent } from './particulars/description/description.component';
+import { UserAssignmentsComponent } from './user-assignments/user-assignments.component';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
@@ -134,7 +135,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIG
     MediaComponent,
     PicturesComponent,
     DescriptionShortLetComponent,
-    DescriptionComponent
+    DescriptionComponent,
+    UserAssignmentsComponent
   ],
   providers: [
     AgentService,
