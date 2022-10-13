@@ -45,4 +45,25 @@ beforeAll(function() {
             };  	 
         }
     });
+
+    jasmine.addMatchers({
+        toBeValidStepData : function () {
+            return {
+                compare: function(actual, expected) {
+                    var result = {};
+                    if (typeof actual != "undefined") {
+                        console.log("valid step data");
+                        result.pass = true;
+                        result.message = "StepData:" + JSON.stringify(actual);
+                        console.log(result.message);
+                    } else {
+                        console.log("invalid step data");
+                        result.pass = false;
+                        result.message = "Data not valid: " + actual;
+                    }
+                    return result;                    
+                }
+            };  	 
+        }
+    });
 })
