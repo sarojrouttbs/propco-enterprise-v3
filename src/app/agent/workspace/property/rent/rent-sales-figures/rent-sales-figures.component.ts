@@ -237,9 +237,9 @@ export class RentSalesFiguresComponent implements OnInit {
   onUseRentPercentageChange(e: any) {
     const val = e.detail.checked;
     if (val)
-      this.group.get('premiumPercentage').enable()
+      this.group.get('premiumPercentage').enable();
     else
-      this.group.get('premiumPercentage').disable()
+      this.group.get('premiumPercentage').disable();
   }
 
   private getOptions() {
