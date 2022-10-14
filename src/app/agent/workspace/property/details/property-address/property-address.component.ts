@@ -116,8 +116,7 @@ export class PropertyAddressComponent {
           organisationName: res.company,
           pafReference: res.domesticId,
           postcode: res.postalCode
-        }
-
+        };
         this.agentService.updatePropertyDetails(this.selectedEntityDetails.entityId, addressObj).subscribe(
           res => {
           },
