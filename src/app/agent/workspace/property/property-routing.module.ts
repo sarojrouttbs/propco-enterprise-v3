@@ -15,6 +15,7 @@ import { KeysComponent } from './admin/keys/keys.component';
 import { SafetyDeviceComponent } from './safety-device/safety-device.component';
 import { ClausesComponent } from './admin/clauses/clauses.component';
 import { MediaComponent } from './media/media.component';
+import { UserAssignmentsComponent } from './user-assignments/user-assignments.component';
 
 const routes: Routes = [
   {
@@ -72,6 +73,10 @@ const routes: Routes = [
       {
         path: 'clauses',
         component: ClausesComponent,
+      },
+      {
+        path: 'user-assignments',
+        component: UserAssignmentsComponent,
       },
       {
         path: 'create-offer',

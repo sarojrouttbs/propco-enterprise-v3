@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { ParticularsService } from '../particulars.service';
 
 @Component({
   selector: 'app-description',
@@ -19,7 +20,8 @@ export class DescriptionComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private commonService: CommonService,
-    private agentService: AgentService
+    private agentService: AgentService,
+    private particularService : ParticularsService
   ) { }
 
   ngOnInit() {
@@ -45,6 +47,7 @@ export class DescriptionComponent implements OnInit {
     this.localStorageItems = await this.fetchItems();
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
     this.getPropertyDetails(this.selectedEntityDetails.entityId);
+    this.particularService.updateDetails(this.descriptionForm, this.selectedEntityDetails.entityId);
   }
 
   private fetchItems() {

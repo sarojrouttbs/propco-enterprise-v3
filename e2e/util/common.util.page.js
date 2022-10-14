@@ -5,19 +5,96 @@ var CommonFunction = function() {
     
     var EC = protractor.ExpectedConditions;   
         
-    this.waitForElement = function (loc){        
-        browser.wait(EC.elementToBeClickable(loc), 180000);
+    /**
+     * Function that returns boolean result after expected condition evaluation
+     * @param {Protractor function} expectCondition Protractor function that evaluates user specified expected condition
+     * @returns true if expected condition is met within specifed time limit else false
+     */
+    this.checkCondition = function(expectCondition){
+        return browser.wait(expectCondition, 30000).then(function(){
+            return true;
+        }, function() {
+            return false;
+        });
+    } 
+
+    this.checkOptionData = function(element, optList, optDataList, conditionResult, msg){
+        let expCondition = protractor.ExpectedConditions;
+        let options = [];
+        let optionData = [];
+        if(optList){
+           options = optList.split(","); 
+        }
+        if(optDataList){
+            optionData = optDataList.split(","); 
+        }
+        for(let i = 0; i<options.length; i++){
+            this.scrollToElement(this.getElementByCssContainingText(element, optionData[i]));
+            expect(this.checkCondition(expCondition.visibilityOf(this.getElementByCssContainingText(element, optionData[i])))).toBeCorrect(conditionResult, msg + " : " + options[i] + " - " + optionData[i]);         
+        }
     }
 
-    this.validation = function(loc,expectedResult){        
-        this.waitForElement(loc);        
-        loc.getText().then(function(actualResult) {
-            if(actualResult == expectedResult){
-                console.log("Verified, Actual Text -  " + actualResult  + " Expected - " + expectedResult + "")
-            }else {
-                console.log("verification failed, Actual Text - " + actualResult + " Expected - " + expectedResult + "")
-            }
-        });        
+    this.checkOptionDataByAttrib = function(locators, optList, attribList, optDataList){
+        let options = [];
+        let attributes = [];
+        let optionData = [];
+        if(optList){
+           options = optList.split("`"); 
+        }
+        if(attribList){
+           attributes = attribList.split("`"); 
+        }
+        if(optDataList){
+            optionData = optDataList.split("`"); 
+        }
+        for(let i = 0; i<options.length; i++){
+            this.scrollToElement(locators[i]);
+            let optionObj = this.updateVerificationObjectByAttrib((locators[i]), options[i], attributes[i]); 
+            expect(optionObj).toContainData(optionData[i]);            
+        }
+    }
+
+    this.checkOptionToolTip = function(locators, optList, optDataList){
+        let options = [];
+        let optionData = [];
+        if(optList){
+           options = optList.split("`"); 
+        }
+        if(optDataList){
+            optionData = optDataList.split("`"); 
+        }
+        for(let i = 0; i<options.length; i++){
+            this.scrollToElement(locators[i]);
+            this.mouseHover(locators[i]);
+            let optionObj = this.updateVerificationObject(element(by.css("div.mat-tooltip")), options[i]); 
+            expect(optionObj).toContainData(optionData[i]);    
+        }
+    }
+
+    this.checkPageData = function(element, optList, conditionResult, fieldList){
+        let expCondition = protractor.ExpectedConditions; 
+        if(optList){
+          let fields = fieldList.split("`");  
+          let options = optList.split("`");
+          let i = 0;
+          options.forEach(option =>{
+              this.scrollToElement(this.getElementByCssContainingText(element, option));
+              let field = fields[i];
+              expect(this.checkCondition(expCondition.visibilityOf(this.getElementByCssContainingText(element, option)))).toBeCorrect(conditionResult, field + " - " + option);
+              if((fields.length - 1) > i){i++;}              
+          });
+        }
+    }
+
+    this.checkVisibleData = function(element, optList, conditionResult, msg){
+        let expCondition = protractor.ExpectedConditions; 
+        if(optList){
+          let options = optList.split(",");
+          options.forEach(option =>{
+              this.scrollToElement(this.getElementByCssContainingText(element, option));
+              expect(this.checkCondition(expCondition.visibilityOf(this.getElementByCssContainingText(element, option)))).toBeCorrect(conditionResult, msg + " - " + option);
+          });
+        }
     }
     
     this.clickOn = function (loc) {        
@@ -26,83 +103,16 @@ var CommonFunction = function() {
         console.log("element clicked ");
     }
 
-    this.getAttribute = function (loc, attribute) {        
-        //this.waitForElement(loc);
-        return loc.getAttribute(attribute).then(function(value){
-            console.log(value);
-            return value;
-        });              
-    }
-
-    this.getText = function (loc) {        
-       // this.waitForElement(loc);
-        loc.getText().then(function(value){
-            console.log(value);
-            return value;
-        });              
-    }
-
-    this.sendkeys = function (loc, value) {        
-        console.log("Entering text - " + value); 
-        this.waitForElement(loc);
-        loc.clear().sendKeys(value);               
-    }  
-
-    this.pressEnterKey = function () {
-        browser.actions().sendKeys(protractor.Key.ENTER).perform();        
-    }
-
-    this.pressDownKey = function () {
-        browser.actions().sendKeys(protractor.Key.DOWN).perform();       
-    }    
-
-/**
- * Common functions for FixAFault module
- */
-
-    this.scrollToElement = function(loc){
-        console.log("Go to Element");
-        browser.controlFlow().execute(function(){
-            browser.executeScript("arguments[0].scrollIntoView();", loc.getWebElement());
-        });
-    } 
-
-    this.executeJS = function(script, loc){
-        console.log("Executing JavaScript");
-        browser.controlFlow().execute(function(){
-            browser.executeScript(script, loc.getWebElement());
-        });
-    }
-
-    this.getAttributeValueOfHiddenElement = function(loc, attrib){
-        browser.controlFlow().execute(function () {
-            browser.executeScript("arguments[0].setAttribute('type', '');", loc.getWebElement());
-        });
-        return loc.getAttribute(attrib).then(function(text){
-               return text;
-        });
-    }
-
-    this.mouseHover = function(loc){
-        return loc.getWebElement().then(function(result){
-            browser.actions().mouseMove(result).perform();
-       });
-    }
-
-    this.getElementByCssContainingText = function(css, value){
-        return element(by.cssContainingText(css, value));    
-    }
-
     this.clickOnElement = function(loc, cName){  
-       // this.waitForElement(loc); 
-        this.scrollToElement(loc);
-        browser.controlFlow().execute(function(){
-           browser.executeScript("console.log('" + cName + " is clicked');");          
-        });
-        loc.click();
-        console.log("element clicked " + cName);
+        // this.waitForElement(loc); 
+         this.scrollToElement(loc);
+         browser.controlFlow().execute(function(){
+            browser.executeScript("console.log('" + cName + " is clicked');");          
+         });
+         loc.click();
+         console.log("element clicked " + cName);
     }
-
+ 
     /**
      * function to click on specified element if there are multiple elements
      * @param {WebElement} loc Element locator 'By'
@@ -112,7 +122,7 @@ var CommonFunction = function() {
      */
     this.clickOnSpecificElement = function(loc, elementNo, cName, listIndex){  
         browser.controlFlow().execute(function(){
-           browser.executeScript("console.log('" + cName + " is clicked');");          
+        browser.executeScript("console.log('" + cName + " is clicked');");          
         }); 
         switch(elementNo){
             case "first":
@@ -158,6 +168,130 @@ var CommonFunction = function() {
         }        
         console.log("element clicked " + cName);
     }
+
+    this.editOptionData = function(locators, optList, optDataList){
+        //let options = [];
+        let optionData = [];
+        /*if(optList){
+           options = optList.split("`"); 
+        }*/
+        if(optDataList){
+            optionData = optDataList.split("`"); 
+        }
+        for(let i = 0; i<optionData.length; i++){
+            console.log("Locator " + locators[i]);
+            console.log("Parent " + optList[i]);
+            console.log("Data " + optionData[i]);
+            if(optionData[i]){
+               this.scrollToElement(optList[i]);
+              // this.clickOnElement(optList[i], "field");
+               this.executeJS("arguments[0].click();", optList[i]); 
+               this.sendKeysInto(locators[i], optionData[i]);
+               browser.sleep(1000);               
+            }                     
+        }
+    }
+
+    this.executeJS = function(script, loc){
+        console.log("Executing JavaScript");
+        browser.controlFlow().execute(function(){
+            browser.executeScript(script, loc.getWebElement());
+        });
+    }
+
+    this.getAttribute = function (loc, attribute) {        
+        //this.waitForElement(loc);
+        return loc.getAttribute(attribute).then(function(value){
+            console.log(value);
+            return value;
+        });              
+    }
+
+    this.getAttributeValueOfHiddenElement = function(loc, attrib){
+        browser.controlFlow().execute(function () {
+            browser.executeScript("arguments[0].setAttribute('type', '');", loc.getWebElement());
+        });
+        return loc.getAttribute(attrib).then(function(text){
+               return text;
+        });
+    }
+
+    this.getAESEncryptedString = function(message, key){
+        return cryptoJs.AES.encrypt(message, key);
+    }
+
+    this.getAESDecryptedString = function(encrypted, key){
+        return cryptoJs.AES.decrypt(encrypted, key).toString(cryptoJs.enc.Utf8);
+    }
+
+    this.getCurrentDate = function(){
+        const d = new Date();
+        let currentDate = (d.getDate()  < 10 ) ? "0" + d.getDate().toString() : d.getDate().toString();
+        let currentMonth = ((d.getMonth() + 1) < 10 ) ? "0" + (d.getMonth() + 1).toString() : (d.getMonth() + 1).toString();
+        let currentYear = d.getFullYear().toString();
+        let date = currentDate + "/" + currentMonth + "/" + currentYear;
+        return date;
+    }
+
+    this.getElementByCssContainingText = function(css, value){
+        return element(by.cssContainingText(css, value));    
+    }
+
+    this.getText = function (loc) {        
+       // this.waitForElement(loc);
+        loc.getText().then(function(value){
+            console.log(value);
+            return value;
+        });              
+    }
+
+    this.logMessage = function(msg){
+        browser.controlFlow().execute(function () {
+            browser.executeScript("console.log('" + msg + "');");           
+         }); 
+    }
+
+    this.mouseHover = function(loc){
+        return loc.getWebElement().then(function(result){
+            browser.actions().mouseMove(result).perform();
+       });
+    }
+
+    this.pressKey = function(key){
+        browser.actions().sendKeys(key).perform();       
+    }
+
+    this.pressDownKey = function () {
+        browser.actions().sendKeys(protractor.Key.DOWN).perform();       
+    } 
+    
+    this.pressEndKey = function(){
+        browser.actions().sendKeys(protractor.Key.END).perform();       
+    }
+    
+    this.pressEnterKey = function () {
+        browser.actions().sendKeys(protractor.Key.ENTER).perform();        
+    }
+       
+    this.scrollToElement = function(loc){
+        console.log("Go to Element");
+        browser.controlFlow().execute(function(){
+            browser.executeScript("arguments[0].scrollIntoView();", loc.getWebElement());
+        });
+    }  
+    
+    this.selectFromDropDown = function(locList, locValue, cList, cValue){
+        this.clickOnElement(locList, cList);
+        this.waitForElementToBeVisible(element(by.xpath("//ion-select-popover")), 'Drop down list');
+        browser.sleep(2000);
+        this.clickOnElement(locValue, cValue);    
+    }    
+    
+    this.sendkeys = function (loc, value) {        
+        console.log("Entering text - " + value); 
+        this.waitForElement(loc);
+        loc.clear().sendKeys(value);               
+    }  
  
     this.sendKeysInto = function(loc, value){        
         console.log("Entering text - " + value); 
@@ -167,78 +301,8 @@ var CommonFunction = function() {
            browser.executeScript("console.log('" + value + " is entered');");         
         });
         loc.clear().sendKeys(value);               
-    }   
-
-    this.selectFromDropDown = function(locList, locValue, cList, cValue){
-        this.clickOnElement(locList, cList);
-        this.waitForElementToBeVisible(element(by.xpath("//ion-select-popover")), 'Drop down list');
-        browser.sleep(2000);
-        this.clickOnElement(locValue, cValue);    
-    }
-
-    this.pressEndKey = function(){
-        browser.actions().sendKeys(protractor.Key.END).perform();       
-    }
-
-    this.pressKey = function(key){
-        browser.actions().sendKeys(key).perform();       
-    }
-
-    this.uploadImage = function(loc, fileToUpload, value){
-        browser.controlFlow().execute(function () {
-           browser.executeScript("console.log('" + value + " is uploaded');");           
-        }); 
-        console.log("Environment: " + browser.params.environment);
-        if(browser.params.environment.includes("remote")){
-            var remoteEnv = require('selenium-webdriver/remote');
-            browser.setFileDetector(new remoteEnv.FileDetector());
-        }
-        this.scrollToElement(loc);
-        console.log("FileToUpload: " +fileToUpload);
-        if(fileToUpload){
-            let docs = fileToUpload.split(",");
-            docs.forEach(function(result){
-                let absolutePath = path.resolve(__dirname, result);
-                console.log("Image path: " + absolutePath);
-                loc.clear().sendKeys(absolutePath);
-            });
-        }      
-    }
-
-    this.waitForElementToBeVisible = function(loc, value){  
-        browser.controlFlow().execute(function () {
-           browser.executeScript("console.log('Waiting for " + value + " to be visible');");           
-        });       
-        browser.wait(EC.visibilityOf(loc), 280000);
-    }
-
-    this.waitForSpecificElementToBeVisible = function(loc, elementNo, value, listIndex ){
-        browser.controlFlow().execute(function () {
-            browser.executeScript("console.log('Waiting for " + value + " to be visible');");           
-        }); 
-        switch(elementNo){
-            case "first":
-                browser.wait(EC.visibilityOf(element.all(loc).first()), 180000);
-                break;
-            case "last": 
-                browser.wait(EC.visibilityOf(element.all(loc).last()), 180000);
-                break;
-            case "index":
-                browser.wait(EC.visibilityOf(element.all(loc).get(listIndex)), 180000);
-                break;
-            default:
-                browser.wait(EC.visibilityOf(element.all(loc).last()), 180000);
-                break;    
-        }        
-    }
-
-    this.waitForElementToBeInvisible = function(loc, value){ 
-        browser.controlFlow().execute(function () {
-            browser.executeScript("console.log('Waiting for " + value + " to be invisible');");           
-        });        
-        browser.wait(EC.invisibilityOf(loc), 180000);
-    }
-
+    } 
+    
     this.setDate = function(dValue, day, month, year, hour, minute){
         const d = new Date();
         let currentDay = d.getDate();
@@ -289,46 +353,6 @@ var CommonFunction = function() {
         }   
     }
 
-    this.checkVisibleData = function(element, optList, conditionResult, msg){
-        let expCondition = protractor.ExpectedConditions; 
-        if(optList){
-          let options = optList.split(",");
-          options.forEach(option =>{
-              this.scrollToElement(this.getElementByCssContainingText(element, option));
-              expect(this.checkCondition(expCondition.visibilityOf(this.getElementByCssContainingText(element, option)))).toBeCorrect(conditionResult, msg + " - " + option);
-          });
-        }
-    }
-
-    this.checkOptionData = function(element, optList, optDataList, conditionResult, msg){
-        let expCondition = protractor.ExpectedConditions;
-        let options = [];
-        let optionData = [];
-        if(optList){
-           options = optList.split(","); 
-        }
-        if(optDataList){
-            optionData = optDataList.split(","); 
-        }
-        for(let i = 0; i<options.length; i++){
-            this.scrollToElement(this.getElementByCssContainingText(element, optionData[i]));
-            expect(this.checkCondition(expCondition.visibilityOf(this.getElementByCssContainingText(element, optionData[i])))).toBeCorrect(conditionResult, msg + " : " + options[i] + " - " + optionData[i]);         
-        }
-    }
-    
-    /**
-     * Function that returns boolean result after expected condition evaluation
-     * @param {Protractor function} expectCondition Protractor function that evaluates user specified expected condition
-     * @returns true if expected condition is met within specifed time limit else false
-     */
-    this.checkCondition = function(expectCondition){
-        return browser.wait(expectCondition, 30000).then(function(){
-            return true;
-        }, function() {
-            return false;
-        });
-    } 
-    
     /**
      * Function that returns object used for verification of text
      * @param {WebElement} loc Element locator
@@ -360,21 +384,28 @@ var CommonFunction = function() {
         });              
     }
 
-    this.getAESEncryptedString = function(message, key){
-        return cryptoJs.AES.encrypt(message, key);
-    }
-
-    this.getAESDecryptedString = function(encrypted, key){
-        return cryptoJs.AES.decrypt(encrypted, key).toString(cryptoJs.enc.Utf8);
+    this.uploadImage = function(loc, fileToUpload, value){
+        browser.controlFlow().execute(function () {
+           browser.executeScript("console.log('" + value + " is uploaded');");           
+        }); 
+        console.log("Environment: " + browser.params.environment);
+        if(browser.params.environment.includes("remote")){
+            var remoteEnv = require('selenium-webdriver/remote');
+            browser.setFileDetector(new remoteEnv.FileDetector());
+        }
+        this.scrollToElement(loc);
+        console.log("FileToUpload: " +fileToUpload);
+        if(fileToUpload){
+            let docs = fileToUpload.split(",");
+            docs.forEach(function(result){
+                let absolutePath = path.resolve(__dirname, result);
+                console.log("Image path: " + absolutePath);
+                loc.clear().sendKeys(absolutePath);
+            });
+        }      
     }
 
     this.updateStepDataObject = function(keyList, valueList){                
-        /*return loc.getText().then(function(text){
-            var obj = {param:"Original parameter", pValue:"Original value"};
-            obj.param  = cMessage;
-            obj.pValue = text;
-            return obj;
-        }); */
         return new Promise (function(resolve,reject) { 
             const obj = {};
             let keys = [];
@@ -406,38 +437,18 @@ var CommonFunction = function() {
     }
 
     this.updateStepTestData = function(keyList, valueList){
-        /*return new Promise (function(resolve,reject) { 
-            let jasmineObj = jasmine.getEnv();
-            let keys = [];
-            let values = [];
-            if(keyList){
-                keys = keyList.split(","); 
-            }
-            if(valueList){
-                values = valueList.split(","); 
-            }
-            for(let i = 0; i<keys.length; i++){
-               jasmineObj.setSpecProperty(keys[i],values[i]);  
-            }
-            if (typeof jasmineObj != "undefined") {
-                console.log("Jasmine env object is created");
-                resolve(true);
-            } else {
-                reject("Object does not exist");
-            }             
-        });*/
         const obj = {};
         let keys = [];
         let values = [];
         if(keyList){
-            keys = keyList.split(","); 
+            keys = keyList.split("`"); 
         }
         console.log(keyList);
         keys.forEach(item => {
             console.log(item); 
         });
         if(valueList){
-            values = valueList.split(","); 
+            values = valueList.split("`"); 
         }
         console.log(valueList);
         values.forEach(item => {
@@ -448,9 +459,105 @@ var CommonFunction = function() {
         }
         if (typeof obj != "undefined") {
             console.log("Step data object is created");
-            expect(obj).toBeValid();
+            expect(obj).toBeValidStepData();
         }
+    }    
+
+    this.waitForElement = function (loc){        
+        browser.wait(EC.elementToBeClickable(loc), 180000);
     }
+
+    this.waitForElementToBeVisible = function(loc, value){  
+        browser.controlFlow().execute(function () {
+           browser.executeScript("console.log('Waiting for " + value + " to be visible');");           
+        });       
+        browser.wait(EC.visibilityOf(loc), 280000);
+    }
+
+    this.waitForElementToBeInvisible = function(loc, value){ 
+        browser.controlFlow().execute(function () {
+            browser.executeScript("console.log('Waiting for " + value + " to be invisible');");           
+        });        
+        browser.wait(EC.invisibilityOf(loc), 180000);
+    }
+
+    this.waitForElementAttrib = function(loc, attrib, attribValue, value, milsec){
+        browser.controlFlow().execute(function () {
+            browser.executeScript("console.log('Waiting for " + value + " to be visible');");           
+        }); 
+        let isVisible = function(){
+            return loc.getAttribute(attrib).then(result => {
+                console.log(result);
+                if(result.includes(attribValue)){
+                    console.log(result);
+                    console.log("Attribute has value");
+                    return false;
+                } else {
+                    console.log("Attribute does not have value");
+                    return true;
+                }
+            })
+        }
+        browser.wait(isVisible, milsec);
+    }
+
+    this.waitForElementToBePresent = function(loc, value){ 
+        browser.controlFlow().execute(function () {
+            browser.executeScript("console.log('Waiting for " + value + " to be present');");           
+        });        
+        browser.wait(EC.presenceOf(loc), 180000);
+    }
+
+    this.waitForClickableElement = function(loc, sec, value){
+        browser.controlFlow().execute(function () {
+            browser.executeScript("console.log('Waiting for " + value + " to be clickable');");           
+        }); 
+        this.scrollToElement(loc);
+        let counter = 0;
+        do {
+            this.getAttribute(loc, "class").then(result => {
+                if(result){
+                    if(result.includes("button-disabled")){
+                        browser.sleep(1000);                                      
+                    }
+                }                
+            });
+            this.getAttribute(loc, "aria-disabled").then(result => {
+                if(result){
+                    if(result.includes("true")){
+                        browser.sleep(1000);                                      
+                    }
+                }                
+            });              
+            counter++;                   
+        } while (counter < sec);
+        return loc.isEnabled().then(result =>{
+            if(result){
+               return true;
+            }
+            return false; 
+        })        
+    }
+
+    this.waitForSpecificElementToBeVisible = function(loc, elementNo, value, listIndex ){
+        browser.controlFlow().execute(function () {
+            browser.executeScript("console.log('Waiting for " + value + " to be visible');");           
+        }); 
+        switch(elementNo){
+            case "first":
+                browser.wait(EC.visibilityOf(element.all(loc).first()), 180000);
+                break;
+            case "last": 
+                browser.wait(EC.visibilityOf(element.all(loc).last()), 180000);
+                break;
+            case "index":
+                browser.wait(EC.visibilityOf(element.all(loc).get(listIndex)), 180000);
+                break;
+            default:
+                browser.wait(EC.visibilityOf(element.all(loc).last()), 180000);
+                break;    
+        }        
+    }     
 
 /*
 * @Author: Sipan.Sarangi
@@ -461,6 +568,17 @@ var CommonFunction = function() {
         browser.actions().sendKeys(protractor.Key.ESCAPE).perform();   
     }
 
+    this.validation = function(loc,expectedResult){        
+        this.waitForElement(loc);        
+        loc.getText().then(function(actualResult) {
+            if(actualResult == expectedResult){
+                console.log("Verified, Actual Text -  " + actualResult  + " Expected - " + expectedResult + "")
+            }else {
+                console.log("verification failed, Actual Text - " + actualResult + " Expected - " + expectedResult + "")
+            }
+        });        
+    }
+    
     this.verification = function (loc, expectedText) {
         loc.getText().then(function (text) {
             if (text == expectedText){

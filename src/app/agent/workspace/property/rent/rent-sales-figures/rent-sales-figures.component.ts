@@ -3,7 +3,7 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AgentService } from 'src/app/agent/agent.service';
-import { DATE_FORMAT, PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, PROPCO, SYSTEM_OPTIONS } from 'src/app/shared/constants';
 import { ChangeGrossPage } from './rent-sales-figures-modal/change-gross/change-gross.page';
 import { ChangeNettPage } from './rent-sales-figures-modal/change-nett/change-nett.page';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -33,6 +33,7 @@ export class RentSalesFiguresComponent implements OnInit {
   isRentForm = false;
   DATE_FORMAT = DATE_FORMAT;
   dateChanged = new FormControl('');
+  systemOptions: any;
 
   constructor(private commonService: CommonService, private agentService: AgentService, private modalController: ModalController) { }
 
@@ -49,6 +50,7 @@ export class RentSalesFiguresComponent implements OnInit {
     this.getLookupData();
     this.getPropertyLookupData();
     this.getRentIndemnityProducts();
+    this.getOptions();
   }
 
   private patchFormData(): void {
@@ -76,7 +78,7 @@ export class RentSalesFiguresComponent implements OnInit {
       emergencyResponseService:
       {
         isERSEnabled: this.property?.propertyRentInfo?.emergencyResponseService?.isERSEnabled,
-        eriProduct: parseInt(this.property?.propertyRentInfo?.emergencyResponseService?.eriProduct),
+        eriProduct: this.property?.propertyRentInfo?.emergencyResponseService?.eriProduct ? parseInt(this.property?.propertyRentInfo?.emergencyResponseService?.eriProduct) : null,
         inceptionDate: this.property?.propertyRentInfo?.emergencyResponseService?.inceptionDate,
         renewalDate: this.property?.propertyRentInfo?.emergencyResponseService?.renewalDate,
         cancelledDate: this.property?.propertyRentInfo?.emergencyResponseService?.cancelledDate
@@ -91,6 +93,10 @@ export class RentSalesFiguresComponent implements OnInit {
       isLandlordArrearsExcluded: this.property?.propertyRentInfo?.isLandlordArrearsExcluded
     });
     this.isRentForm = true;
+    if (this.property?.propertyRentInfo?.isUseRentPercentage)
+      this.group.get('premiumPercentage').enable();
+    else
+      this.group.get('premiumPercentage').disable();
   }
 
   private getLookupData() {
@@ -159,7 +165,17 @@ export class RentSalesFiguresComponent implements OnInit {
       backdropDismiss: false
     });
 
-    modal.onDidDismiss();
+    modal.onDidDismiss().then(res => {
+      if (res && res.data) {
+        const commission = parseFloat(res.data);
+        const vat = (commission * ((this.systemOptions / 100) + 1)).toFixed(2);
+        this.group.get('managementCommission').patchValue(commission);
+        this.group.get('vatInclusive').patchValue(vat);
+        this.group.get('managementCommission').markAsDirty();
+        this.group.get('vatInclusive').markAsDirty();
+        this.group.updateValueAndValidity();
+      }
+    });
     await modal.present();
   }
 
@@ -171,7 +187,17 @@ export class RentSalesFiguresComponent implements OnInit {
       backdropDismiss: false
     });
 
-    modal.onDidDismiss();
+    modal.onDidDismiss().then(res => {
+      if (res && res.data) {
+        const vat = parseFloat(res.data);
+        const commission = (vat / ((this.systemOptions / 100) + 1)).toFixed(2);
+        this.group.get('vatInclusive').patchValue(vat);
+        this.group.get('managementCommission').patchValue(commission);
+        this.group.get('managementCommission').markAsDirty();
+        this.group.get('vatInclusive').markAsDirty();
+        this.group.updateValueAndValidity();
+      }
+    });
     await modal.present();
   }
 
@@ -206,6 +232,31 @@ export class RentSalesFiguresComponent implements OnInit {
         });
       }
     }
+  }
+
+  onUseRentPercentageChange(e: any) {
+    const val = e.detail.checked;
+    if (val)
+      this.group.get('premiumPercentage').enable();
+    else
+      this.group.get('premiumPercentage').disable();
+  }
+
+  private getOptions() {
+    const params = new HttpParams()
+      .set('hideLoader', 'true')
+      .set('option', SYSTEM_OPTIONS.STDVATRATE);
+    return new Promise((resolve) => {
+      this.agentService.getSyatemOptions(params).subscribe(
+        (res) => {
+          this.systemOptions = res ? res.STDVATRATE : '';
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
   }
 }
 

@@ -3,5 +3,6 @@ export const environment = {
   API_BASE_URL: "https://saas-qa.propco.co.uk/v3-dev/api/" ,
   MEDIA_HOST_URL: 'https://saas-qa.propco.co.uk/demolocal/',
   PAYMENT_METHOD: 'BARCLAYCARD_REDIRECT',
-  PAYMENT_PROD: false
+  PAYMENT_PROD: false,
+  FLUTTER_HOST_URL: 'http://172.20.10.4:8080/#/'
 };

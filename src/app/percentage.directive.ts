@@ -48,6 +48,9 @@ export class PercentageDirective {
     if (value == undefined || value === '') {
       return null;
     }
+    if (typeof value === 'number')
+      value = value + "";
+
     if (value.indexOf('%') != -1 && isParse) {
       value = value.replace(/[%]/g, '');
       this.ngControl.valueAccessor.writeValue(value);

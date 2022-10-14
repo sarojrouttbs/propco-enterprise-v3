@@ -113,6 +113,13 @@
           "state": "propco.agent.entity.property.whitegoods",
           "isActive": false,
           "route": "whitegoods"
+        },{
+          "index": 7,
+          "key": "usersassignments",
+          "name": "User Assignments",
+          "state": "propco.agent.entity.property.userassignments",
+          "isActive": false,
+          "route": "user-assignments"
         }
       ]
     },

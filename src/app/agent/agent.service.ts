@@ -1,8 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, BehaviorSubject, throwError, Subject } from 'rxjs';
+import { catchError, debounceTime, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { CommonService } from '../shared/services/common.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,9 +14,12 @@ export class AgentService {
   updatedViewingCount = this.getViewingCount.asObservable();
 
   private resetViewingFilter = new BehaviorSubject<any>('');
-  updateResetFilter = this.resetViewingFilter.asObservable();
-
-  constructor(private httpClient: HttpClient) { }
+  updateResetFilter = this.resetViewingFilter.asObservable(); 
+  
+  constructor(
+    private httpClient: HttpClient,
+    private commonService: CommonService
+    ) { }
 
   updateCount(message: number) {
     this.getViewingCount.next(message);
@@ -227,7 +231,7 @@ export class AgentService {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/shortlet/node`, { params })
   }
 
-  updatePropertyDetails(propertyId: number, requestObj: any): Observable<any> {
+  updatePropertyDetails(propertyId: string, requestObj: any): Observable<any> {
     const params = new HttpParams().set('hideLoader', 'true');
     return this.httpClient.patch(environment.API_BASE_URL + `properties/${propertyId}/update/node`, requestObj,  { params }).pipe(
       catchError(this.handleError<any>(''))
@@ -240,4 +244,7 @@ export class AgentService {
       return throwError(error);
     };
   }
+
+    
 }
+
