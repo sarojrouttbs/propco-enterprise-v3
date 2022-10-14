@@ -231,7 +231,7 @@ export class AgentService {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/shortlet/node`, { params })
   }
 
-  updatePropertyDetails(propertyId: number, requestObj: any): Observable<any> {
+  updatePropertyDetails(propertyId: any, requestObj: any): Observable<any> {
     const params = new HttpParams().set('hideLoader', 'true');
     return this.httpClient.patch(environment.API_BASE_URL + `properties/${propertyId}/update/node`, requestObj,  { params }).pipe(
       catchError(this.handleError<any>(''))

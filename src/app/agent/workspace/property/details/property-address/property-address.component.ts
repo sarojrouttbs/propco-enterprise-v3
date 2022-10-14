@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { AgentService } from 'src/app/agent/agent.service';
+import { AGENT_WORKSPACE_CONFIGS } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -9,6 +11,8 @@ export class PropertyAddressComponent {
   @Input() group;
   address: any;
   lookupLoader = false;
+  localStorageItems: any = [];
+  selectedEntityDetails: any = null;
   addressList: any[];
   selectedAddress: any;
   addressPopoverOptions: any = {
@@ -16,7 +20,35 @@ export class PropertyAddressComponent {
   };
   @Input() isPropertyAddressAvailable = false;
 
-  constructor(private commonService: CommonService) { }
+  constructor(
+    private commonService: CommonService,
+    private agentService: AgentService
+  ) {
+    this.initApiCalls();
+
+  }
+
+  private async initApiCalls() {
+    this.localStorageItems = await this.fetchItems();
+    this.selectedEntityDetails = await this.getActiveTabEntityInfo();
+
+  }
+
+  private fetchItems() {
+    return (
+      this.commonService.getItem(
+        AGENT_WORKSPACE_CONFIGS.localStorageName,
+        true
+      ) || []
+    );
+  }
+
+  private getActiveTabEntityInfo() {
+    const item = this.localStorageItems.filter((x) => x.isSelected);
+    if (item) {
+      return item[0];
+    }
+  }
 
   getAddressList() {
     if (this.group.get('postcode').value == null) {
@@ -65,7 +97,34 @@ export class PropertyAddressComponent {
         this.group.get('latitude').setValue(res.latitude);
         this.group.get('longitude').setValue(res.longitude);
         this.group.get('organisationName').setValue(res.company);
-        this.group.get('pafref').setValue(res.domesticId);
+        this.group.get('pafReference').setValue(res.domesticId);
+        this.group.get('postcode').setValue(res.postalCode);
+
+        const addressObj = {
+          buildingNumber: res.buildingNumber,
+          buildingName: res.buildingName,
+          street: res.street,
+          addressLine1: res.line1,
+          addressLine2: res.line2,
+          addressLine3: res.line3,
+          locality: res.line4,
+          town: res.line5,
+          county: res.county,
+          country: res.countryName,
+          latitude: res.latitude.toString(),
+          longitude: res.longitude.toString(),
+          organisationName: res.company,
+          pafReference: res.domesticId,
+          postcode: res.postalCode
+        }
+
+        this.agentService.updatePropertyDetails(this.selectedEntityDetails.entityId, addressObj).subscribe(
+          res => {
+          },
+          error => {
+            this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Update Property Address', 'error');
+          }
+        );
       }
     }, error => {
       this.selectedAddress = {};
@@ -76,7 +135,7 @@ export class PropertyAddressComponent {
     });
   }
 
-  toUpperCase(formControlName: string, event: any):void {
+  toUpperCase(formControlName: string, event: any): void {
     this.group.get(formControlName).setValue(event.target.value.toUpperCase());
   }
 

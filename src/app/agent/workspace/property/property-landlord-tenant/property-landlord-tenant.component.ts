@@ -117,7 +117,7 @@ export class PropertyLandlordTenantComponent implements OnInit {
   async openCallInfo(info: any, type: any) {
     const modal = await this.modalCtrl.create({
       component: CallInfoModalPage,
-      cssClass: 'user-info-modal',
+      cssClass: 'modal-container user-info-modal',
       componentProps: {
         userInfo: info,
         type: type
