@@ -17,16 +17,13 @@
     <p class="lable">Call Mobile</p>
     <ion-text class="info">{{userInfo?.mobile || notAvailable}}</ion-text>
   </ng-template>
-
-
-
 </ion-content>
 
 <ion-footer>
   <ion-grid>
     <ion-row>
-      <ion-col class="ion-text-center">
-        <ion-button (click)="dismiss()">Close</ion-button>
+      <ion-col class="ion-text-right">
+        <ion-button (click)="dismiss()" color="danger">Close</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

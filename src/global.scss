@@ -637,30 +637,40 @@ mat-form-field {
 
 .searchbarCustom {
   --background: transparent;
-    padding: 0;
+  padding: 0;
+  .searchbar-input {
+    line-height: 27px;
+  }
+  .searchbar-search-icon {
+    display:none; 
+    width:0; 
+    height:0;
+  }
+  .searchbar-search-icon {
+    background-image: url("assets/images/solr/propcoLogo.svg")!important;
+    color: transparent;
+    background-size: cover;
+  }
+  .searchbar-input-container{
+    border: 1px solid #ccc;
+    box-shadow: none;
+    border-left: 0;
     .searchbar-input {
-      line-height: 27px;
-    }
-    .searchbar-search-icon {
-      display:none; 
-      width:0; 
-      height:0;
-    }
-    .searchbar-search-icon {
-      background-image: url("assets/images/solr/propcoLogo.svg")!important;
-      color: transparent;
-      background-size: cover;
-    }
-    .searchbar-input-container{
-      border: 1px solid #ccc;
       box-shadow: none;
-      border-left: 0;
-      .searchbar-input {
-        box-shadow: none;
-        padding-top: 4px;
-        padding-left: 10px;
+      padding-top: 4px;
+      padding-left: 10px;
+    }
+    &.sc-ion-searchbar-ios{
+      height: 39px;
+      .searchbar-input{
+        padding-inline-start: 15px;
       }
     }
+  }
+  &.sc-ion-searchbar-ios-h{
+    height: 39px;
+    min-width: 200px;
+  }
 }
 .solrMutiSelect {
 	.mat-form-field {
@@ -846,22 +856,8 @@ mat-form-field {
 }
 
 .user-info-modal  {
-  --background:  var(--ion-color-four);
   --height: 260px;
   --width: 470px;
-  ion-toolbar{
-    --background: var(--ion-color-property-status-bg);
-    color: var(--ion-color-six);
-  }
-  ion-content{
-    color: var(--ion-color-six) !important;
-    --background:  var(--ion-color-four);
-  }
-  ion-footer{    
-    ion-button{
-      --background: var(--ion-color-property-status-bg);
-    }
-  }
 }
 
 // #agent-portal {
