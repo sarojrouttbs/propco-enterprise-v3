@@ -253,7 +253,8 @@ export const SYSTEM_CONFIG = {
 export const SYSTEM_OPTIONS = {
   REPAIR_ESTIMATE_QUOTE_THRESHOLD: 'REPAIR_ESTIMATE_QUOTE_THRESHOLD',
   INVOICE_VERIFICATION_THRESHOLD: 'INVOICE_VERIFICATION_THRESHOLD',
-  WEB_IMAGE_URL : "WEB_IMAGE_URL"
+  WEB_IMAGE_URL : 'WEB_IMAGE_URL',
+  STDVATRATE: 'STDVATRATE'
 };
 
 export const MAINTENANCE_TYPES = {
@@ -663,7 +664,8 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'whitegoods': 'Service/White Goods',
       'safety': 'Safety Devices/Alarms',
       'clauses': 'Clauses',
-      'media' : 'Media'
+      'media' : 'Media',
+      'user-assignments' : 'User Assignments'
     }
   }
 };
