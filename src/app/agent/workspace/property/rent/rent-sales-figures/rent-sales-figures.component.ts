@@ -94,9 +94,9 @@ export class RentSalesFiguresComponent implements OnInit {
     });
     this.isRentForm = true;
     if (this.property?.propertyRentInfo?.isUseRentPercentage)
-      this.group.get('premiumPercentage').enable()
+      this.group.get('premiumPercentage').enable();
     else
-      this.group.get('premiumPercentage').disable()
+      this.group.get('premiumPercentage').disable();
   }
 
   private getLookupData() {
