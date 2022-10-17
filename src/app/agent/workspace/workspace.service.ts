@@ -6,7 +6,7 @@ import {
   DEFAULT_MESSAGES,
 } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { Property } from './workspace.model';
+import { LANDLORD, Property } from './workspace.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +21,10 @@ export class WorkspaceService {
       case 'PROPERTY':
         await this.setItemInWS(item);
         this.goToPropertyDashboard(item);
+        break;
+      case 'LANDLORD':
+        await this.setItemInWS(item);
+        this.goToLandlordDashboard(item);
         break;
 
       default:
@@ -41,10 +45,18 @@ export class WorkspaceService {
       });
   }
 
+  private goToLandlordDashboard(item): void {
+    this.router
+      .navigate([`agent/workspace/landlord/${item.entityId}/contact-info`])
+      .then(() => {
+        location.reload();
+      });
+  }
+
   prepareTabData(item) {
     switch (item.entityType) {
       case 'PROPERTY':
-        let propData: Property = {} as Property;
+        const propData: Property = {} as Property;
         propData.entity = item.entityType;
         propData.entityId = item.entityId;
         propData.entityTitle = item.address;
@@ -53,13 +65,23 @@ export class WorkspaceService {
         propData.pageRef = AGENT_WORKSPACE_CONFIGS.property.pageTitleMap.dashboard;
         propData.isSelected = true;
         return propData;
+      case 'LANDLORD':
+        const landlordData: LANDLORD = {} as LANDLORD;
+        landlordData.entity = item.entityType;
+        landlordData.entityId = item.entityId;
+        landlordData.entityTitle = item.fullName;
+        landlordData.reference = item.reference;
+        landlordData.state = `agent/workspace/landlord/${item.entityId}/contact-info`;
+        landlordData.pageRef = AGENT_WORKSPACE_CONFIGS.landlord.pageTitleMap['contact-info'];
+        landlordData.isSelected = true;
+        return landlordData;
       default:
         break;
     }
   }
 
-  private async setItemInWS(item) {
-    let itemsInStorage = this.commonService.getItem(
+  private async setItemInWS(item: any) {
+    const itemsInStorage = this.commonService.getItem(
       AGENT_WORKSPACE_CONFIGS.localStorageName,
       true
     );
@@ -69,7 +91,7 @@ export class WorkspaceService {
       ]);
       return;
     } else {
-      let updatedList = await this.changeSelected(itemsInStorage, 'isSelected', item.entityId);
+      const updatedList = await this.changeSelected(itemsInStorage, 'isSelected', item.entityId);
       if (!this.checkIfEntityExistsInWS(item.entityId)) {
         this.commonService.removeItem(AGENT_WORKSPACE_CONFIGS.localStorageName);
         itemsInStorage.push(this.prepareTabData(item));
@@ -91,7 +113,7 @@ export class WorkspaceService {
   }
 
   private checkIfEntityExistsInWS(entyityId: string) {
-    let found;
+    let found: boolean;
     const arr = this.commonService.getItem(
       AGENT_WORKSPACE_CONFIGS.localStorageName,
       true
