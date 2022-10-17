@@ -6,25 +6,24 @@ import menuList from '../../../../assets/data/menu.json';
 import { WorkspaceService } from '../workspace.service';
 
 @Component({
-  selector: 'app-property',
-  templateUrl: './property.page.html',
-  styleUrls: ['./property.page.scss'],
+  selector: 'app-landlord',
+  templateUrl: './landlord.page.html',
+  styleUrls: ['./landlord.page.scss'],
 })
-export class PropertyPage implements OnInit {
+export class LandlordPage implements OnInit  {
   showFiller = false;
   open = false;
-  mobileQuery: MediaQueryList;
   isExpanded = true;
   showSubmenu = false;
   isShowing = false;
   showSubSubMenu = false;
-  proptertyId: string;
+  landlordId: string;
   menuItems;
   screenWidth;
   showMenu = false;
-  label = AGENT_WORKSPACE_CONFIGS.property.pageTitleMap.dashboard;
+  label = AGENT_WORKSPACE_CONFIGS.landlord.pageTitleMap['contact-info'];
   mode: string = 'side';
-  agentMenu: any[] = menuList.property;
+  agentMenu: any[] = menuList.landlord;
   constructor(
     private route: ActivatedRoute,
     private workspaceService: WorkspaceService,
@@ -40,8 +39,8 @@ export class PropertyPage implements OnInit {
   }
 
   ngOnInit() {
-    this.menuItems = menuList.property;
-    this.proptertyId = this.route.snapshot.params['propertyId'];
+    this.menuItems = menuList.landlord;
+    this.landlordId = this.route.snapshot.params['landlordId'];
     if (this.screenWidth > 1024) {
       setTimeout(() => {
         /** added timeout to open sidenav, On page load we will see a better way to do it */
@@ -76,7 +75,7 @@ export class PropertyPage implements OnInit {
   }
 
   workspaceSetActiveLink(route: string) {
-    this.workspaceService.updateItemState(this.proptertyId, route);
+    this.workspaceService.updateItemState(this.landlordId, route);
   }
 
   onShowSearchResultClick() {

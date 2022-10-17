@@ -667,6 +667,11 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'media' : 'Media',
       'user-assignments' : 'User Assignments'
     }
+  },
+  landlord: {
+    pageTitleMap: {
+      'contact-info': 'Contact Info'
+    }
   }
 };
 
