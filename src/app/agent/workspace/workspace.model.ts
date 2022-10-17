@@ -9,7 +9,6 @@ export interface Params {
 export interface Property {
   state: string;
   params: Params;
-  entityType: number;
   entityId: string;
   entity: string;
   entityTitle: string;
@@ -21,7 +20,6 @@ export interface Property {
 export interface LANDLORD {
   state: string;
   params: Params;
-  entityType: number;
   entityId: string;
   entity: string;
   entityTitle: string;
