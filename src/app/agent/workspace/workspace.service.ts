@@ -80,7 +80,7 @@ export class WorkspaceService {
     }
   }
 
-  private async setItemInWS(item) {
+  private async setItemInWS(item: any) {
     const itemsInStorage = this.commonService.getItem(
       AGENT_WORKSPACE_CONFIGS.localStorageName,
       true
