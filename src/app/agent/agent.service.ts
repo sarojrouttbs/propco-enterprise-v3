@@ -14,12 +14,12 @@ export class AgentService {
   updatedViewingCount = this.getViewingCount.asObservable();
 
   private resetViewingFilter = new BehaviorSubject<any>('');
-  updateResetFilter = this.resetViewingFilter.asObservable(); 
-  
+  updateResetFilter = this.resetViewingFilter.asObservable();
+
   constructor(
     private httpClient: HttpClient,
     private commonService: CommonService
-    ) { }
+  ) { }
 
   updateCount(message: number) {
     this.getViewingCount.next(message);
@@ -233,9 +233,13 @@ export class AgentService {
 
   updatePropertyDetails(propertyId: number, requestObj: any): Observable<any> {
     const params = new HttpParams().set('hideLoader', 'true');
-    return this.httpClient.patch(environment.API_BASE_URL + `properties/${propertyId}/update/node`, requestObj,  { params }).pipe(
+    return this.httpClient.patch(environment.API_BASE_URL + `properties/${propertyId}/update/node`, requestObj, { params }).pipe(
       catchError(this.handleError<any>(''))
     );
+  }
+
+  createWhiteGoods(propertyId: number, requestObj: any) {
+    return this.httpClient.post(environment.API_BASE_URL + `properties/${propertyId}/management-services`, requestObj);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
@@ -245,6 +249,6 @@ export class AgentService {
     };
   }
 
-    
+
 }
 
