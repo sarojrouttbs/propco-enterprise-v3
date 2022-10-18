@@ -60,7 +60,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       tap(() => {
         this.formStatus = FormStatus.Saving;
         this.commonService.showAutoSaveLoader(this.formStatus);
-        const changedData = this.commonService.getDirtyValues(this.propertyDetailsForm)
+        const changedData = this.commonService.getDirtyValues(this.propertyDetailsForm);
         const controlName = Object.keys(changedData);
         this.formChangedValue = changedData[controlName[0]] ?? {};
       }),

@@ -1,0 +1,143 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add Guarantee Certificates and Service Contracts</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <form [formGroup]="whitegoodForm">
+      <ion-row>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Type <ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="type">
+              <ion-select-option [value]="type?.index" *ngFor="let type of certificateTypes">
+                {{ type?.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="whitegoodForm.controls.type"></app-validation-message>
+        </ion-col>
+        <ion-col size="50">
+          <ion-item>
+            <ion-label position="floating">Certificate Number</ion-label>
+            <ion-input formControlName="managementServiceNumber"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="50">
+          <ion-item>
+            <ion-label position="floating">Membership Number</ion-label>
+            <ion-input formControlName="membershipNumber"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Contact</ion-label>
+            <ion-input formControlName="contact"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="50">
+          <ion-item>
+            <ion-label position="floating">Contact Number</ion-label>
+            <ion-input formControlName="contactNumber"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="50">
+          <ion-item>
+            <ion-label position="floating">Contact Ref</ion-label>
+            <ion-input formControlName="contactRef"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Supplier/Contact Address</ion-label>
+            <ion-input formControlName="supplierAddress"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="70">
+          <ion-item>
+            <ion-label position="floating">Appliance</ion-label>
+            <ion-input formControlName="appliance"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="30">
+          <ion-item>
+            <ion-label position="floating">Star Rating</ion-label>
+            <ion-input formControlName="starRating"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="70">
+          <ion-item>
+            <ion-label position="floating">Model</ion-label>
+            <ion-input formControlName="model"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="30">
+          <ion-item>
+            <ion-label position="floating">Age</ion-label>
+            <ion-input formControlName="age"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Serial Number</ion-label>
+            <ion-input formControlName="serialNumber"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="50">
+          <ion-item id="startDate">
+            <ion-label position="floating">Starts <ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-input value="{{ whitegoodForm.controls.startDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="startDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="startDate"
+                  (ionChange)="getExpiryDate()">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+          <app-validation-message [control]="whitegoodForm.controls.startDate"></app-validation-message>
+        </ion-col>
+        <ion-col size="50">
+          <ion-item id="expireDate">
+            <ion-label position="floating">Expires <ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-input value="{{ whitegoodForm.controls.expireDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="expireDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="expireDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+          <app-validation-message [control]="whitegoodForm.controls.expireDate"></app-validation-message>
+        </ion-col>
+        <ion-col size="100">
+          <ion-item>
+            <ion-label position="floating">Notes</ion-label>
+            <ion-input formControlName="notes"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="100" class="ion-text-end">
+        <ion-button (click)="dismiss()" color="danger">Cancel</ion-button>
+        <ion-button color="success" (click)="createWhiteGoods()" >OK </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
