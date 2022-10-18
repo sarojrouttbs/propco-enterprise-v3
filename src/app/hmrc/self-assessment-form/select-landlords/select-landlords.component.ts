@@ -169,12 +169,6 @@ export class SelectLandlordsComponent implements OnInit {
     } else {
       return this.uncheckedLandlords.indexOf(propertyLinkId) >= 0 ? false : true;
     }
-
-    if (this.gridCheckAll) {
-      return this.checkedLandlords.indexOf(propertyLinkId) >= 0 ? false : true;
-    } else {
-      return this.uncheckedLandlords.indexOf(propertyLinkId) >= 0 ? true : false;
-    }
   }
 
   private getRows(selected: boolean) {
