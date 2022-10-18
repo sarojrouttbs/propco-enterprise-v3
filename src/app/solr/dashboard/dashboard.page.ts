@@ -66,6 +66,7 @@ export class DashboardPage implements OnInit {
     },
   };
   isSolrTourDone = false;
+  private routeSnapShot;
 
 
   constructor(
@@ -75,6 +76,7 @@ export class DashboardPage implements OnInit {
     private guidedTourService: GuidedTourService,
     private router: Router
   ) {
+    this.routeSnapShot = route.snapshot;
   }
 
   ngOnInit() {
@@ -88,7 +90,12 @@ export class DashboardPage implements OnInit {
   private async initApiCalls() {
     const accessToken = this.commonService.getItem(PROPCO.ACCESS_TOKEN);
     const webKey = this.commonService.getItem(PROPCO.WEB_KEY);
-    if (accessToken && webKey) {
+    let ssoKey = encodeURIComponent(this.routeSnapShot.queryParams.ssoKey);
+    const oldSsoKey = this.commonService.getItem(PROPCO.SSO_KEY);
+    if (accessToken && webKey && ssoKey == 'undefined') {
+      ssoKey = oldSsoKey;
+    }
+    if (accessToken && webKey && (ssoKey && ssoKey === oldSsoKey)) {
       this.setDefaultHome(true);
       this.loggedInUserData = this.commonService.getItem(PROPCO.USER_DETAILS, true);
       this.isSolrTourDone = this.loggedInUserData.isSolrTourDone;
