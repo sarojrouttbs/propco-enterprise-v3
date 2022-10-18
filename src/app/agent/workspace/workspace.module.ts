@@ -10,6 +10,7 @@ import { WorkspacePage } from './workspace.page';
 import { MaterialModule } from 'src/app/material.module';
 import { ComponentsModule } from 'src/app/shared/components/components.module';
 import { PropertyPageModule } from './property/property.module';
+import { LandlordPageModule } from './landlord/landlord.module';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { PropertyPageModule } from './property/property.module';
     WorkspacePageRoutingModule,
     MaterialModule,
     ComponentsModule,
-    PropertyPageModule
+    PropertyPageModule,
+    LandlordPageModule
   ],
   declarations: [WorkspacePage],
 })

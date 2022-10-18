@@ -1,5 +1,5 @@
 {
-  "agents": [
+  "property": [
     {
       "index": 1,
       "key": "dashboard",
@@ -113,6 +113,13 @@
           "state": "propco.agent.entity.property.whitegoods",
           "isActive": false,
           "route": "whitegoods"
+        },{
+          "index": 7,
+          "key": "usersassignments",
+          "name": "User Assignments",
+          "state": "propco.agent.entity.property.userassignments",
+          "isActive": false,
+          "route": "user-assignments"
         }
       ]
     },
@@ -154,6 +161,25 @@
           "state": "propco.agent.entity.property.notes",
           "isActive": false,
           "route": "notes"
+        }
+      ]
+    }
+  ],
+  "landlord": [
+    {
+      "index": 1,
+      "name": "Home",
+      "key": "home",
+      "isActive": false,
+      "showSubmenu": false,
+      "subMenu": [
+        {
+          "index": 1,
+          "key": "contact_info",
+          "name": "Contact Information",
+          "state": "propco.agent.entity.landlord.contactinfo",
+          "isActive": false,
+          "route": "contact-info"
         }
       ]
     }
