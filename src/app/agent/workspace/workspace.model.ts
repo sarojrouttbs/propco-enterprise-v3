@@ -9,7 +9,17 @@ export interface Params {
 export interface Property {
   state: string;
   params: Params;
-  entityType: number;
+  entityId: string;
+  entity: string;
+  entityTitle: string;
+  reference: string;
+  isSelected: boolean;
+  pageRef: string;
+}
+
+export interface LANDLORD {
+  state: string;
+  params: Params;
   entityId: string;
   entity: string;
   entityTitle: string;
