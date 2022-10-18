@@ -4,5 +4,5 @@ export const environment = {
   MEDIA_HOST_URL: 'https://saas-qa.propco.co.uk/demolocal/',
   PAYMENT_METHOD: 'BARCLAYCARD_REDIRECT',
   PAYMENT_PROD: false,
-  FLUTTER_HOST_URL: 'http://172.20.10.4:8080/#/'
+  FLUTTER_HOST_URL: 'https://embed-qa.propco.co.uk/v3-web/#/'
 };
