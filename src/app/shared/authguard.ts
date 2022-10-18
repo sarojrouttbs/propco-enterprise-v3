@@ -18,8 +18,8 @@ export class AuthGuard implements CanActivate {
         if (accessToken && webKey && ssoKey == 'undefined') {
             ssoKey = oldSsoKey;
         }
-
-        if (accessToken && webKey) {
+        
+        if (accessToken && webKey && (ssoKey && ssoKey == oldSsoKey)) {
             return true;
         } else {
             if (ssoKey && ssoKey !== 'undefined') {
