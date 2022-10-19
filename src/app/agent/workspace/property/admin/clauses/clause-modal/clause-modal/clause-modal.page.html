@@ -31,7 +31,7 @@
         </ion-col>
         <ion-col size="100">
           <ion-item>
-            <ion-text>Clause Heading</ion-text>
+            <ion-label>Clause Heading</ion-label>
             <ion-select formControlName="clauseHeadingId" interface="popover">
               <ion-select-option [value]="item.clauseHeadingId" *ngFor="let item of clausesHeadingList">
                 {{item.clauseHeading}}
@@ -39,20 +39,20 @@
             </ion-select>
           </ion-item>
         </ion-col>
-        <ion-col size="30">
+        <ion-col size="33.33">
           <ion-item lines="none">
             <ion-toggle formControlName="isNewHeading" color="primary" (ionChange)="onToggle($event)">
             </ion-toggle>
             <ion-text>New Heading</ion-text>
           </ion-item>
         </ion-col>
-        <ion-col size="30" formArrayName="newHeading">
+        <ion-col size="33.33" formArrayName="newHeading">
           <ion-item>
             <ion-label position="floating">Clause Heading</ion-label>
             <ion-input formControlName="clauseHeading"></ion-input>
           </ion-item>
         </ion-col>
-        <ion-col size="30" formArrayName="newHeading">
+        <ion-col size="33.33" formArrayName="newHeading">
           <ion-item>
             <ion-label position="floating">Clause Number</ion-label>
             <ion-input formControlName="clauseNumber"></ion-input>

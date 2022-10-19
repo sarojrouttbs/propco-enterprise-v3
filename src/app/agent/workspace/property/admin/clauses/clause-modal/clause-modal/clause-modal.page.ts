@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AgentService } from 'src/app/agent/agent.service';
+import { PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
@@ -14,6 +15,8 @@ export class ClauseModalPage implements OnInit {
 
   clauseForm: FormGroup
   clausesHeadingList;
+  lookupdata: any;
+  clauseCategory: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -23,22 +26,42 @@ export class ClauseModalPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.getLookupData();
     this.initForm();
+  }
+
+  private getLookupData() {
+    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
+    if (this.lookupdata) {
+      this.setLookupData(this.lookupdata);
+    } else {
+      this.commonService.getLookup().subscribe(data => {
+        this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
+        this.lookupdata = data;
+        this.setLookupData(data);
+      });
+    }
+  }
+
+  private setLookupData(data: any) {
+    this.clauseCategory = data.clauseCategory;
   }
 
   initForm() {
     this.clauseForm = this.formBuilder.group({
-      clauseCategory: [''],
+      clauseCategory: this.clauseCategory[0].index,
       clauseHeadingId: [''],
       clauseName: [''],
       clauseNumber: [''],
-      clauseScope: ['PROPERTY'],
+      clauseScope: ['Property'],
       clauseText: [''],
       isNewHeading: [false],
       newHeading: this.formBuilder.group({
         clauseNumber: [''],
         clauseHeading: ['']
-      })
+      }),
+      isNegotiable: false,
+      isRedundant: false
     });
     this.clauseForm.get('newHeading').disable();
   }
@@ -62,9 +85,12 @@ export class ClauseModalPage implements OnInit {
       return;
     }
     this.agentService.createClause(this.clauseForm.value).subscribe((res) => {
-      this.modalController.dismiss('success');
+      this.modalController.dismiss({
+        status: 'success',
+        data: res ? res : ''
+      });
     }, (error) => {
-      this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Create Key Set', 'error');
+      this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Add Clause', 'error');
     });
   }
 
