@@ -448,16 +448,20 @@
           </ion-item>
           <app-validation-message [control]="applicantDetailsForm.controls.email"></app-validation-message>
         </ion-col>
-        <ion-col size-xs="100" size-sm="33.3" style="padding-top: 21px;">
-          <mat-form-field appearance="fill">
-            <mat-label> Date of birth</mat-label>
-            <input matInput [matDatepicker]="picker3" [max]="currentDate" formControlName="dateOfBirth" readonly>
-            <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
-            <mat-datepicker #picker3></mat-datepicker>
-          </mat-form-field>
-          <div style="margin-top: -20px !important;">
-            <app-validation-message [control]="applicantDetailsForm.controls.dateOfBirth"></app-validation-message>
-          </div>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item id="dateOfBirth">
+            <ion-label position="floating">Date of birth<ion-text class="mandatory"> * </ion-text></ion-label>
+            <ion-input value="{{ applicantDetailsForm.controls.dateOfBirth.value | date: DATE_FORMAT.DATE }}">
+            </ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="dateOfBirth" show-backdrop="false">
+              <ng-template>
+                <ion-datetime showDefaultButtons="true" presentation="date" formControlName="dateOfBirth" [max]="currentDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+          <app-validation-message [control]="applicantDetailsForm.controls.dateOfBirth"></app-validation-message>
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
@@ -719,13 +723,18 @@
               </ion-item>
             </ion-col>
             <ion-col size-xs="100" size-sm="33.3">
-              <mat-form-field appearance="fill" *ngIf="question.controls['type'].value === 'DATE'">
-                <mat-label> Date and time </mat-label>
-                <input matInput [matDatepicker]="picker2" formControlName="answer"
-                  [disabled]="!question.controls['toggle'].value" readonly>
-                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                <mat-datepicker #picker2></mat-datepicker>
-              </mat-form-field>
+              <ion-item id="answer" *ngIf="question.controls['type'].value === 'DATE'">
+                <ion-label position="floating">Date and time</ion-label>
+                <ion-input value="{{ question.controls.answer.value | date: DATE_FORMAT.DATE }}" [disabled]="!question.controls['toggle'].value">
+                </ion-input>
+                <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                <ion-popover class="ion-datepicker-popover" trigger="answer" show-backdrop="false">
+                  <ng-template>
+                    <ion-datetime showDefaultButtons="true" presentation="date" formControlName="answer">
+                    </ion-datetime>
+                  </ng-template>
+                </ion-popover>
+              </ion-item>
 
               <ion-item *ngIf="question.controls['type'].value === 'TEXT'">
                 <ion-label position="floating">Answer</ion-label>
@@ -759,33 +768,36 @@
           </ion-text>
         </ion-col>
 
-        <ion-col size-xs="100" size-sm="33.3" style="padding-top: 21px;">
-          <mat-form-field appearance="fill">
-            <mat-label>When would you like to move in?</mat-label>
-            <input matInput [matDatepicker]="picker" [max]="maxMoveInDate" [min]="currentDate"
-              formControlName="moveInDate" readonly>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-          <div style="margin-top: -20px !important;">
-            <app-validation-message [control]="tenancyDetailForm.controls.moveInDate"></app-validation-message>
-          </div>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item id="moveInDate">
+            <ion-label position="floating">When would you like to move in?</ion-label>
+            <ion-input value="{{ tenancyDetailForm.controls.moveInDate.value | date: DATE_FORMAT.DATE }}">
+            </ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="moveInDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime showDefaultButtons="true" presentation="date" formControlName="moveInDate" [max]="maxMoveInDate" [min]="currentDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+          <app-validation-message [control]="tenancyDetailForm.controls.moveInDate"></app-validation-message>
         </ion-col>
 
-        <ion-col size-xs="100" size-sm="33.3" style="padding-top: 21px;">
-          <mat-form-field appearance="fill">
-            <mat-label>Tenancy end</mat-label>
-            <input matInput [matDatepicker]="picker1" [min]="tenancyDetailForm.controls.moveInDate.value"
-              formControlName="preferredTenancyEndDate" readonly>
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <mat-datepicker #picker1></mat-datepicker>
-          </mat-form-field>
-          <div *ngIf="tenancyDetailForm.hasError('invalidEndDate')" class="error-block">End Date can't before start date
-          </div>
-          <div style="margin-top: -20px !important;">
-            <app-validation-message [control]="tenancyDetailForm.controls.preferredTenancyEndDate">
-            </app-validation-message>
-          </div>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item id="preferredTenancyEndDate">
+            <ion-label position="floating">Tenancy end</ion-label>
+            <ion-input value="{{ tenancyDetailForm.controls.preferredTenancyEndDate.value | date: DATE_FORMAT.DATE }}">
+            </ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="preferredTenancyEndDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime showDefaultButtons="true" presentation="date" formControlName="preferredTenancyEndDate" [min]="tenancyDetailForm.controls.moveInDate.value">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+          <app-validation-message [control]="tenancyDetailForm.controls.preferredTenancyEndDate"></app-validation-message>
         </ion-col>
 
         <ion-col size-xs="100" size-sm="33.3">

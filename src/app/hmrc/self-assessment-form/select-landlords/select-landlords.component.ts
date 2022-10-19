@@ -175,6 +175,7 @@ export class SelectLandlordsComponent implements OnInit {
     } else {
       return this.uncheckedLandlords.indexOf(propertyLinkId) >= 0 ? true : false;
     }
+
   }
 
   private getRows(selected: boolean) {
