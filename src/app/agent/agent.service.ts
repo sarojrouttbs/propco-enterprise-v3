@@ -243,7 +243,7 @@ export class AgentService {
   }
 
   createClause(requestObj: any) {
-    return this.httpClient.post(environment.API_BASE_URL + `clauses`, requestObj);
+    return this.httpClient.post(environment.API_BASE_URL + `clauses/node`, requestObj);
   }
 
   addEntityClause(entityId: string, clauseId: number, requestObj: any) {
