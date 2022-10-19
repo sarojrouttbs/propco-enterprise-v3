@@ -92,7 +92,7 @@ export class OfficeFilterModalPage implements OnInit {
       node.groupDefinitionType = selectedDefinationObj[0].name;
       if (value !== null) {
         if (typeof value === 'object') {
-          if (value.items.length !== 0) {
+          if (value.items instanceof Array && value.items.length !== 0) {
             node.children = this.buildFileTree(value.items, level + 1);
           }
         }
