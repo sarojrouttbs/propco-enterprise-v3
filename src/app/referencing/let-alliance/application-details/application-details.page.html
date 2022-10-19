@@ -20,16 +20,20 @@
           </ion-item>
           <app-validation-message [control]="tenancyDetailsForm.controls.noOfTenantToBeReferenced"></app-validation-message>
         </ion-col>
-        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" style="padding-top:13px">
-          <mat-form-field appearance="fill">
-            <mat-label>Tenancy Start Date</mat-label>
-            <input matInput [matDatepicker]="picker" [min]="currentDate" [max]="futureDate" formControlName="tenancyStartDate" readonly>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-          <div style="margin-top: -20px !important;">
-            <app-validation-message [control]="tenancyDetailsForm.controls.tenancyStartDate"></app-validation-message>
-          </div>
+        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
+          <ion-item id="tenancyStartDate">
+            <ion-label position="floating">Tenancy Start Date</ion-label>
+            <ion-input value="{{ tenancyDetailsForm.controls.tenancyStartDate.value | date: DATE_FORMAT.DATE }}">
+            </ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="tenancyStartDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime showDefaultButtons="true" presentation="date" formControlName="tenancyStartDate" [min]="currentDate" [max]="futureDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+          <app-validation-message [control]="tenancyDetailsForm.controls.tenancyStartDate"></app-validation-message>
         </ion-col>
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
@@ -193,13 +197,19 @@
           </ion-item>
           <app-validation-message [control]="tenantDetailsForm.controls.email"></app-validation-message>
         </ion-col>
-        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3" style="padding-top:13px">
-          <mat-form-field appearance="fill">
-            <mat-label>Date of Birth</mat-label>
-            <input matInput [matDatepicker]="picker1" [max]="adultDate" formControlName="dateOfBirth" readonly>
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <mat-datepicker #picker1></mat-datepicker>
-          </mat-form-field>
+        <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
+          <ion-item id="dateOfBirth">
+            <ion-label position="floating">Date of Birth</ion-label>
+            <ion-input value="{{ tenantDetailsForm.controls.dateOfBirth.value | date: DATE_FORMAT.DATE }}">
+            </ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="dateOfBirth" show-backdrop="false">
+              <ng-template>
+                <ion-datetime showDefaultButtons="true" presentation="date" formControlName="dateOfBirth" [max]="adultDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
         </ion-col>
         <ion-col size-xs="100" size-sm="50" size-md="50" size-lg="33.3" size-xl="33.3">
           <ion-item>
@@ -430,7 +440,7 @@
            &nbsp;New Application</div>
       </ion-col>
       <ion-col size-xs="100" size-sm="37" size="50" class="la-logo">
-        <img src="assets/images/referencing/la-logo.svg"/>
+        <img src="assets/images/referencing/la-logo.svg" alt="Let alliance"/>
       </ion-col>
     </ion-row>
   </ion-grid>

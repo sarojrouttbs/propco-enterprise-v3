@@ -4,78 +4,88 @@
 
 <ion-content id="tob-offer-list">
   <ng-container>
-    <div class="property-details">
-      <ion-grid class="ion-padding">
-        <ion-row class="address">
-          <ion-col class="ion-no-padding" size="80" *ngIf="isPropertyDetailsAvailable">
-            <h1 *ngIf="propertyDetails?.publishedAddress" class="ion-no-margin">{{ propertyDetails?.publishedAddress }}
-            </h1>
-            <h1 *ngIf="!propertyDetails?.publishedAddress" class="ion-no-margin">
-              {{ propertyDetails?.address | address }}
-            </h1>
-          </ion-col>
-          <ion-col class="ion-no-padding" size="80" *ngIf="!isPropertyDetailsAvailable">
-            <ion-skeleton-text animated></ion-skeleton-text>
-          </ion-col>
-          <ion-col class="ion-no-padding ion-text-end" size="20">
-            <ion-button class="ion-no-margin" (click)="makeAnOffer()" [disabled]="!accessRight?.hasAccessToAddOffer || !propertyDetails?.isAvailable">Make an Offer
-            </ion-button>
-          </ion-col>
-        </ion-row>
+    <form [formGroup]="filterForm">
+      <div class="property-details">
+        <ion-grid class="ion-padding">
+          <ion-row class="address">
+            <ion-col class="ion-no-padding" size="80" *ngIf="isPropertyDetailsAvailable">
+              <h1 *ngIf="propertyDetails?.publishedAddress" class="ion-no-margin">{{ propertyDetails?.publishedAddress }}
+              </h1>
+              <h1 *ngIf="!propertyDetails?.publishedAddress" class="ion-no-margin">
+                {{ propertyDetails?.address | address }}
+              </h1>
+            </ion-col>
+            <ion-col class="ion-no-padding" size="80" *ngIf="!isPropertyDetailsAvailable">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-col>
+            <ion-col class="ion-no-padding ion-text-end" size="20">
+              <ion-button class="ion-no-margin" (click)="makeAnOffer()" [disabled]="!accessRight?.hasAccessToAddOffer || !propertyDetails?.isAvailable">Make an Offer
+              </ion-button>
+            </ion-col>
+          </ion-row>
 
-        <ion-row class="filters">
-          <ion-col size-xl="20">
-            <ion-item class="sort-offer">
-              <ion-label position="floating">Sort Offers By
-              </ion-label>
-              <ion-select [(ngModel)]="sortKey" (ionChange)="sortResult()" interface="popover" class="reason-dropdown"
-                [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
-                <ion-select-option [value]="item?.key" *ngFor="let item of sortingFields">
-                  {{ item?.value }}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-col>
+          <ion-row class="filters">
+            <ion-col size-xl="20">
+              <!-- <ion-item class="sort-offer">
+                <ion-label position="floating">Sort Offers By
+                </ion-label>
+                <ion-select [(ngModel)]="sortKey" (ionChange)="sortResult()" interface="popover" class="reason-dropdown"
+                  [interfaceOptions]="{'cssClass': 'ion-select-popover-content'}">
+                  <ion-select-option [value]="item?.key" *ngFor="let item of sortingFields">
+                    {{ item?.value }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item> -->
+            </ion-col>
 
-          <ion-col class="ion-no-padding" size-xl="19" size-sm="25">
-            <ion-item lines="none">
-              <ion-label class="ion-text-end">Offers made between</ion-label>
-            </ion-item>
-          </ion-col>
+            <ion-col class="ion-no-padding" size-xl="19" size-sm="25">
+              <ion-item lines="none">
+                <ion-label class="ion-text-end">Offers made between</ion-label>
+              </ion-item>
+            </ion-col>
 
-          <ion-col class="ion-text-end" size-xl="13" size-sm="15">
-            <mat-form-field appearance="fill">
-              <mat-label>Date From
-              </mat-label>
-              <input matInput [matDatepicker]="picker1" [formControl]="fromDate" [max]="maxDate">
-              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-              <mat-datepicker #picker1></mat-datepicker>
-            </mat-form-field>
-          </ion-col>
+            <ion-col class="ion-text-end" size-xl="13" size-sm="15">
+              <ion-item id="fromDate">
+                <ion-label position="floating">Date From</ion-label>
+                <ion-input value="{{ filterForm.controls.fromDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                <ion-popover class="ion-datepicker-popover" trigger="fromDate" show-backdrop="false">
+                  <ng-template>
+                    <ion-datetime showDefaultButtons="true" presentation="date" formControlName="fromDate" [max]="maxDate">
+                    </ion-datetime>
+                  </ng-template>
+                </ion-popover>
+              </ion-item>
+            </ion-col>
 
-          <ion-col class="ion-text-end" size-xl="13" size-sm="15">
-            <mat-form-field appearance="fill">
-              <mat-label>Date To
-              </mat-label>
-              <input matInput [matDatepicker]="picker2" [formControl]="toDate" [min]="fromDate" [max]="maxDate">
-              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-              <mat-datepicker #picker2></mat-datepicker>
-            </mat-form-field>
-          </ion-col>
+            <ion-col class="ion-text-end" size-xl="13" size-sm="15">
+              <ion-item id="toDate">
+                <ion-label position="floating">Date To</ion-label>
+                <ion-input value="{{ filterForm.controls.toDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                <ion-popover class="ion-datepicker-popover" trigger="toDate" show-backdrop="false">
+                  <ng-template>
+                    <ion-datetime showDefaultButtons="true" presentation="date" formControlName="toDate" [min]="filterForm.controls.fromDate.value" [max]="maxDate">
+                    </ion-datetime>
+                  </ng-template>
+                </ion-popover>
+              </ion-item>
+            </ion-col>
 
-          <ion-col class="ion-text-end no-padding-right" size-xl="20" size-sm="25">
-            <ion-button class="btn-filter" color="success" [disabled]="fromDate.value && toDate.value ? false : true"
-              (click)="filterByDate()" expand="block">Filter</ion-button>
-            <ion-button class="btn-filter" color="danger" (click)="resetFilters()" expand="block">Reset</ion-button>
-          </ion-col>
+            <ion-col class="ion-text-end no-padding-right" size-xl="20" size-sm="25">
+              <ion-button class="btn-filter" color="success" [disabled]="filterForm.controls.fromDate.value && filterForm.controls.toDate.value ? false : true"
+                (click)="filterByDate()" expand="block">Filter</ion-button>
+              <ion-button class="btn-filter" color="danger" (click)="resetFilters()" expand="block">Reset</ion-button>
+            </ion-col>
 
-          <ion-col class="ion-no-padding ion-text-end" size-xl="15">
-            <ion-button (click)="hideRecords()"> {{ isHideRejected ? "Show Rejected Offers" : "Hide Rejected Offers"}}
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </div>
+            <ion-col class="ion-no-padding ion-text-end" size-xl="15">
+              <ion-button (click)="hideRecords()"> {{ isHideRejected ? "Show Rejected Offers" : "Hide Rejected Offers"}}
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </form>
   </ng-container>
 
   <ng-container>
