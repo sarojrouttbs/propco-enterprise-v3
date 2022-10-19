@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +19,7 @@ import { OfferData, OfferNotesData } from './offer-list.model';
 })
 
 export class OfferListPage implements OnInit {
-  maxDate = new Date();
+  maxDate = this.commonService.getFormatedDate(new Date());
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('notesPaginator') notesPaginator: MatPaginator;
   obsOfferList: Observable<any>;
@@ -31,8 +31,7 @@ export class OfferListPage implements OnInit {
   selectedNotesRow: any;
   isHideRejected = false;
   sortKey = null;
-  fromDate = new FormControl('', []);
-  toDate = new FormControl('', []);
+  filterForm: FormGroup;
   sortingFields = [
     { key: '1', value: 'Date' },
     { key: '2', value: 'Offer Price (Desc)' },
@@ -64,7 +63,14 @@ export class OfferListPage implements OnInit {
   DATE_FORMAT = DATE_FORMAT;
   DEFAULTS = DEFAULTS;
 
-  constructor(private router: Router, private modalController: ModalController, private route: ActivatedRoute, private commonService: CommonService, private tobService: TobService) {
+  constructor(
+    private router: Router,
+    private modalController: ModalController,
+    private route: ActivatedRoute,
+    private commonService: CommonService,
+    private tobService: TobService,
+    private formBuilder: FormBuilder
+    ) {
     this.getTobLookupData();
     this.getLookUpData();
   }
@@ -73,6 +79,7 @@ export class OfferListPage implements OnInit {
     this.obsOfferList = this.filteredOfferList.connect();
     this.obsOfferNotesList = this.filteredNotesList.connect();
     this.initData();
+    this.initFilterForm();
   }
 
   private initData() {
@@ -82,6 +89,13 @@ export class OfferListPage implements OnInit {
       this.propertyId = this.route.snapshot.parent.parent.paramMap.get('propertyId');
     }
     this.initApiCalls();
+  }
+
+  private initFilterForm() {
+    this.filterForm = this.formBuilder.group({
+      fromDate: [''],
+      toDate: ['']
+    });
   }
 
   private async initApiCalls() {
@@ -128,13 +142,13 @@ export class OfferListPage implements OnInit {
 
   filterByDate() {
     this.filteredOfferList.data = this.offerList;
-    this.filteredOfferList.data = this.filteredOfferList.data.filter(e => new Date(this.commonService.getFormatedDate(e.offerAt, this.DATE_FORMAT.YEAR_DATE)) >= new Date(this.commonService.getFormatedDate(this.fromDate.value, this.DATE_FORMAT.YEAR_DATE)) && new Date(this.commonService.getFormatedDate(e.offerAt, this.DATE_FORMAT.YEAR_DATE)) <= new Date(this.commonService.getFormatedDate(this.toDate.value, this.DATE_FORMAT.YEAR_DATE)));
+    this.filteredOfferList.data = this.filteredOfferList.data.filter(e => new Date(this.commonService.getFormatedDate(e.offerAt, this.DATE_FORMAT.YEAR_DATE)) >= new Date(this.commonService.getFormatedDate(this.filterForm.controls.fromDate.value, this.DATE_FORMAT.YEAR_DATE)) && new Date(this.commonService.getFormatedDate(e.offerAt, this.DATE_FORMAT.YEAR_DATE)) <= new Date(this.commonService.getFormatedDate(this.filterForm.controls.toDate.value, this.DATE_FORMAT.YEAR_DATE)));
     this.checkOffersAvailable();
   }
 
   resetFilters() {
-    this.fromDate.reset();
-    this.toDate.reset();
+    this.filterForm.controls.fromDate.reset();
+    this.filterForm.controls.toDate.reset();
     this.filteredOfferList.data = this.offerList;
     this.checkOffersAvailable();
   }

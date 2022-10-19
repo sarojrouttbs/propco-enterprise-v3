@@ -212,16 +212,20 @@
           <app-validation-message [control]="makeAnOfferForm.controls.status"></app-validation-message>
         </ion-col>
 
-        <ion-col size-xs="100" size-sm="33.3" style="padding-top: 21px;">
-          <mat-form-field appearance="fill">
-            <mat-label>When would you like to move in?</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="moveInDate" readonly>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-          <div style="margin-top: -20px !important;">
-            <app-validation-message [control]="makeAnOfferForm.controls.moveInDate"></app-validation-message>
-          </div>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item id="moveInDate">
+            <ion-label position="floating">When would you like to move in?</ion-label>
+            <ion-input value="{{ makeAnOfferForm.controls.moveInDate.value | date: DATE_FORMAT.DATE }}">
+            </ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="moveInDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime showDefaultButtons="true" presentation="date" formControlName="moveInDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+          <app-validation-message [control]="makeAnOfferForm.controls.moveInDate"></app-validation-message>
         </ion-col>
 
         <ion-col size-xs="100" size-sm="33.3">
@@ -477,17 +481,21 @@
           </ion-item>
         </ion-col>
 
-        <ion-col size-sm="50" size-md="20" size-xl="25" class="ion-text-end" style="padding-top: 15px;">
-          <mat-form-field appearance="fill">
-            <mat-label>Confirmed On</mat-label>
-            <input matInput [matDatepicker]="applicantConfirmedDate" formControlName="applicantConfirmedDate" readonly>
-            <mat-datepicker-toggle matSuffix [for]="applicantConfirmedDate"></mat-datepicker-toggle>
-            <mat-datepicker #applicantConfirmedDate></mat-datepicker>
-          </mat-form-field>
-          <div style="margin-top: -20px !important;" class="ion-text-left">
-            <app-validation-message [control]="confirmationForm.controls.applicantConfirmedDate">
-            </app-validation-message>
-          </div>
+        <ion-col size-sm="50" size-md="20" size-xl="25" class="ion-text-end">
+          <ion-item id="applicantConfirmedDate">
+            <ion-label position="floating">Confirmed On</ion-label>
+            <ion-input value="{{ confirmationForm.controls.applicantConfirmedDate.value | date: DATE_FORMAT.DATE }}">
+            </ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="applicantConfirmedDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime showDefaultButtons="true" presentation="date" formControlName="applicantConfirmedDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+          <app-validation-message [control]="confirmationForm.controls.applicantConfirmedDate">
+          </app-validation-message>
         </ion-col>
 
         <ion-col size-sm="50" size-md="30" size-xl="25">
@@ -497,17 +505,22 @@
             <ion-label>Confirmed By Landlord</ion-label>
           </ion-item>
         </ion-col>
-        <ion-col size-sm="50" size-md="20" size-xl="25" class="ion-text-end" style="padding-top: 15px;">
-          <mat-form-field appearance="fill">
-            <mat-label>Confirmed On</mat-label>
-            <input matInput [matDatepicker]="landlordConfirmedDate" formControlName="landlordConfirmedDate" readonly>
-            <mat-datepicker-toggle matSuffix [for]="landlordConfirmedDate"></mat-datepicker-toggle>
-            <mat-datepicker #landlordConfirmedDate></mat-datepicker>
-          </mat-form-field>
-          <div style="margin-top: -20px !important;" class="ion-text-left">
-            <app-validation-message [control]="confirmationForm.controls.landlordConfirmedDate">
-            </app-validation-message>
-          </div>
+        <ion-col size-sm="50" size-md="20" size-xl="25" class="ion-text-end">
+          <ion-item id="landlordConfirmedDate">
+            <ion-label position="floating">Confirmed On</ion-label>
+            <ion-input value="{{ confirmationForm.controls.landlordConfirmedDate.value | date: DATE_FORMAT.DATE }}">
+            </ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="landlordConfirmedDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime showDefaultButtons="true" presentation="date" formControlName="landlordConfirmedDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+          <app-validation-message [control]="confirmationForm.controls.landlordConfirmedDate">
+          </app-validation-message>
+
         </ion-col>
         <ion-col size-sm="50" size-md="29" size-xl="24">
           <ion-item lines="none" class="mt-7">

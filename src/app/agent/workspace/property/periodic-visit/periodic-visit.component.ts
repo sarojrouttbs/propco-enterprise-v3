@@ -224,18 +224,28 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
     }
   }
 
-  async openVisitModal() {
+  async openVisitModal(action) {
     const modal = await this.modalController.create({
       component: PeriodicVisitModalPage,
       cssClass: 'modal-container property-modal-container',
       componentProps: {
         propertyVisitTypes: this.propertyVisitTypes,
-        inspectionStatuses: this.inspectionStatuses
+        inspectionStatuses: this.inspectionStatuses,
+        propertyId: this.selectedEntityDetails.entityId,
+        visitData: this.selectedData,
+        action: action
       },
       backdropDismiss: false
     });
-
-    modal.onDidDismiss();
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        if (action === 'add')
+          this.commonService.showMessage('Periodic Visit has been added successfully.', 'Periodic Visit', 'success');
+        else
+          this.commonService.showMessage('Periodic Visit has been updated successfully.', 'Periodic Visit', 'success');
+        this.rerenderVisits();
+      }
+    });
     await modal.present();
   }
 
@@ -285,6 +295,14 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
       }
     });
     await modal.present();
+  }
+
+  private rerenderVisits(resetPaging?: any): void {
+    if (this.dtElements && this.dtElements.first.dtInstance) {
+      this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.ajax.reload(resetPaging);
+      });
+    }
   }
 
   ngOnDestroy() {

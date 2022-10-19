@@ -1,20 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-import { PeriodicVisitModalPage } from './periodic-visit-modal.page';
-import { RouterModule, Routes } from '@angular/router';
+import { ClauseModalPage } from './clause-modal.page';
+import { Routes, RouterModule } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
-import { ComponentsModule } from 'src/app/shared/components/components.module';
 
 const routes: Routes = [
   {
     path: '',
-    component: PeriodicVisitModalPage
+    component: ClauseModalPage
   }
 ];
-
 @NgModule({
   imports: [
     CommonModule,
@@ -22,10 +19,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
-    MaterialModule,
-    ComponentsModule
+    MaterialModule
   ],
-  declarations: [PeriodicVisitModalPage],
-  exports: [PeriodicVisitModalPage]
+  declarations: [ClauseModalPage]
 })
-export class PeriodicVisitModalPageModule { }
+export class ClauseModalPageModule { }

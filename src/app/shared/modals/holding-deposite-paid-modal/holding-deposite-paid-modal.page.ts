@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
+import { DATE_FORMAT } from '../../constants';
 import { CommonService } from '../../services/common.service';
 import { HodlingDepositePaidService } from './hodling-deposite-paid.service';
 
@@ -15,6 +16,8 @@ export class HoldingDepositePaidModalPage implements OnInit {
   selectedApplication;
   offlinePaymentTypes;
   holdingDepositForm: FormGroup;
+  DATE_FORMAT = DATE_FORMAT;
+
   constructor(private modalController: ModalController, private _formBuilder: FormBuilder, private commonService: CommonService, private holdingDepositePaidService: HodlingDepositePaidService) { }
 
   ngOnInit() {
