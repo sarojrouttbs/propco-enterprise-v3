@@ -49,18 +49,9 @@
                       <ng-template ionicSelectableFooterTemplate>
                         <ion-toolbar>
                           <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
-                            (click)="toggleItemsClauses()" [disabled]="!propertyClausesList.length">
-                            {{propertyClausesFilter.itemsToConfirm.length ? 'Deselect All' : 'Select All'}}
-                          </ion-button>
-                          <ion-button color="success" class="action-btn" fill="outline" class="selectable-btn"
                             (click)="propertyClausesFilter.confirm();propertyClausesFilter.close();onSelectionChange();"
                             [disabled]="!propertyClausesFilter.itemsToConfirm.length">
                             OK
-                          </ion-button>
-                          <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
-                            (click)="propertyClausesFilter.clear();propertyClausesFilter.close();onSelectionChange();"
-                            [disabled]="!propertyClausesFilter.itemsToConfirm.length">
-                            Clear
                           </ion-button>
                           <ion-button color="danger" class="action-btn" fill="outline" class="selectable-btn"
                             (click)="propertyClausesFilter.close()">
@@ -71,7 +62,8 @@
                     </ionic-selectable>
                   </ion-item>
                 </ion-col>
-                <ion-col size="40" class="ion-text-center">
+                <ion-col size="40">
+                  <ion-button color="success" (click)="openClauseModal('add')">Add</ion-button>
                 </ion-col>
               </ion-row>
 

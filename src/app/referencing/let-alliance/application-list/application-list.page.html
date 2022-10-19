@@ -8,7 +8,7 @@
           <i class="propcoicon propcoicon-refresh icon-primary" style="display: inline; background: transparent; cursor: pointer;" (click)="refresh()"></i></div>
       </ion-col>
       <ion-col size-xs="100" size-sm="37" size="50" class="la-logo">
-        <img src="assets/images/referencing/la-logo.svg"/>
+        <img src="assets/images/referencing/la-logo.svg" alt="Let alliance"/>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -61,26 +61,38 @@
               </ion-item>
           </ion-col>
           <ion-col size-xl="21" size-lg="23" size-md="38" size-sm="50" size-xs="100">
-            <mat-form-field appearance="fill" class="margin-top-13">
-              <mat-label>Date of Submission From</mat-label>
-              <input matInput [matDatepicker]="picker" [max]="currentDate" formControlName="fromDate" readonly>
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-            <div *ngIf='applicationFilterForm?.errors?.startDateRequired' class="error-message" style="margin-top: -20px !important;">
+            <ion-item id="fromDate">
+              <ion-label position="floating">Date of Submission From</ion-label>
+              <ion-input value="{{ applicationFilterForm.controls.fromDate.value | date: DATE_FORMAT.DATE }}">
+              </ion-input>
+              <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+              <ion-popover class="ion-datepicker-popover" trigger="fromDate" show-backdrop="false">
+                <ng-template>
+                  <ion-datetime showDefaultButtons="true" presentation="date" formControlName="fromDate" [max]="currentDate">
+                  </ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </ion-item>
+            <div *ngIf='applicationFilterForm?.errors?.startDateRequired' class="error-message" style="margin-top: 5px !important;position: absolute;">
               Please enter From
            </div>
           </ion-col>
           <ion-col size-xl="21" size-lg="23" size-md="38" size-sm="50" size-xs="100">
-            <mat-form-field appearance="fill" class="margin-top-13">
-              <mat-label>Date of Submission To</mat-label>
-              <input matInput [matDatepicker]="picker1" [max]="currentDate" formControlName="toDate" readonly>
-              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-              <mat-datepicker #picker1></mat-datepicker>
-            </mat-form-field>
-            <div *ngIf='applicationFilterForm?.errors?.invalidEndDate' class="error-message" style="margin-top: -20px !important;">
+            <ion-item id="toDate">
+              <ion-label position="floating">Date of Submission To</ion-label>
+              <ion-input value="{{ applicationFilterForm.controls.toDate.value | date: DATE_FORMAT.DATE }}">
+              </ion-input>
+              <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+              <ion-popover class="ion-datepicker-popover" trigger="toDate" show-backdrop="false">
+                <ng-template>
+                  <ion-datetime showDefaultButtons="true" presentation="date" formControlName="toDate" [max]="currentDate">
+                  </ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </ion-item>
+            <div *ngIf='applicationFilterForm?.errors?.invalidEndDate' class="error-message" style="margin-top: 5px !important;position: absolute;">
               To cannot be before and equal to From
-           </div>
+            </div> 
           </ion-col>
           <ion-col class="ion-text-end ion-align-self-center" size-xl="16" size-lg="19" size-md="24" size-sm="100" size-xs="100">
             <ion-button class="submit-button" style="margin: 0px 5px;" (click)="getApplicationList()" [disabled]="!this.applicationFilterForm.valid">Submit</ion-button>
