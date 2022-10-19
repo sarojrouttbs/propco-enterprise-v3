@@ -247,19 +247,19 @@ export class AgentService {
   }
 
   addEntityClause(entityId: string, clauseId: number, requestObj: any) {
-    return this.httpClient.post(environment.API_BASE_URL + `properties/${entityId}/clauses/${clauseId}`, requestObj);
+    return this.httpClient.post(environment.API_BASE_URL + `properties/${entityId}/clauses/${clauseId}/node`, requestObj);
   }
 
   deleteClause(entityId: string, clauseId: number, requestObj: any) {
-    return this.httpClient.delete(environment.API_BASE_URL + `properties/${entityId}/clauses/${clauseId}`, requestObj);
+    return this.httpClient.delete(environment.API_BASE_URL + `properties/${entityId}/clauses/${clauseId}/node`, requestObj);
   }
 
   createPeriodicVisit(propertyId: number, requestObj: any) {
-    return this.httpClient.post(environment.API_BASE_URL + `properties/${propertyId}/visits`, requestObj);
+    return this.httpClient.post(environment.API_BASE_URL + `properties/${propertyId}/visits/node`, requestObj);
   }
 
   updatePeriodicVisit(visitId: string, requestObj: any): Observable<any> {
-    return this.httpClient.put(environment.API_BASE_URL + `visits/${visitId}`, requestObj);
+    return this.httpClient.put(environment.API_BASE_URL + `visits/${visitId}/node`, requestObj);
   }
 
   updateAgreementDetails(agreementId: string, requestObj: any): Observable<any> {
