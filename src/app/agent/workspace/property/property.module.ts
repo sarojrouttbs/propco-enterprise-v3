@@ -67,6 +67,7 @@ import { DescriptionShortLetComponent } from './particulars/description-short-le
 import { DescriptionComponent } from './particulars/description/description.component';
 import { WhitegoodModalPageModule } from './whitegoods/whitegoods-modal/whitegood-modal/whitegood-modal.module';
 import { UserAssignmentsComponent } from './user-assignments/user-assignments.component';
+import { ClauseModalPageModule } from './admin/clauses/clause-modal/clause-modal/clause-modal.module';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIGURATION;
 
@@ -95,7 +96,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = CURRENCY_MASK_CONFIG
     LeafletModule,
     PostcodeDirectiveModule,
     IonicSelectableModule,
-    WhitegoodModalPageModule
+    WhitegoodModalPageModule,
+    ClauseModalPageModule
   ],
   declarations: [
     PropertyPage,
