@@ -30,8 +30,6 @@ export class PeriodicVisitModalPage implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    if (this.action === 'edit' && this.visitData)
-      this.visitForm.patchValue(this.visitData);
   }
 
   initForm() {
@@ -47,6 +45,19 @@ export class PeriodicVisitModalPage implements OnInit {
       comments: [''],
       reportLink: ['']
     });
+
+    if (this.action === 'edit' && this.visitData) {
+      this.visitForm.patchValue(this.visitData);
+      this.visitForm.get('dueDate').setValue(this.visitData.visitDate);
+    }
+
+  }
+
+  save() {
+    if (this.action === 'add')
+      this.createPeriodicVisit();
+    else
+      this.updatePeriodicVisit();
   }
 
   createPeriodicVisit() {
@@ -54,10 +65,26 @@ export class PeriodicVisitModalPage implements OnInit {
       this.visitForm.markAllAsTouched();
       return;
     }
+    this.visitForm.value.dueDate = this.commonService.getFormatedDate(this.visitForm.value.dueDate);
+    this.visitForm.value.bookedDate = this.commonService.getFormatedDate(this.visitForm.value.bookedDate);
     this.agentService.createPeriodicVisit(this.propertyId, this.visitForm.value).subscribe((res) => {
       this.modalController.dismiss('success');
     }, (error) => {
-      this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Create Key Set', 'error');
+      this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Periodic Visit', 'error');
+    });
+  }
+
+  updatePeriodicVisit() {
+    if (this.visitForm.invalid) {
+      this.visitForm.markAllAsTouched();
+      return;
+    }
+    this.visitForm.value.dueDate = this.commonService.getFormatedDate(this.visitForm.value.dueDate);
+    this.visitForm.value.bookedDate = this.commonService.getFormatedDate(this.visitForm.value.bookedDate);
+    this.agentService.updatePeriodicVisit(this.visitData.visitId, this.visitForm.value).subscribe((res) => {
+      this.modalController.dismiss('success');
+    }, (error) => {
+      this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Periodic Visit', 'error');
     });
   }
 

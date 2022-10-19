@@ -237,8 +237,15 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
       },
       backdropDismiss: false
     });
-
-    modal.onDidDismiss();
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success') {
+        if (action === 'add')
+          this.commonService.showMessage('Periodic Visit has been added successfully.', 'Periodic Visit', 'success');
+        else
+          this.commonService.showMessage('Periodic Visit has been updated successfully.', 'Periodic Visit', 'success');
+        this.rerenderVisits();
+      }
+    });
     await modal.present();
   }
 
@@ -288,6 +295,14 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
       }
     });
     await modal.present();
+  }
+
+  private rerenderVisits(resetPaging?: any): void {
+    if (this.dtElements && this.dtElements.first.dtInstance) {
+      this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.ajax.reload(resetPaging);
+      });
+    }
   }
 
   ngOnDestroy() {

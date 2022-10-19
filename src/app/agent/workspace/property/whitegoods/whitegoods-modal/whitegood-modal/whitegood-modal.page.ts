@@ -17,7 +17,10 @@ export class WhitegoodModalPage implements OnInit {
   certificateTypes: any;
   DATE_FORMAT = DATE_FORMAT;
   propertyId;
-
+  popoverOptions: any = {
+    cssClass: 'market-apprisal-ion-select'
+  };
+  
   constructor(
     private formBuilder: FormBuilder,
     private modalController: ModalController,
