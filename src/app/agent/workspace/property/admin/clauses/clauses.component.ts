@@ -176,8 +176,14 @@ export class ClausesComponent implements OnInit {
       }
     });
 
-    modal.onDidDismiss().then(res => {
-      if (res.data == 'success') {
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data.status == 'success') {
+        const newClauseId = res.data.data.clauseId;
+        this.propertyClausesList = await this.getClauses();
+        const newClause = this.propertyClausesList.find((x) => x.clauseId === newClauseId);
+        this.propertyClauses.value.push(newClause);
+        this.addEntityClause(newClauseId);
+        this.commonService.showMessage('Clause Details has been added successfully.', 'Clause Details', 'success');
       }
     });
     await modal.present();
