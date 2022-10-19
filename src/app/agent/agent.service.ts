@@ -242,13 +242,35 @@ export class AgentService {
     return this.httpClient.post(environment.API_BASE_URL + `properties/${propertyId}/management-services`, requestObj);
   }
 
+  createClause(requestObj: any) {
+    return this.httpClient.post(environment.API_BASE_URL + `clauses`, requestObj);
+  }
+
+  addEntityClause(entityType: string, entityId: string, clauseId: number, requestObj: any) {
+    return this.httpClient.post(environment.API_BASE_URL + `${entityType}/${entityId}/clauses/${clauseId}`, requestObj);
+  }
+
+  deleteClause(entityType: string, entityId: string, clauseId: number, requestObj: any) {
+    return this.httpClient.delete(environment.API_BASE_URL + `${entityType}/${entityId}/clauses/${clauseId}`, requestObj);
+  }
+
+  createPeriodicVisit(propertyId: number, requestObj: any) {
+    return this.httpClient.post(environment.API_BASE_URL + `properties/${propertyId}/visits`, requestObj);
+  }
+
+  updatePeriodicVisit(visitId: string, requestObj: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `visits/${visitId}`, requestObj);
+  }
+
+  updateAgreementDetails(agreementId: string, requestObj: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `agreements/${agreementId}`, requestObj);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
       return throwError(error);
     };
   }
-
-
 }
 

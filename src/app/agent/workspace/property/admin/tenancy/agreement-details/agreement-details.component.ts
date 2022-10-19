@@ -1,8 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DATE_FORMAT, DEFAULTS, PROPCO } from 'src/app/shared/constants';
+import { AGENT_WORKSPACE_CONFIGS, DATE_FORMAT, DEFAULTS, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { AgentService } from 'src/app/agent/agent.service';
+import { debounceTime, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-agreement-details',
@@ -27,8 +30,19 @@ export class AgreementDetailsComponent implements OnInit {
   @Input() selectedTenant;
   @Output() propcoAgreementId = new EventEmitter<any>();
   tenant: any;
+  activeLink: any;
+  dateControl = ['lastRentRequestDate', 'nextClaimDate', 'originalStart', 'originalEnd', 'checkInDate', 'checkOutDate', 'renewalStart', 'tenancyStartDate', 'tenancyEndDate', 'noticeDate', 'noticeProcessedDate'];
 
-  constructor(private agentService: AgentService, private _formBuilder: FormBuilder, private commonService: CommonService) { }
+  private unsubscribe = new Subject<void>();
+  formStatus: FormStatus.Saving | FormStatus.Saved | FormStatus.Idle = FormStatus.Idle;
+  formChangedValue: any;
+
+  constructor(
+    private agentService: AgentService,
+    private _formBuilder: FormBuilder,
+    private commonService: CommonService,
+    private router: Router
+  ) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selectedTenant && changes.selectedTenant.currentValue) {
@@ -42,9 +56,10 @@ export class AgreementDetailsComponent implements OnInit {
     this.initAPI();
   }
 
-  private initAPI() {
+  private async initAPI() {
     this.getLookupData();
     this.creatForm();
+    this.updateDetails();
   }
 
   private async initAgreementDetailsApi() {
@@ -62,7 +77,7 @@ export class AgreementDetailsComponent implements OnInit {
       frequencyType: [],
       commissionPercentage: [],
       managementType: [],
-      totalOccupants: [{value: '', disabled: true}],
+      totalOccupants: [{ value: '', disabled: true }],
       noOfOccupiers: [],
       status: [],
       nextClaimDate: [],
@@ -142,7 +157,7 @@ export class AgreementDetailsComponent implements OnInit {
   private patchAgreementDetails() {
     this.agreementDetailsForm.patchValue(this.agreementDetails)
     this.agreementDetailsForm.patchValue({
-      commissionPercentage: this.agreementDetails?.commissionPercentage ? this.agreementDetails?.commissionPercentage.toString()+'%' : '0%',
+      commissionPercentage: this.agreementDetails?.commissionPercentage ? this.agreementDetails?.commissionPercentage.toString() + '%' : '0%',
       directDebitDueDay: this.agreementDetails?.directDebitDueDay ? this.agreementDetails?.directDebitDueDay : '0',
       contractType: this.agreementDetails?.contractType ? this.agreementDetails?.contractType.toString() : '',
       managementType: this.agreementDetails?.managementType ? this.agreementDetails?.managementType.toString() : '',
@@ -177,4 +192,52 @@ export class AgreementDetailsComponent implements OnInit {
     }
     return className;
   }
+
+  updateDetails() {
+    this.agreementDetailsForm.valueChanges.pipe(
+      debounceTime(1000),
+      tap(() => {
+        this.formStatus = FormStatus.Saving;
+        this.commonService.showAutoSaveLoader(this.formStatus);
+        this.formChangedValue = this.commonService.getDirtyValues(this.agreementDetailsForm);
+        const controlName = Object.keys(this.formChangedValue);
+        const controlValue = this.formChangedValue[controlName[0]];
+        if (this.dateControl.indexOf(controlName[0]) !== -1)
+          this.formChangedValue[controlName[0]] = this.commonService.getFormatedDate(controlValue);
+
+      }),
+      switchMap((value) => {
+        if (Object.keys(this.formChangedValue).length > 0) {
+          return this.agentService.updateAgreementDetails(this.tenant?.agreementId, this.formChangedValue);
+        }
+      }),
+      takeUntil(this.unsubscribe)
+    ).subscribe(async (value) => {
+      this.agreementDetailsForm.markAsPristine();
+      this.agreementDetailsForm.markAsUntouched();
+      this.formStatus = FormStatus.Saved;
+      this.commonService.showAutoSaveLoader(this.formStatus);
+      await this.sleep(2000);
+      if (this.formStatus === FormStatus.Saved) {
+        this.formStatus = FormStatus.Idle;
+        this.commonService.showAutoSaveLoader(this.formStatus);
+      }
+    }, (error) => {
+      this.agreementDetailsForm.markAsPristine();
+      this.agreementDetailsForm.markAsUntouched();
+      this.formStatus = FormStatus.Idle;
+      this.commonService.showAutoSaveLoader(this.formStatus);
+      this.updateDetails();
+    });
+  }
+
+  sleep(ms: number): Promise<any> {
+    return new Promise((res) => setTimeout(res, ms));
+  }
+}
+
+enum FormStatus {
+  Saving = 'Saving...',
+  Saved = 'Saved!',
+  Idle = '',
 }

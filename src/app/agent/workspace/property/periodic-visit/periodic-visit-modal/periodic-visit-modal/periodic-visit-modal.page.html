@@ -13,13 +13,14 @@
       <ion-row>
         <ion-col size="100">
           <ion-item>
-            <ion-label position="floating">Type</ion-label>
+            <ion-label position="floating">Type <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="visitType">
               <ion-select-option [value]="type?.index" *ngFor="let type of propertyVisitTypes">
                 {{ type?.value }}
               </ion-select-option>
             </ion-select>
           </ion-item>
+          <app-validation-message [control]="visitForm.controls.visitType"></app-validation-message>
         </ion-col>
         <ion-col size="100">
           <ion-item>
@@ -27,37 +28,39 @@
             <ion-input formControlName="details"></ion-input>
           </ion-item>
         </ion-col>
-        <ion-col size="100">
+        <ion-col size="50">
           <ion-item>
             <ion-label position="floating">Contact Name</ion-label>
             <ion-input formControlName="contactName"></ion-input>
           </ion-item>
         </ion-col>
-        <ion-col size="100">
+        <ion-col size="50">
           <ion-item>
             <ion-label position="floating">Contact Number</ion-label>
             <ion-input formControlName="contactNumber"></ion-input>
           </ion-item>
         </ion-col>
-        <ion-col size="100">
+        <ion-col size="50">
           <ion-item>
-            <ion-label position="floating">Status</ion-label>
+            <ion-label position="floating">Status <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-select interface="popover" [interfaceOptions]="popoverOptions" formControlName="status">
               <ion-select-option [value]="status?.index" *ngFor="let status of inspectionStatuses">
                 {{ status?.value }}
               </ion-select-option>
             </ion-select>
           </ion-item>
+          <app-validation-message [control]="visitForm.controls.status"></app-validation-message>
         </ion-col>
-        <ion-col size="100">
+        <ion-col size="50">
           <ion-item>
-            <ion-label position="floating">Visit Number</ion-label>
+            <ion-label position="floating">Visit Number <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-input formControlName="visitNumber"></ion-input>
           </ion-item>
+          <app-validation-message [control]="visitForm.controls.visitNumber"></app-validation-message>
         </ion-col>
-        <ion-col size="100" style="padding-top: 8px;">
+        <ion-col size="50" style="padding-top: 8px;">
           <ion-item id="dueDate">
-            <ion-label position="floating">Due Date</ion-label>
+            <ion-label position="floating">Due Date <ion-text class="mandatory">*</ion-text></ion-label>
             <ion-input value="{{ visitForm.controls.dueDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
             <ion-popover class="ion-datepicker-popover" trigger="dueDate" show-backdrop="false">
@@ -67,8 +70,9 @@
               </ng-template>
             </ion-popover>
           </ion-item>
+          <app-validation-message [control]="visitForm.controls.dueDate"></app-validation-message>
         </ion-col>
-        <ion-col size="100" style="padding-top: 8px;">
+        <ion-col size="50" style="padding-top: 8px;">
           <ion-item id="bookedDate">
             <ion-label position="floating">Booked Date</ion-label>
             <ion-input value="{{ visitForm.controls.bookedDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
@@ -104,7 +108,7 @@
 
       <ion-col size="100" class="ion-text-end">
         <ion-button (click)="dismiss()" color="danger">Cancel</ion-button>
-        <ion-button color="success">OK </ion-button>
+        <ion-button color="success" (click)="createPeriodicVisit()">OK</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

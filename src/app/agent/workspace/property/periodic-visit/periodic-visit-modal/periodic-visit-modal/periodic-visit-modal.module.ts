@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { PeriodicVisitModalPage } from './periodic-visit-modal.page';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
+import { ComponentsModule } from 'src/app/shared/components/components.module';
 
 const routes: Routes = [
   {
@@ -21,7 +22,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    ComponentsModule
   ],
   declarations: [PeriodicVisitModalPage],
   exports: [PeriodicVisitModalPage]

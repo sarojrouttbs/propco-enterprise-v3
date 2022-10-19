@@ -224,13 +224,16 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
     }
   }
 
-  async openVisitModal() {
+  async openVisitModal(action) {
     const modal = await this.modalController.create({
       component: PeriodicVisitModalPage,
       cssClass: 'modal-container property-modal-container',
       componentProps: {
         propertyVisitTypes: this.propertyVisitTypes,
-        inspectionStatuses: this.inspectionStatuses
+        inspectionStatuses: this.inspectionStatuses,
+        propertyId: this.selectedEntityDetails.entityId,
+        visitData: this.selectedData,
+        action: action
       },
       backdropDismiss: false
     });
