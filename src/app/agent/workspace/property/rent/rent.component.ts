@@ -53,7 +53,7 @@ export class RentComponent implements OnInit {
         rentFrequency: null,
         frequencyType: null,
         depositAmount: '',
-        depositSchemeNo: null,
+        depositSchemeNumber: null,
         depositScheme: null,
         salePriceType: null,
         salePrice: '',
